@@ -20,7 +20,7 @@ What the library offers:
 - **Decorative shapes:** {{ui:shape.star}}, {{ui:shape.heart}} and {{ui:shape.crescent}}.
 - **Lettering:** {{ui:shape.text}}, also along a circular arc. More in [Text](chapter:text).
 - **Mechanics:** {{ui:shape.thread}} (threaded rod, screw, nut and tapped hole), {{ui:shape.spring}}, {{ui:shape.gear}} and the {{ui:shape.knurl}} for grips. More in [Threads and mechanics](chapter:threads-and-mechanics).
-- **For constructions:** {{ui:shape.honeycomb}}, the print-in-place {{ui:shape.hinge}}, {{ui:shape.dovetail}}, the {{ui:shape.teardrop}} for horizontal holes, the {{ui:shape.counterbore}} and {{ui:shape.countersink}} for screw heads and the {{ui:shape.ruler}}, which is only a measuring tool and never shows up in an export.
+- **For constructions:** the print-in-place {{ui:shape.hinge}}, {{ui:shape.dovetail}}, the {{ui:shape.teardrop}} for horizontal holes, the {{ui:shape.counterbore}} and {{ui:shape.countersink}} for screw heads and the {{ui:shape.ruler}}, which is only a measuring tool and never shows up in an export.
 
 You get a triangle in two ways: the {{ui:shape.polygon}} with three sides is an isosceles triangle, the "Roof" of Tinkercad, and the {{ui:shape.wedge}} is a right triangle. Both are true triangular prisms. For a triangular hole, copy the shape, make the copy smaller, mark it as a hole and line it up with {{ui:editor.tool.centerOnWorkplane}} or {{ui:editor.tool.align}}. Both work with the shape's bounding box, the smallest box that encloses it, so a halved square still counts as a whole square. The command search ([[Ctrl]]+[[K]]) also finds both shapes under "triangle" or "roof".
 
@@ -47,7 +47,7 @@ Taper and twist work on almost every shape. Only the gear, thread, spring, knurl
 
 ![A cone whose top radius and height were changed: a small arrow next to each takes the value back, and the two buttons at the bottom save or reset the defaults of the shape.](shot:property-reset)
 
-A tapered or leaning box, cylinder, ellipse, polygon, tube or ring keeps its exact shape, and so do the capsule, star, heart, crescent, honeycomb, dovetail and a rounded box without rounded top and bottom edges: chamfers and fillets work on it as on the plain shape, and the STEP export writes it. The same holds for a twisted shape: its section turns exactly as it rises, and the sides wind evenly from bottom to top.
+A tapered or leaning box, cylinder, ellipse, polygon, tube or ring keeps its exact shape, and so do the capsule, star, heart, crescent, dovetail and a rounded box without rounded top and bottom edges: chamfers and fillets work on it as on the plain shape, and the STEP export writes it. The same holds for a twisted shape: its section turns exactly as it rises, and the sides wind evenly from bottom to top.
 
 Typing is more exact than dragging. All number fields take millimetres, but also percentages: type "50 %" into a width of 40 mm and you get 20 mm. They calculate too: "15*3", "120-2*4" or "(40+2)/2" give 45, 112 and 21; x works instead of *. The field remembers the calculation, in the Properties panel as well as in the dimension boxes around the selected body: click into it again later and the formula stands there instead of the number, as long as the value still matches it, and you change it in place, "(140+2)/2" becoming "(40+6)/2". Drag the body by a handle or scale it and the formula no longer fits, so the field shows just the number again.
 

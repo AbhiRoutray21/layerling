@@ -11518,6 +11518,7 @@ export function LayerlingEditor({
 
       if (command.action === "create_shape") {
         const rawKind = mcpString(params.kind, "box");
+        if (rawKind === "honeycomb") throw new Error("The honeycomb shape is gone: use layerling_perforate_face to cut a hexagon hole pattern into a face");
         const kind = rawKind === "cube" ? "box" : rawKind;
         const width = Math.max(MIN_SHAPE_DIMENSION, mcpNumber(params.width ?? params.size, 20));
         const depth = Math.max(MIN_SHAPE_DIMENSION, mcpNumber(params.depth ?? params.size, rawKind === "cube" ? width : 20));

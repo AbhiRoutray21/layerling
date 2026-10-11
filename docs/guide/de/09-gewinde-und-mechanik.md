@@ -1,6 +1,6 @@
 ---
 title: Gewinde, Zahnräder und andere Bauteile
-summary: Schrauben, Muttern und Gewindelöcher, die zusammenpassen, dazu Zahnrad, Feder, gebogenes Rohr, Wabengitter, Schwalbenschwanz, Tropfenbohrung sowie Stufen- und Senkbohrung.
+summary: Schrauben, Muttern und Gewindelöcher, die zusammenpassen, dazu Zahnrad, Feder, gebogenes Rohr, Schwalbenschwanz, Tropfenbohrung sowie Stufen- und Senkbohrung.
 ---
 
 Die Formenbibliothek enthält neben den Grundformen einige Bauteile, die man sonst mühsam zusammensetzen müsste. Alle lassen sich nachträglich in ihren Einstellungen ändern.
@@ -74,10 +74,6 @@ Der {{ui:shape.loft}} verbindet einen Umriss unten mit einem anderen oben, wie e
 {{ui:prop.loftTwist}} dreht den Querschnitt auf dem Weg nach oben gleichmäßig um die Hochachse, bis zu 360° in beide Richtungen; die Seiten winden sich dann. {{ui:prop.loftTiltX}} und {{ui:prop.loftTiltZ}} kippen das obere Ende, bis zu 45°: Ein positiver Wert hebt seine Vorderkante beziehungsweise seine rechte Seite. Die Schnitte dazwischen kippen anteilig mit, so dass die Wand weich in die Schräge läuft. Der höchste Punkt bleibt auf der eingestellten Höhe. Wird die Höhe später so klein, dass das schräge Ende unter die Platte reichen würde, gibt die Neigung so weit nach, dass es passt. Einen Bogen entlang eines Pfads, etwa einen Rohrkrümmer, macht der Übergang nicht.
 
 Der Übergang ist ein exakter Körper, auch verdreht und gekippt: Seine Kanten lassen sich fasen und verrunden, und der STEP-Export behält ihn. Einen Flansch mit Schraubenlöchern setzt du wie gewohnt dazu und gruppierst.
-
-## Wabengitter
-
-Das {{ui:shape.honeycomb}} ist eine Platte mit sechseckigen Aussparungen: leicht, stabil und schön anzusehen. Die {{ui:prop.honeycombCellSize}}, die {{ui:prop.honeycombWallThickness}} und die {{ui:prop.honeycombFrameWidth}} legen das Aussehen fest.
 
 ## Scharnier
 

@@ -5,10 +5,14 @@ import { MCP_SHAPE_SETTING_KEYS } from "@/lib/mcpShapeSettings";
 import { bentTubeSegmentsEqual } from "@/lib/bentTubeGeometry";
 import type { SketchStroke, WorkplaneShape } from "@/types/layerling";
 
+/** Bauwerte der Wabengitter, die es nur noch in alten Entwuerfen gibt: Die Form wird nicht mehr angeboten (#223), bleibt aber bearbeitbar. */
+const LEGACY_BODY_PARAMETER_KEYS = ["honeycombCellSize", "honeycombWallThickness", "honeycombFrameWidth"] as const;
+
 /** Aendert dieser Patch einen Bauwert des Koerpers - oder nur seinen Rahmen? */
 export function patchTouchesBodyParameters(patch: Partial<WorkplaneShape>) {
   return (
     MCP_SHAPE_SETTING_KEYS.some((key) => key in patch) ||
+    LEGACY_BODY_PARAMETER_KEYS.some((key) => key in patch) ||
     "width" in patch ||
     "depth" in patch ||
     "height" in patch ||
