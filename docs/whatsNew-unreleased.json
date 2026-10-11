@@ -18,5 +18,15 @@
       "de": "Unter Einstellungen → Arbeitsebene gibt es den Schalter „Gitterlinien wachsen beim Zoomen“. Aus bleiben die Linien bei jedem Zoom einen Pixel breit, wie in der Skizze. Standardmäßig bleibt alles wie bisher.",
       "en": "Settings → Workplane has a new switch, \"Grid lines grow when zooming\". Off, the lines stay one pixel wide at every zoom, as in the sketch. By default everything stays as it was."
     }
+  },
+  {
+    "title": {
+      "de": "Abgerundeter Quader mit Fase",
+      "en": "Rounded box with chamfers"
+    },
+    "body": {
+      "de": "Die Qualität des abgerundeten Quaders geht jetzt bis 1 hinunter. Dann ist jede Ecke ein gerader Schnitt statt eines Bogens, also eine Fase an den senkrechten Kanten.",
+      "en": "The quality of the rounded box now goes down to 1. Each corner is then one straight cut instead of an arc, which is a chamfer on the upright edges."
+    }
   }
 ]

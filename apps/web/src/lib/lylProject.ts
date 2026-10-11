@@ -1548,7 +1548,7 @@ function validateShapeDefinition(definition: Record<string, unknown>, label: str
     }
     if (definition.roundedBoxQuality !== undefined) {
       const roundedBoxQuality = finiteNumber(definition.roundedBoxQuality, `${label}.roundedBoxQuality`);
-      if (!Number.isInteger(roundedBoxQuality) || roundedBoxQuality < 4 || roundedBoxQuality > 64) {
+      if (!Number.isInteger(roundedBoxQuality) || roundedBoxQuality < 1 || roundedBoxQuality > 64) {
         throw new Error(`${label}.roundedBoxQuality is outside the supported range`);
       }
     }

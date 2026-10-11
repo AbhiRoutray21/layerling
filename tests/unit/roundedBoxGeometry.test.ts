@@ -171,8 +171,29 @@ describe("roundedBox geometry", () => {
     expect(normalizeTopBottomFillet(3.48)).toBe(3.5);
     expect(normalizeTopBottomFillet(50, 8)).toBe(8);
 
-    expect(normalizeRoundedBoxQuality(2)).toBe(4);
+    expect(normalizeRoundedBoxQuality(0)).toBe(1);
+    expect(normalizeRoundedBoxQuality(1)).toBe(1);
     expect(normalizeRoundedBoxQuality(50)).toBe(32);
     expect(normalizeRoundedBoxQuality(12)).toBe(12);
+  });
+
+  it("takes quality 1 for chamfered corners, still watertight, with and without top and bottom rounding (#239)", () => {
+    const flat = createRoundedBoxGeometry({ width: 40, depth: 30, height: 20, cornerFillet: 6, topBottomFillet: 0, roundedBoxQuality: 1 });
+    const flatPosition = flat.getAttribute("position");
+    expect(signedVolume(flatPosition)).toBeGreaterThan(0);
+    expect([...edgeUseCounts(flatPosition).values()].every((uses) => uses === 2)).toBe(true);
+    // One straight cut per corner: no vertex lies on an arc between the two cut ends.
+    const corner = new Set<string>();
+    for (let i = 0; i < flatPosition.count; i += 1) {
+      const x = flatPosition.getX(i);
+      const z = flatPosition.getZ(i);
+      if (x > 14 - 1e-4 && z > 9 - 1e-4 && flatPosition.getY(i) < 1e-6) corner.add(`${x.toFixed(4)},${z.toFixed(4)}`);
+    }
+    expect(corner.size).toBe(2);
+    const full = createRoundedBoxGeometry({ width: 50, depth: 40, height: 25, cornerFillet: 6, topBottomFillet: 4, roundedBoxQuality: 1 });
+    const fullPosition = full.getAttribute("position");
+    expect(signedVolume(fullPosition)).toBeGreaterThan(0);
+    expect([...edgeUseCounts(fullPosition).values()].every((uses) => uses === 2)).toBe(true);
+    expect((full.boundingBox?.max.x ?? 0) - (full.boundingBox?.min.x ?? 0)).toBeCloseTo(50, 3);
   });
 });

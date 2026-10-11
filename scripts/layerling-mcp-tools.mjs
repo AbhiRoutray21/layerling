@@ -144,7 +144,7 @@ export const shapeSettingSchema = {
   dovetailClearance: { type: "number", description: "Dovetail only: gap in mm (0 to 2, default 0.2) added on every side while the dovetail is a hole - a copy of the tail set to hole cuts a socket the tail fits into." },
   cornerFillet: { type: "number", description: "Rounded box only: fillet radius of vertical corners in mm." },
   topBottomFillet: { type: "number", description: "Rounded box only: fillet radius of top and bottom edges in mm." },
-  roundedBoxQuality: { type: "number", description: "Rounded box only: quality / segment count for fillet rounding (4 to 32)." },
+  roundedBoxQuality: { type: "number", description: "Rounded box only: quality / segment count for fillet rounding (1 to 32; 1 gives chamfered corners)." },
   bentTubeProfile: { type: "string", enum: ["round", "square", "hexagon", "octagon"], description: "Bent tube only: outer cross-section." },
   bentTubeInnerProfile: { type: "string", enum: ["none", "round", "square", "hexagon", "octagon"], description: "Bent tube only: inner cross-section; \"none\" makes a solid tube." },
   bentTubeSize: { type: "number", description: "Bent tube only: outer diameter of a round tube, width across flats of a polygonal one, in mm (1 to 500)." },

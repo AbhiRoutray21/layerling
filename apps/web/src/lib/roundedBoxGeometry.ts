@@ -8,7 +8,8 @@ export const DEFAULT_ROUNDED_BOX_CORNER_FILLET = 5;
 export const DEFAULT_ROUNDED_BOX_TOP_BOTTOM_FILLET = 0;
 export const DEFAULT_ROUNDED_BOX_QUALITY = 8;
 
-export const MIN_ROUNDED_BOX_QUALITY = 4;
+// 1 is a chamfered corner: one straight piece instead of the arc (#239).
+export const MIN_ROUNDED_BOX_QUALITY = 1;
 export const MAX_ROUNDED_BOX_QUALITY = 32;
 
 export function normalizeCornerFillet(val: unknown, maxFillet = 50): number {
@@ -50,7 +51,7 @@ export function buildRoundedRectContour(
   const safeD = Math.max(0.01, depth);
   const maxR = Math.min(safeW / 2, safeD / 2);
   const r = Math.max(0, Math.min(maxR, cornerFillet));
-  const q = Math.max(2, quality);
+  const q = Math.max(1, quality);
 
   if (r <= 1e-5) {
     const hw = safeW / 2;
