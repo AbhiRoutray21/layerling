@@ -7206,21 +7206,24 @@ export function LayerlingEditor({
           : shapes,
     [alignMode, alignPreview, arrayPreview, edgeModifier?.preview, effectiveAlignAnchorId, holePatternPreview, mirrorMode, mirrorPreviewAxis, selectedIds, selectedShapes, shapes],
   );
-  const sketchReferenceShapes = useMemo(
+  const sketchReferenceShapes = useMemo(() => {
     // Only the sketch view shows them; outside it every body would be projected for nothing.
-    () => !sketchActive || sketchOperation === "revolve" || placementWorkplaneIsBase(activeSketchWorkplane)
-      ? shapes
-      : shapes.map((shape) => shape.hidden || shape.id === editingSketchShapeId
-        ? shape
-        : sketchReferenceShapeOnWorkplane(shape, activeSketchWorkplane)),
-    [activeSketchWorkplane, editingSketchShapeId, shapes, sketchActive, sketchOperation],
-  );
+    if (!sketchActive) return shapes;
+    // On the base plate a body that only stands turned about the vertical keeps its plain outline;
+    // one that lies tilted (laid flat, stood on an edge) shows as it sits there, not as it was made (#231).
+    const onBase = placementWorkplaneIsBase(activeSketchWorkplane);
+    const tilted = (shape: WorkplaneShape) => Boolean(shape.rotationX || shape.rotationZ);
+    if (onBase && !shapes.some(tilted)) return shapes;
+    return shapes.map((shape) => shape.hidden || shape.id === editingSketchShapeId || (onBase && !tilted(shape))
+      ? shape
+      : sketchReferenceShapeOnWorkplane(shape, activeSketchWorkplane));
+  }, [activeSketchWorkplane, editingSketchShapeId, shapes, sketchActive]);
   // A workplane inside a body cuts it: the sketch view shows the outline of the cut (a hollow body
   // gives a ring), where a workplane on a face shows that face. Per body, as an SVG path in the
   // workplane's own coordinates.
   const sketchReferenceSlices = useMemo(() => {
     const slices: Record<string, string> = {};
-    if (!sketchActive || sketchOperation === "revolve" || placementWorkplaneIsBase(activeSketchWorkplane)) return slices;
+    if (!sketchActive || placementWorkplaneIsBase(activeSketchWorkplane)) return slices;
     shapes.forEach((shape) => {
       if (shape.hidden || shape.id === editingSketchShapeId) return;
       const mesh = meshForShape(shape);
@@ -7233,7 +7236,7 @@ export function LayerlingEditor({
       if (path) slices[shape.id] = path;
     });
     return slices;
-  }, [activeSketchWorkplane, editingSketchShapeId, shapes, sketchActive, sketchOperation]);
+  }, [activeSketchWorkplane, editingSketchShapeId, shapes, sketchActive]);
   const debugState = useMemo(
     () =>
       JSON.stringify({

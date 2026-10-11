@@ -28,5 +28,15 @@
       "de": "In der Formenbibliothek steht jetzt „Namensschild“ gleich nach Text. Eine Karte zeigt Text, Buchstabengröße und jede Schicht in einer Zeile mit Farbe, Breite, Ecken und Höhe. Auf Wunsch kommt ein Schlüsselringloch mit Lasche dazu, links, rechts oder oben.",
       "en": "The shape library now has \"Name tag\" right after Text. One card shows the text, the letter size and every layer in a row with colour, width, corners and height. A key ring hole with a tab can be added on the left, right or top."
     }
+  },
+  {
+    "title": {
+      "de": "Die Skizze zeigt die Körper, wie sie liegen",
+      "en": "The sketch shows bodies the way they lie"
+    },
+    "body": {
+      "de": "Ein flach gelegter oder gekippter Körper erscheint unter der Skizze so, wie er auf der Platte steht, nicht mehr wie beim Erzeugen. Bei einer gesetzten Arbeitsebene gilt das jetzt auch für die Rotationsskizze, die bisher die Grundplatte zeigte.",
+      "en": "A body laid flat or tilted now shows under the sketch the way it sits on the plate, not as it was made. With a workplane set, the revolve sketch follows it too; it used to show the base plate."
+    }
   }
 ]
