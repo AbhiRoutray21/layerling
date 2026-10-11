@@ -433,6 +433,27 @@ export const tools = [
     },
   },
   {
+    name: "layerling_perforate_face",
+    description: "Cut a pattern of holes into a flat face of a solid body - the editor's Hole pattern tool (vents, speaker grilles, baskets). The holes are ordinary hole shapes standing on the face and grouped with the body (nothing is baked: ungroup frees them again). Name the body and a side of its own box (targetFace, snapped to the nearest real face; the whole flat face around its middle is used) or give point and normal on the face yourself. Only holes that lie wholly inside the face, at least margin away from its edge, are made. form: round (size = diameter), square (size = side), rectangle and slot (size = width, height = height), hexagon (size = diameter across the corners). spacing is centre to centre; staggered shifts every second row by half a spacing and packs the rows so each hole has neighbours one spacing away. Without depth the holes go through the whole body. A curved face is refused. One undo step.",
+    inputSchema: {
+      ...editorTargetSchema,
+      properties: {
+        ...editorTargetSchema.properties,
+        targetId: { type: "string", description: "The body to perforate. If omitted, the one selected object (id also works)." },
+        targetFace: { type: "string", enum: ["bottom", "top", "left", "right", "front", "back"], description: "Side of the body's own box, taken in its current turn (default top)." },
+        point: { type: "array", items: { type: "number" }, minItems: 3, maxItems: 3, description: "A point on the face, [x, y, z] in world coordinates (y up). With normal, wins over targetFace." },
+        normal: { type: "array", items: { type: "number" }, minItems: 3, maxItems: 3, description: "Outward normal [x, y, z] of the face at point, in world coordinates." },
+        form: { type: "string", enum: ["round", "square", "rectangle", "hexagon", "slot"], description: "Shape of the holes (default hexagon)." },
+        size: { type: "number", minimum: 0.5, maximum: 200, description: "Diameter, side or width of a hole in millimetres (default 6)." },
+        height: { type: "number", minimum: 0.5, maximum: 200, description: "Height of a rectangle or slot in millimetres (default: size)." },
+        spacing: { type: "number", minimum: 0.5, maximum: 400, description: "Centre to centre in millimetres (default 9); raised to just over the hole size if smaller." },
+        arrangement: { type: "string", enum: ["grid", "staggered"], description: "grid (rows and columns) or staggered (default)." },
+        margin: { type: "number", minimum: 0, maximum: 100, description: "Clear distance between the holes and the face's edge in millimetres (default 4)." },
+        depth: { type: "number", minimum: 0.1, description: "Depth of the holes in millimetres. Omit to go through the whole body." },
+      },
+    },
+  },
+  {
     name: "layerling_mate_faces",
     description: "Move one object so a face of it meets a face of another object - the editor's Align faces tool. The moving object is turned the shortest way until the faces are parallel (not at all if they already are), then slid along the target face's normal only, so it keeps its place sideways. mode against puts the faces face to face (touching, back to back), flush lays them in one plane side by side. gap leaves that much room, measured out of the target face. Faces are named as sides of each object's own box and snap to the nearest real face. One undo step.",
     inputSchema: {

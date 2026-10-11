@@ -11925,6 +11925,72 @@ export function LayerlingEditor({
         };
       }
 
+      if (command.action === "perforate_face") {
+        // The same code as the hole pattern tool in the view (#223).
+        const all = currentShapes();
+        const selectedNow = selectedIdsRef.current;
+        const targetId = typeof params.targetId === "string"
+          ? params.targetId
+          : typeof params.id === "string" ? params.id : selectedNow.length === 1 ? selectedNow[0] : null;
+        const target = all.find((shape) => shape.id === targetId);
+        if (!target) throw new Error("perforate_face needs targetId (or exactly one selected object)");
+        if (target.locked) throw new Error("Unlock the object before perforating it");
+        if (target.hole || isNonSolidShapeKind(target.kind)) throw new Error("perforate_face needs a solid body, not a hole");
+        const vec3 = (value: unknown) => (Array.isArray(value) && value.length === 3 && value.every((entry) => typeof entry === "number" && Number.isFinite(entry))
+          ? new THREE.Vector3(value[0] as number, value[1] as number, value[2] as number)
+          : null);
+        let point = vec3(params.point);
+        let normal = vec3(params.normal);
+        if (!point || !normal || normal.lengthSq() < 1e-12) {
+          const side = typeof params.targetFace === "string" && params.targetFace in LAY_FLAT_SIDES ? params.targetFace as LayFlatSide : "top";
+          const [x, y, z] = LAY_FLAT_SIDES[side];
+          const faceNormal = nearestFaceNormal(target, new THREE.Vector3(x, y, z).applyQuaternion(quaternionForShape(target)));
+          if (!faceNormal) throw new Error("perforate_face found no face on that object");
+          normal = faceNormal.clone().normalize();
+          // The middle of the target, moved out along the normal onto the plane of that face.
+          const center = new THREE.Vector3(target.x, (target.elevation ?? 0) + target.height / 2, target.z);
+          const reach = Math.max(...meshForShape(target).vertices.map(([vx, vy, vz]) => new THREE.Vector3(vx, vy, vz).dot(normal as THREE.Vector3)));
+          point = center.clone().addScaledVector(normal, reach - center.dot(normal));
+        }
+        const form = params.form === undefined ? DEFAULT_HOLE_PATTERN.form : params.form;
+        if (form !== "round" && form !== "square" && form !== "rectangle" && form !== "hexagon" && form !== "slot") {
+          throw new Error("perforate_face form must be round, square, rectangle, hexagon or slot");
+        }
+        const arrangement = params.arrangement === undefined ? DEFAULT_HOLE_PATTERN.arrangement : params.arrangement;
+        if (arrangement !== "grid" && arrangement !== "staggered") throw new Error("perforate_face arrangement must be grid or staggered");
+        const depth = mcpOptionalNumber(params.depth);
+        const size = mcpNumber(params.size, DEFAULT_HOLE_PATTERN.size);
+        const settings = normalizeHolePattern({
+          form,
+          arrangement,
+          size,
+          height: mcpNumber(params.height, size),
+          spacing: mcpNumber(params.spacing, DEFAULT_HOLE_PATTERN.spacing),
+          margin: mcpNumber(params.margin, DEFAULT_HOLE_PATTERN.margin),
+          depth: depth !== undefined && depth > 0 ? depth : null,
+        });
+        const read = readPerforableFace(worldTrianglePositions(target), point, normal);
+        if (!read.ok) throw new Error(read.reason === "curved" ? "That face is curved; perforate_face needs a flat face" : "perforate_face found no flat face there");
+        const plan = holePatternShapes(read.face, settings, t("holePattern.holeName"));
+        if (plan.tooMany) throw new Error("That would be too many holes; make them bigger or the spacing wider");
+        if (plan.holes.length === 0) throw new Error("No hole fits on that face with this size and margin");
+        const sourceFingerprint = projectShapesFingerprint(currentShapes());
+        const sourceProjectId = projectInfoRef.current.projectId;
+        const result = await buildGroupedShapeFromSelection([target, ...plan.holes], workspaceSettingsRef.current.booleanTriangleLimit);
+        if (projectInfoRef.current.projectId !== sourceProjectId || projectShapesFingerprint(currentShapes()) !== sourceFingerprint) {
+          throw new Error("The scene changed while perforating; run the command again");
+        }
+        if (!result.group) throw new Error(result.failureNotice);
+        const editableGroup = canonicalizeShape({ ...result.group, groupOperation: "group" });
+        commitShapes([...currentShapes().filter((shape) => shape.id !== target.id), editableGroup], editableGroup.id, t("status.holePatternCreated", { count: plan.holes.length }));
+        return {
+          object: mcpShapeSummary(editableGroup),
+          holes: plan.holes.length,
+          settings,
+          normal: [normal.x, normal.y, normal.z].map((value) => Number(value.toFixed(4))),
+        };
+      }
+
       if (command.action === "align_objects") {
         const axis = params.axis === "x" || params.axis === "y" || params.axis === "z" ? params.axis : null;
         const target = params.target === "min" || params.target === "center" || params.target === "max" ? params.target : null;
