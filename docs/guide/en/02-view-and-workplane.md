@@ -91,6 +91,8 @@ Two sliders under {{ui:workspace.appearance}} set how the bodies are lit. {{ui:w
 
 ![The editor in the dark colour scheme. You set the colour scheme at the top right: System, Light, Dark or Graphite.](shot:editor-dark)
 
+{{ui:workspace.toolbarSize}} under {{ui:workspace.appearance}} makes the buttons of the ribbon on top, its shape menu and the camera controls on the left smaller or larger: {{ui:workspace.toolbarSizeSmall}}, {{ui:workspace.toolbarSizeMedium}} (as it always was) or {{ui:workspace.toolbarSizeLarge}}. Small leaves more room for the workplane on a laptop; large is easier to hit on a big screen or with a finger. With large buttons the groups of the ribbon go onto a second row when the window is too narrow for them. The size is kept in this browser and holds for every design.
+
 > **Tip:** Stop rotating the view when you fit parts together exactly. Use the number keys to go to the straight view from top or front and press [[O]] for the flat display. Then you see at once whether two edges are really flush.
 
 ## When layerling feels slow

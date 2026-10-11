@@ -433,7 +433,10 @@ input:where([type='button'], [type='reset'], [type='submit']),
   --toolbar-label: #77695a;
   --toolbar-icon: #241f20;
   --toolbar-icon-disabled: #ebe3d4;
-  --toolbar-icon-size: 43px;
+  /* Toolbar size setting (lib/toolbarSize.ts): the existing icons are scaled
+     by the browser, see html[data-toolbar-size] below. */
+  --toolbar-scale: 1;
+  --toolbar-icon-size: calc(43px * var(--toolbar-scale));
   --toolbar-tile: #ffffff;
   --toolbar-hover-bg: rgba(255, 255, 255, 0.66);
   --toolbar-hover-ring: rgba(216, 201, 185, 0.86);
@@ -453,6 +456,29 @@ input:where([type='button'], [type='reset'], [type='submit']),
   --group-manage: var(--filament-azure);
   --group-help: var(--group-neutral);
   --group-sketch: var(--filament-magenta);
+}
+
+/* Small and large toolbar. The icons scale with --toolbar-scale; the tool row
+   grows or shrinks by the same amount as an icon (43px * 0.25 = ~11px). The
+   row height stays a plain number because the editor reads it from script. */
+html[data-toolbar-size="small"] {
+  --toolbar-scale: 0.75;
+  --editor-toolbar-tools-height: 65px;
+  --editor-toolbar-height: 109px;
+}
+
+html[data-toolbar-size="large"] {
+  --toolbar-scale: 1.25;
+  --editor-toolbar-tools-height: 87px;
+  --editor-toolbar-height: 131px;
+}
+
+/* Large icons no longer fit the widths measured for the media queries below,
+   so the groups wrap onto a further row at any width rather than being cut off. */
+html[data-toolbar-size="large"] .toolbar-mode-content,
+html[data-toolbar-size="large"] .sketch-toolbar-ribbon {
+  flex-wrap: wrap;
+  height: auto;
 }
 
 * {
@@ -2955,8 +2981,8 @@ html[data-theme="dark"] .whats-new-earlier:hover {
 }
 
 .editor-home-control svg {
-  width: 43px;
-  height: 43px;
+  width: calc(43px * var(--toolbar-scale));
+  height: calc(43px * var(--toolbar-scale));
 }
 
 .dashboard-settings-panel {
@@ -3910,14 +3936,14 @@ html[data-theme="dark"] .shell-openings-summary {
 }
 
 .sketch-tool-icon svg {
-  width: 30px;
-  height: 30px;
+  width: calc(30px * var(--toolbar-scale));
+  height: calc(30px * var(--toolbar-scale));
   stroke-width: 1.8;
 }
 
 .sketch-tool-icon .sketch-reference-icon {
-  width: 32px;
-  height: 32px;
+  width: calc(32px * var(--toolbar-scale));
+  height: calc(32px * var(--toolbar-scale));
 }
 
 .sketch-reference-icon {
@@ -3968,7 +3994,7 @@ html[data-theme="dark"] .shell-openings-summary {
 
 .sketch-command-button {
   display: inline-flex;
-  height: 43px;
+  height: calc(43px * var(--toolbar-scale));
   min-width: 80px;
   padding: 3px 9px;
   flex-direction: column;
@@ -3985,14 +4011,14 @@ html[data-theme="dark"] .shell-openings-summary {
 }
 
 .sketch-command-button svg {
-  width: 25px;
-  height: 25px;
+  width: calc(25px * var(--toolbar-scale));
+  height: calc(25px * var(--toolbar-scale));
   stroke-width: 1.8;
 }
 
 .sketch-command-button .sketch-reference-icon {
-  width: 27px;
-  height: 27px;
+  width: calc(27px * var(--toolbar-scale));
+  height: calc(27px * var(--toolbar-scale));
 }
 
 .sketch-command-button:hover:not(:disabled) {
@@ -4024,7 +4050,7 @@ html[data-theme="dark"] .shell-openings-summary {
 
 .sketch-create-menu {
   position: relative;
-  height: 43px;
+  height: calc(43px * var(--toolbar-scale));
 }
 
 .sketch-create-menu-trigger {
@@ -4043,8 +4069,8 @@ html[data-theme="dark"] .shell-openings-summary {
   position: absolute;
   right: 4px;
   bottom: 5px;
-  width: 13px;
-  height: 13px;
+  width: calc(13px * var(--toolbar-scale));
+  height: calc(13px * var(--toolbar-scale));
 }
 
 /* The heading of the "Sketch to 3D" menu, with its question mark. */
@@ -4360,7 +4386,8 @@ html[data-theme="dark"] .shell-openings-summary {
   order: 2;
   position: relative;
   display: flex;
-  height: 52px;
+  /* The row below the 24px label. */
+  height: calc(var(--editor-toolbar-tools-height) - 24px);
   align-items: center;
   justify-content: center;
   padding: 0 3px 1px;
@@ -4513,6 +4540,12 @@ html[data-theme="dark"] .shell-openings-summary {
   color: var(--toolbar-icon);
 }
 
+/* The inspector header keeps its size; the ribbon follows the toolbar size. */
+.shape-menu-trigger .toolbar-vector-art-icon {
+  width: calc(26px * var(--toolbar-scale));
+  height: calc(26px * var(--toolbar-scale));
+}
+
 /* Manage sits in the same ribbon as every other group, so its icons are drawn
    at the same size and in the same ink. They were inheriting the small size
    meant for the inspector header. */
@@ -4556,6 +4589,12 @@ html[data-theme="dark"] .shell-openings-summary {
   filter: grayscale(1) contrast(0.78) brightness(1.35);
   opacity: 0.22;
   transition: filter 120ms ease, opacity 120ms ease;
+}
+
+/* The sprite icons size themselves from this (components/icons.tsx); in the
+   ribbon they follow the toolbar size setting. */
+.toolbar-mode-content {
+  --sprite-icon-size: calc(35px * var(--toolbar-scale));
 }
 
 .vector-toolbar-sprite-icon {
@@ -4605,7 +4644,7 @@ html[data-theme="dark"] .shell-openings-summary {
   align-items: center;
   justify-content: center;
   gap: 5px;
-  height: 52px;
+  height: calc(var(--editor-toolbar-tools-height) - 24px);
   padding: 0 6px 2px;
 }
 
@@ -4755,6 +4794,66 @@ html[data-theme="dark"] .shell-openings-summary {
 .shape-menu-body .shape-menu-list {
   max-height: none;
   overflow: visible;
+}
+
+/* The 3D editor's shape menu follows the toolbar size setting; the sketch
+   editor's menu (.sketch-shape-menu-dropdown) keeps its size. The browser
+   zooms the whole menu - pictures, names, spacing. Zoom also multiplies the
+   menu's own lengths, so everything measured from the window or the bar is
+   divided by the scale to land where it did at medium. */
+.shape-menu-dropdown:not(.sketch-shape-menu-dropdown) {
+  /* Small menus fit more columns, large ones fewer: 5, 4, 3. The width holds
+     that many 210px columns with their gaps, the list's padding and border,
+     and room for the scrollbar. */
+  --shape-menu-columns: 4;
+  --shape-menu-width: calc(var(--shape-menu-columns) * 210px + (var(--shape-menu-columns) - 1) * 4px + 34px);
+  zoom: var(--toolbar-scale);
+  top: calc(var(--editor-toolbar-tools-height) / var(--toolbar-scale));
+  width: min(var(--shape-menu-width), calc((100vw - 32px) / var(--toolbar-scale)));
+  max-height: min(650px, calc((100vh - 92px) / var(--toolbar-scale)));
+}
+
+html[data-toolbar-size="small"] .shape-menu-dropdown:not(.sketch-shape-menu-dropdown) {
+  --shape-menu-columns: 5;
+}
+
+html[data-toolbar-size="large"] .shape-menu-dropdown:not(.sketch-shape-menu-dropdown) {
+  --shape-menu-columns: 3;
+}
+
+.shape-menu-dropdown:not(.sketch-shape-menu-dropdown) .shape-menu-list {
+  grid-template-columns: repeat(var(--shape-menu-columns), minmax(0, 1fr));
+}
+
+.shape-menu-dropdown:not(.sketch-shape-menu-dropdown) .shape-menu-list,
+.shape-menu-dropdown:not(.sketch-shape-menu-dropdown) .shape-menu-body {
+  max-height: min(608px, calc((100vh - 136px) / var(--toolbar-scale)));
+}
+
+.shape-menu-dropdown:not(.sketch-shape-menu-dropdown) .shape-menu-body .shape-menu-list {
+  max-height: none;
+}
+
+/* The narrow window's menu hangs from the window below the bar (see the
+   max-width: 1240px block further down); the same lengths, divided. */
+@media (max-width: 1240px) {
+  .shape-menu-dropdown:not(.sketch-shape-menu-dropdown) {
+    top: calc(var(--editor-toolbar-height) / var(--toolbar-scale));
+    left: calc(10px / var(--toolbar-scale));
+    width: min(var(--shape-menu-width), calc((100vw - 20px) / var(--toolbar-scale)));
+    max-height: calc((100vh - var(--editor-toolbar-height) - 10px) / var(--toolbar-scale));
+    max-height: calc((100dvh - var(--editor-toolbar-height) - 10px) / var(--toolbar-scale));
+  }
+
+  .shape-menu-dropdown:not(.sketch-shape-menu-dropdown) .shape-menu-list,
+  .shape-menu-dropdown:not(.sketch-shape-menu-dropdown) .shape-menu-body {
+    max-height: none;
+  }
+
+  /* A narrow window may not hold all the columns: as many as fit, as before. */
+  .shape-menu-dropdown:not(.sketch-shape-menu-dropdown) .shape-menu-list {
+    grid-template-columns: repeat(auto-fill, minmax(206px, 1fr));
+  }
 }
 
 .shape-menu-subtitle {
@@ -6965,6 +7064,21 @@ html[data-theme="dark"] .sketch-image-hint {
   box-shadow: none;
   cursor: pointer;
   transition: color 140ms ease, background-color 140ms ease, border-color 140ms ease, transform 140ms ease;
+}
+
+/* The column on the left follows the toolbar size setting: its own buttons
+   and the first button of each group, not the popovers they open. Each icon
+   keeps its size relative to the others (they are drawn from 22 to 28 px), so
+   the browser zooms the icon instead of every icon getting one new size. */
+.camera-controls > button,
+.camera-controls > div > button {
+  width: calc(44px * var(--toolbar-scale));
+  height: calc(43px * var(--toolbar-scale));
+}
+
+.camera-controls > button > svg,
+.camera-controls > div > button > svg {
+  zoom: var(--toolbar-scale);
 }
 
 .camera-controls button:hover {
@@ -12059,14 +12173,14 @@ html[data-theme="dark"] .workspace-custom-snap-add:hover {
   }
 
   .action-buttons button {
-    width: 43px;
-    min-width: 43px;
+    width: calc(43px * var(--toolbar-scale));
+    min-width: calc(43px * var(--toolbar-scale));
     padding: 0;
   }
 
   .action-buttons .action-icon-button {
-    width: 43px;
-    min-width: 43px;
+    width: calc(43px * var(--toolbar-scale));
+    min-width: calc(43px * var(--toolbar-scale));
   }
 
   .view-cube {
@@ -13831,7 +13945,7 @@ html[data-theme="dark"] .shortcuts-or {
    1415 px. Jeder neue Knopf verschiebt alle drei Schwellen: neu messen. */
 @media (max-width: 1910px) {
   :root {
-    --toolbar-icon-size: 37px;
+    --toolbar-icon-size: calc(37px * var(--toolbar-scale));
   }
 
   .toolbar-section-tools {
@@ -13852,7 +13966,7 @@ html[data-theme="dark"] .shortcuts-or {
 
 @media (max-width: 1620px) {
   :root {
-    --toolbar-icon-size: 34px;
+    --toolbar-icon-size: calc(34px * var(--toolbar-scale));
   }
 
   .toolbar-section {
@@ -14033,6 +14147,29 @@ html[data-theme="dark"] .theme-check {
   .camera-controls > .tape-control-group,
   .camera-controls > .corner-ruler-control-group,
   .camera-controls > .section-control-group {
+    order: 2;
+  }
+}
+
+/* At Large the column is a quarter taller, so it needs two columns from a taller
+   workplane on - 600 px was measured for Medium (#241). */
+@container workplane (max-height: 720px) {
+  html[data-toolbar-size="large"] .camera-controls {
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+    transform: none;
+  }
+
+  html[data-toolbar-size="large"] .camera-controls > .camera-zoom-button,
+  html[data-toolbar-size="large"] .camera-controls > .camera-touch-rotate {
+    order: 1;
+  }
+
+  html[data-toolbar-size="large"] .camera-controls > .workplane-control-group,
+  html[data-toolbar-size="large"] .camera-controls > .workplane-display-control-group,
+  html[data-toolbar-size="large"] .camera-controls > .tape-control-group,
+  html[data-toolbar-size="large"] .camera-controls > .corner-ruler-control-group,
+  html[data-toolbar-size="large"] .camera-controls > .section-control-group {
     order: 2;
   }
 }

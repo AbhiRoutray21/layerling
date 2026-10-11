@@ -1,6 +1,16 @@
 [
   {
     "title": {
+      "de": "Größe der Werkzeugleiste",
+      "en": "Toolbar size"
+    },
+    "body": {
+      "de": "Unter Einstellungen → Darstellung lassen sich die Knöpfe der Leiste oben und der Kamerasteuerung links klein, mittel oder groß stellen: mehr Platz auf dem Laptop, größere Knöpfe auf einem großen Bildschirm.",
+      "en": "Under Settings → Appearance the buttons of the ribbon on top and the camera controls on the left can be set small, medium or large: more room on a laptop, bigger buttons on a large screen."
+    }
+  },
+  {
+    "title": {
       "de": "Kürzel in den Tooltips, B für die Verrundung",
       "en": "Shortcuts in tooltips, B for the fillet"
     },
