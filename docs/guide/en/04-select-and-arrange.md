@@ -91,7 +91,7 @@ The copies first appear as a preview. Only {{ui:array.apply}} creates them. If t
 
 ## Hole pattern on a face
 
-For vents, speaker grilles, baskets and enclosures the {{ui:holePattern.title}} spreads holes evenly over a flat face. You no longer have to make one hole, repeat it and set it onto the wall. Select exactly one body, right-click it and choose {{ui:holePattern.title}}, or find it with [[Ctrl]]+[[K]].
+For vents, speaker grilles, baskets and enclosures the {{ui:holePattern.title}} spreads holes evenly over a flat face. You no longer have to make one hole, repeat it and set it onto the wall. Select exactly one body and click {{ui:holePattern.title}} in the {{ui:editor.group.modify}} group of the toolbar, next to the pattern. You can also right-click the body, or find it with [[Ctrl]]+[[K]].
 
 1. Click a flat face of the body. The whole flat face around your click counts, not just the triangle under the pointer. A curved face does not work: you get a hint and click a flat one instead.
 2. In the window, set how the holes look and lie:

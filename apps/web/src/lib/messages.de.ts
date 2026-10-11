@@ -771,7 +771,7 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "status.honeycombConverted": "Wabengitter in ein Lochmuster umgewandelt: {count}",
   "welcome.moreHolePatternTitle": "Lochmuster",
   "welcome.moreHolePatternBody": "Eine ebene Fläche eines Körpers anklicken und Löcher darin verteilen: rund, quadratisch, rechteckig, als Sechseck oder Langloch, im Raster oder versetzt, mit Abstand, Rand zur Kante und Tiefe (durch die ganze Form oder ein Maß). Eine Vorschau zeigt die Löcher, bevor du sie erzeugst; sie bleiben normale Aussparungen, mit dem Körper gruppiert - für Lüftungsgitter, Lautsprecher, Körbe und Gehäuse.",
-  "guide.select.holePattern": "Lochmuster (Rechtsklick auf einen Körper oder Strg+K): eine ebene Fläche anklicken, dann Lochform, Größe, Abstand, Anordnung, Rand und Tiefe einstellen. Die Löcher erscheinen als Vorschau; „Erzeugen“ legt sie als Aussparungen an, mit dem Körper gruppiert. Gruppe auflösen gibt sie wieder frei.",
+  "guide.select.holePattern": "Lochmuster (Knopf neben dem Muster in der Leiste, Rechtsklick auf einen Körper oder Strg+K): eine ebene Fläche anklicken, dann Lochform, Größe, Abstand, Anordnung, Rand und Tiefe einstellen. Die Löcher erscheinen als Vorschau; „Erzeugen“ legt sie als Aussparungen an, mit dem Körper gruppiert. Gruppe auflösen gibt sie wieder frei.",
   "scalePercent.errorTooSmall": "„{name}“ würde kleiner als 0,01 mm.",
   "scalePercent.errorTooLarge": "„{name}“ würde größer, als seine Form erlaubt. Setz in den Einstellungen unter Formvorgaben eine höhere „Eigene Größengrenze“ oder nimm einen kleineren Prozentwert.",
   "status.scaledByPercent": "Auf {percent} % skaliert",

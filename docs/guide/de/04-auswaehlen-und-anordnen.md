@@ -91,7 +91,7 @@ Die Kopien erscheinen zuerst als Vorschau. Erst {{ui:array.apply}} legt sie an. 
 
 ## Lochmuster auf einer Fläche
 
-Für Lüftungsschlitze, Lautsprechergitter, Körbe und Gehäuse verteilt das {{ui:holePattern.title}} Löcher gleichmäßig auf einer ebenen Fläche. Du musst dafür kein Loch einzeln anlegen, vervielfältigen und an die Wand setzen. Wähle genau einen Körper aus, klicke mit der rechten Maustaste darauf und wähle {{ui:holePattern.title}}, oder suche es mit [[Strg]]+[[K]].
+Für Lüftungsschlitze, Lautsprechergitter, Körbe und Gehäuse verteilt das {{ui:holePattern.title}} Löcher gleichmäßig auf einer ebenen Fläche. Du musst dafür kein Loch einzeln anlegen, vervielfältigen und an die Wand setzen. Wähle genau einen Körper aus und klicke in der Gruppe {{ui:editor.group.modify}} der Werkzeugleiste auf {{ui:holePattern.title}}, gleich neben dem Muster. Du kannst auch mit der rechten Maustaste auf den Körper klicken oder es mit [[Strg]]+[[K]] suchen.
 
 1. Klicke eine ebene Fläche des Körpers an. Die ganze ebene Fläche um deinen Klick zählt, nicht nur das Dreieck unter dem Mauszeiger. Eine gewölbte Fläche geht nicht: Du bekommst einen Hinweis und klickst eine ebene an.
 2. Stelle im Fenster ein, wie die Löcher aussehen und liegen:

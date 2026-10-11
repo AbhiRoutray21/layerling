@@ -772,7 +772,7 @@ export const MESSAGES_EN = {
   "status.honeycombConverted": "Honeycomb converted to a hole pattern: {count}",
   "welcome.moreHolePatternTitle": "Hole pattern",
   "welcome.moreHolePatternBody": "Click a flat face of a body and spread holes over it: round, square, rectangular, hexagonal or slots, in a grid or staggered, with spacing, margin to the edge and depth (through the whole body or a set depth). A preview shows the holes before you create them; they stay ordinary holes, grouped with the body - for vents, speaker grilles, baskets and enclosures.",
-  "guide.select.holePattern": "Hole pattern (right-click a body, or Ctrl+K): click a flat face, then set the hole shape, size, spacing, arrangement, margin and depth. The holes show as a preview; \"Create\" adds them as holes grouped with the body. Ungroup frees them again.",
+  "guide.select.holePattern": "Hole pattern (the toolbar button next to Pattern, right-click a body, or Ctrl+K): click a flat face, then set the hole shape, size, spacing, arrangement, margin and depth. The holes show as a preview; \"Create\" adds them as holes grouped with the body. Ungroup frees them again.",
   "scalePercent.errorTooSmall": "\"{name}\" would become smaller than 0.01 mm.",
   "scalePercent.errorTooLarge": "\"{name}\" would become larger than its shape allows. Set a higher \"Custom size limit\" for it under Shape defaults in the settings, or pick a smaller percentage.",
   "status.scaledByPercent": "Scaled to {percent} %",

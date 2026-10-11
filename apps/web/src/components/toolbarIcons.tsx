@@ -276,6 +276,28 @@ export function ToolbarPatternIcon(props: IconProps) {
   );
 }
 
+/** A plate with staggered hexagonal holes: the hole pattern (#223). */
+export function ToolbarHolePatternIcon(props: IconProps) {
+  const r = 4;
+  const half = (Math.sqrt(3) / 2) * r;
+  const hexagon = (cx: number, cy: number) =>
+    `M${cx} ${cy - r}l${half} ${r / 2}v${r}l${-half} ${r / 2}l${-half} ${-r / 2}v${-r}Z`;
+  const holes = [
+    ...[15, 24, 33].map((x) => [x, 16]),
+    ...[19.5, 28.5].map((x) => [x, 24]),
+    ...[15, 24, 33].map((x) => [x, 32]),
+  ];
+  return (
+    <ToolbarVectorIcon {...props}>
+      <rect x="6" y="8" width="36" height="32" rx="3" {...SOLID} />
+      <rect x="6" y="8" width="36" height="32" rx="3" />
+      {holes.map(([x, y]) => (
+        <path key={`${x}-${y}`} d={hexagon(x, y)} strokeWidth="2" />
+      ))}
+    </ToolbarVectorIcon>
+  );
+}
+
 export function ToolbarSplitIcon(props: IconProps) {
   return (
     <ToolbarVectorIcon {...props}>

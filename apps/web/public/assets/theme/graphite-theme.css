@@ -6472,13 +6472,13 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .shortcuts-or {
   color: #787878;
 }
 
-@media (max-width: 1825px) {
+@media (max-width: 1910px) {
   :root:where([data-theme="dark"][data-palette="graphite"]) {
     --toolbar-icon-size: 37px;
   }
 }
 
-@media (max-width: 1547px) {
+@media (max-width: 1620px) {
   :root:where([data-theme="dark"][data-palette="graphite"]) {
     --toolbar-icon-size: 34px;
   }
