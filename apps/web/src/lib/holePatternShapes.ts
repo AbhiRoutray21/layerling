@@ -121,7 +121,13 @@ export type HolePatternPlan = {
  * face, reaching `depth` into the body and a little out of it. Nothing is cut
  * here - grouping them with the body does that, and ungrouping frees them.
  */
-export function holePatternShapes(face: PerforableFace, settings: HolePatternSettings, namePrefix: string): HolePatternPlan {
+export function holePatternShapes(
+  face: PerforableFace,
+  settings: HolePatternSettings,
+  namePrefix: string,
+  /** Ids that stay the same from one call to the next, for a preview that is redrawn while the numbers change. */
+  previewIdPrefix?: string,
+): HolePatternPlan {
   const { centers, tooMany } = holePatternCenters(face.outline, settings);
   if (tooMany || centers.length === 0) return { holes: [], tooMany };
 
@@ -146,7 +152,7 @@ export function holePatternShapes(face: PerforableFace, settings: HolePatternSet
       { width: size.width, depth: size.height, height, sides: settings.form === "hexagon" ? 6 : undefined },
     );
     const sized = { ...made, width: size.width, depth: size.height, height, size: Math.max(size.width, size.height) };
-    const placed = { ...sized, ...placementPatchForNewShape(sized, workplane, base) };
+    const placed = { ...sized, ...placementPatchForNewShape(sized, workplane, base), ...(previewIdPrefix ? { id: `${previewIdPrefix}-${index}` } : {}) };
     return canonicalizeShape(withHoleMode(placed, true));
   });
   return { holes, tooMany: false };

@@ -26,6 +26,7 @@ export const COMMAND_KEYWORDS: Readonly<Record<string, readonly string[]>> = {
   mirror: ["mirror", "flip", "spiegeln", "spiegelung"],
   pivot: ["pivot", "rotation point", "drehpunkt", "drehen", "rotate"],
   scalePercent: ["scale", "percent", "resize", "bigger", "smaller", "skalieren", "prozent", "vergrößern", "vergroessern", "verkleinern", "größe"],
+  holePattern: ["hole pattern", "perforate", "perforation", "perforated", "holes", "vent", "ventilation", "grille", "honeycomb", "hexagon holes", "slots", "lochmuster", "lochraster", "perforieren", "locher", "löcher", "loecher", "lüftung", "lueftung", "gitter", "wabe", "langloch", "luftschlitze"],
   array: ["array", "pattern", "repeat", "muster", "reihe", "kreis", "wiederholen", "vervielfachen"],
   split: ["split", "cut", "slice", "teilen", "schneiden", "trennen", "saegen", "sägen", "ebene"],
   snap: ["snap", "grid", "raster", "einrasten", "gitter"],
