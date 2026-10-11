@@ -373,7 +373,7 @@ export const tools = [
   },
   {
     name: "layerling_align_objects",
-    description: "Align two or more Layerling objects using the same alignment logic as the editor Alignment button.",
+    description: "Align two or more Layerling objects using the same alignment logic as the editor Alignment button. On the plate the axes are the world's; with a workplane set on a face (layerling_set_workplane) the objects are measured and moved along that plane's axes instead - x along the face, y out of it, z across - so a part turned 45° lines up with its own edges.",
     inputSchema: {
       ...editorTargetSchema,
       required: ["axis", "target"],
@@ -381,7 +381,7 @@ export const tools = [
         ...editorTargetSchema.properties,
         ids: { type: "array", items: { type: "string" }, description: "Object ids to align. If omitted, uses the current selection." },
         anchorId: { type: "string", description: "Optional object id to keep fixed as the alignment reference." },
-        axis: { type: "string", enum: ["x", "y", "z"], description: "x=left/right, z=front/back, y=bottom/top." },
+        axis: { type: "string", enum: ["x", "y", "z"], description: "x=left/right, z=front/back, y=bottom/top - or along the set workplane's x, z and normal." },
         target: { type: "string", enum: ["min", "center", "max"], description: "Which side/center to align." },
       },
     },

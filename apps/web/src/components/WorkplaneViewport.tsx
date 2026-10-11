@@ -145,6 +145,7 @@ import {
   type TransformHandleKind,
   type TransformOverlayState,
 } from "@/components/workplane/TransformOverlay";
+import { cuboidCorners, pointAlongAxes, type AlignAxes, type FrameCuboid } from "@/lib/alignFrame";
 import type { AlignAxis, AlignHandleStatus, AlignTarget, GridSize, MeasurementAccuracy, ShapeAsset, WorkplaneNote, WorkplaneNoteAnchor, WorkplaneShape, WorkplaneWorkspaceSettings } from "@/types/layerling";
 import { NOTE_TEXT_LIMIT, referencePoints } from "@/lib/workplaneNotes";
 import { planarFaceCentroid, planarFaceTriangles, type PivotPoint } from "@/lib/rotationPivot";
@@ -300,6 +301,10 @@ type WorkplaneViewportProps = {
   alignMode: boolean;
   alignAnchorId: string | null;
   alignHandles: AlignHandleStatus[];
+  /** The axes the align tool measures along when a workplane is set on a face (#232); null on the plate. */
+  alignAxes?: AlignAxes | null;
+  /** The box the handles stand on along those axes, from the shapes before any preview. */
+  alignFrameBounds?: FrameCuboid | null;
   alignReferenceShapes: WorkplaneShape[];
   mirrorMode: boolean;
   mirrorReferenceShapes: WorkplaneShape[];
@@ -553,6 +558,8 @@ type ThreeState = {
   lastViewCubeSync: number;
   /** True while a handle of the align tool shows its preview: the drawn parts have moved then (#235). */
   alignPreviewActive?: boolean;
+  /** The axes and box the align handles stand on along a set workplane (#232). */
+  alignFrameInfo?: { axes: AlignAxes; bounds: FrameCuboid } | null;
   /** The box of the parts the align handles stand on, from before a preview moved them. */
   alignBoundsCache?: { key: string; shapes: WorkplaneShape[]; bounds: THREE.Box3 | null };
   rotationHandleSides: RotationHandleSides | null;
@@ -4345,6 +4352,8 @@ export function WorkplaneViewport({
   alignMode,
   alignAnchorId,
   alignHandles,
+  alignAxes = null,
+  alignFrameBounds = null,
   alignReferenceShapes,
   mirrorMode,
   mirrorReferenceShapes,
@@ -5129,10 +5138,11 @@ export function WorkplaneViewport({
     alignAnchorIdRef.current = alignAnchorId;
     alignHandlesRef.current = alignHandles;
     if (threeRef.current) {
+      threeRef.current.alignFrameInfo = alignAxes && alignFrameBounds ? { axes: alignAxes, bounds: alignFrameBounds } : null;
       syncAlignOverlay(threeRef.current, alignReferenceShapesRef.current, selectedIdsRef.current, alignMode, alignAnchorId, alignHandles, alignOverlayRef, setAlignOverlay);
       threeRef.current.needsRender = true;
     }
-  }, [alignAnchorId, alignHandles, alignMode]);
+  }, [alignAnchorId, alignAxes, alignFrameBounds, alignHandles, alignMode]);
 
   useEffect(() => {
     mirrorModeRef.current = mirrorMode;
@@ -12193,17 +12203,21 @@ function syncAlignOverlay(
     return;
   }
 
-  const selectedFrame = selectionFrameForShapes(shapes, selectedIds);
-  const anchorFrame = alignAnchorId && selectedIds.includes(alignAnchorId) ? selectionFrameForShapes(shapes, [alignAnchorId]) : null;
+  // With a workplane set on a face the handles stand on its axes, on the box the editor measured (#232).
+  const info = state.alignFrameInfo ?? null;
+  const selectedFrame = info ? null : selectionFrameForShapes(shapes, selectedIds);
+  const anchorFrame = !info && alignAnchorId && selectedIds.includes(alignAnchorId) ? selectionFrameForShapes(shapes, [alignAnchorId]) : null;
   const frame = anchorFrame ?? selectedFrame;
-  if (!frame) {
+  if (!info && !frame) {
     clear();
     return;
   }
 
   const rect = state.renderer.domElement.getBoundingClientRect();
   state.camera.updateMatrixWorld();
-  const corners = selectionFrameCorners(frame);
+  const corners = info
+    ? cuboidCorners(info.bounds, info.axes).map((corner) => new THREE.Vector3(corner.x, corner.y, corner.z))
+    : selectionFrameCorners(frame!);
   const projectedCorners = corners.map((corner) => {
     const cameraSpace = corner.clone().applyMatrix4(state.camera.matrixWorldInverse);
     const projected = corner.clone().project(state.camera);
@@ -12231,16 +12245,23 @@ function syncAlignOverlay(
   const boundsIds = anchorFrame && alignAnchorId ? [alignAnchorId] : selectedIds;
   const boundsKey = boundsIds.join(",");
   const cached = state.alignBoundsCache;
-  const drawn = state.alignPreviewActive && cached && cached.key === boundsKey && cached.shapes === shapes
+  const drawn = info ? null : state.alignPreviewActive && cached && cached.key === boundsKey && cached.shapes === shapes
     ? cached.bounds
     : drawnShapesBounds(state, boundsIds);
-  if (!state.alignPreviewActive) state.alignBoundsCache = { key: boundsKey, shapes, bounds: drawn };
-  const worldMinY = drawn ? drawn.min.y : Math.min(...corners.map((corner) => corner.y));
-  const worldMaxY = drawn ? drawn.max.y : Math.max(...corners.map((corner) => corner.y));
-  const worldMinX = drawn ? drawn.min.x : Math.min(...corners.map((corner) => corner.x));
-  const worldMaxX = drawn ? drawn.max.x : Math.max(...corners.map((corner) => corner.x));
-  const worldMinZ = drawn ? drawn.min.z : Math.min(...corners.map((corner) => corner.z));
-  const worldMaxZ = drawn ? drawn.max.z : Math.max(...corners.map((corner) => corner.z));
+  if (!info && !state.alignPreviewActive) state.alignBoundsCache = { key: boundsKey, shapes, bounds: drawn };
+  // The min and max of the box along each axis: the world's, or the workplane's.
+  const worldMinY = info ? info.bounds.minY : drawn ? drawn.min.y : Math.min(...corners.map((corner) => corner.y));
+  const worldMaxY = info ? info.bounds.maxY : drawn ? drawn.max.y : Math.max(...corners.map((corner) => corner.y));
+  const worldMinX = info ? info.bounds.minX : drawn ? drawn.min.x : Math.min(...corners.map((corner) => corner.x));
+  const worldMaxX = info ? info.bounds.maxX : drawn ? drawn.max.x : Math.max(...corners.map((corner) => corner.x));
+  const worldMinZ = info ? info.bounds.minZ : drawn ? drawn.min.z : Math.min(...corners.map((corner) => corner.z));
+  const worldMaxZ = info ? info.bounds.maxZ : drawn ? drawn.max.z : Math.max(...corners.map((corner) => corner.z));
+  // A point at (x, y, z) measured along the axes in use.
+  const at = (x: number, y: number, z: number) => {
+    if (!info) return new THREE.Vector3(x, y, z);
+    const point = pointAlongAxes(info.axes, x, y, z);
+    return new THREE.Vector3(point.x, point.y, point.z);
+  };
   const worldCenterX = (worldMinX + worldMaxX) / 2;
   const worldCenterY = (worldMinY + worldMaxY) / 2;
   const worldCenterZ = (worldMinZ + worldMaxZ) / 2;
@@ -12248,12 +12269,12 @@ function syncAlignOverlay(
   const statusByKey = new Map(statuses.map((status) => [`${status.axis}:${status.target}`, status]));
 
   const guidePoints = {
-    x0: project(new THREE.Vector3(worldMinX, worldMinY, worldMaxZ + offset)),
-    x1: project(new THREE.Vector3(worldMaxX, worldMinY, worldMaxZ + offset)),
-    z0: project(new THREE.Vector3(worldMaxX + offset, worldMinY, worldMinZ)),
-    z1: project(new THREE.Vector3(worldMaxX + offset, worldMinY, worldMaxZ)),
-    y0: project(new THREE.Vector3(worldMinX - offset, worldMinY, worldMaxZ + offset)),
-    y1: project(new THREE.Vector3(worldMinX - offset, worldMaxY, worldMaxZ + offset)),
+    x0: project(at(worldMinX, worldMinY, worldMaxZ + offset)),
+    x1: project(at(worldMaxX, worldMinY, worldMaxZ + offset)),
+    z0: project(at(worldMaxX + offset, worldMinY, worldMinZ)),
+    z1: project(at(worldMaxX + offset, worldMinY, worldMaxZ)),
+    y0: project(at(worldMinX - offset, worldMinY, worldMaxZ + offset)),
+    y1: project(at(worldMinX - offset, worldMaxY, worldMaxZ + offset)),
   };
 
   const makeHandle = (axis: AlignAxis, target: AlignTarget, point: THREE.Vector3) => {
@@ -12271,15 +12292,15 @@ function syncAlignOverlay(
   };
 
   const handles = [
-    makeHandle("x", "min", new THREE.Vector3(worldMinX, worldMinY, worldMaxZ + offset)),
-    makeHandle("x", "center", new THREE.Vector3(worldCenterX, worldMinY, worldMaxZ + offset)),
-    makeHandle("x", "max", new THREE.Vector3(worldMaxX, worldMinY, worldMaxZ + offset)),
-    makeHandle("z", "min", new THREE.Vector3(worldMaxX + offset, worldMinY, worldMinZ)),
-    makeHandle("z", "center", new THREE.Vector3(worldMaxX + offset, worldMinY, worldCenterZ)),
-    makeHandle("z", "max", new THREE.Vector3(worldMaxX + offset, worldMinY, worldMaxZ)),
-    makeHandle("y", "min", new THREE.Vector3(worldMinX - offset, worldMinY, worldMaxZ + offset)),
-    makeHandle("y", "center", new THREE.Vector3(worldMinX - offset, worldCenterY, worldMaxZ + offset)),
-    makeHandle("y", "max", new THREE.Vector3(worldMinX - offset, worldMaxY, worldMaxZ + offset)),
+    makeHandle("x", "min", at(worldMinX, worldMinY, worldMaxZ + offset)),
+    makeHandle("x", "center", at(worldCenterX, worldMinY, worldMaxZ + offset)),
+    makeHandle("x", "max", at(worldMaxX, worldMinY, worldMaxZ + offset)),
+    makeHandle("z", "min", at(worldMaxX + offset, worldMinY, worldMinZ)),
+    makeHandle("z", "center", at(worldMaxX + offset, worldMinY, worldCenterZ)),
+    makeHandle("z", "max", at(worldMaxX + offset, worldMinY, worldMaxZ)),
+    makeHandle("y", "min", at(worldMinX - offset, worldMinY, worldMaxZ + offset)),
+    makeHandle("y", "center", at(worldMinX - offset, worldCenterY, worldMaxZ + offset)),
+    makeHandle("y", "max", at(worldMinX - offset, worldMaxY, worldMaxZ + offset)),
   ].filter((handle): handle is AlignOverlayState["handles"][number] => Boolean(handle));
 
   const next = {

@@ -47,6 +47,7 @@ import { sketchPrimitiveGeometry } from "@/lib/sketchPrimitives";
 import { cloneSketchProfile, orderedSketchPaths, withSegmentHandles, withSmoothSketchHandles } from "@/lib/sketchSmoothHandles";
 import { curveSketchSegment, straightenSketchSegment } from "@/lib/sketchSegmentCurve";
 import { withSegmentsConstruction } from "@/lib/sketchConstruction";
+import { alignAxesForWorkplane, cuboidAlongAxes, shiftAlongAxis, type AlignAxes } from "@/lib/alignFrame";
 import {
   SketchBoltCircleIcon,
   SketchEllipseIcon,
@@ -3169,12 +3170,23 @@ function alignmentLabel(axis: AlignAxis, target: AlignTarget) {
   return target === "min" ? t("align.bottom") : target === "max" ? t("align.top") : t("align.middle");
 }
 
-function alignmentStatuses(selection: WorkplaneShape[], anchorId: string | null): AlignHandleStatus[] {
+/** The box of a part along a workplane's axes, as the alignment measures it there (#232). */
+function frameAabb(shape: WorkplaneShape, axes: AlignAxes): Cuboid {
+  const mesh = shape.cylinderWrap && shape.importedMesh ? null : meshForShape(shape);
+  const own = mesh && mesh.vertices.length > 0 ? cuboidAlongAxes(mesh.vertices, axes) : null;
+  if (own) return own;
+  const box = shapeAabb(shape);
+  const corners: Array<[number, number, number]> = [];
+  for (const x of [box.minX, box.maxX]) for (const y of [box.minY, box.maxY]) for (const z of [box.minZ, box.maxZ]) corners.push([x, y, z]);
+  return cuboidAlongAxes(corners, axes) ?? box;
+}
+
+function alignmentStatuses(selection: WorkplaneShape[], anchorId: string | null, axes: AlignAxes | null = null): AlignHandleStatus[] {
   if (selection.length < 2) {
     return [];
   }
 
-  const boundsById = new Map(selection.map((shape) => [shape.id, meshAabb(shape)]));
+  const boundsById = new Map(selection.map((shape) => [shape.id, axes ? frameAabb(shape, axes) : meshAabb(shape)]));
   const anchorBounds = anchorId ? boundsById.get(anchorId) ?? null : null;
   const referenceBounds = anchorBounds ?? boundsForCuboids(Array.from(boundsById.values()));
 
@@ -3211,9 +3223,10 @@ function alignedShapesForSelection(
   anchorId: string | null,
   axis: AlignAxis,
   target: AlignTarget,
+  axes: AlignAxes | null = null,
 ) {
   const selected = new Set(selectedIds);
-  const boundsById = new Map(selectedShapes.map((shape) => [shape.id, meshAabb(shape)]));
+  const boundsById = new Map(selectedShapes.map((shape) => [shape.id, axes ? frameAabb(shape, axes) : meshAabb(shape)]));
   const anchorBounds = anchorId ? boundsById.get(anchorId) ?? null : null;
   const referenceBounds = anchorBounds ?? boundsForCuboids(Array.from(boundsById.values()));
   const targetValue = alignCoordinate(referenceBounds, axis, target);
@@ -3232,6 +3245,16 @@ function alignedShapesForSelection(
       return shape;
     }
     moved += 1;
+    if (axes) {
+      // Along a workplane's axes the part moves along that axis of the world (#232).
+      const shift = shiftAlongAxis(axes, axis, delta);
+      return {
+        ...shape,
+        x: cleanNearZero(Number((shape.x + shift.x).toFixed(4)), ALIGN_EPSILON),
+        z: cleanNearZero(Number((shape.z + shift.z).toFixed(4)), ALIGN_EPSILON),
+        elevation: cleanNearZero(Number(((shape.elevation ?? 0) + shift.y).toFixed(4)), ALIGN_EPSILON),
+      };
+    }
     if (axis === "x") {
       return { ...shape, x: cleanNearZero(Number((shape.x + delta).toFixed(4)), ALIGN_EPSILON) };
     }
@@ -7202,7 +7225,15 @@ export function LayerlingEditor({
     () => effectiveAlignmentAnchorId(selectedShapes, alignAnchorId),
     [alignAnchorId, selectedShapes],
   );
-  const alignHandleStatuses = useMemo(() => (alignMode ? alignmentStatuses(selectedShapes, effectiveAlignAnchorId) : []), [alignMode, effectiveAlignAnchorId, selectedShapes]);
+  // A workplane set on a face lets the align tool measure along its axes (#232); on the plate it is the world's.
+  const alignAxes = useMemo(() => alignAxesForWorkplane(placementWorkplane), [placementWorkplane]);
+  const alignHandleStatuses = useMemo(() => (alignMode ? alignmentStatuses(selectedShapes, effectiveAlignAnchorId, alignAxes) : []), [alignAxes, alignMode, effectiveAlignAnchorId, selectedShapes]);
+  // The box the handles stand on along those axes, of the anchor or of the whole selection, from the shapes as they are (no preview).
+  const alignFrameBounds = useMemo(() => {
+    if (!alignMode || !alignAxes || selectedShapes.length < 2) return null;
+    const anchor = effectiveAlignAnchorId ? selectedShapes.find((shape) => shape.id === effectiveAlignAnchorId) : null;
+    return boundsForCuboids((anchor ? [anchor] : selectedShapes).map((shape) => frameAabb(shape, alignAxes)));
+  }, [alignAxes, alignMode, effectiveAlignAnchorId, selectedShapes]);
   // The copies a pattern would add, shown on the workplane until "Create".
   const arrayPreview = useMemo(
     () => (arrayTool && selectedShapes.length > 0 ? arrayCopies(selectedShapes, arrayTool) : null),
@@ -7224,11 +7255,11 @@ export function LayerlingEditor({
         : edgeModifier?.preview && cadModifierBaseShapeRef.current
         ? shapes.map((shape) => shape.id === cadModifierBaseShapeRef.current?.id ? edgeModifier.preview as WorkplaneShape : shape)
         : alignMode && alignPreview
-        ? alignedShapesForSelection(shapes, selectedIds, selectedShapes, effectiveAlignAnchorId, alignPreview.axis, alignPreview.target).nextShapes
+        ? alignedShapesForSelection(shapes, selectedIds, selectedShapes, effectiveAlignAnchorId, alignPreview.axis, alignPreview.target, alignAxes).nextShapes
         : mirrorMode && mirrorPreviewAxis
           ? mirroredShapesForSelection(shapes, selectedIds, selectedShapes, mirrorPreviewAxis).nextShapes
           : shapes,
-    [alignMode, alignPreview, arrayPreview, edgeModifier?.preview, effectiveAlignAnchorId, holePatternPreview, mirrorMode, mirrorPreviewAxis, selectedIds, selectedShapes, shapes],
+    [alignAxes, alignMode, alignPreview, arrayPreview, edgeModifier?.preview, effectiveAlignAnchorId, holePatternPreview, mirrorMode, mirrorPreviewAxis, selectedIds, selectedShapes, shapes],
   );
   const sketchReferenceShapes = useMemo(() => {
     // Only the sketch view shows them; outside it every body would be projected for nothing.
@@ -9353,7 +9384,7 @@ export function LayerlingEditor({
         return;
       }
 
-      const { nextShapes, moved } = alignedShapesForSelection(shapes, selectedIds, selectedShapes, effectiveAlignAnchorId, axis, target);
+      const { nextShapes, moved } = alignedShapesForSelection(shapes, selectedIds, selectedShapes, effectiveAlignAnchorId, axis, target, alignAxes);
       setAlignPreview(null);
 
       if (moved === 0) {
@@ -9365,7 +9396,7 @@ export function LayerlingEditor({
         ? t("status.alignedOne", { alignment: alignmentLabel(axis, target) })
         : t("status.alignedMany", { count: moved, alignment: alignmentLabel(axis, target) }));
     },
-    [commitShapes, effectiveAlignAnchorId, selectedIds, selectedShapes, shapes],
+    [alignAxes, commitShapes, effectiveAlignAnchorId, selectedIds, selectedShapes, shapes],
   );
 
   const previewAlignSelection = useCallback((axis: AlignAxis, target: AlignTarget) => {
@@ -12187,7 +12218,7 @@ export function LayerlingEditor({
         const validIds = selectedForAlign.map((shape) => shape.id);
         const requestedAnchorId = typeof params.anchorId === "string" ? params.anchorId : null;
         const anchorId = effectiveAlignmentAnchorId(selectedForAlign, requestedAnchorId);
-        const { nextShapes, moved } = alignedShapesForSelection(currentShapes(), validIds, selectedForAlign, anchorId, axis, target);
+        const { nextShapes, moved } = alignedShapesForSelection(currentShapes(), validIds, selectedForAlign, anchorId, axis, target, alignAxesForWorkplane(placementWorkplaneRef.current));
         if (moved === 0) {
           setSelectedIds(validIds);
           selectedIdsRef.current = validIds;
@@ -14595,6 +14626,8 @@ export function LayerlingEditor({
           alignMode={alignMode}
           alignAnchorId={effectiveAlignAnchorId}
           alignHandles={alignHandleStatuses}
+          alignAxes={alignAxes}
+          alignFrameBounds={alignFrameBounds}
           alignReferenceShapes={shapes}
           mirrorMode={mirrorMode}
           mirrorReferenceShapes={shapes}

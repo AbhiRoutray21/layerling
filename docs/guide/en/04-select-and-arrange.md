@@ -44,6 +44,8 @@ With [[Alt]] already held when the drag begins, you drag a copy, as in Tinkercad
 
 Two or more selected shapes are lined up with {{ui:editor.tool.align}}: points appear around the selection for left, centre and right, front, centre and back, and top, centre and bottom. A click on a point moves all shapes there. If you first click one of the selected shapes, it stays in place and the others line up with it.
 
+A shape turned at an angle, say by 45°, has its box round it to line up with, not its own edges. To line up with the edges, set a workplane on a face of that shape first ({{ui:camera.placeWorkplane}}, then click the face): the points then stand on the axes of that plane, and the shapes are measured and moved along them, as in Tinkercad. Reset the workplane to line up along the plate again.
+
 ![Align shows the possible targets as dots around the selection.](shot:align)
 
 The key is [[L]]. [[Esc]] cancels.

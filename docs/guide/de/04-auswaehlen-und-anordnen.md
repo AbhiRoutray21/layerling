@@ -44,6 +44,8 @@ Ist [[Alt]] schon gedrückt, wenn das Ziehen beginnt, ziehst du eine Kopie, wie 
 
 Zwei oder mehr ausgewählte Formen richtest du mit {{ui:editor.tool.align}} aneinander aus: Am Rand der Auswahl erscheinen Punkte für links, mittig und rechts, vorn, mittig und hinten sowie oben, mittig und unten. Ein Klick auf einen Punkt schiebt alle Formen dorthin. Klickst du zuerst eine der ausgewählten Formen an, bleibt sie an ihrem Platz und die anderen richten sich nach ihr.
 
+Eine schräg gedrehte Form, etwa um 45°, hat als Bezug den Kasten um sich herum, nicht ihre eigenen Kanten. Um an den Kanten auszurichten, setzt du zuerst eine Arbeitsebene auf eine Fläche dieser Form ({{ui:camera.placeWorkplane}}, dann die Fläche anklicken): Die Punkte stehen dann auf den Achsen dieser Ebene, und die Formen werden entlang davon gemessen und verschoben, wie in Tinkercad. Setzt du die Arbeitsebene zurück, richtest du wieder an der Platte aus.
+
 ![Das Ausrichten zeigt an den Rändern der Auswahl die möglichen Ziele als Punkte.](shot:align)
 
 Die Taste dafür ist [[L]]. [[Esc]] bricht ab.
