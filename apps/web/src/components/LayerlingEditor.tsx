@@ -1,7 +1,7 @@
 "use client";
 
 import { GuideHelpLink } from "@/components/GuideHelpLink";
-import { AlertTriangle, Check, Percent, Circle as CircleIcon, CloudUpload, Download, Eye, EyeOff, FilePlus2, FolderOpen, Hexagon as HexagonIcon, Info, ListTree, Pencil, Search, Square as SquareIcon, Triangle as TriangleIcon, X } from "lucide-react";
+import { AlertTriangle, Check, Grid3x3 as HolePatternIcon, Percent, Circle as CircleIcon, CloudUpload, Download, Eye, EyeOff, FilePlus2, FolderOpen, Hexagon as HexagonIcon, Info, ListTree, Pencil, Search, Square as SquareIcon, Triangle as TriangleIcon, X } from "lucide-react";
 import { ObjectListPanel } from "@/components/workplane/ObjectListPanel";
 import type manifoldModule from "manifold-3d";
 import type { ManifoldToplevel } from "manifold-3d";
@@ -95,6 +95,10 @@ import { ShellPanel } from "./workplane/ShellPanel";
 import { MateFacesPanel } from "./workplane/MateFacesPanel";
 import { mateMotion, type FacePick, type MateMode } from "@/lib/mateFaces";
 import { carriedOntoFace } from "@/lib/carryOntoFace";
+import { HolePatternPanel } from "./workplane/HolePatternPanel";
+import { DEFAULT_HOLE_PATTERN, normalizeHolePattern, type HolePatternSettings } from "@/lib/holePattern";
+import { holePatternShapes, readPerforableFace, type PerforableFace } from "@/lib/holePatternShapes";
+import { honeycombReplacementParts } from "@/lib/honeycombMigration";
 import { MeshSimplifyPanel } from "./workplane/MeshSimplifyPanel";
 import { addCustomFontFile, customFontErrorMessage, FontManagerPanel } from "./workplane/FontManagerPanel";
 import { onFontManagerRequested } from "@/lib/fontManagerEvents";
@@ -2958,6 +2962,21 @@ type LayFlatSide = keyof typeof LAY_FLAT_SIDES;
  * consistent, so "outward" is taken as away from the body's centre; a face
  * never counts the wrong way round (the bottom never passes for the top).
  */
+/** The triangles of a body in the world, nine numbers each - what the face readers take. */
+function worldTrianglePositions(shape: WorkplaneShape): Float64Array {
+  const mesh = meshForShape(shape);
+  const positions = new Float64Array(mesh.faces.length * 9);
+  mesh.faces.forEach((face, index) => {
+    face.forEach((vertexIndex, corner) => {
+      const vertex = mesh.vertices[vertexIndex];
+      positions[index * 9 + corner * 3] = vertex[0];
+      positions[index * 9 + corner * 3 + 1] = vertex[1];
+      positions[index * 9 + corner * 3 + 2] = vertex[2];
+    });
+  });
+  return positions;
+}
+
 function nearestFaceNormal(shape: WorkplaneShape, direction: THREE.Vector3): THREE.Vector3 | null {
   const mesh = meshForShape(shape);
   const wanted = direction.clone().normalize();
@@ -6480,6 +6499,15 @@ export function LayerlingEditor({
     mode: MateMode;
     gap: number;
   } | null>(null);
+  // "Hole pattern": a flat face of the selected body, then the holes that fit it (#223).
+  const [holePatternTool, setHolePatternTool] = useState<{
+    sourceId: string;
+    step: "pick" | "ready";
+    face: PerforableFace | null;
+    settings: HolePatternSettings;
+    busy: boolean;
+  } | null>(null);
+  const holePatternSettingsRef = useRef<HolePatternSettings>(DEFAULT_HOLE_PATTERN);
   const [cruiseAsset, setCruiseAsset] = useState<ShapeAsset | null>(null);
   const cruiseAssetRef = useRef<ShapeAsset | null>(null);
   cruiseAssetRef.current = cruiseAsset;
@@ -7155,10 +7183,19 @@ export function LayerlingEditor({
     () => (arrayTool && selectedShapes.length > 0 ? arrayCopies(selectedShapes, arrayTool) : null),
     [arrayTool, selectedShapes],
   );
+  // The holes a hole pattern would cut, shown on the face until "Create".
+  const holePatternPreview = useMemo(
+    () => (holePatternTool?.face
+      ? holePatternShapes(holePatternTool.face, holePatternTool.settings, t("holePattern.holeName"), "hole-pattern-preview")
+      : null),
+    [holePatternTool?.face, holePatternTool?.settings],
+  );
   const viewportShapes = useMemo(
     () =>
       arrayPreview
         ? [...shapes, ...arrayPreview]
+        : holePatternPreview?.holes.length
+        ? [...shapes, ...holePatternPreview.holes]
         : edgeModifier?.preview && cadModifierBaseShapeRef.current
         ? shapes.map((shape) => shape.id === cadModifierBaseShapeRef.current?.id ? edgeModifier.preview as WorkplaneShape : shape)
         : alignMode && alignPreview
@@ -7166,7 +7203,7 @@ export function LayerlingEditor({
         : mirrorMode && mirrorPreviewAxis
           ? mirroredShapesForSelection(shapes, selectedIds, selectedShapes, mirrorPreviewAxis).nextShapes
           : shapes,
-    [alignMode, alignPreview, arrayPreview, edgeModifier?.preview, effectiveAlignAnchorId, mirrorMode, mirrorPreviewAxis, selectedIds, selectedShapes, shapes],
+    [alignMode, alignPreview, arrayPreview, edgeModifier?.preview, effectiveAlignAnchorId, holePatternPreview, mirrorMode, mirrorPreviewAxis, selectedIds, selectedShapes, shapes],
   );
   const sketchReferenceShapes = useMemo(
     // Only the sketch view shows them; outside it every body would be projected for nothing.
@@ -10527,6 +10564,149 @@ export function LayerlingEditor({
     if (mateTool && (selectedIds.length !== 1 || selectedIds[0] !== mateTool.sourceId)) setMateTool(null);
   }, [mateTool, selectedIds]);
 
+  // "Hole pattern" (#223): pick a flat face of the selected body, set the holes, create them as holes grouped with the body.
+  const toggleHolePattern = useCallback(() => {
+    if (holePatternTool) {
+      setHolePatternTool(null);
+      setNotice(t("status.holePatternCancelled"));
+      return;
+    }
+    const source = selectedShapes.length === 1 ? selectedShapes[0] : null;
+    if (!source) {
+      setNotice(t("status.holePatternSelectOne"));
+      return;
+    }
+    if (source.locked) {
+      setNotice(t("status.selectionLocked"));
+      return;
+    }
+    if (source.hole || isNonSolidShapeKind(source.kind)) {
+      setNotice(t("status.holePatternNeedsSolid"));
+      return;
+    }
+    if (edgeModifier || shellTool || splitSession || simplifyToolId) {
+      setNotice(t("status.holePatternOtherTool"));
+      return;
+    }
+    stopCruise();
+    setAlignMode(false);
+    setMirrorMode(false);
+    setPivotPickMode(false);
+    setLayFlatPickMode(false);
+    setMateTool(null);
+    setArrayTool(null);
+    setScalePercentTool(null);
+    setHolePatternTool({ sourceId: source.id, step: "pick", face: null, settings: holePatternSettingsRef.current, busy: false });
+    setNotice(t("status.holePatternStart"));
+  }, [edgeModifier, holePatternTool, selectedShapes, shellTool, simplifyToolId, splitSession, stopCruise]);
+
+  const pickHolePatternFace = useCallback((pick: LayFlatPick | null) => {
+    if (!holePatternTool || holePatternTool.step !== "pick") return;
+    const source = shapesRef.current.find((shape) => shape.id === holePatternTool.sourceId);
+    if (!pick || !source || pick.shapeId !== source.id) {
+      setNotice(t("status.holePatternMissed"));
+      return;
+    }
+    const read = readPerforableFace(worldTrianglePositions(source), pick.point, pick.normal);
+    if (!read.ok) {
+      setNotice(t(read.reason === "curved" ? "status.holePatternCurved" : "status.holePatternMissed"));
+      return;
+    }
+    setHolePatternTool({ ...holePatternTool, step: "ready", face: read.face });
+    setNotice(t("status.holePatternReady"));
+  }, [holePatternTool]);
+
+  const changeHolePatternSettings = useCallback((patch: Partial<HolePatternSettings>) => {
+    setHolePatternTool((current) => {
+      if (!current) return current;
+      // A slot or a rectangle starts out longer than high, with room for it, unless it was sized by hand.
+      const longForm = (patch.form === "slot" || patch.form === "rectangle")
+        && current.settings.form !== "slot" && current.settings.form !== "rectangle"
+        && current.settings.height === current.settings.size;
+      const start = longForm
+        ? (patch.form === "slot" ? { size: 12, height: 5, spacing: Math.max(current.settings.spacing, 15) } : { size: 10, height: 5, spacing: Math.max(current.settings.spacing, 13) })
+        : {};
+      const settings = normalizeHolePattern({ ...current.settings, ...start, ...patch });
+      holePatternSettingsRef.current = settings;
+      return { ...current, settings };
+    });
+  }, []);
+
+  const applyHolePattern = useCallback(async () => {
+    const tool = holePatternTool;
+    if (!tool?.face || tool.busy) return;
+    const source = shapesRef.current.find((shape) => shape.id === tool.sourceId);
+    if (!source) return;
+    const plan = holePatternShapes(tool.face, tool.settings, t("holePattern.holeName"));
+    if (plan.tooMany || plan.holes.length === 0) {
+      setNotice(t(plan.tooMany ? "status.holePatternTooMany" : "status.holePatternNone"));
+      return;
+    }
+    setHolePatternTool({ ...tool, busy: true });
+    const sourceFingerprint = projectShapesFingerprint(shapesRef.current);
+    const sourceProjectId = projectInfoRef.current.projectId;
+    const result = await buildGroupedShapeFromSelection([source, ...plan.holes], workspaceSettingsRef.current.booleanTriangleLimit);
+    if (projectInfoRef.current.projectId !== sourceProjectId || projectShapesFingerprint(shapesRef.current) !== sourceFingerprint) {
+      setHolePatternTool(null);
+      setNotice(t("status.groupChanged"));
+      return;
+    }
+    if (!result.group) {
+      setHolePatternTool((current) => (current ? { ...current, busy: false } : current));
+      setNotice(result.failureNotice);
+      return;
+    }
+    const editableGroup = canonicalizeShape({ ...result.group, groupOperation: "group" });
+    setHolePatternTool(null);
+    commitShapes(
+      [...shapesRef.current.filter((shape) => shape.id !== source.id), editableGroup],
+      editableGroup.id,
+      t("status.holePatternCreated", { count: plan.holes.length }),
+    );
+  }, [commitShapes, holePatternTool]);
+
+  // The tool belongs to the body it was started for, and gives way to the tools that pick faces or open panels of their own.
+  useEffect(() => {
+    if (!holePatternTool) return;
+    if (
+      selectedIds.length !== 1
+      || selectedIds[0] !== holePatternTool.sourceId
+      || mateTool || layFlatPickMode || pivotPickMode || arrayTool || scalePercentTool
+      || shellTool || edgeModifier || splitSession || simplifyToolId
+    ) {
+      setHolePatternTool(null);
+    }
+  }, [arrayTool, edgeModifier, holePatternTool, layFlatPickMode, mateTool, pivotPickMode, scalePercentTool, selectedIds, shellTool, simplifyToolId, splitSession]);
+
+  // The Honeycomb is gone as a shape (#223): one in an older design becomes a box with hexagonal holes, grouped, as the
+  // hole pattern makes it. Each is converted once - Undo may bring the old one back, and it then stays as it was.
+  const honeycombConvertedRef = useRef(new Set<string>());
+  useEffect(() => {
+    if (historyViewState) return;
+    const pending = shapes.filter((shape) => shape.kind === "honeycomb" && !shape.hole && !honeycombConvertedRef.current.has(shape.id));
+    if (pending.length === 0) return;
+    pending.forEach((shape) => honeycombConvertedRef.current.add(shape.id));
+    const sourceProjectId = projectInfoRef.current.projectId;
+    const sourceFingerprint = projectShapesFingerprint(shapesRef.current);
+    void (async () => {
+      const replacements = new Map<string, WorkplaneShape>();
+      for (const shape of pending) {
+        const parts = honeycombReplacementParts(shape);
+        if (!parts) continue;
+        const result = await buildGroupedShapeFromSelection([parts.body, ...parts.holes], workspaceSettingsRef.current.booleanTriangleLimit);
+        if (!result.group) continue;
+        replacements.set(shape.id, canonicalizeShape({ ...result.group, id: shape.id, name: shape.name, color: shape.color, locked: shape.locked, groupOperation: "group" }));
+      }
+      if (replacements.size === 0) return;
+      if (projectInfoRef.current.projectId !== sourceProjectId || projectShapesFingerprint(shapesRef.current) !== sourceFingerprint) return;
+      commitShapes(
+        shapesRef.current.map((shape) => (shape.kind === "honeycomb" ? replacements.get(shape.id) ?? shape : shape)),
+        selectedIdsRef.current,
+        t("status.honeycombConverted", { count: replacements.size }),
+      );
+    })();
+  }, [commitShapes, historyViewState, shapes]);
+
   const centerSelectionOnWorkplane = useCallback(() => {
     if (!hasSelection) {
       setNotice(t("status.selectShapeFirst"));
@@ -11417,6 +11597,7 @@ export function LayerlingEditor({
 
       if (command.action === "create_shape") {
         const rawKind = mcpString(params.kind, "box");
+        if (rawKind === "honeycomb") throw new Error("The honeycomb shape is gone: use layerling_perforate_face to cut a hexagon hole pattern into a face");
         const kind = rawKind === "cube" ? "box" : rawKind;
         const width = Math.max(MIN_SHAPE_DIMENSION, mcpNumber(params.width ?? params.size, 20));
         const depth = Math.max(MIN_SHAPE_DIMENSION, mcpNumber(params.depth ?? params.size, rawKind === "cube" ? width : 20));
@@ -11828,6 +12009,72 @@ export function LayerlingEditor({
           point: [point.x, point.y, point.z].map((value) => Number(value.toFixed(4))),
           normal: [normal.x, normal.y, normal.z].map((value) => Number(value.toFixed(4))),
           objects: nextShapes.filter((shape) => ids.has(shape.id)).map(mcpShapeSummary),
+        };
+      }
+
+      if (command.action === "perforate_face") {
+        // The same code as the hole pattern tool in the view (#223).
+        const all = currentShapes();
+        const selectedNow = selectedIdsRef.current;
+        const targetId = typeof params.targetId === "string"
+          ? params.targetId
+          : typeof params.id === "string" ? params.id : selectedNow.length === 1 ? selectedNow[0] : null;
+        const target = all.find((shape) => shape.id === targetId);
+        if (!target) throw new Error("perforate_face needs targetId (or exactly one selected object)");
+        if (target.locked) throw new Error("Unlock the object before perforating it");
+        if (target.hole || isNonSolidShapeKind(target.kind)) throw new Error("perforate_face needs a solid body, not a hole");
+        const vec3 = (value: unknown) => (Array.isArray(value) && value.length === 3 && value.every((entry) => typeof entry === "number" && Number.isFinite(entry))
+          ? new THREE.Vector3(value[0] as number, value[1] as number, value[2] as number)
+          : null);
+        let point = vec3(params.point);
+        let normal = vec3(params.normal);
+        if (!point || !normal || normal.lengthSq() < 1e-12) {
+          const side = typeof params.targetFace === "string" && params.targetFace in LAY_FLAT_SIDES ? params.targetFace as LayFlatSide : "top";
+          const [x, y, z] = LAY_FLAT_SIDES[side];
+          const faceNormal = nearestFaceNormal(target, new THREE.Vector3(x, y, z).applyQuaternion(quaternionForShape(target)));
+          if (!faceNormal) throw new Error("perforate_face found no face on that object");
+          normal = faceNormal.clone().normalize();
+          // The middle of the target, moved out along the normal onto the plane of that face.
+          const center = new THREE.Vector3(target.x, (target.elevation ?? 0) + target.height / 2, target.z);
+          const reach = Math.max(...meshForShape(target).vertices.map(([vx, vy, vz]) => new THREE.Vector3(vx, vy, vz).dot(normal as THREE.Vector3)));
+          point = center.clone().addScaledVector(normal, reach - center.dot(normal));
+        }
+        const form = params.form === undefined ? DEFAULT_HOLE_PATTERN.form : params.form;
+        if (form !== "round" && form !== "square" && form !== "rectangle" && form !== "hexagon" && form !== "slot") {
+          throw new Error("perforate_face form must be round, square, rectangle, hexagon or slot");
+        }
+        const arrangement = params.arrangement === undefined ? DEFAULT_HOLE_PATTERN.arrangement : params.arrangement;
+        if (arrangement !== "grid" && arrangement !== "staggered") throw new Error("perforate_face arrangement must be grid or staggered");
+        const depth = mcpOptionalNumber(params.depth);
+        const size = mcpNumber(params.size, DEFAULT_HOLE_PATTERN.size);
+        const settings = normalizeHolePattern({
+          form,
+          arrangement,
+          size,
+          height: mcpNumber(params.height, size),
+          spacing: mcpNumber(params.spacing, DEFAULT_HOLE_PATTERN.spacing),
+          margin: mcpNumber(params.margin, DEFAULT_HOLE_PATTERN.margin),
+          depth: depth !== undefined && depth > 0 ? depth : null,
+        });
+        const read = readPerforableFace(worldTrianglePositions(target), point, normal);
+        if (!read.ok) throw new Error(read.reason === "curved" ? "That face is curved; perforate_face needs a flat face" : "perforate_face found no flat face there");
+        const plan = holePatternShapes(read.face, settings, t("holePattern.holeName"));
+        if (plan.tooMany) throw new Error("That would be too many holes; make them bigger or the spacing wider");
+        if (plan.holes.length === 0) throw new Error("No hole fits on that face with this size and margin");
+        const sourceFingerprint = projectShapesFingerprint(currentShapes());
+        const sourceProjectId = projectInfoRef.current.projectId;
+        const result = await buildGroupedShapeFromSelection([target, ...plan.holes], workspaceSettingsRef.current.booleanTriangleLimit);
+        if (projectInfoRef.current.projectId !== sourceProjectId || projectShapesFingerprint(currentShapes()) !== sourceFingerprint) {
+          throw new Error("The scene changed while perforating; run the command again");
+        }
+        if (!result.group) throw new Error(result.failureNotice);
+        const editableGroup = canonicalizeShape({ ...result.group, groupOperation: "group" });
+        commitShapes([...currentShapes().filter((shape) => shape.id !== target.id), editableGroup], editableGroup.id, t("status.holePatternCreated", { count: plan.holes.length }));
+        return {
+          object: mcpShapeSummary(editableGroup),
+          holes: plan.holes.length,
+          settings,
+          normal: [normal.x, normal.y, normal.z].map((value) => Number(value.toFixed(4))),
         };
       }
 
@@ -13671,6 +13918,11 @@ export function LayerlingEditor({
           setNotice(t("status.mateCancelled"));
           return;
         }
+        if (holePatternTool) {
+          setHolePatternTool(null);
+          setNotice(t("status.holePatternCancelled"));
+          return;
+        }
         if (arrayTool) {
           setArrayTool(null);
           setNotice(t("status.arrayCancelled"));
@@ -13921,6 +14173,7 @@ export function LayerlingEditor({
     // Esc closes these tools, and Ctrl+A picks from the current shapes: a handler from before
     // they opened, or before a shape was added, closed nothing and missed new shapes.
     mateTool,
+    holePatternTool,
     scalePercentTool,
     shapes,
   ]);
@@ -13963,6 +14216,9 @@ export function LayerlingEditor({
         { key: "fillet", label: t("editor.tool.fillet"), onSelect: () => startEdgeModifier("fillet") },
         { key: "hollow", label: t("editor.tool.hollow"), onSelect: startShellTool },
       );
+      if (!single.hole && !single.locked && !isNonSolidShapeKind(single.kind)) {
+        items.push({ key: "holePattern", label: t("holePattern.title"), onSelect: toggleHolePattern });
+      }
     }
     if (!allLocked) items.push({ key: "scalePercent", label: t("scalePercent.title"), separated: true, onSelect: toggleScalePercentTool });
     if (single && offersMeshSimplify(single) && !single.locked) items.push({ key: "simplify", label: t("contextMenu.simplify"), separated: true, onSelect: startSimplifyTool });
@@ -14062,6 +14318,9 @@ export function LayerlingEditor({
         layFlatActive={layFlatPickMode}
         onMateFaces={toggleMateFaces}
         mateFacesActive={Boolean(mateTool)}
+        onHolePattern={toggleHolePattern}
+        holePatternActive={Boolean(holePatternTool)}
+        canHolePattern={selectedShapes.length === 1 && Boolean(selectedShape && !selectedShape.locked && !selectedShape.hole && !isNonSolidShapeKind(selectedShape.kind))}
         onGroup={groupSelected}
         onBundle={bundleSelected}
         onIntersect={intersectSelected}
@@ -14299,8 +14558,10 @@ export function LayerlingEditor({
           onLayFlatPick={layFlatOnFace}
           mateFacePick={mateTool && mateTool.step !== "ready"
             ? { shapeIds: mateTool.step === "source" ? [mateTool.sourceId] : shapes.filter((shape) => shape.id !== mateTool.sourceId && !shape.hidden).map((shape) => shape.id) }
-            : null}
-          onMateFacePick={pickMateFace}
+            : holePatternTool?.step === "pick"
+              ? { shapeIds: [holePatternTool.sourceId] }
+              : null}
+          onMateFacePick={mateTool ? pickMateFace : pickHolePatternFace}
           onNoteAdd={addNote}
           onNoteUpdate={updateNote}
           onNoteRemove={removeNote}
@@ -14409,6 +14670,28 @@ export function LayerlingEditor({
           shape={simplifyToolShape}
           onApply={applySimplifyTool}
           onCancel={() => setSimplifyToolId(null)}
+        />
+      ) : null}
+      {holePatternTool && selectedShape?.id === holePatternTool.sourceId ? (
+        <HolePatternPanel
+          targetName={displayShapeName(selectedShape)}
+          step={holePatternTool.step}
+          settings={holePatternTool.settings}
+          workspace={workspaceSettings}
+          thickness={holePatternTool.face?.thickness ?? 0}
+          holeCount={holePatternPreview?.holes.length ?? 0}
+          tooMany={Boolean(holePatternPreview?.tooMany)}
+          busy={holePatternTool.busy}
+          onChange={changeHolePatternSettings}
+          onRepick={() => {
+            setHolePatternTool({ ...holePatternTool, step: "pick", face: null });
+            setNotice(t("status.holePatternStart"));
+          }}
+          onApply={() => void applyHolePattern()}
+          onCancel={() => {
+            setHolePatternTool(null);
+            setNotice(t("status.holePatternCancelled"));
+          }}
         />
       ) : null}
       {mateTool && selectedShape ? (
@@ -14788,6 +15071,9 @@ function SecondaryToolbar({
   layFlatActive,
   onMateFaces,
   mateFacesActive,
+  onHolePattern,
+  holePatternActive,
+  canHolePattern,
   onGroup,
   onBundle,
   onIntersect,
@@ -14891,6 +15177,9 @@ function SecondaryToolbar({
   layFlatActive: boolean;
   onMateFaces: () => void;
   mateFacesActive: boolean;
+  onHolePattern: () => void;
+  holePatternActive: boolean;
+  canHolePattern: boolean;
   onGroup: () => void;
   onBundle: () => void;
   onIntersect: () => void;
@@ -15309,6 +15598,7 @@ function SecondaryToolbar({
       ...combineTools.map((tool) => fromTool(tool, t("editor.group.combine"))),
       ...modifyTools.map((tool) => fromTool(tool, t("editor.group.modify"))),
       plain("scalePercent", t("scalePercent.title"), t("editor.group.modify"), hasSelection, onScalePercent, { icon: Percent, active: scalePercentActive }),
+      plain("holePattern", t("holePattern.title"), t("editor.group.modify"), canHolePattern, onHolePattern, { icon: HolePatternIcon, active: holePatternActive }),
       ...arrangeTools.map((tool) => fromTool(tool, t("editor.group.arrange"))),
       plain("note", t("editor.tool.note"), manageGroup, true, onNoteTool, { icon: ToolbarNoteIcon, active: noteMode }),
       plain("import", t("editor.import"), manageGroup, true, () => onTopPanel("import"), { icon: ToolbarImportIcon }),

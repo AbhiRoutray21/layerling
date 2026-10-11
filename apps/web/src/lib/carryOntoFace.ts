@@ -70,11 +70,15 @@ export function carriedOntoFace(
  * rules the workplane follows on a face, so a part carried from face to face keeps its edges in line.
  */
 function frameFacing(normal: Vec) {
+  return placementWorkplaneQuaternion(faceFrameWorkplane({ x: 0, y: 0, z: 0 }, normal));
+}
+
+/** The workplane frame a face pointing along `normal` gets (see frameFacing), with its origin at `origin`. */
+export function faceFrameWorkplane(origin: Vec, normal: Vec): PlacementWorkplane {
   const n = new THREE.Vector3(normal.x, normal.y, normal.z).normalize();
   const level = new THREE.Vector3(1, 0, 0).projectOnPlane(n);
   if (level.lengthSq() < 1e-8) level.set(0, 0, 1).projectOnPlane(n);
-  const origin = { x: 0, y: 0, z: 0 };
-  return placementWorkplaneQuaternion(placementWorkplaneFromSurface(origin, n, level, false, true));
+  return placementWorkplaneFromSurface(origin, n, level, false, true);
 }
 
 /** The eight corners of a part's frame in the world, as the view places it. */

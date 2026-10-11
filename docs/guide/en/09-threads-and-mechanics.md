@@ -1,6 +1,6 @@
 ---
 title: Threads, gears and other parts
-summary: Screws, nuts and tapped holes that fit together, plus gear, spring, bent tube, honeycomb, dovetail, teardrop hole, counterbore and countersink.
+summary: Screws, nuts and tapped holes that fit together, plus gear, spring, bent tube, dovetail, teardrop hole, counterbore and countersink.
 ---
 
 Besides the basic shapes, the library contains some parts that would be tedious to put together yourself. All of them can be changed afterwards in their settings.
@@ -74,10 +74,6 @@ The {{ui:shape.loft}} joins one outline at the bottom to another at the top, lik
 {{ui:prop.loftTwist}} turns the section evenly about the vertical on the way up, up to 360° either way; the sides then wind round. {{ui:prop.loftTiltX}} and {{ui:prop.loftTiltZ}} tilt the top end, up to 45°: a positive value raises its front edge or its right side. The sections in between tilt by their share, so the wall runs smoothly into the slant. The highest point stays at the set height. If the height later becomes so small that the slanted end would reach under the plate, the tilt gives way until it fits. A bend along a path, such as a pipe elbow, is not something the loft does.
 
 The loft is an exact body, twisted and tilted too: its edges can be chamfered and filleted, and STEP export keeps it. Add a flange with screw holes as usual and group them.
-
-## Honeycomb
-
-The {{ui:shape.honeycomb}} is a plate with hexagonal holes: light, stiff and nice to look at. The {{ui:prop.honeycombCellSize}}, the {{ui:prop.honeycombWallThickness}} and the {{ui:prop.honeycombFrameWidth}} set the look.
 
 ## Hinge
 

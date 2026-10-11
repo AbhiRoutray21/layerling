@@ -43,6 +43,7 @@ export const GUIDE_SECTIONS = {
   myShapes: { chapter: "shapes", de: "eigene-formen", en: "custom-shapes" },
   objectList: { chapter: "select", de: "die-objektliste", en: "the-object-list" },
   pattern: { chapter: "select", de: "muster-reihe-und-kreis", en: "patterns-row-and-circle" },
+  holePattern: { chapter: "select", de: "lochmuster-auf-einer-flaeche", en: "hole-pattern-on-a-face" },
   scaleByPercent: { chapter: "select", de: "um-prozent-skalieren", en: "scaling-by-percent" },
   selectionProperties: { chapter: "select", de: "mehrere-teile-auf-einmal-aendern", en: "changing-several-parts-at-once" },
   historyView: { chapter: "select", de: "zurueckschauen-die-verlaufsansicht", en: "looking-back-the-history-view" },
@@ -57,7 +58,6 @@ export const GUIDE_SECTIONS = {
   springs: { chapter: "threads", de: "federn", en: "springs" },
   bentTubes: { chapter: "threads", de: "gebogene-rohre", en: "bent-tubes" },
   loft: { chapter: "threads", de: "uebergang", en: "loft" },
-  honeycomb: { chapter: "threads", de: "wabengitter", en: "honeycomb" },
   hinge: { chapter: "threads", de: "scharnier", en: "hinge" },
   knurl: { chapter: "threads", de: "raendelung", en: "knurling" },
   dovetail: { chapter: "threads", de: "schwalbenschwanz", en: "dovetail" },
@@ -142,7 +142,8 @@ export function guideSectionForShape(shape: GuideShape): GuideSection | undefine
     case "loft":
       return "loft";
     case "honeycomb":
-      return "honeycomb";
+      // No longer a shape of its own: the hole pattern tool took its place (#223).
+      return "holePattern";
     case "hinge":
       return "hinge";
     case "knurl":
@@ -175,7 +176,6 @@ export function guideChapterForShape(shape: GuideShape): GuideChapter {
     case "gear":
     case "bentTube":
     case "loft":
-    case "honeycomb":
     case "hinge":
     case "knurl":
     case "dovetail":

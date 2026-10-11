@@ -1,6 +1,16 @@
 [
   {
     "title": {
+      "de": "Lochmuster für eine Fläche",
+      "en": "Hole pattern for a face"
+    },
+    "body": {
+      "de": "Neues Werkzeug für Lüftungsgitter, Lautsprecher und Körbe: einen Körper wählen, eine ebene Fläche anklicken, Lochform, Größe, Abstand, Anordnung, Rand und Tiefe einstellen. Die Löcher erscheinen als Vorschau und bleiben nach „Erzeugen“ normale Aussparungen, mit dem Körper gruppiert. Das Wabengitter gibt es dafür nicht mehr; vorhandene werden umgewandelt.",
+      "en": "A new tool for vents, speaker grilles and baskets: select a body, click a flat face and set the hole shape, size, spacing, arrangement, margin and depth. The holes show as a preview and stay ordinary holes grouped with the body after Create. The Honeycomb shape is gone for it; existing ones are converted."
+    }
+  },
+  {
+    "title": {
       "de": "Die Maßfelder folgen der Lage des Körpers",
       "en": "The size fields follow the way a body lies"
     },

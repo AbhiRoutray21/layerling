@@ -60,19 +60,19 @@ describe("shape catalog", () => {
     expect(kinds.indexOf("text")).toBe(kinds.indexOf("teardrop") + 1);
   });
 
-  it("exposes knurl, honeycomb, hinge and dovetail between gear and the decorative shapes in the toolbar catalog", () => {
+  it("exposes knurl, hinge and dovetail between gear and the decorative shapes in the toolbar catalog", () => {
     const kinds = toolbarShapeAssets.map((asset) => asset.kind);
 
-    expect(kinds).toContain("honeycomb");
-
     const gearIndex = kinds.indexOf("gear");
-    const honeycombIndex = kinds.indexOf("honeycomb");
     const dovetailIndex = kinds.indexOf("dovetail");
     expect(kinds.indexOf("knurl")).toBe(gearIndex + 1);
-    expect(honeycombIndex).toBe(gearIndex + 2);
-    expect(kinds.indexOf("hinge")).toBe(honeycombIndex + 1);
-    expect(dovetailIndex).toBe(honeycombIndex + 2);
+    expect(kinds.indexOf("hinge")).toBe(gearIndex + 2);
+    expect(dovetailIndex).toBe(gearIndex + 3);
     expect(kinds.indexOf("star")).toBe(dovetailIndex + 1);
+  });
+
+  it("no longer offers the honeycomb: the hole pattern tool replaced it (#223)", () => {
+    expect(toolbarShapeAssets.map((asset) => asset.kind)).not.toContain("honeycomb");
   });
 
   it("creates placed shapes from toolbar assets", () => {
