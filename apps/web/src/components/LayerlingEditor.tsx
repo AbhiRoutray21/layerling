@@ -10572,7 +10572,14 @@ export function LayerlingEditor({
   const changeHolePatternSettings = useCallback((patch: Partial<HolePatternSettings>) => {
     setHolePatternTool((current) => {
       if (!current) return current;
-      const settings = normalizeHolePattern({ ...current.settings, ...patch });
+      // A slot or a rectangle starts out longer than high, with room for it, unless it was sized by hand.
+      const longForm = (patch.form === "slot" || patch.form === "rectangle")
+        && current.settings.form !== "slot" && current.settings.form !== "rectangle"
+        && current.settings.height === current.settings.size;
+      const start = longForm
+        ? (patch.form === "slot" ? { size: 12, height: 5, spacing: Math.max(current.settings.spacing, 15) } : { size: 10, height: 5, spacing: Math.max(current.settings.spacing, 13) })
+        : {};
+      const settings = normalizeHolePattern({ ...current.settings, ...start, ...patch });
       holePatternSettingsRef.current = settings;
       return { ...current, settings };
     });

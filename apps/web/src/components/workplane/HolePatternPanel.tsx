@@ -95,7 +95,7 @@ export function HolePatternPanel({
 
       <div className="edge-modifier-field shell-openings" role="radiogroup" aria-label={t("holePattern.form")}>
         <span>{t("holePattern.form")}</span>
-        <div className="shell-opening-options">
+        <div className="shell-opening-options hole-pattern-forms">
           {HOLE_FORMS.map((option) => (
             <button
               key={option}

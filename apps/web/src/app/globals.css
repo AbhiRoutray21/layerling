@@ -3352,6 +3352,11 @@ html[data-theme="dark"] .whats-new-earlier:hover {
   cursor: pointer;
 }
 
+/* Five hole shapes: three to a row. */
+.hole-pattern-panel .hole-pattern-forms {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
 .shell-opening-options button.active {
   color: #9f5508;
   background: #fff1e0;
