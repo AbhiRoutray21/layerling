@@ -206,4 +206,43 @@ describe("Sketch CAD profile → B-Rep extrusion (real OCCT kernel)", () => {
     };
     expect(() => cadSketchRegions(openProfile)).toThrow(/open/i);
   });
+
+  it("builds a rounded corner as a true arc, so the wall is a cylinder, not a free-form surface (#618071)", async () => {
+    const { OcctKernel } = await import("occt-wasm");
+    const { circularArcMidpoint } = await import("@/lib/sketchCircularArc");
+    const wasm = join(dirname(fileURLToPath(import.meta.resolve("occt-wasm"))), "occt-wasm.wasm");
+    const kernel = await OcctKernel.init({ wasm });
+    // A 20 x 20 square whose corner (20, 20) is rounded with radius 10 by one cubic Bezier, as the sketch's fillet draws it.
+    const k = 0.5522847498 * 10;
+    const from = { x: 20, z: 10 };
+    const to = { x: 10, z: 20 };
+    const middle = circularArcMidpoint(from, { x: 20, z: 10 + k }, { x: 10 + k, z: 20 }, to);
+    expect(middle).not.toBeNull();
+    const v = (point: { x: number; z: number }) => ({ x: point.x, y: 0, z: point.z });
+    const wire = kernel.makeWire([
+      kernel.makeLineEdge(v({ x: 0, z: 0 }), v({ x: 20, z: 0 })),
+      kernel.makeLineEdge(v({ x: 20, z: 0 }), v(from)),
+      kernel.makeArcEdge(v(from), v(middle!), v(to)),
+      kernel.makeLineEdge(v(to), v({ x: 0, z: 20 })),
+      kernel.makeLineEdge(v({ x: 0, z: 20 }), v({ x: 0, z: 0 })),
+    ]);
+    const solid = kernel.extrude(kernel.makeFace(wire), 0, 10, 0);
+    expect(kernel.isValid(solid)).toBe(true);
+    expect(kernel.isSolid(solid)).toBe(true);
+    const brep = kernel.toBREP(solid);
+    // In the BREP text each surface starts with its type: 1 is a plane, 2 a cylinder, 6 a swept free-form curve.
+    const surfaces = brep.slice(brep.indexOf("Surfaces"), brep.indexOf("TShapes")).split(String.fromCharCode(10)).map((row) => row.split(" ")[0]);
+    expect(surfaces).toContain("2");
+    // The quarter circle cuts (1 - pi/4) * 10 * 10 off the corner of the square.
+    const mesh = kernel.tessellate(solid, { linearDeflection: 0.01, angularDeflection: 0.05 });
+    let volume = 0;
+    for (let index = 0; index < mesh.indices.length; index += 3) {
+      const [a, b, c] = [0, 1, 2].map((offset) => {
+        const vertex = mesh.indices[index + offset] * 3;
+        return [mesh.positions[vertex], mesh.positions[vertex + 1], mesh.positions[vertex + 2]];
+      });
+      volume += (a[0] * (b[1] * c[2] - b[2] * c[1]) - a[1] * (b[0] * c[2] - b[2] * c[0]) + a[2] * (b[0] * c[1] - b[1] * c[0])) / 6;
+    }
+    expect(Math.abs(volume)).toBeCloseTo((400 - (1 - Math.PI / 4) * 100) * 10, -1);
+  });
 });

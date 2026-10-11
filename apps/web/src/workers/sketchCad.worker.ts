@@ -4,6 +4,7 @@ import { OcctKernel, type ShapeHandle } from "occt-wasm";
 import { CAD_MODIFIER_RUNTIME_BASE, SKETCH_CAD_DEFLECTION } from "@/lib/cadModifierRuntime";
 import { cadSketchRegions, type OrderedCadSketchPath } from "@/lib/sketchCadProfile";
 import { buildRevolvedSketchSolid } from "@/lib/cadSketchRevolve";
+import { circularArcMidpoint } from "@/lib/sketchCircularArc";
 import type { SketchCadBuildRequest, SketchCadBuildResponse } from "@/lib/sketchCadTypes";
 
 let kernelPromise: Promise<OcctKernel> | null = null;
@@ -39,6 +40,9 @@ function pathWire(cad: OcctKernel, path: OrderedCadSketchPath) {
     const first = forward ? from.handleOut : from.handleIn;
     const second = forward ? to.handleIn : to.handleOut;
     if (segment.kind !== "line" && first && second) {
+      // A rounded corner is a circle: build it as one (a cylinder wall), not as a free-form curve.
+      const middle = circularArcMidpoint(from, first, second, to);
+      if (middle) return cad.makeArcEdge({ x: from.x, y: 0, z: from.z }, { x: middle.x, y: 0, z: middle.z }, { x: to.x, y: 0, z: to.z });
       return cad.makeBezierEdge([
         { x: from.x, y: 0, z: from.z },
         { x: first.x, y: 0, z: first.z },
