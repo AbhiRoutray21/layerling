@@ -4,6 +4,10 @@ layerling started over at 1.0.0 when it was forked from SketchForge-3D 1.0.9.
 Everything from 1.0.9 downwards is SketchForge's history, kept here because the
 code still carries it - so a lower number further down is older, not newer.
 
+## Unreleased
+
+- **A revolve sketch shows the bodies on the workplane you set:** With a workplane on a face, the sketch for an extrusion showed the bodies as seen from that plane, but the sketch for a revolve still showed them from the base plate, as they were created - a body laid flat or a face chosen for a bottle or knob profile did not match what was on screen. The revolve sketch now shows the same view as the extrusion sketch, including the cut outline of a workplane inside a body. Reported in #231.
+
 ## 1.61.1
 
 - **STL files can be picked on an iPad:** In the file picker of an iPad or iPhone the STL, 3MF, STEP and `.lyl` files were greyed out and could not be selected, while ZIP files worked: iOS greys out every ending it does not know as a type, and the picker asked for exactly those. On these devices the pickers now show all files, and layerling checks what it is given, as it always did; elsewhere the list narrows the picker as before. Not tried on an iPad yet. Reported by @andrej-cds in #219.
