@@ -89,6 +89,25 @@ Tipp: Setze vorher mit {{ui:editor.tool.rotationPivot}} den Drehpunkt auf eine F
 
 Die Kopien erscheinen zuerst als Vorschau. Erst {{ui:array.apply}} legt sie an. Sind die Kopien Aussparungen, gruppierst du sie danach mit dem Körper, in den sie schneiden sollen.
 
+## Lochmuster auf einer Fläche
+
+Für Lüftungsschlitze, Lautsprechergitter, Körbe und Gehäuse verteilt das {{ui:holePattern.title}} Löcher gleichmäßig auf einer ebenen Fläche. Du musst dafür kein Loch einzeln anlegen, vervielfältigen und an die Wand setzen. Wähle genau einen Körper aus, klicke mit der rechten Maustaste darauf und wähle {{ui:holePattern.title}}, oder suche es mit [[Strg]]+[[K]].
+
+1. Klicke eine ebene Fläche des Körpers an. Die ganze ebene Fläche um deinen Klick zählt, nicht nur das Dreieck unter dem Mauszeiger. Eine gewölbte Fläche geht nicht: Du bekommst einen Hinweis und klickst eine ebene an.
+2. Stelle im Fenster ein, wie die Löcher aussehen und liegen:
+   - **{{ui:holePattern.form}}:** {{ui:holePattern.form.round}}, {{ui:holePattern.form.square}}, {{ui:holePattern.form.rectangle}}, {{ui:holePattern.form.hexagon}} oder {{ui:holePattern.form.slot}}.
+   - **Größe:** der {{ui:holePattern.size.diameter}} eines runden Lochs, die {{ui:holePattern.size.side}} eines quadratischen, {{ui:holePattern.size.width}} und {{ui:holePattern.size.height}} bei Rechteck und Langloch. Beim Sechseck gilt das Maß {{ui:holePattern.size.corners}}.
+   - **{{ui:holePattern.spacing}}:** der Abstand von einer Lochmitte zur nächsten. Ist er kleiner, als die Löcher zulassen, setzt layerling ihn auf das kleinste mögliche Maß, damit zwischen den Löchern noch ein Steg bleibt.
+   - **{{ui:holePattern.arrangement}}:** {{ui:holePattern.arrangement.grid}} legt die Löcher in Zeilen und Spalten. {{ui:holePattern.arrangement.staggered}} rückt jede zweite Zeile um einen halben Abstand und die Zeilen näher zusammen, so dass jedes Loch Nachbarn im gleichen Abstand hat - mit Sechsecken ergibt das eine Wabe.
+   - **{{ui:holePattern.margin}}:** der freie Abstand zwischen den Löchern und der Kante der Fläche. Nur Löcher, die ganz innerhalb von Fläche minus Rand liegen, werden angelegt; was darüber hinausragen würde, fällt weg. Auch um Öffnungen in der Fläche bleibt dieser Rand.
+   - **{{ui:holePattern.depth}}:** {{ui:holePattern.depth.through}} (die Vorgabe) schneidet durch die ganze Wand. Mit {{ui:holePattern.depth.custom}} gibst du die Tiefe in Millimetern an, etwa für Vertiefungen.
+3. Die Löcher erscheinen sofort als Vorschau auf der Fläche und ändern sich mit jedem Wert. Das Fenster sagt, wie viele Löcher passen. Mit {{ui:holePattern.repick}} wählst du eine andere Fläche, [[Esc]] schließt das Werkzeug, und wie die anderen Werkzeugfenster lässt es sich an der Titelleiste verschieben.
+4. Erst {{ui:holePattern.apply}} legt die Löcher an.
+
+Die Löcher sind ganz gewöhnliche Aussparungen und mit dem Körper gruppiert, genau wie nach {{ui:editor.tool.group}}: Nichts ist eingebacken. {{ui:editor.tool.ungroup}} löst die Gruppe wieder auf und gibt jedes Loch frei, das du dann einzeln verschieben, ändern oder löschen kannst. Das Ganze ist ein Schritt für {{ui:editor.tool.undo}}. Mehr als 400 Löcher auf einmal legt das Werkzeug nicht an; dann machst du die Löcher größer oder den Abstand weiter.
+
+Eine KI kann dasselbe über die MCP-Schnittstelle tun, mit `layerling_perforate_face` (siehe das Kapitel [KI mit MCP](chapter:ki-mit-mcp)).
+
 ## Mehrere Teile auf einmal ändern
 
 Sind mehrere Teile ausgewählt, zeigt das Eigenschaften-Feld rechts, wie viele es sind, und bietet an, was für alle zugleich gilt: {{ui:inspector.solid}} oder {{ui:inspector.hole}}, eine Farbe für alle (ein Klick auf {{ui:inspector.solid}} öffnet die Farben) und das Schloss zum Sperren. Ist die Auswahl gemischt, macht ein Klick alle zu Körpern oder alle zu Aussparungen. Gesperrte Teile bleiben, wie sie sind. Maße änderst du an einem einzelnen Teil, mit den Griffen oder mit {{ui:scalePercent.title}}. Körper und Aussparung gehen auch per Rechtsklick oder mit [[S]] und [[H]].

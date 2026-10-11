@@ -89,6 +89,25 @@ Tip: first set the pivot on a face with {{ui:editor.tool.rotationPivot}}, then t
 
 The copies first appear as a preview. Only {{ui:array.apply}} creates them. If the copies are holes, group them afterwards with the body they should cut into.
 
+## Hole pattern on a face
+
+For vents, speaker grilles, baskets and enclosures the {{ui:holePattern.title}} spreads holes evenly over a flat face. You no longer have to make one hole, repeat it and set it onto the wall. Select exactly one body, right-click it and choose {{ui:holePattern.title}}, or find it with [[Ctrl]]+[[K]].
+
+1. Click a flat face of the body. The whole flat face around your click counts, not just the triangle under the pointer. A curved face does not work: you get a hint and click a flat one instead.
+2. In the window, set how the holes look and lie:
+   - **{{ui:holePattern.form}}:** {{ui:holePattern.form.round}}, {{ui:holePattern.form.square}}, {{ui:holePattern.form.rectangle}}, {{ui:holePattern.form.hexagon}} or {{ui:holePattern.form.slot}}.
+   - **Size:** the {{ui:holePattern.size.diameter}} of a round hole, the {{ui:holePattern.size.side}} of a square one, {{ui:holePattern.size.width}} and {{ui:holePattern.size.height}} for a rectangle and a slot. For the hexagon the size is the {{ui:holePattern.size.corners}}.
+   - **{{ui:holePattern.spacing}}:** the distance from one hole's middle to the next. If it is smaller than the holes allow, layerling raises it to the smallest possible value so a wall stays between the holes.
+   - **{{ui:holePattern.arrangement}}:** {{ui:holePattern.arrangement.grid}} puts the holes in rows and columns. {{ui:holePattern.arrangement.staggered}} shifts every second row by half a spacing and moves the rows closer, so every hole has neighbours at the same distance - with hexagons that makes a honeycomb.
+   - **{{ui:holePattern.margin}}:** the clear distance between the holes and the edge of the face. Only holes that lie wholly inside the face minus this margin are made; anything that would reach beyond it is left out. The margin also holds around openings in the face.
+   - **{{ui:holePattern.depth}}:** {{ui:holePattern.depth.through}} (the default) cuts through the whole wall. With {{ui:holePattern.depth.custom}} you give the depth in millimetres, for recesses, say.
+3. The holes show at once as a preview on the face and follow every value. The window says how many holes fit. {{ui:holePattern.repick}} chooses another face, [[Esc]] closes the tool, and like the other tool windows it moves by its title bar.
+4. Only {{ui:holePattern.apply}} makes the holes.
+
+The holes are ordinary holes grouped with the body, just as after {{ui:editor.tool.group}}: nothing is baked in. {{ui:editor.tool.ungroup}} dissolves the group again and frees every hole, which you can then move, change or delete one by one. The whole thing is one step for {{ui:editor.tool.undo}}. The tool does not make more than 400 holes at once; make the holes bigger or the spacing wider then.
+
+An AI can do the same through the MCP bridge with `layerling_perforate_face` (see the chapter [AI with MCP](chapter:ai-with-mcp)).
+
 ## Changing several parts at once
 
 With several parts selected, the properties panel on the right shows how many there are and offers what applies to all of them together: {{ui:inspector.solid}} or {{ui:inspector.hole}}, one colour for all (a click on {{ui:inspector.solid}} opens the colours) and the lock. With a mixed selection, one click makes them all solids or all holes. Locked parts stay as they are. Sizes are changed on a single part, with the handles or with {{ui:scalePercent.title}}. Solid and hole also work with a right-click or the [[S]] and [[H]] keys.
