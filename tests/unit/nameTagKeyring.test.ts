@@ -5,7 +5,7 @@ import { tools } from "../../scripts/layerling-mcp-tools.mjs";
 import { editorHistoryEntry } from "@/lib/editorHistory";
 import { rememberManifoldRuntime } from "@/lib/manifoldHandle";
 import { exportLylProject, importLylProject, type LylProjectDocumentV1, type LylProjectExportInput } from "@/lib/lylProject";
-import { textLetterSizePatch } from "@/lib/nameTag";
+import { NAME_TAG_LAYERS, textLetterSizePatch } from "@/lib/nameTag";
 import { textFillComponents, textHasFill } from "@/lib/textFill";
 import { loadTextFonts } from "@/lib/textFonts";
 import { textGlyphShapes } from "@/lib/textGeometry";
@@ -80,28 +80,40 @@ function boundsOf(section: CrossSection) {
 }
 
 /**
- * How far the edge of a layer's round hole stands from the plate - the bottom layer of the same
- * stack without a key ring, so without the tab - within the tab's band (1.175 hole diameters
- * either side of the hole's middle): the shortest distance from the hole's middle to the plate
- * there, less the hole's measured radius.
+ * A key ring tab measured on the geometry (#215), along the tab (s, outwards) and across it (v):
+ * the hole; where the plate - the bottom layer of the same stack without a key ring, so without
+ * the tab - reaches furthest in the tab's band (the hole and a 1.75 mm wall either side of the
+ * hole's middle), where the tab's flat end sits; how far the tab reaches; and its width halfway
+ * between that flat end and the hole's middle.
  */
-function clearanceToPlate(withRing: WorkplaneShape, plain: WorkplaneShape, side: TextKeyringSide, diameter: number, made: CrossSection[]) {
+function tabMeasures(withRing: WorkplaneShape, plain: WorkplaneShape, side: TextKeyringSide, diameter: number, made: CrossSection[]) {
+  const keep = (section: CrossSection) => {
+    made.push(section);
+    return section;
+  };
+  const along = (x: number, z: number) => (side === "right" ? x : side === "left" ? -x : -z);
+  const across = (x: number, z: number) => (side === "top" ? x : z);
   const hole = measuredHole(withRing);
-  const half = 1.175 * diameter;
-  const band = side === "top" ? runtime.CrossSection.square([2 * half, 1000]).translate([hole.x - half, -500]) : runtime.CrossSection.square([1000, 2 * half]).translate([-500, hole.z - half]);
-  made.push(band);
-  const near = outline(plain, made).intersect(band);
-  made.push(near);
-  let shortest = Infinity;
-  for (const ring of near.toPolygons()) {
-    ring.forEach(([ax, az], index) => {
-      const [bx, bz] = ring[(index + 1) % ring.length];
-      const [dx, dz] = [bx - ax, bz - az];
-      const t = Math.max(0, Math.min(1, ((hole.x - ax) * dx + (hole.z - az) * dz) / (dx * dx + dz * dz)));
-      shortest = Math.min(shortest, Math.hypot(hole.x - (ax + t * dx), hole.z - (az + t * dz)));
-    });
-  }
-  return { hole, gap: shortest - hole.width / 2 };
+  const holeAlong = along(hole.x, hole.z);
+  const holeAcross = across(hole.x, hole.z);
+  const half = diameter / 2 + 1.75;
+  const band = keep(side === "top" ? runtime.CrossSection.square([2 * half, 1000]).translate([hole.x - half, -500]) : runtime.CrossSection.square([1000, 2 * half]).translate([-500, hole.z - half]));
+  const furthest = (section: CrossSection) => {
+    const box = boundsOf(keep(section.intersect(band)));
+    return side === "right" ? box.maxX : side === "left" ? -box.minX : -box.minZ;
+  };
+  const bottom = outline(withRing, made);
+  const edge = furthest(outline(plain, made));
+  const tip = furthest(bottom);
+  // A thin cut across the tab halfway along its straight part, a little wider than the band.
+  const at = (edge + holeAlong) / 2;
+  const span = 2 * half + 2;
+  const cut = keep(side === "top"
+    ? runtime.CrossSection.square([span, 0.02]).translate([holeAcross - span / 2, -at - 0.01])
+    : runtime.CrossSection.square([0.02, span]).translate([side === "right" ? at - 0.01 : -at - 0.01, holeAcross - span / 2]));
+  const slice = keep(bottom.intersect(cut)).bounds();
+  const [low, high] = side === "top" ? [slice.min[0], slice.max[0]] : [slice.min[1], slice.max[1]];
+  return { hole, holeAlong, holeAcross, edge, tip, low: low - holeAcross, high: high - holeAcross, width: high - low, along };
 }
 
 describe("the key ring hole (#215)", () => {
@@ -120,7 +132,7 @@ describe("the key ring hole (#215)", () => {
     else expect(hole.z).toBeCloseTo(letters.midZ, 2);
     // Nothing of the bottom layer inside the hole; all of a ring round it is the ear.
     expect(covered(bottom, disc(hole.x, hole.z, 1.9, made), made)).toBeLessThan(1e-6);
-    const ring = disc(hole.x, hole.z, 4.2, made).subtract(disc(hole.x, hole.z, 2.1, made));
+    const ring = disc(hole.x, hole.z, 3.7, made).subtract(disc(hole.x, hole.z, 2.1, made));
     made.push(ring);
     expect(covered(bottom, ring, made)).toBeGreaterThan(0.999);
     // The ear holds on to the plate: one piece.
@@ -133,7 +145,7 @@ describe("the key ring hole (#215)", () => {
 
   it("goes through every layer it touches", () => {
     const made: CrossSection[] = [];
-    // A middle layer 12 mm wider reaches well past the hole, which stays 2.5 mm clear of the 3 mm plate: it gets the hole too, but no tab.
+    // A middle layer 12 mm wider reaches well past the hole, whose edge is 2 mm beyond the 3 mm plate: it gets the hole too, but no tab.
     const layers: TextLayer[] = [{ grow: 0, height: 1, color: "#ffffff" }, { grow: 12, height: 1, color: "#d41721" }, { grow: 3, height: 2, color: "#2b2b2b", silhouette: true }];
     const parts = textLayerShapes(sized(text(), 12), layers, [], { side: "right", diameter: 4 });
     expect(parts[1].textKeyring).toMatchObject({ side: "right", diameter: 4 });
@@ -149,7 +161,7 @@ describe("the key ring hole (#215)", () => {
       const source = sized(text({ text: words }), size);
       const parts = textLayerShapes(source, DEFAULT_TEXT_LAYERS, [], { side: "left", diameter: 4 });
       const letters = boundsOf(outline(parts[0], made));
-      return { letters, ...clearanceToPlate(parts[2], textLayerShapes(source, DEFAULT_TEXT_LAYERS)[2], "left", 4, made) };
+      return { letters, ...tabMeasures(parts[2], textLayerShapes(source, DEFAULT_TEXT_LAYERS)[2], "left", 4, made) };
     };
     const short = measure("Name", 12);
     const long = measure("Alexandra", 12);
@@ -157,9 +169,9 @@ describe("the key ring hole (#215)", () => {
     // Further out with the longer word and the bigger letters ...
     expect(long.hole.x).toBeLessThan(short.hole.x - 10);
     expect(big.hole.x).toBeLessThan(short.hole.x - 5);
-    // ... always 2.5 mm clear of the plate and in the letters' middle.
-    for (const { letters, hole, gap } of [short, long, big]) {
-      expect(Math.abs(gap - 2.5)).toBeLessThan(0.05);
+    // ... always with its edge 2 mm beyond the plate and in the letters' middle.
+    for (const { letters, hole, holeAlong, edge } of [short, long, big]) {
+      expect(Math.abs(holeAlong - 2 - edge - 2)).toBeLessThan(0.05);
       expect(hole.z).toBeCloseTo(letters.midZ, 2);
     }
     made.forEach((section) => section.delete());
@@ -173,83 +185,75 @@ describe("the key ring hole (#215)", () => {
   });
 });
 
-describe("the key ring hole 2.5 mm clear of the plate's real outline (#215)", () => {
-  // plazmabokor's "Arany": its A slants and its y hangs below, so the plate's box is no measure of where its edge is.
-  const cases = (["top", "left", "right"] as TextKeyringSide[]).flatMap((side) => [4, 1.85].map((diameter) => [side, diameter] as const));
-  it.each(cases)("\"Arany\", Sans, letter size 11, default layers, hole on the %s, %s mm: its edge 2.5 mm from the plate in the tab's band", (side, diameter) => {
+describe("the key ring tab as plazmabokor's printed one (#215)", () => {
+  // The printed tab: 6.5 mm wide, a 3 mm hole in the middle of the half circle at its end; its
+  // edge 2 mm beyond the plate, so 6.75 mm of the tab stick out (the printed 8 mm, 1.25 mm of it in the plate). "Arany" at 9 mm on a name tag's layers: its A
+  // slants and its y hangs below, so the plate's box is no measure of where its edge is.
+  const cases = (["left", "right", "top"] as TextKeyringSide[]).flatMap((side) => [3, 5].map((diameter) => [side, diameter] as const));
+  it.each(cases)("\"Arany\", Sans, letter size 9, name tag layers, on the %s, hole %s mm: width, reach, hole and its distance, measured", (side, diameter) => {
     const made: CrossSection[] = [];
-    const source = sized(text({ text: "Arany", font: "Sans" }), 11);
-    const plain = textLayerShapes(source, DEFAULT_TEXT_LAYERS);
-    const parts = textLayerShapes(source, DEFAULT_TEXT_LAYERS, [], { side, diameter });
-    const { hole, gap } = clearanceToPlate(parts[2], plain[2], side, diameter, made);
-    expect(hole.width).toBeCloseTo(diameter, 2);
-    expect(Math.abs(gap - 2.5)).toBeLessThan(0.05);
-    // In the middle of its side: of the letters' box, the same with and without the hole.
+    const source = sized(text({ text: "Arany", font: "Sans" }), 9);
+    const plain = textLayerShapes(source, NAME_TAG_LAYERS);
+    const parts = textLayerShapes(source, NAME_TAG_LAYERS, [], { side, diameter });
+    const tab = tabMeasures(parts[2], plain[2], side, diameter, made);
+    // 3 mm: 6.5 mm wide, 6.75 mm out, the hole's edge 2 mm from the plate. 5 mm: 8.5 mm wide, 8.75 mm out.
+    const [width, out] = diameter === 3 ? [6.5, 6.75] : [8.5, 8.75];
+    expect(Math.abs(tab.width - width)).toBeLessThan(0.05);
+    expect(Math.abs(tab.tip - tab.edge - out)).toBeLessThan(0.05);
+    expect(Math.abs(tab.hole.width - diameter)).toBeLessThan(0.05);
+    expect(Math.abs(tab.hole.depth - diameter)).toBeLessThan(0.05);
+    expect(Math.abs(tab.holeAlong - diameter / 2 - tab.edge - 2)).toBeLessThan(0.05);
+    // On the plate's 3 mm: the tab is the bottom layer.
+    expect(parts[2].height).toBe(3);
+    expect(parts[2].textKeyring?.ear).toBe(true);
+    // In the middle of its side, and the letters stay where they were.
     const letters = boundsOf(outline(plain[0], made));
-    if (side === "top") expect(hole.x).toBeCloseTo(letters.midX, 1);
-    else expect(Math.abs(hole.z - (plain[0].z ?? 0))).toBeLessThan(1e-3);
-    // The letters stay where they were.
+    if (side === "top") expect(tab.hole.x).toBeCloseTo(letters.midX, 1);
+    else expect(Math.abs(tab.hole.z - (plain[0].z ?? 0))).toBeLessThan(1e-3);
     const withHole = boundsOf(outline(parts[0], made));
     expect(withHole.minX).toBeCloseTo(letters.minX, 6);
     expect(withHole.minZ).toBeCloseTo(letters.minZ, 6);
+    expect(textFillComponents(runtime, parts[2])).toHaveLength(1);
     made.forEach((section) => section.delete());
   });
 });
 
-describe("the key ring tab, in the proportions of the measured one (#215)", () => {
-  // plazmabokor's printed tab: 4.34 mm wide round a 1.85 mm hole; the hole's edge 2.5 mm clear of the plate.
-  const cases = (["left", "right", "top"] as TextKeyringSide[]).flatMap((side) => [1.85, 4].map((diameter) => [side, diameter] as const));
-  it.each(cases)("%s, hole %s mm: width, distance, hole, half circle and parallel sides, measured", (side, diameter) => {
+describe("the key ring tab's shape (#215)", () => {
+  const cases = (["left", "right", "top"] as TextKeyringSide[]).flatMap((side) => [3, 5].map((diameter) => [side, diameter] as const));
+  it.each(cases)("%s, hole %s mm: parallel sides, half circle round the hole, one piece, measured", (side, diameter) => {
     const made: CrossSection[] = [];
     const source = sized(text(), 12);
     const plain = textLayerShapes(source, DEFAULT_TEXT_LAYERS);
     const parts = textLayerShapes(source, DEFAULT_TEXT_LAYERS, [], { side, diameter });
-    // Along the tab (s, outwards) and across it (v), in the world.
-    const along = (x: number, z: number) => (side === "right" ? x : side === "left" ? -x : -z);
-    const across = (x: number, z: number) => (side === "top" ? x : z);
+    const half = diameter / 2 + 1.75;
+    const tab = tabMeasures(parts[2], plain[2], side, diameter, made);
+    expect(tab.hole.width).toBeCloseTo(diameter, 2);
+    expect(Math.abs(tab.holeAlong - diameter / 2 - tab.edge - 2)).toBeLessThan(0.05);
+    // Straight, parallel sides the hole and a 1.75 mm wall either side apart, centred on the hole, wherever cut between plate and hole.
     const bottom = outline(parts[2], made);
-    const { hole, gap } = clearanceToPlate(parts[2], plain[2], side, diameter, made);
-    const holeAlong = along(hole.x, hole.z);
-    const holeAcross = across(hole.x, hole.z);
-    const half = 1.175 * diameter;
-    // Where the plate - without the tab - reaches furthest in the tab's band.
-    const band = side === "top" ? runtime.CrossSection.square([2 * half, 1000]).translate([hole.x - half, -500]) : runtime.CrossSection.square([1000, 2 * half]).translate([-500, hole.z - half]);
-    made.push(band);
-    const near = outline(plain[2], made).intersect(band);
-    made.push(near);
-    const furthest = boundsOf(near);
-    const edge = side === "right" ? furthest.maxX : side === "left" ? -furthest.minX : -furthest.minZ;
-    // The hole: its radius, its edge 2.5 mm clear of the plate, and so no more than 2.5 mm beyond the plate's furthest point.
-    expect(hole.width / 2).toBeCloseTo(diameter / 2, 2);
-    expect(Math.abs(gap - 2.5)).toBeLessThan(0.05);
-    expect(holeAlong - diameter / 2 - edge).toBeLessThanOrEqual(2.5 + 0.05);
-    // Straight, parallel sides 2.35 diameters apart, centred on the hole, wherever it is cut between plate and hole.
     for (const share of [0.25, 0.5, 0.75]) {
-      const at = edge + share * (holeAlong - edge);
-      const width = 2 * half + 2;
+      const at = tab.edge + share * (tab.holeAlong - tab.edge);
+      const span = 2 * half + 2;
       const cut = side === "top"
-        ? runtime.CrossSection.square([width, 0.02]).translate([holeAcross - width / 2, -at - 0.01])
-        : runtime.CrossSection.square([0.02, width]).translate([side === "right" ? at - 0.01 : -at - 0.01, holeAcross - width / 2]);
+        ? runtime.CrossSection.square([span, 0.02]).translate([tab.holeAcross - span / 2, -at - 0.01])
+        : runtime.CrossSection.square([0.02, span]).translate([side === "right" ? at - 0.01 : -at - 0.01, tab.holeAcross - span / 2]);
       made.push(cut);
       const slice = bottom.intersect(cut);
       made.push(slice);
       const { min, max } = slice.bounds();
       const low = side === "top" ? min[0] : min[1];
       const high = side === "top" ? max[0] : max[1];
-      expect(high - low).toBeCloseTo(2.35 * diameter, 2);
-      expect(low - holeAcross).toBeCloseTo(-1.175 * diameter, 2);
-      expect(high - holeAcross).toBeCloseTo(1.175 * diameter, 2);
+      expect(high - low).toBeCloseTo(diameter + 3.5, 2);
+      expect(low - tab.holeAcross).toBeCloseTo(-half, 2);
+      expect(high - tab.holeAcross).toBeCloseTo(half, 2);
     }
-    // Beyond the hole's middle the outline is a half circle round it, 1.175 diameters out.
+    // Beyond the hole's middle the outline is a half circle round it, half the tab's width out.
     const tip = textFillComponents(runtime, parts[2])!.flatMap(({ outer }) => outer)
       .map((point) => ({ x: point.x + parts[2].x, z: point.z + parts[2].z }))
-      .filter((point) => along(point.x, point.z) > holeAlong + 1e-3);
+      .filter((point) => tab.along(point.x, point.z) > tab.holeAlong + 1e-3);
     expect(tip.length).toBeGreaterThan(10);
-    tip.forEach((point) => expect(Math.hypot(point.x - hole.x, point.z - hole.z)).toBeCloseTo(1.175 * diameter, 3));
-    // Nothing reaches further than the half circle, and the tab is one piece with the plate.
-    const reach = boundsOf(bottom);
-    const far = side === "right" ? reach.maxX : side === "left" ? -reach.minX : -reach.minZ;
-    expect(far - holeAlong).toBeCloseTo(1.175 * diameter, 2);
+    tip.forEach((point) => expect(Math.hypot(point.x - tab.hole.x, point.z - tab.hole.z)).toBeCloseTo(half, 3));
+    expect(tab.tip - tab.holeAlong).toBeCloseTo(half, 2);
     expect(textFillComponents(runtime, parts[2])).toHaveLength(1);
     made.forEach((section) => section.delete());
   });
@@ -304,9 +308,9 @@ describe("layerling_layer_text's new arguments (#215)", () => {
     expect(layerTextKeyringArgument(undefined)).toBeUndefined();
     expect(layerTextKeyringArgument(false)).toEqual({ keyring: null });
     expect(layerTextKeyringArgument(null)).toEqual({ keyring: null });
-    expect(layerTextKeyringArgument(true)).toEqual({ keyring: { side: "left", diameter: 1.85 } });
+    expect(layerTextKeyringArgument(true)).toEqual({ keyring: { side: "left", diameter: 3 } });
     expect(layerTextKeyringArgument({ side: "top", diameter: 5.5 })).toEqual({ keyring: { side: "top", diameter: 5.5 } });
-    expect(layerTextKeyringArgument({})).toEqual({ keyring: { side: "left", diameter: 1.85 } });
+    expect(layerTextKeyringArgument({})).toEqual({ keyring: { side: "left", diameter: 3 } });
     expect(layerTextKeyringArgument({ side: "bottom" })).toEqual({ error: "keyring.side must be left, right or top" });
     expect(layerTextKeyringArgument({ diameter: 0.5 })).toEqual({ error: "keyring.diameter must be 1 to 20 mm" });
     expect(layerTextKeyringArgument({ diameter: 25 })).toEqual({ error: "keyring.diameter must be 1 to 20 mm" });

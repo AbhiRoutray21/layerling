@@ -1,8 +1,8 @@
 import * as THREE from "three";
 import { loadedManifoldRuntime } from "@/lib/manifoldHandle";
 import { normalizeSketchStroke, SKETCH_STROKE_JOINS } from "@/lib/sketchStroke";
-import { textOutlineClearance } from "@/lib/textFill";
-import { DEFAULT_KEYRING_DIAMETER, KEYRING_EDGE_GAP, keyringEarRadius, MAX_KEYRING_DIAMETER, MIN_KEYRING_DIAMETER, TEXT_KEYRING_SIDES, textFillExtent, textKeyringOf, textKeyringReach, textLetterBox, textLetterOffset } from "@/lib/textGeometry";
+import { textOutlineClearance, textOutlineReach } from "@/lib/textFill";
+import { DEFAULT_KEYRING_DIAMETER, KEYRING_HOLE_EDGE_DISTANCE, keyringEarRadius, MAX_KEYRING_DIAMETER, MIN_KEYRING_DIAMETER, TEXT_KEYRING_SIDES, textFillExtent, textKeyringOf, textKeyringReach, textLetterBox, textLetterOffset } from "@/lib/textGeometry";
 import { shapeDepth, shapeWidth } from "@/lib/workplaneShapes";
 import type { SketchStroke, SketchStrokeJoin, TextKeyring, TextKeyringSide, WorkplaneShape } from "@/types/layerling";
 
@@ -137,31 +137,34 @@ const growStroke = (grow: number, join: SketchStrokeJoin = "round"): SketchStrok
 
 /**
  * The key ring hole (#215) of each layer, top to bottom: the bottom layer carries the ear. The
- * hole's edge stays KEYRING_EDGE_GAP clear of the bottom layer's outline in the band the tab
- * runs in (its width, across the middle of its side) - its real outline when the 2D kernel is
- * there, else its box. A layer above gets the hole only where it reaches into it.
+ * tab's flat end sits where the bottom layer's outline reaches furthest in the band the tab runs
+ * in (its width, across the middle of its side) - its real outline when the 2D kernel is there,
+ * else its box - and the hole's edge KEYRING_HOLE_EDGE_DISTANCE beyond that. A layer above gets
+ * the hole only where it reaches into it.
  */
 function layerKeyrings(letters: WorkplaneShape, layers: readonly TextLayer[], keyring: NameTagKeyring | null): (TextKeyring | undefined)[] {
   if (!keyring || !layers.length) return layers.map(() => undefined);
   const { side, diameter } = keyring;
   const half = side === "top" ? (letters.depth ?? 0) / 2 : (letters.width ?? 0) / 2;
   const runtime = loadedManifoldRuntime();
-  // From the letters' middle, how far out a point stands `clearance` clear of a layer's outline in the band; null where none of it is in the band.
-  const clearOf = (layer: TextLayer, clearance: number) => {
+  // A layer as a text without a key ring, and how far its box reaches from the letters' middle.
+  const layerText = (layer: TextLayer) => {
     const stroke = growStroke(layer.grow, layer.join);
     const extent = textFillExtent({ textStroke: stroke });
-    if (!runtime) return half + extent + clearance;
     const { textStroke: _stroke, textSilhouette: _silhouette, textKeyring: _keyring, ...plain } = letters;
     const shape: WorkplaneShape = { ...plain, width: (letters.width ?? 0) + 2 * extent, depth: (letters.depth ?? 0) + 2 * extent, ...(stroke ? { textStroke: stroke } : {}) };
-    return textOutlineClearance(runtime, shape, side, keyringEarRadius(diameter), clearance);
+    return { shape, box: half + extent };
   };
-  const bottom = layers[layers.length - 1];
-  const hole = clearOf(bottom, KEYRING_EDGE_GAP + diameter / 2) ?? half + textFillExtent({ textStroke: growStroke(bottom.grow, bottom.join) }) + KEYRING_EDGE_GAP + diameter / 2;
+  const band = keyringEarRadius(diameter);
+  const bottom = layerText(layers[layers.length - 1]);
+  const plate = (runtime ? textOutlineReach(runtime, bottom.shape, side, band) : null) ?? bottom.box;
+  const hole = plate + KEYRING_HOLE_EDGE_DISTANCE + diameter / 2;
   const offset = round(hole - half);
   return layers.map((layer, index) => {
     if (index === layers.length - 1) return { side, diameter, offset, ear: true };
     // A layer reaches into the hole where a hole's edge would have to stand further out to clear it.
-    const reach = clearOf(layer, diameter / 2);
+    const { shape, box } = layerText(layer);
+    const reach = runtime ? textOutlineClearance(runtime, shape, side, band, diameter / 2) : box + diameter / 2;
     return reach !== null && reach > hole + 1e-6 ? { side, diameter, offset } : undefined;
   });
 }
