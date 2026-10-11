@@ -1,6 +1,6 @@
 import { curvedTextPatch, DEFAULT_TEXT_SIZE, textBoxAroundLetters, textLetterBox } from "@/lib/textGeometry";
 import { customFontRevision, textFont } from "@/lib/textFonts";
-import { MAX_TEXT_LAYERS, MAX_TEXT_LAYER_GROW, type TextLayer, type textLayersOf } from "@/lib/textLayers";
+import { DEFAULT_TEXT_LAYERS, MAX_TEXT_LAYERS, MAX_TEXT_LAYER_GROW, type TextLayer, type textLayersOf } from "@/lib/textLayers";
 import type { WorkplaneShape } from "@/types/layerling";
 
 /**
@@ -18,8 +18,13 @@ export const MIN_LETTER_SIZE = 1;
 export const MAX_LETTER_SIZE = 200;
 /** The space between the tags of a name list, in mm: the panel has no field for it, as layer_text's default. */
 export const NAME_TAG_GAP = 5;
-/** How tall the capitals of a name tag from the shape library stand, in mm. */
-export const NAME_TAG_LETTER_SIZE = 12;
+/** How tall the capitals of a name tag from the shape library stand, in mm: plazmabokor's printed tag. */
+export const NAME_TAG_LETTER_SIZE = 9;
+/**
+ * The layers a name tag starts with, from the shape library and from "Make layers": layer_text's
+ * three, the bottom plate 3 mm thick - it carries the key ring tab, and a thinner tab tears off.
+ */
+export const NAME_TAG_LAYERS: readonly TextLayer[] = DEFAULT_TEXT_LAYERS.map((layer, index) => (index === DEFAULT_TEXT_LAYERS.length - 1 ? { ...layer, height: 3 } : layer));
 
 /** Colours a new layer takes, the first one the tag does not use yet - so the new layer shows. */
 const NEW_LAYER_COLORS = ["#2b2b2b", "#f2cf10", "#0098c7", "#33983d", "#ffffff", "#d41721", "#6e2786"];

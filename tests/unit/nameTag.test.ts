@@ -1,7 +1,7 @@
 import manifoldModule, { type CrossSection, type ManifoldToplevel } from "manifold-3d";
 import { beforeAll, describe, expect, it } from "vitest";
 import { guideChapterForShape, guideHref, guideSectionForShape } from "@/lib/guideLinks";
-import { addTextLayer, MIN_NAME_TAG_LAYERS, NAME_TAG_GAP, removeTextLayer, textLetterSize, textLetterSizePatch } from "@/lib/nameTag";
+import { addTextLayer, MIN_NAME_TAG_LAYERS, NAME_TAG_GAP, NAME_TAG_LAYERS, NAME_TAG_LETTER_SIZE, removeTextLayer, textLetterSize, textLetterSizePatch } from "@/lib/nameTag";
 import { libraryShapeAssets, nameTagAsset, parseDroppedShapeAsset, toolbarShapeAssets } from "@/lib/shapeCatalog";
 import { textFillComponents, textHasFill } from "@/lib/textFill";
 import { TEXT_FILL_CHOICES, textFillChoice, textLineSettingsInView, textStrokeForChoice, textStrokeWider } from "@/lib/textFillChoice";
@@ -229,6 +229,27 @@ describe("the name list (#215)", () => {
   it("lays the tags out 5 mm apart, the gap layer_text takes when none is given", () => {
     expect(NAME_TAG_GAP).toBe(5);
     expect(nameTagOffsets(3, 50, 20, NAME_TAG_GAP)).toEqual([{ x: 0, z: 0 }, { x: 0, z: 25 }, { x: 0, z: 50 }]);
+  });
+});
+
+describe("a new name tag (#215)", () => {
+  it("has a capital H 9 mm from above, on layers 1.2, 1.2 and 3 mm high - the tab on a 3 mm plate", () => {
+    const made: CrossSection[] = [];
+    // As the shape library's Name tag is built: its letter size, its layers.
+    const parts = textLayerShapes(sized(text({ text: "H" }), NAME_TAG_LETTER_SIZE), NAME_TAG_LAYERS);
+    expect(bounds(outline(parts[0], made)).depth).toBeCloseTo(9, 2);
+    expect(parts.map((part) => part.height)).toEqual([1.2, 1.2, 3]);
+    // Stacked from the plate up: 0, 3, 4.2 - 5.4 mm in all.
+    expect(parts.map((part) => part.elevation)).toEqual([4.2, 3, 0]);
+    // Letters, a rim 1.5 mm wider and a plate 3 mm wider without holes, as before.
+    expect(NAME_TAG_LAYERS.map((layer) => [layer.grow, Boolean(layer.silhouette)])).toEqual([[0, false], [1.5, false], [3, true]]);
+    const letters = bounds(outline(parts[0], made));
+    expect(bounds(outline(parts[2], made)).width - letters.width).toBeCloseTo(6, 2);
+    made.forEach((section) => section.delete());
+  });
+
+  it("leaves layer_text's own layers as they were, the plate 2 mm", () => {
+    expect(DEFAULT_TEXT_LAYERS.map((layer) => layer.height)).toEqual([1.2, 1.2, 2]);
   });
 });
 

@@ -39,7 +39,7 @@ import { createSpringGeometry } from "@/lib/springGeometry";
 import { curvedTextPatch } from "@/lib/textGeometry";
 import { textDisplayGeometry } from "@/lib/textFill";
 import { DEFAULT_TEXT_LAYERS, layerTextKeyringArgument, layerTextLayersError, nameTagOffsets, normalizeTextLayers, textLayerShapes, textLayersOf, type NameTagKeyring, type TextLayer, type TextLayerStack } from "@/lib/textLayers";
-import { NAME_TAG_LETTER_SIZE, textLetterSize, textLetterSizePatch } from "@/lib/nameTag";
+import { NAME_TAG_LAYERS, NAME_TAG_LETTER_SIZE, textLetterSize, textLetterSizePatch } from "@/lib/nameTag";
 import type { TextLayerPatch } from "@/components/workplane/ShapeInspector";
 import { loadedManifoldRuntime, onManifoldReady, rememberManifoldRuntime, setManifoldLoader } from "@/lib/manifoldHandle";
 import { canApplySketchCornerTreatment } from "@/lib/sketchFilletChamfer";
@@ -3693,7 +3693,7 @@ function nameTagsFor(stack: { source: WorkplaneShape; layers: readonly TextLayer
 function prepareNewShape(asset: ShapeAsset, shape: WorkplaneShape): WorkplaneShape {
   if (asset.id !== nameTagAsset.id || shape.kind !== "text") return shape;
   const source = nameTagSource(shape, { text: t("nameTag.defaultText"), letterSize: NAME_TAG_LETTER_SIZE });
-  return layeredTextShape(source, DEFAULT_TEXT_LAYERS, [], shape.id, { locked: false, hidden: false, name: "Text" });
+  return layeredTextShape(source, NAME_TAG_LAYERS, [], shape.id, { locked: false, hidden: false, name: "Text" });
 }
 
 function offersCylinderWrap(shape: WorkplaneShape | null | undefined) {
@@ -10923,7 +10923,7 @@ export function LayerlingEditor({
     const wasText = selectedShape.kind === "text";
     // The panel keeps the letter size through new words and fonts, and sets it for all layers at once.
     const source = nameTagSource(stack.source, patch);
-    const layers = patch.layers ?? (wasText ? [...DEFAULT_TEXT_LAYERS] : stack.layers);
+    const layers = patch.layers ?? (wasText ? [...NAME_TAG_LAYERS] : stack.layers);
     // The key ring hole (#215) follows the letters: it is laid out from them on every build.
     const keyring = patch.keyring !== undefined ? patch.keyring : stack.keyring;
     await keyringRuntimeReady(keyring);

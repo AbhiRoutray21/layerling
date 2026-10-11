@@ -3,7 +3,7 @@ import { act, createElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeAll, describe, expect, it } from "vitest";
 import * as THREE from "three";
-import { ShapeInspector } from "@/components/workplane/ShapeInspector";
+import { ShapeInspector, type TextLayerPatch } from "@/components/workplane/ShapeInspector";
 import { createTextGeometry } from "@/lib/textGeometry";
 import { loadTextFonts } from "@/lib/textFonts";
 import { makeShapeFromAsset, toolbarShapeAssets } from "@/lib/shapeCatalog";
@@ -32,7 +32,7 @@ afterEach(() => {
   root = null;
 });
 
-function mount(shape: WorkplaneShape, onUpdate: (patch: Partial<WorkplaneShape>) => void) {
+function mount(shape: WorkplaneShape, onUpdate: (patch: Partial<WorkplaneShape>) => void, onLayerText?: (patch: TextLayerPatch) => void) {
   container = document.createElement("div");
   document.body.appendChild(container);
   root = createRoot(container);
@@ -43,6 +43,7 @@ function mount(shape: WorkplaneShape, onUpdate: (patch: Partial<WorkplaneShape>)
       snapOpen: false,
       workspace: DEFAULT_WORKPLANE_WORKSPACE,
       onUpdate,
+      onLayerText,
       onSnapChange: () => {},
       onSnapOpenChange: () => {},
     }));
@@ -94,5 +95,18 @@ describe("letter size on a plain text (#215)", () => {
     expect(after.fromAbove).toBeCloseTo(30, 2);
     expect(after.thickness).toBeCloseTo(before.thickness, 6);
     expect(after.thickness).toBeCloseTo(shape.height, 6);
+  });
+});
+
+describe("Make layers on a plain text (#215)", () => {
+  it("splits it into the name tag's layers: 1.2, 1.2 and a 3 mm plate for the key ring tab", () => {
+    const patches: TextLayerPatch[] = [];
+    const shape = makeShapeFromAsset(toolbarShapeAssets.find((asset) => asset.kind === "text")!, { x: 0, z: 0 });
+    const panel = mount(shape, () => {}, (patch) => patches.push(patch));
+    const button = panel.querySelector<HTMLButtonElement>(".name-tag-start-button");
+    expect(button).not.toBeNull();
+    act(() => button!.click());
+    expect(patches).toHaveLength(1);
+    expect(patches[0].layers?.map((layer) => [layer.grow, layer.height, Boolean(layer.silhouette)])).toEqual([[0, 1.2, false], [1.5, 1.2, false], [3, 3, true]]);
   });
 });
