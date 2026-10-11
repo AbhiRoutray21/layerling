@@ -693,6 +693,12 @@ export type WorkplaneShape = {
    */
   layeredText?: boolean;
   /**
+   * A bundle that is one SVG icon as a stack of layers, the icon tag: sketch bodies of the same
+   * outline, each a "Wider" line round the one above, in their own colours. Its properties panel
+   * edits the icon's width and the layers together and builds the stack again.
+   */
+  layeredIcon?: boolean;
+  /**
    * Set on a body made by wrapping around a cylinder (#106): its box is
    * centred on the cylinder's axis, and aligning, snapping and centring use
    * that box rather than the arc the mesh actually covers.

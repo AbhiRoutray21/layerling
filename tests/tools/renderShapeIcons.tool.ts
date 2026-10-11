@@ -24,6 +24,7 @@ import { createGearGeometry } from "@/lib/gearGeometry";
 import manifoldModule from "manifold-3d";
 import { mergeGeometries } from "three/examples/jsm/utils/BufferGeometryUtils.js";
 import { rememberManifoldRuntime } from "@/lib/manifoldHandle";
+import { ICON_TAG_LAYERS } from "@/lib/iconTag";
 import { textLetterSizePatch } from "@/lib/nameTag";
 import { textDisplayGeometry } from "@/lib/textFill";
 import { loadTextFonts } from "@/lib/textFonts";
@@ -547,6 +548,36 @@ describe("palette icon of the name tag (#215)", () => {
     const height = Math.max(...layers.map((layer) => (layer.elevation ?? 0) + layer.height));
     render({
       name: "apps/web/public/assets/editor/shape-icons-gray/nameTag.png",
+      height,
+      lay: false,
+      azimuth: 30,
+      elevation: 42,
+      build: () => stack,
+    });
+  });
+});
+
+describe("palette icon of the icon tag", () => {
+  it("renders the default layers of the word SVG", async () => {
+    const runtime = await manifoldModule();
+    runtime.setup();
+    rememberManifoldRuntime(runtime);
+    await loadTextFonts();
+    // The word says what goes in: an SVG file. A heart or a cloud read as the library's own shapes.
+    const words: WorkplaneShape = { id: "icon", name: "Text", kind: "text", color: "#ffffff", x: 0, z: 0, elevation: 0, rotation: 0, width: 40, depth: 20, height: 1, size: 40, text: "SVG", font: "Sans" };
+    const layers = textLayerShapes({ ...words, ...textLetterSizePatch(words, 12) }, ICON_TAG_LAYERS);
+    const pieces = layers.map((layer) => {
+      const piece = textDisplayGeometry(layer);
+      const flat = piece.index ? piece.toNonIndexed() : piece;
+      Object.keys(flat.attributes).filter((name) => name !== "position").forEach((name) => flat.deleteAttribute(name));
+      flat.translate(0, layer.elevation ?? 0, 0);
+      return flat;
+    });
+    const stack = mergeGeometries(pieces, false);
+    stack.computeVertexNormals();
+    const height = Math.max(...layers.map((layer) => (layer.elevation ?? 0) + layer.height));
+    render({
+      name: "apps/web/public/assets/editor/shape-icons-gray/iconTag.png",
       height,
       lay: false,
       azimuth: 30,

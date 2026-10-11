@@ -203,6 +203,7 @@ const SHAPE_LABEL_KEYS: Record<string, MessageKey> = {
   wedge: "shape.wedge",
   text: "shape.text",
   nameTag: "shape.nameTag",
+  iconTag: "shape.iconTag",
   "round-roof": "shape.roundRoof",
   "half-sphere": "shape.halfSphere",
   torus: "shape.torus",
@@ -274,8 +275,21 @@ export const nameTagAsset: ToolbarShapeAsset = {
   color: "#ffffff",
 };
 
-/** What the shape library lists: the catalogue, with the name tag after the text. */
-export const libraryShapeAssets: ToolbarShapeAsset[] = toolbarShapeAssets.flatMap((asset) => (asset.id === "text" ? [asset, nameTagAsset] : [asset]));
+/**
+ * The icon tag: an SVG icon split into the name tag's layers. The library entry opens a small
+ * window for the file and the width instead of a shape to place; the kind only names its picture.
+ */
+export const iconTagAsset: ToolbarShapeAsset = {
+  id: "iconTag",
+  name: "Icon tag",
+  src: "assets/editor/shape-icons-gray/iconTag.png",
+  menuIcon: "assets/editor/shape-icons-gray/iconTag.png",
+  kind: "text",
+  color: "#ffffff",
+};
+
+/** What the shape library lists: the catalogue, with the name tag and the icon tag after the text. */
+export const libraryShapeAssets: ToolbarShapeAsset[] = toolbarShapeAssets.flatMap((asset) => (asset.id === "text" ? [asset, nameTagAsset, iconTagAsset] : [asset]));
 
 /**
  * Kinds a shape dragged from the library may have. Taken from the library
@@ -866,6 +880,7 @@ const GENERATED_NAME_KEYS: Record<string, MessageKey> = {
   "Sketch extrusion": "shape.sketchExtrusion",
   "Sketch revolve": "shape.sketchRevolve",
   Cube: "shape.box",
+  "Icon tag": "shape.iconTag",
 };
 
 /**

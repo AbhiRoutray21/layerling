@@ -1257,6 +1257,9 @@ function validateShapeDefinition(definition: Record<string, unknown>, label: str
   if (definition.layeredText !== undefined && typeof definition.layeredText !== "boolean") {
     throw new Error(`${label}.layeredText must be true or false`);
   }
+  if (definition.layeredIcon !== undefined && typeof definition.layeredIcon !== "boolean") {
+    throw new Error(`${label}.layeredIcon must be true or false`);
+  }
   // The corners of a text's line (#215): a layer of a name tag can be bevelled or sharp now, so an
   // unknown corner is refused rather than read as sharp.
   const textJoin = (definition.textStroke as { join?: unknown } | undefined)?.join;

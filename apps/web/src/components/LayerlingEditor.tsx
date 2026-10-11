@@ -41,7 +41,9 @@ import { normalizeTextEdge } from "@/lib/textEdge";
 import { textDisplayGeometry } from "@/lib/textFill";
 import { DEFAULT_TEXT_LAYERS, layerTextKeyringArgument, layerTextLayersError, nameTagOffsets, normalizeTextLayers, textLayerShapes, textLayersOf, type NameTagKeyring, type TextLayer, type TextLayerStack } from "@/lib/textLayers";
 import { NAME_TAG_LAYERS, NAME_TAG_LETTER_SIZE, textLetterSize, textLetterSizePatch } from "@/lib/nameTag";
-import type { TextLayerPatch } from "@/components/workplane/ShapeInspector";
+import { ICON_TAG_LAYERS, iconLayerElevations, iconLayerProfile, iconLayersOf, iconSourceProfile, iconTagGrid, isIconLayerBody, MAX_ICON_TAG_WIDTH, MIN_ICON_TAG_WIDTH, normalizeIconTagCount, scaledIconProfile, type IconLayerStack, type IconTagPlace } from "@/lib/iconTag";
+import type { IconLayerPatch, IconTagControls, TextLayerPatch } from "@/components/workplane/ShapeInspector";
+import { IconTagPanel } from "@/components/workplane/IconTagPanel";
 import { loadedManifoldRuntime, onManifoldReady, rememberManifoldRuntime, setManifoldLoader } from "@/lib/manifoldHandle";
 import { canApplySketchCornerTreatment } from "@/lib/sketchFilletChamfer";
 import { sketchPrimitiveGeometry } from "@/lib/sketchPrimitives";
@@ -118,7 +120,7 @@ import { acceleratedRaycast, computeBoundsTree, disposeBoundsTree } from "three-
 import { meshForTwist, twistBandCount } from "@/lib/heightSlices";
 import { SHELL_SIDES, shellMaxThickness, shellOpeningsFor, shellOpenSides } from "@/lib/shellLimits";
 import { circleStepDegrees, clampArrayCount, moveAlongRadius, rotateAroundVertical, rowOffset, singleAxisSpacing, type ArraySettings } from "@/lib/shapeArray";
-import { bedOverhangs, printerPresetById, type BedOverhang } from "@/lib/printBed";
+import { bedOverhangs, printerPresetById, shapeBedFootprint, type BedOverhang } from "@/lib/printBed";
 import { SplitPanel } from "./workplane/SplitPanel";
 import { groupedContentScale, groupedPartSizeScale, scaleGroupedVertices } from "@/lib/groupScale";
 import { dropSplitSlivers, unionSplitManifoldComponents } from "@/lib/manifoldSplit";
@@ -216,7 +218,7 @@ import { ThemeSwitch } from "@/components/ThemeSwitch";
 import { useFileAccept } from "@/lib/fileAccept";
 import { exportLylProject, importLylProject, LYL_CREATED_WITH_VERSION, LYL_MEDIA_TYPE } from "@/lib/lylProject";
 import { simplifyTrianglePositions } from "@/lib/meshSimplify";
-import { displayShapeName, libraryShapeAssets, makeShapeFromAsset, nameTagAsset, sceneShape, shapeAssetLabel, shapeAssetMenuLabel, toolbarShapeAssets } from "@/lib/shapeCatalog";
+import { displayShapeName, iconTagAsset, libraryShapeAssets, makeShapeFromAsset, nameTagAsset, sceneShape, shapeAssetLabel, shapeAssetMenuLabel, toolbarShapeAssets } from "@/lib/shapeCatalog";
 import { importedShapeFromStl } from "@/lib/stlImport";
 import { exportMeshesToStl } from "@/lib/stlExport";
 import { exportMeshesTo3mf, THREE_MF_MEDIA_TYPE } from "@/lib/threemfExport";
@@ -242,8 +244,8 @@ import {
 import { localizedError } from "@/lib/userErrors";
 import { sketchBodyStretch, stretchedSketchProfile } from "@/lib/sketchResize";
 import { silhouetteSketchProfile } from "@/lib/sketchCadProfile";
-import { svgSketchMatchesMesh } from "@/lib/svgSketch";
-import { DEFAULT_SKETCH_STROKE, normalizeSketchStroke, strokedSketchProfile } from "@/lib/sketchStroke";
+import { sketchProfileFromSvg, svgSketchMatchesMesh } from "@/lib/svgSketch";
+import { DEFAULT_SKETCH_STROKE, filledGrowPockets, normalizeSketchStroke, strokedSketchProfile } from "@/lib/sketchStroke";
 import { topCadModifierEdgeIds } from "@/lib/topEdges";
 import { placeSketchShape } from "@/lib/sketchPlacement";
 import { meshSlicePath, planeCutsMesh } from "@/lib/sketchSlice";
@@ -526,7 +528,13 @@ async function cadShapeFromSketchProfile(profile: SketchProfile, height: number,
     });
   };
   let response: SketchCadBuildResponse;
-  if (profile.stroke) {
+  // With No holes and a "Wider" line, parts that touch once wider can close a pocket between
+  // them; without holes means without those too, as for a text (#215). Only then is the outline
+  // worked out here, as the polygon stroke with its outer rings only, and built as an area.
+  const pocketsFilled = profile.stroke?.align === "grow" && profile.silhouette ? filledGrowPockets(await getManifoldRuntime(), buildProfile) : null;
+  if (pocketsFilled) {
+    response = await buildOnWorker(pocketsFilled);
+  } else if (profile.stroke) {
     // The kernel moves the outlines of a stroked sketch itself, so its walls stay planes, arcs and
     // single curves (#154); where it cannot (open lines, bevelled corners ...), a stroked outline of
     // straight lines is worked out here and the usual extrusion builds that. The body keeps the drawn line.
@@ -3755,6 +3763,105 @@ function prepareNewShape(asset: ShapeAsset, shape: WorkplaneShape): WorkplaneSha
   return layeredTextShape(source, NAME_TAG_LAYERS, [], shape.id, { locked: false, hidden: false, name: "Text" });
 }
 
+/**
+ * The icon tag: a sketch body (an imported SVG above all) or a stack of its layers that the icon
+ * tag card can work on. A revolved sketch, a group or a locked body has no such card.
+ */
+function offersIconLayers(shape: WorkplaneShape | null | undefined) {
+  if (!shape || shape.locked || shape.cylinderWrap) return false;
+  if (isIconLayerBody(shape)) return !shape.edgeTreatments?.length;
+  return Boolean(shape.layeredIcon && shape.groupOperation === "bundle" && shape.groupedShapes?.length);
+}
+
+/** The icon and layers a shape stands for: a sketch body is one layer of itself; an icon tag is read from its parts. */
+function iconLayerStack(shape: WorkplaneShape): IconLayerStack | null {
+  if (isIconLayerBody(shape)) return iconLayersOf([shape]);
+  if (!shape.layeredIcon || !shape.groupedShapes?.length) return null;
+  return iconLayersOf(restoreGroupedChildren(shape));
+}
+
+/**
+ * The icon's outline as an area at the width asked for: a drawing made of lines becomes the area
+ * of its line first, so every layer can take a "Wider" line round it. `width` is the icon's,
+ * `currentWidth` how wide the outline comes out as it is.
+ */
+async function iconTagArea(source: SketchProfile, currentWidth: number, width: number) {
+  let area: SketchProfile = { points: source.points, segments: source.segments };
+  if (source.stroke) {
+    const stroked = strokedSketchProfile(await getManifoldRuntime(), source);
+    if (!stroked) throw new Error(t("sketch.strokeEmpty"));
+    area = { points: stroked.points, segments: stroked.segments };
+  }
+  const wanted = Math.min(MAX_ICON_TAG_WIDTH, Math.max(MIN_ICON_TAG_WIDTH, width));
+  return scaledIconProfile(area, wanted / Math.max(1e-6, currentWidth));
+}
+
+/**
+ * An icon's layers as one shape, standing at `place`: each layer a sketch body built by the CAD
+ * kernel, centred on the icon's middle, the bottom one on the place's elevation and each next
+ * on the one below; a bundle flagged as an icon tag, or with one layer only, that body itself.
+ */
+async function layeredIconShape(area: SketchProfile, layers: readonly TextLayer[], place: IconTagPlace, ids: (string | undefined)[], keepId: string, keep: Pick<WorkplaneShape, "locked" | "hidden" | "name">): Promise<WorkplaneShape> {
+  const name = keep.name || "Icon tag";
+  const elevations = iconLayerElevations(layers, place.elevation);
+  const parts = await Promise.all(layers.map(async (layer, index) => {
+    const built = await cadShapeFromSketchProfile(iconLayerProfile(area, layer), layer.height);
+    return canonicalizeShape({
+      ...built,
+      id: ids[index] ?? createLocalId("icon-layer"),
+      name: layers.length > 1 ? `${name} ${index + 1}` : name,
+      color: layer.color,
+      hole: false,
+      x: place.x,
+      z: place.z,
+      elevation: elevations[index],
+      rotation: place.rotation,
+      rotationX: place.rotationX,
+      rotationZ: place.rotationZ,
+    });
+  }));
+  if (parts.length === 1) return canonicalizeShape({ ...parts[0], id: keepId, name, locked: keep.locked, hidden: keep.hidden });
+  const group = groupedShape(parts);
+  if (!group) throw new Error("Could not build the icon layers");
+  return canonicalizeShape({ ...group, id: keepId, name, groupOperation: "bundle", layeredIcon: true, locked: keep.locked, hidden: keep.hidden });
+}
+
+/**
+ * Copies of a tag in a grid on the plate (the icon tag's count): `count` of them centred on the
+ * plate's middle, as many to a row as its width takes, the first being the tag itself.
+ */
+function iconTagCopies(tag: WorkplaneShape, count: number, plate: { width: number; depth: number }): WorkplaneShape[] {
+  const footprint = shapeBedFootprint(tag);
+  const size = { width: footprint.maxX - footprint.minX, depth: footprint.maxZ - footprint.minZ };
+  // The grid places footprints; the tag's own point may sit off the middle of its footprint.
+  const offsetX = tag.x - (footprint.minX + footprint.maxX) / 2;
+  const offsetZ = tag.z - (footprint.minZ + footprint.maxZ) / 2;
+  return iconTagGrid(normalizeIconTagCount(count), size, plate).map((spot, index) => canonicalizeShape({
+    ...(index === 0 ? tag : cloneWorkplaneShapeTreeWithFreshIds(tag, `copy${index}`)),
+    x: Math.round((spot.x + offsetX) * 1000) / 1000,
+    z: Math.round((spot.z + offsetZ) * 1000) / 1000,
+  }));
+}
+
+/**
+ * An SVG file's icon as an area `width` mm wide, and the name a tag of it takes - the file's.
+ * As the import does (#197), a drawing the kernel builds differently from the mesh is refused.
+ */
+async function svgIconArea(fileName: string, text: string, width: number) {
+  const profile = sketchProfileFromSvg(text);
+  if (!profile) throw new Error(t("iconTag.unreadable"));
+  const probe = await cadShapeFromSketchProfile(profile, 1).catch(() => null);
+  if (!probe || !svgSketchMatchesMesh(probe, { ...importedShapeFromSvg(fileName, text), mirrorZ: true })) throw new Error(t("iconTag.unreadable"));
+  const area = await iconTagArea(iconSourceProfile(profile), probe.width, width);
+  return { area, name: fileName.replace(/\.svg$/i, "").trim() || "Icon tag" };
+}
+
+/** An SVG file's text as a new icon tag in the start layers, `width` mm wide, standing on the plate's middle. */
+async function iconTagFromSvg(fileName: string, text: string, width: number): Promise<WorkplaneShape> {
+  const { area, name } = await svgIconArea(fileName, text, width);
+  return layeredIconShape(area, ICON_TAG_LAYERS, { x: 0, z: 0, elevation: 0, rotation: 0, rotationX: 0, rotationZ: 0 }, [], createLocalId("icon-tag"), { locked: false, hidden: false, name });
+}
+
 function offersCylinderWrap(shape: WorkplaneShape | null | undefined) {
   if (!canWrapAroundCylinder(shape) || !shape) return false;
   return Boolean(shape.importedMesh && !shape.groupedShapes?.length) || shape.kind === "text" || Boolean(shape.sketchProfile);
@@ -6058,6 +6165,7 @@ function mcpShapeSummary(shape: WorkplaneShape): LayerlingMcpShapeSummary {
     // A name tag's key ring hole (#215), on the layers it goes through; the bottom one carries the ear.
     ...(shape.kind === "text" && shape.textKeyring ? { textKeyring: shape.textKeyring } : {}),
     ...(shape.layeredText ? { layeredText: true } : {}),
+    ...(shape.layeredIcon ? { layeredIcon: true } : {}),
     children: shape.groupedShapes?.map(mcpShapeSummary),
   };
 }
@@ -6494,6 +6602,8 @@ export function LayerlingEditor({
   const [snapGrid, setSnapGrid] = useState<GridSize>(() => normalizeSnapGrid(initialSnap));
   const [workplaneMode, setWorkplaneMode] = useState(false);
   const [topPanel, setTopPanel] = useState<TopPanel>(null);
+  /** The icon tag window: an SVG file, its width and OK (the library's Icon tag). */
+  const [iconTagPanelOpen, setIconTagPanelOpen] = useState(false);
   const [shortcutsOpen, setShortcutsOpen] = useState(false);
   const [guideOpen, setGuideOpen] = useState(false);
   const [outlinerOpen, setOutlinerOpen] = useState(false);
@@ -7132,6 +7242,11 @@ export function LayerlingEditor({
   // A shape on the pointer and a tool that waits for a click cannot share the
   // click: the one taken up last wins and puts the other one down.
   const startCruise = useCallback((asset: ShapeAsset) => {
+    // The icon tag has no shape to carry: it starts from an SVG file, in its own window.
+    if (asset.id === iconTagAsset.id) {
+      setIconTagPanelOpen(true);
+      return;
+    }
     closeSplit();
     invalidateCadModifierSession();
     setWorkplaneMode(false);
@@ -8842,6 +8957,10 @@ export function LayerlingEditor({
   const addShape = useCallback(
     (asset: ShapeAsset, point?: PlacementPoint, onFace?: PlacementWorkplane) => {
       setCruiseAsset(null);
+      if (asset.id === iconTagAsset.id) {
+        setIconTagPanelOpen(true);
+        return;
+      }
       const shape = makeShapeFromAsset(asset, undefined, workspaceSettingsRef.current.shapeCustomizations[asset.kind]);
       // Dropped on a body's face, the shape lies on that face; otherwise on the current workplane.
       const workplane = onFace ?? placementWorkplane;
@@ -11273,6 +11392,103 @@ export function LayerlingEditor({
       t("status.textTagsMade", { count: tags.length }),
     );
   }, [commitShapes, selectedShape, selectedShapes.length]);
+
+  /** The selected icon tag, or a sketch body that can become one, as its card shows it. */
+  const selectedIconStack = useMemo(
+    () => (selectedShapes.length === 1 && selectedShape && offersIconLayers(selectedShape) ? iconLayerStack(selectedShape) : null),
+    [selectedShape, selectedShapes.length],
+  );
+
+  /**
+   * Splits the selected sketch body into an icon tag's layers, or builds the selected icon tag
+   * again with a new width or layers. The kernel takes a moment per layer, so a burst of changes
+   * (a slider dragged) builds once, after the last; a build that a newer change overtook is dropped.
+   */
+  const iconLayerTimerRef = useRef<number | null>(null);
+  const iconLayerRequestRef = useRef(0);
+  const iconLayerPatchRef = useRef<{ id: string; patch: IconLayerPatch } | null>(null);
+  const layerSelectedIcon = useCallback((patch: IconLayerPatch) => {
+    if (selectedShapes.length !== 1 || !selectedShape || !offersIconLayers(selectedShape)) return;
+    const id = selectedShape.id;
+    // Changes in one burst add up: a new width and then new layers both count.
+    const pending = iconLayerPatchRef.current;
+    iconLayerPatchRef.current = { id, patch: pending?.id === id ? { ...pending.patch, ...patch } : patch };
+    if (iconLayerTimerRef.current !== null) window.clearTimeout(iconLayerTimerRef.current);
+    const request = ++iconLayerRequestRef.current;
+    iconLayerTimerRef.current = window.setTimeout(() => {
+      iconLayerTimerRef.current = null;
+      const wanted = iconLayerPatchRef.current;
+      iconLayerPatchRef.current = null;
+      const current = shapesRef.current.find((shape) => shape.id === wanted?.id);
+      if (!wanted || !current || !offersIconLayers(current)) return;
+      const stack = iconLayerStack(current);
+      if (!stack) return;
+      const wasBody = !current.layeredIcon;
+      const layers = wanted.patch.layers ?? (wasBody ? [...ICON_TAG_LAYERS] : stack.layers);
+      setNotice(t("status.buildingSketch"), true);
+      void (async () => {
+        const area = await iconTagArea(stack.source, stack.width, wanted.patch.width ?? stack.width);
+        return layeredIconShape(area, layers, stack.place, wasBody ? [] : stack.ids, current.id, wasBody ? { ...current, name: stack.name } : current);
+      })()
+        .then((next) => {
+          if (iconLayerRequestRef.current !== request || !shapesRef.current.some((shape) => shape.id === next.id)) return;
+          commitShapes(
+            shapesRef.current.map((shape) => (shape.id === next.id ? next : shape)),
+            [next.id],
+            t(wasBody ? "status.iconLayered" : "status.iconLayersUpdated", { count: layers.length }),
+          );
+        })
+        .catch((error) => {
+          if (iconLayerRequestRef.current === request) setNotice(error instanceof Error ? localizedError(error.message) : t("status.sketchCannotExtrude"), true);
+        });
+    }, 250);
+  }, [commitShapes, selectedShape, selectedShapes.length]);
+
+  /** `count` tags like the selected one in a grid on the plate's middle; the first is the tag itself. */
+  const makeIconTags = useCallback((count: number) => {
+    if (selectedShapes.length !== 1 || !selectedShape || !offersIconLayers(selectedShape)) return;
+    const plate = workspaceSettingsRef.current;
+    const tags = iconTagCopies(selectedShape, count, { width: plate.width, depth: plate.depth });
+    commitShapes(
+      [...shapesRef.current.filter((shape) => shape.id !== selectedShape.id), ...tags],
+      tags.map((tag) => tag.id),
+      t("status.iconTagsMade", { count: tags.length }),
+    );
+  }, [commitShapes, selectedShape, selectedShapes.length]);
+
+  /** Another SVG on the selected icon tag: its layers, width and place stay, the icon and the name change. */
+  const replaceIconSvg = useCallback(async (file: File) => {
+    const current = selectedShapes.length === 1 && selectedShape?.layeredIcon ? selectedShape : null;
+    const stack = current ? iconLayerStack(current) : null;
+    if (!current || !stack) return;
+    const { area, name } = await svgIconArea(file.name, await file.text(), stack.width);
+    const next = await layeredIconShape(area, stack.layers, stack.place, stack.ids, current.id, { ...current, name });
+    if (!shapesRef.current.some((shape) => shape.id === current.id)) return;
+    commitShapes(shapesRef.current.map((shape) => (shape.id === current.id ? next : shape)), [next.id], t("status.iconReplaced", { name }));
+  }, [commitShapes, selectedShape, selectedShapes.length]);
+
+  /** The icon tag card's wiring for the selected sketch body or icon tag; null for anything else. */
+  const iconTagControls = useMemo<IconTagControls | null>(() => {
+    if (!selectedIconStack || !selectedShape) return null;
+    const footprint = shapeBedFootprint(selectedShape);
+    return {
+      stack: selectedIconStack,
+      isTag: Boolean(selectedShape.layeredIcon),
+      plate: { width: workspaceSettings.width, depth: workspaceSettings.depth },
+      footprint: { width: footprint.maxX - footprint.minX, depth: footprint.maxZ - footprint.minZ },
+      onLayer: layerSelectedIcon,
+      onCopies: makeIconTags,
+      onReplaceSvg: replaceIconSvg,
+    };
+  }, [layerSelectedIcon, makeIconTags, replaceIconSvg, selectedIconStack, selectedShape, workspaceSettings.depth, workspaceSettings.width]);
+
+  /** The icon tag window's OK: the SVG as a new icon tag on the plate, selected. */
+  const createIconTag = useCallback(async (file: File, width: number) => {
+    const text = await file.text();
+    const tag = await iconTagFromSvg(file.name, text, width);
+    commitShapes([...shapesRef.current, tag], [tag.id], t("status.iconTagAdded", { name: tag.name }));
+    setIconTagPanelOpen(false);
+  }, [commitShapes]);
 
   const simplifyToolShape = simplifyToolId && selectedShapes.length === 1 && selectedShape?.id === simplifyToolId && offersMeshSimplify(selectedShape)
     ? selectedShape
@@ -14718,6 +14934,7 @@ export function LayerlingEditor({
           onLayerText={selectedShapes.length === 1 && offersTextLayers(selectedShape) ? layerSelectedText : undefined}
           onTextTags={selectedShapes.length === 1 && offersTextLayers(selectedShape) ? makeTextTags : undefined}
           textLayerStack={selectedNameTag}
+          iconTag={historyViewState ? null : iconTagControls}
           prepareNewShape={prepareNewShape}
           onUpdateShape={updateShape}
           onDuplicateShapeAt={duplicateShapeAt}
@@ -14997,6 +15214,9 @@ export function LayerlingEditor({
           onApply={applyEdgeModifier}
           onCancel={cancelEdgeModifier}
         />
+      ) : null}
+      {iconTagPanelOpen && !historyViewState ? (
+        <IconTagPanel onClose={() => setIconTagPanelOpen(false)} onCreate={createIconTag} />
       ) : null}
       {topPanel ? (
         <TopActionPanel

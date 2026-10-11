@@ -1,5 +1,5 @@
 import type { CrossSection, ManifoldToplevel } from "manifold-3d";
-import { orderedCadSketchPaths, type OrderedCadSketchPath } from "@/lib/sketchCadProfile";
+import { orderedCadSketchPaths, silhouetteSketchProfile, type OrderedCadSketchPath } from "@/lib/sketchCadProfile";
 import type { SketchProfile, SketchStroke, SketchStrokeAlign, SketchStrokeCap, SketchStrokeJoin } from "@/types/layerling";
 
 /**
@@ -205,4 +205,19 @@ export function strokedSketchProfile(runtime: ManifoldToplevel, profile: SketchP
     ids.forEach((id, index) => segments.push({ id: `stroke-${loopIndex}-s${index}`, startId: id, endId: ids[(index + 1) % ids.length], kind: "line" }));
   });
   return { points, segments };
+}
+
+/**
+ * A sketch with No holes and a "Wider" line (#215) whose wider parts close a pocket between
+ * them: the polygon stroke of its outline with only the outer rings kept, so the pocket is filled
+ * as for a text. Null when no pocket closes - the exact build of the line is the better one then -
+ * or when the line leaves nothing. `profile` is the sketch with its own holes already left out.
+ */
+export function filledGrowPockets(runtime: ManifoldToplevel, profile: SketchProfile): SketchProfile | null {
+  if (profile.stroke?.align !== "grow") return null;
+  const stroked = strokedSketchProfile(runtime, profile);
+  if (!stroked) return null;
+  const filled = silhouetteSketchProfile(stroked);
+  const closedRings = (sketch: SketchProfile) => orderedCadSketchPaths(sketch).filter((path) => path.closed).length;
+  return closedRings(filled) < closedRings(stroked) ? filled : null;
 }

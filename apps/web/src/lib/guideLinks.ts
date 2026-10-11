@@ -40,6 +40,7 @@ export const GUIDE_SECTIONS = {
   wrapCylinder: { chapter: "shapes", de: "um-einen-zylinder-wickeln", en: "wrapping-around-a-cylinder" },
   textFill: { chapter: "text", de: "kontur-silhouette-und-breiter", en: "outline-silhouette-and-wider" },
   textLayers: { chapter: "text", de: "schichten-und-namensschilder", en: "layers-and-name-tags" },
+  iconTag: { chapter: "text", de: "symbolschilder", en: "icon-tags" },
   myShapes: { chapter: "shapes", de: "eigene-formen", en: "custom-shapes" },
   objectList: { chapter: "select", de: "die-objektliste", en: "the-object-list" },
   pattern: { chapter: "select", de: "muster-reihe-und-kreis", en: "patterns-row-and-circle" },
@@ -111,11 +112,14 @@ type GuideShape = {
   sketchOperation?: string;
   importedMesh?: { sourceFormat?: string };
   layeredText?: boolean;
+  layeredIcon?: boolean;
 };
 
 export function guideSectionForShape(shape: GuideShape): GuideSection | undefined {
   // A name tag (#215) is a bundle, but its panel is explained with the text.
   if (shape.layeredText && shape.groupedShapes?.length) return "textLayers";
+  // An icon tag is a bundle too; its card is explained next to the name tag.
+  if (shape.layeredIcon && shape.groupedShapes?.length) return "iconTag";
   if (shape.groupedShapes?.length) {
     if (shape.groupOperation === "bundle") return "bundling";
     if (shape.groupOperation === "intersection") return "intersection";
