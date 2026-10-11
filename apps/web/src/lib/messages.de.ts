@@ -768,6 +768,7 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "status.holePatternTooMany": "Das wären zu viele Löcher für ein Muster.",
   "status.holePatternNone": "Es passt kein Loch auf die Fläche.",
   "status.holePatternCreated": "Lochmuster erzeugt: {count} Löcher, mit dem Körper gruppiert",
+  "status.honeycombConverted": "Wabengitter in ein Lochmuster umgewandelt: {count}",
   "welcome.moreHolePatternTitle": "Lochmuster",
   "welcome.moreHolePatternBody": "Eine ebene Fläche eines Körpers anklicken und Löcher darin verteilen: rund, quadratisch, rechteckig, als Sechseck oder Langloch, im Raster oder versetzt, mit Abstand, Rand zur Kante und Tiefe (durch die ganze Form oder ein Maß). Eine Vorschau zeigt die Löcher, bevor du sie erzeugst; sie bleiben normale Aussparungen, mit dem Körper gruppiert - für Lüftungsgitter, Lautsprecher, Körbe und Gehäuse.",
   "guide.select.holePattern": "Lochmuster (Rechtsklick auf einen Körper oder Strg+K): eine ebene Fläche anklicken, dann Lochform, Größe, Abstand, Anordnung, Rand und Tiefe einstellen. Die Löcher erscheinen als Vorschau; „Erzeugen“ legt sie als Aussparungen an, mit dem Körper gruppiert. Gruppe auflösen gibt sie wieder frei.",

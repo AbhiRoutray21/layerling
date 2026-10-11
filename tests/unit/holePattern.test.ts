@@ -4,6 +4,7 @@ import {
   faceOutlineFromTriangles,
   holeFootprintPolygon,
   holePatternCenters,
+  holePatternMinSpacing,
   normalizeHolePattern,
   rectangleOutline,
   type FaceOutline,
@@ -131,9 +132,20 @@ describe("hole pattern", () => {
     expect(centers.length).toBeGreaterThan(0);
   });
 
+  it("lets staggered hexagons interlock closer than their corner-to-corner size", () => {
+    // 6 mm across the corners is 5.2 mm across the flats: a 0.4 mm wall needs 5.6 mm, not 6.4.
+    const hex = normalizeHolePattern({ form: "hexagon", size: 6, spacing: 1, arrangement: "staggered" });
+    expect(hex.spacing).toBeCloseTo(5.196 + 0.4, 2);
+    // In a grid the corners face each other along the columns.
+    expect(normalizeHolePattern({ form: "hexagon", size: 6, spacing: 1, arrangement: "grid" }).spacing).toBeCloseTo(6.4, 2);
+    // A staggered square needs more than its own width: the next row sits diagonally.
+    expect(normalizeHolePattern({ form: "square", size: 10, spacing: 1, arrangement: "staggered" }).spacing).toBeGreaterThan(10.4);
+    expect(holePatternMinSpacing({ form: "round", size: 6, height: 6, arrangement: "grid" })).toBeCloseTo(6.4, 2);
+  });
+
   it("keeps the numbers inside what the tool offers", () => {
     const settings = normalizeHolePattern({ form: "slot", size: 10, height: 4, spacing: 1, margin: -3, depth: -2 });
-    expect(settings.spacing).toBeGreaterThanOrEqual(10.2);
+    expect(settings.spacing).toBeGreaterThanOrEqual(10.4);
     expect(settings.margin).toBe(0);
     expect(settings.depth).toBeNull();
     expect(normalizeHolePattern({ form: "nonsense" as never }).form).toBe(DEFAULT_HOLE_PATTERN.form);

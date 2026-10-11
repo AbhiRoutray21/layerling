@@ -391,6 +391,50 @@ export function rectangleOutline(minU: number, minV: number, maxU: number, maxV:
   };
 }
 
+/** The least clear wall between two neighbouring holes that the tool allows, in mm. */
+export const HOLE_PATTERN_MIN_WALL = 0.4;
+
+/** Do two copies of a convex outline, one moved by (dU, dV), come closer than `gap`? */
+function footprintsCloserThan(polygon: readonly Point2[], dU: number, dV: number, gap: number) {
+  const moved = polygon.map((point) => ({ u: point.u + dU, v: point.v + dV }));
+  if (moved.some((point) => insideConvex(polygon, point)) || polygon.some((point) => insideConvex(moved, point))) return true;
+  let nearest = Infinity;
+  for (let i = 0; i < polygon.length; i += 1) {
+    const a = polygon[i];
+    const b = polygon[(i + 1) % polygon.length];
+    for (let j = 0; j < moved.length; j += 1) {
+      nearest = Math.min(nearest, segmentSegmentDistance(a, b, moved[j], moved[(j + 1) % moved.length]));
+      if (nearest < gap) return true;
+    }
+  }
+  return false;
+}
+
+/**
+ * The smallest spacing at which neighbouring holes of this shape keep a wall of
+ * `HOLE_PATTERN_MIN_WALL`: a grid compares along both axes, a staggered
+ * pattern along the row and along the diagonal. Hexagons that interlock in a
+ * staggered pattern can stand closer than their corner-to-corner size.
+ */
+export function holePatternMinSpacing(settings: Pick<HolePatternSettings, "form" | "size" | "height" | "arrangement">) {
+  const polygon = holeFootprintPolygon(settings);
+  const directions = settings.arrangement === "staggered"
+    ? [{ u: 1, v: 0 }, { u: 0.5, v: STAGGER_ROW_RATIO }]
+    : [{ u: 1, v: 0 }, { u: 0, v: 1 }];
+  let needed = HOLE_PATTERN_MIN_SIZE;
+  for (const direction of directions) {
+    let low = 0;
+    let high = (holeFootprintSize(settings).width + holeFootprintSize(settings).height) * 2 + HOLE_PATTERN_MIN_WALL;
+    for (let step = 0; step < 40; step += 1) {
+      const middle = (low + high) / 2;
+      if (footprintsCloserThan(polygon, direction.u * middle, direction.v * middle, HOLE_PATTERN_MIN_WALL)) low = middle;
+      else high = middle;
+    }
+    needed = Math.max(needed, high);
+  }
+  return needed;
+}
+
 /** Keeps every number of the settings inside what the tool offers. */
 export function normalizeHolePattern(input: Partial<HolePatternSettings>): HolePatternSettings {
   const base = DEFAULT_HOLE_PATTERN;
@@ -398,17 +442,17 @@ export function normalizeHolePattern(input: Partial<HolePatternSettings>): HoleP
   const number = (value: unknown, fallback: number, min: number, max: number) =>
     typeof value === "number" && Number.isFinite(value) ? Math.min(max, Math.max(min, value)) : fallback;
   const form = forms.includes(input.form as HoleForm) ? input.form as HoleForm : base.form;
+  const arrangement: HoleArrangement = input.arrangement === "grid" ? "grid" : input.arrangement === "staggered" ? "staggered" : base.arrangement;
   const size = number(input.size, base.size, HOLE_PATTERN_MIN_SIZE, HOLE_PATTERN_MAX_SIZE);
   const height = number(input.height, size, HOLE_PATTERN_MIN_SIZE, HOLE_PATTERN_MAX_SIZE);
-  const footprint = holeFootprintSize({ form, size, height });
   // Holes that overlap would only merge into one wide cut.
-  const minSpacing = Math.max(footprint.width, footprint.height) + 0.2;
+  const minSpacing = holePatternMinSpacing({ form, size, height, arrangement });
   return {
     form,
     size,
     height,
     spacing: Math.max(minSpacing, number(input.spacing, base.spacing, HOLE_PATTERN_MIN_SIZE, HOLE_PATTERN_MAX_SPACING)),
-    arrangement: input.arrangement === "grid" ? "grid" : input.arrangement === "staggered" ? "staggered" : base.arrangement,
+    arrangement,
     margin: number(input.margin, base.margin, 0, HOLE_PATTERN_MAX_MARGIN),
     depth: typeof input.depth === "number" && Number.isFinite(input.depth) && input.depth > 0 ? Math.min(input.depth, 1000) : null,
   };

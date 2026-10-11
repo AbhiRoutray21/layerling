@@ -97,6 +97,7 @@ import { carriedOntoFace } from "@/lib/carryOntoFace";
 import { HolePatternPanel } from "./workplane/HolePatternPanel";
 import { DEFAULT_HOLE_PATTERN, normalizeHolePattern, type HolePatternSettings } from "@/lib/holePattern";
 import { holePatternShapes, readPerforableFace, type PerforableFace } from "@/lib/holePatternShapes";
+import { honeycombReplacementParts } from "@/lib/honeycombMigration";
 import { MeshSimplifyPanel } from "./workplane/MeshSimplifyPanel";
 import { addCustomFontFile, customFontErrorMessage, FontManagerPanel } from "./workplane/FontManagerPanel";
 import { onFontManagerRequested } from "@/lib/fontManagerEvents";
@@ -10630,6 +10631,35 @@ export function LayerlingEditor({
       setHolePatternTool(null);
     }
   }, [arrayTool, edgeModifier, holePatternTool, layFlatPickMode, mateTool, pivotPickMode, scalePercentTool, selectedIds, shellTool, simplifyToolId, splitSession]);
+
+  // The Honeycomb is gone as a shape (#223): one in an older design becomes a box with hexagonal holes, grouped, as the
+  // hole pattern makes it. Each is converted once - Undo may bring the old one back, and it then stays as it was.
+  const honeycombConvertedRef = useRef(new Set<string>());
+  useEffect(() => {
+    if (historyViewState) return;
+    const pending = shapes.filter((shape) => shape.kind === "honeycomb" && !shape.hole && !honeycombConvertedRef.current.has(shape.id));
+    if (pending.length === 0) return;
+    pending.forEach((shape) => honeycombConvertedRef.current.add(shape.id));
+    const sourceProjectId = projectInfoRef.current.projectId;
+    const sourceFingerprint = projectShapesFingerprint(shapesRef.current);
+    void (async () => {
+      const replacements = new Map<string, WorkplaneShape>();
+      for (const shape of pending) {
+        const parts = honeycombReplacementParts(shape);
+        if (!parts) continue;
+        const result = await buildGroupedShapeFromSelection([parts.body, ...parts.holes], workspaceSettingsRef.current.booleanTriangleLimit);
+        if (!result.group) continue;
+        replacements.set(shape.id, canonicalizeShape({ ...result.group, id: shape.id, name: shape.name, color: shape.color, locked: shape.locked, groupOperation: "group" }));
+      }
+      if (replacements.size === 0) return;
+      if (projectInfoRef.current.projectId !== sourceProjectId || projectShapesFingerprint(shapesRef.current) !== sourceFingerprint) return;
+      commitShapes(
+        shapesRef.current.map((shape) => (shape.kind === "honeycomb" ? replacements.get(shape.id) ?? shape : shape)),
+        selectedIdsRef.current,
+        t("status.honeycombConverted", { count: replacements.size }),
+      );
+    })();
+  }, [commitShapes, historyViewState, shapes]);
 
   const centerSelectionOnWorkplane = useCallback(() => {
     if (!hasSelection) {
