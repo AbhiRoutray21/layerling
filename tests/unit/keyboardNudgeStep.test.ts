@@ -3,6 +3,7 @@ import {
   BRICK_SNAP_STEP,
   KEYBOARD_NUDGE_COARSE_FACTOR,
   KEYBOARD_NUDGE_FALLBACK_STEP,
+  keyboardNudgeCoarseFactor,
   keyboardNudgeStep,
   snapGridStep,
 } from "@/lib/workplaneSettings";
@@ -76,5 +77,23 @@ describe("keyboard nudge step", () => {
       position += step;
     }
     expect(position % snapGridStep("5.0 mm")).toBeCloseTo(0, 10);
+  });
+});
+
+describe("Shift nudge follows the darker grid line (#222)", () => {
+  it("takes 5 steps by default, as before, and 10 when the darker line is every 10", () => {
+    expect(keyboardNudgeCoarseFactor({ units: "Metric", gridMajorInterval: 5 })).toBe(5);
+    expect(keyboardNudgeCoarseFactor({ units: "Metric", gridMajorInterval: 10 })).toBe(10);
+    expect(keyboardNudgeStep("1.0 mm", true, 10)).toBe(10);
+    expect(keyboardNudgeStep("0.5 mm", true, 10)).toBe(5);
+    expect(keyboardNudgeStep("1.0 mm", false, 10)).toBe(1);
+  });
+
+  it("keeps 5 in inches, where the setting is not offered", () => {
+    expect(keyboardNudgeCoarseFactor({ units: "Imperial", gridMajorInterval: 10 })).toBe(5);
+  });
+
+  it("falls back to the factor of 5 without a factor", () => {
+    expect(keyboardNudgeStep("1.0 mm", true)).toBe(5);
   });
 });

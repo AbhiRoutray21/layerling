@@ -18,5 +18,15 @@
       "de": "Eine um 45° gedrehte Form wurde am Kasten um sie herum ausgerichtet. Setze eine Arbeitsebene auf eine ihrer Flächen: Die Punkte des Ausrichtens stehen dann auf den Achsen dieser Ebene, und die Formen richten sich an den echten Kanten aus, wie in Tinkercad.",
       "en": "A shape turned by 45° was aligned by the box round it. Set a workplane on one of its faces: the points of Align then stand on that plane's axes and the shapes line up with the true edges, as in Tinkercad."
     }
+  },
+  {
+    "title": {
+      "de": "Umschalt-Pfeil folgt der dunkleren Rasterlinie",
+      "en": "Shift with an arrow follows the darker grid line"
+    },
+    "body": {
+      "de": "Umschalt und Pfeiltaste schieben jetzt so viele Rasterschritte, wie die Einstellung „Dunklere Rasterlinie alle“ sagt: 5 wie bisher oder 10 wie in Tinkercad.",
+      "en": "Shift and an arrow key now move as many grid steps as the setting \"Darker grid line every\" says: 5 as before or 10 as in Tinkercad."
+    }
   }
 ]

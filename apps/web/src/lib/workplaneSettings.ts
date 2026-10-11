@@ -518,10 +518,19 @@ export function snapGridStep(size: GridSize) {
  * Following the grid keeps an aligned shape aligned; Shift keeps its former
  * meaning of a coarser step. With the grid off, the old 1mm and 5mm stand.
  */
-export function keyboardNudgeStep(size: GridSize, coarse: boolean) {
+export function keyboardNudgeStep(size: GridSize, coarse: boolean, coarseFactor = KEYBOARD_NUDGE_COARSE_FACTOR) {
   const grid = snapGridStep(size);
   const base = grid > 0 ? grid : KEYBOARD_NUDGE_FALLBACK_STEP;
-  return coarse ? base * KEYBOARD_NUDGE_COARSE_FACTOR : base;
+  return coarse ? base * coarseFactor : base;
+}
+
+/**
+ * How many steps Shift and an arrow key move (#222): as many as the darker grid line is apart,
+ * the "Darker grid line every" setting - 5 by default, and 10 as in Tinkercad. In inches the
+ * setting is not offered, so it stays at 5.
+ */
+export function keyboardNudgeCoarseFactor(workspace: Pick<WorkplaneWorkspaceSettings, "units" | "gridMajorInterval">) {
+  return workspace.units === "Imperial" ? KEYBOARD_NUDGE_COARSE_FACTOR : workspace.gridMajorInterval === 10 ? 10 : KEYBOARD_NUDGE_COARSE_FACTOR;
 }
 
 // Projects saved before the workplane turned ochre still carry the turquoise
