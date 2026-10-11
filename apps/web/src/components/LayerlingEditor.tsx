@@ -46,6 +46,7 @@ import { canApplySketchCornerTreatment } from "@/lib/sketchFilletChamfer";
 import { sketchPrimitiveGeometry } from "@/lib/sketchPrimitives";
 import { cloneSketchProfile, orderedSketchPaths, withSegmentHandles, withSmoothSketchHandles } from "@/lib/sketchSmoothHandles";
 import { curveSketchSegment, straightenSketchSegment } from "@/lib/sketchSegmentCurve";
+import { withSegmentsConstruction } from "@/lib/sketchConstruction";
 import {
   SketchBoltCircleIcon,
   SketchEllipseIcon,
@@ -74,6 +75,7 @@ import {
   ToolbarRotationPivotIcon,
   ToolbarPatternIcon,
   ToolbarHolePatternIcon,
+  ToolbarConstructionLineIcon,
   ToolbarLayFlatIcon,
   ToolbarMateFacesIcon,
   ToolbarNoteIcon,
@@ -6628,6 +6630,11 @@ export function LayerlingEditor({
   const sketchRevolveUpdateRequestRef = useRef(new Map<string, number>());
   const sketchRevolveUpdateTimerRef = useRef(new Map<string, number>());
   const [sketchTool, setSketchTool] = useState<SketchTool>("line");
+  // New lines are construction lines (#229).
+  const [sketchConstruction, setSketchConstruction] = useState(false);
+  useEffect(() => {
+    if (!sketchActive) setSketchConstruction(false);
+  }, [sketchActive]);
   const [sketchProfile, setSketchProfile] = useState<SketchProfile>(() => emptySketchProfile());
   const [sketchHistory, setSketchHistory] = useState<SketchProfile[]>([emptySketchProfile()]);
   const [sketchHistoryIndex, setSketchHistoryIndex] = useState(0);
@@ -8154,7 +8161,7 @@ export function LayerlingEditor({
         ? profile
         : {
             ...profile,
-            segments: [...profile.segments, { id: createLocalId("sketch-segment"), startId: sketchActivePointId, endId: pointId, kind: curveKind }],
+            segments: [...profile.segments, { id: createLocalId("sketch-segment"), startId: sketchActivePointId, endId: pointId, kind: curveKind, ...(sketchConstruction ? { construction: true } : {}) }],
           };
       const smoothed = sketchTool === "smooth" ? withSmoothSketchHandles(next) : next;
       const closed = orderedSketchPaths(smoothed).some((path) => path.closed && path.steps.some((step) => step.segment.startId === sketchActivePointId || step.segment.endId === sketchActivePointId));
@@ -8164,7 +8171,7 @@ export function LayerlingEditor({
       if (closed) setSketchTool("select");
       return smoothed;
     },
-    [commitSketchProfile, sketchActivePointId, sketchProfile, sketchTool],
+    [commitSketchProfile, sketchActivePointId, sketchConstruction, sketchProfile, sketchTool],
   );
 
   const addSketchPlanePoint = useCallback(
@@ -8188,14 +8195,14 @@ export function LayerlingEditor({
       };
       const next: SketchProfile = { ...sketchProfile, points: [...sketchProfile.points, point] };
       if (sketchActivePointId) {
-        next.segments = [...next.segments, { id: createLocalId("sketch-segment"), startId: sketchActivePointId, endId: point.id, kind: curveKind }];
+        next.segments = [...next.segments, { id: createLocalId("sketch-segment"), startId: sketchActivePointId, endId: point.id, kind: curveKind, ...(sketchConstruction ? { construction: true } : {}) }];
       }
       const prepared = sketchTool === "smooth" ? withSmoothSketchHandles(next) : next;
       commitSketchProfile(prepared, sketchActivePointId ? t("status.sketchPointSegmentAdded") : t("status.sketchPointAdded"));
       setSketchActivePointId(point.id);
       setSketchSelection({ kind: "point", id: point.id });
     },
-    [commitSketchProfile, connectSketchPoint, measureSketchPoint, sketchActivePointId, sketchProfile, sketchTool],
+    [commitSketchProfile, connectSketchPoint, measureSketchPoint, sketchActivePointId, sketchConstruction, sketchProfile, sketchTool],
   );
 
   const addSketchPrimitive = useCallback(
@@ -8250,6 +8257,7 @@ export function LayerlingEditor({
             startId: neighboringIds[0],
             endId: neighboringIds[1],
             kind: connected.every((segment) => segment.kind === "line") ? "line" : connected.some((segment) => segment.kind === "smooth") ? "smooth" : "bezier",
+            ...(connected.every((segment) => segment.construction) ? { construction: true } : {}),
           });
         }
       }
@@ -8513,6 +8521,17 @@ export function LayerlingEditor({
     const next = straightenSketchSegment(sketchProfile, id);
     if (next) commitSketchProfile(next, t("status.sketchLineStraightened"));
   }, [commitSketchProfile, sketchProfile]);
+
+  const setSketchSegmentConstruction = useCallback((id: string, construction: boolean) => {
+    commitSketchProfile(withSegmentsConstruction(sketchProfile, new Set([id]), construction), t(construction ? "status.sketchMadeConstruction" : "status.sketchMadeSolid"));
+  }, [commitSketchProfile, sketchProfile]);
+
+  const toggleSketchConstruction = useCallback(() => {
+    const next = !sketchConstruction;
+    setSketchConstruction(next);
+    if (next && !["line", "bezier", "smooth"].includes(sketchTool)) setActiveSketchTool("line");
+    setNotice(t(next ? "status.sketchConstructionOn" : "status.sketchConstructionOff"));
+  }, [setActiveSketchTool, sketchConstruction, sketchTool]);
 
   const insertSketchPoint = useCallback((segmentId: string, _position: { x: number; z: number }, amount: number) => {
     const result = splitSketchSegment(sketchProfile, segmentId, amount, createLocalId);
@@ -14289,6 +14308,8 @@ export function LayerlingEditor({
         canFilletSketchPoint={canFilletSketchPoint}
         sketchCornerDialog={sketchCornerDialog}
         onSketchCornerDialog={setSketchCornerDialog}
+        sketchConstruction={sketchConstruction}
+        onSketchConstruction={toggleSketchConstruction}
         sketchStrokeActive={sketchStrokePanelOpen || Boolean(sketchProfile.stroke)}
         onSketchStroke={() => setSketchStrokePanelOpen((open) => !open)}
         onStartSketch={(operation) => beginSketch(operation)}
@@ -14470,6 +14491,7 @@ export function LayerlingEditor({
             onSetPointMode={setSketchPointMode}
             onCurveSegment={curveSketchSegmentAction}
             onStraightenSegment={straightenSketchSegmentAction}
+            onSetSegmentConstruction={setSketchSegmentConstruction}
             onApplyFillet={applySketchFilletHandler}
             onApplyChamfer={applySketchChamferHandler}
             onClearMeasurement={clearSketchMeasurement}
@@ -15048,6 +15070,8 @@ function SecondaryToolbar({
   canFilletSketchPoint,
   sketchCornerDialog,
   onSketchCornerDialog,
+  sketchConstruction,
+  onSketchConstruction,
   sketchStrokeActive,
   onSketchStroke,
   onStartSketch,
@@ -15154,6 +15178,8 @@ function SecondaryToolbar({
   canFilletSketchPoint?: boolean;
   sketchCornerDialog?: "fillet" | "chamfer" | null;
   onSketchCornerDialog?: (dialog: "fillet" | "chamfer" | null) => void;
+  sketchConstruction?: boolean;
+  onSketchConstruction?: () => void;
   sketchStrokeActive?: boolean;
   onSketchStroke?: () => void;
   onStartSketch: (operation: SketchOperation) => void;
@@ -15551,6 +15577,7 @@ function SecondaryToolbar({
         plain("sketch-line", t("sketch.line"), drawGroup, true, () => onSketchTool("line"), { icon: SKETCH_PALETTE_ICONS.line, active: sketchTool === "line" }),
         plain("sketch-bezier", t("sketch.bezier"), drawGroup, true, () => onSketchTool("bezier"), { icon: SKETCH_PALETTE_ICONS.bezier, active: sketchTool === "bezier" }),
         plain("sketch-smooth", t("sketch.smooth"), drawGroup, true, () => onSketchTool("smooth"), { icon: SKETCH_PALETTE_ICONS.smooth, active: sketchTool === "smooth" }),
+        plain("sketch-construction", t("sketch.construction"), drawGroup, true, () => onSketchConstruction?.(), { icon: ToolbarConstructionLineIcon, active: Boolean(sketchConstruction), keywords: ["construction", "guide", "helper", "hilfslinie", "hilfs", "konstruktion"] }),
         ...sketchShapeMenuItems.map(({ primitive, label, icon }) => plain(
           `sketch-shape-${primitive}`,
           t("palette.addShape", { shape: t(label) }),
@@ -15902,6 +15929,9 @@ function SecondaryToolbar({
                     </button>
                     <button className={`toolbar-icon sketch-tool-icon ${sketchTool === "smooth" ? "active" : ""}`} type="button" aria-label={t("sketch.smooth")} title={t("sketch.smooth")} onClick={() => onSketchTool("smooth")}>
                       <SketchReferenceIcon name="smooth" />
+                    </button>
+                    <button className={`toolbar-icon sketch-tool-icon sketch-construction-toggle ${sketchConstruction ? "active" : ""}`} type="button" aria-pressed={Boolean(sketchConstruction)} aria-label={t("sketch.construction")} title={t("sketch.constructionHint")} onClick={onSketchConstruction}>
+                      <ToolbarConstructionLineIcon />
                     </button>
                   </div>
                 </div>

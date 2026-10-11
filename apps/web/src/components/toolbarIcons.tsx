@@ -298,6 +298,17 @@ export function ToolbarHolePatternIcon(props: IconProps) {
   );
 }
 
+/** A dashed line with a dot at each end: a construction line in a sketch (#229). */
+export function ToolbarConstructionLineIcon(props: IconProps) {
+  return (
+    <ToolbarVectorIcon {...props}>
+      <path d="M12 36 36 12" strokeDasharray="5 5" />
+      <circle cx="10" cy="38" r="3.6" fill="currentColor" stroke="none" />
+      <circle cx="38" cy="10" r="3.6" fill="currentColor" stroke="none" />
+    </ToolbarVectorIcon>
+  );
+}
+
 export function ToolbarSplitIcon(props: IconProps) {
   return (
     <ToolbarVectorIcon {...props}>

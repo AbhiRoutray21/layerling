@@ -325,6 +325,8 @@ export type SketchSegment = {
   startId: string;
   endId: string;
   kind?: "line" | "bezier" | "smooth";
+  /** A construction line (#229): drawn dashed, never part of the body, points snap to its crossings. */
+  construction?: boolean;
 };
 
 export type SketchImage = {

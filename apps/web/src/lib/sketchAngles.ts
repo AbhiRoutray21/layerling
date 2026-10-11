@@ -37,7 +37,8 @@ export function sketchCornerAt(profile: SketchProfile, pointId: string): SketchC
   const point = profile.points.find((entry) => entry.id === pointId);
   if (!point) return null;
   const pointById = new Map(profile.points.map((entry) => [entry.id, entry]));
-  const touching = profile.segments.filter((segment) => segment.startId === pointId || segment.endId === pointId);
+  // A construction line meeting a corner does not make it a different corner (#229).
+  const touching = profile.segments.filter((segment) => !segment.construction && (segment.startId === pointId || segment.endId === pointId));
   if (touching.length !== 2) return null;
   const legs = touching.map((segment) => {
     const farId = segment.startId === pointId ? segment.endId : segment.startId;

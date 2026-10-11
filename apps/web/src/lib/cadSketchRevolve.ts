@@ -1,5 +1,6 @@
 import type { OcctKernel, ShapeHandle } from "occt-wasm";
 import { cadSketchRegions, type OrderedCadSketchPath } from "@/lib/sketchCadProfile";
+import { solidSketchProfile } from "@/lib/sketchConstruction";
 import type { SketchProfile } from "@/types/layerling";
 
 // A revolved sketch as an exact CAD body, built like an extruded one. It lives
@@ -9,7 +10,9 @@ import type { SketchProfile } from "@/types/layerling";
 const AXIS_TOLERANCE = 1e-6;
 
 /** The profile stands left of the axis (x <= 0), as the sketch view draws it. */
-export function revolveProfileFitsAxis(profile: SketchProfile) {
+export function revolveProfileFitsAxis(sketch: SketchProfile) {
+  // A construction line may stand anywhere; only the outline has to keep to the left (#229).
+  const profile = solidSketchProfile(sketch);
   return profile.points.length > 0 && profile.points.every((point) =>
     point.x <= AXIS_TOLERANCE
     && (!point.handleIn || point.handleIn.x <= AXIS_TOLERANCE)
@@ -41,7 +44,8 @@ function sectionWire(cad: OcctKernel, path: OrderedCadSketchPath, maxZ: number) 
  * as in the mesh revolve). Throws when the profile is not entirely on the
  * axis's left side or has no closed loop; the caller may then fall back.
  */
-export function buildRevolvedSketchSolid(cad: OcctKernel, profile: SketchProfile, startAngle: number, sweepAngle: number): ShapeHandle {
+export function buildRevolvedSketchSolid(cad: OcctKernel, sketch: SketchProfile, startAngle: number, sweepAngle: number): ShapeHandle {
+  const profile = solidSketchProfile(sketch);
   if (!revolveProfileFitsAxis(profile)) throw new Error("The profile crosses the revolve axis");
   const regions = cadSketchRegions(profile);
   if (regions.length === 0) throw new Error("No closed profile found. Draw at least one closed loop and ensure it has no degenerate (zero-area) geometry.");

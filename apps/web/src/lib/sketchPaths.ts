@@ -1,3 +1,4 @@
+import { isConstructionSegment } from "@/lib/sketchConstruction";
 import type { SketchPoint, SketchProfile, SketchSegment } from "@/types/layerling";
 
 export type PathStep = { segment: SketchSegment; from: SketchPoint; to: SketchPoint };
@@ -9,7 +10,7 @@ export function orderedPaths(profile: SketchProfile): DisplayPath[] {
   const adjacency = new Map<string, Array<{ pointId: string; segment: SketchSegment }>>();
   profile.points.forEach((point) => adjacency.set(point.id, []));
   const valid = profile.segments.filter((segment) => {
-    if (!pointById.has(segment.startId) || !pointById.has(segment.endId)) return false;
+    if (isConstructionSegment(segment) || !pointById.has(segment.startId) || !pointById.has(segment.endId)) return false;
     adjacency.get(segment.startId)?.push({ pointId: segment.endId, segment });
     adjacency.get(segment.endId)?.push({ pointId: segment.startId, segment });
     return true;

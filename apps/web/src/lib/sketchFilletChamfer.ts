@@ -24,7 +24,7 @@ export function getCornerGeometryInfo(profile: SketchProfile, pointId: string): 
   const point = profile.points.find((p) => p.id === pointId);
   if (!point) return null;
 
-  const connected = profile.segments.filter((s) => s.startId === pointId || s.endId === pointId);
+  const connected = profile.segments.filter((s) => !s.construction && (s.startId === pointId || s.endId === pointId));
   if (connected.length !== 2) return null;
 
   const [seg1, seg2] = connected;

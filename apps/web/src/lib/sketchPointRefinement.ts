@@ -193,6 +193,9 @@ export function addLineIntersectionPoints(profile: SketchProfile, createId: IdFa
     const rz = b.z - a.z;
     for (let secondIndex = firstIndex + 1; secondIndex < lines.length; secondIndex += 1) {
       const secondSegment = lines[secondIndex];
+      // A construction line does not cut the outline where it crosses it (#229): the crossing is
+      // a place to snap to, and a point there is made when one is clicked.
+      if (firstSegment.construction || secondSegment.construction) continue;
       if (
         firstSegment.startId === secondSegment.startId ||
         firstSegment.startId === secondSegment.endId ||

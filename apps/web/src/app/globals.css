@@ -6307,6 +6307,19 @@ html[data-theme="dark"] .sketch-image-hint {
   stroke-width: 4;
 }
 
+/* A construction line (#229): dashed and thinner, and never part of the body. */
+.sketch-segments path.construction {
+  stroke: #079bc6;
+  stroke-width: 1.8;
+  stroke-dasharray: 8 6;
+}
+
+.sketch-segments path.construction:hover,
+.sketch-segments path.construction.selected {
+  stroke: #ff8a00;
+  stroke-width: 3;
+}
+
 .sketch-preview-line {
   stroke: #ce7416;
   stroke-width: 2;
@@ -6537,6 +6550,12 @@ html[data-theme="dark"] .sketch-image-hint {
 .sketch-point-actions svg {
   width: 17px;
   height: 17px;
+}
+
+.sketch-point-actions button.active {
+  color: #8e5112;
+  background: #f7f2ea;
+  border-color: #e4c7a9;
 }
 
 .sketch-point-divider {
@@ -13343,7 +13362,8 @@ html[data-theme="dark"] .sketch-point-actions button {
   color: #cbd5e0;
 }
 
-html[data-theme="dark"] .sketch-point-actions button:hover {
+html[data-theme="dark"] .sketch-point-actions button:hover,
+html[data-theme="dark"] .sketch-point-actions button.active {
   color: #f7fafc;
   background: #2d241e;
   border-color: #554438;

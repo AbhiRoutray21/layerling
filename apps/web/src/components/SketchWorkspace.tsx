@@ -4,6 +4,8 @@ import { AlignCenterHorizontal, AlignCenterVertical, Check, ChevronUp, CornerDow
 import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties, type FocusEvent as ReactFocusEvent, type KeyboardEvent as ReactKeyboardEvent, type MouseEvent as ReactMouseEvent, type PointerEvent as ReactPointerEvent, type WheelEvent as ReactWheelEvent } from "react";
 import { SnapGridControl } from "@/components/workplane/ShapeInspector";
 import { SketchRevolvePreview } from "@/components/SketchRevolvePreview";
+import { ToolbarConstructionLineIcon } from "@/components/toolbarIcons";
+import { constructionCrossings } from "@/lib/sketchConstruction";
 import { canApplySketchCornerTreatment } from "@/lib/sketchFilletChamfer";
 import { t } from "@/lib/i18n";
 import { useLanguage } from "@/lib/useLanguage";
@@ -67,6 +69,8 @@ type SketchWorkspaceProps = {
   /** Bends a straight side into a curve with handles, or makes a curved side straight again. */
   onCurveSegment?: (id: string) => void;
   onStraightenSegment?: (id: string) => void;
+  /** Makes a line a construction line (#229), or a normal line again. */
+  onSetSegmentConstruction?: (id: string, construction: boolean) => void;
   onApplyFillet?: (id: string, radius: number) => void;
   onApplyChamfer?: (id: string, distance: number) => void;
   onClearMeasurement: () => void;
@@ -511,6 +515,7 @@ export function SketchWorkspace({
   onSetPointMode,
   onCurveSegment,
   onStraightenSegment,
+  onSetSegmentConstruction,
   onApplyFillet,
   onApplyChamfer,
   onClearMeasurement,
@@ -879,7 +884,7 @@ export function SketchWorkspace({
       const reach = REFERENCE_SNAP_PX * screenUnit;
       let nearest: { x: number; z: number } | null = null;
       let nearestDistance = reach;
-      referenceSnapPoints.forEach((candidate) => {
+      snapTargets.forEach((candidate) => {
         const distance = Math.hypot(candidate.x - local.x, candidate.z - local.z);
         if (distance <= nearestDistance) {
           nearest = candidate;
@@ -1410,7 +1415,13 @@ export function SketchWorkspace({
     // Rounded, so a corner at 0 is 0 and not 7e-15.
     return points.map((point) => ({ x: Number(point.x.toFixed(4)) || 0, z: Number(point.z.toFixed(4)) || 0 }));
   }, [referenceFootprints, referenceShapes, referenceSlices]);
-  const hoverOnReference = hover ? referenceSnapPoints.some((point) => point.x === hover.x && point.z === hover.z) : false;
+  // Where construction lines cross other lines (#229): a point snaps there like to a corner of a body underneath.
+  const crossingSnapPoints = useMemo(
+    () => constructionCrossings(displayProfile).map((point) => ({ x: Number(point.x.toFixed(4)) || 0, z: Number(point.z.toFixed(4)) || 0 })),
+    [displayProfile],
+  );
+  const snapTargets = useMemo(() => [...referenceSnapPoints, ...crossingSnapPoints], [crossingSnapPoints, referenceSnapPoints]);
+  const hoverOnReference = hover ? snapTargets.some((point) => point.x === hover.x && point.z === hover.z) : false;
 
   // Colours picked in the settings reach the light theme through variables; the stylesheet
   // falls back to its own colours for what was not changed, and the dark themes ignore them.
@@ -1623,7 +1634,7 @@ export function SketchWorkspace({
               <path
                 data-sketch-entity="segment"
                 data-segment-id={segment.id}
-                className={isSegmentSelected(segment.id) ? "selected" : ""}
+                className={[isSegmentSelected(segment.id) ? "selected" : "", segment.construction ? "construction" : ""].filter(Boolean).join(" ")}
                 key={segment.id}
                 d={segmentData(segment, pointById)}
                 onPointerMove={(event) => {
@@ -2355,6 +2366,18 @@ export function SketchWorkspace({
         <div className="sketch-point-actions" aria-label={t("sketch.segmentActions")}>
           <button type="button" title={t("sketch.curveLineHint")} disabled={selectedSegmentCurved} onClick={() => onCurveSegment(selectedSegment.id)}><Spline /><span>{t("sketch.curveLine")}</span></button>
           <button type="button" title={t("sketch.straightenLineHint")} disabled={!selectedSegmentCurved && (selectedSegment.kind ?? "line") === "line"} onClick={() => onStraightenSegment(selectedSegment.id)}><Minus /><span>{t("sketch.straightenLine")}</span></button>
+          {onSetSegmentConstruction ? (
+            <button
+              type="button"
+              className={selectedSegment.construction ? "active" : ""}
+              aria-pressed={Boolean(selectedSegment.construction)}
+              title={t(selectedSegment.construction ? "sketch.makeSolidHint" : "sketch.makeConstructionHint")}
+              onClick={() => onSetSegmentConstruction(selectedSegment.id, !selectedSegment.construction)}
+            >
+              <ToolbarConstructionLineIcon />
+              <span>{t(selectedSegment.construction ? "sketch.makeSolid" : "sketch.makeConstruction")}</span>
+            </button>
+          ) : null}
           <GuideHelpLink section="sketchCurve" className="sketch-corner-help" iconSize={17} />
         </div>
       ) : null}

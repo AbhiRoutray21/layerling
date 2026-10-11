@@ -1170,6 +1170,7 @@ function validateSketchProfile(value: unknown, label: string) {
     const startId = stringValue(segment.startId, `${label}.segments[${index}].startId`);
     const endId = stringValue(segment.endId, `${label}.segments[${index}].endId`);
     if (!pointIds.has(startId) || !pointIds.has(endId)) throw new Error(`${label} contains a segment with a missing point reference`);
+    if (segment.construction !== undefined && typeof segment.construction !== "boolean") throw new Error(`${label}.segments[${index}].construction must be true or false`);
   });
   if (profile.silhouette !== undefined && typeof profile.silhouette !== "boolean") throw new Error(`${label}.silhouette must be true or false`);
 }
