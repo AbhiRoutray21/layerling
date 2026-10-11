@@ -38,5 +38,15 @@
       "de": "Die Karten Verjüngen und Verdrehen/Neigen sind für einen normalen Text wieder da, mit denen sich eine Schrift leicht verzerren lässt. Nur beim Namensschild bleiben sie weg.",
       "en": "The Taper and Twist & Lean cards are back for a plain text, to distort letters a little. Only a name tag goes without them."
     }
+  },
+  {
+    "title": {
+      "de": "Der Fehlerbericht ist eine ZIP-Datei",
+      "en": "The bug report is a ZIP file"
+    },
+    "body": {
+      "de": "Der Knopf Fehlerbericht in der Fußzeile speichert jetzt eine ZIP-Datei mit deinem Entwurf und einem Text mit Version, Browser und letzten Meldungen. GitHub nimmt sie an, so lässt sie sich direkt an eine Meldung hängen. Die Startseite öffnet sie wie eine Sicherung.",
+      "en": "The bug report button in the footer now saves a ZIP file with your design and a text with the version, browser and last messages. GitHub accepts it, so it can be attached to a report directly. The start page opens it like a backup."
+    }
   }
 ]
