@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+## 1.63.0
+
 - **Toolbar size:** A new setting under Settings → Appearance, **Toolbar size**, makes the ribbon on top and the camera controls on the left **Small** (75 %), **Medium** (as before) or **Large** (125 %) - room for the workplane on a laptop, bigger targets on a large screen. The existing icons are scaled by the browser through one CSS value, `--toolbar-scale`, so no icon was redrawn; the tool row grows or shrinks with them and the workplane moves along. With large buttons the ribbon's groups wrap onto a second row whenever the window is too narrow, at any width. The size is kept in the browser (`layerling.toolbarSize`) for every design, and applied before the page is drawn so the bar does not jump. The shape menu of the 3D editor scales with the bar, zoomed as a whole, and shows 5, 4 or 3 columns (Medium had 3 before); the other menus and pop-out panels, and the sketch editor's shape menu, keep their size.
 
 - **Rounded box with quality 1 gives chamfered corners:** The Quality of a rounded box can go down to **1** (it started at 4): the corner is then one straight cut instead of an arc - a chamfer on the four upright edges, and a single flat piece per corner when the top and bottom are rounded too. The MCP bridge takes 1 as well. Suggested in #239.
