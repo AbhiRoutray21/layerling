@@ -8,7 +8,7 @@ summary: Chamfer and fillet on chosen edges, walls of equal thickness for boxes,
 Sharp edges rarely look good on a printed part, and they are not particularly strong either. A **chamfer** cuts the edge off at an angle, a **fillet** rounds it. Both act on the edges you click.
 
 1. Select the body (or the group).
-2. Click {{ui:editor.tool.fillet}} or {{ui:editor.tool.chamfer}} in the ribbon, or right-click the body and pick it from the menu.
+2. Click {{ui:editor.tool.fillet}} or {{ui:editor.tool.chamfer}} in the ribbon, press [[B]] for the fillet or [[Shift+B]] for the chamfer, or right-click the body and pick it from the menu.
 3. The body's edges light up. Click those that should be affected. Another click takes an edge out again. With [[Shift]] you add or remove a single edge.
 4. Set the size and confirm with {{ui:edge.apply}} or [[Enter]].
 

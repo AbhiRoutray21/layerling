@@ -8,7 +8,7 @@ summary: Fase und Verrundung an ausgewählten Kanten, Wände gleicher Stärke f�
 Scharfe Kanten sehen an einem gedruckten Teil selten gut aus, und sie sind auch nicht besonders stabil. Mit einer **Fase** schneidest du die Kante schräg ab, mit einer **Verrundung** rundest du sie ab. Beides wirkt auf die Kanten, die du anklickst.
 
 1. Wähle den Körper aus (oder die Gruppe).
-2. Klicke im Menüband auf {{ui:editor.tool.fillet}} oder {{ui:editor.tool.chamfer}}, oder klicke mit der rechten Maustaste auf den Körper und wähle es im Menü.
+2. Klicke im Menüband auf {{ui:editor.tool.fillet}} oder {{ui:editor.tool.chamfer}}, drücke [[B]] für die Verrundung oder [[Shift+B]] für die Fase, oder klicke mit der rechten Maustaste auf den Körper und wähle es im Menü.
 3. Die Kanten des Körpers werden hervorgehoben. Klicke die an, die betroffen sein sollen. Ein weiterer Klick nimmt sie wieder heraus. Mit [[Umschalt]] fügst du eine einzelne Kante hinzu oder nimmst sie weg.
 4. Stelle das Maß ein und bestätige mit {{ui:edge.apply}} oder [[Enter]].
 

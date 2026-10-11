@@ -632,6 +632,8 @@ export const MESSAGES_EN = {
   "shortcuts.hole": "Turn the selection into a hole",
   "shortcuts.solid": "Turn the selection back into a solid",
   "shortcuts.mirror": "Mirror mode",
+  "shortcuts.fillet": "Fillet tool for the selected body (again: close it)",
+  "shortcuts.chamfer": "Chamfer tool for the selected body (again: close it)",
   "shortcuts.align": "Align mode",
   "shortcuts.note": "Place a note",
   "shortcuts.carryOntoFace": "Pick up the selection and set it down on a face (like Cruise in Tinkercad)",

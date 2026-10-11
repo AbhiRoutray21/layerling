@@ -631,6 +631,8 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "shortcuts.hole": "Auswahl zur Aussparung machen",
   "shortcuts.solid": "Auswahl wieder zum Körper machen",
   "shortcuts.mirror": "Spiegelmodus",
+  "shortcuts.fillet": "Verrundung für den gewählten Körper (nochmal: schließen)",
+  "shortcuts.chamfer": "Fase für den gewählten Körper (nochmal: schließen)",
   "shortcuts.align": "Ausrichtungsmodus",
   "shortcuts.note": "Notiz setzen",
   "shortcuts.carryOntoFace": "Auswahl aufnehmen und auf eine Fläche setzen (wie Cruise in Tinkercad)",

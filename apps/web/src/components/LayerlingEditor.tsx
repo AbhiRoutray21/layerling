@@ -14280,6 +14280,12 @@ export function LayerlingEditor({
       } else if (key === "e" && !shortcut && !event.altKey) {
         event.preventDefault();
         editSelectedGroup();
+      } else if (key === "b" && !shortcut && !event.altKey && hasSelection) {
+        // B opens the fillet, Shift+B the chamfer; pressed again, the tool closes (#242).
+        const kind = event.shiftKey ? "chamfer" : "fillet";
+        event.preventDefault();
+        if (edgeModifier?.kind === kind) cancelEdgeModifier();
+        else startEdgeModifier(kind);
       }
     };
 
@@ -14326,6 +14332,9 @@ export function LayerlingEditor({
     toggleAlignMode,
     toggleHidden,
     toggleMirrorMode,
+    edgeModifier,
+    cancelEdgeModifier,
+    startEdgeModifier,
     toggleLocked,
     toggleSelectedSketchImageLock,
     toolbarMode,
@@ -15148,6 +15157,8 @@ const COMMAND_SHORTCUTS: Readonly<Record<string, string>> = {
   ungroup: "Ctrl+Shift+G",
   align: "L",
   mirror: "M",
+  fillet: "B",
+  chamfer: "Shift+B",
   drop: "D",
   note: "N",
   import: "Ctrl+I",
@@ -15660,7 +15671,7 @@ function SecondaryToolbar({
         key={id}
         data-layerling-tool={id}
         aria-label={label}
-        title={label}
+        title={COMMAND_SHORTCUTS[id] ? `${label} (${COMMAND_SHORTCUTS[id]})` : label}
         onClick={action}
         disabled={!enabled}
       >

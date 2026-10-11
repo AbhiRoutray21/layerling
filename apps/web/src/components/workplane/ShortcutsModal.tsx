@@ -82,6 +82,8 @@ const SHORTCUT_GROUPS: ShortcutGroup[] = [
       { combos: ["H"], label: "shortcuts.hole" },
       { combos: ["S"], label: "shortcuts.solid" },
       { combos: ["M"], label: "shortcuts.mirror" },
+      { combos: ["B"], label: "shortcuts.fillet" },
+      { combos: ["Shift+B"], label: "shortcuts.chamfer" },
       { combos: ["L"], label: "shortcuts.align" },
       { combos: ["D"], label: "shortcuts.dropToWorkplane" },
       { combos: ["C"], label: "shortcuts.carryOntoFace" },

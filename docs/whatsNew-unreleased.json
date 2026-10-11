@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "title": {
+      "de": "Kürzel in den Tooltips, B für die Verrundung",
+      "en": "Shortcuts in tooltips, B for the fillet"
+    },
+    "body": {
+      "de": "Die Tooltips der Leiste zeigen jetzt das Tastenkürzel, wo es eins gibt, zum Beispiel „Spiegeln (M)“. Neu ist B für die Verrundung und Umschalt+B für die Fase, beide für den gewählten Körper.",
+      "en": "The ribbon's tooltips now show the keyboard shortcut where there is one, for example \"Mirror (M)\". New: B for the fillet and Shift+B for the chamfer, both for the selected body."
+    }
+  }
+]

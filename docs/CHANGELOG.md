@@ -4,6 +4,10 @@ layerling started over at 1.0.0 when it was forked from SketchForge-3D 1.0.9.
 Everything from 1.0.9 downwards is SketchForge's history, kept here because the
 code still carries it - so a lower number further down is older, not newer.
 
+## Unreleased
+
+- **Shortcuts in the tooltips, and B for the fillet:** The tooltip of a tool in the ribbon now shows its keyboard shortcut - "Mirror (M)", "Group (Ctrl+G)" - where it has one, from the same list the command search (Ctrl+K) shows. The fillet and the chamfer had none: **B** opens the fillet and **Shift+B** the chamfer for the selected body, and pressing it again closes the tool. They are in the shortcut list and the guide. Suggested in #242.
+
 ## 1.62.3
 
 - **Rounded corners of a sketch come out as true arcs:** A corner rounded in the sketch is stored as a curve, and the exact body built a free-form surface from it, which the viewer meshed unevenly - the wall showed patches of shading and a net of stray triangles. A curve that is a circular arc (every corner the fillet draws, and a circle drawn as curves) now goes to the kernel as an arc and becomes a plain cylinder wall: clean shading, fewer triangles, and an exact shape for the edge tool. Reported in the drucktipps3d forum.
