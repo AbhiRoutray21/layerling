@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+## 1.64.0
+
 - **Undo says when it brings a workplane back:** Setting a workplane on a face or putting it back on the base plate is a step of its own in the history, and most tools in Modify change nothing when they are only opened. So an undo after opening one took back that older step and a workplane seemed to appear out of nowhere. The message after Undo and Redo now says when the workplane changed, e.g. "Undo - the workplane is back on a face". Reported by @prmod3d in #246.
 
 - **The Hollow tool explains its "Inner edges" switch:** Rounded and Sharp only differ where the inner walls move apart, at a step or around an opening, so the cavity of a plain box looked the same with both and seemed to ignore the switch. A note under the switch now says so and how to get a rounded inside (round the outside edges first, then hollow), and the guide says the same. Reported by @slammerfox in #245.
