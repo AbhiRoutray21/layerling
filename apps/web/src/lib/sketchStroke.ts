@@ -36,7 +36,7 @@ export function normalizeSketchStroke(value: unknown): SketchStroke | undefined 
 }
 
 /** A path as points, curves broken into short straight pieces; a closed path does not repeat its start. */
-function sampledPath(path: OrderedCadSketchPath): Vec[] {
+export function sampledPath(path: OrderedCadSketchPath): Vec[] {
   const samples: Vec[] = [];
   path.steps.forEach(({ segment, from, to }, stepIndex) => {
     if (stepIndex === 0) samples.push({ x: from.x, z: from.z });

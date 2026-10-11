@@ -8,6 +8,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 - **Rounded corners of a sketch come out as true arcs:** A corner rounded in the sketch is stored as a curve, and the exact body built a free-form surface from it, which the viewer meshed unevenly - the wall showed patches of shading and a net of stray triangles. A curve that is a circular arc (every corner the fillet draws, and a circle drawn as curves) now goes to the kernel as an arc and becomes a plain cylinder wall: clean shading, fewer triangles, and an exact shape for the edge tool. Reported in the drucktipps3d forum.
 
+- **Stroked and widened sketches are built exactly:** A sketch drawn as a line (inside, outside or centred) or filled "Wider" had its outline worked out as hundreds of short straight pieces - a rounded corner became a net of strips, the walls showed stripes and the edge tool could not work on the result. The kernel now moves the outlines itself: a line stays a plane, an arc a cylinder, a curve one smooth face, with a few dozen faces instead of hundreds, and fillet and chamfer work on the top edges. Where the kernel cannot do it - open lines, bevelled corners, a very pointed miter corner, a stroke wider than the outline - the old way builds the body as before.
+
 - **Tidier hole pattern icon and letter edge row:** The hole pattern icon in "Adjust" has no dark fill any more and its hexagonal holes sit on one even grid, with the same distance to each other and to the plate edge. On the name tag card the "Letter edge" row gives its three buttons equal width and room.
 
 ## 1.62.2

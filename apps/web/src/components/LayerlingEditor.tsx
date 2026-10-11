@@ -261,10 +261,10 @@ import {
   type LayerlingMcpViewFace,
 } from "@/lib/layerlingMcpProtocol";
 import type { CadModifierComponentMesh, CadModifierDeflection, CadModifierDisplayEdge, CadModifierEdge, CadModifierHelicalGearPart, CadModifierKind, CadModifierMeshPart, CadModifierPrimitivePart, CadModifierProfilePart, CadModifierQuality, CadModifierSpringPart, CadModifierThreadPart, CadModifierWorkerRequest, CadModifierWorkerResponse } from "@/lib/cadModifierTypes";
-import type { SketchCadBuildResponse } from "@/lib/sketchCadTypes";
+import { SKETCH_STROKE_UNSUPPORTED, type SketchCadBuildResponse } from "@/lib/sketchCadTypes";
 import { getSectionBounds, sectionAxisLetter, type SectionPlaneAxis, type SectionPlaneSettings } from "@/lib/sectionView";
 import { projectSectionPoint, SECTION_VIEW_FACE, sectionSvgDocument, sliceMeshContours } from "@/lib/sectionSvg";
-import type { AlignAxis, AlignHandleStatus, AlignTarget, GridSize, ParametricSource, ProjectAsset, ShapeAsset, ShapeCustomization, ShapeKind, SketchImage, SketchOperation, SketchPoint, SketchProfile, SketchRevolveSettings, SketchSegment, ShellEdges, ShellOpenings, ShellSide, WorkplaneNote, WorkplaneShape, WorkplaneWorkspaceSettings } from "@/types/layerling";
+import type { AlignAxis, AlignHandleStatus, AlignTarget, GridSize, ParametricSource, ProjectAsset, ShapeAsset, ShapeCustomization, ShapeKind, SketchImage, SketchOperation, SketchPoint, SketchProfile, SketchRevolveSettings, SketchSegment, SketchStroke, ShellEdges, ShellOpenings, ShellSide, WorkplaneNote, WorkplaneShape, WorkplaneWorkspaceSettings } from "@/types/layerling";
 
 export { importedShapeFromObj, importedShapeFromStl, importedShapeFromSvg };
 
@@ -511,24 +511,34 @@ function ensureSketchCadWorker() {
 
 async function cadShapeFromSketchProfile(profile: SketchProfile, height: number, existing?: WorkplaneShape | null) {
   const safeHeight = Math.max(MIN_SHAPE_DIMENSION, height);
-  // A stroked sketch builds from the outline of its line; the body keeps the drawn line (#154).
   // A silhouette leaves its holes out first, so its outer line runs round the outside only (#197).
-  let buildProfile = profile.silhouette ? silhouetteSketchProfile(profile) : profile;
+  const buildProfile = profile.silhouette ? silhouetteSketchProfile(profile) : profile;
+  const buildOnWorker = (build: SketchProfile, stroke?: SketchStroke) => {
+    const worker = ensureSketchCadWorker();
+    const requestId = ++sketchCadRequestId;
+    return new Promise<SketchCadBuildResponse>((resolve, reject) => {
+      const timer = window.setTimeout(() => {
+        sketchCadPending.delete(requestId);
+        reject(new Error("OpenCascade timed out while building the sketch"));
+      }, 30_000);
+      sketchCadPending.set(requestId, { resolve, reject, timer });
+      worker.postMessage({ type: "build", requestId, profile: cloneSketchProfile(build), height: safeHeight, ...(stroke ? { stroke } : {}) });
+    });
+  };
+  let response: SketchCadBuildResponse;
   if (profile.stroke) {
-    const stroked = strokedSketchProfile(await getManifoldRuntime(), buildProfile);
-    if (!stroked) throw new Error(t("sketch.strokeEmpty"));
-    buildProfile = stroked;
+    // The kernel moves the outlines of a stroked sketch itself, so its walls stay planes, arcs and
+    // single curves (#154); where it cannot (open lines, bevelled corners ...), a stroked outline of
+    // straight lines is worked out here and the usual extrusion builds that. The body keeps the drawn line.
+    response = await buildOnWorker(buildProfile, profile.stroke);
+    if (response.type === "error" && response.message === SKETCH_STROKE_UNSUPPORTED) {
+      const stroked = strokedSketchProfile(await getManifoldRuntime(), buildProfile);
+      if (!stroked) throw new Error(t("sketch.strokeEmpty"));
+      response = await buildOnWorker(stroked);
+    }
+  } else {
+    response = await buildOnWorker(buildProfile);
   }
-  const worker = ensureSketchCadWorker();
-  const requestId = ++sketchCadRequestId;
-  const response = await new Promise<SketchCadBuildResponse>((resolve, reject) => {
-    const timer = window.setTimeout(() => {
-      sketchCadPending.delete(requestId);
-      reject(new Error("OpenCascade timed out while building the sketch"));
-    }, 30_000);
-    sketchCadPending.set(requestId, { resolve, reject, timer });
-    worker.postMessage({ type: "build", requestId, profile: cloneSketchProfile(buildProfile), height: safeHeight });
-  });
   if (response.type === "error") throw new Error(response.message);
   const source = canonicalizeShape({
     ...(existing ?? {
