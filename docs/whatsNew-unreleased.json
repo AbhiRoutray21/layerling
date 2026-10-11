@@ -1,1 +1,22 @@
-[]
+[
+  {
+    "title": {
+      "de": "Rundungen in Skizzen sauber",
+      "en": "Clean rounded corners in sketches"
+    },
+    "body": {
+      "de": "Eine in der Skizze verrundete Ecke wird jetzt als echter Kreisbogen gebaut. Die Wand ist glatt statt fleckig, hat weniger Dreiecke, und das Kantenwerkzeug kommt besser damit zurecht. Das gilt auch für gedrehte Skizzen.",
+      "en": "A corner rounded in the sketch is now built as a true circular arc. The wall is smooth instead of blotchy, has fewer triangles, and the edge tool copes with it better. This holds for revolved sketches too."
+    }
+  },
+  {
+    "title": {
+      "de": "Linienfüllung und „Breiter“ exakt",
+      "en": "Exact line fills and Wider"
+    },
+    "body": {
+      "de": "Skizzen und SVG, die als Linie (innen, außen, mittig) oder als „Breiter“ gefüllt sind, baut der Kern jetzt exakt statt aus Hunderten kurzer Stücke. Die Wände haben keine Streifen mehr, und Fase und Verrundung greifen an den oberen Kanten.",
+      "en": "Sketches and SVG filled as a line (inside, outside, centred) or as Wider are now built exactly by the kernel instead of from hundreds of short pieces. The walls lose their stripes, and chamfer and fillet work on the top edges."
+    }
+  }
+]
