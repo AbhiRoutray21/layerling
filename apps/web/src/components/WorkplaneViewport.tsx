@@ -551,6 +551,10 @@ type ThreeState = {
   wasCameraMoving: boolean;
   lastOverlaySync: number;
   lastViewCubeSync: number;
+  /** True while a handle of the align tool shows its preview: the drawn parts have moved then (#235). */
+  alignPreviewActive?: boolean;
+  /** The box of the parts the align handles stand on, from before a preview moved them. */
+  alignBoundsCache?: { key: string; shapes: WorkplaneShape[]; bounds: THREE.Box3 | null };
   rotationHandleSides: RotationHandleSides | null;
   sectionPlane: THREE.Plane | null;
   sectionPlaneHelper: THREE.Group | null;
@@ -9804,7 +9808,20 @@ export function WorkplaneViewport({
               onPointCardOffsetChange={changePointCardOffset}
             />
           ) : null}
-          {!workplaneMode && !splitActive && alignOverlay ? <AlignOverlay overlay={alignOverlay} onAlign={onAlignSelection} onPreview={onAlignPreview} onPreviewClear={onAlignPreviewClear} /> : null}
+          {!workplaneMode && !splitActive && alignOverlay ? (
+            <AlignOverlay
+              overlay={alignOverlay}
+              onAlign={onAlignSelection}
+              onPreview={(axis, target) => {
+                if (threeRef.current) threeRef.current.alignPreviewActive = true;
+                onAlignPreview(axis, target);
+              }}
+              onPreviewClear={() => {
+                if (threeRef.current) threeRef.current.alignPreviewActive = false;
+                onAlignPreviewClear();
+              }}
+            />
+          ) : null}
           {!workplaneMode && !splitActive && mirrorOverlay ? <MirrorOverlay overlay={mirrorOverlay} onMirror={onMirrorSelection} onPreview={onMirrorPreview} onPreviewClear={onMirrorPreviewClear} /> : null}
           {!splitActive && sectionMeasureOverlay ? <SectionMeasureOverlay overlay={sectionMeasureOverlay} /> : null}
           {!workplaneMode && !splitActive && tapeOverlay && (tapeOverlay.points.length > 0 || tapeOverlay.hover) ? (
@@ -12208,7 +12225,16 @@ function syncAlignOverlay(
   // The handles stand where the parts will line up: at the box round what is drawn, as the
   // alignment measures it. The corners of a turned part's own box stick out past a cylinder or
   // a star, so handles placed there promised an edge the parts then did not move to (#187).
-  const drawn = drawnShapesBounds(state, anchorFrame && alignAnchorId ? [alignAnchorId] : selectedIds);
+  // While a handle shows its preview the parts are drawn where they would go; the handles must not
+  // follow them there, or they jump from under the pointer, the preview ends, they jump back, and
+  // so on (#235). So they keep the box the parts had before the preview.
+  const boundsIds = anchorFrame && alignAnchorId ? [alignAnchorId] : selectedIds;
+  const boundsKey = boundsIds.join(",");
+  const cached = state.alignBoundsCache;
+  const drawn = state.alignPreviewActive && cached && cached.key === boundsKey && cached.shapes === shapes
+    ? cached.bounds
+    : drawnShapesBounds(state, boundsIds);
+  if (!state.alignPreviewActive) state.alignBoundsCache = { key: boundsKey, shapes, bounds: drawn };
   const worldMinY = drawn ? drawn.min.y : Math.min(...corners.map((corner) => corner.y));
   const worldMaxY = drawn ? drawn.max.y : Math.max(...corners.map((corner) => corner.y));
   const worldMinX = drawn ? drawn.min.x : Math.min(...corners.map((corner) => corner.x));

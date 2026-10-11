@@ -7,6 +7,7 @@ code still carries it - so a lower number further down is older, not newer.
 ## Unreleased
 
 - **The key ring tab as a printed one:** The tab of a name tag's key ring hole is now 6.5 mm wide round a 3 mm hole - a 1.75 mm wall either side - and sticks out 6.75 mm, the hole's edge 2 mm beyond the plate; the hole is 3 mm by default (it was 1.85 mm in a 4.34 mm tab, 2.5 mm clear). The tab still grows with the hole. **Make layers** on a plain text now starts a name tag at 9 mm letters too, as the shape library's Name tag does. Measured on a printed tag by @plazmabokor in #215.
+- **The align handles no longer jump:** With two shapes far apart, resting the pointer on a handle of the align tool, such as the centre of the width, made the handle jump back and forth between two places and the shapes flicker. The handles stood on the box of the shapes as drawn, and while a handle shows its preview the shapes are drawn where they would go: the handle moved away from under the pointer, the preview ended, the handle came back, and so on. The handles now keep the box the shapes had before the preview, so they stay put, and a click aligns as before. Reported by @AkiraNorthstar in #235.
 
 ## 1.62.0
 

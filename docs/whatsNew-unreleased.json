@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "title": {
+      "de": "Die Ausrichten-Griffe springen nicht mehr",
+      "en": "The align handles no longer jump"
+    },
+    "body": {
+      "de": "Lagen zwei Formen weit auseinander, sprang ein Griff des Ausrichten-Werkzeugs unter dem ruhenden Zeiger hin und her, und die Formen flackerten. Die Griffe bleiben jetzt stehen, solange die Vorschau läuft.",
+      "en": "With two shapes far apart, a handle of the align tool jumped back and forth under a resting pointer and the shapes flickered. The handles now stay put while the preview shows."
+    }
+  }
+]
