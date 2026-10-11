@@ -1998,6 +1998,8 @@ export function ShapeInspector({
    * die MCP-Bruecke, damit nicht eine Stelle anbietet, was die andere wegwirft.
    */
   const shapeIgnoresTaper = !shapeSupportsTaper(shape.kind);
+  // A text and a name tag only get distorted by taper, twist and lean: their cards stay away (#225).
+  const showTaperCards = !shapeIgnoresTaper && shape.kind !== "text" && !shape.layeredText;
   const threadRoleProperty = isThread ? findSelectProperty(properties, "threadRole") : null;
   const threadHeadProperty = isThread ? findSelectProperty(properties, "threadHead") : null;
   const primaryProperties = shape.kind === "gear"
@@ -2554,7 +2556,7 @@ export function ShapeInspector({
           onSegmentChange={onBentTubeSegmentChange}
         />
       ) : null}
-      {!shapeIgnoresTaper ? (
+      {showTaperCards ? (
         <div className={`property-card ${taperOpen ? "" : "collapsed"}`}>
           <button
             className="property-card-header"
@@ -2573,7 +2575,7 @@ export function ShapeInspector({
           ) : null}
         </div>
       ) : null}
-      {!shapeIgnoresTaper ? (
+      {showTaperCards ? (
         <div className={`property-card ${twistOpen ? "" : "collapsed"}`}>
           <button
             className="property-card-header"

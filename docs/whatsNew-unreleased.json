@@ -8,5 +8,15 @@
       "de": "Einen Körper auf die Seite gelegt oder gedreht: Höhe ist jetzt das, was nach oben geht, Breite läuft entlang X, Länge entlang Y. Gibst du eine Höhe ein, ändert sich das senkrechte Maß, und die Unterseite bleibt auf der Platte.",
       "en": "Laid on its side or turned a quarter: Height is now what goes up, Width runs along X, Length along Y. Type a height and the vertical measure changes, with the underside staying on the plate."
     }
+  },
+  {
+    "title": {
+      "de": "Namensschilder: eigener Eintrag, Schichtenzeilen und Schlüsselringloch",
+      "en": "Name tags: an entry of their own, a row per layer and a key ring hole"
+    },
+    "body": {
+      "de": "In der Formenbibliothek steht jetzt „Namensschild“ gleich nach Text. Eine Karte zeigt Text, Buchstabengröße und jede Schicht in einer Zeile mit Farbe, Breite, Ecken und Höhe. Auf Wunsch kommt ein Schlüsselringloch mit Lasche dazu, links, rechts oder oben.",
+      "en": "The shape library now has \"Name tag\" right after Text. One card shows the text, the letter size and every layer in a row with colour, width, corners and height. A key ring hole with a tab can be added on the left, right or top."
+    }
   }
 ]
