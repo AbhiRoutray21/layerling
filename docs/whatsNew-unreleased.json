@@ -18,5 +18,25 @@
       "de": "Die Formen-Bibliothek hat ein neues Symbolschild: Wähle eine SVG-Datei, und das Symbol steht in denselben farbigen Schichten wie ein Namensschild auf der Platte. Breite, Schichten und Anzahl lassen sich danach ändern, und „so viele wie passen“ füllt die Druckplatte mit Kopien.",
       "en": "The shape library has a new Icon tag: pick an SVG file and the icon stands on the plate in the same coloured layers as a name tag. Width, layers and count can be changed afterwards, and \"as many as fit\" fills the print plate with copies."
     }
+  },
+  {
+    "title": {
+      "de": "Aushöhlen erklärt die inneren Kanten",
+      "en": "Hollow explains the inner edges"
+    },
+    "body": {
+      "de": "Unter „Innere Kanten“ steht jetzt, wo Gerundet und Scharfkantig überhaupt wirken: an Stufen und Öffnungen, nicht in den Ecken eines einfachen Quaders. Für ein rundes Inneres rundest du zuerst die Außenkanten und höhlst dann aus.",
+      "en": "Under Inner edges it now says where Rounded and Sharp make a difference: at steps and openings, not in the corners of a plain box. For a rounded inside, round the outside edges first, then hollow."
+    }
+  },
+  {
+    "title": {
+      "de": "Rückgängig nennt die Arbeitsebene",
+      "en": "Undo names the workplane"
+    },
+    "body": {
+      "de": "Bringt Rückgängig oder Wiederherstellen eine Arbeitsebene zurück oder wieder auf die Grundplatte, steht das jetzt in der Meldung. So erscheint keine Ebene mehr scheinbar aus dem Nichts.",
+      "en": "When Undo or Redo brings a workplane back, or puts it back on the base plate, the message now says so. A workplane no longer seems to appear out of nowhere."
+    }
   }
 ]
