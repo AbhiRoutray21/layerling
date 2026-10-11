@@ -28,5 +28,15 @@
       "de": "Das Fenster zum Aushöhlen zeigt jetzt dieselbe Liste wie die Verrundung: Kantenbearbeitung zurücknehmen, mit Ändern neben jeder Aushöhlung. So lässt sich eine Wand später dünner oder dicker machen, ohne neu anzufangen.",
       "en": "The Hollow window now shows the same list as the fillet: revert an edge treatment, with Edit next to every hollowing. A wall can be made thinner or thicker later without starting over."
     }
+  },
+  {
+    "title": {
+      "de": "Verjüngen beim Text wieder da",
+      "en": "Taper is back for text"
+    },
+    "body": {
+      "de": "Die Karten Verjüngen und Verdrehen/Neigen sind für einen normalen Text wieder da, mit denen sich eine Schrift leicht verzerren lässt. Nur beim Namensschild bleiben sie weg.",
+      "en": "The Taper and Twist & Lean cards are back for a plain text, to distort letters a little. Only a name tag goes without them."
+    }
   }
 ]

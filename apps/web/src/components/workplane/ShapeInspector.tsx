@@ -1999,8 +1999,8 @@ export function ShapeInspector({
    * die MCP-Bruecke, damit nicht eine Stelle anbietet, was die andere wegwirft.
    */
   const shapeIgnoresTaper = !shapeSupportsTaper(shape.kind);
-  // A text and a name tag only get distorted by taper, twist and lean: their cards stay away (#225).
-  const showTaperCards = !shapeIgnoresTaper && shape.kind !== "text" && !shape.layeredText;
+  // A name tag only gets distorted by taper, twist and lean: its cards stay away (#225). A plain text keeps them (#238).
+  const showTaperCards = !shapeIgnoresTaper && !shape.layeredText;
   const threadRoleProperty = isThread ? findSelectProperty(properties, "threadRole") : null;
   const threadHeadProperty = isThread ? findSelectProperty(properties, "threadHead") : null;
   const primaryProperties = shape.kind === "gear"
