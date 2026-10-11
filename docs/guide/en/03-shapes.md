@@ -88,6 +88,8 @@ Besides the settings there are handles on the shape itself:
 - The **numbers** beside the shape show the dimensions. A click on one opens a field in which you type the number you want.
 - A **click on a corner** (without dragging) opens width and depth together. Type the first, press [[Tab]] for the second and [[Enter]] to apply both. [[Esc]] cancels.
 
+Once a shape is turned by right angles, for instance laid on its side with {{ui:editor.tool.layFlat}}, the fields in the properties are named after the direction each measure runs in now: {{ui:prop.height}} is what goes up, {{ui:prop.width}} runs along X and {{ui:prop.length}} along Y. Typing the height of a shape lying down therefore changes the vertical measure, and its underside stays on the plate. A shape tilted at any other angle shows its own measures in the fields, and a note below says so.
+
 Without the mouse, use the keyboard: the arrow keys move the selection by one snap step, with [[Shift]] by five. They follow the view: [[→]] moves to where the screen's right is, [[↑]] away from you, even after turning the plate. Push a shape out of the picture and the view moves along. [[Ctrl]]+[[↑]] and [[Ctrl]]+[[↓]] raise and lower it. [[R]] rotates by 45°, [[Shift]]+[[R]] by 22.5°. [[D]] drops the selection onto the workplane.
 
 The handles pull a shape as large as your plate, at least 220 mm wide and deep. Typing a number in the properties goes beyond that, and a shape made that large does not shrink back when you grab it again. A ceiling of your own per shape is set in the settings under {{ui:workspace.shapeDefaults}} with {{ui:workspace.customLimit}}.

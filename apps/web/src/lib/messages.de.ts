@@ -1369,6 +1369,7 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "prop.pivotZ": "Drehpunkt Z (Höhe)",
   "prop.twist": "Verdrehung",
   "prop.widthOffset": "Breitenversatz",
+  "prop.tiltedMeasures": "Der Körper steht schräg: Länge, Breite und Höhe sind seine eigenen Maße, nicht die Richtungen im Raum.",
   "prop.lengthOffset": "Längenversatz",
   "font.manage": "Eigene Schriften …",
   "font.customGroup": "Eigene Schriften",

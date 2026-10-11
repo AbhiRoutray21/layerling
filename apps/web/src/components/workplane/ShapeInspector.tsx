@@ -188,6 +188,7 @@ import { useRecentColors } from "@/lib/recentColors";
 import { canToggleGroupColors, groupShowsPartColors } from "@/lib/groupColors";
 import { shapePivotFromWorld, shapePivotWorld } from "@/lib/rotationPivot";
 import { signedDegrees } from "@/lib/geometryRotation";
+import { orientedMeasures, withOrientedMeasures } from "@/lib/orientedMeasures";
 
 /**
  * Docked at the right edge, full height. Moved away, it floats: no longer
@@ -1887,7 +1888,10 @@ function textFontProperty(shape: WorkplaneShape, onUpdate: ShapeInspectorUpdate)
 
 function getShapeProperties(shape: WorkplaneShape, onUpdate: ShapeInspectorUpdate, workspace: WorkplaneWorkspaceSettings): ShapePropertyConfig[] {
   const customLimit = workspace.shapeCustomizations[shape.kind]?.maxDimension;
-  const properties = getShapePropertiesWithAppLimits(shape, onUpdate, customLimit ?? 260);
+  // A body turned by right angles names its measures by the way they run now (#230).
+  const oriented = orientedMeasures(shape);
+  const own = getShapePropertiesWithAppLimits(shape, onUpdate, customLimit ?? 260);
+  const properties = withOrientedMeasures(own, oriented, { width: t("prop.width"), height: t("prop.height"), length: t("prop.length") });
   if (customLimit === undefined) return properties;
   return properties.map((property) => {
     if (property.type === "text" || property.type === "select") return property;
@@ -1969,6 +1973,7 @@ export function ShapeInspector({
     onUpdateShape(pending ? { ...patch, formulas: withFieldFormula(shape.formulas, pending.id, pending.text) } : patch, options);
   };
   const properties = getShapeProperties(shape, onUpdate, workspace);
+  const tiltedMeasures = orientedMeasures(shape).kind === "tilted";
   // What each value would be on a shape of this kind made new, with the saved defaults: the
   // small arrow next to a changed value takes it back there.
   const propertyDefaults = useMemo(() => shapePropertyDefaults(shape.kind, workspace), [shape.kind, workspace]);
@@ -2443,6 +2448,9 @@ export function ShapeInspector({
               />
             ) : null}
             <ShapePropertyRows formulas={shape.formulas} onFormula={noteFormula} properties={primaryProperties} defaults={propertyDefaults?.main} workspace={workspace} disabled={locked} onInteractionActiveChange={onInteractionActiveChange} />
+            {tiltedMeasures && primaryProperties.some((property) => ["width", "length", "height"].includes(property.id)) ? (
+              <p className="cylinder-wrap-hint">{t("prop.tiltedMeasures")}</p>
+            ) : null}
             {onShapeDefaultsChange && propertyDefaults ? (
               <div className="property-defaults-actions">
                 <button type="button" disabled={locked || sameDefaults} title={t("inspector.saveDefaultsHint")} onClick={() => onShapeDefaultsChange(shape.kind, defaultsToSave)}>

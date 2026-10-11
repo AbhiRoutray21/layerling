@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "title": {
+      "de": "Die Maßfelder folgen der Lage des Körpers",
+      "en": "The size fields follow the way a body lies"
+    },
+    "body": {
+      "de": "Einen Körper auf die Seite gelegt oder gedreht: Höhe ist jetzt das, was nach oben geht, Breite läuft entlang X, Länge entlang Y. Gibst du eine Höhe ein, ändert sich das senkrechte Maß, und die Unterseite bleibt auf der Platte.",
+      "en": "Laid on its side or turned a quarter: Height is now what goes up, Width runs along X, Length along Y. Type a height and the vertical measure changes, with the underside staying on the plate."
+    }
+  }
+]

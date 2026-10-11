@@ -89,6 +89,8 @@ Neben den Einstellungen gibt es Griffe an der Form selbst:
 - An den **Zahlen** neben der Form siehst du die Maße. Ein Klick darauf öffnet ein Feld, in das du die gewünschte Zahl tippst.
 - Ein **Klick auf eine Ecke** (ohne zu ziehen) öffnet Breite und Tiefe gemeinsam. Gib die erste Zahl ein, wechsle mit [[Tab]] zur zweiten und übernimm beide mit [[Enter]]. [[Esc]] bricht ab.
 
+Hast du eine Form um rechte Winkel gedreht, etwa mit {{ui:editor.tool.layFlat}} auf die Seite gelegt, heißen die Felder in den Eigenschaften nach der Richtung, in die das Maß jetzt läuft: {{ui:prop.height}} ist, was nach oben geht, {{ui:prop.width}} läuft entlang X und {{ui:prop.length}} entlang Y. Gibst du bei der liegenden Form die Höhe ein, ändert sich also das senkrechte Maß, und die Unterseite bleibt auf der Platte. Steht die Form in einem anderen Winkel schräg, zeigen die Felder ihre eigenen Maße, und ein Hinweis darunter sagt es.
+
 Ohne Maus geht es mit der Tastatur: Die Pfeiltasten schieben die Auswahl um einen Rasterschritt, mit [[Umschalt]] um fünf. Sie richten sich nach der Ansicht: [[→]] schiebt dahin, wo auf dem Bildschirm rechts ist, [[↑]] vom Betrachter weg, auch wenn du die Platte gedreht hast. Schiebst du eine Form aus dem Bild, rückt die Ansicht mit. [[Strg]]+[[↑]] und [[Strg]]+[[↓]] heben und senken sie. [[R]] dreht um 45°, [[Umschalt]]+[[R]] um 22,5°. [[D]] setzt die Auswahl auf die Arbeitsebene ab.
 
 Die Griffe ziehen eine Form so groß wie deine Platte, mindestens 220 mm breit und tief. Größer geht es per Zahl in den Eigenschaften; eine so vergrößerte Form schrumpft beim nächsten Anfassen nicht zurück. Eine eigene Obergrenze je Form setzt du in den Einstellungen unter {{ui:workspace.shapeDefaults}} mit {{ui:workspace.customLimit}}.

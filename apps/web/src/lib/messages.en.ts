@@ -1370,6 +1370,7 @@ export const MESSAGES_EN = {
   "prop.pivotZ": "Pivot Z (height)",
   "prop.twist": "Twist",
   "prop.widthOffset": "Width Offset",
+  "prop.tiltedMeasures": "The body is tilted: Length, Width and Height are its own measures, not the directions in space.",
   "prop.lengthOffset": "Length Offset",
   "font.manage": "Your own fonts …",
   "font.customGroup": "Your own fonts",

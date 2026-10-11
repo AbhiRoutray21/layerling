@@ -4,6 +4,10 @@ layerling started over at 1.0.0 when it was forked from SketchForge-3D 1.0.9.
 Everything from 1.0.9 downwards is SketchForge's history, kept here because the
 code still carries it - so a lower number further down is older, not newer.
 
+## Unreleased
+
+- **The size fields follow the way a turned body lies:** Lay a roof on its side and its "Height" field still meant the roof's own height, which then ran sideways - to make it 34 mm tall you had to type 34 into "Length" and the 70 mm into "Height". A body turned by right angles (laid flat, stood on its end, turned a quarter) now names its fields by the direction each measure runs in: **Height** is what goes up, **Width** runs along X, **Length** along Y, in the usual order, and each still writes the same measure of the body. Typing a height into a body lying down changes the vertical measure and its underside stays on the plate. A body tilted at some other angle keeps its own measures, with a note under the fields. The handles and the boxes drawn at them were not at fault and are unchanged. Reported by @slammerfox in #230.
+
 ## 1.61.1
 
 - **STL files can be picked on an iPad:** In the file picker of an iPad or iPhone the STL, 3MF, STEP and `.lyl` files were greyed out and could not be selected, while ZIP files worked: iOS greys out every ending it does not know as a type, and the picker asked for exactly those. On these devices the pickers now show all files, and layerling checks what it is given, as it always did; elsewhere the list narrows the picker as before. Not tried on an iPad yet. Reported by @andrej-cds in #219.
