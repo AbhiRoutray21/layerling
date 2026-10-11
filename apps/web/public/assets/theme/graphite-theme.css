@@ -94,7 +94,8 @@
   --toolbar-label: #5c5c5c;
   --toolbar-icon: #241f20;
   --toolbar-icon-disabled: #e0e0e0;
-  --toolbar-icon-size: 43px;
+  --toolbar-scale: 1;
+  --toolbar-icon-size: calc(43px * var(--toolbar-scale));
   --toolbar-tile: #ffffff;
   --toolbar-hover-bg: rgba(255, 255, 255, 0.66);
   --toolbar-hover-ring: rgba(201, 201, 201, 0.86);
@@ -110,6 +111,18 @@
   --group-manage: var(--filament-azure);
   --group-help: var(--group-neutral);
   --group-sketch: var(--filament-magenta);
+}
+
+html:where([data-theme="dark"][data-palette="graphite"])[data-toolbar-size="small"] {
+  --toolbar-scale: 0.75;
+  --editor-toolbar-tools-height: 65px;
+  --editor-toolbar-height: 109px;
+}
+
+html:where([data-theme="dark"][data-palette="graphite"])[data-toolbar-size="large"] {
+  --toolbar-scale: 1.25;
+  --editor-toolbar-tools-height: 87px;
+  --editor-toolbar-height: 131px;
 }
 
 html:where([data-theme="dark"][data-palette="graphite"]),
@@ -1805,6 +1818,10 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .shell-openings-summary
 
 :where(html[data-theme="dark"][data-palette="graphite"]) .toolbar-sprite-icon {
   filter: grayscale(1) contrast(0.78) brightness(1.35);
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .toolbar-mode-content {
+  --sprite-icon-size: calc(35px * var(--toolbar-scale));
 }
 
 :where(html[data-theme="dark"][data-palette="graphite"]) .vector-toolbar-sprite-icon {
@@ -6510,13 +6527,13 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .shortcuts-or {
 
 @media (max-width: 1910px) {
   :root:where([data-theme="dark"][data-palette="graphite"]) {
-    --toolbar-icon-size: 37px;
+    --toolbar-icon-size: calc(37px * var(--toolbar-scale));
   }
 }
 
 @media (max-width: 1620px) {
   :root:where([data-theme="dark"][data-palette="graphite"]) {
-    --toolbar-icon-size: 34px;
+    --toolbar-icon-size: calc(34px * var(--toolbar-scale));
   }
 }
 

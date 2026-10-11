@@ -8,6 +8,8 @@ import { useMovablePanel } from "@/lib/useMovablePanel";
 import { createPortal } from "react-dom";
 import { HexColorInput, HexColorPicker } from "react-colorful";
 import { APP_THEME_OPTIONS, type AppThemePreference } from "@/lib/appTheme";
+import { setToolbarSize, TOOLBAR_SIZE_OPTIONS, type ToolbarSize } from "@/lib/toolbarSize";
+import { useToolbarSize } from "@/lib/useToolbarSize";
 import { gearCenterHoleLimits, gearToothPitch } from "@/lib/gearGeometry";
 import { automaticSideCount } from "@/lib/roundSideCount";
 import { printerPresetById } from "@/lib/printBed";
@@ -94,6 +96,12 @@ const THEME_LABEL_KEYS: Record<AppThemePreference, MessageKey> = {
   light: "workspace.themeLight",
   dark: "workspace.themeDark",
   graphite: "workspace.themeGraphite",
+};
+
+const TOOLBAR_SIZE_LABEL_KEYS: Record<ToolbarSize, MessageKey> = {
+  small: "workspace.toolbarSizeSmall",
+  medium: "workspace.toolbarSizeMedium",
+  large: "workspace.toolbarSizeLarge",
 };
 
 function gridBlockPresetLabel(preset: string) {
@@ -420,6 +428,7 @@ export function WorkspaceSettingsModal({
   const [defaultSaved, setDefaultSaved] = useState(false);
   useLanguage();
   const [activeSection, setActiveSection] = useState<WorkspaceSettingsSection>("appearance");
+  const toolbarSize = useToolbarSize();
   const [selectedShapeKind, setSelectedShapeKind] = useState<ShapeKind>(toolbarShapeAssets[0].kind);
   const [dimensionDrafts, setDimensionDrafts] = useState(() => ({
     width: workspace.width.toFixed(workspace.accuracy),
@@ -685,6 +694,19 @@ export function WorkspaceSettingsModal({
                       {APP_THEME_OPTIONS.map((option) => (
                         <option key={option.value} value={option.value}>
                           {t(THEME_LABEL_KEYS[option.value])}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  <label className="workspace-select">
+                    <span>{t("workspace.toolbarSize")}</span>
+                    <select
+                      value={toolbarSize}
+                      onChange={(event) => setToolbarSize(event.currentTarget.value as ToolbarSize)}
+                    >
+                      {TOOLBAR_SIZE_OPTIONS.map((size) => (
+                        <option key={size} value={size}>
+                          {t(TOOLBAR_SIZE_LABEL_KEYS[size])}
                         </option>
                       ))}
                     </select>

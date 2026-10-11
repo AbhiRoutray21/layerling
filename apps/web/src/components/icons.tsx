@@ -11,9 +11,16 @@ type SpriteRect = {
 const toolbarSprite = "assets/editor/toolbar-sprite.svg?v=2";
 const vectorToolbarSprite = "assets/editor/vector-toolbar-icons.svg?v=1";
 
+// The drawn height of a sprite icon comes from --sprite-icon-size (35px unless
+// a stylesheet sets it), so the toolbar size setting can scale it from CSS.
+const spriteIconSize = "var(--sprite-icon-size, 35px)";
+
+function spriteLength(rect: SpriteRect) {
+  return (value: number) => `calc(${spriteIconSize} * ${value / rect.height})`;
+}
+
 function ToolbarSpriteIcon({ rect, className, style }: IconProps & { rect: SpriteRect }) {
-  const size = 35;
-  const scale = size / rect.height;
+  const scaled = spriteLength(rect);
 
   return (
     <span
@@ -21,12 +28,12 @@ function ToolbarSpriteIcon({ rect, className, style }: IconProps & { rect: Sprit
       className={["toolbar-sprite-icon", className].filter(Boolean).join(" ")}
       style={
         {
-          "--sprite-x": `${-rect.x * scale}px`,
-          "--sprite-y": `${-rect.y * scale}px`,
-          "--sprite-width": `${260 * scale}px`,
-          "--sprite-height": `${80 * scale}px`,
-          width: `${rect.width * scale}px`,
-          height: `${size}px`,
+          "--sprite-x": scaled(-rect.x),
+          "--sprite-y": scaled(-rect.y),
+          "--sprite-width": scaled(260),
+          "--sprite-height": scaled(80),
+          width: scaled(rect.width),
+          height: spriteIconSize,
           backgroundImage: `url(${toolbarSprite})`,
           ...(style as CSSProperties),
         } as CSSProperties
@@ -36,8 +43,7 @@ function ToolbarSpriteIcon({ rect, className, style }: IconProps & { rect: Sprit
 }
 
 function VectorToolbarSpriteIcon({ rect, className, style }: IconProps & { rect: SpriteRect }) {
-  const size = 35;
-  const scale = size / rect.height;
+  const scaled = spriteLength(rect);
 
   return (
     <span
@@ -45,12 +51,12 @@ function VectorToolbarSpriteIcon({ rect, className, style }: IconProps & { rect:
       className={["vector-toolbar-sprite-icon", className].filter(Boolean).join(" ")}
       style={
         {
-          "--vector-sprite-x": `${-rect.x * scale}px`,
-          "--vector-sprite-y": `${-rect.y * scale}px`,
-          "--vector-sprite-width": `${165 * scale}px`,
-          "--vector-sprite-height": `${27 * scale}px`,
-          width: `${rect.width * scale}px`,
-          height: `${size}px`,
+          "--vector-sprite-x": scaled(-rect.x),
+          "--vector-sprite-y": scaled(-rect.y),
+          "--vector-sprite-width": scaled(165),
+          "--vector-sprite-height": scaled(27),
+          width: scaled(rect.width),
+          height: spriteIconSize,
           backgroundImage: `url(${vectorToolbarSprite})`,
           ...(style as CSSProperties),
         } as CSSProperties
