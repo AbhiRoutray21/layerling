@@ -10216,8 +10216,18 @@ html[data-theme="dark"] .property-hint {
 }
 
 .name-tag-sides.name-tag-edge {
-  grid-template-columns: 128px repeat(3, minmax(0, 1fr));
+  grid-template-columns: auto repeat(3, minmax(0, 1fr));
+  gap: 5px;
   font-size: 14px;
+}
+
+.name-tag-sides.name-tag-edge > span {
+  padding-right: 8px;
+}
+
+.name-tag-sides.name-tag-edge button {
+  padding: 0 2px;
+  font-size: 12.5px;
 }
 
 .name-tag-sides button {

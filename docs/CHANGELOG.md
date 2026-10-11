@@ -4,6 +4,10 @@ layerling started over at 1.0.0 when it was forked from SketchForge-3D 1.0.9.
 Everything from 1.0.9 downwards is SketchForge's history, kept here because the
 code still carries it - so a lower number further down is older, not newer.
 
+## Unreleased
+
+- **Tidier hole pattern icon and letter edge row:** The hole pattern icon in "Adjust" has no dark fill any more and its hexagonal holes sit on one even grid, with the same distance to each other and to the plate edge. On the name tag card the "Letter edge" row gives its three buttons equal width and room.
+
 ## 1.62.2
 
 - **Taper is back for a plain text:** 1.62.0 hid the Taper and Twist & Lean cards for every text, but they were meant to go only for name tags, where they only distort the letters. A plain text shows them again; a name tag, a stack of layers, still has none. Reported by @Hns-Rtgrs in #238.
