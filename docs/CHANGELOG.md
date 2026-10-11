@@ -4,7 +4,7 @@ layerling started over at 1.0.0 when it was forked from SketchForge-3D 1.0.9.
 Everything from 1.0.9 downwards is SketchForge's history, kept here because the
 code still carries it - so a lower number further down is older, not newer.
 
-## Unreleased
+## 1.62.1
 
 - **The key ring tab as a printed one:** The tab of a name tag's key ring hole is now 6.5 mm wide round a 3 mm hole - a 1.75 mm wall either side - and sticks out 6.75 mm, the hole's edge 2 mm beyond the plate; the hole is 3 mm by default (it was 1.85 mm in a 4.34 mm tab, 2.5 mm clear). The tab still grows with the hole. **Make layers** on a plain text now starts a name tag at 9 mm letters too, as the shape library's Name tag does. Measured on a printed tag by @plazmabokor in #215.
 - **Shift with an arrow key follows the darker grid line:** Shift and an arrow key moved a selection by five grid steps, fixed. It now moves as many steps as the setting **Darker grid line every** says: 5 by default, so nothing changes, and 10 as in Tinkercad. It holds in the editor and in the sketch; in inches, where the setting is not offered, it stays 5. Asked for by @prmod3d in #222.
