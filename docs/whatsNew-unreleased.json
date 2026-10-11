@@ -18,5 +18,15 @@
       "de": "Die Karte des Namensschilds hat eine neue Zeile, Buchstabenkante: Keine, Rund oder Fase, mit einer Größe. So sehen die Buchstaben oben aus wie bei einem gedruckten Schild, für jede Schrift und jedes Wort, ohne das Bündel zu öffnen.",
       "en": "The name tag card has a new row, Letter edge: None, Round or Chamfer, with a size. The letters on top then look like those of a printed tag, for every font and word, without opening the bundle."
     }
+  },
+  {
+    "title": {
+      "de": "Aushöhlen mit Zurücknehmen und Ändern",
+      "en": "Hollow with Revert and Edit"
+    },
+    "body": {
+      "de": "Das Fenster zum Aushöhlen zeigt jetzt dieselbe Liste wie die Verrundung: Kantenbearbeitung zurücknehmen, mit Ändern neben jeder Aushöhlung. So lässt sich eine Wand später dünner oder dicker machen, ohne neu anzufangen.",
+      "en": "The Hollow window now shows the same list as the fillet: revert an edge treatment, with Edit next to every hollowing. A wall can be made thinner or thicker later without starting over."
+    }
   }
 ]

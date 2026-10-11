@@ -34,7 +34,7 @@ If the size is too large for the edge, layerling says so and suggests a smaller 
 
 ### Taking an edge treatment back
 
-A treated body can always be treated again. Select it again and open the tool: under {{ui:edge.featureHistory}} you see what is already on it. {{ui:edge.revertAction}} takes back a single treatment. Note: if newer treatments lie on top, they go with it, and the panel tells you how many.
+A treated body can always be treated again. Select it again and open the tool - Fillet, Chamfer or Hollow, each shows the list: under {{ui:edge.featureHistory}} you see what is already on it. {{ui:edge.revertAction}} takes back a single treatment. Note: if newer treatments lie on top, they go with it, and the panel tells you how many.
 
 Next to a chamfer, a fillet or a hollowing there is also {{ui:edge.editAction}}. It takes the treatment back the same way, but opens the tool again at once with the same edges and the old value. You change the value and apply it again: a 3 mm fillet becomes a 5 mm one without clicking the edges once more. If newer treatments lie on top, they go with it here too. This holds for edge treatments you make from now on; older ones only offer taking back, and so do single parts of a group.
 

@@ -14875,6 +14875,11 @@ export function LayerlingEditor({
           workspace={workspaceSettings}
           busy={shellTool.busy}
           error={shellTool.error}
+          appliedFeatureCount={selectedEdgeFeatureCount}
+          reversibleFeatureCount={selectedReversibleEdgeFeatureCount}
+          historyOptions={selectedEdgeHistoryOptions}
+          onRemoveFeature={removeEdgeTreatment}
+          onEditFeature={editEdgeTreatment}
           onThicknessChange={(value) => setShellTool((current) => current ? { ...current, thickness: value, error: null } : current)}
           onOpeningsChange={(value) => setShellTool((current) => {
             if (!current) return current;

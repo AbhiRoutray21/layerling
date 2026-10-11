@@ -3,7 +3,7 @@
 import { GuideHelpLink } from "@/components/GuideHelpLink";
 import { MovableToolPanel } from "@/components/workplane/MovableToolPanel";
 import { Check, LoaderCircle, X } from "lucide-react";
-import { EdgeModifierSlider } from "@/components/workplane/EdgeModifierPanel";
+import { EdgeFeatureHistory, EdgeModifierSlider, type EdgeHistoryOption } from "@/components/workplane/EdgeModifierPanel";
 import { cadModifierUserErrorMessage } from "@/lib/cadModifierRuntime";
 import { t } from "@/lib/i18n";
 import { useLanguage } from "@/lib/useLanguage";
@@ -27,6 +27,11 @@ export function ShellPanel({
   workspace,
   busy,
   error,
+  appliedFeatureCount,
+  reversibleFeatureCount,
+  historyOptions,
+  onRemoveFeature,
+  onEditFeature,
   onThicknessChange,
   onOpeningsChange,
   onEdgesChange,
@@ -41,6 +46,12 @@ export function ShellPanel({
   workspace: WorkplaneWorkspaceSettings;
   busy: boolean;
   error: string | null;
+  /** The treatments the body already has, to revert or edit (#237). */
+  appliedFeatureCount: number;
+  reversibleFeatureCount: number;
+  historyOptions: EdgeHistoryOption[];
+  onRemoveFeature: (id: string) => void;
+  onEditFeature?: (id: string) => void;
   onThicknessChange: (value: number) => void;
   onOpeningsChange: (value: ShellOpenings) => void;
   onEdgesChange: (value: ShellEdges) => void;
@@ -68,6 +79,14 @@ export function ShellPanel({
         <strong>{targetName}</strong>
         <span>{t("shell.help")}</span>
       </div>
+
+      <EdgeFeatureHistory
+        appliedFeatureCount={appliedFeatureCount}
+        reversibleFeatureCount={reversibleFeatureCount}
+        historyOptions={historyOptions}
+        onRemoveFeature={onRemoveFeature}
+        onEditFeature={onEditFeature}
+      />
 
       <EdgeModifierSlider
         label={t("shell.wall")}

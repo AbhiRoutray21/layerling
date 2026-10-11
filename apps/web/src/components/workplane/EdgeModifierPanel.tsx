@@ -24,7 +24,7 @@ function formatSliderValue(value: number, accuracy: WorkplaneWorkspaceSettings["
   return formatMeasurementNumber(value, accuracy, step);
 }
 
-type EdgeHistoryOption = {
+export type EdgeHistoryOption = {
   id: string;
   label: string;
   kind: CadModifierKind;
@@ -44,6 +44,68 @@ function edgeHistoryLabel(option: EdgeHistoryOption) {
     return t(option.kind === "fillet" ? "edge.revertFilletOne" : "edge.revertChamferOne", { size });
   }
   return t(option.kind === "fillet" ? "edge.revertFilletMany" : "edge.revertChamferMany", { size, count: option.edgeCount });
+}
+
+/**
+ * The treatments a body already has - fillets, chamfers, hollowing - with "Revert" for each and
+ * "Edit" where the tool can be opened again with the same values (#227). The fillet and chamfer
+ * tool and the hollow tool show the same list (#237).
+ */
+export function EdgeFeatureHistory({
+  appliedFeatureCount,
+  reversibleFeatureCount,
+  historyOptions,
+  onRemoveFeature,
+  onEditFeature,
+}: {
+  appliedFeatureCount: number;
+  reversibleFeatureCount: number;
+  historyOptions: EdgeHistoryOption[];
+  onRemoveFeature: (id: string) => void;
+  onEditFeature?: (id: string) => void;
+}) {
+  const [historyOpen, setHistoryOpen] = useState(false);
+  if (appliedFeatureCount === 0) return null;
+  return (
+    <div className="edge-modifier-history-actions">
+      <button
+        className="edge-modifier-history-toggle"
+        type="button"
+        aria-expanded={historyOpen}
+        disabled={reversibleFeatureCount === 0}
+        onClick={() => setHistoryOpen((open) => !open)}
+      >
+        {historyOpen ? <Minus size={15} /> : <Plus size={15} />}
+        <span>{t("edge.featureHistory")}</span>
+      </button>
+      {reversibleFeatureCount === 0 ? <span>{t("edge.noStoredHistory")}</span> : null}
+      {historyOpen && historyOptions.length > 0 ? (
+        <div className="edge-modifier-history-list">
+          <p className="edge-modifier-history-hint">{t("edge.revertHint")}</p>
+          {historyOptions.map((option) => (
+            <div className="edge-modifier-history-row" key={option.id}>
+              <button className="edge-modifier-history-item" type="button" onClick={() => onRemoveFeature(option.id)}>
+                <RotateCcw size={14} />
+                <span>
+                  <strong>{`${t("edge.revertAction")}: ${edgeHistoryLabel(option)}`}</strong>
+                  <small>{option.targetName}</small>
+                  {option.removesNewerCount > 0 ? (
+                    <small className="edge-modifier-history-warning">{t("edge.alsoRemovesNewer", { count: option.removesNewerCount })}</small>
+                  ) : null}
+                </span>
+              </button>
+              {option.editable && onEditFeature ? (
+                <button className="edge-modifier-history-edit" type="button" title={t("edge.editHint")} onClick={() => onEditFeature(option.id)}>
+                  <Pencil size={14} />
+                  <span>{t("edge.editAction")}</span>
+                </button>
+              ) : null}
+            </div>
+          ))}
+        </div>
+      ) : null}
+    </div>
+  );
 }
 
 export function EdgeModifierSlider({
@@ -227,7 +289,6 @@ export function EdgeModifierPanel({
   onCancel: () => void;
 }) {
   useLanguage();
-  const [historyOpen, setHistoryOpen] = useState(false);
   const title = kind === "fillet" ? t("edge.filletTitle") : t("edge.chamferTitle");
   const amountMin = Math.min(MIN_EDGE_MODIFIER_AMOUNT, Math.max(Number.EPSILON, maxAmount));
   const amountMax = Math.max(amountMin, maxAmount);
@@ -267,46 +328,13 @@ export function EdgeModifierPanel({
         <button type="button" disabled={!prepared} onClick={onClear}>{t("edge.clear")}</button>
       </div>
 
-      {appliedFeatureCount > 0 ? (
-        <div className="edge-modifier-history-actions">
-          <button
-            className="edge-modifier-history-toggle"
-            type="button"
-            aria-expanded={historyOpen}
-            disabled={reversibleFeatureCount === 0}
-            onClick={() => setHistoryOpen((open) => !open)}
-          >
-            {historyOpen ? <Minus size={15} /> : <Plus size={15} />}
-            <span>{t("edge.featureHistory")}</span>
-          </button>
-          {reversibleFeatureCount === 0 ? <span>{t("edge.noStoredHistory")}</span> : null}
-          {historyOpen && historyOptions.length > 0 ? (
-            <div className="edge-modifier-history-list">
-              <p className="edge-modifier-history-hint">{t("edge.revertHint")}</p>
-              {historyOptions.map((option) => (
-                <div className="edge-modifier-history-row" key={option.id}>
-                  <button className="edge-modifier-history-item" type="button" onClick={() => onRemoveFeature(option.id)}>
-                    <RotateCcw size={14} />
-                    <span>
-                      <strong>{`${t("edge.revertAction")}: ${edgeHistoryLabel(option)}`}</strong>
-                      <small>{option.targetName}</small>
-                      {option.removesNewerCount > 0 ? (
-                        <small className="edge-modifier-history-warning">{t("edge.alsoRemovesNewer", { count: option.removesNewerCount })}</small>
-                      ) : null}
-                    </span>
-                  </button>
-                  {option.editable && onEditFeature ? (
-                    <button className="edge-modifier-history-edit" type="button" title={t("edge.editHint")} onClick={() => onEditFeature(option.id)}>
-                      <Pencil size={14} />
-                      <span>{t("edge.editAction")}</span>
-                    </button>
-                  ) : null}
-                </div>
-              ))}
-            </div>
-          ) : null}
-        </div>
-      ) : null}
+      <EdgeFeatureHistory
+        appliedFeatureCount={appliedFeatureCount}
+        reversibleFeatureCount={reversibleFeatureCount}
+        historyOptions={historyOptions}
+        onRemoveFeature={onRemoveFeature}
+        onEditFeature={onEditFeature}
+      />
 
       <EdgeModifierSlider
         label={kind === "fillet" ? t("edge.radius") : t("edge.distance")}

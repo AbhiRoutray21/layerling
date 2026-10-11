@@ -34,7 +34,7 @@ Wenn das Maß zu groß für die Kante ist, sagt layerling das und schlägt einen
 
 ### Eine Kantenbearbeitung zurücknehmen
 
-Ein behandelter Körper lässt sich jederzeit noch einmal behandeln. Wähle ihn wieder aus und öffne das Werkzeug: Unter {{ui:edge.featureHistory}} steht, was schon darauf liegt. {{ui:edge.revertAction}} nimmt eine einzelne Bearbeitung zurück. Achtung: Liegen neuere Bearbeitungen darüber, gehen sie mit weg, und das Fenster sagt dir, wie viele.
+Ein behandelter Körper lässt sich jederzeit noch einmal behandeln. Wähle ihn wieder aus und öffne das Werkzeug - Verrundung, Fase oder Aushöhlen zeigen alle die Liste: Unter {{ui:edge.featureHistory}} steht, was schon darauf liegt. {{ui:edge.revertAction}} nimmt eine einzelne Bearbeitung zurück. Achtung: Liegen neuere Bearbeitungen darüber, gehen sie mit weg, und das Fenster sagt dir, wie viele.
 
 Neben einer Fase, einer Verrundung oder einer Aushöhlung steht außerdem {{ui:edge.editAction}}. Es nimmt die Bearbeitung genauso zurück, öffnet das Werkzeug aber gleich wieder mit denselben Kanten und dem alten Wert. Du änderst den Wert und wendest ihn neu an: So wird aus einer Verrundung von 3 mm eine von 5 mm, ohne dass du die Kanten noch einmal anklicken musst. Liegen neuere Bearbeitungen darüber, gehen sie auch hier mit. Das gilt für Kantenbearbeitungen, die du ab jetzt machst; bei älteren steht nur das Zurücknehmen da, und bei einzelnen Teilen einer Gruppe ebenfalls.
 
