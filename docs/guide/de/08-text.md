@@ -100,6 +100,22 @@ Jede Änderung siehst du sofort. Das Schild ist ein Bündel: Es bewegt sich als 
 
 Tippe die Namen in die {{ui:textLayers.names}}, einen je Zeile, bis zu hundert. Der Knopf darunter sagt, wie viele Schilder er macht, etwa „12 Namensschilder machen“. Jedes Schild bekommt dieselben Schichten, dieselbe Buchstabengröße und dasselbe Loch und ist ein eigenes Objekt; sie liegen in Reihen unter dem ersten, 5 mm auseinander. Auch ein einfacher Text hat die Namensliste, weiter unten in seinen Einstellungen.
 
+## Symbolschilder
+
+Ein Symbolschild ist dasselbe Schild mit einem SVG-Symbol statt Buchstaben: ein Herz, eine Wolke, das Logo eines Vereins. Oben das Symbol, darunter derselbe Umriss etwas breiter in einer zweiten Farbe, zuunterst eine Platte ohne Löcher.
+
+- **Ein neues Symbolschild:** Wähle in der Formenbibliothek {{ui:shape.iconTag}}. Ein kleines Fenster öffnet sich: Klicke auf {{ui:iconTag.browse}}, wähle eine SVG-Datei, prüfe das Bild, tippe die {{ui:iconTag.width}} des Symbols ein und klicke auf {{ui:iconTag.ok}}. Das Schild steht in der Mitte der Platte, in denselben Schichten wie ein neues Namensschild.
+- **Aus einem Skizzenkörper:** Eine importierte SVG oder eine selbst gezeichnete Skizze hat oben in ihren Einstellungen {{ui:nameTag.makeLayers}}.
+
+Die Karte {{ui:iconTag.title}} oben in den Einstellungen enthält:
+
+- **{{ui:iconTag.replace}}:** setzt das Symbol einer anderen SVG auf das Schild; Schichten und Breite bleiben, wie sie sind.
+- **{{ui:iconTag.iconWidth}}:** wie breit das Symbol oben ist, in mm. Alle Schichten gehen mit und bleiben deckungsgleich.
+- **{{ui:nameTag.layers}}:** die Zeilen wie beim Namensschild - Farbe, um wie viel breiter, {{ui:nameTag.corners}}, Höhe und {{ui:nameTag.noHoles}}, **+** und **–**, zwei bis sechs Schichten. Die oberste Zeile ist das Symbol selbst.
+- **{{ui:iconTag.count}}:** wie viele Schilder du möchtest, 1 bis 100. {{ui:iconTag.fill}} rechnet es aus der Platte des Druckers aus, der in den Einstellungen gewählt ist, für kleine Logos eine volle Platte. Der Knopf darunter erzeugt sie, 5 mm auseinander, in der Mitte der Platte verteilt; das erste ist das Schild selbst.
+
+Die SVG braucht geschlossene Umrisse; eine Zeichnung nur aus offenen Linien wird kein Schild. Ein Skizzenkörper, dessen Füllung eine Linie ist, behält sie: Die Fläche dieser Linie ist das Symbol.
+
 ## Text auf dem Kreisbogen
 
 Soll die Beschriftung nicht gerade laufen, sondern dem Rand einer Münze, eines Deckels oder eines Rings folgen? Dafür gibt es die Einstellung {{ui:prop.textCurved}}.

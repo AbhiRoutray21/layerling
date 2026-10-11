@@ -8,5 +8,15 @@
       "de": "Nach dem Verstellen eines Reglers in einem Eigenschaftenfenster geht Strg+Z jetzt sofort, ohne vorher in die Arbeitsfläche zu klicken. So lassen sich Einstellungen wie die Verjüngung bequem ausprobieren und zurücknehmen.",
       "en": "After moving a slider in a properties window, Ctrl+Z now works at once, without clicking into the workplane first. That makes it easy to try settings like taper and take them back."
     }
+  },
+  {
+    "title": {
+      "de": "Symbolschild aus einer SVG-Datei",
+      "en": "An icon tag from an SVG file"
+    },
+    "body": {
+      "de": "Die Formen-Bibliothek hat ein neues Symbolschild: Wähle eine SVG-Datei, und das Symbol steht in denselben farbigen Schichten wie ein Namensschild auf der Platte. Breite, Schichten und Anzahl lassen sich danach ändern, und „so viele wie passen“ füllt die Druckplatte mit Kopien.",
+      "en": "The shape library has a new Icon tag: pick an SVG file and the icon stands on the plate in the same coloured layers as a name tag. Width, layers and count can be changed afterwards, and \"as many as fit\" fills the print plate with copies."
+    }
   }
 ]

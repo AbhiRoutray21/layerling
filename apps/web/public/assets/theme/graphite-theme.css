@@ -7398,6 +7398,65 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .history-view-slider .r
   background: color-mix(in srgb, currentColor 8%, transparent);
 }
 
+:where(html[data-theme="dark"][data-palette="graphite"]) .icon-tag-preview {
+  color: #909090;
+  background: #fff;
+  border: 1px solid #dddddd;
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .icon-tag-width {
+  color: #3a3a3a;
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .icon-tag-width input {
+  color: #3f3f3f;
+  background: #fff;
+  border: 1px solid #e1e1e1;
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .icon-tag-width input[aria-invalid="true"] {
+  border-color: #c4361d;
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .icon-tag-width small {
+  color: #6b6b6b;
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .top-action-body .icon-tag-error {
+  color: #b02f17;
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .top-action-body .icon-tag-ok {
+  color: #fff;
+  background: #d07210;
+  border-color: #b9620a;
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .top-action-body .icon-tag-ok:hover:not(:disabled) {
+  background: #b9620a;
+}
+
+html[data-theme="dark"]:where([data-palette="graphite"]) .icon-tag-preview,
+html[data-theme="dark"]:where([data-palette="graphite"]) .icon-tag-width input {
+  color: #cbcbcb;
+  background: #2d2d2d;
+  border-color: #4d4d4d;
+}
+
+html[data-theme="dark"]:where([data-palette="graphite"]) .icon-tag-width {
+  color: #e4e4e4;
+}
+
+html[data-theme="dark"]:where([data-palette="graphite"]) .top-action-body .icon-tag-ok {
+  color: #fff;
+  background: #b9620a;
+  border-color: #d07210;
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .shape-inspector .icon-tag-card-error {
+  color: #b02f17;
+}
+
 :where(html[data-theme="dark"][data-palette="graphite"]) .toolbar-section-tools,
 :where(html[data-theme="dark"][data-palette="graphite"]) .toolbar-section .action-buttons {
   background: var(--toolbar-tile);

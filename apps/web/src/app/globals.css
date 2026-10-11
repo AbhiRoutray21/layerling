@@ -5281,6 +5281,17 @@ html[data-toolbar-size="large"] .shape-menu-dropdown:not(.sketch-shape-menu-drop
   font-weight: 700;
 }
 
+/* The icon tag window moves by its title bar like the tool panels. */
+.icon-tag-panel header.movable {
+  cursor: grab;
+  touch-action: none;
+}
+
+.icon-tag-panel.moving,
+.icon-tag-panel.moving header.movable {
+  cursor: grabbing;
+}
+
 .top-action-panel.export-action-panel,
 .top-action-panel.import-action-panel {
   width: min(440px, calc(100vw - 28px));
@@ -15732,4 +15743,100 @@ html[data-theme="dark"] .history-view-slider .range-control input[type="range"]:
   opacity: 1;
   background: color-mix(in srgb, currentColor 8%, transparent);
   border-style: solid;
+}
+
+/* The icon tag window: the SVG's picture, the icon's width and OK. */
+.icon-tag-preview {
+  display: grid;
+  height: 132px;
+  place-items: center;
+  padding: 10px;
+  color: #b9a58f;
+  background: #fff;
+  border: 1px solid #ebe1cf;
+  border-radius: 8px;
+}
+
+.icon-tag-preview img {
+  max-width: 100%;
+  max-height: 110px;
+  object-fit: contain;
+}
+
+.icon-tag-width {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 96px;
+  align-items: center;
+  gap: 4px 10px;
+  color: #4d3720;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.icon-tag-width input {
+  height: 32px;
+  padding: 0 10px;
+  color: #523c26;
+  font: inherit;
+  text-align: right;
+  background: #fff;
+  border: 1px solid #ebe4d7;
+  border-radius: 6px;
+}
+
+.icon-tag-width input[aria-invalid="true"] {
+  border-color: #c4361d;
+}
+
+.icon-tag-width small {
+  grid-column: 1 / -1;
+  color: #8e7a66;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.top-action-body .icon-tag-error {
+  color: #b02f17;
+}
+
+.top-action-body .icon-tag-ok {
+  color: #fff;
+  background: #d07210;
+  border-color: #b9620a;
+}
+
+.top-action-body .icon-tag-ok:hover:not(:disabled) {
+  background: #b9620a;
+}
+
+.top-action-body .icon-tag-ok:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+html[data-theme="dark"] .icon-tag-preview,
+html[data-theme="dark"] .icon-tag-width input {
+  color: #ddccb9;
+  background: #35281b;
+  border-color: #5e4c3a;
+}
+
+html[data-theme="dark"] .icon-tag-width {
+  color: #f0e7d9;
+}
+
+html[data-theme="dark"] .top-action-body .icon-tag-ok {
+  color: #fff;
+  background: #b9620a;
+  border-color: #d07210;
+}
+
+.shape-inspector .icon-tag-card-error {
+  color: #b02f17;
+}
+
+.icon-tag-preview-empty {
+  font-size: 26px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
 }

@@ -21,7 +21,7 @@ import { GridEyeIcon } from "@/components/GridEyeIcon";
 import { AlignOverlay, MirrorOverlay, type AlignOverlayState, type MirrorOverlayState } from "@/components/workplane/ActionOverlays";
 import { MoveDimensionOverlay } from "@/components/workplane/MoveDimensionOverlay";
 import { OriginDimensionOverlay } from "@/components/workplane/OriginDimensionOverlay";
-import { SelectionInspector, ShapeInspector, SnapGridControl, type ShapeInspectorUpdateOptions, type TextLayerPatch } from "@/components/workplane/ShapeInspector";
+import { SelectionInspector, ShapeInspector, SnapGridControl, type IconTagControls, type ShapeInspectorUpdateOptions, type TextLayerPatch } from "@/components/workplane/ShapeInspector";
 import type { NameTagStack } from "@/lib/nameTag";
 import { WorkspaceSettingsModal } from "@/components/workplane/WorkspaceSettingsModal";
 import { appThemePalette, type AppThemePalette, type AppThemePreference, type ResolvedAppTheme } from "@/lib/appTheme";
@@ -361,6 +361,8 @@ type WorkplaneViewportProps = {
   onTextTags?: (names: string[], gap: number) => void;
   /** The selected name tag as its card shows it (#215). */
   textLayerStack?: NameTagStack | null;
+  /** The icon tag card's wiring for the selected sketch body or icon tag. */
+  iconTag?: IconTagControls | null;
   /** Turns a shape fresh from the library into what it places - a name tag's layers (#215) - for the ghost that follows the pointer too. */
   prepareNewShape?: (asset: ShapeAsset, shape: WorkplaneShape) => WorkplaneShape;
   onUpdateShape: (id: string, patch: ShapeUpdatePatch) => void;
@@ -4400,6 +4402,7 @@ export function WorkplaneViewport({
   onLayerText,
   onTextTags,
   textLayerStack,
+  iconTag,
   prepareNewShape,
   onUpdateShape,
   onDuplicateShapeAt,
@@ -9957,6 +9960,7 @@ export function WorkplaneViewport({
           onLayerText={onLayerText}
           onTextTags={onTextTags}
           textLayerStack={textLayerStack}
+          iconTag={iconTag}
           onInteractionActiveChange={onInteractionActiveChange}
           onSnapGridAwayChange={setInspectorSnapGridAway}
         />

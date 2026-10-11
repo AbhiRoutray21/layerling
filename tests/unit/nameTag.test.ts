@@ -258,7 +258,8 @@ describe("finding the name tag (#215)", () => {
     const ids = libraryShapeAssets.map((asset) => asset.id);
     expect(ids.indexOf("nameTag")).toBe(ids.indexOf("text") + 1);
     expect(nameTagAsset.kind).toBe("text");
-    expect(libraryShapeAssets).toHaveLength(toolbarShapeAssets.length + 1);
+    // The name tag and the icon tag are the library's two entries beyond the kinds.
+    expect(libraryShapeAssets).toHaveLength(toolbarShapeAssets.length + 2);
     // The catalogue of kinds keeps one tile per kind.
     expect(toolbarShapeAssets.some((asset) => asset.id === "nameTag")).toBe(false);
     expect(parseDroppedShapeAsset(JSON.stringify(nameTagAsset))).toMatchObject({ id: "nameTag", kind: "text" });

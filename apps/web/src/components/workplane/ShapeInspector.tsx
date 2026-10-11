@@ -3,7 +3,7 @@
 import { displayY, displayYTurn, insideZ, insideZTurn } from "@/lib/displayAxes";
 import { GuideHelpLink } from "@/components/GuideHelpLink";
 import { guideChapterForShape, guideSectionForShape } from "@/lib/guideLinks";
-import { ChevronDown, ChevronUp, Cylinder, Eye, EyeOff, Layers, Lock, Minus, Pencil, Plus, RotateCcw, Split, Tags, Unlock } from "lucide-react";
+import { ChevronDown, ChevronUp, Cylinder, Eye, EyeOff, FolderOpen, Grid3x3, Layers, Lock, Minus, Pencil, Plus, RotateCcw, Split, Tags, Unlock } from "lucide-react";
 import { Fragment, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type Dispatch, type ReactNode, type SetStateAction } from "react";
 import {
   DEFAULT_GEAR_HELIX_ANGLE,
@@ -148,6 +148,7 @@ import {
 } from "@/lib/bentTubeGeometry";
 import { displayStepFromMillimeters, formatFractionalInches, showsInchFractions, displayToMillimeters, formatMeasurementNumber, lengthDisplayUnit, measurementOptionLabel, millimetersToDisplay, parseMeasurementInput, resolveMeasurementInput } from "@/lib/measurementUnits";
 import { t, type MessageKey } from "@/lib/i18n";
+import { localizedError } from "@/lib/userErrors";
 import { displayShapeName, makeShapeFromAsset, renamedShapeName } from "@/lib/shapeCatalog";
 import { shapeDefaultsAsset, shapeDefaultsFromShape } from "@/lib/shapeDefaults";
 import { MAX_SCREW_HOLE_ANGLE, MIN_SCREW_HOLE_ANGLE, normalizeScrewHoleAngle, normalizeScrewHoleHeadDepth, normalizeScrewHoleShaft } from "@/lib/screwHoleGeometry";
@@ -161,6 +162,7 @@ import { MAX_TEXT_LAYERS, MAX_TEXT_LAYER_GROW, MIN_TEXT_LAYER_HEIGHT, namesFromL
 import { DEFAULT_KEYRING_DIAMETER, MIN_KEYRING_DIAMETER, TEXT_KEYRING_SIDES } from "@/lib/textGeometry";
 import { addTextLayer, MIN_LETTER_SIZE, MIN_NAME_TAG_LAYERS, NAME_TAG_GAP, NAME_TAG_LAYERS, NAME_TAG_LETTER_SIZE, removeTextLayer, textLetterSize, textLetterSizePatch, type NameTagStack } from "@/lib/nameTag";
 import { FONT_MANAGER_OPTION, requestFontManager } from "@/lib/fontManagerEvents";
+import { ICON_TAG_LAYERS, iconTagFitCount, MAX_ICON_TAG_WIDTH, MAX_ICON_TAGS, MIN_ICON_TAG_WIDTH, normalizeIconTagCount, type IconLayerStack } from "@/lib/iconTag";
 import { customFontList, textFontLabel } from "@/lib/textFonts";
 import { MIN_SLOT_END_RATIO, normalizeSlotEndRatio, taperedSlotOutline } from "@/lib/slotGeometry";
 import { loftMeasures, loftShapePatch, loftTiltLimit, maxLoftWall, MAX_LOFT_SIDES, MAX_LOFT_TWIST, MIN_LOFT_SIDES, MIN_LOFT_SIZE, normalizeLoftOutline, type LoftMeasures } from "@/lib/loftGeometry";
@@ -339,7 +341,7 @@ const RELATIVE_SIZE_PROPERTY_IDS = new Set(["width", "height", "length", "diamet
 const ROTATION_PROPERTY_IDS = new Set(["rotateX", "rotateY", "rotateZ"]);
 
 function propertyUsesLengthUnit(key: string) {
-  return ["textLineWidth", "letterSize", "keyringDiameter", "positionX", "positionY", "positionZ", "pivotX", "pivotY", "pivotZ", "radius", "length", "width", "height", "bevel", "topRadius", "baseRadius", "thickness", "toothSize", "toothWidth", "gearBacklash", "centerHole", "slotSmallEnd", "slotCentreDistance", "sketchLineWidth", "topLength", "topWidth", "bottomLength", "bottomWidth", "diameter", "pitch", "clearance", "boltClearance", "threadLength", "headHeight", "chamfer", "headChamfer", "wire", "starOuterSize", "starInnerSize", "starOuterFillet", "starInnerFillet", "heartTipFillet", "crescentThickness", "crescentTipFillet", "honeycombCellSize", "honeycombWallThickness", "honeycombFrameWidth", "cornerFillet", "topBottomFillet", "bentTubeSize", "bentTubeWall", "bentTubeSegmentLength", "bentTubeBendRadius", "dovetailNeckWidth", "dovetailClearance", "hingePinDiameter", "hingeLeafThickness", "hingeClearance", "screwHoleShaft", "screwHoleHeadDepth", "knurlDepth", "knurlChamfer", "loftBottomWidth", "loftBottomDepth", "loftTopWidth", "loftTopDepth", "loftBottomCorner", "loftTopCorner", "loftOffsetX", "loftOffsetZ", "loftWall"].includes(key);
+  return ["textLineWidth", "letterSize", "iconWidth", "keyringDiameter", "positionX", "positionY", "positionZ", "pivotX", "pivotY", "pivotZ", "radius", "length", "width", "height", "bevel", "topRadius", "baseRadius", "thickness", "toothSize", "toothWidth", "gearBacklash", "centerHole", "slotSmallEnd", "slotCentreDistance", "sketchLineWidth", "topLength", "topWidth", "bottomLength", "bottomWidth", "diameter", "pitch", "clearance", "boltClearance", "threadLength", "headHeight", "chamfer", "headChamfer", "wire", "starOuterSize", "starInnerSize", "starOuterFillet", "starInnerFillet", "heartTipFillet", "crescentThickness", "crescentTipFillet", "honeycombCellSize", "honeycombWallThickness", "honeycombFrameWidth", "cornerFillet", "topBottomFillet", "bentTubeSize", "bentTubeWall", "bentTubeSegmentLength", "bentTubeBendRadius", "dovetailNeckWidth", "dovetailClearance", "hingePinDiameter", "hingeLeafThickness", "hingeClearance", "screwHoleShaft", "screwHoleHeadDepth", "knurlDepth", "knurlChamfer", "loftBottomWidth", "loftBottomDepth", "loftTopWidth", "loftTopDepth", "loftBottomCorner", "loftTopCorner", "loftOffsetX", "loftOffsetZ", "loftWall"].includes(key);
 }
 
 /**
@@ -1926,6 +1928,7 @@ export function ShapeInspector({
   onLayerText,
   onTextTags,
   textLayerStack: nameTagStack,
+  iconTag,
   onInteractionActiveChange,
   onSnapGridAwayChange,
   proportionLock = false,
@@ -1954,6 +1957,8 @@ export function ShapeInspector({
   onTextTags?: (names: string[], gap: number) => void;
   /** The selected name tag's words, font and layers, read from its layers as they stand (#215). */
   textLayerStack?: NameTagStack | null;
+  /** The icon tag card's wiring, for a sketch body or an icon tag; null for anything else. */
+  iconTag?: IconTagControls | null;
   onInteractionActiveChange?: (active: boolean) => void;
   /** The snap control lives in the expanded panel; collapsed, the workplane shows its own. */
   /** Called with true while the inspector does not carry the snap grid control (collapsed, or floating), so the workplane shows it. */
@@ -2253,8 +2258,13 @@ export function ShapeInspector({
         />
       ) : null}
       {shape.kind === "text" && onLayerText ? <MakeLayersButton disabled={locked} onLayerText={onLayerText} /> : null}
+      {iconTag?.isTag ? (
+        <IconTagCard key={`icon-tag-${shape.id}`} shapeId={shape.id} controls={iconTag} workspace={workspace} disabled={locked} onInteractionActiveChange={onInteractionActiveChange} />
+      ) : iconTag ? (
+        <MakeIconLayersButton disabled={locked} onLayer={iconTag.onLayer} />
+      ) : null}
       {shape.groupOperation === "bundle" ? (
-        <p className="inspector-bundle-note">{t(nameTagStack ? "nameTag.bundleNote" : "inspector.bundleNote")}</p>
+        <p className="inspector-bundle-note">{t(nameTagStack || iconTag?.isTag ? "nameTag.bundleNote" : "inspector.bundleNote")}</p>
       ) : !isNonSolidShapeKind(shape.kind) ? (
       <div className="shape-state-card" role="group" aria-label={t("inspector.shapeMode")}>
         <button
@@ -2806,6 +2816,90 @@ function NameListCard({ shapeId, disabled, onTextTags, onInteractionActiveChange
 }
 
 /**
+ * The rows of a layered tag (#215), a name tag's or an icon tag's: one per layer from the top down -
+ * colour, how much wider than the top, its corners, height, without holes - with "+" and "–".
+ * The top row is the letters or the icon themselves and has no width or corners of its own.
+ */
+function LayerRows({ layers, firstLabel, workspace, disabled, onChange, onInteractionActiveChange }: {
+  layers: TextLayer[];
+  firstLabel: string;
+  workspace: WorkplaneWorkspaceSettings;
+  disabled: boolean;
+  onChange: (layers: TextLayer[]) => void;
+  onInteractionActiveChange?: (active: boolean) => void;
+}) {
+  const unit = lengthDisplayUnit(workspace).label;
+  const writeLayers = onChange;
+  const changeLayer = (index: number, changes: Partial<TextLayer>) => writeLayers(layers.map((entry, position) => (position === index ? { ...entry, ...changes } : entry)));
+  const layerName = (index: number) => (index === 0 ? firstLabel : t("textLayers.layer", { number: index + 1 }));
+  return (
+    <>
+      <div className="name-tag-layers-heading">
+        <span>{t("nameTag.layers")}</span>
+        <span className="name-tag-stepper">
+          <button type="button" aria-label={t("nameTag.removeLayer")} title={t("nameTag.removeLayer")} disabled={disabled || layers.length <= MIN_NAME_TAG_LAYERS} onClick={() => writeLayers(removeTextLayer(layers))}>
+            <Minus size={16} strokeWidth={2.8} />
+          </button>
+          <output aria-label={t("nameTag.layers")}>{layers.length}</output>
+          <button type="button" aria-label={t("nameTag.addLayer")} title={t("nameTag.addLayer")} disabled={disabled || layers.length >= MAX_TEXT_LAYERS} onClick={() => writeLayers(addTextLayer(layers))}>
+            <Plus size={16} strokeWidth={2.8} />
+          </button>
+        </span>
+      </div>
+      <div className="name-tag-layers" role="table" aria-label={t("nameTag.layers")}>
+        <div className="name-tag-layer name-tag-layer-head" role="row">
+          <span role="columnheader">{t("nameTag.color")}</span>
+          <span role="columnheader">{t("nameTag.wider", { unit })}</span>
+          <span role="columnheader">{t("nameTag.corners")}</span>
+          <span role="columnheader">{t("nameTag.height", { unit })}</span>
+          <span role="columnheader">{t("nameTag.noHoles")}</span>
+        </div>
+        {layers.map((layer, index) => (
+          <div className="name-tag-layer" role="row" key={index} data-layer={index + 1}>
+            <label className="name-tag-swatch" role="cell" style={{ "--swatch": layer.color } as CSSProperties} title={`${layerName(index)}: ${t("nameTag.color")}`}>
+              <CustomColorInput color={layer.color} disabled={disabled} onCommit={(color) => changeLayer(index, { color })} onInteractionActiveChange={onInteractionActiveChange} />
+            </label>
+            <span role="cell">
+              {index === 0 ? (
+                <span className="name-tag-letters">{firstLabel}</span>
+              ) : (
+                <CompactMeasureField label={`${layerName(index)}: ${t("nameTag.wider", { unit })}`} value={layer.grow} min={0} max={MAX_TEXT_LAYER_GROW} workspace={workspace} disabled={disabled} onChange={(grow) => changeLayer(index, { grow })} onInteractionActiveChange={onInteractionActiveChange} />
+              )}
+            </span>
+            <span role="cell">
+              {/* How the wider outline goes round the corners of the letters; the letters themselves have none. */}
+              {index === 0 ? null : (
+                <select
+                  className="name-tag-corner"
+                  aria-label={`${layerName(index)}: ${t("nameTag.corners")}`}
+                  title={`${layerName(index)}: ${t("nameTag.corners")}`}
+                  value={layer.join ?? "round"}
+                  disabled={disabled}
+                  onChange={(event) => {
+                    const join = event.currentTarget.value;
+                    changeLayer(index, { join: join === "bevel" || join === "miter" ? join : undefined });
+                  }}
+                >
+                  {(["round", "bevel", "miter"] as const).map((join) => (
+                    <option key={join} value={join}>{t(`nameTag.corner.${join}`)}</option>
+                  ))}
+                </select>
+              )}
+            </span>
+            <span role="cell">
+              <CompactMeasureField label={`${layerName(index)}: ${t("nameTag.height", { unit })}`} value={layer.height} min={MIN_TEXT_LAYER_HEIGHT} max={40} workspace={workspace} disabled={disabled} onChange={(height) => changeLayer(index, { height })} onInteractionActiveChange={onInteractionActiveChange} />
+            </span>
+            <span role="cell" className="name-tag-check">
+              <input type="checkbox" aria-label={`${layerName(index)}: ${t("nameTag.noHoles")}`} checked={Boolean(layer.silhouette)} disabled={disabled} onChange={(event) => changeLayer(index, { silhouette: event.currentTarget.checked || undefined })} />
+            </span>
+          </div>
+        ))}
+      </div>
+    </>
+  );
+}
+
+/**
  * The name tag (#215): a layered text's card, open and first. Words, font and letter size; every
  * layer in a row of its own - colour, how much wider than the letters, height, without holes -
  * with "+" and "–" and, for a wider layer, its corners; the key ring hole; the name list. Every
@@ -2830,10 +2924,8 @@ function NameTagCard({
 }) {
   const [open, setOpen] = useState(true);
   const { source, layers, keyring } = stack;
-  const unit = lengthDisplayUnit(workspace).label;
   const writeLayers = (next: TextLayer[]) => onLayerText({ layers: next });
   const changeLayer = (index: number, changes: Partial<TextLayer>) => writeLayers(layers.map((entry, position) => (position === index ? { ...entry, ...changes } : entry)));
-  const layerName = (index: number) => (index === 0 ? t("nameTag.letters") : t("textLayers.layer", { number: index + 1 }));
   const properties: ShapePropertyConfig[] = [
     { type: "text", id: "nameTagText", label: t("prop.text"), value: source.text ?? "TEXT", onChange: (text) => onLayerText({ text: text.slice(0, 24) || " " }) },
     textFontProperty(source, (patch) => { if (typeof patch.font === "string") onLayerText({ font: patch.font }); }),
@@ -2855,67 +2947,7 @@ function NameTagCard({
       {open ? (
         <div className="property-list text-layers-body name-tag-body" id={`name-tag-${shapeId}`}>
           <ShapePropertyRows properties={properties} workspace={workspace} disabled={disabled} onInteractionActiveChange={onInteractionActiveChange} />
-          <div className="name-tag-layers-heading">
-            <span>{t("nameTag.layers")}</span>
-            <span className="name-tag-stepper">
-              <button type="button" aria-label={t("nameTag.removeLayer")} title={t("nameTag.removeLayer")} disabled={disabled || layers.length <= MIN_NAME_TAG_LAYERS} onClick={() => writeLayers(removeTextLayer(layers))}>
-                <Minus size={16} strokeWidth={2.8} />
-              </button>
-              <output aria-label={t("nameTag.layers")}>{layers.length}</output>
-              <button type="button" aria-label={t("nameTag.addLayer")} title={t("nameTag.addLayer")} disabled={disabled || layers.length >= MAX_TEXT_LAYERS} onClick={() => writeLayers(addTextLayer(layers))}>
-                <Plus size={16} strokeWidth={2.8} />
-              </button>
-            </span>
-          </div>
-          <div className="name-tag-layers" role="table" aria-label={t("nameTag.layers")}>
-            <div className="name-tag-layer name-tag-layer-head" role="row">
-              <span role="columnheader">{t("nameTag.color")}</span>
-              <span role="columnheader">{t("nameTag.wider", { unit })}</span>
-              <span role="columnheader">{t("nameTag.corners")}</span>
-              <span role="columnheader">{t("nameTag.height", { unit })}</span>
-              <span role="columnheader">{t("nameTag.noHoles")}</span>
-            </div>
-            {layers.map((layer, index) => (
-              <div className="name-tag-layer" role="row" key={index} data-layer={index + 1}>
-                <label className="name-tag-swatch" role="cell" style={{ "--swatch": layer.color } as CSSProperties} title={`${layerName(index)}: ${t("nameTag.color")}`}>
-                  <CustomColorInput color={layer.color} disabled={disabled} onCommit={(color) => changeLayer(index, { color })} onInteractionActiveChange={onInteractionActiveChange} />
-                </label>
-                <span role="cell">
-                  {index === 0 ? (
-                    <span className="name-tag-letters">{t("nameTag.letters")}</span>
-                  ) : (
-                    <CompactMeasureField label={`${layerName(index)}: ${t("nameTag.wider", { unit })}`} value={layer.grow} min={0} max={MAX_TEXT_LAYER_GROW} workspace={workspace} disabled={disabled} onChange={(grow) => changeLayer(index, { grow })} onInteractionActiveChange={onInteractionActiveChange} />
-                  )}
-                </span>
-                <span role="cell">
-                  {/* How the wider outline goes round the corners of the letters; the letters themselves have none. */}
-                  {index === 0 ? null : (
-                    <select
-                      className="name-tag-corner"
-                      aria-label={`${layerName(index)}: ${t("nameTag.corners")}`}
-                      title={`${layerName(index)}: ${t("nameTag.corners")}`}
-                      value={layer.join ?? "round"}
-                      disabled={disabled}
-                      onChange={(event) => {
-                        const join = event.currentTarget.value;
-                        changeLayer(index, { join: join === "bevel" || join === "miter" ? join : undefined });
-                      }}
-                    >
-                      {(["round", "bevel", "miter"] as const).map((join) => (
-                        <option key={join} value={join}>{t(`nameTag.corner.${join}`)}</option>
-                      ))}
-                    </select>
-                  )}
-                </span>
-                <span role="cell">
-                  <CompactMeasureField label={`${layerName(index)}: ${t("nameTag.height", { unit })}`} value={layer.height} min={MIN_TEXT_LAYER_HEIGHT} max={40} workspace={workspace} disabled={disabled} onChange={(height) => changeLayer(index, { height })} onInteractionActiveChange={onInteractionActiveChange} />
-                </span>
-                <span role="cell" className="name-tag-check">
-                  <input type="checkbox" aria-label={`${layerName(index)}: ${t("nameTag.noHoles")}`} checked={Boolean(layer.silhouette)} disabled={disabled} onChange={(event) => changeLayer(index, { silhouette: event.currentTarget.checked || undefined })} />
-                </span>
-              </div>
-            ))}
-          </div>
+          <LayerRows layers={layers} firstLabel={t("nameTag.letters")} workspace={workspace} disabled={disabled} onChange={writeLayers} onInteractionActiveChange={onInteractionActiveChange} />
           {/* The top edge of the letters (#225): a printed tag's letters on top are finished, not cut square. */}
           <div className="name-tag-sides name-tag-edge" role="radiogroup" aria-label={t("nameTag.letterEdge")}>
             <span>{t("nameTag.letterEdge")}</span>
@@ -2970,6 +3002,125 @@ function NameTagCard({
             </>
           ) : null}
           <NameListFields disabled={disabled} onTextTags={onTextTags} onInteractionActiveChange={onInteractionActiveChange} />
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
+/** What the icon tag card changes: the icon's width and the layers; the rest stays as it is. */
+export type IconLayerPatch = { width?: number; layers?: TextLayer[] };
+
+/**
+ * The icon tag card's wiring: the stack as it stands, the build, the copies on the plate, and
+ * the plate's size for "As many as fit". `isTag` is false for a plain sketch body, which gets
+ * the way to an icon tag instead of the card.
+ */
+export type IconTagControls = {
+  stack: IconLayerStack;
+  isTag: boolean;
+  plate: { width: number; depth: number };
+  /** How much of the plate one tag takes, seen from above, as it stands. */
+  footprint: { width: number; depth: number };
+  onLayer: (patch: IconLayerPatch) => void;
+  onCopies: (count: number) => void;
+  /** Puts another SVG's icon on the tag, keeping its layers and width. */
+  onReplaceSvg: (file: File) => Promise<void>;
+};
+
+/** A sketch body's way to an icon tag, first in its settings: one click splits it into the start layers. */
+function MakeIconLayersButton({ disabled, onLayer }: { disabled: boolean; onLayer: (patch: IconLayerPatch) => void }) {
+  return (
+    <div className="name-tag-start">
+      <button className="inspector-action-button name-tag-start-button" type="button" disabled={disabled} onClick={() => onLayer({ layers: [...ICON_TAG_LAYERS] })}>
+        <Layers size={17} strokeWidth={2.5} />
+        <span>{t("nameTag.makeLayers")}</span>
+      </button>
+      <p className="name-tag-hint">
+        {t("iconTag.makeLayersHint")}
+        <GuideHelpLink chapter="text" section="iconTag" className="inspector-help-link" />
+      </p>
+    </div>
+  );
+}
+
+/**
+ * The icon tag card, open and first: the icon's width, the layers as the name tag has them, and
+ * how many tags of it - typed in, or as many as fit on the plate - laid out on the plate's middle.
+ */
+function IconTagCard({ shapeId, controls, workspace, disabled, onInteractionActiveChange }: {
+  shapeId: string;
+  controls: IconTagControls;
+  workspace: WorkplaneWorkspaceSettings;
+  disabled: boolean;
+  onInteractionActiveChange?: (active: boolean) => void;
+}) {
+  const [open, setOpen] = useState(true);
+  const [count, setCount] = useState(1);
+  const [fitNote, setFitNote] = useState(false);
+  const [replacing, setReplacing] = useState(false);
+  const [replaceError, setReplaceError] = useState("");
+  const fileRef = useRef<HTMLInputElement>(null);
+  const { stack, plate, onLayer, onCopies, onReplaceSvg } = controls;
+  const replace = (file: File) => {
+    setReplacing(true);
+    setReplaceError("");
+    onReplaceSvg(file)
+      .catch((reason) => setReplaceError(reason instanceof Error ? localizedError(reason.message) : String(reason)))
+      .finally(() => setReplacing(false));
+  };
+  const properties: ShapePropertyConfig[] = [
+    { id: "iconWidth", label: t("iconTag.iconWidth"), value: stack.width, min: MIN_ICON_TAG_WIDTH, max: MAX_ICON_TAG_WIDTH, step: 0.5, hint: t("iconTag.iconWidthHint"), onChange: (width) => onLayer({ width }) },
+    { id: "iconTagCount", label: t("iconTag.count"), value: count, min: 1, max: MAX_ICON_TAGS, step: 1, hint: t("iconTag.countHint"), onChange: (value) => { setFitNote(false); setCount(normalizeIconTagCount(value)); } },
+  ];
+  const fill = () => {
+    const fits = iconTagFitCount(controls.footprint, plate);
+    setFitNote(fits === 0);
+    setCount(normalizeIconTagCount(Math.max(1, fits)));
+  };
+  return (
+    <div className={`property-card name-tag-card icon-tag-card ${open ? "" : "collapsed"}`}>
+      <button className="property-card-header" type="button" aria-expanded={open} aria-controls={`icon-tag-${shapeId}`} onClick={() => setOpen((current) => !current)}>
+        <span>{t("iconTag.title")}</span>
+        <ChevronUp className={open ? "" : "collapsed"} size={25} strokeWidth={2.8} />
+      </button>
+      {open ? (
+        <p className="name-tag-hint">
+          {t("iconTag.cardHint")}
+          <GuideHelpLink chapter="text" section="iconTag" className="inspector-help-link" />
+        </p>
+      ) : null}
+      {open ? (
+        <div className="property-list text-layers-body name-tag-body" id={`icon-tag-${shapeId}`}>
+          <input
+            ref={fileRef}
+            type="file"
+            accept=".svg,image/svg+xml"
+            hidden
+            data-testid="icon-tag-replace-file"
+            onChange={(event) => {
+              const chosen = event.currentTarget.files?.[0];
+              event.currentTarget.value = "";
+              if (chosen) replace(chosen);
+            }}
+          />
+          <button className="inspector-action-button" type="button" disabled={disabled || replacing} onClick={() => fileRef.current?.click()}>
+            <FolderOpen size={17} strokeWidth={2.5} />
+            <span>{replacing ? t("iconTag.building") : t("iconTag.replace")}</span>
+          </button>
+          {replaceError ? <p className="name-tag-hint icon-tag-card-error" role="alert">{replaceError}</p> : null}
+          <ShapePropertyRows properties={properties.slice(0, 1)} workspace={workspace} disabled={disabled} onInteractionActiveChange={onInteractionActiveChange} />
+          <LayerRows layers={stack.layers} firstLabel={t("iconTag.icon")} workspace={workspace} disabled={disabled} onChange={(layers) => onLayer({ layers })} onInteractionActiveChange={onInteractionActiveChange} />
+          <ShapePropertyRows properties={properties.slice(1)} workspace={workspace} disabled={disabled} onInteractionActiveChange={onInteractionActiveChange} />
+          <button className="inspector-action-button" type="button" disabled={disabled} onClick={fill}>
+            <Grid3x3 size={17} strokeWidth={2.5} />
+            <span>{t("iconTag.fill")}</span>
+          </button>
+          {fitNote ? <p className="name-tag-hint" role="status">{t("iconTag.fitsNone")}</p> : null}
+          <button className="inspector-action-button" type="button" disabled={disabled || count < 2} onClick={() => onCopies(count)}>
+            <Tags size={17} strokeWidth={2.5} />
+            <span>{t("iconTag.makeTags", { count })}</span>
+          </button>
         </div>
       ) : null}
     </div>
