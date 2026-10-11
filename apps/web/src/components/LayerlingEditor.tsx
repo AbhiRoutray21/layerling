@@ -9221,6 +9221,8 @@ export function LayerlingEditor({
     const nextSelection = (entry?.selectedIds ?? []).filter((id) => nextShapes.some((shape) => shape.id === id));
     const nextNotes = normalizeNotes(entry?.notes);
     const nextWorkplane = normalizePlacementWorkplane(entry?.placementWorkplane);
+    // A workplane that comes back or goes away is a step of its own - say so (#246).
+    const workplaneChanged = placementWorkplaneFingerprint(nextWorkplane) !== placementWorkplaneFingerprint(placementWorkplaneRef.current);
     const nextElevation = Math.abs(nextWorkplane.normal.x) < 1e-6
       && Math.abs(nextWorkplane.normal.y - 1) < 1e-6
       && Math.abs(nextWorkplane.normal.z) < 1e-6
@@ -9240,7 +9242,9 @@ export function LayerlingEditor({
     setPlacementWorkplane(nextWorkplane);
     setPlacementElevation(nextElevation);
     syncProjectShapes(nextShapes);
-    setNotice(modifierCancelled ? t("status.edgeCancelledUndo") : t("status.undo"));
+    setNotice(modifierCancelled
+      ? t("status.edgeCancelledUndo")
+      : workplaneChanged ? t(placementWorkplaneIsBase(nextWorkplane) ? "status.undoWorkplaneBase" : "status.undoWorkplaneFace") : t("status.undo"));
   }, [invalidateCadModifierSession, setOpenGroupLevels, syncProjectShapes]);
 
   const redo = useCallback(() => {
@@ -9261,6 +9265,8 @@ export function LayerlingEditor({
     const nextSelection = (entry?.selectedIds ?? []).filter((id) => nextShapes.some((shape) => shape.id === id));
     const nextNotes = normalizeNotes(entry?.notes);
     const nextWorkplane = normalizePlacementWorkplane(entry?.placementWorkplane);
+    // A workplane that comes back or goes away is a step of its own - say so (#246).
+    const workplaneChanged = placementWorkplaneFingerprint(nextWorkplane) !== placementWorkplaneFingerprint(placementWorkplaneRef.current);
     const nextElevation = Math.abs(nextWorkplane.normal.x) < 1e-6
       && Math.abs(nextWorkplane.normal.y - 1) < 1e-6
       && Math.abs(nextWorkplane.normal.z) < 1e-6
@@ -9280,7 +9286,9 @@ export function LayerlingEditor({
     setPlacementWorkplane(nextWorkplane);
     setPlacementElevation(nextElevation);
     syncProjectShapes(nextShapes);
-    setNotice(modifierCancelled ? t("status.edgeCancelledRedo") : t("status.redo"));
+    setNotice(modifierCancelled
+      ? t("status.edgeCancelledRedo")
+      : workplaneChanged ? t(placementWorkplaneIsBase(nextWorkplane) ? "status.redoWorkplaneBase" : "status.redoWorkplaneFace") : t("status.redo"));
   }, [invalidateCadModifierSession, setOpenGroupLevels, syncProjectShapes]);
 
   /**
