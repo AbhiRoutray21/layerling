@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **Ctrl+Z works while a slider has the focus:** After moving a slider in a properties window (taper, size, angle ...) the slider kept the focus, and Ctrl+Z only said "Finish the current drag or transform before undoing" until you clicked into the workplane. Now Ctrl+Z and Ctrl+Y on a slider, checkbox, list or colour field leave it and undo or redo the last step straight away; in a text or number field they still undo the typing. Suggested by @kwjaarsveld-star in #243.
+
 ## 1.63.0
 
 - **Toolbar size:** A new setting under Settings → Appearance, **Toolbar size**, makes the ribbon on top and the camera controls on the left **Small** (75 %), **Medium** (as before) or **Large** (125 %) - room for the workplane on a laptop, bigger targets on a large screen. The existing icons are scaled by the browser through one CSS value, `--toolbar-scale`, so no icon was redrawn; the tool row grows or shrinks with them and the workplane moves along. With large buttons the ribbon's groups wrap onto a second row whenever the window is too narrow, at any width. The size is kept in the browser (`layerling.toolbarSize`) for every design, and applied before the page is drawn so the bar does not jump. The shape menu of the 3D editor scales with the bar, zoomed as a whole, and shows 5, 4 or 3 columns (Medium had 3 before); the other menus and pop-out panels, and the sketch editor's shape menu, keep their size.

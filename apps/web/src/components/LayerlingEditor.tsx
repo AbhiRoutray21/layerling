@@ -13968,14 +13968,26 @@ export function LayerlingEditor({
       }
       return target.isContentEditable || ["INPUT", "TEXTAREA", "SELECT"].includes(target.tagName);
     };
+    // A slider, checkbox or list keeps the focus after it was used but has no text to undo, so
+    // Ctrl+Z there is meant for the project (#243). A slider holds the current action while it has
+    // the focus: leave it first (that closes the history step), then run the key as if nothing had it.
+    const isNonTextControl = (target: EventTarget | null) =>
+      target instanceof HTMLSelectElement ||
+      (target instanceof HTMLInputElement && ["range", "checkbox", "radio", "color", "button"].includes(target.type));
 
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (isTypingTarget(event.target)) {
-        return;
-      }
-
       const key = event.key.toLowerCase();
       const shortcut = event.ctrlKey || event.metaKey;
+
+      if (isTypingTarget(event.target)) {
+        if (isNonTextControl(event.target) && shortcut && (key === "z" || key === "y")) {
+          event.preventDefault();
+          (event.target as HTMLElement).blur();
+          const { key: eventKey, ctrlKey, metaKey, shiftKey } = event;
+          window.setTimeout(() => document.body.dispatchEvent(new KeyboardEvent("keydown", { key: eventKey, ctrlKey, metaKey, shiftKey, bubbles: true })), 30);
+        }
+        return;
+      }
 
       if (splitSession) {
         return;

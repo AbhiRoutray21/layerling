@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "title": {
+      "de": "Rückgängig auch direkt am Regler",
+      "en": "Undo right from the slider"
+    },
+    "body": {
+      "de": "Nach dem Verstellen eines Reglers in einem Eigenschaftenfenster geht Strg+Z jetzt sofort, ohne vorher in die Arbeitsfläche zu klicken. So lassen sich Einstellungen wie die Verjüngung bequem ausprobieren und zurücknehmen.",
+      "en": "After moving a slider in a properties window, Ctrl+Z now works at once, without clicking into the workplane first. That makes it easy to try settings like taper and take them back."
+    }
+  }
+]
