@@ -1293,6 +1293,16 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .shell-openings-summary
   color: #a3521a;
 }
 
+:where(html[data-theme="dark"][data-palette="graphite"]) .edge-modifier-history-edit {
+  color: #8e5112;
+  background: #f9f9f9;
+  border: 1px solid #c7c7c7;
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .edge-modifier-history-edit:hover {
+  background: #f1f1f1;
+}
+
 :where(html[data-theme="dark"][data-palette="graphite"]) .edge-modifier-history-item strong {
   color: #6d4310;
 }
@@ -5648,6 +5658,16 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .edge-modifier-history-
   color: #6a6a6a;
   background: #292929;
   border-color: #3e3e3e;
+}
+
+html[data-theme="dark"]:where([data-palette="graphite"]) .edge-modifier-history-edit {
+  color: #bfbfbf;
+  background: #2d2d2d;
+  border-color: #4d4d4d;
+}
+
+html[data-theme="dark"]:where([data-palette="graphite"]) .edge-modifier-history-edit:hover {
+  background: #333333;
 }
 
 html[data-theme="dark"]:where([data-palette="graphite"]) .edge-modifier-history-actions span,

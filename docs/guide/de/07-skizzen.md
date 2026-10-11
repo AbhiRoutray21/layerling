@@ -55,6 +55,15 @@ Klicke auf einen Eckpunkt und wähle {{ui:sketch.filletCorner}} oder {{ui:sketch
 
 ![Die Ecke oben links wird mit 12 mm Radius verrundet.](shot:sketch-fillet)
 
+## Hilfslinien
+
+Eine Hilfslinie hilft dir beim Setzen von Punkten, ohne zum Körper zu gehören. Sie wird gestrichelt gezeichnet und zählt nie zum Umriss: Du kannst sie beliebig weit über die Form hinausziehen, ohne dass der Körper größer wird.
+
+- Schalte {{ui:sketch.construction}} in der Gruppe {{ui:sketch.group.draw}} ein. Neue Linien, auch die nach Maß, sind dann Hilfslinien. Mit dem Knopf schaltest du wieder auf normale Linien zurück.
+- Eine schon gezeichnete Linie machst du zur Hilfslinie, indem du sie anklickst und {{ui:sketch.makeConstruction}} wählst. {{ui:sketch.makeSolid}} macht sie wieder zu einer normalen Linie.
+- Neue Punkte rasten dort ein, wo eine Hilfslinie eine andere Linie kreuzt, ein blauer Ring zeigt es, und an den Enden der Hilfslinie. So legst du eine Ecke auf eine Mitte, in einen festen Abstand von der Kante oder auf einen Schnittpunkt, ohne zu rechnen.
+- Eine Hilfslinie schneidet den Umriss dort nicht auseinander, wo sie ihn kreuzt. Beim Rotieren darf sie auch rechts von der Achse liegen.
+
 ## Ein Körper daraus machen
 
 Klicke auf {{ui:sketch.finishSketch}}. Der Umriss steht als Körper auf der Arbeitsebene und trägt den Namen „Skizzenkörper“. In seinen Einstellungen änderst du die Höhe, die Farbe und alles Weitere wie bei jeder anderen Form. Änderst du seine Größe, baut layerling ihn kurz danach aus der Skizze neu auf, und die Skizze wächst mit. So bleibt er ein exakter Körper, an dem Fase und Rundung gehen, und beim nächsten Bearbeiten hat die Skizze die Größe, die der Körper hat.

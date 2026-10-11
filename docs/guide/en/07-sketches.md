@@ -55,6 +55,15 @@ Click a corner point and choose {{ui:sketch.filletCorner}} or {{ui:sketch.chamfe
 
 ![The corner at the top left is rounded with a 12 mm radius.](shot:sketch-fillet)
 
+## Construction lines
+
+A construction line helps you place points without becoming part of the body. It is drawn dashed and never counts as outline: you can pull it as far beyond the shape as you like and the body does not grow.
+
+- Switch on {{ui:sketch.construction}} in the {{ui:sketch.group.draw}} group. New lines, those typed by measure too, are then construction lines. The button switches back to normal lines.
+- A line you have drawn already becomes a construction line when you click it and choose {{ui:sketch.makeConstruction}}. {{ui:sketch.makeSolid}} makes it a normal line again.
+- New points snap to where a construction line crosses another line, a blue ring shows it, and to the ends of the construction line. That is how you put a corner on a middle, at a fixed distance from an edge or on a crossing, without calculating.
+- A construction line does not cut the outline apart where it crosses it. When revolving it may lie to the right of the axis too.
+
 ## Making a body from it
 
 Click {{ui:sketch.finishSketch}}. The outline stands as a body on the workplane. In its settings you change the height, the colour and everything else as with any other shape. When you resize it, layerling builds it again from the sketch a moment later, and the sketch grows with it. So it stays an exact body that takes chamfers and fillets, and the next time you edit it the sketch has the size the body has.

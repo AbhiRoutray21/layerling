@@ -372,6 +372,8 @@ type EdgeFeatureRevertOption = {
   targetName: string;
   createdAt: number;
   removesNewerCount: number;
+  /** Can be taken back and opened again with its value and edges (#227): the body's own, with its edges noted. */
+  editable: boolean;
 };
 type ManifoldSolid = ReturnType<ManifoldToplevel["Manifold"]["cube"]>;
 type GroupBuildResult = {
@@ -1850,6 +1852,7 @@ function edgeTreatmentHistoryOptions(shape: WorkplaneShape, path: number[] = [],
     targetName,
     createdAt: entry.createdAt,
     removesNewerCount: Math.max(0, ownHistory.length - index - 1),
+    editable: path.length === 0 && (entry.feature.kind === "shell" || Boolean(entry.feature.edgeIds?.length)),
   }));
   const childOptions = (shape.groupedShapes ?? []).flatMap((child, index) =>
     edgeTreatmentHistoryOptions(child, [...path, index], `${targetName} / ${child.name}`),
@@ -6676,6 +6679,10 @@ export function LayerlingEditor({
   // A text with a fill mode draws plain until the 2D kernel is there, then again properly (#215).
   useEffect(() => onManifoldReady(() => setCustomFontRound((round) => round + 1)), []);
   const edgeModifierRef = useRef<EdgeModifierSession | null>(null);
+  // "Edit" on a stored fillet or chamfer (#227): the body is taken back first, then the tool opens with these.
+  const edgeEditRequestRef = useRef<{ shapeId: string; historyLength: number; preset: { kind: CadModifierKind; amount: number; chamferAngle: number; edgeIds: number[] } } | null>(null);
+  const edgeModifierPresetRef = useRef<{ kind: CadModifierKind; amount: number; chamferAngle: number; edgeIds: number[] } | null>(null);
+  const [edgeEditRound, setEdgeEditRound] = useState(0);
   const cadModifierWorkerRef = useRef<Worker | null>(null);
   const cadModifierPendingRef = useRef(new Map<number, {
     resolve: (message: CadModifierWorkerResponse) => void;
@@ -6792,17 +6799,27 @@ export function LayerlingEditor({
         const gesenkteSchwelle = message.selectableEdgeIds.length === 0
           ? rescueSharpAngleForEdges(message.edges, edgeModifierRef.current?.sharpAngle ?? 25)
           : null;
-        setEdgeModifier((current) => current ? {
-          ...current,
-          edges: message.edges,
-          sharpAngle: gesenkteSchwelle ?? current.sharpAngle,
-          selectedEdgeIds: [],
-          busy: false,
-          prepared: true,
-          preview: null,
-          componentPreviews: [],
-          error: message.selectableEdgeIds.length || gesenkteSchwelle ? null : t("edge.noManifoldEdges"),
-        } : current);
+        // An "Edit" brings the value and the edges the treatment had (#227).
+        const preset = edgeModifierPresetRef.current;
+        edgeModifierPresetRef.current = null;
+        const existingEdgeIds = new Set(message.edges.map((edge) => edge.id));
+        setEdgeModifier((current) => {
+          if (!current) return current;
+          // Judged here and not on the ref: the answer can come before the session is drawn.
+          const presetEdgeIds = preset && current.kind === preset.kind ? preset.edgeIds.filter((edgeId) => existingEdgeIds.has(edgeId)) : [];
+          return {
+            ...current,
+            edges: message.edges,
+            sharpAngle: gesenkteSchwelle ?? current.sharpAngle,
+            selectedEdgeIds: presetEdgeIds,
+            ...(preset && presetEdgeIds.length ? { amount: preset.amount, chamferAngle: preset.chamferAngle } : {}),
+            busy: presetEdgeIds.length > 0,
+            prepared: true,
+            preview: null,
+            componentPreviews: [],
+            error: message.selectableEdgeIds.length || gesenkteSchwelle ? null : t("edge.noManifoldEdges"),
+          };
+        });
         if (message.selectableEdgeIds.length) setNotice(t("status.selectHighlightedEdges"), true);
         else if (gesenkteSchwelle) setNotice(t("status.sharpAngleLowered", { angle: gesenkteSchwelle }), true);
         return;
@@ -7938,6 +7955,52 @@ export function LayerlingEditor({
       restored.shape.id,
     );
     setNotice(t("status.removedFeature", { label: restored.label }));
+  }, [commitShapes, invalidateCadModifierSession, selectedEdgeFeatureCount, selectedEdgeHistoryOptions, selectedShape]);
+
+  // "Edit" on a stored treatment (#227): it is taken back as in the list, and the tool opens again with
+  // its value and its edges to change. A fillet or chamfer waits for the body to be there again first.
+  const editEdgeTreatment = useCallback(async (optionId: string) => {
+    const option = selectedEdgeHistoryOptions.find((candidate) => candidate.id === optionId);
+    const entry = option && selectedShape && option.path.length === 0
+      ? (selectedShape.edgeTreatmentHistory ?? []).find((candidate) => candidate.id === option.entryId)
+      : undefined;
+    if (!selectedShape || !option || !entry) {
+      setNotice(t("status.chooseEdgeFeature"), true);
+      return;
+    }
+    if (selectedShape.locked) {
+      setNotice(t("status.unlockBeforeEdgeRemove"));
+      return;
+    }
+    const sourceFingerprint = projectShapesFingerprint([selectedShape]);
+    const sourceProjectId = projectInfoRef.current.projectId;
+    const restored = await restoreEdgeTreatmentInShape(selectedShape, option.path, option.entryId, workspaceSettingsRef.current.booleanTriangleLimit);
+    if (!restored) {
+      setNotice(selectedEdgeFeatureCount > 0 ? t("status.edgeNoUndoHistory") : t("status.noEdgeFeature"));
+      return;
+    }
+    const currentTarget = shapesRef.current.find((shape) => shape.id === selectedShape.id);
+    if (projectInfoRef.current.projectId !== sourceProjectId || !currentTarget || projectShapesFingerprint([currentTarget]) !== sourceFingerprint) {
+      setNotice(t("status.edgeRemoveChanged"));
+      return;
+    }
+    invalidateCadModifierSession();
+    commitShapes(
+      shapesRef.current.map((shape) => shape.id === selectedShape.id ? restored.shape : shape),
+      restored.shape.id,
+    );
+    const feature = entry.feature;
+    if (feature.kind === "shell") {
+      setShellTool({ thickness: feature.amount, openings: feature.openings ?? "top", edges: feature.shellEdges ?? "round", busy: false, error: null });
+    } else {
+      edgeEditRequestRef.current = {
+        shapeId: restored.shape.id,
+        historyLength: restored.shape.edgeTreatmentHistory?.length ?? 0,
+        preset: { kind: feature.kind, amount: feature.amount, chamferAngle: feature.chamferAngle ?? 45, edgeIds: feature.edgeIds ?? [] },
+      };
+      setEdgeEditRound((round) => round + 1);
+    }
+    setNotice(t("status.editingFeature", { label: restored.label }));
   }, [commitShapes, invalidateCadModifierSession, selectedEdgeFeatureCount, selectedEdgeHistoryOptions, selectedShape]);
 
   const commitSketchProfile = useCallback(
@@ -9738,6 +9801,16 @@ export function LayerlingEditor({
     armCadModifierWatchdog(prepareRequestId, "prepare", prepareTimeoutMs);
   }, [armCadModifierWatchdog, invalidateCadModifierSession, postCadModifierRequest, selectedShape, selectedShapes.length, stopCruise]);
 
+  // The body is back after an "Edit" (#227): open the tool on it with the value and the edges it had.
+  useEffect(() => {
+    const request = edgeEditRequestRef.current;
+    if (!request || !selectedShape || selectedShape.id !== request.shapeId) return;
+    if ((selectedShape.edgeTreatmentHistory?.length ?? 0) !== request.historyLength) return;
+    edgeEditRequestRef.current = null;
+    edgeModifierPresetRef.current = request.preset;
+    startEdgeModifier(request.preset.kind);
+  }, [edgeEditRound, selectedShape, startEdgeModifier]);
+
   const prepareCadModifierForMcp = useCallback(async (shape: WorkplaneShape, sharpAngle: number) => {
     if (shape.locked || shape.hole) {
       throw new Error("Select one unlocked solid object for edge treatment");
@@ -9880,6 +9953,7 @@ export function LayerlingEditor({
       kind,
       amount,
       edgeCount: selectedEdgeIds.length,
+      edgeIds: [...selectedEdgeIds],
       ...(kind === "chamfer" ? { chamferAngle } : {}),
     } satisfies NonNullable<WorkplaneShape["edgeTreatments"]>[number];
     const session: EdgeModifierSession = {
@@ -10182,6 +10256,7 @@ export function LayerlingEditor({
       kind: edgeModifier.kind,
       amount: edgeModifier.amount,
       edgeCount: edgeModifier.selectedEdgeIds.length,
+      edgeIds: [...edgeModifier.selectedEdgeIds],
       ...(edgeModifier.kind === "chamfer" ? { chamferAngle: edgeModifier.chamferAngle } : {}),
     } satisfies NonNullable<WorkplaneShape["edgeTreatments"]>[number];
     const createdAt = Date.now();
@@ -14839,6 +14914,7 @@ export function LayerlingEditor({
           })}
           onClear={() => setEdgeModifier((current) => current?.prepared ? { ...current, selectedEdgeIds: [], preview: null, busy: false, error: t("edge.selectAtLeastOne") } : current)}
           onRemoveFeature={removeEdgeTreatment}
+          onEditFeature={editEdgeTreatment}
           onApply={applyEdgeModifier}
           onCancel={cancelEdgeModifier}
         />

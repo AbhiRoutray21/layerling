@@ -38,5 +38,25 @@
       "de": "Ein flach gelegter oder gekippter Körper erscheint unter der Skizze so, wie er auf der Platte steht, nicht mehr wie beim Erzeugen. Bei einer gesetzten Arbeitsebene gilt das jetzt auch für die Rotationsskizze, die bisher die Grundplatte zeigte.",
       "en": "A body laid flat or tilted now shows under the sketch the way it sits on the plate, not as it was made. With a workplane set, the revolve sketch follows it too; it used to show the base plate."
     }
+  },
+  {
+    "title": {
+      "de": "Hilfslinien in der Skizze",
+      "en": "Construction lines in the sketch"
+    },
+    "body": {
+      "de": "Neuer Knopf „Hilfslinie“ beim Zeichnen: Die Linie wird gestrichelt, gehört nie zum Körper, und Punkte rasten an ihren Enden und Kreuzungen ein. Eine gewählte Linie lässt sich ebenfalls zur Hilfslinie machen und zurück.",
+      "en": "A new \"Construction line\" button for drawing: the line is dashed, never part of the body, and points snap to its ends and crossings. A selected line can be made a construction line and back."
+    }
+  },
+  {
+    "title": {
+      "de": "Fase, Verrundung und Aushöhlung später ändern",
+      "en": "Change a fillet, chamfer or hollowing later"
+    },
+    "body": {
+      "de": "In der Liste des Kantenwerkzeugs steht neben jeder neuen Bearbeitung ein Knopf „Ändern“. Er nimmt sie zurück und öffnet das Werkzeug gleich wieder mit denselben Kanten und dem alten Wert, den du änderst und neu anwendest.",
+      "en": "The list in the edge tool has an \"Edit\" button next to every new treatment. It takes it back and opens the tool again with the same edges and the old value, which you change and apply again."
+    }
   }
 ]

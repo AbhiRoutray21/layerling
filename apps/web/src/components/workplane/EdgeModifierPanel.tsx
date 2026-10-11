@@ -3,7 +3,7 @@
 import { GuideHelpLink } from "@/components/GuideHelpLink";
 import { MovableToolPanel } from "@/components/workplane/MovableToolPanel";
 import { useEffect, useState, type CSSProperties } from "react";
-import { Check, LoaderCircle, Minus, Plus, RotateCcw, X } from "lucide-react";
+import { Check, LoaderCircle, Minus, Pencil, Plus, RotateCcw, X } from "lucide-react";
 import { displayStepFromMillimeters, displayToMillimeters, formatMeasurementNumber, lengthDisplayUnit, millimetersToDisplay, parseMeasurementInput } from "@/lib/measurementUnits";
 import type { CadModifierKind, CadModifierQuality } from "@/lib/cadModifierTypes";
 import { CAD_MODIFIER_MAX_SHARP_ANGLE, cadModifierUserErrorMessage, edgeModifierSelectionStatus } from "@/lib/cadModifierRuntime";
@@ -32,6 +32,8 @@ type EdgeHistoryOption = {
   edgeCount: number;
   targetName: string;
   removesNewerCount: number;
+  /** Opens the tool again with the value and edges it had. */
+  editable: boolean;
 };
 
 /** Der gespeicherte Text ist englisch - fuer die Tafel wird er neu gesetzt. */
@@ -183,6 +185,7 @@ export function EdgeModifierPanel({
   onSelectTop,
   onClear,
   onRemoveFeature,
+  onEditFeature,
   onApply,
   onCancel,
 }: {
@@ -218,6 +221,8 @@ export function EdgeModifierPanel({
   onSelectTop?: () => void;
   onClear: () => void;
   onRemoveFeature: (id: string) => void;
+  /** Takes a treatment back and opens the tool again with its value and edges (#227). */
+  onEditFeature?: (id: string) => void;
   onApply: () => void;
   onCancel: () => void;
 }) {
@@ -279,16 +284,24 @@ export function EdgeModifierPanel({
             <div className="edge-modifier-history-list">
               <p className="edge-modifier-history-hint">{t("edge.revertHint")}</p>
               {historyOptions.map((option) => (
-                <button className="edge-modifier-history-item" type="button" key={option.id} onClick={() => onRemoveFeature(option.id)}>
-                  <RotateCcw size={14} />
-                  <span>
-                    <strong>{`${t("edge.revertAction")}: ${edgeHistoryLabel(option)}`}</strong>
-                    <small>{option.targetName}</small>
-                    {option.removesNewerCount > 0 ? (
-                      <small className="edge-modifier-history-warning">{t("edge.alsoRemovesNewer", { count: option.removesNewerCount })}</small>
-                    ) : null}
-                  </span>
-                </button>
+                <div className="edge-modifier-history-row" key={option.id}>
+                  <button className="edge-modifier-history-item" type="button" onClick={() => onRemoveFeature(option.id)}>
+                    <RotateCcw size={14} />
+                    <span>
+                      <strong>{`${t("edge.revertAction")}: ${edgeHistoryLabel(option)}`}</strong>
+                      <small>{option.targetName}</small>
+                      {option.removesNewerCount > 0 ? (
+                        <small className="edge-modifier-history-warning">{t("edge.alsoRemovesNewer", { count: option.removesNewerCount })}</small>
+                      ) : null}
+                    </span>
+                  </button>
+                  {option.editable && onEditFeature ? (
+                    <button className="edge-modifier-history-edit" type="button" title={t("edge.editHint")} onClick={() => onEditFeature(option.id)}>
+                      <Pencil size={14} />
+                      <span>{t("edge.editAction")}</span>
+                    </button>
+                  ) : null}
+                </div>
               ))}
             </div>
           ) : null}

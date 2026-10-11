@@ -419,6 +419,8 @@ export type EdgeTreatmentFeature = {
   kind: "fillet" | "chamfer" | "shell";
   amount: number;
   edgeCount: number;
+  /** The edges picked, as the tool numbered them on the body before this treatment: "Edit" picks them again (#227). */
+  edgeIds?: number[];
   chamferAngle?: number;
   openings?: ShellOpenings;
   /** Only for "shell"; missing means "round". */
