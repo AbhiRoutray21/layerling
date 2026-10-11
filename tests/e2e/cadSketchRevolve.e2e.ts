@@ -82,6 +82,10 @@ describe("a revolved sketch as an exact solid, with the real OCCT kernel", () =>
     expect(kernel.isValid(dome)).toBe(true);
     // A Bezier quarter circle is within a few hundredths of a percent of the true arc.
     expect(Math.abs(kernel.getVolume(dome) / ((2 / 3) * Math.PI * 20 ** 3) - 1)).toBeLessThan(0.002);
+    // The quarter circle is built as an arc, so the dome is a true sphere surface (type 4 in the BREP text), not a free-form revolution.
+    const brep = kernel.toBREP(dome);
+    const surfaces = brep.slice(brep.indexOf("Surfaces"), brep.indexOf("TShapes")).split(String.fromCharCode(10)).map((row) => row.split(" ")[0]);
+    expect(surfaces).toContain("4");
   });
 
   it("leaves a ring as a ring when the profile has a hole in it", () => {

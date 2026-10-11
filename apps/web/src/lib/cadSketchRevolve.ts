@@ -1,5 +1,6 @@
 import type { OcctKernel, ShapeHandle } from "occt-wasm";
 import { cadSketchRegions, type OrderedCadSketchPath } from "@/lib/sketchCadProfile";
+import { circularArcMidpoint } from "@/lib/sketchCircularArc";
 import { solidSketchProfile } from "@/lib/sketchConstruction";
 import type { SketchProfile } from "@/types/layerling";
 
@@ -31,6 +32,9 @@ function sectionWire(cad: OcctKernel, path: OrderedCadSketchPath, maxZ: number) 
     const first = forward ? from.handleOut : from.handleIn;
     const second = forward ? to.handleIn : to.handleOut;
     if (segment.kind !== "line" && first && second) {
+      // A rounded corner turns into a torus piece, not a free-form surface.
+      const middle = circularArcMidpoint(from, first, second, to);
+      if (middle) return cad.makeArcEdge(map(from), map(middle), map(to));
       return cad.makeBezierEdge([map(from), map(first), map(second), map(to)]);
     }
     return cad.makeLineEdge(map(from), map(to));
