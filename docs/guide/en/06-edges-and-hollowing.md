@@ -58,6 +58,8 @@ Boxes, cups, cases and covers have one thing in common: they are empty inside, w
 
 The walls grow inward. The outside stays as it is.
 
+The {{ui:shell.edges}} only matter where the inner walls move apart - at a step in the body or around an opening. The corners of the cavity of a plain box are always sharp, with both settings. For a rounded inside, round the outside edges of the body first (see above), then hollow it: the inside follows with the radius minus the wall thickness.
+
 ![The result: a shell with a 3 mm wall, open at the top.](shot:hollow-result)
 
 ![The same box with only the front side open: a slot for a drawer.](shot:hollow-sides)

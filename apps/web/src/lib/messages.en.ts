@@ -474,6 +474,7 @@ export const MESSAGES_EN = {
   "shell.edges": "Inner edges",
   "shell.edges.round": "Rounded",
   "shell.edges.sharp": "Sharp",
+  "shell.edgesHint": "Applies where inner walls move apart, at a step or an opening. The corners of a plain box stay sharp inside - round its outside edges first to get a rounded inside.",
   "shell.apply": "Hollow",
   "shell.working": "Hollowing…",
   "shell.cancel": "Cancel hollowing",

@@ -140,6 +140,7 @@ export function ShellPanel({
             </button>
           ))}
         </div>
+        <span className="shell-openings-summary">{t("shell.edgesHint")}</span>
       </div>
 
       {error ? <div className="edge-modifier-error" role="alert">{cadModifierUserErrorMessage(error)}</div> : null}

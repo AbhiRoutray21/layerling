@@ -473,6 +473,7 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "shell.edges": "Innere Kanten",
   "shell.edges.round": "Gerundet",
   "shell.edges.sharp": "Scharfkantig",
+  "shell.edgesHint": "Gilt dort, wo Innenwände auseinanderlaufen, an einer Stufe oder Öffnung. Die Ecken eines einfachen Quaders bleiben innen scharf - runde zuerst seine Außenkanten, dann wird auch das Innere rund.",
   "shell.apply": "Aushöhlen",
   "shell.working": "Wird ausgehöhlt…",
   "shell.cancel": "Aushöhlen abbrechen",

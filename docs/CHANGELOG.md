@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **The Hollow tool explains its "Inner edges" switch:** Rounded and Sharp only differ where the inner walls move apart, at a step or around an opening, so the cavity of a plain box looked the same with both and seemed to ignore the switch. A note under the switch now says so and how to get a rounded inside (round the outside edges first, then hollow), and the guide says the same. Reported by @slammerfox in #245.
+
 - **Ctrl+Z works while a slider has the focus:** After moving a slider in a properties window (taper, size, angle ...) the slider kept the focus, and Ctrl+Z only said "Finish the current drag or transform before undoing" until you clicked into the workplane. Now Ctrl+Z and Ctrl+Y on a slider, checkbox, list or colour field leave it and undo or redo the last step straight away; in a text or number field they still undo the typing. Suggested by @kwjaarsveld-star in #243.
 
 ## 1.63.0
