@@ -1073,6 +1073,12 @@ export function WorkspaceSettingsModal({
                     checked={workspace.showPlateLabels}
                     onChange={(showPlateLabels) => patchWorkspace({ showPlateLabels })}
                   />
+                  <WorkspaceToggle
+                    label={t("workspace.gridLinesGrow")}
+                    description={t("workspace.gridLinesGrowHint")}
+                    checked={workspace.gridLinesGrow}
+                    onChange={(gridLinesGrow) => patchWorkspace({ gridLinesGrow })}
+                  />
                   <WorkspaceSelect
                     label={t("workspace.size")}
                     value={workspace.sizePreset}

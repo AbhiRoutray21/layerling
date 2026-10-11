@@ -378,6 +378,8 @@ export const MESSAGES_EN = {
   "workspace.surfaceColor": "Workplane under the grid (light theme)",
   "workspace.showAxes": "Axis arrows",
   "workspace.showPlateLabels": "Plate labels",
+  "workspace.gridLinesGrow": "Grid lines grow when zooming",
+  "workspace.gridLinesGrowHint": "The grid lines also lie on the plate as bands that get thicker as you zoom in, as in Tinkercad. Off, they stay one pixel wide at every zoom, as in the sketch.",
   "workspace.showPlateLabelsHint": "Writes the design's name on the plate, and the printer's name and build volume when a printer is chosen.",
   "workspace.showAxesHint": "Shows arrows for X (red, to the right), Y (green, to the back) and Z (blue, up) at the front left corner of the plate - the way the numbers count.",
   "workspace.edgeLines": "Edge lines on all bodies",

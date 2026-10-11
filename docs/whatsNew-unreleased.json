@@ -8,5 +8,15 @@
       "de": "Die Tooltips der Leiste zeigen jetzt das Tastenkürzel, wo es eins gibt, zum Beispiel „Spiegeln (M)“. Neu ist B für die Verrundung und Umschalt+B für die Fase, beide für den gewählten Körper.",
       "en": "The ribbon's tooltips now show the keyboard shortcut where there is one, for example \"Mirror (M)\". New: B for the fillet and Shift+B for the chamfer, both for the selected body."
     }
+  },
+  {
+    "title": {
+      "de": "Gitterlinien dünn halten",
+      "en": "Keep grid lines thin"
+    },
+    "body": {
+      "de": "Unter Einstellungen → Arbeitsebene gibt es den Schalter „Gitterlinien wachsen beim Zoomen“. Aus bleiben die Linien bei jedem Zoom einen Pixel breit, wie in der Skizze. Standardmäßig bleibt alles wie bisher.",
+      "en": "Settings → Workplane has a new switch, \"Grid lines grow when zooming\". Off, the lines stay one pixel wide at every zoom, as in the sketch. By default everything stays as it was."
+    }
   }
 ]

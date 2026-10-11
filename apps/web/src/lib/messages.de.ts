@@ -377,6 +377,8 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "workspace.surfaceColor": "Arbeitsebene unter dem Raster (helles Thema)",
   "workspace.showAxes": "Achsenpfeile",
   "workspace.showPlateLabels": "Beschriftung der Platte",
+  "workspace.gridLinesGrow": "Gitterlinien wachsen beim Zoomen",
+  "workspace.gridLinesGrowHint": "Die Gitterlinien liegen auch als Bänder auf der Platte, die beim Hineinzoomen dicker werden, wie bei Tinkercad. Aus bleiben sie bei jedem Zoom einen Pixel breit, wie in der Skizze.",
   "workspace.showPlateLabelsHint": "Schreibt den Namen des Entwurfs und, wenn ein Drucker gewählt ist, seinen Namen und Bauraum auf die Platte.",
   "workspace.showAxesHint": "Zeigt am vorderen linken Eck der Platte Pfeile für X (rot, nach rechts), Y (grün, nach hinten) und Z (blau, nach oben) - so wie die Zahlen zählen.",
   "workspace.edgeLines": "Kantenlinien an allen Körpern",

@@ -244,6 +244,8 @@ export type WorkplaneWorkspaceSettings = {
   showAxes: boolean;
   /** The design's name and the printer with its build volume, written on the plate (#192). */
   showPlateLabels: boolean;
+  /** The fine and darker grid lines also lie on the plate as bands that grow as you zoom in; off, they stay one pixel wide (#240). */
+  gridLinesGrow: boolean;
   /** Draw an edge line on every body, not only on selected and complex ones. */
   edgeLines: boolean;
   /** Colour of those edge lines. */

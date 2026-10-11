@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **Grid lines can stay thin when zooming:** The fine and darker lines of the grid are drawn twice - as a one-pixel line and as a band on the plate that grows as you zoom in, as in Tinkercad (#143) - so zoomed in they get thick. A new switch under Settings → Workplane, **Grid lines grow when zooming**, turns the bands off: the lines then stay one pixel wide at every zoom, as in the sketch. It is on by default. Suggested in #240.
+
 - **Shortcuts in the tooltips, and B for the fillet:** The tooltip of a tool in the ribbon now shows its keyboard shortcut - "Mirror (M)", "Group (Ctrl+G)" - where it has one, from the same list the command search (Ctrl+K) shows. The fillet and the chamfer had none: **B** opens the fillet and **Shift+B** the chamfer for the selected body, and pressing it again closes the tool. They are in the shortcut list and the guide. Suggested in #242.
 
 ## 1.62.3

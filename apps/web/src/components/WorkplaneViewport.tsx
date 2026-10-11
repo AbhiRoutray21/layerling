@@ -10563,6 +10563,7 @@ function rebuildWorkplane(
         state.palette,
         true,
         majorLineColor,
+        workspace.gridLinesGrow !== false,
       ));
     } else if (workspace.showGrid) {
       group.add(createGridLines(
@@ -10574,6 +10575,7 @@ function rebuildWorkplane(
         state.palette,
         false,
         majorLineColor,
+        workspace.gridLinesGrow !== false,
       ));
       const labelPalette = workplaneGridPalette(theme, lineColor, state.palette).major;
       // The design's name in the near left corner, so a screenshot of the scene
@@ -10908,6 +10910,7 @@ function createGridLines(
   paletteName: AppThemePalette = "default",
   outlineOnly = false,
   majorColor = "",
+  linesGrow = true,
 ) {
   const group = new THREE.Group();
   const palette = workplaneThemePalette(theme, DEFAULT_WORKSPACE.background, gridColor, paletteName, undefined, majorColor).grid;
@@ -10944,12 +10947,14 @@ function createGridLines(
 
   group.add(linesFromPoints(minorPoints, minor));
   group.add(linesFromPoints(majorPoints, major));
+  group.add(linesFromPoints(axisPoints, axis));
+  group.add(linesFromPoints(borderPoints, border));
+  // Switched off (#240), every line stays one pixel wide whatever the zoom, as in the sketch.
+  if (!linesGrow) return group;
   const gridBands = workplaneGridBandWidths(layout.step);
   // The darker lines first, so they stay whole where a fine line crosses them.
   if (majorBands.length) group.add(bandsFromSegments(majorBands, gridBands.major, palette.major, { order: 1 }));
   if (minorBands.length) group.add(bandsFromSegments(minorBands, gridBands.minor, palette.minor, { order: 1.5 }));
-  group.add(linesFromPoints(axisPoints, axis));
-  group.add(linesFromPoints(borderPoints, border));
 
   // A line is one pixel wide whatever the zoom, so the centre cross and the border also get
   // a narrow band on the plate: stronger, and growing as you zoom in, as in Tinkercad (#143).
