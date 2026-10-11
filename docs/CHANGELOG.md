@@ -4,6 +4,10 @@ layerling started over at 1.0.0 when it was forked from SketchForge-3D 1.0.9.
 Everything from 1.0.9 downwards is SketchForge's history, kept here because the
 code still carries it - so a lower number further down is older, not newer.
 
+## Unreleased
+
+- **The bug report is a ZIP:** "Bug report" in the footer saved a `.lyl`, and GitHub does not accept that ending, so the file could not be attached to an issue or a discussion. It now saves a ZIP with the design as a `.lyl` and the text with the version, browser and last messages next to it. The start page opens the ZIP like a backup, or you unpack it and open the `.lyl`; the bug report form on GitHub points to it. Suggested after a report in #234 could not attach its file.
+
 ## 1.62.1
 
 - **The key ring tab as a printed one:** The tab of a name tag's key ring hole is now 6.5 mm wide round a 3 mm hole - a 1.75 mm wall either side - and sticks out 6.75 mm, the hole's edge 2 mm beyond the plate; the hole is 3 mm by default (it was 1.85 mm in a 4.34 mm tab, 2.5 mm clear). The tab still grows with the hole. **Make layers** on a plain text now starts a name tag at 9 mm letters too, as the shape library's Name tag does. Measured on a printed tag by @plazmabokor in #215.

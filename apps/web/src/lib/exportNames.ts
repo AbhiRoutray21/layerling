@@ -1,4 +1,4 @@
-export type ProjectExportFormat = "stl" | "3mf" | "obj" | "step" | "svg" | "png" | "lyl";
+export type ProjectExportFormat = "stl" | "3mf" | "obj" | "step" | "svg" | "png" | "lyl" | "zip";
 
 export function projectExportFileName(projectName: string, format: ProjectExportFormat) {
   const safeProjectName = projectName

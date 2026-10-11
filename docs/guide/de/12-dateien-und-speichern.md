@@ -65,7 +65,7 @@ Schneiden, Vereinigen und Schnittmengen mit einem importierten Netz werden in de
 
 ## Einen Fehler melden
 
-Macht layerling etwas Unerwartetes, speichere einen {{ui:editor.bugReport}}: Der Link steht unten in der Fußzeile neben dem Forum. Das ist eine gewöhnliche .lyl-Datei mit deinem Entwurf, die sich in layerling öffnen lässt. Darin liegt zusätzlich eine kurze Textdatei mit Version, Browser, Bildschirmgröße, den letzten Meldungen und aufgetretenen Fehlern. Persönliches steht nicht darin. Häng die Datei an deinen Beitrag im Forum oder bei GitHub, dann lässt sich der Fehler mit genau deinem Entwurf nachstellen.
+Macht layerling etwas Unerwartetes, speichere einen {{ui:editor.bugReport}}: Der Link steht unten in der Fußzeile neben dem Forum. Das ist eine ZIP-Datei, weil GitHub und viele Foren eine bloße .lyl ablehnen: Darin liegen dein Entwurf als .lyl und eine kurze Textdatei mit Version, Browser, Bildschirmgröße, den letzten Meldungen und aufgetretenen Fehlern. Die Startseite öffnet das ZIP wie eine Sicherung, oder du entpackst es und öffnest die .lyl. Persönliches steht nicht darin. Häng die Datei an deinen Beitrag im Forum oder bei GitHub, dann lässt sich der Fehler mit genau deinem Entwurf nachstellen.
 
 Bleibt layerling mit einem Fehler stehen, erscheint statt einer leeren Seite ein Fenster mit der Fehlermeldung. Darin sicherst du den zuletzt im Browser gespeicherten Stand des Entwurfs als .lyl-Datei, kehrst zur Übersicht zurück oder beginnst einen neuen Entwurf. Die Fehlermeldung aus dem Fenster und die gesicherte Datei helfen beim Melden.
 

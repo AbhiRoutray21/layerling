@@ -42,4 +42,4 @@ body:
     id: media
     attributes:
       label: Screenshots or recordings
-      description: Add screenshots, recordings, or sample STL files if they help.
+      description: Add screenshots, recordings, or sample STL files if they help. A design helps most - use "Bug report" in the footer of the editor and attach the ZIP it saves.

@@ -13526,8 +13526,14 @@ export function LayerlingEditor({
         sketchPlacementWorkplane: placementWorkplane,
         extraFiles: { [BUG_REPORT_FILE]: new TextEncoder().encode(text) },
       });
-      const buffer = bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength) as ArrayBuffer;
-      await downloadBlobFile(projectExportFileName(`${projectName}-${t("bugReport.fileSuffix")}`, "lyl"), new Blob([buffer], { type: LYL_MEDIA_TYPE }));
+      // A ZIP, because GitHub and many forums refuse a file ending in .lyl: the design as a .lyl and the
+      // report as text, side by side. The start page opens such a ZIP like a backup, and the text reads without layerling.
+      const zip = packBackup([
+        { name: projectExportFileName(projectName, "lyl"), bytes },
+        { name: BUG_REPORT_FILE, bytes: new TextEncoder().encode(text) },
+      ]);
+      const buffer = zip.buffer.slice(zip.byteOffset, zip.byteOffset + zip.byteLength) as ArrayBuffer;
+      await downloadBlobFile(projectExportFileName(`${projectName}-${t("bugReport.fileSuffix")}`, "zip"), new Blob([buffer], { type: "application/zip" }));
       setNotice(t("status.bugReportSaved"), true);
     } catch (error) {
       setNotice(error instanceof Error ? localizedError(error.message) : t("status.saveProjectFailed"));

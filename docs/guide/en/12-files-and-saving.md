@@ -65,7 +65,7 @@ Cutting, merging and intersecting an imported mesh is calculated in your browser
 
 ## Reporting a bug
 
-If layerling does something unexpected, save a {{ui:editor.bugReport}}: the link sits in the footer at the bottom, next to the forum. It is an ordinary .lyl file with your design that opens in layerling, and it also carries a short text file with the version, browser, screen size, the last messages and any errors. Nothing personal is in it. Attach the file to your post in the forum or on GitHub, so the problem can be followed with exactly your design.
+If layerling does something unexpected, save a {{ui:editor.bugReport}}: the link sits in the footer at the bottom, next to the forum. It is a ZIP file, because GitHub and many forums refuse a bare .lyl: inside are your design as a .lyl and a short text file with the version, browser, screen size, the last messages and any errors. The start page opens the ZIP like a backup, or you unpack it and open the .lyl. Nothing personal is in it. Attach the file to your post in the forum or on GitHub, so the problem can be followed with exactly your design.
 
 If layerling stops with an error, a window with the error message shows instead of a blank page. From it you can save the state of the design last stored in the browser as a .lyl file, go back to the overview, or start a new design. The error message from the window and the saved file help when you report it.
 
