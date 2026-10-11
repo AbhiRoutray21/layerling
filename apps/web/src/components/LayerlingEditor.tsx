@@ -119,7 +119,7 @@ import { SHELL_SIDES, shellMaxThickness, shellOpeningsFor, shellOpenSides } from
 import { circleStepDegrees, clampArrayCount, moveAlongRadius, rotateAroundVertical, rowOffset, singleAxisSpacing, type ArraySettings } from "@/lib/shapeArray";
 import { bedOverhangs, printerPresetById, type BedOverhang } from "@/lib/printBed";
 import { SplitPanel } from "./workplane/SplitPanel";
-import { groupedContentScale, scaleGroupedVertices } from "@/lib/groupScale";
+import { groupedContentScale, groupedPartSizeScale, scaleGroupedVertices } from "@/lib/groupScale";
 import { dropSplitSlivers, unionSplitManifoldComponents } from "@/lib/manifoldSplit";
 import { NO_SPLIT_ROTATION, modelSplitPlane, snapSplitPositionToVertices, splitOrientationForNormal, splitAxisFromLabel, splitAxisLabel, splitPlaneIntersectsPoints, splitRotationAxes, splitShapeFromWorldPositions, type ModelSplitPlane, type SplitRotation } from "@/lib/modelSplit";
 import { GuideModal } from "./workplane/GuideModal";
@@ -5777,9 +5777,14 @@ function restoreGroupedChildren(group: WorkplaneShape): WorkplaneShape[] {
   const groupCenter = new THREE.Vector3(group.x, (group.elevation ?? 0) + group.height / 2, group.z);
 
   return children.map((child) => {
-    const width = shapeWidth(child) * sx;
-    const depth = shapeDepth(child) * sz;
-    const height = child.height * sy;
+    // The group stretches along its own axes; a turned part has its width, height and depth on others.
+    const childQuaternion = quaternionForShape(child);
+    const partAxes = [new THREE.Vector3(1, 0, 0), new THREE.Vector3(0, 1, 0), new THREE.Vector3(0, 0, 1)]
+      .map((axis) => axis.applyQuaternion(childQuaternion).toArray() as [number, number, number]) as [[number, number, number], [number, number, number], [number, number, number]];
+    const partScale = groupedPartSizeScale(partAxes, [sx, sy, sz]);
+    const width = shapeWidth(child) * partScale.width;
+    const depth = shapeDepth(child) * partScale.depth;
+    const height = child.height * partScale.height;
     const localCenter = new THREE.Vector3(
       child.x * sx * mirrorSign(group.mirrorX),
       (((child.elevation ?? 0) + child.height / 2) * sy - group.height / 2) * mirrorSign(group.mirrorY),

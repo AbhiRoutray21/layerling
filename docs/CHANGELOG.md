@@ -6,6 +6,7 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **A stretched bundle of turned parts cuts where it stands:** A bundle whose parts lie turned - bars on their side - and that was then made longer cut nothing, or in the wrong place, once it was grouped with a body: the stretch went to each part's width instead of the length that really runs along the bundle, so the bars grew fat instead of long. Grouping and Ungroup now stretch every part along its own axes. The picture in the editor was right all along. Reported by @danyvanimpe-lab in #234.
 - **The bug report is a ZIP:** "Bug report" in the footer saved a `.lyl`, and GitHub does not accept that ending, so the file could not be attached to an issue or a discussion. It now saves a ZIP with the design as a `.lyl` and the text with the version, browser and last messages next to it. The start page opens the ZIP like a backup, or you unpack it and open the `.lyl`; the bug report form on GitHub points to it. Suggested after a report in #234 could not attach its file.
 
 ## 1.62.1
