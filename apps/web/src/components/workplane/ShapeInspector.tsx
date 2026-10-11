@@ -158,7 +158,7 @@ import { textHasFill } from "@/lib/textFill";
 import { TEXT_FILL_CHOICES, textFillChoice, textLineSettingsInView, textStrokeForChoice, textStrokeWider, type TextFillChoice } from "@/lib/textFillChoice";
 import { MAX_TEXT_LAYERS, MAX_TEXT_LAYER_GROW, MIN_TEXT_LAYER_HEIGHT, namesFromList, type NameTagKeyring, type TextLayer } from "@/lib/textLayers";
 import { DEFAULT_KEYRING_DIAMETER, MIN_KEYRING_DIAMETER, TEXT_KEYRING_SIDES } from "@/lib/textGeometry";
-import { addTextLayer, MIN_LETTER_SIZE, MIN_NAME_TAG_LAYERS, NAME_TAG_GAP, NAME_TAG_LAYERS, removeTextLayer, textLetterSize, textLetterSizePatch, type NameTagStack } from "@/lib/nameTag";
+import { addTextLayer, MIN_LETTER_SIZE, MIN_NAME_TAG_LAYERS, NAME_TAG_GAP, NAME_TAG_LAYERS, NAME_TAG_LETTER_SIZE, removeTextLayer, textLetterSize, textLetterSizePatch, type NameTagStack } from "@/lib/nameTag";
 import { FONT_MANAGER_OPTION, requestFontManager } from "@/lib/fontManagerEvents";
 import { customFontList, textFontLabel } from "@/lib/textFonts";
 import { MIN_SLOT_END_RATIO, normalizeSlotEndRatio, taperedSlotOutline } from "@/lib/slotGeometry";
@@ -2671,12 +2671,12 @@ export type TextLayerPatch = { text?: string; font?: string; letterSize?: number
 
 /**
  * A plain text's way to a name tag (#215), first in its settings so a beginner finds it: one
- * click splits it into the default layers.
+ * click splits it into a name tag's layers, at a name tag's letter size - as the library's Name tag.
  */
 function MakeLayersButton({ disabled, onLayerText }: { disabled: boolean; onLayerText: (patch: TextLayerPatch) => void }) {
   return (
     <div className="name-tag-start">
-      <button className="inspector-action-button name-tag-start-button" type="button" disabled={disabled} onClick={() => onLayerText({ layers: [...NAME_TAG_LAYERS] })}>
+      <button className="inspector-action-button name-tag-start-button" type="button" disabled={disabled} onClick={() => onLayerText({ layers: [...NAME_TAG_LAYERS], letterSize: NAME_TAG_LETTER_SIZE })}>
         <Layers size={17} strokeWidth={2.5} />
         <span>{t("nameTag.makeLayers")}</span>
       </button>

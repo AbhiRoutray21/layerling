@@ -118,7 +118,7 @@ describe("a name tag from the panel as exact bodies (#215, real OCCT kernel)", (
     // Where the hole is, in the world: from the plate's centre, the side's direction, turned with the tag.
     const letters = textLayerShapes(sized(text({ x: 6, z: -4, rotation: 20 }), 12), DEFAULT_TEXT_LAYERS)[0];
     const half = side === "top" ? letters.depth / 2 : letters.width / 2;
-    // The hole's middle as the layer stores it, beyond the letters' box (the unit tests measure that it is 2.5 mm clear of the plate).
+    // The hole's middle as the layer stores it, beyond the letters' box (the unit tests measure that its edge is 2 mm beyond the plate).
     const reach = half + parts[2].textKeyring!.offset;
     const local = side === "left" ? { x: -reach, z: 0 } : side === "right" ? { x: reach, z: 0 } : { x: 0, z: -reach };
     const angle = (20 * Math.PI) / 180;
@@ -126,7 +126,7 @@ describe("a name tag from the panel as exact bodies (#215, real OCCT kernel)", (
     const middle = at(local.x, local.z);
     const y = (parts[2].elevation ?? 0) + parts[2].height / 2;
     expect(cad.containsPoint(solid, { x: middle.x, y, z: middle.z })).toBe(false);
-    // 3.3 mm from the hole's middle, away from the letters: inside the tab's half circle (2 to 4.7 mm).
+    // 3.3 mm from the hole's middle, away from the letters: inside the tab's half circle (2 to 3.75 mm).
     const out = side === "left" ? { x: -reach - 3.3, z: 0 } : side === "right" ? { x: reach + 3.3, z: 0 } : { x: 0, z: -reach - 3.3 };
     const ear = at(out.x, out.z);
     expect(cad.containsPoint(solid, { x: ear.x, y, z: ear.z })).toBe(true);

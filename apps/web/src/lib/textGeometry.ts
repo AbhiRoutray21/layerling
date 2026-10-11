@@ -75,16 +75,16 @@ export function textFillExtent(shape: Pick<WorkplaneShape, "textStroke">): numbe
 
 export const TEXT_KEYRING_SIDES: readonly TextKeyringSide[] = ["left", "right", "top"];
 /**
- * The ear of a name tag's key ring hole (#215), in the proportions of a tab plazmabokor measured
- * from a printed one: a straight-sided tab 2.35 times the hole wide (a 1.85 mm hole in a 4.34 mm
- * tab), its far end a half circle round the hole. The hole's edge stays 2.5 mm clear of the
- * bottom layer: of its real outline in the tab's band, not of its box.
+ * The ear of a name tag's key ring hole (#215), as the tab plazmabokor measured on a printed one:
+ * 6.5 mm wide round a 3 mm hole - a 1.75 mm wall either side - its far end a half circle round
+ * the hole. The hole's edge is 2 mm beyond the bottom layer, so the tab sticks out 6.75 mm. The
+ * walls and that distance stay as they are; the tab grows with the hole.
  */
-export const DEFAULT_KEYRING_DIAMETER = 1.85;
+export const DEFAULT_KEYRING_DIAMETER = 3;
 export const MIN_KEYRING_DIAMETER = 1;
 export const MAX_KEYRING_DIAMETER = 20;
-export const KEYRING_TAB_WIDTH_RATIO = 2.35;
-export const KEYRING_EDGE_GAP = 2.5;
+export const KEYRING_TAB_WALL = 1.75;
+export const KEYRING_HOLE_EDGE_DISTANCE = 2;
 /** A hole sits off the letters' box by up to this much either way: inside it where the letters are thin in the tab's band. */
 export const MAX_KEYRING_OFFSET = 1000;
 
@@ -122,9 +122,9 @@ export function textKeyringOf(shape: Pick<WorkplaneShape, "textKeyring" | "textC
   return shape.textCurved ? undefined : normalizeTextKeyring(shape.textKeyring);
 }
 
-/** The radius of the ear's half circle round a key ring hole of this diameter: half the tab's width. */
+/** The radius of the ear's half circle round a key ring hole of this diameter: half the tab's width, the hole and a wall either side. */
 export function keyringEarRadius(diameter: number) {
-  return (KEYRING_TAB_WIDTH_RATIO * diameter) / 2;
+  return diameter / 2 + KEYRING_TAB_WALL;
 }
 
 /**

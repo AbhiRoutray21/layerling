@@ -4,7 +4,9 @@ import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeAll, describe, expect, it } from "vitest";
 import * as THREE from "three";
 import { ShapeInspector, type TextLayerPatch } from "@/components/workplane/ShapeInspector";
+import { textLetterSize, textLetterSizePatch } from "@/lib/nameTag";
 import { createTextGeometry } from "@/lib/textGeometry";
+import { textLayerShapes } from "@/lib/textLayers";
 import { loadTextFonts } from "@/lib/textFonts";
 import { makeShapeFromAsset, toolbarShapeAssets } from "@/lib/shapeCatalog";
 import { DEFAULT_SNAP_GRID, DEFAULT_WORKPLANE_WORKSPACE } from "@/lib/workplaneSettings";
@@ -99,14 +101,22 @@ describe("letter size on a plain text (#215)", () => {
 });
 
 describe("Make layers on a plain text (#215)", () => {
-  it("splits it into the name tag's layers: 1.2, 1.2 and a 3 mm plate for the key ring tab", () => {
+  it("splits it into the name tag's layers at 9 mm letters: 1.2, 1.2 and a 3 mm plate for the key ring tab", () => {
     const patches: TextLayerPatch[] = [];
-    const shape = makeShapeFromAsset(toolbarShapeAssets.find((asset) => asset.kind === "text")!, { x: 0, z: 0 });
+    // A plain text whose capitals are 27.36 mm from above, as plazmabokor's was.
+    const asset = toolbarShapeAssets.find((entry) => entry.kind === "text")!;
+    const plain = { ...makeShapeFromAsset(asset, { x: 0, z: 0 }), text: "HI" };
+    const shape = { ...plain, ...textLetterSizePatch(plain, 27.36) };
+    expect(measured(shape).fromAbove).toBeCloseTo(27.36, 2);
     const panel = mount(shape, () => {}, (patch) => patches.push(patch));
     const button = panel.querySelector<HTMLButtonElement>(".name-tag-start-button");
     expect(button).not.toBeNull();
     act(() => button!.click());
     expect(patches).toHaveLength(1);
-    expect(patches[0].layers?.map((layer) => [layer.grow, layer.height, Boolean(layer.silhouette)])).toEqual([[0, 1.2, false], [1.5, 1.2, false], [3, 3, true]]);
+    const { layers, letterSize } = patches[0];
+    expect(layers?.map((layer) => [layer.grow, layer.height, Boolean(layer.silhouette)])).toEqual([[0, 1.2, false], [1.5, 1.2, false], [3, 3, true]]);
+    // Built as the editor builds it: the letter size set on the text, then the layers.
+    const letters = textLayerShapes({ ...shape, ...textLetterSizePatch(shape, letterSize ?? textLetterSize(shape)) }, layers!)[0];
+    expect(measured(letters).fromAbove).toBeCloseTo(9, 2);
   });
 });

@@ -4,6 +4,10 @@ layerling started over at 1.0.0 when it was forked from SketchForge-3D 1.0.9.
 Everything from 1.0.9 downwards is SketchForge's history, kept here because the
 code still carries it - so a lower number further down is older, not newer.
 
+## Unreleased
+
+- **The key ring tab as a printed one:** The tab of a name tag's key ring hole is now 6.5 mm wide round a 3 mm hole - a 1.75 mm wall either side - and sticks out 6.75 mm, the hole's edge 2 mm beyond the plate; the hole is 3 mm by default (it was 1.85 mm in a 4.34 mm tab, 2.5 mm clear). The tab still grows with the hole. **Make layers** on a plain text now starts a name tag at 9 mm letters too, as the shape library's Name tag does. Measured on a printed tag by @plazmabokor in #215.
+
 ## 1.62.0
 
 - **Construction lines in the sketch:** A line can now be a construction line: drawn dashed, never part of the outline, so it can run as far beyond the shape as you like without making the body bigger, and a revolve may have one right of the axis. The new **Construction line** button in the Draw group makes new lines - typed ones too - construction lines; a selected line has a button to make it one or a normal line again. Points snap to the ends of a construction line and to where it crosses another line (a blue ring shows it), so a corner can go on a middle or at a fixed distance from an edge without calculating. Where a construction line crosses the outline it does not cut it apart. Saved in `.lyl` as an optional `construction` on the line. Constraints were asked for too and are not planned: they need a solver, which layerling does not have. Asked for by @OE3JGW in #229.
