@@ -4796,6 +4796,66 @@ html[data-theme="dark"] .shell-openings-summary {
   overflow: visible;
 }
 
+/* The 3D editor's shape menu follows the toolbar size setting; the sketch
+   editor's menu (.sketch-shape-menu-dropdown) keeps its size. The browser
+   zooms the whole menu - pictures, names, spacing. Zoom also multiplies the
+   menu's own lengths, so everything measured from the window or the bar is
+   divided by the scale to land where it did at medium. */
+.shape-menu-dropdown:not(.sketch-shape-menu-dropdown) {
+  /* Small menus fit more columns, large ones fewer: 5, 4, 3. The width holds
+     that many 210px columns with their gaps, the list's padding and border,
+     and room for the scrollbar. */
+  --shape-menu-columns: 4;
+  --shape-menu-width: calc(var(--shape-menu-columns) * 210px + (var(--shape-menu-columns) - 1) * 4px + 34px);
+  zoom: var(--toolbar-scale);
+  top: calc(var(--editor-toolbar-tools-height) / var(--toolbar-scale));
+  width: min(var(--shape-menu-width), calc((100vw - 32px) / var(--toolbar-scale)));
+  max-height: min(650px, calc((100vh - 92px) / var(--toolbar-scale)));
+}
+
+html[data-toolbar-size="small"] .shape-menu-dropdown:not(.sketch-shape-menu-dropdown) {
+  --shape-menu-columns: 5;
+}
+
+html[data-toolbar-size="large"] .shape-menu-dropdown:not(.sketch-shape-menu-dropdown) {
+  --shape-menu-columns: 3;
+}
+
+.shape-menu-dropdown:not(.sketch-shape-menu-dropdown) .shape-menu-list {
+  grid-template-columns: repeat(var(--shape-menu-columns), minmax(0, 1fr));
+}
+
+.shape-menu-dropdown:not(.sketch-shape-menu-dropdown) .shape-menu-list,
+.shape-menu-dropdown:not(.sketch-shape-menu-dropdown) .shape-menu-body {
+  max-height: min(608px, calc((100vh - 136px) / var(--toolbar-scale)));
+}
+
+.shape-menu-dropdown:not(.sketch-shape-menu-dropdown) .shape-menu-body .shape-menu-list {
+  max-height: none;
+}
+
+/* The narrow window's menu hangs from the window below the bar (see the
+   max-width: 1240px block further down); the same lengths, divided. */
+@media (max-width: 1240px) {
+  .shape-menu-dropdown:not(.sketch-shape-menu-dropdown) {
+    top: calc(var(--editor-toolbar-height) / var(--toolbar-scale));
+    left: calc(10px / var(--toolbar-scale));
+    width: min(var(--shape-menu-width), calc((100vw - 20px) / var(--toolbar-scale)));
+    max-height: calc((100vh - var(--editor-toolbar-height) - 10px) / var(--toolbar-scale));
+    max-height: calc((100dvh - var(--editor-toolbar-height) - 10px) / var(--toolbar-scale));
+  }
+
+  .shape-menu-dropdown:not(.sketch-shape-menu-dropdown) .shape-menu-list,
+  .shape-menu-dropdown:not(.sketch-shape-menu-dropdown) .shape-menu-body {
+    max-height: none;
+  }
+
+  /* A narrow window may not hold all the columns: as many as fit, as before. */
+  .shape-menu-dropdown:not(.sketch-shape-menu-dropdown) .shape-menu-list {
+    grid-template-columns: repeat(auto-fill, minmax(206px, 1fr));
+  }
+}
+
 .shape-menu-subtitle {
   padding: 8px 15px 0;
   color: #8a6d4c;

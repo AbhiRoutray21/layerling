@@ -4,6 +4,10 @@ layerling started over at 1.0.0 when it was forked from SketchForge-3D 1.0.9.
 Everything from 1.0.9 downwards is SketchForge's history, kept here because the
 code still carries it - so a lower number further down is older, not newer.
 
+## Unreleased
+
+- **Toolbar size:** A new setting under Settings → Appearance, **Toolbar size**, makes the ribbon on top and the camera controls on the left **Small** (75 %), **Medium** (as before) or **Large** (125 %) - room for the workplane on a laptop, bigger targets on a large screen. The existing icons are scaled by the browser through one CSS value, `--toolbar-scale`, so no icon was redrawn; the tool row grows or shrinks with them and the workplane moves along. With large buttons the ribbon's groups wrap onto a second row whenever the window is too narrow, at any width. The size is kept in the browser (`layerling.toolbarSize`) for every design, and applied before the page is drawn so the bar does not jump. The shape menu of the 3D editor scales with the bar, zoomed as a whole, and shows 5, 4 or 3 columns (Medium had 3 before); the other menus and pop-out panels, and the sketch editor's shape menu, keep their size.
+
 ## 1.62.3
 
 - **Rounded corners of a sketch come out as true arcs:** A corner rounded in the sketch is stored as a curve, and the exact body built a free-form surface from it, which the viewer meshed unevenly - the wall showed patches of shading and a net of stray triangles. A curve that is a circular arc (every corner the fillet draws, and a circle drawn as curves) now goes to the kernel as an arc and becomes a plain cylinder wall: clean shading, fewer triangles, and an exact shape for the edge tool. Reported in the drucktipps3d forum.
