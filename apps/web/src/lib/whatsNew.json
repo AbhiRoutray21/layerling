@@ -1,5 +1,60 @@
 [
   {
+    "version": "1.62.2",
+    "items": [
+      {
+        "title": {
+          "de": "Gestrecktes Bündel schneidet richtig",
+          "en": "A stretched bundle cuts where it stands"
+        },
+        "body": {
+          "de": "Ein Bündel aus gedrehten Teilen, etwa Stäben auf der Seite, das du danach länger gezogen hast, schnitt beim Gruppieren nichts oder an der falschen Stelle. Die Teile werden jetzt entlang ihrer eigenen Achsen gestreckt, die Löcher liegen dort, wo du sie siehst.",
+          "en": "A bundle of turned parts, such as bars on their side, that you then made longer cut nothing or the wrong place when grouped. The parts are now stretched along their own axes, so the holes sit where you see them."
+        }
+      },
+      {
+        "title": {
+          "de": "Gerundete Kante an den Buchstaben",
+          "en": "A rounded edge on the letters"
+        },
+        "body": {
+          "de": "Die Karte des Namensschilds hat eine neue Zeile, Buchstabenkante: Keine, Rund oder Fase, mit einer Größe. So sehen die Buchstaben oben aus wie bei einem gedruckten Schild, für jede Schrift und jedes Wort, ohne das Bündel zu öffnen.",
+          "en": "The name tag card has a new row, Letter edge: None, Round or Chamfer, with a size. The letters on top then look like those of a printed tag, for every font and word, without opening the bundle."
+        }
+      },
+      {
+        "title": {
+          "de": "Aushöhlen mit Zurücknehmen und Ändern",
+          "en": "Hollow with Revert and Edit"
+        },
+        "body": {
+          "de": "Das Fenster zum Aushöhlen zeigt jetzt dieselbe Liste wie die Verrundung: Kantenbearbeitung zurücknehmen, mit Ändern neben jeder Aushöhlung. So lässt sich eine Wand später dünner oder dicker machen, ohne neu anzufangen.",
+          "en": "The Hollow window now shows the same list as the fillet: revert an edge treatment, with Edit next to every hollowing. A wall can be made thinner or thicker later without starting over."
+        }
+      },
+      {
+        "title": {
+          "de": "Verjüngen beim Text wieder da",
+          "en": "Taper is back for text"
+        },
+        "body": {
+          "de": "Die Karten Verjüngen und Verdrehen/Neigen sind für einen normalen Text wieder da, mit denen sich eine Schrift leicht verzerren lässt. Nur beim Namensschild bleiben sie weg.",
+          "en": "The Taper and Twist & Lean cards are back for a plain text, to distort letters a little. Only a name tag goes without them."
+        }
+      },
+      {
+        "title": {
+          "de": "Der Fehlerbericht ist eine ZIP-Datei",
+          "en": "The bug report is a ZIP file"
+        },
+        "body": {
+          "de": "Der Knopf Fehlerbericht in der Fußzeile speichert jetzt eine ZIP-Datei mit deinem Entwurf und einem Text mit Version, Browser und letzten Meldungen. GitHub nimmt sie an, so lässt sie sich direkt an eine Meldung hängen. Die Startseite öffnet sie wie eine Sicherung.",
+          "en": "The bug report button in the footer now saves a ZIP file with your design and a text with the version, browser and last messages. GitHub accepts it, so it can be attached to a report directly. The start page opens it like a backup."
+        }
+      }
+    ]
+  },
+  {
     "version": "1.62.1",
     "items": [
       {

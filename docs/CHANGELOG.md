@@ -4,7 +4,7 @@ layerling started over at 1.0.0 when it was forked from SketchForge-3D 1.0.9.
 Everything from 1.0.9 downwards is SketchForge's history, kept here because the
 code still carries it - so a lower number further down is older, not newer.
 
-## Unreleased
+## 1.62.2
 
 - **Taper is back for a plain text:** 1.62.0 hid the Taper and Twist & Lean cards for every text, but they were meant to go only for name tags, where they only distort the letters. A plain text shows them again; a name tag, a stack of layers, still has none. Reported by @Hns-Rtgrs in #238.
 - **The Hollow tool shows Revert and Edit too:** The list of what a body already has - **Revert edge treatment** with **Edit** next to each fillet, chamfer or hollowing - was only in the Fillet and Chamfer tool. Whoever opened Hollow to change a hollowing found no button and no way back. The Hollow window now shows the same list, and Edit on a hollowing opens it again with the old wall, openings and inner edges. Reported by @AkiraNorthstar in #237.
