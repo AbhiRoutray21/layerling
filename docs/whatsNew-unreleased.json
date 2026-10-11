@@ -8,5 +8,15 @@
       "de": "Ein Bündel aus gedrehten Teilen, etwa Stäben auf der Seite, das du danach länger gezogen hast, schnitt beim Gruppieren nichts oder an der falschen Stelle. Die Teile werden jetzt entlang ihrer eigenen Achsen gestreckt, die Löcher liegen dort, wo du sie siehst.",
       "en": "A bundle of turned parts, such as bars on their side, that you then made longer cut nothing or the wrong place when grouped. The parts are now stretched along their own axes, so the holes sit where you see them."
     }
+  },
+  {
+    "title": {
+      "de": "Gerundete Kante an den Buchstaben",
+      "en": "A rounded edge on the letters"
+    },
+    "body": {
+      "de": "Die Karte des Namensschilds hat eine neue Zeile, Buchstabenkante: Keine, Rund oder Fase, mit einer Größe. So sehen die Buchstaben oben aus wie bei einem gedruckten Schild, für jede Schrift und jedes Wort, ohne das Bündel zu öffnen.",
+      "en": "The name tag card has a new row, Letter edge: None, Round or Chamfer, with a size. The letters on top then look like those of a printed tag, for every font and word, without opening the bundle."
+    }
   }
 ]

@@ -1,10 +1,11 @@
 import * as THREE from "three";
 import { loadedManifoldRuntime } from "@/lib/manifoldHandle";
 import { normalizeSketchStroke, SKETCH_STROKE_JOINS } from "@/lib/sketchStroke";
+import { normalizeTextEdge } from "@/lib/textEdge";
 import { textOutlineClearance, textOutlineReach } from "@/lib/textFill";
 import { DEFAULT_KEYRING_DIAMETER, KEYRING_HOLE_EDGE_DISTANCE, keyringEarRadius, MAX_KEYRING_DIAMETER, MIN_KEYRING_DIAMETER, TEXT_KEYRING_SIDES, textFillExtent, textKeyringOf, textKeyringReach, textLetterBox, textLetterOffset } from "@/lib/textGeometry";
 import { shapeDepth, shapeWidth } from "@/lib/workplaneShapes";
-import type { SketchStroke, SketchStrokeJoin, TextKeyring, TextKeyringSide, WorkplaneShape } from "@/types/layerling";
+import type { SketchStroke, SketchStrokeJoin, TextEdge, TextKeyring, TextKeyringSide, WorkplaneShape } from "@/types/layerling";
 
 /**
  * Layered text (#215): one text as a stack of bodies for a multicolour print - the letters on
@@ -26,6 +27,11 @@ export type TextLayer = {
    * it is round, as every layer was before, so older stacks come out the same.
    */
   join?: Exclude<SketchStrokeJoin, "round">;
+  /**
+   * The top edge of this layer's letters rounded or chamfered (#225), as the name tag card's
+   * "Letter edge" sets it on the top layer. Left out the edge is as sharp as it was.
+   */
+  edge?: TextEdge;
 };
 
 export const MAX_TEXT_LAYERS = 6;
@@ -50,6 +56,7 @@ export function normalizeTextLayer(layer: Partial<TextLayer>, fallback: TextLaye
     color: typeof layer.color === "string" && /^#[0-9a-f]{6}$/i.test(layer.color) ? layer.color.toLowerCase() : fallback.color,
     ...(layer.silhouette ? { silhouette: true } : {}),
     ...(isTextLayerJoin(layer.join as unknown) && (layer.join as unknown) !== "round" ? { join: layer.join } : {}),
+    ...(normalizeTextEdge(layer.edge) ? { edge: normalizeTextEdge(layer.edge) } : {}),
   };
 }
 
@@ -100,7 +107,9 @@ export function layerTextKeyringArgument(value: unknown): { keyring: NameTagKeyr
 export function layerTextLayersError(value: unknown): string | null {
   if (!Array.isArray(value)) return null;
   const bad = value.findIndex((layer) => layer && typeof layer === "object" && (layer as { join?: unknown }).join !== undefined && !isTextLayerJoin((layer as { join?: unknown }).join));
-  return bad >= 0 ? `layers[${bad}].join must be round, bevel or miter` : null;
+  if (bad >= 0) return `layers[${bad}].join must be round, bevel or miter`;
+  const badEdge = value.findIndex((layer) => layer && typeof layer === "object" && (layer as { edge?: unknown }).edge !== undefined && !normalizeTextEdge((layer as { edge?: unknown }).edge));
+  return badEdge >= 0 ? `layers[${badEdge}].edge must be a round or chamfer edge with a size` : null;
 }
 
 /** A shape's own (x, y, z) offset in the world: its turn applied, as the scene turns it. */
@@ -119,7 +128,7 @@ export function textLayerSource(text: WorkplaneShape): WorkplaneShape {
   const letters = textLetterBox(text);
   // Beside an ear (#215) the letters sit off the middle of the box; the source stands where they are.
   const middle = turned(text, textLetterOffset(text));
-  const { textStroke: _stroke, textSilhouette: _silhouette, textKeyring: _keyring, ...rest } = text;
+  const { textStroke: _stroke, textSilhouette: _silhouette, textKeyring: _keyring, textEdge: _edge, ...rest } = text;
   // A layer is named "<name> <number>"; the stack's name is the part before the number.
   return {
     ...rest,
@@ -151,7 +160,7 @@ function layerKeyrings(letters: WorkplaneShape, layers: readonly TextLayer[], ke
   const layerText = (layer: TextLayer) => {
     const stroke = growStroke(layer.grow, layer.join);
     const extent = textFillExtent({ textStroke: stroke });
-    const { textStroke: _stroke, textSilhouette: _silhouette, textKeyring: _keyring, ...plain } = letters;
+    const { textStroke: _stroke, textSilhouette: _silhouette, textKeyring: _keyring, textEdge: _edge, ...plain } = letters;
     const shape: WorkplaneShape = { ...plain, width: (letters.width ?? 0) + 2 * extent, depth: (letters.depth ?? 0) + 2 * extent, ...(stroke ? { textStroke: stroke } : {}) };
     return { shape, box: half + extent };
   };
@@ -199,6 +208,7 @@ export function textLayerShapes(source: WorkplaneShape, layers: readonly TextLay
       size: 0,
       ...(stroke ? { textStroke: stroke } : {}),
       ...(layer.silhouette ? { textSilhouette: true } : {}),
+      ...(layer.edge ? { textEdge: layer.edge } : {}),
       ...(layerKeyring ? { textKeyring: layerKeyring } : {}),
     };
     if (layerKeyring?.ear) {
@@ -241,6 +251,8 @@ export function textLayersOf(shapes: WorkplaneShape[]): TextLayerStack | null {
       silhouette: shape.textSilhouette,
       // A wider layer's corners (#215); round is the default and is left out.
       ...(stroke?.align === "grow" && stroke.join !== "round" ? { join: stroke.join } : {}),
+      // The top edge of the letters (#225).
+      ...(shape.textEdge ? { edge: shape.textEdge } : {}),
     }, DEFAULT_TEXT_LAYERS[0]);
   });
   // The letters are the same in every layer; the top one is as good a source as any.

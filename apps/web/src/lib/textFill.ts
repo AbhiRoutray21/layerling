@@ -1,11 +1,13 @@
 import * as THREE from "three";
 import type { CrossSection, ManifoldToplevel } from "manifold-3d";
-import { mergeGeometries } from "three/examples/jsm/utils/BufferGeometryUtils.js";
+import { mergeGeometries, toCreasedNormals } from "three/examples/jsm/utils/BufferGeometryUtils.js";
 import { extrudeOutline, type OutlinePoint } from "@/lib/gearGeometry";
+import { normalizeTextEdge, textEdgeLevels, textHasEdge } from "@/lib/textEdge";
+import { loftedTextEdge } from "@/lib/textEdgeLoft";
 import { loadedManifoldRuntime, requestManifoldRuntime } from "@/lib/manifoldHandle";
 import { normalizeSketchStroke, strokeRegion, type Keep } from "@/lib/sketchStroke";
 import { createTextGeometry, keyringEarRadius, textGlyphShapes, textKeyringCenter, textKeyringOf, textLetterOffset } from "@/lib/textGeometry";
-import type { TextKeyringSide, WorkplaneShape } from "@/types/layerling";
+import type { TextEdge, TextKeyringSide, WorkplaneShape } from "@/types/layerling";
 
 /**
  * Fill modes for the Text shape (#215, as Tinkercad's): instead of the filled letters, a line
@@ -41,16 +43,8 @@ export function textFillComponents(runtime: ManifoldToplevel, shape: WorkplaneSh
     return section;
   };
   try {
-    const filled = textRegion(runtime, keep, shape);
-    if (!filled) return null;
-    const eared = withKeyringEar(runtime, keep, shape, filled);
-    // The silhouette has no holes at all: dropping each letter's counters is not enough once a
-    // wider outline makes neighbouring letters touch and close a pocket between them (#215,
-    // "Arany" 1.5 mm wider kept one between n and y). Only the outer rings stay - before the
-    // key ring hole is cut, which stays.
-    const closed = shape.textSilhouette ? withoutHoles(runtime, keep, eared) : eared;
-    const result = keep(withKeyringHole(runtime, keep, shape, closed).simplify(1e-6));
-    if (result.area() <= 1e-9) return null;
+    const result = textBodyRegion(runtime, keep, shape);
+    if (!result) return null;
     const components: TextFillComponent[] = [];
     for (const piece of result.decompose().map(keep)) {
       const rings = piece.toPolygons().map((polygon) => polygon.map(([x, z]) => ({ x, z })));
@@ -64,6 +58,23 @@ export function textFillComponents(runtime: ManifoldToplevel, shape: WorkplaneSh
   } finally {
     new Set(made).forEach((section) => section.delete());
   }
+}
+
+/**
+ * The outline a text fills, whatever its fill mode: the letters with the fill's line or widening,
+ * a key ring's ear and hole. Null when nothing is left.
+ */
+function textBodyRegion(runtime: ManifoldToplevel, keep: Keep, shape: WorkplaneShape): CrossSection | null {
+  const filled = textRegion(runtime, keep, shape);
+  if (!filled) return null;
+  const eared = withKeyringEar(runtime, keep, shape, filled);
+  // The silhouette has no holes at all: dropping each letter's counters is not enough once a
+  // wider outline makes neighbouring letters touch and close a pocket between them (#215,
+  // "Arany" 1.5 mm wider kept one between n and y). Only the outer rings stay - before the
+  // key ring hole is cut, which stays.
+  const closed = shape.textSilhouette ? withoutHoles(runtime, keep, eared) : eared;
+  const result = keep(withKeyringHole(runtime, keep, shape, closed).simplify(1e-6));
+  return result.area() > 1e-9 ? result : null;
 }
 
 /** The letters with the fill's line or widening, before any key ring: null without letters. */
@@ -248,12 +259,13 @@ export function textFillPieceGeometry(component: TextFillComponent, height: numb
  * it; the viewport draws the text again once it is there (manifoldRevision in its cache key).
  */
 export function textDisplayGeometry(shape: WorkplaneShape): THREE.BufferGeometry {
-  if (!textHasFill(shape)) return createTextGeometry(shape);
+  if (!textHasFill(shape) && !textHasEdge(shape)) return createTextGeometry(shape);
   const runtime = loadedManifoldRuntime();
   if (!runtime) {
     requestManifoldRuntime();
     return createTextGeometry(shape);
   }
+  if (textHasEdge(shape)) return textEdgeGeometry(runtime, shape) ?? new THREE.BoxGeometry(0.001, shape.height, 0.001);
   const components = textFillComponents(runtime, shape);
   if (!components) return new THREE.BoxGeometry(0.001, shape.height, 0.001);
   const pieces = components.map((component) => textFillPieceGeometry(component, shape.height));
@@ -261,4 +273,102 @@ export function textDisplayGeometry(shape: WorkplaneShape): THREE.BufferGeometry
   if (pieces.length > 1) pieces.forEach((piece) => piece.dispose());
   merged.computeBoundingBox();
   return merged;
+}
+
+/** Steps the edge is built in: about 0.08 mm each, below what a printer lays down, within these limits. */
+const EDGE_STEP = 0.08;
+const MIN_EDGE_STEPS = 3;
+const MAX_EDGE_STEPS = 12;
+
+/**
+ * The text with its top edge rounded or chamfered (#225): one smooth skin where the outlines allow
+ * it (textEdgeLoft), else slabs. Null when the letters leave nothing to stand on.
+ */
+export function textEdgeGeometry(runtime: ManifoldToplevel, shape: WorkplaneShape): THREE.BufferGeometry | null {
+  const edge = normalizeTextEdge(shape.textEdge);
+  if (!edge || shape.height <= 0) return null;
+  const made: { delete: () => void }[] = [];
+  const keep = <T extends { delete: () => void }>(item: T): T => {
+    made.push(item);
+    return item;
+  };
+  try {
+    const region = textBodyRegion(runtime, keep as Keep, shape);
+    if (!region) return null;
+    const size = Math.min(edge.size, shape.height);
+    // A chamfer is one slope; a round edge a few segments, fewer for a small one: a printer lays down no finer.
+    const steps = edge.kind === "chamfer" ? 1 : Math.min(8, Math.max(3, Math.ceil(size / 0.12)));
+    const levels = textEdgeLevels({ kind: edge.kind, size }, steps);
+    // The letters stepped in for each boundary of the edge, as rings: the 2D kernel makes them, so they are valid whatever the corners.
+    const rings: { x: number; z: number }[][][] = [];
+    for (const level of levels) {
+      const section = level.inset === 0 ? region : keep(region.offset(-level.inset, "Round", 2, 48));
+      if (section.area() <= 1e-9) break;
+      rings.push(section.toPolygons().map((polygon) => polygon.map(([x, z]) => ({ x, z }))));
+    }
+    const skin = rings.length === levels.length ? loftedTextEdge(rings, levels.map((level) => shape.height - size + level.height)) : null;
+    if (skin) {
+      const indexed = new THREE.BufferGeometry();
+      indexed.setAttribute("position", new THREE.Float32BufferAttribute(skin.positions, 3));
+      indexed.setIndex(skin.indices);
+      const geometry = toCreasedNormals(indexed, THREE.MathUtils.degToRad(12));
+      geometry.computeBoundingBox();
+      return geometry;
+    }
+    return textEdgeSlabGeometry(runtime, shape);
+  } finally {
+    new Set(made).forEach((item) => item.delete());
+  }
+}
+
+/**
+ * The same edge built as slabs, which always stand: the body up to where the edge begins,
+ * then slabs on top of it, each the outline stepped in by how far the edge has come in at its
+ * upper side, so the steps lie inside the true edge and the top is exactly as far in as asked.
+ * The slabs are one union, so the mesh has no faces inside and no gaps. Where the letters are
+ * thinner than twice the edge the slabs run out and the edge simply ends in a narrower top.
+ * Null when the letters leave nothing to stand on.
+ */
+function textEdgeSlabGeometry(runtime: ManifoldToplevel, shape: WorkplaneShape): THREE.BufferGeometry | null {
+  const edge = normalizeTextEdge(shape.textEdge);
+  if (!edge || shape.height <= 0) return null;
+  const made: { delete: () => void }[] = [];
+  const keep = <T extends { delete: () => void }>(item: T): T => {
+    made.push(item);
+    return item;
+  };
+  try {
+    const region = textBodyRegion(runtime, keep as Keep, shape);
+    if (!region) return null;
+    const size = Math.min(edge.size, shape.height);
+    const steps = Math.min(MAX_EDGE_STEPS, Math.max(MIN_EDGE_STEPS, Math.ceil(size / EDGE_STEP)));
+    const levels = textEdgeLevels({ kind: edge.kind, size }, steps);
+    const start = shape.height - size;
+    // The slabs are made standing on the plane with the outline's z as y, then turned up: a
+    // quarter turn about x takes (x, y, z) to (x, -z, y), so a slab from height a to b is placed from -b to -a.
+    const slab = (footprint: CrossSection, from: number, to: number) => keep(keep(runtime.Manifold.extrude(footprint, to - from)).translate([0, 0, -to]));
+    const slabs: InstanceType<ManifoldToplevel["Manifold"]>[] = [];
+    if (start > 1e-4) slabs.push(slab(region, 0, start));
+    for (let step = 1; step < levels.length; step += 1) {
+      const footprint = keep(region.offset(-levels[step].inset, "Round", 2, 48));
+      if (footprint.area() <= 1e-9) break;
+      slabs.push(slab(footprint, start + levels[step - 1].height, start + levels[step].height));
+    }
+    if (!slabs.length) return null;
+    const body = keep(keep(runtime.Manifold.union(slabs)).rotate([90, 0, 0]));
+    const mesh = body.getMesh();
+    if (mesh.triVerts.length < 9) return null;
+    const positions: number[] = [];
+    for (let offset = 0; offset + 2 < mesh.vertProperties.length; offset += mesh.numProp) {
+      positions.push(mesh.vertProperties[offset], mesh.vertProperties[offset + 1], mesh.vertProperties[offset + 2]);
+    }
+    const indexed = new THREE.BufferGeometry();
+    indexed.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
+    indexed.setIndex(Array.from(mesh.triVerts));
+    const geometry = toCreasedNormals(indexed, THREE.MathUtils.degToRad(12));
+    geometry.computeBoundingBox();
+    return geometry;
+  } finally {
+    new Set(made).forEach((item) => item.delete());
+  }
 }

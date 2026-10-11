@@ -356,6 +356,20 @@ export const tools = [
           description: "Extruded sketch bodies (an imported SVG among them) and texts: how the body is filled. An object builds the outline as a frame - align outside is Tinkercad's outer line, inside its inner line, center on the line - or with align grow keeps the area and widens it by width all round; width in mm; join miter (sharp), round or bevel; values left out keep the current ones. null makes it a filled area again. A sketch body is built again from its sketch, where it stands; a text keeps its letters and its box grows by the stroke's reach (outside and grow by width, center by half).",
         },
         silhouette: { type: "boolean", description: "Extruded sketch bodies and texts: true leaves out every outline inside another - holes, and islands in them; on a text the counters of its letters - false brings them back. With an outside stroke this makes a cookie cutter from one SVG; with grow, a base layer under a text." },
+        letterEdge: {
+          anyOf: [
+            { type: "null" },
+            {
+              type: "object",
+              properties: {
+                kind: { type: "string", enum: ["round", "chamfer"] },
+                size: { type: "number", description: "How wide and high the edge is, in mm (0.05 to 5, at most the text's height)." },
+              },
+              required: ["kind", "size"],
+            },
+          ],
+          description: "Text only: the top edge of the letters rounded or chamfered, as the top layer of a name tag is finished. null takes it off. Built from the outline stepped inwards, so it works for every font and word; the edge tool takes such a text as a mesh.",
+        },
         x: { type: "number" },
         z: { type: "number" },
         elevation: { type: "number" },
@@ -758,6 +772,15 @@ export const tools = [
               color: { type: "string", description: "Hex colour such as #d41721." },
               silhouette: { type: "boolean", description: "Without the holes in the letters - for the base plate." },
               join: { type: "string", enum: ["round", "bevel", "miter"], description: "How a wider layer goes round the corners of the letters: round (default), bevel or miter (sharp)." },
+              edge: {
+                type: "object",
+                description: "The top edge of this layer's letters rounded or chamfered, as the card's Letter edge row does for the top layer.",
+                properties: {
+                  kind: { type: "string", enum: ["round", "chamfer"] },
+                  size: { type: "number", description: "How wide and high the edge is, in mm (0.05 to 5)." },
+                },
+                required: ["kind", "size"],
+              },
             },
           },
         },

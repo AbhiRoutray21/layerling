@@ -154,6 +154,7 @@ import { MAX_SCREW_HOLE_ANGLE, MIN_SCREW_HOLE_ANGLE, normalizeScrewHoleAngle, no
 import { MAX_TEARDROP_TIP_ANGLE, MIN_TEARDROP_TIP_ANGLE, normalizeTeardropTipAngle, teardropHeightForTipAngle, teardropTipAngle } from "@/lib/teardropGeometry";
 import { MAX_DOVETAIL_CLEARANCE, normalizeDovetailClearance, normalizeDovetailNeckWidth } from "@/lib/dovetailGeometry";
 import { DEFAULT_SKETCH_STROKE, MAX_SKETCH_STROKE_WIDTH, MIN_SKETCH_STROKE_WIDTH, normalizeSketchStroke, SKETCH_STROKE_JOINS } from "@/lib/sketchStroke";
+import { MAX_TEXT_EDGE, MIN_TEXT_EDGE } from "@/lib/textEdge";
 import { textHasFill } from "@/lib/textFill";
 import { TEXT_FILL_CHOICES, textFillChoice, textLineSettingsInView, textStrokeForChoice, textStrokeWider, type TextFillChoice } from "@/lib/textFillChoice";
 import { MAX_TEXT_LAYERS, MAX_TEXT_LAYER_GROW, MIN_TEXT_LAYER_HEIGHT, namesFromList, type NameTagKeyring, type TextLayer } from "@/lib/textLayers";
@@ -2915,6 +2916,40 @@ function NameTagCard({
               </div>
             ))}
           </div>
+          {/* The top edge of the letters (#225): a printed tag's letters on top are finished, not cut square. */}
+          <div className="name-tag-sides name-tag-edge" role="radiogroup" aria-label={t("nameTag.letterEdge")}>
+            <span>{t("nameTag.letterEdge")}</span>
+            {(["none", "round", "chamfer"] as const).map((kind) => {
+              const active = (layers[0]?.edge?.kind ?? "none") === kind;
+              return (
+                <button
+                  key={kind}
+                  type="button"
+                  role="radio"
+                  aria-checked={active}
+                  className={active ? "active" : ""}
+                  disabled={disabled || !layers.length}
+                  onClick={() => changeLayer(0, { edge: kind === "none" ? undefined : { kind, size: layers[0]?.edge?.size ?? Math.min(0.4, layers[0].height) } })}
+                >
+                  {t(`nameTag.edge.${kind}`)}
+                </button>
+              );
+            })}
+          </div>
+          {layers[0]?.edge ? (
+            <RangeProperty
+              id="letterEdgeSize"
+              label={t("nameTag.letterEdgeSize")}
+              value={layers[0].edge.size}
+              min={MIN_TEXT_EDGE}
+              max={Math.max(MIN_TEXT_EDGE, Math.min(MAX_TEXT_EDGE, layers[0].height))}
+              step={0.05}
+              workspace={workspace}
+              disabled={disabled}
+              onChange={(size) => changeLayer(0, { edge: { kind: layers[0].edge!.kind, size } })}
+              onInteractionActiveChange={onInteractionActiveChange}
+            />
+          ) : null}
           <ToggleProperty
             label={t("nameTag.keyring")}
             value={Boolean(keyring)}

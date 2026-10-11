@@ -37,6 +37,7 @@ import { roundSideCount } from "@/lib/roundSideCount";
 import { createThreadGeometry, DEFAULT_THREAD_PROFILE, defaultThreadHeadHeight, normalizeThreadHeadHeight, threadNaturalFootprint, threadSettings } from "@/lib/threadGeometry";
 import { createSpringGeometry } from "@/lib/springGeometry";
 import { curvedTextPatch } from "@/lib/textGeometry";
+import { normalizeTextEdge } from "@/lib/textEdge";
 import { textDisplayGeometry } from "@/lib/textFill";
 import { DEFAULT_TEXT_LAYERS, layerTextKeyringArgument, layerTextLayersError, nameTagOffsets, normalizeTextLayers, textLayerShapes, textLayersOf, type NameTagKeyring, type TextLayer, type TextLayerStack } from "@/lib/textLayers";
 import { NAME_TAG_LAYERS, NAME_TAG_LETTER_SIZE, textLetterSize, textLetterSizePatch } from "@/lib/nameTag";
@@ -6043,7 +6044,7 @@ function mcpShapeSummary(shape: WorkplaneShape): LayerlingMcpShapeSummary {
       ? { sketchStroke: shape.sketchProfile.stroke ?? null, silhouette: Boolean(shape.sketchProfile.silhouette) }
       : {}),
     // A text's fill (#215) reads like a sketch body's: its stroke, and whether the counters are left out.
-    ...(shape.kind === "text" ? { textStroke: shape.textStroke ?? null, textSilhouette: Boolean(shape.textSilhouette) } : {}),
+    ...(shape.kind === "text" ? { textStroke: shape.textStroke ?? null, textSilhouette: Boolean(shape.textSilhouette), textEdge: shape.textEdge ?? null } : {}),
     // A name tag's key ring hole (#215), on the layers it goes through; the bottom one carries the ear.
     ...(shape.kind === "text" && shape.textKeyring ? { textKeyring: shape.textKeyring } : {}),
     ...(shape.layeredText ? { layeredText: true } : {}),
@@ -11981,6 +11982,16 @@ export function LayerlingEditor({
             }
           }
           if (typeof params.silhouette === "boolean") patch.textSilhouette = params.silhouette || undefined;
+          // The top edge of the letters (#225): { kind: "round" | "chamfer", size } or null for none.
+          if (params.letterEdge !== undefined) {
+            if (params.letterEdge === null || params.letterEdge === false) {
+              patch.textEdge = undefined;
+            } else {
+              const letterEdge = normalizeTextEdge(params.letterEdge);
+              if (!letterEdge) throw new Error("letterEdge needs a kind (round or chamfer) and a size in mm, or null for none");
+              patch.textEdge = letterEdge;
+            }
+          }
         }
         const pivotRequest = mcpPivotRequest(params.rotationPivot);
         const withPivotRequest = (shape: WorkplaneShape) => pivotRequest === undefined

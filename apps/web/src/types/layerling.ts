@@ -504,6 +504,9 @@ export type CadPrimitiveFrame = {
   frame: CadBrepFrame;
 };
 
+/** The top edge of a text's letters: rounded or chamfered, `size` mm wide and high (#225). */
+export type TextEdge = { kind: "round" | "chamfer"; size: number };
+
 export type WorkplaneShape = {
   id: string;
   name: string;
@@ -673,6 +676,12 @@ export type WorkplaneShape = {
   textStroke?: SketchStroke;
   /** Text only (#215): the letters without their counters (the holes in O, A, e), as Tinkercad's Silhouette. */
   textSilhouette?: boolean;
+  /**
+   * Text only (#225): the top edge of the letters rounded or chamfered by `size` mm, as a name
+   * tag's letters on top are finished. Built from the outline stepped inwards, so it works for
+   * every font and word; the edge tool takes such a text as a mesh.
+   */
+  textEdge?: TextEdge;
   /** Text only (#215): a key ring hole, with the ear round it on the bottom layer of a name tag. Straight text only. */
   textKeyring?: TextKeyring;
   /**

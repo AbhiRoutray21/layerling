@@ -21,6 +21,7 @@ import { teardropExactSection } from "@/lib/teardropGeometry";
 import { screwHoleProfile } from "@/lib/screwHoleGeometry";
 import { DEFAULT_ROUNDED_BOX_CORNER_FILLET, DEFAULT_ROUNDED_BOX_TOP_BOTTOM_FILLET, normalizeCornerFillet, normalizeTopBottomFillet } from "@/lib/roundedBoxGeometry";
 import { textGlyphShapes } from "@/lib/textGeometry";
+import { textHasEdge } from "@/lib/textEdge";
 import { textFillComponents, textFillPieceGeometry, textHasFill } from "@/lib/textFill";
 import { loadedManifoldRuntime } from "@/lib/manifoldHandle";
 import { threadBuildPlan, WHITWORTH_PROFILE_CONSTANTS } from "@/lib/threadGeometry";
@@ -743,6 +744,8 @@ export function textGlyphProfiles(shape: WorkplaneShape) {
   if (shape.kind !== "text" || shape.importedMesh || shape.cadBrep || shapeHasShapeDeform(shape)) return null;
   const bevel = Math.min(8, Math.max(0, shape.bevel ?? 0));
   if (bevel > 0) return null;
+  // The letters' rounded or chamfered top edge (#225) is part of the display mesh only.
+  if (textHasEdge(shape)) return null;
   const width = shapeWidth(shape);
   const depth = shapeDepth(shape);
   if (![width, depth, shape.height].every((value) => Number.isFinite(value) && value > 0)) return null;

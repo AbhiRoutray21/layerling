@@ -7,6 +7,7 @@ import { importedShapeFromObj } from "@/lib/objImport";
 import { normalizeProjectAsset, sha256Hex } from "@/lib/projectAssets";
 import { canonicalizeShape } from "@/lib/workplaneShapes";
 import { normalizeSketchStroke, SKETCH_STROKE_JOINS } from "@/lib/sketchStroke";
+import { normalizeTextEdge } from "@/lib/textEdge";
 import { isTextKeyring } from "@/lib/textGeometry";
 import { normalizeNotes } from "@/lib/workplaneNotes";
 import { importedShapeFromStl } from "@/lib/stlImport";
@@ -1248,6 +1249,10 @@ function validateShapeDefinition(definition: Record<string, unknown>, label: str
   }
   if (definition.textSilhouette !== undefined && typeof definition.textSilhouette !== "boolean") {
     throw new Error(`${label}.textSilhouette must be true or false`);
+  }
+  // The top edge of a text's letters (#225): round or chamfer, with a size.
+  if (definition.textEdge !== undefined && !normalizeTextEdge(definition.textEdge)) {
+    throw new Error(`${label}.textEdge must be a round or chamfer edge with a size`);
   }
   if (definition.layeredText !== undefined && typeof definition.layeredText !== "boolean") {
     throw new Error(`${label}.layeredText must be true or false`);

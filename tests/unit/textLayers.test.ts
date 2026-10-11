@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { DEFAULT_TEXT_LAYERS, nameTagOffsets, namesFromList, normalizeTextLayers, textLayerShapes, textLayersOf } from "@/lib/textLayers";
+import { DEFAULT_TEXT_LAYERS, layerTextLayersError, nameTagOffsets, namesFromList, normalizeTextLayers, textLayerShapes, textLayersOf } from "@/lib/textLayers";
 import type { WorkplaneShape } from "@/types/layerling";
 
 // #215: one text as a stack of layers, and a tag per name.
@@ -63,5 +63,29 @@ describe("text layers (#215)", () => {
     expect(namesFromList("a\nb\nc", 2)).toEqual(["a", "b"]);
     expect(nameTagOffsets(3, 60, 20, 5)).toEqual([{ x: 0, z: 0 }, { x: 0, z: 25 }, { x: 0, z: 50 }]);
     expect(nameTagOffsets(4, 60, 20, 5, 2)).toEqual([{ x: 0, z: 0 }, { x: 0, z: 25 }, { x: 65, z: 0 }, { x: 65, z: 25 }]);
+  });
+
+  it("puts a layer's letter edge on its text and reads it back (#225)", () => {
+    const layers = normalizeTextLayers([
+      { grow: 0, height: 1.2, color: "#ffffff", edge: { kind: "round", size: 0.4 } },
+      { grow: 1.5, height: 1.2, color: "#d41721", edge: { kind: "bevel", size: 1 } },
+      { grow: 3, height: 2, color: "#2b2b2b", silhouette: true },
+    ])!;
+    // A broken edge is left off, as a broken join is.
+    expect(layers[0].edge).toEqual({ kind: "round", size: 0.4 });
+    expect(layers[1].edge).toBeUndefined();
+    const built = textLayerShapes(text(), layers);
+    expect(built[0].textEdge).toEqual({ kind: "round", size: 0.4 });
+    expect(built[1].textEdge).toBeUndefined();
+    const read = textLayersOf(built)!;
+    expect(read.layers[0].edge).toEqual({ kind: "round", size: 0.4 });
+    expect(read.layers[1].edge).toBeUndefined();
+    // The letters themselves carry no edge: it belongs to a layer.
+    expect(read.source.textEdge).toBeUndefined();
+  });
+
+  it("names the layer whose edge is not a round or chamfer with a size", () => {
+    expect(layerTextLayersError([{}, { edge: { kind: "round", size: 1 } }])).toBeNull();
+    expect(layerTextLayersError([{}, { edge: { kind: "bevel", size: 1 } }])).toMatch(/layers\[1\]\.edge/);
   });
 });

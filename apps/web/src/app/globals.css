@@ -10215,6 +10215,11 @@ html[data-theme="dark"] .property-hint {
   font-weight: 650;
 }
 
+.name-tag-sides.name-tag-edge {
+  grid-template-columns: 128px repeat(3, minmax(0, 1fr));
+  font-size: 14px;
+}
+
 .name-tag-sides button {
   height: 30px;
   padding: 0 6px;

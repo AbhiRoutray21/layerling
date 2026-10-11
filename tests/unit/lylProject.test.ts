@@ -133,6 +133,22 @@ describe("layerling .lyl project packages", () => {
     expect(document.assets.filter((entry) => entry.kind === "derived-mesh")).toHaveLength(0);
   });
 
+  it("keeps the top edge of a text's letters through saving and opening, and refuses a broken one (#225)", async () => {
+    const letters = shape("text", "text-edge", { text: "Ada", textEdge: { kind: "round", size: 0.4 } });
+    const bytes = await exportLylProject(input([letters]));
+    const restored = await importLylProject(bytes);
+    expect(restored.shapes[0].textEdge).toEqual({ kind: "round", size: 0.4 });
+    const broken = mutateProject(bytes, (document) => {
+      const nodes = JSON.stringify(document);
+      expect(nodes).toContain("textEdge");
+      document.states.forEach((state) => state.nodes.forEach((node) => {
+        const definition = node.definition as Record<string, unknown>;
+        if (definition.textEdge) definition.textEdge = { kind: "bevel", size: 1 };
+      }));
+    });
+    await expect(importLylProject(broken)).rejects.toThrow(/textEdge/);
+  });
+
   it("keeps a group's Multicolor choice through saving and opening", async () => {
     const group = shape("box", "group-1", { multicolor: false });
     const other = shape("box", "group-2", { multicolor: true });

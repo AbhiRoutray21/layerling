@@ -51,7 +51,7 @@ The AI works with the same functions as you, through the same path as your opera
 | `layerling_add_font` | adds a font of one's own for text from a TrueType, OpenType or WOFF file; it stays in the browser, a design keeps only the letters it uses |
 | `layerling_list_fonts` | lists the built-in fonts and the fonts of one's own, with id and name |
 | `layerling_import_mesh` | brings a triangle mesh into the design |
-| `layerling_update_object` | changes dimensions, position, colour, name, solid or hole and everything else that makes up the shape |
+| `layerling_update_object` | changes dimensions, position, colour, name, solid or hole and everything else that makes up the shape, a text's letter edge included |
 | `layerling_align_objects` | aligns objects with each other |
 | `layerling_scale_objects` | scales objects by a percentage, together or each in place |
 | `layerling_lay_flat` | lays an object with one face on the plate |
@@ -71,7 +71,7 @@ The AI works with the same functions as you, through the same path as your opera
 | `layerling_hollow_object` | hollows a body with an even wall |
 | `layerling_array_objects` | multiplies in a row or on a circle |
 | `layerling_bundle_objects` | bundles objects like Ctrl+B: they move together, keep their colour and kind and go out separately in an export |
-| `layerling_layer_text` | turns a text into a stack of layers for a multicolour print (letters, wider rims, a plate without holes) or builds a stack again, with a key ring hole and the corners per layer; with a name list, one tag per name |
+| `layerling_layer_text` | turns a text into a stack of layers for a multicolour print (letters, wider rims, a plate without holes) or builds a stack again, with a key ring hole, the corners per layer and a rounded or chamfered letter edge; with a name list, one tag per name |
 | `layerling_measure_section` | measures on a cutting plane between two points that snap to the outline - wall thickness, gaps, fits |
 | `layerling_show_overhangs` | switches the overhang hatching on or off, sets the angle and reports for each body the area that would need supports |
 | `layerling_estimate_print` | estimates volume, weight and filament for the selection or the whole design, worked out as solid like the export window |
