@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+## 1.66.6
+
 - **Mirror in the right-click menu:** Right-click a selection and choose **Mirror**, as well as pressing M or using the ribbon: the three arrows for left-right, front-back and top-bottom appear. Asked for in a discussion by someone who could not find the tool.
 - **See-through bodies no longer fade away behind the plate's middle:** A body shown see-through that stood in the back half of the plate, seen from the camera, could turn into a faint ghost, depending on the camera's height and while it was moved. The plate is see-through too, and the view draws such surfaces by the distance of their centres; behind the plate's centre the body came first and the plate was laid over it. The plate is now always drawn first, and the section plane always after the bodies, so neither changes with the view. Reported by DrJones in the forum.
 - **Chamfer, bottom end shows up (#269):** 1.66.2 gave every end of a rod, nut or tapped hole a chamfer of its own, but the field for the bottom end never appeared in the thread's settings, because the list of fields shown for a thread did not know it. It is there now, as **Chamfer, bottom end**. A screw still has its one chamfer at the tip. Reported by DrJones and PePa in the forum.
