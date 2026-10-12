@@ -738,13 +738,6 @@ function withoutSlivers(cad: OcctKernel, solid: ShapeHandle, height: number) {
  * face pushed up once. Throws when anything is off - the caller then builds `profile.loops`, the
  * polygon outline of the same body.
  */
-/**
- * A widened text (profile.grow) as one exact solid: every letter's outline moved out by the kernel,
- * its counters moved in (and gone where they close up), the letters joined as flat faces - the
- * joining of flat faces is robust where that of the curved walls of two prisms is not - and the
- * face pushed up once. Throws when anything is off - the caller then builds `profile.loops`, the
- * polygon outline of the same body.
- */
 export function grownProfileSolid(cad: OcctKernel, profile: CadModifierProfilePart) {
   const grow = profile.grow!;
   const tolerance = profileExtent(profile) * 1e-6;
