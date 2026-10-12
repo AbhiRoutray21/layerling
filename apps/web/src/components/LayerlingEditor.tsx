@@ -300,12 +300,17 @@ type EdgeModifierSession = {
  * worker's own finding stands.
  */
 function conflictEdgeIds(session: EdgeModifierSession, workerFailedEdgeIds: number[]) {
-  const working = new Set(session.workingEdgeIds ?? []);
-  const added = session.selectedEdgeIds.filter((edgeId) => !working.has(edgeId));
+  const added = edgesAddedSinceWorking(session);
   const earlier = new Set(session.failedEdgeIds ?? []);
   const stillSelected = added.filter((edgeId) => earlier.has(edgeId));
   if (stillSelected.length) return stillSelected;
-  return working.size && added.length ? added : workerFailedEdgeIds;
+  return added.length ? added : workerFailedEdgeIds;
+}
+
+/** The edges picked since the last preview that worked; none without one. */
+function edgesAddedSinceWorking(session: EdgeModifierSession) {
+  const working = new Set(session.workingEdgeIds ?? []);
+  return working.size ? session.selectedEdgeIds.filter((edgeId) => !working.has(edgeId)) : [];
 }
 
 type SplitSession = {
@@ -6400,6 +6405,9 @@ export function LayerlingEditor({
       return;
     }
     const timer = window.setTimeout(() => {
+      // Read from the ref: the working selection moves with every preview and
+      // must not send a new one by itself.
+      const addedEdgeIds = edgeModifierRef.current ? edgesAddedSinceWorking(edgeModifierRef.current) : [];
       cadPreviewQueueRef.current.request({
         type: "preview",
         kind: edgeModifier.kind,
@@ -6408,6 +6416,7 @@ export function LayerlingEditor({
         quality: edgeModifier.quality,
         chamferAngle: edgeModifier.chamferAngle,
         minDeflection: cadModifierBaseShapeRef.current?.cadMeshDeflection,
+        ...(addedEdgeIds.length ? { addedEdgeIds } : {}),
       });
     }, 120);
     return () => window.clearTimeout(timer);

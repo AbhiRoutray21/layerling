@@ -678,9 +678,10 @@ function verwirfKernel(cad: OcctKernel | null) {
   edgeOwners = [];
 }
 
-// Testing each edge alone costs one kernel call per edge; past this many the
-// whole component is reported instead.
-const CULPRIT_EDGE_TEST_LIMIT = 32;
+// Testing each edge alone costs one kernel call per edge, on a heavy body a
+// second or more each. Past this budget the whole component is reported
+// instead, so a refusal never comes near the preview's 30 s watchdog.
+const CULPRIT_SEARCH_BUDGET_MS = 1500;
 
 class EdgeTreatmentError extends Error {
   constructor(message: string, readonly failedEdgeIds: number[]) {
@@ -699,19 +700,23 @@ function treatEdges(cad: OcctKernel, solid: ShapeHandle, edges: ShapeHandle[], r
 // The kernel only says that the set failed. The edges that fail on their own
 // are the ones to blame; when every edge works alone, it is the combination.
 function culpritEdgeIds(cad: OcctKernel, solid: ShapeHandle, entries: { id: number; edge: ShapeHandle }[], request: Extract<CadModifierWorkerRequest, { type: "preview" }>) {
-  if (entries.length <= 1 || entries.length > CULPRIT_EDGE_TEST_LIMIT) return entries.map((entry) => entry.id);
-  const failing = entries.filter((entry) => {
+  const all = entries.map((entry) => entry.id);
+  if (entries.length <= 1 || request.addedEdgeIds?.length) return all;
+  const deadline = performance.now() + CULPRIT_SEARCH_BUDGET_MS;
+  const failing: number[] = [];
+  for (const entry of entries) {
+    if (performance.now() > deadline) return all;
     try {
       const single = treatEdges(cad, solid, [entry.edge], request);
       const solidLeft = cadHasSolidBody(cad, single);
       releaseHandles(cad, [single]);
-      return !solidLeft;
+      if (!solidLeft) failing.push(entry.id);
     } catch (error) {
       if (isFatalKernelFault(error)) throw error;
-      return true;
+      failing.push(entry.id);
     }
-  });
-  return (failing.length ? failing : entries).map((entry) => entry.id);
+  }
+  return failing.length ? failing : all;
 }
 
 async function bearbeiteAnfrage(request: CadModifierWorkerRequest, halter: { cad: OcctKernel | null }) {
