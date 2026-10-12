@@ -10,6 +10,7 @@ import { threadPartSolid } from "@/lib/threadSolid";
 import { springPartSolid } from "@/lib/springSolid";
 import { helicalGearPartSolid } from "@/lib/gearSolid";
 import { meshTreatedBody } from "@/lib/cadMeshAccuracy";
+import { planarMeshFaces } from "@/lib/cadPlanarMesh";
 import { CAD_MODIFIER_KERNEL_RESTART_MESSAGE, CAD_MODIFIER_RUNTIME_BASE, cadModifierCappedDeflection, cadModifierTessellationDeflection, cadModifierTopologyEdgeIsSelectable, cadTransformRequiresGeneralTransform, isCadModifierKernelExhausted, isCadModifierWasmMemoryFault } from "@/lib/cadModifierRuntime";
 
 const HASH_UPPER_BOUND = 2_147_483_647;
@@ -388,6 +389,53 @@ function reconstructSolid(cad: OcctKernel, part: CadModifierMeshPart) {
   if (part.brep) {
     return restoredExactSolid(cad, cad.fromBREP(part.brep), part.brepTransform);
   }
+  return reconstructMeshSolid(cad, part);
+}
+
+/** Meshes of more triangles than this are curved bodies: no use looking for flat faces in them. */
+const PLANAR_FACE_TRIANGLE_LIMIT = 6000;
+
+/**
+ * The solid of a mesh part. Triangles of one flat face are flat only to float32 accuracy, so the
+ * kernel can leave such a face in pieces, and a fillet or chamfer next to the seams fails (#248).
+ * When the plain way gives more faces than the mesh has flat ones, the flat faces are built whole
+ * and sewn instead; whatever goes wrong there leaves the plain result.
+ */
+function reconstructMeshSolid(cad: OcctKernel, part: CadModifierMeshPart) {
+  let plain: ShapeHandle | null = null;
+  let plainError: unknown = null;
+  try {
+    plain = plainMeshSolid(cad, part);
+  } catch (error) {
+    if (isFatalKernelFault(error)) throw error;
+    plainError = error;
+  }
+  if (part.positions && part.indices && part.indices.length / 3 <= PLANAR_FACE_TRIANGLE_LIMIT) {
+    try {
+      const flat = planarMeshFaces(cad, part.positions, part.indices);
+      if (flat && (plain === null || cad.getSubShapes(plain, "face").length > flat.faceCount)) {
+        for (const tolerance of [1e-6, 1e-5, 1e-4]) {
+          let candidate = cad.sewAndSolidify(flat.faces, tolerance);
+          candidate = cad.fixShape(candidate);
+          if (cad.isSolid(candidate)) candidate = cad.healSolid(candidate, tolerance);
+          candidate = cad.fixFaceOrientations(candidate);
+          candidate = cad.removeDegenerateEdges(candidate);
+          candidate = cad.unifySameDomain(candidate);
+          if (cad.isSolid(candidate) && cadShapeIsValid(cad, candidate) && (plain === null || cad.getSubShapes(candidate, "face").length < cad.getSubShapes(plain, "face").length)) {
+            return candidate;
+          }
+        }
+      }
+    } catch (error) {
+      if (isFatalKernelFault(error)) throw error;
+      // The plain solid stays.
+    }
+  }
+  if (plain !== null) return plain;
+  throw plainError;
+}
+
+function plainMeshSolid(cad: OcctKernel, part: CadModifierMeshPart) {
   const imported = cad.importStl(meshPartToAsciiStl(part));
   let shape = cad.fixShape(imported);
   if (cad.isSolid(shape)) {

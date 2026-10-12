@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **Chamfer and fillet after Split:** On a body that was cut with the Split tool, the edges of the new cut face could not be rounded or chamfered, whatever the size ("cannot be filleted together at this size"). The cut leaves the flat sides of the body as many tiny triangles that are flat only to a millionth of a millimetre, and the CAD kernel then kept one side in several pieces and failed at the seams between them. The edge tool now gathers the triangles of a flat face back into one face and builds the corners exactly, so the edges of a cut corner can be treated like any other. Found by @lukyanenkomax in #248.
+
 ## 1.66.0
 
 - **Save into your own folder:** In Chrome and Edge, saving a design as LYL now opens the system's save dialog, so you choose the folder and the name and can replace an existing file. After that **Ctrl+S** saves the design into the same file again, and a design opened from a `.lyl` file saves back into it. Firefox and Safari do not let a page write into files; there the file is still downloaded. Suggested by @boatingman44 in #251.

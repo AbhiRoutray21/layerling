@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "title": {
+      "de": "Fase und Verrundung nach dem Teilen",
+      "en": "Chamfer and fillet after Split"
+    },
+    "body": {
+      "de": "Die Kanten einer mit dem Teilen-Werkzeug abgeschnittenen Ecke lassen sich jetzt anfasen und verrunden. Vorher scheiterte das mit „kann bei dieser Größe nicht zusammen verrundet werden“, weil der Schnitt die ebenen Seiten in winzige Dreiecke zerlegt hatte, die der Kernel nicht wieder zu einer Fläche zusammenfügte.",
+      "en": "The edges of a corner cut off with the Split tool can now be chamfered and filleted. Before, that failed with \"cannot be filleted together at this size\", because the cut had left the flat sides in tiny triangles that the kernel did not join into one face again."
+    }
+  }
+]
