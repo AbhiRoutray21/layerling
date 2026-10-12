@@ -11,6 +11,7 @@ export const MESSAGES_EN = {
   "common.delete": "Delete",
   "common.rename": "Rename",
   "common.duplicate": "Duplicate",
+  "dashboard.sendToServer": "Put on the server",
   "common.language": "Language",
   "common.theme": "Theme",
   "theme.short.system": "System",

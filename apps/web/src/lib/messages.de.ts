@@ -10,6 +10,7 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "common.delete": "Löschen",
   "common.rename": "Umbenennen",
   "common.duplicate": "Duplizieren",
+  "dashboard.sendToServer": "Auf den Server legen",
   "common.language": "Sprache",
   "common.theme": "Farbschema",
   "theme.short.system": "System",
