@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **STL into your own folder:** In Chrome and Edge, the first STL export of a design now opens the system's save dialog, so you choose the folder and the name. Later STL exports of the design write into that same file without asking, and a message says so; **Save as…** in the export window picks another file. The dialog remembers its own folder, apart from the one for designs. Firefox and Safari still download the file.
+
 ## 1.66.4
 
 - **Selecting a body above the horizon (#269):** Looking at the plate flat from the side, a body could only be selected by clicking its lowest part, below the horizon line. Above it the click ray never reaches the workplane, and the code that starts a drag gave up before it had selected the body. A click on the body now selects it wherever it is; there is just nothing to drag from when the ray misses the workplane. Reported by DrJones in the forum.
