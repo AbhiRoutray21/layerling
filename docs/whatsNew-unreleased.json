@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "title": {
+      "de": "Überhänge: eine 45°-Fase wird nicht mehr markiert",
+      "en": "Overhangs: a 45 degree chamfer is no longer marked"
+    },
+    "body": {
+      "de": "Eine Fläche genau auf dem eingestellten Überhangwinkel, etwa eine 45°-Fase bei der Voreinstellung, war je nach Rechenrauschen mal markiert und mal nicht. Jetzt bleibt sie unmarkiert; was steiler ist, wird weiter markiert.",
+      "en": "A face exactly on the set overhang angle, say a 45 degree chamfer at the default, was marked or not by chance. Now it stays unmarked; anything steeper is still marked."
+    }
+  }
+]

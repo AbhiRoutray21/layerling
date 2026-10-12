@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **A 45 degree chamfer is no overhang (#269):** *Show overhangs* marks faces that lean out further than the set angle. A face exactly on the angle, a 45 degree chamfer at the default, was marked or not marked at random, because the float noise of its mesh decided. The limit now lies a hair above the angle (about 0.4 degrees), so a face on the angle is left alone and anything steeper is still marked. Reported by DrJones in the forum.
+
 ## 1.66.4
 
 - **Selecting a body above the horizon (#269):** Looking at the plate flat from the side, a body could only be selected by clicking its lowest part, below the horizon line. Above it the click ray never reaches the workplane, and the code that starts a drag gave up before it had selected the body. A click on the body now selects it wherever it is; there is just nothing to drag from when the ray misses the workplane. Reported by DrJones in the forum.
