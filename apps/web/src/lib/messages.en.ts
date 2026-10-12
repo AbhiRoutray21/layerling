@@ -1648,6 +1648,7 @@ export const MESSAGES_EN = {
   "export.historyHint": "Choose how many recent undo actions travel with the design",
   "export.historyLabel": "Saved LYL action history",
   "export.unlimited": "Unlimited",
+  "export.historyNone": "None",
   "export.actionCount": "{count} actions",
   "export.saveToShared": "Save to the server",
   "export.savingProject": "Saving design…",

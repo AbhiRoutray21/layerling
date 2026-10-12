@@ -16709,13 +16709,14 @@ function TopActionPanel({
     setExportName((current) => current === previousProjectName ? projectName : current);
     previousProjectNameRef.current = projectName;
   }, [projectName]);
-  // A custom number from the settings joins the usual stops in its place.
+  // A custom number from the settings joins the usual stops in its place; the last stop, None,
+  // saves the design with its current state only, for sharing a file without its undo steps (#246).
   const lylHistoryLimits = useMemo<readonly LylHistoryLimit[]>(() => {
     const presets: number[] = [100, 50, 30];
     const numbers = typeof workspaceHistoryLimit === "number" && !presets.includes(workspaceHistoryLimit)
       ? [...presets, workspaceHistoryLimit].sort((a, b) => b - a)
       : presets;
-    return ["unlimited", ...numbers];
+    return ["unlimited", ...numbers, 0];
   }, [workspaceHistoryLimit]);
   const lylHistoryLimitIndex = Math.max(0, lylHistoryLimits.indexOf(lylHistoryLimit));
   const [printMaterial, setPrintMaterial] = useState<PrintMaterial>(() => {
@@ -17009,14 +17010,14 @@ function TopActionPanel({
                   step={1}
                   value={lylHistoryLimitIndex}
                   aria-label={t("export.historyLabel")}
-                  aria-valuetext={lylHistoryLimit === "unlimited" ? t("export.unlimited") : t("export.actionCount", { count: lylHistoryLimit })}
+                  aria-valuetext={lylHistoryLimit === "unlimited" ? t("export.unlimited") : lylHistoryLimit === 0 ? t("export.historyNone") : t("export.actionCount", { count: lylHistoryLimit })}
                   onChange={(event) => setLylHistoryLimit(lylHistoryLimits[Number(event.currentTarget.value)] ?? "unlimited")}
                 />
               </div>
               <div className="lyl-history-range-labels" aria-hidden="true">
                 {lylHistoryLimits.map((limit, index) => (
                   <span key={limit} className={lylHistoryLimit === limit ? "active" : undefined} style={lylHistoryStop(index)}>
-                    {limit === "unlimited" ? t("export.unlimited") : limit}
+                    {limit === "unlimited" ? t("export.unlimited") : limit === 0 ? t("export.historyNone") : limit}
                   </span>
                 ))}
               </div>

@@ -28,5 +28,15 @@
       "de": "Wer layerling mit einer KI wie Claude benutzt, muss den Editor nicht mehr vorher öffnen: Ist keiner offen, startet die KI deinen Browser mit einem Editor und arbeitet dann los. Das gilt für layerling auf deinem eigenen Rechner.",
       "en": "If you use layerling with an AI such as Claude, you no longer have to open the editor first: when none is open, the AI starts your browser with an editor and gets to work. This is for layerling on your own computer."
     }
+  },
+  {
+    "title": {
+      "de": "Entwurf ohne Verlauf weitergeben",
+      "en": "Share a design without its history"
+    },
+    "body": {
+      "de": "Beim Export als LYL hat der Regler „Gespeicherter Verlauf“ jetzt eine letzte Stufe, Keine. Die Datei enthält dann nur den aktuellen Stand, ohne Rückgängig-Schritte. So lässt sich ein Entwurf zum Beispiel auf Printables oder Makerworld teilen.",
+      "en": "In the LYL export the \"Saved action history\" slider now has a last stop, None. The file then holds only the current state, without undo steps - handy for sharing a design on Printables or Makerworld."
+    }
   }
 ]

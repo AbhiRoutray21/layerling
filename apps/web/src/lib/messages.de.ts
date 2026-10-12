@@ -1647,6 +1647,7 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "export.historyHint": "Wähle, wie viele der letzten Schritte mit dem Entwurf mitreisen",
   "export.historyLabel": "Im LYL gespeicherter Verlauf",
   "export.unlimited": "Unbegrenzt",
+  "export.historyNone": "Keine",
   "export.actionCount": "{count} Schritte",
   "export.saveToShared": "Auf dem Server speichern",
   "export.savingProject": "Entwurf wird gespeichert …",

@@ -220,6 +220,14 @@ describe("editor history snapshots", () => {
     expect(lastThirty.entries[0].shapes[0].x).toBe(90);
     expect(lastThirty.entries[30].shapes[0].x).toBe(120);
   });
+
+  it("keeps only the current state for a project export without history (the None stop, #246)", () => {
+    const entries = Array.from({ length: 140 }, (_, x) => editorHistoryEntry([box({ x })], []));
+    const none = editorHistoryForExport(entries, 120, 0);
+    expect(none.entries).toHaveLength(1);
+    expect(none.index).toBe(0);
+    expect(none.entries[0].shapes[0].x).toBe(120);
+  });
 });
 
 describe("history view", () => {
