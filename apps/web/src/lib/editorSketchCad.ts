@@ -1,5 +1,6 @@
 
 import { t } from "@/lib/i18n";
+import { isBuildMessage, reportWorkerBuild } from "@/lib/buildStamp";
 import { cloneSketchProfile } from "@/lib/sketchSmoothHandles";
 import { canonicalizeShape, cleanNearZero } from "@/lib/workplaneShapes";
 import { SKETCH_CAD_DEFLECTION } from "@/lib/cadModifierRuntime";
@@ -32,6 +33,10 @@ function ensureSketchCadWorker() {
   if (sketchCadWorker) return sketchCadWorker;
   const worker = new Worker(new URL("../workers/sketchCad.worker.ts", import.meta.url), { type: "module" });
   worker.onmessage = (event: MessageEvent<SketchCadBuildResponse>) => {
+    if (isBuildMessage(event.data)) {
+      reportWorkerBuild(event.data);
+      return;
+    }
     const pending = sketchCadPending.get(event.data.requestId);
     if (!pending) return;
     window.clearTimeout(pending.timer);

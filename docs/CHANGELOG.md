@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **Mismatched program files are noticed:** The page and its two CAD workers (edge tool, sketch bodies) are separate files that load at different times. Each worker now says which build it is from the moment it starts, and the page compares that with its own. If they differ - after an update, or because the browser handed out a stored copy of an older file - the same card as for an update appears ("Part of this page is from another version") and offers **Save and reload**. The build id is set per static export (`LAYERLING_BUILD_ID` in scripts/build-static-export.mjs) and is the version number everywhere else. Suggested by Stefan after #248.
+
 ## 1.66.1
 
 - **Notice of an update while the page is open:** On the published program (layerling.com, any web server with the static export) an open page now notices that a new version was installed in the meantime. Every export carries a `version.json` with a build id; the page asks for it every five minutes while visible, when the tab comes to the front, when the connection returns, and at once when a program file or worker it needs fails to load. On a change a card at the bottom right offers **Save and reload** (the open design is written to the browser first and reopens as it was) or **Later** (15 minutes), and lists the new highlights. Until now an old page kept running on its own files and could meet parts of the new version that did not fit (#88).

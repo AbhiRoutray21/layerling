@@ -27,6 +27,8 @@ const nextConfig: NextConfig = {
     NEXT_PUBLIC_STATIC_EXPORT: isStaticExport ? "true" : "false",
     NEXT_PUBLIC_OCCT_RUNTIME_VERSION: occtRuntimeVersion,
     NEXT_PUBLIC_APP_VERSION: appVersion,
+    // Page and CAD workers compare it (lib/buildStamp.ts); the export script sets one per build.
+    NEXT_PUBLIC_BUILD_ID: process.env.LAYERLING_BUILD_ID || appVersion,
   },
   images: {
     unoptimized: true

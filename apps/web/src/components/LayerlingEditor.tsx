@@ -145,6 +145,7 @@ import { LanguageSwitch } from "@/components/LanguageSwitch";
 import { ThemeSwitch } from "@/components/ThemeSwitch";
 import { useFileAccept } from "@/lib/fileAccept";
 import { exportLylProject, importLylProject, LYL_CREATED_WITH_VERSION, LYL_MEDIA_TYPE } from "@/lib/lylProject";
+import { isBuildMessage, reportWorkerBuild } from "@/lib/buildStamp";
 import {
   ensureLylFileWritable,
   forgetLylFile,
@@ -2750,6 +2751,10 @@ export function LayerlingEditor({
       }
     };
     function handleWorkerMessage(event: MessageEvent<CadModifierWorkerResponse>) {
+      if (isBuildMessage(event.data)) {
+        reportWorkerBuild(event.data);
+        return;
+      }
       const message = event.data;
       clearCadModifierWatchdog(message.requestId);
       const pending = cadModifierPendingRef.current.get(message.requestId);

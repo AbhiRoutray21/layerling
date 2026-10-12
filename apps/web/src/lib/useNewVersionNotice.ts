@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { BUILD_MISMATCH_EVENT } from "@/lib/buildStamp";
 import {
   fetchVersionInfo,
   isNewBuild,
@@ -13,14 +14,18 @@ import {
 /** The editor listens for this and writes the design to the browser at once. */
 export const SAVE_NOW_EVENT = "layerling:save-now";
 
+/** Why the reload is offered: the server has a newer build, or a part of this page is from another one. */
+export type NewVersionReason = "update" | "mismatch";
+
 /**
- * The version the server holds when it is not the one this page started with, or null. Only in the
- * published program (the static export); the first answer of the server is what the page started
- * with, every later one is compared to it - while the page is visible, when it comes back to the
- * front or the connection returns, and at once when a program file it asks for is gone.
+ * The offer to reload, or null. Two things bring it. In the published program (the static export)
+ * the first answer of the server is what the page started with, and every later one is compared
+ * to it - while the page is visible, when it comes back to the front or the connection returns,
+ * and at once when a program file it asks for is gone. And everywhere, a worker that reports
+ * another build than the page (lib/buildStamp.ts) means a stored or half-updated file.
  */
 export function useNewVersionNotice() {
-  const [latest, setLatest] = useState<VersionInfo | null>(null);
+  const [offer, setOffer] = useState<{ latest: VersionInfo; reason: NewVersionReason } | null>(null);
   const [hiddenUntil, setHiddenUntil] = useState(0);
   const started = useRef<VersionInfo | null>(null);
   const announced = useRef(false);
@@ -35,8 +40,19 @@ export function useNewVersionNotice() {
     }
     if (isNewBuild(started.current, info)) {
       announced.current = true;
-      setLatest(info);
+      setOffer({ latest: info, reason: "update" });
     }
+  }, []);
+
+  useEffect(() => {
+    const onMismatch = () => {
+      if (announced.current) return;
+      announced.current = true;
+      // What the server has now makes the offer concrete; without an answer it is made all the same.
+      void fetchVersionInfo().then((info) => setOffer({ latest: info ?? { version: "", build: "", highlights: [] }, reason: "mismatch" }));
+    };
+    window.addEventListener(BUILD_MISMATCH_EVENT, onMismatch);
+    return () => window.removeEventListener(BUILD_MISMATCH_EVENT, onMismatch);
   }, []);
 
   useEffect(() => {
@@ -90,5 +106,6 @@ export function useNewVersionNotice() {
     window.setTimeout(() => window.location.reload(), 800);
   }, []);
 
-  return { latest: hiddenUntil > Date.now() ? null : latest, later, reload };
+  const visible = offer !== null && hiddenUntil <= Date.now();
+  return { latest: visible ? offer.latest : null, reason: offer?.reason ?? "update", later, reload };
 }

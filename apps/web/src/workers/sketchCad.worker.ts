@@ -6,6 +6,7 @@ import { cadSketchRegions } from "@/lib/sketchCadProfile";
 import { buildRevolvedSketchSolid } from "@/lib/cadSketchRevolve";
 import { buildStrokedSketchSolid } from "@/lib/cadSketchStroke";
 import { pathWire } from "@/lib/sketchCadWire";
+import { buildMessage } from "@/lib/buildStamp";
 import { SKETCH_STROKE_UNSUPPORTED, type SketchCadBuildRequest, type SketchCadBuildResponse } from "@/lib/sketchCadTypes";
 
 let kernelPromise: Promise<OcctKernel> | null = null;
@@ -34,6 +35,9 @@ function kernel() {
 function post(message: SketchCadBuildResponse, transfer: Transferable[] = []) {
   self.postMessage(message, { transfer });
 }
+
+// The first thing the page hears: which build this worker is from (lib/buildStamp.ts).
+self.postMessage(buildMessage());
 
 self.onmessage = async (event: MessageEvent<SketchCadBuildRequest>) => {
   const request = event.data;

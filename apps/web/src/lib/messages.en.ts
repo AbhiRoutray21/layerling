@@ -64,6 +64,8 @@ export const MESSAGES_EN = {
   "dashboard.updateAvailable": "Update available: {version}",
   "newVersion.title": "A new version of layerling is ready",
   "newVersion.body": "This page started with version {current}; the server now has {latest}. Reload to switch - your designs are kept in this browser, and the one you have open is saved first and comes back just as it is.",
+  "newVersion.titleMismatch": "Part of this page is from another version",
+  "newVersion.bodyMismatch": "A file this page loaded later does not match the rest, usually after an update or with a stored copy of an older version. Reload to fix it - your designs are kept in this browser, and the one you have open is saved first and comes back just as it is.",
   "newVersion.reload": "Save and reload",
   "newVersion.later": "Later",
   "dashboard.updateLocalHint": "You run layerling on this computer: the \"Start layerling\" shortcut fetches the update at the next start. Click for the steps.",

@@ -14,13 +14,13 @@ const RUNNING_VERSION = process.env.NEXT_PUBLIC_APP_VERSION ?? "";
  */
 export function NewVersionNotice() {
   const language = useLanguage();
-  const { latest, later, reload } = useNewVersionNotice();
+  const { latest, reason, later, reload } = useNewVersionNotice();
   if (!latest) return null;
   const news = highlightsAfter(RUNNING_VERSION, latest).slice(0, 4);
   return (
     <div className="new-version-notice" role="alertdialog" aria-labelledby="new-version-title" aria-describedby="new-version-body">
-      <strong id="new-version-title">{t("newVersion.title")}</strong>
-      <p id="new-version-body">{t("newVersion.body", { current: RUNNING_VERSION, latest: latest.version })}</p>
+      <strong id="new-version-title">{reason === "mismatch" ? t("newVersion.titleMismatch") : t("newVersion.title")}</strong>
+      <p id="new-version-body">{reason === "mismatch" ? t("newVersion.bodyMismatch") : t("newVersion.body", { current: RUNNING_VERSION, latest: latest.version })}</p>
       {news.length > 0 ? (
         <ul>
           {news.map((entry) => (

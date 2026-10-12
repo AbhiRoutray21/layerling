@@ -11,6 +11,7 @@ import { springPartSolid } from "@/lib/springSolid";
 import { helicalGearPartSolid } from "@/lib/gearSolid";
 import { meshTreatedBody } from "@/lib/cadMeshAccuracy";
 import { planarMeshFaces } from "@/lib/cadPlanarMesh";
+import { buildMessage } from "@/lib/buildStamp";
 import { CAD_MODIFIER_KERNEL_RESTART_MESSAGE, CAD_MODIFIER_RUNTIME_BASE, cadModifierCappedDeflection, cadModifierTessellationDeflection, cadModifierTopologyEdgeIsSelectable, cadTransformRequiresGeneralTransform, isCadModifierKernelExhausted, isCadModifierWasmMemoryFault } from "@/lib/cadModifierRuntime";
 
 const HASH_UPPER_BOUND = 2_147_483_647;
@@ -29,6 +30,9 @@ type CollectedCadEdgeGeometry = Omit<CadModifierEdge, "display" | "selectable"> 
   faceAreas: number[];
 };
 type CollectedCadEdge = CollectedCadEdgeGeometry & Pick<CadModifierEdge, "display" | "selectable">;
+
+// The first thing the page hears: which build this worker is from (lib/buildStamp.ts).
+self.postMessage(buildMessage());
 
 function post(message: CadModifierWorkerResponse, transfer: Transferable[] = []) {
   self.postMessage(message, { transfer });
