@@ -26,7 +26,7 @@ export type GroupBuildResult = {
   failureNotice: string;
 };
 
-export type IntersectionAttempt =
+type IntersectionAttempt =
   | { status: "success"; group: WorkplaneShape }
   | { status: "empty" }
   | { status: "unsupported" };
@@ -37,14 +37,14 @@ export type IntersectionBuildResult = {
   failureNotice: string;
 };
 
-export function cutBoundaryEdgeCount(positions: number[], cutters: WorkplaneShape[]) {
+function cutBoundaryEdgeCount(positions: number[], cutters: WorkplaneShape[]) {
   if (cutters.length === 0) {
     return 0;
   }
   return positionsBoundaryEdges(positions).filter((edge) => cutters.some((cutter) => pointInsideHoleShape(edge.midpoint, cutter))).length;
 }
 
-export function introducesOpenCutBoundary(resultPositions: number[], sourceMesh: MeshData, cutters: WorkplaneShape[]) {
+function introducesOpenCutBoundary(resultPositions: number[], sourceMesh: MeshData, cutters: WorkplaneShape[]) {
   const resultCutBoundaries = cutBoundaryEdgeCount(resultPositions, cutters);
   if (resultCutBoundaries === 0) {
     return false;
@@ -54,7 +54,7 @@ export function introducesOpenCutBoundary(resultPositions: number[], sourceMesh:
   return resultCutBoundaries > sourceCutBoundaries + Math.max(4, Math.floor(sourceCutBoundaries * 0.25));
 }
 
-export function paddedCutterShape(shape: WorkplaneShape): WorkplaneShape {
+function paddedCutterShape(shape: WorkplaneShape): WorkplaneShape {
   const width = shapeWidth(shape) + CUTTER_PADDING * 2;
   const depth = shapeDepth(shape) + CUTTER_PADDING * 2;
   const height = shape.height + CUTTER_PADDING * 2;
@@ -69,17 +69,17 @@ export function paddedCutterShape(shape: WorkplaneShape): WorkplaneShape {
   };
 }
 
-export function brushFromShape(shape: WorkplaneShape, cutter = false) {
+function brushFromShape(shape: WorkplaneShape, cutter = false) {
   const brush = new Brush(geometryFromMeshData(meshForShape(cutter ? paddedCutterShape(shape) : shape)));
   brush.updateMatrixWorld(true);
   return brush;
 }
 
-export function positiveCuboid(cuboid: Cuboid) {
+function positiveCuboid(cuboid: Cuboid) {
   return cuboid.maxX - cuboid.minX > 0.01 && cuboid.maxY - cuboid.minY > 0.01 && cuboid.maxZ - cuboid.minZ > 0.01;
 }
 
-export function subtractCuboid(source: Cuboid, cutter: Cuboid): Cuboid[] {
+function subtractCuboid(source: Cuboid, cutter: Cuboid): Cuboid[] {
   const overlap = {
     minX: Math.max(source.minX, cutter.minX),
     maxX: Math.min(source.maxX, cutter.maxX),
@@ -103,7 +103,7 @@ export function subtractCuboid(source: Cuboid, cutter: Cuboid): Cuboid[] {
   ].filter(positiveCuboid);
 }
 
-export function cuboidsOverlap(a: Cuboid, b: Cuboid) {
+function cuboidsOverlap(a: Cuboid, b: Cuboid) {
   return (
     Math.min(a.maxX, b.maxX) - Math.max(a.minX, b.minX) > 0.01 &&
     Math.min(a.maxY, b.maxY) - Math.max(a.minY, b.minY) > 0.01 &&
@@ -111,13 +111,13 @@ export function cuboidsOverlap(a: Cuboid, b: Cuboid) {
   );
 }
 
-export function hasSolidHoleOverlap(solids: WorkplaneShape[], holes: WorkplaneShape[]) {
+function hasSolidHoleOverlap(solids: WorkplaneShape[], holes: WorkplaneShape[]) {
   const solidBounds = solids.map(meshAabb);
   const holeBounds = holes.map((hole) => meshAabb(paddedCutterShape(hole)));
   return solidBounds.some((solid) => holeBounds.some((hole) => cuboidsOverlap(solid, hole)));
 }
 
-export function pointInsideCuboid(point: Vec3, cuboid: Cuboid, inset = -POINT_TOLERANCE) {
+function pointInsideCuboid(point: Vec3, cuboid: Cuboid, inset = -POINT_TOLERANCE) {
   const minX = cuboid.minX + inset;
   const maxX = cuboid.maxX - inset;
   const minY = cuboid.minY + inset;
@@ -145,9 +145,9 @@ export function pointInsideCuboid(point: Vec3, cuboid: Cuboid, inset = -POINT_TO
  * meant minutes on the main thread, the page "unresponsive" (#214). Shapes are
  * never changed in place, so the box stays right for as long as the object lives.
  */
-export const holeShapeBoundsCache = new WeakMap<WorkplaneShape, Cuboid>();
+const holeShapeBoundsCache = new WeakMap<WorkplaneShape, Cuboid>();
 
-export function holeShapeBounds(shape: WorkplaneShape): Cuboid {
+function holeShapeBounds(shape: WorkplaneShape): Cuboid {
   const cached = holeShapeBoundsCache.get(shape);
   if (cached) return cached;
   const bounds = meshAabb(shape);
@@ -155,7 +155,7 @@ export function holeShapeBounds(shape: WorkplaneShape): Cuboid {
   return bounds;
 }
 
-export function pointInsideHoleShape(point: Vec3, shape: WorkplaneShape, strictInterior = false) {
+function pointInsideHoleShape(point: Vec3, shape: WorkplaneShape, strictInterior = false) {
   if (shape.importedMesh || shape.groupedShapes?.length) {
     return pointInsideCuboid(point, holeShapeBounds(shape), strictInterior ? CUTTER_RESIDUAL_INSET : -POINT_TOLERANCE);
   }
@@ -208,11 +208,11 @@ export function pointInsideHoleShape(point: Vec3, shape: WorkplaneShape, strictI
   return Math.abs(local.x) <= halfWidth + POINT_TOLERANCE && Math.abs(local.z) <= halfDepth + POINT_TOLERANCE;
 }
 
-export function triangleCentroid([a, b, c]: Vec3[]): Vec3 {
+function triangleCentroid([a, b, c]: Vec3[]): Vec3 {
   return [(a[0] + b[0] + c[0]) / 3, (a[1] + b[1] + c[1]) / 3, (a[2] + b[2] + c[2]) / 3];
 }
 
-export function triangleAabb([a, b, c]: Vec3[]): Cuboid {
+function triangleAabb([a, b, c]: Vec3[]): Cuboid {
   return {
     minX: Math.min(a[0], b[0], c[0]),
     maxX: Math.max(a[0], b[0], c[0]),
@@ -223,7 +223,7 @@ export function triangleAabb([a, b, c]: Vec3[]): Cuboid {
   };
 }
 
-export function cuboidsTouch(a: Cuboid, b: Cuboid, tolerance = 0.0001) {
+function cuboidsTouch(a: Cuboid, b: Cuboid, tolerance = 0.0001) {
   return (
     Math.min(a.maxX, b.maxX) + tolerance >= Math.max(a.minX, b.minX) &&
     Math.min(a.maxY, b.maxY) + tolerance >= Math.max(a.minY, b.minY) &&
@@ -231,7 +231,7 @@ export function cuboidsTouch(a: Cuboid, b: Cuboid, tolerance = 0.0001) {
   );
 }
 
-export function triangleTouchesHoleShape(triangle: Vec3[], hole: WorkplaneShape, holeBounds: Cuboid) {
+function triangleTouchesHoleShape(triangle: Vec3[], hole: WorkplaneShape, holeBounds: Cuboid) {
   const bounds = triangleAabb(triangle);
   if (!cuboidsTouch(bounds, holeBounds)) {
     return false;
@@ -250,7 +250,7 @@ export function triangleTouchesHoleShape(triangle: Vec3[], hole: WorkplaneShape,
   return triangleSpan <= cutterSpan * 0.35;
 }
 
-export function cutterTouchedTriangleCount(mesh: MeshData, cutters: WorkplaneShape[]) {
+function cutterTouchedTriangleCount(mesh: MeshData, cutters: WorkplaneShape[]) {
   const cutterInfo = cutters.map((cutter) => ({ shape: cutter, bounds: meshAabb(cutter) }));
   return mesh.faces.reduce((total, [ai, bi, ci]) => {
     const triangle = [mesh.vertices[ai], mesh.vertices[bi], mesh.vertices[ci]];
@@ -258,7 +258,7 @@ export function cutterTouchedTriangleCount(mesh: MeshData, cutters: WorkplaneSha
   }, 0);
 }
 
-export function isAxisAlignedBoxCutter(shape: WorkplaneShape) {
+function isAxisAlignedBoxCutter(shape: WorkplaneShape) {
   const rotation = Math.abs(normalizeDegrees(shape.rotation));
   const rotationX = Math.abs(normalizeDegrees(shape.rotationX ?? 0));
   const rotationZ = Math.abs(normalizeDegrees(shape.rotationZ ?? 0));
@@ -271,7 +271,7 @@ export function isAxisAlignedBoxCutter(shape: WorkplaneShape) {
   return shape.kind === "box" && straightX && straightY && straightZ && !shapeHasShapeDeform(shape);
 }
 
-export function cuboidsToMesh(name: string, cuboids: Cuboid[], centerX: number, centerZ: number, baseY = 0): MeshData {
+function cuboidsToMesh(name: string, cuboids: Cuboid[], centerX: number, centerZ: number, baseY = 0): MeshData {
   const vertices: Vec3[] = [];
   const faces: [number, number, number][] = [];
 
@@ -343,7 +343,7 @@ export function cuboidsToMesh(name: string, cuboids: Cuboid[], centerX: number, 
   return { name, vertices, faces };
 }
 
-export function booleanMeshShape(selection: WorkplaneShape[], groupChildren?: WorkplaneShape[]): WorkplaneShape | null {
+function booleanMeshShape(selection: WorkplaneShape[], groupChildren?: WorkplaneShape[]): WorkplaneShape | null {
   const solids = selection.filter((shape) => !shape.hole && !shape.locked);
   const holes = selection.filter((shape) => shape.hole);
   if (solids.length === 0 || holes.length === 0) {
@@ -426,7 +426,7 @@ export function booleanMeshShape(selection: WorkplaneShape[], groupChildren?: Wo
   }
 }
 
-export function resultGeometryToMeshShape(
+function resultGeometryToMeshShape(
   selection: WorkplaneShape[],
   solids: WorkplaneShape[],
   geometry: THREE.BufferGeometry,
@@ -486,7 +486,7 @@ export function resultGeometryToMeshShape(
   };
 }
 
-export function isUsableBooleanGroup(group: WorkplaneShape | null, sourceTriangleCount = 0, enforceMinimumTriangles = true) {
+function isUsableBooleanGroup(group: WorkplaneShape | null, sourceTriangleCount = 0, enforceMinimumTriangles = true) {
   if (!group?.importedMesh) {
     return false;
   }
@@ -502,7 +502,7 @@ export function isUsableBooleanGroup(group: WorkplaneShape | null, sourceTriangl
   return triangleCount >= minTriangles && group.width > 0.01 && group.height > 0.01 && group.depth > 0.01;
 }
 
-export function looksLikeUnchangedBooleanResult(group: WorkplaneShape | null, sourceTriangleCount: number, requireChanged = true) {
+function looksLikeUnchangedBooleanResult(group: WorkplaneShape | null, sourceTriangleCount: number, requireChanged = true) {
   if (!group?.importedMesh) {
     return true;
   }
@@ -515,15 +515,15 @@ export function looksLikeUnchangedBooleanResult(group: WorkplaneShape | null, so
   return sameTriangles;
 }
 
-export function shapeContainsImportedMesh(shape: WorkplaneShape): boolean {
+function shapeContainsImportedMesh(shape: WorkplaneShape): boolean {
   return Boolean(shape.importedMesh) || Boolean(shape.groupedShapes?.some(shapeContainsImportedMesh));
 }
 
-export function shapeIsImportedHole(shape: WorkplaneShape): boolean {
+function shapeIsImportedHole(shape: WorkplaneShape): boolean {
   return Boolean(shape.hole) && shapeContainsImportedMesh(shape);
 }
 
-export function coplanarRescueCutterShape(shape: WorkplaneShape): WorkplaneShape {
+function coplanarRescueCutterShape(shape: WorkplaneShape): WorkplaneShape {
   if (!shapeIsImportedHole(shape) || hasNonZeroRotation(shape)) {
     return shape;
   }
@@ -544,7 +544,7 @@ export function cloneAsGroupChild(shape: WorkplaneShape, centerX: number, center
   };
 }
 
-export function mergedSolidMeshData(solids: WorkplaneShape[]) {
+function mergedSolidMeshData(solids: WorkplaneShape[]) {
   const mergedSolidMesh: MeshData = { name: "ImportedBooleanSource", vertices: [], faces: [] };
 
   solids.forEach((solid) => {
@@ -579,7 +579,7 @@ export function meshDataToManifoldMesh(runtime: ManifoldToplevel, mesh: MeshData
   return manifoldMesh;
 }
 
-export function boxBoundsToManifold(runtime: ManifoldToplevel, bounds: Cuboid, created: ManifoldSolid[]) {
+function boxBoundsToManifold(runtime: ManifoldToplevel, bounds: Cuboid, created: ManifoldSolid[]) {
   const width = bounds.maxX - bounds.minX;
   const height = bounds.maxY - bounds.minY;
   const depth = bounds.maxZ - bounds.minZ;
@@ -596,18 +596,18 @@ export function boxBoundsToManifold(runtime: ManifoldToplevel, bounds: Cuboid, c
   return moved;
 }
 
-export function trackManifold<T extends ManifoldSolid | null>(created: ManifoldSolid[], value: T): T {
+function trackManifold<T extends ManifoldSolid | null>(created: ManifoldSolid[], value: T): T {
   if (value) {
     created.push(value);
   }
   return value;
 }
 
-export function manifoldTransformFromMatrix(matrix: THREE.Matrix4) {
+function manifoldTransformFromMatrix(matrix: THREE.Matrix4) {
   return matrix.elements as unknown as Parameters<ManifoldSolid["transform"]>[0];
 }
 
-export function shapeRotationQuaternion(shape: WorkplaneShape) {
+function shapeRotationQuaternion(shape: WorkplaneShape) {
   return new THREE.Quaternion().setFromEuler(
     new THREE.Euler(
       THREE.MathUtils.degToRad(shape.rotationX ?? 0),
@@ -618,7 +618,7 @@ export function shapeRotationQuaternion(shape: WorkplaneShape) {
   );
 }
 
-export function primitiveTransformMatrix(shape: WorkplaneShape, scale: THREE.Vector3, alignRotation?: THREE.Euler) {
+function primitiveTransformMatrix(shape: WorkplaneShape, scale: THREE.Vector3, alignRotation?: THREE.Euler) {
   const center = new THREE.Vector3(shape.x, (shape.elevation ?? 0) + shape.height / 2, shape.z);
   const matrix = new THREE.Matrix4().compose(center, shapeRotationQuaternion(shape), new THREE.Vector3(1, 1, 1));
   if (alignRotation) {
@@ -628,12 +628,12 @@ export function primitiveTransformMatrix(shape: WorkplaneShape, scale: THREE.Vec
   return matrix;
 }
 
-export function transformedPrimitiveManifold(primitive: ManifoldSolid, matrix: THREE.Matrix4, created: ManifoldSolid[]) {
+function transformedPrimitiveManifold(primitive: ManifoldSolid, matrix: THREE.Matrix4, created: ManifoldSolid[]) {
   trackManifold(created, primitive);
   return trackManifold(created, primitive.transform(manifoldTransformFromMatrix(matrix)));
 }
 
-export function primitiveManifoldForShape(runtime: ManifoldToplevel, shape: WorkplaneShape, created: ManifoldSolid[]) {
+function primitiveManifoldForShape(runtime: ManifoldToplevel, shape: WorkplaneShape, created: ManifoldSolid[]) {
   // Taper, twist and lean are not part of the analytic primitives; the mesh
   // carries them.
   if (shapeHasShapeDeform(shape)) {
@@ -704,7 +704,7 @@ export function shapeToManifoldSolid(runtime: ManifoldToplevel, shape: Workplane
   return normalized.solid ?? solid;
 }
 
-export function shapesToManifoldUnion(runtime: ManifoldToplevel, shapes: WorkplaneShape[], created: ManifoldSolid[], useBoxPrimitive = false) {
+function shapesToManifoldUnion(runtime: ManifoldToplevel, shapes: WorkplaneShape[], created: ManifoldSolid[], useBoxPrimitive = false) {
   const parts: ManifoldSolid[] = [];
   for (const shape of shapes) {
     const part = shapeToManifoldSolid(runtime, shape, created, useBoxPrimitive);
@@ -729,7 +729,7 @@ export function shapesToManifoldUnion(runtime: ManifoldToplevel, shapes: Workpla
   return union.status() === "NoError" && union.numTri() > 0 ? union : null;
 }
 
-export async function splitShapeByPlane(shape: WorkplaneShape, plane: Pick<ModelSplitPlane, "axis" | "normal" | "position">) {
+async function splitShapeByPlane(shape: WorkplaneShape, plane: Pick<ModelSplitPlane, "axis" | "normal" | "position">) {
   const created: ManifoldSolid[] = [];
   try {
     const runtime = await getManifoldRuntime();
@@ -814,7 +814,7 @@ export async function splitShapesByPlane(
   return { status: "done", replacements, splitCount };
 }
 
-export function manifoldMeshToPositions(mesh: InstanceType<ManifoldToplevel["Mesh"]>) {
+function manifoldMeshToPositions(mesh: InstanceType<ManifoldToplevel["Mesh"]>) {
   const positions: number[] = [];
   const numProp = mesh.numProp;
   for (let i = 0; i < mesh.triVerts.length; i += 1) {
@@ -825,7 +825,7 @@ export function manifoldMeshToPositions(mesh: InstanceType<ManifoldToplevel["Mes
   return positions;
 }
 
-export function positionsInteriorTriangleCount(positions: number[], cutters: WorkplaneShape[], strictInterior = false) {
+function positionsInteriorTriangleCount(positions: number[], cutters: WorkplaneShape[], strictInterior = false) {
   let count = 0;
   for (let i = 0; i + 8 < positions.length; i += 9) {
     const centroid: Vec3 = [
@@ -840,7 +840,7 @@ export function positionsInteriorTriangleCount(positions: number[], cutters: Wor
   return count;
 }
 
-export function meshPositionsToGroupShape(selection: WorkplaneShape[], solids: WorkplaneShape[], positions: number[], idPrefix: string, groupChildren?: WorkplaneShape[]): WorkplaneShape | null {
+function meshPositionsToGroupShape(selection: WorkplaneShape[], solids: WorkplaneShape[], positions: number[], idPrefix: string, groupChildren?: WorkplaneShape[]): WorkplaneShape | null {
   if (positions.length < 9) {
     return null;
   }
@@ -912,7 +912,7 @@ export function meshPositionsToGroupShape(selection: WorkplaneShape[], solids: W
   };
 }
 
-export function manifoldMeshToMeshData(mesh: InstanceType<ManifoldToplevel["Mesh"]>, name: string): MeshData {
+function manifoldMeshToMeshData(mesh: InstanceType<ManifoldToplevel["Mesh"]>, name: string): MeshData {
   const numProp = mesh.numProp;
   const vertices: Vec3[] = [];
   for (let offset = 0; offset + 2 < mesh.vertProperties.length; offset += numProp) {
@@ -936,7 +936,7 @@ export function manifoldMeshToMeshData(mesh: InstanceType<ManifoldToplevel["Mesh
  * A group of solids without holes is the loose pile of its parts' surfaces,
  * so its parts overlap each other even when nothing else does.
  */
-export function isPileOfSolids(shape: WorkplaneShape) {
+function isPileOfSolids(shape: WorkplaneShape) {
   return Boolean(shape.groupedShapes && shape.groupedShapes.length > 1 && !shape.importedMesh);
 }
 
@@ -1164,7 +1164,7 @@ export function multicolorExportSolids(shape: WorkplaneShape): PartColorSolid[] 
   return solids.length ? solids : null;
 }
 
-export const PART_COLOR_PROBE = new THREE.Vector3(0.5773, 0.5774, 0.5775).normalize();
+const PART_COLOR_PROBE = new THREE.Vector3(0.5773, 0.5774, 0.5775).normalize();
 
 /**
  * A colour for every face of an exported body: the colour of the part the face belongs to,
@@ -1291,7 +1291,7 @@ export function disposeManifold(value: unknown) {
   (value as { delete?: () => void } | null)?.delete?.();
 }
 
-export async function manifoldBooleanMeshShape(selection: WorkplaneShape[], triangleLimit: number, options: { requireImported?: boolean; idPrefix?: string } = {}, groupChildren?: WorkplaneShape[]): Promise<WorkplaneShape | null> {
+async function manifoldBooleanMeshShape(selection: WorkplaneShape[], triangleLimit: number, options: { requireImported?: boolean; idPrefix?: string } = {}, groupChildren?: WorkplaneShape[]): Promise<WorkplaneShape | null> {
   // GROUPING SAFETY NOTE FOR FUTURE AGENTS:
   // Imported STL + hole grouping stays on exact boolean first. Rotated cutters
   // are validated against their real oriented volume, not their broad AABB.
@@ -1359,7 +1359,7 @@ export async function manifoldBooleanMeshShape(selection: WorkplaneShape[], tria
   }
 }
 
-export async function manifoldUnionMeshShape(selection: WorkplaneShape[], triangleLimit: number, groupChildren?: WorkplaneShape[]): Promise<WorkplaneShape | null> {
+async function manifoldUnionMeshShape(selection: WorkplaneShape[], triangleLimit: number, groupChildren?: WorkplaneShape[]): Promise<WorkplaneShape | null> {
   const solids = selection.filter((shape) => !shape.hole && !shape.locked);
   if (solids.length < 2 || !selection.some((shape) => Boolean(shape.importedMesh))) {
     return null;
@@ -1393,7 +1393,7 @@ export async function manifoldUnionMeshShape(selection: WorkplaneShape[], triang
   }
 }
 
-export function asIntersectionGroup(group: WorkplaneShape): WorkplaneShape {
+function asIntersectionGroup(group: WorkplaneShape): WorkplaneShape {
   return {
     ...group,
     name: "Intersection",
@@ -1412,7 +1412,7 @@ export type IntersectionPlan = {
   children: WorkplaneShape[];
 };
 
-export function intersectionPlanForSelection(groupable: WorkplaneShape[]): IntersectionPlan | null {
+function intersectionPlanForSelection(groupable: WorkplaneShape[]): IntersectionPlan | null {
   const candidates = groupable.filter((shape) => !shape.locked);
   if (candidates.some((shape) => shape.hole)) {
     const booleanSelection = expandGroupsForBoolean(candidates);
@@ -1429,12 +1429,12 @@ export function canIntersectShapes(groupable: WorkplaneShape[]) {
   return intersectionPlanForSelection(groupable) !== null;
 }
 
-export function intersectionOperandsOverlap(operands: WorkplaneShape[][]) {
+function intersectionOperandsOverlap(operands: WorkplaneShape[][]) {
   const [first, ...rest] = operands;
   return rest.every((operand) => hasSolidHoleOverlap(first, operand));
 }
 
-export async function manifoldIntersectionMeshShape(plan: IntersectionPlan, triangleLimit: number): Promise<IntersectionAttempt> {
+async function manifoldIntersectionMeshShape(plan: IntersectionPlan, triangleLimit: number): Promise<IntersectionAttempt> {
   const sourceTriangleCount = plan.children.reduce((total, shape) => total + meshForShape(shape).faces.length, 0);
   if (sourceTriangleCount > triangleLimit) {
     return { status: "unsupported" };
@@ -1476,7 +1476,7 @@ export async function manifoldIntersectionMeshShape(plan: IntersectionPlan, tria
   }
 }
 
-export function bvhIntersectionMeshShape(plan: IntersectionPlan, operation: CSGOperation, idPrefix: string): IntersectionAttempt {
+function bvhIntersectionMeshShape(plan: IntersectionPlan, operation: CSGOperation, idPrefix: string): IntersectionAttempt {
   // Die hohle Schnittmenge behaelt nur die Haut der ersten Seite - fuer mehr
   // als zwei Partner ist das keine Schnittmenge mehr.
   if (operation === HOLLOW_INTERSECTION && plan.operands.length !== 2) {
@@ -1563,14 +1563,14 @@ export async function buildIntersectionShapeFromSelection(groupable: WorkplaneSh
   };
 }
 
-export function cutterInteriorTriangleCount(mesh: MeshData, cutters: WorkplaneShape[]) {
+function cutterInteriorTriangleCount(mesh: MeshData, cutters: WorkplaneShape[]) {
   return mesh.faces.reduce((total, [ai, bi, ci]) => {
     const centroid = triangleCentroid([mesh.vertices[ai], mesh.vertices[bi], mesh.vertices[ci]]);
     return total + (cutters.some((cutter) => pointInsideHoleShape(centroid, cutter)) ? 1 : 0);
   }, 0);
 }
 
-export function geometryInteriorTriangleCount(geometry: THREE.BufferGeometry, cutters: WorkplaneShape[], strictInterior = false) {
+function geometryInteriorTriangleCount(geometry: THREE.BufferGeometry, cutters: WorkplaneShape[], strictInterior = false) {
   const positions = positionsFromGeometryDrawRange(geometry);
   let count = 0;
   for (let i = 0; i + 8 < positions.length; i += 9) {
@@ -1586,7 +1586,7 @@ export function geometryInteriorTriangleCount(geometry: THREE.BufferGeometry, cu
   return count;
 }
 
-export function clearsImportedCutVolume(geometry: THREE.BufferGeometry, sourceInteriorTriangles: number, cutters: WorkplaneShape[]) {
+function clearsImportedCutVolume(geometry: THREE.BufferGeometry, sourceInteriorTriangles: number, cutters: WorkplaneShape[]) {
   if (sourceInteriorTriangles <= 0 || cutters.length === 0) {
     return true;
   }
@@ -1595,7 +1595,7 @@ export function clearsImportedCutVolume(geometry: THREE.BufferGeometry, sourceIn
   return remainingInteriorTriangles <= Math.max(4, Math.floor(sourceInteriorTriangles * 0.05));
 }
 
-export function importedBooleanMeshShape(selection: WorkplaneShape[], groupChildren?: WorkplaneShape[]): WorkplaneShape | null {
+function importedBooleanMeshShape(selection: WorkplaneShape[], groupChildren?: WorkplaneShape[]): WorkplaneShape | null {
   const solids = selection.filter((shape) => !shape.hole && !shape.locked);
   const holes = selection.filter((shape) => shape.hole);
   if (solids.length === 0 || holes.length === 0 || !selection.some((shape) => Boolean(shape.importedMesh))) {
@@ -1663,7 +1663,7 @@ export function importedBooleanMeshShape(selection: WorkplaneShape[], groupChild
   return null;
 }
 
-export function boxedBooleanMeshShape(selection: WorkplaneShape[], groupChildren?: WorkplaneShape[]): WorkplaneShape | null {
+function boxedBooleanMeshShape(selection: WorkplaneShape[], groupChildren?: WorkplaneShape[]): WorkplaneShape | null {
   const solids = selection.filter((shape) => !shape.hole && shape.kind === "box" && !shape.locked);
   const holes = selection.filter((shape) => shape.hole && shape.kind === "box");
   if (solids.length === 0 || holes.length === 0) {
@@ -1717,7 +1717,7 @@ export function boxedBooleanMeshShape(selection: WorkplaneShape[], groupChildren
   };
 }
 
-export function cutFullyConsumesSolids(selection: WorkplaneShape[]) {
+function cutFullyConsumesSolids(selection: WorkplaneShape[]) {
   const solids = selection.filter((shape) => !shape.hole && !shape.locked);
   const holes = selection.filter((shape) => shape.hole).map(paddedCutterShape);
   if (solids.length === 0 || holes.length === 0) {
@@ -1740,7 +1740,7 @@ export function cutFullyConsumesSolids(selection: WorkplaneShape[]) {
   });
 }
 
-export function mergedMeshShape(selection: WorkplaneShape[], groupChildren?: WorkplaneShape[]): WorkplaneShape | null {
+function mergedMeshShape(selection: WorkplaneShape[], groupChildren?: WorkplaneShape[]): WorkplaneShape | null {
   const groupable = selection.filter((shape) => !shape.locked);
   if (groupable.length < 2) {
     return null;
@@ -1962,7 +1962,7 @@ export function restoreGroupedChildren(group: WorkplaneShape): WorkplaneShape[] 
   });
 }
 
-export function expandGroupsForBoolean(selection: WorkplaneShape[]): WorkplaneShape[] {
+function expandGroupsForBoolean(selection: WorkplaneShape[]): WorkplaneShape[] {
   return selection.flatMap((shape) => {
     if (shape.importedMesh) {
       return [shape];
@@ -1971,15 +1971,15 @@ export function expandGroupsForBoolean(selection: WorkplaneShape[]): WorkplaneSh
   });
 }
 
-export function expandGroupsForBoxBoolean(selection: WorkplaneShape[]): WorkplaneShape[] {
+function expandGroupsForBoxBoolean(selection: WorkplaneShape[]): WorkplaneShape[] {
   return selection.flatMap((shape) => (shape.groupedShapes?.length ? restoreGroupedChildren(shape) : [shape]));
 }
 
-export function canUseBoxBoolean(selection: WorkplaneShape[]) {
+function canUseBoxBoolean(selection: WorkplaneShape[]) {
   return selection.every(isAxisAlignedBoxCutter);
 }
 
-export function hasNonZeroRotation(shape: WorkplaneShape) {
+function hasNonZeroRotation(shape: WorkplaneShape) {
   const rotation = Math.abs(normalizeDegrees(shape.rotation));
   const rotationX = Math.abs(normalizeDegrees(shape.rotationX ?? 0));
   const rotationZ = Math.abs(normalizeDegrees(shape.rotationZ ?? 0));
@@ -1991,7 +1991,7 @@ export function hasNonZeroRotation(shape: WorkplaneShape) {
  * the triangle count alone is the reason; between the two limits the kernel
  * was tried and refused the mesh, and only the fallback stopped at the count.
  */
-export function importedCutFailureNotice(selection: WorkplaneShape[], succeeded: boolean, triangleLimit: number) {
+function importedCutFailureNotice(selection: WorkplaneShape[], succeeded: boolean, triangleLimit: number) {
   const fallback = "Could not cut this imported mesh cleanly";
   if (succeeded) return fallback;
   const triangleCount = selection

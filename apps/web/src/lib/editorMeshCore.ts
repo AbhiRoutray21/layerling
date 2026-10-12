@@ -50,7 +50,7 @@ export const CUTTER_RESIDUAL_INSET = CUTTER_PADDING * 0.4;
 
 export const MIN_SHAPE_DIMENSION = 0.01;
 
-export const MODEL_DIMENSION_PRECISION = 3;
+const MODEL_DIMENSION_PRECISION = 3;
 
 // The exact kernel (Manifold) cuts a few hundred thousand triangles in about a
 // second; its limit is the workspace setting handed to the boolean helpers
@@ -99,7 +99,7 @@ export function getManifoldRuntime() {
 }
 setManifoldLoader(getManifoldRuntime);
 
-export function sanitizeName(name: string) {
+function sanitizeName(name: string) {
   return name.replace(/[^a-z0-9_-]+/gi, "_") || "shape";
 }
 
@@ -176,7 +176,7 @@ export function transformMesh(mesh: MeshData, shape: WorkplaneShape): MeshData {
   };
 }
 
-export function boxMesh(shape: WorkplaneShape): MeshData {
+function boxMesh(shape: WorkplaneShape): MeshData {
   const width = shapeWidth(shape);
   const depth = shapeDepth(shape);
   const height = shape.height;
@@ -211,7 +211,7 @@ export function boxMesh(shape: WorkplaneShape): MeshData {
   };
 }
 
-export function cylinderMesh(shape: WorkplaneShape, sides = 96, topRadiusScale = 1): MeshData {
+function cylinderMesh(shape: WorkplaneShape, sides = 96, topRadiusScale = 1): MeshData {
   const width = shapeWidth(shape);
   const depth = shapeDepth(shape);
   const height = shape.height;
@@ -239,7 +239,7 @@ export function cylinderMesh(shape: WorkplaneShape, sides = 96, topRadiusScale =
   return { name: sanitizeName(shape.name), vertices, faces };
 }
 
-export function sphereMesh(shape: WorkplaneShape): MeshData {
+function sphereMesh(shape: WorkplaneShape): MeshData {
   const { widthSegments: lon, heightSegments: lat } = sphereTessellation(shape.steps);
   const width = shapeWidth(shape);
   const depth = shapeDepth(shape);
@@ -268,7 +268,7 @@ export function sphereMesh(shape: WorkplaneShape): MeshData {
   return { name: sanitizeName(shape.name), vertices, faces };
 }
 
-export function bufferGeometryToMeshData(name: string, geometry: THREE.BufferGeometry): MeshData {
+function bufferGeometryToMeshData(name: string, geometry: THREE.BufferGeometry): MeshData {
   const prepared = geometry.index ? geometry.toNonIndexed() : geometry;
   prepared.computeVertexNormals();
   prepared.computeBoundingBox();
@@ -295,7 +295,7 @@ export function bufferGeometryToMeshData(name: string, geometry: THREE.BufferGeo
   return { name, vertices, faces };
 }
 
-export function createBooleanRoofGeometry(width: number, height: number, depth: number) {
+function createBooleanRoofGeometry(width: number, height: number, depth: number) {
   const w = width / 2;
   const d = depth / 2;
   const vertices = new Float32Array([
@@ -315,7 +315,7 @@ export function createBooleanRoofGeometry(width: number, height: number, depth: 
   return geometry;
 }
 
-export function createBooleanWedgeGeometry(width: number, height: number, depth: number) {
+function createBooleanWedgeGeometry(width: number, height: number, depth: number) {
   const w = width / 2;
   const d = depth / 2;
   const vertices = new Float32Array([
@@ -335,7 +335,7 @@ export function createBooleanWedgeGeometry(width: number, height: number, depth:
   return geometry;
 }
 
-export function createBooleanTorusGeometry(width: number, height: number, depth: number) {
+function createBooleanTorusGeometry(width: number, height: number, depth: number) {
   const tubeRadius = Math.max(0.1, height / 2);
   const majorRadius = Math.max(0.2, Math.min(width, depth) / 2 - tubeRadius);
   const geometry = new THREE.TorusGeometry(majorRadius, tubeRadius, 36, 144);
@@ -345,11 +345,11 @@ export function createBooleanTorusGeometry(width: number, height: number, depth:
   return geometry;
 }
 
-export function createBooleanTextGeometry(shape: WorkplaneShape) {
+function createBooleanTextGeometry(shape: WorkplaneShape) {
   return textDisplayGeometry(shape);
 }
 
-export function geometryMeshForShape(shape: WorkplaneShape): MeshData | null {
+function geometryMeshForShape(shape: WorkplaneShape): MeshData | null {
   const width = shapeWidth(shape);
   const depth = shapeDepth(shape);
   const height = shape.height;
@@ -629,7 +629,7 @@ export function appendMeshData(vertices: Vec3[], faces: [number, number, number]
   }
 }
 
-export function importedMeshForShape(shape: WorkplaneShape): MeshData {
+function importedMeshForShape(shape: WorkplaneShape): MeshData {
   const mesh = shape.importedMesh;
   if (!mesh || mesh.positions.length < 9) {
     return transformMesh(boxMesh(shape), shape);
@@ -797,15 +797,15 @@ export function quantizedPointKey([x, y, z]: Vec3, tolerance: number) {
   return [x, y, z].map((value) => Math.round(value / tolerance)).join(",");
 }
 
-export function triangleSignature(points: Vec3[], tolerance: number) {
+function triangleSignature(points: Vec3[], tolerance: number) {
   return points.map((point) => quantizedPointKey(point, tolerance)).sort().join("|");
 }
 
-export function addSignature(signatures: Map<string, number>, signature: string) {
+function addSignature(signatures: Map<string, number>, signature: string) {
   signatures.set(signature, (signatures.get(signature) ?? 0) + 1);
 }
 
-export function meshSignatureMap(mesh: MeshData, tolerance: number) {
+function meshSignatureMap(mesh: MeshData, tolerance: number) {
   const signatures = new Map<string, number>();
   mesh.faces.forEach(([ai, bi, ci]) => {
     addSignature(signatures, triangleSignature([mesh.vertices[ai], mesh.vertices[bi], mesh.vertices[ci]], tolerance));
@@ -813,7 +813,7 @@ export function meshSignatureMap(mesh: MeshData, tolerance: number) {
   return signatures;
 }
 
-export function positionsSignatureMap(positions: number[], tolerance: number) {
+function positionsSignatureMap(positions: number[], tolerance: number) {
   const signatures = new Map<string, number>();
   for (let i = 0; i + 8 < positions.length; i += 9) {
     addSignature(
@@ -831,7 +831,7 @@ export function positionsSignatureMap(positions: number[], tolerance: number) {
   return signatures;
 }
 
-export function signatureMapsDiffer(a: Map<string, number>, b: Map<string, number>) {
+function signatureMapsDiffer(a: Map<string, number>, b: Map<string, number>) {
   if (a.size !== b.size) {
     return true;
   }
@@ -854,17 +854,17 @@ export function geometryDiffersFromMeshData(geometry: THREE.BufferGeometry, mesh
   return positionsDifferFromMeshData(positionsFromGeometryDrawRange(geometry), mesh, tolerance);
 }
 
-export function sortedEdgeKey(a: Vec3, b: Vec3, tolerance: number) {
+function sortedEdgeKey(a: Vec3, b: Vec3, tolerance: number) {
   const ak = quantizedPointKey(a, tolerance);
   const bk = quantizedPointKey(b, tolerance);
   return ak < bk ? `${ak}|${bk}` : `${bk}|${ak}`;
 }
 
-export function edgeMidpoint(a: Vec3, b: Vec3): Vec3 {
+function edgeMidpoint(a: Vec3, b: Vec3): Vec3 {
   return [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2, (a[2] + b[2]) / 2];
 }
 
-export function addBoundaryEdge(edges: Map<string, { count: number; midpoint: Vec3 }>, a: Vec3, b: Vec3, tolerance: number) {
+function addBoundaryEdge(edges: Map<string, { count: number; midpoint: Vec3 }>, a: Vec3, b: Vec3, tolerance: number) {
   const key = sortedEdgeKey(a, b, tolerance);
   const existing = edges.get(key);
   if (existing) {

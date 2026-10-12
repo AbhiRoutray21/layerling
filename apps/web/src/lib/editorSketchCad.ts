@@ -18,17 +18,17 @@ export function emptySketchProfile(): SketchProfile {
   return { points: [], segments: [], images: [] };
 }
 
-export let sketchCadWorker: Worker | null = null;
+let sketchCadWorker: Worker | null = null;
 
-export let sketchCadRequestId = 0;
+let sketchCadRequestId = 0;
 
-export const sketchCadPending = new Map<number, {
+const sketchCadPending = new Map<number, {
   resolve: (response: SketchCadBuildResponse) => void;
   reject: (error: Error) => void;
   timer: number;
 }>();
 
-export function ensureSketchCadWorker() {
+function ensureSketchCadWorker() {
   if (sketchCadWorker) return sketchCadWorker;
   const worker = new Worker(new URL("../workers/sketchCad.worker.ts", import.meta.url), { type: "module" });
   worker.onmessage = (event: MessageEvent<SketchCadBuildResponse>) => {
@@ -121,7 +121,7 @@ export async function cadShapeFromSketchProfile(profile: SketchProfile, height: 
  * triangles, not tens of thousands (#167). Null when the profile cannot be built that way (it
  * crosses the axis) or the kernel refuses; the mesh revolve takes over then.
  */
-export async function cadShapeFromSketchRevolve(
+async function cadShapeFromSketchRevolve(
   profile: SketchProfile,
   settings: SketchRevolveSettings,
   existing?: WorkplaneShape | null,

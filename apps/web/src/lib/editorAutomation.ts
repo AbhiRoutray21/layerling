@@ -7,7 +7,7 @@ import type { ParametricSource, ShapeKind, SketchOperation, SketchProfile, Sketc
 import { type Vec3, meshForShape, appendMeshData, boundsForCuboids, meshAabb } from "@/lib/editorMeshCore";
 import { groupedShape } from "@/lib/editorBooleans";
 
-export function stlBoxTrianglePositions(width: number, depth: number, height: number) {
+function stlBoxTrianglePositions(width: number, depth: number, height: number) {
   const x = width / 2;
   const z = depth / 2;
   const vertices: Vec3[] = [
@@ -37,7 +37,7 @@ export function stlBoxTrianglePositions(width: number, depth: number, height: nu
   return faces.flatMap((face) => face.flatMap((index) => vertices[index]));
 }
 
-export function automationSolidBox(overrides: Partial<WorkplaneShape> = {}) {
+function automationSolidBox(overrides: Partial<WorkplaneShape> = {}) {
   return sceneShape({
     id: "solid-cube",
     name: "Solid cube",
@@ -52,7 +52,7 @@ export function automationSolidBox(overrides: Partial<WorkplaneShape> = {}) {
   });
 }
 
-export function automationHoleBox(overrides: Partial<WorkplaneShape> = {}) {
+function automationHoleBox(overrides: Partial<WorkplaneShape> = {}) {
   return sceneShape({
     id: "hole-cube",
     name: "Hole cube",
@@ -69,7 +69,7 @@ export function automationHoleBox(overrides: Partial<WorkplaneShape> = {}) {
   });
 }
 
-export function automationImportedStlBox(overrides: Partial<WorkplaneShape> = {}) {
+function automationImportedStlBox(overrides: Partial<WorkplaneShape> = {}) {
   const width = overrides.width ?? 28;
   const depth = overrides.depth ?? 28;
   const height = overrides.height ?? 28;
@@ -95,7 +95,7 @@ export function automationImportedStlBox(overrides: Partial<WorkplaneShape> = {}
   });
 }
 
-export function automationHoleStlBox(overrides: Partial<WorkplaneShape> = {}) {
+function automationHoleStlBox(overrides: Partial<WorkplaneShape> = {}) {
   return automationImportedStlBox({
     id: "hole-stl",
     name: "Hole STL",
@@ -109,7 +109,7 @@ export function automationHoleStlBox(overrides: Partial<WorkplaneShape> = {}) {
   });
 }
 
-export function automationImportedStlFromShapes(id: string, name: string, color: string, parts: WorkplaneShape[], overrides: Partial<WorkplaneShape> = {}) {
+function automationImportedStlFromShapes(id: string, name: string, color: string, parts: WorkplaneShape[], overrides: Partial<WorkplaneShape> = {}) {
   const vertices: Vec3[] = [];
   const faces: [number, number, number][] = [];
   parts.forEach((part) => appendMeshData(vertices, faces, meshForShape(part)));
@@ -149,7 +149,7 @@ export function automationImportedStlFromShapes(id: string, name: string, color:
   });
 }
 
-export function automationRaspberryPiStl(overrides: Partial<WorkplaneShape> = {}) {
+function automationRaspberryPiStl(overrides: Partial<WorkplaneShape> = {}) {
   const parts: WorkplaneShape[] = [
     sceneShape({ id: "raspi-board", name: "Board", kind: "box", color: "#1f9f5f", width: 70, depth: 48, height: 3, elevation: 0 }),
     sceneShape({ id: "raspi-soc", name: "Main chip", kind: "box", color: "#30343b", x: -8, z: 0, width: 15, depth: 15, height: 3.2, elevation: 3 }),
@@ -181,7 +181,7 @@ export function automationRaspberryPiStl(overrides: Partial<WorkplaneShape> = {}
   return automationImportedStlFromShapes("raspberry-pi-stl", "Raspberry Pi-like STL", "#0098c7", parts, overrides);
 }
 
-export const booleanAutomationShapeConfigs: Record<
+const booleanAutomationShapeConfigs: Record<
   string,
   {
     name: string;
@@ -206,7 +206,7 @@ export const booleanAutomationShapeConfigs: Record<
   tube: { name: "Tube", kind: "tube", color: "#ce7013", width: 34, depth: 34, height: 28, props: { bevel: 6, sides: 96 } },
 };
 
-export function automationShape(key: string, overrides: Partial<WorkplaneShape> = {}) {
+function automationShape(key: string, overrides: Partial<WorkplaneShape> = {}) {
   const config = booleanAutomationShapeConfigs[key];
   if (!config) {
     return null;
@@ -231,7 +231,7 @@ export function automationShape(key: string, overrides: Partial<WorkplaneShape> 
   });
 }
 
-export function automationHoleShape(key: string, overrides: Partial<WorkplaneShape> = {}) {
+function automationHoleShape(key: string, overrides: Partial<WorkplaneShape> = {}) {
   const shape = automationShape(key, {
     hole: true,
     color: "#b8c2cc",
@@ -245,7 +245,7 @@ export function automationHoleShape(key: string, overrides: Partial<WorkplaneSha
   return shape ? withHoleMode(shape, true) : null;
 }
 
-export function automationNormalGroupedObject(overrides: Partial<WorkplaneShape> = {}) {
+function automationNormalGroupedObject(overrides: Partial<WorkplaneShape> = {}) {
   const cube = automationShape("cube", { id: "normal-group-cube", x: -9, width: 18, depth: 24, height: 26 });
   const cylinder = automationShape("cylinder", { id: "normal-group-cylinder", x: 10, width: 20, depth: 20, height: 28 });
   if (!cube || !cylinder) {
@@ -255,7 +255,7 @@ export function automationNormalGroupedObject(overrides: Partial<WorkplaneShape>
   return group ? { ...group, id: "normal-group", name: "Normal grouped object", ...overrides } : null;
 }
 
-export function automationSelectionOutlineRegressionShape() {
+function automationSelectionOutlineRegressionShape() {
   const geometries: THREE.BufferGeometry[] = [
     new RoundedBoxGeometry(30, 20, 20, 8, 4).translate(-15, 10, 0),
     new THREE.BoxGeometry(16, 20, 20).translate(18, 10, 0),
@@ -303,7 +303,7 @@ export function automationSelectionOutlineRegressionShape() {
   );
 }
 
-export function booleanAutomationDynamicScene(caseId: string): { label: string; shapes: WorkplaneShape[] } | null {
+function booleanAutomationDynamicScene(caseId: string): { label: string; shapes: WorkplaneShape[] } | null {
   const requestedKeys = Object.keys(booleanAutomationShapeConfigs).filter((key) => key !== "cube" && key !== "cylinder");
   const allNormalKeys = Object.keys(booleanAutomationShapeConfigs);
 

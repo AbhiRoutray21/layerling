@@ -42,7 +42,7 @@ export function debugShapeSummary(shape: WorkplaneShape): Record<string, unknown
 }
 
 /** A body's own pivot in the coordinates the MCP tools use for positions. */
-export function mcpPivotSummary(shape: WorkplaneShape) {
+function mcpPivotSummary(shape: WorkplaneShape) {
   const pivot = shapePivotWorld(shape);
   return pivot ? { x: Number(pivot.x.toFixed(3)), z: Number(pivot.z.toFixed(3)), elevation: Number(pivot.y.toFixed(3)) } : null;
 }
@@ -78,9 +78,9 @@ export function compactShapeSummary(shape: WorkplaneShape, index: number) {
 }
 
 /** Runde Koerper, deren Seitenzahl ohne eigene Angabe der Groesse folgt. */
-export const MCP_FOLLOWING_SIDE_KINDS = new Set<ShapeKind>(["cylinder", "ellipse", "cone", "tube", "ring"]);
+const MCP_FOLLOWING_SIDE_KINDS = new Set<ShapeKind>(["cylinder", "ellipse", "cone", "tube", "ring"]);
 
-export function mcpShapeSettings(shape: WorkplaneShape): Record<string, string | number | boolean> | undefined {
+function mcpShapeSettings(shape: WorkplaneShape): Record<string, string | number | boolean> | undefined {
   const settings: Record<string, string | number | boolean> = {};
   MCP_SHAPE_SETTING_KEYS.forEach((key) => {
     const value = shape[key];
@@ -193,7 +193,7 @@ export function mcpTextFont(value: string) {
 }
 
 /** The transition's values as the body shows them, under the names a command sets them by. */
-export function mcpLoftSettings(shape: WorkplaneShape): Record<string, string | number> {
+function mcpLoftSettings(shape: WorkplaneShape): Record<string, string | number> {
   const m = loftMeasures(shape);
   return {
     loftBottomOutline: m.bottomOutline, loftTopOutline: m.topOutline,

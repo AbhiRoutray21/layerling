@@ -22,16 +22,16 @@ import type { MeasurementAccuracy, WorkplaneNote, WorkplaneShape, WorkplaneWorks
 import { NOTE_TEXT_LIMIT } from "@/lib/workplaneNotes";
 
 /** Light-blue chrome for origin-distance lines, matching `.origin-dimension-value`. */
-export const ORIGIN_DIMENSION_LINE_COLOR = { light: "#6ec4e8", dark: "#8fd4f0" } as const;
+const ORIGIN_DIMENSION_LINE_COLOR = { light: "#6ec4e8", dark: "#8fd4f0" } as const;
 
 /** Kreuzbreite und Vorgabe-Armlaengen des Winkellineal-Werkzeugs - kein Formen-Katalog-Eintrag mehr, siehe layerling-lineal.md. */
-export const CORNER_RULER_ARM_WIDTH = 12;
+const CORNER_RULER_ARM_WIDTH = 12;
 
 export const RENDER_LAYER_HELPERS = 2;
 
-export const MAX_SHARED_SHAPE_GEOMETRIES = 192;
+const MAX_SHARED_SHAPE_GEOMETRIES = 192;
 
-export const MAX_SHARED_SHAPE_MATERIALS = 128;
+const MAX_SHARED_SHAPE_MATERIALS = 128;
 
 export const sharedShapeGeometryCache = new Map<string, { geometry: THREE.BufferGeometry; users: number }>();
 
@@ -108,12 +108,12 @@ export type MoveDimensionSession = {
 };
 
 /** Breite einer offenen Notizkarte samt Nadel und Abstand, in Bildpunkten. */
-export const NOTE_CARD_REACH = 260;
+const NOTE_CARD_REACH = 260;
 
 /** Weiter waechst das Textfeld nicht mit; darueber hinaus wird darin gerollt. */
-export const NOTE_TEXT_MAX_HEIGHT = 168;
+const NOTE_TEXT_MAX_HEIGHT = 168;
 
-export type NoteOverlayItem = {
+type NoteOverlayItem = {
   id: string;
   index: number;
   text: string;
@@ -157,7 +157,7 @@ export type TapeEdgeAttachment = {
   topologyKey?: string;
 };
 
-export type TapeSegment = {
+type TapeSegment = {
   id: string;
   startId: string;
   endId: string;
@@ -393,7 +393,7 @@ export function tapeShapeDimensions(object: THREE.Object3D) {
   return dimensions ?? [1, 1, 1];
 }
 
-export function tapeAttachmentWorld(state: ThreeState, attachment: TapeAttachment) {
+function tapeAttachmentWorld(state: ThreeState, attachment: TapeAttachment) {
   const object = findShapeObject(state, attachment.shapeId);
   if (!object) return null;
   const dimensions = tapeShapeDimensions(object);
@@ -415,13 +415,13 @@ export function tapeEdgeWorldPoints(state: ThreeState, edge: TapeEdgeAttachment)
   });
 }
 
-export function tapePolylineLength(points: THREE.Vector3[]) {
+function tapePolylineLength(points: THREE.Vector3[]) {
   let length = 0;
   for (let index = 0; index + 1 < points.length; index += 1) length += points[index].distanceTo(points[index + 1]);
   return length;
 }
 
-export function tapePolylineMidpoint(points: THREE.Vector3[]) {
+function tapePolylineMidpoint(points: THREE.Vector3[]) {
   if (points.length === 0) return new THREE.Vector3();
   const half = tapePolylineLength(points) / 2;
   let traversed = 0;
@@ -433,7 +433,7 @@ export function tapePolylineMidpoint(points: THREE.Vector3[]) {
   return points[points.length - 1].clone();
 }
 
-export function tapeScreenPointList(points: THREE.Vector3[], state: ThreeState) {
+function tapeScreenPointList(points: THREE.Vector3[], state: ThreeState) {
   return points.map((point) => {
     const screen = projectToScreen(point, state);
     return `${screen.x},${screen.y}`;
@@ -531,7 +531,7 @@ export function syncTapeOverlay(
  * Verschieben, Drehen und Groessenaendern mitfaehrt. Ist der Koerper nicht mehr
  * da, gilt die zuletzt bekannte Stelle.
  */
-export function noteWorldPosition(state: ThreeState, note: WorkplaneNote) {
+function noteWorldPosition(state: ThreeState, note: WorkplaneNote) {
   if (note.anchor) {
     const world = tapeAttachmentWorld(state, { shapeId: note.anchor.shapeId, normalized: note.anchor.normalized });
     if (world) return world;
@@ -613,7 +613,7 @@ export function syncNoteOverlay(
  * Anfasser zum Kleinerziehen half nicht: Die Mindesthoehe war hoeher als eine
  * Zeile.
  */
-export function fitNoteHeight(area: HTMLTextAreaElement | null) {
+function fitNoteHeight(area: HTMLTextAreaElement | null) {
   if (!area) return;
   area.style.height = "auto";
   // `scrollHeight` zaehlt den Innenabstand mit, den Rahmen nicht - und die
@@ -628,7 +628,7 @@ export function fitNoteHeight(area: HTMLTextAreaElement | null) {
  * Das Schreibfeld einer Notiz. Es misst sich nach jedem Wechsel des Textes neu -
  * auch wenn der von aussen kommt, etwa aus einem Rueckgaengig.
  */
-export function NoteText({
+function NoteText({
   value,
   focused,
   onChange,
@@ -662,7 +662,7 @@ export function NoteText({
 }
 
 /** One coordinate of a reference point, typed in the workspace's unit; Enter or leaving the field applies it. */
-export function PointCoordinateField({ label, value, workspace, onCommit }: {
+function PointCoordinateField({ label, value, workspace, onCommit }: {
   label: string;
   value: number;
   workspace: WorkplaneWorkspaceSettings;
@@ -1059,13 +1059,13 @@ export type CornerRulerInstance = {
   mode?: CornerRulerMode;
 };
 
-export type CornerRulerTickScreen = { x1: number; y1: number; x2: number; y2: number };
+type CornerRulerTickScreen = { x1: number; y1: number; x2: number; y2: number };
 
-export type CornerRulerLabelScreen = { x: number; y: number; text: string };
+type CornerRulerLabelScreen = { x: number; y: number; text: string };
 
 export type CornerRulerNeighborLabel = { key: string; x: number; y: number; text: string };
 
-export type CornerRulerOverlayItem = {
+type CornerRulerOverlayItem = {
   id: string;
   mode: CornerRulerMode;
   handleX: number;
@@ -1096,7 +1096,7 @@ export type CornerRulerOverlayState = {
 };
 
 /** Bemassungslabel eines Nachbarn an einem Arm - reine Ablesung, kein Eintippen (siehe layerling-lineal.md). */
-export function cornerRulerNeighborLabel(
+function cornerRulerNeighborLabel(
   key: string,
   armPose: { x: number; z: number; rotation: number; length: number; crossWidth: number },
   acrossAxis: THREE.Vector3,
@@ -1535,7 +1535,7 @@ export function shapeLocalExtents(shape: WorkplaneShape) {
   };
 }
 
-export type AxisProjectionBounds = {
+type AxisProjectionBounds = {
   min: THREE.Vector3;
   max: THREE.Vector3;
 };
@@ -1545,11 +1545,11 @@ export type AxisProjectionBounds = {
 // shape only shifts its bounds, so they are kept per mesh, measured from the
 // shape's centre, for as long as nothing but the position changes.
 // Copies of a shape share one mesh, hence a short list per mesh.
-export const importedShapeProjectionBoundsCache = new WeakMap<object, Array<{ shape: WorkplaneShape; byAxis: Map<string, AxisProjectionBounds> }>>();
+const importedShapeProjectionBoundsCache = new WeakMap<object, Array<{ shape: WorkplaneShape; byAxis: Map<string, AxisProjectionBounds> }>>();
 
-export const MAX_PROJECTION_BOUNDS_PER_MESH = 16;
+const MAX_PROJECTION_BOUNDS_PER_MESH = 16;
 
-export function sameShapeApartFromPosition(a: WorkplaneShape, b: WorkplaneShape) {
+function sameShapeApartFromPosition(a: WorkplaneShape, b: WorkplaneShape) {
   if (a === b) return true;
   const left = a as unknown as Record<string, unknown>;
   const right = b as unknown as Record<string, unknown>;
@@ -1561,7 +1561,7 @@ export function sameShapeApartFromPosition(a: WorkplaneShape, b: WorkplaneShape)
   return true;
 }
 
-export function importedShapeProjectionBounds(
+function importedShapeProjectionBounds(
   shape: WorkplaneShape,
   xAxis: THREE.Vector3,
   yAxis: THREE.Vector3,
@@ -1724,7 +1724,7 @@ export function findShapeObject(state: ThreeState, id: string) {
   return state.shapeRecords.get(id)?.object ?? null;
 }
 
-export function disposeSharedShapeGeometry(geometry: THREE.BufferGeometry) {
+function disposeSharedShapeGeometry(geometry: THREE.BufferGeometry) {
   const edges = sharedEdgesGeometryCache.get(geometry);
   edges?.forEach((entry) => entry.dispose());
   if ((geometry as THREE.BufferGeometry & { boundsTree?: unknown }).boundsTree) {

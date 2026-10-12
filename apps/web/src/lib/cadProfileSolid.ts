@@ -745,36 +745,6 @@ function withoutSlivers(cad: OcctKernel, solid: ShapeHandle, height: number) {
  * face pushed up once. Throws when anything is off - the caller then builds `profile.loops`, the
  * polygon outline of the same body.
  */
-export function debugWires(cad: OcctKernel, profile: CadModifierProfilePart) {
-  const out: string[] = [];
-  const tolerance = profileExtent(profile) * 1e-6;
-  profile.grow!.regions.forEach((region, index) => {
-    const wire = loopWire(cad, region.outer, tolerance);
-    const moved = cad.offsetWire2D(wire, profile.grow!.width, 0);
-    const wires = cad.isWire(moved) ? [moved] : cad.getSubShapes(moved, "wire");
-    wires.forEach((w, wi) => {
-      const edges = cad.getSubShapes(w, "edge");
-      const len = (e: ShapeHandle) => { const b = cad.getBoundingBox(e); return Math.hypot(b.xmax - b.xmin, b.zmax - b.zmin); };
-      out.push(`region ${index} wire ${wi}: edges ${edges.length} lens ${edges.map((e) => len(e).toFixed(4)).join(" ")}`);
-      const kept = edges.filter((e) => len(e) > 1e-3);
-      const lensOf = (sh: ShapeHandle) => cad.getSubShapes(sh, "edge").map((e) => len(e).toFixed(4)).join(" ");
-      const face0 = cad.makeFace(w);
-      out.push(`  face0 edges ${lensOf(face0)}`);
-      out.push(`  fixShape(face) edges ${lensOf(cad.fixShape(face0))}`);
-      out.push(`  unify(face) edges ${lensOf(cad.unifySameDomain(face0))}`);
-      out.push(`  simplify(face) edges ${lensOf(cad.simplify(face0))}`);
-      const sol = cad.extrude(face0, 0, -1, 0);
-      out.push(`  fixShape(solid) edges y-flat ${lensOf(cad.fixShape(sol)).split(" ").filter((x) => parseFloat(x) < 0.001).length}`);
-      try {
-        const rebuilt = cad.makeWire(kept);
-        const face = cad.makeFace(rebuilt);
-        out.push(`  rebuilt wire ok edges ${kept.length} closed? face valid ${cad.isValid(face)} area ${cad.getSurfaceArea(face).toFixed(3)} vs ${cad.getSurfaceArea(cad.makeFace(w)).toFixed(3)}`);
-      } catch (e) { out.push(`  rebuild threw ${String(e).slice(0, 80)}`); }
-    });
-  });
-  return out;
-}
-
 export function grownProfileSolid(cad: OcctKernel, profile: CadModifierProfilePart) {
   const grow = profile.grow!;
   const tolerance = profileExtent(profile) * 1e-6;
