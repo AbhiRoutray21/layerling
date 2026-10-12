@@ -15899,3 +15899,64 @@ html[data-theme="dark"] .top-action-body .icon-tag-ok {
   font-weight: 900;
   letter-spacing: 0.08em;
 }
+
+/* An update arrived while this page was open: offer to reload (lib/newVersionWatch.ts). */
+.new-version-notice {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 3000;
+  display: grid;
+  gap: 8px;
+  width: min(380px, calc(100vw - 32px));
+  padding: 14px 16px;
+  color: #3f2f20;
+  background: #fffaf2;
+  border: 1px solid #d8b98f;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(60, 40, 10, 0.22);
+}
+
+.new-version-notice p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.new-version-notice ul {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 13px;
+  line-height: 1.45;
+  font-weight: 700;
+}
+
+.new-version-notice-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.new-version-notice-actions button {
+  display: inline-flex;
+  min-height: 34px;
+  padding: 0 13px;
+  align-items: center;
+  gap: 7px;
+  border: 1px solid #d8c8b7;
+  border-radius: 7px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.new-version-notice-actions .secondary {
+  color: #745e48;
+  background: white;
+}
+
+.new-version-notice-actions .primary {
+  color: white;
+  background: #cf6a12;
+  border-color: #b45a0c;
+}

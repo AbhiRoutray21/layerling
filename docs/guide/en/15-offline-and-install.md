@@ -20,6 +20,8 @@ You can close the hint on the start page with {{ui:installHint.dismiss}}. Starti
 
 When a newer version exists, layerling shows it on the start page. Through {{ui:dashboard.updateBannerLink}} you read what has changed. The version number is at the bottom right. After reloading the page you have the new version.
 
+On layerling.com and on other web servers an open page notices an update by itself. It asks the server for its version now and then, when you come back to the tab, and at once if a program file it needs has disappeared. When something new was installed in the meantime, a card at the bottom right says so and lists what is new. {{ui:newVersion.reload}} writes the design you have open into the browser first and then loads the page again; the design comes back as you left it. {{ui:newVersion.later}} holds the card back for 15 minutes. Reload soon: a page that stays on the old version may load parts of the new one that do not fit.
+
 When layerling is open in several tabs, they look out for each other: if another tab already runs a newer version, a note at the bottom of the old tab asks you to reload it. And if the same design is open in two tabs, both warn you, because they save automatically and would overwrite each other. If you open layerling in one more tab while one is already open, the new tab suggests carrying on in the old one and offers to close itself. If you want two tabs on purpose, say for two designs side by side, click {{ui:tabs.keepHere}} there. This guide opens in a tab of its own as well: while layerling is open next to it, its button at the top right reads "Back to the editor" and closes the guide instead of opening the editor a second time.
 
 ## Language and appearance

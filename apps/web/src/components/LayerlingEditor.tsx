@@ -3549,11 +3549,15 @@ export function LayerlingEditor({
       if (document.visibilityState !== "hidden") return;
       saveProjectShapesNow();
     };
+    // The offer to reload after an update asks for the open design to be written first.
+    const saveOnRequest = () => saveProjectShapesNow();
+    window.addEventListener("layerling:save-now", saveOnRequest);
     document.addEventListener("visibilitychange", saveNow);
     window.addEventListener("pagehide", saveNow);
     return () => {
       document.removeEventListener("visibilitychange", saveNow);
       window.removeEventListener("pagehide", saveNow);
+      window.removeEventListener("layerling:save-now", saveOnRequest);
     };
   }, [onProjectShapesChange, projectId, saveProjectShapesNow]);
 

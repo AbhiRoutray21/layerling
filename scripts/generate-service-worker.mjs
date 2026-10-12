@@ -40,7 +40,8 @@ export function precachePaths(relativeFiles) {
     const path = "/" + file.split(sep).join("/");
     if (path.endsWith(".php")) continue;
     if (path.endsWith(".map")) continue;
-    if (path === "/sw.js" || path === "/index.txt" || path === "/robots.txt" || path === "/sitemap.xml") continue;
+    // version.json is what an open page asks for to learn that a new version arrived: never stored.
+    if (path === "/sw.js" || path === "/version.json" || path === "/index.txt" || path === "/robots.txt" || path === "/sitemap.xml") continue;
     if (path === "/404.html" || path.startsWith("/404/")) continue;
     if (path.startsWith("/_next/static/media/") && path.endsWith(".wasm")) continue;
     // The guide's pages are small text and worth having offline; its pictures
@@ -49,6 +50,16 @@ export function precachePaths(relativeFiles) {
     paths.push(path === "/index.html" ? "/" : path);
   }
   return paths.sort();
+}
+
+/**
+ * version.json: what a page that is already open asks for now and then. A different build means a
+ * deploy happened since it loaded, and it offers a reload. The titles of the newest highlights go
+ * along so the offer can say what is new.
+ */
+export function versionFileSource(packageVersion, build, whatsNewEntries) {
+  const highlights = whatsNewEntries.slice(0, 12).flatMap((entry) => entry.items.map((item) => ({ version: entry.version, title: item.title })));
+  return JSON.stringify({ version: packageVersion, build, highlights });
 }
 
 export function serviceWorkerSource(version, paths) {
@@ -186,6 +197,9 @@ async function main() {
   }
   const version = hash.digest("hex").slice(0, 16);
   await writeFile(join(exportRoot, "sw.js"), serviceWorkerSource(version, paths));
+  const packageJson = JSON.parse(await readFile(join(repositoryRoot, "package.json"), "utf8"));
+  const whatsNew = JSON.parse(await readFile(join(repositoryRoot, "apps", "web", "src", "lib", "whatsNew.json"), "utf8"));
+  await writeFile(join(exportRoot, "version.json"), versionFileSource(packageJson.version, version, whatsNew));
   console.log(`Service worker: ${paths.length} files for offline use, version ${version}`);
 }
 
