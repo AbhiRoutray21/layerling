@@ -120,6 +120,7 @@ It is not a full CAD package: there is no parametric timeline and no assemblies.
 Made by others, not by this project:
 
 - [Layerling – Playlist](https://www.youtube.com/playlist?list=PLCsBmX2kOGWs) – Making Layers (English). A series about layerling: an introduction for people coming from Tinkercad, and the sketch tools.
+- [Meet Layerling Free Browser Based CAD that EXTENDS Tinkercad!](https://youtu.be/979_Ohy9ESM) – HL ModTech (English). A look at layerling by a Tinkercad user.
 - [Tinkercad Too Basic? Fusion 360 Too Much? Meet Layerling for 3D Printing](https://youtu.be/kzV7fQ3rXhw) – 3D Jesus | 3D Printing & Design (English). A first-time test of layerling without any manual.
 
 ## Getting Started
