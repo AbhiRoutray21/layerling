@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **Torus symbol:** the picture of the torus in the shapes menu showed SketchForge's flat ring with a square profile. It is now rendered from the real geometry, a donut with a round profile. Reported by DrJones in the forum.
+
 ## 1.66.5
 
 - **A size typed for several bodies changes all of them (#259):** With two or more bodies selected, a number typed into the width, depth or height label (or the pair of a corner) only changed the first body, and a typed height above the plate only the last one. The label shows the size of the whole selection, so the number now sets that: every body is scaled with it and moved with it, as when the handle is dragged. Reported on GitHub.
