@@ -2617,7 +2617,22 @@ function resizeSelectionFromHandle(
     ? frame.center.clone()
     : resizeCenterFromAnchor(frame, transform.scaleAnchorPoint ?? resizeAnchorPointForFrame(frame, signs), signs, nextX.size, nextZ.size);
 
-  return transform.items.map((item) => {
+  return scaleSelectionItems(frame, transform.items, nextX, nextZ, uniformScale, nextCenter, heightAnchorY, step, maxSize);
+}
+
+/** Every body of a selection scaled with its frame: the sizes and the spaces between them grow alike. */
+function scaleSelectionItems(
+  frame: SelectionFrame,
+  items: TransformDragItem[],
+  nextX: { size: number; scale: number },
+  nextZ: { size: number; scale: number },
+  uniformScale: number,
+  nextCenter: THREE.Vector3,
+  heightAnchorY: number,
+  step: number,
+  maxSize: number,
+) {
+  return items.map((item) => {
     const localCenter = frameLocalPoint(frame, item.startCenter);
     const nextItemCenter = nextCenter
       .clone()
@@ -2639,6 +2654,27 @@ function resizeSelectionFromHandle(
       patch: patchWithUniformHeightScale(item.startShape, patch, uniformScale, heightAnchorY),
     };
   });
+}
+
+/**
+ * A width and/or depth typed for a whole selection (#259): the selection's frame becomes that size,
+ * as when its handle is dragged, from the corner opposite the one that was pressed.
+ */
+function resizeSelectionToSizes(
+  frame: SelectionFrame,
+  items: TransformDragItem[],
+  sizes: { width?: number; depth?: number },
+  signs: ResizeSigns,
+  maxSize: number,
+) {
+  const axisSize = (current: number, size: number | undefined) => (
+    size === undefined ? { size: current, scale: 1 } : { size, scale: size / Math.max(MIN_SHAPE_SIZE, current) }
+  );
+  const nextX = axisSize(frame.width, sizes.width);
+  const nextZ = axisSize(frame.depth, sizes.depth);
+  const activeSigns = { x: sizes.width === undefined ? 0 : signs.x, z: sizes.depth === undefined ? 0 : signs.z };
+  const nextCenter = resizeCenterFromAnchor(frame, resizeAnchorPointForFrame(frame, activeSigns), activeSigns, nextX.size, nextZ.size);
+  return scaleSelectionItems(frame, items, nextX, nextZ, 1, nextCenter, selectionWorldYBounds(frame).min, 0, maxSize);
 }
 
 /**
@@ -5388,6 +5424,50 @@ export function WorkplaneViewport({
     return shape.formulas || formula ? { ...patch, formulas: withFieldFormula(shape.formulas, DIMENSION_FORMULA_FIELDS[axis], formula) } : patch;
   }, [dimensionSizePatchFor]);
 
+  // Width, depth or height typed for several bodies at once (#259). The box shows the size of the
+  // whole selection, so the number sets that: every body is scaled with it, as when it is dragged.
+  const applyTypedSelectionSize = useCallback((edits: { axis: "width" | "depth" | "height"; text: string }[]) => {
+    const ids = selectedIdsRef.current;
+    const frame = selectionFrameForShapes(shapesRef.current, ids, placementWorkplaneRef.current);
+    if (ids.length < 2 || !frame) return;
+    const items: TransformDragItem[] = frame.ids
+      .map((id) => shapesRef.current.find((entry) => entry.id === id))
+      .filter((entry): entry is WorkplaneShape => Boolean(entry))
+      .map((entry) => ({ id: entry.id, startShape: { ...entry }, startCenter: shapeCenter(entry), startQuaternion: quaternionForShape(entry) }));
+    const anchor = lastResizeAnchorRef.current?.shapeId === ids[0] ? lastResizeAnchorRef.current : null;
+    const workspace = workspaceRef.current;
+    const across = Math.max(frame.width, frame.depth, frame.height);
+    const maxSize = Math.max(...items.map((item) => handleDimensionLimit(workspace, item.startShape.kind, 260, "across", across)));
+    const sizes: { width?: number; depth?: number } = {};
+    let height: number | undefined;
+    edits.forEach((entry) => {
+      const extent = entry.axis === "width" ? frame.width : entry.axis === "depth" ? frame.depth : frame.height;
+      const value = resolveMeasureMm(entry.text, extent);
+      if (!(Number.isFinite(value) && value > 0)) return;
+      if (entry.axis === "height") {
+        const printerHeight = printerPresetById(workspace.printer)?.height;
+        const maxHeight = Math.max(...items.map((item) => handleDimensionLimit(workspace, item.startShape.kind, 180, "height", frame.height, printerHeight)));
+        height = clamp(value, MIN_SHAPE_SIZE, maxHeight);
+      } else {
+        sizes[entry.axis] = clamp(value, MIN_SHAPE_SIZE, maxSize);
+      }
+    });
+    const patches: { id: string; patch: Partial<WorkplaneShape> }[] = [];
+    if (sizes.width !== undefined || sizes.depth !== undefined) {
+      const signs = anchor?.signs ?? { x: 0, z: 0 };
+      patches.push(...resizeSelectionToSizes(frame, items, sizes, signs, maxSize));
+    }
+    if (height !== undefined) {
+      const fromBottom = anchor?.pressedY === "bottom";
+      items.forEach((item) => patches.push({ id: item.id, patch: resizeShapeAlongFrameNormal(item.startShape, frame, height as number, fromBottom) }));
+    }
+    // One change for all of them: outside an interaction each update starts from the shapes as they
+    // were, so the second body's patch would overwrite the first's.
+    onInteractionActiveChange?.(true);
+    patches.forEach(({ id, patch }) => onUpdateShape(id, patch));
+    onInteractionActiveChange?.(false);
+  }, [onInteractionActiveChange, onUpdateShape]);
+
   const commitDimensionEdit = useCallback(() => {
     const edit = editingDimension;
     const id = selectedIdsRef.current[0];
@@ -5408,6 +5488,8 @@ export function WorkplaneViewport({
         const targetElevation = cleanNearZero(clamp(value, MIN_ELEVATION, MAX_ELEVATION), 0.0005);
         const delta = targetElevation - currentElevation;
         const axis = lift ? lift.axis : new THREE.Vector3(0, 1, 0);
+        // One change for all bodies, or each update would start from the shapes as they were (#259).
+        onInteractionActiveChange?.(true);
         selectedIdsRef.current.forEach((selectedId) => {
           const selectedShape = shapesRef.current.find((entry) => entry.id === selectedId);
           if (selectedShape) {
@@ -5421,16 +5503,21 @@ export function WorkplaneViewport({
             });
           }
         });
+        onInteractionActiveChange?.(false);
       }
       setEditingDimension(null);
       setPinnedMeasureKey(null);
       return;
     }
-    const patch = dimensionPatchFor(shape, edit.axis, edit.value);
-    if (patch) onUpdateShape(id, patch);
+    if (selectedIdsRef.current.length > 1) {
+      applyTypedSelectionSize([{ axis: edit.axis, text: edit.value }]);
+    } else {
+      const patch = dimensionPatchFor(shape, edit.axis, edit.value);
+      if (patch) onUpdateShape(id, patch);
+    }
     setEditingDimension(null);
     setPinnedMeasureKey(null);
-  }, [dimensionPatchFor, editingDimension, onUpdateShape]);
+  }, [applyTypedSelectionSize, dimensionPatchFor, editingDimension, onInteractionActiveChange, onUpdateShape]);
 
   // A click on a corner opens its width and depth together; Tab moves between them.
   const beginCornerEdit = useCallback((handleKey: string) => {
@@ -5467,6 +5554,10 @@ export function WorkplaneViewport({
     setEditingCorner(null);
     setPinnedMeasureKey(null);
     if (!edit || !shape) return;
+    if (selectedIdsRef.current.length > 1) {
+      applyTypedSelectionSize(edit.entries.filter((entry) => entry.value.trim() !== entry.original).map((entry) => ({ axis: entry.axis, text: entry.value })));
+      return;
+    }
     // Both sizes go out as one patch, the second worked out on the first's result.
     let working = shape;
     let merged: Partial<WorkplaneShape> = {};
@@ -5478,7 +5569,7 @@ export function WorkplaneViewport({
       merged = { ...merged, ...patch };
     });
     if (Object.keys(merged).length > 0) onUpdateShape(shape.id, merged);
-  }, [dimensionPatchFor, editingCorner, onUpdateShape]);
+  }, [applyTypedSelectionSize, dimensionPatchFor, editingCorner, onUpdateShape]);
 
   // The 3D view keeps focus on pointer down, so a click beside the boxes never
   // blurs them; any press outside the pair applies it, as leaving a field would.
