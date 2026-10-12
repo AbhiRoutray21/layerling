@@ -8,5 +8,15 @@
       "de": "Im Verlaufsblick gibt es unten links einen Knopf „Verlauf löschen“. Nach einer Rückfrage entfernt er alle früheren Schritte endgültig; der Entwurf behält seinen jetzigen Stand. So lässt sich ein Entwurf ohne seine Vergangenheit weitergeben.",
       "en": "The History view has a new button at the bottom left, Delete history. After a question it removes every earlier step for good; the design keeps its current state. Handy for sharing a design without its past."
     }
+  },
+  {
+    "title": {
+      "de": "Speichern in die eigene Datei",
+      "en": "Save into your own file"
+    },
+    "body": {
+      "de": "In Chrome und Edge öffnet „Entwurf speichern“ den Speichern-Dialog deines Systems: Du wählst Ordner und Namen und kannst eine vorhandene Datei ersetzen. Danach speichert Strg+S den Entwurf wieder in genau diese Datei, auch einen aus einer .lyl-Datei geöffneten. Andere Browser laden die Datei wie bisher herunter.",
+      "en": "In Chrome and Edge, Save layerling design now opens your system's save dialog: you choose the folder and name and can replace an existing file. After that Ctrl+S saves the design into that same file again, a design opened from a .lyl file included. Other browsers download the file as before."
+    }
   }
 ]

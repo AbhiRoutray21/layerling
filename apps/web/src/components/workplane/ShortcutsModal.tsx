@@ -59,6 +59,7 @@ const SHORTCUT_GROUPS: ShortcutGroup[] = [
     shortcuts: [
       { combos: ["Ctrl+I"], label: "shortcuts.import" },
       { combos: ["Ctrl+E"], label: "shortcuts.export" },
+      { combos: ["Ctrl+S"], label: "shortcuts.save" },
     ],
   },
   {

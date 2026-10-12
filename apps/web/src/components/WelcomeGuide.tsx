@@ -30,6 +30,7 @@ const MORE = [
   ["welcome.morePivotTitle", "welcome.morePivotBody"],
   ["welcome.moreLayFlatTitle", "welcome.moreLayFlatBody"],
   ["welcome.moreMeasureTitle", "welcome.moreMeasureBody"],
+  ["welcome.moreSaveTitle", "welcome.moreSaveBody"],
   ["welcome.moreBackupTitle", "welcome.moreBackupBody"],
   ["welcome.morePrintersTitle", "welcome.morePrintersBody"],
   ["welcome.moreImportTitle", "welcome.moreImportBody"],

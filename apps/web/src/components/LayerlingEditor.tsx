@@ -145,6 +145,17 @@ import { LanguageSwitch } from "@/components/LanguageSwitch";
 import { ThemeSwitch } from "@/components/ThemeSwitch";
 import { useFileAccept } from "@/lib/fileAccept";
 import { exportLylProject, importLylProject, LYL_CREATED_WITH_VERSION, LYL_MEDIA_TYPE } from "@/lib/lylProject";
+import {
+  ensureLylFileWritable,
+  forgetLylFile,
+  linkedLylFile,
+  lylFileAccessSupported,
+  pickLylFileToOpen,
+  pickLylFileToSave,
+  rememberLylFile,
+  writeLylFile,
+  type LylFileHandle,
+} from "@/lib/lylFileAccess";
 import { simplifyTrianglePositions } from "@/lib/meshSimplify";
 import { displayShapeName, iconTagAsset, libraryShapeAssets, makeShapeFromAsset, nameTagAsset, sceneShape, shapeAssetLabel, shapeAssetMenuLabel, toolbarShapeAssets } from "@/lib/shapeCatalog";
 import { importedShapeFromStl } from "@/lib/stlImport";
@@ -241,7 +252,8 @@ type ExportFormat = "stl" | "3mf" | "obj" | "step" | "svg" | "png" | "lyl";
 type DirectExportFormat = Exclude<ExportFormat, "step" | "png" | "lyl">;
 type ViewImageOptions = { plate: boolean; transparent: boolean };
 type LylHistoryLimit = EditorHistoryExportLimit;
-type LylExportTarget = "download" | "shared";
+/** "file" writes into the file the design is tied to (asking for one the first time), "fileAs" always asks (#251). */
+type LylExportTarget = "download" | "shared" | "file" | "fileAs";
 type ToolbarMode = "geometry" | "sketch";
 type OpenGroupOutcome = { ok: boolean; message: string; partIds?: string[]; groupId?: string };
 /** One group being edited: the group as it was, and the ids of its loose parts. */
@@ -2290,7 +2302,7 @@ export function LayerlingEditor({
   initialPlacementElevation?: number;
   initialPlacementWorkplane?: PlacementWorkplane;
   onHome?: (leaving: { itemCount: number }) => void;
-  onOpenLylProjectFile?: (file: File) => Promise<{ ok: boolean; message: string } | void> | { ok: boolean; message: string } | void;
+  onOpenLylProjectFile?: (file: File, shared?: undefined, fileHandle?: LylFileHandle) => Promise<{ ok: boolean; message: string } | void> | { ok: boolean; message: string } | void;
   onSaveSharedProject?: (request: { exportName: string; bytes: Uint8Array; thumbnailDataUrl: string; targetFileName?: string }) => Promise<string>;
   /** Set while the open project came from the server; then it saves back there by itself. */
   serverFileName?: string | null;
@@ -7456,7 +7468,7 @@ export function LayerlingEditor({
   }, [buildSectionSvg, projectName]);
 
   // Der Dateiimport steht weiter unten; die MCP-Aktion nimmt denselben Weg.
-  const importFilesRef = useRef<((files: File[]) => Promise<{ importedIds: string[]; failures: Array<{ fileName: string; reason: string }> }>) | null>(null);
+  const importFilesRef = useRef<((files: File[], fileHandle?: LylFileHandle) => Promise<{ importedIds: string[]; failures: Array<{ fileName: string; reason: string }> }>) | null>(null);
 
   // Custom shapes (#109): kept in this browser (IndexedDB) and, where the
   // shared store is on, in its "Custom shapes" folder. Shown on top of the
@@ -9547,6 +9559,30 @@ export function LayerlingEditor({
       setNotice(t("status.finishBeforeSave"));
       return;
     }
+    // The browser opens a file dialog only in answer to a click or a key press, so this comes
+    // before anything that takes time. A browser without it keeps the download.
+    const projectId = projectInfoRef.current.projectId ?? "";
+    let fileHandle: LylFileHandle | null = null;
+    if (target === "file" || target === "fileAs") {
+      if (!lylFileAccessSupported()) {
+        target = "download";
+      } else {
+        try {
+          fileHandle = target === "file" ? linkedLylFile(projectId) : null;
+          if (fileHandle && !(await ensureLylFileWritable(fileHandle))) {
+            setNotice(t("status.fileNotWritable", { name: fileHandle.name }), true);
+            return;
+          }
+          fileHandle ??= await pickLylFileToSave(projectExportFileName(exportName, "lyl"));
+          // Closed without a choice: nothing to do.
+          if (!fileHandle) return;
+        } catch {
+          // No dialog here (a frame, a policy): the download still works.
+          fileHandle = null;
+          target = "download";
+        }
+      }
+    }
     setLylExporting(true);
     setNotice(target === "shared" ? t("status.packagingShared") : t("status.packagingProject"));
     try {
@@ -9580,6 +9616,16 @@ export function LayerlingEditor({
       });
       if (target === "shared" && onSaveSharedProject) {
         setNotice(await onSaveSharedProject({ exportName: exportName.trim() || projectName, bytes, thumbnailDataUrl }));
+      } else if (fileHandle) {
+        try {
+          await writeLylFile(fileHandle, bytes);
+        } catch {
+          // The file may be gone, moved or locked: the next Save asks for one again.
+          forgetLylFile(projectId);
+          throw new Error(t("status.saveFileFailed", { name: fileHandle.name }));
+        }
+        rememberLylFile(projectId, fileHandle);
+        setNotice(t("status.savedToFile", { name: fileHandle.name }));
       } else {
         const buffer = bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength) as ArrayBuffer;
         await downloadBlobFile(projectExportFileName(exportName, "lyl"), new Blob([buffer], { type: LYL_MEDIA_TYPE }));
@@ -9592,6 +9638,26 @@ export function LayerlingEditor({
       setLylExporting(false);
     }
   }, [onSaveSharedProject, placementElevation, placementWorkplane, projectCreatedAt, projectModifiedAt, projectName, lylExporting, snapGrid]);
+
+  /** Ctrl+S: into the file the design is tied to; the first time it asks for one (#251). */
+  const saveDesignRef = useRef<() => void>(() => undefined);
+  saveDesignRef.current = () => {
+    void exportLylDesign(projectName, workspaceSettingsRef.current.historyLimit, lylFileAccessSupported() ? "file" : "download");
+  };
+
+  /** The open button of the export dialog: a file dialog where there is one, the usual file field elsewhere. */
+  const pickProjectFile = useCallback(async () => {
+    if (lylFileAccessSupported()) {
+      try {
+        const picked = await pickLylFileToOpen();
+        if (picked) await importFilesRef.current?.([picked.file], picked.handle);
+        return;
+      } catch {
+        // Fall through to the file field.
+      }
+    }
+    projectFileInputRef.current?.click();
+  }, []);
 
   /** Der Entwurf als .lyl samt einer Textdatei, die sagt, wo und womit es passiert ist. */
   const saveBugReport = useCallback(async () => {
@@ -9900,7 +9966,7 @@ export function LayerlingEditor({
     }
   }, [commitShapes]);
 
-  const importFiles = useCallback(async (selected: File[]): Promise<{ importedIds: string[]; failures: Array<{ fileName: string; reason: string }> }> => {
+  const importFiles = useCallback(async (selected: File[], fileHandle?: LylFileHandle): Promise<{ importedIds: string[]; failures: Array<{ fileName: string; reason: string }> }> => {
     const none = { importedIds: [] as string[], failures: [] as Array<{ fileName: string; reason: string }> };
     if (!selected.length) return none;
     const projectFiles = selected.filter((file) => /\.(lyl|skf)$/i.test(file.name));
@@ -9914,7 +9980,7 @@ export function LayerlingEditor({
         return none;
       }
       setNotice(t("status.validatingFile", { name: projectFiles[0].name }), true);
-      const result = await onOpenLylProjectFile(projectFiles[0]);
+      const result = await onOpenLylProjectFile(projectFiles[0], undefined, fileHandle);
       if (result?.message) setNotice(result.message);
       if (result?.ok !== false) setTopPanel(null);
       return none;
@@ -10085,6 +10151,17 @@ export function LayerlingEditor({
     const handleKeyDown = (event: KeyboardEvent) => {
       const key = event.key.toLowerCase();
       const shortcut = event.ctrlKey || event.metaKey;
+
+      // Save works from anywhere in the editor, a field too; the browser's own "save page" has
+      // nothing to do here. Behind the project overview the key stays the browser's.
+      if (shortcut && key === "s" && !event.shiftKey && !event.altKey) {
+        const stage = document.querySelector(".editor-stage");
+        if (!stage || stage.classList.contains("active")) {
+          event.preventDefault();
+          if (!splitSession) saveDesignRef.current();
+          return;
+        }
+      }
 
       if (isTypingTarget(event.target)) {
         if (isNonTextControl(event.target) && shortcut && (key === "z" || key === "y")) {
@@ -11145,7 +11222,7 @@ export function LayerlingEditor({
           stepExporting={stepExporting}
           onImportFiles={selectFiles}
           onPickFile={() => fileInputRef.current?.click()}
-          onPickProjectFile={() => projectFileInputRef.current?.click()}
+          onPickProjectFile={() => void pickProjectFile()}
           onPickInsertProjectFile={() => insertProjectFileInputRef.current?.click()}
           workspaceHistoryLimit={workspaceSettings.historyLimit}
         />
@@ -12638,7 +12715,7 @@ function TopActionPanel({
   const runSelectedExport = () => {
     if (exportFormat === "step") onExportStep(exportName);
     else if (exportFormat === "png") onExportImage(exportName, imageOptions);
-    else if (exportFormat === "lyl") onExportLyl(exportName, lylHistoryLimit);
+    else if (exportFormat === "lyl") onExportLyl(exportName, lylHistoryLimit, lylFileAccessSupported() ? "fileAs" : "download");
     else onExport(exportFormat, exportName);
   };
 

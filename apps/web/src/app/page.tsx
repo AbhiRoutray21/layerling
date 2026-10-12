@@ -40,6 +40,7 @@ import { hydrateProjectShapeState, reconcileLoadedProjectShapeCacheEntry, type I
 import { ToolbarImportIcon } from "@/components/toolbarIcons";
 import { writeDesignView } from "@/lib/designView";
 import { useFileAccept } from "@/lib/fileAccept";
+import { lylFileAccessSupported, pickFilesToImport, rememberLylFile, type LylFileHandle } from "@/lib/lylFileAccess";
 import { exportLylProject, importLylProject, LYL_CREATED_WITH_VERSION, LYL_MEDIA_TYPE } from "@/lib/lylProject";
 import { backupEntryNames, backupFileName, isBackupFileName, packBackup, unpackBackup, zipHoldsDesigns } from "@/lib/projectBackup";
 import { customShapesBackupEntries, restoreCustomShapesFromBackup } from "@/lib/myShapes";
@@ -1268,7 +1269,7 @@ export default function Home() {
     openEditor(project.id, { allowMissingFromStorage: true });
   };
 
-  const openLylProjectFromFile = useCallback(async (file: File, sharedProject?: SharedProject) => {
+  const openLylProjectFromFile = useCallback(async (file: File, sharedProject?: SharedProject, fileHandle?: LylFileHandle) => {
     setDashboardNotice(t("notice.validatingFile", { name: file.name }));
     try {
       const restored = await importLylProject(await file.arrayBuffer());
@@ -1300,6 +1301,8 @@ export default function Home() {
       // A file saved with a view opens in it; the working copy of a server design keeps its own.
       if (restored.view && !existing) writeDesignView(project.id, restored.view);
       setProjectShapesById((current) => ({ ...current, [project.id]: entry }));
+      // Saving later writes into the file it came from (#251).
+      if (fileHandle) rememberLylFile(project.id, fileHandle);
       setProjects((current) => existing
         ? current.map((entryProject) => (entryProject.id === project.id ? project : entryProject))
         : [project, ...current]);
@@ -1742,7 +1745,7 @@ export default function Home() {
   }, [projects.length]);
 
   const importFilesFromDashboard = useCallback(
-    async (files: File[]) => {
+    async (files: File[], fileHandle?: LylFileHandle) => {
       if (!files.length) return;
       const zips = files.filter((file) => isBackupFileName(file.name));
       const zipContents = await Promise.all(zips.map(async (file) => zipHoldsDesigns(new Uint8Array(await file.arrayBuffer()))));
@@ -1761,7 +1764,7 @@ export default function Home() {
           setDashboardNotice(t("notice.oneLylAtATime"));
           return;
         }
-        await openLylProjectFromFile(projectFiles[0]);
+        await openLylProjectFromFile(projectFiles[0], undefined, fileHandle);
         return;
       }
       const result = await importModelFiles(files, {
@@ -1805,6 +1808,20 @@ export default function Home() {
     },
     [openLylProjectFromFile, projects.length, restoreBackup],
   );
+
+  /** Chrome and Edge: a file dialog that hands over the file's place, so Save can write back into it (#251). */
+  const pickDashboardImport = async () => {
+    if (lylFileAccessSupported()) {
+      try {
+        const picked = await pickFilesToImport([".lyl", ".skf", ".zip", ".stl", ".obj", ".mtl", ".3mf", ".step", ".stp", ".svg"]);
+        if (picked?.length) await importFilesFromDashboard(picked.map((entry) => entry.file), picked.length === 1 ? picked[0].handle : undefined);
+        return;
+      } catch {
+        // Fall through to the file field.
+      }
+    }
+    dashboardImportInputRef.current?.click();
+  };
 
   const openLatestProject = () => {
     const latest = [...projects].sort((a, b) => b.updatedAt - a.updatedAt)[0];
@@ -2024,7 +2041,7 @@ export default function Home() {
           onDeleteSharedProject={(project) => void deleteSharedProject(project)}
           onDuplicateProject={(projectId) => void duplicateProject(projectId)}
           onDuplicateSharedProject={(project) => void duplicateSharedProject(project)}
-          onImportFile={() => dashboardImportInputRef.current?.click()}
+          onImportFile={() => void pickDashboardImport()}
           onBackupAll={() => void backupAllProjects()}
           onOpenSharedProject={(project) => void openSharedProject(project)}
           onOpenProject={openEditor}
