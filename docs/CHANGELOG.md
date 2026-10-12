@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **Delete history:** The History view has a new button at the bottom left, **Delete history**. After a question it removes every earlier step for good; the design keeps the state it has now, Undo has nothing to go back to and a file saved afterwards carries no history. It is alone and in a different colour so it is not pressed by accident. For an AI client there is `layerling_clear_history` (it needs `confirm: true`). Suggested by @prmod3d in #246.
+
 - **Newer CAD kernel:** The CAD kernel (occt-wasm) is now 5.7.0 instead of 5.4.0 and the 2D geometry library (manifold-3d) 3.5.4: fewer redundant steps in boolean operations, a fix for general transforms that applied a placement twice, and the joint type of 2D offsets now passed on correctly. All tests pass and the shapes behave as before; nothing changes in how you work.
 
 - **Quick guide, welcome text and README brought up to date:** The quick guide gained entries for Hollow, text with name tags and icon tags, construction lines and the B and Shift+B keys; it now mentions Undo an edge feature and Edit, the toolbar size and the grid-line switch under Settings, the language buttons at the top right, and the None stop and the file name when exporting a LYL. The welcome text and the README say that the AI connection needs a copy you run yourself and that the editor can open itself, and the guide chapter on measuring says that the tape measure and the framing square stay while you sketch.

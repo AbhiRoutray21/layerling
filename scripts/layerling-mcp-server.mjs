@@ -156,6 +156,8 @@ async function callTool(name, args) {
       return bridgeCommand("bundle_objects", args);
     case "layerling_layer_text":
       return bridgeCommand("layer_text", args, 30000);
+    case "layerling_clear_history":
+      return bridgeCommand("clear_history", args);
     case "layerling_layer_icon":
       return bridgeCommand("layer_icon", args, 60000);
     case "layerling_measure_section":

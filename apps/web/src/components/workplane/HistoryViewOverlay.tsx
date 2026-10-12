@@ -1,7 +1,7 @@
 "use client";
 
-import { ChevronLeft, ChevronRight, Download, FilePlus2, LoaderCircle, X } from "lucide-react";
-import { useEffect, useRef, type CSSProperties } from "react";
+import { ChevronLeft, ChevronRight, Download, FilePlus2, LoaderCircle, Trash2, X } from "lucide-react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { GuideHelpLink } from "@/components/GuideHelpLink";
 import { t } from "@/lib/i18n";
 import { useLanguage } from "@/lib/useLanguage";
@@ -60,6 +60,7 @@ export function HistoryViewOverlay({
   onIndexChange,
   onExport,
   onCreateProject,
+  onDeleteHistory,
   onClose,
 }: {
   /** Der gezeigte Stand, 0 ist der aelteste. */
@@ -74,11 +75,14 @@ export function HistoryViewOverlay({
   onIndexChange: (index: number) => void;
   onExport: () => void;
   onCreateProject: () => void;
+  /** Wirft den ganzen Verlauf weg; der Entwurf behaelt seinen jetzigen Stand (#246). */
+  onDeleteHistory: () => void;
   onClose: () => void;
 }) {
   const language = useLanguage();
   const movable = useMovablePanel<HTMLElement>("layerling.editor.historyViewPosition", HISTORY_BAR);
   const sliderRef = useRef<HTMLInputElement>(null);
+  const [confirmingDelete, setConfirmingDelete] = useState(false);
   useEffect(() => {
     sliderRef.current?.focus({ preventScroll: true });
   }, []);
@@ -152,7 +156,27 @@ export function HistoryViewOverlay({
         </span>
       </div>
 
+      {confirmingDelete ? (
+        <div className="history-view-confirm" role="alertdialog" aria-labelledby="history-delete-title" aria-describedby="history-delete-body">
+          <strong id="history-delete-title">{t("historyView.deleteTitle")}</strong>
+          <p id="history-delete-body">{t("historyView.deleteBody")}</p>
+          <div className="history-view-confirm-actions">
+            {/* Focused, so a stray Enter keeps the history. */}
+            <button type="button" className="secondary" autoFocus onClick={() => setConfirmingDelete(false)}>{t("common.cancel")}</button>
+            <button type="button" className="danger" onClick={onDeleteHistory}>
+              <Trash2 size={16} aria-hidden="true" />
+              {t("historyView.deleteConfirm")}
+            </button>
+          </div>
+        </div>
+      ) : null}
+
       <div className="history-view-actions">
+        {/* Alone at the left, away from the buttons that take something along. */}
+        <button type="button" className="delete-history" disabled={confirmingDelete || count <= 1} title={count <= 1 ? t("historyView.deleteNothing") : t("historyView.deleteHint")} onClick={() => setConfirmingDelete(true)}>
+          <Trash2 size={16} aria-hidden="true" />
+          {t("historyView.delete")}
+        </button>
         <button type="button" className="secondary" onClick={onExport}>
           <Download size={16} aria-hidden="true" />
           {t("historyView.export")}

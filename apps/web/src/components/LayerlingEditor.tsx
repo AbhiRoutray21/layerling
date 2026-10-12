@@ -215,6 +215,7 @@ const HISTORY_VIEW_MCP_ACTIONS = new Set([
   "export_section_svg",
   "capture_image",
   "set_history_view",
+  "clear_history",
 ]);
 
 /**
@@ -7703,6 +7704,29 @@ export function LayerlingEditor({
         : t("status.myShapesLoaded", { count: added }));
   }, [keepInBrowser, packCustomShape, refreshMyShapes]);
 
+  /**
+   * Throws away every earlier step of the design: it keeps the state it has now, as its only one
+   * (#246 - a file to share without its history, or a design to start the undo steps over).
+   */
+  const clearHistory = useCallback(() => {
+    if (projectInteractionActiveRef.current) {
+      setNotice(t("status.finishBeforeHistory"));
+      return 0;
+    }
+    const removed = historyRef.current.length - 1;
+    const entry = editorHistoryEntry(shapesRef.current, selectedIdsRef.current, notesRef.current, placementWorkplaneRef.current);
+    openGroupHistoryRef.current = new Map([[entry.fingerprint, openGroupsRef.current]]);
+    historyRef.current = [entry];
+    historyIndexRef.current = 0;
+    setHistory([entry]);
+    setHistoryIndex(0);
+    setHistoryViewIndex(null);
+    setTopPanel(null);
+    syncProjectShapes(shapesRef.current, true);
+    setNotice(t("status.historyCleared"));
+    return Math.max(0, removed);
+  }, [syncProjectShapes]);
+
   const executeMcpCommand = useCallback(async (command: LayerlingMcpCommand): Promise<unknown> => {
     const params = command.params ?? {};
     const currentShapes = () => shapesRef.current;
@@ -7716,6 +7740,12 @@ export function LayerlingEditor({
       }
       if (command.action === "get_scene") {
         return mcpSceneSnapshot(params.includeRawShapes === true);
+      }
+
+      if (command.action === "clear_history") {
+        if (params.confirm !== true) throw new Error("clear_history deletes every undo step for good; pass confirm: true to do it");
+        const removed = clearHistory();
+        return { cleared: true, removedSteps: removed, states: historyRef.current.length };
       }
 
       if (command.action === "set_history_view") {
@@ -10870,6 +10900,7 @@ export function LayerlingEditor({
           onIndexChange={(index) => setHistoryViewIndex(Math.min(Math.max(0, index), Math.max(0, history.length - 1)))}
           onExport={() => setTopPanel((current) => (current === "export" ? null : "export"))}
           onCreateProject={() => void createProjectFromHistoryState()}
+          onDeleteHistory={clearHistory}
           onClose={closeHistoryView}
         />
       ) : null}

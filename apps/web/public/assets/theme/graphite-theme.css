@@ -7287,6 +7287,37 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .color-recent {
   border-color: #b35f07;
 }
 
+:where(html[data-theme="dark"][data-palette="graphite"]) .history-view-actions .delete-history {
+  color: #a33a2a;
+  background: white;
+  border-color: #cccccc;
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .history-view-actions .delete-history:hover:not(:disabled) {
+  background: #f6f6f6;
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .history-view-confirm {
+  color: #6b2a1f;
+  background: #f6f6f6;
+  border: 1px solid #cccccc;
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .history-view-confirm-actions button {
+  border: 1px solid #c8c8c8;
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .history-view-confirm-actions .secondary {
+  color: #535353;
+  background: white;
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .history-view-confirm-actions .danger {
+  color: white;
+  background: #b4402e;
+  border-color: #962f1f;
+}
+
 html[data-theme="dark"]:where([data-palette="graphite"]) .history-view-bar {
   color: #e1e1e1;
   background: rgba(36, 36, 36, 0.97);

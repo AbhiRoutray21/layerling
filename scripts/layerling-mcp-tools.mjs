@@ -960,6 +960,18 @@ export const tools = [
     },
   },
   {
+    name: "layerling_clear_history",
+    description: "Delete every undo and redo step of the design for good, as the History view's \"Delete history\" button does: the design keeps its current state as its only one, so Undo has nothing to go back to, and a LYL file saved afterwards carries no history. It cannot be undone. Needs `confirm: true`, so it is never done by accident. Closes the History view if it is open. Returns how many steps were removed.",
+    inputSchema: {
+      ...editorTargetSchema,
+      required: ["confirm"],
+      properties: {
+        ...editorTargetSchema.properties,
+        confirm: { type: "boolean", description: "Must be true: every earlier state is deleted for good." },
+      },
+    },
+  },
+  {
     name: "layerling_export_section_svg",
     description: "Cut the design with a plane and return the outlines as an SVG at 1:1 in millimetres - the editor's \"Section as SVG\". Same bodies as the export: visible solids only, holes already taken off, groups combined, bodies of one colour joined; one unfilled path per body in its colour. An x cut is seen from the right, y from above, z from the front (seenFrom). axis and offset (an x position, a height or a z position, like layerling_set_section_view) default to the current section view, or the middle of the design on that axis; the section view itself is left as it is. Returns svg, loops, openLoops (should be 0), widthMm, heightMm and hiddenSkipped. Fails with a message when the plane misses every visible solid.",
     inputSchema: {

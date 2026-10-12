@@ -15391,6 +15391,65 @@ html[data-theme="dark"] .color-recent {
   opacity: 0.55;
 }
 
+/* Delete history: alone at the left of the row, in a colour that says it is not like the others. */
+.history-view-actions .delete-history {
+  margin-right: auto;
+  color: #a33a2a;
+  background: white;
+  border-color: #e3bdb4;
+}
+
+.history-view-actions .delete-history:hover:not(:disabled) {
+  background: #fdf1ee;
+}
+
+.history-view-confirm {
+  display: grid;
+  gap: 6px;
+  margin-bottom: 10px;
+  padding: 10px 12px;
+  color: #6b2a1f;
+  background: #fdf1ee;
+  border: 1px solid #e3bdb4;
+  border-radius: 8px;
+}
+
+.history-view-confirm p {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.history-view-confirm-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.history-view-confirm-actions button {
+  display: inline-flex;
+  min-height: 34px;
+  padding: 0 13px;
+  align-items: center;
+  gap: 7px;
+  border: 1px solid #d8c8b7;
+  border-radius: 7px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.history-view-confirm-actions .secondary {
+  color: #745e48;
+  background: white;
+}
+
+.history-view-confirm-actions .danger {
+  color: white;
+  background: #b4402e;
+  border-color: #962f1f;
+}
+
 .history-view-spinner {
   animation: history-view-spin 0.9s linear infinite;
 }

@@ -129,6 +129,7 @@ export type LayerlingMcpCommandName =
   | "layer_icon"
   | "set_section_view"
   | "set_history_view"
+  | "clear_history"
   | "show_workplane"
   | "export_section_svg"
   | "import_file"

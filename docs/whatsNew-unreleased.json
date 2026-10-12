@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "title": {
+      "de": "Verlauf löschen",
+      "en": "Delete history"
+    },
+    "body": {
+      "de": "Im Verlaufsblick gibt es unten links einen Knopf „Verlauf löschen“. Nach einer Rückfrage entfernt er alle früheren Schritte endgültig; der Entwurf behält seinen jetzigen Stand. So lässt sich ein Entwurf ohne seine Vergangenheit weitergeben.",
+      "en": "The History view has a new button at the bottom left, Delete history. After a question it removes every earlier step for good; the design keeps its current state. Handy for sharing a design without its past."
+    }
+  }
+]
