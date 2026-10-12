@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+## 1.65.0
+
 - **A design file without its undo steps:** The slider "Saved action history" in the LYL export stopped at 30 actions. It has a last stop, **None**, now: the file then holds only the current state - for sharing a design on Printables or Makerworld without its whole history. The export is a copy under the file name you enter, so the design in your browser keeps its history. Suggested by @prmod3d in #246.
 
 - **MCP: the AI opens the editor itself:** Until now an editor tab had to be open before an AI client could do anything. When none is, the first tool that needs one now starts your default browser with an editor and waits until it has connected (up to 45 s); the new tool `layerling_open_editor` does the same on purpose, for another tab. It works for a layerling on your own computer; a copy on a NAS or server cannot start your browser, and `LAYERLING_MCP_OPEN_EDITOR=0` for the MCP server switches it off. Suggested by @brauwers1981 in #250.
