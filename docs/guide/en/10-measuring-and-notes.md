@@ -39,6 +39,8 @@ When you select a body, the framing square shows in green how far it is from the
 
 With the midpoint, the green numbers count to the middle of the body, in height as well. That way you place a sphere with its centre exactly 15 mm from an edge, without subtracting the radius. On a wall you place a hole 40 mm from the left and 190 mm from the top like this: select the hole, switch to midpoint, type 40 and 190. The height there counts outward from the wall.
 
+Both the tape measure and the framing square stay where they are while you sketch and come back to the 3D view. They are not saved with the design and not in the history, and they go when you reload the page.
+
 ## Distances to the origin and while moving
 
 In the settings under {{ui:workspace.appearance}} there are two switches for live dimensions:

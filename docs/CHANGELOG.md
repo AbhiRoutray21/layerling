@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **Quick guide, welcome text and README brought up to date:** The quick guide gained entries for Hollow, text with name tags and icon tags, construction lines and the B and Shift+B keys; it now mentions Undo an edge feature and Edit, the toolbar size and the grid-line switch under Settings, the language buttons at the top right, and the None stop and the file name when exporting a LYL. The welcome text and the README say that the AI connection needs a copy you run yourself and that the editor can open itself, and the guide chapter on measuring says that the tape measure and the framing square stay while you sketch.
+
 ## 1.65.0
 
 - **A design file without its undo steps:** The slider "Saved action history" in the LYL export stopped at 30 actions. It has a last stop, **None**, now: the file then holds only the current state - for sharing a design on Printables or Makerworld without its whole history. The export is a copy under the file name you enter, so the design in your browser keeps its history. Suggested by @prmod3d in #246.

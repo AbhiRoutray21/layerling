@@ -352,7 +352,7 @@ It works against a local development server. In production builds and static hos
 server switches it on with an access token ([see below](#letting-an-ai-client-reach-a-copy-on-a-nas-or-server)); on layerling.com it is always off.
 
 1. Start layerling from the project folder with `npm run dev` (see [Install and Run](#install-and-run)).
-2. Open an editor tab, e.g. `http://127.0.0.1:3000/?editor=1`.
+2. Open an editor tab, e.g. `http://127.0.0.1:3000/?editor=1` - or leave it out: when no editor is open, the first tool that needs one starts your browser with an editor (not for a copy on a NAS or server; `LAYERLING_MCP_OPEN_EDITOR=0` switches it off).
 3. Connect your AI client as described below. It starts the MCP server itself with
    `node scripts/layerling-mcp-server.mjs`.
 

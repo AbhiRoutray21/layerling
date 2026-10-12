@@ -367,7 +367,7 @@ MCP-Route abgeschaltet, es sei denn, der Server schaltet sie mit einem Zugriffss
 ([siehe unten](#eine-ki-an-eine-kopie-auf-nas-oder-server-lassen)); auf layerling.com ist sie immer aus.
 
 1. layerling im Projektordner mit `npm run dev` starten (siehe [Installieren und starten](#installieren-und-starten)).
-2. Einen Editor-Tab öffnen, z. B. `http://127.0.0.1:3000/?editor=1`.
+2. Einen Editor-Tab öffnen, z. B. `http://127.0.0.1:3000/?editor=1` - oder weglassen: Ist keiner offen, startet das erste Werkzeug, das einen braucht, deinen Browser mit einem Editor (nicht bei einer Kopie auf NAS oder Server; mit `LAYERLING_MCP_OPEN_EDITOR=0` abgeschaltet).
 3. Den KI-Client wie unten beschrieben anbinden. Er startet den MCP-Server selbst mit
    `node scripts/layerling-mcp-server.mjs`.
 

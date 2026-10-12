@@ -39,6 +39,8 @@ Markierst du einen Körper, zeigt das Winkellineal in Grün, wie weit er von der
 
 Mit dem Mittelpunkt zählen die grünen Zahlen bis zur Mitte des Körpers, auch in der Höhe. So setzt du etwa eine Kugel mit ihrer Mitte genau 15 mm neben eine Kante, ohne den Radius abzuziehen. Auf einer Wand setzt du so ein Loch 40 mm von links und 190 mm von oben: Loch markieren, Mittelpunkt einschalten, 40 und 190 eintippen. Die Höhe zählt dort von der Wand aus nach außen.
 
+Das Maßband und das Winkellineal bleiben stehen, wenn du eine Skizze machst und in die 3D-Ansicht zurückkehrst. Sie werden nicht mit dem Entwurf gespeichert und stehen nicht im Verlauf, und beim Neuladen der Seite sind sie weg.
+
 ## Abstände zum Nullpunkt und beim Verschieben
 
 In den Einstellungen unter {{ui:workspace.appearance}} gibt es zwei Schalter für laufende Maße:

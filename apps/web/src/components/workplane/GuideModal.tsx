@@ -37,7 +37,7 @@ function guideSections(sharedStore: boolean): GuideSection[] {
     {
       title: "guide.group.shapes",
       chapter: "shapes",
-      lines: ["guide.shapes.add", "guide.shapes.inspector", "guide.shapes.handles", "guide.shapes.wrap", "guide.shapes.myShapes"],
+      lines: ["guide.shapes.add", "guide.shapes.text", "guide.shapes.inspector", "guide.shapes.handles", "guide.shapes.wrap", "guide.shapes.myShapes"],
     },
     {
       title: "guide.group.select",
@@ -57,12 +57,12 @@ function guideSections(sharedStore: boolean): GuideSection[] {
     {
       title: "guide.group.edges",
       chapter: "edges",
-      lines: ["guide.edges.pick", "guide.edges.apply", "guide.edges.undo"],
+      lines: ["guide.edges.pick", "guide.edges.apply", "guide.edges.undo", "guide.edges.hollow"],
     },
     {
       title: "guide.group.sketch",
       chapter: "sketches",
-      lines: ["guide.sketch.start", "guide.sketch.draw", "guide.sketch.image"],
+      lines: ["guide.sketch.start", "guide.sketch.draw", "guide.sketch.construction", "guide.sketch.image"],
     },
     {
       title: "guide.group.files",
@@ -95,7 +95,7 @@ function sketchGuideSections(): GuideSection[] {
     {
       title: "guide.sketchGroup.draw",
       chapter: "sketches",
-      lines: ["guide.sketch.start", "guide.sketch.draw", "guide.sketchDraw.close"],
+      lines: ["guide.sketch.start", "guide.sketch.draw", "guide.sketchDraw.close", "guide.sketch.construction"],
     },
     {
       title: "guide.sketchGroup.edit",
