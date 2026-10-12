@@ -2,7 +2,7 @@
 
 import { GuideHelpLink } from "@/components/GuideHelpLink";
 import { MovableToolPanel } from "@/components/workplane/MovableToolPanel";
-import { useEffect, useState, type CSSProperties } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { Check, LoaderCircle, Minus, Pencil, Plus, RotateCcw, X } from "lucide-react";
 import { displayStepFromMillimeters, displayToMillimeters, formatMeasurementNumber, lengthDisplayUnit, millimetersToDisplay, parseMeasurementInput } from "@/lib/measurementUnits";
 import type { CadModifierKind, CadModifierQuality } from "@/lib/cadModifierTypes";
@@ -292,6 +292,13 @@ export function EdgeModifierPanel({
   const title = kind === "fillet" ? t("edge.filletTitle") : t("edge.chamferTitle");
   const amountMin = Math.min(MIN_EDGE_MODIFIER_AMOUNT, Math.max(Number.EPSILON, maxAmount));
   const amountMax = Math.max(amountMin, maxAmount);
+  // On a short screen the panel scrolls, and the error sits at its foot under
+  // the buttons: bring the whole bottom into view whenever a message appears.
+  const errorRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const panel = errorRef.current?.closest<HTMLElement>(".edge-modifier-panel");
+    if (panel) panel.scrollTop = panel.scrollHeight;
+  }, [error]);
   return (
     <MovableToolPanel className="edge-modifier-panel" ariaLabel={title}>
       {(handleProps) => (<>
@@ -378,7 +385,7 @@ export function EdgeModifierPanel({
         </select>
       </label>
 
-      {error ? <div className="edge-modifier-error" role="alert">{cadModifierUserErrorMessage(error)}</div> : null}
+      {error ? <div ref={errorRef} className="edge-modifier-error" role="alert">{cadModifierUserErrorMessage(error)}</div> : null}
       <div className="edge-modifier-footer">
         <button type="button" className="secondary" onClick={onCancel}>{t("common.cancel")}</button>
         <button type="button" className="primary" disabled={!prepared || busy || selectedCount === 0 || Boolean(error)} onClick={onApply}>
