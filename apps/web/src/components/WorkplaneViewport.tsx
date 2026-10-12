@@ -9042,6 +9042,10 @@ function rebuildWorkplane(
       }),
     );
     surface.name = muted ? "WorkplaneBaseReference" : "WorkplaneBase";
+    // The plate is see-through too, and three.js draws those by the distance of their centres. A body
+    // standing behind the plate's centre was then drawn first and the plate laid over it, so it
+    // faded to a ghost, depending on the view. The plate always goes first.
+    surface.renderOrder = -10;
     surface.rotation.x = -Math.PI / 2;
     surface.receiveShadow = view.showShadows && !muted;
     group.add(surface);
@@ -9963,6 +9967,8 @@ function updateSectionPlaneHelper(
     });
     const quad = new THREE.Mesh(quadGeom, quadMat);
     quad.name = "SectionPlaneQuad";
+    // Always after the see-through bodies, so its tint does not change with the view.
+    quad.renderOrder = 2;
 
     const borderGeom = new THREE.BufferGeometry().setFromPoints([
       new THREE.Vector3(-0.5, -0.5, 0),
@@ -9978,6 +9984,7 @@ function updateSectionPlaneHelper(
       depthWrite: false,
     });
     const border = new THREE.LineLoop(borderGeom, borderMat);
+    border.renderOrder = 3;
     border.name = "SectionPlaneBorder";
 
     helper.add(quad);
