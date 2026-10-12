@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+## 1.66.0
+
 - **Save into your own folder:** In Chrome and Edge, saving a design as LYL now opens the system's save dialog, so you choose the folder and the name and can replace an existing file. After that **Ctrl+S** saves the design into the same file again, and a design opened from a `.lyl` file saves back into it. Firefox and Safari do not let a page write into files; there the file is still downloaded. Suggested by @boatingman44 in #251.
 
 - **Delete history:** The History view has a new button at the bottom left, **Delete history**. After a question it removes every earlier step for good; the design keeps the state it has now, Undo has nothing to go back to and a file saved afterwards carries no history. It is alone and in a different colour so it is not pressed by accident. For an AI client there is `layerling_clear_history` (it needs `confirm: true`). Suggested by @prmod3d in #246.
