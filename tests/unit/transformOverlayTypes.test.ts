@@ -6,6 +6,7 @@ import {
   ROTATION_WHEEL_SHIFT_SNAP_DEGREES,
   ROTATION_WHEEL_SNAP_DEGREES,
   normalizedRotationPlaneBasis,
+  rotateHandleArrow,
   rotationPlaneDirectionSign,
   transformBoundsIntersectClipVolume,
   transformOverlayScreenPoint,
@@ -269,5 +270,46 @@ describe("rotation handle projection", () => {
     { direction: -1, expected: -22.5 },
   ])("wraps 22.5-degree Shift snapping without reversing for plane direction $direction", ({ direction, expected }) => {
     expect(snappedWheelRotation(-157, 179, direction, 22.5)).toEqual({ delta: expected, pointerAngle: -157.5 });
+  });
+});
+
+describe("the arrow of a rotate handle", () => {
+  const numbers = (path: string) => (path.match(/-?\d+(?:\.\d+)?/g) ?? []).map(Number);
+  // Seen straight on: x to the right, y up, z towards the viewer.
+  const front = (point: { x: number; y: number; z: number }) => ({ x: 100 + point.x, y: 200 - point.y });
+  const up = { x: 0, y: 1, z: 0 };
+  const towardsViewer = { x: 0, y: 0, z: 1 };
+
+  it("draws an arc with an arrowhead at each end, anchored on the projected middle", () => {
+    const arrow = rotateHandleArrow(front, { x: 0, y: 0, z: 0 }, up, towardsViewer, 10);
+    expect(arrow.x).toBe(100);
+    expect(arrow.y).toBe(200);
+    expect(numbers(arrow.arc).length).toBe(2 * 15);
+    expect(numbers(arrow.heads).length).toBe(2 * 2 * 3);
+  });
+
+  it("bulges away from the axis", () => {
+    // Radial is up, so the middle of the arc is higher on screen (smaller y) than its ends.
+    const ys = numbers(rotateHandleArrow(front, { x: 0, y: 0, z: 0 }, up, towardsViewer, 10).arc).filter((_, index) => index % 2 === 1);
+    expect(ys[7]).toBeLessThan(ys[0]);
+    expect(ys[7]).toBeLessThan(ys[14]);
+  });
+
+  it("follows the perspective: a plane turned away gives a flatter arc", () => {
+    const squeezed = (point: { x: number; y: number; z: number }) => ({ x: 100 + point.x, y: 200 - point.y * 0.4 });
+    const height = (project: typeof front) => {
+      const ys = numbers(rotateHandleArrow(project, { x: 0, y: 0, z: 0 }, up, towardsViewer, 10).arc).filter((_, index) => index % 2 === 1);
+      return Math.max(...ys) - Math.min(...ys);
+    };
+    expect(height(squeezed)).toBeLessThan(height(front));
+  });
+
+  it("keeps a plane seen edge-on an arrow and not a bar", () => {
+    // The arc lies in the x-z plane, seen from the front: every point has the same screen height.
+    const arrow = rotateHandleArrow(front, { x: 0, y: 0, z: 0 }, { x: 1, y: 0, z: 0 }, up, 10);
+    const all = [...numbers(arrow.arc), ...numbers(arrow.heads)];
+    expect(all.every(Number.isFinite)).toBe(true);
+    const ys = numbers(arrow.arc).filter((_, index) => index % 2 === 1);
+    expect(Math.max(...ys) - Math.min(...ys)).toBeGreaterThan(2);
   });
 });

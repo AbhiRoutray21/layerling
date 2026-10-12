@@ -109,7 +109,7 @@ import {
   getElevationMeasureKey,
   isPointInsideTransformBounds,
   measureKeyForHandle,
-  normalizedRotationPlaneBasis,
+  rotateHandleArrow,
   rotationPlaneDirectionSign,
   transformBoundsIntersectClipVolume,
   transformOverlayScreenPoint,
@@ -10162,10 +10162,8 @@ function updateTransformOverlayDom(state: ThreeState, next: TransformOverlayStat
     }
     element.style.setProperty("--overlay-x", `${handle.x}px`);
     element.style.setProperty("--overlay-y", `${handle.y}px`);
-    element.style.setProperty("--rotate-plane-a", String(handle.plane.a));
-    element.style.setProperty("--rotate-plane-b", String(handle.plane.b));
-    element.style.setProperty("--rotate-plane-c", String(handle.plane.c));
-    element.style.setProperty("--rotate-plane-d", String(handle.plane.d));
+    element.querySelector(".rotate-arrow-arc")?.setAttribute("d", handle.arc);
+    element.querySelector(".rotate-arrow-heads")?.setAttribute("d", handle.heads);
   });
 }
 
@@ -10378,10 +10376,6 @@ function syncTransformOverlay(
   const rotateLeftSource = project(sidePoint(rotationSides.x, frame.max.y));
   const rotateRightSource = project(sidePoint(rotationSides.z, frame.max.y));
   const rotateBottomSource = project(sidePoint(rotationSides.y, footprintY));
-  const rotateLeft = screenOffsetFromCenter(rotateLeftSource, 24);
-  const rotateRight = screenOffsetFromCenter(rotateRightSource, 28);
-  const rotateBottomAnchor = screenOffsetFromCenter(rotateBottomSource, 26);
-  const rotateBottom = { ...rotateBottomAnchor, y: rotateBottomAnchor.y - 5 };
   // With a pivot set, each wheel slides along its face onto the axis through
   // the pivot, so the wheel shows where the selection really turns.
   const customPivot = state.rotationPivot ?? null;
@@ -10392,13 +10386,6 @@ function syncTransformOverlay(
   const zFaceCenter = onPivotAxis(sidePoint(rotationSides.z, 0), zFootAxis);
   const yFaceCenter = onPivotAxis(bottomCenterWorld, yFootAxis);
   const pivotScreen = customPivot ? project(customPivot) : null;
-  const yRotationAxes = rotationSides.y === "near"
-    ? { u: xFootAxis, v: zFootAxis }
-    : rotationSides.y === "far"
-      ? { u: xFootAxis.clone().multiplyScalar(-1), v: zFootAxis.clone().multiplyScalar(-1) }
-      : rotationSides.y === "right"
-        ? { u: zFootAxis.clone().multiplyScalar(-1), v: xFootAxis }
-        : { u: zFootAxis, v: xFootAxis.clone().multiplyScalar(-1) };
   const planeRadius = 154;
   const planeWorldStep = Math.max(0.1, cameraDistance * 0.01);
   const makePlaneView = (centerWorld: THREE.Vector3, uAxis: THREE.Vector3, vAxis: THREE.Vector3, axisVector: THREE.Vector3): RotationPlaneView => {
@@ -10447,19 +10434,6 @@ function syncTransformOverlay(
     y: makePlaneView(yFaceCenter, xFootAxis, zFootAxis, yFootAxis),
     z: makePlaneView(zFaceCenter, xFootAxis, yFootAxis, zFootAxis),
   };
-  const makeCameraPlaneView = (uAxis: THREE.Vector3, vAxis: THREE.Vector3): RotationPlaneView => {
-    const u = uAxis.clone().transformDirection(state.camera.matrixWorldInverse);
-    const v = vAxis.clone().transformDirection(state.camera.matrixWorldInverse);
-    return { x: 0, y: 0, a: u.x, b: -u.y, c: v.x, d: -v.y };
-  };
-  const rotationHandlePlanes: Record<RotationAxis, RotationPlaneView> = {
-    // Project only the two plane axes through the camera rotation. Ignoring
-    // perspective translation keeps glyph appearance independent of object
-    // length and screen position while preserving camera foreshortening.
-    x: makeCameraPlaneView(zFootAxis, yFootAxis),
-    y: makeCameraPlaneView(yRotationAxes.u, yRotationAxes.v),
-    z: makeCameraPlaneView(xFootAxis, yFootAxis),
-  };
 
   const handles = [
     { point: bottom.nearLeft, handle: { key: "near-left", className: "corner", kind: "scale" as const, x: bottom.nearLeft.x, y: bottom.nearLeft.y, title: t("transform.resize") } },
@@ -10474,10 +10448,47 @@ function syncTransformOverlay(
     { point: liftPoint, handle: { key: liftHandleKey, className: showLowerLiftHandle ? "height-lift lower" : "height-lift", kind: "lift" as const, x: liftPoint.x, y: liftPoint.y, title: t("transform.lift"), angle: liftHandleAngle } },
   ].filter(({ point }) => point.visible).map(({ handle }) => handle);
   const rotationChromeVisible = !cameraInsideSelection && centerPoint.visible;
+  // Each arrow is a piece of the circle its axis turns on, built in space so it sits in perspective on the selection.
+  const rotateArrowHandle = (
+    key: string,
+    className: string,
+    axisVector: THREE.Vector3,
+    faceCenter: THREE.Vector3,
+    sideWorld: THREE.Vector3,
+    fallbackRadial: THREE.Vector3,
+  ) => {
+    const offset = sideWorld.clone().sub(faceCenter);
+    const radial = offset.clone().addScaledVector(axisVector, -offset.dot(axisVector));
+    const radialLength = radial.length();
+    const direction = radialLength > 1e-6 ? radial.clone().divideScalar(radialLength) : fallbackRadial.clone();
+    const base = faceCenter.clone().addScaledVector(direction, radialLength);
+    const tangent = new THREE.Vector3().crossVectors(axisVector, direction);
+    const step = Math.max(0.1, cameraDistance * 0.01);
+    const origin = project(base);
+    const screenPerWorld = Math.max(
+      0.0001,
+      ...[direction, tangent, axisVector].map((vector) => {
+        const moved = project(base.clone().addScaledVector(vector, step));
+        return Math.hypot(moved.x - origin.x, moved.y - origin.y) / step;
+      }),
+    );
+    const mid = base.clone().addScaledVector(direction, 22 / screenPerWorld);
+    const arrow = rotateHandleArrow(
+      (point) => {
+        const screen = project(new THREE.Vector3(point.x, point.y, point.z));
+        return { x: screen.x, y: screen.y };
+      },
+      mid,
+      direction,
+      axisVector,
+      (26 / screenPerWorld) * 0.6,
+    );
+    return { key, className, x: arrow.x, y: arrow.y, arc: arrow.arc, heads: arrow.heads };
+  };
   const rotateHandles = rotationChromeVisible ? [
-    rotateLeftSource.visible ? { key: "rotate-left", className: "screen-left", x: rotateLeft.x, y: rotateLeft.y, plane: normalizedRotationPlaneBasis(rotationHandlePlanes.x, true) } : null,
-    rotateRightSource.visible ? { key: "rotate-right", className: "screen-right", x: rotateRight.x, y: rotateRight.y, plane: normalizedRotationPlaneBasis(rotationHandlePlanes.z, true) } : null,
-    rotateBottomSource.visible ? { key: "rotate-bottom", className: "screen-bottom", x: rotateBottom.x, y: rotateBottom.y, plane: normalizedRotationPlaneBasis(rotationHandlePlanes.y, true) } : null,
+    rotateLeftSource.visible ? rotateArrowHandle("rotate-left", "screen-left axis-x", xFootAxis, xFaceCenter, sidePoint(rotationSides.x, frame.max.y), yFootAxis) : null,
+    rotateRightSource.visible ? rotateArrowHandle("rotate-right", "screen-right axis-y", zFootAxis, zFaceCenter, sidePoint(rotationSides.z, frame.max.y), yFootAxis) : null,
+    rotateBottomSource.visible ? rotateArrowHandle("rotate-bottom", "screen-bottom axis-z", yFootAxis, yFaceCenter, sidePoint(rotationSides.y, footprintY), xFootAxis) : null,
   ].filter((handle): handle is NonNullable<typeof handle> => Boolean(handle)) : [];
 
   // Which mid-edge handle sits on the side of the shape currently facing the
