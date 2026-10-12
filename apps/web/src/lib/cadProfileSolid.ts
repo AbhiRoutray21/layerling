@@ -1,4 +1,4 @@
-import type { OcctKernel, ShapeHandle } from "occt-wasm";
+import { JoinType, type OcctKernel, type ShapeHandle } from "occt-wasm";
 import type { CadModifierProfileLoop, CadModifierProfilePart, CadModifierProfileSegment } from "@/lib/cadModifierTypes";
 
 /*
@@ -566,8 +566,8 @@ function loftSolid(cad: OcctKernel, profile: CadModifierProfilePart, tolerance: 
   return solids[0];
 }
 
-/** occt-wasm's JoinType.Arc: round corners. */
-const JOIN_ARC = 0;
+/** Round corners. */
+const JOIN_ARC = JoinType.Arc;
 
 /**
  * A flat face pushed up `height` from y = 0, whichever way round the kernel built the face: a face

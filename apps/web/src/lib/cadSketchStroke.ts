@@ -1,12 +1,12 @@
-import type { OcctKernel, ShapeHandle } from "occt-wasm";
+import { JoinType, type OcctKernel, type ShapeHandle } from "occt-wasm";
 import { cadSketchRegions, orderedCadSketchPaths, type OrderedCadSketchPath } from "@/lib/sketchCadProfile";
 import { pathWire } from "@/lib/sketchCadWire";
 import { sampledPath } from "@/lib/sketchStroke";
 import type { SketchProfile, SketchStroke } from "@/types/layerling";
 
-/** occt-wasm's JoinType: round corners, and corners carried on to a point. */
-const JOIN_ARC = 0;
-const JOIN_INTERSECTION = 2;
+/** Round corners, and corners carried on to a point. */
+const JOIN_ARC = JoinType.Arc;
+const JOIN_INTERSECTION = JoinType.Intersection;
 /** A miter longer than this many times the half width is cut off in the polygon stroke; here the polygon stroke does it. */
 const MITER_LIMIT = 4;
 
