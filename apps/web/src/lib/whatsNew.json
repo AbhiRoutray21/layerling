@@ -28,8 +28,8 @@
           "en": "The AI opens the editor itself"
         },
         "body": {
-          "de": "Wer layerling mit einer KI wie Claude benutzt, muss den Editor nicht mehr vorher öffnen: Ist keiner offen, startet die KI deinen Browser mit einem Editor und arbeitet dann los. Das gilt für layerling auf deinem eigenen Rechner.",
-          "en": "If you use layerling with an AI such as Claude, you no longer have to open the editor first: when none is open, the AI starts your browser with an editor and gets to work. This is for layerling on your own computer."
+          "de": "Wer layerling selbst betreibt und mit einer KI wie Claude verbindet (MCP), muss den Editor nicht mehr vorher öffnen: Ist keiner offen, startet die KI deinen Browser mit einem Editor und arbeitet dann los. Auf layerling.com gibt es die KI-Anbindung nicht.",
+          "en": "If you run layerling yourself and connect it to an AI such as Claude (MCP), you no longer have to open the editor first: when none is open, the AI starts your browser with an editor and gets to work. The AI connection is not available on layerling.com."
         }
       },
       {
