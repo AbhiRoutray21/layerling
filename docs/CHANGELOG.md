@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+## 1.66.2
+
 - **Thread chamfers (#269):** A nut or tapped hole now has its chamfer cone run on, at 45 degrees, down to the thread core: before, it ended on a ledge at the outer diameter, below which the thread stood at full height. The chamfer still means the room the mouth opens beyond the outer diameter, so existing mouths keep their size. Every end of a rod, nut or tapped hole also has a chamfer of its own now (**Chamfer, top end** and **Chamfer, bottom end**; a screw keeps its one at the tip), and `threadChamferBottom` is there for an AI client. Switching a thread between **Threaded rod** and **Tapped hole** keeps its length instead of going back to the standard height. Reported by DrJones in the forum.
 
 - **Round or chamfer several sketch corners at once (#269):** Select the corners with Shift or a frame, choose **Round corner** or **Chamfer corner** and give one radius or distance for all of them. Corners that share a side take at most 45 % of it each, so a rectangle comes out alike all round. Reported by DrJones in the forum.

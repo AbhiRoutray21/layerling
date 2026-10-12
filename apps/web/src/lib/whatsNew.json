@@ -1,5 +1,30 @@
 [
   {
+    "version": "1.66.2",
+    "items": [
+      {
+        "title": {
+          "de": "Gewinde: Fase an jedem Ende, Kegel bis zum Kern",
+          "en": "Threads: a chamfer at each end, the cone down to the core"
+        },
+        "body": {
+          "de": "Stange, Mutter und Gewindeloch haben jetzt oben und unten eine eigene Fase. Bei Mutter und Gewindeloch läuft der Fasenkegel bis auf den Gewindekern weiter, ohne Absatz am Außendurchmesser. Beim Wechsel zwischen Gewindestange und Gewindeloch bleibt die Länge.",
+          "en": "A rod, nut or tapped hole now has a chamfer of its own at the top and at the bottom. On a nut or tapped hole the chamfer cone runs on down to the thread core, with no ledge at the outer diameter. Switching between a threaded rod and a tapped hole keeps the length."
+        }
+      },
+      {
+        "title": {
+          "de": "Skizze: mehrere Ecken auf einmal",
+          "en": "Sketch: several corners at once"
+        },
+        "body": {
+          "de": "Mit Umschalt oder einem Rahmen wählst du mehrere Eckpunkte und verrundest oder fasst sie mit einem Wert in einem Zug. Teilen sich zwei Ecken eine Seite, bekommen beide gleich viel davon.",
+          "en": "Select several corner points with Shift or a frame and round or chamfer them with one value in one go. Where two corners share a side, both get the same share of it."
+        }
+      }
+    ]
+  },
+  {
     "version": "1.66.1",
     "items": [
       {
