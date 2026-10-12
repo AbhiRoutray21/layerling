@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **MCP: `layerling_layer_icon` for the icon tag:** An AI client can now make what the Icon tag in the shape library makes. `svg` (the text of an SVG file) puts a new icon tag on the plate, `id` turns an extruded sketch body into one or builds an icon tag again; `width` is the icon's width, `layers` the layers as for `layerling_layer_text` (without letter edge and key ring hole), and `count` lays copies out on the plate. The guide (chapter 14) and both skills list it.
+
 ## 1.64.0
 
 - **Undo says when it brings a workplane back:** Setting a workplane on a face or putting it back on the base plate is a step of its own in the history, and most tools in Modify change nothing when they are only opened. So an undo after opening one took back that older step and a workplane seemed to appear out of nowhere. The message after Undo and Redo now says when the workplane changed, e.g. "Undo - the workplane is back on a face". Reported by @prmod3d in #246.

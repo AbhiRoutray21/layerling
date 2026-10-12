@@ -804,6 +804,36 @@ export const tools = [
     },
   },
   {
+    name: "layerling_layer_icon",
+    description: "An SVG icon as a layered tag for a multicolour print, like the editor's Icon tag (the shape library) and its card: the icon on top, under it the same outline a little wider in another colour, at the bottom a plate without holes - one bundle of extruded sketch bodies, each with its own colour and height. Two ways in. `svg` (the text of an SVG file) makes a new icon tag standing on the middle of the plate, named after `name`; the drawing is checked as the import checks it and refused when the kernel would build it differently. `id` of an extruded sketch body (an imported SVG, say) turns that body into an icon tag, or of an icon tag builds it again with a new width or new layers; the place and the turn stay. `width` is how wide the icon on top is, seen from above, in mm (2 to 250; 30 for a new tag, the current width otherwise). `layers` are the layers top to bottom as for layerling_layer_text - grow, height, color, silhouette, join - without the letter edge or a key ring hole; left out, a new tag gets the name tag's start layers (the icon, a 1.5 mm rim, a 3 mm plate without holes) and an existing one keeps its own. `count` (1 to 100) lays that many copies out on the middle of the plate 5 mm apart, the first being the tag itself - for small logos one prints a full plate. One undo step. The result returns the tag(s) and the layers.",
+    inputSchema: {
+      ...editorTargetSchema,
+      properties: {
+        ...editorTargetSchema.properties,
+        svg: { type: "string", description: "The text of an SVG file: makes a new icon tag." },
+        name: { type: "string", description: "With svg: the tag's name (the file's name, without .svg)." },
+        id: { type: "string", description: "An extruded sketch body, or an icon tag to build again." },
+        width: { type: "number", minimum: 2, maximum: 250, description: "How wide the icon on top is, in mm." },
+        layers: {
+          type: "array",
+          maxItems: 6,
+          description: "The layers top to bottom.",
+          items: {
+            type: "object",
+            properties: {
+              grow: { type: "number", description: "How much wider than the icon, in mm all round. 0 is the icon itself." },
+              height: { type: "number", description: "The layer's height in mm." },
+              color: { type: "string", description: "Hex colour such as #d41721." },
+              silhouette: { type: "boolean", description: "Without the holes of the icon - for the base plate." },
+              join: { type: "string", enum: ["round", "bevel", "miter"], description: "How a wider layer goes round the corners of the icon: round (default), bevel or miter (sharp)." },
+            },
+          },
+        },
+        count: { type: "integer", minimum: 1, maximum: 100, description: "Copies of the tag on the plate (default 1)." },
+      },
+    },
+  },
+  {
     name: "layerling_measure_section",
     description: "Measure on a cut through the design, like \"Measure\" in the editor's section view: wall thickness, a gap, a clearance. Both points snap to the outline of the cut (within snapRadius mm, default 1): first to the nearest wall, then the second one preferably square to its wall as seen from the first - give it a point near the opposite wall and it returns the true thickness. Points are in the editor's coordinates (x, z, elevation); the one along the axis is set to the plane. axis and offset work like layerling_export_section_svg and default to the section view or the middle of the design. Returns the snapped points with their snap kind (perpendicular, corner, outline or free), distance and deltaX, deltaZ, deltaElevation. The section view itself is left as it is.",
     inputSchema: {

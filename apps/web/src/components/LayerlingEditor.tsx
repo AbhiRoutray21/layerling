@@ -41,7 +41,7 @@ import { normalizeTextEdge } from "@/lib/textEdge";
 import { textDisplayGeometry } from "@/lib/textFill";
 import { DEFAULT_TEXT_LAYERS, layerTextKeyringArgument, layerTextLayersError, nameTagOffsets, normalizeTextLayers, textLayerShapes, textLayersOf, type NameTagKeyring, type TextLayer, type TextLayerStack } from "@/lib/textLayers";
 import { NAME_TAG_LAYERS, NAME_TAG_LETTER_SIZE, textLetterSize, textLetterSizePatch } from "@/lib/nameTag";
-import { ICON_TAG_LAYERS, iconLayerElevations, iconLayerProfile, iconLayersOf, iconSourceProfile, iconTagGrid, isIconLayerBody, MAX_ICON_TAG_WIDTH, MIN_ICON_TAG_WIDTH, normalizeIconTagCount, scaledIconProfile, type IconLayerStack, type IconTagPlace } from "@/lib/iconTag";
+import { DEFAULT_ICON_TAG_WIDTH, ICON_TAG_LAYERS, iconLayerElevations, iconLayerProfile, iconLayersOf, iconSourceProfile, iconTagGrid, isIconLayerBody, MAX_ICON_TAG_WIDTH, MIN_ICON_TAG_WIDTH, normalizeIconTagCount, scaledIconProfile, type IconLayerStack, type IconTagPlace } from "@/lib/iconTag";
 import type { IconLayerPatch, IconTagControls, TextLayerPatch } from "@/components/workplane/ShapeInspector";
 import { IconTagPanel } from "@/components/workplane/IconTagPanel";
 import { loadedManifoldRuntime, onManifoldReady, rememberManifoldRuntime, setManifoldLoader } from "@/lib/manifoldHandle";
@@ -12573,6 +12573,48 @@ export function LayerlingEditor({
         const next = layeredTextShape(source, layers, wasText ? [] : stack.ids, target.id, target, stack.source.text, keyring);
         commitShapes(currentShapes().map((shape) => (shape.id === target.id ? next : shape)), next.id, t("status.mcpTextLayered", { count: layers.length }));
         return { object: mcpShapeSummary(next), layers, keyring };
+      }
+
+      if (command.action === "layer_icon") {
+        const svg = typeof params.svg === "string" && params.svg.trim() ? params.svg : null;
+        const id = typeof params.id === "string" ? params.id : null;
+        if (!svg && !id) throw new Error("layer_icon needs the text of an SVG file (svg), or the id of an extruded sketch body or an icon tag");
+        const requested = params.layers !== undefined ? normalizeTextLayers(params.layers) : null;
+        if (params.layers !== undefined && !requested) throw new Error("layers must be 1 to 6 entries with grow, height, color and silhouette");
+        const badCorner = layerTextLayersError(params.layers);
+        if (badCorner) throw new Error(badCorner);
+        // An icon has no letters: a letter edge on a layer is left out.
+        const layers = requested?.map(({ edge: _edge, ...layer }) => layer) ?? null;
+        if (params.width !== undefined && !(typeof params.width === "number" && params.width >= MIN_ICON_TAG_WIDTH && params.width <= MAX_ICON_TAG_WIDTH)) {
+          throw new Error(`width must be ${MIN_ICON_TAG_WIDTH} to ${MAX_ICON_TAG_WIDTH} mm`);
+        }
+        const width = typeof params.width === "number" ? params.width : null;
+        const count = params.count === undefined ? 1 : normalizeIconTagCount(Number(params.count));
+        const plate = workspaceSettingsRef.current;
+        let tag: WorkplaneShape;
+        let status: string;
+        if (svg) {
+          const label = typeof params.name === "string" && params.name.trim() ? params.name.trim().slice(0, 60) : "Icon tag";
+          const { area, name } = await svgIconArea(`${label}.svg`, svg, width ?? DEFAULT_ICON_TAG_WIDTH);
+          tag = await layeredIconShape(area, layers ?? ICON_TAG_LAYERS, { x: 0, z: 0, elevation: 0, rotation: 0, rotationX: 0, rotationZ: 0 }, [], createLocalId("icon-tag"), { locked: false, hidden: false, name });
+          status = t("status.iconTagAdded", { name });
+        } else {
+          const target = currentShapes().find((shape) => shape.id === id);
+          if (!target) throw new Error(`No object with id ${id}`);
+          if (target.locked) throw new Error("Unlock the object first");
+          if (!offersIconLayers(target)) throw new Error("Only an extruded sketch body (an imported SVG, say) or an icon tag can be layered");
+          const stack = iconLayerStack(target);
+          if (!stack) throw new Error("Could not read the icon's layers");
+          const wasBody = !target.layeredIcon;
+          const area = await iconTagArea(stack.source, stack.width, width ?? stack.width);
+          const built = layers ?? (wasBody ? [...ICON_TAG_LAYERS] : stack.layers);
+          tag = await layeredIconShape(area, built, stack.place, wasBody ? [] : stack.ids, target.id, wasBody ? { ...target, name: stack.name } : target);
+          status = t(wasBody ? "status.iconLayered" : "status.iconLayersUpdated", { count: built.length });
+        }
+        const tags = count > 1 ? iconTagCopies(tag, count, { width: plate.width, depth: plate.depth }) : [tag];
+        const others = currentShapes().filter((shape) => shape.id !== tag.id);
+        commitShapes([...others, ...tags], tags.map((entry) => entry.id), count > 1 ? t("status.iconTagsMade", { count: tags.length }) : status);
+        return count > 1 ? { objects: tags.map(mcpShapeSummary) } : { object: mcpShapeSummary(tag) };
       }
 
       if (command.action === "intersect_objects") {
