@@ -1334,6 +1334,10 @@ function validateShapeDefinition(definition: Record<string, unknown>, label: str
       const threadHeadHeight = finiteNumber(definition.threadHeadHeight, `${label}.threadHeadHeight`);
       if (threadHeadHeight < 0 || threadHeadHeight > 480) throw new Error(`${label}.threadHeadHeight is outside the supported range`);
     }
+    if (definition.threadChamferBottom !== undefined) {
+      const threadChamferBottom = finiteNumber(definition.threadChamferBottom, `${label}.threadChamferBottom`);
+      if (threadChamferBottom < 0 || threadChamferBottom > 480) throw new Error(`${label}.threadChamferBottom is outside the supported range`);
+    }
     if (definition.threadChamfer !== undefined) {
       const threadChamfer = finiteNumber(definition.threadChamfer, `${label}.threadChamfer`);
       if (threadChamfer < 0 || threadChamfer > 480) throw new Error(`${label}.threadChamfer is outside the supported range`);

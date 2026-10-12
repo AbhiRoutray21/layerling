@@ -71,8 +71,8 @@ type SketchWorkspaceProps = {
   onStraightenSegment?: (id: string) => void;
   /** Makes a line a construction line (#229), or a normal line again. */
   onSetSegmentConstruction?: (id: string, construction: boolean) => void;
-  onApplyFillet?: (id: string, radius: number) => void;
-  onApplyChamfer?: (id: string, distance: number) => void;
+  onApplyFillet?: (ids: string[], radius: number) => void;
+  onApplyChamfer?: (ids: string[], distance: number) => void;
   onClearMeasurement: () => void;
   onMeasureTool: () => void;
   cornerDialog?: "fillet" | "chamfer" | null;
@@ -720,17 +720,66 @@ export function SketchWorkspace({
     setCornerValue("2");
   }, [selectedPoint?.id, setCornerDialog]);
 
+  // One corner, or several selected ones that get the same radius or distance at once (#269).
+  const selectedCornerIds = selected?.kind === "point"
+    ? [selected.id]
+    : selected?.kind === "multiple" && selected.segmentIds.length === 0 && !selected.imageIds?.length
+      ? selected.pointIds
+      : [];
+  const manyCorners = selectedCornerIds.length >= 2 && selectedCornerIds.some((id) => canApplySketchCornerTreatment(displayProfile, id));
   const handleApplyCorner = () => {
-    if (!selectedPoint || !activeCornerDialog) return;
+    if (selectedCornerIds.length === 0 || !activeCornerDialog) return;
     const val = parseMeasurementInput(cornerValue);
     if (!Number.isFinite(val) || val <= 0) return;
     if (activeCornerDialog === "fillet") {
-      onApplyFillet?.(selectedPoint.id, val);
+      onApplyFillet?.(selectedCornerIds, val);
     } else if (activeCornerDialog === "chamfer") {
-      onApplyChamfer?.(selectedPoint.id, val);
+      onApplyChamfer?.(selectedCornerIds, val);
     }
     setCornerDialog(null);
   };
+
+  const cornerDialogContent = (
+    <div className="sketch-corner-dialog">
+      <span className="sketch-corner-label">
+        {activeCornerDialog === "fillet" ? t("sketch.filletRadius") : t("sketch.chamferDistance")}
+      </span>
+      {/* Text, not a number input: such a field reads the decimal mark by the browser's
+          language, and a German one refused "2.5" (#210). Comma, point and sums all work. */}
+      <input
+        type="text"
+        inputMode="decimal"
+        className="sketch-corner-input"
+        value={cornerValue}
+        onChange={(e) => setCornerValue(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") handleApplyCorner();
+          if (e.key === "Escape") setCornerDialog(null);
+        }}
+        autoFocus
+      />
+      <span className="sketch-corner-unit">mm</span>
+      <button
+        type="button"
+        className="sketch-corner-submit"
+        title={t("sketch.apply")}
+        aria-label={t("sketch.apply")}
+        onClick={handleApplyCorner}
+      >
+        <Check />
+      </button>
+      <button
+        type="button"
+        className="sketch-corner-cancel"
+        title={t("common.cancel")}
+        aria-label={t("common.cancel")}
+        onClick={() => setCornerDialog(null)}
+      >
+        <X />
+      </button>
+      <GuideHelpLink section="sketchCorners" className="sketch-corner-help" iconSize={17} />
+    </div>
+  );
 
   // Ein Enter, dem das Verschwinden des Felds noch ein blur hinterherschickt,
   // darf die Laenge nicht zweimal setzen - und Escape gar nicht.
@@ -2286,45 +2335,7 @@ export function SketchWorkspace({
       {selectedPoint && tool === "select" ? (
         <div className="sketch-point-actions" aria-label={t("sketch.pointActions")}>
           {activeCornerDialog ? (
-            <div className="sketch-corner-dialog">
-              <span className="sketch-corner-label">
-                {activeCornerDialog === "fillet" ? t("sketch.filletRadius") : t("sketch.chamferDistance")}
-              </span>
-              {/* Text, not a number input: such a field reads the decimal mark by the browser's
-                  language, and a German one refused "2.5" (#210). Comma, point and sums all work. */}
-              <input
-                type="text"
-                inputMode="decimal"
-                className="sketch-corner-input"
-                value={cornerValue}
-                onChange={(e) => setCornerValue(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") handleApplyCorner();
-                  if (e.key === "Escape") setCornerDialog(null);
-                }}
-                autoFocus
-              />
-              <span className="sketch-corner-unit">mm</span>
-              <button
-                type="button"
-                className="sketch-corner-submit"
-                title={t("sketch.apply")}
-                aria-label={t("sketch.apply")}
-                onClick={handleApplyCorner}
-              >
-                <Check />
-              </button>
-              <button
-                type="button"
-                className="sketch-corner-cancel"
-                title={t("common.cancel")}
-                aria-label={t("common.cancel")}
-                onClick={() => setCornerDialog(null)}
-              >
-                <X />
-              </button>
-              <GuideHelpLink section="sketchCorners" className="sketch-corner-help" iconSize={17} />
-            </div>
+            cornerDialogContent
           ) : (
             <>
               <button type="button" title={t("sketch.makeCorner")} onClick={() => onSetPointMode(selectedPoint.id, "corner")}><CornerDownRight /><span>{t("sketch.corner")}</span></button>
@@ -2358,6 +2369,39 @@ export function SketchWorkspace({
                 </>
               ) : null}
               <GuideHelpLink section="sketchCurve" className="sketch-corner-help" iconSize={17} />
+            </>
+          )}
+        </div>
+      ) : null}
+      {manyCorners && tool === "select" ? (
+        <div className="sketch-point-actions" aria-label={t("sketch.pointActions")}>
+          {activeCornerDialog ? (
+            cornerDialogContent
+          ) : (
+            <>
+              <button
+                type="button"
+                title={t("sketch.filletCorners", { count: selectedCornerIds.length })}
+                onClick={() => {
+                  setCornerDialog("fillet");
+                  setCornerValue("2");
+                }}
+              >
+                <Spline />
+                <span>{t("sketch.fillet")}</span>
+              </button>
+              <button
+                type="button"
+                title={t("sketch.chamferCorners", { count: selectedCornerIds.length })}
+                onClick={() => {
+                  setCornerDialog("chamfer");
+                  setCornerValue("2");
+                }}
+              >
+                <Slash />
+                <span>{t("sketch.chamfer")}</span>
+              </button>
+              <GuideHelpLink section="sketchCorners" className="sketch-corner-help" iconSize={17} />
             </>
           )}
         </div>

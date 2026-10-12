@@ -130,6 +130,8 @@ export type ShapeCustomization = {
   threadQuality?: number;
   threadHeadHeight?: number;
   threadChamfer?: number;
+  /** The chamfer at the bottom end; without it the bottom end has the same chamfer as the top. */
+  threadChamferBottom?: number;
   threadHeadChamfer?: number;
   springTurns?: number;
   springWire?: number;
@@ -577,6 +579,8 @@ export type WorkplaneShape = {
   threadQuality?: number;
   threadHeadHeight?: number;
   threadChamfer?: number;
+  /** The chamfer at the bottom end; without it the bottom end has the same chamfer as the top. */
+  threadChamferBottom?: number;
   threadHeadChamfer?: number;
   springTurns?: number;
   springWire?: number;

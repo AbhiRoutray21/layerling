@@ -207,14 +207,14 @@ function helicalSolid(cad: OcctKernel, part: CadModifierThreadPart, zFrom: numbe
 
 /** The outside thread from `bottom` to the top: within the major radius, less the chamfer cones at its ends. */
 function outsideThreadBound(cad: OcctKernel, part: CadModifierThreadPart, bottom: number, chamferBottom: boolean) {
-  const { major, height, chamfer } = part;
+  const { major, height, chamfer, chamferLow } = part;
   // Wider than the crest, so no face of the bound lies on a crest; the
   // chamfer cones run on to that width, past the crest, where they cut
   // nothing more but cross the crest instead of touching it.
   const clear = major + Math.max(0.1, part.pitch);
   const broken = chamfer > 0.001;
   const outline: Point[] = [[0, bottom]];
-  if (broken && chamferBottom) outline.push([major - chamfer, bottom], [clear, bottom + chamfer + (clear - major)]);
+  if (chamferLow > 0.001 && chamferBottom) outline.push([major - chamferLow, bottom], [clear, bottom + chamferLow + (clear - major)]);
   else outline.push([clear, bottom]);
   if (broken) outline.push([clear, height - chamfer - (clear - major)], [major - chamfer, height]);
   else outline.push([clear, height]);
@@ -228,12 +228,12 @@ function outsideThreadBound(cad: OcctKernel, part: CadModifierThreadPart, bottom
  * long rod took many seconds - and the rest is sewn on unchanged.
  */
 function outsideThread(cad: OcctKernel, part: CadModifierThreadPart, bottom: number, crestZ: number, climbsCounterClockwise: boolean) {
-  const { pitch, height, chamfer } = part;
+  const { pitch, height, chamfer, chamferLow } = part;
   const unit = halfTurnFaces(cad, part, climbsCounterClockwise);
   const bound = outsideThreadBound(cad, part, bottom, part.chamferBottom);
   const { first, last } = halfTurnRange(bottom, height, crestZ, pitch);
   const broken = chamfer > 0.001;
-  const clearOfBottom = bottom + (broken && part.chamferBottom ? chamfer + Math.max(0.1, pitch) : 0) + pitch * 0.01;
+  const clearOfBottom = bottom + (chamferLow > 0.001 && part.chamferBottom ? chamferLow + Math.max(0.1, pitch) : 0) + pitch * 0.01;
   const clearOfTop = height - (broken ? chamfer + Math.max(0.1, pitch) : 0) - pitch * 0.01;
   const low: ShapeHandle[] = [];
   const middle: ShapeHandle[] = [];
@@ -252,14 +252,17 @@ function outsideThread(cad: OcctKernel, part: CadModifierThreadPart, bottom: num
 }
 
 /** The cone a chamfer cuts into an inside thread at z = `face`, opening outwards from it (`direction` 1 at the bottom, -1 at the top). */
-function insideChamferCone(cad: OcctKernel, part: CadModifierThreadPart, face: number, direction: 1 | -1) {
-  const { major, minor, chamfer } = part;
+function insideChamferCone(cad: OcctKernel, part: CadModifierThreadPart, face: number, direction: 1 | -1, chamfer: number) {
+  const { major, minor } = part;
   const beyond = Math.max(1, part.pitch);
   // The cone runs on a little past the crest into the tap, so it crosses the
   // crest instead of ending on it: a ring lying on the crest made the boolean
   // fail for some pitches and phases. The tap fills almost all of that sliver.
-  const past = (major - minor) * 0.25;
-  const outline: Point[] = [[0, face - direction * beyond], [major + chamfer + beyond, face - direction * beyond], [major - past, face + direction * (chamfer + past)], [0, face + direction * (chamfer + past)]];
+  const reach = major - minor;
+  const past = Math.min(reach * 0.25, Math.max(0, minor - 0.02));
+  // At 45 degrees from the mouth down to the core, so the crests are cut away right down to the
+  // core and no ledge is left at the outer diameter (#269).
+  const outline: Point[] = [[0, face - direction * beyond], [major + chamfer + beyond, face - direction * beyond], [minor - past, face + direction * (chamfer + reach + past)], [0, face + direction * (chamfer + reach + past)]];
   return revolved(cad, direction === 1 ? outline : [...outline].reverse());
 }
 
@@ -277,7 +280,7 @@ function screwHead(cad: OcctKernel, head: NonNullable<CadModifierThreadPart["hea
 export function threadPartSolid(cad: OcctKernel, part: CadModifierThreadPart): ShapeHandle {
   const { role, pitch, height, shaftBottom } = part;
   if (!(part.major > part.minor && part.minor > 0 && pitch > 0 && height > 0)) throw new Error("The thread's measures are out of range");
-  if (part.chamfer > 0.001 && part.major - part.chamfer < 0.05) throw new Error("The thread's chamfer reaches its axis");
+  if (Math.max(part.chamfer, part.chamferLow) > 0.001 && part.major - Math.max(part.chamfer, part.chamferLow) < 0.05) throw new Error("The thread's chamfer reaches its axis");
   // A thread that climbs with the angle from +x towards +z (hand 1) is a
   // left-hand one; the turn up to y maps it to clockwise about +z seen from above.
   const counterClockwise = part.hand !== 1;
@@ -294,9 +297,10 @@ export function threadPartSolid(cad: OcctKernel, part: CadModifierThreadPart): S
     // A nut or a tapped hole: the thread as the tap that cuts it, reaching
     // past both faces, and the chamfer cones that widen its mouths.
     const tap = helicalSolid(cad, part, -pitch, height + pitch, 0, counterClockwise);
-    const cones = part.chamfer > 0.001
-      ? [...(part.chamferBottom ? [insideChamferCone(cad, part, 0, 1)] : []), insideChamferCone(cad, part, height, -1)]
-      : [];
+    const cones = [
+      ...(part.chamferBottom && part.chamferLow > 0.001 ? [insideChamferCone(cad, part, 0, 1, part.chamferLow)] : []),
+      ...(part.chamfer > 0.001 ? [insideChamferCone(cad, part, height, -1, part.chamfer)] : []),
+    ];
     if (role === "nut" && part.nut) {
       let body = hexPrism(cad, part.nut.acrossFlats, height);
       if (part.nut.chamferFaceRadius > 0) body = oneSolid(cad, cad.common(body, rimChamferBound(cad, part.nut.chamferFaceRadius, height)), "nut");
@@ -305,7 +309,7 @@ export function threadPartSolid(cad: OcctKernel, part: CadModifierThreadPart): S
     } else {
       let hole = tap;
       for (const cone of cones) hole = oneSolid(cad, cad.fuse(hole, cone), "tapped hole");
-      const clear = part.major + part.chamfer + Math.max(1, pitch);
+      const clear = part.major + Math.max(part.chamfer, part.chamferLow) + Math.max(1, pitch);
       solid = oneSolid(cad, cad.common(hole, revolved(cad, [[0, 0], [clear, 0], [clear, height], [0, height]])), "tapped hole");
     }
   }

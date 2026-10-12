@@ -432,6 +432,7 @@ export type ThreadShapeFields = {
   threadQuality?: number;
   threadHeadHeight?: number;
   threadChamfer?: number;
+  threadChamferBottom?: number;
   threadHeadChamfer?: number;
 };
 
@@ -447,6 +448,8 @@ export type ThreadSettings = {
   quality: number;
   headHeight: number;
   chamfer: number;
+  /** The chamfer at the bottom end (a screw has none there: the head sits on it). */
+  chamferLow: number;
   headChamfer: number;
 };
 
@@ -460,7 +463,10 @@ export function threadSettings(shape: ThreadShapeFields): ThreadSettings {
   };
   const profile = normalizeThreadProfile(shape.threadProfile);
   const headHeight = normalizeThreadHeadHeight(shape.threadHeadHeight, head);
-  const chamfer = normalizeThreadChamfer(shape.threadChamfer, { role: head.role, diameter: head.diameter, pitch: head.pitch, profile });
+  const chamferShape = { role: head.role, diameter: head.diameter, pitch: head.pitch, profile };
+  const chamfer = normalizeThreadChamfer(shape.threadChamfer, chamferShape);
+  // Without a value of its own the bottom end has what the top has, as it always did.
+  const chamferLow = normalizeThreadChamfer(shape.threadChamferBottom ?? shape.threadChamfer, chamferShape);
   return {
     ...head,
     hand: normalizeThreadHand(shape.threadHand),
@@ -470,9 +476,10 @@ export function threadSettings(shape: ThreadShapeFields): ThreadSettings {
     quality: normalizeThreadQuality(shape.threadQuality),
     headHeight,
     chamfer,
+    chamferLow,
     // Die Aussenfase kennt ihre Grenze erst, wenn Kopfhoehe und Ansenkung
     // feststehen - bei der Mutter frisst die Ansenkung von innen mit.
-    headChamfer: normalizeThreadHeadChamfer(shape.threadHeadChamfer, { ...head, headHeight, chamfer, profile }),
+    headChamfer: normalizeThreadHeadChamfer(shape.threadHeadChamfer, { ...head, headHeight, chamfer, chamferLow, profile }),
   };
 }
 
@@ -517,7 +524,7 @@ export function threadHeadDiameter(settings: Pick<ThreadSettings, "role" | "head
   return spec.headDiameter;
 }
 
-type HeadChamferShape = Pick<ThreadSettings, "role" | "head" | "diameter" | "pitch" | "headHeight" | "profile"> & { chamfer?: number };
+type HeadChamferShape = Pick<ThreadSettings, "role" | "head" | "diameter" | "pitch" | "headHeight" | "profile"> & { chamfer?: number; chamferLow?: number };
 
 /**
  * Der Kopf steht auf seinem freien Ende. `inscribed` ist der kleinste Radius
@@ -568,7 +575,7 @@ export function threadHeadChamferLimits(settings: HeadChamferShape) {
   // Bohrung samt Ansenkung - und ein Rest Flanke zwischen den beiden Kegeln.
   const socketCorner = spec.socket / Math.sqrt(3);
   const innen = settings.role === "nut"
-    ? settings.diameter / 2 + normalizeThreadChamfer(settings.chamfer, settings)
+    ? settings.diameter / 2 + Math.max(normalizeThreadChamfer(settings.chamfer, settings), normalizeThreadChamfer(settings.chamferLow ?? settings.chamfer, settings))
     : Math.max(socketCorner, settings.diameter / 2);
   const roomToBore = Math.max(0, inscribed - innen - 0.2);
   const roomToHeight = Math.max(0, chamferRimHeight(settings) * 0.35 - (circumscribed - inscribed));
@@ -942,13 +949,15 @@ export function threadFootprintPatch(shape: ThreadShapeFields & { width?: number
     const head: HeadShape = { role: settings.role, head: settings.head, diameter, pitch };
     const headHeight = normalizeThreadHeadHeight(settings.headHeight * factor, head);
     const chamfer = normalizeThreadChamfer(settings.chamfer * factor, { role: head.role, diameter: head.diameter, pitch: head.pitch, profile: settings.profile });
+    const chamferLow = normalizeThreadChamfer(settings.chamferLow * factor, { role: head.role, diameter: head.diameter, pitch: head.pitch, profile: settings.profile });
     return {
       ...settings,
       diameter,
       pitch,
       headHeight,
       chamfer,
-      headChamfer: normalizeThreadHeadChamfer(settings.headChamfer * factor, { ...head, headHeight, chamfer, profile: settings.profile }),
+      chamferLow,
+      headChamfer: normalizeThreadHeadChamfer(settings.headChamfer * factor, { ...head, headHeight, chamfer, chamferLow, profile: settings.profile }),
     };
   })();
   const footprint = drift < 1e-6 ? natural : threadNaturalFootprint(scaled);
@@ -966,6 +975,7 @@ export function threadFootprintPatch(shape: ThreadShapeFields & { width?: number
     threadQuality: scaled.quality,
     threadHeadHeight: scaled.headHeight,
     threadChamfer: scaled.chamfer,
+    threadChamferBottom: scaled.chamferLow,
     threadHeadChamfer: scaled.headChamfer,
   };
 }
@@ -997,6 +1007,7 @@ export function threadBuildPlan(options: ThreadGeometryOptions) {
   const headHeight = Math.min(height * 0.9, settings.headHeight);
   const shaftBottom = settings.role === "screw" ? headHeight : 0;
   const chamfer = Math.min(settings.chamfer, (height - shaftBottom) * 0.45);
+  const chamferLow = Math.min(settings.chamferLow, (height - shaftBottom) * 0.45);
   // Am Schraubenkopf gibt es nichts zu brechen; dort sitzt der Kopf.
   const chamferBottom = settings.role !== "screw";
   // Nach innen geschnittene Gewinde bekommen die Fase andersherum: dort muss
@@ -1032,6 +1043,7 @@ export function threadBuildPlan(options: ThreadGeometryOptions) {
     headHeight,
     shaftBottom,
     chamfer,
+    chamferLow,
     chamferBottom,
     inward,
     rimRadii,
@@ -1051,18 +1063,30 @@ export function threadBuildPlan(options: ThreadGeometryOptions) {
 
 export function createThreadGeometry(options: ThreadGeometryOptions) {
   const plan = threadBuildPlan(options);
-  const { settings, height, spec, profile, major, minor, handSign, headHeight, shaftBottom, chamfer, chamferBottom, inward } = plan;
-  const limitRadius = chamfer <= 0.001
+  const { settings, height, spec, profile, major, minor, handSign, headHeight, shaftBottom, chamfer, chamferLow, chamferBottom, inward } = plan;
+  const lowBroken = chamferBottom && chamferLow > 0.001;
+  const topBroken = chamfer > 0.001;
+  // A cone at a mouth of an inside thread goes on, at 45 degrees, down to the core: it ends where
+  // it has cut the crests away, not on a ledge at the outer diameter (#269).
+  const reach = major - minor;
+  const limitRadius = !lowBroken && !topBroken
     ? (_y: number, radius: number) => radius
-    : (y: number, radius: number) => {
-      const fromBottom = chamferBottom ? chamfer - (y - shaftBottom) : 0;
-      const fromTop = chamfer - (height - y);
-      const cut = Math.max(0, fromBottom, fromTop);
-      if (cut <= 0) return radius;
-      return inward ? Math.max(radius, major + cut) : Math.min(radius, Math.max(0.05, major - cut));
-    };
+    : inward
+      ? (y: number, radius: number) => {
+        const fromBottom = lowBroken ? chamferLow - (y - shaftBottom) : -Infinity;
+        const fromTop = topBroken ? chamfer - (height - y) : -Infinity;
+        const cut = Math.max(fromBottom, fromTop);
+        return cut <= -reach ? radius : Math.max(radius, major + cut);
+      }
+      : (y: number, radius: number) => {
+        const fromBottom = lowBroken ? chamferLow - (y - shaftBottom) : 0;
+        const fromTop = topBroken ? chamfer - (height - y) : 0;
+        const cut = Math.max(0, fromBottom, fromTop);
+        if (cut <= 0) return radius;
+        return Math.min(radius, Math.max(0.05, major - cut));
+      };
   const spanTurns = Math.ceil((height - shaftBottom) / settings.pitch) + 4;
-  const bandHeight = chamfer <= 0.001 ? 0 : chamfer + settings.pitch;
+  const bandHeight = !lowBroken && !topBroken ? 0 : Math.max(topBroken ? chamfer : 0, lowBroken ? chamferLow : 0) + settings.pitch;
   const subdivisions = bandHeight > 0 ? CHAMFER_SUBDIVISIONS : 1;
   const denseSpan = Math.min(spanTurns, Math.ceil(bandHeight / settings.pitch) * 2 + 2);
   const pointsPerTurn = profile.points.length;

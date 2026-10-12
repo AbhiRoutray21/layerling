@@ -196,6 +196,8 @@ export type CadModifierThreadPart = {
   shaftBottom: number;
   /** The 45 degree chamfer at the thread ends; 0 for none. */
   chamfer: number;
+  /** The chamfer at the bottom end, when the part has one (`chamferBottom`). */
+  chamferLow: number;
   chamferBottom: boolean;
   /** Screw only. */
   head?: {

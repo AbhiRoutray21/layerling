@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   applySketchChamfer,
+  applySketchCorners,
   applySketchFillet,
   canApplySketchCornerTreatment,
   getCornerGeometryInfo,
@@ -144,5 +145,70 @@ describe("sketchFilletChamfer", () => {
       ],
     } as SketchProfile;
     expect(canApplySketchCornerTreatment(profile, "b")).toBe(false);
+  });
+});
+
+describe("several corners at once (#269)", () => {
+  /** A 40 x 20 rectangle. */
+  const rectangle = (): SketchProfile => ({
+    points: [
+      { id: "p1", x: 0, z: 0, mode: "corner" },
+      { id: "p2", x: 40, z: 0, mode: "corner" },
+      { id: "p3", x: 40, z: 20, mode: "corner" },
+      { id: "p4", x: 0, z: 20, mode: "corner" },
+    ],
+    segments: [
+      { id: "s1", startId: "p1", endId: "p2", kind: "line" },
+      { id: "s2", startId: "p2", endId: "p3", kind: "line" },
+      { id: "s3", startId: "p3", endId: "p4", kind: "line" },
+      { id: "s4", startId: "p4", endId: "p1", kind: "line" },
+    ],
+  });
+
+  it("rounds all four corners in one go, every one with the same radius", () => {
+    const result = applySketchCorners(rectangle(), ["p1", "p2", "p3", "p4"], "fillet", 3, idFactory)!;
+    expect(result.applied).toBe(4);
+    expect(result.skipped).toBe(0);
+    // Each corner became two points and a curve between them: eight points, eight sides.
+    expect(result.profile.points).toHaveLength(8);
+    expect(result.profile.segments).toHaveLength(8);
+    expect(result.profile.segments.filter((segment) => segment.kind === "bezier")).toHaveLength(4);
+  });
+
+  it("shares a side fairly when the radius is larger than two corners can have", () => {
+    // 15 mm would want 15 mm of every side; the 20 mm side is shared by two corners, so each gets 45 % of it, 9 mm, and a sliver stays between them.
+    const result = applySketchCorners(rectangle(), ["p1", "p2", "p3", "p4"], "chamfer", 15, idFactory)!;
+    const points = result.profile.points;
+    const corner = (x: number, z: number) => points.filter((point) => Math.hypot(point.x - x, point.z - z) < 9.01);
+    // At the corner (0,0): its two new points lie 9 mm along each side.
+    const near = corner(0, 0);
+    expect(near).toHaveLength(2);
+    expect(near.map((point) => Math.round(Math.hypot(point.x, point.z) * 100) / 100).sort()).toEqual([9, 9]);
+    // And the same at the opposite corner, not 15 at one and a few millimetres at the other.
+    const far = points.filter((point) => Math.hypot(point.x - 40, point.z - 20) < 9.01);
+    expect(far).toHaveLength(2);
+    expect(far.map((point) => Math.round(Math.hypot(point.x - 40, point.z - 20) * 100) / 100).sort()).toEqual([9, 9]);
+  });
+
+  it("treats the corners it can and counts the others", () => {
+    const profile = rectangle();
+    profile.points.push({ id: "alone", x: 100, z: 100 });
+    const result = applySketchCorners(profile, ["p1", "p3", "alone"], "fillet", 2, idFactory)!;
+    expect(result.applied).toBe(2);
+    expect(result.skipped).toBe(1);
+  });
+
+  it("does nothing when none of the points is a corner", () => {
+    const profile = rectangle();
+    profile.points.push({ id: "alone", x: 100, z: 100 });
+    expect(applySketchCorners(profile, ["alone"], "fillet", 2, idFactory)).toBeNull();
+  });
+
+  it("gives one corner what a single corner gets", () => {
+    const one = applySketchFillet(rectangle(), "p1", 3, idFactory)!;
+    const viaMany = applySketchCorners(rectangle(), ["p1"], "fillet", 3, idFactory)!;
+    expect(viaMany.applied).toBe(1);
+    const strip = (profile: SketchProfile) => profile.points.map((point) => `${point.x.toFixed(4)},${point.z.toFixed(4)}`).sort();
+    expect(strip(viaMany.profile)).toEqual(strip(one.profile));
   });
 });

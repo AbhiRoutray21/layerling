@@ -1267,6 +1267,7 @@ function getShapePropertiesWithAppLimits(shape: WorkplaneShape, onUpdate: ShapeI
       next.boltClearance = normalizeThreadBoltClearance(next.boltClearance);
       next.quality = normalizeThreadQuality(next.quality);
       next.chamfer = normalizeThreadChamfer(next.chamfer, { role: next.role, diameter: next.diameter, pitch: next.pitch, profile: next.profile });
+      next.chamferLow = normalizeThreadChamfer(next.chamferLow, { role: next.role, diameter: next.diameter, pitch: next.pitch, profile: next.profile });
       const headBase = { role: next.role, head: next.head, diameter: next.diameter, pitch: next.pitch };
       const keepHeadHeight = patch.headHeight !== undefined || !headFollowsStandard;
       next.headHeight = normalizeThreadHeadHeight(
@@ -1275,7 +1276,7 @@ function getShapePropertiesWithAppLimits(shape: WorkplaneShape, onUpdate: ShapeI
       );
       // Die Kopffase haengt am Kopf: wer den Kopf flacher zieht oder auf
       // Senkkopf umschaltet, darf keine Fase behalten, die es dort nicht gibt.
-      next.headChamfer = normalizeThreadHeadChamfer(next.headChamfer, { ...headBase, headHeight: next.headHeight, profile: next.profile });
+      next.headChamfer = normalizeThreadHeadChamfer(next.headChamfer, { ...headBase, headHeight: next.headHeight, chamferLow: next.chamferLow, profile: next.profile });
       const footprint = threadNaturalFootprint(next);
       const update: Partial<WorkplaneShape> = {
         threadRole: next.role,
@@ -1289,6 +1290,7 @@ function getShapePropertiesWithAppLimits(shape: WorkplaneShape, onUpdate: ShapeI
         threadQuality: next.quality,
         threadHeadHeight: next.headHeight,
         threadChamfer: next.chamfer,
+        threadChamferBottom: next.chamferLow,
         threadHeadChamfer: next.headChamfer,
         width: footprint.width,
         depth: footprint.depth,
@@ -1309,7 +1311,13 @@ function getShapePropertiesWithAppLimits(shape: WorkplaneShape, onUpdate: ShapeI
         label: t("inspector.threadRole"),
         value: settings.role,
         options: THREAD_ROLE_OPTIONS.map((option) => ({ value: option.value, label: t(option.label) })),
-        onChange: (role) => applyThread({ role: normalizeThreadRole(role) }, undefined, true),
+        // A rod and a tapped hole are both a thread of any length: switching between them keeps
+        // the length. A nut and a screw have their standard measure.
+        onChange: (role) => {
+          const nextRole = normalizeThreadRole(role);
+          const freeLength = (value: ThreadRole) => value === "rod" || value === "bore";
+          applyThread({ role: nextRole }, undefined, !(freeLength(settings.role) && freeLength(nextRole)));
+        },
       },
     ];
     if (settings.role === "screw") {
@@ -1449,15 +1457,27 @@ function getShapePropertiesWithAppLimits(shape: WorkplaneShape, onUpdate: ShapeI
         onChange: (boltClearance) => applyThread({ boltClearance }),
       });
     }
+    // A screw has a chamfer at its tip only. Every other thread has two ends, each with a chamfer of its own.
     properties.push({
       id: "chamfer",
-      label: t("prop.chamfer"),
+      label: settings.role === "screw" ? t("prop.chamfer") : t("prop.threadChamferTop"),
       value: settings.chamfer,
       min: chamferLimits.min,
       max: chamferLimits.max,
       step: 0.05,
       onChange: (chamfer) => applyThread({ chamfer }),
     });
+    if (settings.role !== "screw") {
+      properties.push({
+        id: "chamferBottom",
+        label: t("prop.threadChamferBottom"),
+        value: settings.chamferLow,
+        min: chamferLimits.min,
+        max: chamferLimits.max,
+        step: 0.05,
+        onChange: (chamferLow) => applyThread({ chamferLow }),
+      });
+    }
     properties.push({
       id: "quality",
       label: t("prop.quality"),

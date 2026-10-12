@@ -1281,6 +1281,7 @@ export function cadModifierThreadForShape(shape: WorkplaneShape): CadModifierThr
     threadQuality: shape.threadQuality,
     threadHeadHeight: shape.threadHeadHeight,
     threadChamfer: shape.threadChamfer,
+    threadChamferBottom: shape.threadChamferBottom,
     threadHeadChamfer: shape.threadHeadChamfer,
   });
   const { settings, spec } = plan;
@@ -1294,6 +1295,7 @@ export function cadModifierThreadForShape(shape: WorkplaneShape): CadModifierThr
     height: plan.height,
     shaftBottom: plan.shaftBottom,
     chamfer: plan.chamfer > 0.001 ? plan.chamfer : 0,
+    chamferLow: plan.chamferLow > 0.001 ? plan.chamferLow : 0,
     chamferBottom: plan.chamferBottom,
     // The mesh is drawn at its natural footprint and stretched to the shape's
     // width and depth; the body takes the same stretch.

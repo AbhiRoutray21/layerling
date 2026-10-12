@@ -69,12 +69,14 @@ export function applySketchChamfer(
   pointId: string,
   distance: number,
   createId: IdFactory,
+  /** What the neighbouring corners leave of each side, when several corners are treated at once. */
+  maxSetback?: number,
 ): CornerTreatmentResult | null {
   const info = getCornerGeometryInfo(profile, pointId);
   if (!info) return null;
 
   const { point, seg1, seg2, v1, v2, len1, len2 } = info;
-  const maxDistance = Math.min(len1, len2) * 0.9;
+  const maxDistance = maxSetback !== undefined ? Math.min(maxSetback, Math.min(len1, len2) * 0.999) : Math.min(len1, len2) * 0.9;
   const d = Math.max(0.1, Math.min(distance, maxDistance));
 
   const idA = createId("sketch-point");
@@ -138,6 +140,8 @@ export function applySketchFillet(
   pointId: string,
   radius: number,
   createId: IdFactory,
+  /** What the neighbouring corners leave of each side, when several corners are treated at once. */
+  maxSetback?: number,
 ): CornerTreatmentResult | null {
   const info = getCornerGeometryInfo(profile, pointId);
   if (!info) return null;
@@ -149,7 +153,7 @@ export function applySketchFillet(
   if (tanHalf <= 1e-4) return null;
 
   const requestedT = radius / tanHalf;
-  const maxT = Math.min(len1, len2) * 0.9;
+  const maxT = maxSetback !== undefined ? Math.min(maxSetback, Math.min(len1, len2) * 0.999) : Math.min(len1, len2) * 0.9;
   const t = Math.max(0.1, Math.min(requestedT, maxT));
   const effectiveR = t * tanHalf;
 
@@ -221,4 +225,50 @@ export function applySketchFillet(
     },
     newPointIds: [idA, idB],
   };
+}
+
+export type CornersResult = {
+  profile: SketchProfile;
+  /** Corners rounded or chamfered. */
+  applied: number;
+  /** Selected points that are not a corner between two straight lines. */
+  skipped: number;
+};
+
+/**
+ * Several corners with the same radius or distance in one go (#269). Two selected corners that
+ * share a side share it fairly: each takes at most 45 % of it, so a rectangle rounded all round comes
+ * out alike at every corner instead of the first one leaving the last almost nothing. A side
+ * whose other end is not selected is used as far as for a single corner.
+ */
+export function applySketchCorners(
+  profile: SketchProfile,
+  pointIds: string[],
+  kind: "fillet" | "chamfer",
+  size: number,
+  createId: IdFactory,
+): CornersResult | null {
+  const ids = [...new Set(pointIds)];
+  const corners = ids.filter((id) => getCornerGeometryInfo(profile, id) !== null);
+  if (corners.length === 0) return null;
+  const selected = new Set(corners);
+  // The room of each corner is worked out on the profile as it is now: it does not change while the others are done.
+  const room = new Map<string, number>();
+  corners.forEach((id) => {
+    const info = getCornerGeometryInfo(profile, id)!;
+    const side = (otherId: string, length: number) => (selected.has(otherId) ? length * 0.45 : length * 0.9);
+    room.set(id, Math.min(side(info.p1.id, info.len1), side(info.p2.id, info.len2)));
+  });
+  let current = profile;
+  let applied = 0;
+  for (const id of corners) {
+    const next = kind === "fillet"
+      ? applySketchFillet(current, id, size, createId, room.get(id))
+      : applySketchChamfer(current, id, size, createId, room.get(id));
+    if (!next) continue;
+    current = next.profile;
+    applied += 1;
+  }
+  if (applied === 0) return null;
+  return { profile: current, applied, skipped: ids.length - corners.length + (corners.length - applied) };
 }

@@ -35,7 +35,9 @@ Weitere Einstellungen:
   - **Gedruckte Schraube und gedruckte Mutter:** Die Schraube bleibt bei 0, die Mutter bekommt das Spiel (die 0,4 mm, mit denen sie beginnt).
   - **Echte Schraube in gedruckter Mutter oder gedrucktem Gewindeloch:** Die gedruckte Seite nimmt alles, die Mutter behält also ihre 0,4 mm. Wackelt die Schraube, ist ein engeres 0,3 mm einen Versuch wert.
   - **Gedruckte Schraube in echter Mutter:** Die echte Mutter hat kein Spiel, also muss die Schraube dünner werden: hier 0,3 bis 0,4 mm, so viel wie eine gedruckte Mutter hätte.
-- **{{ui:prop.chamfer}}, {{ui:prop.headChamfer}} und {{ui:prop.rimChamfer}}:** Fasen an den Enden, damit das Gewinde sauber anläuft und der Kopf keine scharfe Kante hat.
+- **{{ui:prop.threadChamferTop}}, {{ui:prop.threadChamferBottom}}, {{ui:prop.headChamfer}} und {{ui:prop.rimChamfer}}:** Fasen an den Enden, damit das Gewinde sauber anläuft und der Kopf keine scharfe Kante hat. Jedes Ende von Stange, Mutter und Gewindeloch hat seine eigene Fase, oben kann sie also lang und unten kurz sein oder fehlen. Eine Schraube hat nur eine an der Spitze, sie heißt {{ui:prop.chamfer}}. Bei Mutter und Gewindeloch ist die Fase der Platz, um den sich die Mündung über den Außendurchmesser hinaus öffnet; der Kegel läuft unter 45 Grad weiter bis auf den Gewindekern, sodass am Außendurchmesser kein Absatz stehen bleibt.
+
+Beim Umschalten zwischen {{ui:thread.rod}} und {{ui:thread.bore}} bleibt die Länge erhalten. Mutter und Schraube beginnen mit ihren Normmaßen.
 - **{{ui:prop.quality}}:** Wie fein das Gewinde berechnet wird. Höher ist genauer, aber langsamer.
 
 Gedruckte Gewinde sind eine Sache für sich. Stelle die Pärchen aus Schraube und Mutter zuerst als Test her, bevor du ein großes Teil druckst, und passe das Spiel an deinen Drucker an.

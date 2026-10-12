@@ -137,7 +137,7 @@ import { deleteServerCustomShape, listServerCustomShapes, readServerCustomShape,
 import { addLineIntersectionPoints, splitSketchSegment } from "@/lib/sketchPointRefinement";
 import { copySketchSelection, freeSketchPasteOffset, pasteSketchClipboard, type SketchClipboard } from "@/lib/sketchClipboard";
 import { sketchSelectionCount, toggleSketchSelection } from "@/lib/sketchSelection";
-import { applySketchChamfer, applySketchFillet } from "@/lib/sketchFilletChamfer";
+import { applySketchCorners } from "@/lib/sketchFilletChamfer";
 import { revolveAxisShift } from "@/lib/revolveAxis";
 import { buildSketchRevolveMesh, DEFAULT_SKETCH_REVOLVE_SETTINGS, normalizeSketchRevolveSettings, type SketchRevolveMesh } from "@/lib/sketchRevolve";
 import { AppFooter } from "@/components/AppFooter";
@@ -2206,6 +2206,7 @@ function applyMcpThreadSettings(
     threadQuality: settings.quality,
     threadHeadHeight: settings.headHeight,
     threadChamfer: settings.chamfer,
+    threadChamferBottom: settings.chamferLow,
     threadHeadChamfer: settings.headChamfer,
     ...(keepFootprint ? {} : {
       width: footprint.width,
@@ -2627,17 +2628,16 @@ export function LayerlingEditor({
   // Stroke for sketches (#154): the panel, and the stroked outline shown while drawing.
   const [sketchStrokePanelOpen, setSketchStrokePanelOpen] = useState(false);
   const [sketchStrokePreview, setSketchStrokePreview] = useState<string | null>(null);
-  const selectedSketchPointId = useMemo(() => {
-    if (sketchSelection?.kind === "point") return sketchSelection.id;
-    if (sketchSelection?.kind === "multiple" && sketchSelection.pointIds.length === 1 && sketchSelection.segmentIds.length === 0) {
-      return sketchSelection.pointIds[0];
-    }
-    return null;
+  // The points a corner treatment would apply to: one, or several selected ones (#269).
+  const selectedSketchPointIds = useMemo(() => {
+    if (sketchSelection?.kind === "point") return [sketchSelection.id];
+    if (sketchSelection?.kind === "multiple" && sketchSelection.segmentIds.length === 0 && !sketchSelection.imageIds?.length) return sketchSelection.pointIds;
+    return [];
   }, [sketchSelection]);
-  const canFilletSketchPoint = useMemo(() => {
-    if (!selectedSketchPointId) return false;
-    return canApplySketchCornerTreatment(sketchProfile, selectedSketchPointId);
-  }, [selectedSketchPointId, sketchProfile]);
+  const canFilletSketchPoint = useMemo(
+    () => selectedSketchPointIds.some((id) => canApplySketchCornerTreatment(sketchProfile, id)),
+    [selectedSketchPointIds, sketchProfile],
+  );
   useEffect(() => {
     setSketchCornerDialog(null);
   }, [sketchSelection, sketchTool, sketchActive]);
@@ -4599,19 +4599,19 @@ export function LayerlingEditor({
     setSketchTool("select");
   }, [commitSketchProfile, sketchProfile]);
 
-  const applySketchFilletHandler = useCallback((id: string, radius: number) => {
-    const result = applySketchFillet(sketchProfile, id, radius, createLocalId);
+  /** Rounds or chamfers one corner or several at once; the number of corners goes into the message. */
+  const applySketchCornersHandler = useCallback((kind: "fillet" | "chamfer", ids: string[], size: number) => {
+    const result = applySketchCorners(sketchProfile, ids, kind, size, createLocalId);
     if (!result) return;
-    commitSketchProfile(result.profile, t("sketch.filletApplied"));
+    const one = result.applied === 1 && result.skipped === 0;
+    const base = one
+      ? t(kind === "fillet" ? "sketch.filletApplied" : "sketch.chamferApplied")
+      : t(kind === "fillet" ? "sketch.filletAppliedMany" : "sketch.chamferAppliedMany", { count: result.applied });
+    commitSketchProfile(result.profile, result.skipped > 0 && !one ? `${base} ${t("sketch.cornersSkipped", { count: result.skipped })}` : base);
     setSketchSelection(null);
   }, [commitSketchProfile, sketchProfile]);
-
-  const applySketchChamferHandler = useCallback((id: string, distance: number) => {
-    const result = applySketchChamfer(sketchProfile, id, distance, createLocalId);
-    if (!result) return;
-    commitSketchProfile(result.profile, t("sketch.chamferApplied"));
-    setSketchSelection(null);
-  }, [commitSketchProfile, sketchProfile]);
+  const applySketchFilletHandler = useCallback((ids: string[], radius: number) => applySketchCornersHandler("fillet", ids, radius), [applySketchCornersHandler]);
+  const applySketchChamferHandler = useCallback((ids: string[], distance: number) => applySketchCornersHandler("chamfer", ids, distance), [applySketchCornersHandler]);
 
   useEffect(() => {
     if (!sketchActive || !sketchProfile.stroke) {
@@ -8056,6 +8056,7 @@ export function LayerlingEditor({
             threadQuality: threaded.threadQuality,
             threadHeadHeight: threaded.threadHeadHeight,
             threadChamfer: threaded.threadChamfer,
+            threadChamferBottom: threaded.threadChamferBottom,
             threadHeadChamfer: threaded.threadHeadChamfer,
             width: threaded.width,
             depth: threaded.depth,

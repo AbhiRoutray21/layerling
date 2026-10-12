@@ -589,6 +589,7 @@ export function sceneShape(shape: Partial<WorkplaneShape> & Pick<WorkplaneShape,
     threadQuality: shape.threadQuality,
     threadHeadHeight: shape.threadHeadHeight,
     threadChamfer: shape.threadChamfer,
+    threadChamferBottom: shape.threadChamferBottom,
     threadHeadChamfer: shape.threadHeadChamfer,
     springTurns: shape.springTurns,
     springWire: shape.springWire,
@@ -694,6 +695,7 @@ export function makeShapeFromAsset(
     // angekommen ist beim Anlegen aber immer nur das Normmass.
     threadHeadHeight: customization.threadHeadHeight,
     threadChamfer: customization.threadChamfer,
+    threadChamferBottom: customization.threadChamferBottom,
     threadHeadChamfer: customization.threadHeadChamfer,
   }) : null;
   const threadFootprint = threadDefaults ? threadNaturalFootprint(threadDefaults) : null;
@@ -813,6 +815,7 @@ export function makeShapeFromAsset(
     threadQuality: asset.kind === "thread" ? normalizeThreadQuality(customization.threadQuality ?? DEFAULT_THREAD_QUALITY) : undefined,
     threadHeadHeight: threadDefaults ? threadDefaults.headHeight : undefined,
     threadChamfer: threadDefaults ? threadDefaults.chamfer : undefined,
+    threadChamferBottom: threadDefaults && customization.threadChamferBottom !== undefined ? threadDefaults.chamferLow : undefined,
     threadHeadChamfer: threadDefaults ? threadDefaults.headChamfer : undefined,
     springTurns: asset.kind === "spring" ? normalizeSpringTurns(customization.springTurns ?? DEFAULT_SPRING_TURNS, Math.max(width, depth), height, customization.springWire) : undefined,
     springWire: asset.kind === "spring" ? normalizeSpringWire(customization.springWire ?? DEFAULT_SPRING_WIRE, Math.max(width, depth), height) : undefined,

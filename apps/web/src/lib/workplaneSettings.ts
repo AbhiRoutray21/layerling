@@ -430,6 +430,7 @@ export function normalizeShapeCustomizations(value: unknown, fallback: ShapeCust
       entry.threadBoltClearance = optionalShapeNumber(source.threadBoltClearance, fallbackEntry?.threadBoltClearance, 0, 1);
       entry.threadQuality = optionalShapeNumber(source.threadQuality, fallbackEntry?.threadQuality, 12, 96, true);
       entry.threadChamfer = optionalShapeNumber(source.threadChamfer, fallbackEntry?.threadChamfer, 0, 40);
+      entry.threadChamferBottom = optionalShapeNumber(source.threadChamferBottom, fallbackEntry?.threadChamferBottom, 0, 40);
       entry.threadHeadChamfer = optionalShapeNumber(source.threadHeadChamfer, fallbackEntry?.threadHeadChamfer, 0, 40);
     }
     if (kind === "gear") {

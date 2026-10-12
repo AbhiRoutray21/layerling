@@ -35,7 +35,9 @@ More settings:
   - **Printed screw and printed nut:** leave the screw at 0 and give the nut the room (the 0.4 mm it starts with).
   - **Real screw in a printed nut or tapped hole:** the printed side takes all of it, so the nut keeps its 0.4 mm. A tighter 0.3 mm is worth a test if the screw wobbles.
   - **Printed screw in a real nut:** the real nut has no play, so the screw has to be thinner: 0.3 to 0.4 mm here, as much as a printed nut would have.
-- **{{ui:prop.chamfer}}, {{ui:prop.headChamfer}} and {{ui:prop.rimChamfer}}:** Chamfers at the ends so the thread starts cleanly and the head has no sharp edge.
+- **{{ui:prop.threadChamferTop}}, {{ui:prop.threadChamferBottom}}, {{ui:prop.headChamfer}} and {{ui:prop.rimChamfer}}:** Chamfers at the ends so the thread starts cleanly and the head has no sharp edge. Each end of a rod, nut or tapped hole has its own chamfer, so the top can be long and the bottom short or none. A screw has only one at its tip, labelled {{ui:prop.chamfer}}. On a nut or tapped hole the chamfer is the room the mouth opens beyond the outer diameter; the cone runs at 45 degrees on down to the thread core, so no ledge is left at the outer diameter.
+
+Switching a thread between {{ui:thread.rod}} and {{ui:thread.bore}} keeps its length. A nut and a screw start from their standard measures.
 - **{{ui:prop.quality}}:** How finely the thread is calculated. Higher is more exact, but slower.
 
 Printed threads are a topic of their own. Make the screw-and-nut pair as a test first before you print a large part, and adjust the clearance to your printer.

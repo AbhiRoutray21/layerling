@@ -891,6 +891,7 @@ function tapeShapeTopologyKey(shape: WorkplaneShape): string {
     threadQuality: shape.threadQuality,
     threadHeadHeight: shape.threadHeadHeight,
     threadChamfer: shape.threadChamfer,
+    threadChamferBottom: shape.threadChamferBottom,
     threadHeadChamfer: shape.threadHeadChamfer,
     springTurns: shape.springTurns,
     springWire: shape.springWire,
@@ -1131,6 +1132,7 @@ function shapeGeometrySignature(shape: WorkplaneShape): string {
     threadQuality: shape.threadQuality,
     threadHeadHeight: shape.threadHeadHeight,
     threadChamfer: shape.threadChamfer,
+    threadChamferBottom: shape.threadChamferBottom,
     threadHeadChamfer: shape.threadHeadChamfer,
     springTurns: shape.springTurns,
     springWire: shape.springWire,
@@ -11640,6 +11642,7 @@ function createShapeObject(
         threadQuality: shape.threadQuality,
         threadHeadHeight: shape.threadHeadHeight,
         threadChamfer: shape.threadChamfer,
+        threadChamferBottom: shape.threadChamferBottom,
         threadHeadChamfer: shape.threadHeadChamfer,
       })), material, shape);
       break;

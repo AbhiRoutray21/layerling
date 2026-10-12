@@ -53,6 +53,8 @@ A corner shows no angle where a curve meets it, or where more than two lines mee
 
 Click a corner point and choose {{ui:sketch.filletCorner}} or {{ui:sketch.chamferCorner}}. A small field appears for the {{ui:sketch.filletRadius}} or the {{ui:sketch.chamferDistance}}. Enter the size and confirm with the check mark. This works for corners between two straight lines.
 
+Several corners at once work too: select them with [[Shift]] and a click each, or pull a frame round them, and choose {{ui:sketch.filletCorner}} or {{ui:sketch.chamferCorner}} from the bar that appears. All of them get the same radius or distance. Where two selected corners share a side, each takes at most 45 % of it, so a rectangle rounded all round comes out alike at every corner. Points that are not a corner between two straight lines are left out, and the message says how many.
+
 ![The corner at the top left is rounded with a 12 mm radius.](shot:sketch-fillet)
 
 ## Construction lines

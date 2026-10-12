@@ -546,6 +546,7 @@ function geometryMeshForShape(shape: WorkplaneShape): MeshData | null {
         threadQuality: shape.threadQuality,
         threadHeadHeight: shape.threadHeadHeight,
         threadChamfer: shape.threadChamfer,
+        threadChamferBottom: shape.threadChamferBottom,
         threadHeadChamfer: shape.threadHeadChamfer,
       });
       break;
