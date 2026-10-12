@@ -39,6 +39,9 @@ const nextConfig: NextConfig = {
   // there; Next.js 15 ignores it for webpack builds (#217).
   turbopack: {},
   webpack: (config) => {
+    // The webpack cache on disk grew to gigabytes over many builds; entries nobody used for three
+    // days can go (the default is two months).
+    if (config.cache && typeof config.cache === "object") config.cache.maxAge = 3 * 24 * 60 * 60 * 1000;
     config.resolve.alias = {
       ...config.resolve.alias,
       "brepkit-wasm": false,

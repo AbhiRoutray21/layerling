@@ -10,6 +10,7 @@
   "license": "AGPL-3.0-only",
   "scripts": {
     "copy:occt": "node scripts/copy-occt-wasm.mjs",
+    "clean:cache": "node scripts/clean-next-cache.mjs",
     "predev": "npm run copy:occt && npm run guide",
     "dev": "next dev apps/web",
     "prebuild": "npm run copy:occt && npm run guide",
