@@ -8,5 +8,15 @@
       "de": "Die breiteren Schichten eines Namensschilds - Rand und Platte - lassen sich jetzt in den meisten Fällen verrunden oder abschrägen. Früher scheiterte das Kantenwerkzeug dort, oder der Körper kam ungültig zurück. Kleine Radien von 0,2 bis 0,3 mm funktionieren bei vielen Wörtern.",
       "en": "The wider layers of a name tag - the rim and the plate - can now be filleted or chamfered in most cases. Before, the edge tool failed there or handed back a body that was not valid. Small sizes of 0.2 to 0.3 mm work for many words."
     }
+  },
+  {
+    "title": {
+      "de": "Lineale bleiben nach der Skizze stehen",
+      "en": "Rulers stay after a sketch"
+    },
+    "body": {
+      "de": "Ein gesetztes Winkellineal oder Maßband verschwindet nicht mehr, wenn du eine Skizze machst und zurück in die 3D-Ansicht gehst. Sie bleiben stehen, bis du die Seite neu lädst.",
+      "en": "A corner ruler or tape measure you have set no longer disappears when you make a sketch and come back to the 3D view. They stay until you reload the page."
+    }
   }
 ]

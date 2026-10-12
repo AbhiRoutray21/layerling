@@ -363,6 +363,12 @@ type WorkplaneViewportProps = {
   textLayerStack?: NameTagStack | null;
   /** The icon tag card's wiring for the selected sketch body or icon tag. */
   iconTag?: IconTagControls | null;
+  /**
+   * Where the tape measure and the corner ruler are kept while the 3D view is gone - it is taken
+   * down for the sketch and built again after it, and the rulers stay standing (forum, #618183).
+   * They are not saved and not in the history.
+   */
+  toolMemory?: MutableRefObject<ViewportToolMemory>;
   /** Turns a shape fresh from the library into what it places - a name tag's layers (#215) - for the ghost that follows the pointer too. */
   prepareNewShape?: (asset: ShapeAsset, shape: WorkplaneShape) => WorkplaneShape;
   onUpdateShape: (id: string, patch: ShapeUpdatePatch) => void;
@@ -729,6 +735,13 @@ type TapeSegment = {
   startId: string;
   endId: string;
   edge?: TapeEdgeAttachment;
+};
+
+/** What the viewport hands back to the editor to keep across the sketch (see `toolMemory`). */
+export type ViewportToolMemory = {
+  tape?: TapeModel;
+  cornerRulers?: CornerRulerInstance[];
+  cornerRulerId?: number;
 };
 
 type TapeModel = {
@@ -4403,6 +4416,7 @@ export function WorkplaneViewport({
   onTextTags,
   textLayerStack,
   iconTag,
+  toolMemory,
   prepareNewShape,
   onUpdateShape,
   onDuplicateShapeAt,
@@ -4483,7 +4497,7 @@ export function WorkplaneViewport({
   const [workplaneLayerHidden, setWorkplaneLayerHidden] = useState(false);
   const workplaneLayerHiddenRef = useRef(workplaneLayerHidden);
   workplaneLayerHiddenRef.current = workplaneLayerHidden;
-  const [tapeModel, setTapeModel] = useState<TapeModel>({ points: [], segments: [], startPointId: null, hover: null });
+  const [tapeModel, setTapeModel] = useState<TapeModel>(() => toolMemory?.current.tape ?? { points: [], segments: [], startPointId: null, hover: null });
   const [tapeOverlay, setTapeOverlay] = useState<TapeOverlayState | null>(null);
   const [rulerDimensionOverlay, setRulerDimensionOverlay] = useState<RulerDimensionOverlayState | null>(null);
   const [cornerRulerMode, setCornerRulerMode] = useState(false);
@@ -4626,9 +4640,9 @@ export function WorkplaneViewport({
   const tapeIdRef = useRef(0);
   const rulerDimensionOverlayRef = useRef<RulerDimensionOverlayState | null>(null);
   const cornerRulerModeRef = useRef(false);
-  const cornerRulerModelRef = useRef<CornerRulerInstance[]>([]);
+  const cornerRulerModelRef = useRef<CornerRulerInstance[]>(toolMemory?.current.cornerRulers ?? []);
   const cornerRulerOverlayRef = useRef<CornerRulerOverlayState | null>(null);
-  const cornerRulerIdRef = useRef(0);
+  const cornerRulerIdRef = useRef(toolMemory?.current.cornerRulerId ?? 0);
   const cornerRulerDragRef = useRef<{ id: string; pointerId: number; moved: boolean } | null>(null);
   const rulerDuplicateDragRef = useRef<{ pointerId: number; rulerId: string; shapeId: string; baseAlong: number; planeY: number; sourceX: number; sourceZ: number } | null>(null);
   const alignModeRef = useRef(alignMode);
@@ -5175,6 +5189,7 @@ export function WorkplaneViewport({
 
   useEffect(() => {
     tapeModelRef.current = tapeModel;
+    if (toolMemory) toolMemory.current.tape = tapeModel;
     if (threeRef.current) {
       syncTapeOverlay(threeRef.current, tapeModel, tapeOverlayRef, setTapeOverlay, workspaceRef.current.accuracy);
       threeRef.current.needsRender = true;
@@ -7566,11 +7581,15 @@ export function WorkplaneViewport({
    */
   const storeCornerRulerModel = useCallback((next: CornerRulerInstance[]) => {
     cornerRulerModelRef.current = next;
+    if (toolMemory) {
+      toolMemory.current.cornerRulers = next;
+      toolMemory.current.cornerRulerId = cornerRulerIdRef.current;
+    }
     if (threeRef.current) {
       syncCornerRulerToolOverlay(threeRef.current, next, shapesRef.current, selectedIdsRef.current, cornerRulerOverlayRef, setCornerRulerOverlay, workspaceRef.current.accuracy);
       threeRef.current.needsRender = true;
     }
-  }, []);
+  }, [toolMemory]);
 
   /**
    * Wohin die Ecke kommt: an eine Koerperecke in der Naehe, sonst ins Raster

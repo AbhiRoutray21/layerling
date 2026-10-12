@@ -94,7 +94,7 @@ import {
   ToolbarUndoIcon,
   ToolbarVectorExportIcon,
 } from "./icons";
-import { WorkplaneViewport, type LayFlatPick } from "./WorkplaneViewport";
+import { WorkplaneViewport, type LayFlatPick, type ViewportToolMemory } from "./WorkplaneViewport";
 import { layFlatRotation } from "@/lib/layFlat";
 import { SketchWorkspace, type SketchMeasurement, type SketchPrimitive, type SketchSelection, type SketchTool } from "./SketchWorkspace";
 import { EdgeModifierPanel } from "./workplane/EdgeModifierPanel";
@@ -6738,6 +6738,11 @@ export function LayerlingEditor({
   const projectFileInputRef = useRef<HTMLInputElement | null>(null);
   const insertProjectFileInputRef = useRef<HTMLInputElement | null>(null);
   const sketchImageInputRef = useRef<HTMLInputElement | null>(null);
+  // The tape measure and the corner ruler of the 3D view, kept while the sketch has taken its place.
+  const viewportToolMemoryRef = useRef<ViewportToolMemory>({});
+  useEffect(() => {
+    viewportToolMemoryRef.current = {};
+  }, [projectId]);
   const booleanAutomationRunRef = useRef<string | null>(null);
   const splitRunRef = useRef(0);
   const splitProjectIdRef = useRef(projectId ?? null);
@@ -14997,6 +15002,7 @@ export function LayerlingEditor({
           onTextTags={selectedShapes.length === 1 && offersTextLayers(selectedShape) ? makeTextTags : undefined}
           textLayerStack={selectedNameTag}
           iconTag={historyViewState ? null : iconTagControls}
+          toolMemory={viewportToolMemoryRef}
           prepareNewShape={prepareNewShape}
           onUpdateShape={updateShape}
           onDuplicateShapeAt={duplicateShapeAt}
