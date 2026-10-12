@@ -10674,7 +10674,12 @@ export function LayerlingEditor({
         items.push({ key: "holePattern", label: t("holePattern.title"), onSelect: toggleHolePattern });
       }
     }
-    if (!allLocked) items.push({ key: "scalePercent", label: t("scalePercent.title"), separated: true, onSelect: toggleScalePercentTool });
+    if (!allLocked) {
+      items.push(
+        { key: "mirror", label: t("editor.tool.mirror"), shortcut: "M", separated: true, onSelect: toggleMirrorMode },
+        { key: "scalePercent", label: t("scalePercent.title"), onSelect: toggleScalePercentTool },
+      );
+    }
     if (single && offersMeshSimplify(single) && !single.locked) items.push({ key: "simplify", label: t("contextMenu.simplify"), separated: true, onSelect: startSimplifyTool });
     if (!allHoles) {
       items.push(
