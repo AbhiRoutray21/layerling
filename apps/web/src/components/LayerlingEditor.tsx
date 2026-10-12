@@ -283,9 +283,28 @@ type EdgeModifierSession = {
   busy: boolean;
   prepared: boolean;
   error: string | null;
+  // The selection of the last preview that worked.
+  workingEdgeIds?: number[];
+  // The edge(s) whose selection broke a working treatment; drawn red while that error stands.
+  failedEdgeIds?: number[];
   preview: WorkplaneShape | null;
   componentPreviews: EdgeModifierComponentPreview[];
 };
+
+/**
+ * The edge to unselect: the one added when a working treatment broke. It
+ * stays the culprit while more edges are added on top. Without a working
+ * selection to compare to (the first pick, or the size was changed), the
+ * worker's own finding stands.
+ */
+function conflictEdgeIds(session: EdgeModifierSession, workerFailedEdgeIds: number[]) {
+  const working = new Set(session.workingEdgeIds ?? []);
+  const added = session.selectedEdgeIds.filter((edgeId) => !working.has(edgeId));
+  const earlier = new Set(session.failedEdgeIds ?? []);
+  const stillSelected = added.filter((edgeId) => earlier.has(edgeId));
+  if (stillSelected.length) return stillSelected;
+  return working.size && added.length ? added : workerFailedEdgeIds;
+}
 
 type SplitSession = {
   targetIds: string[];
@@ -2799,6 +2818,8 @@ export function LayerlingEditor({
             prepared: true,
             preview: null,
             componentPreviews: [],
+            workingEdgeIds: [],
+            failedEdgeIds: [],
             error: message.selectableEdgeIds.length || gesenkteSchwelle ? null : t("edge.noManifoldEdges"),
           };
         });
@@ -2826,6 +2847,9 @@ export function LayerlingEditor({
           componentPreviews,
           busy: false,
           error: preview ? null : t("edge.emptyResult"),
+          // Edges cannot be toggled while a preview runs, so this is the selection it was made with.
+          workingEdgeIds: preview ? current.selectedEdgeIds : current.workingEdgeIds,
+          failedEdgeIds: [],
         } : current);
         // Ein neuerer Wert kann waehrend der Rechnung eingetroffen sein - der geht jetzt raus.
         const nachgeschoben = cadPreviewQueueRef.current.settle(message.requestId);
@@ -2850,7 +2874,13 @@ export function LayerlingEditor({
           setNotice(cadModifierUserErrorMessage(message.message) ?? message.message);
           return;
         }
-        setEdgeModifier((current) => current ? { ...current, busy: false, preview: null, error: cadModifierUserErrorMessage(message.message) ?? message.message } : current);
+        setEdgeModifier((current) => current ? {
+          ...current,
+          busy: false,
+          preview: null,
+          error: cadModifierUserErrorMessage(message.message) ?? message.message,
+          failedEdgeIds: message.failedEdgeIds ? conflictEdgeIds(current, message.failedEdgeIds) : [],
+        } : current);
         // Ein zu grosser Radius scheitert - der inzwischen gewaehlte kleinere darf es trotzdem versuchen.
         if (cadPreviewQueueRef.current.settle(message.requestId).status !== "sent") {
           setNotice(t("status.edgeNeedsAdjustment"), true);
@@ -10993,6 +11023,7 @@ export function LayerlingEditor({
           modifierEdges={edgeModifier?.edges.filter((edge) => modifierCandidateEdgeIds.includes(edge.id)) ?? []}
           modifierHighlightedEdgeIds={modifierAvailableEdgeIds}
           selectedModifierEdgeIds={edgeModifier?.selectedEdgeIds ?? []}
+          failedModifierEdgeIds={edgeModifier?.error ? edgeModifier.failedEdgeIds ?? [] : []}
           onModifierEdgeToggle={toggleModifierEdge}
           themePreference={themePreference}
           resolvedTheme={resolvedTheme}

@@ -336,4 +336,5 @@ export type CadModifierWorkerResponse =
       deflection: CadModifierDeflection;
     }
   | { type: "disposed"; requestId: number }
-  | { type: "error"; requestId: number; message: string; resetSession?: boolean };
+  // failedEdgeIds: the selected edges the kernel could not treat together.
+  | { type: "error"; requestId: number; message: string; resetSession?: boolean; failedEdgeIds?: number[] };

@@ -678,6 +678,42 @@ function verwirfKernel(cad: OcctKernel | null) {
   edgeOwners = [];
 }
 
+// Testing each edge alone costs one kernel call per edge; past this many the
+// whole component is reported instead.
+const CULPRIT_EDGE_TEST_LIMIT = 32;
+
+class EdgeTreatmentError extends Error {
+  constructor(message: string, readonly failedEdgeIds: number[]) {
+    super(message);
+  }
+}
+
+function treatEdges(cad: OcctKernel, solid: ShapeHandle, edges: ShapeHandle[], request: Extract<CadModifierWorkerRequest, { type: "preview" }>) {
+  return request.kind === "fillet"
+    ? cad.fillet(solid, edges, request.amount)
+    : Math.abs(request.chamferAngle - 45) < 0.001
+      ? cad.chamfer(solid, edges, request.amount)
+      : cad.chamferDistAngle(solid, edges, request.amount, request.chamferAngle);
+}
+
+// The kernel only says that the set failed. The edges that fail on their own
+// are the ones to blame; when every edge works alone, it is the combination.
+function culpritEdgeIds(cad: OcctKernel, solid: ShapeHandle, entries: { id: number; edge: ShapeHandle }[], request: Extract<CadModifierWorkerRequest, { type: "preview" }>) {
+  if (entries.length <= 1 || entries.length > CULPRIT_EDGE_TEST_LIMIT) return entries.map((entry) => entry.id);
+  const failing = entries.filter((entry) => {
+    try {
+      const single = treatEdges(cad, solid, [entry.edge], request);
+      const solidLeft = cadHasSolidBody(cad, single);
+      releaseHandles(cad, [single]);
+      return !solidLeft;
+    } catch (error) {
+      if (isFatalKernelFault(error)) throw error;
+      return true;
+    }
+  });
+  return (failing.length ? failing : entries).map((entry) => entry.id);
+}
+
 async function bearbeiteAnfrage(request: CadModifierWorkerRequest, halter: { cad: OcctKernel | null }) {
   const cad = await kernel();
   halter.cad = cad;
@@ -725,23 +761,29 @@ async function bearbeiteAnfrage(request: CadModifierWorkerRequest, halter: { cad
     return;
   }
   if (baseShape === null) throw new Error("Prepare an object before previewing the modifier");
-  const selected = request.edgeIds.map((id) => ({ edge: edgeHandles[id], owner: edgeOwners[id] })).filter((entry): entry is { edge: ShapeHandle; owner: number } => entry.edge !== undefined);
+  const selected = request.edgeIds.map((id) => ({ id, edge: edgeHandles[id], owner: edgeOwners[id] })).filter((entry): entry is { id: number; edge: ShapeHandle; owner: number } => entry.edge !== undefined);
   if (selected.length === 0 && request.kind !== "shell") throw new Error("Select at least one highlighted edge");
   const componentResults: ShapeHandle[] = [];
   let result: ShapeHandle | null = null;
   try {
     for (let owner = 0; owner < baseSolids.length; owner += 1) {
       const solid = baseSolids[owner];
-      const componentEdges = selected.filter((entry) => entry.owner === owner).map((entry) => entry.edge);
-      const component = request.kind === "shell"
-        ? shellSolid(activeCad, solid, request.amount, request.shellOpenings ?? "none", request.shellEdges)
-        : componentEdges.length === 0
-        ? activeCad.copy(solid)
-        : request.kind === "fillet"
-          ? activeCad.fillet(solid, componentEdges, request.amount)
-          : Math.abs(request.chamferAngle - 45) < 0.001
-            ? activeCad.chamfer(solid, componentEdges, request.amount)
-            : activeCad.chamferDistAngle(solid, componentEdges, request.amount, request.chamferAngle);
+      const componentEntries = selected.filter((entry) => entry.owner === owner);
+      const componentEdges = componentEntries.map((entry) => entry.edge);
+      let component: ShapeHandle;
+      if (request.kind === "shell") {
+        component = shellSolid(activeCad, solid, request.amount, request.shellOpenings ?? "none", request.shellEdges);
+      } else if (componentEdges.length === 0) {
+        component = activeCad.copy(solid);
+      } else {
+        try {
+          component = treatEdges(activeCad, solid, componentEdges, request);
+        } catch (error) {
+          if (isFatalKernelFault(error)) throw error;
+          const rawMessage = error instanceof Error ? error.message : String(error ?? "");
+          throw new EdgeTreatmentError(rawMessage, culpritEdgeIds(activeCad, solid, componentEntries, request));
+        }
+      }
       if (request.kind !== "shell" && componentEdges.length > 0 && !cadHasSolidBody(activeCad, component)) {
         // Past a certain size the kernel returns a "valid" compound without any
         // solid in it (and a volume that grew): not a body to go on with.
@@ -835,13 +877,15 @@ self.onmessage = async (event: MessageEvent<CadModifierWorkerRequest>) => {
     });
     return;
   }
-  const message = request.type === "preview" && (rawMessage.includes("WebAssembly.Exception") || rawMessage.includes("fillet:") || rawMessage.includes("chamfer:"))
+  const kernelRefused = request.type === "preview" && (rawMessage.includes("WebAssembly.Exception") || rawMessage.includes("fillet:") || rawMessage.includes("chamfer:"));
+  const message = kernelRefused
     ? request.kind === "shell"
       ? "The walls cannot be this thick for this body. Choose a thinner wall."
       : `The selected edges cannot be ${request.kind === "fillet" ? "filleted" : "chamfered"} together at this size. Reduce the size or select fewer connected edges.`
     : rawMessage || "The CAD kernel could not complete this edge treatment";
   if (request.type === "prepare" && halter.cad) releaseSession(halter.cad);
-  post({ type: "error", requestId: request.requestId, message });
+  const failedEdgeIds = kernelRefused && error instanceof EdgeTreatmentError ? error.failedEdgeIds : undefined;
+  post({ type: "error", requestId: request.requestId, message, ...(failedEdgeIds ? { failedEdgeIds } : {}) });
 };
 
 export {};

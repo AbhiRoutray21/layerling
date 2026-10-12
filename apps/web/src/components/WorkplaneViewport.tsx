@@ -14,6 +14,8 @@ import { triangleTouchesRect, type ScreenRect } from "@/lib/screenRectHit";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { RoundedBoxGeometry } from "three/examples/jsm/geometries/RoundedBoxGeometry.js";
 import { LineMaterial } from "three/examples/jsm/lines/LineMaterial.js";
+import { LineSegments2 } from "three/examples/jsm/lines/LineSegments2.js";
+import { LineSegmentsGeometry } from "three/examples/jsm/lines/LineSegmentsGeometry.js";
 import { FramingSquareIcon } from "@/components/FramingSquareIcon";
 import { GridEyeIcon } from "@/components/GridEyeIcon";
 import { AlignOverlay, MirrorOverlay, type AlignOverlayState, type MirrorOverlayState } from "@/components/workplane/ActionOverlays";
@@ -380,6 +382,8 @@ type WorkplaneViewportProps = {
   modifierEdges?: CadModifierEdge[];
   modifierHighlightedEdgeIds?: number[];
   selectedModifierEdgeIds?: number[];
+  /** Selected edges the kernel could not treat: drawn red instead of the selection colour. */
+  failedModifierEdgeIds?: number[];
   onModifierEdgeToggle?: (id: number, singleEdge: boolean) => void;
   themePreference?: AppThemePreference;
   resolvedTheme?: ResolvedAppTheme;
@@ -2814,6 +2818,7 @@ export function WorkplaneViewport({
   modifierEdges = [],
   modifierHighlightedEdgeIds = [],
   selectedModifierEdgeIds = [],
+  failedModifierEdgeIds = [],
   onModifierEdgeToggle,
   themePreference = "system",
   resolvedTheme = "light",
@@ -3105,8 +3110,8 @@ export function WorkplaneViewport({
 
   useEffect(() => {
     modifierEdgesRef.current = modifierEdges;
-    rebuildModifierEdges(threeRef.current, modifierEdges, selectedModifierEdgeIds, modifierPreviewActive, hoverModifierEdgeId, modifierHighlightedEdgeIds);
-  }, [hoverModifierEdgeId, modifierEdges, modifierHighlightedEdgeIds, modifierPreviewActive, selectedModifierEdgeIds]);
+    rebuildModifierEdges(threeRef.current, modifierEdges, selectedModifierEdgeIds, modifierPreviewActive, hoverModifierEdgeId, modifierHighlightedEdgeIds, failedModifierEdgeIds);
+  }, [failedModifierEdgeIds, hoverModifierEdgeId, modifierEdges, modifierHighlightedEdgeIds, modifierPreviewActive, selectedModifierEdgeIds]);
 
   const resolvedThemeRef = useRef(resolvedTheme);
   resolvedThemeRef.current = resolvedTheme;
@@ -8598,7 +8603,7 @@ function createThreeScene(host: HTMLDivElement): ThreeState {
     const height = Math.max(1, host.clientHeight);
     renderer.setSize(width, height);
     updateCameraViewport(state.camera, width, height);
-    [state.transformGuideLayer, state.moveDimensionLayer, state.originDimensionLayer].forEach((layer) => {
+    [state.transformGuideLayer, state.moveDimensionLayer, state.originDimensionLayer, state.modifierLayer].forEach((layer) => {
       layer.traverse((child) => {
         const material = (child as THREE.Mesh).material;
         const materials = Array.isArray(material) ? material : material ? [material] : [];
@@ -10062,13 +10067,44 @@ function rebuildShapes(
   state.needsRender = true;
 }
 
-function modifierEdgeMaterialStyle(active: boolean, hovered: boolean, previewActive: boolean, belowThreshold = false) {
+function modifierEdgeMaterialStyle(active: boolean, hovered: boolean, previewActive: boolean, belowThreshold = false, failed = false) {
   const subduedSelectedPreviewEdge = previewActive && active && !hovered;
   return {
-    color: active ? (hovered ? "#ffbf45" : "#ff8a1d") : hovered ? "#84edff" : belowThreshold ? "#4d7f91" : "#17b7e5",
+    color: active ? (failed ? (hovered ? "#ff6b6b" : "#e5242a") : hovered ? "#ffbf45" : "#ff8a1d") : hovered ? "#84edff" : belowThreshold ? "#4d7f91" : "#17b7e5",
     opacity: subduedSelectedPreviewEdge ? 0.18 : active || hovered ? 1 : belowThreshold ? 0.35 : 0.72,
     linewidth: active || hovered ? 3 : 1,
   };
+}
+
+// Browsers draw a plain WebGL line 1px wide whatever its linewidth says, so the
+// edge to unselect gets a screen-space wide line at twice that.
+const FAILED_MODIFIER_EDGE_PX = 2;
+
+function failedModifierEdgeLine(state: ThreeState, points: number[], color: string) {
+  const segments: number[] = [];
+  for (let index = 3; index + 2 < points.length; index += 3) {
+    segments.push(points[index - 3], points[index - 2], points[index - 1], points[index], points[index + 1], points[index + 2]);
+  }
+  const geometry = new LineSegmentsGeometry();
+  geometry.setPositions(segments);
+  const material = new LineMaterial({
+    color,
+    linewidth: FAILED_MODIFIER_EDGE_PX,
+    worldUnits: false,
+    transparent: true,
+    opacity: 1,
+    depthTest: false,
+    depthWrite: false,
+    alphaToCoverage: false,
+  });
+  material.toneMapped = false;
+  const rect = state.renderer.domElement.getBoundingClientRect();
+  material.resolution.set(Math.max(1, rect.width), Math.max(1, rect.height));
+  const line = new LineSegments2(geometry, material);
+  line.renderOrder = 1002;
+  line.frustumCulled = false;
+  setObjectRenderLayer(line, RENDER_LAYER_MODIFIERS);
+  return line;
 }
 
 function rebuildModifierEdges(
@@ -10078,19 +10114,25 @@ function rebuildModifierEdges(
   previewActive = false,
   hoverId: number | null = null,
   highlightedIds: number[] = [],
+  failedIds: number[] = [],
 ) {
   if (!state) return;
   disposeChildren(state.modifierLayer);
   const selected = new Set(selectedIds);
   const highlighted = new Set(highlightedIds);
+  const failed = new Set(failedIds);
   edges.forEach((edge) => {
     if (edge.points.length < 6) return;
-    const geometry = new THREE.BufferGeometry();
-    geometry.setAttribute("position", new THREE.Float32BufferAttribute(edge.points, 3));
     const active = selected.has(edge.id);
     const hovered = hoverId === edge.id;
     const belowThreshold = !active && !hovered && !highlighted.has(edge.id);
-    const style = modifierEdgeMaterialStyle(active, hovered, previewActive, belowThreshold);
+    const style = modifierEdgeMaterialStyle(active, hovered, previewActive, belowThreshold, failed.has(edge.id));
+    if (active && failed.has(edge.id)) {
+      state.modifierLayer.add(failedModifierEdgeLine(state, edge.points, style.color));
+      return;
+    }
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute("position", new THREE.Float32BufferAttribute(edge.points, 3));
     const material = new THREE.LineBasicMaterial({
       color: style.color,
       depthTest: false,
