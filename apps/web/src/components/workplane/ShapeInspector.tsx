@@ -1432,6 +1432,7 @@ function getShapePropertiesWithAppLimits(shape: WorkplaneShape, onUpdate: ShapeI
         min: MIN_THREAD_CLEARANCE,
         max: MAX_THREAD_CLEARANCE,
         step: 0.05,
+        hint: t("thread.clearanceHint"),
         onChange: (clearance) => applyThread({ clearance }),
       });
     } else {
@@ -1444,6 +1445,7 @@ function getShapePropertiesWithAppLimits(shape: WorkplaneShape, onUpdate: ShapeI
         min: MIN_THREAD_BOLT_CLEARANCE,
         max: MAX_THREAD_BOLT_CLEARANCE,
         step: 0.05,
+        hint: t("thread.boltClearanceHint"),
         onChange: (boltClearance) => applyThread({ boltClearance }),
       });
     }

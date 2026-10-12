@@ -10,7 +10,14 @@ export const DEFAULT_THREAD_HAND: ThreadHand = "right";
 export const DEFAULT_THREAD_PROFILE: ThreadProfile = "v";
 export const DEFAULT_THREAD_DIAMETER = 6;
 export const DEFAULT_THREAD_PITCH = 1;
-export const DEFAULT_THREAD_CLEARANCE = 0.2;
+/**
+ * Spiel einer neuen Mutter oder eines neuen Gewindelochs (Durchmesser). Der Spalt zwischen
+ * den Flanken ist nur etwa halb so gross wie das Spiel im Radius: 0,2 mm liessen bei einem
+ * Spitzgewinde 0,05 mm und ein gedrucktes Paar drehte sich nicht (Video von HL ModTech, 12.10.2026).
+ */
+export const DEFAULT_THREAD_CLEARANCE = 0.4;
+/** Was ein Gewinde ohne gespeichertes Spiel behaelt: so hat es immer geladen, es soll nicht lockerer werden. */
+export const LEGACY_THREAD_CLEARANCE = 0.2;
 export const DEFAULT_THREAD_QUALITY = 48;
 
 export const MIN_THREAD_DIAMETER = 1;
@@ -366,7 +373,7 @@ export function normalizeThreadPitch(value: number | undefined, diameter: number
 }
 
 export function normalizeThreadClearance(value?: number) {
-  return clamp(finite(value, DEFAULT_THREAD_CLEARANCE), MIN_THREAD_CLEARANCE, MAX_THREAD_CLEARANCE);
+  return clamp(finite(value, LEGACY_THREAD_CLEARANCE), MIN_THREAD_CLEARANCE, MAX_THREAD_CLEARANCE);
 }
 
 export function normalizeThreadBoltClearance(value?: number) {

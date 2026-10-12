@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **More room in a new nut or tapped hole:** The clearance of a new nut or tapped hole now starts at 0.4 mm instead of 0.2 mm. The gap between the flanks of a V thread is only about half of the clearance across the diameter, so 0.2 mm left 0.05 mm and a printed screw and nut did not turn (seen in a video by HL ModTech). Designs you already made keep their value, and so do the defaults you set in the workspace settings. The two clearance fields of the thread now carry a hint: 0.3 tight, 0.4 usual, 0.5 loose, and print a test pair first.
+
 - **Mismatched program files are noticed:** The page and its two CAD workers (edge tool, sketch bodies) are separate files that load at different times. Each worker now says which build it is from the moment it starts, and the page compares that with its own. If they differ - after an update, or because the browser handed out a stored copy of an older file - the same card as for an update appears ("Part of this page is from another version") and offers **Save and reload**. The build id is set per static export (`LAYERLING_BUILD_ID` in scripts/build-static-export.mjs) and is the version number everywhere else. Suggested by Stefan after #248.
 
 ## 1.66.1

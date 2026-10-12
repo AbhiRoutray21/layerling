@@ -1566,6 +1566,8 @@ export const MESSAGES_EN = {
   "prop.threadHand": "Direction",
   "prop.threadProfile": "Profile",
   "prop.clearance": "Clearance",
+  "thread.clearanceHint": "The extra room across the whole diameter. A printed thread needs more than you would think: the gap between the flanks is only about half of it. Around 0.3 is tight, 0.4 usual, 0.5 loose. Print a test pair first.",
+  "thread.boltClearanceHint": "Makes the bolt thinner by this much, for a metal nut that has no play of its own (0.3 to 0.4, as much as a printed nut would have). With a printed nut leave it at 0 and give the nut the room.",
   "prop.boltClearance": "Clearance for rods and screws",
   "prop.headHeight": "Head height",
   "prop.chamfer": "Chamfer",

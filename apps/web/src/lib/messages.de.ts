@@ -1564,6 +1564,8 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "prop.pitch": "Steigung",
   "prop.threadHand": "Gangrichtung",
   "prop.threadProfile": "Profil",
+  "thread.clearanceHint": "Das zusätzliche Spiel über den ganzen Durchmesser. Ein gedrucktes Gewinde braucht mehr, als man denkt: Der Spalt zwischen den Flanken ist nur etwa halb so groß. Um 0,3 ist eng, 0,4 üblich, 0,5 locker. Drucke zuerst ein Testpaar.",
+  "thread.boltClearanceHint": "Macht den Bolzen um diesen Wert dünner, für eine Metallmutter, die selbst kein Spiel hat (0,3 bis 0,4, so viel wie eine gedruckte Mutter hätte). Bei einer gedruckten Mutter bleibt es 0, und die Mutter bekommt das Spiel.",
   "prop.clearance": "Spiel",
   "prop.boltClearance": "Spiel bei Stange und Schraube",
   "prop.headHeight": "Kopfhöhe",

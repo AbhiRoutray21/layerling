@@ -31,7 +31,10 @@ More settings:
 
 - **{{ui:prop.threadHand}}:** {{ui:thread.right}} or {{ui:thread.left}}.
 - **{{ui:prop.threadProfile}}:** {{ui:thread.profileV}} is the standard profile of metric and inch threads, {{ui:thread.profileWhitworth}} that of the G pipe threads: 55° with rounded crests and roots. {{ui:thread.profileTrapezoidal}} and {{ui:thread.profileRound}} have flat crests and roots. That usually prints more reliably because no thin tips result.
-- **{{ui:prop.clearance}}:** For nut and tapped hole, the room that makes sure a printed pair really turns. The coarser your printer works, the more clearance the pair needs. Rods and screws have a clearance of their own here, which makes the bolt that much thinner in diameter. It is set to 0. If you need it because a printed bolt has to go into a metal nut, which has no play itself, 0.2 to 0.3 mm is a good start.
+- **{{ui:prop.clearance}}:** For nut and tapped hole, the room that makes sure a printed pair really turns. The coarser your printer works, the more clearance the pair needs. It is the extra room across the whole diameter, and the gap between the flanks of a V thread is only about half of it, so a printed pair needs more than you might expect: new nuts start at 0.4 mm, 0.3 is tight and 0.5 loose. Print a test pair first. Rods and screws have a clearance of their own here, which makes the bolt that much thinner in diameter. It is set to 0. Which side gets the room depends on what you pair:
+  - **Printed screw and printed nut:** leave the screw at 0 and give the nut the room (the 0.4 mm it starts with).
+  - **Real screw in a printed nut or tapped hole:** the printed side takes all of it, so the nut keeps its 0.4 mm. A tighter 0.3 mm is worth a test if the screw wobbles.
+  - **Printed screw in a real nut:** the real nut has no play, so the screw has to be thinner: 0.3 to 0.4 mm here, as much as a printed nut would have.
 - **{{ui:prop.chamfer}}, {{ui:prop.headChamfer}} and {{ui:prop.rimChamfer}}:** Chamfers at the ends so the thread starts cleanly and the head has no sharp edge.
 - **{{ui:prop.quality}}:** How finely the thread is calculated. Higher is more exact, but slower.
 
