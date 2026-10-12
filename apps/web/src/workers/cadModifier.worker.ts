@@ -877,7 +877,7 @@ self.onmessage = async (event: MessageEvent<CadModifierWorkerRequest>) => {
     });
     return;
   }
-  const kernelRefused = request.type === "preview" && (rawMessage.includes("WebAssembly.Exception") || rawMessage.includes("fillet:") || rawMessage.includes("chamfer:"));
+  const kernelRefused = request.type === "preview" && (rawMessage.includes("WebAssembly.Exception") || rawMessage.includes("fillet:") || rawMessage.includes("chamfer:") || rawMessage.includes("chamferDistAngle:"));
   const message = kernelRefused
     ? request.kind === "shell"
       ? "The walls cannot be this thick for this body. Choose a thinner wall."
