@@ -279,6 +279,8 @@ type EdgeModifierSession = {
   chamferAngle: number;
   quality: CadModifierQuality;
   tangentChain: boolean;
+  // Off: every edge shows through the body. On: only the ones facing the camera.
+  onlyVisibleEdges?: boolean;
   preserveEdgeSize: boolean;
   busy: boolean;
   prepared: boolean;
@@ -11024,6 +11026,7 @@ export function LayerlingEditor({
           modifierHighlightedEdgeIds={modifierAvailableEdgeIds}
           selectedModifierEdgeIds={edgeModifier?.selectedEdgeIds ?? []}
           failedModifierEdgeIds={edgeModifier?.error ? edgeModifier.failedEdgeIds ?? [] : []}
+          modifierOnlyVisibleEdges={edgeModifier?.onlyVisibleEdges ?? false}
           onModifierEdgeToggle={toggleModifierEdge}
           themePreference={themePreference}
           resolvedTheme={resolvedTheme}
@@ -11219,6 +11222,7 @@ export function LayerlingEditor({
           sharpAngle={edgeModifier.sharpAngle}
           workspace={workspaceSettings}
           tangentChain={edgeModifier.tangentChain}
+          onlyVisibleEdges={edgeModifier.onlyVisibleEdges ?? false}
           impliedEdgeCount={edgeModifierImpliedEdges}
           preserveEdgeSize={edgeModifier.preserveEdgeSize}
           targetName={selectedShape?.name ?? "Object"}
@@ -11261,6 +11265,7 @@ export function LayerlingEditor({
             };
           })}
           onTangentChainChange={(tangentChain) => setEdgeModifier((current) => current?.prepared ? { ...current, tangentChain } : current)}
+          onOnlyVisibleEdgesChange={(onlyVisibleEdges) => setEdgeModifier((current) => current?.prepared ? { ...current, onlyVisibleEdges } : current)}
           onPreserveEdgeSizeChange={(preserveEdgeSize) => setEdgeModifier((current) => current?.prepared ? { ...current, preserveEdgeSize } : current)}
           onSelectAll={() => setEdgeModifier((current) => current?.prepared ? { ...current, selectedEdgeIds: modifierAvailableEdgeIds, preview: null, busy: modifierAvailableEdgeIds.length > 0, error: modifierAvailableEdgeIds.length ? null : current.error } : current)}
           onSelectTop={() => setEdgeModifier((current) => {
