@@ -5166,6 +5166,7 @@ export function WorkplaneViewport({
           text: `${Number(delta.toFixed(1))}°`,
           angle: delta,
           pointerAngle: wheelRotation?.pointerAngle ?? rawPointerAngle,
+          fine: shiftKey && insideSnapWheel,
         });
       }
       transform.items.forEach((item) => {

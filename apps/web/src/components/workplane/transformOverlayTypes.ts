@@ -68,8 +68,11 @@ export function transformOverlayScreenPoint(
   };
 }
 
-export const ROTATION_WHEEL_SNAP_DEGREES = 45;
-export const ROTATION_WHEEL_SHIFT_SNAP_DEGREES = 22.5;
+/** Inside the wheel the turn snaps to the drawn ticks, one every 22.5°; Shift halves the step. */
+export const ROTATION_WHEEL_SNAP_DEGREES = 22.5;
+export const ROTATION_WHEEL_SHIFT_SNAP_DEGREES = 11.25;
+/** Outside the wheel the turn is free (1°); Shift snaps it to this step. */
+export const ROTATION_FREE_SHIFT_SNAP_DEGREES = 45;
 
 /**
  * Smallest screen distance between a measured edge and its dimension label.
@@ -118,7 +121,9 @@ export function rotationPlaneDirectionSign(
 }
 
 export function snappedRotationDelta(rawDelta: number, insideSnapWheel: boolean, shiftKey: boolean) {
-  const step = insideSnapWheel || shiftKey ? ROTATION_WHEEL_SNAP_DEGREES : 1;
+  const step = insideSnapWheel
+    ? (shiftKey ? ROTATION_WHEEL_SHIFT_SNAP_DEGREES : ROTATION_WHEEL_SNAP_DEGREES)
+    : (shiftKey ? ROTATION_FREE_SHIFT_SNAP_DEGREES : 1);
   return Math.round(rawDelta / step) * step;
 }
 
@@ -239,6 +244,8 @@ export type RotationReadout = {
   text: string;
   angle?: number;
   pointerAngle?: number;
+  /** Shift is held inside the wheel: the finer ticks show. */
+  fine?: boolean;
 } | null;
 
 export type EditingDimension = {

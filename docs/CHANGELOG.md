@@ -6,6 +6,7 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **The rotation circle snaps to the ticks it shows:** the circle drew a tick every 22.5 degrees but only snapped every 45, so 22.5 needed Shift. Now it snaps to every tick; Shift adds finer ticks every 11.25 degrees. Outside the circle nothing changes (1 degree, Shift 45). The `R` key still turns by 45.
 - **A 45 degree chamfer is no overhang (#269):** *Show overhangs* marks faces that lean out further than the set angle. A face exactly on the angle, a 45 degree chamfer at the default, was marked or not marked at random, because the float noise of its mesh decided. The limit now lies a hair above the angle (about 0.4 degrees), so a face on the angle is left alone and anything steeper is still marked. Reported by DrJones in the forum.
 
 ## 1.66.4

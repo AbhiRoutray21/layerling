@@ -8657,6 +8657,11 @@ html[data-theme="dark"] .inspector-bundle-note {
   stroke-width: 1.6;
 }
 
+.rotation-tick.fine {
+  stroke: rgba(166, 86, 0, 0.55);
+  stroke-width: 0.8;
+}
+
 .rotation-zero-line {
   stroke: rgba(70, 59, 47, 0.38);
   stroke-width: 1.1;

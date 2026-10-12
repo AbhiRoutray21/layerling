@@ -3,6 +3,8 @@ import { t } from "@/lib/i18n";
 import * as THREE from "three";
 import {
   measureKeyForHandle,
+  ROTATION_WHEEL_SHIFT_SNAP_DEGREES,
+  ROTATION_WHEEL_SNAP_DEGREES,
   type TransformOverlayProps,
   type TransformOverlayState,
 } from "@/components/workplane/transformOverlayTypes";
@@ -94,15 +96,20 @@ export function TransformOverlay({
     : box.alwaysVisibleDimensionKeys.flatMap((key) => box.dimensions[key] ?? []);
   const visibleMarks = (hideDimensionMarks ? [] : marks).filter((mark) => mark.key !== editingDimension?.key && !editingCorner?.entries.some((entry) => entry.key === mark.key));
   const handleMeasureKey = (handle: TransformOverlayState["handles"][number]) => measureKeyForHandle(handle.kind, handle.key, box);
-  const protractorTicks = Array.from({ length: 16 }, (_, index) => {
-    const degrees = index * 22.5 - 90;
+  // A tick for every step the turn snaps to: 22.5°, and 11.25° while Shift is held inside the wheel.
+  const tickStep = rotationReadout?.fine ? ROTATION_WHEEL_SHIFT_SNAP_DEGREES : ROTATION_WHEEL_SNAP_DEGREES;
+  const protractorTicks = Array.from({ length: Math.round(360 / tickStep) }, (_, index) => {
+    const tickDegrees = index * tickStep;
+    const degrees = tickDegrees - 90;
     const radians = THREE.MathUtils.degToRad(degrees);
-    const major = index % 2 === 0;
+    const major = tickDegrees % 45 === 0;
+    const fine = tickDegrees % ROTATION_WHEEL_SNAP_DEGREES !== 0;
     const outer = 94;
-    const inner = major ? 80 : 86;
+    const inner = major ? 80 : fine ? 90 : 86;
     return {
       key: `tick-${index}`,
       major,
+      fine,
       x1: Math.cos(radians) * inner,
       y1: Math.sin(radians) * inner,
       x2: Math.cos(radians) * outer,
@@ -158,7 +165,7 @@ export function TransformOverlay({
             {protractorTicks.map((tick) => (
               <line
                 key={tick.key}
-                className={tick.major ? "rotation-tick major" : "rotation-tick"}
+                className={tick.major ? "rotation-tick major" : tick.fine ? "rotation-tick fine" : "rotation-tick"}
                 x1={tick.x1}
                 y1={tick.y1}
                 x2={tick.x2}
