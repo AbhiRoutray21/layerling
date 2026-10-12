@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+## 1.66.1
+
 - **Notice of an update while the page is open:** On the published program (layerling.com, any web server with the static export) an open page now notices that a new version was installed in the meantime. Every export carries a `version.json` with a build id; the page asks for it every five minutes while visible, when the tab comes to the front, when the connection returns, and at once when a program file or worker it needs fails to load. On a change a card at the bottom right offers **Save and reload** (the open design is written to the browser first and reopens as it was) or **Later** (15 minutes), and lists the new highlights. Until now an old page kept running on its own files and could meet parts of the new version that did not fit (#88).
 
 - **Chamfer and fillet after Split:** On a body that was cut with the Split tool, the edges of the new cut face could not be rounded or chamfered, whatever the size ("cannot be filleted together at this size"). The cut leaves the flat sides of the body as many tiny triangles that are flat only to a millionth of a millimetre, and the CAD kernel then kept one side in several pieces and failed at the seams between them. The edge tool now gathers the triangles of a flat face back into one face and builds the corners exactly, so the edges of a cut corner can be treated like any other. Found by @lukyanenkomax in #248.
