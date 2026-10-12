@@ -41,7 +41,9 @@ function layerPieces(layer: WorkplaneShape): ShapeHandle[] {
   return pieces!.map(({ profile }) => {
     expect(profile).not.toBeNull();
     const local = profileExtrusionSolid(cad, profile!);
-    const solid = !profile!.transform ? local : cadTransformRequiresGeneralTransform(profile!.transform) ? cad.generalTransform(local, profile!.transform) : cad.transform(local, profile!.transform);
+    const placed = !profile!.transform ? local : cadTransformRequiresGeneralTransform(profile!.transform) ? cad.generalTransform(local, profile!.transform) : cad.transform(local, profile!.transform);
+    // The CAD worker repairs a widened text's walls where standing off the origin tips the validity check.
+    const solid = profile!.grow && !cad.isValid(placed) ? cad.fixShape(placed) : placed;
     expect(cad.isValid(solid)).toBe(true);
     return solid;
   });

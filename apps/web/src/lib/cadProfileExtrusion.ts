@@ -20,7 +20,8 @@ import { loftProfileLoops } from "@/lib/loftGeometry";
 import { teardropExactSection } from "@/lib/teardropGeometry";
 import { screwHoleProfile } from "@/lib/screwHoleGeometry";
 import { DEFAULT_ROUNDED_BOX_CORNER_FILLET, DEFAULT_ROUNDED_BOX_TOP_BOTTOM_FILLET, normalizeCornerFillet, normalizeTopBottomFillet } from "@/lib/roundedBoxGeometry";
-import { textGlyphShapes } from "@/lib/textGeometry";
+import { textGlyphShapes, textKeyringOf } from "@/lib/textGeometry";
+import { normalizeSketchStroke } from "@/lib/sketchStroke";
 import { textHasEdge } from "@/lib/textEdge";
 import { textFillComponents, textFillPieceGeometry, textHasFill } from "@/lib/textFill";
 import { loadedManifoldRuntime } from "@/lib/manifoldHandle";
@@ -727,6 +728,65 @@ function glyphLoop(path: GlyphPath, map: (point: THREE.Vector2) => Point, straig
   return segments.length >= 2 ? { ...(start as Point), segments } : null;
 }
 
+const ringArea = (ring: Point[]) => ring.reduce((sum, point, index) => {
+  const next = ring[(index + 1) % ring.length];
+  return sum + point.x * next.z - next.x * point.z;
+}, 0) / 2;
+const componentArea = ({ outer, holes }: { outer: Point[]; holes: Point[][] }) => Math.abs(ringArea(outer)) - holes.reduce((sum, hole) => sum + Math.abs(ringArea(hole)), 0);
+
+/** Whether `point` is inside `ring` (a closed polygon), or on it. */
+function pointInRing(ring: Point[], point: Point) {
+  let inside = false;
+  for (let index = 0, previous = ring.length - 1; index < ring.length; previous = index, index += 1) {
+    const a = ring[index];
+    const b = ring[previous];
+    // On an edge counts as inside: a letter that is not widened starts on the outline of its piece.
+    const cross = (b.x - a.x) * (point.z - a.z) - (b.z - a.z) * (point.x - a.x);
+    const length = Math.hypot(b.x - a.x, b.z - a.z);
+    if (length > 1e-12 && Math.abs(cross) / length < 1e-5
+      && point.x >= Math.min(a.x, b.x) - 1e-5 && point.x <= Math.max(a.x, b.x) + 1e-5
+      && point.z >= Math.min(a.z, b.z) - 1e-5 && point.z <= Math.max(a.z, b.z) + 1e-5) return true;
+    if ((a.z > point.z) !== (b.z > point.z) && point.x < ((b.x - a.x) * (point.z - a.z)) / (b.z - a.z) + a.x) inside = !inside;
+  }
+  return inside;
+}
+
+/**
+ * The letters behind each loose piece of a widened or silhouetted text (#215), as their own
+ * outlines with the font's curves - what the kernel widens exactly, where the piece's own outline
+ * is the display's many short straight lines. A piece takes the letters that start inside it; a
+ * letter in a counter of another belongs to the piece it lies in. Null for a fill the kernel does
+ * not do (a stroke along the outline, a bevelled or pointed corner, a key ring), for a piece that
+ * finds no letter, or a letter that finds no piece.
+ */
+function widenedTextRegions(shape: WorkplaneShape, components: Array<{ outer: Point[]; holes: Point[][] }>) {
+  const stroke = normalizeSketchStroke(shape.textStroke);
+  const widened = stroke?.align === "grow" && stroke.join === "round";
+  if (textKeyringOf(shape) || (stroke ? !widened : !shape.textSilhouette)) return null;
+  const letters = textGlyphShapes(shape);
+  if (!letters) return null;
+  const pieces = components.map(() => [] as Array<{ outer: CadModifierProfileLoop; holes: CadModifierProfileLoop[] }>);
+  for (const { glyph, map } of letters.glyphs) {
+    const outer = glyphLoop(glyph, map, letters.curveSegments === 1);
+    const holes = glyph.holes.map((hole) => glyphLoop(hole, map, letters.curveSegments === 1));
+    if (!outer || holes.some((hole) => hole === null)) return null;
+    const start = { x: outer.x, z: outer.z };
+    // The smallest piece around the letter's start that does not have it in a counter.
+    const home = components
+      .map((component, index) => ({ component, index }))
+      .filter(({ component }) => pointInRing(component.outer, start) && !component.holes.some((hole) => pointInRing(hole, start)))
+      .sort((a, b) => Math.abs(ringArea(a.component.outer)) - Math.abs(ringArea(b.component.outer)))[0];
+    if (!home) {
+      // Left out by the silhouette (a letter in the counter of another).
+      if (shape.textSilhouette) continue;
+      return null;
+    }
+    pieces[home.index].push({ outer, holes: shape.textSilhouette ? [] : (holes as CadModifierProfileLoop[]) });
+  }
+  if (pieces.some((regions) => regions.length === 0)) return null;
+  return pieces.map((regions) => ({ width: widened ? stroke!.width : 0, regions, silhouette: Boolean(shape.textSilhouette) }));
+}
+
 /**
  * The glyphs of a raised text as exact outlines, in the order createTextGeometry
  * extrudes them (font.generateShapes), each with the number of triangles its
@@ -761,13 +821,16 @@ export function textGlyphProfiles(shape: WorkplaneShape) {
       ...points[0],
       segments: [...points.slice(1), points[0]].map((point) => ({ kind: "line", x: point.x, z: point.z })),
     });
-    return components.map((component) => {
+    const exact = widenedTextRegions(shape, components);
+    return components.map((component, index) => {
       const geometry = textFillPieceGeometry(component, shape.height);
       const triangleCount = geometry.getAttribute("position").count / 3;
       geometry.dispose();
       let profile: CadModifierProfilePart | null = null;
       try {
         const candidate: CadModifierProfilePart = { kind: "extrusion", loops: [component.outer, ...component.holes].map(pointLoop), height: shape.height, transform };
+        // The letters' own outlines, widened by the kernel, where the fill is one it can do (#215).
+        if (exact?.[index]) candidate.grow = { ...exact[index]!, area: componentArea(component) };
         validateCadProfile(candidate);
         profile = candidate;
       } catch {
@@ -886,7 +949,7 @@ function alongDepthFrame(depth: number): ProfileFrame {
   return { kind: "extrusion", height: depth, local: new THREE.Matrix4().set(1, 0, 0, 0, 0, 0, 1, 0, 0, -1, 0, depth / 2, 0, 0, 0, 1) };
 }
 
-export function cadProfileForShapeKind(shape: WorkplaneShape, designedRound = false): { loops: CadModifierProfileLoop[]; frame?: ProfileFrame; capFillet?: number; capChamfer?: { radius: number; size: number } } | null {
+export function cadProfileForShapeKind(shape: WorkplaneShape, designedRound = false): { loops: CadModifierProfileLoop[]; frame?: ProfileFrame; capFillet?: number; capChamfer?: { radius: number; size: number }; grow?: CadModifierProfilePart["grow"] } | null {
   const width = shapeWidth(shape);
   const depth = shapeDepth(shape);
   switch (shape.kind) {
@@ -1044,7 +1107,7 @@ export function cadProfileForShapeKind(shape: WorkplaneShape, designedRound = fa
       // A text is one body only when it is one glyph; otherwise the edge tool
       // cuts it into glyph pieces and each piece brings its own outline.
       const glyphs = textGlyphProfiles(shape);
-      return glyphs?.length === 1 && glyphs[0].profile ? { loops: glyphs[0].profile.loops } : null;
+      return glyphs?.length === 1 && glyphs[0].profile ? { loops: glyphs[0].profile.loops, grow: glyphs[0].profile.grow } : null;
     }
     default:
       return null;
@@ -1183,6 +1246,7 @@ export function cadModifierProfileForShape(shape: WorkplaneShape, options: { des
     if (profile.frame?.path) part.path = profile.frame.path;
     if (profile.capFillet) part.capFillet = profile.capFillet;
     if (profile.capChamfer) part.capChamfer = profile.capChamfer;
+    if (profile.grow) part.grow = profile.grow;
     validateCadProfile(part);
     return part;
   } catch {

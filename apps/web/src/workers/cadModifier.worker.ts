@@ -74,6 +74,21 @@ function cadShapeIsValid(cad: OcctKernel, shape: ShapeHandle) {
 }
 
 
+/**
+ * The BREP a treated body is stored as, without the mesh the display was cut from: on a body whose
+ * faces the mesh stands off, the kernel's validity check counts the mesh too, and the stored body
+ * then restores as "not valid" for the next treatment (a widened text's rim, #215). A copy of the
+ * shape leaves the mesh behind; the stored text is also half the size.
+ */
+function storedBrep(cad: OcctKernel, shape: ShapeHandle) {
+  const bare = cad.copy(shape);
+  try {
+    return cad.toBREP(bare);
+  } finally {
+    cad.release(bare);
+  }
+}
+
 function parseEdgeFaceMap(values: number[]) {
   const map = new Map<number, number[]>();
   for (let index = 0; index + 1 < values.length; ) {
@@ -249,7 +264,15 @@ let exactProfileBodiesUsed = 0;
 
 function reconstructProfileSolid(cad: OcctKernel, profile: CadModifierProfilePart) {
   const local = profileExtrusionSolid(cad, profile);
-  const placed = applyCadTransform(cad, local, profile.transform);
+  let placed = applyCadTransform(cad, local, profile.transform);
+  if (profile.grow && (!cad.isSolid(placed) || !cadShapeIsValid(cad, placed))) {
+    // A widened text's walls are moved outlines: standing somewhere other than the origin can tip
+    // the kernel's validity check, and its own repair closes that - kept where the volume stays.
+    const volume = cad.getVolume(placed);
+    const repaired = cad.fixShape(placed);
+    const solids = cad.isSolid(repaired) ? [repaired] : cad.getSubShapes(repaired, "solid");
+    if (solids.length === 1 && cadShapeIsValid(cad, solids[0]) && Math.abs(cad.getVolume(solids[0]) - volume) <= 1e-4 * Math.abs(volume)) placed = solids[0];
+  }
   if (!cad.isSolid(placed) || !cadShapeIsValid(cad, placed)) throw new Error("The exact profile body is not a valid solid after placing it");
   const mismatch = cadProfileSolidMismatch(cad, placed, profile.expected);
   if (mismatch) throw new Error(`The exact profile body does not match the shape (${mismatch})`);
@@ -686,7 +709,7 @@ async function bearbeiteAnfrage(request: CadModifierWorkerRequest, halter: { cad
     const options = tessellationOptions(deflection);
     const mesh = copyCadMesh(meshed.mesh);
     const displayEdges = collectEdges(activeCad, result, 0).displayEdges;
-    const brep = activeCad.toBREP(result);
+    const brep = storedBrep(activeCad, result);
     const components: CadModifierComponentMesh[] = componentResults.map((component, owner) => {
       const componentMesh = copyCadMesh(activeCad.tessellate(component, options));
       return {
@@ -695,7 +718,7 @@ async function bearbeiteAnfrage(request: CadModifierWorkerRequest, halter: { cad
         normals: componentMesh.normals,
         indices: componentMesh.indices,
         triangleCount: componentMesh.triangleCount,
-        brep: activeCad.toBREP(component),
+        brep: storedBrep(activeCad, component),
         displayEdges: collectEdges(activeCad, component, 0).displayEdges,
       };
     });

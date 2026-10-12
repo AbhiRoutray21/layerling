@@ -47,7 +47,9 @@ function solidOf(part: NonNullable<ReturnType<typeof textGlyphProfiles>>[number]
   expect(part).not.toBeNull();
   const local = profileExtrusionSolid(cad, part!);
   const transform = part!.transform;
-  return !transform ? local : cadTransformRequiresGeneralTransform(transform) ? cad.generalTransform(local, transform) : cad.transform(local, transform);
+  const placed = !transform ? local : cadTransformRequiresGeneralTransform(transform) ? cad.generalTransform(local, transform) : cad.transform(local, transform);
+  // The CAD worker repairs a widened text's walls where standing off the origin tips the validity check.
+  return part!.grow && !cad.isValid(placed) ? cad.fixShape(placed) : placed;
 }
 
 describe("text fill modes as exact bodies (#215, real OCCT kernel)", () => {
@@ -71,7 +73,10 @@ describe("text fill modes as exact bodies (#215, real OCCT kernel)", () => {
       expect(cad.isValid(solid)).toBe(true);
       const volume = cad.getVolume(solid);
       const expected = componentArea(components![index]) * shape.height;
-      expect(Math.abs(volume - expected) / expected).toBeLessThan(1e-4);
+      // A widened or silhouetted text is the letters' own curves, moved out by the kernel: it agrees with the
+      // polygon outline of the same piece to within what that outline approximates; the other fills are the polygon.
+      const exact = "textSilhouette" in extra || ("textStroke" in extra && extra.textStroke?.align === "grow");
+      expect(Math.abs(volume - expected) / expected).toBeLessThan(exact ? 0.02 : 1e-4);
       // The body stands where the text stands: its foot at the elevation, its top a height up.
       const bounds = cad.getBoundingBox(solid);
       expect(bounds.ymin).toBeCloseTo(3, 3);

@@ -566,8 +566,265 @@ function loftSolid(cad: OcctKernel, profile: CadModifierProfilePart, tolerance: 
   return solids[0];
 }
 
+/** occt-wasm's JoinType.Arc: round corners. */
+const JOIN_ARC = 0;
+
+/**
+ * A flat face pushed up `height` from y = 0, whichever way round the kernel built the face: a face
+ * looking down makes an inside-out prism going up, which is pushed down and lifted back instead.
+ */
+function faceSolid(cad: OcctKernel, face: ShapeHandle, height: number) {
+  const up = cad.extrude(face, 0, height, 0);
+  if (cad.isValid(up) && cad.getVolume(up) > 0) return up;
+  return cad.translate(cad.extrude(face, 0, -height, 0), 0, height, 0);
+}
+
+/**
+ * The one face a shape the kernel made from moved outlines consists of, valid: such a result can
+ * come out with tiny overlaps that the kernel's own repair closes, which is kept only where it did
+ * not change the area. Throws when it is not one face, or stays invalid.
+ */
+function validFace(cad: OcctKernel, shape: ShapeHandle) {
+  const single = (candidate: ShapeHandle) => {
+    const faces = cad.isFace(candidate) ? [candidate] : cad.getSubShapes(candidate, "face");
+    return faces.length === 1 ? faces[0] : null;
+  };
+  const face = single(shape);
+  if (face && cad.isValid(face)) return face;
+  const area = cad.getSurfaceArea(shape);
+  const repaired = single(cad.fixShape(shape));
+  if (!repaired || !cad.isValid(repaired) || !(Math.abs(cad.getSurfaceArea(repaired) - area) <= 0.01 * area)) throw new Error("The moved outlines are not a valid face");
+  return repaired;
+}
+
+/**
+ * The faces an outline's offset encloses: `delta` out (wider) or in, whichever way round the kernel
+ * counts it. Moved out, `faces` is the one face and `pockets` the voids that close up inside it, as
+ * at the mouth of an "e"; moved in, `faces` has a face for each piece the outline falls into. Null
+ * when it comes back no wider (narrower) than the outline - an inward offset that has closed up, say.
+ */
+function offsetFaces(cad: OcctKernel, wire: ShapeHandle, delta: number, wider: boolean): { faces: ShapeHandle[]; pockets: ShapeHandle[] } | null {
+  const base = cad.makeFace(wire);
+  const baseArea = cad.getSurfaceArea(base);
+  const baseBox = cad.getBoundingBox(base);
+  for (const signed of [delta, -delta]) {
+    let pieces: Array<{ face: ShapeHandle; area: number }>;
+    try {
+      const moved = cad.offsetWire2D(wire, signed, JOIN_ARC);
+      const wires = cad.isWire(moved) ? [moved] : cad.getSubShapes(moved, "wire");
+      pieces = wires.map((piece) => {
+        const face = validFace(cad, cad.makeFace(piece));
+        return { face, area: cad.getSurfaceArea(face) };
+      }).sort((a, b) => b.area - a.area);
+    } catch {
+      continue;
+    }
+    if (!pieces.length) continue;
+    const faces = wider ? [pieces[0].face] : pieces.map((piece) => piece.face);
+    const pockets = wider ? pieces.slice(1).map((piece) => piece.face) : [];
+    const area = (wider ? pieces[0].area - pieces.slice(1).reduce((sum, piece) => sum + piece.area, 0) : pieces.reduce((sum, piece) => sum + piece.area, 0));
+    if (!(area > 1e-9) || (wider ? area <= baseArea : area >= baseArea)) continue;
+    // Moved in, it has to stay inside where it started.
+    const outside = !wider && faces.some((face) => {
+      const box = cad.getBoundingBox(face);
+      return box.xmin < baseBox.xmin - 1e-6 || box.xmax > baseBox.xmax + 1e-6 || box.zmin < baseBox.zmin - 1e-6 || box.zmax > baseBox.zmax + 1e-6;
+    });
+    if (outside) continue;
+    return { faces, pockets };
+  }
+  return null;
+}
+
+/** A turn smaller than this at the joint of two segments is a font's small kink, not a corner (3.5 degrees). */
+const SMOOTH_TURN = 0.061;
+
+/**
+ * An outline of a font with the small kinks at the joints of its curves taken out: where two
+ * segments meet at a turn of a few degrees at most, their end directions are made one (the curves'
+ * control points turned a little about the joint, a straight neighbour keeps its direction). A
+ * font draws many such joints - the kernel then puts a round corner of the offset's radius on each
+ * one when it moves the outline out, an edge a hundredth of a millimetre long that no fillet will
+ * go over. Straight lines stay as they are, corners too.
+ */
+function smoothedLoop(loop: CadModifierProfileLoop): CadModifierProfileLoop {
+  type Pt = { x: number; z: number };
+  // A quadratic curve's one control point serves both ends: as a cubic each end has its own.
+  let from: Pt = { x: loop.x, z: loop.z };
+  const segments = loop.segments.map((segment) => {
+    const start = from;
+    from = segment;
+    if (segment.kind !== "bezier") return { ...segment };
+    if (segment.controls.length !== 1) return { ...segment, controls: segment.controls.map((control) => ({ ...control })) };
+    const [control] = segment.controls;
+    const third = (a: Pt, b: Pt) => ({ x: a.x + (2 / 3) * (b.x - a.x), z: a.z + (2 / 3) * (b.z - a.z) });
+    return { ...segment, controls: [third(start, control), third({ x: segment.x, z: segment.z }, control)] };
+  });
+  const count = segments.length;
+  const point = (index: number): Pt => (index < 0 ? { x: loop.x, z: loop.z } : segments[index]);
+  // The direction a segment arrives in, and leaves in.
+  const arrival = (index: number): Pt => {
+    const segment = segments[index];
+    const before = segment.kind === "bezier" ? segment.controls[segment.controls.length - 1] : point(index - 1);
+    return { x: segment.x - before.x, z: segment.z - before.z };
+  };
+  const departure = (index: number): Pt => {
+    const segment = segments[index];
+    const origin = point(index - 1);
+    const after = segment.kind === "bezier" ? segment.controls[0] : segment;
+    return { x: after.x - origin.x, z: after.z - origin.z };
+  };
+  const turnOf = (a: Pt, b: Pt) => {
+    const turn = Math.atan2(a.x * b.z - a.z * b.x, a.x * b.x + a.z * b.z);
+    return turn;
+  };
+  const rotate = (center: Pt, target: Pt, angle: number): Pt => {
+    const dx = target.x - center.x;
+    const dz = target.z - center.z;
+    const cos = Math.cos(angle);
+    const sin = Math.sin(angle);
+    return { x: center.x + dx * cos - dz * sin, z: center.z + dx * sin + dz * cos };
+  };
+  for (let index = 0; index < count; index += 1) {
+    const before = (index + count - 1) % count;
+    const turn = turnOf(arrival(before), departure(index));
+    if (Math.abs(turn) < 1e-12 || Math.abs(turn) > SMOOTH_TURN) continue;
+    const joint = segments[before];
+    const arriving = segments[before];
+    const leaving = segments[index];
+    // A straight neighbour keeps its direction; between two curves each turns half way.
+    const turnArriving = leaving.kind === "line" ? turn : arriving.kind === "line" ? 0 : turn / 2;
+    const turnLeaving = arriving.kind === "line" ? -turn : leaving.kind === "line" ? 0 : -turn / 2;
+    if (arriving.kind === "line" && leaving.kind === "line") continue;
+    if (arriving.kind === "bezier" && turnArriving !== 0) {
+      const last = arriving.controls.length - 1;
+      arriving.controls[last] = rotate(joint, arriving.controls[last], turnArriving);
+    }
+    if (leaving.kind === "bezier" && turnLeaving !== 0) leaving.controls[0] = rotate(joint, leaving.controls[0], turnLeaving);
+  }
+  return { x: loop.x, z: loop.z, segments };
+}
+
+/** A side face narrower than this (mm) is a leftover of the kernel's offset, not part of a letter. */
+const SLIVER_WIDTH = 0.05;
+
+/**
+ * The solid without the slivers its sides can carry: where the kernel moves an outline out past a
+ * sharp inside corner it leaves a side face a hundredth of a millimetre wide, and a fillet will not
+ * go over it. The faces beside it are carried on to meet, which the kernel does for removing small
+ * features. The solid as it is when that does not work out.
+ */
+function withoutSlivers(cad: OcctKernel, solid: ShapeHandle, height: number) {
+  const slivers = cad.getSubShapes(solid, "face").filter((face) => {
+    const box = cad.getBoundingBox(face);
+    // A side face: not one of the flat ends.
+    return !(Math.abs(box.ymax - box.ymin) < 1e-9) && cad.getSurfaceArea(face) < height * SLIVER_WIDTH;
+  });
+  if (!slivers.length) return solid;
+  try {
+    const volume = cad.getVolume(solid);
+    const cleaned = cad.defeature(solid, slivers, 0);
+    const solids = cad.isSolid(cleaned) ? [cleaned] : cad.getSubShapes(cleaned, "solid");
+    if (solids.length === 1 && cad.isValid(solids[0]) && Math.abs(cad.getVolume(solids[0]) - volume) <= 1e-3 * volume) return solids[0];
+  } catch (error) {
+    if (/memory|WebAssembly|abort/i.test(error instanceof Error ? error.message : String(error))) throw error;
+  }
+  return solid;
+}
+
+/**
+ * A widened text (profile.grow) as one exact solid: every letter's outline moved out by the kernel,
+ * its counters moved in (and gone where they close up), the letters joined as flat faces - the
+ * joining of flat faces is robust where that of the curved walls of two prisms is not - and the
+ * face pushed up once. Throws when anything is off - the caller then builds `profile.loops`, the
+ * polygon outline of the same body.
+ */
+/**
+ * A widened text (profile.grow) as one exact solid: every letter's outline moved out by the kernel,
+ * its counters moved in (and gone where they close up), the letters joined as flat faces - the
+ * joining of flat faces is robust where that of the curved walls of two prisms is not - and the
+ * face pushed up once. Throws when anything is off - the caller then builds `profile.loops`, the
+ * polygon outline of the same body.
+ */
+export function debugWires(cad: OcctKernel, profile: CadModifierProfilePart) {
+  const out: string[] = [];
+  const tolerance = profileExtent(profile) * 1e-6;
+  profile.grow!.regions.forEach((region, index) => {
+    const wire = loopWire(cad, region.outer, tolerance);
+    const moved = cad.offsetWire2D(wire, profile.grow!.width, 0);
+    const wires = cad.isWire(moved) ? [moved] : cad.getSubShapes(moved, "wire");
+    wires.forEach((w, wi) => {
+      const edges = cad.getSubShapes(w, "edge");
+      const len = (e: ShapeHandle) => { const b = cad.getBoundingBox(e); return Math.hypot(b.xmax - b.xmin, b.zmax - b.zmin); };
+      out.push(`region ${index} wire ${wi}: edges ${edges.length} lens ${edges.map((e) => len(e).toFixed(4)).join(" ")}`);
+      const kept = edges.filter((e) => len(e) > 1e-3);
+      const lensOf = (sh: ShapeHandle) => cad.getSubShapes(sh, "edge").map((e) => len(e).toFixed(4)).join(" ");
+      const face0 = cad.makeFace(w);
+      out.push(`  face0 edges ${lensOf(face0)}`);
+      out.push(`  fixShape(face) edges ${lensOf(cad.fixShape(face0))}`);
+      out.push(`  unify(face) edges ${lensOf(cad.unifySameDomain(face0))}`);
+      out.push(`  simplify(face) edges ${lensOf(cad.simplify(face0))}`);
+      const sol = cad.extrude(face0, 0, -1, 0);
+      out.push(`  fixShape(solid) edges y-flat ${lensOf(cad.fixShape(sol)).split(" ").filter((x) => parseFloat(x) < 0.001).length}`);
+      try {
+        const rebuilt = cad.makeWire(kept);
+        const face = cad.makeFace(rebuilt);
+        out.push(`  rebuilt wire ok edges ${kept.length} closed? face valid ${cad.isValid(face)} area ${cad.getSurfaceArea(face).toFixed(3)} vs ${cad.getSurfaceArea(cad.makeFace(w)).toFixed(3)}`);
+      } catch (e) { out.push(`  rebuild threw ${String(e).slice(0, 80)}`); }
+    });
+  });
+  return out;
+}
+
+export function grownProfileSolid(cad: OcctKernel, profile: CadModifierProfilePart) {
+  const grow = profile.grow!;
+  const tolerance = profileExtent(profile) * 1e-6;
+  const height = profile.height;
+  let joined: ShapeHandle | null = null;
+  for (const region of grow.regions) {
+    const outerWire = loopWire(cad, smoothedLoop(region.outer), tolerance);
+    let face: ShapeHandle;
+    const cutAway = (hole: ShapeHandle) => {
+      face = validFace(cad, cad.cut(face, hole));
+    };
+    if (grow.width > 0) {
+      const wider = offsetFaces(cad, outerWire, grow.width, true);
+      if (!wider) throw new Error("A letter could not be widened by the kernel");
+      face = wider.faces[0];
+      // The voids that close up inside it are holes in the letters, except in a silhouette.
+      if (!grow.silhouette) wider.pockets.forEach(cutAway);
+    } else {
+      face = validFace(cad, cad.makeFace(outerWire));
+    }
+    for (const hole of grow.silhouette ? [] : region.holes) {
+      const wire = loopWire(cad, smoothedLoop(hole), tolerance);
+      // A counter that the widening has closed leaves nothing to cut.
+      const smaller = grow.width > 0 ? offsetFaces(cad, wire, -grow.width, false)?.faces : [validFace(cad, cad.makeFace(wire))];
+      (smaller ?? []).forEach(cutAway);
+    }
+    joined = joined ? cad.fuse(joined, face) : face;
+  }
+  if (!joined) throw new Error("The widened text has no letters");
+  let face = validFace(cad, cad.unifySameDomain(joined));
+  // Letters that run together once wider can close a pocket between them; a silhouette has none.
+  if (grow.silhouette && cad.getSubShapes(face, "wire").length > 1) face = validFace(cad, cad.makeFace(cad.outerWire(face)));
+  let solid = withoutSlivers(cad, faceSolid(cad, face, height), height);
+  if (!cad.isSolid(solid) || !cad.isValid(solid)) throw new Error("The widened text is not a valid solid");
+  const volume = cad.getVolume(solid);
+  const expected = grow.area * height;
+  if (!(Math.abs(volume - expected) <= 0.05 * expected)) throw new Error("The widened text does not keep the outline's volume");
+  return solid;
+}
+
 export function profileExtrusionSolid(cad: OcctKernel, profile: CadModifierProfilePart) {
   validateCadProfile(profile);
+  if (profile.kind === "extrusion" && profile.grow) {
+    try {
+      return grownProfileSolid(cad, profile);
+    } catch (error) {
+      // A kernel that has run out of room is for the caller to reset; anything else the outline of straight pieces answers.
+      if (/memory|WebAssembly|abort/i.test(error instanceof Error ? error.message : String(error))) throw error;
+    }
+  }
   const tolerance = profileExtent(profile) * 1e-6;
   if (profile.kind === "loft") {
     const solid = loftSolid(cad, profile, tolerance);

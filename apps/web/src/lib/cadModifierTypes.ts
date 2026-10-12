@@ -145,6 +145,20 @@ export type CadModifierProfilePart = {
   capChamfer?: { radius: number; size: number };
   /** The first loop is the outer boundary, any further loops are holes. */
   loops: CadModifierProfileLoop[];
+  /**
+   * Extrusion only: a text widened all round (#215) - its letters' own outlines, with the font's
+   * curves, which the kernel moves out by `width` itself, so the walls stay planes and single
+   * curves instead of the hundreds of short straight pieces `loops` (the outline the display's
+   * polygon offset made, the fallback) is made of. Each region is a letter's outline with its
+   * counters (none for a silhouette); the regions' wider bodies are fused. `area` is what `loops`
+   * enclose, which the exact body has to agree with, or `loops` is used.
+   */
+  grow?: {
+    width: number;
+    regions: Array<{ outer: CadModifierProfileLoop; holes: CadModifierProfileLoop[] }>;
+    silhouette: boolean;
+    area: number;
+  };
   height: number;
   transform?: number[];
   /**

@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **Chamfer and fillet on the wider layers of a name tag:** The rim and the plate of a name tag (and any text with a **Wider** fill) were built for the edge tool from hundreds of short straight pieces, the polygon outline the display uses. The tool then refused them or gave a body that was not valid - a fillet on a plate came out with more volume than before. Now the kernel moves the letters' own outlines out itself, so a wall is one plane, one arc or one curve, and the top edges of the rim and the plate take a fillet or chamfer of 0.2 to 0.3 mm in most words (the plate of "Name" has 81 edges to round, not 660). Slivers the kernel leaves at sharp inside corners are taken out first. Where an outline is still too fine for the kernel - a very small counter, a very narrow stroke - the usual message stays; a key ring tab, bevelled corners and a stroke along the outline keep the polygon outline. A treated body is also stored without its display mesh now, which halves its size and lets a second edge treatment on it start again. Reported by @plazmabokor in #215 and #225.
+
 - **MCP: `layerling_layer_icon` for the icon tag:** An AI client can now make what the Icon tag in the shape library makes. `svg` (the text of an SVG file) puts a new icon tag on the plate, `id` turns an extruded sketch body into one or builds an icon tag again; `width` is the icon's width, `layers` the layers as for `layerling_layer_text` (without letter edge and key ring hole), and `count` lays copies out on the plate. The guide (chapter 14) and both skills list it.
 
 ## 1.64.0

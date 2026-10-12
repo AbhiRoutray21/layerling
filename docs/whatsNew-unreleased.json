@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "title": {
+      "de": "Verrundung auf den Rändern eines Namensschilds",
+      "en": "Fillets on the rims of a name tag"
+    },
+    "body": {
+      "de": "Die breiteren Schichten eines Namensschilds - Rand und Platte - lassen sich jetzt in den meisten Fällen verrunden oder abschrägen. Früher scheiterte das Kantenwerkzeug dort, oder der Körper kam ungültig zurück. Kleine Radien von 0,2 bis 0,3 mm funktionieren bei vielen Wörtern.",
+      "en": "The wider layers of a name tag - the rim and the plate - can now be filleted or chamfered in most cases. Before, the edge tool failed there or handed back a body that was not valid. Small sizes of 0.2 to 0.3 mm work for many words."
+    }
+  }
+]
