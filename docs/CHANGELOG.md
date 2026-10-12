@@ -6,6 +6,7 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **Chamfer, bottom end shows up (#269):** 1.66.2 gave every end of a rod, nut or tapped hole a chamfer of its own, but the field for the bottom end never appeared in the thread's settings, because the list of fields shown for a thread did not know it. It is there now, as **Chamfer, bottom end**. A screw still has its one chamfer at the tip. Reported by DrJones and PePa in the forum.
 - **Torus symbol:** the picture of the torus in the shapes menu showed SketchForge's flat ring with a square profile. It is now rendered from the real geometry, a donut with a round profile. Reported by DrJones in the forum.
 
 ## 1.66.5
