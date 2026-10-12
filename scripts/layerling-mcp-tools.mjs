@@ -181,6 +181,11 @@ export const tools = [
     inputSchema: { type: "object", properties: {} },
   },
   {
+    name: "layerling_open_editor",
+    description: "Open a new Layerling editor tab in the user's default browser and wait (up to 45 s) until it has connected; returns it with its editorNumber. Only for a Layerling on this computer - for a copy on a NAS or server the browser is somewhere else and the user opens the editor. The other tools open an editor themselves when none is open (unless LAYERLING_MCP_OPEN_EDITOR=0 is set for the MCP server), so call this only to get another tab, for example for a second design.",
+    inputSchema: { type: "object", properties: {} },
+  },
+  {
     name: "layerling_read_scene",
     description: "Read the current scene, selection, workspace units, and exact object dimensions from an open Layerling editor.",
     inputSchema: {

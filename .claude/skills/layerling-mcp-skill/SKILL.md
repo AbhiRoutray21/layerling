@@ -39,7 +39,7 @@ Always call `layerling_list_editors` first when the user mentions multiple proje
 
 Use `editorNumber` for follow-up commands. It is a 5-digit per-tab number stored in browser `sessionStorage`, so two open layerling tabs have different numbers. The list also includes `projectName`, `projectId`, URL, shape count, selected count, notice, and last error.
 
-If only one editor is open, commands may omit `editorNumber`; the server will target the sole live editor.
+If only one editor is open, commands may omit `editorNumber`; the server will target the sole live editor. If none is open, the server starts the user's browser with an editor and waits for it (only for a layerling on this computer; `layerling_open_editor` does that on purpose, to get another tab; `LAYERLING_MCP_OPEN_EDITOR=0` turns it off).
 
 ## Core Workflow
 

@@ -12,7 +12,7 @@ Die Brücke zwischen KI-Client und Editor läuft **lokal auf deinem Rechner**. B
 ## Einrichten
 
 1. Lade layerling von [GitHub](https://github.com/henmedia/layerling) und starte es im Projektordner mit `npm run dev`. Node.js muss installiert sein. Unter Windows erledigt das die Schnellstart-Zeile in der README.
-2. Öffne einen Editor-Tab, zum Beispiel `http://127.0.0.1:3000/?editor=1`.
+2. Öffne einen Editor-Tab, zum Beispiel `http://127.0.0.1:3000/?editor=1`. Das kannst du auch der KI überlassen: Ist kein Editor offen, startet das erste Werkzeug, das einen braucht, deinen Browser mit einem Editor und wartet, bis er verbunden ist. Das geht bei einem layerling auf deinem eigenen Rechner; bei einer Kopie auf einem NAS oder Server öffnest du den Editor selbst. Mit `LAYERLING_MCP_OPEN_EDITOR=0` am MCP-Server schaltest du es ab.
 3. Verbinde deinen KI-Client mit dem MCP-Server. Er wird vom Client selbst mit `node scripts/layerling-mcp-server.mjs` gestartet.
 
 ### Claude Code
@@ -42,6 +42,7 @@ Die KI arbeitet mit denselben Funktionen wie du, sie läuft über denselben Weg 
 | Werkzeug | Was es tut |
 | --- | --- |
 | `layerling_list_editors` | listet die offenen Editor-Tabs auf |
+| `layerling_open_editor` | öffnet einen neuen Editor-Tab in deinem Standardbrowser und wartet, bis er verbunden ist (nur auf deinem eigenen Rechner) |
 | `layerling_read_scene` | liest Szene, Auswahl, Einheiten und die genauen Maße aller Objekte |
 | `layerling_list_objects` | listet alle Objekte mit Maßen, Lage, Drehung und Kennung |
 | `layerling_select_objects` | wählt Objekte aus |

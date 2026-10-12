@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import { tools } from "./layerling-mcp-tools.mjs";
+import { isLocalBridgeUrl, openEditorAndWait } from "./layerling-mcp-open.mjs";
 
 const DEFAULT_BASE_URL = "http://127.0.0.1:3000";
 const MCP_ROUTE = "/api/layerling-mcp";
@@ -8,6 +9,9 @@ const baseUrl = process.env.LAYERLING_URL || DEFAULT_BASE_URL;
 // A copy on a NAS or home server that switched remote use on (LAYERLING_MCP_REMOTE and
 // LAYERLING_MCP_TOKEN there) wants the same token from this client.
 const accessToken = (process.env.LAYERLING_MCP_TOKEN || "").trim();
+// With no editor open, a tool that needs one starts the browser itself - on this computer only.
+// LAYERLING_MCP_OPEN_EDITOR=0 leaves that to the user.
+const openEditorAutomatically = process.env.LAYERLING_MCP_OPEN_EDITOR !== "0" && isLocalBridgeUrl(baseUrl);
 
 function bridgeUrl() {
   return new URL(MCP_ROUTE, baseUrl);
@@ -47,7 +51,10 @@ async function bridgeCommand(action, args = {}, defaultTimeoutMs = 15000) {
   let targetId = typeof editorId === "string" ? editorId : undefined;
 
   if (!targetNumber && !targetId) {
-    const { editors = [] } = await bridgeGet();
+    let { editors = [] } = await bridgeGet();
+    if (editors.length === 0 && openEditorAutomatically) {
+      editors = (await openEditorAndWait({ baseUrl, listEditors: bridgeGet })).editors;
+    }
     if (editors.length === 1) {
       targetNumber = editors[0].editorNumber;
     } else {
@@ -79,6 +86,8 @@ async function callTool(name, args) {
   switch (name) {
     case "layerling_list_editors":
       return bridgeGet();
+    case "layerling_open_editor":
+      return openEditorAndWait({ baseUrl, listEditors: bridgeGet });
     case "layerling_read_scene":
       return bridgeCommand("get_scene", args);
     case "layerling_list_objects":

@@ -12,7 +12,7 @@ The bridge between AI client and editor runs **locally on your computer**. Keep 
 ## Setting up
 
 1. Get layerling from [GitHub](https://github.com/henmedia/layerling) and start it in the project folder with `npm run dev`. Node.js must be installed. On Windows the quick-start line in the README takes care of that.
-2. Open an editor tab, for example `http://127.0.0.1:3000/?editor=1`.
+2. Open an editor tab, for example `http://127.0.0.1:3000/?editor=1`. You can leave that to the AI: when no editor is open, the first tool that needs one starts your browser with an editor and waits until it has connected. That works for a layerling on your own computer; a copy on a NAS or server needs you to open the editor. Set `LAYERLING_MCP_OPEN_EDITOR=0` for the MCP server to switch it off.
 3. Connect your AI client to the MCP server. The client starts it itself with `node scripts/layerling-mcp-server.mjs`.
 
 ### Claude Code
@@ -42,6 +42,7 @@ The AI works with the same functions as you, through the same path as your opera
 | Tool | What it does |
 | --- | --- |
 | `layerling_list_editors` | lists the open editor tabs |
+| `layerling_open_editor` | opens a new editor tab in your default browser and waits until it has connected (on your own computer only) |
 | `layerling_read_scene` | reads scene, selection, units and the exact dimensions of all objects |
 | `layerling_list_objects` | lists all objects with dimensions, position, rotation and id |
 | `layerling_select_objects` | selects objects |
