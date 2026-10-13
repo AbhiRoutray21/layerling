@@ -31,7 +31,8 @@ export async function fetchServerDefaultTheme(
   endpoint: string = SERVER_DEFAULTS_ENDPOINT,
 ): Promise<AppThemePreference | null> {
   try {
-    const response = await fetchImpl(endpoint, { cache: "no-store" });
+    // A POST, because that is what makes the Node build answer it on every call (see the route).
+    const response = await fetchImpl(endpoint, { method: "POST", cache: "no-store" });
     if (!response.ok) return null;
     const body = (await response.json()) as { theme?: unknown } | null;
     return parseDefaultTheme(body?.theme);
