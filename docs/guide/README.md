@@ -2,7 +2,9 @@
 
 The guide at [layerling.com/guide](https://layerling.com/guide/index.html) (English) and
 [layerling.com/anleitung](https://layerling.com/anleitung/index.html) (German) is written here and built into plain
-static pages. It ships with the program: `npm run export` and `npm run dev` build it, nothing else to deploy.
+static pages. It ships with the program: `npm run export` and `npm run dev` build it, nothing else to deploy. The build
+also writes a `search-index.json` per language (one entry per section of every chapter), which the search box in the
+header of each page reads; nothing to maintain, a new chapter or heading is in it with the next build.
 
 ```
 docs/guide/

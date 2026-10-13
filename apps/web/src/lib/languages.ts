@@ -32,6 +32,9 @@ export type GuideStrings = {
   notTranslated: string;
   /** The label of the language menu on a guide page. */
   languageMenu: string;
+  /** The search box at the top of a guide page: what it is called and what it says when nothing matches. */
+  search: string;
+  searchNothing: string;
 };
 
 export type LanguageInfo = {
@@ -94,6 +97,8 @@ export const LANGUAGE_INFO: Readonly<Record<Language, LanguageInfo>> = {
       forum: "discussions",
       notTranslated: "This chapter is not translated into your language yet. The English text follows.",
       languageMenu: "Language",
+      search: "Search the guide",
+      searchNothing: "Nothing found.",
     },
   },
   de: {
@@ -123,6 +128,8 @@ export const LANGUAGE_INFO: Readonly<Record<Language, LanguageInfo>> = {
       forum: "Forum",
       notTranslated: "Dieses Kapitel ist noch nicht in deine Sprache übersetzt. Es folgt der englische Text.",
       languageMenu: "Sprache",
+      search: "Anleitung durchsuchen",
+      searchNothing: "Nichts gefunden.",
     },
   },
 };

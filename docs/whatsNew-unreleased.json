@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "title": {
+      "de": "Suche in der Anleitung",
+      "en": "Search in the guide"
+    },
+    "body": {
+      "de": "Jede Seite der Anleitung hat jetzt oben ein Suchfeld. Tippe ein oder zwei Wörter, und es zeigt die Abschnitte, in denen sie vorkommen, mit einem Textausschnitt. Ein Klick springt direkt dorthin.",
+      "en": "Every page of the user guide now has a search box at the top. Type a word or two and it shows the sections where they appear, with a snippet of the text. One click takes you straight there."
+    }
+  }
+]

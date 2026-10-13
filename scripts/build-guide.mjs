@@ -326,6 +326,18 @@ a { color: var(--accent); }
 .brand b { font-size: 19px; letter-spacing: -0.03em; }
 .brand-text { display: flex; align-items: baseline; gap: 10px; }
 .brand-note { color: var(--muted); font-size: 13px; font-weight: 600; }
+.guide-search { position: relative; flex: 0 1 280px; min-width: 0; margin: 0; }
+.guide-search input { width: 100%; padding: 7px 12px; border: 1px solid var(--edge); border-radius: 8px; background: var(--card); color: var(--ink); font: inherit; font-size: 14px; }
+.guide-search input:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.guide-results { position: absolute; left: 0; right: 0; top: calc(100% + 6px); max-height: min(70vh, 460px); overflow-y: auto; background: var(--card); border: 1px solid var(--edge); border-radius: 8px; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.14); z-index: 7; }
+.guide-results[hidden] { display: none; }
+.guide-results a { display: block; padding: 8px 12px; color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--edge); }
+.guide-results a:last-child { border-bottom: 0; }
+.guide-results a:hover, .guide-results a:focus-visible { background: var(--tint); outline: none; }
+.guide-results b { display: block; font-size: 14px; }
+.guide-results span { display: block; color: var(--muted); font-size: 13px; line-height: 1.45; }
+.guide-results mark { background: transparent; color: var(--accent); font-weight: 800; }
+.guide-results p { margin: 0; padding: 10px 12px; color: var(--muted); font-size: 14px; }
 .editor-elsewhere { max-width: 1100px; margin: 0 auto; padding: 0 16px 10px; color: var(--muted); font-size: 14px; text-align: right; }
 .editor-elsewhere[hidden] { display: none; }
 .bar a.button { padding: 7px 14px; border-radius: 8px; background: var(--accent); color: var(--accent-ink); font-weight: 700; font-size: 14px; text-decoration: none; }
@@ -392,6 +404,10 @@ footer.note { max-width: 1100px; margin: 0 auto; padding: 0 16px 12px; color: va
   h1 { font-size: 28px; }
   .brand-note { display: none; }
 }
+@media (max-width: 720px) {
+  .bar-inner { flex-wrap: wrap; }
+  .guide-search { order: 5; flex: 1 1 100%; }
+}
 @media print { .bar, nav.chapters, .pager { display: none; } .shell { display: block; } }
 `;
 
@@ -404,6 +420,131 @@ footer.note { max-width: 1100px; margin: 0 auto; padding: 0 16px 12px; color: va
  */
 function editorButtonScript(strings) {
   return `(function(){var b=document.getElementById("open-editor");if(!b||typeof BroadcastChannel==="undefined")return;var elsewhere=false,c=new BroadcastChannel("layerling-tabs"),id="guide-"+Math.random().toString(36).slice(2);c.onmessage=function(e){var m=e.data;if(m&&m.kind==="here"&&m.tabId!==id&&!elsewhere){elsewhere=true;b.textContent=${JSON.stringify(strings.backToEditor)};}};c.postMessage({kind:"ask",tabId:id});b.addEventListener("click",function(e){if(!elsewhere)return;e.preventDefault();window.close();setTimeout(function(){elsewhere=false;b.textContent=${JSON.stringify(strings.openEditor)};var n=document.getElementById("editor-elsewhere");if(n)n.hidden=false;},400);});})();`;
+}
+
+const HEADING_PATTERN = /<h([23]) id="([^"]+)">([\s\S]*?)<\/h\1>/g;
+
+/** The text of some rendered HTML, as one line. */
+export function plainText(html) {
+  return html
+    .replace(/<\/(p|li|tr|td|th|h[1-6]|div|aside|figcaption|figure|pre)>/g, " ")
+    .replace(/<[^>]+>/g, "")
+    .replace(/&nbsp;/g, " ")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&amp;/g, "&")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+/**
+ * What the guide search looks through: one entry per section of a chapter (the part before its first
+ * heading counts as the chapter's own), each with the address to jump to. `c` is the chapter, `h`
+ * the section heading ("" for the chapter itself), `u` the address and `t` the plain text.
+ */
+export function searchEntries({ title, summary, html, path }) {
+  const matches = [...html.matchAll(HEADING_PATTERN)];
+  const entries = [{ c: title, h: "", u: path, t: [summary, plainText(html.slice(0, matches[0]?.index ?? html.length))].filter(Boolean).join(" ") }];
+  matches.forEach((match, position) => {
+    const end = matches[position + 1]?.index ?? html.length;
+    entries.push({ c: title, h: plainText(match[3]), u: `${path}#${match[2]}`, t: plainText(html.slice(match.index + match[0].length, end)) });
+  });
+  return entries;
+}
+
+/**
+ * The matching, kept apart from the page so a test can run it. It folds case and accents one letter
+ * for one letter (so a position in the folded text is a position in the real one), wants every word
+ * of the query somewhere in a section, and ranks a word in the heading above one in the chapter's
+ * title above one in the text. Written for browsers, so plain ES5 and no backslashes.
+ */
+export const GUIDE_SEARCH_CORE = `
+function guideFold(text){var out="";for(var i=0;i<text.length;i++){out+=text.charAt(i).toLowerCase().normalize("NFD").charAt(0);}return out;}
+function guidePrepare(entries){return entries.map(function(e){return {e:e,c:guideFold(e.c),h:guideFold(e.h),t:guideFold(e.t)};});}
+function guideTokens(query){return guideFold(query).split(" ").filter(function(w){return w.length>0;});}
+function guideSearch(prepared,query,limit){
+  var tokens=guideTokens(query);if(!tokens.length)return [];
+  var phrase=tokens.join(" "),found=[];
+  prepared.forEach(function(p){
+    var score=0;
+    for(var i=0;i<tokens.length;i++){
+      var w=tokens[i],inH=p.h.indexOf(w)>=0,inC=p.c.indexOf(w)>=0,at=p.t.indexOf(w);
+      if(!inH&&!inC&&at<0)return;
+      if(inH)score+=10;
+      if(inC)score+=3;
+      if(at>=0){score+=1;var n=0,k=at;while(k>=0&&n<5){n++;k=p.t.indexOf(w,k+w.length);}score+=n*0.3;}
+    }
+    if(tokens.length>1&&(p.h.indexOf(phrase)>=0||p.t.indexOf(phrase)>=0))score+=6;
+    found.push({entry:p.e,score:score,folded:p.t,tokens:tokens});
+  });
+  found.sort(function(a,b){return b.score-a.score;});
+  return found.slice(0,limit||8);
+}
+`;
+
+const GUIDE_SEARCH_PAGE = `
+function guideSnippet(hit){
+  var text=hit.entry.t,first=-1;
+  hit.tokens.forEach(function(w){var k=hit.folded.indexOf(w);if(k>=0&&(first<0||k<first))first=k;});
+  var from=first>40?first-40:0;
+  if(from>0){var gap=text.indexOf(" ",from);if(gap>=0&&gap<first)from=gap+1;}
+  var end=Math.min(text.length,from+150),marked=[];
+  for(var i=from;i<end;i++)marked.push(false);
+  hit.tokens.forEach(function(w){var k=hit.folded.indexOf(w,from);while(k>=0&&k<end){for(var j=k;j<k+w.length&&j<end;j++)marked[j-from]=true;k=hit.folded.indexOf(w,k+w.length);}});
+  var parts=[],run="",state=false;
+  if(from>0)parts.push({text:"... ",mark:false});
+  for(var m=0;m<marked.length;m++){if(marked[m]!==state&&run){parts.push({text:run,mark:state});run="";}state=marked[m];run+=text.charAt(from+m);}
+  if(run)parts.push({text:run,mark:state});
+  if(end<text.length)parts.push({text:" ...",mark:false});
+  return parts;
+}
+(function(){
+  var form=document.getElementById("guide-search");if(!form||!window.fetch)return;
+  var input=form.querySelector("input"),box=document.getElementById("guide-results"),prepared=null,loading=null;
+  function load(){if(!loading){loading=fetch(form.getAttribute("data-index")).then(function(r){return r.json();}).then(function(list){prepared=guidePrepare(list);}).catch(function(){loading=null;});}return loading;}
+  function close(){box.hidden=true;input.setAttribute("aria-expanded","false");}
+  function render(){
+    if(!guideTokens(input.value).length){close();return;}
+    if(!prepared){load().then(function(){if(prepared)render();});return;}
+    var hits=guideSearch(prepared,input.value,8);
+    box.textContent="";
+    if(!hits.length){var none=document.createElement("p");none.textContent=form.getAttribute("data-nothing");box.appendChild(none);}
+    hits.forEach(function(hit){
+      var link=document.createElement("a"),title=document.createElement("b"),line=document.createElement("span");
+      link.href=hit.entry.u;
+      title.textContent=hit.entry.h?hit.entry.c+" > "+hit.entry.h:hit.entry.c;
+      guideSnippet(hit).forEach(function(part){if(part.mark){var mark=document.createElement("mark");mark.textContent=part.text;line.appendChild(mark);}else line.appendChild(document.createTextNode(part.text));});
+      link.appendChild(title);link.appendChild(line);box.appendChild(link);
+    });
+    box.hidden=false;input.setAttribute("aria-expanded","true");
+  }
+  input.addEventListener("input",render);
+  input.addEventListener("focus",function(){load();if(input.value)render();});
+  input.addEventListener("keydown",function(e){
+    if(e.key==="ArrowDown"){var first=box.querySelector("a");if(first){e.preventDefault();first.focus();}}
+    else if(e.key==="Escape"){input.value="";close();}
+  });
+  form.addEventListener("submit",function(e){e.preventDefault();var first=box.querySelector("a");if(first)window.location.href=first.href;});
+  box.addEventListener("keydown",function(e){
+    var current=document.activeElement;
+    if(e.key==="ArrowDown"&&current.nextElementSibling){e.preventDefault();current.nextElementSibling.focus();}
+    else if(e.key==="ArrowUp"){e.preventDefault();if(current.previousElementSibling)current.previousElementSibling.focus();else input.focus();}
+    else if(e.key==="Escape"){input.focus();close();}
+  });
+  box.addEventListener("click",close);
+  document.addEventListener("click",function(e){if(!form.contains(e.target))close();});
+})();
+`;
+
+function guideSearchScript() {
+  return GUIDE_SEARCH_CORE + GUIDE_SEARCH_PAGE;
+}
+
+/** The search box in the header of a guide page; the script fills it with results. */
+function searchForm(strings) {
+  return `<form class="guide-search" id="guide-search" role="search" data-index="/${strings.dir}/search-index.json" data-nothing="${escapeHtml(strings.searchNothing)}"><input type="search" id="guide-search-input" name="q" placeholder="${escapeHtml(strings.search)}" aria-label="${escapeHtml(strings.search)}" aria-controls="guide-results" aria-expanded="false" autocomplete="off" spellcheck="false"><div class="guide-results" id="guide-results" hidden></div></form>`;
 }
 
 const THEME_SCRIPT = `try{var t=localStorage.getItem("layerling.theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t;else if(t==="graphite")document.documentElement.dataset.theme="dark"}catch(e){}`;
@@ -435,6 +576,7 @@ function pageShell({ language, title, description, path, alternates, chapters, c
   <body>
     <header class="bar"><div class="bar-inner">
       <a class="brand" href="/${strings.dir}/index.html"><img src="/assets/layerling/layerling-logo.svg" alt=""><span class="brand-text"><b>layerling</b><span class="brand-note">${escapeHtml(strings.home)}</span></span></a>
+      ${searchForm(strings)}
       ${languageMenu(languageLinks, language, strings)}
       <a class="button" id="open-editor" href="/">${escapeHtml(strings.openEditor)}</a>
     </div><p class="editor-elsewhere" id="editor-elsewhere" role="status" hidden>${escapeHtml(strings.editorElsewhere)}</p></header>
@@ -447,6 +589,7 @@ ${body}
     <footer class="note">${escapeHtml(strings.sourceNote)} <a href="${strings.forumUrl}" rel="noopener">${escapeHtml(strings.forum)}</a>.</footer>
     ${footer}
     <script>${editorButtonScript(strings)}</script>
+    <script>${guideSearchScript()}</script>
   </body>
 </html>
 `;
@@ -547,6 +690,7 @@ export async function buildGuide({ log = console.log } = {}) {
       return { code, name: LANGUAGE_INFO[code].name, htmlLang: target.htmlLang, href: `/${target.dir}/${slug ?? "index"}.html` };
     });
 
+    const searchIndex = [];
     for (const [position, chapter] of chapters.entries()) {
       const context = {
         language,
@@ -586,6 +730,7 @@ export async function buildGuide({ log = console.log } = {}) {
         current: chapter.slug, body, footer, languageLinks: languageLinksFor(chapter.number), englishPath,
       });
       await writeFile(join(outputRoot, `${chapter.slug}.html`), page);
+      searchIndex.push(...searchEntries({ title: chapter.title, summary: chapter.summary, html: rendered.html, path }));
       // A page that only shows English text is no page of its own for a search engine.
       if (!chapter.fallback) result.pages.push({ path, alternates });
     }
@@ -602,6 +747,7 @@ export async function buildGuide({ log = console.log } = {}) {
       languageLinks: languageLinksFor(null),
     });
     await writeFile(join(outputRoot, "index.html"), indexPage);
+    await writeFile(join(outputRoot, "search-index.json"), JSON.stringify(searchIndex));
     result.pages.unshift({ path: indexPath, alternates: indexAlternates });
   }
 
