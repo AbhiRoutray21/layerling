@@ -68,5 +68,15 @@
       "de": "Das Zahnrad gibt es jetzt auch als Pfeilrad: zwei Schrägrad-Hälften, die gegenläufig drehen. Es zentriert sich von selbst auf der Welle und schiebt nicht seitlich, das macht es für den 3D-Druck angenehm. Winkel und Qualität stellst du wie beim Schrägrad ein.",
       "en": "The gear now comes as a herringbone gear too: two helical halves turning opposite ways. It centres itself on its shaft and does not push sideways, which makes it pleasant for 3D printing. You set angle and quality as for the helical gear."
     }
+  },
+  {
+    "title": {
+      "de": "SVG-Import: Buchstaben fehlten",
+      "en": "SVG import: missing letters"
+    },
+    "body": {
+      "de": "Ein SVG, dessen Umriss nicht genau am Startpunkt endet, etwa bei einem nachgezeichneten Logo aus Affinity, kam ohne diese Form herein, oder die Datei wurde ganz abgelehnt. Solche Umrisse werden jetzt sauber geschlossen.",
+      "en": "An SVG whose outline does not end exactly at its start, such as a traced logo from Affinity, came in without that shape, or the whole file was refused. Such outlines are now closed cleanly."
+    }
   }
 ]

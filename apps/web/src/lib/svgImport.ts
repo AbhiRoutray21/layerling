@@ -240,6 +240,13 @@ function cleanRingPoints(points: THREE.Vector2[]) {
     if (!cleaned.length || cleaned[cleaned.length - 1].distanceToSquared(point) > same) cleaned.push(point.clone());
   }
   if (cleaned.length > 1 && cleaned[0].distanceToSquared(cleaned[cleaned.length - 1]) <= same) cleaned.pop();
+  // An outline written with rounded numbers rarely ends exactly where it began: Affinity's relative
+  // steps leave the last point 0.001 beside the first. The closing edge between them is a sliver the
+  // extrusion cannot triangulate, which dropped the whole letter without a word (#258, the T of a
+  // traced logo). A last point within a hundred-thousandth of the drawing's size of the first is the
+  // first.
+  const closeEnough = (extent * 1e-5) ** 2;
+  if (cleaned.length > 3 && cleaned[0].distanceToSquared(cleaned[cleaned.length - 1]) <= closeEnough) cleaned.pop();
   return cleaned;
 }
 
