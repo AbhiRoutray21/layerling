@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "title": {
+      "de": "Torus: Seiten und Stufen einstellbar",
+      "en": "Torus: adjustable sides and steps"
+    },
+    "body": {
+      "de": "Der Torus hat jetzt zwei Regler in den Eigenschaften: „Seiten am Ring“ und „Stufen am Wulst“. Ohne eigene Angabe folgen sie der Größe, ein großer Torus wird also von selbst glatt. Stellst du sie niedrig, zeichnet layerling den Torus eckig, in der Ansicht und im Export.",
+      "en": "The torus has two sliders in its properties now: “Ring sides” and “Tube steps”. Left alone they follow the size, so a large torus comes out smooth by itself. Set them low and layerling draws the torus faceted, in the view and in the export."
+    }
+  }
+]

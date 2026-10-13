@@ -272,8 +272,11 @@ export function normalizeShapeCustomizations(value: unknown, fallback: ShapeCust
       height: optionalShapeDimension(source.height, fallbackEntry?.height),
       maxDimension: optionalShapeDimension(source.maxDimension, fallbackEntry?.maxDimension),
     };
-    if (kind === "sphere" || kind === "halfSphere") {
+    if (kind === "sphere" || kind === "halfSphere" || kind === "torus") {
       entry.steps = optionalShapeNumber(source.steps, fallbackEntry?.steps, 6, MAX_HIGH_RESOLUTION_STEPS, true);
+    }
+    if (kind === "torus") {
+      entry.sides = optionalShapeNumber(source.sides, fallbackEntry?.sides, 12, MAX_HIGH_RESOLUTION_SIDES, true);
     }
     if (kind === "cylinder" || kind === "ellipse" || kind === "slot" || kind === "cone" || kind === "tube" || kind === "ring" || kind === "counterbore" || kind === "countersink" || kind === "teardrop") {
       entry.sides = optionalShapeNumber(source.sides, fallbackEntry?.sides, 3, MAX_HIGH_RESOLUTION_SIDES, true);

@@ -59,8 +59,8 @@ export const threadSizeSetting = {
  * geprueft wie in den Einstellungen; was daneben liegt, wird eingefangen.
  */
 export const shapeSettingSchema = {
-  sides: { type: "number", description: "Cylinder, slot, cone, tube, polygon, pyramid, round roof, teardrop, counterbore, countersink. Left out on a round body, the side count follows the diameter." },
-  steps: { type: "number", description: "Sphere and half sphere: how finely the surface is divided." },
+  sides: { type: "number", description: "Cylinder, slot, cone, tube, polygon, pyramid, round roof, teardrop, counterbore, countersink, torus (around the ring). Left out on a round body, the side count follows the diameter." },
+  steps: { type: "number", description: "Sphere and half sphere: how finely the surface is divided. Torus: how finely the tube is divided; left out, it follows the size." },
   bevel: { type: "number", description: "Tube: wall thickness. Text: rounding of the lettering." },
   segments: { type: "number", description: "Text only: steps in the rounding." },
   topRadius: { type: "number", description: "Cone only: radius of the flat top. 0 runs to a point." },

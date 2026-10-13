@@ -12,6 +12,7 @@ import { setToolbarSize, TOOLBAR_SIZE_OPTIONS, type ToolbarSize } from "@/lib/to
 import { useToolbarSize } from "@/lib/useToolbarSize";
 import { gearCenterHoleLimits, gearToothPitch } from "@/lib/gearGeometry";
 import { automaticSideCount } from "@/lib/roundSideCount";
+import { torusTessellation } from "@/lib/torusTessellation";
 import { printerPresetById } from "@/lib/printBed";
 import { PRINTER_PRESETS } from "@/lib/printerPresets.generated";
 import {
@@ -198,6 +199,13 @@ function specialFieldsForShape(
     }];
   }
   if (kind === "sphere" || kind === "halfSphere") return [{ type: "number", key: "steps", label: t("prop.steps"), defaultValue: defaults.steps ?? (kind === "halfSphere" ? 32 : 24), min: 6, max: MAX_HIGH_RESOLUTION_STEPS, step: 1 }];
+  if (kind === "torus") {
+    const effective = torusTessellation({ sides: defaults.sides, steps: defaults.steps }, dimensions.width, dimensions.depth, dimensions.height);
+    return [
+      { type: "number", key: "sides", label: t("prop.torusSides"), defaultValue: effective.ringSides, min: 12, max: MAX_HIGH_RESOLUTION_SIDES, step: 1 },
+      { type: "number", key: "steps", label: t("prop.torusSteps"), defaultValue: effective.tubeSteps, min: 6, max: MAX_HIGH_RESOLUTION_STEPS, step: 1 },
+    ];
+  }
   if (kind === "cone") {
     return [
       { type: "number", key: "topRadius", label: t("prop.topRadius"), defaultValue: defaults.topRadius ?? 0, min: 0, max: MAX_CUSTOM_SHAPE_DIMENSION / 2, unit: "mm" },

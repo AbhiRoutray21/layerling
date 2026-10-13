@@ -1560,6 +1560,8 @@ export const MESSAGES_EN = {
   "prop.sidesFollowSize": "Sides follow the size",
   "prop.sides": "Sides",
   "prop.steps": "Steps",
+  "prop.torusSides": "Ring sides",
+  "prop.torusSteps": "Tube steps",
   "prop.teeth": "Teeth",
   "prop.helixAngle": "Helix Angle",
   "prop.quality": "Quality",

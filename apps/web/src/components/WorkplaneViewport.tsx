@@ -103,6 +103,7 @@ import { withShapeDefaults } from "@/lib/shapeDefaults";
 import { workplaneGridBandWidths, AXIS_ARROW_COLORS, axisArrowLayout, DEFAULT_EDGE_LINE_COLOR, fillLightPosition, keyLightPosition, sceneLightLevels, shadowBlurRadius, workplaneGridLayout, workplaneGridLines, workplaneGridPalette, workplaneLabelLayout, workplaneThemePalette, WORKPLANE_LABEL_ASPECT, WORKPLANE_LINE_ELEVATION, type WorkplaneGridLayout } from "@/lib/workplaneGrid";
 import { cleanNearZero, cleanRotationDegrees, isNonSolidShapeKind, mirroredAxisCount, mirrorSign, preservesEdgeTreatmentSize, proportionalResizeScale, resizedImportedCoordinates, resizedImportedMeshPositions, resizedShapeSize, shapeDepth, shapeExtrudeDeformAt, shapeHasExtrudeDeform, shapeHasShapeDeform, shapeHasTaper, shapeSupportsTaper, shapeTaperDimensions, shapeTaperScaleAt, shapeWidth, shapeWithParametricSource } from "@/lib/workplaneShapes";
 import { sphereTessellation } from "@/lib/sphereTessellation";
+import { torusTessellation } from "@/lib/torusTessellation";
 import type { LayerlingMcpViewFace } from "@/lib/layerlingMcpProtocol";
 import {
   TransformOverlay,
@@ -11760,7 +11761,7 @@ function createShapeObject(
       addMesh(group, sharedShapeGeometry(geometryCacheKey, () => createHalfSphereGeometry(width, height, depth, shape.steps ?? 32)), material, shape);
       break;
     case "torus":
-      addMesh(group, sharedShapeGeometry(geometryCacheKey, () => createTorusGeometry(width, height, depth)), material, shape);
+      addMesh(group, sharedShapeGeometry(geometryCacheKey, () => createTorusGeometry(width, height, depth, shape)), material, shape);
       break;
     case "ring":
     case "tube":
@@ -12508,10 +12509,11 @@ function createWedgeGeometry(width: number, height: number, depth: number) {
   return geometry.toNonIndexed();
 }
 
-function createTorusGeometry(width: number, height: number, depth: number) {
+function createTorusGeometry(width: number, height: number, depth: number, shape: Pick<WorkplaneShape, "sides" | "steps">) {
   const tubeRadius = Math.max(0.1, height / 2);
   const majorRadius = Math.max(0.2, Math.min(width, depth) / 2 - tubeRadius);
-  const geometry = new THREE.TorusGeometry(majorRadius, tubeRadius, 36, 144);
+  const { ringSides, tubeSteps } = torusTessellation(shape, width, depth, height);
+  const geometry = new THREE.TorusGeometry(majorRadius, tubeRadius, tubeSteps, ringSides);
   geometry.rotateX(Math.PI / 2);
   const outerDiameter = (majorRadius + tubeRadius) * 2;
   geometry.scale(width / outerDiameter, 1, depth / outerDiameter);

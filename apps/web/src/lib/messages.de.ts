@@ -1559,6 +1559,8 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "prop.sidesFollowSize": "Seiten folgen der Größe",
   "prop.sides": "Seiten",
   "prop.steps": "Stufen",
+  "prop.torusSides": "Seiten am Ring",
+  "prop.torusSteps": "Stufen am Wulst",
   "prop.teeth": "Zähne",
   "prop.helixAngle": "Schrägungswinkel",
   "prop.quality": "Qualität",

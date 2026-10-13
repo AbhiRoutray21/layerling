@@ -6,6 +6,7 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **Torus: sides and steps (#272):** The torus drew its ring and its tube with fixed numbers of corners (144 and 36), so a big one, 200 mm across, showed facets and there was no way to change it. It has two sliders now, **Ring sides** around the ring and **Tube steps** around the tube. Left alone they follow the size, never coarser than before, so a large torus comes out smooth; held, they work like the side count of a cylinder: a torus of few sides is drawn faceted, in the view, in the export and for the edge tool. The workspace defaults for the torus and the MCP bridge (`sides`, `steps`) take them as well. Reported by micro4rgb-maker on GitHub.
 ## 1.66.7
 
 - **Put a design on the server from its menu:** The menu of a design card in this browser has a new entry, **Put on the server**, for the shared folder you have open, as dragging the card onto the server tile does. Asked for by ucito in the forum, who moved a whole backup over.

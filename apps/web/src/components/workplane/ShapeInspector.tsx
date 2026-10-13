@@ -173,6 +173,7 @@ import { useMovablePanel, type MovablePanelOptions } from "@/lib/useMovablePanel
 import { isNonSolidShapeKind, resizedShapeSize, shapeDepth, shapeHasTaper, shapeOverallFootprintDimensions, shapeSupportsTaper, shapeTaperDimensions, shapeWidth } from "@/lib/workplaneShapes";
 import { normalizeSketchRevolveSettings } from "@/lib/sketchRevolve";
 import { roundSideCount } from "@/lib/roundSideCount";
+import { torusTessellation } from "@/lib/torusTessellation";
 import { normalizePyramidTop } from "@/lib/pyramidGeometry";
 import {
   MAX_SPRING_QUALITY,
@@ -374,6 +375,49 @@ function roundSideProperties(
       step: 1,
       disabled: followsSize,
       onChange: (sides) => onUpdate({ sides: Math.round(sides) }),
+    },
+  ];
+}
+
+/**
+ * Der Torus hat zwei Zahlen: Seiten rund um den Ring, Stufen rund um den Wulst. Beide folgen
+ * zusammen der Groesse, bis der Schalter sie festhaelt (#272).
+ */
+function torusSideProperties(
+  shape: WorkplaneShape,
+  width: number,
+  depth: number,
+  onUpdate: ShapeInspectorUpdate,
+): ShapePropertyConfig[] {
+  const followsSize = shape.sides === undefined && shape.steps === undefined;
+  const effective = torusTessellation(shape, width, depth, shape.height);
+  return [
+    {
+      type: "toggle",
+      id: "sidesFollowSize",
+      label: t("prop.sidesFollowSize"),
+      value: followsSize,
+      onChange: (follows) => onUpdate(follows ? { sides: undefined, steps: undefined } : { sides: effective.ringSides, steps: effective.tubeSteps }),
+    },
+    {
+      id: "sides",
+      label: t("prop.torusSides"),
+      value: effective.ringSides,
+      min: 12,
+      max: MAX_HIGH_RESOLUTION_SIDES,
+      step: 1,
+      disabled: followsSize,
+      onChange: (sides) => onUpdate({ sides: Math.round(sides), steps: shape.steps ?? effective.tubeSteps }),
+    },
+    {
+      id: "steps",
+      label: t("prop.torusSteps"),
+      value: effective.tubeSteps,
+      min: 6,
+      max: MAX_HIGH_RESOLUTION_STEPS,
+      step: 1,
+      disabled: followsSize,
+      onChange: (steps) => onUpdate({ steps: Math.round(steps), sides: shape.sides ?? effective.ringSides }),
     },
   ];
 }
@@ -1048,6 +1092,15 @@ function getShapePropertiesWithAppLimits(shape: WorkplaneShape, onUpdate: ShapeI
   if (shape.kind === "sphere") {
     return [
       { id: "steps", label: t("prop.steps"), value: shape.steps ?? 24, min: 6, max: MAX_HIGH_RESOLUTION_STEPS, step: 1, onChange: (steps) => onUpdate({ steps: Math.round(steps) }) },
+      { id: "length", label: t("prop.length"), value: depth, min: MIN_SHAPE_SIZE, max: 160, onChange: setDepth },
+      { id: "width", label: t("prop.width"), value: width, min: MIN_SHAPE_SIZE, max: 160, onChange: setWidth },
+      { id: "height", label: t("prop.height"), value: shape.height, min: MIN_SHAPE_SIZE, max: 160, onChange: setHeight },
+    ];
+  }
+
+  if (shape.kind === "torus") {
+    return [
+      ...torusSideProperties(shape, width, depth, onUpdate),
       { id: "length", label: t("prop.length"), value: depth, min: MIN_SHAPE_SIZE, max: 160, onChange: setDepth },
       { id: "width", label: t("prop.width"), value: width, min: MIN_SHAPE_SIZE, max: 160, onChange: setWidth },
       { id: "height", label: t("prop.height"), value: shape.height, min: MIN_SHAPE_SIZE, max: 160, onChange: setHeight },
