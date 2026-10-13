@@ -6,7 +6,10 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+
 - Fix orthographic view render bug.
+- **Writing a note:** Moving the cursor back into the text of a note and typing or deleting there threw the cursor to the end after every key, because the text came back to the field the long way round, through the editor and the view, and the field showed the old text in between. The field now keeps what you type itself while you write, so the cursor stays where you put it. Writing has keys now too: **Enter** keeps the text and closes the field, **Esc** puts the text back to how it was when you clicked into it, and **Shift+Enter** starts a new line (before, Enter did that, and there was no way back short of undo).
+- **The note button names its key:** The tooltip of the note button in the toolbar named no key, although **N** places a note; it now reads "Note (N)", like the tool buttons.
 
 ## 1.67.4
 
