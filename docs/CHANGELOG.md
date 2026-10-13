@@ -6,6 +6,7 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **Workplane on the cut of the section view (#154):** The section view only clipped the model, so there was no face on the cut for the workplane tool to land on, and a sketch could not start exactly there. A new button in the section panel, **Workplane here**, puts the workplane on the cut: on the plane of the section, facing out of the body that stays. The sketch then starts there and shows the outline of the cut, which you draw along and snap to. The MCP action `layerling_set_workplane` has `onSection: true` for it. Asked for by jrs94yj on GitHub.
 ## 1.67.1
 
 - **Wrap around a cylinder: the diameter in tenths of a millimetre (#274):** The diameter of the cylinder wall moved and read in whole millimetres, so a cup of 63.5 mm could not be set. The slider now steps by 0.1 mm and the field shows and takes the decimals. Asked for by Bitt-Cloud on GitHub.

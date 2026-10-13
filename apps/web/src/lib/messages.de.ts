@@ -1770,6 +1770,8 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "camera.sectionAxisY": "Y (Tiefe)",
   "camera.sectionAxisZ": "Z (Höhe)",
   "camera.sectionFlip": "Schnittrichtung umkehren",
+  "camera.sectionWorkplane": "Arbeitsebene hier",
+  "camera.sectionWorkplaneHint": "Die Arbeitsebene auf den Schnitt legen, damit eine Skizze genau dort beginnt und die Kontur des Schnitts zeigt",
   "camera.sectionReset": "Zentrieren",
   "camera.sectionResetHint": "Schnitt auf Modellmitte zentrieren",
   "camera.sectionOffset": "Position",

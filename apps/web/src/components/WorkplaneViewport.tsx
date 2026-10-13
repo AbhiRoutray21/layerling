@@ -1,10 +1,10 @@
 "use client";
 
-import { ArrowDownToLine, ChevronLeft, ChevronRight, Crosshair, Cuboid, Download, Eye, EyeOff, FlipHorizontal, GripVertical, Home, Minus, MousePointer2, PanelsTopLeft, Plus, Rotate3d, RotateCcw, Ruler, RulerDimensionLine, Slice, Trash2, X } from "lucide-react";
+import { ArrowDownToLine, ChevronLeft, ChevronRight, Crosshair, Cuboid, Download, Eye, EyeOff, FlipHorizontal, GripVertical, Home, Layers, Minus, MousePointer2, PanelsTopLeft, Plus, Rotate3d, RotateCcw, Ruler, RulerDimensionLine, Slice, Trash2, X } from "lucide-react";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type Dispatch, type DragEvent, type MouseEvent as ReactMouseEvent, type MutableRefObject, type PointerEvent as ReactPointerEvent, type ReactNode, type SetStateAction, type WheelEvent as ReactWheelEvent } from "react";
 import { objectSnapOffset, shiftSnapBox, type ObjectSnapGuide, type SnapBox } from "@/lib/objectSnap";
 import { useMovablePanel, type MovablePanelOptions } from "@/lib/useMovablePanel";
-import { computeSectionPlaneVector, DEFAULT_SECTION_SETTINGS, getSectionBounds, SECTION_AXES_SHOWN, sectionAxisLetter, sectionFineWindow, type SectionPlaneAxis, type SectionPlaneSettings } from "@/lib/sectionView";
+import { computeSectionPlaneVector, DEFAULT_SECTION_SETTINGS, getSectionBounds, SECTION_AXES_SHOWN, sectionAxisLetter, sectionFineWindow, sectionPlacementWorkplane, type SectionPlaneAxis, type SectionPlaneSettings } from "@/lib/sectionView";
 import { projectSectionPoint, type SectionLoop, type SectionPoint } from "@/lib/sectionSvg";
 import { sectionMeasurement, sectionPointToWorld, snapSectionPoint, type SectionSnap } from "@/lib/sectionMeasure";
 import * as THREE from "three";
@@ -8201,6 +8201,22 @@ export function WorkplaneViewport({
                             <span className="section-measure-help">{t("camera.sectionMeasureHelp")}</span>
                           )
                         ) : null}
+                      </div>
+
+                      <div className="section-measure-row">
+                        <button
+                          type="button"
+                          className="section-action-btn section-workplane-btn"
+                          onClick={() => {
+                            // The workplane lies on the cut (#154); the next sketch starts exactly there.
+                            onSetPlacementWorkplane(sectionPlacementWorkplane(sectionSettings), "shape");
+                            onWorkplaneModeChange(false);
+                          }}
+                          title={t("camera.sectionWorkplaneHint")}
+                        >
+                          <Layers size={14} strokeWidth={2.2} aria-hidden="true" />
+                          <span>{t("camera.sectionWorkplane")}</span>
+                        </button>
                       </div>
 
                       <div className="section-popover-footer">

@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "title": {
+      "de": "Arbeitsebene auf dem Schnitt",
+      "en": "Workplane on the cut"
+    },
+    "body": {
+      "de": "In der Schnittansicht gibt es einen neuen Knopf, „Arbeitsebene hier“. Er legt die Arbeitsebene auf den Schnitt, so dass eine Skizze genau dort beginnt und die Kontur des Schnitts zeigt, etwa für einen Deckel, der in den freigelegten Innenraum passt.",
+      "en": "The section view has a new button, “Workplane here”. It puts the workplane on the cut, so a sketch starts exactly there and shows the outline of the cut, for a lid that fits the cavity the section opened, for example."
+    }
+  }
+]

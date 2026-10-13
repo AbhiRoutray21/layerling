@@ -1771,6 +1771,8 @@ export const MESSAGES_EN = {
   "camera.sectionAxisY": "Y (depth)",
   "camera.sectionAxisZ": "Z (height)",
   "camera.sectionFlip": "Flip cut direction",
+  "camera.sectionWorkplane": "Workplane here",
+  "camera.sectionWorkplaneHint": "Put the workplane on the cut, so a sketch starts exactly there and shows the outline of the cut",
   "camera.sectionReset": "Center",
   "camera.sectionResetHint": "Center cut on model",
   "camera.sectionOffset": "Position",
