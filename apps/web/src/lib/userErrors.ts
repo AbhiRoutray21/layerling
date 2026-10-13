@@ -135,7 +135,7 @@ const ENGLISH_WORDS = new RegExp(ENGLISH_HINT.source, "gi");
  * wrapped again.
  */
 export function looksEnglish(text: string): boolean {
-  if (/[^ -]/.test(text)) return false;
+  if (/[^\x00-\x7F]/.test(text)) return false;
   return new Set((text.match(ENGLISH_WORDS) ?? []).map((word) => word.toLowerCase())).size >= 2;
 }
 
