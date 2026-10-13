@@ -315,6 +315,11 @@ const STYLE = `
   --ground: #17130e; --card: #201a13; --ink: #f1e9dc; --muted: #b3a48d; --edge: #362d21;
   --accent: #f0a23a; --accent-ink: #1c1408; --tint: #2b2116; --code: #2a2218;
 }
+/* Graphite is the dark theme with the warm browns turned grey (the program's own Graphite, see scripts/generate-graphite-theme.mjs); the orange accent stays. */
+:root[data-theme="dark"][data-palette="graphite"] {
+  --ground: #1a1a1a; --card: #202020; --ink: #e7e7e7; --muted: #8d8d8d; --edge: #303030;
+  --accent-ink: #191919; --tint: #262626; --code: #272727;
+}
 * { box-sizing: border-box; }
 html { scroll-padding-top: 76px; }
 body { margin: 0; background: var(--ground); color: var(--ink); font: 16px/1.7 "Avenir Next", Avenir, "Segoe UI", "Helvetica Neue", Arial, sans-serif; }
@@ -559,7 +564,7 @@ function searchForm(strings) {
   return `<form class="guide-search" id="guide-search" role="search" data-index="/${strings.dir}/search-index.json" data-nothing="${escapeHtml(strings.searchNothing)}"><input type="search" id="guide-search-input" name="q" placeholder="${escapeHtml(strings.search)}" aria-label="${escapeHtml(strings.search)}" aria-controls="guide-results" aria-expanded="false" autocomplete="off" spellcheck="false"><div class="guide-results" id="guide-results" hidden></div></form>`;
 }
 
-const THEME_SCRIPT = `try{var t=localStorage.getItem("layerling.theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t;else if(t==="graphite")document.documentElement.dataset.theme="dark"}catch(e){}`;
+const THEME_SCRIPT = `try{var t=localStorage.getItem("layerling.theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t;else if(t==="graphite"){document.documentElement.dataset.theme="dark";document.documentElement.dataset.palette="graphite"}}catch(e){}`;
 
 function pageShell({ language, title, description, path, alternates, chapters, current, body, languageLinks, footer, englishPath }) {
   const strings = GUIDE_LANGUAGES[language];
