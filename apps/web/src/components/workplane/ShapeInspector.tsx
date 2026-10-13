@@ -3264,7 +3264,8 @@ function CylinderWrapCard({
             value={diameter}
             min={1}
             max={400}
-            step={1}
+            // Tenths of a millimetre: a cup is 63.5 across, not 63 or 64 (#274).
+            step={0.1}
             workspace={workspace}
             disabled={disabled}
             onChange={setDiameter}

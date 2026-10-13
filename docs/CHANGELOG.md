@@ -6,6 +6,7 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **Wrap around a cylinder: the diameter in tenths of a millimetre (#274):** The diameter of the cylinder wall moved and read in whole millimetres, so a cup of 63.5 mm could not be set. The slider now steps by 0.1 mm and the field shows and takes the decimals. Asked for by Bitt-Cloud on GitHub.
 - **Loft: smooth transition (#271):** A transition between two outlines always ran in straight lines from bottom to top, like a cone, but a hose adapter that flares from a narrow to a wide pipe, as drawn by hose-adapter generators, runs in an S-curve. A new slider, **Smooth transition**, blends between the two: 0 is the straight transition as before, 100 lets the sides leave both ends straight up and change their size in between. It works with the wall (open at both ends), the twist, the tilt and the offset, and stays an exact body, built through sections along the same curve as the display, so the edge tool and the STEP export work on it. The MCP bridge takes `loftSmooth` too. Asked for by whanner11-cpu on GitHub.
 ## 1.67.0
 
