@@ -38,7 +38,19 @@ export function createCatalogueStore(
 ) {
   const loaded: Partial<Record<string, Catalogue>> = { ...initial };
   const loading = new Map<string, Promise<void>>();
+  const sentenceSets = new Map<string, Set<string>>();
   return {
+    /** Whether a text is one of a language's own sentences, as it stands. */
+    hasSentence(language: string, text: string): boolean {
+      const catalogue = loaded[language];
+      if (!catalogue) return false;
+      let sentences = sentenceSets.get(language);
+      if (!sentences) {
+        sentences = new Set(Object.values(catalogue));
+        sentenceSets.set(language, sentences);
+      }
+      return sentences.has(text);
+    },
     isLoaded: (language: string) => Boolean(loaded[language]),
     /** Fetches a language's sentences once; resolves when they are there. */
     load(language: string): Promise<void> {
@@ -167,6 +179,11 @@ export function translate(
 /** The everyday form: uses whatever language is current right now. */
 export function t(key: MessageKey, values?: Record<string, string | number>): string {
   return translate(current, key, values);
+}
+
+/** Whether a text is one of the current language's own interface sentences, as it stands. */
+export function isInterfaceSentence(text: string, language: Language = current): boolean {
+  return catalogues.hasSentence(language, text);
 }
 
 /** A text that exists in some languages, in the current one or else in English. */
