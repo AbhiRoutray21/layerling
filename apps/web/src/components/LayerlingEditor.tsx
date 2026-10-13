@@ -12468,7 +12468,7 @@ function SecondaryToolbar({
             className={`action-icon-button ${noteMode ? "active" : ""}`}
             aria-label={t("editor.tool.note")}
             aria-pressed={noteMode}
-            title={t("editor.tool.note")}
+            title={`${t("editor.tool.note")} (${COMMAND_SHORTCUTS.note})`}
             onClick={onNoteTool}
             disabled={historyViewActive}
           >
