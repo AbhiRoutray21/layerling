@@ -695,6 +695,7 @@ export const MESSAGES_EN = {
   "shortcuts.sketchLockImage": "Lock or unlock the reference image",
   "shortcuts.sketchResetView": "Fit the whole sketch in the view",
   "shortcuts.sketchFocusSelection": "Zoom to the selection in the sketch",
+  "shortcuts.sketchZoom": "Zoom in or out of the sketch",
   "shortcuts.sketchNudge": "Move the selected points, lines or image by one grid step (Shift: a larger step)",
   "shortcuts.sketchAxisLock": "While dragging: keep the move on one axis",
   "shortcuts.sketchAngleSnap": "While drawing: snap the new line in 15° steps",

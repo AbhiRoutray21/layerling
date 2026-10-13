@@ -694,6 +694,7 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "shortcuts.sketchLockImage": "Vorlagenbild sperren oder entsperren",
   "shortcuts.sketchResetView": "Die ganze Skizze ins Bild holen",
   "shortcuts.sketchFocusSelection": "Auf die Auswahl der Skizze zoomen",
+  "shortcuts.sketchZoom": "In die Skizze hinein- oder herauszoomen",
   "shortcuts.sketchNudge": "Gewählte Punkte, Linien oder das Bild um einen Rasterschritt verschieben (Umschalt: größerer Schritt)",
   "shortcuts.sketchAxisLock": "Beim Ziehen: die Bewegung auf einer Achse halten",
   "shortcuts.sketchAngleSnap": "Beim Zeichnen: die neue Linie in 15°-Schritten einrasten",

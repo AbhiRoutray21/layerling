@@ -148,6 +148,7 @@ const SHORTCUT_GROUPS: ShortcutGroup[] = [
       { combos: ["L"], label: "shortcuts.sketchLockImage" },
       { combos: ["F", "Home"], label: "shortcuts.sketchResetView" },
       { combos: ["Shift+F"], label: "shortcuts.sketchFocusSelection" },
+      { combos: ["+", "−"], label: "shortcuts.sketchZoom" },
       { combos: ["Alt+Enter"], label: "shortcuts.sketchDimensionSymmetric" },
       { combos: ["← / → / ↑ / ↓", "Shift+← / → / ↑ / ↓"], label: "shortcuts.sketchNudge" },
       { combos: ["Shift"], label: "shortcuts.sketchAngleSnap" },
