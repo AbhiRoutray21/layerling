@@ -105,6 +105,7 @@ import { ShortcutsModal } from "./workplane/ShortcutsModal";
 import { CommandPalette, type PaletteCommand } from "./workplane/CommandPalette";
 import { COMMAND_KEYWORDS, SHAPE_KEYWORDS } from "@/lib/commandKeywords";
 import { ShapeContextMenu, type ShapeContextMenuItem } from "./workplane/ShapeContextMenu";
+import { nextSelectionTransparency } from "@/lib/selectionTransparency";
 import { canonicalizeShape, cloneWorkplaneShapeTreeWithFreshIds, cleanNearZero, cleanRotationDegrees, isNonSolidShapeKind, meshYawDegrees, preservesEdgeTreatmentSize, serializeShapesForSync, shapeDepth, shapeExtrudeDeformPatch, shapeHasShapeDeform, shapeTaperPatch, shapeTransformShouldRemainEditable, shapeWidth, shapeWithParametricSource, patchTouchesBodyParameters, withHoleMode, workplaneShapesEqual, shellNeedingRebuild } from "@/lib/workplaneShapes";
 import { workplaneCenteringOffset } from "@/lib/workplaneCentering";
 import { bakeCadMetadataForShapeTransform, cadBrepTransformForShape, cadModifierPrimitiveForAnalyticShape, cadModifierPrimitiveForBakedShape, importedStepPartForShape } from "@/lib/cadBakeMetadata";
@@ -6535,6 +6536,23 @@ export function LayerlingEditor({
     [commitShapes, hasSelection, selectedIds, shapes],
   );
 
+  /** The T key (#276): every selected part see-through, or, when any already is, every part opaque. */
+  const toggleSelectionTransparency = useCallback(() => {
+    if (!hasSelection) {
+      setNotice(t("status.selectShapeFirst"));
+      return;
+    }
+    const selected = new Set(selectedIds);
+    const eligible = (shape: WorkplaneShape) => selected.has(shape.id) && !isNonSolidShapeKind(shape.kind);
+    const transparent = nextSelectionTransparency(shapes.filter(eligible));
+    if (transparent === null) return;
+    commitShapes(
+      shapes.map((shape) => (eligible(shape) && !shape.locked && !shape.hole ? { ...shape, transparent: transparent || undefined } : shape)),
+      selectedIds,
+      transparent ? t("status.selectionTransparent") : t("status.selectionOpaque"),
+    );
+  }, [commitShapes, hasSelection, selectedIds, shapes]);
+
   /** One colour for every selected part (#183); locked ones stay as they are, a group shows it whole. */
   const setSelectionColor = useCallback(
     (color: string) => {
@@ -10555,6 +10573,9 @@ export function LayerlingEditor({
       } else if (key === "s") {
         event.preventDefault();
         setSelectionHoleMode(false);
+      } else if (key === "t" && !shortcut && !event.altKey && hasSelection) {
+        event.preventDefault();
+        toggleSelectionTransparency();
       } else if (key === "m") {
         event.preventDefault();
         toggleMirrorMode();
@@ -10617,6 +10638,7 @@ export function LayerlingEditor({
     setSelectionHoleMode,
     showHidden,
     toggleAlignMode,
+    toggleSelectionTransparency,
     toggleHidden,
     toggleMirrorMode,
     edgeModifier,

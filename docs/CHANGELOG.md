@@ -6,6 +6,7 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **T toggles transparency (#276):** The T key makes the selected bodies see-through, and opaque again on the next press. If any selected body is already see-through, all become opaque, otherwise all become see-through, so a mixed selection goes opaque first. Holes and locked bodies stay as they are. Asked for by foofoodog on GitHub.
 - **Sketch editor: Shift+right drag pans, the snap grid control sits over the plate:** Like in the 3D editor, the view of the sketch pans with Shift plus the right mouse button, next to the middle button and Ctrl/Cmd plus right. The snap grid control now floats over the sketch plate instead of having a strip of its own. By gogades (PR #269).
 - **Torus: sides and steps (#272):** The torus drew its ring and its tube with fixed numbers of corners (144 and 36), so a big one, 200 mm across, showed facets and there was no way to change it. It has two sliders now, **Ring sides** around the ring and **Tube steps** around the tube. Left alone they follow the size, never coarser than before, so a large torus comes out smooth; held, they work like the side count of a cylinder: a torus of few sides is drawn faceted, in the view, in the export and for the edge tool. The workspace defaults for the torus and the MCP bridge (`sides`, `steps`) take them as well. Reported by micro4rgb-maker on GitHub.
 ## 1.66.7

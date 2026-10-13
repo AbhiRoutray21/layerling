@@ -82,6 +82,7 @@ const SHORTCUT_GROUPS: ShortcutGroup[] = [
     shortcuts: [
       { combos: ["H"], label: "shortcuts.hole" },
       { combos: ["S"], label: "shortcuts.solid" },
+      { combos: ["T"], label: "shortcuts.transparent" },
       { combos: ["M"], label: "shortcuts.mirror" },
       { combos: ["B"], label: "shortcuts.fillet" },
       { combos: ["Shift+B"], label: "shortcuts.chamfer" },
