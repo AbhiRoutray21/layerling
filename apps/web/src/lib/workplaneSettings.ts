@@ -444,7 +444,7 @@ export function normalizeShapeCustomizations(value: unknown, fallback: ShapeCust
       entry.centerHoleSize = optionalShapeNumber(source.centerHoleSize, fallbackEntry?.centerHoleSize, 0, MAX_CUSTOM_SHAPE_DIMENSION);
       entry.gearType = source.gearType === undefined
         ? fallbackEntry?.gearType
-        : source.gearType === "spur" || source.gearType === "helical" || source.gearType === "bevel" || source.gearType === "internal" || source.gearType === "rack"
+        : source.gearType === "spur" || source.gearType === "helical" || source.gearType === "herringbone" || source.gearType === "bevel" || source.gearType === "internal" || source.gearType === "rack"
           ? source.gearType
           : fallbackEntry?.gearType;
       entry.helixAngle = optionalShapeNumber(source.helixAngle, fallbackEntry?.helixAngle, -45, 45);

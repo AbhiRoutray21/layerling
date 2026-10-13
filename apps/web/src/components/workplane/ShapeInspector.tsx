@@ -21,6 +21,7 @@ import {
   normalizeGearToothSize,
   normalizeGearToothWidth,
   normalizeGearType,
+  gearTypeHasHelix,
   gearToothPitch,
   DEFAULT_GEAR_BACKLASH,
   involuteGearDiameter,
@@ -244,6 +245,7 @@ const TEXT_FONT_OPTIONS = ["Multilanguage", "Sans", "Serif", "Script", "Monospac
 const GEAR_TYPE_OPTIONS: Array<{ value: GearType; label: MessageKey }> = [
   { value: "spur", label: "gear.spur" },
   { value: "helical", label: "gear.helical" },
+  { value: "herringbone", label: "gear.herringbone" },
   { value: "bevel", label: "gear.bevel" },
   { value: "internal", label: "gear.internal" },
   { value: "rack", label: "gear.rack" },
@@ -1726,7 +1728,7 @@ function getShapePropertiesWithAppLimits(shape: WorkplaneShape, onUpdate: ShapeI
         onChange: (toothWidth) => onUpdate({ toothWidth }),
       },
     );
-    if (normalizeGearType(shape.gearType) === "helical") {
+    if (gearTypeHasHelix(shape.gearType)) {
       properties.push({
         id: "helixAngle",
       label: t("prop.helixAngle"),
@@ -2733,7 +2735,7 @@ export function ShapeInspector({
           ) : null}
         </div>
       ) : null}
-      {gearType === "helical" ? (
+      {gearTypeHasHelix(gearType ?? undefined) ? (
         <div className={`property-card ${gearHelixOpen ? "" : "collapsed"}`}>
           <button
             className="property-card-header"

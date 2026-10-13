@@ -10,7 +10,7 @@ import { HexColorInput, HexColorPicker } from "react-colorful";
 import { APP_THEME_OPTIONS, type AppThemePreference } from "@/lib/appTheme";
 import { setToolbarSize, TOOLBAR_SIZE_OPTIONS, type ToolbarSize } from "@/lib/toolbarSize";
 import { useToolbarSize } from "@/lib/useToolbarSize";
-import { gearCenterHoleLimits, gearToothPitch } from "@/lib/gearGeometry";
+import { gearCenterHoleLimits, gearToothPitch, gearTypeHasHelix } from "@/lib/gearGeometry";
 import { automaticSideCount } from "@/lib/roundSideCount";
 import { torusTessellation } from "@/lib/torusTessellation";
 import { printerPresetById } from "@/lib/printBed";
@@ -121,6 +121,7 @@ const TEXT_FONT_OPTIONS = ["Multilanguage", "Sans", "Serif", "Script", "Monospac
 const GEAR_TYPE_OPTIONS: Array<{ value: GearType; label: MessageKey }> = [
   { value: "spur", label: "gear.spur" },
   { value: "helical", label: "gear.helical" },
+  { value: "herringbone", label: "gear.herringbone" },
   { value: "bevel", label: "gear.bevel" },
   { value: "internal", label: "gear.internal" },
   { value: "rack", label: "gear.rack" },
@@ -301,7 +302,7 @@ function specialFieldsForShape(
     if (gearType === "internal") {
       fields.push({ type: "number", key: "gearRim", label: t("prop.gearRim"), defaultValue: defaults.gearRim ?? 3, min: 0.5, max: 60, unit: "mm" });
     }
-    if (gearType === "helical") {
+    if (gearTypeHasHelix(gearType)) {
       fields.push(
         { type: "number", key: "helixAngle", label: t("prop.helixAngle"), defaultValue: defaults.helixAngle ?? 22.5, min: -45, max: 45, unit: "°" },
         { type: "number", key: "helixQuality", label: t("prop.helixQuality"), defaultValue: defaults.helixQuality ?? 16, min: 4, max: 32, step: 1 },

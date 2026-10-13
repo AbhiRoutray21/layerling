@@ -1269,6 +1269,7 @@ export const MESSAGES_EN = {
   "inspector.gearType": "Gear Type",
   "gear.spur": "Spur gear",
   "gear.helical": "Helical gear",
+  "gear.herringbone": "Herringbone gear",
   "gear.bevel": "Bevel gear",
   "gear.profileInvolute": "Involute",
   "gear.profileSimple": "Simple",

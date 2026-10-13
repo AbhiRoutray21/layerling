@@ -381,8 +381,8 @@ export type SketchProfile = {
 
 export type SketchOperation = "extrude" | "revolve";
 
-/** Spur, helical and bevel gears; a ring gear with its teeth pointing in and a rack (#201). */
-export type GearType = "spur" | "helical" | "bevel" | "internal" | "rack";
+/** Spur, helical, herringbone and bevel gears; a ring gear with its teeth pointing in and a rack (#201, #265). */
+export type GearType = "spur" | "helical" | "herringbone" | "bevel" | "internal" | "rack";
 export type GearProfile = "involute" | "round" | "simple";
 
 /** Was aus dem Gewinde wird: Stange, Schraube, Mutter oder das Loch dafuer. */

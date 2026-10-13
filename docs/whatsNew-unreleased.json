@@ -58,5 +58,15 @@
       "de": "Mutter und Gewindeloch haben ein neues Feld, „Spiel in Achsrichtung“. Es macht die Zähne dünner, ohne den Durchmesser aufzuweiten, damit ein gedrucktes Gewinde leicht läuft und nicht seitlich wackelt. In der Anleitung steht ein neuer Abschnitt mit Tipps für gedruckte Gewinde.",
       "en": "Nuts and tapped holes have a new field, “Play along the axis”. It makes the teeth thinner without widening the diameter, so a printed thread turns easily and does not wobble sideways. The guide has a new section with tips for printed threads."
     }
+  },
+  {
+    "title": {
+      "de": "Pfeilrad",
+      "en": "Herringbone gear"
+    },
+    "body": {
+      "de": "Das Zahnrad gibt es jetzt auch als Pfeilrad: zwei Schrägrad-Hälften, die gegenläufig drehen. Es zentriert sich von selbst auf der Welle und schiebt nicht seitlich, das macht es für den 3D-Druck angenehm. Winkel und Qualität stellst du wie beim Schrägrad ein.",
+      "en": "The gear now comes as a herringbone gear too: two helical halves turning opposite ways. It centres itself on its shaft and does not push sideways, which makes it pleasant for 3D printing. You set angle and quality as for the helical gear."
+    }
   }
 ]

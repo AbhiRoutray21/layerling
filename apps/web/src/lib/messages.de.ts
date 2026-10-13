@@ -1268,6 +1268,7 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "inspector.gearType": "Zahnradart",
   "gear.spur": "Stirnrad",
   "gear.helical": "Schrägrad",
+  "gear.herringbone": "Pfeilrad",
   "gear.bevel": "Kegelrad",
   "gear.profileInvolute": "Evolvente",
   "gear.profileSimple": "Einfach",

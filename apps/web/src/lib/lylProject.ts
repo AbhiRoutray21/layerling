@@ -1394,7 +1394,7 @@ function validateShapeDefinition(definition: Record<string, unknown>, label: str
       const centerHoleSize = finiteNumber(definition.centerHoleSize, `${label}.centerHoleSize`);
       if (centerHoleSize < 0) throw new Error(`${label}.centerHoleSize cannot be negative`);
     }
-    if (!["spur", "helical", "bevel", "internal", "rack"].includes(definition.gearType as string)) throw new Error(`${label}.gearType is invalid`);
+    if (!["spur", "helical", "herringbone", "bevel", "internal", "rack"].includes(definition.gearType as string)) throw new Error(`${label}.gearType is invalid`);
     if (definition.gearRim !== undefined) {
       const rim = finiteNumber(definition.gearRim, `${label}.gearRim`);
       if (rim <= 0) throw new Error(`${label}.gearRim must be positive`);
