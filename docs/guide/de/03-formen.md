@@ -125,7 +125,7 @@ Der Ordner `Custom shapes` erscheint auch auf der Startseite. Dort öffnest du e
 
 Ein Muster, ein Logo oder ein Schriftzug soll auf einen Becher, eine Dose oder ein Rohr? Lege es zuerst flach auf die Platte, etwa als importiertes SVG oder als Text, so wie es von oben gesehen aussehen soll. Dann wickelst du es in den Einstellungen der Form unter {{ui:inspector.wrapCylinder}} um einen Zylinder:
 
-1. Klappe {{ui:inspector.wrapCylinder}} auf und gib den {{ui:inspector.wrapDiameter}} der Zylinderwand ein, etwa den Außendurchmesser deines Bechers.
+1. Klappe {{ui:inspector.wrapCylinder}} auf und gib den {{ui:inspector.wrapDiameter}} der Zylinderwand ein, etwa den Außendurchmesser deines Bechers. Auch Zehntelmillimeter gehen, etwa 63,5.
 2. Klicke auf {{ui:inspector.wrapApply}}. Was von links nach rechts lag, läuft jetzt um den Zylinder herum, der hintere Rand wird oben, und die Dicke steht nach außen ab.
 3. Markiere die gewickelte Form und den Zylinder und richte sie beide mittig aus, links-rechts und vorne-hinten. Die Mitte der gewickelten Form ist die Achse des Zylinders, also sitzt sie dann genau auf seiner Wand.
 

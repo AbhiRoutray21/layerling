@@ -124,7 +124,7 @@ The `Custom shapes` folder shows on the start page as well. Open a shape there l
 
 Should a pattern, a logo or lettering go onto a cup, a can or a tube? First lay it flat on the plate, as an imported SVG or as text for example, the way it should look from above. Then wrap it around a cylinder in the shape's settings under {{ui:inspector.wrapCylinder}}:
 
-1. Open {{ui:inspector.wrapCylinder}} and enter the {{ui:inspector.wrapDiameter}} of the cylinder wall, such as the outside diameter of your cup.
+1. Open {{ui:inspector.wrapCylinder}} and enter the {{ui:inspector.wrapDiameter}} of the cylinder wall, such as the outside diameter of your cup. Tenths of a millimetre work too, such as 63.5.
 2. Click {{ui:inspector.wrapApply}}. What ran from left to right now runs around the cylinder, the back edge becomes the top, and the thickness stands out of the wall.
 3. Select the wrapped shape and the cylinder and centre both, left to right and front to back. The middle of the wrapped shape is the cylinder's axis, so it then sits right on its wall.
 
