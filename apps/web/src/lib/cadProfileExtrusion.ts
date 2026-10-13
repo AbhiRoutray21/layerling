@@ -19,7 +19,7 @@ import { dovetailOutlineForShape } from "@/lib/dovetailGeometry";
 import { loftProfileLoops } from "@/lib/loftGeometry";
 import { teardropExactSection } from "@/lib/teardropGeometry";
 import { screwHoleProfile } from "@/lib/screwHoleGeometry";
-import { DEFAULT_ROUNDED_BOX_CORNER_FILLET, DEFAULT_ROUNDED_BOX_TOP_BOTTOM_FILLET, normalizeCornerFillet, normalizeTopBottomFillet } from "@/lib/roundedBoxGeometry";
+import { DEFAULT_ROUNDED_BOX_CORNER_FILLET, DEFAULT_ROUNDED_BOX_TOP_BOTTOM_FILLET, normalizeCornerFillet, normalizeRoundedBoxQuality, normalizeTopBottomFillet } from "@/lib/roundedBoxGeometry";
 import { textGlyphShapes, textKeyringOf } from "@/lib/textGeometry";
 import { normalizeSketchStroke } from "@/lib/sketchStroke";
 import { textHasEdge } from "@/lib/textEdge";
@@ -1072,6 +1072,8 @@ export function cadProfileForShapeKind(shape: WorkplaneShape, designedRound = fa
     case "roundedBox": {
       const corner = normalizeCornerFillet(shape.cornerFillet ?? DEFAULT_ROUNDED_BOX_CORNER_FILLET, Math.min(width, depth) / 2);
       const ends = normalizeTopBottomFillet(shape.topBottomFillet ?? DEFAULT_ROUNDED_BOX_TOP_BOTTOM_FILLET, shape.height / 2);
+      // Quality 1 is drawn as a flat chamfer (#239); the exact round would contradict what the view shows.
+      if (normalizeRoundedBoxQuality(shape.roundedBoxQuality) === 1 && (corner > 1e-4 || ends > 1e-4)) return null;
       return { loops: [roundedRectLoop(width, depth, corner)], capFillet: ends > 1e-4 ? ends : undefined };
     }
     case "counterbore":

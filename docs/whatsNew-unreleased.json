@@ -18,5 +18,25 @@
       "de": "Mit der Taste T machst du die ausgewählten Körper durchsichtig, mit einem zweiten Druck wieder undurchsichtig. Ist in einer gemischten Auswahl schon einer durchsichtig, werden zuerst alle undurchsichtig. Aussparungen und gesperrte Körper bleiben, wie sie sind.",
       "en": "Press T to make the selected bodies see-through, and again to make them opaque. If a mixed selection already has a see-through body, all become opaque first. Holes and locked bodies stay as they are."
     }
+  },
+  {
+    "title": {
+      "de": "Lochmuster: Wand zwischen den Löchern",
+      "en": "Hole pattern: wall between the holes"
+    },
+    "body": {
+      "de": "Das Lochmuster hat einen neuen Regler, „Wand zwischen den Löchern“. Er zeigt den Steg, der zwischen zwei Nachbarlöchern bleibt, also die Wandstärke im Druck, und stellt ihn ein: Der Abstand von Mitte zu Mitte folgt, und umgekehrt. Das gilt für alle Lochformen und beide Anordnungen.",
+      "en": "The hole pattern has a new slider, “Wall between the holes”. It shows the wall left between two neighbouring holes, which is the wall thickness in the print, and sets it: the spacing centre to centre follows, and the other way round. It works for every hole shape and both arrangements."
+    }
+  },
+  {
+    "title": {
+      "de": "Abgerundeter Quader: Qualität 1 ist eine echte Fase",
+      "en": "Rounded box: quality 1 is a true chamfer"
+    },
+    "body": {
+      "de": "Mit Qualität 1 bekommt ein Abgerundeter Quader eine echte Fase, jetzt auch dann, wenn Deckel- und Bodenkante gerundet sind. Vorher ergab das zwei Stücke statt einer flachen Fläche.",
+      "en": "With quality 1 a rounded box gets a true chamfer, now also when its top and bottom edges are rounded. Before, that gave two pieces instead of one flat face."
+    }
   }
 ]
