@@ -38,5 +38,15 @@
       "de": "Mit Qualität 1 bekommt ein Abgerundeter Quader eine echte Fase, jetzt auch dann, wenn Deckel- und Bodenkante gerundet sind. Vorher ergab das zwei Stücke statt einer flachen Fläche.",
       "en": "With quality 1 a rounded box gets a true chamfer, now also when its top and bottom edges are rounded. Before, that gave two pieces instead of one flat face."
     }
+  },
+  {
+    "title": {
+      "de": "Skizze: Formen übereinander schieben",
+      "en": "Sketch: pushing shapes over each other"
+    },
+    "body": {
+      "de": "Zwei Formen, die du in der Skizze übereinander schiebst, zeigen keine Aussparung mehr an der Überlappung, denn der Körper wird ihre Vereinigung. Und sie verhaken sich nicht mehr: Beim Verschieben entstehen keine gemeinsamen Punkte an den Kreuzungen, du kannst sie wieder auseinanderziehen.",
+      "en": "Two shapes you push over each other in the sketch no longer show a hole where they overlap, because the body becomes their union. And they no longer get caught on each other: moving makes no shared points at the crossings, so you can pull them apart again."
+    }
   }
 ]

@@ -135,7 +135,7 @@ import { renderMyShapeThumbnail } from "@/lib/myShapeThumbnail";
 import { packBackup, unpackBackup } from "@/lib/projectBackup";
 import { MyShapesSection, type CustomShapeEntry, type CustomShapeLocation } from "@/components/workplane/MyShapesSection";
 import { deleteServerCustomShape, listServerCustomShapes, readServerCustomShape, renameServerCustomShape, saveServerCustomShape, type ServerCustomShape } from "@/lib/customShapesServer";
-import { addLineIntersectionPoints, splitSketchSegment } from "@/lib/sketchPointRefinement";
+import { addLineIntersectionPoints, onlyMovesPoints, splitSketchSegment } from "@/lib/sketchPointRefinement";
 import { copySketchSelection, freeSketchPasteOffset, pasteSketchClipboard, type SketchClipboard } from "@/lib/sketchClipboard";
 import { sketchSelectionCount, toggleSketchSelection } from "@/lib/sketchSelection";
 import { applySketchCorners } from "@/lib/sketchFilletChamfer";
@@ -4049,7 +4049,8 @@ export function LayerlingEditor({
       // Most edits build a new profile from points and lines only; the stroke (#154) carries over
       // unless the edit sets it - or clears it with `stroke: undefined`.
       const carried = "stroke" in next || !latest?.stroke ? next : { ...next, stroke: latest.stroke };
-      const snapshot = cloneSketchProfile(addLineIntersectionPoints(carried, createLocalId));
+      // Moving shapes over each other makes no shared points where their lines cross (#239); drawing does.
+      const snapshot = cloneSketchProfile(latest && onlyMovesPoints(latest, carried) ? carried : addLineIntersectionPoints(carried, createLocalId));
       setSketchProfile(snapshot);
       if (latest && JSON.stringify(latest) === JSON.stringify(snapshot)) {
         return;

@@ -26,7 +26,7 @@ import { DEFAULT_SKETCH_STROKE, SKETCH_STROKE_ALIGNS, SKETCH_STROKE_CAPS, SKETCH
 import { selectWholeValue } from "@/lib/numberField";
 import { GuideHelpLink } from "@/components/GuideHelpLink";
 import { clampNudge, constrainToAxis, sketchSegmentDragPointIds, sketchSelectionMovePointIds, type SketchSelectableEntity, type SketchSelection } from "@/lib/sketchSelection";
-import { closedPathAt, cubicPoint, curveControls, isInsideEdges, orderedPaths, pathEdges, type DisplayPath, type PlaneEdge } from "@/lib/sketchPaths";
+import { closedPathAt, closedPathRegions, cubicPoint, curveControls, isInsideEdges, orderedPaths, pathEdges, type DisplayPath, type PlaneEdge } from "@/lib/sketchPaths";
 import { capturePointer } from "@/lib/pointerCapture";
 import { constrainToAngle, sketchLineAngle, sketchPolarPoint, splitTypedLine } from "@/lib/sketchPolar";
 
@@ -1672,7 +1672,10 @@ export function SketchWorkspace({
             />
           ) : null}
           <g className={`sketch-profile-fills ${profile.stroke ? "stroked" : ""}`} pointerEvents="none">
-            {paths.some((path) => path.closed) ? <path d={paths.filter((path) => path.closed).map(pathData).join(" ")} /> : null}
+            {/* One body at a time, with its holes: pushed over each other, two shapes show as one body, not as a hole (#239). */}
+            {closedPathRegions(paths).map((region) => (
+              <path key={region.outer.id} d={[region.outer, ...region.holes].map(pathData).join(" ")} />
+            ))}
           </g>
           {profile.stroke && strokePreview ? (
             // What the body will be: the drawn line with its width (#154).
