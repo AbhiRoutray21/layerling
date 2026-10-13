@@ -6,6 +6,7 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **Thread fields say their direction (#256):** On a nut or tapped hole the two play fields are now called **Clearance (XY)** and **Play along the axis (Z)**, German **Spiel (XY)** and **Spiel in Achsrichtung (Z)**, so it shows at a glance that the first opens the thread across the diameter and the second along the axis, as in Tinkercad's thread tools. Suggested by @hlmodtech.
 ## 1.67.4
 
 - **SVG files of one page line up (#258):** Every imported SVG was centred on its own drawing, so the layers of one document exported as separate files - an orange fill, its black outline, a white part and its outline - drifted apart when the pieces had different extents; Tinkercad keeps each file's place on the page. The import window has a new box, **SVG: keep the place on the drawing page**: with it, each drawing sits where it was drawn on its page (the viewBox, or a width and height in pixels), and files of one page meet again, even for the four files of the report, whose pairs now lie on top of each other. It is off by default, so a single drawing still comes in centred, and it remembers its setting. A drawing that states no page is centred as usual, and the import says so. Through MCP, `layerling_import_file` takes `keepPagePosition`. Reported by @stainlessdmc12.
