@@ -7,7 +7,6 @@ code still carries it - so a lower number further down is older, not newer.
 ## Unreleased
 
 - **A new video in the list:** "The PERFECT FREE CAD Program Between Tinkercad and Fusion 360!" by Print N Repeat, at the top of the video list in the app, the guide and the README.
-
 - **Locked objects show it and hold still:** A selected locked object now greys out its resize, lift and rotate handles and shows a padlock beside the Z arrow; hovering a handle still shows the sizes. Every Combine, Modify and Arrange tool and Delete are greyed out, the right-click menu leaves out what would change it, and every key or command that would change it says "Object locked" - before, some reported success ("Moved 1 shape", "Selection to hole") without doing anything, and others failed without a word. One locked object now holds the whole selection: moving, turning, snapping, dropping, centring, scaling, colouring or dragging a mixed selection no longer changes only the unlocked parts. Locked objects can no longer be deleted or cut, and Hide in the toolbar and Ctrl+H now hide them, as the outliner and the properties panel already did. Locking while a tool is open closes the tool. Align keeps working with a locked part in the selection, which stays in place as the anchor. Nine different lock messages became the one "Object locked".
 
 ## 1.68.0
