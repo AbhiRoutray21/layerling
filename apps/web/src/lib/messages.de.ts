@@ -1724,6 +1724,9 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "import.insertProjectHint": "Die Körper eines layerling-Entwurfs (.lyl) zu den vorhandenen holen - etwa Grundformen, die du immer wieder brauchst",
   "import.divider": "oder Geometrie hinzufügen",
   "import.dropZone": "STL-, OBJ- (mit .mtl oder als ZIP), 3MF-, STEP- oder SVG-Dateien hier ablegen",
+  "import.keepSvgPage": "SVG: Lage auf der Zeichenfläche beibehalten",
+  "import.keepSvgPageHint": "Zeichnungen, die auf einer Seite entstanden sind, etwa die Ebenen eines Dokuments als einzelne Dateien, liegen nach dem Import nacheinander wieder deckungsgleich. Ohne das wird jede Zeichnung auf sich selbst zentriert.",
+  "status.importSvgNoPage": "{name} nennt keine Seitengröße und wurde deshalb wie sonst zentriert.",
   "import.dropZoneHint": "oder hier klicken, um eine Datei auszuwählen",
 
   "view.cube": "Ansichtswürfel",

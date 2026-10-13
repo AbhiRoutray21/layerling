@@ -1726,6 +1726,9 @@ export const MESSAGES_EN = {
   "import.divider": "or add geometry",
   "import.dropZone": "Drop STL, OBJ (with its .mtl or as a ZIP), 3MF, STEP, or SVG files",
   "import.dropZoneHint": "or click to choose from your computer",
+  "import.keepSvgPage": "SVG: keep the place on the drawing page",
+  "import.keepSvgPageHint": "Drawings made on one page, such as the layers of one document exported as separate files, line up again when you import them one after the other. Without it every drawing is centred on itself.",
+  "status.importSvgNoPage": "{name} states no page size, so it was centred as usual.",
 
   "view.cube": "View orientation cube",
   "view.top": "Top view",

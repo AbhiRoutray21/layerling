@@ -138,6 +138,7 @@ import { exportMeshesToObj } from "@/lib/objExport";
 import { rotateSketchPoints, selectedClosedSketchPoints } from "@/lib/sketchRotation";
 import { PROJECT_THUMBNAIL_IDLE_MS, projectThumbnailSceneChanged, type ProjectThumbnailSceneKey } from "@/lib/projectThumbnail";
 import { importedShapeFromObj } from "@/lib/objImport";
+import { readKeepSvgPage, storeKeepSvgPage } from "@/lib/importPreferences";
 import { importFailureSummary, importModelFiles } from "@/lib/modelImport";
 import { dedupeProjectAssets } from "@/lib/projectAssets";
 import { customShapesBackupEntries, deleteMyShape, listMyShapes, myShapeNameFromFile, restoreCustomShapesFromBackup, myShapesBackupFileName, onMyShapesChanged, readMyShapePackage, renameMyShape, saveMyShape, shapesForLibrary, shapesFromLibrary, type MyShapeMeta } from "@/lib/myShapes";
@@ -7585,7 +7586,7 @@ export function LayerlingEditor({
   }, [buildSectionSvg, projectName]);
 
   // Der Dateiimport steht weiter unten; die MCP-Aktion nimmt denselben Weg.
-  const importFilesRef = useRef<((files: File[], fileHandle?: LylFileHandle) => Promise<{ importedIds: string[]; failures: Array<{ fileName: string; reason: string }> }>) | null>(null);
+  const importFilesRef = useRef<((files: File[], fileHandle?: LylFileHandle, options?: { keepSvgPage?: boolean }) => Promise<{ importedIds: string[]; failures: Array<{ fileName: string; reason: string }> }>) | null>(null);
 
   // Custom shapes (#109): kept in this browser (IndexedDB) and, where the
   // shared store is on, in its "Custom shapes" folder. Shown on top of the
@@ -9109,7 +9110,8 @@ export function LayerlingEditor({
           : Uint8Array.from(atob(params.base64 as string), (char) => char.charCodeAt(0));
         const files = [new File([bytes as BlobPart], fileName)];
         if (typeof params.mtl === "string") files.push(new File([params.mtl], fileName.replace(/\.[^.]+$/, "") + ".mtl"));
-        const result = await importer(files);
+        // Through MCP the answer does not depend on a setting of the browser: only a wish keeps the page.
+        const result = await importer(files, undefined, { keepSvgPage: params.keepPagePosition === true });
         if (!result.importedIds.length) throw new Error(result.failures.map((failure) => `${failure.fileName}: ${failure.reason}`).join("; ") || "Nothing was imported");
         const imported = currentShapes().filter((shape) => result.importedIds.includes(shape.id));
         return {
@@ -10128,7 +10130,7 @@ export function LayerlingEditor({
     }
   }, [commitShapes]);
 
-  const importFiles = useCallback(async (selected: File[], fileHandle?: LylFileHandle): Promise<{ importedIds: string[]; failures: Array<{ fileName: string; reason: string }> }> => {
+  const importFiles = useCallback(async (selected: File[], fileHandle?: LylFileHandle, importOptions?: { keepSvgPage?: boolean }): Promise<{ importedIds: string[]; failures: Array<{ fileName: string; reason: string }> }> => {
     const none = { importedIds: [] as string[], failures: [] as Array<{ fileName: string; reason: string }> };
     if (!selected.length) return none;
     const projectFiles = selected.filter((file) => /\.(lyl|skf)$/i.test(file.name));
@@ -10150,6 +10152,7 @@ export function LayerlingEditor({
     const sourceProjectId = projectInfoRef.current.projectId;
     const result = await importModelFiles(selected, {
       cancelled: () => projectInfoRef.current.projectId !== sourceProjectId,
+      svgKeepPagePosition: importOptions?.keepSvgPage,
       // An SVG comes in as a sketch body, its fill changeable afterwards (#197); should the
       // kernel build it differently from the mesh, the mesh stays.
       svgAsSketch: async (mesh, profile) => {
@@ -12857,6 +12860,8 @@ function TopActionPanel({
   onPickInsertProjectFile: () => void;
   workspaceHistoryLimit: LylHistoryLimit;
 }) {
+  const [keepSvgPage, setKeepSvgPage] = useState(false);
+  useEffect(() => setKeepSvgPage(readKeepSvgPage()), []);
   const [exportFormat, setExportFormat] = useState<ExportFormat>("stl");
   const [exportName, setExportName] = useState(projectName);
   const previousProjectNameRef = useRef(projectName);
@@ -13017,6 +13022,17 @@ function TopActionPanel({
             <strong>{t("import.dropZone")}</strong>
             <span>{t("import.dropZoneHint")}</span>
           </button>
+          <label className="import-option" title={t("import.keepSvgPageHint")}>
+            <input
+              type="checkbox"
+              checked={keepSvgPage}
+              onChange={(event) => {
+                setKeepSvgPage(event.currentTarget.checked);
+                storeKeepSvgPage(event.currentTarget.checked);
+              }}
+            />
+            <span>{t("import.keepSvgPage")}</span>
+          </label>
         </div>
       ) : null}
       {panel === "export" ? (

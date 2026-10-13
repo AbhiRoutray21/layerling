@@ -601,8 +601,42 @@ export function importedShapeFromSvg(fileName: string, source: string): Workplan
   return importedShapeFromSvgWithReport(fileName, source).shape;
 }
 
-/** The imported shape and how many of the drawing's shapes could not be built and were left out. */
-export function importedShapeFromSvgWithReport(fileName: string, source: string): { shape: WorkplaneShape; skippedShapes: number } {
+/** The page a drawing is made on, in its own units: its viewBox, or a width and a height in pixels. */
+export type SvgPage = { x: number; y: number; width: number; height: number };
+
+/**
+ * The page of a drawing, or null when it states none (a width of 100 % says nothing). Drawings that
+ * belong together, like the layers of one Affinity document exported as separate files, share a
+ * page, and their place on it is what keeps them lined up (#258).
+ */
+export function svgPageOfDrawing(source: string): SvgPage | null {
+  const tag = /<svg\b[^>]*>/i.exec(source)?.[0];
+  if (!tag) return null;
+  const attribute = (name: string) => new RegExp(`\\b${name}\\s*=\\s*["']([^"']*)["']`, "i").exec(tag)?.[1];
+  const viewBox = attribute("viewBox");
+  if (viewBox) {
+    const [x, y, width, height] = viewBox.trim().split(/[\s,]+/).map(Number);
+    if ([x, y, width, height].every(Number.isFinite) && width > 0 && height > 0) return { x, y, width, height };
+  }
+  const pixels = (value: string | undefined) => {
+    const match = value === undefined ? null : /^\s*(\d+(?:\.\d+)?)\s*(?:px)?\s*$/i.exec(value);
+    return match ? Number(match[1]) : null;
+  };
+  const width = pixels(attribute("width"));
+  const height = pixels(attribute("height"));
+  return width && height ? { x: 0, y: 0, width, height } : null;
+}
+
+/**
+ * The imported shape, how many of the drawing's shapes could not be built and were left out, and
+ * what became of a wish to keep the drawing's place on its page: true when it was kept, false when
+ * the drawing states no page and was centred as usual, null when it was not asked for.
+ */
+export function importedShapeFromSvgWithReport(
+  fileName: string,
+  source: string,
+  options: { keepPagePosition?: boolean } = {},
+): { shape: WorkplaneShape; skippedShapes: number; pageKept: boolean | null } {
   const parsed = parseSvgForImport(source);
   const { rawPositions, rawNormals, analysis, skippedShapes } = buildSvgExtrusionFromPaths(parsed.paths);
   const centerX = analysis.width / 2;
@@ -647,7 +681,22 @@ export function importedShapeFromSvgWithReport(fileName: string, source: string)
     locked: false,
     hidden: false,
   };
-  return { shape, skippedShapes };
+  let pageKept: boolean | null = null;
+  if (options.keepPagePosition) {
+    const page = svgPageOfDrawing(source);
+    pageKept = page !== null;
+    if (page) {
+      // The drawing's middle, and the middle of its page, in the drawing's own units with y running
+      // down; the page's middle goes where a centred drawing's middle goes, so every file of a page
+      // meets there and the drawing sits where it was drawn. The mesh lies mirrored (z = -y) until
+      // the import turns it back, so a drawing's y is the shape's z.
+      const middleX = minX + analysis.width / 2;
+      const middleY = -(minZ + analysis.depth / 2);
+      shape.x += middleX - (page.x + page.width / 2);
+      shape.z += middleY - (page.y + page.height / 2);
+    }
+  }
+  return { shape, skippedShapes, pageKept };
 }
 
 export function invalidSvgMeshReason(shape: WorkplaneShape) {

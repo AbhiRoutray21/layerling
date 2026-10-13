@@ -5881,6 +5881,27 @@ html[data-toolbar-size="large"] .shape-menu-dropdown:not(.sketch-shape-menu-drop
   box-shadow: inset 0 0 0 1px rgba(166, 86, 0, 0.12), 0 4px 14px rgba(70, 51, 30, 0.1);
 }
 
+.import-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  color: #604529;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.import-option input {
+  width: 16px;
+  height: 16px;
+  accent-color: #b3680f;
+}
+
+html[data-theme="dark"] .import-option {
+  color: #f0e7d9;
+}
+
 .import-drop-zone svg {
   color: #573e24;
 }
