@@ -6,6 +6,12 @@
  */
 export const LAYERLING_VIDEOS = [
   {
+    title: "The PERFECT FREE CAD Program Between Tinkercad and Fusion 360!",
+    channel: "Print N Repeat",
+    lang: "EN",
+    url: "https://youtu.be/GIoG-IHPXyg",
+  },
+  {
     // A whole playlist, so new videos in it arrive here without a release.
     title: "Layerling – Playlist",
     channel: "Making Layers",
