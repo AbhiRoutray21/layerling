@@ -8,7 +8,7 @@ import { TOOLBAR_SIZE_BOOT_SCRIPT } from "@/lib/toolbarSize";
 
 const NAME = "layerling";
 const TITLE = "layerling - Free 3D CAD for 3D printing in your browser";
-const DESCRIPTION = "Free 3D CAD in your browser, no account: a Tinkercad alternative with fillets, chamfers, hollowing and threads. Export to STL, 3MF and STEP.";
+const DESCRIPTION = "Free 3D CAD in your browser, no account, easy for people coming from Tinkercad: fillets, chamfers, hollowing and threads. Export to STL, 3MF and STEP.";
 
 // Tells search engines what layerling is: a free web application, not an
 // article about one.

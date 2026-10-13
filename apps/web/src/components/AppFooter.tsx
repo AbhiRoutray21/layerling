@@ -202,6 +202,7 @@ export function AppFooter({
           ) : null,
         ])}
       </div>
+      {variant === "dashboard" ? <p className="dashboard-trademark">{t("footer.trademark")}</p> : null}
     </footer>
     </>
   );

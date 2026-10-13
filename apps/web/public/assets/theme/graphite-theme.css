@@ -238,6 +238,14 @@ html:where([data-theme="dark"][data-palette="graphite"]),
   border-top: 1px solid #e1e1e1;
 }
 
+:where(html[data-theme="dark"][data-palette="graphite"]) .dashboard-trademark {
+  color: #757575;
+}
+
+html[data-theme="dark"]:where([data-palette="graphite"]) .dashboard-trademark {
+  color: #8d8d8d;
+}
+
 :where(html[data-theme="dark"][data-palette="graphite"]) .dashboard-legal-dot {
   color: #aaaaaa;
 }

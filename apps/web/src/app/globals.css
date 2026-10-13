@@ -1012,6 +1012,19 @@ button {
   font-weight: 700;
 }
 
+.dashboard-trademark {
+  flex: 1 0 100%;
+  margin: 0;
+  color: #988672;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.45;
+}
+
+html[data-theme="dark"] .dashboard-trademark {
+  color: #b3a48d;
+}
+
 .dashboard-legal-group {
   display: flex;
   flex-wrap: wrap;

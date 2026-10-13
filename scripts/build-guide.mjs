@@ -81,7 +81,8 @@ export function renderFooter({ language, messages, environment, version }) {
     link(`${SOURCE_CODE}/releases`, (messages["dashboard.releaseNotes"] ?? "").replace("{version}", version), external),
   ];
   const group = (items) => `<div>${items.join('<span class="dot" aria-hidden="true">&middot;</span>')}</div>`;
-  return `<footer class="site-footer">${group(left)}${group(right)}</footer>`;
+  const trademark = messages["footer.trademark"] ? `<p class="trademark">${escapeHtml(messages["footer.trademark"])}</p>` : "";
+  return `<footer class="site-footer">${group(left)}${group(right)}${trademark}</footer>`;
 }
 
 export function escapeHtml(text) {
@@ -399,6 +400,7 @@ th { color: var(--muted); font-size: 12px; letter-spacing: 0.06em; text-transfor
 .cards span { color: var(--muted); font-size: 14px; line-height: 1.45; display: block; }
 footer.note { max-width: 1100px; margin: 0 auto; padding: 0 16px 12px; color: var(--muted); font-size: 14px; }
 .site-footer { max-width: 1100px; margin: 0 auto; padding: 14px 16px 40px; border-top: 1px solid var(--edge); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 24px; color: var(--muted); font-size: 13px; }
+.site-footer .trademark { flex: 1 0 100%; margin: 0; font-size: 12px; line-height: 1.45; }
 .site-footer a { color: var(--muted); text-decoration: none; }
 .site-footer a:hover { color: var(--accent); text-decoration: underline; }
 .site-footer .dot { margin: 0 8px; }

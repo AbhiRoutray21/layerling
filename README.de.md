@@ -479,6 +479,10 @@ layerling ist ein Fork von [SketchForge-3D](https://github.com/Formsmith746/Sket
 SketchForge-Beitragenden. Der Fork begann am 16. September 2026 auf Basis von SketchForge 1.0.9. SketchForge bleibt ein
 hervorragendes Projekt und der Grund, warum es dieses hier gibt.
 
+## Marken
+
+Tinkercad ist eine Marke von Autodesk, Inc. layerling ist ein unabhängiges Projekt und steht in keiner Verbindung zu Autodesk, wird nicht von Autodesk unterstützt oder gesponsert.
+
 ## Lizenz
 
 Copyright (C) 2026 layerling contributors.
