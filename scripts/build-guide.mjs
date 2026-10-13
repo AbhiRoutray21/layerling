@@ -147,8 +147,9 @@ export function renderInline(text, context) {
     if (typeof value !== "number") throw new Error(`Unknown value {{value:${name}}}`);
     return new Intl.NumberFormat(GUIDE_LANGUAGES[context.language].htmlLang, { maximumFractionDigits: 6, useGrouping: false }).format(value);
   });
+  // "+" joins keys, so [[Ctrl+K]] is two; on its own, [[+]] is the plus key.
   work = work.replace(/\[\[([^\]]+)\]\]/g, (_, keys) =>
-    keys.split("+").map((key) => `<kbd>${key.trim()}</kbd>`).join("+"));
+    keys.trim() === "+" ? "<kbd>+</kbd>" : keys.split("+").map((key) => `<kbd>${key.trim()}</kbd>`).join("+"));
   work = work.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, (_, label, target) => {
     const chapter = /^chapter:([\w-]+)$/.exec(target);
     if (chapter) {
