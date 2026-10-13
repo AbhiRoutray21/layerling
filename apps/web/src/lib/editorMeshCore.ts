@@ -3,7 +3,7 @@ import type manifoldModule from "manifold-3d";
 import type { ManifoldToplevel } from "manifold-3d";
 import * as THREE from "three";
 import { RoundedBoxGeometry } from "three/examples/jsm/geometries/RoundedBoxGeometry.js";
-import { getLanguage } from "@/lib/i18n";
+import { numberLocale } from "@/lib/i18n";
 import { sphereTessellation } from "@/lib/sphereTessellation";
 import { torusTessellation } from "@/lib/torusTessellation";
 import { createGearGeometry } from "@/lib/gearGeometry";
@@ -658,7 +658,7 @@ function importedMeshForShape(shape: WorkplaneShape): MeshData {
 
 /** Tausender trennen, in der gerade eingestellten Sprache. */
 export function formatTriangleCount(count: number) {
-  return count.toLocaleString(getLanguage() === "de" ? "de-DE" : "en-US");
+  return count.toLocaleString(numberLocale());
 }
 
 export function shapeAabb(shape: WorkplaneShape): Cuboid {

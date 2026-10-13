@@ -12,6 +12,9 @@ docs/guide/
   images/en/*.webp
 ```
 
+Further languages get a folder of their own and the English file names; a chapter they have not translated is built from
+the English one, with a note at the top, so every language has every chapter. See [../TRANSLATING.md](../TRANSLATING.md).
+
 ## Writing a chapter
 
 A chapter starts with `title:` and `summary:` between `---` lines, followed by Markdown: headings (`##`, `###`),

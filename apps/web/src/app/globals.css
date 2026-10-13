@@ -1173,40 +1173,6 @@ button {
   color: #cf710f;
 }
 
-.language-switch button {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  height: 27px;
-  box-sizing: border-box;
-  padding: 0 7px;
-  color: #8a7560;
-  border-radius: 6px;
-  font: inherit;
-  font-size: 13px;
-  font-weight: 700;
-  line-height: 1;
-  cursor: pointer;
-}
-
-.language-switch button:hover,
-.language-switch button:focus-visible {
-  color: #9a5a06;
-  background: #f5ebdc;
-}
-
-.language-switch button.active {
-  color: #573f26;
-  background: #f0e4d2;
-}
-
-.language-switch svg {
-  width: 15px;
-  height: 11px;
-  border: 1px solid rgba(87, 63, 38, 0.25);
-  border-radius: 2px;
-}
-
 /* The one thing in this row that asks for something, so it is the one thing
    that looks like a control. Both selectors carry the element too, otherwise
    `.dashboard-legal a` above wins on specificity and the colour never lands.
@@ -14064,25 +14030,6 @@ html[data-theme="dark"] .shortcuts-or {
 
 html[data-theme="dark"] .guide-section li {
   color: #cbbba6;
-}
-
-html[data-theme="dark"] .language-switch button {
-  color: #a89179;
-}
-
-html[data-theme="dark"] .language-switch button:hover,
-html[data-theme="dark"] .language-switch button:focus-visible {
-  color: #f3a452;
-  background: #3a2c16;
-}
-
-html[data-theme="dark"] .language-switch button.active {
-  color: #f3ede3;
-  background: #40301d;
-}
-
-html[data-theme="dark"] .language-switch svg {
-  border-color: rgba(243, 237, 227, 0.3);
 }
 
 html[data-theme="dark"] .workspace-divider {

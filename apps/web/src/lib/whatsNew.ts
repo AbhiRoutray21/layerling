@@ -1,3 +1,4 @@
+import { LANGUAGES, type Language } from "@/lib/languages";
 import whatsNewData from "./whatsNew.json";
 
 /**
@@ -8,7 +9,8 @@ import whatsNewData from "./whatsNew.json";
  * lines for what a user can do now that they could not before, and only rarely
  * for a fix.
  */
-export type WhatsNewText = { de: string; en: string };
+/** A text in English and in as many other languages as were written; the others read the English one. */
+export type WhatsNewText = { en: string } & Partial<Record<Language, string>>;
 export type WhatsNewItem = { title: WhatsNewText; body: WhatsNewText };
 export type WhatsNewEntry = { version: string; items: WhatsNewItem[] };
 
@@ -91,10 +93,20 @@ export function lastSeenVersion(stored: string | null, hasDesigns: boolean): str
   return hasDesigns ? WHATS_NEW_BASELINE : null;
 }
 
-function isText(value: unknown): value is WhatsNewText {
+export function isText(value: unknown): value is WhatsNewText {
   if (!value || typeof value !== "object") return false;
-  const { de, en } = value as Record<string, unknown>;
-  return typeof de === "string" && de.trim() !== "" && typeof en === "string" && en.trim() !== "";
+  const { en } = value as Record<string, unknown>;
+  return typeof en === "string" && en.trim() !== "";
+}
+
+/** The English text and every other language's text that is a real string, nothing else. */
+export function cleanText(value: WhatsNewText): WhatsNewText {
+  const cleaned: WhatsNewText = { en: value.en };
+  for (const language of LANGUAGES) {
+    const text = (value as Partial<Record<Language, unknown>>)[language];
+    if (language !== "en" && typeof text === "string" && text.trim() !== "") cleaned[language] = text;
+  }
+  return cleaned;
 }
 
 /**
@@ -112,7 +124,7 @@ export function parseWhatsNewEntries(value: unknown, limit = 200): WhatsNewEntry
     const valid = items
       .slice(0, 20)
       .filter((item): item is WhatsNewItem => Boolean(item) && typeof item === "object" && isText((item as WhatsNewItem).title) && isText((item as WhatsNewItem).body))
-      .map((item) => ({ title: { de: item.title.de, en: item.title.en }, body: { de: item.body.de, en: item.body.en } }));
+      .map((item) => ({ title: cleanText(item.title), body: cleanText(item.body) }));
     if (valid.length > 0) entries.push({ version, items: valid });
   }
   return entries;

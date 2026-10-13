@@ -1,33 +1,74 @@
 import { MESSAGES_DE } from "@/lib/messages.de";
 import { MESSAGES_EN, type MessageKey } from "@/lib/messages.en";
+import {
+  DEFAULT_LANGUAGE,
+  LANGUAGE_INFO,
+  LANGUAGES,
+  isLanguage,
+  languageFromTag,
+  type Language,
+} from "@/lib/languages";
 
-export const LANGUAGES = ["en", "de"] as const;
-export type Language = (typeof LANGUAGES)[number];
-export const DEFAULT_LANGUAGE: Language = "en";
+export { DEFAULT_LANGUAGE, LANGUAGE_INFO, LANGUAGES, isLanguage, languageFromTag };
+export type { Language };
 export const LANGUAGE_STORAGE_KEY = "layerling.language";
 
-const CATALOGUE: Record<Language, Record<MessageKey, string>> = {
-  en: MESSAGES_EN,
-  de: MESSAGES_DE,
-};
-
-export const LANGUAGE_NAMES: Record<Language, string> = {
-  en: "English",
-  de: "Deutsch",
-};
-
-export function isLanguage(value: unknown): value is Language {
-  return typeof value === "string" && (LANGUAGES as readonly string[]).includes(value);
-}
+/** Each language's own name, for the language list. */
+export const LANGUAGE_NAMES: Record<Language, string> = Object.fromEntries(
+  LANGUAGES.map((language) => [language, LANGUAGE_INFO[language].name]),
+) as Record<Language, string>;
 
 /**
- * The language a browser asks for, as far as we can serve it. `de-AT` and plain
- * `de` both mean German; anything else falls back to English.
+ * A language's sentences. A language that is not complete leaves out the ones it has not
+ * translated yet, and the English sentence shows in their place.
  */
-export function languageFromTag(tag: string | undefined | null): Language | null {
-  const primary = tag?.trim().toLowerCase().split("-")[0];
-  return isLanguage(primary) ? primary : null;
+export type Catalogue = Partial<Record<MessageKey, string>>;
+export type CatalogueLoader = () => Promise<Catalogue>;
+
+/**
+ * The sentences of every language that has been loaded, and the way to fetch the others. English
+ * is always there, it is what every other language falls back to; German is built in too, as
+ * the server's page for search engines reads it. A language added after them is a file of its
+ * own that the browser fetches only when someone chooses it, so a new language adds nothing to
+ * the page everybody loads.
+ */
+export function createCatalogueStore(
+  initial: Partial<Record<string, Catalogue>>,
+  loaders: Partial<Record<string, CatalogueLoader>>,
+) {
+  const loaded: Partial<Record<string, Catalogue>> = { ...initial };
+  const loading = new Map<string, Promise<void>>();
+  return {
+    isLoaded: (language: string) => Boolean(loaded[language]),
+    /** Fetches a language's sentences once; resolves when they are there. */
+    load(language: string): Promise<void> {
+      if (loaded[language]) return Promise.resolve();
+      const loader = loaders[language];
+      if (!loader) return Promise.reject(new Error(`No catalogue for ${language}`));
+      let pending = loading.get(language);
+      if (!pending) {
+        pending = loader()
+          .then((catalogue) => {
+            loaded[language] = catalogue;
+          })
+          .finally(() => {
+            loading.delete(language);
+          });
+        loading.set(language, pending);
+      }
+      return pending;
+    },
+    /** The sentence in a language; English where that language does not have it, the key as the last resort. */
+    text(language: string, key: MessageKey): string {
+      return loaded[language]?.[key] ?? MESSAGES_EN[key] ?? key;
+    },
+  };
 }
+
+/** Fetching a further language: one line per language that is not built in, `() => import("@/lib/messages.xx").then((module) => module.MESSAGES_XX)`. */
+const LOADERS: Partial<Record<Language, CatalogueLoader>> = {};
+
+const catalogues = createCatalogueStore({ en: MESSAGES_EN, de: MESSAGES_DE }, LOADERS);
 
 /**
  * The current language lives in a module-level store rather than in React
@@ -35,6 +76,8 @@ export function languageFromTag(tag: string | undefined | null): Language | null
  * editor, and those need `t()` without a hook.
  */
 let current: Language = DEFAULT_LANGUAGE;
+/** The language the person asked for last, which may still be loading; an earlier request that finishes later is dropped. */
+let requested: Language = DEFAULT_LANGUAGE;
 const listeners = new Set<() => void>();
 
 /**
@@ -53,7 +96,7 @@ export function getLanguage(): Language {
   return current;
 }
 
-export function setLanguage(language: Language, persist = true) {
+function applyLanguage(language: Language, persist: boolean) {
   if (language === current) return;
   current = language;
   if (persist && typeof window !== "undefined") {
@@ -67,9 +110,30 @@ export function setLanguage(language: Language, persist = true) {
   // server always renders "en", so a stored German choice has to correct it
   // here, once, on the one path every language change already takes.
   if (typeof document !== "undefined") {
-    document.documentElement.lang = language;
+    document.documentElement.lang = LANGUAGE_INFO[language].htmlLang;
   }
   listeners.forEach((listener) => listener());
+}
+
+/**
+ * Switches the interface language. A language that is built in switches at once; any other is
+ * fetched first and switches when its sentences are there, which the returned promise reports.
+ * If the fetch fails the language stays as it was.
+ */
+export function setLanguage(language: Language, persist = true): Promise<void> {
+  requested = language;
+  if (catalogues.isLoaded(language)) {
+    applyLanguage(language, persist);
+    return Promise.resolve();
+  }
+  return catalogues
+    .load(language)
+    .then(() => {
+      if (requested === language) applyLanguage(language, persist);
+    })
+    .catch(() => {
+      if (requested === language) requested = current;
+    });
 }
 
 /** Stored choice first, then what the browser asks for, then English. */
@@ -93,7 +157,7 @@ export function translate(
   key: MessageKey,
   values?: Record<string, string | number>,
 ): string {
-  const template = CATALOGUE[language][key] ?? MESSAGES_EN[key] ?? key;
+  const template = catalogues.text(language, key);
   if (!values) return template;
   return template.replace(/\{(\w+)\}/g, (match, name: string) =>
     Object.prototype.hasOwnProperty.call(values, name) ? String(values[name]) : match,
@@ -103,6 +167,16 @@ export function translate(
 /** The everyday form: uses whatever language is current right now. */
 export function t(key: MessageKey, values?: Record<string, string | number>): string {
   return translate(current, key, values);
+}
+
+/** A text that exists in some languages, in the current one or else in English. */
+export function localizedText(text: { en: string } & Partial<Record<Language, string>>, language: Language): string {
+  return text[language] || text.en;
+}
+
+/** The locale this language writes its numbers in. */
+export function numberLocale(language: Language = current): string {
+  return LANGUAGE_INFO[language].numberLocale;
 }
 
 export type { MessageKey };

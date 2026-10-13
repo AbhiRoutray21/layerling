@@ -3,6 +3,7 @@ import "./globals.css";
 import { NewVersionNotice } from "@/components/NewVersionNotice";
 import { ServiceWorkerRegistration } from "@/components/ServiceWorkerRegistration";
 import { DOM_MUTATION_GUARD_SCRIPT } from "@/lib/domMutationGuard";
+import { LANGUAGES } from "@/lib/languages";
 import { TOOLBAR_SIZE_BOOT_SCRIPT } from "@/lib/toolbarSize";
 
 const NAME = "layerling";
@@ -19,7 +20,7 @@ const STRUCTURED_DATA = {
   description: DESCRIPTION,
   applicationCategory: "DesignApplication",
   operatingSystem: "Any (web browser)",
-  inLanguage: ["en", "de"],
+  inLanguage: [...LANGUAGES],
   isAccessibleForFree: true,
   offers: { "@type": "Offer", price: "0", priceCurrency: "EUR" },
   image: "https://layerling.com/assets/layerling/layerling-social.png",
