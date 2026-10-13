@@ -35,12 +35,40 @@ More settings:
   - **Printed screw and printed nut:** leave the screw at 0 and give the nut the room (the 0.4 mm it starts with).
   - **Real screw in a printed nut or tapped hole:** the printed side takes all of it, so the nut keeps its 0.4 mm. A tighter 0.3 mm is worth a test if the screw wobbles.
   - **Printed screw in a real nut:** the real nut has no play, so the screw has to be thinner: 0.3 to 0.4 mm here, as much as a printed nut would have.
+- **{{ui:prop.axialClearance}}:** For nut and tapped hole, the play along the axis, on top of the {{ui:prop.clearance}}. Every tooth of the nut gets this much thinner, the diameter stays as it is. The reason: the {{ui:prop.clearance}} works on the diameter only and opens the flanks of a V thread to about 0.58 of its value. Anyone who wants air between the flanks has to open the diameter wide and gets sideways slop for it. The play along the axis sets the two apart. It is set to 0, so a saved thread does not change, and it goes up to a fifth of the pitch at most, because above that nothing would be left of the nut's teeth. The field exists for nut and tapped hole only; rod and screw keep their own clearance. More below under "Threads for 3D printing".
 - **{{ui:prop.threadChamferTop}}, {{ui:prop.threadChamferBottom}}, {{ui:prop.headChamfer}} and {{ui:prop.rimChamfer}}:** Chamfers at the ends so the thread starts cleanly and the head has no sharp edge. Each end of a rod, nut or tapped hole has its own chamfer, so the top can be long and the bottom short or none. A screw has only one at its tip, labelled {{ui:prop.chamfer}}. On a nut or tapped hole the chamfer is the room the mouth opens beyond the outer diameter; the cone runs at 45 degrees on down to the thread core, so no ledge is left at the outer diameter.
 
 Switching a thread between {{ui:thread.rod}} and {{ui:thread.bore}} keeps its length. A nut and a screw start from their standard measures.
 - **{{ui:prop.quality}}:** How finely the thread is calculated. Higher is more exact, but slower.
 
 Printed threads are a topic of their own. Make the screw-and-nut pair as a test first before you print a large part, and adjust the clearance to your printer.
+
+## Threads for 3D printing
+
+A printed thread needs air in two places, and they act differently:
+
+- **Clearance in the diameter ({{ui:prop.clearance}}):** makes the nut wider. The screw then has half the value as air on each side, 0.2 mm at 0.4 mm. The thread turns easily, but the screw can wobble sideways.
+- **Play along the axis ({{ui:prop.axialClearance}}):** makes the teeth of the nut thinner. The screw can then move back and forth along the axis by that value when it is not tightened. There is no extra air to the side for it.
+
+Together they make the gap between the flanks: about 0.58 times the clearance in the diameter plus the play along the axis. An example for a 0.3 mm gap: it used to take 0.5 mm in the diameter, that is 0.25 mm of air on each side. Now 0.2 mm in the diameter (0.1 mm on each side) and 0.2 mm along the axis do it, and the gap is 0.32 mm.
+
+**Consequences to know**
+
+- **The screw has play along the axis.** Without load it can move back and forth by that value. For fastenings, lids and housings that does not matter; for a lead screw that has to position exactly it does, so keep it small or at 0 there.
+- **The nut's teeth get thinner.** With 0.3 mm at a pitch of 1.75 mm every tooth is almost a third thinner at its middle and so clearly less strong. For heavily loaded parts take a coarser thread instead.
+- **More to calculate.** The tooth shape gets extra points, so the thread has more triangles and takes a little longer to compute.
+- **No true arc in the STEP export for the Whitworth profile.** A {{ui:thread.profileWhitworth}} thread with play along the axis goes to the edge tool and the STEP export as a tooth shape made of straight pieces, not with the true circular arcs. At 0 everything stays as before.
+
+**Tips**
+
+1. **A test pair first.** A screw and a nut, each only 4 to 6 mm tall, take a few minutes. Print three pairs with different play side by side and take the one that turns easily and does not wobble.
+2. **Start with values that often fit.** Clearance in the diameter 0.2 to 0.3 mm and play along the axis 0.2 mm. If the screw wobbles sideways, lower the clearance in the diameter; if it jams, raise the play along the axis. If you would rather do without the play along the axis, use 0.4 mm in the diameter as before.
+3. **The play along the axis should be at least one layer height.** What lies below one layer the printer does not resolve. With a layer height of 0.2 mm, 0.2 mm is a good start; with 0.1 mm, less is enough.
+4. **Print screw and nut upright.** The axis points up, so every turn lies in whole layers and the flanks come out clean. Lying down, the flanks sag.
+5. **Fine pitches are hard.** Below about 1 mm of pitch the turns often fuse. A coarser thread, or a {{ui:thread.profileTrapezoidal}} profile with flat crests, prints more reliably than a fine V thread.
+6. **Avoid thin tips.** The V thread has a narrow tip that the printer hardly hits with its nozzle width. The {{ui:thread.profileTrapezoidal}} and {{ui:thread.profileRound}} profiles have flatter teeth.
+7. **Deburr and run it in.** The first turns are often stiff because small remains of the print stand on the flanks. Turn it back and forth a few times and it runs easier. The chamfer at the start helps threading it in.
+8. **Another printer or filament.** The play depends on the printer, the material and the nozzle. Print the test pair again when you change either.
 
 The edge tool takes a thread as its exact body. You can chamfer or round the part that carries it with the thread already in place, or the rims of a screw head, see [Breaking edges and hollowing bodies](chapter:edges-and-hollowing). Working out a thread's edges takes a while: a few seconds for an M6, about half a minute for a G1/2 pipe thread. The quickest way to break the edge of a screw head is still the head chamfer in the properties.
 

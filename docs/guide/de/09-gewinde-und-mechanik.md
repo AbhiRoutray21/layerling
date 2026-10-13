@@ -35,12 +35,40 @@ Weitere Einstellungen:
   - **Gedruckte Schraube und gedruckte Mutter:** Die Schraube bleibt bei 0, die Mutter bekommt das Spiel (die 0,4 mm, mit denen sie beginnt).
   - **Echte Schraube in gedruckter Mutter oder gedrucktem Gewindeloch:** Die gedruckte Seite nimmt alles, die Mutter behält also ihre 0,4 mm. Wackelt die Schraube, ist ein engeres 0,3 mm einen Versuch wert.
   - **Gedruckte Schraube in echter Mutter:** Die echte Mutter hat kein Spiel, also muss die Schraube dünner werden: hier 0,3 bis 0,4 mm, so viel wie eine gedruckte Mutter hätte.
+- **{{ui:prop.axialClearance}}:** Bei Mutter und Gewindeloch das Spiel entlang der Achse, zusätzlich zum {{ui:prop.clearance}}. Jeder Zahn der Mutter wird um diesen Wert dünner, der Durchmesser bleibt, wie er ist. Der Grund: Das {{ui:prop.clearance}} wirkt nur auf den Durchmesser und öffnet die Flanken eines Spitzgewindes zu etwa 0,58 seines Betrags. Wer Luft zwischen den Flanken will, muss den Durchmesser weit aufmachen und bekommt dafür seitliches Schlackern. Mit dem Spiel in Achsrichtung stellst du beides getrennt ein. Es ist auf 0 gestellt, ein gespeichertes Gewinde ändert sich also nicht, und es reicht höchstens bis ein Fünftel der Steigung, denn darüber bliebe von den Zähnen der Mutter nichts mehr. Das Feld gibt es nur bei Mutter und Gewindeloch, Stange und Schraube behalten ihr eigenes Spiel. Mehr dazu unten bei „Gewinde für den 3D-Druck“.
 - **{{ui:prop.threadChamferTop}}, {{ui:prop.threadChamferBottom}}, {{ui:prop.headChamfer}} und {{ui:prop.rimChamfer}}:** Fasen an den Enden, damit das Gewinde sauber anläuft und der Kopf keine scharfe Kante hat. Jedes Ende von Stange, Mutter und Gewindeloch hat seine eigene Fase, oben kann sie also lang und unten kurz sein oder fehlen. Eine Schraube hat nur eine an der Spitze, sie heißt {{ui:prop.chamfer}}. Bei Mutter und Gewindeloch ist die Fase der Platz, um den sich die Mündung über den Außendurchmesser hinaus öffnet; der Kegel läuft unter 45 Grad weiter bis auf den Gewindekern, sodass am Außendurchmesser kein Absatz stehen bleibt.
 
 Beim Umschalten zwischen {{ui:thread.rod}} und {{ui:thread.bore}} bleibt die Länge erhalten. Mutter und Schraube beginnen mit ihren Normmaßen.
 - **{{ui:prop.quality}}:** Wie fein das Gewinde berechnet wird. Höher ist genauer, aber langsamer.
 
 Gedruckte Gewinde sind eine Sache für sich. Stelle die Pärchen aus Schraube und Mutter zuerst als Test her, bevor du ein großes Teil druckst, und passe das Spiel an deinen Drucker an.
+
+## Gewinde für den 3D-Druck
+
+Ein gedrucktes Gewinde braucht Luft an zwei Stellen, und beide wirken verschieden:
+
+- **Spiel im Durchmesser ({{ui:prop.clearance}}):** macht die Mutter weiter. Die Schraube sitzt dann zu jeder Seite mit der Hälfte des Werts Luft, bei 0,4 mm also 0,2 mm. Das Gewinde läuft leicht, die Schraube kann aber seitlich wackeln.
+- **Spiel in Achsrichtung ({{ui:prop.axialClearance}}):** macht die Zähne der Mutter dünner. Die Schraube kann dann entlang der Achse um diesen Wert hin und her, wenn man sie nicht anzieht. Seitlich gibt es dafür keine Luft.
+
+Beides zusammen ergibt den Spalt zwischen den Flanken: etwa 0,58 mal das Spiel im Durchmesser plus das Spiel in Achsrichtung. Ein Beispiel für 0,3 mm Spalt: Früher brauchte es dafür 0,5 mm im Durchmesser, also 0,25 mm Luft zu jeder Seite. Jetzt reichen 0,2 mm im Durchmesser (0,1 mm Luft zu jeder Seite) und 0,2 mm in Achsrichtung, und der Spalt ist 0,32 mm.
+
+**Folgen, die du kennen solltest**
+
+- **Die Schraube hat Spiel in Achsrichtung.** Ohne Last kann sie sich um diesen Wert hin und her bewegen. Für Verschraubungen, Deckel und Gehäuse ist das unerheblich, bei einer Spindel, die genau positionieren soll, nicht: Dort bleibt es klein oder bei 0.
+- **Die Zähne der Mutter werden dünner.** Mit 0,3 mm bei 1,75 mm Steigung ist jeder Zahn in seiner Mitte knapp ein Drittel dünner und damit deutlich weniger belastbar. Für Teile, die stark belastet werden, nimmst du lieber ein gröberes Gewinde.
+- **Mehr Rechenarbeit.** Die Zahnform bekommt zusätzliche Punkte, das Gewinde hat mehr Dreiecke und braucht beim Berechnen etwas länger.
+- **Kein Bogen im STEP-Export beim Whitworth-Profil.** Ein {{ui:thread.profileWhitworth}}-Gewinde mit Spiel in Achsrichtung gibt das Kantenwerkzeug und der STEP-Export als Zahnform aus Strecken weiter, nicht mit den echten Kreisbögen. Bei 0 bleibt alles wie bisher.
+
+**Tipps**
+
+1. **Zuerst ein Testpaar.** Schraube und Mutter, jeweils nur 4 bis 6 mm hoch, dauern wenige Minuten. Drucke drei Paare mit unterschiedlichem Spiel nebeneinander und nimm das, das sich leicht dreht und nicht wackelt.
+2. **Mit Werten anfangen, die oft passen.** Spiel im Durchmesser 0,2 bis 0,3 mm und Spiel in Achsrichtung 0,2 mm. Wackelt die Schraube seitlich, verringere das Spiel im Durchmesser, klemmt sie, erhöhe das Spiel in Achsrichtung. Wer ohne das Spiel in Achsrichtung auskommen will, nimmt wie bisher 0,4 mm im Durchmesser.
+3. **Das Spiel in Achsrichtung sollte mindestens eine Schichthöhe betragen.** Was unter einer Schicht liegt, löst der Drucker nicht auf. Bei 0,2 mm Schichthöhe sind 0,2 mm ein guter Anfang, bei 0,1 mm Schichthöhe reicht weniger.
+4. **Drucke Schraube und Mutter stehend.** Die Achse zeigt nach oben, dann liegt jeder Gang in ganzen Schichten und die Flanken kommen sauber heraus. Liegend hängen die Flanken durch.
+5. **Feine Steigungen sind schwierig.** Unter etwa 1 mm Steigung verschmelzen die Gänge oft. Ein gröberes Gewinde oder ein {{ui:thread.profileTrapezoidal}}-Profil mit flachen Spitzen druckt zuverlässiger als ein feines Spitzgewinde.
+6. **Dünne Spitzen vermeiden.** Das Spitzgewinde hat eine schmale Spitze, die der Drucker mit seiner Düsenbreite kaum trifft. Das {{ui:thread.profileTrapezoidal}}- und das {{ui:thread.profileRound}}-Profil haben flachere Zähne.
+7. **Entgraten und einlaufen lassen.** Die erste Umdrehung geht oft schwer, weil an den Flanken kleine Reste vom Druck stehen. Ein paar Mal hin und her drehen, dann läuft es leichter. Die Fase am Anfang hilft dem Einfädeln.
+8. **Wechselnde Drucker und Filamente.** Das Spiel hängt vom Drucker, vom Material und von der Düse ab. Wer den Drucker oder das Material wechselt, druckt das Testpaar neu.
 
 Das Kantenwerkzeug nimmt ein Gewinde als exakten Körper. Du kannst das Teil, in dem es sitzt, mit dem Gewinde darin fasen oder verrunden, ebenso die Kanten eines Schraubenkopfs, siehe [Kanten brechen und Körper aushöhlen](chapter:kanten-und-aushoehlen). Die Kanten eines Gewindes zu ermitteln dauert etwas: ein paar Sekunden bei M6, etwa eine halbe Minute bei einem G1/2-Rohrgewinde. Am schnellsten brichst du die Kante eines Schraubenkopfs aber weiterhin mit der Kopffase in den Eigenschaften.
 

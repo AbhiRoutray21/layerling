@@ -60,6 +60,8 @@ import {
   normalizeThreadChamfer,
   normalizeThreadClearance,
   normalizeThreadBoltClearance,
+  normalizeThreadAxialClearance,
+  threadAxialClearanceLimit,
   MIN_THREAD_BOLT_CLEARANCE,
   MAX_THREAD_BOLT_CLEARANCE,
   normalizeThreadDiameter,
@@ -342,7 +344,7 @@ const RELATIVE_SIZE_PROPERTY_IDS = new Set(["width", "height", "length", "diamet
 const ROTATION_PROPERTY_IDS = new Set(["rotateX", "rotateY", "rotateZ"]);
 
 function propertyUsesLengthUnit(key: string) {
-  return ["textLineWidth", "letterSize", "iconWidth", "keyringDiameter", "positionX", "positionY", "positionZ", "pivotX", "pivotY", "pivotZ", "radius", "length", "width", "height", "bevel", "topRadius", "baseRadius", "thickness", "toothSize", "toothWidth", "gearBacklash", "centerHole", "slotSmallEnd", "slotCentreDistance", "sketchLineWidth", "topLength", "topWidth", "bottomLength", "bottomWidth", "diameter", "pitch", "clearance", "boltClearance", "threadLength", "headHeight", "chamfer", "chamferBottom", "headChamfer", "wire", "starOuterSize", "starInnerSize", "starOuterFillet", "starInnerFillet", "heartTipFillet", "crescentThickness", "crescentTipFillet", "honeycombCellSize", "honeycombWallThickness", "honeycombFrameWidth", "cornerFillet", "topBottomFillet", "bentTubeSize", "bentTubeWall", "bentTubeSegmentLength", "bentTubeBendRadius", "dovetailNeckWidth", "dovetailClearance", "hingePinDiameter", "hingeLeafThickness", "hingeClearance", "screwHoleShaft", "screwHoleHeadDepth", "knurlDepth", "knurlChamfer", "loftBottomWidth", "loftBottomDepth", "loftTopWidth", "loftTopDepth", "loftBottomCorner", "loftTopCorner", "loftOffsetX", "loftOffsetZ", "loftWall"].includes(key);
+  return ["textLineWidth", "letterSize", "iconWidth", "keyringDiameter", "positionX", "positionY", "positionZ", "pivotX", "pivotY", "pivotZ", "radius", "length", "width", "height", "bevel", "topRadius", "baseRadius", "thickness", "toothSize", "toothWidth", "gearBacklash", "centerHole", "slotSmallEnd", "slotCentreDistance", "sketchLineWidth", "topLength", "topWidth", "bottomLength", "bottomWidth", "diameter", "pitch", "clearance", "axialClearance", "boltClearance", "threadLength", "headHeight", "chamfer", "chamferBottom", "headChamfer", "wire", "starOuterSize", "starInnerSize", "starOuterFillet", "starInnerFillet", "heartTipFillet", "crescentThickness", "crescentTipFillet", "honeycombCellSize", "honeycombWallThickness", "honeycombFrameWidth", "cornerFillet", "topBottomFillet", "bentTubeSize", "bentTubeWall", "bentTubeSegmentLength", "bentTubeBendRadius", "dovetailNeckWidth", "dovetailClearance", "hingePinDiameter", "hingeLeafThickness", "hingeClearance", "screwHoleShaft", "screwHoleHeadDepth", "knurlDepth", "knurlChamfer", "loftBottomWidth", "loftBottomDepth", "loftTopWidth", "loftTopDepth", "loftBottomCorner", "loftTopCorner", "loftOffsetX", "loftOffsetZ", "loftWall"].includes(key);
 }
 
 /**
@@ -1318,6 +1320,7 @@ function getShapePropertiesWithAppLimits(shape: WorkplaneShape, onUpdate: ShapeI
       next.pitch = normalizeThreadPitch(next.pitch, next.diameter);
       next.clearance = normalizeThreadClearance(next.clearance);
       next.boltClearance = normalizeThreadBoltClearance(next.boltClearance);
+      next.axialClearance = normalizeThreadAxialClearance(next.axialClearance, next.pitch);
       next.quality = normalizeThreadQuality(next.quality);
       next.chamfer = normalizeThreadChamfer(next.chamfer, { role: next.role, diameter: next.diameter, pitch: next.pitch, profile: next.profile });
       next.chamferLow = normalizeThreadChamfer(next.chamferLow, { role: next.role, diameter: next.diameter, pitch: next.pitch, profile: next.profile });
@@ -1340,6 +1343,7 @@ function getShapePropertiesWithAppLimits(shape: WorkplaneShape, onUpdate: ShapeI
         threadPitch: next.pitch,
         threadClearance: next.clearance,
         threadBoltClearance: next.boltClearance,
+        threadAxialClearance: next.axialClearance,
         threadQuality: next.quality,
         threadHeadHeight: next.headHeight,
         threadChamfer: next.chamfer,
@@ -1495,6 +1499,17 @@ function getShapePropertiesWithAppLimits(shape: WorkplaneShape, onUpdate: ShapeI
         step: 0.05,
         hint: t("thread.clearanceHint"),
         onChange: (clearance) => applyThread({ clearance }),
+      });
+      // The play along the axis (#256): the tooth of the part gets thinner, the diameter stays.
+      properties.push({
+        id: "axialClearance",
+        label: t("prop.axialClearance"),
+        value: settings.axialClearance,
+        min: 0,
+        max: threadAxialClearanceLimit(settings.pitch),
+        step: 0.05,
+        hint: t("thread.axialClearanceHint"),
+        onChange: (axialClearance) => applyThread({ axialClearance }),
       });
     } else {
       // Stange und Schraube: das Spiel macht den Bolzen duenner, fuer eine
@@ -2092,7 +2107,7 @@ export function ShapeInspector({
   const textFillMore = shape.kind === "text" ? properties.filter((property) => TEXT_FILL_MORE_IDS.has(property.id)) : [];
   const textFillEnd = primaryProperties.reduce((end, property, index) => (TEXT_FILL_IN_VIEW_IDS.has(property.id) ? index + 1 : end), 0);
   const threadProperties = isThread
-    ? properties.filter((property) => ["pitch", "threadsPerInch", "threadHand", "threadProfile", "clearance", "boltClearance", "chamfer", "chamferBottom", "quality"].includes(property.id))
+    ? properties.filter((property) => ["pitch", "threadsPerInch", "threadHand", "threadProfile", "clearance", "axialClearance", "boltClearance", "chamfer", "chamferBottom", "quality"].includes(property.id))
     : [];
   const gearTeethProperties = shape.kind === "gear"
     ? properties.filter((property) => ["gearProfile", "teeth", "gearModule", "gearPressureAngle", "gearBacklash", "gearRim", "toothSize", "toothWidth"].includes(property.id))

@@ -1280,6 +1280,7 @@ export function cadModifierThreadForShape(shape: WorkplaneShape): CadModifierThr
     threadPitch: shape.threadPitch,
     threadClearance: shape.threadClearance,
     threadBoltClearance: shape.threadBoltClearance,
+    threadAxialClearance: shape.threadAxialClearance,
     threadQuality: shape.threadQuality,
     threadHeadHeight: shape.threadHeadHeight,
     threadChamfer: shape.threadChamfer,
@@ -1307,7 +1308,7 @@ export function cadModifierThreadForShape(shape: WorkplaneShape): CadModifierThr
   // faces per turn instead of one per chord. They are circles only at the
   // profile's full depth, which a very coarse pitch on a thin rod can cut
   // short - then the points stay the profile.
-  if (settings.profile === "whitworth" && Math.abs(plan.major - plan.minor - settings.pitch * plan.profile.depthPerPitch) < 1e-9) {
+  if (settings.profile === "whitworth" && !plan.axialPlay && Math.abs(plan.major - plan.minor - settings.pitch * plan.profile.depthPerPitch) < 1e-9) {
     part.curve = { kind: "whitworth", radius: WHITWORTH_PROFILE_CONSTANTS.radiusPerPitch, halfAngle: (WHITWORTH_PROFILE_CONSTANTS.flankAngleDegrees / 2) * (Math.PI / 180) };
   }
   if (settings.role === "screw") {

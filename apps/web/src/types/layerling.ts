@@ -127,6 +127,7 @@ export type ShapeCustomization = {
   threadClearance?: number;
   /** Rod and screw: how much thinner (in diameter) the bolt comes out, for a metal nut. */
   threadBoltClearance?: number;
+  threadAxialClearance?: number;
   threadQuality?: number;
   threadHeadHeight?: number;
   threadChamfer?: number;
@@ -576,6 +577,7 @@ export type WorkplaneShape = {
   threadClearance?: number;
   /** Rod and screw: how much thinner (in diameter) the bolt comes out, for a metal nut. */
   threadBoltClearance?: number;
+  threadAxialClearance?: number;
   threadQuality?: number;
   threadHeadHeight?: number;
   threadChamfer?: number;

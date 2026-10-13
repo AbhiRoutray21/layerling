@@ -92,6 +92,7 @@ export const shapeSettingSchema = {
   threadDiameter: { type: "number", description: "Thread only, in millimetres: 6 is an M6, 20.955 a G1/2 pipe thread. Width and depth follow it, they are not set separately. For a standard size, threadSize is simpler." },
   threadPitch: { type: "number", description: "Thread only, in millimetres per turn: an M6 runs 1.0 as standard." },
   threadClearance: { type: "number", description: "Thread only, for nuts and tapped holes: how much room the thread leaves so a printed pair still turns." },
+  threadAxialClearance: { type: "number", description: "Thread only, for nuts and tapped holes: extra play along the axis (mm, 0 to 1 but at most a fifth of the pitch, default 0): each tooth of the part gets this much thinner while the diameter stays. Add it to a small threadClearance for a thread that turns freely without rattling sideways." },
   threadBoltClearance: { type: "number", description: "Thread only, for rods and screws: how much thinner in diameter (mm, 0 to 1, default 0) the bolt is built, so a printed bolt fits a metal nut. Try 0.2 to 0.3." },
   threadQuality: { type: "number", description: "Thread only: columns around the circumference." },
   threadChamfer: { type: "number", description: "Thread only: the break at the ends that leads the first turn in. On a nut, tapped hole and rod it is the top end (and the bottom end too, unless threadChamferBottom is given); on a screw it is the tip. On a nut or tapped hole the 45 degree cone reaches down to the thread core." },

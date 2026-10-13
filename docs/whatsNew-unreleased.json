@@ -48,5 +48,15 @@
       "de": "Zwei Formen, die du in der Skizze übereinander schiebst, zeigen keine Aussparung mehr an der Überlappung, denn der Körper wird ihre Vereinigung. Und sie verhaken sich nicht mehr: Beim Verschieben entstehen keine gemeinsamen Punkte an den Kreuzungen, du kannst sie wieder auseinanderziehen.",
       "en": "Two shapes you push over each other in the sketch no longer show a hole where they overlap, because the body becomes their union. And they no longer get caught on each other: moving makes no shared points at the crossings, so you can pull them apart again."
     }
+  },
+  {
+    "title": {
+      "de": "Gewinde: Spiel in Achsrichtung",
+      "en": "Threads: play along the axis"
+    },
+    "body": {
+      "de": "Mutter und Gewindeloch haben ein neues Feld, „Spiel in Achsrichtung“. Es macht die Zähne dünner, ohne den Durchmesser aufzuweiten, damit ein gedrucktes Gewinde leicht läuft und nicht seitlich wackelt. In der Anleitung steht ein neuer Abschnitt mit Tipps für gedruckte Gewinde.",
+      "en": "Nuts and tapped holes have a new field, “Play along the axis”. It makes the teeth thinner without widening the diameter, so a printed thread turns easily and does not wobble sideways. The guide has a new section with tips for printed threads."
+    }
   }
 ]
