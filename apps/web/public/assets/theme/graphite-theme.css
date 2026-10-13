@@ -2389,6 +2389,48 @@ html:where([data-theme="dark"][data-palette="graphite"])[data-toolbar-size="larg
   stroke: rgba(123, 63, 0, 0.95);
 }
 
+:where(html[data-theme="dark"][data-palette="graphite"]) .sketch-shape-options {
+  border-top: 1px solid #e4e4e4;
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .sketch-shape-options label {
+  color: #474747;
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .sketch-shape-options input {
+  color: #575757;
+  background: #ffffff;
+  border: 1px solid #cccccc;
+  outline: 0;
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .sketch-shape-options input:focus {
+  border-color: #ea953d;
+  box-shadow: 0 0 0 3px rgba(161, 83, 0, 0.14);
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .sketch-shape-options .unit {
+  color: #757575;
+}
+
+html[data-theme="dark"]:where([data-palette="graphite"]) .sketch-shape-options {
+  border-color: #4b4b4b;
+}
+
+html[data-theme="dark"]:where([data-palette="graphite"]) .sketch-shape-options label {
+  color: #e4e4e4;
+}
+
+html[data-theme="dark"]:where([data-palette="graphite"]) .sketch-shape-options input {
+  color: #e4e4e4;
+  background: #272727;
+  border-color: #4b4b4b;
+}
+
+html[data-theme="dark"]:where([data-palette="graphite"]) .sketch-shape-options .unit {
+  color: #8d8d8d;
+}
+
 :where(html[data-theme="dark"][data-palette="graphite"]) .sketch-geometry-selection-box {
   fill: rgba(123, 63, 0, 0.025);
   stroke: rgba(123, 63, 0, 0.82);

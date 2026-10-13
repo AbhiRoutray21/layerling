@@ -1,7 +1,7 @@
 "use client";
 
 import { GuideHelpLink } from "@/components/GuideHelpLink";
-import { AlertTriangle, Check, Percent, Circle as CircleIcon, CloudUpload, Download, Eye, EyeOff, FilePlus2, FolderOpen, Hexagon as HexagonIcon, Info, ListTree, Pencil, Search, Square as SquareIcon, Triangle as TriangleIcon, X } from "lucide-react";
+import { AlertTriangle, Check, Percent, Circle as CircleIcon, CloudUpload, Download, Eye, EyeOff, FilePlus2, FolderOpen, Hexagon as HexagonIcon, Info, ListTree, Pencil, Pentagon as PentagonIcon, Search, Square as SquareIcon, Star as StarIcon, Triangle as TriangleIcon, X } from "lucide-react";
 import { ObjectListPanel } from "@/components/workplane/ObjectListPanel";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import * as THREE from "three";
@@ -23,7 +23,17 @@ import type { IconLayerPatch, IconTagControls, TextLayerPatch } from "@/componen
 import { IconTagPanel } from "@/components/workplane/IconTagPanel";
 import { loadedManifoldRuntime, onManifoldReady } from "@/lib/manifoldHandle";
 import { canApplySketchCornerTreatment } from "@/lib/sketchFilletChamfer";
-import { sketchPrimitiveGeometry } from "@/lib/sketchPrimitives";
+import {
+  normalizePolygonSides,
+  normalizeStarInnerPercent,
+  SKETCH_POLYGON_DEFAULT_SIDES,
+  SKETCH_POLYGON_MAX_SIDES,
+  SKETCH_POLYGON_MIN_SIDES,
+  SKETCH_STAR_DEFAULT_INNER_PERCENT,
+  SKETCH_STAR_MAX_INNER_PERCENT,
+  SKETCH_STAR_MIN_INNER_PERCENT,
+  sketchPrimitiveGeometry,
+} from "@/lib/sketchPrimitives";
 import { cloneSketchProfile, orderedSketchPaths, withSegmentHandles, withSmoothSketchHandles } from "@/lib/sketchSmoothHandles";
 import { curveSketchSegment, straightenSketchSegment } from "@/lib/sketchSegmentCurve";
 import { withSegmentsConstruction } from "@/lib/sketchConstruction";
@@ -2657,6 +2667,11 @@ export function LayerlingEditor({
   const [sketchMeasurement, setSketchMeasurement] = useState<SketchMeasurement>(null);
   const [editingSketchShapeId, setEditingSketchShapeId] = useState<string | null>(null);
   const [sketchCornerDialog, setSketchCornerDialog] = useState<"fillet" | "chamfer" | null>(null);
+  // The sides of the polygon and star and the inner size of the star, set in the sketch shapes menu (#280).
+  const [sketchShapeOptions, setSketchShapeOptions] = useState<SketchShapeOptions>({
+    sides: SKETCH_POLYGON_DEFAULT_SIDES,
+    innerPercent: SKETCH_STAR_DEFAULT_INNER_PERCENT,
+  });
   // Stroke for sketches (#154): the panel, and the stroked outline shown while drawing.
   const [sketchStrokePanelOpen, setSketchStrokePanelOpen] = useState(false);
   const [sketchStrokePreview, setSketchStrokePreview] = useState<string | null>(null);
@@ -4212,6 +4227,8 @@ export function LayerlingEditor({
       boltCircle: t("status.sketchTool.boltCircle"),
       triangle: t("status.sketchTool.triangle"),
       hexagon: t("status.sketchTool.hexagon"),
+      polygon: t("sketch.polygon"),
+      star: t("sketch.star"),
       select: t("status.sketchTool.select"),
       refine: t("status.sketchTool.refine"),
       erase: t("status.sketchTool.erase"),
@@ -4309,7 +4326,7 @@ export function LayerlingEditor({
 
   const addSketchPrimitive = useCallback(
     (primitive: SketchPrimitive, center: { x: number; z: number } = { x: 0, z: 0 }) => {
-      const { points, segments } = sketchPrimitiveGeometry(primitive, center, createLocalId);
+      const { points, segments } = sketchPrimitiveGeometry(primitive, center, createLocalId, undefined, sketchShapeOptions);
 
       const next: SketchProfile = {
         ...sketchProfile,
@@ -4321,7 +4338,7 @@ export function LayerlingEditor({
       setSketchSelection(null);
       setSketchTool("select");
     },
-    [commitSketchProfile, sketchProfile],
+    [commitSketchProfile, sketchProfile, sketchShapeOptions],
   );
 
   const pressSketchPoint = useCallback(
@@ -10787,6 +10804,8 @@ export function LayerlingEditor({
         onEditSketch={beginSketchEdit}
         onSketchTool={setActiveSketchTool}
         onSketchPrimitive={(primitive) => addSketchPrimitive(primitive, { x: 0, z: 0 })}
+        sketchShapeOptions={sketchShapeOptions}
+        onSketchShapeOptions={setSketchShapeOptions}
         onSketchImage={() => {
           if (sketchTool !== "select") {
             setNotice(t("status.chooseSelectFirst"));
@@ -11465,6 +11484,44 @@ function SketchReferenceIcon({ name }: { name: SketchReferenceIconName }) {
   );
 }
 
+type SketchShapeOptions = { sides: number; innerPercent: number };
+
+/** A number in the sketch shapes menu: typed freely, tidied to its limits when it is left. */
+function SketchShapeNumberField({ label, value, min, max, suffix, normalize, onChange }: {
+  label: string;
+  value: number;
+  min: number;
+  max: number;
+  suffix?: string;
+  normalize: (value: unknown) => number;
+  onChange: (value: number) => void;
+}) {
+  const [draft, setDraft] = useState(String(value));
+  useEffect(() => setDraft(String(value)), [value]);
+  const commit = () => {
+    const next = normalize(draft.replace(",", "."));
+    setDraft(String(next));
+    onChange(next);
+  };
+  return (
+    <label>
+      <span>{label}</span>
+      <input
+        type="text"
+        inputMode="decimal"
+        aria-label={label}
+        title={`${min} - ${max}`}
+        value={draft}
+        onFocus={(event) => event.currentTarget.select()}
+        onChange={(event) => setDraft(event.currentTarget.value)}
+        onBlur={commit}
+        onKeyDown={(event) => { if (event.key === "Enter") event.currentTarget.blur(); }}
+      />
+      {suffix ? <span className="unit">{suffix}</span> : null}
+    </label>
+  );
+}
+
 const sketchShapeMenuItems = [
   { primitive: "rectangle", label: "sketch.rectangle", icon: SquareIcon },
   { primitive: "circle", label: "sketch.circle", icon: CircleIcon },
@@ -11473,6 +11530,8 @@ const sketchShapeMenuItems = [
   { primitive: "pieSlice", label: "sketch.pieSlice", icon: SketchPieSliceIcon },
   { primitive: "triangle", label: "sketch.triangle", icon: TriangleIcon },
   { primitive: "hexagon", label: "sketch.hexagon", icon: HexagonIcon },
+  { primitive: "polygon", label: "sketch.polygon", icon: PentagonIcon },
+  { primitive: "star", label: "sketch.star", icon: StarIcon },
   { primitive: "boltCircle", label: "sketch.boltCircle", icon: SketchBoltCircleIcon },
 ] satisfies Array<{ primitive: SketchPrimitive; label: MessageKey; icon: ComponentType<SVGProps<SVGSVGElement>> }>;
 
@@ -11570,6 +11629,8 @@ function SecondaryToolbar({
   onEditSketch,
   onSketchTool,
   onSketchPrimitive,
+  sketchShapeOptions,
+  onSketchShapeOptions,
   onSketchImage,
   onSketchCopy,
   onSketchPaste,
@@ -11678,6 +11739,8 @@ function SecondaryToolbar({
   onEditSketch: () => void;
   onSketchTool: (tool: SketchTool) => void;
   onSketchPrimitive: (primitive: SketchPrimitive) => void;
+  sketchShapeOptions: SketchShapeOptions;
+  onSketchShapeOptions: (options: SketchShapeOptions) => void;
   onSketchImage: () => void;
   onSketchCopy: () => void;
   onSketchPaste: () => void;
@@ -12471,6 +12534,25 @@ function SecondaryToolbar({
                             <span>{t(label)}</span>
                           </button>
                         ))}
+                      </div>
+                      <div className="sketch-shape-options">
+                        <SketchShapeNumberField
+                          label={t("sketch.polygonSides")}
+                          value={sketchShapeOptions.sides}
+                          min={SKETCH_POLYGON_MIN_SIDES}
+                          max={SKETCH_POLYGON_MAX_SIDES}
+                          normalize={normalizePolygonSides}
+                          onChange={(sides) => onSketchShapeOptions({ ...sketchShapeOptions, sides })}
+                        />
+                        <SketchShapeNumberField
+                          label={t("sketch.starInner")}
+                          value={sketchShapeOptions.innerPercent}
+                          min={SKETCH_STAR_MIN_INNER_PERCENT}
+                          max={SKETCH_STAR_MAX_INNER_PERCENT}
+                          suffix="%"
+                          normalize={normalizeStarInnerPercent}
+                          onChange={(innerPercent) => onSketchShapeOptions({ ...sketchShapeOptions, innerPercent })}
+                        />
                       </div>
                     </div>
                   ) : null}
