@@ -423,7 +423,7 @@ export function roundWave(teeth: number, tipRadius: number, rootRadius: number, 
 }
 
 /**
- * Round teeth (#201, like Tinkercad's Useful gear): each tooth one convex arc, each gap one
+ * Round teeth (#201, like the usual Useful gear): each tooth one convex arc, each gap one
  * concave arc, every arc running smoothly into the next. The tip sits ROUND_GEAR_ADDENDUM modules
  * above the pitch circle, the root ROUND_GEAR_DEDENDUM below it - a quarter module of room for the
  * other gear's tip - and the tooth is as thick on the pitch circle as half a pitch less half the

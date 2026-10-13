@@ -3154,7 +3154,7 @@ export function WorkplaneViewport({
   /**
    * Die ausgewaehlten Formen, solange gerade nichts anderes den Bildschirm
    * belegt - siehe layerling-lineal.md. Mehrere zaehlen zusammen wie ein
-   * Koerper: gemessen wird ihre gemeinsame Umrissbox, wie in Tinkercad.
+   * Koerper: gemessen wird ihre gemeinsame Umrissbox, wie in similar tools.
    */
   const originDimensionShapeFor = useCallback(
     (shapesList: WorkplaneShape[], ids = selectedIdsRef.current) => {
@@ -4164,7 +4164,7 @@ export function WorkplaneViewport({
     };
   }, []);
 
-  // A double click on a sketch body opens its sketch, as in Tinkercad; on a group or a bundle it
+  // A double click on a sketch body opens its sketch, as in similar tools; on a group or a bundle it
   // opens that for editing (#150). The first click has already selected it, so this is the same
   // as Edit Sketch or Edit group. Both can be switched off in the settings.
   const onEditSketchRef = useRef(onEditSketch);
@@ -4370,7 +4370,7 @@ export function WorkplaneViewport({
     const local = placementWorkplaneCoordinates(workplane, raw);
     const step = snapStep(snapRef.current);
     const bounds = workspaceRef.current;
-    // Wie bei Tinkercad darf ein Teil neben der Platte geparkt werden (Discussion #80);
+    // Wie bei andere Programme darf ein Teil neben der Platte geparkt werden (Discussion #80);
     // die Grenze faengt nur den flachen Blick ab, bei dem der Strahl die Ebene weit draussen trifft.
     const reachX = bounds.width / 2 + bounds.width * PLATE_DRAG_REACH;
     const reachZ = bounds.depth / 2 + bounds.depth * PLATE_DRAG_REACH;
@@ -4392,7 +4392,7 @@ export function WorkplaneViewport({
   }, [toRawPlanePoint]);
 
   /**
-   * Where a shape on the pointer lands, as in Tinkercad's Cruise (#195): over a body on the face
+   * Where a shape on the pointer lands, as in the usual Cruise (#195): over a body on the face
    * under the pointer, lined up with it (a sloped one too); elsewhere on the current workplane.
    */
   const cruiseTarget = useCallback((clientX: number, clientY: number, skip?: ReadonlySet<string>) => {
@@ -6218,7 +6218,7 @@ export function WorkplaneViewport({
     setCornerRulerMode(next);
   }, [onCancelCruise]);
 
-  /** Der Griff ist immer direkt ziehbar, ohne eigenen Verschieben-Modus - wie bei einer Notiz-Nadel, nicht wie beim Massband (das mehrere Punkte je Strecke verwaltet und deshalb einen Modus braucht). Ein Klick ohne Zug dreht die Instanz um 90 Grad - wie in Tinkercad. */
+  /** Der Griff ist immer direkt ziehbar, ohne eigenen Verschieben-Modus - wie bei einer Notiz-Nadel, nicht wie beim Massband (das mehrere Punkte je Strecke verwaltet und deshalb einen Modus braucht). Ein Klick ohne Zug dreht die Instanz um 90 Grad - wie in similar tools. */
   const handleCornerRulerHandlePointerDown = useCallback((event: ReactPointerEvent<SVGCircleElement>, id: string) => {
     event.preventDefault();
     event.stopPropagation();
@@ -9492,7 +9492,7 @@ function createGridLines(
   if (minorBands.length) group.add(bandsFromSegments(minorBands, gridBands.minor, palette.minor, { order: 1.5 }));
 
   // A line is one pixel wide whatever the zoom, so the centre cross and the border also get
-  // a narrow band on the plate: stronger, and growing as you zoom in, as in Tinkercad (#143).
+  // a narrow band on the plate: stronger, and growing as you zoom in, as in similar tools (#143).
   const axisBand = THREE.MathUtils.clamp(Math.min(width, depth) * 0.0012, 0.15, 1);
   const borderBand = axisBand * 2;
   const axisBands: Array<[number, number, number, number]> = outlineOnly ? [] : [

@@ -20,7 +20,7 @@ export type ImportFailure = { fileName: string; reason: string };
 
 /**
  * Was zum Import ausgewaehlt wurde, zurechtgelegt: ein ZIP (so liefert
- * Tinkercad seine OBJ, mit der .mtl daneben) wird ausgepackt, und .mtl-Dateien
+ * andere Programme ihre OBJ, mit der .mtl daneben) wird ausgepackt, und .mtl-Dateien
  * sind keine eigenen Teile, sondern die Farben fuer die OBJ daneben.
  */
 async function prepareImportFiles(files: readonly File[]) {

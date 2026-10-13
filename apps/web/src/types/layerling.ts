@@ -294,7 +294,7 @@ export type WorkplaneWorkspaceSettings = {
   showRotationAngles: boolean;
   zoomSpeed: number;
   units: string;
-  /** With Imperial: inches as fractions (1⅝, like Tinkercad) or decimals (1.625). */
+  /** With Imperial: inches as fractions (1⅝, like similar tools) or decimals (1.625). */
   inchFormat: InchFormat;
   scale: string;
   accuracy: MeasurementAccuracy;
@@ -377,7 +377,7 @@ export type SketchProfile = {
   segments: SketchSegment[];
   images?: SketchImage[];
   stroke?: SketchStroke;
-  /** Built without its holes: only the outermost outlines count, as Tinkercad's Silhouette (#197). */
+  /** Built without its holes: only the outermost outlines count, as the usual Silhouette (#197). */
   silhouette?: boolean;
 };
 
@@ -686,7 +686,7 @@ export type WorkplaneShape = {
    * Width and depth stay the box of the whole body; the letters are fitted inside it.
    */
   textStroke?: SketchStroke;
-  /** Text only (#215): the letters without their counters (the holes in O, A, e), as Tinkercad's Silhouette. */
+  /** Text only (#215): the letters without their counters (the holes in O, A, e), as the usual Silhouette. */
   textSilhouette?: boolean;
   /**
    * Text only (#225): the top edge of the letters rounded or chamfered by `size` mm, as a name
@@ -762,7 +762,7 @@ export type WorkplaneShape = {
   groupedBaseDepth?: number;
   groupedBaseHeight?: number;
   /**
-   * How the parts are put together. "bundle" (Tinkercad's Ctrl+B) only holds
+   * How the parts are put together. "bundle" (the usual Ctrl+B) only holds
    * them together: no cutting, every part keeps its colour and goes out as
    * its own body.
    */
@@ -780,13 +780,13 @@ export type WorkplaneShape = {
    */
   formulas?: Record<string, string>;
   /**
-   * A group shows each part in its own colour, like Tinkercad's "Multicolor".
+   * A group shows each part in its own colour, like the usual "Multicolor".
    * Left out, see groupShowsPartColors() for what a group shows.
    */
   multicolor?: boolean;
   locked?: boolean;
   hidden?: boolean;
-  /** Drawn see-through in its own colour, like Tinkercad's "Transparent". Display only - a solid stays a solid. */
+  /** Drawn see-through in its own colour, like the usual "Transparent". Display only - a solid stays a solid. */
   transparent?: boolean;
 };
 

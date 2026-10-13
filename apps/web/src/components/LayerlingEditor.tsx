@@ -5085,7 +5085,7 @@ export function LayerlingEditor({
   }, [commitShapes, hasSelection, selectedIds, shapes]);
 
   /*
-   * darkwingbreydins Forenwunsch: wie in Tinkercad soll ein Duplizieren nach
+   * darkwingbreydins Forenwunsch: wie in similar tools soll ein Duplizieren nach
    * dem Verschieben eines vorigen Duplikats denselben Versatz wiederholen, so
    * dass wiederholtes Duplizieren allein eine Lochreihe ergibt. Das Ziel ist
    * eine reine Sitzungserinnerung, kein Projektfeld: sie haengt an der
@@ -7033,7 +7033,7 @@ export function LayerlingEditor({
     commitShapes([...shapesRef.current.filter((shape) => !selected.has(shape.id)), editableGroup], editableGroup.id, t("status.groupedMany", { count: selectedShapes.length }));
   }, [commitShapes, selectedIds, selectedShapes]);
 
-  /** Tinkercad's bundle (Ctrl+B): the parts move, turn and scale together and stay what they are. */
+  /** the usual bundle (Ctrl+B): the parts move, turn and scale together and stay what they are. */
   const bundleSelected = useCallback(() => {
     if (selectedShapes.length < 2) {
       setNotice(t("status.selectTwoToBundle"));
@@ -9555,7 +9555,7 @@ export function LayerlingEditor({
   const exportDesign = useCallback(async (format: DirectExportFormat, exportName: string, chooseFile = false) => {
     const source = exportSource();
     const selectionScoped = source.selection;
-    // Ausgeblendetes bleibt draussen, wie bei Tinkercad: ein beiseitegelegtes
+    // Ausgeblendetes bleibt draussen, wie bei vergleichbaren Programmen: ein beiseitegelegtes
     // Teil soll nicht unbemerkt mitgedruckt werden (Discussion #80).
     const { visible: sourceShapes, hiddenNote } = visibleExportShapes(source.shapes);
     const exportable = sourceShapes.filter((shape) => !shape.hole && !isNonSolidShapeKind(shape.kind));
@@ -10233,7 +10233,7 @@ export function LayerlingEditor({
       const selected = new Set(selectedIds);
       // Right and up on the keys mean right and away on the screen: each picks
       // the workplane axis that points that way most, so after turning the
-      // view the keys still go where the arrows point (as in Tinkercad).
+      // view the keys still go where the arrows point (as in similar tools).
       const { xStep, zStep } = screenAlignedNudge(placementWorkplane, deltaX, deltaZ, window.layerlingScreenDirections?.());
       const translation = {
         x: placementWorkplane.xAxis.x * xStep + placementWorkplane.zAxis.x * zStep,
@@ -10488,7 +10488,7 @@ export function LayerlingEditor({
         return;
       }
 
-      // C without Ctrl picks the selection up, as Tinkercad's Cruise: it follows the pointer over
+      // C without Ctrl picks the selection up, as the usual Cruise: it follows the pointer over
       // the faces of other bodies and a click sets it down there (#195).
       if (!shortcut && !event.altKey && !event.shiftKey && key === "c" && hasSelection) {
         event.preventDefault();

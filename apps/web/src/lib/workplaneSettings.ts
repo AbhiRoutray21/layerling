@@ -533,7 +533,7 @@ export function keyboardNudgeStep(size: GridSize, coarse: boolean, coarseFactor 
 
 /**
  * How many steps Shift and an arrow key move (#222): as many as the darker grid line is apart,
- * the "Darker grid line every" setting - 5 by default, and 10 as in Tinkercad. In inches the
+ * the "Darker grid line every" setting - 5 by default, and 10 as in similar tools. In inches the
  * setting is not offered, so it stays at 5.
  */
 export function keyboardNudgeCoarseFactor(workspace: Pick<WorkplaneWorkspaceSettings, "units" | "gridMajorInterval">) {

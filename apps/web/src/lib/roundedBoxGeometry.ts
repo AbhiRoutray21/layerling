@@ -309,7 +309,7 @@ function createFullRoundedBox(
  * 1. Eckenradius (4 aufrechte vertikale Kanten, ideal für Gehäuse & 3D-Druck)
  * 2. Kantenradius (Deckel- und Bodenkanten)
  *
- * Im Gegensatz zu Tinkercad bleiben die Radien bei Änderungen von Breite, Tiefe
+ * Im Gegensatz zu vielen anderen Programmen bleiben die Radien bei Änderungen von Breite, Tiefe
  * oder Höhe absolut konstant und verzerren nicht zu Ellipsen.
  */
 export function createRoundedBoxGeometry({

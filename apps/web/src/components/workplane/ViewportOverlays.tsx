@@ -1116,7 +1116,7 @@ function cornerRulerNeighborLabel(
 /**
  * Projiziert jede platzierte Winkellineal-Instanz auf den Bildschirm: die
  * Ecke, die beiden Arm-Endpunkte, jeden Teilstrich (`cornerRulerTicks`),
- * die relative Bemaßung des ausgewählten Körpers (wie in Tinkercad) sowie
+ * die relative Bemaßung des ausgewählten Körpers (wie in similar tools) sowie
  * die automatische Bemaßung weiterer Formen am Lineal.
  * Reine Bildschirm-Darstellung wie beim Massband - kein Three.js-Objekt.
  */
@@ -1165,7 +1165,7 @@ export function syncCornerRulerToolOverlay(
         });
       };
       // Die Teilstriche zeigen nach aussen (weg vom jeweils anderen Arm),
-      // wie bei Tinkercad - nicht in die Ecke hinein, wo sonst platzierte
+      // wie bei vergleichbaren Programmen - nicht in die Ecke hinein, wo sonst platzierte
       // Formen sitzen wuerden.
       buildTicks(xAxis, zAxis.clone().negate(), ruler.armLengthX);
       buildTicks(zAxis, xAxis.clone().negate(), ruler.armLengthZ);

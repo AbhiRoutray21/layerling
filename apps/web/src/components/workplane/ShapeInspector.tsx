@@ -1839,7 +1839,7 @@ function getShapePropertiesWithAppLimits(shape: WorkplaneShape, onUpdate: ShapeI
 }
 
 /**
- * How a text is filled (#215), as Tinkercad lists it: one list - filled, outline, outer line,
+ * How a text is filled (#215), as similar tools list it: one list - filled, outline, outer line,
  * inner line - and, for a line, its width and corners right under it. The silhouette and "Wider"
  * (the filled letters grown by the line width, its corners beside it) are rarer and sit under
  * "More" (TEXT_FILL_MORE_IDS). The box follows the fill (textFillPatch), the letters stay as
@@ -1902,7 +1902,7 @@ function textFillProperties(shape: WorkplaneShape, onUpdate: ShapeInspectorUpdat
 }
 
 /**
- * How an extruded sketch body is filled, without opening the sketch (#197, as Tinkercad's SVG
+ * How an extruded sketch body is filled, without opening the sketch (#197, as the usual SVG
  * fill modes): the area, a stroke outside, inside or centred on its lines with a width and
  * corners, and the silhouette that leaves its holes out. The editor builds the body again.
  */
@@ -2067,7 +2067,7 @@ export function ShapeInspector({
 }) {
   useLanguage();
   const solidColor = shape.color;
-  // Picking one colour for a group means one colour for all of it, as in Tinkercad.
+  // Picking one colour for a group means one colour for all of it, as in similar tools.
   const singleColorPatch: Partial<WorkplaneShape> = canToggleGroupColors(shape) ? { multicolor: false } : {};
   const locked = Boolean(shape.locked);
   // A calculation typed into a field (#180) is noted just before the field's change and rides
@@ -3661,7 +3661,7 @@ function RangeProperty({
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState(formatPropertyNumber(controlValue, accuracy, controlStep));
   const unit = isLength ? lengthDisplayUnit(workspace).label : ROTATION_PROPERTY_IDS.has(id) ? "°" : null;
-  // Inches read as fractions (1⅝), like Tinkercad; the slider and typed decimals stay exact.
+  // Inches read as fractions (1⅝), like similar tools; the slider and typed decimals stay exact.
   const formatShown = (shown: number) => (unit === "in" && showsInchFractions(workspace) ? formatFractionalInches(shown) : formatPropertyNumber(shown, accuracy, controlStep));
   const toModelValue = (nextValue: number) => isLength ? displayToMillimeters(nextValue, workspace) : nextValue;
   // The calculation the field was last set from comes back when it is entered (#180), as long as
@@ -3963,7 +3963,7 @@ function GearTypeSelector({ value, disabled, onChange }: { value: GearType; disa
 }
 
 /**
- * The properties panel for several parts at once (#183), as in Tinkercad: how many are
+ * The properties panel for several parts at once (#183), as in similar tools: how many are
  * selected, solid or hole and a colour for all of them, and locking. Sizes stay with a single
  * body, the handles and Scale by percent. Locked parts are left as they are.
  */

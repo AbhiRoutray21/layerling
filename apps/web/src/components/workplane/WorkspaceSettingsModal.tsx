@@ -932,10 +932,10 @@ export function WorkspaceSettingsModal({
                     </button>
                     <button
                       type="button"
-                      title={t("workspace.tinkercadLookHint")}
-                      onClick={() => patchWorkspace(tinkercadLookPatch(workspace))}
+                      title={t("workspace.classicLookHint")}
+                      onClick={() => patchWorkspace(classicLookPatch(workspace))}
                     >
-                      {t("workspace.tinkercadLook")}
+                      {t("workspace.classicLook")}
                     </button>
                   </div>
                   <label className="workspace-range">
@@ -1485,11 +1485,11 @@ const EDGE_COLOR_PRESETS = [
 ] as const;
 
 /**
- * The work area as Tinkercad shows it, with the values @prmod3d measured (#143): white ground,
+ * The work area as similar tools show it, with the values @prmod3d measured (#143): white ground,
  * pale blue grid with darker lines every centimetre, black edge lines, light from straight above
  * with soft shadows. Everything stays adjustable afterwards.
  */
-function tinkercadLookPatch(workspace: WorkplaneWorkspaceSettings): Partial<WorkplaneWorkspaceSettings> {
+function classicLookPatch(workspace: WorkplaneWorkspaceSettings): Partial<WorkplaneWorkspaceSettings> {
   return {
     background: "#ffffff",
     surfaceColor: "#fafafa",

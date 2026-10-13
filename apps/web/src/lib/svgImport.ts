@@ -90,7 +90,7 @@ export function validateSvgSourcePreflight(source: string) {
   }
 
   if (/\b(?:width|height|viewBox|d)\s*=\s*(["'])[^"']*\bNaN\b[^"']*\1/i.test(source)) {
-    throw new Error("SVG contains invalid NaN geometry. In Tinkercad, make sure the workplane intersects the model before exporting the cross-section");
+    throw new Error("SVG contains invalid NaN geometry. In the program that made it, make sure the cross-section really cuts the model before exporting it");
   }
 
   const xmlElementCount = source.match(/<[a-z][^!?/\s>]*/gi)?.length ?? 0;

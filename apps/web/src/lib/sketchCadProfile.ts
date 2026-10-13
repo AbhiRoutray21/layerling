@@ -88,7 +88,7 @@ function signedArea(points: Array<{ x: number; z: number }>) {
 }
 
 /**
- * The sketch without its holes (#197, Tinkercad's Silhouette): only the closed outlines no larger
+ * The sketch without its holes (#197, the usual Silhouette): only the closed outlines no larger
  * one holds stay, with the open lines; every outline inside them - holes and islands in holes -
  * is left out.
  */
