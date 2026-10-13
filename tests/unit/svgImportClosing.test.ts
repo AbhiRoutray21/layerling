@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { describe, expect, it } from "vitest";
-import { buildSvgExtrusionFromPaths, parseSvgForImport } from "@/lib/svgImport";
+import { buildSvgExtrusionFromPaths, importedShapeFromSvgWithReport, parseSvgForImport } from "@/lib/svgImport";
 
 describe("an outline that closes a hair beside its start (#258)", () => {
   // Three letters traced in Affinity: every path is written with three decimals, so the T ends
@@ -32,5 +32,22 @@ describe("an outline that closes a hair beside its start (#258)", () => {
     const together = buildSvgExtrusionFromPaths(parseSvgForImport(logo).paths).analysis.volume;
     expect(together).toBeCloseTo(only(0) + only(1) + only(2), 3);
     expect(only(1)).toBeGreaterThan(1000);
+  });
+});
+
+describe("shapes that do not build into a solid are counted (#258)", () => {
+  const square = '<path d="M0,0L100,0L100,100L0,100Z" style="fill:#000"/>';
+  const wrap = (body: string) => `<?xml version="1.0"?><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">${body}</svg>`;
+
+  it("reports none for a clean drawing", () => {
+    expect(importedShapeFromSvgWithReport("clean.svg", wrap(square)).skippedShapes).toBe(0);
+  });
+
+  it("reports the shapes left out, and still imports the rest", () => {
+    // Two squares joined at one corner, drawn as a single outline that passes through the corner twice.
+    const bowTie = '<path d="M150,0L200,0L200,50L250,50L250,100L200,100L200,50L150,50Z" style="fill:#000"/>';
+    const report = importedShapeFromSvgWithReport("mixed.svg", wrap(square + bowTie));
+    expect(report.skippedShapes).toBeGreaterThanOrEqual(1);
+    expect(report.shape.importedMesh?.triangleCount).toBeGreaterThan(0);
   });
 });

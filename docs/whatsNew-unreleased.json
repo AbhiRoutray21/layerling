@@ -75,8 +75,8 @@
       "en": "SVG import: missing letters"
     },
     "body": {
-      "de": "Ein SVG, dessen Umriss nicht genau am Startpunkt endet, etwa bei einem nachgezeichneten Logo aus Affinity, kam ohne diese Form herein, oder die Datei wurde ganz abgelehnt. Solche Umrisse werden jetzt sauber geschlossen.",
-      "en": "An SVG whose outline does not end exactly at its start, such as a traced logo from Affinity, came in without that shape, or the whole file was refused. Such outlines are now closed cleanly."
+      "de": "Ein SVG, dessen Umriss nicht genau am Startpunkt endet, etwa bei einem nachgezeichneten Logo aus Affinity, kam ohne diese Form herein, oder die Datei wurde ganz abgelehnt. Solche Umrisse werden jetzt sauber geschlossen. Und Formen, die sich nicht zu einem Körper bauen lassen, meldet der Import jetzt, statt sie stillschweigend wegzulassen.",
+      "en": "An SVG whose outline does not end exactly at its start, such as a traced logo from Affinity, came in without that shape, or the whole file was refused. Such outlines are now closed cleanly. And shapes that cannot be built into a solid are now reported by the import instead of being left out silently."
     }
   }
 ]

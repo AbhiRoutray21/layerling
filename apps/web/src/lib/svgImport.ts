@@ -539,6 +539,8 @@ export function buildSvgExtrusionFromPaths(paths: readonly THREE.ShapePath[]) {
   const shapes = composeNestedRings(sourceShapes);
   const rawPositions: number[] = [];
   const acceptedAnalyses: TriangleSoupAnalysis[] = [];
+  // Shapes that do not build into a solid are left out; the import says how many (#258).
+  let skippedShapes = 0;
 
   for (const shape of shapes) {
     const rawGeometry = new THREE.ExtrudeGeometry(shape, {
@@ -568,6 +570,8 @@ export function buildSvgExtrusionFromPaths(paths: readonly THREE.ShapePath[]) {
     if (candidateAnalysis) {
       rawPositions.push(...candidatePositions);
       acceptedAnalyses.push(candidateAnalysis);
+    } else {
+      skippedShapes += 1;
     }
     if (geometry !== rawGeometry) geometry.dispose();
     rawGeometry.dispose();
@@ -590,12 +594,17 @@ export function buildSvgExtrusionFromPaths(paths: readonly THREE.ShapePath[]) {
   const rawNormals: number[] = [];
   for (let index = 0; index < normal.count; index += 1) rawNormals.push(normal.getX(index), normal.getY(index), normal.getZ(index));
   geometry.dispose();
-  return { rawPositions, rawNormals, analysis };
+  return { rawPositions, rawNormals, analysis, skippedShapes };
 }
 
 export function importedShapeFromSvg(fileName: string, source: string): WorkplaneShape {
+  return importedShapeFromSvgWithReport(fileName, source).shape;
+}
+
+/** The imported shape and how many of the drawing's shapes could not be built and were left out. */
+export function importedShapeFromSvgWithReport(fileName: string, source: string): { shape: WorkplaneShape; skippedShapes: number } {
   const parsed = parseSvgForImport(source);
-  const { rawPositions, rawNormals, analysis } = buildSvgExtrusionFromPaths(parsed.paths);
+  const { rawPositions, rawNormals, analysis, skippedShapes } = buildSvgExtrusionFromPaths(parsed.paths);
   const centerX = analysis.width / 2;
   const centerZ = analysis.depth / 2;
   let minX = Number.POSITIVE_INFINITY;
@@ -612,7 +621,7 @@ export function importedShapeFromSvg(fileName: string, source: string): Workplan
     positions.push(rawPositions[index] - minX - centerX, rawPositions[index + 1] - minY, rawPositions[index + 2] - minZ - centerZ);
   }
 
-  return {
+  const shape: WorkplaneShape = {
     id: createLocalId("uploaded-svg"),
     name: fileName.replace(/\.[^.]+$/, "") || "Imported SVG",
     kind: "mesh",
@@ -638,6 +647,7 @@ export function importedShapeFromSvg(fileName: string, source: string): Workplan
     locked: false,
     hidden: false,
   };
+  return { shape, skippedShapes };
 }
 
 export function invalidSvgMeshReason(shape: WorkplaneShape) {

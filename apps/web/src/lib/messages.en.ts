@@ -921,6 +921,7 @@ export const MESSAGES_EN = {
   "status.importFailedMore": " and {count} more",
   "status.importColoredParts": "{name} has {count} colours and comes in as {count} bodies, each in its place and selected together.",
   "status.importObjectParts": "{name} holds {objects} objects and comes in as {count} bodies, each in its place and selected together.",
+  "status.importSvgSkipped": "{count} shape(s) of {name} did not build into a solid and were left out. Join overlapping pieces in the drawing program, close the outlines and save the SVG again.",
   "status.importObjNoMtl": "The material colours for {name} are missing - select the .mtl file with it or import the whole ZIP.",
   "status.importMtlAlone": "An .mtl file only holds colours. Select it together with its .obj.",
   "status.importZipEmpty": "The ZIP holds no file layerling can import",
