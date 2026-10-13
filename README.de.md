@@ -227,6 +227,8 @@ auf den Pfad im Container setzen, an dem es eingebunden ist, etwa `./shared-proj
 Nach einer Änderung `docker compose up -d` ausführen: `docker compose restart` behält die alte Einstellung.
 `docker exec <Container> printenv LAYERLING_SHARED_PROJECTS_DIR` zeigt die tatsächlich verwendete.
 
+Das Farbschema, das Leute beim ersten Besuch bekommen, legst du mit `LAYERLING_DEFAULT_THEME` fest: `system`, `light`, `dark` oder `graphite` (auf demselben Weg, in `compose.yml` oder in der Umgebung von `npm run start`). Wer layerling schon geöffnet hat, behält das Schema, das sein Browser bereits hat, und jeder kann es weiter mit dem Umschalter ändern. Ohne die Einstellung folgt das Schema dem System. Eine Kopie, die als reine Dateien ausgeliefert wird, hat keinen Server, der sie lesen könnte, dort gilt sie nicht.
+
 ### Statisches Hosting: reine Dateien auf einem Webserver
 
 Jeder Webserver kann layerling als reine Dateien ausliefern; auf ihm läuft kein Node.js. Du baust die Dateien einmal auf einem Rechner mit Node.js (siehe [Was du brauchst](#was-du-brauchst)):
