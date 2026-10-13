@@ -6099,7 +6099,7 @@ html[data-toolbar-size="large"] .shape-menu-dropdown:not(.sketch-shape-menu-drop
 
 .sketch-plate-wrap {
   position: absolute;
-  inset: 14px 14px 42px;
+  inset: 14px 14px 0;
   display: block;
   overflow: hidden;
 }
