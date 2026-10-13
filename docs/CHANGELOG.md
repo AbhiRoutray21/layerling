@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **Arabic and Hebrew read right to left, Arabic letters join up:** A text in Arabic came out mirrored, letter by letter from the left, and each letter stood alone instead of joining its neighbours. Text in Arabic, Persian, Urdu or Hebrew is now laid out right to left - in a mixed line only the right-to-left words turn round, digits stay - and Arabic letters take their initial, medial and final forms, lam-alef its ligature. The forms come from the font: from its character map or from its shaping rules when it is added. This needs a font of your own with these letters, such as Arial, Noto Naskh Arabic or Amiri; the built-in typefaces have none. Reported by @iq0099 (#294).
+
 ## 1.67.6
 
 - **Arrow keys take fine steps when the snap grid is off:** With the grid switched off, the arrow keys still moved a shape by a whole millimetre (5 with Shift), although dragging with the mouse was free. They now move by 0.1 mm (0.5 with Shift), in the 3D view and in the sketch (#293).

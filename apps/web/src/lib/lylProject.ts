@@ -137,7 +137,8 @@ function embeddedFonts(states: WorkplaneShape[][]): LylFontV1[] {
   const visit = (shape: WorkplaneShape) => {
     if (isCustomFontId(shape.font) && shape.kind === "text") {
       const used = characters.get(shape.font) ?? new Set<string>();
-      textCharacters((shape.text ?? "TEXT").trim() || " ").forEach((character) => used.add(character));
+      const glyphs = customFontEntry(shape.font)?.data.glyphs as Record<string, unknown> | undefined;
+      textCharacters((shape.text ?? "TEXT").trim() || " ", glyphs).forEach((character) => used.add(character));
       characters.set(shape.font, used);
     }
     shape.groupedShapes?.forEach(visit);
