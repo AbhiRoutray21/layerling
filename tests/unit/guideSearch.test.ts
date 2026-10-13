@@ -89,6 +89,22 @@ describe("the matching", () => {
     expect(find("uber griffe")).toEqual(["/anleitung/groesse.html#groesse"]);
   });
 
+  it("takes ss and the sharp s for each other, in the query and in the text", () => {
+    const tape = core.prepare([
+      { c: "Messen", h: "Das Maßband", u: "/anleitung/messen.html#das-massband", t: "Das Maßband misst zwischen zwei Punkten." },
+      { c: "Messen", h: "Straße und Fuß", u: "/anleitung/messen.html#strasse", t: "Eine Strasse ist kein Fuss." },
+    ]);
+    const urls = (query: string) => core.search(tape, query).map((hit) => hit.entry.u);
+    expect(urls("massband")).toEqual(["/anleitung/messen.html#das-massband"]);
+    expect(urls("maßband")).toEqual(["/anleitung/messen.html#das-massband"]);
+    expect(urls("MASSBAND")).toEqual(["/anleitung/messen.html#das-massband"]);
+    expect(urls("strasse")).toEqual(["/anleitung/messen.html#strasse"]);
+    expect(urls("straße")).toEqual(["/anleitung/messen.html#strasse"]);
+    expect(urls("fuss")).toEqual(["/anleitung/messen.html#strasse"]);
+    expect(urls("fuß")).toEqual(["/anleitung/messen.html#strasse"]);
+    expect(urls("strasse fuß")).toEqual(["/anleitung/messen.html#strasse"]);
+  });
+
   it("finds a part of a word", () => {
     expect(find("palet")).toEqual(["/guide/shapes.html"]);
   });

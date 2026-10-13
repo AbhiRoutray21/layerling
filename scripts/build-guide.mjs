@@ -458,26 +458,38 @@ export function searchEntries({ title, summary, html, path }) {
  * The matching, kept apart from the page so a test can run it. It folds case and accents one letter
  * for one letter (so a position in the folded text is a position in the real one), wants every word
  * of the query somewhere in a section, and ranks a word in the heading above one in the chapter's
- * title above one in the text. Written for browsers, so plain ES5 and no backslashes.
+ * title above one in the text. "ss" and the sharp s are the same to it, whichever one is typed and
+ * whichever one the text has. Written for browsers, so plain ES5 and no backslashes.
  */
 export const GUIDE_SEARCH_CORE = `
 function guideFold(text){var out="";for(var i=0;i<text.length;i++){out+=text.charAt(i).toLowerCase().normalize("NFD").charAt(0);}return out;}
+function guideForms(word){
+  var forms=[word];
+  if(word.indexOf("ss")>=0)forms.push(word.split("ss").join(String.fromCharCode(223)));
+  if(word.indexOf(String.fromCharCode(223))>=0)forms.push(word.split(String.fromCharCode(223)).join("ss"));
+  return forms;
+}
+function guideFind(text,forms,from){
+  var best=null;
+  for(var i=0;i<forms.length;i++){var k=text.indexOf(forms[i],from);if(k>=0&&(!best||k<best.at))best={at:k,len:forms[i].length};}
+  return best;
+}
 function guidePrepare(entries){return entries.map(function(e){return {e:e,c:guideFold(e.c),h:guideFold(e.h),t:guideFold(e.t)};});}
 function guideTokens(query){return guideFold(query).split(" ").filter(function(w){return w.length>0;});}
 function guideSearch(prepared,query,limit){
   var tokens=guideTokens(query);if(!tokens.length)return [];
-  var phrase=tokens.join(" "),found=[];
+  var forms=tokens.map(guideForms),phrase=guideForms(tokens.join(" ")),found=[];
   prepared.forEach(function(p){
     var score=0;
     for(var i=0;i<tokens.length;i++){
-      var w=tokens[i],inH=p.h.indexOf(w)>=0,inC=p.c.indexOf(w)>=0,at=p.t.indexOf(w);
-      if(!inH&&!inC&&at<0)return;
+      var inH=guideFind(p.h,forms[i],0),inC=guideFind(p.c,forms[i],0),at=guideFind(p.t,forms[i],0);
+      if(!inH&&!inC&&!at)return;
       if(inH)score+=10;
       if(inC)score+=3;
-      if(at>=0){score+=1;var n=0,k=at;while(k>=0&&n<5){n++;k=p.t.indexOf(w,k+w.length);}score+=n*0.3;}
+      if(at){score+=1;var n=0,k=at;while(k&&n<5){n++;k=guideFind(p.t,forms[i],k.at+k.len);}score+=n*0.3;}
     }
-    if(tokens.length>1&&(p.h.indexOf(phrase)>=0||p.t.indexOf(phrase)>=0))score+=6;
-    found.push({entry:p.e,score:score,folded:p.t,tokens:tokens});
+    if(tokens.length>1&&(guideFind(p.h,phrase,0)||guideFind(p.t,phrase,0)))score+=6;
+    found.push({entry:p.e,score:score,folded:p.t,forms:forms});
   });
   found.sort(function(a,b){return b.score-a.score;});
   return found.slice(0,limit||8);
@@ -487,12 +499,12 @@ function guideSearch(prepared,query,limit){
 const GUIDE_SEARCH_PAGE = `
 function guideSnippet(hit){
   var text=hit.entry.t,first=-1;
-  hit.tokens.forEach(function(w){var k=hit.folded.indexOf(w);if(k>=0&&(first<0||k<first))first=k;});
+  hit.forms.forEach(function(group){var f=guideFind(hit.folded,group,0);if(f&&(first<0||f.at<first))first=f.at;});
   var from=first>40?first-40:0;
   if(from>0){var gap=text.indexOf(" ",from);if(gap>=0&&gap<first)from=gap+1;}
   var end=Math.min(text.length,from+150),marked=[];
   for(var i=from;i<end;i++)marked.push(false);
-  hit.tokens.forEach(function(w){var k=hit.folded.indexOf(w,from);while(k>=0&&k<end){for(var j=k;j<k+w.length&&j<end;j++)marked[j-from]=true;k=hit.folded.indexOf(w,k+w.length);}});
+  hit.forms.forEach(function(group){var f=guideFind(hit.folded,group,from);while(f&&f.at<end){for(var j=f.at;j<f.at+f.len&&j<end;j++)marked[j-from]=true;f=guideFind(hit.folded,group,f.at+f.len);}});
   var parts=[],run="",state=false;
   if(from>0)parts.push({text:"... ",mark:false});
   for(var m=0;m<marked.length;m++){if(marked[m]!==state&&run){parts.push({text:run,mark:state});run="";}state=marked[m];run+=text.charAt(from+m);}
