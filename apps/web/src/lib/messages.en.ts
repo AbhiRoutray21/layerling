@@ -1411,6 +1411,8 @@ export const MESSAGES_EN = {
   "prop.loftOffsetX": "Top Offset in Width",
   "prop.loftOffsetZ": "Top Offset in Length",
   "prop.loftWall": "Wall Thickness (0 = solid)",
+  "prop.loftSmooth": "Smooth transition (%)",
+  "loft.smoothHint": "0 is a straight taper, like a cone. 100 gives an S-curve: the sides leave both ends straight up and change their size in between, like a hose adapter that flares smoothly from a narrow to a wide pipe.",
   "prop.loftTwist": "Twist",
   "prop.sketchFill": "Fill",
   "prop.sketchFill.area": "Area",

@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "title": {
+      "de": "Loft: weicher Übergang",
+      "en": "Loft: smooth transition"
+    },
+    "body": {
+      "de": "Die Form Loft hat einen neuen Regler, „Weicher Übergang“. Bei 0 laufen die Seiten gerade wie bei einem Kegel, bei 100 in einer S-Kurve: ideal für einen Schlauchadapter, der sich weich vom schmalen zum weiten Rohr aufweitet. Mit Wand bleibt er an beiden Enden offen.",
+      "en": "The Loft shape has a new slider, “Smooth transition”. At 0 the sides run straight like a cone, at 100 along an S-curve: ideal for a hose adapter that flares smoothly from a narrow to a wide pipe. With a wall it stays open at both ends."
+    }
+  }
+]

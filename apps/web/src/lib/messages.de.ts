@@ -1410,6 +1410,8 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "prop.loftOffsetX": "Versatz oben in der Breite",
   "prop.loftOffsetZ": "Versatz oben in der Länge",
   "prop.loftWall": "Wandstärke (0 = voll)",
+  "prop.loftSmooth": "Weicher Übergang (%)",
+  "loft.smoothHint": "0 ist eine gerade Verjüngung wie bei einem Kegel. Bei 100 laufen die Seiten an beiden Enden gerade nach oben und ändern dazwischen ihre Größe in einer S-Kurve, wie ein Schlauchadapter, der sich weich von einem schmalen zu einem weiten Rohr aufweitet.",
   "prop.loftTwist": "Verdrehung",
   "prop.sketchFill": "Füllung",
   "prop.sketchFill.area": "Fläche",
