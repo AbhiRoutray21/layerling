@@ -1,26 +1,23 @@
-import { existsSync, readFileSync } from "node:fs";
-import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { graphiteGrey } from "../../scripts/generate-graphite-theme.mjs";
+import { STYLE, THEME_SCRIPT } from "../../scripts/build-guide.mjs";
 
 /*
  * The guide follows the program's colour theme, Graphite too (#278): the dark theme with the warm
- * browns turned grey. Its greys must be the ones the program's own Graphite works out.
+ * browns turned grey. Its greys must be the ones the program's own Graphite works out. Reads the
+ * guide's stylesheet and script as the builder holds them, so it needs no built guide.
  */
-const page = join(__dirname, "..", "..", "apps/web/public/guide/index.html");
-
 function tokens(block: string) {
   return Object.fromEntries([...block.matchAll(/--([\w-]+):\s*(#[0-9a-fA-F]{6})/g)].map((match) => [match[1], match[2].toLowerCase()]));
 }
 
-describe.skipIf(!existsSync(page))("the guide in Graphite", () => {
-  const html = readFileSync(page, "utf8");
-  const dark = tokens(/:root\[data-theme="dark"\]\s*\{([^}]*)\}/.exec(html)?.[1] ?? "");
-  const graphite = tokens(/:root\[data-theme="dark"\]\[data-palette="graphite"\]\s*\{([^}]*)\}/.exec(html)?.[1] ?? "");
+const dark = tokens(/:root\[data-theme="dark"\]\s*\{([^}]*)\}/.exec(STYLE)?.[1] ?? "");
+const graphite = tokens(/:root\[data-theme="dark"\]\[data-palette="graphite"\]\s*\{([^}]*)\}/.exec(STYLE)?.[1] ?? "");
 
+describe("the guide in Graphite", () => {
   it("sets the palette when Graphite is the stored theme", () => {
-    expect(html).toContain('t==="graphite"');
-    expect(html).toContain('dataset.palette="graphite"');
+    expect(THEME_SCRIPT).toContain('t==="graphite"');
+    expect(THEME_SCRIPT).toContain('dataset.palette="graphite"');
   });
 
   it("has a grey for every brown of the dark theme", () => {
