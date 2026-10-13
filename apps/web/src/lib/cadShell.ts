@@ -106,8 +106,11 @@ const MIN_PROBE_WALL = 0.01;
  * instead. The precise tolerance is tried first; the coarser one survives more
  * curved inputs.
  */
-export function shellSolid(cad: OcctKernel, solid: ShapeHandle, thickness: number, openings: ShellOpenings, edges: ShellEdges = "round") {
-  const joinType = edges === "sharp" ? JoinType.Intersection : JoinType.Arc;
+function shellBody(cad: OcctKernel, solid: ShapeHandle, thickness: number, openings: ShellOpenings, edges: ShellEdges) {
+  // Rounded inner corners are tried first. An outline made of many short straight pieces, such as
+  // a traced drawing, can defeat the arc joins at every wall thickness while sharp joins build it
+  // without trouble (forum 618422), so a rounded request falls back to sharp ones.
+  const joinTypes: Array<JoinType.Arc | JoinType.Intersection> = edges === "sharp" ? [JoinType.Intersection] : [JoinType.Arc, JoinType.Intersection];
   const faces = cad.getSubShapes(solid, "face");
   try {
     const bySide = shellOpeningFacesBySide(cad, solid, faces, openings);
@@ -123,22 +126,24 @@ export function shellSolid(cad: OcctKernel, solid: ShapeHandle, thickness: numbe
     const solidVolume = cad.getVolume(solid);
     let lastError: unknown = null;
     const attempt = (wall: number): ShapeHandle | null => {
-      for (const tolerance of [1e-6, 1e-3]) {
-        let cavity: ShapeHandle | null = null;
-        try {
-          const result = open.length > 0
-            ? cad.shell(solid, open, wall, tolerance, joinType)
-            : cad.cut(solid, (cavity = cavityFromOffset(cad, cad.offset(solid, -wall, tolerance, joinType))));
-          const volume = shapeIsValid(cad, result) ? cad.getVolume(result) : 0;
-          if (volume > 0 && volume < solidVolume * (1 - 1e-6)) return result;
-          cad.release(result);
-          lastError = new Error("invalid shell");
-        } catch (error) {
-          // A missing kernel function is not a verdict on the wall thickness.
-          if (error instanceof Error && /is not a function/.test(error.message)) throw error;
-          lastError = error;
-        } finally {
-          if (cavity !== null) cad.release(cavity);
+      for (const joinType of joinTypes) {
+        for (const tolerance of [1e-6, 1e-3]) {
+          let cavity: ShapeHandle | null = null;
+          try {
+            const result = open.length > 0
+              ? cad.shell(solid, open, wall, tolerance, joinType)
+              : cad.cut(solid, (cavity = cavityFromOffset(cad, cad.offset(solid, -wall, tolerance, joinType))));
+            const volume = shapeIsValid(cad, result) ? cad.getVolume(result) : 0;
+            if (volume > 0 && volume < solidVolume * (1 - 1e-6)) return result;
+            cad.release(result);
+            lastError = new Error("invalid shell");
+          } catch (error) {
+            // A missing kernel function is not a verdict on the wall thickness.
+            if (error instanceof Error && /is not a function/.test(error.message)) throw error;
+            lastError = error;
+          } finally {
+            if (cavity !== null) cad.release(cavity);
+          }
         }
       }
       return null;
@@ -164,3 +169,47 @@ export function shellSolid(cad: OcctKernel, solid: ShapeHandle, thickness: numbe
   }
 }
 
+/** A face smaller than this has no area worth the name; the kernel's own tolerance is far below it. */
+const ZERO_AREA_FACE = 1e-4;
+/** A face whose area is under this share of the square of its own length is a sliver. */
+const SLIVER_RATIO = 1e-3;
+
+/**
+ * A copy of the body without its sliver faces, or null when it has none (or they cannot be taken
+ * out cleanly). A mesh whose pieces overlapped a little comes out of the conversion with a flat
+ * face as long as a finger and thinner than a hair; every other face of the body is fine and still
+ * the kernel cannot hollow it (forum 618422: an imported drawing of a house, 0.00 mm2 on a face
+ * 8 mm long).
+ */
+function withoutSliverFaces(cad: OcctKernel, solid: ShapeHandle): ShapeHandle | null {
+  const faces = cad.getSubShapes(solid, "face");
+  try {
+    const slivers = faces.filter((face) => {
+      const area = cad.getSurfaceArea(face);
+      if (area < ZERO_AREA_FACE) return true;
+      const box = cad.getBoundingBox(face, false);
+      const lengthSquared = (box.xmax - box.xmin) ** 2 + (box.ymax - box.ymin) ** 2 + (box.zmax - box.zmin) ** 2;
+      return area < lengthSquared * SLIVER_RATIO;
+    });
+    if (slivers.length === 0) return null;
+    try {
+      const cleaned = cad.defeature(solid, slivers, 1e-4);
+      if (cad.isSolid(cleaned) && shapeIsValid(cad, cleaned)) return cleaned;
+      cad.release(cleaned);
+    } catch {
+      // The body stays as it is; hollowing it may fail as before.
+    }
+    return null;
+  } finally {
+    releaseAll(cad, faces);
+  }
+}
+
+export function shellSolid(cad: OcctKernel, solid: ShapeHandle, thickness: number, openings: ShellOpenings, edges: ShellEdges = "round") {
+  const cleaned = withoutSliverFaces(cad, solid);
+  try {
+    return shellBody(cad, cleaned ?? solid, thickness, openings, edges);
+  } finally {
+    if (cleaned !== null) cad.release(cleaned);
+  }
+}

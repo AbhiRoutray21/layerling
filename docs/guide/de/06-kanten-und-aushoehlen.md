@@ -63,7 +63,7 @@ Dosen, Becher, Gehäuse und Abdeckungen haben eines gemeinsam: Sie sind innen le
 
 Die Wände wachsen nach innen. Außen bleibt alles, wie es ist.
 
-Die {{ui:shell.edges}} wirken nur dort, wo die Innenwände auseinanderlaufen - an einer Stufe im Körper oder rund um eine Öffnung. Die Ecken des Hohlraums eines einfachen Quaders sind mit beiden Einstellungen immer scharf. Für ein rundes Innere rundest du zuerst die Außenkanten des Körpers (siehe oben) und höhlst ihn dann aus: Das Innere folgt mit dem Radius minus der Wandstärke.
+Die {{ui:shell.edges}} wirken nur dort, wo die Innenwände auseinanderlaufen - an einer Stufe im Körper oder rund um eine Öffnung. Die Ecken des Hohlraums eines einfachen Quaders sind mit beiden Einstellungen immer scharf. Für ein rundes Innere rundest du zuerst die Außenkanten des Körpers (siehe oben) und höhlst ihn dann aus: Das Innere folgt mit dem Radius minus der Wandstärke. Lässt sich das runde Innere nicht bauen, was bei einem Umriss aus sehr vielen kurzen geraden Stücken wie einer nachgezeichneten Zeichnung vorkommen kann, baut layerling denselben Hohlkörper stattdessen mit scharfen Innenecken.
 
 ![Das Ergebnis: eine Schale mit 3 mm Wand, oben offen.](shot:hollow-result)
 
