@@ -213,4 +213,14 @@ describe("hollowing a solid with the real OCCT kernel", () => {
     expect(() => shellSolid(kernel, solid, 16, "top")).toThrow(/thinner wall/);
     kernel.release(solid);
   });
+
+  it("does not blame the wall when the body cannot be hollowed at all (forum 618422)", () => {
+    // Two boxes that touch along one edge only: no solid the kernel can shell, whatever the wall.
+    const joined = kernel.fuse(kernel.makeBox(20, 20, 20), kernel.translate(kernel.makeBox(20, 20, 20), 20, 20, 0));
+    for (const wall of [0.2, 1]) {
+      expect(() => shellSolid(kernel, joined, wall, "top")).toThrow(/cannot be hollowed with any wall thickness/);
+      expect(() => shellSolid(kernel, joined, wall, "top")).not.toThrow(/thinner wall/);
+    }
+    kernel.release(joined);
+  });
 });

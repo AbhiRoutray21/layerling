@@ -493,6 +493,7 @@ export const MESSAGES_EN = {
   "shell.working": "Hollowing…",
   "shell.cancel": "Cancel hollowing",
   "shell.errorTooThick": "The walls cannot be this thick for this body. Choose a thinner wall.",
+  "shell.errorCannotHollow": "This body cannot be hollowed, not even with a very thin wall. Its outline is probably not clean enough for the CAD kernel; a cutout that touches the outer edge, such as a door cut down to the bottom edge of an imported shape, can cause this.",
   "shell.errorNoFlatTop": "This body has no flat top face to leave open. Spheres and free shapes cannot be hollowed this way.",
   "shell.errorNoFlatBottom": "This body has no flat bottom face to leave open.",
   "edge.errorOldRevolve": "This revolved body was built as a mesh by an older layerling. Open Edit sketch and finish it again to make it an exact body; then it can be hollowed, rounded and chamfered.",

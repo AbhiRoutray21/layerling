@@ -492,6 +492,7 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "shell.working": "Wird ausgehöhlt…",
   "shell.cancel": "Aushöhlen abbrechen",
   "shell.errorTooThick": "Die Wände können für diesen Körper nicht so dick sein. Bitte eine dünnere Wandstärke wählen.",
+  "shell.errorCannotHollow": "Dieser Körper lässt sich nicht aushöhlen, auch nicht mit einer sehr dünnen Wand. Sein Umriss ist wahrscheinlich nicht sauber genug für den CAD-Kern; eine Aussparung, die den Außenrand berührt, etwa eine bis zur Unterkante reichende Tür bei einer importierten Form, kann das auslösen.",
   "shell.errorNoFlatTop": "Dieser Körper hat oben keine ebene Fläche, die geöffnet werden kann. Kugeln und freie Formen können so nicht ausgehöhlt werden.",
   "shell.errorNoFlatBottom": "Dieser Körper hat unten keine ebene Fläche, die geöffnet werden kann.",
   "edge.errorOldRevolve": "Dieser gedrehte Körper wurde von einer älteren layerling-Fassung als Netz gebaut. Öffne „Skizze bearbeiten“ und schließe ihn neu ab, dann ist er ein exakter Körper und lässt sich aushöhlen, verrunden und fasen.",

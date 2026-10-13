@@ -91,6 +91,13 @@ function cavityFromOffset(cad: OcctKernel, offset: ShapeHandle) {
   }
 }
 
+/** The raw messages of a hollowing that failed; the editor words them for the person (cadModifierRuntime). */
+export const TOO_THICK_MESSAGE = "The walls cannot be this thick for this body. Choose a thinner wall.";
+export const CANNOT_HOLLOW_MESSAGE = "This body cannot be hollowed with any wall thickness.";
+/** The thin wall tried when a hollowing fails, to tell a wall that is too thick from a body that cannot be hollowed. */
+const PROBE_WALL = 0.05;
+const MIN_PROBE_WALL = 0.01;
+
 /**
  * Hollows one solid to walls of `thickness`, measured inward.
  *
@@ -115,27 +122,43 @@ export function shellSolid(cad: OcctKernel, solid: ShapeHandle, thickness: numbe
     // solid as a "valid" result - a hollow body has to lose volume.
     const solidVolume = cad.getVolume(solid);
     let lastError: unknown = null;
-    for (const tolerance of [1e-6, 1e-3]) {
-      let cavity: ShapeHandle | null = null;
-      try {
-        const result = open.length > 0
-          ? cad.shell(solid, open, thickness, tolerance, joinType)
-          : cad.cut(solid, (cavity = cavityFromOffset(cad, cad.offset(solid, -thickness, tolerance, joinType))));
-        const volume = shapeIsValid(cad, result) ? cad.getVolume(result) : 0;
-        if (volume > 0 && volume < solidVolume * (1 - 1e-6)) return result;
-        cad.release(result);
-        lastError = new Error("invalid shell");
-      } catch (error) {
-        // A missing kernel function is not a verdict on the wall thickness.
-        if (error instanceof Error && /is not a function/.test(error.message)) throw error;
-        lastError = error;
-      } finally {
-        if (cavity !== null) cad.release(cavity);
+    const attempt = (wall: number): ShapeHandle | null => {
+      for (const tolerance of [1e-6, 1e-3]) {
+        let cavity: ShapeHandle | null = null;
+        try {
+          const result = open.length > 0
+            ? cad.shell(solid, open, wall, tolerance, joinType)
+            : cad.cut(solid, (cavity = cavityFromOffset(cad, cad.offset(solid, -wall, tolerance, joinType))));
+          const volume = shapeIsValid(cad, result) ? cad.getVolume(result) : 0;
+          if (volume > 0 && volume < solidVolume * (1 - 1e-6)) return result;
+          cad.release(result);
+          lastError = new Error("invalid shell");
+        } catch (error) {
+          // A missing kernel function is not a verdict on the wall thickness.
+          if (error instanceof Error && /is not a function/.test(error.message)) throw error;
+          lastError = error;
+        } finally {
+          if (cavity !== null) cad.release(cavity);
+        }
+      }
+      return null;
+    };
+    const hollowed = attempt(thickness);
+    if (hollowed) return hollowed;
+    if (lastError instanceof Error && lastError.message.startsWith("This body")) throw lastError;
+    // Every failure used to be reported as "too thick", also at 0.2 mm. Only a body that can be
+    // hollowed with a very thin wall is a body whose wall was too thick. A body that fails even
+    // then is not clean for the kernel (forum 618422: an imported house whose door was cut down
+    // to its bottom edge, so that the cutout touches the outline).
+    const probe = Math.max(MIN_PROBE_WALL, Math.min(thickness / 4, PROBE_WALL));
+    if (thickness > probe * 1.01) {
+      const thin = attempt(probe);
+      if (thin) {
+        cad.release(thin);
+        throw new Error(TOO_THICK_MESSAGE);
       }
     }
-    throw lastError instanceof Error && lastError.message.startsWith("This body")
-      ? lastError
-      : new Error("The walls cannot be this thick for this body. Choose a thinner wall.");
+    throw new Error(CANNOT_HOLLOW_MESSAGE);
   } finally {
     releaseAll(cad, faces);
   }

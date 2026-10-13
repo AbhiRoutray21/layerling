@@ -6,6 +6,7 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **Hollowing no longer blames the wall when the body is the problem:** Whenever the CAD kernel could not hollow a body, the message said the walls could not be this thick, also at 0.2 mm. Now a very thin wall is tried when hollowing fails: if that works, the wall really was too thick and the message stays; if even that fails, the message says the body cannot be hollowed at all and names a likely cause, such as a cutout that touches the outer edge of an imported shape (a door cut down to the bottom edge of a house, for example), which leaves an outline the kernel cannot work with. Found in a forum report.
 ## 1.67.3
 
 - **The guide follows Graphite (#278):** With the Graphite theme chosen, the user guide still showed the brown dark theme, because its pages only knew light and dark. They now have the grey palette too, worked out from the dark one the way the program does it, with the orange accent kept, and a test keeps the two in step. Reported by @AkiraNorthstar.
