@@ -54,7 +54,7 @@ Wo eine Kurve an die Ecke stößt oder mehr als zwei Linien zusammenlaufen, gibt
 
 Klicke auf einen Eckpunkt und wähle {{ui:sketch.filletCorner}} oder {{ui:sketch.chamferCorner}}. Es erscheint ein kleines Feld für den {{ui:sketch.filletRadius}} beziehungsweise den {{ui:sketch.chamferDistance}}. Trage das Maß ein und bestätige mit dem Haken. Das geht für Ecken zwischen zwei geraden Linien.
 
-Auch mehrere Ecken auf einmal gehen: Wähle sie mit [[Umschalt]] und je einem Klick oder ziehe einen Rahmen darum, und nimm {{ui:sketch.filletCorner}} oder {{ui:sketch.chamferCorner}} aus der Leiste, die erscheint. Alle bekommen denselben Radius oder Abstand. Teilen sich zwei gewählte Ecken eine Seite, nimmt jede höchstens 45 % davon, ein Rechteck rundherum verrundet wird also an jeder Ecke gleich. Punkte, die keine Ecke zwischen zwei geraden Linien sind, bleiben außen vor, und die Meldung sagt, wie viele.
+Auch mehrere Ecken auf einmal gehen: Wähle sie mit [[Umschalt]] und je einem Klick oder ziehe einen Rahmen darum, und nimm {{ui:sketch.filletCorner}} oder {{ui:sketch.chamferCorner}} aus der Leiste, die erscheint. Alle bekommen denselben Radius oder Abstand. Teilen sich zwei gewählte Ecken eine Seite, nimmt jede höchstens 45 % davon, ein Rechteck rundherum verrundet wird also an jeder Ecke gleich. Punkte, die keine Ecke zwischen zwei geraden Linien sind, bleiben außen vor, und die Meldung sagt, wie viele. Ein Rahmen um eine ganze Form oder ein Klick hinein wählt ihre Ecken und ihre Linien zusammen aus, und die Leiste bietet dann neben den Eckenwerkzeugen {{ui:sketch.curveLine}} und {{ui:sketch.straightenLine}} für alle gewählten Linien an.
 
 ![Die Ecke oben links wird mit 12 mm Radius verrundet.](shot:sketch-fillet)
 

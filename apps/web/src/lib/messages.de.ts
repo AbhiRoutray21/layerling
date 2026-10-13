@@ -950,6 +950,8 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "status.sketchMadeCorner": "In eine Ecke umgewandelt",
   "status.sketchLineCurved": "Linie gekrümmt",
   "status.sketchLineStraightened": "Linie gerade gemacht",
+  "status.sketchLinesCurved": "{count} Linien gekrümmt",
+  "status.sketchLinesStraightened": "{count} Linien gerade gemacht",
   "status.sketchMadeSmooth": "In eine Rundung umgewandelt",
   "status.sketchHandlesSplit": "Kurvengriffe getrennt",
   "status.sketchPointInserted": "Punkt in den Pfad eingefügt",

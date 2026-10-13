@@ -6,6 +6,7 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **Corner and line tools on a mixed sketch selection (#283):** A frame round a shape, or a click inside it, selects its corners and its lines together, and then the sketch offered neither **Round corner** nor **Chamfer corner**, and **Curve line** only ever worked on one line. Now the bar shows the corner tools for the selected corners whatever lines come with them, and **Curve line** and **Straight line** act on all the selected lines at once, in one undo step. A line selection alone works the same, so a whole outline can be curved in one click. Suggested by @lukyanenkomax.
 - **Hollowing no longer blames the wall when the body is the problem:** Whenever the CAD kernel could not hollow a body, the message said the walls could not be this thick, also at 0.2 mm. Now a very thin wall is tried when hollowing fails: if that works, the wall really was too thick and the message stays; if even that fails, the message says the body cannot be hollowed at all and names a likely cause, such as a cutout that touches the outer edge of an imported shape (a door cut down to the bottom edge of a house, for example), which leaves an outline the kernel cannot work with. Found in a forum report.
 ## 1.67.3
 

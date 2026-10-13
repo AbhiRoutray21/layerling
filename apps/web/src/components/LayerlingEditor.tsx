@@ -35,7 +35,7 @@ import {
   sketchPrimitiveGeometry,
 } from "@/lib/sketchPrimitives";
 import { cloneSketchProfile, orderedSketchPaths, withSegmentHandles, withSmoothSketchHandles } from "@/lib/sketchSmoothHandles";
-import { curveSketchSegment, straightenSketchSegment } from "@/lib/sketchSegmentCurve";
+import { curveSketchSegment, isSegmentCurved, straightenSketchSegment } from "@/lib/sketchSegmentCurve";
 import { withSegmentsConstruction } from "@/lib/sketchConstruction";
 import { alignAxesForWorkplane, cuboidAlongAxes, shiftAlongAxis, type AlignAxes } from "@/lib/alignFrame";
 import {
@@ -147,7 +147,7 @@ import { MyShapesSection, type CustomShapeEntry, type CustomShapeLocation } from
 import { deleteServerCustomShape, listServerCustomShapes, readServerCustomShape, renameServerCustomShape, saveServerCustomShape, type ServerCustomShape } from "@/lib/customShapesServer";
 import { addLineIntersectionPoints, onlyMovesPoints, splitSketchSegment } from "@/lib/sketchPointRefinement";
 import { copySketchSelection, freeSketchPasteOffset, pasteSketchClipboard, type SketchClipboard } from "@/lib/sketchClipboard";
-import { sketchSelectionCount, toggleSketchSelection } from "@/lib/sketchSelection";
+import { sketchSelectedPointIds, sketchSelectionCount, toggleSketchSelection } from "@/lib/sketchSelection";
 import { applySketchCorners } from "@/lib/sketchFilletChamfer";
 import { revolveAxisShift } from "@/lib/revolveAxis";
 import { buildSketchRevolveMesh, DEFAULT_SKETCH_REVOLVE_SETTINGS, normalizeSketchRevolveSettings, type SketchRevolveMesh } from "@/lib/sketchRevolve";
@@ -2676,11 +2676,7 @@ export function LayerlingEditor({
   const [sketchStrokePanelOpen, setSketchStrokePanelOpen] = useState(false);
   const [sketchStrokePreview, setSketchStrokePreview] = useState<string | null>(null);
   // The points a corner treatment would apply to: one, or several selected ones (#269).
-  const selectedSketchPointIds = useMemo(() => {
-    if (sketchSelection?.kind === "point") return [sketchSelection.id];
-    if (sketchSelection?.kind === "multiple" && sketchSelection.segmentIds.length === 0 && !sketchSelection.imageIds?.length) return sketchSelection.pointIds;
-    return [];
-  }, [sketchSelection]);
+  const selectedSketchPointIds = useMemo(() => sketchSelectedPointIds(sketchSelection), [sketchSelection]);
   const canFilletSketchPoint = useMemo(
     () => selectedSketchPointIds.some((id) => canApplySketchCornerTreatment(sketchProfile, id)),
     [selectedSketchPointIds, sketchProfile],
@@ -4634,6 +4630,36 @@ export function LayerlingEditor({
   const curveSketchSegmentAction = useCallback((id: string) => {
     const next = curveSketchSegment(sketchProfile, id);
     if (next) commitSketchProfile(next, t("status.sketchLineCurved"));
+  }, [commitSketchProfile, sketchProfile]);
+
+  /** Curves every selected straight line at once, one undo step (#283). */
+  const curveSketchSegmentsAction = useCallback((ids: string[]) => {
+    let next = sketchProfile;
+    let count = 0;
+    for (const id of ids) {
+      const segment = next.segments.find((entry) => entry.id === id);
+      if (!segment || isSegmentCurved(next, segment)) continue;
+      const curved = curveSketchSegment(next, id);
+      if (curved) {
+        next = curved;
+        count += 1;
+      }
+    }
+    if (count > 0) commitSketchProfile(next, count === 1 ? t("status.sketchLineCurved") : t("status.sketchLinesCurved", { count }));
+  }, [commitSketchProfile, sketchProfile]);
+
+  /** Makes every selected curved line straight again at once (#283). */
+  const straightenSketchSegmentsAction = useCallback((ids: string[]) => {
+    let next = sketchProfile;
+    let count = 0;
+    for (const id of ids) {
+      const straightened = straightenSketchSegment(next, id);
+      if (straightened) {
+        next = straightened;
+        count += 1;
+      }
+    }
+    if (count > 0) commitSketchProfile(next, count === 1 ? t("status.sketchLineStraightened") : t("status.sketchLinesStraightened", { count }));
   }, [commitSketchProfile, sketchProfile]);
 
   const straightenSketchSegmentAction = useCallback((id: string) => {
@@ -10980,6 +11006,8 @@ export function LayerlingEditor({
             onInsertPoint={insertSketchPoint}
             onSetPointMode={setSketchPointMode}
             onCurveSegment={curveSketchSegmentAction}
+            onCurveSegments={curveSketchSegmentsAction}
+            onStraightenSegments={straightenSketchSegmentsAction}
             onStraightenSegment={straightenSketchSegmentAction}
             onSetSegmentConstruction={setSketchSegmentConstruction}
             onApplyFillet={applySketchFilletHandler}

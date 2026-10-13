@@ -951,6 +951,8 @@ export const MESSAGES_EN = {
   "status.sketchMadeCorner": "Made corner",
   "status.sketchLineCurved": "Line curved",
   "status.sketchLineStraightened": "Line made straight",
+  "status.sketchLinesCurved": "{count} lines curved",
+  "status.sketchLinesStraightened": "{count} lines made straight",
   "status.sketchMadeSmooth": "Made smooth",
   "status.sketchHandlesSplit": "Curve handles split",
   "status.sketchPointInserted": "Point added to path",

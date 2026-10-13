@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "title": {
+      "de": "Skizze: ganze Form auf einmal runden oder krümmen",
+      "en": "Sketch: round or curve a whole shape at once"
+    },
+    "body": {
+      "de": "Wählst du in einer Skizze eine ganze Form aus, mit einem Rahmen oder einem Klick hinein, bietet die Leiste jetzt für alle ihre Ecken Verrunden und Fasen und für alle ihre Linien Krümmen und Gerade an. Vorher gingen diese Werkzeuge nur bei einer einzelnen Auswahl.",
+      "en": "Select a whole shape in a sketch, with a frame or a click inside it, and the bar now offers Round and Chamfer for all of its corners and Curve and Straight for all of its lines. Before, these tools only worked on a single selection."
+    }
+  }
+]
