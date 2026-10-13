@@ -56,6 +56,11 @@ export type LanguageInfo = {
   quickstartAnchor: string;
   /** The built-in labels of the legal links in the footer. */
   legal: { imprint: string; privacy: string };
+  /**
+   * Whether people write "ae", "oe" and "ue" for the letters ä, ö and ü, as German does when the
+   * keyboard has none; the guide search then finds one for the other.
+   */
+  asciiUmlauts: boolean;
   /** Names of keys and mouse actions where the language does not use the English ones. */
   keyNames: Readonly<Record<string, string>>;
   /**
@@ -81,6 +86,7 @@ export const LANGUAGE_INFO: Readonly<Record<Language, LanguageInfo>> = {
     quickstartAnchor: "windows-quickstart",
     legal: { imprint: "Imprint", privacy: "Privacy Policy" },
     keyNames: { RightClick: "Right click" },
+    asciiUmlauts: false,
     complete: true,
     guide: {
       site: "layerling user guide",
@@ -112,6 +118,7 @@ export const LANGUAGE_INFO: Readonly<Record<Language, LanguageInfo>> = {
     quickstartAnchor: "schnellstart-unter-windows",
     legal: { imprint: "Impressum", privacy: "Datenschutz" },
     keyNames: { Ctrl: "Strg", Shift: "Umschalt", Delete: "Entf", Backspace: "Rücktaste", Home: "Pos1", Click: "Klick", RightClick: "Rechtsklick", Drag: "Ziehen" },
+    asciiUmlauts: true,
     complete: true,
     guide: {
       site: "layerling Anleitung",

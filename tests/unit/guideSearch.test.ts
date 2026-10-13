@@ -13,7 +13,7 @@ type Hit = { entry: Entry; score: number };
 const core = new Function(`${GUIDE_SEARCH_CORE}; return { fold: guideFold, prepare: guidePrepare, search: guideSearch };`)() as {
   fold: (text: string) => string;
   prepare: (entries: Entry[]) => unknown;
-  search: (prepared: unknown, query: string, limit?: number) => Hit[];
+  search: (prepared: unknown, query: string, limit?: number, umlauts?: boolean) => Hit[];
 };
 
 const entries: Entry[] = [
@@ -103,6 +103,17 @@ describe("the matching", () => {
     expect(urls("fuss")).toEqual(["/anleitung/messen.html#strasse"]);
     expect(urls("fuß")).toEqual(["/anleitung/messen.html#strasse"]);
     expect(urls("strasse fuß")).toEqual(["/anleitung/messen.html#strasse"]);
+  });
+
+  it("finds an umlaut by its two letters where the language writes them so", () => {
+    const search = (query: string, umlauts: boolean) => core.search(prepared, query, 8, umlauts).map((hit) => hit.entry.u);
+    expect(search("aendere", true)).toEqual(["/anleitung/groesse.html#groesse"]);
+    expect(search("groesse", true)).toEqual([]);
+    expect(search("hoehe", true)).toEqual(["/anleitung/groesse.html#groesse"]);
+    expect(search("ueber", true)).toEqual(["/anleitung/groesse.html#groesse"]);
+    // Without it a query is taken as typed: English "blue" must not turn into "blu".
+    expect(search("aendere", false)).toEqual([]);
+    expect(search("hoehe", false)).toEqual([]);
   });
 
   it("finds a part of a word", () => {

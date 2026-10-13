@@ -466,12 +466,14 @@ export function searchEntries({ title, summary, html, path }) {
  * for one letter (so a position in the folded text is a position in the real one), wants every word
  * of the query somewhere in a section, and ranks a word in the heading above one in the chapter's
  * title above one in the text. "ss" and the sharp s are the same to it, whichever one is typed and
- * whichever one the text has. Written for browsers, so plain ES5 and no backslashes.
+ * whichever one the text has; where people write "ae", "oe" and "ue" for the umlauts, those find
+ * them too. Written for browsers, so plain ES5 and no backslashes.
  */
 export const GUIDE_SEARCH_CORE = `
 function guideFold(text){var out="";for(var i=0;i<text.length;i++){out+=text.charAt(i).toLowerCase().normalize("NFD").charAt(0);}return out;}
-function guideForms(word){
+function guideForms(word,umlauts){
   var forms=[word];
+  if(umlauts){var plain=word.split("ae").join("a").split("oe").join("o").split("ue").join("u");if(plain!==word)forms.push(plain);}
   if(word.indexOf("ss")>=0)forms.push(word.split("ss").join(String.fromCharCode(223)));
   if(word.indexOf(String.fromCharCode(223))>=0)forms.push(word.split(String.fromCharCode(223)).join("ss"));
   return forms;
@@ -483,9 +485,9 @@ function guideFind(text,forms,from){
 }
 function guidePrepare(entries){return entries.map(function(e){return {e:e,c:guideFold(e.c),h:guideFold(e.h),t:guideFold(e.t)};});}
 function guideTokens(query){return guideFold(query).split(" ").filter(function(w){return w.length>0;});}
-function guideSearch(prepared,query,limit){
+function guideSearch(prepared,query,limit,umlauts){
   var tokens=guideTokens(query);if(!tokens.length)return [];
-  var forms=tokens.map(guideForms),phrase=guideForms(tokens.join(" ")),found=[];
+  var forms=tokens.map(function(w){return guideForms(w,umlauts);}),phrase=guideForms(tokens.join(" "),umlauts),found=[];
   prepared.forEach(function(p){
     var score=0;
     for(var i=0;i<tokens.length;i++){
@@ -527,7 +529,7 @@ function guideSnippet(hit){
   function render(){
     if(!guideTokens(input.value).length){close();return;}
     if(!prepared){load().then(function(){if(prepared)render();});return;}
-    var hits=guideSearch(prepared,input.value,8);
+    var hits=guideSearch(prepared,input.value,8,form.getAttribute("data-umlauts")==="true");
     box.textContent="";
     if(!hits.length){var none=document.createElement("p");none.textContent=form.getAttribute("data-nothing");box.appendChild(none);}
     hits.forEach(function(hit){
@@ -562,8 +564,8 @@ function guideSearchScript() {
 }
 
 /** The search box in the header of a guide page; the script fills it with results. */
-function searchForm(strings) {
-  return `<form class="guide-search" id="guide-search" role="search" data-index="/${strings.dir}/search-index.json" data-nothing="${escapeHtml(strings.searchNothing)}"><input type="search" id="guide-search-input" name="q" placeholder="${escapeHtml(strings.search)}" aria-label="${escapeHtml(strings.search)}" aria-controls="guide-results" aria-expanded="false" autocomplete="off" spellcheck="false"><div class="guide-results" id="guide-results" hidden></div></form>`;
+function searchForm(strings, language) {
+  return `<form class="guide-search" id="guide-search" role="search" data-index="/${strings.dir}/search-index.json" data-nothing="${escapeHtml(strings.searchNothing)}" data-umlauts="${LANGUAGE_INFO[language].asciiUmlauts ? "true" : "false"}"><input type="search" id="guide-search-input" name="q" placeholder="${escapeHtml(strings.search)}" aria-label="${escapeHtml(strings.search)}" aria-controls="guide-results" aria-expanded="false" autocomplete="off" spellcheck="false"><div class="guide-results" id="guide-results" hidden></div></form>`;
 }
 
 export const THEME_SCRIPT = `try{var t=localStorage.getItem("layerling.theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t;else if(t==="graphite"){document.documentElement.dataset.theme="dark";document.documentElement.dataset.palette="graphite"}}catch(e){}`;
@@ -595,7 +597,7 @@ function pageShell({ language, title, description, path, alternates, chapters, c
   <body>
     <header class="bar"><div class="bar-inner">
       <a class="brand" href="/${strings.dir}/index.html"><img src="/assets/layerling/layerling-logo.svg" alt=""><span class="brand-text"><b>layerling</b><span class="brand-note">${escapeHtml(strings.home)}</span></span></a>
-      ${searchForm(strings)}
+      ${searchForm(strings, language)}
       ${languageMenu(languageLinks, language, strings)}
       <a class="button" id="open-editor" href="/">${escapeHtml(strings.openEditor)}</a>
     </div><p class="editor-elsewhere" id="editor-elsewhere" role="status" hidden>${escapeHtml(strings.editorElsewhere)}</p></header>
