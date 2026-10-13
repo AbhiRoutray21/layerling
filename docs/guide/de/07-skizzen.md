@@ -101,6 +101,17 @@ Die Kontur stellst du auch ein, ohne die Skizze zu öffnen: In den Eigenschaften
 
 Verrundungen und Fasen an den Kanten gehen beim Neubau verloren, wie beim Bearbeiten der Skizze.
 
+## Schräge Wände, für Stempel
+
+Eine extrudierte Skizze hat senkrechte Wände. Ein Stempel, eine Prägeform oder ein Stanzwerkzeug braucht schräge, außen und innen, mit durchgehend gleicher Wandstärke. Einen Ausformwinkel für die Extrusion gibt es in layerling nicht, bei einfachen Umrissen kommt man aber mit der {{ui:inspector.taper}} ans Ziel. Ein Weg, der funktioniert:
+
+1. Zeichne den Umriss mit dem Loch, das er braucht, und mache einen Körper daraus. Dupliziere den Körper ([[Strg]]+[[D]]).
+2. Schalte beim ersten Körper {{ui:prop.sketchSilhouette}} ein, so dass das Loch gefüllt ist, und gib ihm mit {{ui:inspector.taper}} unten eine größere Fläche als oben.
+3. Öffne bei der Kopie die Skizze noch einmal und lösche den äußeren Umriss, so dass nur der Umriss des Lochs bleibt. Schließe die Skizze ab, stelle den Körper auf {{ui:inspector.hole}} und gib ihm mit {{ui:inspector.taper}} unten eine kleinere Fläche als oben.
+4. Schiebe das Loch dorthin, wo es im ersten Körper war, und gruppiere beide.
+
+Die Wände sind nun außen und innen schräg. Die Verjüngung skaliert den ganzen Umriss, deshalb stimmt das bei einfachen Formen genau, wo du die Maße so wählen kannst, dass die Wände parallel laufen, und bei feinen Einzelheiten wie Schrift nur ungefähr.
+
 ## Ein Bild als Vorlage
 
 Mit {{ui:sketch.addImage}} legst du ein Foto oder eine Zeichnung unter die Skizze und zeichnest sie nach. Du kannst die Größe, die Deckkraft und die Lage einstellen. Sobald das Bild richtig liegt, sperrst du es mit [[L]], damit du es beim Zeichnen nicht versehentlich verschiebst. Ein gesperrtes Bild ist aus dem Weg: Klicks gehen durch es hindurch, du wählst also Linien und Punkte darauf an und ziehst einen Rahmen darüber. Um es wieder auszuwählen, etwa zum Entsperren, klickst du mit [[Alt]] darauf. Verdecken seine Einstellungen am rechten Rand das Bild, ziehst du sie an ihrer Titelleiste weg; ein Doppelklick darauf dockt sie wieder an.

@@ -101,6 +101,17 @@ You can set the stroke without opening the sketch too: in the properties of a sk
 
 Fillets and chamfers on the edges go when the body is built again, as when the sketch is edited.
 
+## Slanted walls, for stamps
+
+An extruded sketch has vertical walls. A stamp, an embossing die or a punch wants slanted ones, outside and inside, with the same wall thickness all the way. Layerling has no draft angle for an extrusion, but for plain outlines the {{ui:inspector.taper}} gets you there. One way that works:
+
+1. Draw the outline with the hole it needs and make a body of it. Duplicate the body ([[Ctrl]]+[[D]]).
+2. On the first body, switch on {{ui:prop.sketchSilhouette}}, so the hole is filled, and give it a wider bottom than top with {{ui:inspector.taper}}.
+3. On the copy, open its sketch again and delete the outer outline, so that only the outline of the hole is left. Finish the sketch, switch the body to {{ui:inspector.hole}} and give it a narrower bottom than top with {{ui:inspector.taper}}.
+4. Move the hole into the first body, where the hole was, and group the two.
+
+The walls now slope outside and inside. Taper scales the whole outline, so this is exact for plain shapes, where you can choose the sizes so the walls run parallel, and only an approximation for fine details such as lettering.
+
 ## A picture as template
 
 With {{ui:sketch.addImage}} you put a photo or a drawing under the sketch and trace it. You can set its size, opacity and position. Once the picture sits right, lock it with [[L]] so you do not move it by accident while drawing. A locked image is out of the way: clicks go through it, so you can pick lines and points on top of it and drag a frame over them. To select it again, for example to unlock it, [[Alt]]+click it. If its settings at the right edge cover the picture, drag them away by their title bar; a double-click on it docks them again.
