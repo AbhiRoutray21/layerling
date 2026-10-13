@@ -1,5 +1,90 @@
 [
   {
+    "version": "1.67.0",
+    "items": [
+      {
+        "title": {
+          "de": "Torus: Seiten und Stufen einstellbar",
+          "en": "Torus: adjustable sides and steps"
+        },
+        "body": {
+          "de": "Der Torus hat jetzt zwei Regler in den Eigenschaften: „Seiten am Ring“ und „Stufen am Wulst“. Ohne eigene Angabe folgen sie der Größe, ein großer Torus wird also von selbst glatt. Stellst du sie niedrig, zeichnet layerling den Torus eckig, in der Ansicht und im Export.",
+          "en": "The torus has two sliders in its properties now: “Ring sides” and “Tube steps”. Left alone they follow the size, so a large torus comes out smooth by itself. Set them low and layerling draws the torus faceted, in the view and in the export."
+        }
+      },
+      {
+        "title": {
+          "de": "T macht die Auswahl durchsichtig",
+          "en": "T makes the selection see-through"
+        },
+        "body": {
+          "de": "Mit der Taste T machst du die ausgewählten Körper durchsichtig, mit einem zweiten Druck wieder undurchsichtig. Ist in einer gemischten Auswahl schon einer durchsichtig, werden zuerst alle undurchsichtig. Aussparungen und gesperrte Körper bleiben, wie sie sind.",
+          "en": "Press T to make the selected bodies see-through, and again to make them opaque. If a mixed selection already has a see-through body, all become opaque first. Holes and locked bodies stay as they are."
+        }
+      },
+      {
+        "title": {
+          "de": "Lochmuster: Wand zwischen den Löchern",
+          "en": "Hole pattern: wall between the holes"
+        },
+        "body": {
+          "de": "Das Lochmuster hat einen neuen Regler, „Wand zwischen den Löchern“. Er zeigt den Steg, der zwischen zwei Nachbarlöchern bleibt, also die Wandstärke im Druck, und stellt ihn ein: Der Abstand von Mitte zu Mitte folgt, und umgekehrt. Das gilt für alle Lochformen und beide Anordnungen.",
+          "en": "The hole pattern has a new slider, “Wall between the holes”. It shows the wall left between two neighbouring holes, which is the wall thickness in the print, and sets it: the spacing centre to centre follows, and the other way round. It works for every hole shape and both arrangements."
+        }
+      },
+      {
+        "title": {
+          "de": "Abgerundeter Quader: Qualität 1 ist eine echte Fase",
+          "en": "Rounded box: quality 1 is a true chamfer"
+        },
+        "body": {
+          "de": "Mit Qualität 1 bekommt ein Abgerundeter Quader eine echte Fase, jetzt auch dann, wenn Deckel- und Bodenkante gerundet sind. Vorher ergab das zwei Stücke statt einer flachen Fläche.",
+          "en": "With quality 1 a rounded box gets a true chamfer, now also when its top and bottom edges are rounded. Before, that gave two pieces instead of one flat face."
+        }
+      },
+      {
+        "title": {
+          "de": "Skizze: Formen übereinander schieben",
+          "en": "Sketch: pushing shapes over each other"
+        },
+        "body": {
+          "de": "Zwei Formen, die du in der Skizze übereinander schiebst, zeigen keine Aussparung mehr an der Überlappung, denn der Körper wird ihre Vereinigung. Und sie verhaken sich nicht mehr: Beim Verschieben entstehen keine gemeinsamen Punkte an den Kreuzungen, du kannst sie wieder auseinanderziehen.",
+          "en": "Two shapes you push over each other in the sketch no longer show a hole where they overlap, because the body becomes their union. And they no longer get caught on each other: moving makes no shared points at the crossings, so you can pull them apart again."
+        }
+      },
+      {
+        "title": {
+          "de": "Gewinde: Spiel in Achsrichtung",
+          "en": "Threads: play along the axis"
+        },
+        "body": {
+          "de": "Mutter und Gewindeloch haben ein neues Feld, „Spiel in Achsrichtung“. Es macht die Zähne dünner, ohne den Durchmesser aufzuweiten, damit ein gedrucktes Gewinde leicht läuft und nicht seitlich wackelt. In der Anleitung steht ein neuer Abschnitt mit Tipps für gedruckte Gewinde.",
+          "en": "Nuts and tapped holes have a new field, “Play along the axis”. It makes the teeth thinner without widening the diameter, so a printed thread turns easily and does not wobble sideways. The guide has a new section with tips for printed threads."
+        }
+      },
+      {
+        "title": {
+          "de": "Pfeilrad",
+          "en": "Herringbone gear"
+        },
+        "body": {
+          "de": "Das Zahnrad gibt es jetzt auch als Pfeilrad: zwei Schrägrad-Hälften, die gegenläufig drehen. Es zentriert sich von selbst auf der Welle und schiebt nicht seitlich, das macht es für den 3D-Druck angenehm. Winkel und Qualität stellst du wie beim Schrägrad ein.",
+          "en": "The gear now comes as a herringbone gear too: two helical halves turning opposite ways. It centres itself on its shaft and does not push sideways, which makes it pleasant for 3D printing. You set angle and quality as for the helical gear."
+        }
+      },
+      {
+        "title": {
+          "de": "SVG-Import: Buchstaben fehlten",
+          "en": "SVG import: missing letters"
+        },
+        "body": {
+          "de": "Ein SVG, dessen Umriss nicht genau am Startpunkt endet, etwa bei einem nachgezeichneten Logo aus Affinity, kam ohne diese Form herein, oder die Datei wurde ganz abgelehnt. Solche Umrisse werden jetzt sauber geschlossen. Und Formen, die sich nicht zu einem Körper bauen lassen, meldet der Import jetzt, statt sie stillschweigend wegzulassen.",
+          "en": "An SVG whose outline does not end exactly at its start, such as a traced logo from Affinity, came in without that shape, or the whole file was refused. Such outlines are now closed cleanly. And shapes that cannot be built into a solid are now reported by the import instead of being left out silently."
+        }
+      }
+    ]
+  },
+  {
     "version": "1.66.7",
     "items": [
       {

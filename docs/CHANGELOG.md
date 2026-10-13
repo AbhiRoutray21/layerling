@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+## 1.67.0
+
 - **SVG import says what it left out (#258):** An SVG shape that does not build into a solid, such as an outline crossing itself or touching itself at a point, was dropped without a word, so a drawing came in with a gap nobody could explain. The import message now says how many shapes of the file were left out and what to try. The guide has it under adding geometry. Follows from the closing sliver found by stainlessdmc12.
 - **SVG import: a letter closing a hair beside its start (#258):** A traced logo (letters F, T and L from Affinity) came in without its T. The program writes every number with three decimals, so the T's outline ended 0.001 beside where it began, and the closing edge between the two was a sliver the extrusion could not triangulate. The check for a solid threw the whole letter out without a word, and a file in which every shape ended like that was refused as having "no filled contours". A last point within a hundred-thousandth of the drawing's size of the first is now taken as the first. Reported by stainlessdmc12 on GitHub.
 - **Guide: hollow bodies that end in a point (#263):** Hollow needs a flat face to leave open, and a closed cavity fails at a sharp tip too, as on a cone or a revolved triangle. The guide now says so under Hollowing and shows the way that works: draw the wall into the profile before revolving. Asked about by danyvanimpe-lab on GitHub.
