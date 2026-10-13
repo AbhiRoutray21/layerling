@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+## 1.67.5
+
 - **Slanted walls for stamps, a tip in the guide:** The sketches chapter has a new section, "Slanted walls, for stamps": layerling has no draft angle for an extrusion, but for plain outlines a body with Taper and a hole with its own Taper give slanted walls outside and inside, step by step. Suggested by @HolmanCotton.
 - **The Script typeface draws Cyrillic, Greek and Polish letters:** The Script typeface lacked the Cyrillic and Greek alphabets and 37 letters of Latin Extended-A, among them the Polish ą and ę, and drew a question mark for each. It now borrows them from Sans, as the other typefaces already did, and a test checks the Russian, Ukrainian, Greek and Polish letters in every typeface.
 - **Search in the German guide finds umlauts typed as two letters:** "aushoehlen" finds "aushöhlen", "ueber" finds "über", as the command search in the editor already did. English guides take a query as typed.

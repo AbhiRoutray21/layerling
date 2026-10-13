@@ -1,5 +1,20 @@
 [
   {
+    "version": "1.67.5",
+    "items": [
+      {
+        "title": {
+          "de": "Notizen schreiben mit Enter und Esc",
+          "en": "Writing notes with Enter and Esc"
+        },
+        "body": {
+          "de": "Beim Schreiben einer Notiz übernimmt Enter jetzt den Text, Esc stellt ihn wieder her, wie er vorher war, und Umschalt+Enter beginnt eine neue Zeile. Und tippst du mitten im Text, bleibt der Cursor dort, statt ans Ende zu springen.",
+          "en": "While you write a note, Enter now keeps the text, Esc puts it back to how it was, and Shift+Enter starts a new line. And when you type in the middle of the text, the cursor stays there instead of jumping to the end."
+        }
+      }
+    ]
+  },
+  {
     "version": "1.67.4",
     "items": [
       {
