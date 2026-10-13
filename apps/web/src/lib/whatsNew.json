@@ -1,5 +1,30 @@
 [
   {
+    "version": "1.67.3",
+    "items": [
+      {
+        "title": {
+          "de": "Suche in der Anleitung",
+          "en": "Search in the guide"
+        },
+        "body": {
+          "de": "Jede Seite der Anleitung hat jetzt oben ein Suchfeld. Tippe ein oder zwei Wörter, und es zeigt die Abschnitte, in denen sie vorkommen, mit einem Textausschnitt. Ein Klick springt direkt dorthin.",
+          "en": "Every page of the user guide now has a search box at the top. Type a word or two and it shows the sections where they appear, with a snippet of the text. One click takes you straight there."
+        }
+      },
+      {
+        "title": {
+          "de": "Vieleck und Stern in der Skizze",
+          "en": "Polygon and star in the sketch"
+        },
+        "body": {
+          "de": "Das Menü der Skizzenformen hat zwei neue Formen: ein Vieleck und einen Stern. Unten im Menü stellst du die Zahl der Seiten oder Zacken ein und beim Stern, wie tief die Täler reichen. Danach sind es ganz normale Eckpunkte, die du weiter bearbeiten kannst.",
+          "en": "The sketch shapes menu has two new shapes: a polygon and a star. At the bottom of the menu you set the number of sides or points and, for the star, how deep the valleys reach. Afterwards they are ordinary corner points you can keep editing."
+        }
+      }
+    ]
+  },
+  {
     "version": "1.67.2",
     "items": [
       {
