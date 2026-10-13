@@ -1,5 +1,20 @@
 [
   {
+    "version": "1.68.0",
+    "items": [
+      {
+        "title": {
+          "de": "Arabisch und Hebräisch von rechts nach links",
+          "en": "Arabic and Hebrew right to left"
+        },
+        "body": {
+          "de": "Text in Arabisch, Persisch, Urdu oder Hebräisch läuft jetzt von rechts nach links, und arabische Buchstaben verbinden sich mit ihren Nachbarn wie in der Schrift vorgesehen. Dafür braucht es eine eigene Schrift mit diesen Buchstaben, etwa Arial oder Noto Naskh Arabic.",
+          "en": "Text in Arabic, Persian, Urdu or Hebrew now runs right to left, and Arabic letters join their neighbours the way the script asks. This needs a font of your own with these letters, such as Arial or Noto Naskh Arabic."
+        }
+      }
+    ]
+  },
+  {
     "version": "1.67.6",
     "items": [
       {
