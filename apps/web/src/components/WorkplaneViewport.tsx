@@ -203,8 +203,22 @@ function orthographicZoomRange(camera: THREE.OrthographicCamera) {
  * Near and far planes that follow the distance: up close a near plane of
  * 0.1 mm would cut into a 3 mm view, far out a fixed one would leave the
  * depth buffer too coarse and faces would flicker into each other.
+ *
+ * The flat view draws the same picture wherever the camera stands on its line
+ * of sight, but the camera stays where the standard view (F) or the switch
+ * left it, often closer than the parts in front of the pivot: tilted towards
+ * the front, everything nearer than the camera was cut off. Its depth range
+ * reaches behind the camera as far as in front, so nothing in the picture is.
  */
 function fitCameraDepthRange(camera: THREE.Camera, target: THREE.Vector3) {
+  if (camera instanceof THREE.OrthographicCamera) {
+    const far = camera.position.distanceTo(target) + CAMERA_MAX_DISTANCE;
+    if (camera.near === -CAMERA_MAX_DISTANCE && Math.abs(camera.far - far) <= camera.far * 0.05) return;
+    camera.near = -CAMERA_MAX_DISTANCE;
+    camera.far = far;
+    camera.updateProjectionMatrix();
+    return;
+  }
   if (!(camera instanceof THREE.PerspectiveCamera)) return;
   const distance = camera.position.distanceTo(target);
   const near = clamp(distance / 2000, 0.01, 5);
@@ -8925,7 +8939,7 @@ function toggleCameraProjection(state: ThreeState) {
       CAMERA_MIN_DISTANCE,
       CAMERA_MAX_DISTANCE,
     );
-    next = new THREE.PerspectiveCamera(CAMERA_FOV, aspect, current.near, current.far);
+    next = new THREE.PerspectiveCamera(CAMERA_FOV, aspect, 0.1, 6000);
     next.position.copy(target).addScaledVector(direction, distance);
   }
 
@@ -8938,6 +8952,7 @@ function toggleCameraProjection(state: ThreeState) {
   next.layers.mask = current.layers.mask;
   next.lookAt(target);
   next.updateProjectionMatrix();
+  fitCameraDepthRange(next, target);
   next.updateMatrixWorld();
   state.camera = next;
   state.controls.object = next;
@@ -10150,14 +10165,16 @@ function modifierEdgeMaterialStyle(active: boolean, hovered: boolean, previewAct
 }
 
 // Scaling a view-space point about the camera keeps it on the same pixel; in
-// an orthographic view only its depth may change.
+// an orthographic view only its depth may change, towards the viewer also for
+// a point behind the camera, which that view draws too.
 function pullModifierEdgeTowardCamera(material: THREE.LineBasicMaterial) {
   const pull = MODIFIER_EDGE_DEPTH_PULL.toFixed(4);
   material.onBeforeCompile = (shader) => {
     shader.vertexShader = shader.vertexShader.replace(
       "#include <project_vertex>",
       `#include <project_vertex>
-      mvPosition.xyz *= isOrthographic ? vec3(1.0, 1.0, ${pull}) : vec3(${pull});
+      if (isOrthographic) mvPosition.z += abs(mvPosition.z) * (1.0 - ${pull});
+      else mvPosition.xyz *= ${pull};
       gl_Position = projectionMatrix * mvPosition;`,
     );
   };
@@ -10444,11 +10461,13 @@ function syncTransformOverlay(
   }
   const cameraDistance = state.camera.position.distanceTo(frame.center);
   const cameraInSelectionFrame = frameLocalPoint(frame, state.camera.position);
-  const cameraInsideSelection = isPointInsideTransformBounds(cameraInSelectionFrame, frame.min, frame.max);
+  // The flat view's camera stands anywhere on its line of sight and sees behind itself too.
+  const flatView = state.camera instanceof THREE.OrthographicCamera;
+  const cameraInsideSelection = !flatView && isPointInsideTransformBounds(cameraInSelectionFrame, frame.min, frame.max);
   const project = (point: THREE.Vector3) => {
     const cameraSpace = point.clone().applyMatrix4(state.camera.matrixWorldInverse);
     const projected = cameraSpace.clone().applyMatrix4(state.camera.projectionMatrix);
-    return transformOverlayScreenPoint(projected, cameraSpace.z, rect.width, rect.height);
+    return transformOverlayScreenPoint(projected, flatView ? -1 : cameraSpace.z, rect.width, rect.height);
   };
 
   const xFootAxis = frame.xAxis.clone().normalize();
@@ -10817,7 +10836,8 @@ function syncAlignOverlay(
     const projected = corner.clone().project(state.camera);
     return { cameraSpace, projected };
   });
-  const nearPlane = state.camera instanceof THREE.PerspectiveCamera ? state.camera.near : 0.1;
+  // The flat view draws what is behind its camera too: nothing there is out of sight.
+  const nearPlane = state.camera instanceof THREE.PerspectiveCamera ? state.camera.near : -Infinity;
   if (projectedCorners.some(({ cameraSpace, projected }) => cameraSpace.z > -nearPlane * 1.5 || !Number.isFinite(projected.x) || !Number.isFinite(projected.y))) {
     clear();
     return;
@@ -10944,7 +10964,8 @@ function syncMirrorOverlay(
     const projected = corner.clone().project(state.camera);
     return { cameraSpace, projected };
   });
-  const nearPlane = state.camera instanceof THREE.PerspectiveCamera ? state.camera.near : 0.1;
+  // The flat view draws what is behind its camera too: nothing there is out of sight.
+  const nearPlane = state.camera instanceof THREE.PerspectiveCamera ? state.camera.near : -Infinity;
   if (projectedCorners.some(({ cameraSpace, projected }) => cameraSpace.z > -nearPlane * 1.5 || !Number.isFinite(projected.x) || !Number.isFinite(projected.y))) {
     clear();
     return;
