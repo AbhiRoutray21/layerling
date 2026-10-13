@@ -12,17 +12,17 @@ export const LAYERLING_VIDEOS = [
     url: "https://youtu.be/GIoG-IHPXyg",
   },
   {
+    title: "Meet Layerling Free Browser Based CAD that EXTENDS Tinkercad!",
+    channel: "HL ModTech",
+    lang: "EN",
+    url: "https://youtu.be/979_Ohy9ESM",
+  },
+  {
     // A whole playlist, so new videos in it arrive here without a release.
     title: "Layerling – Playlist",
     channel: "Making Layers",
     lang: "EN",
     url: "https://www.youtube.com/playlist?list=PLCsBmX2kOGWs",
-  },
-  {
-    title: "Meet Layerling Free Browser Based CAD that EXTENDS Tinkercad!",
-    channel: "HL ModTech",
-    lang: "EN",
-    url: "https://youtu.be/979_Ohy9ESM",
   },
   {
     title: "Tinkercad Too Basic? Fusion 360 Too Much? Meet Layerling for 3D Printing",
