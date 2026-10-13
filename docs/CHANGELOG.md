@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **One snap grid for the sketch and the 3D view:** The sketch kept a grid of its own. A grid picked there did not reach the 3D editor and was gone when you came back from it. Now both use the same grid, and it is saved with the design (#291).
+
 ## 1.67.5
 
 - **Slanted walls for stamps, a tip in the guide:** The sketches chapter has a new section, "Slanted walls, for stamps": layerling has no draft angle for an extrusion, but for plain outlines a body with Taper and a hole with its own Taper give slanted walls outside and inside, step by step. Suggested by @HolmanCotton.

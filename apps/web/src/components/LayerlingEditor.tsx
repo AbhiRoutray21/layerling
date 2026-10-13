@@ -10969,6 +10969,7 @@ export function LayerlingEditor({
             measurement={sketchMeasurement}
             pendingMeasurementStart={sketchMeasureStart}
             initialSnap={snapGrid}
+            onSnapChange={(snap) => updateProjectWorkspaceSettings({ workspace: workspaceSettingsRef.current, snap })}
             initialWorkspace={workspaceSettings}
             onPlanePoint={addSketchPlanePoint}
             onAddPrimitive={addSketchPrimitive}
