@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+## 1.67.6
+
 - **Arrow keys take fine steps when the snap grid is off:** With the grid switched off, the arrow keys still moved a shape by a whole millimetre (5 with Shift), although dragging with the mouse was free. They now move by 0.1 mm (0.5 with Shift), in the 3D view and in the sketch (#293).
 - **One snap grid for the sketch and the 3D view:** The sketch kept a grid of its own. A grid picked there did not reach the 3D editor and was gone when you came back from it. Now both use the same grid, and it is saved with the design (#291).
 
