@@ -1,5 +1,30 @@
 [
   {
+    "version": "1.67.4",
+    "items": [
+      {
+        "title": {
+          "de": "Skizze: ganze Form auf einmal runden oder krümmen",
+          "en": "Sketch: round or curve a whole shape at once"
+        },
+        "body": {
+          "de": "Wählst du in einer Skizze eine ganze Form aus, mit einem Rahmen oder einem Klick hinein, bietet die Leiste jetzt für alle ihre Ecken Verrunden und Fasen und für alle ihre Linien Krümmen und Gerade an. Vorher gingen diese Werkzeuge nur bei einer einzelnen Auswahl.",
+          "en": "Select a whole shape in a sketch, with a frame or a click inside it, and the bar now offers Round and Chamfer for all of its corners and Curve and Straight for all of its lines. Before, these tools only worked on a single selection."
+        }
+      },
+      {
+        "title": {
+          "de": "SVG-Dateien einer Seite deckungsgleich importieren",
+          "en": "Import SVG files of one page so they line up"
+        },
+        "body": {
+          "de": "Im Importfenster gibt es ein neues Feld, „SVG: Lage auf der Zeichenfläche beibehalten“. Damit behält jede Zeichnung ihren Platz auf der Seite, auf der sie gezeichnet wurde. Exportierst du die Ebenen eines Dokuments als einzelne SVG-Dateien, liegen sie nach dem Import wieder genau übereinander, so wie du es von Tinkercad kennst.",
+          "en": "The import window has a new box, “SVG: keep the place on the drawing page”. With it each drawing keeps the place it has on the page it was drawn on. Export the layers of a document as separate SVG files and they line up exactly again after the import, as you know it from Tinkercad."
+        }
+      }
+    ]
+  },
+  {
     "version": "1.67.3",
     "items": [
       {
