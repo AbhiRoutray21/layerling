@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **21 more printers, 221 in all, the large ones among them:** Goofoo (GP1, TurboM, Velo+, Velo+ Tool), the big machines Elegoo OrangeStorm Giga (810 x 805 x 1010), Creality CR-6 Max, Wanhao D9-400 and D9-500, Volumic EXO42, EXO65 and SH65 Performance, RatRig V-Core 3 and 4 in 400 and 500 (and the two IDEX), Vivedino Troodon 2.0 and Xplorer, Tronxy X5SA 400. Plates and heights are the ones from OrcaSlicer. Left out on purpose: kit, dual-extruder-mode and firmware variants, and the industrial makers.
+
 ## 1.69.0
 
 - **Hollowing a block with a pocket:** A block with a hole that does not go all the way through - a box grouped with a raised hole - could not be hollowed with its top open (the default): the kernel's thick solid does not take a face with a pocket in it, and the message said the body could not be hollowed with any wall. Where it fails, the body is now grown over the open face, hollowed from its inward offset, and the cavity cut out of the body as it was - the way a closed body is hollowed. The result is exact: for a 20 x 10 x 20 block with a 10 x 10 pocket 5 deep and a 1.5 mm wall it has the volume worked out by hand. The same goes for the bottom, both ends and a hole right through. Reported in the forum as a wish for mould making (#302).
