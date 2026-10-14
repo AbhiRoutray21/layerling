@@ -21,7 +21,7 @@
     <a href="#layerling-mcp-skill"><img alt="Von einer KI steuerbar" src="https://img.shields.io/badge/KI--steuerbar-MCP--Server-16c0d4"></a>
   </p>
 
-  <p><a href="README.md">English</a> · <strong>Deutsch</strong></p>
+  <p><a href="README.md">English</a> · <strong>Deutsch</strong> · <a href="README.nl.md">Nederlands</a></p>
 </div>
 
 <p align="center">

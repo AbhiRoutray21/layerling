@@ -10,7 +10,7 @@
  *
  * To add a language, see docs/TRANSLATING.md.
  */
-export const LANGUAGES = ["en", "de"] as const;
+export const LANGUAGES = ["en", "de", "nl"] as const;
 export type Language = (typeof LANGUAGES)[number];
 export const DEFAULT_LANGUAGE: Language = "en";
 
@@ -137,6 +137,38 @@ export const LANGUAGE_INFO: Readonly<Record<Language, LanguageInfo>> = {
       languageMenu: "Sprache",
       search: "Anleitung durchsuchen",
       searchNothing: "Nichts gefunden.",
+    },
+  },
+  nl: {
+    name: "Nederlands",
+    htmlLang: "nl",
+    numberLocale: "nl-NL",
+    quotes: ["“", "”"],
+    guideDir: "handleiding",
+    communityUrl: GITHUB_DISCUSSIONS,
+    readme: "README.nl.md",
+    quickstartAnchor: "snelstart-op-windows",
+    legal: { imprint: "Colofon", privacy: "Privacybeleid" },
+    keyNames: { Click: "Klik", RightClick: "Rechtsklik", Drag: "Slepen" },
+    asciiUmlauts: false,
+    complete: true,
+    guide: {
+      site: "layerling handleiding",
+      home: "Handleiding",
+      openEditor: "Naar de editor",
+      backToEditor: "Terug naar de editor",
+      editorElsewhere: "De editor is al open in een ander tabblad - schakel daar gewoon naartoe.",
+      chapters: "Hoofdstukken",
+      onThisPage: "Op deze pagina",
+      previous: "Vorig hoofdstuk",
+      next: "Volgend hoofdstuk",
+      overviewLead: "Alles wat layerling kan, stap voor stap. De afbeeldingen komen uit het draaiende programma en worden bij elke versie opnieuw gemaakt.",
+      sourceNote: "Deze handleiding groeit mee met het programma. Mis je iets of klopt er iets niet, laat het ons weten in de",
+      forum: "discussies",
+      notTranslated: "Dit hoofdstuk is nog niet in jouw taal vertaald. Hieronder volgt de Engelse tekst.",
+      languageMenu: "Taal",
+      search: "Handleiding doorzoeken",
+      searchNothing: "Niets gevonden.",
     },
   },
 };

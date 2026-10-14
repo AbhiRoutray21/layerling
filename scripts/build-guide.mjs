@@ -93,6 +93,8 @@ export function slugify(text) {
   return text
     .toLowerCase()
     .replace(/ä/g, "ae").replace(/ö/g, "oe").replace(/ü/g, "ue").replace(/ß/g, "ss")
+    // Other accents lose their mark, so Dutch "geïmporteerde" reads "geimporteerde", not "ge-mporteerde".
+    .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
     .replace(/<[^>]*>/g, "")
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "");
