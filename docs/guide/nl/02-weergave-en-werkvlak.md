@@ -15,6 +15,8 @@ Met de muis:
 | scrollwiel | in- en uitzoomen |
 | [[Ctrl]] ingedrukt houden en slepen met de linkerknop | verschuift ook de weergave |
 
+Hoe snel het muiswiel zoomt, stel je in bij de instellingen onder {{ui:workspace.appearance}} met {{ui:workspace.zoomSpeed}}: een schuifregelaar van 1 tot 10, eerst 5.
+
 Op een tablet of telefoon zoomen twee vingers (spreiden en knijpen) en verschuiven ze de weergave (samen schuiven). Eén vinger werkt op het ontwerp, net als de linkermuisknop. Om met één vinger te draaien, zet je {{ui:camera.touchRotate}} aan in de camerabalk. Die schakelaar verschijnt alleen op apparaten met een touchscreen.
 
 Een tekentablet met pen gedraagt zich als een muis: de punt is de linkerknop, de knop op de pen de rechter, voor het draaien van de weergave en voor het menu. De sneltoetsen van het tablet kun je in de driver instellen op de [sneltoetsen](chapter:sneltoetsen) van layerling.
