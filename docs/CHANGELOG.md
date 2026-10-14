@@ -6,6 +6,7 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **Turn a selection in the sketch by any angle:** The sketch could turn only a whole closed outline, 45 degrees at a time with R, so a single line, a curve, several outlines together or an angle in between could not be turned at all. A round handle now stands above the frame round a selection: dragging it turns everything selected - points, lines and curve handles - about the middle of the selection, with the angle shown over the handle, and with Shift in steps of 15 degrees. R still turns a closed outline by 45 degrees; the guide now says so in the text, not only in the table of keys. Asked for by @lukyanenkomax (#330), and earlier in the forum and by @strelniece (#260).
 ## 1.72.2
 
 - **Sliders in whole millimetres also in Firefox:** A length slider snaps to the grid while it is dragged, but in Firefox the value jumped to a crooked one in the neighbourhood when the mouse button was let go. Firefox sends one last value after the pointer is up, and by then the slider no longer counted as dragged. It now counts as dragged for a moment longer, so the last value is snapped too. Reported in the forum.

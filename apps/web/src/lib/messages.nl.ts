@@ -316,6 +316,8 @@ export const MESSAGES_NL: Record<MessageKey, string> = {
   "sketch.revolveAxis": "OMWENTELINGSAS",
   "sketch.shapeMoved": "Schetsvorm verplaatst",
   "sketch.shapeResized": "Schetsvorm geschaald",
+  "sketch.shapeRotated": "Selectie gedraaid",
+  "sketch.rotateSelection": "Selectie draaien (Shift: in stappen van 15°)",
   "sketch.imageMoved": "Schetsafbeelding verplaatst",
   "sketch.imageResized": "Schetsafbeelding geschaald",
   "sketch.viewControls": "Weergaveknoppen van de schets",

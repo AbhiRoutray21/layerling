@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "title": {
+      "de": "Skizze: Auswahl frei drehen",
+      "en": "Sketch: turn a selection freely"
+    },
+    "body": {
+      "de": "Über dem Rahmen um eine Auswahl in der Skizze sitzt jetzt ein runder Griff. Du ziehst daran, und alles, was ausgewählt ist, dreht sich um seine Mitte, mit dem Winkel als Zahl darüber; mit Umschalt springt er in 15°-Schritten. Das geht auch für einzelne Linien, Kurven und mehrere Umrisse zusammen. R dreht weiter einen geschlossenen Umriss um 45°.",
+      "en": "There is now a round handle above the frame round a selection in the sketch. Drag it and everything selected turns about its middle, with the angle shown as a number over it; with Shift it moves in steps of 15°. That works for single lines, curves and several outlines together. R still turns a closed outline by 45°."
+    }
+  }
+]

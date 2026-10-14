@@ -317,6 +317,8 @@ export const MESSAGES_EN = {
   "sketch.revolveAxis": "REVOLVE AXIS",
   "sketch.shapeMoved": "Sketch shape moved",
   "sketch.shapeResized": "Sketch shape resized",
+  "sketch.shapeRotated": "Selection turned",
+  "sketch.rotateSelection": "Turn the selection (Shift: in steps of 15°)",
   "sketch.imageMoved": "Sketch image moved",
   "sketch.imageResized": "Sketch image resized",
   "sketch.viewControls": "Sketch view controls",

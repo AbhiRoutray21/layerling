@@ -316,6 +316,8 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "sketch.revolveAxis": "DREHACHSE",
   "sketch.shapeMoved": "Skizzenform verschoben",
   "sketch.shapeResized": "Skizzenform skaliert",
+  "sketch.shapeRotated": "Auswahl gedreht",
+  "sketch.rotateSelection": "Auswahl drehen (Umschalt: in 15°-Schritten)",
   "sketch.imageMoved": "Vorlagenbild verschoben",
   "sketch.imageResized": "Vorlagenbild skaliert",
   "sketch.viewControls": "Ansichtssteuerung der Skizze",
