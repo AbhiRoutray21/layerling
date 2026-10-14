@@ -1,5 +1,20 @@
 [
   {
+    "version": "1.71.0",
+    "items": [
+      {
+        "title": {
+          "de": "layerling spricht jetzt Niederländisch",
+          "en": "layerling speaks Dutch now"
+        },
+        "body": {
+          "de": "Die Oberfläche und die ganze Anleitung gibt es auf Niederländisch (Nederlands). Die Sprache wird nach deinem Browser gewählt und lässt sich in der Sprachliste ändern. Wer Fehler in einem Wort findet, kann sie in einem kleinen Pull Request verbessern.",
+          "en": "The interface and the whole user guide are available in Dutch (Nederlands). The language is chosen from your browser and can be changed in the language list. If you find a wrong word, a small pull request fixes it."
+        }
+      }
+    ]
+  },
+  {
     "version": "1.70.0",
     "items": [
       {
