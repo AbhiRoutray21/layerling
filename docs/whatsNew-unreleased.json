@@ -8,5 +8,45 @@
       "de": "Unter „Profil“ eines Gewindes gibt es jetzt „Eigenes (Trapez)“: Du stellst Flankenwinkel, Gewindetiefe und Kerndurchmesser selbst ein. Bei 90° oder weniger ist keine Flanke flacher als 45°, das Gewinde druckt sich also ohne Stützen. Tiefe und Kerndurchmesser sind ein Maß auf zwei Arten.",
       "en": "Under a thread's “Profile” there is now “Custom (trapezoid)”: you set the flank angle, the thread depth and the core diameter yourself. At 90° or less no flank is flatter than 45°, so the thread prints without supports. Depth and core diameter are one measure said two ways."
     }
+  },
+  {
+    "title": {
+      "de": "Ein Block mit Tasche lässt sich aushöhlen",
+      "en": "A block with a pocket can be hollowed"
+    },
+    "body": {
+      "de": "Ein Block mit einem Loch, das nicht ganz hindurchgeht, ließ sich mit offener Oberseite nicht aushöhlen. Jetzt geht es, auch mit offener Unterseite, an beiden Enden und mit einem Loch ganz hindurch.",
+      "en": "A block with a hole that does not go all the way through could not be hollowed with its top open. Now it can, also with the bottom open, both ends open and a hole right through."
+    }
+  },
+  {
+    "title": {
+      "de": "Text aus LightBurn kommt vollständig an",
+      "en": "Text from LightBurn comes in whole"
+    },
+    "body": {
+      "de": "Eine SVG mit Text aus LightBurn verlor beim Import die Hälfte der Buchstaben. Punkte auf geraden Kanten stören nicht mehr. Ein Buchstabe, dessen Umriss an sich selbst entlangläuft, muss im Zeichenprogramm noch zusammengefügt werden.",
+      "en": "An SVG with text made in LightBurn lost half of its letters on import. Points along straight edges no longer get in the way. A letter whose outline runs along itself still has to be joined in the drawing program."
+    }
+  },
+  {
+    "title": {
+      "de": "200 Drucker, alphabetisch sortiert",
+      "en": "200 printers, in alphabetical order"
+    },
+    "body": {
+      "de": "Zehn Drucker sind dazugekommen (Creality, Elegoo, Anycubic, Sovol, Flashforge), und die Liste in den Arbeitsbereich-Einstellungen ist alphabetisch sortiert, Zahlen als Zahlen gezählt.",
+      "en": "Ten printers have been added (Creality, Elegoo, Anycubic, Sovol, Flashforge), and the list in the workspace settings is in alphabetical order, numbers counted as numbers."
+    }
+  },
+  {
+    "title": {
+      "de": "Schieber rasten am Raster ein, Zoom am Rand springt nicht mehr",
+      "en": "Sliders snap to the grid, zooming at the edge no longer jumps"
+    },
+    "body": {
+      "de": "Ein Schieber für eine Länge, etwa die Höhe, rastet beim Ziehen mit der Maus am Fangraster ein, so dass ganze Millimeter herauskommen. Und das Mausrad zoomt nahe am oberen Rand der Ansicht wieder hinein, statt weit herauszuspringen.",
+      "en": "A slider for a length, the height for example, snaps to the snap grid while you drag it with the mouse, so whole millimetres come out. And the mouse wheel zooms in again near the top edge of the view, instead of jumping far out."
+    }
   }
 ]
