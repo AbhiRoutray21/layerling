@@ -74,7 +74,7 @@ It is not a full CAD package: there is no parametric timeline and no assemblies.
 - **Command search** – press Ctrl+K and type a tool, a shape or a command ("fillet", "mirror", "cylinder") to jump straight to it; it understands English and German words and shows the keyboard shortcuts beside each entry.
 - **History view** – look back at any earlier state of the project with a slider, without changing anything; export that state or start a new project from it. By @rmpel.
 - **Millimetres or inches** – with Imperial units every measure is shown in inches, as fractions like Tinkercad (1 5/8) or as decimals, the snap grid steps from 1/64 to 1 inch, and the plate's grid is drawn in inches.
-- **Your printer's plate** – pick one of 200 common printers and the plate takes its size. Its name and build volume show in the corner of the workplane (a switch in the settings hides this and the design's name), and a warning appears when a body reaches past the edge.
+- **Your printer's plate** – pick one of more than 220 common printers and the plate takes its size. Its name and build volume show in the corner of the workplane (a switch in the settings hides this and the design's name), and a warning appears when a body reaches past the edge.
 - **Overhangs and filament** – "Show overhangs" hatches every face steeper than 45° (or your printer's own angle) that would need supports, and the export window shows volume, weight and metres of filament before you slice.
 - **Shape library** – boxes, cylinders, capsules (one end smaller if needed, say for a belt guard), spheres, cones, pyramids, wedges, text, roofs, half spheres, torus shapes, tubes, lofts from one outline to another (say square to round, solid or with a wall, straight or flaring smoothly, twisted or with a tilted top), polygon prisms from three to twenty-four sides, coil springs, a print-in-place hinge, knurled grips (straight, crossed or round) and more.
 - **Threads that fit** – threaded rods, screws with a socket, countersunk or hex head, hex nuts and tapped holes. M2 to M12, UNC/UNF from #4 to one inch and the Whitworth pipe threads G1/16 to G4 (ISO 228-1) are one pick away, or set your own diameter and pitch, left-hand as well; an inch or G size asks for threads per inch instead of millimetres. The ends take a chamfer, and a tapped hole is a cutter: drop it into a part, group, and the hole comes out threaded.
@@ -99,6 +99,7 @@ It is not a full CAD package: there is no parametric timeline and no assemblies.
 - **Fonts of your own** – use any TrueType, OpenType or WOFF font for text, or in Chrome and Edge a font installed on the computer. A design keeps only the outlines of the letters it uses, so it opens anywhere. Arabic and Hebrew run right to left, Arabic letters join up.
 - **Bring your own models** – import STL, OBJ, 3MF, STEP or SVG and build around it. An SVG comes in as a sketch body: an area, a stroke outside or inside its lines, a silhouette without its holes, or the drawing widened all round - together a cookie cutter from one file, or the layers of a multicolour logo. The Text shape has the same fill modes, and the shape library has a name tag: a text in coloured layers for a multicolour print, with an optional key ring hole and a rounded or chamfered edge on the letters, and an icon tag: an SVG icon in the same coloured layers, with a count and "as many as fit" to fill a plate. A coloured OBJ – from layerling, or from Tinkercad as a ZIP with its `.mtl` – or a coloured 3MF, slicer projects included, comes in as one body per colour, and a 3MF with several objects as one body per object.
 - **Export what your slicer wants** – STL, 3MF with names and colours, or OBJ with colours, for the selection or the whole scene (hidden parts stay out), plus STEP if the design should travel on into a full CAD program. PNG saves a clean picture of the view, at twice the resolution and with a transparent background if you like.
+- **Drawing export** – select a part, or clear the selection for the whole visible design, then choose **Export → Drawing → PDF or SVG**. Generates front, top and right-side views in first-angle layout on a bordered engineering sheet with zone numbers and a lower-right title block, with overall dimensions, hidden edges, and diameter/position tables for axis-aligned circular bores. Views are 1:1 in millimetres; the sheet uses the smallest fitting ISO landscape size (or a larger custom size). Print at **100% / actual size**. Positions are measured from each view's lower-left overall corner. Hole tables use nominal mesh geometry and do not automatically dimension angled/non-circular holes, threads, depths or tolerances. The projection engine is adapted from [Cadverix-3D](https://github.com/WC3D/Cadverix-3D)'s drawing work.
 - **Update notice** – on the published program an open page notices a new version by itself and offers to save and reload, listing what is new.
 - **Projects as files** – save a whole project, history, sketches and groups included, as a `.lyl` file and carry on elsewhere. In Chrome and Edge you choose the folder yourself and Ctrl+S saves into that same file again; other browsers download it. Older `.skf` files from earlier versions still open; saving then writes a `.lyl` beside them.
 - **Bug report** – one link in the footer saves a ZIP with the design as a `.lyl` and a text with the version, browser and last messages, ready to attach in the forum or on GitHub, which refuse a bare `.lyl`.
@@ -176,7 +177,7 @@ then open `http://127.0.0.1:3000/` yourself. `Ctrl+C` in that window stops it ei
 
 ### Docker
 
-To run layerling on a computer, NAS (Synology, Unraid, etc.) or home server without installing Node.js, use the ready-made image **`ghcr.io/henmedia/layerling`**. Every release publishes it for amd64 and arm64 (Raspberry Pi, ARM NAS) under its version number and as `latest`. The app listens on port **3000**.
+To run layerling on a computer, NAS (Synology, Unraid, etc.) or home server without installing Node.js, use the ready-made image **`henmedia/layerling`** on Docker Hub (also at **`ghcr.io/henmedia/layerling`**, the same image). Every release publishes it for amd64 and arm64 (Raspberry Pi, ARM NAS) under its version number and as `latest`. The app listens on port **3000**.
 
 The quickest way is a single command:
 
@@ -184,7 +185,7 @@ The quickest way is a single command:
 docker run -d --name layerling -p 3000:3000 --restart unless-stopped ghcr.io/henmedia/layerling:latest
 ```
 
-On a NAS with a container manager (Synology Container Manager, Unraid, Portainer), add the image `ghcr.io/henmedia/layerling:latest` and map port 3000. To update, pull the image again and recreate the container (or let Watchtower do it).
+On a NAS with a container manager (Synology Container Manager, Unraid, Portainer), search for `henmedia/layerling` in its registry (Docker Hub) or enter `henmedia/layerling:latest`, and map port 3000. To update, pull the image again and recreate the container (or let Watchtower do it).
 
 The image tags are plain version numbers **without a "v"**: `ghcr.io/henmedia/layerling:1.42.0`, while the GitHub release is called `v1.42.0`. A pull only fetches the new image; a container that already exists keeps running the old one until it is removed and created again:
 
@@ -240,6 +241,8 @@ Three things to know:
 - **A quick test on your own computer:** `npx serve apps/web/.next-export` and open the address it prints.
 
 ### Shared Designs on a Network
+
+layerling itself is only files, so the shared folder needs something on the server that can write. There are two ways, and you need just one of them: **Node or Docker** (this section, with `LAYERLING_SHARED_PROJECTS_DIR`), or **a plain web server with PHP** (the `store` folder, further down). A web server that serves the files without either of them – `npx serve`, nginx or Apache without PHP – shows layerling fine, but has no server folder.
 
 If you run layerling with `npm run dev` or `npm run start` on a machine other people open in their browser, it can offer a
 shared folder for `.lyl` designs. Point `LAYERLING_SHARED_PROJECTS_DIR` at a directory before starting:

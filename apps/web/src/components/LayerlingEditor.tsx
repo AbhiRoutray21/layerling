@@ -203,7 +203,7 @@ import { silhouetteSketchProfile } from "@/lib/sketchCadProfile";
 import { svgSketchMatchesMesh } from "@/lib/svgSketch";
 import { DEFAULT_SKETCH_STROKE, normalizeSketchStroke, strokedSketchProfile } from "@/lib/sketchStroke";
 import { topCadModifierEdgeIds } from "@/lib/topEdges";
-import { placeSketchShape } from "@/lib/sketchPlacement";
+import { movedWithEditedOutline, placeSketchShape, sketchBodyAnchor, type SketchAnchor } from "@/lib/sketchPlacement";
 import { meshSlicePath, planeCutsMesh } from "@/lib/sketchSlice";
 import { BUG_REPORT_FILE, bugReportText, rememberBugReportEvent, type BugReportEvent } from "@/lib/bugReport";
 import { formatLengthMm, lengthDisplayUnit } from "@/lib/measurementUnits";
@@ -219,6 +219,7 @@ import { cloneAsGroupChild, meshDataToManifoldMesh, shapeToManifoldSolid, splitS
 import { booleanAutomationScene } from "@/lib/editorAutomation";
 import { debugShapeSummary, mcpPivotRequest, compactShapeSummary, mcpShapeSummary, mcpSketchFillProfile, mcpTextFont } from "@/lib/editorMcpSummary";
 import { emptySketchProfile, cadShapeFromSketchProfile, shapeFromRevolvedSketchProfile, shapeFromCadMesh, sketchReferenceShapeOnWorkplane, defaultMcpSketchProfile } from "@/lib/editorSketchCad";
+import { drawingLabelsInLanguage } from "@/lib/drawingLabels";
 import { offersTextLayers, textLayerStack, layeredTextShape, nameTagSource, nameTagsFor, offersIconLayers, iconLayerStack, iconTagArea, layeredIconShape, iconTagCopies, svgIconArea, iconTagFromSvg } from "@/lib/editorTextTags";
 
 export { importedShapeFromObj, importedShapeFromStl, importedShapeFromSvg };
@@ -241,6 +242,7 @@ const HISTORY_VIEW_MCP_ACTIONS = new Set([
   "set_section_view",
   "show_workplane",
   "export_section_svg",
+  "export_drawing",
   "capture_image",
   "set_history_view",
   "clear_history",
@@ -265,8 +267,8 @@ export type HistoryProjectRequest = {
   /** Das Bild der Arbeitsflaeche in diesem Stand, fuer die Karte in der Uebersicht. */
   thumbnailDataUrl: string | null;
 };
-type ExportFormat = "stl" | "3mf" | "obj" | "step" | "svg" | "png" | "lyl";
-type DirectExportFormat = Exclude<ExportFormat, "step" | "png" | "lyl">;
+type ExportFormat = "stl" | "3mf" | "obj" | "step" | "svg" | "png" | "lyl" | "drawing";
+type DirectExportFormat = Exclude<ExportFormat, "step" | "png" | "lyl" | "drawing">;
 type ViewImageOptions = { plate: boolean; transparent: boolean };
 type LylHistoryLimit = EditorHistoryExportLimit;
 /** "file" writes into the file the design is tied to (asking for one the first time), "fileAs" always asks (#251). */
@@ -2500,6 +2502,7 @@ export function LayerlingEditor({
     setOpenGroups(levels);
   }, []);
   const [stepExporting, setStepExporting] = useState(false);
+  const [drawingExporting, setDrawingExporting] = useState(false);
   const [lylExporting, setLylExporting] = useState(false);
   const [alignMode, setAlignMode] = useState(false);
   const [alignAnchorId, setAlignAnchorId] = useState<string | null>(null);
@@ -4092,6 +4095,9 @@ export function LayerlingEditor({
     [],
   );
 
+  /** Where the edited body's middle is in the sketch, when the sketch of an existing body was opened (#291). */
+  const sketchEditAnchorRef = useRef<SketchAnchor | null>(null);
+
   const beginSketch = useCallback((
     operation: SketchOperation,
     profile?: SketchProfile,
@@ -4132,18 +4138,17 @@ export function LayerlingEditor({
     }
     const operation = selectedShape.sketchOperation ?? (selectedShape.sketchRevolve ? "revolve" : "extrude");
     let editWorkplane: PlacementWorkplane | undefined;
+    sketchEditAnchorRef.current = null;
     if (operation === "extrude") {
       const quaternion = quaternionForShape(selectedShape);
       const normal = new THREE.Vector3(0, 1, 0).applyQuaternion(quaternion).normalize();
       const xAxis = new THREE.Vector3(1, 0, 0).applyQuaternion(quaternion).normalize();
       const zAxis = new THREE.Vector3(0, 0, 1).applyQuaternion(quaternion).normalize();
-      const points = selectedShape.sketchProfile.points;
-      const profileCenterX = points.length
-        ? (Math.min(...points.map((point) => point.x)) + Math.max(...points.map((point) => point.x))) / 2
-        : 0;
-      const profileCenterZ = points.length
-        ? (Math.min(...points.map((point) => point.z)) + Math.max(...points.map((point) => point.z))) / 2
-        : 0;
+      // The sketch is drawn over the body: the point of the outline under the body's middle goes there.
+      const anchor = sketchBodyAnchor(selectedShape);
+      sketchEditAnchorRef.current = anchor;
+      const profileCenterX = anchor.x;
+      const profileCenterZ = anchor.z;
       const origin = new THREE.Vector3(
         selectedShape.x,
         (selectedShape.elevation ?? 0) + selectedShape.height / 2,
@@ -4177,6 +4182,7 @@ export function LayerlingEditor({
 
   const cancelSketch = useCallback(() => {
     setSketchActive(false);
+    sketchEditAnchorRef.current = null;
     setSketchActivePointId(null);
     setSketchSelection(null);
     setSketchMeasureStart(null);
@@ -4772,6 +4778,19 @@ export function LayerlingEditor({
         setNotice(t("status.buildingSketch"), true);
         const extrusion = await cadShapeFromSketchProfile(sketchProfile, height, existing);
         resolved = placeSketchShape(extrusion, activeSketchWorkplane, existing);
+        if (existing && resolved) {
+          // Put the body where its outline is: it is centred on the new outline, and the edit may have moved that middle.
+          const quaternion = quaternionForShape(existing);
+          const xAxis = new THREE.Vector3(1, 0, 0).applyQuaternion(quaternion);
+          const zAxis = new THREE.Vector3(0, 0, 1).applyQuaternion(quaternion);
+          resolved = movedWithEditedOutline(
+            resolved,
+            existing,
+            sketchEditAnchorRef.current ?? sketchBodyAnchor(existing),
+            { x: extrusion.x, z: extrusion.z },
+            { x: [xAxis.x, xAxis.y, xAxis.z], z: [zAxis.x, zAxis.y, zAxis.z] },
+          );
+        }
       }
     } catch (error) {
       setNotice(error instanceof Error ? localizedError(error.message) : t(sketchOperation === "revolve" ? "status.sketchCannotRevolve" : "status.sketchCannotExtrude"));
@@ -4795,6 +4814,7 @@ export function LayerlingEditor({
     setSketchStrokePanelOpen(false);
     setSketchRevolvePreview(null);
     setEditingSketchShapeId(null);
+    sketchEditAnchorRef.current = null;
     setToolbarMode("geometry");
   }, [activeSketchWorkplane, commitShapes, editingSketchShapeId, shapes, sketchOperation, sketchProfile, sketchRevolveSettings]);
 
@@ -9168,6 +9188,37 @@ export function LayerlingEditor({
         };
       }
 
+      if (command.action === "export_drawing") {
+        // The drawing the export window makes: three views at 1:1 with the overall sizes and the round
+        // bores, from the same bodies as the export. ids limit it to those objects (holes still cut).
+        const ids = Array.isArray(params.ids) ? params.ids.filter((id): id is string => typeof id === "string") : [];
+        const format = params.format === undefined ? "svg" : mcpString(params.format, "svg").toLowerCase();
+        if (format !== "svg" && format !== "pdf") throw new Error("format must be svg or pdf");
+        const all = currentShapes();
+        const chosen = ids.length ? all.filter((shape) => ids.includes(shape.id)) : all;
+        if (ids.length && chosen.length === 0) throw new Error("None of the ids is an object in this design");
+        const { drawing, hiddenNote } = await buildDrawing({ shapes: chosen, selection: ids.length > 0 }, all, projectName);
+        if (!drawing) throw new Error(t(hiddenNote ? "status.exportOnlyHidden" : "status.addSolidBeforeExport"));
+        const { drawingToSvg, drawingToPdf, drawingBoreRows } = await import("@/lib/drawingExport");
+        const round = (value: number) => Number(value.toFixed(3));
+        const result: Record<string, unknown> = {
+          sheet: drawing.paper ?? "custom",
+          widthMm: round(drawing.width),
+          heightMm: round(drawing.height),
+          views: drawing.views.map((view) => ({ id: view.id, name: view.name, widthMm: round(view.projection.width), heightMm: round(view.projection.height), bores: view.holes.length })),
+          bores: drawingBoreRows(drawing).map((row) => ({ id: row.id, view: row.view, diameterMm: round(row.diameter), xMm: round(row.x), yMm: round(row.y) })),
+          format,
+        };
+        if (format === "svg") result.svg = drawingToSvg(drawing);
+        else {
+          const bytes = drawingToPdf(drawing);
+          let binary = "";
+          for (let index = 0; index < bytes.length; index += 8192) binary += String.fromCharCode(...bytes.subarray(index, index + 8192));
+          result.pdfBase64 = btoa(binary);
+        }
+        return result;
+      }
+
       if (command.action === "set_workplane") {
         // Wie W und ein Klick auf eine Flaeche: eine Seite des eigenen Rahmens
         // des Koerpers, eingerastet auf die echte Flaeche, die Ebene in ihrer Mitte.
@@ -9688,6 +9739,48 @@ export function LayerlingEditor({
       })
       .catch((error: unknown) => failNotice(label, error));
   }, [bedPrinter, exportSource, projectId, projectName]);
+
+  /**
+   * The drawing of a set of bodies, from the same bodies as the export (visible solids, holes taken
+   * off). `drawing` is null when there is no solid in it. Loose holes count even when only the part
+   * they cut is chosen.
+   */
+  const buildDrawing = useCallback(async (source: { shapes: WorkplaneShape[]; selection: boolean }, allShapes: WorkplaneShape[], title: string) => {
+    const scopedShapes = source.selection
+      ? [...source.shapes, ...allShapes.filter((shape) => shape.hole && !source.shapes.some((selected) => selected.id === shape.id))]
+      : source.shapes;
+    const { visible, hiddenNote } = visibleExportShapes(scopedShapes);
+    if (!visible.some((shape) => !shape.hole && !isNonSolidShapeKind(shape.kind))) return { drawing: null, hiddenNote };
+    const { generateDrawing } = await import("@/lib/drawingExport");
+    const { meshes, holeCutsFailed } = await exportBodiesWithLooseHoles(visible);
+    if (holeCutsFailed) throw new Error(t("status.drawingHoleCutFailed"));
+    return { drawing: generateDrawing(meshes, title, drawingLabelsInLanguage()), hiddenNote };
+  }, []);
+
+  const exportDrawingDesign = useCallback(async (exportName: string, format: "svg" | "pdf") => {
+    if (drawingExporting) return;
+    const source = exportSource();
+    setDrawingExporting(true);
+    setNotice(t("status.buildingDrawing"), true);
+    try {
+      const title = exportName.trim() || projectName;
+      const { drawing, hiddenNote } = await buildDrawing(source, shapes, title);
+      if (!drawing) {
+        setNotice(hiddenNote ? t("status.exportOnlyHidden") : t(source.selection ? "status.selectSolidBeforeExport" : "status.addSolidBeforeExport"));
+        return;
+      }
+      const { drawingToSvg, drawingToPdf } = await import("@/lib/drawingExport");
+      const filename = projectExportFileName(`${title} drawing`, format);
+      if (format === "svg") await downloadTextFile(filename, drawingToSvg(drawing), "image/svg+xml;charset=utf-8");
+      else await downloadBlobFile(filename, new Blob([drawingToPdf(drawing) as BlobPart], { type: "application/pdf" }));
+      setTopPanel(null);
+      setNotice(t("status.exportedDrawing", { format: format.toUpperCase() }) + hiddenNote);
+    } catch (error) {
+      setNotice(error instanceof Error ? localizedError(error.message) : t("status.drawingFailed"), true);
+    } finally {
+      setDrawingExporting(false);
+    }
+  }, [buildDrawing, drawingExporting, exportSource, projectName, shapes]);
 
   const exportStepDesign = useCallback(async (exportName: string) => {
     if (stepExporting) {
@@ -11454,6 +11547,8 @@ export function LayerlingEditor({
           stlFileName={topPanel === "export" ? linkedStlFile(projectId ?? "")?.name ?? null : null}
           onExportLyl={exportLylDesign}
           onExportStep={exportStepDesign}
+          onExportDrawing={exportDrawingDesign}
+          drawingExporting={drawingExporting}
           onExportImage={exportViewImage}
           sharedProjectsEnabled={sharedProjectsEnabled}
           lylExporting={lylExporting}
@@ -12879,6 +12974,8 @@ function TopActionPanel({
   stlFileName = null,
   onExportLyl,
   onExportStep,
+  onExportDrawing,
+  drawingExporting,
   onExportImage,
   sharedProjectsEnabled,
   lylExporting,
@@ -12908,6 +13005,8 @@ function TopActionPanel({
   stlFileName?: string | null;
   onExportLyl: (exportName: string, historyLimit: LylHistoryLimit, target?: LylExportTarget) => void;
   onExportStep: (exportName: string) => void;
+  onExportDrawing: (exportName: string, format: "svg" | "pdf") => void;
+  drawingExporting: boolean;
   onExportImage: (exportName: string, options: ViewImageOptions) => void;
   sharedProjectsEnabled: boolean;
   lylExporting: boolean;
@@ -12921,6 +13020,7 @@ function TopActionPanel({
   const [keepSvgPage, setKeepSvgPage] = useState(false);
   useEffect(() => setKeepSvgPage(readKeepSvgPage()), []);
   const [exportFormat, setExportFormat] = useState<ExportFormat>("stl");
+  const [drawingFormat, setDrawingFormat] = useState<"svg" | "pdf">("pdf");
   const [exportName, setExportName] = useState(projectName);
   const previousProjectNameRef = useRef(projectName);
   // Starts at the history setting from the workspace settings, so a project
@@ -12951,7 +13051,7 @@ function TopActionPanel({
   });
   const [printVolume, setPrintVolume] = useState<ExportSolidVolume | null>(null);
   const [imageOptions, setImageOptions] = useState<ViewImageOptions>({ plate: true, transparent: false });
-  const showPrintEstimate = panel === "export" && exportFormat !== "svg" && exportFormat !== "png" && exportFormat !== "lyl" && shapeCount > 0;
+  const showPrintEstimate = panel === "export" && exportFormat !== "drawing" && exportFormat !== "svg" && exportFormat !== "png" && exportFormat !== "lyl" && shapeCount > 0;
   // A picture shows the view as it is, not the selection, so the notes about what goes along do not apply.
   const exportsBodies = exportFormat !== "lyl" && exportFormat !== "png";
   useEffect(() => {
@@ -12984,6 +13084,11 @@ function TopActionPanel({
   const title = panel === "export" ? t("panel.export") : t("panel.import");
 
   const exportDetails: Record<ExportFormat, { label: string; description: string; note: string }> = {
+    drawing: {
+      label: t("export.drawing.label"),
+      description: t("export.drawing.description"),
+      note: t("export.drawing.note"),
+    },
     stl: {
       label: "STL",
       description: t("export.stl.description"),
@@ -13022,7 +13127,9 @@ function TopActionPanel({
   };
   const selectedExport = exportDetails[exportFormat];
   const runSelectedExport = () => {
-    if (exportFormat === "step") onExportStep(exportName);
+    if (drawingExporting || stepExporting || lylExporting) return;
+    if (exportFormat === "drawing") onExportDrawing(exportName, drawingFormat);
+    else if (exportFormat === "step") onExportStep(exportName);
     else if (exportFormat === "png") onExportImage(exportName, imageOptions);
     else if (exportFormat === "lyl") onExportLyl(exportName, lylHistoryLimit, lylFileAccessSupported() ? "fileAs" : "download");
     else onExport(exportFormat, exportName);
@@ -13107,10 +13214,10 @@ function TopActionPanel({
                 onChange={(event) => setExportName(event.target.value)}
                 onFocus={(event) => event.currentTarget.select()}
                 onKeyDown={(event) => {
-                  if (event.key === "Enter" && (shapeCount > 0 || !exportsBodies) && !stepExporting && !lylExporting) runSelectedExport();
+                  if (event.key === "Enter" && (shapeCount > 0 || !exportsBodies) && !stepExporting && !lylExporting && !drawingExporting) runSelectedExport();
                 }}
               />
-              <span>.{exportFormat}</span>
+              <span>.{exportFormat === "drawing" ? drawingFormat : exportFormat}</span>
             </div>
           </section>
 
@@ -13126,20 +13233,33 @@ function TopActionPanel({
                   : t(scopeLabel === "selected" ? "export.scopeSelected" : "export.scopeTotal", { count: shapeCount })}</span>
             </div>
             <div className="export-format-slider" data-format={exportFormat} role="radiogroup" aria-label={t("export.formatLabel")}>
-              {(["stl", "3mf", "obj", "step", "svg", "png", "lyl"] as const).map((format) => (
+              {(["stl", "3mf", "obj", "step", "svg", "png", "lyl", "drawing"] as const).map((format) => (
                 <button
                   key={format}
                   type="button"
                   role="radio"
                   aria-checked={exportFormat === format}
                   aria-label={`${exportDetails[format].label}: ${exportDetails[format].description}`}
+                  title={format === "drawing" ? exportDetails[format].label : undefined}
                   onClick={() => setExportFormat(format)}
                 >
-                  {exportDetails[format].label}
+                  {format === "drawing" ? t("export.drawing.short") : exportDetails[format].label}
                 </button>
               ))}
             </div>
           </section>
+
+          {exportFormat === "drawing" ? (
+            <section className="export-setting-section">
+              <label>
+                <strong>{t("export.drawing.fileFormat")}</strong>{" "}
+                <select aria-label={t("export.drawing.fileFormat")} value={drawingFormat} onChange={(event) => setDrawingFormat(event.target.value as "svg" | "pdf")}>
+                  <option value="pdf">PDF</option>
+                  <option value="svg">SVG</option>
+                </select>
+              </label>
+            </section>
+          ) : null}
 
           {exportsBodies && selectionLeavesOut ? (
             <div className="export-holes-only-warning export-selection-note" role="status">
@@ -13281,17 +13401,19 @@ function TopActionPanel({
                   className="export-shared-button"
                   type="button"
                   onClick={() => onExportLyl(exportName, lylHistoryLimit, "shared")}
-                  disabled={lylExporting || stepExporting}
+                  disabled={lylExporting || stepExporting || drawingExporting}
                 >
                   <CloudUpload />
                   <span>{t("export.saveToShared")}</span>
                 </button>
               ) : null}
-              <button className="export-primary-button" onClick={runSelectedExport} disabled={(shapeCount === 0 && exportsBodies) || stepExporting || lylExporting}>
+              <button className="export-primary-button" onClick={runSelectedExport} disabled={(shapeCount === 0 && exportsBodies) || stepExporting || lylExporting || drawingExporting}>
                 <Download />
                 {exportFormat === "lyl" ? (lylExporting ? t("export.savingProject") : t("export.saveProject")) : null}
                 <span hidden={exportFormat === "lyl"}>
-                {stepExporting && exportFormat === "step"
+                {drawingExporting && exportFormat === "drawing"
+                  ? t("status.buildingDrawing")
+                  : stepExporting && exportFormat === "step"
                   ? t("export.buildingStep")
                   : t("export.run", { format: selectedExport.label })}
                 </span>

@@ -75,7 +75,7 @@ Ein vollständiges CAD-Paket ist es nicht: Es gibt keine parametrische Zeitleist
 - **Befehlssuche** – mit Strg+K ein Werkzeug, eine Form oder einen Befehl eintippen („Verrunden“, „Spiegeln“, „Zylinder“) und direkt dorthin springen; sie versteht deutsche und englische Wörter und zeigt die Tastenkürzel dazu.
 - **Verlaufsansicht** – mit einem Schieber auf jeden früheren Stand des Projekts zurückschauen, ohne etwas zu ändern; diesen Stand exportieren oder als neues Projekt anlegen. Von @rmpel.
 - **Millimeter oder Zoll** – mit Imperial erscheinen alle Maße in Zoll, als Bruch wie in Tinkercad (1 5/8) oder als Dezimalzahl, das Raster rastet von 1/64 bis 1 Zoll, und das Gitter der Platte ist in Zoll gezeichnet.
-- **Die Platte deines Druckers** – wähl einen von 200 gängigen Druckern, dann bekommt die Platte seine Größe. Name und Bauraum stehen in der Ecke der Arbeitsfläche (ein Schalter in den Einstellungen blendet das und den Namen des Entwurfs aus), und eine Warnung erscheint, wenn ein Körper über den Rand ragt.
+- **Die Platte deines Druckers** – wähl einen von über 220 gängigen Druckern, dann bekommt die Platte seine Größe. Name und Bauraum stehen in der Ecke der Arbeitsfläche (ein Schalter in den Einstellungen blendet das und den Namen des Entwurfs aus), und eine Warnung erscheint, wenn ein Körper über den Rand ragt.
 - **Überhänge und Filament** – „Überhänge zeigen“ schraffiert jede Fläche, die steiler als 45° (oder der Winkel deines Druckers) überhängt und Stützen bräuchte, und das Exportfenster nennt Volumen, Gewicht und Meter Filament, bevor du slicst.
 - **Formen-Bibliothek** – Quader, Zylinder, Kapseln (auf Wunsch mit einem kleineren Ende, etwa für eine Riemenabdeckung), Kugeln, Kegel, Pyramiden, Keile, Text, Dächer, Halbkugeln, Tori, Rohre, Übergänge (Loft) von einem Umriss zum anderen, etwa eckig auf rund, auch verdreht oder mit geneigtem oberen Ende, mit oder ohne Wand, Mehrkante von drei bis vierundzwanzig Seiten, Federn, ein druckbares Scharnier, Rändelungen für Griffe (gerade, gekreuzt oder rund) und mehr.
 - **Gewinde, die passen** – Gewindestangen, Schrauben mit Zylinder-, Senk- oder Sechskantkopf, Sechskantmuttern und Gewindelöcher. M2 bis M12 liegen bereit, dazu UNC und UNF von #4 bis ein Zoll und die Whitworth-Rohrgewinde G1/16 bis G4 (ISO 228-1); Durchmesser und Steigung lassen sich auch frei wählen, Linksgewinde ebenso. Bei einer Zoll- oder G-Größe fragt das Feld nach Gängen je Zoll statt nach Millimetern. Die Enden bekommen auf Wunsch eine Fase, und das Gewindeloch ist eine Aussparung: in ein Teil ziehen, gruppieren, fertig.
@@ -100,6 +100,7 @@ Ein vollständiges CAD-Paket ist es nicht: Es gibt keine parametrische Zeitleist
 - **Eigene Schriften** – jede TrueType-, OpenType- oder WOFF-Schrift für Text, in Chrome und Edge auch eine auf dem Computer installierte. Ein Entwurf behält nur die Umrisse der benutzten Buchstaben und öffnet sich deshalb überall. Arabisch und Hebräisch laufen von rechts nach links, arabische Buchstaben verbinden sich.
 - **Eigene Modelle mitbringen** – STL, OBJ, 3MF, STEP oder SVG importieren und darum herum konstruieren. Ein SVG kommt als Skizzenkörper: als Fläche, als Kontur außen oder innen an seinen Linien, als Silhouette ohne Löcher oder rundum verbreitert - zusammen ein Ausstecher aus einer Datei oder die Schichten eines mehrfarbigen Logos. Die Textform hat dieselben Füllmodi, und die Formen-Bibliothek hat ein Namensschild: ein Text in farbigen Schichten für den Mehrfarbdruck, auf Wunsch mit Schlüsselringloch und gerundeter oder abgeschrägter Kante an den Buchstaben, und ein Symbolschild: ein SVG-Symbol in denselben farbigen Schichten, mit Anzahl und „so viele wie passen“, um eine Platte zu füllen. Eine farbige OBJ – aus layerling oder aus Tinkercad als ZIP mit ihrer `.mtl` – oder eine farbige 3MF, auch ein Slicer-Projekt, kommt als ein Körper je Farbe, eine 3MF mit mehreren Objekten als ein Körper je Objekt.
 - **Exportieren, was dein Slicer will** – STL, 3MF mit Namen und Farben oder OBJ mit Farben, für die Auswahl oder die ganze Szene (Ausgeblendetes bleibt draußen), dazu STEP, wenn der Entwurf in ein vollwertiges CAD weiterreisen soll. PNG speichert ein sauberes Bild der Ansicht, in doppelter Auflösung und auf Wunsch mit durchsichtigem Hintergrund.
+- **Zeichnung exportieren** – ein Teil auswählen oder die Auswahl für den ganzen sichtbaren Entwurf aufheben, dann **Exportieren → Zeichnung → PDF oder SVG** wählen. Erstellt Vorder-, Drauf- und rechte Seitenansicht in Erstwinkelprojektion auf einem gerahmten Zeichnungsblatt mit Zonennummern und Schriftfeld unten rechts, mit Gesamtmaßen, verdeckten Kanten und Tabellen für Durchmesser und Positionen achsparalleler runder Bohrungen. Maßstab 1:1 in Millimetern; das Blatt wächst mit dem Entwurf. Bei **100 % / tatsächlicher Größe** drucken. Bohrungspositionen beziehen sich auf die linke untere Ecke der Gesamtmaße jeder Ansicht. Schräge oder unrunde Bohrungen, Gewinde, Tiefen und Toleranzen werden nicht automatisch bemaßt. Die Projektion basiert auf der Zeichnungsarbeit aus [Cadverix-3D](https://github.com/WC3D/Cadverix-3D).
 - **Hinweis auf Updates** – im veröffentlichten Programm bemerkt eine offene Seite eine neue Version selbst und bietet an, zu speichern und neu zu laden, samt Liste des Neuen.
 - **Projekte als Datei** – ein ganzes Projekt samt Verlauf, Skizzen und Gruppen als `.lyl` sichern und anderswo weiterbauen. In Chrome und Edge wählst du den Ordner selbst, und Strg+S speichert wieder in genau diese Datei; andere Browser laden sie herunter. Ältere `.skf`-Dateien aus früheren Fassungen öffnen sich weiterhin; gespeichert wird dann als `.lyl` daneben.
 - **Fehlerbericht** – ein Link in der Fußzeile speichert ein ZIP mit dem Entwurf als `.lyl` und einem Text mit Version, Browser und den letzten Meldungen, fertig zum Anhängen im Forum oder bei GitHub, die eine bloße `.lyl` ablehnen.
@@ -179,7 +180,7 @@ Dann selbst `http://127.0.0.1:3000/` öffnen. `Strg+C` in diesem Fenster beendet
 
 ### Docker
 
-Um layerling auf einem Rechner, NAS (Synology, Unraid usw.) oder Heimserver ohne Node.js zu betreiben, nimmst du das fertige Image **`ghcr.io/henmedia/layerling`**. Jedes Release veröffentlicht es für amd64 und arm64 (Raspberry Pi, ARM-NAS), unter seiner Versionsnummer und als `latest`. Die App lauscht auf Port **3000**.
+Um layerling auf einem Rechner, NAS (Synology, Unraid usw.) oder Heimserver ohne Node.js zu betreiben, nimmst du das fertige Image **`henmedia/layerling`** auf Docker Hub (auch unter **`ghcr.io/henmedia/layerling`**, dasselbe Image). Jedes Release veröffentlicht es für amd64 und arm64 (Raspberry Pi, ARM-NAS), unter seiner Versionsnummer und als `latest`. Die App lauscht auf Port **3000**.
 
 Am schnellsten geht es mit einem einzigen Befehl:
 
@@ -187,7 +188,7 @@ Am schnellsten geht es mit einem einzigen Befehl:
 docker run -d --name layerling -p 3000:3000 --restart unless-stopped ghcr.io/henmedia/layerling:latest
 ```
 
-Auf einem NAS mit Container-Verwaltung (Synology Container Manager, Unraid, Portainer) trägst du das Image `ghcr.io/henmedia/layerling:latest` ein und gibst Port 3000 frei. Zum Aktualisieren das Image neu holen und den Container neu anlegen (oder Watchtower das erledigen lassen).
+Auf einem NAS mit Container-Verwaltung (Synology Container Manager, Unraid, Portainer) suchst du in der Registrierung (Docker Hub) nach `henmedia/layerling` oder trägst `henmedia/layerling:latest` ein und gibst Port 3000 frei. Zum Aktualisieren das Image neu holen und den Container neu anlegen (oder Watchtower das erledigen lassen).
 
 Die Image-Tags sind reine Versionsnummern **ohne „v“**: `ghcr.io/henmedia/layerling:1.42.0`, das GitHub-Release heißt dagegen `v1.42.0`. Ein Pull holt nur das neue Image; ein vorhandener Container läuft mit dem alten weiter, bis er entfernt und neu angelegt wird:
 
@@ -248,6 +249,8 @@ Drei Dinge zu wissen:
 - **Ein schneller Test auf dem eigenen Rechner:** `npx serve apps/web/.next-export` und die angezeigte Adresse öffnen.
 
 ### Gemeinsame Entwürfe im Netz
+
+layerling selbst besteht nur aus Dateien, der gemeinsame Ordner braucht also etwas auf dem Server, das schreiben kann. Es gibt zwei Wege, und du brauchst nur einen: **Node oder Docker** (dieser Abschnitt, mit `LAYERLING_SHARED_PROJECTS_DIR`) oder **ein gewöhnlicher Webserver mit PHP** (der Ordner `store`, weiter unten). Ein Webserver, der die Dateien nur ausliefert – `npx serve`, nginx oder Apache ohne PHP –, zeigt layerling ganz normal, hat aber keinen Serverordner.
 
 Betreibst du layerling mit `npm run dev` oder `npm run start` auf einem Rechner, den andere im Browser öffnen, kann es
 einen gemeinsamen Ordner für `.lyl`-Projekte anbieten. Setze dazu vor dem Start `LAYERLING_SHARED_PROJECTS_DIR` auf ein

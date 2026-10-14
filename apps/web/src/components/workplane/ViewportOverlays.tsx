@@ -170,6 +170,8 @@ export type TapeModel = {
   points: TapePoint[];
   segments: TapeSegment[];
   startPointId: string | null;
+  /** The edge the first point lies on, while a measurement is under way: the diameter of a circle snaps from it (#308). */
+  startEdge?: TapeEdgeAttachment | null;
   hover: TapeCandidate | null;
 };
 
@@ -185,7 +187,10 @@ export type TapeCandidate = {
   z: number;
   pointId?: string;
   attachment?: TapeAttachment;
+  /** Set when a click would measure this whole edge. */
   edge?: TapeEdgeAttachment;
+  /** The edge the point lies on, whether or not a click measures all of it. */
+  circleEdge?: TapeEdgeAttachment;
 };
 
 export type RotationHandleSide = "near" | "right" | "far" | "left";

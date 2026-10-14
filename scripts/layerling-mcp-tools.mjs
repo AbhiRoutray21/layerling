@@ -990,6 +990,18 @@ export const tools = [
     },
   },
   {
+    name: "layerling_export_drawing",
+    description: "Make the editor's \"Drawing\" export: front, top and right-side views in first-angle layout on an ISO sheet at 1:1, with the overall size of each view, hidden edges and a table of the round bores that run parallel to a view axis (diameter and position from the lower-left corner of the view). Same bodies as the export: visible solids only, holes already taken off. ids limits it to those objects (loose holes still cut them); without ids it is the whole design. Returns sheet (\"ISO A3\" and so on, or \"custom\"), widthMm and heightMm of the sheet, views (id F, T or R, size, bore count), bores (id, view, diameterMm, xMm, yMm) and, by format, svg (the drawing as SVG text, the default) or pdfBase64 (the vector PDF, base64). Threads, depths, tolerances and bores at an angle are not dimensioned. Fails with a message when there is no visible solid or the design is too complex (over 100,000 triangles, 200 bores, 5,080 mm).",
+    inputSchema: {
+      ...editorTargetSchema,
+      properties: {
+        ...editorTargetSchema.properties,
+        ids: { type: "array", items: { type: "string" }, description: "Objects to draw. Defaults to the whole design." },
+        format: { type: "string", enum: ["svg", "pdf"], description: "svg returns the drawing as text, pdf as base64. Defaults to svg." },
+      },
+    },
+  },
+  {
     name: "layerling_set_workplane",
     description: "Set, reset or hide the workplane. A workplane on a face of a body makes new shapes land on that face (layerling_create_shape places onto it), and rotating turns about its normal - the editor's W and a click. id with face puts it on that side of the object's own box, snapped to the real face and centred on it; a face standing up keeps the sketch's up pointing up. flip: true turns it to face inwards. reset: true puts it back on the base plate. visible: false hides a face workplane without dropping it - it still applies, only the drawing goes, which gives a clear view or picture; visible: true shows it again. Setting a new workplane shows it again by itself. Call with no settings to read the state; layerling_read_scene reports it as workplane.",
     inputSchema: {

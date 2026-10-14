@@ -39,7 +39,7 @@ export const COMMAND_KEYWORDS: Readonly<Record<string, readonly string[]>> = {
   center: ["center", "centre", "mitte", "zentrieren", "mittig"],
   note: ["note", "annotation", "point", "reference", "notiz", "anmerkung", "bezugspunkt"],
   import: ["import", "open", "load", "stl", "3mf", "obj", "step", "svg", "oeffnen", "öffnen", "laden"],
-  export: ["export", "save", "download", "print", "stl", "3mf", "step", "speichern", "drucken", "lyl"],
+  export: ["export", "save", "download", "print", "stl", "3mf", "step", "speichern", "drucken", "lyl", "drawing", "pdf", "zeichnung", "plan"],
   settings: ["settings", "options", "units", "grid", "einstellungen", "optionen", "einheit", "mm", "zoll"],
   guide: ["guide", "help", "manual", "tutorial", "anleitung", "hilfe", "kurzanleitung"],
   shortcuts: ["shortcuts", "keys", "keyboard", "tastenkuerzel", "tastenkürzel", "tastatur", "hotkeys"],
