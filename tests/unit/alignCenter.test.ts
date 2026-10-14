@@ -74,3 +74,19 @@ describe("the middle the align tool means (#268)", () => {
     expect(center.z).toBeCloseTo(triangle.z, 3);
   });
 });
+
+describe("the middle of a teardrop hole (#268)", () => {
+  it("is the middle of its round part, below the middle of the box with the tip", () => {
+    const drop = shape({ kind: "teardrop", width: 9.5, depth: 20, height: 11.4724, elevation: 3 });
+    const center = alignNaturalCenter(drop)!;
+    expect(center).not.toBeNull();
+    // The round part's middle stands 4.75 above the bottom of the shape; the box's middle 5.74.
+    expect(center.y).toBeCloseTo(3 + 4.75, 3);
+    expect(center.x).toBeCloseTo(10, 6);
+    expect(center.z).toBeCloseTo(-4, 6);
+    // Seen in the real mesh: the lowest point of the round part is 4.75 below it, the tip 6.72 above.
+    const ys = meshForShape(drop).vertices.map(([, y]) => y);
+    expect(center.y - Math.min(...ys)).toBeCloseTo(4.75, 2);
+    expect(Math.max(...ys) - center.y).toBeCloseTo(4.75 / Math.sin(Math.PI / 4), 1);
+  });
+});

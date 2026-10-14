@@ -6,6 +6,7 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **Align puts a teardrop hole on the middle of its round part:** "Centre" took the middle of the box round a teardrop, which has its tip on top, so the round part sat about a millimetre below the middle of the box (0.98 mm for 9.5 mm). A teardrop hole aligned with a tapped hole therefore did not lie on its circle. Now the middle of a teardrop is the middle of its round part, up and down as well. With that a threaded hole on its side gets a teardrop of its own that opens its top: a teardrop of the thread core and the tapped hole, aligned in the middle and grouped. The guide describes it in the chapter on threads. Asked about by @robstern (#268).
 ## 1.72.1
 
 - **A sketch outline stretched by its frame lands on whole values:** Pulling a handle of the frame round a selected outline - a rectangle of 20, say - gave sizes like 24.83 although the snap grid was on. The handle stands off the edge it moves by a gap that follows the zoom; the pointer was snapped and the gap taken off afterwards, so the edge came out crooked. Now the edge itself lands on the grid. Reported in the forum.

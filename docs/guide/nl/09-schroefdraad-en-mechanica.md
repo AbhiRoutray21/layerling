@@ -137,6 +137,8 @@ Een gat dat op zijn kant ligt, krijgt bij het printen een brug over de bovenkant
 
 Maak van het druppelgat een gat en groepeer het met het onderdeel. De lengte loopt langs de diepte en de punt wijst omhoog. Voor een gat in de andere richting draai je het 90° om de verticale as.
 
+Een **getapt gat** op zijn zij zakt aan de bovenkant op dezelfde manier door. Geef het een eigen druppelgat: voeg een {{ui:shape.teardrop}} toe als gat, met als {{ui:prop.teardropDiameter}} de kern van de schroefdraad, de diameter die zijn tanden vrijlaten (bij M10 ongeveer 8,4 mm), even lang als het getapte gat, en selecteer beide. Klik op {{ui:editor.tool.align}} en lijn ze uit in het midden - het midden van het druppelgat is het midden van zijn ronde deel, niet van zijn doos met de punt, dus de twee cirkels liggen precies op elkaar - en groepeer beide met het onderdeel. De schroefdraad wordt zoals gewoonlijk gesneden en de punt opent de bovenkant van het gat, zodat het zonder steunen print.
+
 ## Verzinkboring en verzinking
 
 Een schroefkop moet vaak niet uitsteken. De {{ui:shape.counterbore}} snijdt een ronde kamer voor een cilinderkopschroef met binnenzeskant (DIN 912), de {{ui:shape.countersink}} een kegel voor een verzonken schroef (DIN 7991). Beide staan met het kopeinde omhoog: de {{ui:prop.screwHoleHead}} is de diameter van de kamer of de kegel, de {{ui:prop.screwHoleShaft}} de boring eronder, de {{ui:prop.screwHoleLength}} de hele lengte. Bij de verzinkboring stel je de {{ui:prop.screwHoleHeadDepth}} in, bij de verzinking de {{ui:prop.screwHoleAngle}} (90° past bij verzonken schroeven). De standaardwaarden passen bij een M3-schroef.
