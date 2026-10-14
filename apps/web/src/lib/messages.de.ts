@@ -639,6 +639,7 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "shortcuts.axisLockDrag": "Beim Ziehen gedrückt halten: nur entlang X oder Y bewegen",
   "shortcuts.duplicateDrag": "Eine Kopie ziehen, das Original bleibt stehen",
   "shortcuts.pauseObjectSnap": "Erst während des Ziehens gedrückt: Fangen an anderen Formen aussetzen",
+  "shortcuts.sizeAroundCenter": "Eine Größe neben der Form tippen: um die Mitte wachsen statt von der Gegenkante",
   "shortcuts.copy": "Kopieren",
   "shortcuts.cut": "Ausschneiden",
   "shortcuts.paste": "Einfügen",

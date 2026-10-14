@@ -640,6 +640,7 @@ export const MESSAGES_EN = {
   "shortcuts.axisLockDrag": "Hold while dragging: move along X or Y only",
   "shortcuts.duplicateDrag": "Drag a copy, the original stays put",
   "shortcuts.pauseObjectSnap": "Pressed once dragging: pause snapping to other shapes",
+  "shortcuts.sizeAroundCenter": "Typing a size beside the shape: grow round the middle instead of from the opposite edge",
   "shortcuts.copy": "Copy",
   "shortcuts.cut": "Cut",
   "shortcuts.paste": "Paste",

@@ -5661,7 +5661,9 @@ export function WorkplaneViewport({
     onInteractionActiveChange?.(false);
   }, [onInteractionActiveChange, onUpdateShape]);
 
-  const commitDimensionEdit = useCallback(() => {
+  const commitDimensionEdit = useCallback((aroundCenter = false) => {
+    // Alt+Enter (#327): no edge is held, so the shape grows round its middle.
+    if (aroundCenter) lastResizeAnchorRef.current = null;
     const edit = editingDimension;
     const id = selectedIdsRef.current[0];
     const shape = shapesRef.current.find((entry) => entry.id === id);
@@ -5741,7 +5743,8 @@ export function WorkplaneViewport({
     });
   }, [beginDimensionEdit, formulaForDimensionMark, rememberResizeAnchor]);
 
-  const commitCornerEdit = useCallback(() => {
+  const commitCornerEdit = useCallback((aroundCenter = false) => {
+    if (aroundCenter) lastResizeAnchorRef.current = null;
     const edit = editingCorner;
     const shape = shapesRef.current.find((entry) => entry.id === selectedIdsRef.current[0]);
     setEditingCorner(null);

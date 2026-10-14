@@ -639,6 +639,7 @@ export const MESSAGES_NL: Record<MessageKey, string> = {
   "shortcuts.axisLockDrag": "Ingedrukt houden tijdens slepen: alleen langs X of Y verplaatsen",
   "shortcuts.duplicateDrag": "Een kopie slepen, het origineel blijft staan",
   "shortcuts.pauseObjectSnap": "Eenmaal indrukken tijdens slepen: snappen aan andere vormen pauzeren",
+  "shortcuts.sizeAroundCenter": "Een maat naast de vorm typen: rond het midden groeien in plaats van vanaf de tegenoverliggende rand",
   "shortcuts.copy": "Kopiëren",
   "shortcuts.cut": "Knippen",
   "shortcuts.paste": "Plakken",
