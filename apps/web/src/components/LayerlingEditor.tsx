@@ -203,7 +203,7 @@ import { silhouetteSketchProfile } from "@/lib/sketchCadProfile";
 import { svgSketchMatchesMesh } from "@/lib/svgSketch";
 import { DEFAULT_SKETCH_STROKE, normalizeSketchStroke, strokedSketchProfile } from "@/lib/sketchStroke";
 import { topCadModifierEdgeIds } from "@/lib/topEdges";
-import { placeSketchShape } from "@/lib/sketchPlacement";
+import { movedWithEditedOutline, placeSketchShape, sketchBodyAnchor, type SketchAnchor } from "@/lib/sketchPlacement";
 import { meshSlicePath, planeCutsMesh } from "@/lib/sketchSlice";
 import { BUG_REPORT_FILE, bugReportText, rememberBugReportEvent, type BugReportEvent } from "@/lib/bugReport";
 import { formatLengthMm, lengthDisplayUnit } from "@/lib/measurementUnits";
@@ -4095,6 +4095,9 @@ export function LayerlingEditor({
     [],
   );
 
+  /** Where the edited body's middle is in the sketch, when the sketch of an existing body was opened (#291). */
+  const sketchEditAnchorRef = useRef<SketchAnchor | null>(null);
+
   const beginSketch = useCallback((
     operation: SketchOperation,
     profile?: SketchProfile,
@@ -4135,18 +4138,17 @@ export function LayerlingEditor({
     }
     const operation = selectedShape.sketchOperation ?? (selectedShape.sketchRevolve ? "revolve" : "extrude");
     let editWorkplane: PlacementWorkplane | undefined;
+    sketchEditAnchorRef.current = null;
     if (operation === "extrude") {
       const quaternion = quaternionForShape(selectedShape);
       const normal = new THREE.Vector3(0, 1, 0).applyQuaternion(quaternion).normalize();
       const xAxis = new THREE.Vector3(1, 0, 0).applyQuaternion(quaternion).normalize();
       const zAxis = new THREE.Vector3(0, 0, 1).applyQuaternion(quaternion).normalize();
-      const points = selectedShape.sketchProfile.points;
-      const profileCenterX = points.length
-        ? (Math.min(...points.map((point) => point.x)) + Math.max(...points.map((point) => point.x))) / 2
-        : 0;
-      const profileCenterZ = points.length
-        ? (Math.min(...points.map((point) => point.z)) + Math.max(...points.map((point) => point.z))) / 2
-        : 0;
+      // The sketch is drawn over the body: the point of the outline under the body's middle goes there.
+      const anchor = sketchBodyAnchor(selectedShape);
+      sketchEditAnchorRef.current = anchor;
+      const profileCenterX = anchor.x;
+      const profileCenterZ = anchor.z;
       const origin = new THREE.Vector3(
         selectedShape.x,
         (selectedShape.elevation ?? 0) + selectedShape.height / 2,
@@ -4180,6 +4182,7 @@ export function LayerlingEditor({
 
   const cancelSketch = useCallback(() => {
     setSketchActive(false);
+    sketchEditAnchorRef.current = null;
     setSketchActivePointId(null);
     setSketchSelection(null);
     setSketchMeasureStart(null);
@@ -4775,6 +4778,19 @@ export function LayerlingEditor({
         setNotice(t("status.buildingSketch"), true);
         const extrusion = await cadShapeFromSketchProfile(sketchProfile, height, existing);
         resolved = placeSketchShape(extrusion, activeSketchWorkplane, existing);
+        if (existing && resolved) {
+          // Put the body where its outline is: it is centred on the new outline, and the edit may have moved that middle.
+          const quaternion = quaternionForShape(existing);
+          const xAxis = new THREE.Vector3(1, 0, 0).applyQuaternion(quaternion);
+          const zAxis = new THREE.Vector3(0, 0, 1).applyQuaternion(quaternion);
+          resolved = movedWithEditedOutline(
+            resolved,
+            existing,
+            sketchEditAnchorRef.current ?? sketchBodyAnchor(existing),
+            { x: extrusion.x, z: extrusion.z },
+            { x: [xAxis.x, xAxis.y, xAxis.z], z: [zAxis.x, zAxis.y, zAxis.z] },
+          );
+        }
       }
     } catch (error) {
       setNotice(error instanceof Error ? localizedError(error.message) : t(sketchOperation === "revolve" ? "status.sketchCannotRevolve" : "status.sketchCannotExtrude"));
@@ -4798,6 +4814,7 @@ export function LayerlingEditor({
     setSketchStrokePanelOpen(false);
     setSketchRevolvePreview(null);
     setEditingSketchShapeId(null);
+    sketchEditAnchorRef.current = null;
     setToolbarMode("geometry");
   }, [activeSketchWorkplane, commitShapes, editingSketchShapeId, shapes, sketchOperation, sketchProfile, sketchRevolveSettings]);
 

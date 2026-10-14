@@ -1,6 +1,16 @@
 [
   {
     "title": {
+      "de": "Eine Skizze bearbeiten verschiebt den Körper nicht mehr",
+      "en": "Editing a sketch no longer moves the body"
+    },
+    "body": {
+      "de": "Wer eine Skizze öffnete, einen Punkt oder Kurvengriff nach außen zog und abschloss, sah den Körper seitlich rutschen, und beim nächsten Öffnen lag die Skizze daneben. Jetzt bleibt alles, was du nicht angefasst hast, an seinem Platz, und die Skizze liegt genau über dem Körper, auch bei Kurven.",
+      "en": "If you opened a sketch, pulled a point or a curve handle outward and finished, the body slid sideways, and the next time you opened it the sketch lay beside it. Now everything you did not touch stays where it was, and the sketch lies exactly over the body, curves included."
+    }
+  },
+  {
+    "title": {
       "de": "Zeichnung für die Werkstatt",
       "en": "Drawing for the workshop"
     },
