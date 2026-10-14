@@ -407,6 +407,8 @@ type WorkplaneViewportProps = {
   onNoteAdd?: (note: { x: number; y: number; z: number; anchor?: WorkplaneNoteAnchor }) => string | null;
   /** Puts reference points in the scene; answers with the ids it made (none if they are there already). */
   onAddReferencePoints?: (positions: ReferencePosition[]) => string[];
+  /** Deletes every reference point at once. */
+  onRemoveAllReferencePoints?: () => void;
   onNoteUpdate?: (id: string, patch: Partial<WorkplaneNote>, transient?: boolean) => void;
   onNoteRemove?: (id: string) => void;
   onNoteModeChange?: (active: boolean) => void;
@@ -473,6 +475,7 @@ function readMoveDimensionsEnabled() {
 
 const PROPORTION_LOCK_STORAGE_KEY = "layerling.editor.keepProportions";
 const POINT_CARD_OFFSET_STORAGE_KEY = "layerling.editor.pointCardOffset";
+const POINT_CARD_OFFSETS_STORAGE_KEY = "layerling.editor.pointCardOffsets";
 
 
 /** The card of a reference point, as far as the person has moved it from its pin. */
@@ -484,6 +487,19 @@ function readPointCardOffset(): PointCardOffset {
     // Without storage the card simply opens beside its pin.
   }
   return { x: 0, y: 0 };
+}
+
+/** Where each reference point's card stands off its pin, by point (#329); a point not moved yet uses the old shared offset. */
+function readPointCardOffsets(): Record<string, PointCardOffset> {
+  try {
+    const parsed = JSON.parse(window.localStorage.getItem(POINT_CARD_OFFSETS_STORAGE_KEY) ?? "null") as Record<string, Partial<PointCardOffset>> | null;
+    if (!parsed || typeof parsed !== "object") return {};
+    return Object.fromEntries(Object.entries(parsed)
+      .filter(([, offset]) => offset && Number.isFinite(offset.x) && Number.isFinite(offset.y))
+      .map(([id, offset]) => [id, { x: Number(offset.x), y: Number(offset.y) }]));
+  } catch {
+    return {};
+  }
 }
 
 function readProportionLock() {
@@ -2970,6 +2986,7 @@ export function WorkplaneViewport({
   onMateFacePick,
   onNoteAdd,
   onAddReferencePoints,
+  onRemoveAllReferencePoints,
   onNoteUpdate,
   onNoteRemove,
   onNoteModeChange,
@@ -3117,19 +3134,28 @@ export function WorkplaneViewport({
     });
   }, []);
   const [pointCardOffset, setPointCardOffset] = useState<PointCardOffset>({ x: 0, y: 0 });
-  const changePointCardOffset = useCallback((offset: PointCardOffset, final: boolean) => {
-    setPointCardOffset(offset);
-    if (!final) return;
-    try {
-      window.localStorage.setItem(POINT_CARD_OFFSET_STORAGE_KEY, JSON.stringify(offset));
-    } catch {
-      // The card keeps its place for this session when storage is unavailable.
-    }
+  const [pointCardOffsets, setPointCardOffsets] = useState<Record<string, PointCardOffset>>({});
+  const changePointCardOffset = useCallback((noteId: string, offset: PointCardOffset, final: boolean) => {
+    setPointCardOffsets((current) => {
+      const next = { ...current };
+      // Back at its pin, a card needs no entry of its own and uses the default again.
+      if (offset.x === 0 && offset.y === 0 && final) delete next[noteId];
+      else next[noteId] = offset;
+      if (final) {
+        try {
+          window.localStorage.setItem(POINT_CARD_OFFSETS_STORAGE_KEY, JSON.stringify(next));
+        } catch {
+          // The card keeps its place for this session when storage is unavailable.
+        }
+      }
+      return next;
+    });
   }, []);
   const [proportionLock, setProportionLock] = useState(false);
   const proportionLockRef = useRef(false);
   useEffect(() => {
     setPointCardOffset(readPointCardOffset());
+    setPointCardOffsets(readPointCardOffsets());
   }, []);
   useEffect(() => {
     const stored = readProportionLock();
@@ -8520,7 +8546,9 @@ export function WorkplaneViewport({
               workspace={workspace}
               onPointChange={(id, patch) => onNoteUpdate?.(id, patch)}
               pointCardOffset={pointCardOffset}
+              pointCardOffsets={pointCardOffsets}
               onPointCardOffsetChange={changePointCardOffset}
+              onRemoveAllPoints={onRemoveAllReferencePoints}
             />
           ) : null}
           {!workplaneMode && !splitActive && alignOverlay ? (

@@ -132,5 +132,7 @@ Ein Muster, ein Logo oder ein Schriftzug soll auf einen Becher, eine Dose oder e
 
 Für eine Gravur schaltest du {{ui:inspector.wrapInward}} ein: Dann geht die Dicke in die Wand hinein. Setze die Form als Aussparung, richte sie mittig aus und gruppiere sie mit dem Zylinder.
 
+Eine Form, die schon gewickelt ist, ist ein Netz des Gewickelten und lässt sich nicht noch einmal wickeln: Nimm das Wickeln zurück oder wickle das flache Original noch einmal mit einem anderen Durchmesser.
+
 Das Ergebnis ist ein Netz wie ein importiertes Modell. Mit Rückgängig liegt die Form wieder flach da; für einen anderen Durchmesser erst zurück und dann neu wickeln. Länger als einmal um den Zylinder geht nicht, dann nennt layerling den kleinsten Durchmesser, der passt.
 

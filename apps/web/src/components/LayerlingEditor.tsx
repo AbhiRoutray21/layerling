@@ -1955,7 +1955,8 @@ function cylinderWrappedShape(shape: WorkplaneShape, diameter: number, inward: b
 }
 
 function canWrapAroundCylinder(shape: WorkplaneShape | null | undefined) {
-  return Boolean(shape && !shape.locked && shape.groupOperation !== "bundle" && !isNonSolidShapeKind(shape.kind));
+  // A shape that is wrapped already is a mesh of the wrapped thing: wrapping that again gave nonsense (#329).
+  return Boolean(shape && !shape.locked && !shape.cylinderWrap && shape.groupOperation !== "bundle" && !isNonSolidShapeKind(shape.kind));
 }
 
 
@@ -3905,6 +3906,12 @@ export function LayerlingEditor({
     },
     [commitNotes, setNotice],
   );
+
+  const removeAllReferencePoints = useCallback(() => {
+    const points = referencePoints(notesRef.current);
+    if (points.length === 0) return;
+    commitNotes(notesRef.current.filter((note) => note.kind !== "point"), t("status.pointsRemoved", { count: points.length }));
+  }, [commitNotes]);
 
   const markSelectionPoints = useCallback(
     (spot: ReferencePointSpot) => {
@@ -7341,7 +7348,7 @@ export function LayerlingEditor({
       return;
     }
     if (!canWrapAroundCylinder(selectedShape)) {
-      setNotice(t(selectedShape.locked ? "status.objectLocked" : "status.selectOneToWrap"));
+      setNotice(t(selectedShape.locked ? "status.objectLocked" : selectedShape.cylinderWrap ? "status.alreadyWrapped" : "status.selectOneToWrap"));
       return;
     }
     const wrapped = cylinderWrappedShape(selectedShape, diameter, inward);
@@ -8722,6 +8729,7 @@ export function LayerlingEditor({
         const target = findShape(params.id) ?? (selectedIdsRef.current.length === 1 ? findShape(selectedIdsRef.current[0]) : null);
         if (!target) throw new Error("Select one object to wrap");
         if (target.locked) throw new Error("Unlock the object before wrapping it");
+        if (target.cylinderWrap) throw new Error("This object is already wrapped around a cylinder: undo the wrapping, or wrap the flat original again");
         if (!canWrapAroundCylinder(target)) throw new Error("This object cannot be wrapped; a bundle or a measuring tool has no body of its own");
         const diameter = mcpNumber(params.diameter, Number.NaN);
         if (!Number.isFinite(diameter) || diameter <= 0) throw new Error("diameter must be a positive number of millimetres");
@@ -10950,6 +10958,7 @@ export function LayerlingEditor({
         { key: "markCenter", label: t("contextMenu.markCenter"), separated: true, onSelect: () => markSelectionPoints("center") },
         { key: "markCorners", label: t("contextMenu.markCorners"), onSelect: () => markSelectionPoints("corners") },
         { key: "markMidpoints", label: t("contextMenu.markMidpoints"), onSelect: () => markSelectionPoints("midpoints") },
+        ...(referencePoints(notes).length > 0 ? [{ key: "removePoints", label: t("contextMenu.removeAllPoints", { count: referencePoints(notes).length }), danger: true, onSelect: removeAllReferencePoints }] : []),
       );
     }
     items.push(
@@ -11301,6 +11310,7 @@ export function LayerlingEditor({
           onMateFacePick={mateTool ? pickMateFace : pickHolePatternFace}
           onNoteAdd={addNote}
           onAddReferencePoints={addReferencePoints}
+          onRemoveAllReferencePoints={removeAllReferencePoints}
           onNoteUpdate={updateNote}
           onNoteRemove={removeNote}
           onNoteModeChange={setNoteMode}

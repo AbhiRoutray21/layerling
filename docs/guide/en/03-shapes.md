@@ -131,5 +131,7 @@ Should a pattern, a logo or lettering go onto a cup, a can or a tube? First lay 
 
 For an engraving, switch on {{ui:inspector.wrapInward}}: the thickness then goes into the wall. Make the shape a hole, centre it and group it with the cylinder.
 
+A shape that is wrapped already is a mesh of the wrapped thing and cannot be wrapped again: undo the wrapping, or wrap the flat original once more with another diameter.
+
 The result is a mesh like an imported model. Undo lays the shape flat again; for another diameter, undo first and wrap again. It cannot go further than once around the cylinder; then layerling names the smallest diameter that fits.
 

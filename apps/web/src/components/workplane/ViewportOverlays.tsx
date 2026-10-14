@@ -777,11 +777,17 @@ export function NoteOverlay({
   workspace,
   onPointChange,
   pointCardOffset,
+  pointCardOffsets,
   onPointCardOffsetChange,
+  onRemoveAllPoints,
 }: {
   overlay: NoteOverlayState;
+  /** Where a card stands that was not moved on its own yet. */
   pointCardOffset: PointCardOffset;
-  onPointCardOffsetChange: (offset: PointCardOffset, final: boolean) => void;
+  /** The cards that were moved, by point. */
+  pointCardOffsets: Record<string, PointCardOffset>;
+  onPointCardOffsetChange: (noteId: string, offset: PointCardOffset, final: boolean) => void;
+  onRemoveAllPoints?: () => void;
   workspace: WorkplaneWorkspaceSettings;
   onPointChange: (noteId: string, patch: { x?: number; y?: number; z?: number }) => void;
   editingId: string | null;
@@ -796,6 +802,9 @@ export function NoteOverlay({
   onEditingIdChange: (noteId: string | null) => void;
 }) {
   const pointCardDrag = useRef<{ pointerId: number; startX: number; startY: number; origin: PointCardOffset } | null>(null);
+  // The card or pin touched last stands in front of the others, whatever its place in the list (#329).
+  const [frontId, setFrontId] = useState<string | null>(null);
+  const pointCount = overlay.notes.filter((note) => note.point).length;
   return (
     <div className="note-overlay" aria-label={t("editor.tool.note")}>
       {overlay.notes.map((note) => {
@@ -805,7 +814,8 @@ export function NoteOverlay({
           <div
             key={note.id}
             className={`note-pin-anchor ${open ? "open" : ""} ${note.flipped ? "flipped" : ""}`}
-            style={{ left: note.screenX, top: note.screenY }}
+            style={{ left: note.screenX, top: note.screenY, ...(frontId === note.id ? { zIndex: 6 } : {}) }}
+            onPointerDownCapture={() => setFrontId(note.id)}
           >
             <button
               type="button"
@@ -819,10 +829,12 @@ export function NoteOverlay({
             >
               {note.point ? <Crosshair size={15} strokeWidth={2.6} aria-hidden="true" /> : note.index}
             </button>
-            {open && note.point ? (
+            {open && note.point ? (() => {
+              const offset = pointCardOffsets[note.id] ?? pointCardOffset;
+              return (
               <div
                 className="note-card point-card"
-                style={{ transform: `translate(${pointCardOffset.x}px, ${pointCardOffset.y}px)` }}
+                style={{ transform: `translate(${offset.x}px, ${offset.y}px)` }}
                 onPointerDown={(event) => event.stopPropagation()}
               >
                 <strong
@@ -830,21 +842,21 @@ export function NoteOverlay({
                   title={t("panel.moveHint")}
                   onPointerDown={(event) => {
                     capturePointer(event.currentTarget, event.pointerId);
-                    pointCardDrag.current = { pointerId: event.pointerId, startX: event.clientX, startY: event.clientY, origin: pointCardOffset };
+                    pointCardDrag.current = { pointerId: event.pointerId, startX: event.clientX, startY: event.clientY, origin: offset };
                   }}
                   onPointerMove={(event) => {
                     const drag = pointCardDrag.current;
                     if (!drag || drag.pointerId !== event.pointerId) return;
-                    onPointCardOffsetChange({ x: drag.origin.x + event.clientX - drag.startX, y: drag.origin.y + event.clientY - drag.startY }, false);
+                    onPointCardOffsetChange(note.id, { x: drag.origin.x + event.clientX - drag.startX, y: drag.origin.y + event.clientY - drag.startY }, false);
                   }}
                   onPointerUp={(event) => {
                     const drag = pointCardDrag.current;
                     if (!drag || drag.pointerId !== event.pointerId) return;
                     pointCardDrag.current = null;
                     if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId);
-                    onPointCardOffsetChange({ x: drag.origin.x + event.clientX - drag.startX, y: drag.origin.y + event.clientY - drag.startY }, true);
+                    onPointCardOffsetChange(note.id, { x: drag.origin.x + event.clientX - drag.startX, y: drag.origin.y + event.clientY - drag.startY }, true);
                   }}
-                  onDoubleClick={() => onPointCardOffsetChange({ x: 0, y: 0 }, true)}
+                  onDoubleClick={() => onPointCardOffsetChange(note.id, { x: 0, y: 0 }, true)}
                 >
                   {t("point.title")}
                 </strong>
@@ -858,8 +870,12 @@ export function NoteOverlay({
                     <button type="button" className="note-action danger" onClick={() => onRemove(note.id)}>{t("common.delete")}</button>
                   </span>
                 </div>
+                {pointCount > 1 && onRemoveAllPoints ? (
+                  <button type="button" className="note-action danger point-delete-all" onClick={onRemoveAllPoints}>{t("point.deleteAll", { count: pointCount })}</button>
+                ) : null}
               </div>
-            ) : open ? (
+              );
+            })() : open ? (
               <div className="note-card" onPointerDown={(event) => event.stopPropagation()}>
                 <NoteText
                   value={note.text}

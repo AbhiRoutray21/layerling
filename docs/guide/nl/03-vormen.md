@@ -131,4 +131,6 @@ Moet een patroon, een logo of belettering op een beker, een blik of een buis? Le
 
 Voor een gravure zet je {{ui:inspector.wrapInward}} aan: de dikte gaat dan de wand in. Maak de vorm een gat, centreer hem en groepeer hem met de cilinder.
 
+Een vorm die al gewikkeld is, is een net van het gewikkelde en laat zich niet nog eens wikkelen: maak het wikkelen ongedaan of wikkel het platte origineel nog eens met een andere diameter.
+
 Het resultaat is een mesh, net als een geïmporteerd model. Ongedaan maken legt de vorm weer plat; voor een andere diameter maak je eerst ongedaan en wikkel je opnieuw. Verder dan één keer rond de cilinder gaat het niet; dan noemt layerling de kleinste diameter die past.

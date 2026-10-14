@@ -8080,6 +8080,12 @@ html[data-theme="dark"] .inspector-bundle-note {
   gap: 8px;
 }
 
+.point-card .point-delete-all {
+  width: 100%;
+  justify-content: center;
+  white-space: nowrap;
+}
+
 .note-card-end {
   display: inline-flex;
   align-items: center;
