@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "title": {
+      "de": "Russisch als Sprache",
+      "en": "Russian as a language"
+    },
+    "body": {
+      "de": "layerling gibt es jetzt auch auf Russisch: die ganze Oberfläche und die 16 Kapitel der Anleitung. Die Sprache wird für einen Browser mit russischer Einstellung von selbst gewählt und lässt sich in der Sprachliste ändern. Übersetzt mit einem KI-Assistenten; falsche Wörter lassen sich mit einem kleinen Pull Request auf GitHub verbessern.",
+      "en": "layerling now speaks Russian: the whole interface and the 16 chapters of the guide. The language is chosen automatically for a browser set to Russian and can be changed in the language list. It was translated with an AI assistant; wrong words are fixed with a small pull request on GitHub."
+    }
+  }
+]

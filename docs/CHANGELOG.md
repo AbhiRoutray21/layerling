@@ -6,6 +6,7 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **Russian:** The whole interface, the 16 chapters of the guide and the guide's own pages are in Russian, with the language list and the guide's language switch. It is picked automatically for a browser set to Russian. Made by @CjCrash with an AI assistant (pull request #124); a second Russian reader is still welcome, wrong words are fixed with a small pull request. Along the way the guide builder learned two things any language profits from: a language without pictures of its own points at the English pictures instead of carrying a copy of them, and a heading in Cyrillic gets an id of its own instead of an empty one.
 ## 1.73.0
 
 - **The corner ruler no longer draws a fan of lines:** With the camera close above the ruler, looking along one of its arms, the part of the arm that lay behind the camera was drawn mirrored on the screen: a fan of fine lines that crossed the picture. Lines, ticks and numbers of the ruler (and the arrows and guide lines of its distances) are now cut off where they pass the camera, so only what is in front of it is drawn. Reported in the forum.
