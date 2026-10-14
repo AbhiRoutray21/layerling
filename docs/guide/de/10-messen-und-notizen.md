@@ -7,14 +7,15 @@ Wer ein Teil genau bauen will, muss messen können. layerling hat dafür mehrere
 
 ## Das Maßband
 
-Das Maßband liegt am unteren Ende der Kameraleiste am linken Rand ({{ui:camera.tapeTools}}). Es misst Abstände zwischen Ecken, Kanten und Flächen. Ein Klick darauf öffnet vier Schaltflächen. Verdecken sie, was du messen willst, ziehst du sie am Griff links frei über die Arbeitsfläche; ein Doppelklick auf den Griff bringt sie zurück:
+Das Maßband liegt am unteren Ende der Kameraleiste am linken Rand ({{ui:camera.tapeTools}}). Es misst Abstände zwischen Ecken, Kanten und Flächen. Ein Klick darauf öffnet fünf Schaltflächen. Verdecken sie, was du messen willst, ziehst du sie am Griff links frei über die Arbeitsfläche; ein Doppelklick auf den Griff bringt sie zurück:
 
-![Das Maßband mit seinen vier Schaltflächen: Maß hinzufügen, Messpunkte verschieben, Maß entfernen, alle Maße entfernen.](shot:tape-menu)
+![Das Maßband mit seinen Schaltflächen: Maß hinzufügen, Messpunkte verschieben, Maß entfernen, ganze Kanten messen, alle Maße entfernen.](shot:tape-menu)
 
 1. **{{ui:camera.addMeasurement}}:** Klicke einen Punkt an, ziehe zum nächsten und klicke ihn an. Die Strecke wird beschriftet.
 2. **{{ui:camera.moveMeasurement}}:** Fasse die Punkte an und schiebe sie, die Zahl folgt.
 3. **{{ui:camera.deleteMeasurement}}:** Danach klickst du ein Maß an, um es zu entfernen.
-4. **{{ui:camera.deleteAllMeasurements}}:** Entfernt alle Maße auf einmal. Weil sich das nicht rückgängig machen lässt, fragt layerling vorher nach; gibt es keine Maße, passiert nichts.
+4. **{{ui:camera.tapeWholeEdges}}:** Ein Klick auf eine Kante misst sie ganz, bei einem Kreis zum Beispiel den Umfang. Ist das ausgeschaltet, setzt der Klick stattdessen einen Punkt auf die Kante, und der zweite Punkt kann überall liegen, so dass du den Durchmesser oder jede andere Strecke messen kannst. Mit [[Alt]] gilt der Schalter für einen Klick umgekehrt. Auf einem Kreis rastet der Punkt gegenüber vom ersten ein, wenn der Zeiger in die Nähe kommt, und die Punkte liegen auf dem wirklichen Kreis, so dass der Durchmesser genau herauskommt.
+5. **{{ui:camera.deleteAllMeasurements}}:** Entfernt alle Maße auf einmal. Weil sich das nicht rückgängig machen lässt, fragt layerling vorher nach; gibt es keine Maße, passiert nichts.
 
 Mit [[Esc]] verlässt du den Messmodus.
 
