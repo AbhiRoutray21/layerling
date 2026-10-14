@@ -23,7 +23,7 @@ Einen einzelnen Entwurf sicherst du im Editor: {{ui:editor.export}}, dann das Fo
 
 Klicke auf {{ui:editor.export}} oder drücke [[Strg]]+[[E]].
 
-![Das Exportfenster mit den Formaten STL, 3MF, OBJ, STEP, SVG, PNG und LYL.](shot:export-panel)
+![Das Exportfenster mit den Formaten STL, 3MF, OBJ, STEP, SVG, PNG, LYL und 2D.](shot:export-panel)
 
 Oben steht der Dateiname, darunter wählst du das Format. Ist etwas markiert, wird nur die Auswahl exportiert, sonst der ganze Entwurf. Lässt die Auswahl sichtbare Teile aus, sagt das ein Hinweis im Fenster deutlich, und {{ui:export.selectAll}} markiert mit einem Klick alles Sichtbare. Ist die Datei geschrieben, schließt sich das Fenster von selbst; schlägt der Export fehl, bleibt es mit der Meldung offen.
 
@@ -36,12 +36,23 @@ Oben steht der Dateiname, darunter wählst du das Format. Ist etwas markiert, wi
 | **SVG** | Lasercutter und Plotter | Eine saubere Draufsicht in Millimetern, samt Löchern und gekrümmten Umrissen. |
 | **PNG** | Forenbeiträge, Druckportale, Rückfragen | Ein Bild der Ansicht, wie sie gerade ist, in doppelter Auflösung und ohne Griffe, Auswahlrahmen und Maße. {{ui:export.png.plate}} und {{ui:export.png.transparent}} wählst du im Fenster. Drehe und zoome vorher, bis der Ausschnitt passt; die Auswahl spielt hier keine Rolle. |
 | **LYL** | layerling selbst | Der bearbeitbare Entwurf mit allem Drum und Dran. |
+| **2D** | Werkstatt, Drehbank und Fräse, Dokumentation | Eine Zeichnung im Maßstab 1:1 als PDF oder SVG: Vorder-, Drauf- und rechte Seitenansicht auf einem ISO-Blatt. Siehe unten. |
 
 **STL in den eigenen Ordner (Chrome und Edge).** Dort öffnet der erste STL-Export eines Entwurfs den Speichern-Dialog deines Systems: Ordner und Namen wählst du selbst, und eine vorhandene Datei lässt sich ersetzen. Danach schreibt jeder STL-Export des Entwurfs ohne Dialog in genau diese Datei; das Export-Fenster zeigt, in welche, und **Speichern unter …** neben dem Export-Knopf wählt eine andere. Der Dialog merkt sich seinen eigenen Ordner, getrennt von dem für Entwürfe, so bleiben die Slicer-Dateien beim Slicer. Nach dem Neuladen der Seite kennt der Entwurf seine STL-Datei nicht mehr, und der nächste Export fragt wieder. Firefox und Safari laden die Datei wie bisher herunter.
 
 Eine Aussparung, die du nicht gruppiert hast, zieht der Export von jedem Körper ab, den sie berührt, so wie die Ansicht es zeigt. Du musst also nicht vor jedem Export gruppieren. Mit einer Auswahl zählen nur die ausgewählten Aussparungen. Allein lässt sich eine Aussparung nicht exportieren; darauf weist dich layerling hin.
 
 STEP enthält nur exakte CAD-Körper. Was sich nicht exakt abbilden lässt, etwa ein als STL importiertes Netz, bleibt draußen. Die Meldung nach dem Export nennt diese Körper beim Namen und sagt, warum. Für den Drucker nimmst du dann STL oder 3MF, die tragen alles.
+
+### Eine Zeichnung für die Werkstatt
+
+Wähle das Format **2D** (mit der Maus darauf steht Zeichnung) und unter dem Dateinamen PDF oder SVG. Ist etwas ausgewählt, wird nur die Auswahl gezeichnet, sonst der ganze sichtbare Entwurf; Aussparungen, die du nicht gruppiert hast, schneiden trotzdem die Teile, die sie berühren.
+
+layerling zeichnet Vorder-, Drauf- und rechte Seitenansicht in Erstwinkelprojektion (die Seitenansicht links neben der Vorderansicht, die Draufsicht darunter) auf das kleinste ISO-Blatt, das passt, von A4 bis A0, oder ein größeres, wenn das Teil es braucht. Es ist immer 1:1. Jede Ansicht trägt ihre Gesamtbreite und -höhe, Kanten, die man nicht sieht, sind gestrichelt. Runde Bohrungen, die parallel zu einer Blickrichtung laufen, bekommen ein Mittenkreuz und eine Bezeichnung (F1, T1, R1), und eine Tabelle unten nennt ihren Durchmesser und ihre Lage, gemessen von der linken unteren Ecke der Ansicht. Das Schriftfeld unten rechts enthält Name, Maßstab, Einheit, Datum und Blattnummer. Die Wörter auf dem Blatt folgen der Sprache der Oberfläche.
+
+Drucke bei 100 % oder „tatsächlicher Größe“, sonst stimmen die Längen nicht. Was die Zeichnung nicht tut: Gewinde, Tiefen, Toleranzen und schräge Bohrungen werden nicht bemaßt, und die Maße kommen aus dem Modell als Netz, sind also Nennmaße. Ein sehr feines Teil (über 100.000 Dreiecke) oder mehr als 200 Bohrungen lehnt der Export mit einer Meldung ab; wähle dann weniger Objekte.
+
+Die Projektion beruht auf der Zeichnungsarbeit von Cadverix-3D von WC3D.
 
 ### Wie viel Filament braucht das?
 

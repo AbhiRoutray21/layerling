@@ -92,6 +92,7 @@ The AI works with the same functions as you, through the same path as your opera
 | `layerling_clear_history` | deletes every undo step for good, as the History view's "Delete history" button does; needs `confirm: true` |
 | `layerling_set_history_view` | looks back at an earlier state of the project, like the History view (the real design stays untouched; changing tools wait until it is closed) |
 | `layerling_export_section_svg` | returns the outlines on a cutting plane as an SVG at 1:1, from the same bodies as the export |
+| `layerling_export_drawing` | makes the workshop drawing of the "2D" export: three views at 1:1 on an ISO sheet with overall sizes and a table of the round bores, as SVG text or PDF |
 | `layerling_set_workplane` | puts the workplane on a side of a body or back on the base plate, and hides or shows it |
 | `layerling_capture_image` | takes a picture of the view: front, top, side, diagonally from a corner and more |
 

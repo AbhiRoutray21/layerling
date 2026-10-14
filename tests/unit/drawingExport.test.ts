@@ -1,7 +1,9 @@
 import * as THREE from "three";
 import ManifoldModule from "manifold-3d";
 import { describe, expect, it } from "vitest";
-import { drawingToPdf, drawingToSvg, generateDrawing } from "@/lib/drawingExport";
+import { drawingBoreRows, drawingToPdf, drawingToSvg, generateDrawing } from "@/lib/drawingExport";
+import { drawingLabelsInLanguage } from "@/lib/drawingLabels";
+import { setLanguage } from "@/lib/i18n";
 import { projectDrawingMeshes, type DrawingMesh } from "@/lib/drawingProjection";
 
 function meshFromGeometry(geometry: THREE.BufferGeometry): DrawingMesh {
@@ -176,5 +178,31 @@ describe("automatic drawing export", () => {
     expect(() => generateDrawing([], "Empty")).toThrow("no solid geometry");
     expect(() => projectDrawingMeshes([{ vertices: [[NaN, 0, 0]], faces: [[0, 0, 0]] }], [0, 0, 0])).toThrow("invalid coordinates");
     expect(() => projectDrawingMeshes([{ vertices: [[0, 0, 0]], faces: Array.from({ length: 100001 }, () => [0, 0, 0]) }], [0, 0, 0])).toThrow("100,000 triangles");
+  });
+  it("lists the bores as rows with their sheet id and the position from the view's lower-left corner", () => {
+    const rows = drawingBoreRows(generateDrawing([plateWithBores()], "Fixture"));
+    const front = rows.filter((row) => row.id.startsWith("F")).sort((a, b) => a.x - b.x);
+    expect(front.map((row) => row.id)).toHaveLength(2);
+    expect(front[0]).toMatchObject({ view: "Front", diameter: expect.closeTo(6, 4), x: expect.closeTo(12, 4), y: expect.closeTo(8, 4) });
+    expect(front[1]).toMatchObject({ diameter: expect.closeTo(8, 4), x: expect.closeTo(35, 4), y: expect.closeTo(20, 4) });
+    expect(generateDrawing([plateWithBores()], "Fixture").paper).toBe("ISO A4");
+    expect(generateDrawing([meshFromGeometry(new THREE.BoxGeometry(240, 50, 20))], "Long").paper).toBe("ISO A3");
+  });
+
+  it("writes the sheet in the interface language, also into the PDF", () => {
+    setLanguage("de");
+    try {
+      const drawing = generateDrawing([plateWithBores()], "Platte", drawingLabelsInLanguage());
+      const texts = drawing.primitives.filter((p) => p.kind === "text").map((p) => p.text);
+      expect(texts).toEqual(expect.arrayContaining(["HINWEISE", "MAßSTAB", "BLATT", "Vorderansicht", "Durchmesser", "LAYERLING · ISO A4 · ERSTWINKELPROJEKTION"]));
+      expect(drawing.views.map((view) => view.id)).toEqual(["F", "T", "R"]);
+      expect(drawing.views[0].name).toBe("Vorderansicht");
+      expect(drawingToSvg(drawing)).toContain("MAßSTAB");
+      const pdf = new TextDecoder().decode(drawingToPdf(drawing));
+      expect(pdf).toContain("MA\\337STAB");
+      expect(pdf).toContain("\\304NDERUNG");
+    } finally {
+      setLanguage("en");
+    }
   });
 });

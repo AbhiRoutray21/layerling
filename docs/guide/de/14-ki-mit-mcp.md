@@ -92,6 +92,7 @@ Die KI arbeitet mit denselben Funktionen wie du, sie läuft über denselben Weg 
 | `layerling_clear_history` | löscht jeden Rückgängig-Schritt endgültig, wie der Knopf „Verlauf löschen“ im Verlaufsblick; verlangt `confirm: true` |
 | `layerling_set_history_view` | schaut auf einen früheren Stand des Projekts zurück, wie die Verlaufsansicht (der echte Entwurf bleibt unberührt; ändernde Werkzeuge warten, bis sie geschlossen ist) |
 | `layerling_export_section_svg` | liefert die Umrisse auf einer Schnittebene als SVG im Maßstab 1:1, aus denselben Körpern wie der Export |
+| `layerling_export_drawing` | macht die Werkstattzeichnung des Exports „2D“: drei Ansichten im Maßstab 1:1 auf einem ISO-Blatt mit Gesamtmaßen und einer Tabelle der runden Bohrungen, als SVG-Text oder PDF |
 | `layerling_set_workplane` | legt die Arbeitsebene auf eine Seite eines Körpers, setzt sie auf die Grundplatte zurück oder blendet sie aus und ein |
 | `layerling_capture_image` | nimmt ein Bild der Ansicht auf, von vorn, oben, seitlich, schräg von einer Ecke und mehr |
 

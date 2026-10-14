@@ -5,10 +5,42 @@ export type DrawingHole = { center: DrawingPoint; diameter: number };
 type Stroke = { kind: "line"; a: DrawingPoint; b: DrawingPoint; width: number; dash?: number[] };
 type Label = { kind: "text"; at: DrawingPoint; text: string; size: number; anchor?: "middle" };
 type Primitive = Stroke | Label;
+/** `id` is the letter of the view in the bore table (F, T, R); `name` is what the sheet calls it. */
+export type DrawingView = { id: "F" | "T" | "R"; name: string; projection: DrawingProjection; holes: DrawingHole[] };
 export type GeneratedDrawing = {
   width: number; height: number; title: string; primitives: Primitive[];
-  views: { name: string; projection: DrawingProjection; holes: DrawingHole[] }[];
+  /** "ISO A3" and the like, or null when the sheet had to grow past A0. */
+  paper: string | null;
+  views: DrawingView[];
 };
+
+/** The words on the sheet. English is the default; the editor hands in the interface language's own. */
+export type DrawingLabels = {
+  front: string; top: string; right: string;
+  bores: string; id: string; view: string; diameter: string;
+  firstAngle: string; customSheet: string; revision: string; drawnBy: string;
+  scale: string; units: string; sheet: string; notes: string; notesLines: string[];
+};
+export const DRAWING_LABELS_EN: DrawingLabels = {
+  front: "Front", top: "Top", right: "Right side",
+  bores: "CIRCULAR BORES — positions from each view's lower-left corner (mm)",
+  id: "ID", view: "View", diameter: "Diameter",
+  firstAngle: "FIRST ANGLE", customSheet: "CUSTOM SHEET", revision: "DRAWING / REVISION", drawnBy: "DRAWN BY / DATE",
+  scale: "SCALE", units: "DIMENSIONS IN", sheet: "SHEET", notes: "NOTES",
+  notesLines: ["Print at 100% / actual size.", "Mesh-derived nominal geometry.", "Bores parallel to view axes only.", "Threads, depths and tolerances", "are not automatically dimensioned."],
+};
+
+/** One row of the bore table: the position is measured from the lower-left corner of the view's overall size. */
+export type DrawingBoreRow = { id: string; view: string; diameter: number; x: number; y: number };
+export function drawingBoreRows(drawing: Pick<GeneratedDrawing, "views">): DrawingBoreRow[] {
+  return drawing.views.flatMap((view) => view.holes.map((hole, i) => ({
+    id: `${view.id}${i + 1}`,
+    view: view.name,
+    diameter: hole.diameter,
+    x: hole.center[0] + view.projection.width / 2,
+    y: view.projection.height / 2 - hole.center[1],
+  })));
+}
 
 /** Recognize complete, inward-facing cylindrical walls, not outside bosses.
  * Connected walls are fitted in view space so booleans/imported meshes work too.
@@ -84,23 +116,23 @@ const dimension = (n: number) => (Math.abs(n) < 0.005 ? 0 : n).toFixed(2);
 
 /** First-angle engineering sheet: right view to the left, top below front.
  * One unit = 1 mm; larger parts use larger sheets rather than changing scale. */
-export function generateDrawing(meshes: readonly DrawingMesh[], title: string): GeneratedDrawing {
-  const presets: { name: string; rotation: DrawingPoint3 }[] = [
-    { name: "Front", rotation: [0, 0, 0] }, { name: "Top", rotation: [90, 0, 0] }, { name: "Right side", rotation: [0, -90, 0] },
+export function generateDrawing(meshes: readonly DrawingMesh[], title: string, labels: DrawingLabels = DRAWING_LABELS_EN): GeneratedDrawing {
+  const presets: { id: DrawingView["id"]; name: string; rotation: DrawingPoint3 }[] = [
+    { id: "F", name: labels.front, rotation: [0, 0, 0] }, { id: "T", name: labels.top, rotation: [90, 0, 0] }, { id: "R", name: labels.right, rotation: [0, -90, 0] },
   ];
-  const views = presets.map(({ name, rotation }) => {
+  const views: DrawingView[] = presets.map(({ id, name, rotation }) => {
     const projection = projectDrawingMeshes(meshes, rotation);
-    return { name, projection, holes: findDrawingHoles(meshes, rotation, projection.center) };
+    return { id, name, projection, holes: findDrawingHoles(meshes, rotation, projection.center) };
   });
   const [front, top, side] = views.map((v) => v.projection);
-  const holeRows = views.flatMap((view) => view.holes.map((hole, i) => ({ view, hole, id: `${view.name === "Front" ? "F" : view.name === "Top" ? "T" : "R"}${i + 1}` })));
+  const boreRows = drawingBoreRows({ views });
   const left = 20, margin = 10, gap = 12, titleHeight = 36;
   // Reserve space for dimensions and captions, even on very small parts.
   const sideCell = Math.max(100, side.width + 32);
   const frontCell = Math.max(100, front.width + 32, top.width + 32);
   const upperRow = Math.max(front.height, side.height) + 28;
   const lowerRow = top.height + 28;
-  const tableHeight = holeRows.length ? 18 + holeRows.length * 5 : 0;
+  const tableHeight = boreRows.length ? 18 + boreRows.length * 5 : 0;
   const requiredWidth = left + sideCell + gap + frontCell + margin;
   const requiredHeight = 15 + upperRow + gap + lowerRow + tableHeight + 6 + titleHeight + margin;
   const papers = [[297, 210], [420, 297], [594, 420], [841, 594], [1189, 841]];
@@ -159,22 +191,22 @@ export function generateDrawing(meshes: readonly DrawingMesh[], title: string): 
       line([hx - extent, hy], [hx + extent, hy], 0.13, [3, 1, 0.4, 1]);
       line([hx, hy - extent], [hx, hy + extent], 0.13, [3, 1, 0.4, 1]);
       // Keep labels in the table; leader IDs sit just outside the bore.
-      const id = `${index === 0 ? "F" : index === 1 ? "T" : "R"}${i + 1}`;
+      const id = `${view.id}${i + 1}`;
       const label: DrawingPoint = [hx + hole.diameter / 2 + 3, hy - hole.diameter / 2 - 3];
       line([hx, hy], label, 0.13); text(label, id, 2.5);
     });
   });
-  if (holeRows.length) {
-    text([left + 3, drawingBottom + 5], "CIRCULAR BORES — positions from each view's lower-left corner (mm)", 2.5);
+  if (boreRows.length) {
+    text([left + 3, drawingBottom + 5], labels.bores, 2.5);
     line([left, drawingBottom + 8], [width - margin, drawingBottom + 8]);
-    text([left + 3, drawingBottom + 12], "ID", 2.5); text([left + 20, drawingBottom + 12], "View", 2.5);
-    text([left + 56, drawingBottom + 12], "Diameter", 2.5); text([left + 86, drawingBottom + 12], "X", 2.5); text([left + 116, drawingBottom + 12], "Y", 2.5);
+    text([left + 3, drawingBottom + 12], labels.id, 2.5); text([left + 20, drawingBottom + 12], labels.view, 2.5);
+    text([left + 56, drawingBottom + 12], labels.diameter, 2.5); text([left + 86, drawingBottom + 12], "X", 2.5); text([left + 116, drawingBottom + 12], "Y", 2.5);
   }
-  holeRows.forEach(({ view, hole, id }, i) => {
+  boreRows.forEach((row, i) => {
     const y = drawingBottom + 17 + i * 5;
-    text([left + 3, y], id, 2.5); text([left + 20, y], view.name, 2.5); text([left + 56, y], dimension(hole.diameter), 2.5);
-    text([left + 86, y], dimension(hole.center[0] + view.projection.width / 2), 2.5);
-    text([left + 116, y], dimension(view.projection.height / 2 - hole.center[1]), 2.5);
+    text([left + 3, y], row.id, 2.5); text([left + 20, y], row.view, 2.5); text([left + 56, y], dimension(row.diameter), 2.5);
+    text([left + 86, y], dimension(row.x), 2.5);
+    text([left + 116, y], dimension(row.y), 2.5);
   });
   const blockWidth = Math.min(180, (width - left - margin) * 0.7);
   const blockX = width - margin - blockWidth;
@@ -183,24 +215,24 @@ export function generateDrawing(meshes: readonly DrawingMesh[], title: string): 
   line([blockX, titleTop + 25], [width - margin, titleTop + 25]);
   line([blockX + blockWidth / 2, titleTop + 14], [blockX + blockWidth / 2, titleTop + 25]);
   for (let column = 1; column < 3; column++) line([blockX + blockWidth * column / 3, titleTop + 25], [blockX + blockWidth * column / 3, height - margin]);
-  const paperName = paperIndex >= 0 ? `ISO A${4 - paperIndex}` : "CUSTOM SHEET";
-  text([blockX + 3, titleTop + 4], `LAYERLING · ${paperName} · FIRST ANGLE`, 2);
+  const paper = paperIndex >= 0 ? `ISO A${4 - paperIndex}` : null;
+  text([blockX + 3, titleTop + 4], `LAYERLING · ${paper ?? labels.customSheet} · ${labels.firstAngle}`, 2);
   const displayTitle = title.length > 64 ? `${title.slice(0, 61)}...` : title;
   text([blockX + 3, titleTop + 10], displayTitle, Math.min(4, (blockWidth - 6) / Math.max(1, textWidth(displayTitle))));
-  text([blockX + 2, titleTop + 17], "DRAWING / REVISION", 1.8);
+  text([blockX + 2, titleTop + 17], labels.revision, 1.8);
   text([blockX + 2, titleTop + 22], "— / A", 2.5);
-  text([blockX + blockWidth / 2 + 2, titleTop + 17], "DRAWN BY / DATE", 1.8);
+  text([blockX + blockWidth / 2 + 2, titleTop + 17], labels.drawnBy, 1.8);
   const today = new Date();
   const date = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
   text([blockX + blockWidth / 2 + 2, titleTop + 22], `— / ${date}`, 2.5);
-  [ ["SCALE", "1:1"], ["DIMENSIONS IN", "mm"], ["SHEET", "1 / 1"] ].forEach(([label, value], i) => {
+  [ [labels.scale, "1:1"], [labels.units, "mm"], [labels.sheet, "1 / 1"] ].forEach(([label, value], i) => {
     const x = blockX + blockWidth * i / 3 + 2;
     text([x, titleTop + 28], label, 1.8); text([x, titleTop + 33], value, 2.5);
   });
   // Keep the manufacturing caveats separate from the drawing's title block.
-  text([left + 2, titleTop + 6], "NOTES", 1.8);
-  ["Print at 100% / actual size.", "Mesh-derived nominal geometry.", "Bores parallel to view axes only.", "Threads, depths and tolerances", "are not automatically dimensioned."].forEach((note, i) => text([left + 2, titleTop + 11 + i * 4], note, 1.8));
-  return { width, height, title, primitives, views };
+  text([left + 2, titleTop + 6], labels.notes, 1.8);
+  labels.notesLines.forEach((note, i) => text([left + 2, titleTop + 11 + i * 4], note, 1.8));
+  return { width, height, title, primitives, paper, views };
 }
 
 // Helvetica advance widths (in ems) keep centered captions consistent in PDF/SVG.

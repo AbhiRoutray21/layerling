@@ -219,6 +219,7 @@ import { cloneAsGroupChild, meshDataToManifoldMesh, shapeToManifoldSolid, splitS
 import { booleanAutomationScene } from "@/lib/editorAutomation";
 import { debugShapeSummary, mcpPivotRequest, compactShapeSummary, mcpShapeSummary, mcpSketchFillProfile, mcpTextFont } from "@/lib/editorMcpSummary";
 import { emptySketchProfile, cadShapeFromSketchProfile, shapeFromRevolvedSketchProfile, shapeFromCadMesh, sketchReferenceShapeOnWorkplane, defaultMcpSketchProfile } from "@/lib/editorSketchCad";
+import { drawingLabelsInLanguage } from "@/lib/drawingLabels";
 import { offersTextLayers, textLayerStack, layeredTextShape, nameTagSource, nameTagsFor, offersIconLayers, iconLayerStack, iconTagArea, layeredIconShape, iconTagCopies, svgIconArea, iconTagFromSvg } from "@/lib/editorTextTags";
 
 export { importedShapeFromObj, importedShapeFromStl, importedShapeFromSvg };
@@ -241,6 +242,7 @@ const HISTORY_VIEW_MCP_ACTIONS = new Set([
   "set_section_view",
   "show_workplane",
   "export_section_svg",
+  "export_drawing",
   "capture_image",
   "set_history_view",
   "clear_history",
@@ -9169,6 +9171,37 @@ export function LayerlingEditor({
         };
       }
 
+      if (command.action === "export_drawing") {
+        // The drawing the export window makes: three views at 1:1 with the overall sizes and the round
+        // bores, from the same bodies as the export. ids limit it to those objects (holes still cut).
+        const ids = Array.isArray(params.ids) ? params.ids.filter((id): id is string => typeof id === "string") : [];
+        const format = params.format === undefined ? "svg" : mcpString(params.format, "svg").toLowerCase();
+        if (format !== "svg" && format !== "pdf") throw new Error("format must be svg or pdf");
+        const all = currentShapes();
+        const chosen = ids.length ? all.filter((shape) => ids.includes(shape.id)) : all;
+        if (ids.length && chosen.length === 0) throw new Error("None of the ids is an object in this design");
+        const { drawing, hiddenNote } = await buildDrawing({ shapes: chosen, selection: ids.length > 0 }, all, projectName);
+        if (!drawing) throw new Error(t(hiddenNote ? "status.exportOnlyHidden" : "status.addSolidBeforeExport"));
+        const { drawingToSvg, drawingToPdf, drawingBoreRows } = await import("@/lib/drawingExport");
+        const round = (value: number) => Number(value.toFixed(3));
+        const result: Record<string, unknown> = {
+          sheet: drawing.paper ?? "custom",
+          widthMm: round(drawing.width),
+          heightMm: round(drawing.height),
+          views: drawing.views.map((view) => ({ id: view.id, name: view.name, widthMm: round(view.projection.width), heightMm: round(view.projection.height), bores: view.holes.length })),
+          bores: drawingBoreRows(drawing).map((row) => ({ id: row.id, view: row.view, diameterMm: round(row.diameter), xMm: round(row.x), yMm: round(row.y) })),
+          format,
+        };
+        if (format === "svg") result.svg = drawingToSvg(drawing);
+        else {
+          const bytes = drawingToPdf(drawing);
+          let binary = "";
+          for (let index = 0; index < bytes.length; index += 8192) binary += String.fromCharCode(...bytes.subarray(index, index + 8192));
+          result.pdfBase64 = btoa(binary);
+        }
+        return result;
+      }
+
       if (command.action === "set_workplane") {
         // Wie W und ein Klick auf eine Flaeche: eine Seite des eigenen Rahmens
         // des Koerpers, eingerastet auf die echte Flaeche, die Ebene in ihrer Mitte.
@@ -9690,26 +9723,36 @@ export function LayerlingEditor({
       .catch((error: unknown) => failNotice(label, error));
   }, [bedPrinter, exportSource, projectId, projectName]);
 
+  /**
+   * The drawing of a set of bodies, from the same bodies as the export (visible solids, holes taken
+   * off). `drawing` is null when there is no solid in it. Loose holes count even when only the part
+   * they cut is chosen.
+   */
+  const buildDrawing = useCallback(async (source: { shapes: WorkplaneShape[]; selection: boolean }, allShapes: WorkplaneShape[], title: string) => {
+    const scopedShapes = source.selection
+      ? [...source.shapes, ...allShapes.filter((shape) => shape.hole && !source.shapes.some((selected) => selected.id === shape.id))]
+      : source.shapes;
+    const { visible, hiddenNote } = visibleExportShapes(scopedShapes);
+    if (!visible.some((shape) => !shape.hole && !isNonSolidShapeKind(shape.kind))) return { drawing: null, hiddenNote };
+    const { generateDrawing } = await import("@/lib/drawingExport");
+    const { meshes, holeCutsFailed } = await exportBodiesWithLooseHoles(visible);
+    if (holeCutsFailed) throw new Error(t("status.drawingHoleCutFailed"));
+    return { drawing: generateDrawing(meshes, title, drawingLabelsInLanguage()), hiddenNote };
+  }, []);
+
   const exportDrawingDesign = useCallback(async (exportName: string, format: "svg" | "pdf") => {
     if (drawingExporting) return;
     const source = exportSource();
-    // Loose holes affect the visible part even when only that part is selected.
-    const scopedShapes = source.selection
-      ? [...source.shapes, ...shapes.filter((shape) => shape.hole && !source.shapes.some((selected) => selected.id === shape.id))]
-      : source.shapes;
-    const { visible, hiddenNote } = visibleExportShapes(scopedShapes);
-    if (!visible.some((shape) => !shape.hole && !isNonSolidShapeKind(shape.kind))) {
-      setNotice(hiddenNote ? t("status.exportOnlyHidden") : t(source.selection ? "status.selectSolidBeforeExport" : "status.addSolidBeforeExport"));
-      return;
-    }
     setDrawingExporting(true);
     setNotice(t("status.buildingDrawing"), true);
     try {
-      const { generateDrawing, drawingToSvg, drawingToPdf } = await import("@/lib/drawingExport");
-      const { meshes, holeCutsFailed } = await exportBodiesWithLooseHoles(visible);
-      if (holeCutsFailed) throw new Error(t("status.drawingHoleCutFailed"));
       const title = exportName.trim() || projectName;
-      const drawing = generateDrawing(meshes, title);
+      const { drawing, hiddenNote } = await buildDrawing(source, shapes, title);
+      if (!drawing) {
+        setNotice(hiddenNote ? t("status.exportOnlyHidden") : t(source.selection ? "status.selectSolidBeforeExport" : "status.addSolidBeforeExport"));
+        return;
+      }
+      const { drawingToSvg, drawingToPdf } = await import("@/lib/drawingExport");
       const filename = projectExportFileName(`${title} drawing`, format);
       if (format === "svg") await downloadTextFile(filename, drawingToSvg(drawing), "image/svg+xml;charset=utf-8");
       else await downloadBlobFile(filename, new Blob([drawingToPdf(drawing) as BlobPart], { type: "application/pdf" }));
@@ -9720,7 +9763,7 @@ export function LayerlingEditor({
     } finally {
       setDrawingExporting(false);
     }
-  }, [drawingExporting, exportSource, projectName, shapes]);
+  }, [buildDrawing, drawingExporting, exportSource, projectName, shapes]);
 
   const exportStepDesign = useCallback(async (exportName: string) => {
     if (stepExporting) {
@@ -13180,9 +13223,10 @@ function TopActionPanel({
                   role="radio"
                   aria-checked={exportFormat === format}
                   aria-label={`${exportDetails[format].label}: ${exportDetails[format].description}`}
+                  title={format === "drawing" ? exportDetails[format].label : undefined}
                   onClick={() => setExportFormat(format)}
                 >
-                  {exportDetails[format].label}
+                  {format === "drawing" ? t("export.drawing.short") : exportDetails[format].label}
                 </button>
               ))}
             </div>
