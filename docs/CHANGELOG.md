@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+## 1.72.0
+
 - **The whole guide on one page, to print:** Every chapter of the guide could be printed on its own, but not the guide as a whole. A new page in each language - the link **Whole guide, to print** under the chapter list - shows all chapters one after the other with a table of contents, each chapter starting on a new page, the pictures included, in light colours whatever theme you use. Press Ctrl+P (or the Print button) to print it or to save it as a PDF; to print only a part, choose its page numbers in the print dialog. The page is not stored for offline use and not offered to search engines.
 - **Import/Export window toggle:** The keyboard shortcuts for import and export toggle the window on or off, like other windows that have a shortcut (eg. fillet, chamfer, hollow). By @gogades (#319).
 - **Dutch: a round of corrections:** A native-speaker read-through of the Dutch interface and guide fixed wrong or half-translated sentences (the number of printers, the name of the bug report button, "solid" left in English, a decimal comma) and settled on one word each for the intersection ("Doorsnijding", so "Doorsnede" stays the section view) and the box shape ("Blok"). By @brauwers1981.
