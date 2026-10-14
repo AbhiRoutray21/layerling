@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **The design's name sits right in the corner:** The name written on the plate no longer leaves room for the axis arrows but starts at the front left corner as if they were not there, with the same small gap from both edges, so it takes less of the plate and gets in the way of bodies less often.
+
 ## 1.70.0
 
 - **The tape measure: a point on a round edge, and the diameter across a circle:** A click on an edge, a bore for example, measured the whole edge - the length of the circle - and was done; there was no way to put a point on it. The tape measure's menu has a new switch, **Measure whole edges**: with it off, a click sets a point on the edge, and the second one goes anywhere. **Alt** turns the switch round for one click. On a circle the point across from the first one snaps in when the pointer comes near, and points on a round edge sit on the true circle, not on a side of the polygon it is drawn as, so the diameter comes out exact (30.00 for a 30 mm bore, where a click on the polygon gave 29.96). Suggested in #308.
