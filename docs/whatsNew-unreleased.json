@@ -28,5 +28,15 @@
       "de": "Tippst du eine Größe in eine der Zahlen neben der Form, wächst die Form von der gegenüberliegenden Kante aus. Mit Alt+Enter statt Enter wächst sie jetzt um ihre Mitte, für Breite und Länge. So bleibt eine Form, die an einer anderen ausgerichtet war, ausgerichtet, auch wenn du mehrmals probierst.",
       "en": "When you type a size into one of the numbers beside a shape, the shape grows from the opposite edge. With Alt+Enter instead of Enter it now grows round its middle, for width and length. A shape that was aligned with another stays aligned, however often you try."
     }
+  },
+  {
+    "title": {
+      "de": "Zoomen ins Leere und Schieber in Firefox",
+      "en": "Zooming into the empty, and sliders in Firefox"
+    },
+    "body": {
+      "de": "Zeigt der Mauszeiger beim Hineinzoomen über die Platte hinaus auf den Hintergrund, bleibt die Kamera nicht mehr an ihrer nächsten Entfernung hängen, sondern fährt weiter nach vorn. Und in Firefox springt ein Längenschieber beim Loslassen nicht mehr auf einen krummen Wert, sondern bleibt auf dem Raster.",
+      "en": "When you zoom in with the pointer past the plate, on the background, the camera no longer stops at its closest distance but goes on forward. And in Firefox a length slider no longer jumps to a crooked value when you let go, but stays on the grid."
+    }
   }
 ]

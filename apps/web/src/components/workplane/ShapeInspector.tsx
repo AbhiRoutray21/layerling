@@ -3723,6 +3723,12 @@ function RangeProperty({
   const holdInteraction = useInteractionHold(onInteractionActiveChange);
   const snapStepMm = useContext(SliderSnapContext);
   const draggingSliderRef = useRef(false);
+  // Firefox sends one last value after the pointer is up, so a drag ends a moment later than the pointer does.
+  const sliderReleaseTimerRef = useRef<number | undefined>(undefined);
+  const endSliderDrag = () => {
+    window.clearTimeout(sliderReleaseTimerRef.current);
+    sliderReleaseTimerRef.current = window.setTimeout(() => { draggingSliderRef.current = false; }, 120);
+  };
   const allowsAboveSliderMax = ["length", "width", "height", "starOuterSize", "starInnerSize", "crescentThickness", "honeycombCellSize", "honeycombWallThickness", "honeycombFrameWidth", "bentTubeSize", "bentTubeBendRadius"].includes(id) || id.endsWith("Length") || id.endsWith("Width");
   const isLength = propertyUsesLengthUnit(id);
   const accuracy = workspace.accuracy;
@@ -3820,15 +3826,16 @@ function RangeProperty({
           onFocus={() => holdInteraction(true)}
           onBlur={() => holdInteraction(false)}
           onPointerDown={() => {
+            window.clearTimeout(sliderReleaseTimerRef.current);
             draggingSliderRef.current = true;
             holdInteraction(true);
           }}
           onPointerUp={() => {
-            draggingSliderRef.current = false;
+            endSliderDrag();
             holdInteraction(false);
           }}
           onPointerCancel={() => {
-            draggingSliderRef.current = false;
+            endSliderDrag();
             holdInteraction(false);
           }}
           onChange={(event) => handleSliderChange(Number(event.currentTarget.value))}

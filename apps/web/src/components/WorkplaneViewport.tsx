@@ -135,6 +135,7 @@ import {
 import { cuboidCorners, pointAlongAxes, type AlignAxes, type FrameCuboid } from "@/lib/alignFrame";
 import type { AlignAxis, AlignHandleStatus, AlignTarget, GridSize, MeasurementAccuracy, ShapeAsset, WorkplaneNote, WorkplaneNoteAnchor, WorkplaneShape, WorkplaneWorkspaceSettings } from "@/types/layerling";
 import { referencePoints } from "@/lib/workplaneNotes";
+import { pivotKeptAhead, ZOOM_PIVOT_REACH_MM } from "@/lib/zoomPivot";
 import { measurementMiddle, type ReferencePosition } from "@/lib/referencePoints";
 import { planarFaceCentroid, planarFaceTriangles, type PivotPoint } from "@/lib/rotationPivot";
 import { outwardFaceNormal } from "@/lib/layFlat";
@@ -187,13 +188,19 @@ function movePivotToDepthUnder(state: ThreeState, ndcX: number, ndcY: number) {
   ));
   state.raycaster.layers.mask = layers;
   const point = hit?.point ?? state.raycaster.ray.intersectPlane(new THREE.Plane(new THREE.Vector3(0, 1, 0), 0), new THREE.Vector3());
-  if (!point) return;
   const forward = state.camera.getWorldDirection(new THREE.Vector3());
+  // Nothing to zoom towards under the pointer (the sky, a spot past the plate): the pivot stays ahead of the camera.
+  const keepAhead = () => {
+    const limits = state.pivotLimits;
+    const ahead = pivotKeptAhead(state.camera.position, state.controls.target, forward, ZOOM_PIVOT_REACH_MM, limits ? { halfWidth: limits.halfWidth, halfDepth: limits.halfDepth, minY: CAMERA_MIN_TARGET_Y, maxY: CAMERA_MAX_TARGET_Y } : null);
+    if (ahead) state.controls.target.copy(ahead);
+  };
+  if (!point) { keepAhead(); return; }
   const depth = point.clone().sub(state.camera.position).dot(forward);
-  if (!(depth > 0) || depth > CAMERA_MAX_DISTANCE) return;
+  if (!(depth > 0) || depth > CAMERA_MAX_DISTANCE) { keepAhead(); return; }
   const target = state.camera.position.clone().addScaledVector(forward, depth);
   const limits = state.pivotLimits;
-  if (limits && (Math.abs(target.x) > limits.halfWidth || Math.abs(target.z) > limits.halfDepth || target.y < CAMERA_MIN_TARGET_Y || target.y > CAMERA_MAX_TARGET_Y)) return;
+  if (limits && (Math.abs(target.x) > limits.halfWidth || Math.abs(target.z) > limits.halfDepth || target.y < CAMERA_MIN_TARGET_Y || target.y > CAMERA_MAX_TARGET_Y)) { keepAhead(); return; }
   state.controls.target.copy(target);
 }
 
