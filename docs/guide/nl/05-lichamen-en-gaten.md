@@ -11,13 +11,13 @@ Selecteer een vorm en klik in de instellingen op {{ui:inspector.solid}} of {{ui:
 
 Zolang er niets gegroepeerd is, doet een gat niets. Het ligt er gewoon en laat zien waar later iets verdwijnt.
 
-![De cilinder is een gat. Hij steekt aan de bovenkant uit de kubus, zodat hij er helemaal doorheen snijdt.](shot:hole-before)
+![De cilinder is een gat. Hij steekt aan de bovenkant uit het blok, zodat hij er helemaal doorheen snijdt.](shot:hole-before)
 
 ## Groeperen
 
 Selecteer lichamen en gat(en) en klik op {{ui:editor.tool.group}} ([[Ctrl]]+[[G]]). Nu halen de gaten het materiaal weg uit de lichamen die ze raken. Wat overblijft is één nieuwe vorm.
 
-![Het resultaat: een kubus met een boring.](shot:hole-after)
+![Het resultaat: een blok met een boring.](shot:hole-after)
 
 Zo maak je:
 
@@ -35,7 +35,7 @@ Je kunt een groep behandelen als een vorm: verplaatsen, draaien, kleuren, opnieu
 Ook een hele groep kan een lichaam of een gat zijn. Daarbij geldt een eenvoudige regel:
 
 - Bestaat de groep alleen uit lichamen (of alleen uit gaten), dan schakel je hem als geheel om en gaan de onderdelen mee.
-- Bevat hij allebei, bijvoorbeeld een kubus met een boring, dan houdt elk onderdeel zijn eigen stand. De hele groep wordt dan gereedschap, maar de boring blijft een boring.
+- Bevat hij allebei, bijvoorbeeld een blok met een boring, dan houdt elk onderdeel zijn eigen stand. De hele groep wordt dan gereedschap, maar de boring blijft een boring.
 
 ## Bundelen
 

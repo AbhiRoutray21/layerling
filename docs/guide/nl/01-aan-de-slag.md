@@ -27,17 +27,17 @@ Al je ontwerpen verschijnen later op de startpagina met een voorbeeldafbeelding.
 
 ## Je eerste onderdeel
 
-Als voorbeeld bouwen we een kubus met een gat.
+Als voorbeeld bouwen we een blok met een gat.
 
 1. Klik in het lint op {{ui:editor.addShape}} en kies {{ui:shape.box}}. De vorm hangt nu aan je muisaanwijzer. Met een klik op het werkvlak zet je hem neer.
 2. Stel rechts de afmetingen in, bijvoorbeeld 40 mm lang, 40 mm breed en 20 mm hoog.
-3. Zet op dezelfde manier een {{ui:shape.cylinder}} in het midden, 14 mm doorsnede en 30 mm hoog. Hij moet hoger zijn dan de kubus, zodat hij er helemaal doorheen steekt.
+3. Zet op dezelfde manier een {{ui:shape.cylinder}} in het midden, 14 mm doorsnede en 30 mm hoog. Hij moet hoger zijn dan het blok, zodat hij er helemaal doorheen steekt.
 4. Selecteer de cilinder en klik rechts op {{ui:inspector.hole}}. Hij wordt doorzichtig: het lichaam is een gereedschap geworden dat materiaal weghaalt.
-5. Selecteer beide vormen en klik op {{ui:editor.tool.group}}. De kubus heeft nu een gat.
+5. Selecteer beide vormen en klik op {{ui:editor.tool.group}}. Het blok heeft nu een gat.
 
-![De cilinder is een gat en steekt boven de kubus uit.](shot:hole-before)
+![De cilinder is een gat en steekt boven het blok uit.](shot:hole-before)
 
-![Na het groeperen heeft de kubus een boring.](shot:hole-after)
+![Na het groeperen heeft het blok een boring.](shot:hole-after)
 
 Zo maak je boringen, sleuven en kamers. Het hoofdstuk [Lichamen en gaten](chapter:lichamen-en-gaten) legt het uitgebreid uit.
 
