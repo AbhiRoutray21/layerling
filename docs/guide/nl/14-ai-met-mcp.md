@@ -76,7 +76,7 @@ De AI werkt met dezelfde functies als jij, via dezelfde weg als jouw bediening i
 | `layerling_layer_icon` | maakt van een SVG-pictogram (de tekst van het bestand, of een geëxtrudeerd schetslichaam) een gelaagd pictogramlabel voor een meerkleurenprint - het pictogram, bredere randen, een plaat zonder gaten - of bouwt er een opnieuw op met een nieuwe breedte of nieuwe lagen; met een aantal vult het de plaat met kopieën |
 | `layerling_measure_section` | meet op een doorsnedevlak tussen twee punten die op de contour snappen - wanddikte, spleten, passingen |
 | `layerling_show_overhangs` | zet de overhangarcering aan of uit, stelt de hoek in en meldt per lichaam het oppervlak dat support nodig zou hebben |
-| `layerling_estimate_print` | schat volume, gewicht en filament voor de selectie of het hele ontwerp, berekend als massief zoals in het exportvenster |
+| `layerling_estimate_print` | schat volume, gewicht en filament voor de selectie of het hele ontwerp: voor een massief lichaam en als grove schatting met wanden en infill zoals in het exportvenster |
 | `layerling_add_reference_points` | markeert referentiepunten - op het midden, de hoeken of de randmiddens van objecten, of op exacte posities - waarop vormen snappen |
 | `layerling_list_reference_points` | somt de referentiepunten op met hun id's en posities |
 | `layerling_remove_reference_points` | verwijdert referentiepunten op id, of allemaal |

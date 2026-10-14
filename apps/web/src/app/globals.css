@@ -5382,6 +5382,21 @@ html[data-toolbar-size="large"] .shape-menu-dropdown:not(.sketch-shape-menu-drop
   border-radius: 6px;
 }
 
+.print-estimate-settings {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+}
+
+.print-estimate-settings label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #96836f;
+  font-size: 12px;
+  font-weight: 700;
+}
+
 .print-estimate-values {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -13922,6 +13937,7 @@ html[data-theme="dark"] .print-estimate-values dd {
   color: #f0e7d9;
 }
 
+html[data-theme="dark"] .print-estimate-settings label,
 html[data-theme="dark"] .print-estimate-values dt,
 html[data-theme="dark"] .print-estimate-busy,
 html[data-theme="dark"] .print-estimate-note {

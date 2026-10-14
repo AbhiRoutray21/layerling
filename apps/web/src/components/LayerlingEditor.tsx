@@ -123,7 +123,7 @@ import { hasOneToOneCadComponentMapping } from "@/lib/cadModifierGroups";
 import { cadModifierHelicalGearForShape, cadModifierProfileForShape, cadModifierSpringForShape, cadModifierThreadForShape, cadProfileExpectation, cadProfileSegmentCount, textGlyphProfiles, withinExactProfileLimit } from "@/lib/cadProfileExtrusion";
 import { DEFAULT_OVERHANG_ANGLE, normalizeOverhangAngle, overhangArea } from "@/lib/overhang";
 import { sectionMeasurement, sectionPointToWorld, snapSectionPoint } from "@/lib/sectionMeasure";
-import { DEFAULT_PRINT_MATERIAL, PRINT_MATERIAL_DENSITY, PRINT_MATERIALS, FILAMENT_DIAMETER_MM, normalizePrintMaterial, printEstimate, type PrintMaterial } from "@/lib/printEstimate";
+import { DEFAULT_INFILL_PERCENT, DEFAULT_PRINT_MATERIAL, DEFAULT_WALLS, INFILL_CHOICES, PRINT_MATERIAL_DENSITY, PRINT_MATERIALS, FILAMENT_DIAMETER_MM, WALL_CHOICES, normalizeInfillPercent, normalizePrintMaterial, normalizeWalls, printEstimate, printEstimateWithInfill, type PrintMaterial } from "@/lib/printEstimate";
 import { CAD_MODIFIER_MAX_SHARP_ANGLE, CAD_MODIFIER_REQUEST_TIMEOUT_MS, CAD_MODIFIER_PREPARE_TRIANGLE_LIMIT, cadModifierPrepareTimeoutMs, cadModifierTimeoutMessage, cadModifierUserErrorMessage, cadModifierWorkerFailureMessage, cadModifierCandidateEdge, defaultCadModifierTangentChain, rescueSharpAngleForEdges, selectableCadModifierEdge, type CadModifierRequestPhase } from "@/lib/cadModifierRuntime";
 import { createCadPreviewQueue } from "@/lib/cadPreviewQueue";
 import { cloneWorkplaneShapeSnapshot, compactEdgeTreatmentHistory, edgeTreatmentAppliedFrame, restoreShapeBeforeEdgeTreatment } from "@/lib/edgeTreatmentHistory";
@@ -216,7 +216,7 @@ import { getSectionBounds, sectionAxisLetter, sectionPlacementWorkplane, type Se
 import { projectSectionPoint, SECTION_VIEW_FACE, sectionSvgDocument, sliceMeshContours } from "@/lib/sectionSvg";
 import type { AlignAxis, AlignHandleStatus, AlignTarget, GridSize, ParametricSource, ProjectAsset, ShapeAsset, ShapeCustomization, ShapeKind, SketchImage, SketchOperation, SketchPoint, SketchProfile, SketchRevolveSettings, SketchSegment, ShellEdges, ShellOpenings, ShellSide, WorkplaneNote, WorkplaneShape, WorkplaneWorkspaceSettings } from "@/types/layerling";
 import { type Vec3, type MeshData, type Cuboid, type ShapeUpdatePatch, type ManifoldSolid, MIN_SHAPE_DIMENSION, resetManifoldRuntime, cleanModelDimension, getManifoldRuntime, meshForShape, appendMeshData, formatTriangleCount, shapeAabb, boundsForShapes, boundsForCuboids, meshAabb, boundsForPositions, quantizedPointKey } from "@/lib/editorMeshCore";
-import { cloneAsGroupChild, meshDataToManifoldMesh, shapeToManifoldSolid, splitShapesByPlane, unionOverlappingExportMeshes, exportBodiesWithLooseHoles, exportSolidVolume, type ExportSolidVolume, PRINT_MATERIAL_STORAGE_KEY, formatEstimateNumber, formatSectionOffset, SECTION_SEEN_FROM_KEYS, expandBundles, visibleExportShapes, multicolorExportSolids, exportFaceColors, colorSeparatedExportMeshes, disposeManifold, canIntersectShapes, buildIntersectionShapeFromSelection, groupedShape, quaternionForShape, rotationFromQuaternion, ARROW_KEYS, cleanShapePatch, restoreGroupedChildren, buildGroupedShapeFromSelection } from "@/lib/editorBooleans";
+import { cloneAsGroupChild, meshDataToManifoldMesh, shapeToManifoldSolid, splitShapesByPlane, unionOverlappingExportMeshes, exportBodiesWithLooseHoles, exportSolidVolume, type ExportSolidVolume, PRINT_MATERIAL_STORAGE_KEY, PRINT_INFILL_STORAGE_KEY, PRINT_WALLS_STORAGE_KEY, formatEstimateNumber, formatSectionOffset, SECTION_SEEN_FROM_KEYS, expandBundles, visibleExportShapes, multicolorExportSolids, exportFaceColors, colorSeparatedExportMeshes, disposeManifold, canIntersectShapes, buildIntersectionShapeFromSelection, groupedShape, quaternionForShape, rotationFromQuaternion, ARROW_KEYS, cleanShapePatch, restoreGroupedChildren, buildGroupedShapeFromSelection } from "@/lib/editorBooleans";
 import { booleanAutomationScene } from "@/lib/editorAutomation";
 import { debugShapeSummary, mcpPivotRequest, compactShapeSummary, mcpShapeSummary, mcpSketchFillProfile, mcpTextFont } from "@/lib/editorMcpSummary";
 import { emptySketchProfile, cadShapeFromSketchProfile, shapeFromRevolvedSketchProfile, shapeFromCadMesh, sketchReferenceShapeOnWorkplane, defaultMcpSketchProfile } from "@/lib/editorSketchCad";
@@ -9074,9 +9074,22 @@ export function LayerlingEditor({
           throw new Error(`material must be one of ${PRINT_MATERIALS.join(", ")}`);
         }
         const material = normalizePrintMaterial(params.material);
+        if (params.infillPercent !== undefined && !(typeof params.infillPercent === "number" && params.infillPercent >= 0 && params.infillPercent <= 100)) {
+          throw new Error("infillPercent must be a number from 0 to 100");
+        }
+        if (params.walls !== undefined && !(typeof params.walls === "number" && Number.isInteger(params.walls) && params.walls >= 1 && params.walls <= 6)) {
+          throw new Error("walls must be a whole number from 1 to 6");
+        }
         const volume = await exportSolidVolume(source);
         if (volume.solids === 0) throw new Error("Nothing to estimate: no visible solid body");
         const estimate = printEstimate(volume.volumeMm3, material);
+        const withInfill = printEstimateWithInfill(
+          volume.volumeMm3,
+          { sideMm2: volume.sideMm2, flatMm2: volume.flatMm2 },
+          material,
+          params.infillPercent === undefined ? DEFAULT_INFILL_PERCENT : (params.infillPercent as number),
+          params.walls === undefined ? DEFAULT_WALLS : (params.walls as number),
+        );
         return {
           scope: requestedIds.length ? "ids" : pickIds.length ? "selection" : "design",
           material,
@@ -9089,7 +9102,14 @@ export function LayerlingEditor({
           solids: volume.solids,
           bodies: volume.bodies,
           unionFailed: volume.unionFailed,
-          note: "Solid, without infill: the slicer shows less with walls and infill.",
+          note: "volumeMm3, grams and filamentMeters are for a solid body, the upper bound. `estimate` is a rough guess with the walls and the infill, as the export window shows it; the slicer's own settings decide the real number.",
+          estimate: {
+            infillPercent: withInfill.infillPercent,
+            walls: withInfill.walls,
+            printedVolumeMm3: Number(withInfill.printed.volumeMm3.toFixed(1)),
+            grams: Number(withInfill.printed.grams.toFixed(2)),
+            filamentMeters: Number(withInfill.printed.filamentMeters.toFixed(3)),
+          },
         };
       }
 
@@ -13061,6 +13081,20 @@ function TopActionPanel({
     }
   });
   const [printVolume, setPrintVolume] = useState<ExportSolidVolume | null>(null);
+  const [printInfill, setPrintInfill] = useState<number>(() => {
+    try {
+      return normalizeInfillPercent(window.localStorage.getItem(PRINT_INFILL_STORAGE_KEY));
+    } catch {
+      return DEFAULT_INFILL_PERCENT;
+    }
+  });
+  const [printWalls, setPrintWalls] = useState<number>(() => {
+    try {
+      return normalizeWalls(window.localStorage.getItem(PRINT_WALLS_STORAGE_KEY));
+    } catch {
+      return DEFAULT_WALLS;
+    }
+  });
   const [imageOptions, setImageOptions] = useState<ViewImageOptions>({ plate: true, transparent: false });
   const showPrintEstimate = panel === "export" && exportFormat !== "drawing" && exportFormat !== "svg" && exportFormat !== "png" && exportFormat !== "lyl" && shapeCount > 0;
   // A picture shows the view as it is, not the selection, so the notes about what goes along do not apply.
@@ -13089,7 +13123,28 @@ function TopActionPanel({
       // Ohne Speicher gilt die Wahl nur bis zum Schliessen.
     }
   };
-  const estimate = printVolume ? printEstimate(printVolume.volumeMm3, printMaterial) : null;
+  const choosePrintInfill = (value: string) => {
+    const infill = normalizeInfillPercent(value);
+    setPrintInfill(infill);
+    try {
+      window.localStorage.setItem(PRINT_INFILL_STORAGE_KEY, String(infill));
+    } catch {
+      // Without storage the choice holds until the window closes.
+    }
+  };
+  const choosePrintWalls = (value: string) => {
+    const walls = normalizeWalls(value);
+    setPrintWalls(walls);
+    try {
+      window.localStorage.setItem(PRINT_WALLS_STORAGE_KEY, String(walls));
+    } catch {
+      // See above.
+    }
+  };
+  // Volume is the body's own; weight and filament count the walls and the infill, the solid numbers stand under them.
+  const estimate = printVolume
+    ? printEstimateWithInfill(printVolume.volumeMm3, { sideMm2: printVolume.sideMm2, flatMm2: printVolume.flatMm2 }, printMaterial, printInfill, printWalls)
+    : null;
   const lylHistoryStop = (index: number) => ({ "--stop": index / (lylHistoryLimits.length - 1) }) as CSSProperties;
   useLanguage();
   const title = panel === "export" ? t("panel.export") : t("panel.import");
@@ -13321,25 +13376,53 @@ function TopActionPanel({
                   ))}
                 </select>
               </div>
+              <div className="print-estimate-settings">
+                <label htmlFor="export-print-infill">
+                  <span>{t("export.estimateInfillLabel")}</span>
+                  <select id="export-print-infill" className="print-estimate-material" value={printInfill} onChange={(event) => choosePrintInfill(event.currentTarget.value)}>
+                    {INFILL_CHOICES.map((percent) => (
+                      <option key={percent} value={percent}>{percent} %</option>
+                    ))}
+                  </select>
+                </label>
+                <label htmlFor="export-print-walls" hidden={printInfill === 100}>
+                  <span>{t("export.estimateWallsLabel")}</span>
+                  <select id="export-print-walls" className="print-estimate-material" value={printWalls} onChange={(event) => choosePrintWalls(event.currentTarget.value)}>
+                    {WALL_CHOICES.map((count) => (
+                      <option key={count} value={count}>{count}</option>
+                    ))}
+                  </select>
+                </label>
+              </div>
               {estimate ? (
                 <dl className="print-estimate-values">
                   <div>
                     <dt>{t("export.estimateVolume")}</dt>
-                    <dd>{formatEstimateNumber(estimate.volumeCm3, estimate.volumeCm3 < 10 ? 2 : 1)} cm³</dd>
+                    <dd>{formatEstimateNumber(estimate.solid.volumeCm3, estimate.solid.volumeCm3 < 10 ? 2 : 1)} cm³</dd>
                   </div>
                   <div>
                     <dt>{t("export.estimateWeight")}</dt>
-                    <dd>{formatEstimateNumber(estimate.grams, estimate.grams < 10 ? 1 : 0)} g</dd>
+                    <dd>{formatEstimateNumber(estimate.printed.grams, estimate.printed.grams < 10 ? 1 : 0)} g</dd>
                   </div>
                   <div>
                     <dt>{t("export.estimateFilament")}</dt>
-                    <dd>{formatEstimateNumber(estimate.filamentMeters, estimate.filamentMeters < 10 ? 2 : 1)} m</dd>
+                    <dd>{formatEstimateNumber(estimate.printed.filamentMeters, estimate.printed.filamentMeters < 10 ? 2 : 1)} m</dd>
                   </div>
                 </dl>
               ) : (
                 <span className="print-estimate-busy">{t("export.estimateBusy")}</span>
               )}
-              {estimate ? <span className="print-estimate-note print-estimate-infill">{t("export.estimateInfill")}</span> : null}
+              {estimate ? (
+                <span className="print-estimate-note print-estimate-infill">
+                  {estimate.infillPercent === 100
+                    ? t("export.estimateSolidNote")
+                    : t("export.estimateInfill", {
+                      walls: estimate.walls,
+                      infill: estimate.infillPercent,
+                      grams: formatEstimateNumber(estimate.solid.grams, estimate.solid.grams < 10 ? 1 : 0),
+                    })}
+                </span>
+              ) : null}
               {printVolume && printVolume.unionFailed > 0 ? (
                 <span className="print-estimate-note">{t("export.estimateOverlap")}</span>
               ) : null}

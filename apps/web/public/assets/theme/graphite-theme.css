@@ -2134,6 +2134,10 @@ html:where([data-theme="dark"][data-palette="graphite"])[data-toolbar-size="larg
   border: 1px solid #e1e1e1;
 }
 
+:where(html[data-theme="dark"][data-palette="graphite"]) .print-estimate-settings label {
+  color: #737373;
+}
+
 :where(html[data-theme="dark"][data-palette="graphite"]) .print-estimate-values dt,
 :where(html[data-theme="dark"][data-palette="graphite"]) .print-estimate-busy,
 :where(html[data-theme="dark"][data-palette="graphite"]) .print-estimate-note {
@@ -6594,6 +6598,7 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .print-estimate-values 
   color: #e4e4e4;
 }
 
+html[data-theme="dark"]:where([data-palette="graphite"]) .print-estimate-settings label,
 html[data-theme="dark"]:where([data-palette="graphite"]) .print-estimate-values dt,
 html[data-theme="dark"]:where([data-palette="graphite"]) .print-estimate-busy,
 html[data-theme="dark"]:where([data-palette="graphite"]) .print-estimate-note {

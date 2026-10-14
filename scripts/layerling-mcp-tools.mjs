@@ -875,13 +875,15 @@ export const tools = [
   },
   {
     name: "layerling_estimate_print",
-    description: "Estimate the material a print needs, like the Material box in the editor's export window: volume, weight and length of 1.75 mm filament, worked out as if printed solid (with walls and infill the slicer shows less, so this is the upper bound). Counts what an STL export would hold: visible solid bodies only, groups with their holes taken off, overlapping bodies counted once. Without ids it takes the selection, or the whole design when nothing is selected. Returns volumeMm3, volumeCm3, grams, filamentMeters, the material and its density, solids (bodies counted) and unionFailed (overlaps that could not be joined and so count twice).",
+    description: "Estimate the material a print needs, like the Material box in the editor's export window: volume, weight and length of 1.75 mm filament, for a solid body (the upper bound) and, in `estimate`, a rough guess with walls and infill as the export window shows it - default 2 walls and 15 % infill; the slicer's own settings decide the real number. Counts what an STL export would hold: visible solid bodies only, groups with their holes taken off, overlapping bodies counted once. Without ids it takes the selection, or the whole design when nothing is selected. Returns volumeMm3, volumeCm3, grams, filamentMeters (all for a solid body), estimate (infillPercent, walls, printedVolumeMm3, grams, filamentMeters with the infill), the material and its density, solids (bodies counted) and unionFailed (overlaps that could not be joined and so count twice).",
     inputSchema: {
       ...editorTargetSchema,
       properties: {
         ...editorTargetSchema.properties,
         ids: { type: "array", items: { type: "string" }, description: "Objects to weigh. Left out: the selection, or the whole design." },
         material: { type: "string", enum: ["pla", "petg", "abs", "asa", "tpu", "pa"], description: "Filament for the weight, default pla (1.24 g/cm3); pa is nylon." },
+        infillPercent: { type: "number", minimum: 0, maximum: 100, description: "Infill for `estimate`, in percent. Default 15." },
+        walls: { type: "integer", minimum: 1, maximum: 6, description: "Number of walls (lines) for `estimate`. Default 2." },
       },
     },
   },

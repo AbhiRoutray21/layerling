@@ -56,7 +56,7 @@ Die Projektion beruht auf der Zeichnungsarbeit von Cadverix-3D von WC3D.
 
 ### Wie viel Filament braucht das?
 
-Bei STL, 3MF, OBJ und STEP zeigt das Feld {{ui:export.estimateTitle}} Volumen, Gewicht und Filamentlänge (1,75 mm) dessen, was exportiert wird. Gezählt wird wie in der Datei: nur sichtbare Körper, Aussparungen abgezogen, Überlappungen nur einmal. Rechts wählst du das Filament – PLA, PETG, ABS, ASA, TPU oder PA (Nylon) –, das Gewicht folgt seiner Dichte. Gerechnet ist massiv, also wie mit 100 % Füllung, und das Feld sagt es unter den Zahlen. Mit Wänden und Füllung zeigt der Slicer weniger, bei einem massigen Körper oft deutlich weniger; die Zahl ist die Obergrenze und taugt gut zum Vergleichen und dafür, ob die Rolle noch reicht.
+Bei STL, 3MF, OBJ und STEP zeigt das Feld {{ui:export.estimateTitle}} Volumen, Gewicht und Filamentlänge (1,75 mm) dessen, was exportiert wird. Gezählt wird wie in der Datei: nur sichtbare Körper, Aussparungen abgezogen, Überlappungen nur einmal. Rechts wählst du das Filament – PLA, PETG, ABS, ASA, TPU oder PA (Nylon) –, das Gewicht folgt seiner Dichte. Das Volumen ist das des Körpers. Gewicht und Filament sind eine grobe Schätzung für einen Druck mit Wänden und Füllung: Unter der Überschrift stellst du die {{ui:export.estimateInfillLabel}} (zu Beginn 15 %) und die {{ui:export.estimateWallsLabel}} (2) ein, und das Feld sagt, was es gezählt hat und wie viel dasselbe Teil massiv wöge. Die Einstellungen deines Slicers entscheiden über die echte Zahl, nimm sie also als Richtwert, gut zum Vergleichen von Entwürfen und dafür, ob die Rolle noch reicht. Bei 100 % Füllung zählt das Feld das Teil als massiv, die Obergrenze und taugt gut zum Vergleichen und dafür, ob die Rolle noch reicht.
 
 ## Importieren
 
