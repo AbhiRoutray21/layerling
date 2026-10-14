@@ -198,6 +198,7 @@ import {
   type PlacementWorkplane,
 } from "@/lib/placementWorkplane";
 import { localizedError } from "@/lib/userErrors";
+import { alignNaturalCenter, type AlignPoint } from "@/lib/alignCenter";
 import { sketchBodyStretch, stretchedSketchProfile } from "@/lib/sketchResize";
 import { silhouetteSketchProfile } from "@/lib/sketchCadProfile";
 import { svgSketchMatchesMesh } from "@/lib/svgSketch";
@@ -1610,7 +1611,7 @@ const ALIGN_EPSILON = 0.0005;
 const ALIGN_AXES: AlignAxis[] = ["x", "y", "z"];
 const ALIGN_TARGETS: AlignTarget[] = ["min", "center", "max"];
 
-function alignCoordinate(bounds: Cuboid, axis: AlignAxis, target: AlignTarget) {
+function alignCoordinate(bounds: Cuboid, axis: AlignAxis, target: AlignTarget, natural: AlignPoint | null = null, axes: AlignAxes | null = null) {
   const min = axis === "x" ? bounds.minX : axis === "y" ? bounds.minY : bounds.minZ;
   const max = axis === "x" ? bounds.maxX : axis === "y" ? bounds.maxY : bounds.maxZ;
   if (target === "min") {
@@ -1618,6 +1619,12 @@ function alignCoordinate(bounds: Cuboid, axis: AlignAxis, target: AlignTarget) {
   }
   if (target === "max") {
     return max;
+  }
+  // The middle of a pentagon or a star is not the middle of its box (#268).
+  if (natural) {
+    if (!axes) return natural[axis];
+    const direction = axes[axis];
+    return natural.x * direction.x + natural.y * direction.y + natural.z * direction.z;
   }
   return (min + max) / 2;
 }
@@ -1649,22 +1656,24 @@ function alignmentStatuses(selection: WorkplaneShape[], anchorId: string | null,
   }
 
   const boundsById = new Map(selection.map((shape) => [shape.id, axes ? frameAabb(shape, axes) : meshAabb(shape)]));
+  const naturalById = new Map(selection.map((shape) => [shape.id, alignNaturalCenter(shape)]));
   const anchorBounds = anchorId ? boundsById.get(anchorId) ?? null : null;
   const referenceBounds = anchorBounds ?? boundsForCuboids(Array.from(boundsById.values()));
+  const referenceNatural = anchorBounds && anchorId ? naturalById.get(anchorId) ?? null : null;
 
   return ALIGN_AXES.flatMap((axis) =>
     ALIGN_TARGETS.map((target) => {
-      const targetValue = alignCoordinate(referenceBounds, axis, target);
+      const targetValue = alignCoordinate(referenceBounds, axis, target, referenceNatural, axes);
       const aligned = selection.every((shape) => {
         const bounds = boundsById.get(shape.id);
-        return bounds ? Math.abs(alignCoordinate(bounds, axis, target) - targetValue) <= ALIGN_EPSILON : true;
+        return bounds ? Math.abs(alignCoordinate(bounds, axis, target, naturalById.get(shape.id) ?? null, axes) - targetValue) <= ALIGN_EPSILON : true;
       });
       const wouldMove = selection.some((shape) => {
         if (shape.locked || shape.id === anchorId) {
           return false;
         }
         const bounds = boundsById.get(shape.id);
-        return bounds ? Math.abs(alignCoordinate(bounds, axis, target) - targetValue) > ALIGN_EPSILON : false;
+        return bounds ? Math.abs(alignCoordinate(bounds, axis, target, naturalById.get(shape.id) ?? null, axes) - targetValue) > ALIGN_EPSILON : false;
       });
       const label = alignmentLabel(axis, target);
       return {
@@ -1689,9 +1698,11 @@ function alignedShapesForSelection(
 ) {
   const selected = new Set(selectedIds);
   const boundsById = new Map(selectedShapes.map((shape) => [shape.id, axes ? frameAabb(shape, axes) : meshAabb(shape)]));
+  const naturalById = new Map(selectedShapes.map((shape) => [shape.id, alignNaturalCenter(shape)]));
   const anchorBounds = anchorId ? boundsById.get(anchorId) ?? null : null;
   const referenceBounds = anchorBounds ?? boundsForCuboids(Array.from(boundsById.values()));
-  const targetValue = alignCoordinate(referenceBounds, axis, target);
+  const referenceNatural = anchorBounds && anchorId ? naturalById.get(anchorId) ?? null : null;
+  const targetValue = alignCoordinate(referenceBounds, axis, target, referenceNatural, axes);
   let moved = 0;
 
   const nextShapes = shapes.map((shape) => {
@@ -1702,7 +1713,7 @@ function alignedShapesForSelection(
     if (!bounds) {
       return shape;
     }
-    const delta = targetValue - alignCoordinate(bounds, axis, target);
+    const delta = targetValue - alignCoordinate(bounds, axis, target, naturalById.get(shape.id) ?? null, axes);
     if (Math.abs(delta) <= ALIGN_EPSILON) {
       return shape;
     }

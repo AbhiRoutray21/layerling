@@ -6,6 +6,7 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **Align puts a hole in the middle of a triangle, a pentagon or a star:** "Centre" took the middle of the box round a shape. For a triangle, a pentagon, a five-pointed star and the like that is not the middle of the shape, so a hole centred on one sat beside the middle: about 5 mm for a triangle with a 20 mm circumradius, 1.9 mm for a pentagon or a five-pointed star. Centre now means the shape's own middle for the regular polygons (also the pyramids over them) and for the star; a hexagon, a square, a cylinder and every other shape stay as they were, and left, right, front, back, top and bottom still go by the box. Reported by @robstern (#268).
 - **Designs on your own server, without moving them one by one:** When shared server storage is on, the start page has two new controls. **Put all on the server** moves every design of this browser into the server folder in one go, and the tick **New designs on the server** makes each new design start there, so it is saved to the server from the first change on. Until now a design stayed in the browser unless you remembered to move it, and a lost device or cleared browser storage took it along. A design whose name is already taken on the server stays where it is, and the message says how many. The tick is kept in this browser. Suggested in #316.
 ## 1.71.0
 

@@ -8,5 +8,15 @@
       "de": "Wo der gemeinsame Serverordner eingerichtet ist, hat die Startseite zwei neue Bedienelemente: „Alle auf den Server legen“ bringt alle Entwürfe dieses Browsers auf einmal dorthin, und mit dem Haken „Neue Entwürfe auf dem Server“ beginnt jeder neue Entwurf gleich im Serverordner. So geht beim Wechsel des Geräts oder beim Löschen der Browserdaten nichts verloren.",
       "en": "Where the shared server folder is set up, the start page has two new controls: “Put all on the server” moves every design of this browser there in one go, and with the tick “New designs on the server” each new design starts in the server folder. So nothing is lost when you change devices or clear the browser data."
     }
+  },
+  {
+    "title": {
+      "de": "Ausrichten zentriert auch Dreiecke und Sterne richtig",
+      "en": "Align centres triangles and stars properly"
+    },
+    "body": {
+      "de": "Eine Bohrung, die du mit „Ausrichten“ auf ein Dreieck, Fünfeck oder einen Stern mittig gesetzt hast, saß neben der Mitte der Form, weil das Ausrichten die Mitte des Kastens um die Form nahm. Jetzt zählt die eigene Mitte der Form; die Ränder links, rechts, vorn und hinten bleiben am Kasten.",
+      "en": "A hole you centred on a triangle, a pentagon or a star with “Align” sat beside the middle of the shape, because Align took the middle of the box round it. Now it is the shape's own middle; the edges - left, right, front and back - stay on the box."
+    }
   }
 ]
