@@ -92,6 +92,7 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "dashboard.backupAll": "Alle sichern",
   "dashboard.newOnServer": "Neue Entwürfe auf dem Server",
   "dashboard.newOnServerTitle": "Neue Entwürfe starten im Serverordner und sichern sich dort ab der ersten Änderung. Entwürfe dieses Browsers bleiben, wie sie sind.",
+  "dashboard.newOnServerLockedTitle": "Vom Server vorgegeben: Jeder neue Entwurf startet im Serverordner.",
   "dashboard.sendAllToServer": "Alle auf den Server legen",
   "dashboard.sendAllToServerTitle": "Legt alle Entwürfe dieses Browsers in den Serverordner. Jeder sichert sich danach dort selbst.",
   "dashboard.backupAllTitle": "Alle Entwürfe und die eigenen Formen als eine Datei sichern - über „Entwurf öffnen“ kommen sie wieder zurück",

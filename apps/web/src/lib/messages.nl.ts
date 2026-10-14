@@ -92,6 +92,7 @@ export const MESSAGES_NL: Record<MessageKey, string> = {
   "dashboard.backupAll": "Alles back-uppen",
   "dashboard.newOnServer": "Nieuwe ontwerpen op de server",
   "dashboard.newOnServerTitle": "Nieuwe ontwerpen beginnen in de servermap en worden daar vanaf de eerste wijziging opgeslagen. Ontwerpen van deze browser blijven zoals ze zijn.",
+  "dashboard.newOnServerLockedTitle": "Door de server ingesteld: elk nieuw ontwerp begint in de servermap.",
   "dashboard.sendAllToServer": "Alles op de server zetten",
   "dashboard.sendAllToServerTitle": "Zet alle ontwerpen van deze browser in de servermap. Elk slaat zichzelf daarna daar op.",
   "dashboard.backupAllTitle": "Alle ontwerpen en de eigen vormen in één bestand opslaan - door het te openen komen ze allemaal terug",

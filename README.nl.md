@@ -224,6 +224,8 @@ De image draait `next start` in productiemodus, dus de MCP-brug staat daar uit t
 
 Om het kleurenthema te kiezen dat mensen bij hun eerste bezoek krijgen, zet je `LAYERLING_DEFAULT_THEME` op `system`, `light`, `dark` of `graphite` (op dezelfde manier, in `compose.yml` of in de omgeving van `npm run start`). Wie layerling al eerder heeft geopend, houdt het thema dat zijn browser al heeft, en iedereen kan het nog steeds wijzigen met de themaschakelaar. Zonder de instelling volgt het thema het systeem. Een kopie die als gewone bestanden wordt aangeboden heeft geen server om het te lezen, dus daar geldt het niet.
 
+Als de gedeelde map aan staat, laat `LAYERLING_NEW_DESIGNS_ON_SERVER` nieuwe ontwerpen op de server beginnen: `true` is de beginwaarde voor wie nog niet heeft gekozen (zij kunnen **Nieuwe ontwerpen op de server** op de startpagina uitzetten), `always` geldt voor iedereen en zet het vinkje vast. Het wordt op dezelfde manier ingesteld, en een kopie die als losse bestanden wordt geserveerd heeft geen server die het kan lezen.
+
 ### Statische hosting: gewone bestanden op een webserver
 
 Elke webserver kan layerling als gewone bestanden aanbieden; er draait geen Node.js op. Bouw de bestanden één keer op een computer met Node.js (zie [Wat je nodig hebt](#wat-je-nodig-hebt)):

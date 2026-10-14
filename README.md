@@ -223,6 +223,8 @@ The image runs `next start` in production mode, so the MCP bridge is off there u
 
 To choose the colour theme people get on their first visit, set `LAYERLING_DEFAULT_THEME` to `system`, `light`, `dark` or `graphite` (the same way, in `compose.yml` or in the environment of `npm run start`). Anyone who has opened layerling before keeps the theme their browser already has, and anyone can still change it with the theme switch. Without the setting the theme follows the system. A copy served as plain files has no server to read it, so it does not apply there.
 
+With the shared folder on, `LAYERLING_NEW_DESIGNS_ON_SERVER` makes new designs start on the server: `true` is the start for people who have not chosen (they can untick **New designs on the server** on the start page), `always` holds for everyone and locks the tick. It is set the same way, and a copy served as plain files has no server to read it.
+
 ### Static Hosting: Plain Files on a Web Server
 
 Any web server can serve layerling as plain files; no Node.js runs on it. Build the files once on a computer that has Node.js (see [What You Need](#what-you-need)):

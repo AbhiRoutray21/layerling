@@ -12,7 +12,7 @@ import dynamic from "next/dynamic";
 import { importFailureSummary, importModelFiles } from "@/lib/modelImport";
 import { loadTextFonts } from "@/lib/textFonts";
 import { loadStoredCustomFonts } from "@/lib/customFontStore";
-import { fetchServerDefaultTheme } from "@/lib/serverDefaults";
+import { fetchServerDefaults, type NewDesignsOnServerSetting } from "@/lib/serverDefaults";
 import { applyAppTheme, getAppThemePreference, hasStoredAppTheme, readStoredAppTheme, resolveAppTheme, setAppTheme, storeAppTheme, subscribeToAppTheme, type AppThemePreference, type ResolvedAppTheme } from "@/lib/appTheme";
 import { hydrateEditorHistoryState, notesForHistoryIndex, type EditorHistoryEntry } from "@/lib/editorHistory";
 import { detectLanguage, setLanguage, t, translate, type Language } from "@/lib/i18n";
@@ -729,19 +729,24 @@ export default function Home() {
   const [query, setQuery] = useState("");
   const [viewMode, setViewMode] = useState<ViewMode>("grid");
   const [sortMode, setSortMode] = useState("recent");
-  const [newDesignsOnServer, setNewDesignsOnServer] = useState(false);
+  // What the person chose (null: nothing yet) and what the server says (LAYERLING_NEW_DESIGNS_ON_SERVER):
+  // "on" is the start for whoever has not chosen, "always" holds for everyone.
+  const [newDesignsChoice, setNewDesignsChoice] = useState<boolean | null>(null);
+  const [serverNewDesigns, setServerNewDesigns] = useState<NewDesignsOnServerSetting | null>(null);
   useEffect(() => {
     try {
-      setNewDesignsOnServer(window.localStorage.getItem(NEW_DESIGNS_ON_SERVER_KEY) === "1");
+      const stored = window.localStorage.getItem(NEW_DESIGNS_ON_SERVER_KEY);
+      setNewDesignsChoice(stored === "1" ? true : stored === "0" ? false : null);
     } catch {
       // A browser that refuses storage keeps the answer for this visit only.
     }
   }, []);
+  const newDesignsOnServerLocked = serverNewDesigns === "always";
+  const newDesignsOnServer = newDesignsOnServerLocked || (newDesignsChoice ?? serverNewDesigns === "on");
   const changeNewDesignsOnServer = useCallback((on: boolean) => {
-    setNewDesignsOnServer(on);
+    setNewDesignsChoice(on);
     try {
-      if (on) window.localStorage.setItem(NEW_DESIGNS_ON_SERVER_KEY, "1");
-      else window.localStorage.removeItem(NEW_DESIGNS_ON_SERVER_KEY);
+      window.localStorage.setItem(NEW_DESIGNS_ON_SERVER_KEY, on ? "1" : "0");
     } catch {
       // See above.
     }
@@ -875,9 +880,11 @@ export default function Home() {
     const storedTheme = readStoredAppTheme(window.localStorage);
     // A first visit takes the theme the server suggests (LAYERLING_DEFAULT_THEME), if it has one;
     // a browser that already has a theme on record keeps it. A static copy has no server to ask.
-    if (!STATIC_EXPORT_BUILD && !hasStoredAppTheme(window.localStorage)) {
-      void fetchServerDefaultTheme().then((suggested) => {
-        if (suggested && getAppThemePreference() === "system") setAppTheme(suggested);
+    const themeOnRecord = hasStoredAppTheme(window.localStorage);
+    if (!STATIC_EXPORT_BUILD) {
+      void fetchServerDefaults().then((defaults) => {
+        setServerNewDesigns(defaults.newDesignsOnServer);
+        if (!themeOnRecord && defaults.theme && getAppThemePreference() === "system") setAppTheme(defaults.theme);
       });
     }
     setAppTheme(storedTheme, false);
@@ -2140,6 +2147,7 @@ export default function Home() {
           viewMode={viewMode}
           onCreate={() => (sharedProjectsEnabled && newDesignsOnServer ? void createProjectInStoreFolder() : createAndOpenProject())}
           newDesignsOnServer={newDesignsOnServer}
+          newDesignsOnServerLocked={newDesignsOnServerLocked}
           onNewDesignsOnServerChange={changeNewDesignsOnServer}
           localOnlyProjects={projects.filter((project) => !project.sharedProject).length}
           onSendAllToServer={() => void sendAllProjectsToServer()}
@@ -2346,6 +2354,7 @@ function Dashboard({
   onImportFile,
   onBackupAll,
   newDesignsOnServer,
+  newDesignsOnServerLocked,
   onNewDesignsOnServerChange,
   localOnlyProjects,
   onSendAllToServer,
@@ -2388,6 +2397,7 @@ function Dashboard({
   onImportFile: () => void;
   onBackupAll: () => void;
   newDesignsOnServer: boolean;
+  newDesignsOnServerLocked: boolean;
   onNewDesignsOnServerChange: (on: boolean) => void;
   localOnlyProjects: number;
   onSendAllToServer: () => void;
@@ -2920,9 +2930,9 @@ function Dashboard({
                 </div>
                 <div className="dashboard-controls">
                   {sharedProjectsEnabled ? (
-                    <label className="dashboard-select dashboard-new-on-server" title={t("dashboard.newOnServerTitle")}>
+                    <label className="dashboard-select dashboard-new-on-server" title={t(newDesignsOnServerLocked ? "dashboard.newOnServerLockedTitle" : "dashboard.newOnServerTitle")}>
                       <Server size={17} />
-                      <input type="checkbox" checked={newDesignsOnServer} onChange={(event) => onNewDesignsOnServerChange(event.currentTarget.checked)} />
+                      <input type="checkbox" checked={newDesignsOnServer} disabled={newDesignsOnServerLocked} onChange={(event) => onNewDesignsOnServerChange(event.currentTarget.checked)} />
                       <span>{t("dashboard.newOnServer")}</span>
                     </label>
                   ) : null}

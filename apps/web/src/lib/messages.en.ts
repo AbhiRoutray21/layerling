@@ -93,6 +93,7 @@ export const MESSAGES_EN = {
   "dashboard.backupAll": "Back up all",
   "dashboard.newOnServer": "New designs on the server",
   "dashboard.newOnServerTitle": "New designs start in the server folder, so they are saved there from the first change on. Designs of this browser stay as they are.",
+  "dashboard.newOnServerLockedTitle": "Set by the server: every new design starts in the server folder.",
   "dashboard.sendAllToServer": "Put all on the server",
   "dashboard.sendAllToServerTitle": "Puts every design of this browser into the server folder. Each one saves itself there from then on.",
   "dashboard.backupAllTitle": "Save every design and the custom shapes in one file - opening it brings them all back",
