@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowDownToLine, ChevronLeft, ChevronRight, Crosshair, Cuboid, Download, Eye, EyeOff, FlipHorizontal, GripVertical, Home, Layers, Minus, MousePointer2, PanelsTopLeft, Plus, Rotate3d, RotateCcw, Ruler, RulerDimensionLine, Slice, Trash2, X } from "lucide-react";
+import { ArrowDownToLine, ChevronLeft, ChevronRight, Crosshair, Cuboid, Download, Eye, EyeOff, FlipHorizontal, GripVertical, Home, Layers, Minus, MousePointer2, PanelsTopLeft, Plus, Rotate3d, RotateCcw, Ruler, RulerDimensionLine, Slice, Spline, Trash2, X } from "lucide-react";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type Dispatch, type DragEvent, type MouseEvent as ReactMouseEvent, type MutableRefObject, type PointerEvent as ReactPointerEvent, type ReactNode, type SetStateAction, type WheelEvent as ReactWheelEvent } from "react";
 import { objectSnapOffset, shiftSnapBox, type ObjectSnapGuide, type SnapBox } from "@/lib/objectSnap";
 import { useMovablePanel, type MovablePanelOptions } from "@/lib/useMovablePanel";
@@ -135,12 +135,15 @@ import {
 import { cuboidCorners, pointAlongAxes, type AlignAxes, type FrameCuboid } from "@/lib/alignFrame";
 import type { AlignAxis, AlignHandleStatus, AlignTarget, GridSize, MeasurementAccuracy, ShapeAsset, WorkplaneNote, WorkplaneNoteAnchor, WorkplaneShape, WorkplaneWorkspaceSettings } from "@/types/layerling";
 import { referencePoints } from "@/lib/workplaneNotes";
+import { pivotKeptAhead, ZOOM_PIVOT_REACH_MM } from "@/lib/zoomPivot";
+import { measurementMiddle, type ReferencePosition } from "@/lib/referencePoints";
 import { planarFaceCentroid, planarFaceTriangles, type PivotPoint } from "@/lib/rotationPivot";
 import { outwardFaceNormal } from "@/lib/layFlat";
 import { OVERHANG_PLATE_TOLERANCE, overhangDownwardLimit } from "@/lib/overhangLimits";
 import { directionIsOwnShapeAxis, rotatedGeometryShapePatch, rotationPatchFromQuaternion as sharedRotationPatchFromQuaternion, signedDegrees } from "@/lib/geometryRotation";
 import type { CadModifierEdge } from "@/lib/cadModifierTypes";
-import { RENDER_LAYER_HELPERS, sharedShapeGeometryCache, sharedEdgesGeometryCache, sharedShapeMaterialCache, type PointCardOffset, type ShapeRenderRecord, type ThreeState, type MoveDimensionSession, type NoteOverlayState, type TapePoint, type TapeAttachment, type TapeEdgeAttachment, type TapeModel, type TapeOverlayState, type TapeCandidate, type RotationHandleSide, type RotationHandleSides, type DragItem, quaternionForShape, projectToScreen, syncMoveDimensionWorldLines, syncTransformGuideWorldLines, tapeShapeDimensions, tapePointWorld, tapeEdgeWorldPoints, syncTapeOverlay, syncNoteOverlay, NoteOverlay, TapeOverlay, type RulerDimensionOverlayItem, type RulerDimensionOverlayState, syncRulerDimensionOverlay, RulerDimensionOverlay, type CornerRulerInstance, type CornerRulerOverlayState, syncCornerRulerToolOverlay, CornerRulerToolOverlay, syncOriginDimensionWorldLines, shapeCenter, shapeLocalExtents, projectShapeExtent, projectShapesExtent, type OriginDimensionFrame, setObjectRenderLayer, freezeStaticObjectMatrices, formatMeasure, findShapeObject, trimSharedShapeGeometryCache, releaseSharedShapeGeometry, trimSharedShapeMaterialCache, releaseSharedShapeMaterials, disposeMaterialResource, disposeChildren, disposeObject } from "@/components/workplane/ViewportOverlays";
+import { circleOfEdgePoints, pointAcrossCircle, pointOnCircle } from "@/lib/tapeCircle";
+import { RENDER_LAYER_HELPERS, sharedShapeGeometryCache, sharedEdgesGeometryCache, sharedShapeMaterialCache, type PointCardOffset, type ShapeRenderRecord, type ThreeState, type MoveDimensionSession, type NoteOverlayState, type TapePoint, type TapeAttachment, type TapeEdgeAttachment, type TapeModel, type TapeOverlayState, type TapeCandidate, type RotationHandleSide, type RotationHandleSides, type DragItem, quaternionForShape, projectToScreen, syncMoveDimensionWorldLines, syncTransformGuideWorldLines, tapeShapeDimensions, tapePointWorld, tapeEdgeWorldPoints, tapeSegmentWorldPoints, syncTapeOverlay, syncNoteOverlay, NoteOverlay, TapeOverlay, type RulerDimensionOverlayItem, type RulerDimensionOverlayState, syncRulerDimensionOverlay, RulerDimensionOverlay, type CornerRulerInstance, type CornerRulerOverlayState, syncCornerRulerToolOverlay, CornerRulerToolOverlay, syncOriginDimensionWorldLines, shapeCenter, shapeLocalExtents, projectShapeExtent, projectShapesExtent, type OriginDimensionFrame, setObjectRenderLayer, freezeStaticObjectMatrices, formatMeasure, findShapeObject, trimSharedShapeGeometryCache, releaseSharedShapeGeometry, trimSharedShapeMaterialCache, releaseSharedShapeMaterials, disposeMaterialResource, disposeChildren, disposeObject } from "@/components/workplane/ViewportOverlays";
 
 const WORKPLANE_WIDTH = 200;
 const WORKPLANE_DEPTH = 140;
@@ -168,6 +171,11 @@ const CAMERA_MAX_DISTANCE = 9000;
  * the pointer (the middle of the screen for the buttons), or of the plate
  * when no body is there. The picture stays put, and the zoom can go on right
  * up to what is under the pointer, as close as the flat view enlarges.
+ *
+ * Where the pivot would lie outside what the camera clamp allows - the plate
+ * is a hit for a ray close to the horizon thousands of millimetres out - it
+ * stays put: the clamp pulls it back and carries the camera along, and the
+ * picture jumps far out (the forum, 14.10.2026).
  */
 function movePivotToDepthUnder(state: ThreeState, ndcX: number, ndcY: number) {
   if (!(state.camera instanceof THREE.PerspectiveCamera)) return;
@@ -180,11 +188,20 @@ function movePivotToDepthUnder(state: ThreeState, ndcX: number, ndcY: number) {
   ));
   state.raycaster.layers.mask = layers;
   const point = hit?.point ?? state.raycaster.ray.intersectPlane(new THREE.Plane(new THREE.Vector3(0, 1, 0), 0), new THREE.Vector3());
-  if (!point) return;
   const forward = state.camera.getWorldDirection(new THREE.Vector3());
+  // Nothing to zoom towards under the pointer (the sky, a spot past the plate): the pivot stays ahead of the camera.
+  const keepAhead = () => {
+    const limits = state.pivotLimits;
+    const ahead = pivotKeptAhead(state.camera.position, state.controls.target, forward, ZOOM_PIVOT_REACH_MM, limits ? { halfWidth: limits.halfWidth, halfDepth: limits.halfDepth, minY: CAMERA_MIN_TARGET_Y, maxY: CAMERA_MAX_TARGET_Y } : null);
+    if (ahead) state.controls.target.copy(ahead);
+  };
+  if (!point) { keepAhead(); return; }
   const depth = point.clone().sub(state.camera.position).dot(forward);
-  if (!(depth > 0) || depth > CAMERA_MAX_DISTANCE) return;
-  state.controls.target.copy(state.camera.position).addScaledVector(forward, depth);
+  if (!(depth > 0) || depth > CAMERA_MAX_DISTANCE) { keepAhead(); return; }
+  const target = state.camera.position.clone().addScaledVector(forward, depth);
+  const limits = state.pivotLimits;
+  if (limits && (Math.abs(target.x) > limits.halfWidth || Math.abs(target.z) > limits.halfDepth || target.y < CAMERA_MIN_TARGET_Y || target.y > CAMERA_MAX_TARGET_Y)) { keepAhead(); return; }
+  state.controls.target.copy(target);
 }
 
 /**
@@ -388,6 +405,8 @@ type WorkplaneViewportProps = {
   mateFacePick?: { shapeIds: string[] } | null;
   onMateFacePick?: (pick: LayFlatPick | null) => void;
   onNoteAdd?: (note: { x: number; y: number; z: number; anchor?: WorkplaneNoteAnchor }) => string | null;
+  /** Puts reference points in the scene; answers with the ids it made (none if they are there already). */
+  onAddReferencePoints?: (positions: ReferencePosition[]) => string[];
   onNoteUpdate?: (id: string, patch: Partial<WorkplaneNote>, transient?: boolean) => void;
   onNoteRemove?: (id: string) => void;
   onNoteModeChange?: (active: boolean) => void;
@@ -914,6 +933,8 @@ function tapeShapeTopologyKey(shape: WorkplaneShape): string {
     threadClearance: shape.threadClearance,
     threadBoltClearance: shape.threadBoltClearance,
     threadAxialClearance: shape.threadAxialClearance,
+    threadDepth: shape.threadDepth,
+    threadFlankAngle: shape.threadFlankAngle,
     threadQuality: shape.threadQuality,
     threadHeadHeight: shape.threadHeadHeight,
     threadChamfer: shape.threadChamfer,
@@ -1157,6 +1178,8 @@ function shapeGeometrySignature(shape: WorkplaneShape): string {
     threadClearance: shape.threadClearance,
     threadBoltClearance: shape.threadBoltClearance,
     threadAxialClearance: shape.threadAxialClearance,
+    threadDepth: shape.threadDepth,
+    threadFlankAngle: shape.threadFlankAngle,
     threadQuality: shape.threadQuality,
     threadHeadHeight: shape.threadHeadHeight,
     threadChamfer: shape.threadChamfer,
@@ -1262,6 +1285,24 @@ function tapeAttachmentFromWorld(state: ThreeState, shapeId: string, world: THRE
   };
 }
 
+
+/** How close, in pixels, the pointer has to come to the point across a circle for it to catch. */
+const TAPE_DIAMETER_SNAP_PIXELS = 16;
+
+/**
+ * With the first point of a measurement on a circular edge, the point across the circle catches the
+ * pointer when it comes near, so the distance is the exact diameter (#308).
+ */
+function diameterSnapCandidate(state: ThreeState, start: TapePoint, edge: TapeEdgeAttachment, localX: number, localY: number): TapeCandidate | null {
+  const circle = circleOfEdgePoints(tapeEdgeWorldPoints(state, edge));
+  if (!circle) return null;
+  const across = pointAcrossCircle(circle, tapePointWorld(state, start));
+  if (!across) return null;
+  const screen = projectToScreen(across, state);
+  if (Math.hypot(screen.x - localX, screen.y - localY) > TAPE_DIAMETER_SNAP_PIXELS) return null;
+  const attachment = tapeAttachmentFromWorld(state, edge.shapeId, across, "edge");
+  return attachment ? { x: across.x, y: across.y, z: across.z, attachment } : null;
+}
 
 function chainTapeLineSegments(segments: Array<[THREE.Vector3, THREE.Vector3]>) {
   if (segments.length <= 1) return segments.map(([a, b]) => [a, b]);
@@ -2928,6 +2969,7 @@ export function WorkplaneViewport({
   mateFacePick = null,
   onMateFacePick,
   onNoteAdd,
+  onAddReferencePoints,
   onNoteUpdate,
   onNoteRemove,
   onNoteModeChange,
@@ -2987,6 +3029,8 @@ export function WorkplaneViewport({
   const [editingCorner, setEditingCorner] = useState<EditingCorner>(null);
   const [editingRotation, setEditingRotation] = useState<EditingRotation>(null);
   const [tapeMode, setTapeMode] = useState(false);
+  // A click on an edge measures the whole edge (the length of a circle, say); off, it sets a point on the edge (#308).
+  const [tapeWholeEdges, setTapeWholeEdges] = useState(true);
   const [tapeDeleteMode, setTapeDeleteMode] = useState(false);
   const [tapeMoveMode, setTapeMoveMode] = useState(false);
   const [tapeToolsOpen, setTapeToolsOpen] = useState(false);
@@ -3122,6 +3166,7 @@ export function WorkplaneViewport({
   const alignOverlayRef = useRef<AlignOverlayState | null>(null);
   const mirrorOverlayRef = useRef<MirrorOverlayState | null>(null);
   const tapeModeRef = useRef(false);
+  const tapeWholeEdgesRef = useRef(true);
   const tapeDeleteModeRef = useRef(false);
   const tapeMoveModeRef = useRef(false);
   const tapePointDragRef = useRef<TapePointDragState | null>(null);
@@ -4654,7 +4699,7 @@ export function WorkplaneViewport({
   }, [cruiseAsset, setTapeActive]);
 
   const resolveTapeCandidate = useCallback(
-    (clientX: number, clientY: number, ignoredPointId?: string): TapeCandidate | null => {
+    (clientX: number, clientY: number, ignoredPointId?: string, wholeEdges: boolean = tapeWholeEdgesRef.current): TapeCandidate | null => {
       const state = threeRef.current;
       if (!state) return null;
 
@@ -4662,6 +4707,12 @@ export function WorkplaneViewport({
       const rect = state.renderer.domElement.getBoundingClientRect();
       const localX = clientX - rect.left;
       const localY = clientY - rect.top;
+      // The first point is on a circle: the point across it, which makes the diameter, catches the pointer first.
+      if (model.startPointId && model.startEdge && model.startPointId !== ignoredPointId) {
+        const start = model.points.find((point) => point.id === model.startPointId);
+        const across = start ? diameterSnapCandidate(state, start, model.startEdge, localX, localY) : null;
+        if (across) return across;
+      }
       const closestPoint = model.points.reduce<{ point: TapePoint; distance: number } | null>((closest, point) => {
         if (point.id === ignoredPointId) return closest;
         const screen = projectToScreen(tapePointWorld(state, point), state);
@@ -4705,7 +4756,21 @@ export function WorkplaneViewport({
       const selectedShapeIds = selectedIdsRef.current.filter((id) => shapesRef.current.some((shape) => shape.id === id && !shape.hidden));
       const targetShapeIds = selectedShapeIds.length > 0 ? selectedShapeIds : shapesRef.current.filter((shape) => !shape.hidden).map((shape) => shape.id);
       const modelCandidate = pickModelTapeCandidate(state, targetShapeIds, clientX, clientY);
-      if (modelCandidate) return modelCandidate;
+      if (modelCandidate) {
+        if (!modelCandidate.edge) return modelCandidate;
+        const onEdge = { ...modelCandidate, circleEdge: modelCandidate.edge, edge: wholeEdges ? modelCandidate.edge : undefined };
+        // With whole edges off the edge is only where a point goes. On a circle it goes on the true circle,
+        // not on a side of the polygon the edge is drawn as, so that a diameter measures exactly.
+        if (!wholeEdges && modelCandidate.attachment?.kind === "edge") {
+          const circle = circleOfEdgePoints(tapeEdgeWorldPoints(state, modelCandidate.edge));
+          if (circle) {
+            const placed = pointOnCircle(circle, new THREE.Vector3(modelCandidate.x, modelCandidate.y, modelCandidate.z));
+            const attachment = tapeAttachmentFromWorld(state, modelCandidate.edge.shapeId, placed, "edge");
+            if (attachment) return { ...onEdge, x: placed.x, y: placed.y, z: placed.z, attachment };
+          }
+        }
+        return onEdge;
+      }
 
       const raw = toRawPlanePoint(clientX, clientY, state.dragPlane);
       if (!raw) return null;
@@ -4783,7 +4848,7 @@ export function WorkplaneViewport({
       const point = existing ?? makePoint(candidate);
       const points = existing ? current.points : [...current.points, point];
       if (!current.startPointId) {
-        storeTapeModel({ ...current, points, startPointId: point.id, hover: { x: point.x, y: point.y, z: point.z, attachment: point.attachment } });
+        storeTapeModel({ ...current, points, startPointId: point.id, startEdge: candidate.circleEdge ?? null, hover: { x: point.x, y: point.y, z: point.z, attachment: point.attachment } });
         return;
       }
       if (current.startPointId === point.id) {
@@ -4804,11 +4869,11 @@ export function WorkplaneViewport({
   );
 
   const updateTapeHover = useCallback(
-    (clientX: number, clientY: number) => {
+    (clientX: number, clientY: number, altKey = false) => {
       if (!tapeModeRef.current) {
         return;
       }
-      const candidate = resolveTapeCandidate(clientX, clientY);
+      const candidate = resolveTapeCandidate(clientX, clientY, undefined, tapeWholeEdgesRef.current !== altKey);
       const current = tapeModelRef.current;
       const hover = candidate;
       if ((!current.hover && !hover) || (current.hover && hover
@@ -5603,7 +5668,9 @@ export function WorkplaneViewport({
     onInteractionActiveChange?.(false);
   }, [onInteractionActiveChange, onUpdateShape]);
 
-  const commitDimensionEdit = useCallback(() => {
+  const commitDimensionEdit = useCallback((aroundCenter = false) => {
+    // Alt+Enter (#327): no edge is held, so the shape grows round its middle.
+    if (aroundCenter) lastResizeAnchorRef.current = null;
     const edit = editingDimension;
     const id = selectedIdsRef.current[0];
     const shape = shapesRef.current.find((entry) => entry.id === id);
@@ -5683,7 +5750,8 @@ export function WorkplaneViewport({
     });
   }, [beginDimensionEdit, formulaForDimensionMark, rememberResizeAnchor]);
 
-  const commitCornerEdit = useCallback(() => {
+  const commitCornerEdit = useCallback((aroundCenter = false) => {
+    if (aroundCenter) lastResizeAnchorRef.current = null;
     const edit = editingCorner;
     const shape = shapesRef.current.find((entry) => entry.id === selectedIdsRef.current[0]);
     setEditingCorner(null);
@@ -6464,7 +6532,8 @@ export function WorkplaneViewport({
 
       if (tapeModeRef.current) {
         event.preventDefault();
-        const candidate = resolveTapeCandidate(event.clientX, event.clientY);
+        // Alt turns whole edges the other way round for this click.
+        const candidate = resolveTapeCandidate(event.clientX, event.clientY, undefined, tapeWholeEdgesRef.current !== event.altKey);
         if (candidate) {
           selectTapeCandidate(candidate);
         }
@@ -6952,7 +7021,7 @@ export function WorkplaneViewport({
         return;
       }
       if (tapeModeRef.current) {
-        updateTapeHover(event.clientX, event.clientY);
+        updateTapeHover(event.clientX, event.clientY, event.altKey);
         return;
       }
       if (tapeMoveModeRef.current) return;
@@ -7589,6 +7658,12 @@ export function WorkplaneViewport({
     onCancelCruise?.();
   }, [onCancelCruise, onWorkplaneModeChange, setTapeActive]);
 
+  const toggleTapeWholeEdges = useCallback(() => {
+    const next = !tapeWholeEdgesRef.current;
+    tapeWholeEdgesRef.current = next;
+    setTapeWholeEdges(next);
+  }, []);
+
   const activateTapeDelete = useCallback(() => {
     if (splitActiveRef.current) return;
     setTapeActive(false);
@@ -7835,6 +7910,21 @@ export function WorkplaneViewport({
     [storeTapeModel],
   );
 
+  /** A reference point in the middle of a measurement: the centre of a round edge or of a diameter (#323). */
+  const markTapeMiddle = useCallback(
+    (segmentId: string) => {
+      const state = threeRef.current;
+      if (!state || !onAddReferencePoints) return;
+      const worldPoints = tapeSegmentWorldPoints(state, tapeModelRef.current, segmentId);
+      const circle = worldPoints.length >= 4 ? circleOfEdgePoints(worldPoints) : null;
+      const middle = circle
+        ? { x: circle.center.x, y: circle.center.y, z: circle.center.z }
+        : measurementMiddle(worldPoints.map((point) => ({ x: point.x, y: point.y, z: point.z })));
+      if (middle) onAddReferencePoints([middle]);
+    },
+    [onAddReferencePoints],
+  );
+
   const handleTapeSegmentPointerDown = useCallback(
     (event: ReactPointerEvent<SVGElement>, segmentId: string) => {
       if (event.button !== 0) {
@@ -7851,7 +7941,7 @@ export function WorkplaneViewport({
       }
       event.preventDefault();
       event.stopPropagation();
-      const candidate = resolveTapeCandidate(event.clientX, event.clientY);
+      const candidate = resolveTapeCandidate(event.clientX, event.clientY, undefined, tapeWholeEdgesRef.current !== event.altKey);
       if (candidate) {
         selectTapeCandidate(candidate);
       }
@@ -8085,6 +8175,9 @@ export function WorkplaneViewport({
                   </button>
                   <button className={`tape-delete-button ${tapeDeleteMode ? "active" : ""}`} aria-label={t("camera.deleteMeasurement")} title={t("camera.deleteMeasurement")} aria-pressed={tapeDeleteMode} onClick={activateTapeDelete}>
                     <X size={20} strokeWidth={2.4} aria-hidden="true" />
+                  </button>
+                  <button className={tapeWholeEdges ? "active" : ""} aria-label={t("camera.tapeWholeEdges")} title={t("camera.tapeWholeEdgesHint")} aria-pressed={tapeWholeEdges} onClick={toggleTapeWholeEdges}>
+                    <Spline size={20} strokeWidth={2.25} aria-hidden="true" />
                   </button>
                   <button className="tape-clear-button" aria-label={t("camera.deleteAllMeasurements")} title={t("camera.deleteAllMeasurements")} onClick={requestClearTape}>
                     <Trash2 size={19} strokeWidth={2.25} aria-hidden="true" />
@@ -8457,6 +8550,7 @@ export function WorkplaneViewport({
               onPointPointerMove={handleTapePointPointerMove}
               onPointPointerUp={handleTapePointPointerUp}
               onSegmentPointerDown={handleTapeSegmentPointerDown}
+              onMarkMiddle={onAddReferencePoints ? markTapeMiddle : undefined}
             />
           ) : null}
           {!workplaneMode && !splitActive && rulerDimensionOverlay && rulerDimensionOverlay.items.length > 0 ? (
@@ -9060,6 +9154,7 @@ function orbitCameraByDrag(state: ThreeState, dx: number, dy: number) {
 }
 
 function constrainCamera(state: ThreeState, workspace: WorkspaceSettings) {
+  state.pivotLimits = { halfWidth: workspace.width / 2, halfDepth: workspace.depth / 2 };
   const target = state.controls.target;
   const previousTarget = target.clone();
   target.x = clamp(target.x, -workspace.width / 2, workspace.width / 2);
@@ -11974,6 +12069,8 @@ function createShapeObject(
         threadClearance: shape.threadClearance,
         threadBoltClearance: shape.threadBoltClearance,
         threadAxialClearance: shape.threadAxialClearance,
+        threadDepth: shape.threadDepth,
+        threadFlankAngle: shape.threadFlankAngle,
         threadQuality: shape.threadQuality,
         threadHeadHeight: shape.threadHeadHeight,
         threadChamfer: shape.threadChamfer,

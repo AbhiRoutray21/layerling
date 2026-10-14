@@ -51,6 +51,8 @@ export type ShapeRenderRecord = {
 };
 
 export type ThreeState = {
+  /** How far the orbit pivot may travel (the plate), as the camera clamp last saw it; the wheel zoom stays within it. */
+  pivotLimits?: { halfWidth: number; halfDepth: number };
   /** Colour set on top of light/dark; only the canvas reads it. */
   palette?: AppThemePalette;
   renderer: THREE.WebGLRenderer;
@@ -168,6 +170,8 @@ export type TapeModel = {
   points: TapePoint[];
   segments: TapeSegment[];
   startPointId: string | null;
+  /** The edge the first point lies on, while a measurement is under way: the diameter of a circle snaps from it (#308). */
+  startEdge?: TapeEdgeAttachment | null;
   hover: TapeCandidate | null;
 };
 
@@ -183,7 +187,10 @@ export type TapeCandidate = {
   z: number;
   pointId?: string;
   attachment?: TapeAttachment;
+  /** Set when a click would measure this whole edge. */
   edge?: TapeEdgeAttachment;
+  /** The edge the point lies on, whether or not a click measures all of it. */
+  circleEdge?: TapeEdgeAttachment;
 };
 
 export type RotationHandleSide = "near" | "right" | "far" | "left";
@@ -413,6 +420,17 @@ export function tapeEdgeWorldPoints(state: ThreeState, edge: TapeEdgeAttachment)
     const world = tapeAttachmentWorld(state, { shapeId: edge.shapeId, normalized });
     return world ? [world] : [];
   });
+}
+
+/** The points a measurement runs along: its whole edge, or the straight line between its two points. */
+export function tapeSegmentWorldPoints(state: ThreeState, model: TapeModel, segmentId: string) {
+  const segment = model.segments.find((candidate) => candidate.id === segmentId);
+  if (!segment) return [];
+  const edgePoints = segment.edge ? tapeEdgeWorldPoints(state, segment.edge) : [];
+  if (edgePoints.length >= 2) return edgePoints;
+  const start = model.points.find((point) => point.id === segment.startId);
+  const end = model.points.find((point) => point.id === segment.endId);
+  return start && end ? [tapePointWorld(state, start), tapePointWorld(state, end)] : [];
 }
 
 function tapePolylineLength(points: THREE.Vector3[]) {
@@ -881,6 +899,7 @@ export function TapeOverlay({
   onPointPointerMove,
   onPointPointerUp,
   onSegmentPointerDown,
+  onMarkMiddle,
 }: {
   overlay: TapeOverlayState;
   startPointId: string | null;
@@ -891,6 +910,8 @@ export function TapeOverlay({
   onPointPointerMove: (event: ReactPointerEvent<SVGCircleElement>, pointId: string) => void;
   onPointPointerUp: (event: ReactPointerEvent<SVGCircleElement>, pointId: string) => void;
   onSegmentPointerDown: (event: ReactPointerEvent<SVGElement>, segmentId: string) => void;
+  /** Puts a reference point in the middle of a measurement (#323). */
+  onMarkMiddle?: (segmentId: string) => void;
 }) {
   return (
     <div className={`tape-overlay ${active ? "active" : ""} ${deleteMode ? "delete-mode" : ""} ${moveMode ? "move-mode" : ""}`} aria-label={t("aria.tapeMeasurements")}>
@@ -938,6 +959,20 @@ export function TapeOverlay({
           {segment.label}
         </span>
       ))}
+      {onMarkMiddle && !deleteMode ? overlay.segments.map((segment) => (
+        <button
+          key={`${segment.id}-mark`}
+          type="button"
+          className="tape-mark"
+          style={{ left: segment.labelX, top: segment.labelY + 24 }}
+          title={t("camera.tapeMarkMiddle")}
+          aria-label={t("camera.tapeMarkMiddle")}
+          onPointerDown={(event) => event.stopPropagation()}
+          onClick={() => onMarkMiddle(segment.id)}
+        >
+          <Crosshair size={13} aria-hidden="true" />
+        </button>
+      )) : null}
     </div>
   );
 }

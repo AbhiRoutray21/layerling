@@ -1,5 +1,235 @@
 [
   {
+    "version": "1.72.2",
+    "items": [
+      {
+        "title": {
+          "de": "Gewindeloch auf der Seite ohne Stützen",
+          "en": "A threaded hole on its side, without supports"
+        },
+        "body": {
+          "de": "Beim Ausrichten zählt als Mitte einer Tropfenbohrung jetzt die Mitte ihres runden Teils, nicht die ihres Kastens mit der Spitze. So lässt sich eine Tropfenbohrung vom Kerndurchmesser genau auf ein Gewindeloch legen: Beide zusammen ergeben ein Gewinde, dessen Oberseite eine Spitze hat und ohne Stützen druckt. Die Anleitung im Kapitel zu Gewinden beschreibt die Schritte.",
+          "en": "In Align, the middle of a teardrop hole is now the middle of its round part, not of its box with the tip. A teardrop of the thread's core diameter therefore lies exactly on a tapped hole: together they give a thread whose top has a point and prints without supports. The chapter on threads in the guide has the steps."
+        }
+      },
+      {
+        "title": {
+          "de": "Vom Zylinder zur Ellipse",
+          "en": "From cylinder to ellipse"
+        },
+        "body": {
+          "de": "Ein Zylinder bleibt absichtlich rund, mit einem Durchmesser. Wer später doch ein Oval will, klickt jetzt bei einem Zylinder auf „Zur Ellipse machen“: Die Form wird eine Ellipse, derselbe Körper, deren Länge und Breite du einzeln einstellst. Bei einem Zylinder mit Fase, Verrundung oder Wand geht das nicht, weil er seinen exakten Körper verlöre.",
+          "en": "A cylinder stays round on purpose, with one diameter. If you want an oval after all, click \"Make it an ellipse\" on a cylinder: the shape becomes an Ellipse, the same body, and you set its length and width one by one. It does not work for a cylinder with a chamfer, a fillet or a wall, which would lose its exact body."
+        }
+      },
+      {
+        "title": {
+          "de": "Alt+Enter: Größe um die Mitte",
+          "en": "Alt+Enter: resize round the middle"
+        },
+        "body": {
+          "de": "Tippst du eine Größe in eine der Zahlen neben der Form, wächst die Form von der gegenüberliegenden Kante aus. Mit Alt+Enter statt Enter wächst sie jetzt um ihre Mitte, für Breite und Länge. So bleibt eine Form, die an einer anderen ausgerichtet war, ausgerichtet, auch wenn du mehrmals probierst.",
+          "en": "When you type a size into one of the numbers beside a shape, the shape grows from the opposite edge. With Alt+Enter instead of Enter it now grows round its middle, for width and length. A shape that was aligned with another stays aligned, however often you try."
+        }
+      },
+      {
+        "title": {
+          "de": "Zoomen ins Leere und Schieber in Firefox",
+          "en": "Zooming into the empty, and sliders in Firefox"
+        },
+        "body": {
+          "de": "Zeigt der Mauszeiger beim Hineinzoomen über die Platte hinaus auf den Hintergrund, bleibt die Kamera nicht mehr an ihrer nächsten Entfernung hängen, sondern fährt weiter nach vorn. Und in Firefox springt ein Längenschieber beim Loslassen nicht mehr auf einen krummen Wert, sondern bleibt auf dem Raster.",
+          "en": "When you zoom in with the pointer past the plate, on the background, the camera no longer stops at its closest distance but goes on forward. And in Firefox a length slider no longer jumps to a crooked value when you let go, but stays on the grid."
+        }
+      }
+    ]
+  },
+  {
+    "version": "1.72.1",
+    "items": [
+      {
+        "title": {
+          "de": "Bezugspunkt in der Mitte einer Messung",
+          "en": "A reference point at the middle of a measurement"
+        },
+        "body": {
+          "de": "Unter der Zahl jeder Maßband-Messung sitzt jetzt ein kleiner Fadenkreuz-Knopf. Er setzt einen Bezugspunkt in die Mitte der Messung: nach einem Klick auf den Rand einer runden Bohrung in ihren Mittelpunkt, auch bei einem importierten Netz. Eine Form, die du ziehst, rastet mit ihrer Mitte an dem Punkt ein, und so sitzt eine neue Aussparung genau auf einer vorhandenen, ohne Zahlen einzutippen.",
+          "en": "Under the number of every tape measurement there is now a small crosshair button. It puts a reference point in the middle of the measurement: after a click on the rim of a round hole, in its centre, on an imported mesh too. A shape you drag snaps to the point with its centre, so a new pocket sits exactly on an existing hole without typing numbers."
+        }
+      },
+      {
+        "title": {
+          "de": "Skizze: Ziehen am Rahmen trifft ganze Werte",
+          "en": "Sketch: stretching by the frame lands on whole values"
+        },
+        "body": {
+          "de": "Wenn du in der Skizze einen Umriss an den Griffen seines Rahmens größer oder kleiner ziehst, rastet jetzt die Kante selbst am Raster ein. Vorher kamen krumme Maße wie 24,83 heraus, weil der Griff etwas neben der Kante sitzt und dieser Abstand nicht auf dem Raster lag.",
+          "en": "When you stretch an outline in the sketch by the handles of its frame, the edge itself now snaps to the grid. Before, you got crooked sizes like 24.83, because the handle sits a little off the edge and that gap was not on the grid."
+        }
+      }
+    ]
+  },
+  {
+    "version": "1.72.0",
+    "items": [
+      {
+        "title": {
+          "de": "Entwürfe gleich auf den Server",
+          "en": "Designs straight to the server"
+        },
+        "body": {
+          "de": "Wo der gemeinsame Serverordner eingerichtet ist, hat die Startseite zwei neue Bedienelemente: „Alle auf den Server legen“ bringt alle Entwürfe dieses Browsers auf einmal dorthin, und mit dem Haken „Neue Entwürfe auf dem Server“ beginnt jeder neue Entwurf gleich im Serverordner. So geht beim Wechsel des Geräts oder beim Löschen der Browserdaten nichts verloren.",
+          "en": "Where the shared server folder is set up, the start page has two new controls: “Put all on the server” moves every design of this browser there in one go, and with the tick “New designs on the server” each new design starts in the server folder. So nothing is lost when you change devices or clear the browser data."
+        }
+      },
+      {
+        "title": {
+          "de": "Ausrichten zentriert auch Dreiecke und Sterne richtig",
+          "en": "Align centres triangles and stars properly"
+        },
+        "body": {
+          "de": "Eine Bohrung, die du mit „Ausrichten“ auf ein Dreieck, Fünfeck oder einen Stern mittig gesetzt hast, saß neben der Mitte der Form, weil das Ausrichten die Mitte des Kastens um die Form nahm. Jetzt zählt die eigene Mitte der Form; die Ränder links, rechts, vorn und hinten bleiben am Kasten.",
+          "en": "A hole you centred on a triangle, a pentagon or a star with “Align” sat beside the middle of the shape, because Align took the middle of the box round it. Now it is the shape's own middle; the edges - left, right, front and back - stay on the box."
+        }
+      },
+      {
+        "title": {
+          "de": "Eine Materialschätzung nahe an der Wirklichkeit",
+          "en": "A material estimate near the real number"
+        },
+        "body": {
+          "de": "Im Exportfenster kannst du jetzt Füllung (zu Beginn 15 %) und Wände (2) einstellen. Gewicht und Filament werden daraus geschätzt, statt das Teil massiv zu rechnen, und liegen so meist nahe an dem, was ein Slicer zeigt. Das Volumen bleibt das des Körpers, und bei 100 % Füllung rechnet das Feld wie bisher massiv.",
+          "en": "In the export window you can now set the infill (15 % to begin with) and the walls (2). Weight and filament are worked out from them instead of counting the part as solid, so they come out near what a slicer shows. The volume stays the body's own, and at 100 % infill the box counts solid as before."
+        }
+      },
+      {
+        "title": {
+          "de": "Die ganze Anleitung zum Drucken",
+          "en": "The whole guide, to print"
+        },
+        "body": {
+          "de": "In der Anleitung gibt es unter der Kapitelliste den Link „Ganze Anleitung zum Drucken“: alle Kapitel hintereinander, mit Inhaltsverzeichnis und Bildern, jedes Kapitel auf einer neuen Seite. Mit Strg+P druckst du sie oder speicherst sie als PDF; wenn du nur einen Teil brauchst, wählst du im Druckdialog die Seitenzahlen.",
+          "en": "Under the chapter list of the guide there is a link, \"Whole guide, to print\": all chapters one after the other, with a table of contents and the pictures, each chapter on a new page. Press Ctrl+P to print it or save it as a PDF; if you only need a part, choose its page numbers in the print dialog."
+        }
+      }
+    ]
+  },
+  {
+    "version": "1.71.0",
+    "items": [
+      {
+        "title": {
+          "de": "layerling spricht jetzt Niederländisch",
+          "en": "layerling speaks Dutch now"
+        },
+        "body": {
+          "de": "Die Oberfläche und die ganze Anleitung gibt es auf Niederländisch (Nederlands). Die Sprache wird nach deinem Browser gewählt und lässt sich in der Sprachliste ändern. Wer Fehler in einem Wort findet, kann sie in einem kleinen Pull Request verbessern.",
+          "en": "The interface and the whole user guide are available in Dutch (Nederlands). The language is chosen from your browser and can be changed in the language list. If you find a wrong word, a small pull request fixes it."
+        }
+      }
+    ]
+  },
+  {
+    "version": "1.70.0",
+    "items": [
+      {
+        "title": {
+          "de": "Eine Skizze bearbeiten verschiebt den Körper nicht mehr",
+          "en": "Editing a sketch no longer moves the body"
+        },
+        "body": {
+          "de": "Wer eine Skizze öffnete, einen Punkt oder Kurvengriff nach außen zog und abschloss, sah den Körper seitlich rutschen, und beim nächsten Öffnen lag die Skizze daneben. Jetzt bleibt alles, was du nicht angefasst hast, an seinem Platz, und die Skizze liegt genau über dem Körper, auch bei Kurven.",
+          "en": "If you opened a sketch, pulled a point or a curve handle outward and finished, the body slid sideways, and the next time you opened it the sketch lay beside it. Now everything you did not touch stays where it was, and the sketch lies exactly over the body, curves included."
+        }
+      },
+      {
+        "title": {
+          "de": "Zeichnung für die Werkstatt",
+          "en": "Drawing for the workshop"
+        },
+        "body": {
+          "de": "Exportieren → 2D macht aus dem Entwurf eine Zeichnung im Maßstab 1:1: Vorder-, Drauf- und Seitenansicht auf einem ISO-Blatt, mit Gesamtmaßen, verdeckten Kanten und einer Tabelle der runden Bohrungen, als PDF oder SVG. Zum Ausdrucken oder für Drehbank und Fräse.",
+          "en": "Export → 2D turns the design into a drawing at 1:1: front, top and side views on an ISO sheet, with overall sizes, hidden edges and a table of the round bores, as PDF or SVG. To print, or to take to the lathe and mill."
+        }
+      },
+      {
+        "title": {
+          "de": "Das Maßband misst auch den Durchmesser",
+          "en": "The tape measure measures diameters too"
+        },
+        "body": {
+          "de": "Im Menü des Maßbands gibt es den Schalter „Ganze Kanten messen“. Ist er aus, setzt ein Klick auf eine runde Kante, etwa eine Bohrung, einen Punkt darauf, und der Gegenpunkt rastet ein: Der Durchmesser kommt exakt heraus. Mit Alt kehrst du den Schalter für einen Klick um.",
+          "en": "The tape measure's menu has a switch “Measure whole edges”. With it off, a click on a round edge, a bore for example, puts a point on it, and the point across snaps in: the diameter is exact. Alt turns the switch round for one click."
+        }
+      },
+      {
+        "title": {
+          "de": "21 weitere Drucker, 221 insgesamt",
+          "en": "21 more printers, 221 in all"
+        },
+        "body": {
+          "de": "Neu in der Druckerliste sind Goofoo und große Maschinen wie die Elegoo OrangeStorm Giga, dazu RatRig, Volumic, Wanhao, Vivedino und Tronxy, jeweils mit Bauplatte und Höhe aus OrcaSlicer.",
+          "en": "New in the printer list are Goofoo and large machines such as the Elegoo OrangeStorm Giga, plus RatRig, Volumic, Wanhao, Vivedino and Tronxy, each with its build plate and height from OrcaSlicer."
+        }
+      }
+    ]
+  },
+  {
+    "version": "1.69.0",
+    "items": [
+      {
+        "title": {
+          "de": "Ein Gewindeprofil nach deinem Maß",
+          "en": "A thread profile of your own"
+        },
+        "body": {
+          "de": "Unter „Profil“ eines Gewindes gibt es jetzt „Eigenes (Trapez)“: Du stellst Flankenwinkel, Gewindetiefe und Kerndurchmesser selbst ein. Bei 90° oder weniger ist keine Flanke flacher als 45°, das Gewinde druckt sich also ohne Stützen. Tiefe und Kerndurchmesser sind ein Maß auf zwei Arten.",
+          "en": "Under a thread's “Profile” there is now “Custom (trapezoid)”: you set the flank angle, the thread depth and the core diameter yourself. At 90° or less no flank is flatter than 45°, so the thread prints without supports. Depth and core diameter are one measure said two ways."
+        }
+      },
+      {
+        "title": {
+          "de": "Ein Block mit Tasche lässt sich aushöhlen",
+          "en": "A block with a pocket can be hollowed"
+        },
+        "body": {
+          "de": "Ein Block mit einem Loch, das nicht ganz hindurchgeht, ließ sich mit offener Oberseite nicht aushöhlen. Jetzt geht es, auch mit offener Unterseite, an beiden Enden und mit einem Loch ganz hindurch.",
+          "en": "A block with a hole that does not go all the way through could not be hollowed with its top open. Now it can, also with the bottom open, both ends open and a hole right through."
+        }
+      },
+      {
+        "title": {
+          "de": "Text aus LightBurn kommt vollständig an",
+          "en": "Text from LightBurn comes in whole"
+        },
+        "body": {
+          "de": "Eine SVG mit Text aus LightBurn verlor beim Import die Hälfte der Buchstaben. Punkte auf geraden Kanten stören nicht mehr. Ein Buchstabe, dessen Umriss an sich selbst entlangläuft, muss im Zeichenprogramm noch zusammengefügt werden.",
+          "en": "An SVG with text made in LightBurn lost half of its letters on import. Points along straight edges no longer get in the way. A letter whose outline runs along itself still has to be joined in the drawing program."
+        }
+      },
+      {
+        "title": {
+          "de": "200 Drucker, alphabetisch sortiert",
+          "en": "200 printers, in alphabetical order"
+        },
+        "body": {
+          "de": "Zehn Drucker sind dazugekommen (Creality, Elegoo, Anycubic, Sovol, Flashforge), und die Liste in den Arbeitsbereich-Einstellungen ist alphabetisch sortiert, Zahlen als Zahlen gezählt.",
+          "en": "Ten printers have been added (Creality, Elegoo, Anycubic, Sovol, Flashforge), and the list in the workspace settings is in alphabetical order, numbers counted as numbers."
+        }
+      },
+      {
+        "title": {
+          "de": "Schieber rasten am Raster ein, Zoom am Rand springt nicht mehr",
+          "en": "Sliders snap to the grid, zooming at the edge no longer jumps"
+        },
+        "body": {
+          "de": "Ein Schieber für eine Länge, etwa die Höhe, rastet beim Ziehen mit der Maus am Fangraster ein, so dass ganze Millimeter herauskommen. Und das Mausrad zoomt nahe am oberen Rand der Ansicht wieder hinein, statt weit herauszuspringen.",
+          "en": "A slider for a length, the height for example, snaps to the snap grid while you drag it with the mouse, so whole millimetres come out. And the mouse wheel zooms in again near the top edge of the view, instead of jumping far out."
+        }
+      }
+    ]
+  },
+  {
     "version": "1.68.1",
     "items": [
       {
