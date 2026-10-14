@@ -180,7 +180,7 @@ Dann selbst `http://127.0.0.1:3000/` öffnen. `Strg+C` in diesem Fenster beendet
 
 ### Docker
 
-Um layerling auf einem Rechner, NAS (Synology, Unraid usw.) oder Heimserver ohne Node.js zu betreiben, nimmst du das fertige Image **`ghcr.io/henmedia/layerling`**. Jedes Release veröffentlicht es für amd64 und arm64 (Raspberry Pi, ARM-NAS), unter seiner Versionsnummer und als `latest`. Die App lauscht auf Port **3000**.
+Um layerling auf einem Rechner, NAS (Synology, Unraid usw.) oder Heimserver ohne Node.js zu betreiben, nimmst du das fertige Image **`henmedia/layerling`** auf Docker Hub (auch unter **`ghcr.io/henmedia/layerling`**, dasselbe Image). Jedes Release veröffentlicht es für amd64 und arm64 (Raspberry Pi, ARM-NAS), unter seiner Versionsnummer und als `latest`. Die App lauscht auf Port **3000**.
 
 Am schnellsten geht es mit einem einzigen Befehl:
 
@@ -188,7 +188,7 @@ Am schnellsten geht es mit einem einzigen Befehl:
 docker run -d --name layerling -p 3000:3000 --restart unless-stopped ghcr.io/henmedia/layerling:latest
 ```
 
-Auf einem NAS mit Container-Verwaltung (Synology Container Manager, Unraid, Portainer) trägst du das Image `ghcr.io/henmedia/layerling:latest` ein und gibst Port 3000 frei. Zum Aktualisieren das Image neu holen und den Container neu anlegen (oder Watchtower das erledigen lassen).
+Auf einem NAS mit Container-Verwaltung (Synology Container Manager, Unraid, Portainer) suchst du in der Registrierung (Docker Hub) nach `henmedia/layerling` oder trägst `henmedia/layerling:latest` ein und gibst Port 3000 frei. Zum Aktualisieren das Image neu holen und den Container neu anlegen (oder Watchtower das erledigen lassen).
 
 Die Image-Tags sind reine Versionsnummern **ohne „v“**: `ghcr.io/henmedia/layerling:1.42.0`, das GitHub-Release heißt dagegen `v1.42.0`. Ein Pull holt nur das neue Image; ein vorhandener Container läuft mit dem alten weiter, bis er entfernt und neu angelegt wird:
 

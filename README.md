@@ -177,7 +177,7 @@ then open `http://127.0.0.1:3000/` yourself. `Ctrl+C` in that window stops it ei
 
 ### Docker
 
-To run layerling on a computer, NAS (Synology, Unraid, etc.) or home server without installing Node.js, use the ready-made image **`ghcr.io/henmedia/layerling`**. Every release publishes it for amd64 and arm64 (Raspberry Pi, ARM NAS) under its version number and as `latest`. The app listens on port **3000**.
+To run layerling on a computer, NAS (Synology, Unraid, etc.) or home server without installing Node.js, use the ready-made image **`henmedia/layerling`** on Docker Hub (also at **`ghcr.io/henmedia/layerling`**, the same image). Every release publishes it for amd64 and arm64 (Raspberry Pi, ARM NAS) under its version number and as `latest`. The app listens on port **3000**.
 
 The quickest way is a single command:
 
@@ -185,7 +185,7 @@ The quickest way is a single command:
 docker run -d --name layerling -p 3000:3000 --restart unless-stopped ghcr.io/henmedia/layerling:latest
 ```
 
-On a NAS with a container manager (Synology Container Manager, Unraid, Portainer), add the image `ghcr.io/henmedia/layerling:latest` and map port 3000. To update, pull the image again and recreate the container (or let Watchtower do it).
+On a NAS with a container manager (Synology Container Manager, Unraid, Portainer), search for `henmedia/layerling` in its registry (Docker Hub) or enter `henmedia/layerling:latest`, and map port 3000. To update, pull the image again and recreate the container (or let Watchtower do it).
 
 The image tags are plain version numbers **without a "v"**: `ghcr.io/henmedia/layerling:1.42.0`, while the GitHub release is called `v1.42.0`. A pull only fetches the new image; a container that already exists keeps running the old one until it is removed and created again:
 
