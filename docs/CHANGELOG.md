@@ -6,6 +6,7 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **Shared folder: what the README had left out (#301):** With Docker, the shared folder showed on the start page but nothing could be saved in it, because the container runs as the user 999 and a mounted folder is usually owned by somebody else. The README and `compose.yml` now say so (`chown 999:999`, or run the container as yourself with `user:`). With `npm run start` they now say that `npm run build` comes first and that the folder must be writable by the user who starts it. Reported by @foofoodog.
 - **Turn a selection in the sketch by any angle:** The sketch could turn only a whole closed outline, 45 degrees at a time with R, so a single line, a curve, several outlines together or an angle in between could not be turned at all. A round handle now stands above the frame round a selection: dragging it turns everything selected - points, lines and curve handles - about the middle of the selection, with the angle shown over the handle, and with Shift in steps of 15 degrees. R still turns a closed outline by 45 degrees; the guide now says so in the text, not only in the table of keys. Asked for by @lukyanenkomax (#330), and earlier in the forum and by @strelniece (#260).
 ## 1.72.2
 

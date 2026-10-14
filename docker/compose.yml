@@ -23,5 +23,8 @@ services:
       # LAYERLING_MCP_REMOTE: "true"
       # LAYERLING_MCP_TOKEN: "a-long-random-secret-of-at-least-16-characters"
       # LAYERLING_MCP_ALLOWED_HOSTS: "layerling.example.com"   # only for a real domain, e.g. behind a reverse proxy
+    # With the shared folder: the container runs as the user with the number 999, which must be allowed to write
+    # to the mounted folder ("sudo chown 999:999 ./shared-projects"), or run it as yourself with:
+    # user: "1000:1000"   # your own numbers: id -u and id -g
     # volumes:
     #   - ./shared-projects:/shared-projects:z

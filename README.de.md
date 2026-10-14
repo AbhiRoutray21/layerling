@@ -226,7 +226,7 @@ Das Image führt `next start` im Produktionsmodus aus, die MCP-Brücke ist dort 
 gemeinsamen Projektordner ein beschreibbares Verzeichnis einbinden und in `compose.yml` `LAYERLING_SHARED_PROJECTS_DIR`
 auf den Pfad im Container setzen, an dem es eingebunden ist, etwa `./shared-projects:/shared-projects` mit
 `LAYERLING_SHARED_PROJECTS_DIR: "/shared-projects"` (siehe [Gemeinsame Entwürfe im Netz](#gemeinsame-entwürfe-im-netz)).
-Nach einer Änderung `docker compose up -d` ausführen: `docker compose restart` behält die alte Einstellung.
+Der Container läuft als der Benutzer mit der Nummer 999, und dieser muss in den Ordner schreiben dürfen: `sudo chown 999:999 ./shared-projects`, oder dem Dienst `user: "1000:1000"` hinzufügen (deine eigenen Benutzer- und Gruppennummern, `id -u` und `id -g` zeigen sie), dann läuft der Container als du. Ohne das erscheint der Ordner auf der Startseite, aber es lässt sich nichts darin speichern. Nach einer Änderung `docker compose up -d` ausführen: `docker compose restart` behält die alte Einstellung.
 `docker exec <Container> printenv LAYERLING_SHARED_PROJECTS_DIR` zeigt die tatsächlich verwendete.
 
 Das Farbschema, das Leute beim ersten Besuch bekommen, legst du mit `LAYERLING_DEFAULT_THEME` fest: `system`, `light`, `dark` oder `graphite` (auf demselben Weg, in `compose.yml` oder in der Umgebung von `npm run start`). Wer layerling schon geöffnet hat, behält das Schema, das sein Browser bereits hat, und jeder kann es weiter mit dem Umschalter ändern. Ohne die Einstellung folgt das Schema dem System. Eine Kopie, die als reine Dateien ausgeliefert wird, hat keinen Server, der sie lesen könnte, dort gilt sie nicht.
@@ -255,8 +255,9 @@ Drei Dinge zu wissen:
 layerling selbst besteht nur aus Dateien, der gemeinsame Ordner braucht also etwas auf dem Server, das schreiben kann. Es gibt zwei Wege, und du brauchst nur einen: **Node oder Docker** (dieser Abschnitt, mit `LAYERLING_SHARED_PROJECTS_DIR`) oder **ein gewöhnlicher Webserver mit PHP** (der Ordner `store`, weiter unten). Ein Webserver, der die Dateien nur ausliefert – `npx serve`, nginx oder Apache ohne PHP –, zeigt layerling ganz normal, hat aber keinen Serverordner.
 
 Betreibst du layerling mit `npm run dev` oder `npm run start` auf einem Rechner, den andere im Browser öffnen, kann es
-einen gemeinsamen Ordner für `.lyl`-Projekte anbieten. Setze dazu vor dem Start `LAYERLING_SHARED_PROJECTS_DIR` auf ein
-Verzeichnis:
+einen gemeinsamen Ordner für `.lyl`-Projekte anbieten. `npm run start` liefert aus, was `npm run build` gebaut hat, führe das also
+einmal vorher aus. Setze vor dem Start `LAYERLING_SHARED_PROJECTS_DIR` auf ein Verzeichnis, in das der Benutzer schreiben darf, der
+layerling startet (ein Ordner unter `/srv` gehört oft root, lege einen eigenen an oder ändere den Besitzer):
 
 ```bash
 LAYERLING_SHARED_PROJECTS_DIR=/srv/layerling-projekte npm run start
