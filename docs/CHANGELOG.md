@@ -6,6 +6,7 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **A thread chamfer of any width above zero counts:** A chamfer of 0.001 mm made it vanish, because only more than 0.001 mm counted. A tiny one is a cone that opens the mouth of a tapped hole or nut to exactly the outer diameter and cuts the crests at the rim - good for a hole whose thread starts a few millimetres behind the opening, with a plain bore of that diameter in front. Now any width above 0 builds it, in the mesh and in the exact body. 0 still means no chamfer. Suggested in the forum.
 - **Zooming near the top edge no longer jumps out:** With the pointer close to the top of the view, in a view seen from the side, the mouse wheel zoomed far out instead of in. The wheel zooms towards a point under the pointer, and a ray that runs almost level met the plate thousands of millimetres away; the camera was then pulled back onto the plate and the picture with it. Such a point is now left alone, and the zoom goes on around the old pivot. Reported in the forum.
 - **Sliders snap to the grid:** Dragged with the mouse, the slider of a length - the height of a box, say - now snaps to the snap step, so it comes out in whole millimetres instead of steps of 0.81. Not with the grid off, not on short sliders, and a typed value and the arrow keys on the slider stay exact. Suggested in the forum.
 ## 1.68.1

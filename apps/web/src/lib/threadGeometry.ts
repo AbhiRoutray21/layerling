@@ -1165,8 +1165,9 @@ export function threadBuildPlan(options: ThreadGeometryOptions) {
 export function createThreadGeometry(options: ThreadGeometryOptions) {
   const plan = threadBuildPlan(options);
   const { settings, height, spec, profile, major, minor, handSign, headHeight, shaftBottom, chamfer, chamferLow, chamferBottom, inward } = plan;
-  const lowBroken = chamferBottom && chamferLow > 0.001;
-  const topBroken = chamfer > 0.001;
+  // Any chamfer above zero counts, however small: a zero-width cone leaves the mouth exactly as wide as the outer diameter (forum, 14.10.2026).
+  const lowBroken = chamferBottom && chamferLow > 0;
+  const topBroken = chamfer > 0;
   // A cone at a mouth of an inside thread goes on, at 45 degrees, down to the core: it ends where
   // it has cut the crests away, not on a ledge at the outer diameter (#269).
   const reach = major - minor;
