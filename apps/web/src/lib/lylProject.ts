@@ -1329,6 +1329,14 @@ function validateShapeDefinition(definition: Record<string, unknown>, label: str
       const threadAxialClearance = finiteNumber(definition.threadAxialClearance, `${label}.threadAxialClearance`);
       if (threadAxialClearance < 0 || threadAxialClearance > 1) throw new Error(`${label}.threadAxialClearance is outside the supported range`);
     }
+    if (definition.threadDepth !== undefined) {
+      const threadDepth = finiteNumber(definition.threadDepth, `${label}.threadDepth`);
+      if (threadDepth <= 0 || threadDepth > 480) throw new Error(`${label}.threadDepth is outside the supported range`);
+    }
+    if (definition.threadFlankAngle !== undefined) {
+      const threadFlankAngle = finiteNumber(definition.threadFlankAngle, `${label}.threadFlankAngle`);
+      if (threadFlankAngle < 10 || threadFlankAngle > 90) throw new Error(`${label}.threadFlankAngle is outside the supported range`);
+    }
     if (definition.threadQuality !== undefined) {
       const threadQuality = finiteNumber(definition.threadQuality, `${label}.threadQuality`);
       if (!Number.isInteger(threadQuality) || threadQuality < 12 || threadQuality > 96) {

@@ -62,6 +62,11 @@ import {
   normalizeThreadClearance,
   normalizeThreadBoltClearance,
   normalizeThreadAxialClearance,
+  normalizeThreadDepth,
+  normalizeThreadFlankAngle,
+  threadDepthLimits,
+  MIN_THREAD_FLANK_ANGLE,
+  MAX_THREAD_FLANK_ANGLE,
   threadAxialClearanceLimit,
   MIN_THREAD_BOLT_CLEARANCE,
   MAX_THREAD_BOLT_CLEARANCE,
@@ -272,6 +277,7 @@ const THREAD_PROFILE_OPTIONS: Array<{ value: ThreadProfile; label: MessageKey }>
   { value: "trapezoidal", label: "thread.profileTrapezoidal" },
   { value: "round", label: "thread.profileRound" },
   { value: "whitworth", label: "thread.profileWhitworth" },
+  { value: "custom", label: "thread.profileCustom" },
 ];
 
 type RangePropertyConfig = {
@@ -346,7 +352,7 @@ const RELATIVE_SIZE_PROPERTY_IDS = new Set(["width", "height", "length", "diamet
 const ROTATION_PROPERTY_IDS = new Set(["rotateX", "rotateY", "rotateZ"]);
 
 function propertyUsesLengthUnit(key: string) {
-  return ["textLineWidth", "letterSize", "iconWidth", "keyringDiameter", "positionX", "positionY", "positionZ", "pivotX", "pivotY", "pivotZ", "radius", "length", "width", "height", "bevel", "topRadius", "baseRadius", "thickness", "toothSize", "toothWidth", "gearBacklash", "centerHole", "slotSmallEnd", "slotCentreDistance", "sketchLineWidth", "topLength", "topWidth", "bottomLength", "bottomWidth", "diameter", "pitch", "clearance", "axialClearance", "boltClearance", "threadLength", "headHeight", "chamfer", "chamferBottom", "headChamfer", "wire", "starOuterSize", "starInnerSize", "starOuterFillet", "starInnerFillet", "heartTipFillet", "crescentThickness", "crescentTipFillet", "honeycombCellSize", "honeycombWallThickness", "honeycombFrameWidth", "cornerFillet", "topBottomFillet", "bentTubeSize", "bentTubeWall", "bentTubeSegmentLength", "bentTubeBendRadius", "dovetailNeckWidth", "dovetailClearance", "hingePinDiameter", "hingeLeafThickness", "hingeClearance", "screwHoleShaft", "screwHoleHeadDepth", "knurlDepth", "knurlChamfer", "loftBottomWidth", "loftBottomDepth", "loftTopWidth", "loftTopDepth", "loftBottomCorner", "loftTopCorner", "loftOffsetX", "loftOffsetZ", "loftWall"].includes(key);
+  return ["textLineWidth", "letterSize", "iconWidth", "keyringDiameter", "positionX", "positionY", "positionZ", "pivotX", "pivotY", "pivotZ", "radius", "length", "width", "height", "bevel", "topRadius", "baseRadius", "thickness", "toothSize", "toothWidth", "gearBacklash", "centerHole", "slotSmallEnd", "slotCentreDistance", "sketchLineWidth", "topLength", "topWidth", "bottomLength", "bottomWidth", "diameter", "pitch", "clearance", "axialClearance", "boltClearance", "threadDepth", "threadCoreDiameter", "threadLength", "headHeight", "chamfer", "chamferBottom", "headChamfer", "wire", "starOuterSize", "starInnerSize", "starOuterFillet", "starInnerFillet", "heartTipFillet", "crescentThickness", "crescentTipFillet", "honeycombCellSize", "honeycombWallThickness", "honeycombFrameWidth", "cornerFillet", "topBottomFillet", "bentTubeSize", "bentTubeWall", "bentTubeSegmentLength", "bentTubeBendRadius", "dovetailNeckWidth", "dovetailClearance", "hingePinDiameter", "hingeLeafThickness", "hingeClearance", "screwHoleShaft", "screwHoleHeadDepth", "knurlDepth", "knurlChamfer", "loftBottomWidth", "loftBottomDepth", "loftTopWidth", "loftTopDepth", "loftBottomCorner", "loftTopCorner", "loftOffsetX", "loftOffsetZ", "loftWall"].includes(key);
 }
 
 /**
@@ -1325,6 +1331,10 @@ function getShapePropertiesWithAppLimits(shape: WorkplaneShape, onUpdate: ShapeI
       next.clearance = normalizeThreadClearance(next.clearance);
       next.boltClearance = normalizeThreadBoltClearance(next.boltClearance);
       next.axialClearance = normalizeThreadAxialClearance(next.axialClearance, next.pitch);
+      // The own profile keeps its proportions when the pitch changes: the depth goes with it, unless it is set in the same step.
+      if (patch.pitch !== undefined && patch.depth === undefined && settings.profile === "custom") next.depth = settings.depth * (next.pitch / settings.pitch);
+      next.flankAngle = normalizeThreadFlankAngle(next.flankAngle);
+      next.depth = normalizeThreadDepth(next.depth, next.pitch, next.diameter, next.flankAngle);
       next.quality = normalizeThreadQuality(next.quality);
       next.chamfer = normalizeThreadChamfer(next.chamfer, { role: next.role, diameter: next.diameter, pitch: next.pitch, profile: next.profile });
       next.chamferLow = normalizeThreadChamfer(next.chamferLow, { role: next.role, diameter: next.diameter, pitch: next.pitch, profile: next.profile });
@@ -1348,6 +1358,9 @@ function getShapePropertiesWithAppLimits(shape: WorkplaneShape, onUpdate: ShapeI
         threadClearance: next.clearance,
         threadBoltClearance: next.boltClearance,
         threadAxialClearance: next.axialClearance,
+        // Only an own profile has them; a shape that had set them keeps them while another profile is chosen.
+        threadDepth: next.profile === "custom" ? next.depth : shape.threadDepth,
+        threadFlankAngle: next.profile === "custom" ? next.flankAngle : shape.threadFlankAngle,
         threadQuality: next.quality,
         threadHeadHeight: next.headHeight,
         threadChamfer: next.chamfer,
@@ -1493,6 +1506,40 @@ function getShapePropertiesWithAppLimits(shape: WorkplaneShape, onUpdate: ShapeI
         onChange: (profile) => applyThread({ profile: normalizeThreadProfile(profile) }),
       },
     );
+    if (settings.profile === "custom") {
+      const depthLimits = threadDepthLimits(settings.pitch, settings.diameter, settings.flankAngle);
+      // Depth and core diameter are one measure said two ways: core = diameter - 2 x depth.
+      properties.push(
+        {
+          id: "threadFlankAngle",
+          label: t("prop.threadFlankAngle"),
+          value: settings.flankAngle,
+          min: MIN_THREAD_FLANK_ANGLE,
+          max: MAX_THREAD_FLANK_ANGLE,
+          step: 1,
+          hint: t("thread.flankAngleHint"),
+          onChange: (flankAngle) => applyThread({ flankAngle }),
+        },
+        {
+          id: "threadDepth",
+          label: t("prop.threadDepth"),
+          value: settings.depth,
+          min: depthLimits.min,
+          max: depthLimits.max,
+          step: 0.05,
+          onChange: (depth) => applyThread({ depth }),
+        },
+        {
+          id: "threadCoreDiameter",
+          label: t("prop.threadCoreDiameter"),
+          value: settings.diameter - 2 * settings.depth,
+          min: settings.diameter - 2 * depthLimits.max,
+          max: settings.diameter - 2 * depthLimits.min,
+          step: 0.05,
+          onChange: (core) => applyThread({ depth: (settings.diameter - core) / 2 }),
+        },
+      );
+    }
     if (settings.role === "bore" || settings.role === "nut") {
       properties.push({
         id: "clearance",
@@ -2117,7 +2164,7 @@ export function ShapeInspector({
   const textFillMore = shape.kind === "text" ? properties.filter((property) => TEXT_FILL_MORE_IDS.has(property.id)) : [];
   const textFillEnd = primaryProperties.reduce((end, property, index) => (TEXT_FILL_IN_VIEW_IDS.has(property.id) ? index + 1 : end), 0);
   const threadProperties = isThread
-    ? properties.filter((property) => ["pitch", "threadsPerInch", "threadHand", "threadProfile", "clearance", "axialClearance", "boltClearance", "chamfer", "chamferBottom", "quality"].includes(property.id))
+    ? properties.filter((property) => ["pitch", "threadsPerInch", "threadHand", "threadProfile", "threadFlankAngle", "threadDepth", "threadCoreDiameter", "clearance", "axialClearance", "boltClearance", "chamfer", "chamferBottom", "quality"].includes(property.id))
     : [];
   const gearTeethProperties = shape.kind === "gear"
     ? properties.filter((property) => ["gearProfile", "teeth", "gearModule", "gearPressureAngle", "gearBacklash", "gearRim", "toothSize", "toothWidth"].includes(property.id))

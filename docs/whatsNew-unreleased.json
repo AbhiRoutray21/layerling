@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "title": {
+      "de": "Ein Gewindeprofil nach deinem Maß",
+      "en": "A thread profile of your own"
+    },
+    "body": {
+      "de": "Unter „Profil“ eines Gewindes gibt es jetzt „Eigenes (Trapez)“: Du stellst Flankenwinkel, Gewindetiefe und Kerndurchmesser selbst ein. Bei 90° oder weniger ist keine Flanke flacher als 45°, das Gewinde druckt sich also ohne Stützen. Tiefe und Kerndurchmesser sind ein Maß auf zwei Arten.",
+      "en": "Under a thread's “Profile” there is now “Custom (trapezoid)”: you set the flank angle, the thread depth and the core diameter yourself. At 90° or less no flank is flatter than 45°, so the thread prints without supports. Depth and core diameter are one measure said two ways."
+    }
+  }
+]
