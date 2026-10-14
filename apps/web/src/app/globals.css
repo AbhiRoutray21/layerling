@@ -9109,8 +9109,9 @@ html[data-theme="dark"] .rotation-angle-badge {
   width: 320px;
   max-height: none;
   overflow-y: auto;
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+  /* A thin bar that shows: on a laptop's touchpad the panel is easier to scroll by its bar. */
+  scrollbar-color: #cdbfa9 transparent;
+  scrollbar-width: thin;
   color: #563e24;
   background: rgba(248, 246, 244, 0.96);
   border-left: 1px solid #e9e2d6;
@@ -9129,7 +9130,20 @@ html[data-theme="dark"] .rotation-angle-badge {
 }
 
 .shape-inspector::-webkit-scrollbar {
-  display: none;
+  width: 8px;
+}
+
+.shape-inspector::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.shape-inspector::-webkit-scrollbar-thumb {
+  background: #cdbfa9;
+  border-radius: 4px;
+}
+
+.shape-inspector::-webkit-scrollbar-thumb:hover {
+  background: #b8a88f;
 }
 
 .shape-inspector-header {
@@ -13284,6 +13298,18 @@ html[data-theme="dark"] .shape-inspector {
   background: rgba(39, 30, 20, 0.97);
   border-color: #534333;
   box-shadow: -3px 0 14px rgba(0, 0, 0, 0.28);
+}
+
+html[data-theme="dark"] .shape-inspector {
+  scrollbar-color: #5a4a3a transparent;
+}
+
+html[data-theme="dark"] .shape-inspector::-webkit-scrollbar-thumb {
+  background: #5a4a3a;
+}
+
+html[data-theme="dark"] .shape-inspector::-webkit-scrollbar-thumb:hover {
+  background: #6e5c49;
 }
 
 html[data-theme="dark"] .shape-inspector.floating {
