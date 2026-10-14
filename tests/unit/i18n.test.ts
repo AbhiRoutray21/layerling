@@ -13,8 +13,9 @@ import {
 } from "@/lib/i18n";
 import { MESSAGES_DE } from "@/lib/messages.de";
 import { MESSAGES_EN } from "@/lib/messages.en";
+import { MESSAGES_NL } from "@/lib/messages.nl";
 
-const CATALOGUES = { en: MESSAGES_EN, de: MESSAGES_DE } as const;
+const CATALOGUES = { en: MESSAGES_EN, de: MESSAGES_DE, nl: MESSAGES_NL } as const;
 /** The languages that must have every sentence; a language still on its way is held to less (i18nLanguages.test.ts). */
 const COMPLETE_LANGUAGES = LANGUAGES.filter((language) => LANGUAGE_INFO[language].complete);
 
