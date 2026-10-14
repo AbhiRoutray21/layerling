@@ -6,6 +6,7 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **The material estimate says it counts 100 % infill:** Under the volume, weight and filament length the export window now says in the open that the numbers are for a solid body - 100 % infill - and that with the infill of the slicer weight and filament are often much lower. Before, a short line under the heading only said the slicer "shows less". Suggested by Stefan.
 - **The design's name sits right in the corner:** The name written on the plate no longer leaves room for the axis arrows but starts at the front left corner as if they were not there, with the same small gap from both edges, so it takes less of the plate and gets in the way of bodies less often.
 
 ## 1.70.0

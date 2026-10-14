@@ -5392,6 +5392,13 @@ html[data-toolbar-size="large"] .shape-menu-dropdown:not(.sketch-shape-menu-drop
   font-weight: 650;
 }
 
+/* The number is for a solid body, and a slicer's infill makes it much smaller: that is said in the open (Stefan, 14.10.2026). */
+.print-estimate-infill {
+  color: #7a6347;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
 .print-estimate-values dd {
   margin: 0;
   color: #4d3720;
@@ -13883,6 +13890,10 @@ html[data-theme="dark"] .print-estimate-values dt,
 html[data-theme="dark"] .print-estimate-busy,
 html[data-theme="dark"] .print-estimate-note {
   color: #9f866c;
+}
+
+html[data-theme="dark"] .print-estimate-infill {
+  color: #c0a888;
 }
 
 html[data-theme="dark"] .export-file-input-wrap > span,

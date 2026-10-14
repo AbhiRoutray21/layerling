@@ -13328,6 +13328,7 @@ function TopActionPanel({
               ) : (
                 <span className="print-estimate-busy">{t("export.estimateBusy")}</span>
               )}
+              {estimate ? <span className="print-estimate-note print-estimate-infill">{t("export.estimateInfill")}</span> : null}
               {printVolume && printVolume.unionFailed > 0 ? (
                 <span className="print-estimate-note">{t("export.estimateOverlap")}</span>
               ) : null}

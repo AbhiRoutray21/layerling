@@ -2136,6 +2136,10 @@ html:where([data-theme="dark"][data-palette="graphite"])[data-toolbar-size="larg
   color: #737373;
 }
 
+:where(html[data-theme="dark"][data-palette="graphite"]) .print-estimate-infill {
+  color: #555555;
+}
+
 :where(html[data-theme="dark"][data-palette="graphite"]) .print-estimate-values dd {
   color: #3a3a3a;
 }
@@ -6565,6 +6569,10 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .print-estimate-values 
 html[data-theme="dark"]:where([data-palette="graphite"]) .print-estimate-busy,
 html[data-theme="dark"]:where([data-palette="graphite"]) .print-estimate-note {
   color: #757575;
+}
+
+html[data-theme="dark"]:where([data-palette="graphite"]) .print-estimate-infill {
+  color: #909090;
 }
 
 html[data-theme="dark"]:where([data-palette="graphite"]) .export-file-input-wrap > span,
