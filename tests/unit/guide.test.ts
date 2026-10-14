@@ -7,6 +7,7 @@ import {
   parseEnv,
   parseFrontMatter,
   renderFooter,
+  renderPrintAll,
   readChapters,
   readShortcutGroups,
   renderBlocks,
@@ -238,5 +239,42 @@ describe("guide content", () => {
     expect(guideChapterForShape({ kind: "thread" })).toBe("threads");
     expect(guideChapterForShape({ kind: "box", groupedShapes: [{}] })).toBe("solids");
     expect(guideChapterForShape({ kind: "cylinder" })).toBe("shapes");
+  });
+});
+
+describe("the whole guide on one page", () => {
+  const chapters = [
+    { slug: "shapes", title: "Shapes", summary: "What there is", fallback: false },
+    { slug: "solids", title: "Solids", summary: "Holes and bodies", fallback: true },
+  ];
+  const printable = [
+    { chapter: chapters[0], html: '<h2 id="box">Box</h2><p>See <a href="#box">above</a>, <a href="/guide/solids.html#holes">holes</a> and <a href="/guide/solids.html">solids</a>.</p><h3 id="size">Size</h3><figure><img src="/guide/img/a.webp" loading="lazy"></figure>' },
+    { chapter: chapters[1], html: '<h2 id="box">Box again</h2><h3 id="holes">Holes</h3>' },
+  ];
+  const html = renderPrintAll({ language: "en", chapters, printable, footer: "", languageLinks: [] });
+
+  it("keeps two chapters' equal anchors apart and points links between chapters into the page", () => {
+    expect(html).toContain('id="shapes--box"');
+    expect(html).toContain('id="solids--box"');
+    expect(html).toContain('href="#shapes--box"');
+    expect(html).toContain('href="#solids--holes"');
+    expect(html).toContain('href="#chapter-solids"');
+    expect(html).toContain('id="chapter-shapes"');
+    const ids = [...html.matchAll(/ id="([^"]+)"/g)].map((match) => match[1]);
+    expect(new Set(ids).size).toBe(ids.length);
+    const anchors = [...html.matchAll(/ href="#([^"]+)"/g)].map((match) => match[1]);
+    for (const anchor of anchors) expect(ids, anchor).toContain(anchor);
+  });
+
+  it("sets the headings one level below the chapter's own title and loads every picture at once", () => {
+    expect(html).toContain("<h2>1. Shapes</h2>");
+    expect(html).toContain('<h3 id="shapes--box">Box</h3>');
+    expect(html).toContain('<h4 id="shapes--size">Size</h4>');
+    expect(html).not.toContain('loading="lazy"');
+  });
+
+  it("is no page for a search engine, and says when a chapter is not translated", () => {
+    expect(html).toContain('<meta name="robots" content="noindex">');
+    expect(html).toContain("not translated");
   });
 });

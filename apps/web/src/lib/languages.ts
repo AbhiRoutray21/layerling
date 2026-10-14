@@ -35,6 +35,12 @@ export type GuideStrings = {
   /** The search box at the top of a guide page: what it is called and what it says when nothing matches. */
   search: string;
   searchNothing: string;
+  /** The link to the page with every chapter in a row, and what that page says (for printing the guide). */
+  printAll: string;
+  printAllTitle: string;
+  printAllLead: string;
+  printContents: string;
+  printButton: string;
 };
 
 export type LanguageInfo = {
@@ -105,6 +111,11 @@ export const LANGUAGE_INFO: Readonly<Record<Language, LanguageInfo>> = {
       languageMenu: "Language",
       search: "Search the guide",
       searchNothing: "Nothing found.",
+      printAll: "Whole guide, to print",
+      printAllTitle: "The whole guide on one page",
+      printAllLead: "Every chapter one after the other, to print or to save as a PDF: press Ctrl+P and switch off \"Headers and footers\" in the print settings. To print only a part, choose its page numbers there.",
+      printContents: "Contents",
+      printButton: "Print",
     },
   },
   de: {
@@ -137,6 +148,11 @@ export const LANGUAGE_INFO: Readonly<Record<Language, LanguageInfo>> = {
       languageMenu: "Sprache",
       search: "Anleitung durchsuchen",
       searchNothing: "Nichts gefunden.",
+      printAll: "Ganze Anleitung zum Drucken",
+      printAllTitle: "Die ganze Anleitung auf einer Seite",
+      printAllLead: "Alle Kapitel hintereinander, zum Drucken oder zum Speichern als PDF: Drücke Strg+P und schalte in den Druckeinstellungen „Kopf- und Fußzeilen“ aus. Möchtest du nur einen Teil drucken, wähle dort die Seitenzahlen.",
+      printContents: "Inhalt",
+      printButton: "Drucken",
     },
   },
   nl: {
@@ -169,6 +185,11 @@ export const LANGUAGE_INFO: Readonly<Record<Language, LanguageInfo>> = {
       languageMenu: "Taal",
       search: "Handleiding doorzoeken",
       searchNothing: "Niets gevonden.",
+      printAll: "Hele handleiding, om af te drukken",
+      printAllTitle: "De hele handleiding op één pagina",
+      printAllLead: "Alle hoofdstukken achter elkaar, om af te drukken of als pdf op te slaan: druk op Ctrl+P en zet in de afdrukinstellingen \"Kop- en voetteksten\" uit. Wil je maar een deel afdrukken, kies daar dan de paginanummers.",
+      printContents: "Inhoud",
+      printButton: "Afdrukken",
     },
   },
 };

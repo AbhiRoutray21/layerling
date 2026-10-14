@@ -28,5 +28,15 @@
       "de": "Im Exportfenster kannst du jetzt Füllung (zu Beginn 15 %) und Wände (2) einstellen. Gewicht und Filament werden daraus geschätzt, statt das Teil massiv zu rechnen, und liegen so meist nahe an dem, was ein Slicer zeigt. Das Volumen bleibt das des Körpers, und bei 100 % Füllung rechnet das Feld wie bisher massiv.",
       "en": "In the export window you can now set the infill (15 % to begin with) and the walls (2). Weight and filament are worked out from them instead of counting the part as solid, so they come out near what a slicer shows. The volume stays the body's own, and at 100 % infill the box counts solid as before."
     }
+  },
+  {
+    "title": {
+      "de": "Die ganze Anleitung zum Drucken",
+      "en": "The whole guide, to print"
+    },
+    "body": {
+      "de": "In der Anleitung gibt es unter der Kapitelliste den Link „Ganze Anleitung zum Drucken“: alle Kapitel hintereinander, mit Inhaltsverzeichnis und Bildern, jedes Kapitel auf einer neuen Seite. Mit Strg+P druckst du sie oder speicherst sie als PDF; wenn du nur einen Teil brauchst, wählst du im Druckdialog die Seitenzahlen.",
+      "en": "Under the chapter list of the guide there is a link, \"Whole guide, to print\": all chapters one after the other, with a table of contents and the pictures, each chapter on a new page. Press Ctrl+P to print it or save it as a PDF; if you only need a part, choose its page numbers in the print dialog."
+    }
   }
 ]
