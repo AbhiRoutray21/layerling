@@ -3822,10 +3822,23 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .rotation-angle-badge {
 }
 
 :where(html[data-theme="dark"][data-palette="graphite"]) .shape-inspector {
+  scrollbar-color: #bbbbbb transparent;
   color: #404040;
   background: rgba(246, 246, 246, 0.96);
   border-left: 1px solid #e0e0e0;
   box-shadow: -2px 0 10px rgba(64, 64, 64, 0.08);
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .shape-inspector::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .shape-inspector::-webkit-scrollbar-thumb {
+  background: #bbbbbb;
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .shape-inspector::-webkit-scrollbar-thumb:hover {
+  background: #909090;
 }
 
 :where(html[data-theme="dark"][data-palette="graphite"]) .shape-inspector-header {
@@ -5978,6 +5991,18 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .shape-inspector {
   background: rgba(35, 35, 35, 0.97);
   border-color: #454545;
   box-shadow: -3px 0 14px rgba(0, 0, 0, 0.28);
+}
+
+html[data-theme="dark"]:where([data-palette="graphite"]) .shape-inspector {
+  scrollbar-color: #4c4c4c transparent;
+}
+
+html[data-theme="dark"]:where([data-palette="graphite"]) .shape-inspector::-webkit-scrollbar-thumb {
+  background: #4c4c4c;
+}
+
+html[data-theme="dark"]:where([data-palette="graphite"]) .shape-inspector::-webkit-scrollbar-thumb:hover {
+  background: #515151;
 }
 
 html[data-theme="dark"]:where([data-palette="graphite"]) .shape-inspector.floating {
