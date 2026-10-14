@@ -6,6 +6,7 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **Touch screens: a finger reaches further:** On a touch screen, a press on the sketch plate or on a line that lands beside a point, a handle or another line goes to that part, so small points and thin lines can be grabbed with a fingertip. The tape measure (points, lines and reference points), the section measure and the edges in the chamfer and fillet tool catch the pointer from a larger distance when it is a finger. A mouse and a stylus keep the reach they had. The guide now recommends a stylus on a tablet. Suggested by @cyryllo (#337).
 - **The tape measure snaps to reference points:** Mark the centre of a circle or the middle of a line as a reference point (the crosshair button under a measurement, or the right-click menu of a body), then click that point with the tape measure to measure from it. Suggested by @RobbieKnobbie (#334).
 - **A way back from the server folder:** Inside "Designs on the server" the only way back to the designs of the browser was the logo. A button **Back to designs in this browser** stands at the left of the row with New design, New folder and Refresh. Suggested by @foofoodog (#333).
 ## 1.72.3

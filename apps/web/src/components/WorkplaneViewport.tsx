@@ -136,6 +136,7 @@ import { cuboidCorners, pointAlongAxes, type AlignAxes, type FrameCuboid } from 
 import type { AlignAxis, AlignHandleStatus, AlignTarget, GridSize, MeasurementAccuracy, ShapeAsset, WorkplaneNote, WorkplaneNoteAnchor, WorkplaneShape, WorkplaneWorkspaceSettings } from "@/types/layerling";
 import { referencePoints } from "@/lib/workplaneNotes";
 import { pivotKeptAhead, ZOOM_PIVOT_REACH_MM } from "@/lib/zoomPivot";
+import { pointerReach } from "@/lib/pointerReach";
 import { measurementMiddle, nearestReferenceOnScreen, type ReferencePosition } from "@/lib/referencePoints";
 import { planarFaceCentroid, planarFaceTriangles, type PivotPoint } from "@/lib/rotationPivot";
 import { outwardFaceNormal } from "@/lib/layFlat";
@@ -1502,6 +1503,9 @@ function pickModelTapeCandidate(state: ThreeState, shapeIds: string[], clientX: 
   const rect = state.renderer.domElement.getBoundingClientRect();
   const pointerX = clientX - rect.left;
   const pointerY = clientY - rect.top;
+  // A finger reaches further than a mouse pointer (#337).
+  const vertexReach = pointerReach(9);
+  const edgeReach = pointerReach(12);
   const targets = shapeIds.flatMap((id) => {
     const object = findShapeObject(state, id);
     return object ? [object] : [];
@@ -1533,9 +1537,9 @@ function pickModelTapeCandidate(state: ThreeState, shapeIds: string[], clientX: 
         });
         // Anything near the pointer? Only then are the attachments of this path worth building.
         const closeToPointer = screens.some((screen, index) => {
-          if (Math.hypot(pointerX - screen.x, pointerY - screen.y) <= 9) return true;
+          if (Math.hypot(pointerX - screen.x, pointerY - screen.y) <= vertexReach) return true;
           const next = screens[index + 1];
-          return next ? distanceToScreenSegment(pointerX, pointerY, screen.x, screen.y, next.x, next.y) <= 12 : false;
+          return next ? distanceToScreenSegment(pointerX, pointerY, screen.x, screen.y, next.x, next.y) <= edgeReach : false;
         });
         if (!closeToPointer) return;
         const attachments = worldPoints.map((point) => tapeAttachmentFromWorld(state, shapeId, point, "edge"));
@@ -1551,7 +1555,7 @@ function pickModelTapeCandidate(state: ThreeState, shapeIds: string[], clientX: 
         endpointIndexes.forEach((index) => {
           const screen = screens[index];
           const distance = Math.hypot(pointerX - screen.x, pointerY - screen.y);
-          if (distance <= 9) {
+          if (distance <= vertexReach) {
             vertexCandidates.push({
               distance,
               candidate: {
@@ -1571,7 +1575,7 @@ function pickModelTapeCandidate(state: ThreeState, shapeIds: string[], clientX: 
           const dy = bScreen.y - aScreen.y;
           const amount = dx * dx + dy * dy > 0.001 ? clamp(((pointerX - aScreen.x) * dx + (pointerY - aScreen.y) * dy) / (dx * dx + dy * dy), 0, 1) : 0;
           const distance = Math.hypot(pointerX - (aScreen.x + dx * amount), pointerY - (aScreen.y + dy * amount));
-          if (distance <= 12) {
+          if (distance <= edgeReach) {
             const world = worldPoints[index].clone().lerp(worldPoints[index + 1], amount);
             const normalizedA = normalizedPoints[index];
             const normalizedB = normalizedPoints[index + 1];
@@ -1669,6 +1673,7 @@ function pickModifierEdgeFromScreen(state: ThreeState, edges: CadModifierEdge[],
   const pointA = new THREE.Vector3();
   const pointB = new THREE.Vector3();
   const candidates: Array<{ id: number; distance: number; point: THREE.Vector3 }> = [];
+  const pickReach = pointerReach(MODIFIER_EDGE_PICK_RADIUS_PX);
   state.camera.updateMatrixWorld();
   edges.forEach((edge) => {
     let best: { id: number; distance: number; point: THREE.Vector3 } | null = null;
@@ -1679,7 +1684,7 @@ function pickModifierEdgeFromScreen(state: ThreeState, edges: CadModifierEdge[],
       const b = projectCadPointToCanvas(pointB, state, rect);
       if (!a || !b) continue;
       const distance = distanceToScreenSegment(pointerX, pointerY, a.x, a.y, b.x, b.y);
-      if (distance < MODIFIER_EDGE_PICK_RADIUS_PX && (!best || distance < best.distance)) {
+      if (distance < pickReach && (!best || distance < best.distance)) {
         const dx = b.x - a.x;
         const dy = b.y - a.y;
         const lengthSq = dx * dx + dy * dy;
@@ -4472,7 +4477,7 @@ export function WorkplaneViewport({
     const there = projectToScreen(new THREE.Vector3(nx, ny, nz), state);
     const pixelsPerMm = Math.max(1e-6, Math.hypot(there.x - here.x, there.y - here.y));
     const model = sectionMeasureRef.current;
-    return snapSectionPoint(target, model.loops, 12 / pixelsPerMm, model.a && !model.b ? model.a : null);
+    return snapSectionPoint(target, model.loops, pointerReach(12) / pixelsPerMm, model.a && !model.b ? model.a : null);
   }, [toRawPlanePoint]);
 
   const placeSectionMeasurePoint = useCallback((point: SectionPoint) => {
@@ -4733,6 +4738,10 @@ export function WorkplaneViewport({
       const rect = state.renderer.domElement.getBoundingClientRect();
       const localX = clientX - rect.left;
       const localY = clientY - rect.top;
+      // A finger covers more than a mouse pointer does, so it reaches further (#337).
+      const pointReach = pointerReach(12);
+      const lineReach = pointerReach(10);
+      const referenceReach = pointerReach(14);
       // The first point is on a circle: the point across it, which makes the diameter, catches the pointer first.
       if (model.startPointId && model.startEdge && model.startPointId !== ignoredPointId) {
         const start = model.points.find((point) => point.id === model.startPointId);
@@ -4743,7 +4752,7 @@ export function WorkplaneViewport({
         if (point.id === ignoredPointId) return closest;
         const screen = projectToScreen(tapePointWorld(state, point), state);
         const distance = Math.hypot(screen.x - localX, screen.y - localY);
-        if (distance <= 12 && (!closest || distance < closest.distance)) {
+        if (distance <= pointReach && (!closest || distance < closest.distance)) {
           return { point, distance };
         }
         return closest;
@@ -4760,7 +4769,7 @@ export function WorkplaneViewport({
           referencePoints(notesRef.current),
           (point) => projectToScreen(new THREE.Vector3(point.x, point.y, point.z), state),
           { x: localX, y: localY },
-          14,
+          referenceReach,
         );
         if (closestReference) {
           const { x, y, z } = closestReference;
@@ -4783,7 +4792,7 @@ export function WorkplaneViewport({
           const dy = b.y - a.y;
           const amount = dx * dx + dy * dy > 0.001 ? clamp(((localX - a.x) * dx + (localY - a.y) * dy) / (dx * dx + dy * dy), 0, 1) : 0;
           const distance = Math.hypot(localX - (a.x + dx * amount), localY - (a.y + dy * amount));
-          if (distance <= 10 && (!closest || distance < closest.distance)) {
+          if (distance <= lineReach && (!closest || distance < closest.distance)) {
             closest = { world: worldPoints[index].clone().lerp(worldPoints[index + 1], amount), distance };
           }
         }
