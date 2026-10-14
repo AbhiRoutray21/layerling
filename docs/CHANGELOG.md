@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+## 1.73.0
+
 - **The corner ruler no longer draws a fan of lines:** With the camera close above the ruler, looking along one of its arms, the part of the arm that lay behind the camera was drawn mirrored on the screen: a fan of fine lines that crossed the picture. Lines, ticks and numbers of the ruler (and the arrows and guide lines of its distances) are now cut off where they pass the camera, so only what is in front of it is drawn. Reported in the forum.
 - **Video list:** The second entry, a single video by HL ModTech, is now their whole playlist "Layerling Tutorials", so new videos in it appear without a release.
 - **A detailed SVG imports again (#340):** An SVG with one very detailed outline, such as a traced drawing, stopped with "Maximum call stack size exceeded" and did not come in. Building the body handed all its triangles over in one call, which has a size limit that thousands of points overrun; they are now added one at a time. Reported by @shanni1783.
