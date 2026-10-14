@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+## 1.72.1
+
 - **A sketch outline stretched by its frame lands on whole values:** Pulling a handle of the frame round a selected outline - a rectangle of 20, say - gave sizes like 24.83 although the snap grid was on. The handle stands off the edge it moves by a gap that follows the zoom; the pointer was snapped and the gap taken off afterwards, so the edge came out crooked. Now the edge itself lands on the grid. Reported in the forum.
 - **A reference point at the middle of a measurement:** Under the number of every tape measurement there is now a small crosshair button that puts a reference point in its middle: after a click on a round edge - the rim of a hole, even on an imported mesh - the centre of that circle, and for a diameter or any straight measurement the point halfway along it. A shape you drag snaps to it with its centre, so a new hole or magnet pocket can be placed exactly on an existing hole without typing numbers. Before, reference points could only be put on the centre, corners and edge middles of a body. Suggested in #323.
 - **The guide printout is easier to find:** The link to the whole guide for printing is now a button with a printer icon at the top of the chapter list and on the overview page.
