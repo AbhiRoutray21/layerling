@@ -18,9 +18,9 @@ import { tools } from "../../scripts/layerling-mcp-tools.mjs";
 import { GUIDE_CHAPTERS, GUIDE_SECTIONS, guideChapterForShape, guideHref, guideSectionForShape } from "@/lib/guideLinks";
 
 const root = join(__dirname, "..", "..");
-const LANGUAGES = ["de", "en"] as const;
+const LANGUAGES = ["de", "en", "nl"] as const;
 
-async function contextFor(language: "de" | "en") {
+async function contextFor(language: (typeof LANGUAGES)[number]) {
   return {
     language,
     messages: await loadMessages(language),
@@ -127,11 +127,12 @@ describe("guide footer", () => {
 });
 
 describe("guide content", () => {
-  it("has the same chapters in both languages", async () => {
-    const [de, en] = await Promise.all(LANGUAGES.map((language) => readChapters(language)));
+  it("has the same chapters in every language", async () => {
+    const [de, en, nl] = await Promise.all(LANGUAGES.map((language) => readChapters(language)));
     expect(de.length).toBeGreaterThan(10);
     expect(en.map((chapter: { number: string }) => chapter.number)).toEqual(de.map((chapter: { number: string }) => chapter.number));
-    for (const chapter of [...de, ...en]) {
+    expect(nl.map((chapter: { number: string }) => chapter.number)).toEqual(en.map((chapter: { number: string }) => chapter.number));
+    for (const chapter of [...de, ...en, ...nl]) {
       expect(chapter.title, chapter.file).not.toBe(chapter.slug);
       expect(chapter.summary, chapter.file).not.toBe("");
     }
@@ -148,14 +149,17 @@ describe("guide content", () => {
         expect(html, where).not.toMatch(/\{\{|\}\}/);
         for (const target of context.references.chapters) expect(slugs.has(target), `${where}: chapter ${target}`).toBe(true);
         for (const shot of context.references.shots) {
-          expect(existsSync(join(root, "docs", "guide", "images", language, `${shot}.webp`)), `${where}: picture ${shot}`).toBe(true);
+          // A language without pictures of its own shows the English ones.
+          const own = join(root, "docs", "guide", "images", language);
+          const pictures = existsSync(own) ? own : join(root, "docs", "guide", "images", "en");
+          expect(existsSync(join(pictures, `${shot}.webp`)), `${where}: picture ${shot}`).toBe(true);
         }
       }
     }
   });
 
-  it("shows the same pictures in both languages", async () => {
-    const shots = async (language: "de" | "en") => {
+  it("shows the same pictures in every language", async () => {
+    const shots = async (language: (typeof LANGUAGES)[number]) => {
       const names = new Set<string>();
       for (const chapter of await readChapters(language)) {
         for (const match of chapter.body.matchAll(/\(shot:([\w-]+)\)/g)) names.add(match[1]);
@@ -163,6 +167,7 @@ describe("guide content", () => {
       return [...names].sort();
     };
     expect(await shots("en")).toEqual(await shots("de"));
+    expect(await shots("nl")).toEqual(await shots("en"));
   });
 
   it("has a scene for every picture", async () => {
@@ -175,9 +180,9 @@ describe("guide content", () => {
     }
   });
 
-  it("names every MCP tool in the AI chapter, in both languages", async () => {
+  it("names every MCP tool in the AI chapter, in every language", async () => {
     for (const language of LANGUAGES) {
-      const chapter = (await readChapters(language)).find((entry: { slug: string }) => entry.slug === (language === "de" ? "ki-mit-mcp" : "ai-with-mcp"));
+      const chapter = (await readChapters(language)).find((entry: { slug: string }) => entry.slug === GUIDE_CHAPTERS.ai[language]);
       expect(chapter, language).toBeDefined();
       for (const tool of tools) expect(chapter.body, `${language}: ${tool.name}`).toContain(`\`${tool.name}\``);
     }

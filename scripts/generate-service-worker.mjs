@@ -46,7 +46,7 @@ export function precachePaths(relativeFiles) {
     if (path.startsWith("/_next/static/media/") && path.endsWith(".wasm")) continue;
     // The guide's pages are small text and worth having offline; its pictures
     // are not, and would triple the download for a page few people open.
-    if (/^\/(anleitung|guide)\/img\//.test(path)) continue;
+    if (/^\/(anleitung|guide|handleiding)\/img\//.test(path)) continue;
     paths.push(path === "/index.html" ? "/" : path);
   }
   return paths.sort();
