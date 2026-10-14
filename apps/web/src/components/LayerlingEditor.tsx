@@ -11293,6 +11293,7 @@ export function LayerlingEditor({
               : null}
           onMateFacePick={mateTool ? pickMateFace : pickHolePatternFace}
           onNoteAdd={addNote}
+          onAddReferencePoints={addReferencePoints}
           onNoteUpdate={updateNote}
           onNoteRemove={removeNote}
           onNoteModeChange={setNoteMode}

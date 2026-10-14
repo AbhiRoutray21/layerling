@@ -135,13 +135,14 @@ import {
 import { cuboidCorners, pointAlongAxes, type AlignAxes, type FrameCuboid } from "@/lib/alignFrame";
 import type { AlignAxis, AlignHandleStatus, AlignTarget, GridSize, MeasurementAccuracy, ShapeAsset, WorkplaneNote, WorkplaneNoteAnchor, WorkplaneShape, WorkplaneWorkspaceSettings } from "@/types/layerling";
 import { referencePoints } from "@/lib/workplaneNotes";
+import { measurementMiddle, type ReferencePosition } from "@/lib/referencePoints";
 import { planarFaceCentroid, planarFaceTriangles, type PivotPoint } from "@/lib/rotationPivot";
 import { outwardFaceNormal } from "@/lib/layFlat";
 import { OVERHANG_PLATE_TOLERANCE, overhangDownwardLimit } from "@/lib/overhangLimits";
 import { directionIsOwnShapeAxis, rotatedGeometryShapePatch, rotationPatchFromQuaternion as sharedRotationPatchFromQuaternion, signedDegrees } from "@/lib/geometryRotation";
 import type { CadModifierEdge } from "@/lib/cadModifierTypes";
 import { circleOfEdgePoints, pointAcrossCircle, pointOnCircle } from "@/lib/tapeCircle";
-import { RENDER_LAYER_HELPERS, sharedShapeGeometryCache, sharedEdgesGeometryCache, sharedShapeMaterialCache, type PointCardOffset, type ShapeRenderRecord, type ThreeState, type MoveDimensionSession, type NoteOverlayState, type TapePoint, type TapeAttachment, type TapeEdgeAttachment, type TapeModel, type TapeOverlayState, type TapeCandidate, type RotationHandleSide, type RotationHandleSides, type DragItem, quaternionForShape, projectToScreen, syncMoveDimensionWorldLines, syncTransformGuideWorldLines, tapeShapeDimensions, tapePointWorld, tapeEdgeWorldPoints, syncTapeOverlay, syncNoteOverlay, NoteOverlay, TapeOverlay, type RulerDimensionOverlayItem, type RulerDimensionOverlayState, syncRulerDimensionOverlay, RulerDimensionOverlay, type CornerRulerInstance, type CornerRulerOverlayState, syncCornerRulerToolOverlay, CornerRulerToolOverlay, syncOriginDimensionWorldLines, shapeCenter, shapeLocalExtents, projectShapeExtent, projectShapesExtent, type OriginDimensionFrame, setObjectRenderLayer, freezeStaticObjectMatrices, formatMeasure, findShapeObject, trimSharedShapeGeometryCache, releaseSharedShapeGeometry, trimSharedShapeMaterialCache, releaseSharedShapeMaterials, disposeMaterialResource, disposeChildren, disposeObject } from "@/components/workplane/ViewportOverlays";
+import { RENDER_LAYER_HELPERS, sharedShapeGeometryCache, sharedEdgesGeometryCache, sharedShapeMaterialCache, type PointCardOffset, type ShapeRenderRecord, type ThreeState, type MoveDimensionSession, type NoteOverlayState, type TapePoint, type TapeAttachment, type TapeEdgeAttachment, type TapeModel, type TapeOverlayState, type TapeCandidate, type RotationHandleSide, type RotationHandleSides, type DragItem, quaternionForShape, projectToScreen, syncMoveDimensionWorldLines, syncTransformGuideWorldLines, tapeShapeDimensions, tapePointWorld, tapeEdgeWorldPoints, tapeSegmentWorldPoints, syncTapeOverlay, syncNoteOverlay, NoteOverlay, TapeOverlay, type RulerDimensionOverlayItem, type RulerDimensionOverlayState, syncRulerDimensionOverlay, RulerDimensionOverlay, type CornerRulerInstance, type CornerRulerOverlayState, syncCornerRulerToolOverlay, CornerRulerToolOverlay, syncOriginDimensionWorldLines, shapeCenter, shapeLocalExtents, projectShapeExtent, projectShapesExtent, type OriginDimensionFrame, setObjectRenderLayer, freezeStaticObjectMatrices, formatMeasure, findShapeObject, trimSharedShapeGeometryCache, releaseSharedShapeGeometry, trimSharedShapeMaterialCache, releaseSharedShapeMaterials, disposeMaterialResource, disposeChildren, disposeObject } from "@/components/workplane/ViewportOverlays";
 
 const WORKPLANE_WIDTH = 200;
 const WORKPLANE_DEPTH = 140;
@@ -397,6 +398,8 @@ type WorkplaneViewportProps = {
   mateFacePick?: { shapeIds: string[] } | null;
   onMateFacePick?: (pick: LayFlatPick | null) => void;
   onNoteAdd?: (note: { x: number; y: number; z: number; anchor?: WorkplaneNoteAnchor }) => string | null;
+  /** Puts reference points in the scene; answers with the ids it made (none if they are there already). */
+  onAddReferencePoints?: (positions: ReferencePosition[]) => string[];
   onNoteUpdate?: (id: string, patch: Partial<WorkplaneNote>, transient?: boolean) => void;
   onNoteRemove?: (id: string) => void;
   onNoteModeChange?: (active: boolean) => void;
@@ -2959,6 +2962,7 @@ export function WorkplaneViewport({
   mateFacePick = null,
   onMateFacePick,
   onNoteAdd,
+  onAddReferencePoints,
   onNoteUpdate,
   onNoteRemove,
   onNoteModeChange,
@@ -7896,6 +7900,21 @@ export function WorkplaneViewport({
     [storeTapeModel],
   );
 
+  /** A reference point in the middle of a measurement: the centre of a round edge or of a diameter (#323). */
+  const markTapeMiddle = useCallback(
+    (segmentId: string) => {
+      const state = threeRef.current;
+      if (!state || !onAddReferencePoints) return;
+      const worldPoints = tapeSegmentWorldPoints(state, tapeModelRef.current, segmentId);
+      const circle = worldPoints.length >= 4 ? circleOfEdgePoints(worldPoints) : null;
+      const middle = circle
+        ? { x: circle.center.x, y: circle.center.y, z: circle.center.z }
+        : measurementMiddle(worldPoints.map((point) => ({ x: point.x, y: point.y, z: point.z })));
+      if (middle) onAddReferencePoints([middle]);
+    },
+    [onAddReferencePoints],
+  );
+
   const handleTapeSegmentPointerDown = useCallback(
     (event: ReactPointerEvent<SVGElement>, segmentId: string) => {
       if (event.button !== 0) {
@@ -8521,6 +8540,7 @@ export function WorkplaneViewport({
               onPointPointerMove={handleTapePointPointerMove}
               onPointPointerUp={handleTapePointPointerUp}
               onSegmentPointerDown={handleTapeSegmentPointerDown}
+              onMarkMiddle={onAddReferencePoints ? markTapeMiddle : undefined}
             />
           ) : null}
           {!workplaneMode && !splitActive && rulerDimensionOverlay && rulerDimensionOverlay.items.length > 0 ? (

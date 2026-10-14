@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **A reference point at the middle of a measurement:** Under the number of every tape measurement there is now a small crosshair button that puts a reference point in its middle: after a click on a round edge - the rim of a hole, even on an imported mesh - the centre of that circle, and for a diameter or any straight measurement the point halfway along it. A shape you drag snaps to it with its centre, so a new hole or magnet pocket can be placed exactly on an existing hole without typing numbers. Before, reference points could only be put on the centre, corners and edge middles of a body. Suggested in #323.
+- **The guide printout is easier to find:** The link to the whole guide for printing is now a button with a printer icon at the top of the chapter list and on the overview page.
 ## 1.72.0
 
 - **The whole guide on one page, to print:** Every chapter of the guide could be printed on its own, but not the guide as a whole. A new page in each language - the link **Whole guide, to print** under the chapter list - shows all chapters one after the other with a table of contents, each chapter starting on a new page, the pictures included, in light colours whatever theme you use. Press Ctrl+P (or the Print button) to print it or to save it as a PDF; to print only a part, choose its page numbers in the print dialog. The page is not stored for offline use and not offered to search engines.

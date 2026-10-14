@@ -1815,6 +1815,7 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "camera.tapeWholeEdgesHint": "Ganze Kanten messen: Ein Klick auf eine Kante misst sie ganz, bei einem Kreis den Umfang. Ausgeschaltet setzt der Klick einen Punkt auf die Kante, für den Durchmesser oder jede andere Strecke. Mit Alt gilt es für einen Klick umgekehrt. Auf einem Kreis rastet der Punkt gegenüber ein, so dass der Durchmesser genau herauskommt.",
   "camera.deleteMeasurement": "Maß entfernen",
   "camera.deleteAllMeasurements": "Alle Maße entfernen",
+  "camera.tapeMarkMiddle": "Mitte als Bezugspunkt markieren",
   "camera.sectionView": "Schnittansicht",
   "camera.sectionActive": "Schnitt aktiv",
   "camera.sectionInactive": "Schnitt inaktiv",

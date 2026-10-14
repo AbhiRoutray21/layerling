@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "title": {
+      "de": "Bezugspunkt in der Mitte einer Messung",
+      "en": "A reference point at the middle of a measurement"
+    },
+    "body": {
+      "de": "Unter der Zahl jeder Maßband-Messung sitzt jetzt ein kleiner Fadenkreuz-Knopf. Er setzt einen Bezugspunkt in die Mitte der Messung: nach einem Klick auf den Rand einer runden Bohrung in ihren Mittelpunkt, auch bei einem importierten Netz. Eine Form, die du ziehst, rastet mit ihrer Mitte an dem Punkt ein, und so sitzt eine neue Aussparung genau auf einer vorhandenen, ohne Zahlen einzutippen.",
+      "en": "Under the number of every tape measurement there is now a small crosshair button. It puts a reference point in the middle of the measurement: after a click on the rim of a round hole, in its centre, on an imported mesh too. A shape you drag snaps to the point with its centre, so a new pocket sits exactly on an existing hole without typing numbers."
+    }
+  }
+]

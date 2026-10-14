@@ -8235,6 +8235,31 @@ html[data-theme="dark"] .inspector-bundle-note {
   transform: translate(-50%, -50%);
 }
 
+/* The button under a measurement that puts a reference point in its middle (#323). */
+.tape-mark {
+  position: absolute;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  color: #3a2816;
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid rgba(224, 208, 190, 0.96);
+  border-radius: 999px;
+  box-shadow: 0 1px 4px rgba(58, 40, 20, 0.12);
+  cursor: pointer;
+  pointer-events: auto;
+  transform: translate(-50%, -50%);
+}
+
+.tape-mark:hover,
+.tape-mark:focus-visible {
+  color: #ad5900;
+  border-color: #ad5900;
+}
+
 /* --- Winkellineal-Werkzeug ---------------------------------------------
    Reine Bildschirm-Darstellung wie das Massband, kein Three.js-Objekt und
    kein Formen-Katalog-Eintrag - der Griff ist immer direkt ziehbar, ohne

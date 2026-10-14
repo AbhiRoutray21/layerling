@@ -51,6 +51,13 @@ async function readEnvironment() {
   return { ...file, ...process.env };
 }
 
+const PRINTER_ICON = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6"/><rect x="6" y="14" width="12" height="8" rx="1"/></svg>';
+
+/** The link to the whole guide for printing, with a printer in front: in the chapter list and on the overview. */
+function printLink(strings, className = "") {
+  return `<p class="print-link${className ? ` ${className}` : ""}"><a href="/${strings.dir}/${PRINT_ALL_PAGE}">${PRINTER_ICON}<span>${escapeHtml(strings.printAll)}</span></a></p>`;
+}
+
 /** The page with every chapter in a row, for printing; one in each guide folder. */
 export const PRINT_ALL_PAGE = "print-all.html";
 
@@ -421,7 +428,11 @@ footer.note { max-width: 1100px; margin: 0 auto; padding: 0 16px 12px; color: va
   .bar-inner { flex-wrap: wrap; }
   .guide-search { order: 5; flex: 1 1 100%; }
 }
-.print-link { margin: 14px 0 0; padding: 0 10px; font-size: 13px; line-height: 1.4; }
+.print-link { margin: 0 0 14px; }
+.print-link a, nav.chapters .print-link a { display: flex; align-items: center; gap: 9px; padding: 9px 12px; border: 1px solid var(--accent); border-radius: 8px; background: var(--tint); color: var(--accent); font-weight: 700; line-height: 1.3; text-decoration: none; }
+.print-link a:hover, .print-link a:focus-visible, nav.chapters .print-link a:hover, nav.chapters .print-link a:focus-visible { background: var(--accent); color: var(--accent-ink); }
+.print-link svg { flex: none; }
+.print-link.in-page { margin: 0 0 22px; max-width: 360px; }
 .print-actions { margin: 0 0 24px; }
 .print-actions button { padding: 8px 16px; border: 0; border-radius: 8px; background: var(--accent); color: var(--accent-ink); font: inherit; font-weight: 700; cursor: pointer; }
 .print-chapter { margin-top: 56px; padding-top: 8px; border-top: 1px solid var(--edge); }
@@ -632,7 +643,7 @@ function pageShell({ language, title, description, path, alternates, chapters, c
       <a class="button" id="open-editor" href="/">${escapeHtml(strings.openEditor)}</a>
     </div><p class="editor-elsewhere" id="editor-elsewhere" role="status" hidden>${escapeHtml(strings.editorElsewhere)}</p></header>
     <div class="shell">
-      <nav class="chapters" aria-label="${escapeHtml(strings.chapters)}"><h2>${escapeHtml(strings.chapters)}</h2><ol>${nav}</ol><p class="print-link"><a href="/${strings.dir}/${PRINT_ALL_PAGE}">${escapeHtml(strings.printAll)}</a></p></nav>
+      <nav class="chapters" aria-label="${escapeHtml(strings.chapters)}"><h2>${escapeHtml(strings.chapters)}</h2>${printLink(strings)}<ol>${nav}</ol></nav>
       <main>
 ${body}
       </main>
@@ -828,7 +839,7 @@ export async function buildGuide({ log = console.log } = {}) {
     const indexPage = pageShell({
       language, title: strings.site, description: strings.overviewLead, path: indexPath,
       alternates: indexAlternates, chapters, current: "", footer,
-      body: `<h1>${escapeHtml(strings.site)}</h1>\n<p class="lead">${escapeHtml(strings.overviewLead)}</p>\n<ul class="cards">${cards}</ul>`,
+      body: `<h1>${escapeHtml(strings.site)}</h1>\n<p class="lead">${escapeHtml(strings.overviewLead)}</p>\n${printLink(strings, "in-page")}\n<ul class="cards">${cards}</ul>`,
       languageLinks: languageLinksFor(null),
     });
     await writeFile(join(outputRoot, "index.html"), indexPage);
