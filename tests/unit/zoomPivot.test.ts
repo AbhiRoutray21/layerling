@@ -18,9 +18,22 @@ describe("keeping the pivot ahead of the camera while zooming at nothing", () =>
     expect(next.z).toBeCloseTo(30 - ZOOM_PIVOT_REACH_MM, 6);
   });
 
-  it("keeps the pivot inside the box it may be in, and stays put where that would not help", () => {
+  it("keeps the pivot inside the box it may be in, cutting the distance short along the line of sight", () => {
     const edge = pivotKeptAhead(v(0, 20, -80), v(0, 20, -90), v(0, 0, -1), ZOOM_PIVOT_REACH_MM, limits)!;
     expect(edge.z).toBe(-110);
     expect(pivotKeptAhead(v(0, 20, -109), v(0, 20, -110), v(0, 0, -1), ZOOM_PIVOT_REACH_MM, limits)).toBeNull();
   });
+
+  it("never turns the view: the pivot stays on the line of sight, also near the back edge of a camera looking down a little", () => {
+    const camera = v(10, 25, -95);
+    const forward = v(0.05, -0.3, -0.95).normalize();
+    const next = pivotKeptAhead(camera, v(10, 25, -99), forward, ZOOM_PIVOT_REACH_MM, limits)!;
+    expect(next).not.toBeNull();
+    const direction = next.clone().sub(camera).normalize();
+    expect(direction.x).toBeCloseTo(forward.x, 9);
+    expect(direction.y).toBeCloseTo(forward.y, 9);
+    expect(direction.z).toBeCloseTo(forward.z, 9);
+    expect(next.z).toBeGreaterThanOrEqual(-limits.halfDepth - 1e-9);
+  });
+
 });
