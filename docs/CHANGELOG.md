@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+## 1.72.3
+
 - **Reference points: delete them all, and cards that behave:** Marking the centre, corners or edge middles of a body leaves several points, and deleting them one by one was cumbersome. **Delete all** in a point card, and "Delete all reference points" in the right-click menu, take them all away in one step (it can be undone). The cards no longer move as a group: each is dragged away on its own, and the card you touched last stands in front, so a card can no longer end up behind another. A point whose card was never moved keeps the place the shared offset had before. Reported by @rondlh (#329).
 - **A wrapped shape is not wrapped a second time:** "Wrap around a cylinder" could be repeated on a shape that was wrapped already, and the second wrapping gave a mesh of an unexpected size and shape. The card is not offered for a wrapped shape any more, and the AI tool answers that the shape is wrapped already; undo the wrapping, or wrap the flat original again. Reported by @rondlh (#329).
 - **The edge tool names chamfer and fillet in your language in its messages:** "Select one solid to chamfer" and "Preparing fillet edges" got the word as a raw English identifier in every language, so a German message read "Wähle einen Körper für chamfer". They take the name of the tool as the interface spells it now. Pointed out by @cyryllo in the Polish translation (#307).
