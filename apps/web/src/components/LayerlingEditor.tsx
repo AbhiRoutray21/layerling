@@ -5832,7 +5832,7 @@ export function LayerlingEditor({
     setShellTool(null);
     if (refuseLockedSelection()) return;
     if (selectedShapes.length !== 1 || !selectedShape || selectedShape.locked || selectedShape.hole || isNonSolidShapeKind(selectedShape.kind)) {
-      setNotice(t("status.selectOneSolid", { kind }));
+      setNotice(t("status.selectOneSolid", { kind: t(kind === "chamfer" ? "editor.tool.chamfer" : "editor.tool.fillet") }));
       return;
     }
     if (selectedShape.groupOperation === "bundle") {
@@ -5930,7 +5930,7 @@ export function LayerlingEditor({
       preview: null,
       componentPreviews: [],
     });
-    setNotice(t("status.preparingEdges", { kind }), true);
+    setNotice(t("status.preparingEdges", { kind: t(kind === "chamfer" ? "editor.tool.chamfer" : "editor.tool.fillet") }), true);
     const parts: CadModifierMeshPart[] = partInputs.map((part) => {
       if (part.brep) return { brep: part.brep, brepTransform: part.brepTransform, hole: Boolean(part.shape.hole) };
       if (part.thread) return cadModifierThreadMeshPart(part.thread, part.profileMesh, sendStepMeshes, Boolean(part.shape.hole));
