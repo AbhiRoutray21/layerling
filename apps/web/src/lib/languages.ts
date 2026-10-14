@@ -10,7 +10,7 @@
  *
  * To add a language, see docs/TRANSLATING.md.
  */
-export const LANGUAGES = ["en", "de"] as const;
+export const LANGUAGES = ["en", "de", "pl"] as const;
 export type Language = (typeof LANGUAGES)[number];
 export const DEFAULT_LANGUAGE: Language = "en";
 
@@ -137,6 +137,42 @@ export const LANGUAGE_INFO: Readonly<Record<Language, LanguageInfo>> = {
       languageMenu: "Sprache",
       search: "Anleitung durchsuchen",
       searchNothing: "Nichts gefunden.",
+    },
+  },
+  // Polish: added as a language that is fetched when chosen, not complete yet (missing sentences show in English).
+  // The README and the guide stay English until they are translated, so readme and quickstartAnchor point at the English ones.
+  pl: {
+    name: "Polski",
+    htmlLang: "pl",
+    numberLocale: "pl-PL",
+    // Polish quotation marks: low opening, high closing (the same pair German uses).
+    quotes: ["„", "”"],
+    guideDir: "instrukcja",
+    communityUrl: GITHUB_DISCUSSIONS,
+    readme: "README.md",
+    quickstartAnchor: "windows-quickstart",
+    legal: { imprint: "Nota prawna", privacy: "Polityka prywatności" },
+    // Polish keyboards label most keys in English; only the mouse actions get Polish names.
+    keyNames: { Click: "Klik", RightClick: "Prawy klik", Drag: "Przeciągnij" },
+    asciiUmlauts: false,
+    complete: false,
+    guide: {
+      site: "Instrukcja layerling",
+      home: "Instrukcja",
+      openEditor: "Otwórz edytor",
+      backToEditor: "Wróć do edytora",
+      editorElsewhere: "Edytor jest już otwarty w innej karcie - po prostu do niej przejdź.",
+      chapters: "Rozdziały",
+      onThisPage: "Na tej stronie",
+      previous: "Poprzedni rozdział",
+      next: "Następny rozdział",
+      overviewLead: "Wszystko, co potrafi layerling, krok po kroku. Obrazki pochodzą z działającego programu i są odnawiane przy każdej wersji.",
+      sourceNote: "Ta instrukcja rośnie razem z programem. Jeśli czegoś brakuje albo coś się nie zgadza, napisz w",
+      forum: "dyskusjach",
+      notTranslated: "Ten rozdział nie jest jeszcze przetłumaczony na polski. Poniżej tekst angielski.",
+      languageMenu: "Język",
+      search: "Szukaj w instrukcji",
+      searchNothing: "Nic nie znaleziono.",
     },
   },
 };
