@@ -265,8 +265,8 @@ export type HistoryProjectRequest = {
   /** Das Bild der Arbeitsflaeche in diesem Stand, fuer die Karte in der Uebersicht. */
   thumbnailDataUrl: string | null;
 };
-type ExportFormat = "stl" | "3mf" | "obj" | "step" | "svg" | "png" | "lyl";
-type DirectExportFormat = Exclude<ExportFormat, "step" | "png" | "lyl">;
+type ExportFormat = "stl" | "3mf" | "obj" | "step" | "svg" | "png" | "lyl" | "drawing";
+type DirectExportFormat = Exclude<ExportFormat, "step" | "png" | "lyl" | "drawing">;
 type ViewImageOptions = { plate: boolean; transparent: boolean };
 type LylHistoryLimit = EditorHistoryExportLimit;
 /** "file" writes into the file the design is tied to (asking for one the first time), "fileAs" always asks (#251). */
@@ -2500,6 +2500,7 @@ export function LayerlingEditor({
     setOpenGroups(levels);
   }, []);
   const [stepExporting, setStepExporting] = useState(false);
+  const [drawingExporting, setDrawingExporting] = useState(false);
   const [lylExporting, setLylExporting] = useState(false);
   const [alignMode, setAlignMode] = useState(false);
   const [alignAnchorId, setAlignAnchorId] = useState<string | null>(null);
@@ -9689,6 +9690,38 @@ export function LayerlingEditor({
       .catch((error: unknown) => failNotice(label, error));
   }, [bedPrinter, exportSource, projectId, projectName]);
 
+  const exportDrawingDesign = useCallback(async (exportName: string, format: "svg" | "pdf") => {
+    if (drawingExporting) return;
+    const source = exportSource();
+    // Loose holes affect the visible part even when only that part is selected.
+    const scopedShapes = source.selection
+      ? [...source.shapes, ...shapes.filter((shape) => shape.hole && !source.shapes.some((selected) => selected.id === shape.id))]
+      : source.shapes;
+    const { visible, hiddenNote } = visibleExportShapes(scopedShapes);
+    if (!visible.some((shape) => !shape.hole && !isNonSolidShapeKind(shape.kind))) {
+      setNotice(hiddenNote ? t("status.exportOnlyHidden") : t(source.selection ? "status.selectSolidBeforeExport" : "status.addSolidBeforeExport"));
+      return;
+    }
+    setDrawingExporting(true);
+    setNotice(t("status.buildingDrawing"), true);
+    try {
+      const { generateDrawing, drawingToSvg, drawingToPdf } = await import("@/lib/drawingExport");
+      const { meshes, holeCutsFailed } = await exportBodiesWithLooseHoles(visible);
+      if (holeCutsFailed) throw new Error(t("status.drawingHoleCutFailed"));
+      const title = exportName.trim() || projectName;
+      const drawing = generateDrawing(meshes, title);
+      const filename = projectExportFileName(`${title} drawing`, format);
+      if (format === "svg") await downloadTextFile(filename, drawingToSvg(drawing), "image/svg+xml;charset=utf-8");
+      else await downloadBlobFile(filename, new Blob([drawingToPdf(drawing) as BlobPart], { type: "application/pdf" }));
+      setTopPanel(null);
+      setNotice(t("status.exportedDrawing", { format: format.toUpperCase() }) + hiddenNote);
+    } catch (error) {
+      setNotice(error instanceof Error ? localizedError(error.message) : t("status.drawingFailed"), true);
+    } finally {
+      setDrawingExporting(false);
+    }
+  }, [drawingExporting, exportSource, projectName, shapes]);
+
   const exportStepDesign = useCallback(async (exportName: string) => {
     if (stepExporting) {
       return;
@@ -11454,6 +11487,8 @@ export function LayerlingEditor({
           stlFileName={topPanel === "export" ? linkedStlFile(projectId ?? "")?.name ?? null : null}
           onExportLyl={exportLylDesign}
           onExportStep={exportStepDesign}
+          onExportDrawing={exportDrawingDesign}
+          drawingExporting={drawingExporting}
           onExportImage={exportViewImage}
           sharedProjectsEnabled={sharedProjectsEnabled}
           lylExporting={lylExporting}
@@ -12879,6 +12914,8 @@ function TopActionPanel({
   stlFileName = null,
   onExportLyl,
   onExportStep,
+  onExportDrawing,
+  drawingExporting,
   onExportImage,
   sharedProjectsEnabled,
   lylExporting,
@@ -12908,6 +12945,8 @@ function TopActionPanel({
   stlFileName?: string | null;
   onExportLyl: (exportName: string, historyLimit: LylHistoryLimit, target?: LylExportTarget) => void;
   onExportStep: (exportName: string) => void;
+  onExportDrawing: (exportName: string, format: "svg" | "pdf") => void;
+  drawingExporting: boolean;
   onExportImage: (exportName: string, options: ViewImageOptions) => void;
   sharedProjectsEnabled: boolean;
   lylExporting: boolean;
@@ -12921,6 +12960,7 @@ function TopActionPanel({
   const [keepSvgPage, setKeepSvgPage] = useState(false);
   useEffect(() => setKeepSvgPage(readKeepSvgPage()), []);
   const [exportFormat, setExportFormat] = useState<ExportFormat>("stl");
+  const [drawingFormat, setDrawingFormat] = useState<"svg" | "pdf">("pdf");
   const [exportName, setExportName] = useState(projectName);
   const previousProjectNameRef = useRef(projectName);
   // Starts at the history setting from the workspace settings, so a project
@@ -12951,7 +12991,7 @@ function TopActionPanel({
   });
   const [printVolume, setPrintVolume] = useState<ExportSolidVolume | null>(null);
   const [imageOptions, setImageOptions] = useState<ViewImageOptions>({ plate: true, transparent: false });
-  const showPrintEstimate = panel === "export" && exportFormat !== "svg" && exportFormat !== "png" && exportFormat !== "lyl" && shapeCount > 0;
+  const showPrintEstimate = panel === "export" && exportFormat !== "drawing" && exportFormat !== "svg" && exportFormat !== "png" && exportFormat !== "lyl" && shapeCount > 0;
   // A picture shows the view as it is, not the selection, so the notes about what goes along do not apply.
   const exportsBodies = exportFormat !== "lyl" && exportFormat !== "png";
   useEffect(() => {
@@ -12984,6 +13024,11 @@ function TopActionPanel({
   const title = panel === "export" ? t("panel.export") : t("panel.import");
 
   const exportDetails: Record<ExportFormat, { label: string; description: string; note: string }> = {
+    drawing: {
+      label: t("export.drawing.label"),
+      description: t("export.drawing.description"),
+      note: t("export.drawing.note"),
+    },
     stl: {
       label: "STL",
       description: t("export.stl.description"),
@@ -13022,7 +13067,9 @@ function TopActionPanel({
   };
   const selectedExport = exportDetails[exportFormat];
   const runSelectedExport = () => {
-    if (exportFormat === "step") onExportStep(exportName);
+    if (drawingExporting || stepExporting || lylExporting) return;
+    if (exportFormat === "drawing") onExportDrawing(exportName, drawingFormat);
+    else if (exportFormat === "step") onExportStep(exportName);
     else if (exportFormat === "png") onExportImage(exportName, imageOptions);
     else if (exportFormat === "lyl") onExportLyl(exportName, lylHistoryLimit, lylFileAccessSupported() ? "fileAs" : "download");
     else onExport(exportFormat, exportName);
@@ -13107,10 +13154,10 @@ function TopActionPanel({
                 onChange={(event) => setExportName(event.target.value)}
                 onFocus={(event) => event.currentTarget.select()}
                 onKeyDown={(event) => {
-                  if (event.key === "Enter" && (shapeCount > 0 || !exportsBodies) && !stepExporting && !lylExporting) runSelectedExport();
+                  if (event.key === "Enter" && (shapeCount > 0 || !exportsBodies) && !stepExporting && !lylExporting && !drawingExporting) runSelectedExport();
                 }}
               />
-              <span>.{exportFormat}</span>
+              <span>.{exportFormat === "drawing" ? drawingFormat : exportFormat}</span>
             </div>
           </section>
 
@@ -13126,7 +13173,7 @@ function TopActionPanel({
                   : t(scopeLabel === "selected" ? "export.scopeSelected" : "export.scopeTotal", { count: shapeCount })}</span>
             </div>
             <div className="export-format-slider" data-format={exportFormat} role="radiogroup" aria-label={t("export.formatLabel")}>
-              {(["stl", "3mf", "obj", "step", "svg", "png", "lyl"] as const).map((format) => (
+              {(["stl", "3mf", "obj", "step", "svg", "png", "lyl", "drawing"] as const).map((format) => (
                 <button
                   key={format}
                   type="button"
@@ -13140,6 +13187,18 @@ function TopActionPanel({
               ))}
             </div>
           </section>
+
+          {exportFormat === "drawing" ? (
+            <section className="export-setting-section">
+              <label>
+                <strong>{t("export.drawing.fileFormat")}</strong>{" "}
+                <select aria-label={t("export.drawing.fileFormat")} value={drawingFormat} onChange={(event) => setDrawingFormat(event.target.value as "svg" | "pdf")}>
+                  <option value="pdf">PDF</option>
+                  <option value="svg">SVG</option>
+                </select>
+              </label>
+            </section>
+          ) : null}
 
           {exportsBodies && selectionLeavesOut ? (
             <div className="export-holes-only-warning export-selection-note" role="status">
@@ -13281,17 +13340,19 @@ function TopActionPanel({
                   className="export-shared-button"
                   type="button"
                   onClick={() => onExportLyl(exportName, lylHistoryLimit, "shared")}
-                  disabled={lylExporting || stepExporting}
+                  disabled={lylExporting || stepExporting || drawingExporting}
                 >
                   <CloudUpload />
                   <span>{t("export.saveToShared")}</span>
                 </button>
               ) : null}
-              <button className="export-primary-button" onClick={runSelectedExport} disabled={(shapeCount === 0 && exportsBodies) || stepExporting || lylExporting}>
+              <button className="export-primary-button" onClick={runSelectedExport} disabled={(shapeCount === 0 && exportsBodies) || stepExporting || lylExporting || drawingExporting}>
                 <Download />
                 {exportFormat === "lyl" ? (lylExporting ? t("export.savingProject") : t("export.saveProject")) : null}
                 <span hidden={exportFormat === "lyl"}>
-                {stepExporting && exportFormat === "step"
+                {drawingExporting && exportFormat === "drawing"
+                  ? t("status.buildingDrawing")
+                  : stepExporting && exportFormat === "step"
                   ? t("export.buildingStep")
                   : t("export.run", { format: selectedExport.label })}
                 </span>
