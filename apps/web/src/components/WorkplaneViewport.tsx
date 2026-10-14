@@ -168,6 +168,11 @@ const CAMERA_MAX_DISTANCE = 9000;
  * the pointer (the middle of the screen for the buttons), or of the plate
  * when no body is there. The picture stays put, and the zoom can go on right
  * up to what is under the pointer, as close as the flat view enlarges.
+ *
+ * Where the pivot would lie outside what the camera clamp allows - the plate
+ * is a hit for a ray close to the horizon thousands of millimetres out - it
+ * stays put: the clamp pulls it back and carries the camera along, and the
+ * picture jumps far out (the forum, 14.10.2026).
  */
 function movePivotToDepthUnder(state: ThreeState, ndcX: number, ndcY: number) {
   if (!(state.camera instanceof THREE.PerspectiveCamera)) return;
@@ -184,7 +189,10 @@ function movePivotToDepthUnder(state: ThreeState, ndcX: number, ndcY: number) {
   const forward = state.camera.getWorldDirection(new THREE.Vector3());
   const depth = point.clone().sub(state.camera.position).dot(forward);
   if (!(depth > 0) || depth > CAMERA_MAX_DISTANCE) return;
-  state.controls.target.copy(state.camera.position).addScaledVector(forward, depth);
+  const target = state.camera.position.clone().addScaledVector(forward, depth);
+  const limits = state.pivotLimits;
+  if (limits && (Math.abs(target.x) > limits.halfWidth || Math.abs(target.z) > limits.halfDepth || target.y < CAMERA_MIN_TARGET_Y || target.y > CAMERA_MAX_TARGET_Y)) return;
+  state.controls.target.copy(target);
 }
 
 /**
@@ -9060,6 +9068,7 @@ function orbitCameraByDrag(state: ThreeState, dx: number, dy: number) {
 }
 
 function constrainCamera(state: ThreeState, workspace: WorkspaceSettings) {
+  state.pivotLimits = { halfWidth: workspace.width / 2, halfDepth: workspace.depth / 2 };
   const target = state.controls.target;
   const previousTarget = target.clone();
   target.x = clamp(target.x, -workspace.width / 2, workspace.width / 2);

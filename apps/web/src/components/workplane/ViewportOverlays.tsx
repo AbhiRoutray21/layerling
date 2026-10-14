@@ -51,6 +51,8 @@ export type ShapeRenderRecord = {
 };
 
 export type ThreeState = {
+  /** How far the orbit pivot may travel (the plate), as the camera clamp last saw it; the wheel zoom stays within it. */
+  pivotLimits?: { halfWidth: number; halfDepth: number };
   /** Colour set on top of light/dark; only the canvas reads it. */
   palette?: AppThemePalette;
   renderer: THREE.WebGLRenderer;

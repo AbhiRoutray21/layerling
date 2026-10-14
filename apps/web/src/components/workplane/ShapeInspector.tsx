@@ -4,7 +4,7 @@ import { displayY, displayYTurn, insideZ, insideZTurn } from "@/lib/displayAxes"
 import { GuideHelpLink } from "@/components/GuideHelpLink";
 import { guideChapterForShape, guideSectionForShape } from "@/lib/guideLinks";
 import { ChevronDown, ChevronUp, Cylinder, Eye, EyeOff, FolderOpen, Grid3x3, Layers, Lock, Minus, Pencil, Plus, RotateCcw, Split, Tags, Unlock } from "lucide-react";
-import { Fragment, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type Dispatch, type ReactNode, type SetStateAction } from "react";
+import { Fragment, createContext, useCallback, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type Dispatch, type ReactNode, type SetStateAction } from "react";
 import {
   DEFAULT_GEAR_HELIX_ANGLE,
   DEFAULT_GEAR_HELIX_QUALITY,
@@ -190,7 +190,7 @@ import {
   springWireLimits,
 } from "@/lib/springGeometry";
 import { regularPolygonAspect } from "@/lib/regularPolygonFootprint";
-import { DEFAULT_TAPER_DIMENSION_MAX, MAX_HIGH_RESOLUTION_SIDES, MAX_HIGH_RESOLUTION_STEPS, customSnapGridLabel, shapeDimensionLimit, snapGridOptions } from "@/lib/workplaneSettings";
+import { DEFAULT_TAPER_DIMENSION_MAX, MAX_HIGH_RESOLUTION_SIDES, MAX_HIGH_RESOLUTION_STEPS, customSnapGridLabel, shapeDimensionLimit, snapGridOptions, snapGridStep } from "@/lib/workplaneSettings";
 import type { BentTubeInnerProfile, BentTubeProfile, CustomSnapGrid, GearType, GridSize, MeasurementAccuracy, ShapeCustomization, SketchProfile, SketchStroke, SketchStrokeAlign, SketchStrokeJoin, ThreadHead, ThreadProfile, ThreadRole, WorkplaneShape, WorkplaneWorkspaceSettings } from "@/types/layerling";
 import { selectWholeValue } from "@/lib/numberField";
 import { formulaMatchesValue, formulaToRemember, withFieldFormula, type FieldFormulas } from "@/lib/fieldFormulas";
@@ -2005,6 +2005,12 @@ function getShapeProperties(shape: WorkplaneShape, onUpdate: ShapeInspectorUpdat
   });
 }
 
+/**
+ * The snap step in mm (0 when the grid is off). A length slider dragged with the mouse snaps to it, so a
+ * height comes out in whole millimetres instead of 0.81 steps of one pixel; typing and the arrow keys stay exact.
+ */
+const SliderSnapContext = createContext(0);
+
 export function ShapeInspector({
   shape,
   snap,
@@ -2280,6 +2286,7 @@ export function ShapeInspector({
   }, [editingName]);
 
   return (
+    <SliderSnapContext.Provider value={snapGridStep(snap)}>
     <aside
       ref={inspectorRef}
       className={`shape-inspector ${isSketchRevolve ? "sketch-revolve-inspector" : ""} ${shape.kind === "gear" ? "gear-inspector" : ""} ${minimized ? "minimized" : ""} ${movable.moved ? "floating" : ""} ${movable.dragging ? "moving" : ""}`}
@@ -2764,6 +2771,7 @@ export function ShapeInspector({
         </>
       ) : null}
     </aside>
+    </SliderSnapContext.Provider>
   );
 }
 
@@ -3650,6 +3658,8 @@ function RangeProperty({
   onInteractionActiveChange,
 }: RangePropertyConfig & { workspace: WorkplaneWorkspaceSettings; disabled?: boolean; onReset?: () => void; formula?: string; onFormula?: (text: string | null | undefined) => void; onInteractionActiveChange?: (active: boolean) => void }) {
   const holdInteraction = useInteractionHold(onInteractionActiveChange);
+  const snapStepMm = useContext(SliderSnapContext);
+  const draggingSliderRef = useRef(false);
   const allowsAboveSliderMax = ["length", "width", "height", "starOuterSize", "starInnerSize", "crescentThickness", "honeycombCellSize", "honeycombWallThickness", "honeycombFrameWidth", "bentTubeSize", "bentTubeBendRadius"].includes(id) || id.endsWith("Length") || id.endsWith("Width");
   const isLength = propertyUsesLengthUnit(id);
   const accuracy = workspace.accuracy;
@@ -3691,7 +3701,12 @@ function RangeProperty({
     holdInteraction(false);
   };
   const handleSliderChange = (nextValue: number) => {
-    const next = clamp(Number.isFinite(nextValue) ? nextValue : controlMin, controlMin, controlMax);
+    let next = clamp(Number.isFinite(nextValue) ? nextValue : controlMin, controlMin, controlMax);
+    // Dragged with the mouse on a long slider: onto the snap grid (not for a short one, which the grid would only make coarse).
+    if (draggingSliderRef.current && isLength && snapStepMm > 0 && max - min >= snapStepMm * 20) {
+      const snappedMm = Math.round(toModelValue(next) / snapStepMm) * snapStepMm;
+      next = clamp(millimetersToDisplay(clamp(snappedMm, min, max), workspace), controlMin, controlMax);
+    }
     onChange(clamp(toModelValue(next), min, max));
     setDraft(formatShown(next));
   };
@@ -3741,9 +3756,18 @@ function RangeProperty({
           disabled={disabled}
           onFocus={() => holdInteraction(true)}
           onBlur={() => holdInteraction(false)}
-          onPointerDown={() => holdInteraction(true)}
-          onPointerUp={() => holdInteraction(false)}
-          onPointerCancel={() => holdInteraction(false)}
+          onPointerDown={() => {
+            draggingSliderRef.current = true;
+            holdInteraction(true);
+          }}
+          onPointerUp={() => {
+            draggingSliderRef.current = false;
+            holdInteraction(false);
+          }}
+          onPointerCancel={() => {
+            draggingSliderRef.current = false;
+            holdInteraction(false);
+          }}
           onChange={(event) => handleSliderChange(Number(event.currentTarget.value))}
         />
       </div>
