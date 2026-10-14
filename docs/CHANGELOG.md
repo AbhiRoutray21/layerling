@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+## 1.69.0
+
 - **Hollowing a block with a pocket:** A block with a hole that does not go all the way through - a box grouped with a raised hole - could not be hollowed with its top open (the default): the kernel's thick solid does not take a face with a pocket in it, and the message said the body could not be hollowed with any wall. Where it fails, the body is now grown over the open face, hollowed from its inward offset, and the cavity cut out of the body as it was - the way a closed body is hollowed. The result is exact: for a 20 x 10 x 20 block with a 10 x 10 pocket 5 deep and a 1.5 mm wall it has the volume worked out by hand. The same goes for the bottom, both ends and a hole right through. Reported in the forum as a wish for mould making (#302).
 - **Ten more printers, 200 in all:** Creality Ender-3 V4, Ender-5S, CR-10 V3, CR-M4, CR-M4 SE and K2 SE, Elegoo Neptune 2D, Anycubic 4Max Pro 2, Sovol SV01 Pro and Flashforge Guider 3 Ultra, with the plate and height from OrcaSlicer. The list is looked at against OrcaSlicer's once a week now, so new printers and corrected plates do not go unnoticed.
 - **The printers are in alphabetical order:** In the workspace settings, under Workplane, the list of printers followed the order of the slicer's profiles: Bambu Lab had its A1 mini before its A1, with the P1P and X1 in between and the H2 models last. The makers and the models of each maker are sorted now, numbers counted as numbers (CR-6 SE before CR-10, Kobra 2 before Kobra 3). The list of profiles itself is unchanged (#305).
