@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+## 1.68.1
+
 - **Tab goes from value to value in the properties panel:** After a number field, Tab stopped on its slider and on the small reset arrow before it reached the next field: three presses per value. The slider and the reset arrow are out of the Tab order now, so Tab steps straight from one number field to the next. Both still work with the mouse (#300).
 - **The tape measure no longer lags on a dense imported mesh:** With the tape measure on, every mouse move went through all the edges of every body, and joining the line pieces into edges took longer the more there were: on a design with a Raspberry Pi model one move took about four seconds. The edges are now kept while the body stays where it is, the pieces are joined through a lookup instead of a search, and the points are only built where the pointer is. The same design takes about 65 ms per move now, and the first move after switching the tool on about a second (#299).
 - **A new video in the list:** "The PERFECT FREE CAD Program Between Tinkercad and Fusion 360!" by Print N Repeat, at the top of the video list in the app, the guide and the README.
