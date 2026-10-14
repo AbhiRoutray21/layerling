@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **Import/Export window toggle:** The keyboard shortcuts for import and export toggle the window on or off, like other windows that have a shortcut (eg. fillet, chamfer, hollow).
+
 ## 1.71.0
 
 - **layerling speaks Dutch:** The interface, the whole user guide (16 chapters) and the README are available in Dutch (Nederlands). The language is chosen from the browser - a visitor whose browser asks for Dutch lands in it - and from the language list. It was translated by @rmpel (#312), with the help of an AI, and it is open to corrections from anyone who reads it: a pull request with the fixed word is all it takes. How to add further languages is in `docs/TRANSLATING.md`.

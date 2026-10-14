@@ -10680,13 +10680,13 @@ export function LayerlingEditor({
 
       if (shortcut && key === "e" && !event.shiftKey && !event.altKey) {
         event.preventDefault();
-        setTopPanel("export");
+        setTopPanel((panel) => (panel === "export" ? null : "export"));
         return;
       }
 
       if (shortcut && key === "i" && !event.shiftKey && !event.altKey) {
         event.preventDefault();
-        setTopPanel("import");
+        setTopPanel((panel) => (panel === "import" ? null : "import"));
         return;
       }
 
