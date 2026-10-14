@@ -8,6 +8,7 @@ code still carries it - so a lower number further down is older, not newer.
 
 - **The tape measure: a point on a round edge, and the diameter across a circle:** A click on an edge, a bore for example, measured the whole edge - the length of the circle - and was done; there was no way to put a point on it. The tape measure's menu has a new switch, **Measure whole edges**: with it off, a click sets a point on the edge, and the second one goes anywhere. **Alt** turns the switch round for one click. On a circle the point across from the first one snaps in when the pointer comes near, and points on a round edge sit on the true circle, not on a side of the polygon it is drawn as, so the diameter comes out exact (30.00 for a 30 mm bore, where a click on the polygon gave 29.96). Suggested in #308.
 - **21 more printers, 221 in all, the large ones among them:** Goofoo (GP1, TurboM, Velo+, Velo+ Tool), the big machines Elegoo OrangeStorm Giga (810 x 805 x 1010), Creality CR-6 Max, Wanhao D9-400 and D9-500, Volumic EXO42, EXO65 and SH65 Performance, RatRig V-Core 3 and 4 in 400 and 500 (and the two IDEX), Vivedino Troodon 2.0 and Xplorer, Tronxy X5SA 400. Plates and heights are the ones from OrcaSlicer. Left out on purpose: kit, dual-extruder-mode and firmware variants, and the industrial makers.
+- **Geometry kernel 5.7.1:** The CAD kernel (occt-wasm) moves from 5.7.0 to the patch release 5.7.1; all kernel tests pass unchanged.
 
 ## 1.69.0
 

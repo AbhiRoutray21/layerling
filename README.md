@@ -241,6 +241,8 @@ Three things to know:
 
 ### Shared Designs on a Network
 
+layerling itself is only files, so the shared folder needs something on the server that can write. There are two ways, and you need just one of them: **Node or Docker** (this section, with `LAYERLING_SHARED_PROJECTS_DIR`), or **a plain web server with PHP** (the `store` folder, further down). A web server that serves the files without either of them – `npx serve`, nginx or Apache without PHP – shows layerling fine, but has no server folder.
+
 If you run layerling with `npm run dev` or `npm run start` on a machine other people open in their browser, it can offer a
 shared folder for `.lyl` designs. Point `LAYERLING_SHARED_PROJECTS_DIR` at a directory before starting:
 
