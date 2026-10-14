@@ -6,6 +6,7 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **layerling speaks Dutch:** The interface, the whole user guide (16 chapters) and the README are available in Dutch (Nederlands). The language is chosen from the browser - a visitor whose browser asks for Dutch lands in it - and from the language list. It was translated by @rmpel (#312), with the help of an AI, and it is open to corrections from anyone who reads it: a pull request with the fixed word is all it takes. How to add further languages is in `docs/TRANSLATING.md`.
 - **A thin scrollbar on the settings panel:** The panel on the right hid its scrollbar, so on a laptop's touchpad nothing showed that it goes on below, and there was no bar to take hold of. It shows a thin bar now, in its own colours in the light, dark and graphite themes; a short panel shows none. By @plazmabokor (#315).
 - **The material estimate says it counts 100 % infill:** Under the volume, weight and filament length the export window now says in the open that the numbers are for a solid body - 100 % infill - and that with the infill of the slicer weight and filament are often much lower. Before, a short line under the heading only said the slicer "shows less". Suggested by Stefan.
 - **The design's name sits right in the corner:** The name written on the plate no longer leaves room for the axis arrows but starts at the front left corner as if they were not there, with the same small gap from both edges, so it takes less of the plate and gets in the way of bodies less often.

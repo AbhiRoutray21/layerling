@@ -56,7 +56,7 @@ De projectie is gebaseerd op het tekenwerk van Cadverix-3D door WC3D.
 
 ### Hoeveel filament kost het?
 
-Bij STL, 3MF, OBJ en STEP toont het vak {{ui:export.estimateTitle}} het volume, het gewicht en de lengte aan filament van 1,75 mm van wat wordt geëxporteerd. Het telt zoals het bestand: alleen zichtbare lichamen, gaten eraf, overlappingen maar één keer. Rechts kies je het filament - PLA, PETG, ABS, ASA, TPU of PA (nylon) - en het gewicht volgt de dichtheid ervan. Het wordt berekend als massief, alsof het met 100 % vulling wordt geprint. Met wanden en vulling toont de slicer minder; het getal is de bovengrens, goed om te vergelijken en om te zien of de spoel genoeg is.
+Bij STL, 3MF, OBJ en STEP toont het vak {{ui:export.estimateTitle}} het volume, het gewicht en de lengte aan filament van 1,75 mm van wat wordt geëxporteerd. Het telt zoals het bestand: alleen zichtbare lichamen, gaten eraf, overlappingen maar één keer. Rechts kies je het filament - PLA, PETG, ABS, ASA, TPU of PA (nylon) - en het gewicht volgt de dichtheid ervan. Het wordt berekend als massief, alsof het met 100 % vulling wordt geprint, en het vak zegt dat onder de getallen. Met wanden en vulling toont de slicer minder, bij een massief lichaam vaak veel minder; het getal is de bovengrens, goed om te vergelijken en om te zien of de spoel genoeg is.
 
 ## Importeren
 
