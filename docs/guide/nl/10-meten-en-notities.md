@@ -7,14 +7,15 @@ Om een onderdeel precies te bouwen, moet je meten. layerling heeft daar verschil
 
 ## Het meetlint
 
-Het meetlint zit aan de onderkant van de camerabalk aan de linkerrand ({{ui:camera.tapeTools}}). Het meet afstanden tussen hoeken, randen en vlakken. Een klik erop opent vier knoppen. Zitten die in de weg bij wat je wilt meten, sleep ze dan aan de greep links naar een willekeurige plek op het werkvlak; een dubbelklik op de greep zet ze terug:
+Het meetlint zit aan de onderkant van de camerabalk aan de linkerrand ({{ui:camera.tapeTools}}). Het meet afstanden tussen hoeken, randen en vlakken. Een klik erop opent vijf knoppen. Zitten die in de weg bij wat je wilt meten, sleep ze dan aan de greep links naar een willekeurige plek op het werkvlak; een dubbelklik op de greep zet ze terug:
 
-![Het meetlint met zijn vier knoppen: meting toevoegen, meetpunten verplaatsen, meting verwijderen, alle metingen verwijderen.](shot:tape-menu)
+![Het meetlint met zijn knoppen: meting toevoegen, meetpunten verplaatsen, meting verwijderen, hele randen, alle metingen verwijderen.](shot:tape-menu)
 
 1. **{{ui:camera.addMeasurement}}:** Klik op een punt, sleep naar het volgende en klik daarop. De afstand krijgt een label.
 2. **{{ui:camera.moveMeasurement}}:** Pak de punten en verplaats ze, het getal volgt mee.
 3. **{{ui:camera.deleteMeasurement}}:** Klik daarna op een meting om die te verwijderen.
-4. **{{ui:camera.deleteAllMeasurements}}:** Verwijdert alle metingen in één keer. Omdat dit niet ongedaan kan worden gemaakt, vraagt layerling het eerst; zijn er geen metingen, dan is er niets te doen.
+4. **{{ui:camera.tapeWholeEdges}}:** Een klik op een rand meet de hele rand, bij een cirkel bijvoorbeeld de omtrek. Staat dit uit, dan zet een klik in plaats daarvan een punt op de rand, en het tweede punt mag overal liggen, zodat je de diameter of een andere afstand kunt meten. [[Alt]] draait de schakelaar voor één klik om. Op een cirkel klikt het punt tegenover het eerste vast zodra de aanwijzer in de buurt komt, en de punten liggen op de echte cirkel, zodat de diameter precies klopt.
+5. **{{ui:camera.deleteAllMeasurements}}:** Verwijdert alle metingen in één keer. Omdat dit niet ongedaan kan worden gemaakt, vraagt layerling het eerst; zijn er geen metingen, dan is er niets te doen.
 
 [[Esc]] verlaat de meetmodus.
 

@@ -23,7 +23,7 @@ Een losse back-up van één ontwerp maak je in de editor: {{ui:editor.export}}, 
 
 Klik op {{ui:editor.export}} of druk op [[Ctrl]]+[[E]].
 
-![Het exportvenster met de formaten STL, 3MF, OBJ, STEP, SVG, PNG en LYL.](shot:export-panel)
+![Het exportvenster met de formaten STL, 3MF, OBJ, STEP, SVG, PNG, LYL en 2D.](shot:export-panel)
 
 Bovenaan staat de bestandsnaam, daaronder kies je het formaat. Is er iets geselecteerd, dan wordt alleen de selectie geëxporteerd, anders het hele ontwerp. Laat de selectie zichtbare delen weg, dan zegt een melding in het venster dat duidelijk, en {{ui:export.selectAll}} selecteert met één klik alles wat zichtbaar is. Zodra het bestand is geschreven, sluit het venster vanzelf; mislukt de export, dan blijft het open met de melding.
 
@@ -36,12 +36,23 @@ Bovenaan staat de bestandsnaam, daaronder kies je het formaat. Is er iets gesele
 | **SVG** | lasersnijder en plotter | Een net bovenaanzicht in millimeters, inclusief gaten en gebogen contouren. |
 | **PNG** | forumberichten, printsites, vragen | Een afbeelding van de weergave zoals die is, op dubbele resolutie en zonder grepen, selectiekaders en maten. {{ui:export.png.plate}} en {{ui:export.png.transparent}} kies je in het venster. Draai en zoom eerst tot de afbeelding goed is; de selectie doet er hier niet toe. |
 | **LYL** | layerling zelf | Het bewerkbare ontwerp met alles wat erbij hoort. |
+| **2D** | werkplaats, draaibank en freesmachine, documentatie | Een tekening op 1:1 als PDF of SVG: voor-, boven- en rechterzijaanzicht op een ISO-blad. Zie hieronder. |
 
 **STL in je eigen map (Chrome en Edge).** Daar opent de eerste STL-export van een ontwerp het opslagvenster van je systeem, zodat je de map en de naam zelf kiest en een bestaand bestand kunt vervangen. Daarna schrijft elke STL-export van het ontwerp zonder venster in datzelfde bestand; het exportvenster toont welk bestand, en **Opslaan als…** naast de exportknop kiest een ander. Het venster onthoudt zijn eigen map, los van die voor ontwerpen, zodat de slicerbestanden bij de slicer kunnen blijven. Nadat de pagina opnieuw is geladen, vergeet het ontwerp zijn STL-bestand en vraagt de volgende export er weer om. Firefox en Safari downloaden het bestand zoals vroeger.
 
 Een gat dat je niet hebt gegroepeerd, wordt bij het exporteren uit elk lichaam gehaald dat het raakt, zoals de weergave het toont. Je hoeft dus niet voor elke export te groeperen. Met een selectie tellen alleen de geselecteerde gaten. Een gat kan niet op zichzelf worden geëxporteerd; layerling wijst je daarop.
 
 STEP bevat alleen exacte CAD-lichamen. Wat niet exact kan worden geschreven, zoals een als STL geïmporteerde mesh, wordt weggelaten. De melding na de export noemt die lichamen en zegt waarom. Gebruik voor de printer STL of 3MF, die alles bevatten.
+
+### Een tekening voor de werkplaats
+
+Kies het formaat **2D** (houd de muis erboven en er staat Tekening) en, onder de bestandsnaam, PDF of SVG. Met een selectie wordt alleen de selectie getekend, anders het hele zichtbare ontwerp; gaten die je niet hebt gegroepeerd, snijden nog steeds in de onderdelen die ze raken.
+
+layerling tekent het voor-, boven- en rechterzijaanzicht in Europese projectie (het rechterzijaanzicht links van het vooraanzicht, het bovenaanzicht eronder) op het kleinste ISO-blad waar het op past, van A4 tot A0, of een groter blad als het onderdeel dat nodig heeft. Het is altijd 1:1. Elk aanzicht krijgt zijn totale breedte en hoogte, en randen die je niet kunt zien, zijn gestippeld. Ronde boringen die evenwijdig aan een kijkrichting lopen, krijgen een hartkruis en een label (F1, T1, R1), en een tabel onderaan geeft hun diameter en positie, gemeten vanaf de linkeronderhoek van het aanzicht. Het titelblok rechtsonder bevat de naam, schaal, eenheden, datum en bladnummer. De woorden op het blad volgen de taal van de interface.
+
+Print op 100 % of "werkelijke grootte", anders kloppen de lengtes niet. Wat de tekening niet doet: schroefdraad, diepten, toleranties en schuine boringen worden niet bemaat, en de maten komen uit het model als mesh, dus het zijn nominale maten. Een heel gedetailleerd onderdeel (meer dan 100.000 driehoeken) of meer dan 200 boringen wordt met een melding geweigerd; kies dan minder objecten.
+
+De projectie is gebaseerd op het tekenwerk van Cadverix-3D door WC3D.
 
 ### Hoeveel filament kost het?
 
