@@ -1287,6 +1287,8 @@ export const MESSAGES_EN = {
   "status.mcpSimplified": "MCP simplified a mesh",
   "status.selectOneMeshToSimplify": "Select one imported mesh to simplify",
   "inspector.separateParts": "Separate Parts",
+  "inspector.makeEllipse": "Make it an ellipse",
+  "inspector.makeEllipseHint": "A cylinder stays round. As an ellipse it is the same body, with a length and a width you set one by one.",
   "inspector.separatedPartName": "{name} Part {index}",
   "inspector.keepProportions": "Keep proportions",
   "inspector.properties": "Properties",

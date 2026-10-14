@@ -1286,6 +1286,8 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "status.mcpSimplified": "MCP hat ein Netz vereinfacht",
   "status.selectOneMeshToSimplify": "Wähle ein importiertes Netz zum Vereinfachen",
   "inspector.separateParts": "Teile trennen",
+  "inspector.makeEllipse": "Zur Ellipse machen",
+  "inspector.makeEllipseHint": "Ein Zylinder bleibt rund. Als Ellipse ist es derselbe Körper, mit Länge und Breite, die du einzeln einstellst.",
   "inspector.separatedPartName": "{name} Teil {index}",
   "inspector.keepProportions": "Proportionen beibehalten",
   "inspector.properties": "Eigenschaften",

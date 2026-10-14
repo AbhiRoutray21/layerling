@@ -1286,6 +1286,8 @@ export const MESSAGES_NL: Record<MessageKey, string> = {
   "status.mcpSimplified": "MCP heeft een mesh vereenvoudigd",
   "status.selectOneMeshToSimplify": "Selecteer één geïmporteerde mesh om te vereenvoudigen",
   "inspector.separateParts": "Delen scheiden",
+  "inspector.makeEllipse": "Tot ellips maken",
+  "inspector.makeEllipseHint": "Een cilinder blijft rond. Als ellips is het hetzelfde lichaam, met een lengte en breedte die je afzonderlijk instelt.",
   "inspector.separatedPartName": "{name} deel {index}",
   "inspector.keepProportions": "Verhoudingen behouden",
   "inspector.properties": "Eigenschappen",

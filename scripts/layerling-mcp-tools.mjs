@@ -336,6 +336,7 @@ export const tools = [
         name: { type: "string" },
         color: { type: "string" },
         hole: { type: "boolean" },
+        makeEllipse: { type: "boolean", description: "Cylinder only: make it an ellipse - the same body, but width and depth can then differ (a cylinder always stays round). Not for a cylinder with an edge treatment or a wall, or a turned, imported or grouped one. Pass width and depth in the same call to set them." },
         transparent: { type: "boolean" },
         multicolor: { type: "boolean", description: "Groups only: show every part in its own colour (Tinkercad's Multicolor) instead of the group colour." },
         rotationPivot: {

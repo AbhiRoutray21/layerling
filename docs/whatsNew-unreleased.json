@@ -8,5 +8,15 @@
       "de": "Beim Ausrichten zählt als Mitte einer Tropfenbohrung jetzt die Mitte ihres runden Teils, nicht die ihres Kastens mit der Spitze. So lässt sich eine Tropfenbohrung vom Kerndurchmesser genau auf ein Gewindeloch legen: Beide zusammen ergeben ein Gewinde, dessen Oberseite eine Spitze hat und ohne Stützen druckt. Die Anleitung im Kapitel zu Gewinden beschreibt die Schritte.",
       "en": "In Align, the middle of a teardrop hole is now the middle of its round part, not of its box with the tip. A teardrop of the thread's core diameter therefore lies exactly on a tapped hole: together they give a thread whose top has a point and prints without supports. The chapter on threads in the guide has the steps."
     }
+  },
+  {
+    "title": {
+      "de": "Vom Zylinder zur Ellipse",
+      "en": "From cylinder to ellipse"
+    },
+    "body": {
+      "de": "Ein Zylinder bleibt absichtlich rund, mit einem Durchmesser. Wer später doch ein Oval will, klickt jetzt bei einem Zylinder auf „Zur Ellipse machen“: Die Form wird eine Ellipse, derselbe Körper, deren Länge und Breite du einzeln einstellst. Bei einem Zylinder mit Fase, Verrundung oder Wand geht das nicht, weil er seinen exakten Körper verlöre.",
+      "en": "A cylinder stays round on purpose, with one diameter. If you want an oval after all, click \"Make it an ellipse\" on a cylinder: the shape becomes an Ellipse, the same body, and you set its length and width one by one. It does not work for a cylinder with a chamfer, a fillet or a wall, which would lose its exact body."
+    }
   }
 ]

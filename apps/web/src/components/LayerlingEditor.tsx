@@ -199,6 +199,7 @@ import {
 } from "@/lib/placementWorkplane";
 import { localizedError } from "@/lib/userErrors";
 import { alignNaturalCenter, type AlignPoint } from "@/lib/alignCenter";
+import { cylinderToEllipsePatch } from "@/lib/cylinderToEllipse";
 import { sketchBodyStretch, stretchedSketchProfile } from "@/lib/sketchResize";
 import { silhouetteSketchProfile } from "@/lib/sketchCadProfile";
 import { svgSketchMatchesMesh } from "@/lib/svgSketch";
@@ -8162,6 +8163,12 @@ export function LayerlingEditor({
         if (typeof params.color === "string") patch.color = params.color;
         if (typeof params.name === "string") patch.name = params.name;
         if (typeof params.hole === "boolean") patch.hole = params.hole;
+        if (params.makeEllipse === true) {
+          // A cylinder is round; as an ellipse it is the same body with a free length and width.
+          const asEllipse = cylinderToEllipsePatch(target);
+          if (!asEllipse) throw new Error("Only a plain cylinder can be made an ellipse: not one with a chamfer, a fillet or a wall, nor a turned, imported or grouped one");
+          Object.assign(patch, asEllipse);
+        }
         if (typeof params.locked === "boolean") patch.locked = params.locked;
         if (typeof params.hidden === "boolean") patch.hidden = params.hidden;
         if (typeof params.transparent === "boolean") patch.transparent = params.transparent || undefined;

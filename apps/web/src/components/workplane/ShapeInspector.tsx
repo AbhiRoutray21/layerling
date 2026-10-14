@@ -158,6 +158,7 @@ import { displayStepFromMillimeters, formatFractionalInches, showsInchFractions,
 import { t, type MessageKey } from "@/lib/i18n";
 import { localizedError } from "@/lib/userErrors";
 import { displayShapeName, makeShapeFromAsset, renamedShapeName } from "@/lib/shapeCatalog";
+import { cylinderToEllipsePatch } from "@/lib/cylinderToEllipse";
 import { shapeDefaultsAsset, shapeDefaultsFromShape } from "@/lib/shapeDefaults";
 import { MAX_SCREW_HOLE_ANGLE, MIN_SCREW_HOLE_ANGLE, normalizeScrewHoleAngle, normalizeScrewHoleHeadDepth, normalizeScrewHoleShaft } from "@/lib/screwHoleGeometry";
 import { MAX_TEARDROP_TIP_ANGLE, MIN_TEARDROP_TIP_ANGLE, normalizeTeardropTipAngle, teardropHeightForTipAngle, teardropTipAngle } from "@/lib/teardropGeometry";
@@ -2552,6 +2553,21 @@ export function ShapeInspector({
 
       {onTextTags && shape.kind === "text" ? (
         <NameListCard key={`names-${shape.id}`} shapeId={shape.id} disabled={locked} onTextTags={onTextTags} onInteractionActiveChange={onInteractionActiveChange} />
+      ) : null}
+
+      {cylinderToEllipsePatch(shape) ? (
+        <button
+          className="inspector-action-button"
+          type="button"
+          disabled={locked}
+          title={t("inspector.makeEllipseHint")}
+          onClick={() => {
+            const patch = cylinderToEllipsePatch(shape);
+            if (patch) onUpdate(patch);
+          }}
+        >
+          <span>{t("inspector.makeEllipse")}</span>
+        </button>
       ) : null}
 
       <div className={`property-card ${propertiesOpen ? "" : "collapsed"}`}>
