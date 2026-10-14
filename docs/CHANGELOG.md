@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **Japanese text, name tags in Japanese:** The seven built-in typefaces have no kana and no kanji, so a Japanese name on a text or a name tag came out as question marks. Every typeface now borrows them from M PLUS Rounded 1c (the Japanese font three.js ships, under the SIL Open Font License), cut down to ASCII, the kana, symbols, Greek and Cyrillic of JIS X 0208 and its 2,965 level-1 kanji. The face is a typeface of its own, **Japanese**, and is fetched (2.6 MB) only the first time a text needs it or it is chosen; a text waiting for it shows question marks for a moment and is drawn again when it arrives. Fonts of your own now keep the common Japanese characters first when they have more than 8,000: by code point, a Japanese font lost the common kanji late in the block (郎, 高, 鈴).
+
 ## 1.87.0
 
 - **Turkish interface (#511):** The interface is available in Türkçe, translated by @murartdursun25 with the help of Claude and read by him as a native speaker: 2547 of 2562 sentences; the others and the chapters of the guide show in English until they are translated.
