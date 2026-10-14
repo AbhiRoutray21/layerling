@@ -265,7 +265,7 @@ LAYERLING_SHARED_PROJECTS_DIR=/srv/layerling-projekte npm run start
 
 Auf der Startseite steht dann neben deinen Browser-Entwürfen der Ordner **Auf dem Server**. Öffnest du ihn, bist du in
 diesem Ordner: **Neuer Entwurf** legt einen darin an, **Neuer Ordner** einen Unterordner, und die Pfadzeile unter der
-Überschrift sagt, wo du bist. Eine `..`-Kachel führt wieder hinaus. Entwürfe wandern per Ziehen auf einen Ordner, auf
+Überschrift sagt, wo du bist. Eine `..`-Kachel führt wieder hinaus, und **Zurück zu den Entwürfen in diesem Browser** links neben den Knöpfen bringt dich zu den Entwürfen dieses Browsers zurück. Entwürfe wandern per Ziehen auf einen Ordner, auf
 diese Kachel oder auf einen Schritt der Pfadzeile – oder über **Verschieben nach …** in ihrem Menü. Ein Entwurf aus dem
 Browser kommt genauso auf den Server: seine Kachel auf den Serverordner ziehen.
 

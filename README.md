@@ -255,7 +255,7 @@ LAYERLING_SHARED_PROJECTS_DIR=/srv/layerling-projects npm run start
 
 The start page then shows a folder named **On the server** beside your browser designs. Open it and you are in that
 folder: **New design** starts one right there, **New folder** makes a subfolder, and a trail under the heading says where
-you are. A `..` tile leads back out. Designs move by dragging them onto a folder, onto that tile or onto a step of the
+you are. A `..` tile leads back out, and **Back to designs in this browser** at the left of the buttons returns to the designs of this browser. Designs move by dragging them onto a folder, onto that tile or onto a step of the
 trail – or through **Move to …** in their menu. A design from your browser goes onto the server the same way: drag its
 card onto the server folder.
 

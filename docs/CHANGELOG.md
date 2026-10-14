@@ -6,6 +6,7 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **A way back from the server folder:** Inside "Designs on the server" the only way back to the designs of the browser was the logo. A button **Back to designs in this browser** stands at the left of the row with New design, New folder and Refresh. Suggested by @foofoodog (#333).
 ## 1.72.3
 
 - **Reference points: delete them all, and cards that behave:** Marking the centre, corners or edge middles of a body leaves several points, and deleting them one by one was cumbersome. **Delete all** in a point card, and "Delete all reference points" in the right-click menu, take them all away in one step (it can be undone). The cards no longer move as a group: each is dragged away on its own, and the card you touched last stands in front, so a card can no longer end up behind another. A point whose card was never moved keeps the place the shared offset had before. Reported by @rondlh (#329).

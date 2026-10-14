@@ -256,7 +256,7 @@ LAYERLING_SHARED_PROJECTS_DIR=/srv/layerling-projects npm run start
 
 De startpagina toont dan een map met de naam **Op de server** naast je browserontwerpen. Open hem en je bent in die
 map: **Nieuw ontwerp** begint er direct een, **Nieuwe map** maakt een submap, en een kruimelpad onder de kop laat zien
-waar je bent. Een `..`-tegel leidt weer naar buiten. Ontwerpen verplaats je door ze naar een map te slepen, naar die tegel
+waar je bent. Een `..`-tegel leidt weer naar buiten, en **Terug naar de ontwerpen in deze browser** links van de knoppen brengt je terug naar de ontwerpen van deze browser. Ontwerpen verplaats je door ze naar een map te slepen, naar die tegel
 of naar een stap in het kruimelpad – of via **Verplaatsen naar …** in hun menu. Een ontwerp uit je browser gaat op dezelfde
 manier naar de server: sleep de kaart naar de servermap.
 
