@@ -136,7 +136,7 @@ import { cuboidCorners, pointAlongAxes, type AlignAxes, type FrameCuboid } from 
 import type { AlignAxis, AlignHandleStatus, AlignTarget, GridSize, MeasurementAccuracy, ShapeAsset, WorkplaneNote, WorkplaneNoteAnchor, WorkplaneShape, WorkplaneWorkspaceSettings } from "@/types/layerling";
 import { referencePoints } from "@/lib/workplaneNotes";
 import { pivotKeptAhead, ZOOM_PIVOT_REACH_MM } from "@/lib/zoomPivot";
-import { measurementMiddle, type ReferencePosition } from "@/lib/referencePoints";
+import { measurementMiddle, nearestReferenceOnScreen, type ReferencePosition } from "@/lib/referencePoints";
 import { planarFaceCentroid, planarFaceTriangles, type PivotPoint } from "@/lib/rotationPivot";
 import { outwardFaceNormal } from "@/lib/layFlat";
 import { OVERHANG_PLATE_TOLERANCE, overhangDownwardLimit } from "@/lib/overhangLimits";
@@ -4753,7 +4753,23 @@ export function WorkplaneViewport({
         return { x: world.x, y: world.y, z: world.z, pointId: closestPoint.point.id, attachment: closestPoint.point.attachment };
       }
 
-      const closestSegment = model.segments.reduce<{ world: THREE.Vector3; distance: number } | null>((closest, segment) => {
+      // A reference point catches the pointer like a measuring point does (#334): mark the middle of a circle
+      // or of a line, then measure from there.
+      if (notesVisibleRef.current) {
+        const closestReference = nearestReferenceOnScreen(
+          referencePoints(notesRef.current),
+          (point) => projectToScreen(new THREE.Vector3(point.x, point.y, point.z), state),
+          { x: localX, y: localY },
+          14,
+        );
+        if (closestReference) {
+          const { x, y, z } = closestReference;
+          const existing = model.points.find((point) => !point.attachment && Math.hypot(point.x - x, point.y - y, point.z - z) < 0.001);
+          return { x, y, z, pointId: existing?.id };
+        }
+      }
+
+      const closestSegment =model.segments.reduce<{ world: THREE.Vector3; distance: number } | null>((closest, segment) => {
         if (segment.startId === ignoredPointId || segment.endId === ignoredPointId) return closest;
         const start = model.points.find((point) => point.id === segment.startId);
         const end = model.points.find((point) => point.id === segment.endId);
@@ -6196,9 +6212,18 @@ export function WorkplaneViewport({
 
   const handleNotePinPointerDown = useCallback((event: ReactPointerEvent<HTMLButtonElement>, noteId: string) => {
     event.stopPropagation();
+    // The tape measure takes a reference point as a measuring point; the pin sits right on the point and would catch the click (#334).
+    const pinned = notesRef.current.find((candidate) => candidate.id === noteId);
+    if (tapeModeRef.current && !tapeMoveModeRef.current && !tapeDeleteModeRef.current && pinned?.kind === "point" && event.button === 0) {
+      event.preventDefault();
+      // The click that follows must not fold the point's card open.
+      noteClickSuppressedRef.current = noteId;
+      selectTapeCandidate({ x: pinned.x, y: pinned.y, z: pinned.z });
+      return;
+    }
     noteDragRef.current = { noteId, pointerId: event.pointerId, moved: false };
     capturePointer(event.currentTarget, event.pointerId);
-  }, []);
+  }, [selectTapeCandidate]);
 
   const handleNotePinPointerMove = useCallback((event: ReactPointerEvent<HTMLButtonElement>, noteId: string) => {
     const drag = noteDragRef.current;

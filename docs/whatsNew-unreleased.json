@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "title": {
+      "de": "Maßband rastet an Bezugspunkten ein",
+      "en": "The tape measure snaps to reference points"
+    },
+    "body": {
+      "de": "Markiere die Mitte eines Kreises oder die Mitte einer Linie als Bezugspunkt (Fadenkreuz-Knopf unter einer Messung oder Rechtsklickmenü) und klicke diesen Punkt dann mit dem Maßband an: Du misst von dort aus. Das Maßband rastet an Bezugspunkten ein wie an Ecken.",
+      "en": "Mark the centre of a circle or the middle of a line as a reference point (the crosshair button under a measurement, or the right-click menu) and then click that point with the tape measure: you measure from there. The tape measure snaps to reference points like to corners."
+    }
+  }
+]
