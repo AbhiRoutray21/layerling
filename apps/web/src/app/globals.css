@@ -2131,6 +2131,16 @@ html[data-theme="dark"] .whats-new-earlier:hover {
   border-color: #e3b77c;
 }
 
+.dashboard-new-on-server {
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.dashboard-new-on-server input {
+  margin: 0;
+  accent-color: #c9731d;
+}
+
 .dashboard-select select {
   min-width: 82px;
   border: 0;

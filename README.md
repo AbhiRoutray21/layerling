@@ -257,6 +257,8 @@ you are. A `..` tile leads back out. Designs move by dragging them onto a folder
 trail – or through **Move to …** in their menu. A design from your browser goes onto the server the same way: drag its
 card onto the server folder.
 
+Two buttons on the start page save the trouble of moving designs one by one: **Put all on the server** moves every design of this browser into the server folder in one go, and the tick **New designs on the server** makes each new design start in the server folder, so it is saved there from the first change on. A design whose name is already taken on the server stays in the browser.
+
 The search box at the top searches the whole server folder, not just the one you are standing in. Every hit says
 which folder holds it, and that folder is a button: one click and you are there, with the search cleared. Folders are
 found by name too. While you are searching, the server tile on the start page says how many matches are waiting over

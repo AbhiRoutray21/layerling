@@ -720,6 +720,10 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .whats-new-earlier:hove
   border-color: #e3b77c;
 }
 
+:where(html[data-theme="dark"][data-palette="graphite"]) .dashboard-new-on-server input {
+  accent-color: #c9731d;
+}
+
 :where(html[data-theme="dark"][data-palette="graphite"]) .dashboard-select select {
   border: 0;
   outline: 0;

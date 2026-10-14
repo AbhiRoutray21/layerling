@@ -180,6 +180,8 @@ type ProjectShapeResourceRecord =
     };
 
 const PROJECTS_STORAGE_KEY = "layerling.projects";
+/** Whether a new design starts in the server folder when there is one (#316). Kept in this browser. */
+const NEW_DESIGNS_ON_SERVER_KEY = "layerling.newDesignsOnServer";
 /** So lang darf ein Entwurfsname werden - so lang kuerzt auch das Umbenennen. */
 const PROJECT_NAME_LIMIT = 80;
 /** Und so lang der Dateiname auf dem Server, ohne Endung: beide Speicher kuerzen dort. */
@@ -727,6 +729,23 @@ export default function Home() {
   const [query, setQuery] = useState("");
   const [viewMode, setViewMode] = useState<ViewMode>("grid");
   const [sortMode, setSortMode] = useState("recent");
+  const [newDesignsOnServer, setNewDesignsOnServer] = useState(false);
+  useEffect(() => {
+    try {
+      setNewDesignsOnServer(window.localStorage.getItem(NEW_DESIGNS_ON_SERVER_KEY) === "1");
+    } catch {
+      // A browser that refuses storage keeps the answer for this visit only.
+    }
+  }, []);
+  const changeNewDesignsOnServer = useCallback((on: boolean) => {
+    setNewDesignsOnServer(on);
+    try {
+      if (on) window.localStorage.setItem(NEW_DESIGNS_ON_SERVER_KEY, "1");
+      else window.localStorage.removeItem(NEW_DESIGNS_ON_SERVER_KEY);
+    } catch {
+      // See above.
+    }
+  }, []);
   const [themePreference, setThemePreference] = useState<AppThemePreference>("system");
   const [resolvedTheme, setResolvedTheme] = useState<ResolvedAppTheme>("light");
   const [dashboardNotice, setDashboardNotice] = useState("");
@@ -1555,6 +1574,36 @@ export default function Home() {
   }, [projects, refreshSharedProjects]);
 
   /**
+   * Every design of this browser that is not on the server yet, put there one after the other (#316).
+   * A move like the single one: each card is bound to its file, and the editor's automatic save writes
+   * there from then on. One that cannot go - the name is taken, or the server hiccups - stays in the
+   * browser, and the notice says how many.
+   */
+  const sendAllProjectsToServer = useCallback(async () => {
+    const targets = projects.filter((project) => !project.sharedProject);
+    if (targets.length === 0) return;
+    let done = 0;
+    let failed = 0;
+    let firstFailure = "";
+    for (const project of targets) {
+      setDashboardNotice(t("notice.sendingAllToServer", { done: done + failed + 1, count: targets.length }));
+      try {
+        const saved = await putProjectOnServer(project, sharedPathRef.current);
+        setProjects((current) => current.map((candidate) => candidate.id === project.id
+          ? { ...candidate, sharedProject: { fileName: saved.fileName, revision: saved.revision, path: saved.path ?? sharedPathRef.current } }
+          : candidate));
+        done += 1;
+      } catch (error) {
+        failed += 1;
+        if (!firstFailure) firstFailure = error instanceof Error ? localizedError(error.message) : t("notice.saveSharedFailed");
+      }
+    }
+    await refreshSharedProjects();
+    if (failed > 0) setDashboardNotice(`${t("notice.sentAllPartial", { done, failed })} ${firstFailure}`);
+    else setDashboardNotice(done === 1 ? t("notice.sentAllOne") : t("notice.sentAllMany", { count: done }));
+  }, [projects, putProjectOnServer, refreshSharedProjects]);
+
+  /**
    * A new design started inside a folder of the store. It is put there right
    * away - an empty file, but a real one - so the editor's automatic save has
    * somewhere to write from the first change on.
@@ -2089,7 +2138,11 @@ export default function Home() {
           sharedSearchLoading={sharedSearchLoading}
           sortMode={sortMode}
           viewMode={viewMode}
-          onCreate={() => createAndOpenProject()}
+          onCreate={() => (sharedProjectsEnabled && newDesignsOnServer ? void createProjectInStoreFolder() : createAndOpenProject())}
+          newDesignsOnServer={newDesignsOnServer}
+          onNewDesignsOnServerChange={changeNewDesignsOnServer}
+          localOnlyProjects={projects.filter((project) => !project.sharedProject).length}
+          onSendAllToServer={() => void sendAllProjectsToServer()}
           onDeleteProject={deleteProject}
           onDeleteSharedProject={(project) => void deleteSharedProject(project)}
           onDuplicateProject={(projectId) => void duplicateProject(projectId)}
@@ -2292,6 +2345,10 @@ function Dashboard({
   onDuplicateSharedProject,
   onImportFile,
   onBackupAll,
+  newDesignsOnServer,
+  onNewDesignsOnServerChange,
+  localOnlyProjects,
+  onSendAllToServer,
   onOpenSharedProject,
   onOpenProject,
   onQueryChange,
@@ -2330,6 +2387,10 @@ function Dashboard({
   onDuplicateSharedProject: (project: SharedProject) => void;
   onImportFile: () => void;
   onBackupAll: () => void;
+  newDesignsOnServer: boolean;
+  onNewDesignsOnServerChange: (on: boolean) => void;
+  localOnlyProjects: number;
+  onSendAllToServer: () => void;
   onOpenSharedProject: (project: SharedProject) => void;
   onOpenProject: (projectId: string) => void;
   onQueryChange: (value: string) => void;
@@ -2858,6 +2919,19 @@ function Dashboard({
                     : t("dashboard.projectsVisibleMany", { count: projects.length })}</span>
                 </div>
                 <div className="dashboard-controls">
+                  {sharedProjectsEnabled ? (
+                    <label className="dashboard-select dashboard-new-on-server" title={t("dashboard.newOnServerTitle")}>
+                      <Server size={17} />
+                      <input type="checkbox" checked={newDesignsOnServer} onChange={(event) => onNewDesignsOnServerChange(event.currentTarget.checked)} />
+                      <span>{t("dashboard.newOnServer")}</span>
+                    </label>
+                  ) : null}
+                  {sharedProjectsEnabled && localOnlyProjects > 0 ? (
+                    <button className="dashboard-select dashboard-backup-button" type="button" title={t("dashboard.sendAllToServerTitle")} onClick={onSendAllToServer}>
+                      <FolderUp size={17} />
+                      <span>{t("dashboard.sendAllToServer")}</span>
+                    </button>
+                  ) : null}
                   {projects.length > 0 ? (
                     <button className="dashboard-select dashboard-backup-button" type="button" title={t("dashboard.backupAllTitle")} onClick={onBackupAll}>
                       <Archive size={17} />

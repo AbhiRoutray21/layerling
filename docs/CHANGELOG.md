@@ -6,6 +6,7 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **Designs on your own server, without moving them one by one:** When shared server storage is on, the start page has two new controls. **Put all on the server** moves every design of this browser into the server folder in one go, and the tick **New designs on the server** makes each new design start there, so it is saved to the server from the first change on. Until now a design stayed in the browser unless you remembered to move it, and a lost device or cleared browser storage took it along. A design whose name is already taken on the server stays where it is, and the message says how many. The tick is kept in this browser. Suggested in #316.
 ## 1.71.0
 
 - **layerling speaks Dutch:** The interface, the whole user guide (16 chapters) and the README are available in Dutch (Nederlands). The language is chosen from the browser - a visitor whose browser asks for Dutch lands in it - and from the language list. It was translated by @rmpel (#312), with the help of an AI, and it is open to corrections from anyone who reads it: a pull request with the fixed word is all it takes. How to add further languages is in `docs/TRANSLATING.md`.

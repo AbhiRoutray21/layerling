@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "title": {
+      "de": "Entwürfe gleich auf den Server",
+      "en": "Designs straight to the server"
+    },
+    "body": {
+      "de": "Wo der gemeinsame Serverordner eingerichtet ist, hat die Startseite zwei neue Bedienelemente: „Alle auf den Server legen“ bringt alle Entwürfe dieses Browsers auf einmal dorthin, und mit dem Haken „Neue Entwürfe auf dem Server“ beginnt jeder neue Entwurf gleich im Serverordner. So geht beim Wechsel des Geräts oder beim Löschen der Browserdaten nichts verloren.",
+      "en": "Where the shared server folder is set up, the start page has two new controls: “Put all on the server” moves every design of this browser there in one go, and with the tick “New designs on the server” each new design starts in the server folder. So nothing is lost when you change devices or clear the browser data."
+    }
+  }
+]
