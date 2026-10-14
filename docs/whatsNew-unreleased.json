@@ -28,5 +28,15 @@
       "de": "Eine SVG mit einer sehr detailreichen Kontur, etwa eine nachgezeichnete Grafik, brach mit „Maximum call stack size exceeded“ ab und kam nicht herein. Beim Bau des Körpers wurden alle Dreiecke in einem einzigen Aufruf übergeben, und der hat eine Größengrenze, die tausende Punkte überschreiten. Jetzt werden sie einzeln angefügt, und die Datei importiert.",
       "en": "An SVG with one very detailed outline, such as a traced drawing, stopped with \"Maximum call stack size exceeded\" and did not come in. Building the body handed all its triangles over in one call, which has a size limit that thousands of points overrun. They are now added one at a time, and the file imports."
     }
+  },
+  {
+    "title": {
+      "de": "Winkellineal: kein Linienfächer mehr",
+      "en": "Corner ruler: no more fan of lines"
+    },
+    "body": {
+      "de": "Schwebt die Kamera dicht über dem Winkellineal, wurde der Teil eines Arms hinter der Kamera gespiegelt gezeichnet und ergab einen Fächer feiner Linien quer über das Bild. Linien, Teilstriche, Zahlen und Maßpfeile des Lineals werden jetzt an der Kamera abgeschnitten, gezeichnet wird nur, was davor liegt.",
+      "en": "With the camera hovering close above the corner ruler, the part of an arm behind the camera was drawn mirrored and made a fan of fine lines across the picture. The ruler's lines, ticks, numbers and distance arrows are now cut off at the camera, and only what is in front of it is drawn."
+    }
   }
 ]
