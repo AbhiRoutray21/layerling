@@ -1,5 +1,50 @@
 [
   {
+    "version": "1.72.2",
+    "items": [
+      {
+        "title": {
+          "de": "Gewindeloch auf der Seite ohne Stützen",
+          "en": "A threaded hole on its side, without supports"
+        },
+        "body": {
+          "de": "Beim Ausrichten zählt als Mitte einer Tropfenbohrung jetzt die Mitte ihres runden Teils, nicht die ihres Kastens mit der Spitze. So lässt sich eine Tropfenbohrung vom Kerndurchmesser genau auf ein Gewindeloch legen: Beide zusammen ergeben ein Gewinde, dessen Oberseite eine Spitze hat und ohne Stützen druckt. Die Anleitung im Kapitel zu Gewinden beschreibt die Schritte.",
+          "en": "In Align, the middle of a teardrop hole is now the middle of its round part, not of its box with the tip. A teardrop of the thread's core diameter therefore lies exactly on a tapped hole: together they give a thread whose top has a point and prints without supports. The chapter on threads in the guide has the steps."
+        }
+      },
+      {
+        "title": {
+          "de": "Vom Zylinder zur Ellipse",
+          "en": "From cylinder to ellipse"
+        },
+        "body": {
+          "de": "Ein Zylinder bleibt absichtlich rund, mit einem Durchmesser. Wer später doch ein Oval will, klickt jetzt bei einem Zylinder auf „Zur Ellipse machen“: Die Form wird eine Ellipse, derselbe Körper, deren Länge und Breite du einzeln einstellst. Bei einem Zylinder mit Fase, Verrundung oder Wand geht das nicht, weil er seinen exakten Körper verlöre.",
+          "en": "A cylinder stays round on purpose, with one diameter. If you want an oval after all, click \"Make it an ellipse\" on a cylinder: the shape becomes an Ellipse, the same body, and you set its length and width one by one. It does not work for a cylinder with a chamfer, a fillet or a wall, which would lose its exact body."
+        }
+      },
+      {
+        "title": {
+          "de": "Alt+Enter: Größe um die Mitte",
+          "en": "Alt+Enter: resize round the middle"
+        },
+        "body": {
+          "de": "Tippst du eine Größe in eine der Zahlen neben der Form, wächst die Form von der gegenüberliegenden Kante aus. Mit Alt+Enter statt Enter wächst sie jetzt um ihre Mitte, für Breite und Länge. So bleibt eine Form, die an einer anderen ausgerichtet war, ausgerichtet, auch wenn du mehrmals probierst.",
+          "en": "When you type a size into one of the numbers beside a shape, the shape grows from the opposite edge. With Alt+Enter instead of Enter it now grows round its middle, for width and length. A shape that was aligned with another stays aligned, however often you try."
+        }
+      },
+      {
+        "title": {
+          "de": "Zoomen ins Leere und Schieber in Firefox",
+          "en": "Zooming into the empty, and sliders in Firefox"
+        },
+        "body": {
+          "de": "Zeigt der Mauszeiger beim Hineinzoomen über die Platte hinaus auf den Hintergrund, bleibt die Kamera nicht mehr an ihrer nächsten Entfernung hängen, sondern fährt weiter nach vorn. Und in Firefox springt ein Längenschieber beim Loslassen nicht mehr auf einen krummen Wert, sondern bleibt auf dem Raster.",
+          "en": "When you zoom in with the pointer past the plate, on the background, the camera no longer stops at its closest distance but goes on forward. And in Firefox a length slider no longer jumps to a crooked value when you let go, but stays on the grid."
+        }
+      }
+    ]
+  },
+  {
     "version": "1.72.1",
     "items": [
       {

@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+## 1.72.2
+
 - **Sliders in whole millimetres also in Firefox:** A length slider snaps to the grid while it is dragged, but in Firefox the value jumped to a crooked one in the neighbourhood when the mouse button was let go. Firefox sends one last value after the pointer is up, and by then the slider no longer counted as dragged. It now counts as dragged for a moment longer, so the last value is snapped too. Reported in the forum.
 - **Zooming into the sky no longer runs into a wall:** With the pointer above the plate, on the background, the mouse wheel zoomed towards the old pivot with a share of the distance at each notch, so the steps got smaller and the camera stopped at its closest distance although the way ahead was free. When nothing under the pointer can be zoomed towards, the pivot is now kept 50 mm ahead of the camera, within the box the pivot may be in, so the camera goes on. Reported in the forum.
 - **Alt+Enter resizes round the middle:** A size typed into one of the numbers beside a shape made the shape grow from the edge opposite the number, as when a handle is dragged, so two shapes that had been aligned on a common centre fell out of line after a resize and needed aligning again. With **Alt+Enter** instead of Enter the shape now grows round its middle, for width and length, in the single number and in the pair that opens on a click at a corner. It is the key that makes a line grow to both sides in the sketch. The height always grows upward from the underside. The size fields in the properties keep the middle without a key, and Alt while dragging a corner handle does so as before. Suggested by @micro4rgb-maker (#327).
