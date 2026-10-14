@@ -3499,6 +3499,8 @@ function PropertyResetButton({ onClick }: { onClick: () => void }) {
     <button
       type="button"
       className="property-reset"
+      // Out of the Tab order: Tab goes from one value to the next (#300).
+      tabIndex={-1}
       title={t("inspector.resetProperty")}
       aria-label={t("inspector.resetProperty")}
       // Inside a label: neither focus nor the label's own click should reach the slider.
@@ -3730,6 +3732,8 @@ function RangeProperty({
       <div className="range-control">
         <input
           type="range"
+          // Out of the Tab order: the number field above is the keyboard's way in, and Tab goes on to the next value (#300).
+          tabIndex={-1}
           min={controlMin}
           max={controlMax}
           step={controlStep}
