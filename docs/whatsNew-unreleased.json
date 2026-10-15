@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "title": {
+      "de": "Winkellineal verdeckbar, Hilfslinien am Boden",
+      "en": "The framing square can hide, guide lines on the floor"
+    },
+    "body": {
+      "de": "Das Winkellineal besteht jetzt aus Linien im Raum: Ein Körper davor verdeckt es, die Zahlen an den Armen verblassen dort. Das kleine Auge unter dem Griff schaltet um, damit das Lineal über allem sichtbar bleibt. Die Hilfslinien der grünen Zahlen laufen am Boden entlang, und der Schalter jeder Zahl sitzt in ihrem Rahmen.",
+      "en": "The framing square is now made of lines in the room: a body in front of it hides it, and the numbers on the arms fade there. The small eye below the handle switches that, to keep the square in view over everything. The guide lines of the green numbers run along the floor, and the switch of each number sits in its frame."
+    }
+  }
+]

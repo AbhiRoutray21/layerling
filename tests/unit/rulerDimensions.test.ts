@@ -179,6 +179,18 @@ describe("computeCornerRulerRelativeCoordinates", () => {
     max: { x: 16.5, y: 15, z: 11.5 },
   };
 
+  it("legt die Hilfslinien auf den Boden: der Zielpunkt liegt in der Ebene des Lineals, nicht auf der Hoehe des Koerpers (Forum)", () => {
+    for (const mode of ["endpoint", "midpoint"] as const) {
+      const coords = computeCornerRulerRelativeCoordinates({ rulerCorner: { x: 0, y: 0, z: 0 }, rulerRotation: 0, mode, bounds });
+      expect(coords.xTargetPoint.y).toBeCloseTo(0, 6);
+      expect(coords.zTargetPoint.y).toBeCloseTo(0, 6);
+      expect(coords.xTargetPoint.x).toBeCloseTo(coords.x, 6);
+      expect(coords.xTargetPoint.z).toBeCloseTo(coords.z, 6);
+      // Die Hoehe hat ihren eigenen Pfeil, am Koerper entlang.
+      expect(coords.elevationTargetPoint.y).toBeCloseTo(coords.elevation, 6);
+    }
+  });
+
   it("berechnet im Eckpunkt-Modus die minimale Ecke", () => {
     const coords = computeCornerRulerRelativeCoordinates({
       rulerCorner: { x: 0, y: 0, z: 0 },

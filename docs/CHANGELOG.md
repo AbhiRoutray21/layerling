@@ -6,6 +6,7 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **The framing square can hide behind bodies, and its guide lines run along the floor:** The square's arms and ticks were drawn on the screen over everything, which looks confusing from many angles, and the guide lines of the green numbers ran up to the middle of the body in the air. Now the arms, ticks, arrows and guide lines are lines in the room: a body in front of them hides them, and the numbers on the arms fade there. A small eye below the handle switches that, so the square can also stay in view over everything. The guide lines run along the floor to the point below or beside the body; the height has its own arrow. The switch of each green number now sits in the frame of the number. Asked for by @DrJones (forum).
 ## 1.78.0
 
 - **A locked object can be renamed and hidden in the properties again (#393):** The list of objects and the keys did it, but the properties window silently refused, because every change there also carried a new height, which a locked body does not accept. A change that is only a name, hiding or locking now goes through as it is. Contributed by @gogades.

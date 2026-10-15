@@ -8408,6 +8408,59 @@ html[data-theme="dark"] .inspector-bundle-note {
   z-index: 5;
 }
 
+/* The switch sits in the same frame as its number, the number's left edge (forum). */
+.ruler-coordinate-field {
+  position: absolute;
+  z-index: 4;
+  display: flex;
+  align-items: stretch;
+  background: rgba(255, 255, 255, 0.96);
+  border: 1.5px solid #4caf50;
+  border-radius: 4px;
+  box-shadow: 0 1px 4px rgba(46, 125, 50, 0.18);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.ruler-coordinate-field .corner-ruler-mode-toggle {
+  position: static;
+  width: 22px;
+  height: auto;
+  flex: none;
+  border: 0;
+  border-right: 1px solid rgba(129, 199, 132, 0.8);
+  border-radius: 2px 0 0 2px;
+  box-shadow: none;
+  transform: none;
+  pointer-events: all;
+}
+
+.ruler-coordinate-field .ruler-coordinate-badge {
+  position: static;
+  min-width: 40px;
+  border: 0;
+  border-radius: 0 2px 2px 0;
+  box-shadow: none;
+  background: transparent;
+  transform: none;
+}
+
+/* The ruler's lines stay in view over bodies (the eye is open) or hide behind them. */
+.corner-ruler-occlude-toggle {
+  color: #6b5b46;
+  background: rgba(255, 255, 255, 0.96);
+  border-color: rgba(182, 97, 8, 0.45);
+}
+
+.corner-ruler-occlude-toggle.active {
+  color: #b66108;
+}
+
+.corner-ruler-tick-label.hidden,
+.ruler-dimension-label.hidden {
+  opacity: 0.2;
+}
+
 .corner-ruler-mode-toggle:hover {
   background: #e8f5e9;
   border-color: #2e7d32;

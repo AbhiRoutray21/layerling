@@ -4178,6 +4178,7 @@ export function WorkplaneViewport({
         state.transformGuideLayer,
         state.moveDimensionLayer,
         state.originDimensionLayer,
+        state.cornerRulerLayer,
         state.modifierLayer,
         state.sectionPlaneHelper,
         plate ? null : state.workplaneLayer,
@@ -4343,6 +4344,7 @@ export function WorkplaneViewport({
       disposeChildren(state.transformGuideLayer);
       disposeChildren(state.moveDimensionLayer);
       disposeChildren(state.originDimensionLayer);
+      disposeChildren(state.cornerRulerLayer);
       disposeChildren(state.modifierLayer);
       if (state.sectionPlaneHelper) {
         state.scene.remove(state.sectionPlaneHelper);
@@ -6395,6 +6397,7 @@ export function WorkplaneViewport({
   const placeCornerRuler = useCallback((point: PlacementPoint, workplane: PlacementWorkplane) => {
     const existingMode = cornerRulerModelRef.current[0]?.mode ?? "endpoint";
     const existingAxisModes = cornerRulerModelRef.current[0]?.axisModes;
+    const stayInView = cornerRulerModelRef.current[0]?.occlude === false;
     const instance: CornerRulerInstance = {
       id: `corner-ruler-${++cornerRulerIdRef.current}`,
       corner: point,
@@ -6404,6 +6407,7 @@ export function WorkplaneViewport({
       armLengthZ: CORNER_RULER_DEFAULT_ARM_Z,
       mode: existingMode,
       ...(existingAxisModes ? { axisModes: existingAxisModes } : {}),
+      ...(stayInView ? { occlude: false } : {}),
     };
     storeCornerRulerModel([instance]);
   }, [storeCornerRulerModel]);
@@ -6414,6 +6418,17 @@ export function WorkplaneViewport({
         if (ruler.id !== id) return ruler;
         const { axisModes: _single, ...rest } = ruler;
         return { ...rest, ...toggledCornerRulerMode(ruler.mode, ruler.axisModes) };
+      })
+    );
+  }, [storeCornerRulerModel]);
+
+  // Whether a body in front hides the ruler's lines, or the ruler stays in view over everything.
+  const toggleCornerRulerOcclude = useCallback((id: string) => {
+    storeCornerRulerModel(
+      cornerRulerModelRef.current.map((ruler) => {
+        if (ruler.id !== id) return ruler;
+        const { occlude: _was, ...rest } = ruler;
+        return ruler.occlude === false ? rest : { ...rest, occlude: false };
       })
     );
   }, [storeCornerRulerModel]);
@@ -8779,6 +8794,7 @@ export function WorkplaneViewport({
               onDelete={removeCornerRuler}
               onToggleMode={toggleCornerRulerMode}
               onToggleAxisMode={toggleCornerRulerAxisMode}
+              onToggleOcclude={toggleCornerRulerOcclude}
               onCoordinateClick={beginRulerCoordinateEdit}
             />
           ) : null}
@@ -9040,10 +9056,13 @@ function createThreeScene(host: HTMLDivElement): ThreeState {
   const originDimensionLayer = new THREE.Group();
   originDimensionLayer.name = "OriginDimensions";
   originDimensionLayer.layers.set(RENDER_LAYER_HELPERS);
+  const cornerRulerLayer = new THREE.Group();
+  cornerRulerLayer.name = "CornerRuler";
+  cornerRulerLayer.layers.set(RENDER_LAYER_HELPERS);
   const modifierLayer = new THREE.Group();
   modifierLayer.name = "EdgeModifier";
   modifierLayer.layers.set(RENDER_LAYER_MODIFIERS);
-  scene.add(workplaneLayer, workplanePreviewLayer, shapeLayer, helperLayer, splitLayer, transformGuideLayer, moveDimensionLayer, originDimensionLayer, modifierLayer);
+  scene.add(workplaneLayer, workplanePreviewLayer, shapeLayer, helperLayer, splitLayer, transformGuideLayer, moveDimensionLayer, originDimensionLayer, cornerRulerLayer, modifierLayer);
 
   const raycaster = new THREE.Raycaster();
   raycaster.params.Line = { threshold: 1.15 };
@@ -9056,7 +9075,7 @@ function createThreeScene(host: HTMLDivElement): ThreeState {
     const height = Math.max(1, host.clientHeight);
     renderer.setSize(width, height);
     updateCameraViewport(state.camera, width, height);
-    [state.transformGuideLayer, state.moveDimensionLayer, state.originDimensionLayer, state.modifierLayer].forEach((layer) => {
+    [state.transformGuideLayer, state.moveDimensionLayer, state.originDimensionLayer, state.cornerRulerLayer, state.modifierLayer].forEach((layer) => {
       layer.traverse((child) => {
         const material = (child as THREE.Mesh).material;
         const materials = Array.isArray(material) ? material : material ? [material] : [];
@@ -9083,6 +9102,7 @@ function createThreeScene(host: HTMLDivElement): ThreeState {
     transformGuideLayer,
     moveDimensionLayer,
     originDimensionLayer,
+    cornerRulerLayer,
     modifierLayer,
     shapeRecords: new Map<string, ShapeRenderRecord>(),
     officialShapeLayerActive: false,

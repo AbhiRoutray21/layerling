@@ -3471,6 +3471,34 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .inspector-bundle-note 
   box-shadow: 0 1px 3px rgba(46, 125, 50, 0.16);
 }
 
+:where(html[data-theme="dark"][data-palette="graphite"]) .ruler-coordinate-field {
+  background: rgba(255, 255, 255, 0.96);
+  border: 1.5px solid #4caf50;
+  box-shadow: 0 1px 4px rgba(46, 125, 50, 0.18);
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .ruler-coordinate-field .corner-ruler-mode-toggle {
+  border: 0;
+  border-right: 1px solid rgba(129, 199, 132, 0.8);
+  box-shadow: none;
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .ruler-coordinate-field .ruler-coordinate-badge {
+  border: 0;
+  box-shadow: none;
+  background: transparent;
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .corner-ruler-occlude-toggle {
+  color: #595959;
+  background: rgba(255, 255, 255, 0.96);
+  border-color: rgba(182, 97, 8, 0.45);
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .corner-ruler-occlude-toggle.active {
+  color: #b66108;
+}
+
 :where(html[data-theme="dark"][data-palette="graphite"]) .corner-ruler-mode-toggle:hover {
   background: #e8f5e9;
   border-color: #2e7d32;
