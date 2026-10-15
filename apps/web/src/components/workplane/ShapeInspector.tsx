@@ -1853,6 +1853,14 @@ function getShapePropertiesWithAppLimits(shape: WorkplaneShape, onUpdate: ShapeI
     if (isCurved) {
       properties.push(
         {
+      // Straight text (#382): the letters keep their proportions in the box, or are stretched to fill it.
+      ...(isCurved ? [] : [{
+        type: "toggle",
+        id: "textStretch",
+        label: t("prop.textStretch"),
+        value: Boolean(shape.textStretch),
+        onChange: (textStretch: boolean) => onUpdate({ textStretch: textStretch || undefined }),
+      } satisfies ShapePropertyConfig]),
           id: "textRadius",
           label: t("prop.textRadius"),
           value: shape.textRadius ?? 30,

@@ -12,6 +12,7 @@ Wähle in der Formenbibliothek {{ui:shape.text}} und setze ihn ab. Im Feld {{ui:
 - **{{ui:prop.height}}:** Wie hoch die Schrift aus der Fläche ragt.
 - **{{ui:prop.bevel}}:** Rundet die Buchstabenkanten ab, damit sie weicher wirken. Mit {{ui:prop.segments}} bestimmst du, in wie vielen Stufen.
 - **Größe:** Länge und Breite der Zeile stellst du wie bei jeder Form ein. Zieh an den Griffen oder tippe die Maße ein.
+- **{{ui:prop.textStretch}}:** Zuerst aus: Die Buchstaben behalten ihre Proportionen und sitzen in der Mitte des Rahmens, ein Rahmen, der breiter oder tiefer gezogen ist, als das Wort braucht, bleibt also größer als die Buchstaben. Schaltest du es ein, werden die Buchstaben in beide Richtungen auf den ganzen Rahmen gestreckt: Ein Großbuchstabe lässt sich niedriger oder schmaler machen, wie in Tinkercad. Es gilt für gerade Schrift; gebogene Schrift hat ihre eigene Buchstabengröße.
 
 Ein Text ist zunächst ein einzelner Körper. Willst du die Buchstaben einzeln behandeln, klicke auf {{ui:inspector.separateParts}}. Dann ist jeder Buchstabe eine eigene Form.
 

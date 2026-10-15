@@ -1613,6 +1613,7 @@ export const MESSAGES_FR: Partial<Record<MessageKey, string>> = {
   "prop.text": "Texte",
   "prop.textCurved": "Sur l'arc",
   "prop.textRadius": "Rayon de l'arc",
+  "prop.textStretch": "Étirer les lettres sur le cadre",
   "prop.textInward": "En bas",
   "prop.textFlipped": "À l'envers",
   "prop.segments": "Segments",

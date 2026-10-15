@@ -1036,6 +1036,7 @@ function tapeShapeTopologyKey(shape: WorkplaneShape): string {
     fontRevision: customFontRevision(shape.font),
     textStroke: shape.textStroke,
     textSilhouette: shape.textSilhouette,
+    textStretch: shape.textStretch,
     textKeyring: shape.textKeyring,
     textEdge: shape.textEdge,
     // A fill is built by the 2D kernel; until it has loaded the text is drawn plain (#215).
@@ -1293,6 +1294,7 @@ function shapeGeometrySignature(shape: WorkplaneShape): string {
     fontRevision: customFontRevision(shape.font),
     textStroke: shape.textStroke,
     textSilhouette: shape.textSilhouette,
+    textStretch: shape.textStretch,
     textKeyring: shape.textKeyring,
     textEdge: shape.textEdge,
     // A fill is built by the 2D kernel; until it has loaded the text is drawn plain (#215).

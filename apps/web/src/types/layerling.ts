@@ -696,6 +696,12 @@ export type WorkplaneShape = {
   /** Text only (#215): the letters without their counters (the holes in O, A, e), as the usual Silhouette. */
   textSilhouette?: boolean;
   /**
+   * Straight text only (#382): the letters are stretched to fill the box in both directions, so a
+   * capital can be made lower or narrower as in Tinkercad. Without it the letters keep their
+   * proportions and are fitted into the box, centred.
+   */
+  textStretch?: boolean;
+  /**
    * Text only (#225): the top edge of the letters rounded or chamfered by `size` mm, as a name
    * tag's letters on top are finished. Built from the outline stepped inwards, so it works for
    * every font and word; the edge tool takes such a text as a mesh.

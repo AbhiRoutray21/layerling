@@ -1642,6 +1642,7 @@ export const MESSAGES_CS: Record<MessageKey, string> = {
   "prop.text": "Text",
   "prop.textCurved": "Po oblouku",
   "prop.textRadius": "Poloměr oblouku",
+  "prop.textStretch": "Roztáhnout písmena na rámeček",
   "prop.textInward": "Podél spodní strany",
   "prop.textFlipped": "Vzhůru nohama",
   "prop.segments": "Segmenty",

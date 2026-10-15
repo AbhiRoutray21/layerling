@@ -20,5 +20,15 @@
       "de": "Eine Raste des Mausrads zoomte in Safari auf einem Mac mit einer einfachen Maus nur etwa ein Achtel so stark wie in Chrome unter Windows, selbst mit der Zoomgeschwindigkeit auf 10. Ein einzelner kleiner Schritt zählt jetzt wie eine ganze Raste. Ein Trackpad, ein weich laufendes Rad und das Spreizen auf dem Trackpad bleiben, wie sie waren.",
       "en": "A notch of the mouse wheel zoomed only about an eighth as much in Safari on a Mac with a plain mouse as in Chrome on Windows, even with Zoom speed at 10. A single small step now counts like a whole notch. A trackpad, a smooth wheel and the pinch on a trackpad stay as they were."
     }
+  },
+  {
+    "title": {
+      "de": "Buchstaben auf den Rahmen strecken",
+      "en": "Stretch letters to the frame"
+    },
+    "body": {
+      "de": "Eine gerade Schrift hielt bisher die Proportionen ihrer Buchstaben und blieb in der Mitte des Rahmens, auch wenn der Rahmen breiter oder tiefer gezogen war. Der neue Schalter „Buchstaben auf den Rahmen strecken“ in den Einstellungen des Textes füllt den ganzen Rahmen in beide Richtungen: Ein Großbuchstabe lässt sich niedriger oder schmaler machen, wie in Tinkercad. Die Umrisse für das Kantenwerkzeug und die Füllarten folgen.",
+      "en": "A straight text used to keep the proportions of its letters and stay in the middle of its frame, even when the frame was pulled wider or deeper. The new switch \"Stretch letters to the frame\" in the text's settings fills the whole frame in both directions: a capital can be made lower or narrower, as in Tinkercad. The outlines for the edge tool and the fill modes follow."
+    }
   }
 ]

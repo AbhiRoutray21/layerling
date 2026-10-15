@@ -1251,6 +1251,9 @@ function validateShapeDefinition(definition: Record<string, unknown>, label: str
   if (definition.textSilhouette !== undefined && typeof definition.textSilhouette !== "boolean") {
     throw new Error(`${label}.textSilhouette must be true or false`);
   }
+  if (definition.textStretch !== undefined && typeof definition.textStretch !== "boolean") {
+    throw new Error(`${label}.textStretch must be true or false`);
+  }
   // The top edge of a text's letters (#225): round or chamfer, with a size.
   if (definition.textEdge !== undefined && !normalizeTextEdge(definition.textEdge)) {
     throw new Error(`${label}.textEdge must be a round or chamfer edge with a size`);

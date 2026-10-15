@@ -1189,6 +1189,7 @@ export const MESSAGES_SL: Partial<Record<MessageKey, string>> = {
   "prop.text": "Besedilo",
   "prop.textCurved": "Po loku",
   "prop.textRadius": "Polmer loka",
+  "prop.textStretch": "Raztegni črke na okvir",
   "prop.textInward": "Po spodnji strani",
   "prop.textFlipped": "Na glavo",
   "prop.segments": "Segmenti",

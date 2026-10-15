@@ -1627,6 +1627,7 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "prop.text": "Text",
   "prop.textCurved": "Auf Kreisbogen",
   "prop.textRadius": "Bogenradius",
+  "prop.textStretch": "Buchstaben auf den Rahmen strecken",
   "prop.textInward": "Unten am Kreis",
   "prop.textFlipped": "Auf den Kopf stellen",
   "prop.segments": "Segmente",

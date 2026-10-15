@@ -1620,6 +1620,7 @@ export const MESSAGES_RU: Partial<Record<MessageKey, string>> = {
   "prop.text": "Текст",
   "prop.textCurved": "По дуге",
   "prop.textRadius": "Радиус дуги",
+  "prop.textStretch": "Растянуть буквы по рамке",
   "prop.textInward": "По нижнему краю",
   "prop.textFlipped": "Вверх ногами",
   "prop.segments": "Сегменты",

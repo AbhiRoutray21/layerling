@@ -1628,6 +1628,7 @@ export const MESSAGES_EN = {
   "prop.text": "Text",
   "prop.textCurved": "On arc",
   "prop.textRadius": "Arc radius",
+  "prop.textStretch": "Stretch letters to the frame",
   "prop.textInward": "Along the bottom",
   "prop.textFlipped": "Upside down",
   "prop.segments": "Segments",

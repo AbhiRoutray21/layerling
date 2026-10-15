@@ -1627,6 +1627,7 @@ export const MESSAGES_NL: Record<MessageKey, string> = {
   "prop.text": "Tekst",
   "prop.textCurved": "Op boog",
   "prop.textRadius": "Boogstraal",
+  "prop.textStretch": "Letters uitrekken tot het kader",
   "prop.textInward": "Langs de onderkant",
   "prop.textFlipped": "Ondersteboven",
   "prop.segments": "Segmenten",
