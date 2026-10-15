@@ -29,7 +29,7 @@ Dans le panneau vous trouvez :
 - {{ui:edge.keepSize}} conserve le chanfrein ou le congé aussi grand qu'il est, même si vous mettez le corps à l'échelle ultérieurement.
 - {{ui:edge.previewQuality}} ({{ui:edge.draft}}, {{ui:edge.standard}} ou {{ui:edge.fine}}) décide de la précision avec laquelle l'aperçu est calculé. Pour les pièces difficiles, {{ui:edge.draft}} est plus rapide.
 
-Pendant que vous ajustez la taille, le layerling recalcule l'aperçu. Cela peut prendre un moment. Vous pouvez continuer à vous adapter ; la dernière valeur que vous avez choisie est celle qui est calculée.
+Pendant que vous ajustez la taille, layerling recalcule l'aperçu. Cela peut prendre un moment. Vous pouvez continuer à vous adapter ; la dernière valeur que vous avez choisie est celle qui est calculée.
 
 Si la taille est trop grande pour le bord, layerling l'indique et suggère une valeur plus petite. Souvent, un ou deux millimètres de moins suffisent. Aux angles vifs, un congé a besoin de plus d’espace que son rayon ne le suggère. Sur un petit écran, le panneau défile tout seul pour que le message soit visible.
 
@@ -45,7 +45,7 @@ A côté d'un chanfrein, d'un congé ou d'un évidement, il y a aussi {{ui:edge.
 
 Sur un groupe, par exemple un cylindre percé d'un trou, le bord traité appartient au corps fini et non à l'une de ses parties. Le groupe devient donc un seul corps et {{ui:editor.tool.ungroup}} n'est plus disponible. Reprenez le traitement comme décrit ci-dessus et le groupe revient avec toutes ses parties. Le moyen le plus simple consiste à traiter les bords en dernier. Cela vaut également pour les filetages : l'outil de bord prend un filetage comme corps exact, de sorte qu'un bloc avec un trou taraudé obtient ses bords arrondis avec le filetage en place. L'élaboration des bords d'un filetage prend plus de temps que pour une forme simple, quelques secondes pour un filetage M6 et environ une demi-minute pour un filetage de tuyau G1/2.
 
-> **Bon à savoir :** la superposition fonctionne avec une véritable géométrie CAO pour les congés et les chanfreins, et pas seulement avec un maillage triangulaire. C'est pourquoi un bord arrondi reste un bord arrondi dans l'exportation STEP.
+> **Bon à savoir :** layerling fonctionne avec une véritable géométrie CAO pour les congés et les chanfreins, et pas seulement avec un maillage triangulaire. C'est pourquoi un bord arrondi reste un bord arrondi dans l'exportation STEP.
 
 Une pièce importée en STEP conserve également sa géométrie CAO : chanfreins, congés et travaux d'évidement sur le corps à partir du fichier, quelle que soit la finesse avec laquelle la pièce est dessinée à l'écran. STL, OBJ et 3MF n'apportent que des triangles, et une pièce finement dessinée peut être trop dense pour l'outil de bord. Si une pièce est également disponible en STEP, importez-la.
 
@@ -63,18 +63,18 @@ Boîtes, tasses, étuis et couvercles ont un point commun : ils sont vides à l'
 
 Les murs grandissent vers l’intérieur. L’extérieur reste tel quel.
 
-Le {{ui:shell.edges}} n'a d'importance que là où les parois intérieures s'écartent - à un niveau du corps ou autour d'une ouverture. Les coins de la cavité d'une boîte ordinaire sont toujours pointus, avec les deux réglages. Pour un intérieur arrondi, arrondissez d'abord les bords extérieurs du corps (voir ci-dessus), puis creusez-le : l'intérieur suit avec le rayon moins l'épaisseur de paroi. Si l'intérieur arrondi ne peut pas être construit, ce qui peut arriver avec un contour composé de très nombreuses pièces droites courtes telles qu'un dessin tracé, la superposition construit à la place le même corps creux avec des coins intérieurs pointus.
+Le {{ui:shell.edges}} n'a d'importance que là où les parois intérieures s'écartent - à un niveau du corps ou autour d'une ouverture. Les coins de la cavité d'une boîte ordinaire sont toujours pointus, avec les deux réglages. Pour un intérieur arrondi, arrondissez d'abord les bords extérieurs du corps (voir ci-dessus), puis creusez-le : l'intérieur suit avec le rayon moins l'épaisseur de paroi. Si l'intérieur arrondi ne peut pas être construit, ce qui peut arriver avec un contour composé de très nombreuses pièces droites courtes telles qu'un dessin tracé, layerling construit à la place le même corps creux avec des coins intérieurs pointus.
 
 ![Le résultat : une coque avec une paroi de 3 mm, ouverte en haut.](shot:hollow-result)
 
 ![La même boîte avec seulement la face avant ouverte : un emplacement pour un tiroir.](shot:hollow-sides)
 
-Pour chaque côté ouvert, le corps a besoin d’une face plate tout au bord de ce côté. Les sphères et les formes libres ne peuvent donc pas être creusées de cette façon. Si le mur est trop épais pour le corps, le layerling vous le signale et en demande un plus fin.
+Pour chaque côté ouvert, le corps a besoin d’une face plate tout au bord de ce côté. Les sphères et les formes libres ne peuvent donc pas être creusées de cette façon. Si le mur est trop épais pour le corps, layerling vous le signale et en demande un plus fin.
 
 Un corps avec une poche - un bloc avec un trou qui ne traverse pas complètement, réalisé en regroupant une boîte avec un trou surélevé - peut également être creusé, avec le dessus ouvert : les parois autour de la poche sont également creusées, de sorte qu'un anneau de cavité reste entre la paroi extérieure et la poche, ouvert en haut, et une fine cavité se trouve sous le fond de la poche.
 
 **Les corps qui se terminent par un point**, comme un cône ou un triangle de révolution, n'ont pas de face plate sur le dessus qui pourrait rester ouverte. Là non plus, une cavité entièrement fermée ne fonctionne pas, car un point ne peut pas être décalé vers l'intérieur : même avec un mur de 1 mm, vous obtenez le message que les murs ne peuvent pas être aussi épais. Dessinez plutôt le mur dans le profil avant de procéder à la révolution : dupliquez le contour, réduisez la copie de manière uniforme, placez-la au milieu du grand contour et coupez le grand avec, puis faites pivoter le tout (chapitre Esquisses, section Révolution). La distance entre les deux contours correspond à l’épaisseur de la paroi.
 
-Si vous redimensionnez un corps évidé ultérieurement, la superposition le creuse immédiatement à nouveau à la nouvelle taille. Le mur reste aussi épais que vous l'avez choisi, corps ronds inclus. Un cylindre que vous tirez plus loin dans un sens que dans l’autre devient une ellipse.
+Si vous redimensionnez un corps évidé ultérieurement, layerling le creuse immédiatement à nouveau à la nouvelle taille. Le mur reste aussi épais que vous l'avez choisi, corps ronds inclus. Un cylindre que vous tirez plus loin dans un sens que dans l’autre devient une ellipse.
 
 > **Astuce :** Avec une buse de 0,4 mm, 1,2 à 2 mm de paroi est un bon début : suffisamment fin pour économiser de la matière, suffisamment épais pour une pièce solide.

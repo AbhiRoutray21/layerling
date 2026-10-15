@@ -3,7 +3,7 @@ title: Solides et trous
 summary: Comment des formes simples deviennent des alésages, des fentes et des poches, et comment changer de groupe plus tard.
 ---
 
-C'est l'idée la plus importante de la superposition, et elle s'apprend rapidement : **Chaque forme est soit un solide, soit un trou.** Un solide reste. Un trou est un outil qui enlève de la matière.
+C'est l'idée la plus importante dans layerling, et elle s'apprend rapidement : **Chaque forme est soit un solide, soit un trou.** Un solide reste. Un trou est un outil qui enlève de la matière.
 
 ## Solide ou troué
 

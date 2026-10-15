@@ -3,7 +3,7 @@ title: Placer et ajuster les formes
 summary: La bibliothèque de formes, dimensions par numéro et par poignée, couleur, rotation, effilage et torsion.
 ---
 
-Chaque élément du layerling commence par une forme. À partir d'eux, vous construisez tout le reste : les formes se complètent, se découpent ou s'assemblent pour former une nouvelle forme.
+Chaque pièce dans layerling commence par une forme. À partir d'eux, vous construisez tout le reste : les formes se complètent, se découpent ou s'assemblent pour former une nouvelle forme.
 
 ## Ajouter une forme
 
@@ -53,7 +53,7 @@ Taper est plus précis que faire glisser. Tous les champs numériques prennent d
 
 ## À quel point est rond ? Le côté compte
 
-Les formes rondes telles que le cylindre, le cône, le tube, l'ellipse ou les alésages ont le commutateur {{ui:prop.sidesFollowSize}} et le curseur {{ui:prop.sides}} dans leurs propriétés. Le {{ui:shape.torus}} possède deux curseurs : {{ui:prop.torusSides}} autour de l'anneau et {{ui:prop.torusSteps}} autour du tube. Là aussi, ils suivent la taille jusqu'à ce que vous les teniez, donc un grand tore ne montre aucune facette. La raison : pour la vue et pour STL, 3MF et OBJ, le layerling dessine un cercle comme un polygone de nombreux petits côtés. Plus il y a de côtés, plus il est lisse et plus il faut de triangles.
+Les formes rondes telles que le cylindre, le cône, le tube, l'ellipse ou les alésages ont le commutateur {{ui:prop.sidesFollowSize}} et le curseur {{ui:prop.sides}} dans leurs propriétés. Le {{ui:shape.torus}} possède deux curseurs : {{ui:prop.torusSides}} autour de l'anneau et {{ui:prop.torusSteps}} autour du tube. Là aussi, ils suivent la taille jusqu'à ce que vous les teniez, donc un grand tore ne montre aucune facette. La raison : pour la vue et pour STL, 3MF et OBJ, layerling dessine un cercle comme un polygone de nombreux petits côtés. Plus il y a de côtés, plus il est lisse et plus il faut de triangles.
 
 **Là où le nombre de côtés compte**
 
@@ -73,7 +73,7 @@ Les formes rondes telles que le cylindre, le cône, le tube, l'ellipse ou les al
 
 **Comment l'utiliser**
 
-- **Laissez {{ui:prop.sidesFollowSize}} activé.** Ensuite, la superposition sélectionne le nombre de côtés à partir du diamètre de sorte que le polygone s'éloigne d'au plus {{value:ROUND_DEVIATION_TOLERANCE}} mm du vrai cercle, bien en dessous de ce qu'une imprimante résout. Les petites formes ont au moins {{value:MIN_AUTOMATIC_SIDES}} côtés, les grandes davantage.
+- **Laissez {{ui:prop.sidesFollowSize}} activé.** Ensuite, layerling sélectionne le nombre de côtés à partir du diamètre de sorte que le polygone s'éloigne d'au plus {{value:ROUND_DEVIATION_TOLERANCE}} mm du vrai cercle, bien en dessous de ce qu'une imprimante résout. Les petites formes ont au moins {{value:MIN_AUTOMATIC_SIDES}} côtés, les grandes davantage.
 - **Moins de côtés** que vous prenez lorsque vous voulez volontairement un polygone (mais il y a le {{ui:shape.polygon}} pour ça) ou lorsque l'éditeur devient lent avec de très nombreuses formes rondes.
 - **Plus de côtés** dont vous n'avez presque jamais besoin. Uniquement sur de très grandes pièces rondes, quand on voit des bords dans le STL.
 - **Pour les pièces que vous traitez uniquement avec des bords ou à la main comme STEP,** le nombre de côtés n'a pas d'importance.
@@ -98,7 +98,7 @@ L'étape d'accrochage se trouve en bas à droite de l'éditeur et peut être mod
 
 ## Copier et dupliquer
 
-{{ui:editor.tool.copy}}, {{ui:editor.tool.paste}} et {{ui:editor.tool.duplicate}} sont dans le ruban ({{ui:editor.group.clipboard}}). [[Ctrl]]+[[D]] duplique une sélection. le layerling se souvient de la façon dont vous avez déplacé ou fait pivoter la copie pour la dernière fois et applique à nouveau la même chose à la copie suivante. Cela produit une rangée de trous ou de marches en quelques pressions sur une touche. Pour les arrangements réguliers, il existe également le modèle décrit dans [Sélection et arrangement] (chapter:select-and-arrange).
+{{ui:editor.tool.copy}}, {{ui:editor.tool.paste}} et {{ui:editor.tool.duplicate}} sont dans le ruban ({{ui:editor.group.clipboard}}). [[Ctrl]]+[[D]] duplique une sélection. layerling se souvient de la façon dont vous avez déplacé ou fait pivoter la copie pour la dernière fois et applique à nouveau la même chose à la copie suivante. Cela produit une rangée de trous ou de marches en quelques pressions sur une touche. Pour les arrangements réguliers, il existe également le modèle décrit dans [Sélection et arrangement] (chapter:select-and-arrange).
 
 > **Astuce :** Si une forme refuse de prendre la taille souhaitée, c'est souvent la limite pour de nouvelles formes. Sous {{ui:workspace.shapeDefaults}} dans les paramètres, vous décidez comment chaque forme commence et quelle taille elle peut atteindre.
 
@@ -130,6 +130,6 @@ Un motif, un logo ou un lettrage doit-il figurer sur une tasse, une canette ou u
 
 Pour une gravure, activez {{ui:inspector.wrapInward}} : l'épaisseur va alors dans le mur. Faites un trou dans la forme, centrez-la et regroupez-la avec le cylindre.
 
-Le résultat est un maillage semblable à un modèle importé. Une forme déjà enveloppée est un maillage de la pièce enroulée et ne peut pas être enroulée une deuxième fois : annulez l'enroulement, ou enroulez à nouveau l'original plat avec un autre diamètre. Annuler remet la forme à plat ; pour un autre diamètre, défaire d'abord et enrouler à nouveau. Il ne peut pas faire plus d'un tour du cylindre ; puis la superposition nomme le plus petit diamètre qui convient.
+Le résultat est un maillage semblable à un modèle importé. Une forme déjà enveloppée est un maillage de la pièce enroulée et ne peut pas être enroulée une deuxième fois : annulez l'enroulement, ou enroulez à nouveau l'original plat avec un autre diamètre. Annuler remet la forme à plat ; pour un autre diamètre, défaire d'abord et enrouler à nouveau. Il ne peut pas faire plus d'un tour du cylindre ; puis layerling indique le plus petit diamètre qui convient.
 
 
