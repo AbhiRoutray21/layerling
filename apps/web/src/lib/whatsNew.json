@@ -1,5 +1,110 @@
 [
   {
+    "version": "1.75.0",
+    "items": [
+      {
+        "title": {
+          "de": "Symbolschild aus einem Bild (PNG, JPG)",
+          "en": "Icon tag from a picture (PNG, JPG)"
+        },
+        "body": {
+          "de": "Das Fenster Symbolschild nimmt jetzt auch PNG- und JPG-Dateien. Das Bild wird zu einem Umriss nachgezeichnet, die Vorschau zeigt ihn, und du wählst, ob sein dunkler oder sein heller Teil das Symbol wird. Eine SVG, die nur ein Bild enthält, wird genauso nachgezeichnet.",
+          "en": "The icon tag window now takes PNG and JPG files too. The picture is traced into an outline, the preview shows it, and you choose whether its dark or its light part becomes the icon. An SVG that holds nothing but a picture is traced the same way."
+        }
+      },
+      {
+        "title": {
+          "de": "Skizze: Teile durchscheinend zeigen",
+          "en": "Sketch: show the parts seen through"
+        },
+        "body": {
+          "de": "In der Skizze gibt es bei den Ansichtsknöpfen links einen neuen Knopf mit Schichten: Er zeichnet alle Kanten der Körper dünn und blass auf die Skizzenebene, in jeder Höhe, als sähest du durch sie hindurch. So zeichnest du an vorhandener Arbeit entlang; auf einer senkrechten Ebene an einer Vorderfläche ist es die Vorderansicht des Teils. Die Wahl bleibt im Browser.",
+          "en": "In the sketch there is a new button with layers among the view buttons on the left: it draws all the edges of the bodies on the sketch plane, thin and faint, at any height, as if you looked through them. That lets you trace round existing work; on an upright plane set on a front face it is the front view of the part. The choice stays in the browser."
+        }
+      },
+      {
+        "title": {
+          "de": "Skizze extrudieren und rotieren: zwei Knöpfe",
+          "en": "Extrude and Revolve: two buttons"
+        },
+        "body": {
+          "de": "Im Reiter Skizze stehen „Skizze extrudieren\" und „Skizze rotieren\" jetzt als zwei Knöpfe nebeneinander in der Gruppe Erstellen, statt in einem Ausklappmenü. Der Hinweis steht als Tooltip am Knopf, das Fragezeichen daneben. So spart der Wechsel zwischen beiden Arten einen Klick.",
+          "en": "In the Sketch tab, Extrude sketch and Revolve sketch now stand side by side as two buttons in the Create group instead of in a drop-down. The hint is the tooltip of the button, the question mark beside them. Switching between the two takes one click less."
+        }
+      },
+      {
+        "title": {
+          "de": "Bilder importieren (PNG, JPG)",
+          "en": "Importing pictures (PNG, JPG)"
+        },
+        "body": {
+          "de": "Das Importfenster nimmt jetzt auch PNG- und JPG-Dateien. Das Bild wird zu einem Umriss nachgezeichnet und kommt als Skizzenkörper von 50 mm Breite, den du danach anders groß machen kannst. Eine SVG, die nur ein Bild enthält, wird genauso nachgezeichnet.",
+          "en": "The import window now takes PNG and JPG files too. The picture is traced into an outline and comes in as a sketch body 50 mm wide, which you can resize afterwards. An SVG that holds nothing but a picture is traced the same way."
+        }
+      },
+      {
+        "title": {
+          "de": "Tasten neben den Namen, und Umschalt+M für Mehrfarbig",
+          "en": "Keys beside the names, and Shift+M for Multicolor"
+        },
+        "body": {
+          "de": "In den Einstellungen einer Form stehen die Tasten jetzt neben den Namen: Körper (S), Aussparung (H), Durchsichtig (T) und Gruppe bearbeiten (E). Mehrfarbig bekommt eine Taste, Umschalt+M, und steht in der Tastenkürzel-Liste. Sie schaltet markierte Gruppen zwischen jedem Teil in seiner Farbe und einer Farbe für die Gruppe um. Umschalt+M schaltete bisher den Spiegelmodus ein, das tut jetzt nur noch M allein.",
+          "en": "The settings of a shape now show the keys next to the names: Solid (S), Hole (H), Transparent (T) and Edit group (E). Multicolor gets a key, Shift+M, and is in the shortcuts list: it switches the selected groups between each part in its own colour and one colour for the group. Shift+M used to start the mirror mode; now only M alone does."
+        }
+      },
+      {
+        "title": {
+          "de": "Französisch als Sprache",
+          "en": "French as a language"
+        },
+        "body": {
+          "de": "layerling gibt es jetzt auch auf Französisch: die ganze Oberfläche und die 16 Kapitel der Anleitung. Die Sprache wird für einen Browser mit französischer Einstellung von selbst gewählt und lässt sich in der Sprachliste ändern. Übersetzt mit einem KI-Assistenten; falsche Wörter lassen sich mit einem kleinen Pull Request auf GitHub verbessern.",
+          "en": "layerling now speaks French: the whole interface and the 16 chapters of the guide. The language is chosen automatically for a browser set to French and can be changed in the language list. It was translated with an AI assistant; wrong words are fixed with a small pull request on GitHub."
+        }
+      },
+      {
+        "title": {
+          "de": "Eigene Rasterstufe nur ganz",
+          "en": "A custom snap grid, whole only"
+        },
+        "body": {
+          "de": "Jede eigene Rasterstufe in den Einstellungen hat einen Schalter „Auch halb und viertel“. Ohne Haken bietet das Menü nur die Größe, die du eingetippt hast, nicht mehr ihre Hälfte und ihr Viertel. Bei den Stufen, die du schon hast, bleibt der Haken gesetzt.",
+          "en": "Each custom snap grid in the settings has a switch “Also half and quarter”. With it off, the menu offers just the size you typed, not its half and quarter as well. For the grids you already have, it stays on."
+        }
+      },
+      {
+        "title": {
+          "de": "Ansicht zentrieren auch jenseits der Platte",
+          "en": "Center view beyond the plate"
+        },
+        "body": {
+          "de": "Ein Teil, das über den Rand der Platte hinausliegt, lässt sich jetzt mit „Ansicht auf die Auswahl zentrieren“ (Umschalt+F) in die Bildmitte holen. Das Haus-Symbol stellt die ganze Platte wieder ein.",
+          "en": "A part that lies beyond the edge of the plate can now be brought to the middle of the screen with “Center view on selection” (Shift+F). The house button brings the whole plate back."
+        }
+      },
+      {
+        "title": {
+          "de": "Pfeiltasten: 0,01 mm bei ausgeschaltetem Raster",
+          "en": "Arrow keys: 0.01 mm with the grid off"
+        },
+        "body": {
+          "de": "Ist das Raster aus, schiebt eine Pfeiltaste die Auswahl um 0,01 mm statt 0,1 mm, mit Umschalt um das Fünffache. Mit Raster folgen die Pfeile weiter dem Raster.",
+          "en": "With the snap grid off, an arrow key moves the selection by 0.01 mm instead of 0.1 mm, and Shift five times that. With a grid on, the arrows still follow the grid."
+        }
+      },
+      {
+        "title": {
+          "de": "Text mit Kontur lässt sich ausschneiden",
+          "en": "A text with an outline can be cut out"
+        },
+        "body": {
+          "de": "Ein Text mit einer Linie um die Buchstaben (Füllart Kontur) konnte bei manchen Schriften nicht als Aussparung aus einer Platte geschnitten werden („Could not cut this imported mesh cleanly“). Sein Netz ist jetzt immer geschlossen, und der Schnitt klappt.",
+          "en": "A text with a line round its letters (the Outline fill) could not be cut out of a plate with some fonts (“Could not cut this imported mesh cleanly”). Its mesh is always closed now, and the cut works."
+        }
+      }
+    ]
+  },
+  {
     "version": "1.74.0",
     "items": [
       {

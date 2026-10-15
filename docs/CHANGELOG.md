@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+## 1.75.0
+
 - **French:** The whole interface and the 16 chapters of the guide are in French, with the language list and the guide's language switch. It is picked automatically for a browser set to French. Made by @ZelTroN-2k3 with an AI assistant (pull request #368); a French reader is still welcome to go through it, wrong words are fixed with a small pull request.
 - **Arrow keys move by 0.01 mm when the snap grid is off:** With the grid off an arrow key moved the selection by 0.1 mm. It now moves it by 0.01 mm, and Shift with an arrow by five times that. With a grid on, the arrows still follow the grid; for 0.1 mm steps choose the 0.1 mm grid. Suggested by @HopGabor62 (#370).
 - **The keys stand beside the names in a shape's settings, and Multicolor has one:** Solid (S), Hole (H), Transparent (T) and Edit group (E) now show their keys in the settings card, and Multicolor, which had none, gets **Shift+M**: it switches the selected groups between each part in its own colour and one colour for the group, and it is in the shortcuts list. Shift+M used to turn on the mirror mode like M; M alone still does. Suggested by @prmod3d (#367).
