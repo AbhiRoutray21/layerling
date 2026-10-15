@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+## 1.79.0
+
 - **Hollowing a rounded box with rounded top and bottom edges says why it fails (#401):** A rounded box whose top and bottom edges are rounded as well can only be hollowed with a wall clearly thinner than that rounding; with a thicker wall the panel only said that the walls cannot be this thick. It now adds the reason and what to do (a thinner wall, or the rounding set to 0 first) and points to the Bug report button in the footer, and the guide says so. Reported by @gquiring on GitHub.
 - **Fillet and chamfer on a body cut by a group of holes (#394):** Two holes grouped first, that group made a hole and then grouped with a plate, ended in "The mesh is open or non-manifold" as soon as an edge was treated, although the cut was perfectly closed. The edge tool took the hole group as one mesh of two loose pieces, which the kernel could not join into one body. It now opens a group of nothing but holes (or of nothing but solids) into its parts, so every hole is the exact shape it was and its rim is a true curve, not facets. A mesh of several loose pieces is also joined into one body now, wherever it still turns up. Reported on GitHub.
 - **Back and Close in the section view only on a tablet (#402):** The two buttons came for a tablet, which has no Esc key, but they showed on every device, where the X and Esc do the same and "Confirm" confirmed nothing. They are shown on a touch device only now, and "Confirm" is called "Close". The guide describes the panel's closing as rondlh wrote it. Reported by @rondlh on GitHub.
