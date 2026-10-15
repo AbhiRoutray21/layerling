@@ -1,5 +1,52 @@
 [
   {
+    "version": "1.77.0",
+    "items": [
+      {
+        "title": {
+          "de": "Ungarisch als Sprache",
+          "en": "Hungarian as a language",
+          "hu": "Magyar nyelv"
+        },
+        "body": {
+          "de": "layerling gibt es jetzt auch auf Ungarisch (Magyar): die ganze Oberfläche und die 16 Kapitel der Anleitung. Die Sprache wird für einen Browser mit ungarischer Einstellung von selbst gewählt und lässt sich in der Sprachliste ändern. Übersetzt mit einem KI-Assistenten; falsche Wörter lassen sich mit einem kleinen Pull Request auf GitHub verbessern.",
+          "en": "layerling now speaks Hungarian (Magyar): the whole interface and the 16 chapters of the guide. The language is chosen automatically for a browser set to Hungarian and can be changed in the language list. It was translated with an AI assistant; wrong words are fixed with a small pull request on GitHub.",
+          "hu": "A layerling mostantól magyarul is beszél: a teljes kezelőfelület és az útmutató 16 fejezete magyar. Magyarra állított böngészőben a nyelv magától kiválasztódik, és a nyelvlistában módosítható. A fordítás MI-asszisztenssel készült; a hibás szavakat egy kis pull requesttel lehet javítani a GitHubon."
+        }
+      },
+      {
+        "title": {
+          "de": "Mausrad zoomt überall gleich",
+          "en": "The mouse wheel zooms alike everywhere"
+        },
+        "body": {
+          "de": "Eine Raste des Mausrads zoomte in Safari auf einem Mac mit einer einfachen Maus nur etwa ein Achtel so stark wie in Chrome unter Windows, selbst mit der Zoomgeschwindigkeit auf 10. Ein einzelner kleiner Schritt zählt jetzt wie eine ganze Raste. Ein Trackpad, ein weich laufendes Rad und das Spreizen auf dem Trackpad bleiben, wie sie waren.",
+          "en": "A notch of the mouse wheel zoomed only about an eighth as much in Safari on a Mac with a plain mouse as in Chrome on Windows, even with Zoom speed at 10. A single small step now counts like a whole notch. A trackpad, a smooth wheel and the pinch on a trackpad stay as they were."
+        }
+      },
+      {
+        "title": {
+          "de": "Buchstaben auf den Rahmen strecken",
+          "en": "Stretch letters to the frame"
+        },
+        "body": {
+          "de": "Eine gerade Schrift hielt bisher die Proportionen ihrer Buchstaben und blieb in der Mitte des Rahmens, auch wenn der Rahmen breiter oder tiefer gezogen war. Der neue Schalter „Buchstaben auf den Rahmen strecken“ in den Einstellungen des Textes füllt den ganzen Rahmen in beide Richtungen: Ein Großbuchstabe lässt sich niedriger oder schmaler machen, wie in Tinkercad. Die Umrisse für das Kantenwerkzeug und die Füllarten folgen.",
+          "en": "A straight text used to keep the proportions of its letters and stay in the middle of its frame, even when the frame was pulled wider or deeper. The new switch \"Stretch letters to the frame\" in the text's settings fills the whole frame in both directions: a capital can be made lower or narrower, as in Tinkercad. The outlines for the edge tool and the fill modes follow."
+        }
+      },
+      {
+        "title": {
+          "de": "Rohr und Ring mit Innendurchmesser",
+          "en": "Tube and ring with an inner diameter"
+        },
+        "body": {
+          "de": "Rohr und Ring hatten nur die Wandstärke. Jetzt steht daneben der Innendurchmesser: Tippst du das Maß der Welle ein, ergibt sich die Wand aus der Breite, ideal für eine Buchse. Stell zuerst die Breite ein; änderst du sie später, bleibt die Wand, und der Innendurchmesser ändert sich mit.",
+          "en": "The tube and the ring had only the wall thickness. Now the inner diameter stands beside it: type the size of the shaft and the wall follows from the width, handy for a bushing. Set the width first; if you change it later, the wall stays and the inner diameter changes with it."
+        }
+      }
+    ]
+  },
+  {
     "version": "1.76.1",
     "items": [
       {
