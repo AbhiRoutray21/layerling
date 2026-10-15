@@ -58,5 +58,45 @@
       "de": "layerling gibt es jetzt auch auf Französisch: die ganze Oberfläche und die 16 Kapitel der Anleitung. Die Sprache wird für einen Browser mit französischer Einstellung von selbst gewählt und lässt sich in der Sprachliste ändern. Übersetzt mit einem KI-Assistenten; falsche Wörter lassen sich mit einem kleinen Pull Request auf GitHub verbessern.",
       "en": "layerling now speaks French: the whole interface and the 16 chapters of the guide. The language is chosen automatically for a browser set to French and can be changed in the language list. It was translated with an AI assistant; wrong words are fixed with a small pull request on GitHub."
     }
+  },
+  {
+    "title": {
+      "de": "Eigene Rasterstufe nur ganz",
+      "en": "A custom snap grid, whole only"
+    },
+    "body": {
+      "de": "Jede eigene Rasterstufe in den Einstellungen hat einen Schalter „Auch halb und viertel“. Ohne Haken bietet das Menü nur die Größe, die du eingetippt hast, nicht mehr ihre Hälfte und ihr Viertel. Bei den Stufen, die du schon hast, bleibt der Haken gesetzt.",
+      "en": "Each custom snap grid in the settings has a switch “Also half and quarter”. With it off, the menu offers just the size you typed, not its half and quarter as well. For the grids you already have, it stays on."
+    }
+  },
+  {
+    "title": {
+      "de": "Ansicht zentrieren auch jenseits der Platte",
+      "en": "Center view beyond the plate"
+    },
+    "body": {
+      "de": "Ein Teil, das über den Rand der Platte hinausliegt, lässt sich jetzt mit „Ansicht auf die Auswahl zentrieren“ (Umschalt+F) in die Bildmitte holen. Das Haus-Symbol stellt die ganze Platte wieder ein.",
+      "en": "A part that lies beyond the edge of the plate can now be brought to the middle of the screen with “Center view on selection” (Shift+F). The house button brings the whole plate back."
+    }
+  },
+  {
+    "title": {
+      "de": "Pfeiltasten: 0,01 mm bei ausgeschaltetem Raster",
+      "en": "Arrow keys: 0.01 mm with the grid off"
+    },
+    "body": {
+      "de": "Ist das Raster aus, schiebt eine Pfeiltaste die Auswahl um 0,01 mm statt 0,1 mm, mit Umschalt um das Fünffache. Mit Raster folgen die Pfeile weiter dem Raster.",
+      "en": "With the snap grid off, an arrow key moves the selection by 0.01 mm instead of 0.1 mm, and Shift five times that. With a grid on, the arrows still follow the grid."
+    }
+  },
+  {
+    "title": {
+      "de": "Text mit Kontur lässt sich ausschneiden",
+      "en": "A text with an outline can be cut out"
+    },
+    "body": {
+      "de": "Ein Text mit einer Linie um die Buchstaben (Füllart Kontur) konnte bei manchen Schriften nicht als Aussparung aus einer Platte geschnitten werden („Could not cut this imported mesh cleanly“). Sein Netz ist jetzt immer geschlossen, und der Schnitt klappt.",
+      "en": "A text with a line round its letters (the Outline fill) could not be cut out of a plate with some fonts (“Could not cut this imported mesh cleanly”). Its mesh is always closed now, and the cut works."
+    }
   }
 ]
