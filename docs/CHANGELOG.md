@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **Hungarian:** The whole interface and the 16 chapters of the guide are in Hungarian (Magyar), informal like the German, with the language list and the guide's language switch. It is picked automatically for a browser set to Hungarian. It is not marked complete, so sentences added later show in English until their Hungarian follows. Made by @plazmabokor with an AI assistant; a Hungarian reader is welcome to go through it, wrong words are fixed with a small pull request.
+
 ## 1.76.1
 
 - **A handle dragged past the opposite side keeps growing there:** The side and corner handles of a shape or a selection, and the arrow on top, stopped at the smallest size when you pulled them over the other side, so you had to let go and pick up the opposite handle. Now the shape keeps growing on the other side of that edge, as in Tinkercad; a selection is mirrored with it. A body made of a mesh still stops at the smallest height. From @andrej-cds' list of iPad changes (#170), and asked for by @rondlh (#329).

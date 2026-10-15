@@ -10,7 +10,7 @@
  *
  * To add a language, see docs/TRANSLATING.md.
  */
-export const LANGUAGES = ["en", "de", "nl", "fr", "pl", "ru", "cs", "sl"] as const;
+export const LANGUAGES = ["en", "de", "nl", "fr", "pl", "ru", "cs", "sl", "hu"] as const;
 export type Language = (typeof LANGUAGES)[number];
 export const DEFAULT_LANGUAGE: Language = "en";
 
@@ -388,6 +388,48 @@ export const LANGUAGE_INFO: Readonly<Record<Language, LanguageInfo>> = {
       printAllLead: "Vsa poglavja eno za drugim, za tiskanje ali shranjevanje kot PDF: pritisni Ctrl+P in v nastavitvah tiskanja izklopi »Glave in noge«. Če želiš natisniti le del, tam izberi številke strani.",
       printContents: "Kazalo",
       printButton: "Natisni",
+    },
+  },
+  // Hungarian: the whole interface and the 16 chapters of the guide, informal ("te") like the German "du". Not marked
+  // complete on purpose: sentences added later show in English until the Hungarian ones follow in a small pull request,
+  // so a release never waits for them. The README stays English, so readme and quickstartAnchor point at the English one.
+  hu: {
+    name: "Magyar",
+    htmlLang: "hu",
+    numberLocale: "hu-HU",
+    // Hungarian quotation marks: low opening, high closing.
+    quotes: ["„", "”"],
+    guideDir: "utmutato",
+    communityUrl: GITHUB_DISCUSSIONS,
+    readme: "README.md",
+    quickstartAnchor: "windows-quickstart",
+    legal: { imprint: "Impresszum", privacy: "Adatvédelem" },
+    // Hungarian keyboards label the keys in English; only the mouse actions get Hungarian names.
+    keyNames: { Click: "Kattintás", RightClick: "Jobb kattintás", Drag: "Húzás" },
+    asciiUmlauts: false,
+    complete: false,
+    guide: {
+      site: "layerling útmutató",
+      home: "Útmutató",
+      openEditor: "Szerkesztő megnyitása",
+      backToEditor: "Vissza a szerkesztőhöz",
+      editorElsewhere: "A szerkesztő már nyitva van egy másik lapon – egyszerűen válts át oda.",
+      chapters: "Fejezetek",
+      onThisPage: "Ezen az oldalon",
+      previous: "Előző fejezet",
+      next: "Következő fejezet",
+      overviewLead: "Minden, amit a layerling tud, lépésről lépésre. A képek a futó programból készülnek, és minden verzióval megújulnak.",
+      sourceNote: "Ez az útmutató a programmal együtt bővül. Ha valami hiányzik vagy nem stimmel, szólj a",
+      forum: "beszélgetésekben",
+      notTranslated: "Ez a fejezet még nincs lefordítva magyarra. Alább az angol szöveg következik.",
+      languageMenu: "Nyelv",
+      search: "Keresés az útmutatóban",
+      searchNothing: "Nincs találat.",
+      printAll: "A teljes útmutató nyomtatáshoz",
+      printAllTitle: "A teljes útmutató egy oldalon",
+      printAllLead: "Minden fejezet egymás után, nyomtatáshoz vagy PDF-be mentéshez: nyomd meg a Ctrl+P-t, és a nyomtatási beállításokban kapcsold ki a „Fejlécek és láblécek” lehetőséget. Ha csak egy részt nyomtatnál, ott válaszd ki az oldalszámokat.",
+      printContents: "Tartalom",
+      printButton: "Nyomtatás",
     },
   },
 };

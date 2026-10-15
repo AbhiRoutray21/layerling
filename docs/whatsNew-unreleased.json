@@ -1,1 +1,14 @@
-[]
+[
+  {
+    "title": {
+      "de": "Ungarisch als Sprache",
+      "en": "Hungarian as a language",
+      "hu": "Magyar nyelv"
+    },
+    "body": {
+      "de": "layerling gibt es jetzt auch auf Ungarisch (Magyar): die ganze Oberfläche und die 16 Kapitel der Anleitung. Die Sprache wird für einen Browser mit ungarischer Einstellung von selbst gewählt und lässt sich in der Sprachliste ändern. Übersetzt mit einem KI-Assistenten; falsche Wörter lassen sich mit einem kleinen Pull Request auf GitHub verbessern.",
+      "en": "layerling now speaks Hungarian (Magyar): the whole interface and the 16 chapters of the guide. The language is chosen automatically for a browser set to Hungarian and can be changed in the language list. It was translated with an AI assistant; wrong words are fixed with a small pull request on GitHub.",
+      "hu": "A layerling mostantól magyarul is beszél: a teljes kezelőfelület és az útmutató 16 fejezete magyar. Magyarra állított böngészőben a nyelv magától kiválasztódik, és a nyelvlistában módosítható. A fordítás MI-asszisztenssel készült; a hibás szavakat egy kis pull requesttel lehet javítani a GitHubon."
+    }
+  }
+]
