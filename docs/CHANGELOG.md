@@ -6,6 +6,7 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **The thread tile and the sample names showed a line-break code in Danish and Russian (#416):** The tile for thread, screw and nut in the shape library, and the sample names in the layered text window, were written with a doubled backslash in the Danish and Russian files, so they showed the code for a line break instead of three lines. They are three lines now, and a test checks every language for it. Reported by @Henrikth12.
 - **A 2D drawing of a smooth, curved part (#414):** The drawing export refused a part of a few centimetres with the message that its views take more than 100,000 triangles: a smooth, curved surface is cut into very many of them at export quality, whatever the size. The limit is 400,000 now, and the message says how many triangles the views really take. The projection needs about 0.6 s per 250,000 triangles, so the old limit was far too careful. Reported by @MartinShake on GitHub.
 ## 1.80.0
 
