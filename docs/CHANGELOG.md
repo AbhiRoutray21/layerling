@@ -6,6 +6,7 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **Gemini CLI and Antigravity in the AI bridge setup:** The README and the AI chapter of the guide now say how to use the MCP server and the skill with Gemini CLI and Google Antigravity, with a config example (`docs/mcp/gemini-config.example.json`) and a copy of the skill that Antigravity finds in the workspace. A test keeps the three copies of the skill identical. By @corefile (#399).
 - **The framing square can hide behind bodies, and its guide lines run along the floor:** The square's arms and ticks were drawn on the screen over everything, which looks confusing from many angles, and the guide lines of the green numbers ran up to the middle of the body in the air. Now the arms, ticks, arrows and guide lines are lines in the room: a body in front of them hides them, and the numbers on the arms fade there. A small eye below the handle switches that, so the square can also stay in view over everything. The guide lines run along the floor to the point below or beside the body; the height has its own arrow. The switch of each green number now sits in the frame of the number. Asked for by @DrJones (forum).
 ## 1.78.0
 
