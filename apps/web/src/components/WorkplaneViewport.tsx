@@ -7549,9 +7549,10 @@ export function WorkplaneViewport({
       state.camera.position.copy(center).add(direction.multiplyScalar(distance));
     }
 
-    // constrainCamera keeps the orbit target inside the workspace on every frame,
-    // so an object parked beyond the plate edge is framed as closely as the
-    // existing camera limits allow rather than pulling the view off the grid.
+    // constrainCamera keeps the orbit target on the plate on every frame, as far out as this
+    // part: one parked beyond the plate edge is centred too, as in Tinkercad (#352). The house
+    // button takes the allowance back.
+    state.focusReach = bounds.clone();
     state.controls.target.copy(center);
     state.camera.lookAt(center);
     state.camera.updateProjectionMatrix();
@@ -9089,6 +9090,7 @@ function createThreeScene(host: HTMLDivElement): ThreeState {
 }
 
 function resetCamera(state: ThreeState) {
+  state.focusReach = null;
   state.camera.up.set(0, 1, 0);
   state.camera.position.copy(CAMERA_HOME);
   state.controls.target.copy(CAMERA_TARGET);
@@ -9246,12 +9248,16 @@ function orbitCameraByDrag(state: ThreeState, dx: number, dy: number) {
 }
 
 function constrainCamera(state: ThreeState, workspace: WorkspaceSettings) {
-  state.pivotLimits = { halfWidth: workspace.width / 2, halfDepth: workspace.depth / 2 };
+  // The pivot stays on the plate, but as far out as the part "Center view" went to, so that part can be centred (#352).
+  const reach = state.focusReach;
+  const halfWidth = Math.max(workspace.width / 2, reach ? Math.max(Math.abs(reach.min.x), Math.abs(reach.max.x)) : 0);
+  const halfDepth = Math.max(workspace.depth / 2, reach ? Math.max(Math.abs(reach.min.z), Math.abs(reach.max.z)) : 0);
+  state.pivotLimits = { halfWidth, halfDepth };
   const target = state.controls.target;
   const previousTarget = target.clone();
-  target.x = clamp(target.x, -workspace.width / 2, workspace.width / 2);
+  target.x = clamp(target.x, -halfWidth, halfWidth);
   target.y = clamp(target.y, CAMERA_MIN_TARGET_Y, CAMERA_MAX_TARGET_Y);
-  target.z = clamp(target.z, -workspace.depth / 2, workspace.depth / 2);
+  target.z = clamp(target.z, -halfDepth, halfDepth);
 
   const targetShift = target.clone().sub(previousTarget);
   if (targetShift.lengthSq() > 0) {
