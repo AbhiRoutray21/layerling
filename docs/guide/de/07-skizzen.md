@@ -7,7 +7,7 @@ Nicht alles lässt sich aus Grundformen zusammensetzen. Für Teile mit eigener K
 
 ## Eine Skizze beginnen
 
-Wechsle oben von {{ui:editor.modeGeometry}} auf {{ui:editor.modeSketch}}. Klicke im Menüband auf {{ui:sketch.to3d}} und wähle, was aus dem Umriss werden soll:
+Wechsle oben von {{ui:editor.modeGeometry}} auf {{ui:editor.modeSketch}}. In der Gruppe {{ui:sketch.group.create}} des Menübands stehen zwei Knöpfe nebeneinander dafür, was aus dem Umriss werden soll:
 
 - **{{ui:sketch.extrude}}:** Der Umriss wird in die Höhe gezogen, wie eine Ausstechform.
 - **{{ui:sketch.revolve}}:** Der Umriss wird um eine Achse gedreht, wie bei einer Drehbank. So entstehen Vasen, Becher, Kegel und alles, was rund ist.

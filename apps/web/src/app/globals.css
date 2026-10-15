@@ -4038,87 +4038,6 @@ html[data-theme="dark"] .shell-openings-summary {
   cursor: default;
 }
 
-.sketch-create-menu {
-  position: relative;
-  height: calc(43px * var(--toolbar-scale));
-}
-
-.sketch-create-menu-trigger {
-  position: relative;
-  min-width: 112px;
-  padding-right: 20px;
-}
-
-.sketch-create-menu-trigger.active {
-  color: #5d3b17;
-  background: #f7f3eb;
-  border-color: #e3c8ad;
-}
-
-.sketch-command-button .sketch-create-menu-chevron {
-  position: absolute;
-  right: 4px;
-  bottom: 5px;
-  width: calc(13px * var(--toolbar-scale));
-  height: calc(13px * var(--toolbar-scale));
-}
-
-/* The heading of the "Sketch to 3D" menu, with its question mark. */
-.sketch-create-dropdown .sketch-create-title {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  padding: 3px 6px 5px;
-  color: #84715d;
-  font-size: 11px;
-  font-weight: 700;
-}
-
-.sketch-create-dropdown {
-  position: absolute;
-  top: calc(100% + 5px);
-  left: 0;
-  z-index: 70;
-  display: grid;
-  width: 232px;
-  padding: 5px;
-  background: rgba(253, 252, 250, 0.99);
-  border: 1px solid #dccdbe;
-  border-radius: 7px;
-  box-shadow: 0 12px 28px rgba(66, 47, 26, 0.22);
-}
-
-.sketch-create-dropdown button {
-  display: grid;
-  gap: 3px;
-  width: 100%;
-  padding: 9px 10px;
-  color: #614931;
-  background: transparent;
-  border: 0;
-  border-radius: 5px;
-  cursor: pointer;
-  text-align: left;
-}
-
-.sketch-create-dropdown button:hover,
-.sketch-create-dropdown button:focus-visible {
-  background: #f7f3eb;
-  outline: none;
-}
-
-.sketch-create-dropdown strong {
-  font-size: 12px;
-  font-weight: 900;
-}
-
-.sketch-create-dropdown span {
-  color: #97836e;
-  font-size: 10px;
-  font-weight: 700;
-}
-
 .toolbar-icon.disabled .sketch-reference-icon,
 .toolbar-icon:disabled .sketch-reference-icon,
 .sketch-command-button.disabled .sketch-reference-icon,
@@ -12356,15 +12275,6 @@ html[data-theme="dark"] .workspace-custom-snap-add:hover {
     flex: none;
   }
 
-  /* Haengt am Fenster statt an seinem Ausloeser, direkt unter der Leiste -
-     auch wenn sie zweizeilig ist, denn deren Hoehe steht in der Variablen.
-     (Frueher rollte die Leiste hier waagerecht und schnitt jedes Menue ab.) */
-  .sketch-create-dropdown {
-    position: fixed;
-    top: var(--editor-toolbar-height);
-    left: 10px;
-  }
-
   .workspace-modal {
     padding-top: 18px;
   }
@@ -13807,8 +13717,7 @@ html[data-theme="dark"] .sketch-command-button.cancel {
   color: #f08d98;
 }
 
-html[data-theme="dark"] .sketch-command-button:hover:not(:disabled),
-html[data-theme="dark"] .sketch-create-menu-trigger.active {
+html[data-theme="dark"] .sketch-command-button:hover:not(:disabled) {
   color: #f9f7f2;
   background: #4d3b29;
   border-color: #745d46;
@@ -13818,25 +13727,6 @@ html[data-theme="dark"] .sketch-command-button.disabled,
 html[data-theme="dark"] .sketch-command-button:disabled {
   color: #a58d75;
   opacity: 0.54;
-}
-
-html[data-theme="dark"] .sketch-create-dropdown {
-  background: rgba(41, 31, 20, 0.99);
-  border-color: #5a4a3a;
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.38);
-}
-
-html[data-theme="dark"] .sketch-create-dropdown button {
-  color: #eee5d6;
-}
-
-html[data-theme="dark"] .sketch-create-dropdown button:hover,
-html[data-theme="dark"] .sketch-create-dropdown button:focus-visible {
-  background: #4d3b29;
-}
-
-html[data-theme="dark"] .sketch-create-dropdown span {
-  color: #a79078;
 }
 
 html[data-theme="dark"] .sketch-point-actions {

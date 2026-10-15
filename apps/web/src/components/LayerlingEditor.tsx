@@ -1,7 +1,7 @@
 "use client";
 
 import { GuideHelpLink } from "@/components/GuideHelpLink";
-import { AlertTriangle, Check, Percent, Circle as CircleIcon, CloudUpload, Download, Eye, EyeOff, FilePlus2, FolderOpen, Hexagon as HexagonIcon, Info, ListTree, Pencil, Pentagon as PentagonIcon, Search, Square as SquareIcon, Star as StarIcon, Triangle as TriangleIcon, X } from "lucide-react";
+import { AlertTriangle, ArrowUpFromLine, Check, Percent, Circle as CircleIcon, CloudUpload, Download, Eye, EyeOff, FilePlus2, FolderOpen, Hexagon as HexagonIcon, Info, ListTree, Pencil, Pentagon as PentagonIcon, Rotate3d, Search, Square as SquareIcon, Star as StarIcon, Triangle as TriangleIcon, X } from "lucide-react";
 import { ObjectListPanel } from "@/components/workplane/ObjectListPanel";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import * as THREE from "three";
@@ -12074,7 +12074,6 @@ function SecondaryToolbar({
   onSelectObject: (id: string) => void;
 }) {
   const [shapesOpen, setShapesOpen] = useState(false);
-  const [sketchCreateOpen, setSketchCreateOpen] = useState(false);
   // On a narrow window the tools wrap onto more rows. Their real height goes
   // into --editor-toolbar-height, which the workplane, the status and the menus
   // below the bar are placed by.
@@ -12102,7 +12101,6 @@ function SecondaryToolbar({
   const [visibilityOpen, setVisibilityOpen] = useState(false);
   const [visibilityMenuPosition, setVisibilityMenuPosition] = useState({ top: 0, left: 0 });
   const shapesMenuRef = useRef<HTMLDivElement>(null);
-  const sketchCreateMenuRef = useRef<HTMLDivElement>(null);
   const visibilityMenuRef = useRef<HTMLDivElement>(null);
   const touchShapeStartRef = useRef<{ id: string; x: number; y: number } | null>(null);
   const suppressNextShapeClickRef = useRef(false);
@@ -12134,7 +12132,6 @@ function SecondaryToolbar({
   };
   const selectToolbarMode = (mode: "geometry" | "sketch") => {
     setShapesOpen(false);
-    setSketchCreateOpen(false);
     setVisibilityOpen(false);
     onTopPanel(null);
     onToolbarModeChange(mode);
@@ -12148,7 +12145,6 @@ function SecondaryToolbar({
     setShapesOpen(false);
   };
   const startSketch = (operation: SketchOperation) => {
-    setSketchCreateOpen(false);
     onStartSketch(operation);
   };
   useEffect(() => {
@@ -12159,7 +12155,6 @@ function SecondaryToolbar({
   const [paletteOpen, setPaletteOpen] = useState(false);
   const openPalette = () => {
     setShapesOpen(false);
-    setSketchCreateOpen(false);
     setVisibilityOpen(false);
     setPaletteOpen(true);
   };
@@ -12178,23 +12173,7 @@ function SecondaryToolbar({
     return () => window.removeEventListener("keydown", openOnShortcut);
   }, []);
   useEffect(() => {
-    if (!sketchCreateOpen) return;
-    const closeOnPointerDown = (event: PointerEvent) => {
-      if (!sketchCreateMenuRef.current?.contains(event.target as Node)) setSketchCreateOpen(false);
-    };
-    const closeOnEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setSketchCreateOpen(false);
-    };
-    window.addEventListener("pointerdown", closeOnPointerDown);
-    window.addEventListener("keydown", closeOnEscape);
-    return () => {
-      window.removeEventListener("pointerdown", closeOnPointerDown);
-      window.removeEventListener("keydown", closeOnEscape);
-    };
-  }, [sketchCreateOpen]);
-  useEffect(() => {
-    if (sketchActive) setSketchCreateOpen(false);
-    else setShapesOpen(false);
+    if (!sketchActive) setShapesOpen(false);
   }, [sketchActive]);
   useEffect(() => {
     if (!shapesOpen) return;
@@ -12252,7 +12231,6 @@ function SecondaryToolbar({
       });
     }
     setShapesOpen(false);
-    setSketchCreateOpen(false);
     onTopPanel(null);
     setVisibilityOpen(true);
   };
@@ -12766,7 +12744,6 @@ function SecondaryToolbar({
                       aria-haspopup="menu"
                       aria-expanded={shapesOpen}
                       onClick={() => {
-                        setSketchCreateOpen(false);
                         setVisibilityOpen(false);
                         setShapesOpen((open) => !open);
                       }}
@@ -12917,36 +12894,27 @@ function SecondaryToolbar({
               <div className="toolbar-section sketch-start-section" data-group="create">
                 <div className="toolbar-section-label">{t("sketch.group.create")}</div>
                 <div className="toolbar-section-tools">
-                  <div className="sketch-create-menu" ref={sketchCreateMenuRef}>
-                    <button
-                      className={`sketch-command-button primary sketch-create-menu-trigger ${sketchCreateOpen ? "active" : ""}`}
-                      type="button"
-                      aria-label={t("sketch.to3dOptions")}
-                      aria-haspopup="menu"
-                      aria-expanded={sketchCreateOpen}
-                      onClick={() => setSketchCreateOpen((open) => !open)}
-                    >
-                      <SketchReferenceIcon name="sketchTo3d" />
-                      <span>{t("sketch.to3d")}</span>
-                      <ToolbarCaretDownIcon className="sketch-create-menu-chevron" />
-                    </button>
-                    {sketchCreateOpen ? (
-                      <div className="sketch-create-dropdown" role="menu" aria-label={t("sketch.to3dMethod")}>
-                        <div className="sketch-create-title">
-                          {t("sketch.to3dMethod")}
-                          <GuideHelpLink section="sketchToBody" />
-                        </div>
-                        <button type="button" role="menuitem" onClick={() => startSketch("extrude")}>
-                          <strong>{t("sketch.extrude")}</strong>
-                          <span>{t("sketch.extrudeHint")}</span>
-                        </button>
-                        <button type="button" role="menuitem" onClick={() => startSketch("revolve")}>
-                          <strong>{t("sketch.revolve")}</strong>
-                          <span>{t("sketch.revolveHint")}</span>
-                        </button>
-                      </div>
-                    ) : null}
-                  </div>
+                  <button
+                    className="sketch-command-button primary"
+                    type="button"
+                    aria-label={t("sketch.extrude")}
+                    title={`${t("sketch.extrude")} - ${t("sketch.extrudeHint")}`}
+                    onClick={() => startSketch("extrude")}
+                  >
+                    <ArrowUpFromLine aria-hidden="true" />
+                    <span>{t("sketch.extrude")}</span>
+                  </button>
+                  <button
+                    className="sketch-command-button primary"
+                    type="button"
+                    aria-label={t("sketch.revolve")}
+                    title={`${t("sketch.revolve")} - ${t("sketch.revolveHint")}`}
+                    onClick={() => startSketch("revolve")}
+                  >
+                    <Rotate3d aria-hidden="true" />
+                    <span>{t("sketch.revolve")}</span>
+                  </button>
+                  <GuideHelpLink section="sketchToBody" />
                   <button className={`sketch-command-button ${canEditSketch ? "" : "disabled"}`} type="button" aria-label={t("sketch.editTo3d")} title={t("sketch.editTo3d")} onClick={onEditSketch} disabled={!canEditSketch}>
                     <SketchReferenceIcon name="editSketchTo3d" />
                     <span>{t("sketch.edit")}</span>

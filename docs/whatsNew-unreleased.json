@@ -18,5 +18,15 @@
       "de": "In der Skizze gibt es bei den Ansichtsknöpfen links einen neuen Knopf mit Schichten: Er zeichnet alle Kanten der Körper dünn und blass auf die Skizzenebene, in jeder Höhe, als sähest du durch sie hindurch. So zeichnest du an vorhandener Arbeit entlang; auf einer senkrechten Ebene an einer Vorderfläche ist es die Vorderansicht des Teils. Die Wahl bleibt im Browser.",
       "en": "In the sketch there is a new button with layers among the view buttons on the left: it draws all the edges of the bodies on the sketch plane, thin and faint, at any height, as if you looked through them. That lets you trace round existing work; on an upright plane set on a front face it is the front view of the part. The choice stays in the browser."
     }
+  },
+  {
+    "title": {
+      "de": "Skizze extrudieren und rotieren: zwei Knöpfe",
+      "en": "Extrude and Revolve: two buttons"
+    },
+    "body": {
+      "de": "Im Reiter Skizze stehen „Skizze extrudieren\" und „Skizze rotieren\" jetzt als zwei Knöpfe nebeneinander in der Gruppe Erstellen, statt in einem Ausklappmenü. Der Hinweis steht als Tooltip am Knopf, das Fragezeichen daneben. So spart der Wechsel zwischen beiden Arten einen Klick.",
+      "en": "In the Sketch tab, Extrude sketch and Revolve sketch now stand side by side as two buttons in the Create group instead of in a drop-down. The hint is the tooltip of the button, the question mark beside them. Switching between the two takes one click less."
+    }
   }
 ]

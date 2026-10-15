@@ -1538,38 +1538,6 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .shell-openings-summary
   border-color: #d9a978;
 }
 
-:where(html[data-theme="dark"][data-palette="graphite"]) .sketch-create-menu-trigger.active {
-  color: #5d3b17;
-  background: #f1f1f1;
-  border-color: #c8c8c8;
-}
-
-:where(html[data-theme="dark"][data-palette="graphite"]) .sketch-create-dropdown .sketch-create-title {
-  color: #636363;
-}
-
-:where(html[data-theme="dark"][data-palette="graphite"]) .sketch-create-dropdown {
-  background: rgba(252, 252, 252, 0.99);
-  border: 1px solid #cdcdcd;
-  box-shadow: 0 12px 28px rgba(50, 50, 50, 0.22);
-}
-
-:where(html[data-theme="dark"][data-palette="graphite"]) .sketch-create-dropdown button {
-  color: #4b4b4b;
-  background: transparent;
-  border: 0;
-}
-
-:where(html[data-theme="dark"][data-palette="graphite"]) .sketch-create-dropdown button:hover,
-:where(html[data-theme="dark"][data-palette="graphite"]) .sketch-create-dropdown button:focus-visible {
-  background: #f1f1f1;
-  outline: none;
-}
-
-:where(html[data-theme="dark"][data-palette="graphite"]) .sketch-create-dropdown span {
-  color: #737373;
-}
-
 :where(html[data-theme="dark"][data-palette="graphite"]) .toolbar-icon.disabled .sketch-reference-icon,
 :where(html[data-theme="dark"][data-palette="graphite"]) .toolbar-icon:disabled .sketch-reference-icon,
 :where(html[data-theme="dark"][data-palette="graphite"]) .sketch-command-button.disabled .sketch-reference-icon,
@@ -6447,8 +6415,7 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .sketch-command-button.
   color: #f08d98;
 }
 
-html[data-theme="dark"]:where([data-palette="graphite"]) .sketch-command-button:hover:not(:disabled),
-html[data-theme="dark"]:where([data-palette="graphite"]) .sketch-create-menu-trigger.active {
+html[data-theme="dark"]:where([data-palette="graphite"]) .sketch-command-button:hover:not(:disabled) {
   color: #f5f5f5;
   background: #3e3e3e;
   border-color: #525252;
@@ -6457,25 +6424,6 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .sketch-create-menu-tri
 html[data-theme="dark"]:where([data-palette="graphite"]) .sketch-command-button.disabled,
 html[data-theme="dark"]:where([data-palette="graphite"]) .sketch-command-button:disabled {
   color: #7c7c7c;
-}
-
-html[data-theme="dark"]:where([data-palette="graphite"]) .sketch-create-dropdown {
-  background: rgba(36, 36, 36, 0.99);
-  border-color: #4c4c4c;
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.38);
-}
-
-html[data-theme="dark"]:where([data-palette="graphite"]) .sketch-create-dropdown button {
-  color: #e2e2e2;
-}
-
-html[data-theme="dark"]:where([data-palette="graphite"]) .sketch-create-dropdown button:hover,
-html[data-theme="dark"]:where([data-palette="graphite"]) .sketch-create-dropdown button:focus-visible {
-  background: #3e3e3e;
-}
-
-html[data-theme="dark"]:where([data-palette="graphite"]) .sketch-create-dropdown span {
-  color: #7e7e7e;
 }
 
 html[data-theme="dark"]:where([data-palette="graphite"]) .sketch-point-actions {

@@ -7,7 +7,7 @@ Not everything can be put together from basic shapes. For parts with a contour o
 
 ## Starting a sketch
 
-At the top, switch from {{ui:editor.modeGeometry}} to {{ui:editor.modeSketch}}. Click {{ui:sketch.to3d}} in the ribbon and choose what the outline should become:
+At the top, switch from {{ui:editor.modeGeometry}} to {{ui:editor.modeSketch}}. In the {{ui:sketch.group.create}} group of the ribbon, two buttons stand side by side for what the outline should become:
 
 - **{{ui:sketch.extrude}}:** The outline is pulled upward, like a cookie cutter.
 - **{{ui:sketch.revolve}}:** The outline is spun about an axis, as on a lathe. That gives vases, cups, cones and everything round.

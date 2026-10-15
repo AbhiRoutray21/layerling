@@ -7,7 +7,7 @@ Niet alles laat zich uit basisvormen samenstellen. Voor onderdelen met een eigen
 
 ## Een schets beginnen
 
-Schakel bovenaan over van {{ui:editor.modeGeometry}} naar {{ui:editor.modeSketch}}. Klik in het lint op {{ui:sketch.to3d}} en kies wat de omtrek moet worden:
+Schakel bovenaan over van {{ui:editor.modeGeometry}} naar {{ui:editor.modeSketch}}. In de groep {{ui:sketch.group.create}} van het lint staan twee knoppen naast elkaar voor wat de omtrek moet worden:
 
 - **{{ui:sketch.extrude}}:** De omtrek wordt omhoog getrokken, als een koekjesvorm.
 - **{{ui:sketch.revolve}}:** De omtrek wordt om een as gedraaid, als op een draaibank. Zo krijg je vazen, bekers, kegels en alles wat rond is.
