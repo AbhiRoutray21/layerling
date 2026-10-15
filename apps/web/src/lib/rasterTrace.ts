@@ -23,10 +23,12 @@ export type RasterTraceOptions = {
   threshold?: number;
   /** At most this many line pieces in the whole outline; the line is straightened until it fits. */
   maxSegments?: number;
+  /** How wide the outline comes out, in the SVG's units, its height in proportion. One pixel one unit by default. */
+  width?: number;
 };
 
 export type RasterTrace = {
-  /** The outline as an SVG file's text, one pixel being one unit. */
+  /** The outline as an SVG file's text, one pixel being one unit unless a width was asked for. */
   svg: string;
   /** How many closed lines the outline has. */
   rings: number;
@@ -284,9 +286,21 @@ export function traceRaster(source: RasterPixels, options: RasterTraceOptions = 
     tolerance = Math.min(MAX_TOLERANCE, tolerance * 1.35);
   }
   if (!lines.length) throw new Error(RASTER_TRACE_EMPTY);
-  const path = lines.map((ring) => `M${ring.map((point) => `${coordinate(point.x)} ${coordinate(point.y)}`).join("L")}Z`).join("");
+  let unit = 1;
+  if (options.width !== undefined) {
+    let minX = Number.POSITIVE_INFINITY;
+    let maxX = Number.NEGATIVE_INFINITY;
+    for (const point of lines.flat()) {
+      minX = Math.min(minX, point.x);
+      maxX = Math.max(maxX, point.x);
+    }
+    unit = options.width / Math.max(1e-6, maxX - minX);
+  }
+  const path = lines.map((ring) => `M${ring.map((point) => `${coordinate(point.x * unit)} ${coordinate(point.y * unit)}`).join("L")}Z`).join("");
+  const svgWidth = coordinate(width * unit);
+  const svgHeight = coordinate(height * unit);
   return {
-    svg: `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}"><path fill="#000000" fill-rule="evenodd" d="${path}"/></svg>`,
+    svg: `<svg xmlns="http://www.w3.org/2000/svg" width="${svgWidth}" height="${svgHeight}" viewBox="0 0 ${svgWidth} ${svgHeight}"><path fill="#000000" fill-rule="evenodd" d="${path}"/></svg>`,
     rings: lines.length,
     segments: lines.reduce((sum, ring) => sum + ring.length, 0),
   };
