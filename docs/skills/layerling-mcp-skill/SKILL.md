@@ -33,6 +33,8 @@ Claude Code reads this same file directly from the repo: it looks for skills und
 
 Claude Desktop does not read either kind of skill file, but it can use the same `scripts/layerling-mcp-server.mjs` MCP server through Claude's `mcpServers` JSON config. Use the repository README for client setup examples.
 
+Gemini CLI and Antigravity can use this MCP server as tools. For Antigravity, the skill is auto-discovered in `.agents/skills/layerling-mcp-skill`, or can be installed globally under `~/.gemini/config/skills/layerling-mcp-skill` (or `~/.gemini/skills/layerling-mcp-skill` for Gemini CLI). Configure the server in `settings.json` or `mcp_config.json`.
+
 ## Targeting Editors
 
 Always call `layerling_list_editors` first when the user mentions multiple projects, tabs, or a number like `49536`.

@@ -52,7 +52,7 @@ layerling sits a step beyond Tinkercad towards Fusion 360: it is operated the sa
 
 It is not a full CAD package: there is no parametric timeline and no assemblies. And you can **run it yourself**: install it as an app (it then starts without internet), or host your own copy on Windows, a NAS or a home server – see [Getting Started](#getting-started).
 
-> **An AI can build along with you.** layerling ships an MCP server. An AI client such as Codex or Claude sees an open
+> **An AI can build along with you.** layerling ships an MCP server. An AI client such as Gemini, Claude or Codex sees an open
 > editor tab and works in it: add shapes, change measurements, group, cut, round edges, read the scene back, take pictures
 > of the viewport. You describe the part, the AI builds it, you watch it happen and step in whenever you want. This runs
 > locally, with nothing leaving the browser – see [layerling MCP Skill](#layerling-mcp-skill) for the setup.
@@ -415,6 +415,30 @@ as the template and replacing the script path with the absolute path on your mac
 
 ```text
 Use $layerling-mcp-skill to list my open layerling editors and inspect the current scene.
+```
+
+### Gemini & Antigravity
+
+For Antigravity, the repo ships a copy of the skill at `.agents/skills/layerling-mcp-skill`, which Antigravity discovers automatically. For Gemini CLI, copy the skill from `docs/skills/layerling-mcp-skill` into your global skills folder.
+
+Windows PowerShell:
+
+```powershell
+New-Item -ItemType Directory -Force "$env:USERPROFILE\.gemini\skills" | Out-Null
+Copy-Item -Recurse -Force "docs\skills\layerling-mcp-skill" "$env:USERPROFILE\.gemini\skills\layerling-mcp-skill"
+```
+
+macOS or Linux:
+
+```bash
+mkdir -p ~/.gemini/skills
+cp -R docs/skills/layerling-mcp-skill ~/.gemini/skills/
+```
+
+Then add the server to your Gemini CLI `settings.json` or Antigravity `mcp_config.json`, using [`docs/mcp/gemini-config.example.json`](docs/mcp/gemini-config.example.json) as the template and replacing the script path with the absolute path on your machine. Restart the client and ask:
+
+```text
+Use the layerling MCP tools to list my open layerling editors and inspect the current scene.
 ```
 
 ### Letting an AI client reach a copy on a NAS or server

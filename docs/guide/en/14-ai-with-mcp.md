@@ -1,9 +1,9 @@
 ---
 title: Building with an AI (MCP)
-summary: How an AI assistant such as Claude or Codex creates and changes shapes, groups them and takes pictures of the view in your open editor.
+summary: How an AI assistant such as Gemini, Claude or Codex creates and changes shapes, groups them and takes pictures of the view in your open editor.
 ---
 
-layerling comes with an MCP server. MCP is a standard through which an AI assistant can use tools in other programs. With it an AI client such as Claude or Codex sees an open editor tab and works in it: it creates shapes, changes dimensions, groups, cuts, rounds edges, reads out the scene and takes pictures of the view. You describe the part, the AI builds it, you watch and can step in at any moment.
+layerling comes with an MCP server. MCP is a standard through which an AI assistant can use tools in other programs. With it an AI client such as Gemini, Claude or Codex sees an open editor tab and works in it: it creates shapes, changes dimensions, groups, cuts, rounds edges, reads out the scene and takes pictures of the view. You describe the part, the AI builds it, you watch and can step in at any moment.
 
 The bridge between AI client and editor runs **locally on your computer**. Keep in mind, though: what the AI reads, meaning the scene and the pictures of the view, goes to the provider of your AI client, like any other input there.
 
@@ -27,7 +27,11 @@ Claude Desktop does not read project files. Enter the server in its own configur
 
 Copy the skill from `docs/skills/layerling-mcp-skill` into your Codex skills folder, enter the server in your Codex configuration using `docs/mcp/codex-config.example.toml`, and restart Codex.
 
-The detailed instructions for all three are in the [README on GitHub](https://github.com/henmedia/layerling/blob/main/README.md#layerling-mcp-skill).
+### Gemini & Antigravity
+
+Antigravity auto-discovers the workspace skill in `.agents/skills/layerling-mcp-skill`. For Gemini CLI, copy the skill from `docs/skills/layerling-mcp-skill` into your global skills folder (`~/.gemini/skills/`), add the server to your settings using `docs/mcp/gemini-config.example.json`, and restart the client.
+
+The detailed instructions for each client are in the [README on GitHub](https://github.com/henmedia/layerling/blob/main/README.md#layerling-mcp-skill).
 
 ## A copy on a NAS or server
 
