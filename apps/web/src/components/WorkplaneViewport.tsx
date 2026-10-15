@@ -64,6 +64,7 @@ import { createBentTubeGeometry, createBentTubeSegmentGeometry } from "@/lib/ben
 import { createThreadGeometry } from "@/lib/threadGeometry";
 import { createSpringGeometry } from "@/lib/springGeometry";
 import { textDisplayGeometry } from "@/lib/textFill";
+import { wheelZoomDelta } from "@/lib/wheelZoom";
 import { manifoldRevision } from "@/lib/manifoldHandle";
 import { customFontRevision } from "@/lib/textFonts";
 import { readDesignView, writeDesignView } from "@/lib/designView";
@@ -9168,6 +9169,20 @@ function createThreeScene(host: HTMLDivElement): ThreeState {
     const rect = renderer.domElement.getBoundingClientRect();
     movePivotToDepthUnder(state, ((event.clientX - rect.left) / rect.width) * 2 - 1, -((event.clientY - rect.top) / rect.height) * 2 + 1);
   };
+  // A mouse notch counts as one whatever number the browser sends for it (#331): the step that stands
+  // alone is looked at before OrbitControls reads it and dropped again after.
+  let lastWheelAt = Number.NEGATIVE_INFINITY;
+  let wheelDeltaOverride: number | null = null;
+  const zoomControls = controls as unknown as { _getZoomScale: (delta: number) => number };
+  const orbitZoomScale = zoomControls._getZoomScale.bind(controls);
+  zoomControls._getZoomScale = (delta: number) => orbitZoomScale(wheelDeltaOverride ?? delta);
+  const countWheelNotch = (event: WheelEvent) => {
+    wheelDeltaOverride = wheelZoomDelta(event, event.timeStamp - lastWheelAt);
+    lastWheelAt = event.timeStamp;
+  };
+  const endWheelNotch = () => {
+    wheelDeltaOverride = null;
+  };
   controls.addEventListener("change", requestRender);
   SAFARI_GESTURES.forEach((name) => renderer.domElement.addEventListener(name, preventSafariGesture));
   renderer.domElement.addEventListener("pointerdown", configureLayerlingMouseButtons, { capture: true });
@@ -9176,6 +9191,8 @@ function createThreeScene(host: HTMLDivElement): ThreeState {
   renderer.domElement.addEventListener("contextmenu", preventContextMenu);
   renderer.domElement.addEventListener("wheel", requestRender, { passive: true });
   renderer.domElement.addEventListener("wheel", pullPivotToSurface, { passive: true, capture: true });
+  renderer.domElement.addEventListener("wheel", countWheelNotch, { passive: true, capture: true });
+  renderer.domElement.addEventListener("wheel", endWheelNotch, { passive: true });
   renderer.domElement.addEventListener("pointerdown", requestRender);
   const ownWindow = renderer.domElement.ownerDocument.defaultView;
   ownWindow?.addEventListener("pointermove", releaseLostCameraDrags, { capture: true });
@@ -9184,6 +9201,8 @@ function createThreeScene(host: HTMLDivElement): ThreeState {
     ownWindow?.removeEventListener("pointermove", releaseLostCameraDrags, { capture: true });
     ownWindow?.removeEventListener("blur", releaseAllCameraDrags);
     renderer.domElement.removeEventListener("wheel", pullPivotToSurface, { capture: true });
+    renderer.domElement.removeEventListener("wheel", countWheelNotch, { capture: true });
+    renderer.domElement.removeEventListener("wheel", endWheelNotch);
     controls.removeEventListener("change", requestRender);
     renderer.domElement.removeEventListener("pointerdown", configureLayerlingMouseButtons, { capture: true });
     renderer.domElement.removeEventListener("pointerup", resetLayerlingMouseButtons);

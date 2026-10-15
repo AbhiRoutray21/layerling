@@ -6,6 +6,7 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **A mouse-wheel notch zooms alike in every browser:** The wheel zooms by how far the browser says it has turned, and that number differs: Chrome on Windows sends 100 for a notch, Safari on a Mac with a plain mouse sent 12, so there a notch zoomed an eighth as much, even with Zoom speed at 10. A small step that arrives alone now counts like a full notch. A trackpad, a smooth wheel and a pinch send many small steps in a row and stay as they were. Reported by @t9vh6j9rt4-collab (#331).
 - **Hungarian:** The whole interface and the 16 chapters of the guide are in Hungarian (Magyar), informal like the German, with the language list and the guide's language switch. It is picked automatically for a browser set to Hungarian. It is not marked complete, so sentences added later show in English until their Hungarian follows. Made by @plazmabokor with an AI assistant; a Hungarian reader is welcome to go through it, wrong words are fixed with a small pull request.
 
 ## 1.76.1

@@ -15,7 +15,7 @@ With the mouse:
 | mouse wheel | zoom in and out |
 | hold [[Ctrl]] and drag with the left button | also moves the view |
 
-How fast the wheel zooms is set with {{ui:workspace.zoomSpeed}} in the settings, under {{ui:workspace.appearance}}: a slider from 1 to 10, 5 to begin with.
+How fast the wheel zooms is set with {{ui:workspace.zoomSpeed}} in the settings, under {{ui:workspace.appearance}}: a slider from 1 to 10, 5 to begin with. One notch of a mouse wheel zooms alike in every browser, a trackpad zooms with how far you stroke.
 
 On a tablet or phone, two fingers zoom (spread and pinch) and move the view (slide together). One finger on empty space turns the view, and a tap there clears the selection; on a shape or a handle it works on the design, just like the left mouse button. To turn the view with a finger that starts on a shape too, switch on {{ui:camera.touchRotate}} in the camera bar. That switch shows on devices with a touch screen.
 
