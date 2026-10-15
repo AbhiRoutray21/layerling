@@ -19,7 +19,7 @@ import { tools } from "../../scripts/layerling-mcp-tools.mjs";
 import { GUIDE_CHAPTERS, GUIDE_SECTIONS, guideChapterForShape, guideHref, guideSectionForShape } from "@/lib/guideLinks";
 
 const root = join(__dirname, "..", "..");
-const LANGUAGES = ["de", "en", "nl", "ru"] as const;
+const LANGUAGES = ["de", "en", "nl", "ru", "cs"] as const;
 
 async function contextFor(language: (typeof LANGUAGES)[number]) {
   return {

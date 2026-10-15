@@ -264,10 +264,14 @@ export function drawingToSvg(drawing: GeneratedDrawing): string {
 function pdfText(value: string) {
   const extras: Record<string, number> = { "€": 128, "–": 150, "—": 151, "‘": 145, "’": 146, "“": 147, "”": 148 };
   return [...value].map((c) => {
-    const code = extras[c] ?? c.codePointAt(0)!;
+    // Standard Helvetica lacks some Czech/Polish letters. Keep their base letter
+    // readable in PDF rather than writing '?'; SVG retains the original Unicode.
+    const printable = extras[c] !== undefined || c.codePointAt(0)! <= 255
+      ? c : c.normalize("NFD").replace(/\p{M}/gu, "").replace(/Ł/g, "L").replace(/ł/g, "l");
+    const code = extras[printable] ?? printable.codePointAt(0)!;
     if (code > 255 || code < 32) return "?";
     if (code > 126) return `\\${code.toString(8).padStart(3, "0")}`;
-    return /[()\\]/.test(c) ? `\\${c}` : c;
+    return /[()\\]/.test(printable) ? `\\${printable}` : printable;
   }).join("");
 }
 

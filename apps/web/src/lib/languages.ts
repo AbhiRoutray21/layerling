@@ -10,7 +10,7 @@
  *
  * To add a language, see docs/TRANSLATING.md.
  */
-export const LANGUAGES = ["en", "de", "nl", "fr", "pl", "ru"] as const;
+export const LANGUAGES = ["en", "de", "nl", "fr", "pl", "ru", "cs"] as const;
 export type Language = (typeof LANGUAGES)[number];
 export const DEFAULT_LANGUAGE: Language = "en";
 
@@ -81,6 +81,43 @@ const GITHUB_DISCUSSIONS = "https://github.com/henmedia/layerling/discussions";
 const DRUCKTIPPS_FORUM = "https://forum.drucktipps3d.de/forum/board/127-layerling/";
 
 export const LANGUAGE_INFO: Readonly<Record<Language, LanguageInfo>> = {
+  cs: {
+    name: "Čeština",
+    htmlLang: "cs",
+    numberLocale: "cs-CZ",
+    quotes: ["„", "“"],
+    guideDir: "prirucka",
+    communityUrl: GITHUB_DISCUSSIONS,
+    readme: "README.md",
+    quickstartAnchor: "windows-quickstart",
+    legal: { imprint: "Údaje o provozovateli", privacy: "Ochrana osobních údajů" },
+    keyNames: { Shift: "Shift", Delete: "Delete", Home: "Home", Click: "Kliknutí", RightClick: "Pravé tlačítko", Drag: "Tažení" },
+    asciiUmlauts: false,
+    complete: true,
+    guide: {
+      site: "Uživatelská příručka Layerlingu",
+      home: "Uživatelská příručka",
+      openEditor: "Otevřít editor",
+      backToEditor: "Zpět do editoru",
+      editorElsewhere: "Editor už je otevřený v jiné kartě. Přepněte se do ní.",
+      chapters: "Kapitoly",
+      onThisPage: "Na této stránce",
+      previous: "Předchozí kapitola",
+      next: "Další kapitola",
+      overviewLead: "Možnosti Layerlingu krok za krokem. Obrázky pocházejí ze spuštěné aplikace a aktualizují se s každou verzí.",
+      sourceNote: "Příručka se rozšiřuje spolu s aplikací. Pokud něco chybí nebo je nesprávně, napište do",
+      forum: "diskuze",
+      notTranslated: "Tato kapitola zatím není přeložená do češtiny. Následuje anglický text.",
+      languageMenu: "Jazyk",
+      search: "Hledat v příručce",
+      searchNothing: "Nic nenalezeno.",
+      printAll: "Vytisknout celou příručku",
+      printAllTitle: "Celá uživatelská příručka",
+      printAllLead: "Všechny kapitoly na jedné stránce pro tisk nebo uložení do PDF. Stiskněte Ctrl+P a v nastavení tisku vypněte záhlaví a zápatí. Pro tisk části příručky zvolte rozsah stránek.",
+      printContents: "Obsah",
+      printButton: "Vytisknout",
+    },
+  },
   en: {
     name: "English",
     htmlLang: "en",
