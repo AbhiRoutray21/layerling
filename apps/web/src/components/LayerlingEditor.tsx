@@ -220,7 +220,7 @@ import { type Vec3, type MeshData, type Cuboid, type ShapeUpdatePatch, type Mani
 import { cloneAsGroupChild, meshDataToManifoldMesh, shapeToManifoldSolid, splitShapesByPlane, unionOverlappingExportMeshes, exportBodiesWithLooseHoles, exportSolidVolume, type ExportSolidVolume, PRINT_MATERIAL_STORAGE_KEY, PRINT_INFILL_STORAGE_KEY, PRINT_WALLS_STORAGE_KEY, formatEstimateNumber, formatSectionOffset, SECTION_SEEN_FROM_KEYS, expandBundles, visibleExportShapes, multicolorExportSolids, exportFaceColors, colorSeparatedExportMeshes, disposeManifold, canIntersectShapes, buildIntersectionShapeFromSelection, groupedShape, quaternionForShape, rotationFromQuaternion, ARROW_KEYS, cleanShapePatch, restoreGroupedChildren, buildGroupedShapeFromSelection } from "@/lib/editorBooleans";
 import { booleanAutomationScene } from "@/lib/editorAutomation";
 import { debugShapeSummary, mcpPivotRequest, compactShapeSummary, mcpShapeSummary, mcpSketchFillProfile, mcpTextFont } from "@/lib/editorMcpSummary";
-import { emptySketchProfile, cadShapeFromSketchProfile, shapeFromRevolvedSketchProfile, shapeFromCadMesh, sketchReferenceShapeOnWorkplane, defaultMcpSketchProfile } from "@/lib/editorSketchCad";
+import { emptySketchProfile, cadShapeFromSketchProfile, revolveBuildProfile, shapeFromRevolvedSketchProfile, shapeFromCadMesh, sketchReferenceShapeOnWorkplane, defaultMcpSketchProfile } from "@/lib/editorSketchCad";
 import { drawingLabelsInLanguage } from "@/lib/drawingLabels";
 import { offersTextLayers, textLayerStack, layeredTextShape, nameTagSource, nameTagsFor, offersIconLayers, iconLayerStack, iconTagArea, layeredIconShape, iconTagCopies, svgIconArea, iconTagFromSvg } from "@/lib/editorTextTags";
 
@@ -3095,7 +3095,7 @@ export function LayerlingEditor({
     }
     const timer = window.setTimeout(() => {
       void getManifoldRuntime()
-        .then((runtime) => buildSketchRevolveMesh(runtime, sketchProfile, sketchRevolveSettings))
+        .then((runtime) => buildSketchRevolveMesh(runtime, revolveBuildProfile(runtime, sketchProfile), sketchRevolveSettings))
         .then((mesh) => {
           if (sketchRevolvePreviewRequestRef.current === requestId) setSketchRevolvePreview(mesh);
         })
@@ -4749,7 +4749,7 @@ export function LayerlingEditor({
     const timer = window.setTimeout(() => {
       void getManifoldRuntime().then((runtime) => {
         if (cancelled) return;
-        const stroked = strokedSketchProfile(runtime, sketchProfile.silhouette ? silhouetteSketchProfile(sketchProfile) : sketchProfile);
+        const stroked = strokedSketchProfile(runtime, sketchProfile.silhouette ? silhouetteSketchProfile(sketchProfile) : sketchProfile, { clipToRevolveSide: sketchOperation === "revolve" });
         if (!stroked) {
           setSketchStrokePreview(null);
           return;
@@ -4768,7 +4768,7 @@ export function LayerlingEditor({
       cancelled = true;
       window.clearTimeout(timer);
     };
-  }, [sketchActive, sketchProfile]);
+  }, [sketchActive, sketchOperation, sketchProfile]);
 
   const finishSketch = useCallback(async () => {
     const existing = editingSketchShapeId ? shapes.find((shape) => shape.id === editingSketchShapeId) ?? null : null;
@@ -4782,10 +4782,11 @@ export function LayerlingEditor({
         if (existing?.sketchProfile && resolved) {
           // The rebuilt body is centred on its outline again: keep its axis where it was.
           const base = existing.importedMesh;
+          const runtime = await getManifoldRuntime();
           const shift = revolveAxisShift(
             existing,
-            { profile: existing.sketchProfile, settings: existing.sketchRevolve ?? {} },
-            { profile: sketchProfile, settings: sketchRevolveSettings },
+            { profile: revolveBuildProfile(runtime, existing.sketchProfile), settings: existing.sketchRevolve ?? {} },
+            { profile: revolveBuildProfile(runtime, sketchProfile), settings: sketchRevolveSettings },
             base ? existing.width / Math.max(0.001, base.baseWidth) : 1,
             base ? existing.depth / Math.max(0.001, base.baseDepth) : 1,
             1,
@@ -5008,7 +5009,7 @@ export function LayerlingEditor({
       if (!source?.sketchProfile || source.sketchOperation !== "revolve") return;
       setNotice(t("status.updatingRevolve"), true);
       void shapeFromRevolvedSketchProfile(source.sketchProfile, settings, source)
-        .then((generated) => {
+        .then(async (generated) => {
           if (sketchRevolveUpdateRequestRef.current.get(id) !== requestId) return;
           const current = shapesRef.current.find((shape) => shape.id === id);
           if (!current?.importedMesh || current.sketchOperation !== "revolve") return;
@@ -5019,10 +5020,13 @@ export function LayerlingEditor({
           const depth = generated.depth * depthScale;
           const height = generated.height * heightScale;
           // The body is centred on its outline, which moves with the sweep: carry its middle so the axis stays put.
+          const runtime = await getManifoldRuntime();
+          if (sketchRevolveUpdateRequestRef.current.get(id) !== requestId) return;
+          const turned = revolveBuildProfile(runtime, source.sketchProfile!);
           const shift = revolveAxisShift(
             current,
-            { profile: source.sketchProfile!, settings: current.sketchRevolve ?? {} },
-            { profile: source.sketchProfile!, settings },
+            { profile: turned, settings: current.sketchRevolve ?? {} },
+            { profile: turned, settings },
             widthScale,
             depthScale,
           );
@@ -11214,7 +11218,7 @@ export function LayerlingEditor({
             onMeasureTool={() => setActiveSketchTool(sketchTool === "measure" ? "select" : "measure")}
             cornerDialog={sketchCornerDialog}
             onCornerDialogChange={setSketchCornerDialog}
-            strokePanelOpen={sketchStrokePanelOpen && sketchOperation !== "revolve"}
+            strokePanelOpen={sketchStrokePanelOpen}
             onCloseStrokePanel={() => setSketchStrokePanelOpen(false)}
             onStrokeChange={(stroke) => commitSketchProfile(
               { ...sketchProfile, stroke },
@@ -12383,7 +12387,7 @@ function SecondaryToolbar({
         ...sketchClipboardTools.map((tool) => fromTool(tool, t("editor.group.clipboard"))),
         plain("sketch-undo", t("editor.tool.undo"), t("editor.group.history"), sketchCanUndo, onSketchUndo, { icon: ToolbarUndoIcon }),
         plain("sketch-redo", t("editor.tool.redo"), t("editor.group.history"), sketchCanRedo, onSketchRedo, { icon: ToolbarRedoIcon }),
-        ...(sketchOperation === "revolve" ? [] : [plain("sketch-stroke", t("sketch.strokeHint"), finishGroup, true, () => onSketchStroke?.(), { icon: SKETCH_PALETTE_ICONS.line, active: Boolean(sketchStrokeActive) })]),
+        plain("sketch-stroke", t("sketch.strokeHint"), finishGroup, true, () => onSketchStroke?.(), { icon: SKETCH_PALETTE_ICONS.line, active: Boolean(sketchStrokeActive) }),
         plain("sketch-finish", sketchOperation === "revolve" ? t("sketch.finishRevolve") : t("sketch.finishSketch"), finishGroup, true, onSketchFinish),
         plain("sketch-cancel", t("sketch.cancel"), finishGroup, true, onSketchCancel),
         modeCommand,
@@ -12859,7 +12863,7 @@ function SecondaryToolbar({
                 <div className="toolbar-section sketch-finish-section" data-group="finish">
                   <div className="toolbar-section-label">{t("sketch.group.finish")}</div>
                   <div className="toolbar-section-tools">
-                    {sketchOperation === "revolve" ? null : <button
+                    <button
                       className={`sketch-command-button ${sketchStrokeActive ? "active" : ""}`}
                       type="button"
                       aria-pressed={Boolean(sketchStrokeActive)}
@@ -12868,7 +12872,7 @@ function SecondaryToolbar({
                     >
                       <SketchReferenceIcon name="line" />
                       <span>{t("sketch.stroke")}</span>
-                    </button>}
+                    </button>
                     <button className="sketch-command-button primary" type="button" onClick={onSketchFinish}>
                       <Check />
                       <span>{sketchOperation === "revolve" ? t("sketch.finishRevolve") : t("sketch.finishSketch")}</span>
