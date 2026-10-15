@@ -25,6 +25,7 @@ apps/web/public/handleiding/
 apps/web/public/instrukcja/
 apps/web/public/guide-fr/
 apps/web/public/ru/
+apps/web/public/navodila/
 
 # Environment files
 .env
