@@ -1875,7 +1875,7 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "camera.sectionMeasureHelp": "Zwei Punkte auf dem Umriss anklicken. Der zweite rastet im rechten Winkel zur Wand ein; auf einem Kreis rasten auch die Mitte und der Gegenpunkt zum ersten ein.",
   "camera.sectionBack": "Zurück",
   "camera.sectionBackHint": "Erst das Messen beenden, dann das Fenster schließen (Esc)",
-  "camera.sectionConfirm": "Bestätigen",
+  "camera.sectionConfirm": "Schließen",
   "camera.sectionConfirmHint": "Fenster schließen, der Schnitt bleibt",
   "panel.moveHint": "Ziehen zum Verschieben; doppelklicken oder an der alten Stelle ablegen bringt die Tafel zurück",
   "camera.sectionMoveHint": "Ziehen zum Verschieben; am Schnitt-Knopf ablegen oder doppelklicken bringt es zurück",

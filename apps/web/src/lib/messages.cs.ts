@@ -1868,7 +1868,7 @@ export const MESSAGES_CS: Record<MessageKey, string> = {
   "camera.sectionMeasureHelp": "Klikněte na dva body obrysu. Druhý se přichytí kolmo k jeho stěně.",
   "camera.sectionBack": "Zpět",
   "camera.sectionBackHint": "Nejprve ukončit měření, pak zavřít okno (Esc)",
-  "camera.sectionConfirm": "Potvrdit",
+  "camera.sectionConfirm": "Zavřít",
   "camera.sectionConfirmHint": "Zavřít okno, řez zůstane",
   "camera.sectionShowPlane": "Zobrazit řeznou rovinu",
   "panel.moveHint": "Přetáhněte panel; dvojklik nebo vrácení na původní místo jej znovu ukotví",

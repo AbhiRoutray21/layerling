@@ -8619,8 +8619,8 @@ export function WorkplaneViewport({
                         </label>
                       </div>
 
-                      {/* Esc closes the panel and Enter confirms it, which a tablet has no keys for. */}
-                      <div className="section-footer-actions section-close-actions">
+                      {/* Esc closes the panel, which a tablet has no key for; a computer has the X and Esc, so it does not show these (#402). */}
+                      {touchDevice ? <div className="section-footer-actions section-close-actions">
                         <button
                           type="button"
                           className="section-action-btn"
@@ -8647,7 +8647,7 @@ export function WorkplaneViewport({
                           <Check size={14} strokeWidth={2.2} aria-hidden="true" />
                           <span>{t("camera.sectionConfirm")}</span>
                         </button>
-                      </div>
+                      </div> : null}
                     </>
                   ) : null}
                   </>)}

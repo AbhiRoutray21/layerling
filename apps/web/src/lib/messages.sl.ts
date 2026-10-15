@@ -1411,7 +1411,7 @@ export const MESSAGES_SL: Partial<Record<MessageKey, string>> = {
   "camera.sectionMeasureHelp": "Klikni dve točki na konturi. Druga se pripne pravokotno na svojo steno.",
   "camera.sectionBack": "Nazaj",
   "camera.sectionBackHint": "Najprej končaj merjenje, nato zapri okno (Esc)",
-  "camera.sectionConfirm": "Potrdi",
+  "camera.sectionConfirm": "Zapri",
   "camera.sectionConfirmHint": "Zapri okno, prerez ostane",
   "camera.sectionShowPlane": "Prikaži rezalno ravnino",
   "panel.moveHint": "Povleci za premik; dvoklik ali spust na prejšnje mesto ga vrne nazaj",

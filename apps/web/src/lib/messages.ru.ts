@@ -1865,7 +1865,7 @@ export const MESSAGES_RU: Partial<Record<MessageKey, string>> = {
   "camera.sectionMeasureHelp": "Щёлкните две точки на контуре. Вторая привязывается перпендикулярно к своей стенке; на окружности также привязываются центр и точка напротив первой.",
   "camera.sectionBack": "Назад",
   "camera.sectionBackHint": "Сначала закончить измерение, затем закрыть окно (Esc)",
-  "camera.sectionConfirm": "Подтвердить",
+  "camera.sectionConfirm": "Закрыть",
   "camera.sectionConfirmHint": "Закрыть окно, разрез остаётся",
   "camera.sectionShowPlane": "Показывать плоскость разреза",
   "panel.moveHint": "Перетащите, чтобы переместить; дважды щёлкните или отпустите на прежнем месте, чтобы вернуть",

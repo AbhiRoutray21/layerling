@@ -1875,7 +1875,7 @@ export const MESSAGES_EN = {
   "camera.sectionMeasureHelp": "Click two points on the outline. The second snaps square to its wall; on a circle the centre and the point across from the first snap too.",
   "camera.sectionBack": "Back",
   "camera.sectionBackHint": "Close the measuring first, then the panel (Esc)",
-  "camera.sectionConfirm": "Confirm",
+  "camera.sectionConfirm": "Close",
   "camera.sectionConfirmHint": "Close the panel and keep the cut",
   "camera.sectionShowPlane": "Show cutting plane",
   "panel.moveHint": "Drag to move; double-click or drop it at its old spot to put it back",

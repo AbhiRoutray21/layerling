@@ -1874,7 +1874,7 @@ export const MESSAGES_NL: Record<MessageKey, string> = {
   "camera.sectionMeasureHelp": "Klik twee punten op de omtrek. Het tweede punt klikt haaks op zijn wand vast; op een cirkel klikken ook het middelpunt en het punt tegenover het eerste vast.",
   "camera.sectionBack": "Terug",
   "camera.sectionBackHint": "Eerst het meten beëindigen, dan het venster sluiten (Esc)",
-  "camera.sectionConfirm": "Bevestigen",
+  "camera.sectionConfirm": "Sluiten",
   "camera.sectionConfirmHint": "Venster sluiten, de doorsnede blijft",
   "camera.sectionShowPlane": "Snijvlak tonen",
   "panel.moveHint": "Sleep om te verplaatsen; dubbelklik of zet het op zijn oude plek neer om het terug te zetten",

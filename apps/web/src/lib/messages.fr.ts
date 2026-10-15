@@ -1858,7 +1858,7 @@ export const MESSAGES_FR: Partial<Record<MessageKey, string>> = {
   "camera.sectionMeasureHelp": "Cliquez sur deux points du contour. Le second s'accroche à son mur ; sur un cercle, le centre et le point opposé au premier s'accrochent aussi.",
   "camera.sectionBack": "Retour",
   "camera.sectionBackHint": "Terminer d'abord la mesure, puis fermer la fenêtre (Échap)",
-  "camera.sectionConfirm": "Confirmer",
+  "camera.sectionConfirm": "Fermer",
   "camera.sectionConfirmHint": "Fermer la fenêtre en gardant la coupe",
   "camera.sectionShowPlane": "Afficher le plan de coupe",
   "panel.moveHint": "Faites glisser pour vous déplacer ; double-cliquez ou déposez-le à son ancien emplacement pour le remettre en place",

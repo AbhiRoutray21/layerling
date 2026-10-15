@@ -18,5 +18,15 @@
       "de": "Neben „Skizze hochziehen“ und „Skizze rotieren“ gibt es einen dritten Weg: Die neue **Skizze entlang Pfad** zieht einen Querschnitt an einem Pfad entlang, etwa einen Kabelkanal mit Ecke, eine Leitung oder einen Ring um ein Sechseck. Du zeichnest den Querschnitt als geschlossenen Umriss (ein zweiter Umriss darin macht ihn hohl) und den Pfad als Hilfslinie, eine Kette aus Linien oder Kurven, offen oder geschlossen. Ecken aus geraden Stücken werden eine Gehrung. Der Körper ist exakt, Verrundung, Fase und STEP-Export gehen. Die MCP-Brücke baut ihn aus Zahlen mit `layerling_sweep_sketch`.",
       "en": "Next to Extrude and Revolve there is a third way: the new **Sweep sketch** pulls a cross-section along a path, for a cable channel that turns a corner, a conduit or a ring round a hexagon. You draw the cross-section as a closed outline (a second outline inside makes it hollow) and the path as a construction line, a chain of lines or curves, open or closed. A corner of straight pieces becomes a mitre. The body is exact, so Fillet, Chamfer and the STEP export work. The MCP bridge builds one from numbers with `layerling_sweep_sketch`."
     }
+  },
+  {
+    "title": {
+      "de": "Schnittansicht: Zurück und Schließen nur auf dem Tablet",
+      "en": "Section view: Back and Close only on a tablet"
+    },
+    "body": {
+      "de": "Die Knöpfe „Zurück“ und „Schließen“ (früher „Bestätigen“) am Fenster der Schnittansicht gibt es für ein Tablet ohne Esc-Taste. Auf einem Computer erscheinen sie nicht mehr, denn dort schließen das X und Esc das Fenster. Die Anleitung beschreibt das Schließen genauer.",
+      "en": "The buttons \"Back\" and \"Close\" (before \"Confirm\") on the section view panel are for a tablet without an Esc key. A computer does not show them any more, as there the X and Esc close the panel. The guide describes the closing in more detail."
+    }
   }
 ]

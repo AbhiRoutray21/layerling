@@ -58,7 +58,7 @@ A design opens the way you left it: the angle, zoom and position of the view are
 
 The panel hangs on its button. If it covers something, drag it by its title bar anywhere on the workplane; it opens there next time too. Double-click the title bar or drop it at the button to put it back.
 
-{{ui:camera.sectionConfirm}} closes the panel and keeps the cut, and {{ui:camera.sectionBack}} ends the measuring first and then closes the panel, for a tablet that has no [[Enter]] or [[Esc]]. [[Esc]] closes the panel too; the cut stays until you switch it off or go back to the design overview. While it is on, its button stays highlighted. Anything you place on the side that is cut away only shows once you switch the cut off.
+The X and [[Esc]] close the panel; with a measuring running, [[Esc]] ends it first. The cut stays until you switch it off with {{ui:camera.sectionActive}} or go back to the design overview. While it is on, its button stays highlighted. Anything you place on the side that is cut away only shows once you switch the cut off. A tablet has no [[Esc]], so there the panel has two more buttons: {{ui:camera.sectionBack}} ends the measuring if one is running and otherwise closes the panel, and {{ui:camera.sectionConfirm}} closes the panel in one step. A computer does not show them.
 
 ## The workplane
 
