@@ -103,7 +103,7 @@ import { storedCustomFonts } from "@/lib/customFontStore";
 import { ArrayPanel } from "./workplane/ArrayPanel";
 import { ScalePercentPanel, type ScalePercentSettings } from "./workplane/ScalePercentPanel";
 import { scaleShapesByPercent } from "@/lib/scaleByPercent";
-import { canToggleGroupColors } from "@/lib/groupColors";
+import { canToggleGroupColors, groupShowsPartColors } from "@/lib/groupColors";
 import { disposeBoundsTree } from "three-mesh-bvh";
 import { SHELL_SIDES, shellMaxThickness, shellOpeningsFor, shellOpenSides } from "@/lib/shellLimits";
 import { circleStepDegrees, clampArrayCount, moveAlongRadius, rotateAroundVertical, rowOffset, singleAxisSpacing, type ArraySettings } from "@/lib/shapeArray";
@@ -6695,6 +6695,29 @@ export function LayerlingEditor({
     );
   }, [refuseLockedSelection, commitShapes, hasSelection, selectedIds, shapes]);
 
+  /** Multicolor for the selected groups (Shift+M): each part in its own colour, or one colour for the group (#367). */
+  const toggleSelectionMulticolor = useCallback(() => {
+    if (!hasSelection) {
+      setNotice(t("status.selectShapeFirst"));
+      return;
+    }
+    if (refuseLockedSelection()) return;
+    const selected = new Set(selectedIds);
+    const eligible = (shape: WorkplaneShape) => selected.has(shape.id) && !shape.locked && canToggleGroupColors(shape);
+    const groups = shapes.filter(eligible);
+    if (groups.length === 0) {
+      setNotice(t("status.multicolorNeedsGroup"));
+      return;
+    }
+    // If every group shows its parts' colours, switch to one colour; otherwise to the parts' colours.
+    const multicolor = !groups.every((shape) => groupShowsPartColors(shape));
+    commitShapes(
+      shapes.map((shape) => (eligible(shape) ? { ...shape, multicolor } : shape)),
+      selectedIds,
+      multicolor ? t("status.selectionMulticolor") : t("status.selectionOneColor"),
+    );
+  }, [refuseLockedSelection, commitShapes, hasSelection, selectedIds, shapes]);
+
   /** One colour for every selected part (#183); a group shows it whole. */
   const setSelectionColor = useCallback(
     (color: string) => {
@@ -10820,7 +10843,11 @@ export function LayerlingEditor({
       } else if (key === "t" && !shortcut && !event.altKey && hasSelection) {
         event.preventDefault();
         toggleSelectionTransparency();
-      } else if (key === "m") {
+      } else if (key === "m" && event.shiftKey && !shortcut && !event.altKey) {
+        // Shift+M: Multicolor for the selected groups (#367); M alone is the mirror mode.
+        event.preventDefault();
+        toggleSelectionMulticolor();
+      } else if (key === "m" && !event.shiftKey) {
         event.preventDefault();
         toggleMirrorMode();
       } else if (key === "l") {

@@ -38,5 +38,15 @@
       "de": "Das Importfenster nimmt jetzt auch PNG- und JPG-Dateien. Das Bild wird zu einem Umriss nachgezeichnet und kommt als Skizzenkörper von 50 mm Breite, den du danach anders groß machen kannst. Eine SVG, die nur ein Bild enthält, wird genauso nachgezeichnet.",
       "en": "The import window now takes PNG and JPG files too. The picture is traced into an outline and comes in as a sketch body 50 mm wide, which you can resize afterwards. An SVG that holds nothing but a picture is traced the same way."
     }
+  },
+  {
+    "title": {
+      "de": "Tasten neben den Namen, und Umschalt+M für Mehrfarbig",
+      "en": "Keys beside the names, and Shift+M for Multicolor"
+    },
+    "body": {
+      "de": "In den Einstellungen einer Form stehen die Tasten jetzt neben den Namen: Körper (S), Aussparung (H), Durchsichtig (T) und Gruppe bearbeiten (E). Mehrfarbig bekommt eine Taste, Umschalt+M, und steht in der Tastenkürzel-Liste. Sie schaltet markierte Gruppen zwischen jedem Teil in seiner Farbe und einer Farbe für die Gruppe um. Umschalt+M schaltete bisher den Spiegelmodus ein, das tut jetzt nur noch M allein.",
+      "en": "The settings of a shape now show the keys next to the names: Solid (S), Hole (H), Transparent (T) and Edit group (E). Multicolor gets a key, Shift+M, and is in the shortcuts list: it switches the selected groups between each part in its own colour and one colour for the group. Shift+M used to start the mirror mode; now only M alone does."
+    }
   }
 ]

@@ -9376,6 +9376,19 @@ html[data-theme="dark"] .rotation-angle-badge {
   color: #f7a146;
 }
 
+/* The key beside a name in the shape card, "Solid (S)" (#367). */
+.shape-state-card button .key-hint {
+  display: block;
+  text-align: center;
+}
+
+.key-hint {
+  opacity: 0.62;
+  font-size: 0.86em;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
 .large-solid-swatch,
 .large-hole-swatch {
   display: block;

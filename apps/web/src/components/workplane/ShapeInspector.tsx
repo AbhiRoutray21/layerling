@@ -2429,7 +2429,7 @@ export function ShapeInspector({
           aria-expanded={colorOpen}
         >
           <span className="large-solid-swatch" style={{ "--swatch": solidColor } as CSSProperties} />
-          <span>{t("inspector.solid")}</span>
+          <span>{t("inspector.solid")} <span className="key-hint">(S)</span></span>
         </button>
         <button
           className={shape.hole ? "active hole-choice" : "hole-choice"}
@@ -2441,18 +2441,18 @@ export function ShapeInspector({
           aria-pressed={shape.hole}
         >
           <span className="large-hole-swatch" />
-          <span>{t("inspector.hole")}</span>
+          <span>{t("inspector.hole")} <span className="key-hint">(H)</span></span>
         </button>
         {/* Stays in place for a hole, only greyed out, so the card does not jump. */}
         <ToggleProperty
-          label={t("inspector.transparent")}
+          label={`${t("inspector.transparent")} (T)`}
           value={Boolean(shape.transparent) && !shape.hole}
           disabled={locked || Boolean(shape.hole)}
           onChange={(transparent) => onUpdate({ transparent: transparent || undefined })}
         />
         {canToggleGroupColors(shape) ? (
           <ToggleProperty
-            label={t("inspector.multicolor")}
+            label={`${t("inspector.multicolor")} (Shift+M)`}
             value={groupShowsPartColors(shape)}
             disabled={locked}
             onChange={(multicolor) => onUpdate({ multicolor })}
@@ -2530,7 +2530,7 @@ export function ShapeInspector({
 
       {onOpenGroup ? (
         <button className="inspector-action-button" type="button" disabled={locked} onClick={onOpenGroup}>
-          {t(shape.groupOperation === "bundle" ? "group.editBundle" : "group.edit")}
+          {t(shape.groupOperation === "bundle" ? "group.editBundle" : "group.edit")} (E)
         </button>
       ) : null}
 
@@ -4135,7 +4135,7 @@ export function SelectionInspector({
             aria-expanded={colorOpen}
           >
             <span className="large-solid-swatch" style={{ "--swatch": swatch } as CSSProperties} />
-            <span>{t("inspector.solid")}</span>
+            <span>{t("inspector.solid")} <span className="key-hint">(S)</span></span>
           </button>
           <button
             className={allHoles ? "active hole-choice" : "hole-choice"}
@@ -4147,7 +4147,7 @@ export function SelectionInspector({
             aria-pressed={allHoles}
           >
             <span className="large-hole-swatch" />
-            <span>{t("inspector.hole")}</span>
+            <span>{t("inspector.hole")} <span className="key-hint">(H)</span></span>
           </button>
           {!noHoles && !allHoles ? <p className="selection-mixed-note">{t("inspector.selectionMixed")}</p> : null}
         </div>
