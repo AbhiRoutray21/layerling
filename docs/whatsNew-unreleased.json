@@ -68,5 +68,15 @@
       "de": "In Chrome und Edge schrieb jeder STL-Export in die Datei, die du beim ersten Mal gewählt hast, und das Dateinamenfeld tat nichts mehr. Tippst du dort jetzt einen anderen Namen, fragt layerling, wo die neue Datei liegen soll. Unter dem Fenster steht, ob in die bisherige Datei geschrieben wird oder gefragt wird.",
       "en": "In Chrome and Edge every STL export wrote into the file you chose the first time, and the file name field did nothing any more. If you now type another name there, layerling asks where the new file should go. The line under the window says whether the old file is written or you are asked."
     }
+  },
+  {
+    "title": {
+      "de": "Doppelklick auf einen Schieber setzt ihn zurück",
+      "en": "A double click on a slider resets it"
+    },
+    "body": {
+      "de": "Ein Doppelklick auf einen Schieber in den Einstellungen einer Form setzt den Wert auf seine Vorgabe zurück, wie der kleine Pfeil neben dem Namen. Das gilt auch für sieben Schieber der Arbeitsbereich-Einstellungen, etwa Zoomgeschwindigkeit und Schattenstärke.",
+      "en": "A double click on a slider in a shape's settings sets the value back to its default, like the small arrow next to its name. It works for seven sliders of the workspace settings as well, such as zoom speed and shadow strength."
+    }
   }
 ]
