@@ -2030,9 +2030,10 @@ html[data-theme="dark"] .whats-new-earlier:hover {
   border-radius: 8px;
 }
 
+/* No square behind the icon of the plain tiles: only the create tile has one (solid orange). */
 .dashboard-action-tile:not(.create) .dashboard-action-icon {
   color: #563e25;
-  background: #f7f3ed;
+  background: transparent;
 }
 
 .dashboard-action-tile span:last-child {
@@ -13018,10 +13019,14 @@ html[data-theme="dark"] .dashboard-action-tile.create {
   border-color: #a3682b;
 }
 
-html[data-theme="dark"] .dashboard-action-tile:not(.create) .dashboard-action-icon,
 html[data-theme="dark"] .dashboard-settings-panel header button {
   color: #d5c2af;
   background: #3e3022;
+}
+
+html[data-theme="dark"] .dashboard-action-tile:not(.create) .dashboard-action-icon {
+  color: #d5c2af;
+  background: transparent;
 }
 
 html[data-theme="dark"] .project-preview {
