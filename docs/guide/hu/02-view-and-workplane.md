@@ -15,7 +15,7 @@ Egérrel:
 | egérgörgő | nagyítás és kicsinyítés |
 | [[Ctrl]] nyomva tartása és húzás bal gombbal | szintén a nézetet mozgatja |
 
-Hogy a görgő milyen gyorsan nagyít, azt a beállításokban a {{ui:workspace.appearance}} alatt a {{ui:workspace.zoomSpeed}} adja meg: egy csúszka 1-től 10-ig, kezdetben 5-ön.
+Hogy a görgő milyen gyorsan nagyít, azt a beállításokban a {{ui:workspace.appearance}} alatt a {{ui:workspace.zoomSpeed}} adja meg: egy csúszka 1-től 14-ig, kezdetben 5-ön; 10 fölött csak a görgő gyorsul.
 
 Táblagépen vagy telefonon két ujjal nagyítasz (széthúzás és összecsípés) és mozgatod a nézetet (együtt csúsztatva). Egy ujjal üres helyen a nézetet forgatod, egy koppintás ott pedig megszünteti a kijelölést; egy alakzaton vagy fogantyún a terven dolgozol, pont mint a bal egérgombbal. Ha akkor is forgatnád a nézetet, amikor az ujjad egy alakzaton indul, kapcsold be a kamerasávon az {{ui:camera.touchRotate}} kapcsolót. Ez a kapcsoló érintőképernyős eszközökön jelenik meg.
 

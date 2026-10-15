@@ -6,6 +6,7 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **The zoom speed slider goes up to 14:** The wheel was still too slow for some at 10, with a Mac mouse that sends small steps. The slider now runs from 1 to 14. The first ten steps are exactly as they were; each step above them goes on with the same factor, so 14 zooms about 3.8 times as fast as 10. The zoom buttons and the + and - keys stop at the rate of 10, so they do not jump. Reported by @t9vh6j9rt4-collab (#331).
 - **A plain notice on the start page that designs live in the browser:** Designs are kept in the browser's storage, and a browser can fail or cause problems after an update. A bold notice under the start tiles now says that layerling takes no responsibility for designs kept there, and that it is worth backing them up from time to time with **Back up all**, or saving them as files; the notice has the button for it. It cannot be closed. The guide says the same in the first chapter.
 - **The guide names the language list:** Two sentences still spoke of the EN and DE buttons, or of "German or English", from before the language list. The guide's page on settings and chapter 15 now say that the language is chosen from the list at the top right, in English, German, Dutch, French, Czech, Russian and Slovenian.
 
