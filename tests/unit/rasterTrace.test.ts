@@ -77,6 +77,15 @@ describe("tracing a picture (PNG, JPG) as an outline", () => {
     expect(traceRaster(wavy, { maxSegments: 80 }).segments).toBeLessThanOrEqual(80);
   });
 
+  it("makes the outline as wide as asked, its height in proportion (#359)", () => {
+    const bar = picture(100, 60, (x, y) => (x >= 10 && x < 90 && y >= 20 && y < 40 ? BLACK : WHITE));
+    const trace = traceRaster(bar, { width: 50 });
+    // 80 x 20 px become 50 x 12.5 units; the page keeps the picture's proportions.
+    expect(importedArea(trace.svg)).toBeGreaterThan(50 * 12.5 * 0.95);
+    expect(importedArea(trace.svg)).toBeLessThan(50 * 12.5 * 1.05);
+    expect(trace.svg).toContain('width="62.5" height="37.5"');
+  });
+
   it("shrinks a large picture first, keeping its proportions", () => {
     const wide = picture(3000, 300, () => WHITE);
     const small = shrinkRaster(wide);
