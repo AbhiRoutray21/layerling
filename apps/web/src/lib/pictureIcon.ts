@@ -1,10 +1,13 @@
 import { MAX_RASTER_TRACE_SIDE, traceRaster, type RasterPart, type RasterPixels } from "@/lib/rasterTrace";
 
 /*
- * A picture as an icon (#359): a PNG or JPG file, or an SVG that holds nothing but such a picture
- * (as Inkscape writes one when a bitmap is imported), is traced into an outline, and the outline
- * is the SVG the icon tag reads. Everything else stays an SVG as it is.
+ * A picture as an icon or an import (#359): a PNG or JPG file, or an SVG that holds nothing but
+ * such a picture (as Inkscape writes one when a bitmap is imported), is traced into an outline,
+ * and the outline is the SVG the icon tag or the import reads. Everything else stays an SVG as it is.
  */
+
+/** How wide a picture comes in through the import, in mm; it can be resized afterwards. */
+export const PICTURE_IMPORT_WIDTH = 50;
 
 export const PICTURE_FILE_ACCEPT = ".png,.jpg,.jpeg,image/png,image/jpeg";
 export const PICTURE_UNREADABLE = "The picture could not be read";
@@ -123,4 +126,10 @@ export async function iconSourceFromFile(file: File, part?: RasterPart): Promise
   const embedded = svgEmbeddedPicture(text);
   if (embedded) return tracedIconSource(name, await picturePixels(embedded), part);
   return { name, svg: text };
+}
+
+/** A picture as the SVG the import builds: the part that is not its background, PICTURE_IMPORT_WIDTH mm wide. */
+export async function importedPictureSvg(source: Blob | string) {
+  const pixels = await picturePixels(source);
+  return traceRaster(pixels, { part: pictureShapePart(pixels), width: PICTURE_IMPORT_WIDTH }).svg;
 }

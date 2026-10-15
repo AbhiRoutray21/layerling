@@ -28,5 +28,15 @@
       "de": "Im Reiter Skizze stehen „Skizze extrudieren\" und „Skizze rotieren\" jetzt als zwei Knöpfe nebeneinander in der Gruppe Erstellen, statt in einem Ausklappmenü. Der Hinweis steht als Tooltip am Knopf, das Fragezeichen daneben. So spart der Wechsel zwischen beiden Arten einen Klick.",
       "en": "In the Sketch tab, Extrude sketch and Revolve sketch now stand side by side as two buttons in the Create group instead of in a drop-down. The hint is the tooltip of the button, the question mark beside them. Switching between the two takes one click less."
     }
+  },
+  {
+    "title": {
+      "de": "Bilder importieren (PNG, JPG)",
+      "en": "Importing pictures (PNG, JPG)"
+    },
+    "body": {
+      "de": "Das Importfenster nimmt jetzt auch PNG- und JPG-Dateien. Das Bild wird zu einem Umriss nachgezeichnet und kommt als Skizzenkörper von 50 mm Breite, den du danach anders groß machen kannst. Eine SVG, die nur ein Bild enthält, wird genauso nachgezeichnet.",
+      "en": "The import window now takes PNG and JPG files too. The picture is traced into an outline and comes in as a sketch body 50 mm wide, which you can resize afterwards. An SVG that holds nothing but a picture is traced the same way."
+    }
   }
 ]
