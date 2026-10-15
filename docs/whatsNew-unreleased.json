@@ -18,5 +18,15 @@
       "de": "In einer Rotationsskizze gibt es den Knopf Kontur wieder. Zeichne die Wand einer Vase oder eines Bechers als eine offene Linie links von der Achse, setze das Häkchen bei Kontur und stelle die Breite ein: Die Rotation dreht dieses Band zu einer dünnen Wand, wie in Tinkercad. Was über die Achse hinausreicht, wird abgeschnitten. Der Körper behält die gezeichnete Linie, mit „Skizze bearbeiten“ machst du dort weiter.",
       "en": "A revolve sketch has the Stroke button again. Draw the wall of a vase or a cup as one open line to the left of the axis, tick the stroke and set the width: the revolve turns that band into a thin wall, as in Tinkercad. What reaches across the axis is cut off. The body keeps the drawn line, so Edit sketch goes on from there."
     }
+  },
+  {
+    "title": {
+      "de": "Die Objektliste bleibt offen",
+      "en": "The object list stays open"
+    },
+    "body": {
+      "de": "Die Objektliste (Strg+Umschalt+O) begann bei jedem Entwurf und nach jedem Neuladen geschlossen. Jetzt bleibt sie offen oder geschlossen, wie du sie verlassen hast, für alle Entwürfe, in diesem Browser.",
+      "en": "The object list (Ctrl+Shift+O) started closed with every design and after every reload. It now stays open or closed as you left it, for all designs, in this browser."
+    }
   }
 ]

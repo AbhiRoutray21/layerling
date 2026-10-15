@@ -11,7 +11,7 @@ What is in your way you hide ({{ui:editor.tool.hideSelected}}, [[Ctrl]]+[[H]]). 
 
 ## The object list
 
-With many parts it is easy to lose track in the view. The object list ({{ui:editor.tool.showOutliner}} or [[Ctrl]]+[[Shift]]+[[O]]) shows all shapes as a list.
+With many parts it is easy to lose track in the view. The object list ({{ui:editor.tool.showOutliner}} or [[Ctrl]]+[[Shift]]+[[O]]) shows all shapes as a list. It stays open or closed as you left it, for every design, until you close it; the choice is kept in the browser.
 
 ![The object list: the group "Group" with two parts and a sphere beside it. A folder icon opens the group.](shot:object-list)
 

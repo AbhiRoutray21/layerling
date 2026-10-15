@@ -11,7 +11,7 @@ Wat in de weg zit, verberg je ({{ui:editor.tool.hideSelected}}, [[Ctrl]]+[[H]]).
 
 ## De objectlijst
 
-Met veel onderdelen raak je in de weergave makkelijk het overzicht kwijt. De objectlijst ({{ui:editor.tool.showOutliner}} of [[Ctrl]]+[[Shift]]+[[O]]) toont alle vormen als een lijst.
+Met veel onderdelen raak je in de weergave makkelijk het overzicht kwijt. De objectlijst ({{ui:editor.tool.showOutliner}} of [[Ctrl]]+[[Shift]]+[[O]]) toont alle vormen als een lijst. Ze blijft open of dicht zoals je haar achterliet, voor elk ontwerp, tot je haar sluit; de keuze wordt in de browser onthouden.
 
 ![De objectlijst: de groep "Groep" met twee onderdelen en een bol ernaast. Een mappictogram opent de groep.](shot:object-list)
 

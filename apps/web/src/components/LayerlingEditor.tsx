@@ -207,6 +207,7 @@ import { DEFAULT_SKETCH_STROKE, normalizeSketchStroke, strokedSketchProfile } fr
 import { topCadModifierEdgeIds } from "@/lib/topEdges";
 import { movedWithEditedOutline, placeSketchShape, sketchBodyAnchor, type SketchAnchor } from "@/lib/sketchPlacement";
 import { meshSlicePath, planeCutsMesh } from "@/lib/sketchSlice";
+import { useRememberedFlag } from "@/lib/useRememberedFlag";
 import { BUG_REPORT_FILE, bugReportText, rememberBugReportEvent, type BugReportEvent } from "@/lib/bugReport";
 import { formatLengthMm, lengthDisplayUnit } from "@/lib/measurementUnits";
 import { wrapMeshAroundCylinder, type CylinderWrapError } from "@/lib/cylinderWrap";
@@ -2490,7 +2491,8 @@ export function LayerlingEditor({
   const [iconTagPanelOpen, setIconTagPanelOpen] = useState(false);
   const [shortcutsOpen, setShortcutsOpen] = useState(false);
   const [guideOpen, setGuideOpen] = useState(false);
-  const [outlinerOpen, setOutlinerOpen] = useState(false);
+  // The object list stays open or closed as it was left, in this browser, for every design (#356).
+  const [outlinerOpen, setOutlinerOpen] = useRememberedFlag("layerling.editor.objectListOpen");
   /**
    * The groups being edited, outermost first; each next one is a part of the
    * one before. A group's parts lie loose on the workplane until "Done" groups
