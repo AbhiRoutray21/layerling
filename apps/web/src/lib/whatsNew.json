@@ -1,5 +1,50 @@
 [
   {
+    "version": "1.78.0",
+    "items": [
+      {
+        "title": {
+          "de": "Skizze: Tasten 1 bis 4 und Pfeiltasten am Griff",
+          "en": "Sketch: keys 1 to 4 and arrow keys on a handle"
+        },
+        "body": {
+          "de": "In der Skizze und der Dreh-Skizze wählen die Tasten 1, 2, 3 und 4 Linie, Bézier-Kurve, Weiche Kurve und Punkte setzen oder entfernen, wie in Tinkercad. Wird gerade eine Linie gezeichnet, bleiben die Ziffern ihre Länge. Ein angeklickter Kurvengriff leuchtet auf, und die Pfeiltasten verschieben ihn um einen Rasterschritt (Umschalt: größer), bei einem weichen Punkt zieht der Gegengriff mit. So lässt sich eine Kurve genau einstellen.",
+          "en": "In the sketch and the revolve sketch the keys 1, 2, 3 and 4 pick Line, Bezier Curve, Smooth Curve and Add or Remove Points, as in Tinkercad. While a line is being drawn the digits stay its length. A curve handle that you click lights up, and the arrow keys move it by one grid step (Shift: a larger step), a smooth point's other handle with it. That way a curve can be set precisely."
+        }
+      },
+      {
+        "title": {
+          "de": "Doppelsenkung",
+          "en": "Double Countersink"
+        },
+        "body": {
+          "de": "Neue Form in der Formenliste, nach der Senkbohrung: ein Loch mit Fase auf beiden Seiten, für eine Platte, die vorn und hinten sauber aussehen soll. An jedem Ende öffnet sich ein Kegel auf den Kopfdurchmesser, dazwischen liegt der Schaft. Du stellst Kopfdurchmesser, Schaftdurchmesser, Kegelwinkel und Gesamtlänge ein. Ist das Loch zu kurz für zwei ganze Kegel, treffen sie sich in der Mitte, und der Schaft bleibt breiter als eingestellt. Als exakter Körper funktionieren Kantenwerkzeug und STEP-Export. Als Lochmuster gibt es sie noch nicht.",
+          "en": "A new shape in the library, after the Countersink: a hole chamfered on both faces, for a plate that should look neat front and back. A cone at each end opens to the head diameter, the shaft sits between them. You set the head diameter, the shaft diameter, the cone angle and the total length. If the hole is too short for two full cones they meet in the middle and the shaft stays wider than set. As an exact body it works with the edge tools and the STEP export. It is not available as a pattern hole yet."
+        }
+      },
+      {
+        "title": {
+          "de": "Schlüsselring-Loch am Symbolschild",
+          "en": "A key ring hole on the icon tag"
+        },
+        "body": {
+          "de": "Das Symbolschild hat jetzt wie das Namensschild ein Loch für den Schlüsselring: in der Karte des Schilds anschalten, Durchmesser und Seite wählen. Das Loch geht durch alle Schichten, die Lasche sitzt an der untersten Schicht außerhalb des Symbols, und die Schichten bleiben ausgerichtet.",
+          "en": "The icon tag now has a key ring hole like the name tag: switch it on in the tag's card and choose the diameter and the side. The hole goes through all layers, the tab sits on the bottom layer beyond the icon, and the layers stay lined up."
+        }
+      },
+      {
+        "title": {
+          "de": "Gesperrtes Objekt umbenennen und verstecken",
+          "en": "Rename and hide a locked object"
+        },
+        "body": {
+          "de": "Ein gesperrtes Objekt ließ sich in der Objektliste und mit den Tasten umbenennen oder verstecken, im Eigenschaftenfenster wurde das still verweigert. Jetzt geht es auch dort.",
+          "en": "A locked object could be renamed or hidden in the object list and with the keys, but the properties window silently refused. Now it works there too."
+        }
+      }
+    ]
+  },
+  {
     "version": "1.77.0",
     "items": [
       {
