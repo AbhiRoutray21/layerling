@@ -1999,7 +1999,7 @@ html[data-theme="dark"] .whats-new-earlier:hover {
   gap: 14px;
   padding: 14px 16px;
   color: #573f26;
-  background: #ffffff;
+  background: #fcfbf8;
   border: 1px solid #ede5d7;
   border-radius: 8px;
   cursor: pointer;
@@ -2014,7 +2014,7 @@ html[data-theme="dark"] .whats-new-earlier:hover {
   transform: translateY(-1px);
 }
 
-/* The create tile only differs by its orange border and icon: its ground is the one of the other tiles. */
+/* All three start tiles have the same cream ground, which the grey-beige icon squares of the two plain ones belong to; the create tile only differs by its orange border and icon. */
 .dashboard-action-tile.create {
   border-color: #f3a452;
 }
