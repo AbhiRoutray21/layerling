@@ -1955,7 +1955,7 @@ export const MESSAGES_FR: Partial<Record<MessageKey, string>> = {
   "workspace.customSnapGridSize": "Taille en millimètres",
   "workspace.customSnapGridAdd": "Ajouter une grille d'accrochage",
   "workspace.customSnapGridRemove": "Supprimer cette grille d'accrochage",
-  "workspace.customSnapGridParts": "Aussi demi et quart",
+  "workspace.customSnapGridParts": "Aussi la moitié et le quart",
   "workspace.printer": "Imprimante",
   "workspace.printerNone": "Pas d'imprimante - taille libre",
   "workspace.printerHint": "Choisissez votre imprimante pour dimensionner le plan de travail en fonction de son plateau de construction. Les corps qui dépassent sont signalés.",
