@@ -3,7 +3,7 @@ import ManifoldModule from "manifold-3d";
 import { describe, expect, it } from "vitest";
 import { drawingBoreRows, drawingToPdf, drawingToSvg, generateDrawing } from "@/lib/drawingExport";
 import { drawingLabelsInLanguage } from "@/lib/drawingLabels";
-import { setLanguage } from "@/lib/i18n";
+import { getLanguage, setLanguage } from "@/lib/i18n";
 import { projectDrawingMeshes, type DrawingMesh } from "@/lib/drawingProjection";
 
 function meshFromGeometry(geometry: THREE.BufferGeometry): DrawingMesh {
@@ -189,6 +189,19 @@ describe("automatic drawing export", () => {
     expect(generateDrawing([meshFromGeometry(new THREE.BoxGeometry(240, 50, 20))], "Long").paper).toBe("ISO A3");
   });
 
+  it("keeps Czech labels in SVG and uses readable base letters for unsupported PDF accents", async () => {
+    const language = getLanguage();
+    await setLanguage("cs");
+    try {
+      const drawing = generateDrawing([plateWithBores()], "Český díl", drawingLabelsInLanguage());
+      expect(drawingToSvg(drawing)).toContain("MĚŘÍTKO");
+      expect(drawingToSvg(drawing)).toContain("Český díl");
+      const pdf = new TextDecoder().decode(drawingToPdf(drawing));
+      expect(pdf).toContain("MER\\315TKO");
+      expect(pdf).toContain("Cesk\\375 d\\355l");
+      expect(pdf).not.toContain("?");
+    } finally { await setLanguage(language); }
+  });
   it("writes the sheet in the interface language, also into the PDF", () => {
     setLanguage("de");
     try {
