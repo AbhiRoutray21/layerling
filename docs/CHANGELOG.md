@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+## 1.74.0
+
 - **Snap grid: the dragged face lands on the grid:** Dragging the height handle snapped the change of the height by whole grid steps, so a body 0.5 mm high on a 1 mm grid went to 1.5 mm. Now the face you drag (the top, or the bottom for the lower handle) lands on the grid of the workplane, so it goes to 1.0 mm, and the lift arrow puts the bottom of the body on the grid the same way. A tilted selection keeps the old step. Reported by @rondlh (#329).
 - **A double click on a slider sets it back to its default:** The small arrow next to a changed value in a shape's settings was the only way back. Now a double click on the slider does the same, there and for seven sliders of the workspace settings (shadow strength and softness, the light's direction and height, shade contrast, overhang angle, zoom speed). The sliders of the small tool windows (edge tool, simplify, split) have no default to go back to and stay as they are. Suggested by @AD3DStuff (#361).
 - **The guide shows how to set an exact angle between two faces:** There is no tool for it, but Align faces, then the rotation pivot on the edge where the faces meet and the angle typed in the Rotation card does it. The chapter on selecting and arranging now says so, in the section on laying flat on a face. Asked in #360.

@@ -1,5 +1,100 @@
 [
   {
+    "version": "1.74.0",
+    "items": [
+      {
+        "title": {
+          "de": "Russisch als Sprache",
+          "en": "Russian as a language"
+        },
+        "body": {
+          "de": "layerling gibt es jetzt auch auf Russisch: die ganze Oberfläche und die 16 Kapitel der Anleitung. Die Sprache wird für einen Browser mit russischer Einstellung von selbst gewählt und lässt sich in der Sprachliste ändern. Übersetzt mit einem KI-Assistenten; falsche Wörter lassen sich mit einem kleinen Pull Request auf GitHub verbessern.",
+          "en": "layerling now speaks Russian: the whole interface and the 16 chapters of the guide. The language is chosen automatically for a browser set to Russian and can be changed in the language list. It was translated with an AI assistant; wrong words are fixed with a small pull request on GitHub."
+        }
+      },
+      {
+        "title": {
+          "de": "Rotation aus einer Linie mit Breite",
+          "en": "Revolve from a line with a width"
+        },
+        "body": {
+          "de": "In einer Rotationsskizze gibt es den Knopf Kontur wieder. Zeichne die Wand einer Vase oder eines Bechers als eine offene Linie links von der Achse, setze das Häkchen bei Kontur und stelle die Breite ein: Die Rotation dreht dieses Band zu einer dünnen Wand, wie in Tinkercad. Was über die Achse hinausreicht, wird abgeschnitten. Der Körper behält die gezeichnete Linie, mit „Skizze bearbeiten“ machst du dort weiter.",
+          "en": "A revolve sketch has the Stroke button again. Draw the wall of a vase or a cup as one open line to the left of the axis, tick the stroke and set the width: the revolve turns that band into a thin wall, as in Tinkercad. What reaches across the axis is cut off. The body keeps the drawn line, so Edit sketch goes on from there."
+        }
+      },
+      {
+        "title": {
+          "de": "Die Objektliste bleibt offen",
+          "en": "The object list stays open"
+        },
+        "body": {
+          "de": "Die Objektliste (Strg+Umschalt+O) begann bei jedem Entwurf und nach jedem Neuladen geschlossen. Jetzt bleibt sie offen oder geschlossen, wie du sie verlassen hast, für alle Entwürfe, in diesem Browser.",
+          "en": "The object list (Ctrl+Shift+O) started closed with every design and after every reload. It now stays open or closed as you left it, for all designs, in this browser."
+        }
+      },
+      {
+        "title": {
+          "de": "Ausrichten und Raster-Einrasten unter Anordnen",
+          "en": "Align and Snap to Grid under Arrange"
+        },
+        "body": {
+          "de": "Ausrichten und Am Raster ausrichten standen im Menüband unter Anpassen, bei Fase, Verrundung und Aushöhlen. Sie platzieren eine Form, sie verändern sie nicht, und stehen jetzt ganz vorn in der Gruppe Anordnen, neben Auf die Arbeitsebene fallen lassen, Auf Fläche legen und Zentrieren.",
+          "en": "Align and Snap to Grid sat in the ribbon under Modify, beside Chamfer, Fillet and Hollow. They place a shape and do not change it, so they now head the Arrange group, beside Drop to workplane, Lay flat and Center on workplane."
+        }
+      },
+      {
+        "title": {
+          "de": "Offener Schnitt wird gemeldet",
+          "en": "An open cut is reported"
+        },
+        "body": {
+          "de": "Hat die Oberfläche eines importierten Teils Lücken, etwa ein STEP-Teil mit kleinen Rissen im Netz, bleibt die Schnittfläche beim Gruppieren mit einem Loch offen, und das Teil ist innen hohl. Die Meldung danach sagt das jetzt mit der Zahl der offenen Kanten und schlägt vor, das Teil als STL oder 3MF zu importieren.",
+          "en": "When the surface of an imported part has gaps, a STEP part with a few cracks in its mesh for example, the cut face stays open when you group it with a hole, and the part is hollow inside. The message afterwards now says so, with the number of open edges, and suggests importing the part as STL or 3MF."
+        }
+      },
+      {
+        "title": {
+          "de": "Winkellineal: jede Zahl für sich",
+          "en": "Framing square: every number on its own"
+        },
+        "body": {
+          "de": "Neben jeder grünen Zahl des Winkellineals sitzt ein kleiner Schalter: Die Zahl zählt bis zum Rand oder bis zur Mitte des Körpers, jede für sich. So setzt du einen stehenden Zylinder mit der Mitte in den beiden Armen und der Unterseite in der Höhe, einen liegenden mit der Mitte quer und einem Ende längs. Der Knopf am Griff schaltet weiter alle drei zugleich. Die Höhenbemaßung steht jetzt außerhalb des Körpers, an der Kante, die auf dem Bildschirm am weitesten rechts liegt.",
+          "en": "Beside each green number of the framing square sits a small switch: the number counts to the edge or to the middle of the body, each on its own. A standing cylinder is placed by its middle in the two arms and its bottom in height, a lying one by its middle across and an end along. The button at the handle still switches all three at once. The height dimension now stands outside the body, on the edge furthest right on the screen."
+        }
+      },
+      {
+        "title": {
+          "de": "Neuer Name beim STL-Export fragt nach einer neuen Datei",
+          "en": "A new name in the STL export asks for a new file"
+        },
+        "body": {
+          "de": "In Chrome und Edge schrieb jeder STL-Export in die Datei, die du beim ersten Mal gewählt hast, und das Dateinamenfeld tat nichts mehr. Tippst du dort jetzt einen anderen Namen, fragt layerling, wo die neue Datei liegen soll. Unter dem Fenster steht, ob in die bisherige Datei geschrieben wird oder gefragt wird.",
+          "en": "In Chrome and Edge every STL export wrote into the file you chose the first time, and the file name field did nothing any more. If you now type another name there, layerling asks where the new file should go. The line under the window says whether the old file is written or you are asked."
+        }
+      },
+      {
+        "title": {
+          "de": "Doppelklick auf einen Schieber setzt ihn zurück",
+          "en": "A double click on a slider resets it"
+        },
+        "body": {
+          "de": "Ein Doppelklick auf einen Schieber in den Einstellungen einer Form setzt den Wert auf seine Vorgabe zurück, wie der kleine Pfeil neben dem Namen. Das gilt auch für sieben Schieber der Arbeitsbereich-Einstellungen, etwa Zoomgeschwindigkeit und Schattenstärke.",
+          "en": "A double click on a slider in a shape's settings sets the value back to its default, like the small arrow next to its name. It works for seven sliders of the workspace settings as well, such as zoom speed and shadow strength."
+        }
+      },
+      {
+        "title": {
+          "de": "Raster: die gezogene Fläche landet auf dem Raster",
+          "en": "Snap grid: the dragged face lands on the grid"
+        },
+        "body": {
+          "de": "Beim Ziehen des Höhenpfeils rastete die Änderung der Höhe in ganzen Rasterschritten ein: Ein 0,5 mm hoher Körper ging auf einem 1-mm-Raster auf 1,5 mm. Jetzt landet die gezogene Fläche selbst auf dem Raster der Arbeitsebene (oben, beim unteren Griff die Unterseite), der Körper geht also auf 1,0 mm. Der Hebepfeil setzt die Unterseite genauso aufs Raster. Eine gekippte Auswahl behält den alten Schritt.",
+          "en": "Dragging the height handle snapped the change of the height by whole grid steps: a body 0.5 mm high on a 1 mm grid went to 1.5 mm. Now the face you drag lands on the grid of the workplane (the top, or the bottom for the lower handle), so it goes to 1.0 mm. The lift arrow puts the bottom of the body on the grid the same way. A tilted selection keeps the old step."
+        }
+      }
+    ]
+  },
+  {
     "version": "1.73.0",
     "items": [
       {
