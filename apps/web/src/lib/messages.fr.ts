@@ -506,6 +506,7 @@ export const MESSAGES_FR: Partial<Record<MessageKey, string>> = {
   "shell.working": "Creux…",
   "shell.cancel": "Annuler le creusement",
   "shell.errorTooThick": "Les murs ne peuvent pas être aussi épais pour ce corps. Choisissez un mur plus fin.",
+  "shell.errorRoundedEdges": "Cette boîte a les bords supérieur et inférieur arrondis, et le mur doit être nettement plus fin que cet arrondi. Choisissez un mur plus fin ou mettez l'arrondi des bords supérieur et inférieur à 0 avant de creuser. Si cela échoue encore, « Rapport de bug » dans le pied de page enregistre la conception pour un signalement.",
   "shell.errorCannotHollow": "Ce corps ne peut pas être creusé, même avec une paroi très mince. Son contour n'est probablement pas assez clair pour le noyau CAO ; une découpe qui touche le bord extérieur, telle qu'une porte coupée jusqu'au bord inférieur d'une forme importée, peut provoquer ce problème.",
   "shell.errorNoFlatTop": "Ce corps n'a pas de face supérieure plate à laisser ouverte. Les sphères et les formes libres ne peuvent pas être creusées de cette façon.",
   "shell.errorNoFlatBottom": "Ce corps n'a pas de face inférieure plate à laisser ouverte.",

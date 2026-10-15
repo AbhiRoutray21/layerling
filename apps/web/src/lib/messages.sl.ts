@@ -426,6 +426,7 @@ export const MESSAGES_SL: Partial<Record<MessageKey, string>> = {
   "shell.working": "Dolbljenje …",
   "shell.cancel": "Prekliči dolbljenje",
   "shell.errorTooThick": "Stene za to telo ne morejo biti tako debele. Izberi tanjšo steno.",
+  "shell.errorRoundedEdges": "Ta škatla ima zaobljene zgornje in spodnje robove, stena pa mora biti jasno tanjša od tega zaobljenja. Izberi tanjšo steno ali nastavi zaobljenje zgornjih in spodnjih robov na 0, preden izdolbeš. Če še vedno ne gre, „Poročilo o napaki“ v nogi shrani zasnovo za prijavo.",
   "shell.errorNoFlatTop": "To telo nima ravne zgornje ploskve, ki bi jo pustili odprto. Krogel in prostoročnih oblik ni mogoče izdolbiti na ta način.",
   "shell.errorNoFlatBottom": "To telo nima ravne spodnje ploskve, ki bi jo pustili odprto.",
   "shell.errorNoFlatSide": "To telo na izbrani strani nima ravne ploskve, ki bi jo pustili odprto.",

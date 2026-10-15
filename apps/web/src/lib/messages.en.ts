@@ -516,6 +516,7 @@ export const MESSAGES_EN = {
   "shell.working": "Hollowing…",
   "shell.cancel": "Cancel hollowing",
   "shell.errorTooThick": "The walls cannot be this thick for this body. Choose a thinner wall.",
+  "shell.errorRoundedEdges": "This box has rounded top and bottom edges, and the wall has to be clearly thinner than that rounding. Choose a thinner wall, or set the rounding of the top and bottom edges to 0 before you hollow it. If it still fails, \"Bug report\" in the footer saves the design for a report.",
   "shell.errorCannotHollow": "This body cannot be hollowed, not even with a very thin wall. Its outline is probably not clean enough for the CAD kernel; a cutout that touches the outer edge, such as a door cut down to the bottom edge of an imported shape, can cause this.",
   "shell.errorNoFlatTop": "This body has no flat top face to leave open. Spheres and free shapes cannot be hollowed this way.",
   "shell.errorNoFlatBottom": "This body has no flat bottom face to leave open.",

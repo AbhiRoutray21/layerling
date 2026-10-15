@@ -592,6 +592,7 @@ export const MESSAGES_CS: Record<MessageKey, string> = {
   "shell.working": "Vytváření dutiny…",
   "shell.cancel": "Zrušit vytváření dutiny",
   "shell.errorTooThick": "Stěny jsou pro toto těleso příliš silné. Zvolte menší tloušťku.",
+  "shell.errorRoundedEdges": "Tato krabice má zaoblené horní a dolní hrany a stěna musí být zřetelně tenčí než toto zaoblení. Zvolte tenčí stěnu nebo před vydlabáním nastavte zaoblení horních a dolních hran na 0. Pokud to stále nejde, uloží „Nahlásit chybu“ v zápatí návrh pro nahlášení.",
   "shell.errorNoFlatTop": "Těleso nemá rovnou horní plochu, kterou lze otevřít. Koule a volné tvary nelze takto vydutit.",
   "shell.errorNoFlatBottom": "Těleso nemá rovnou spodní plochu, kterou lze otevřít.",
   "edge.errorOldRevolve": "Starší layerling vytvořil toto rotační těleso jako polygonovou síť. Otevřete „Upravit náčrt“ a znovu jej dokončete. Vznikne přesné těleso, ve kterém lze vytvářet dutiny, zaoblení a zkosení.",

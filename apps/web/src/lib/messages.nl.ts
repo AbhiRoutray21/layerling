@@ -515,6 +515,7 @@ export const MESSAGES_NL: Record<MessageKey, string> = {
   "shell.working": "Uithollen…",
   "shell.cancel": "Uithollen annuleren",
   "shell.errorTooThick": "De wanden kunnen voor dit lichaam niet zo dik zijn. Kies een dunnere wand.",
+  "shell.errorRoundedEdges": "Deze doos heeft afgeronde boven- en onderranden, en de wand moet duidelijk dunner zijn dan die afronding. Kies een dunnere wand of zet de afronding van de boven- en onderranden op 0 voordat je uithold. Lukt het toch niet, dan slaat \"Foutrapport\" in de voettekst het ontwerp op voor een melding.",
   "shell.errorCannotHollow": "Dit lichaam kan niet worden uitgehold, zelfs niet met een heel dunne wand. De omtrek is waarschijnlijk niet schoon genoeg voor de CAD-kernel; een uitsparing die de buitenrand raakt, zoals een deur die tot aan de onderrand van een geïmporteerde vorm is uitgesneden, kan dit veroorzaken.",
   "shell.errorNoFlatTop": "Dit lichaam heeft geen plat bovenvlak om open te laten. Bollen en vrije vormen kunnen niet op deze manier worden uitgehold.",
   "shell.errorNoFlatBottom": "Dit lichaam heeft geen plat ondervlak om open te laten.",

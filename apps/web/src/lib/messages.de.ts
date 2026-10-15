@@ -515,6 +515,7 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "shell.working": "Wird ausgehöhlt…",
   "shell.cancel": "Aushöhlen abbrechen",
   "shell.errorTooThick": "Die Wände können für diesen Körper nicht so dick sein. Bitte eine dünnere Wandstärke wählen.",
+  "shell.errorRoundedEdges": "Diese Box hat gerundete Ober- und Unterkanten, und die Wand muss deutlich dünner sein als diese Rundung. Wähle eine dünnere Wand oder setze die Rundung der Ober- und Unterkanten auf 0, bevor du aushöhlst. Klappt es trotzdem nicht, speichert „Fehlerbericht“ in der Fußzeile den Entwurf für eine Meldung.",
   "shell.errorCannotHollow": "Dieser Körper lässt sich nicht aushöhlen, auch nicht mit einer sehr dünnen Wand. Sein Umriss ist wahrscheinlich nicht sauber genug für den CAD-Kern; eine Aussparung, die den Außenrand berührt, etwa eine bis zur Unterkante reichende Tür bei einer importierten Form, kann das auslösen.",
   "shell.errorNoFlatTop": "Dieser Körper hat oben keine ebene Fläche, die geöffnet werden kann. Kugeln und freie Formen können so nicht ausgehöhlt werden.",
   "shell.errorNoFlatBottom": "Dieser Körper hat unten keine ebene Fläche, die geöffnet werden kann.",
