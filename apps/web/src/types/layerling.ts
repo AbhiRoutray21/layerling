@@ -379,6 +379,12 @@ export type TextKeyring = { side: TextKeyringSide; diameter: number; offset: num
 
 /** A key ring hole in an extruded sketch (#391): its middle in the sketch's own mm, its size, the side it is on and whether the layer has the ear. */
 export type SketchKeyring = { side: TextKeyringSide; diameter: number; x: number; z: number; ear?: boolean };
+/**
+ * A sketch built set in from its outlines: every edge `distance` mm inward, every corner rounded to
+ * `radius` mm. The face tool keeps the outline of the face it pushes out or in here and builds the
+ * inset from it, as a stroked sketch keeps its line.
+ */
+export type SketchInset = { distance: number; radius: number };
 
 export type SketchProfile = {
   points: SketchPoint[];
@@ -389,6 +395,8 @@ export type SketchProfile = {
   silhouette?: boolean;
   /** A key ring hole cut through the body, with its ear on the bottom layer of an icon tag (#391). */
   keyring?: SketchKeyring;
+  /** Built set in from its outlines by the face tool: the body keeps the face's outline and builds the inset from it. */
+  inset?: SketchInset;
 };
 
 export type SketchOperation = "extrude" | "revolve" | "sweep";

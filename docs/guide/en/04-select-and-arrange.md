@@ -113,6 +113,23 @@ The holes are ordinary holes grouped with the body, just as after {{ui:editor.to
 
 An AI can do the same through the MCP bridge with `layerling_perforate_face` (see the chapter [AI with MCP](chapter:ai-with-mcp)).
 
+## Pushing a face out or in
+
+For a thicker wall, a raised pad on a face or a pocket cut into it, the {{ui:faceTool.title}} tool works on one flat face. It works on an imported STL too, where there is no sketch to change. Select exactly one body and click {{ui:faceTool.title}} in the {{ui:editor.group.modify}} group of the toolbar, next to the hole pattern. You can also right-click the body, or find it with [[Ctrl]]+[[K]].
+
+1. Click a flat face of the body. As with the hole pattern, the whole flat face around your click counts; a curved face does not work.
+2. In the window:
+   - **{{ui:faceTool.direction}}:** choose {{ui:faceTool.direction.out}} for material standing on the face or {{ui:faceTool.direction.in}} for a pocket cut into it. A pocket goes no deeper than the body behind the face; on a hollow body it can still reach the cavity.
+   - **{{ui:faceTool.inset}}:** how far the new outline stays inside the face's edge. Going out, 0 takes the whole face, which makes a wall thicker. Openings in the face grow by the same amount.
+   - **{{ui:faceTool.radius}}:** rounds every corner of the outline, the inner ones too, so a sharp tip ends in an arc. A notch narrower than twice the radius closes, and a part of the face narrower than twice the inset and the radius together is left out.
+   - **{{ui:faceTool.depth}}:** how far the new part stands out of the face, or how deep the pocket goes.
+3. The result shows at once as a preview and follows every value. {{ui:faceTool.repick}} chooses another face, [[Esc]] closes the tool.
+4. Only {{ui:faceTool.apply}} makes it.
+
+What the tool adds is an ordinary sketch body grouped with the body: nothing is baked in. {{ui:group.edit}} opens the group, and {{ui:inspector.editSketch}} on the new part shows the outline it follows. On the top or the bottom of a plain sketch body - one area, not grouped, mirrored, tapered, twisted or leaning, and without a stroke, key ring, fillet or chamfer - that is the body's own outline, set in when it is built, so its lines and arcs stay exact wherever the CAD kernel can set them in, for the edge tools and the STEP export. Resized later, the part keeps its inset. On any other face, and on every face of an imported mesh, the outline follows the face's triangles, and a curve is made of short straight pieces. The whole thing is one step for {{ui:editor.tool.undo}}. To change the inset or the radius later, undo and run the tool again. To round the top edge afterwards, use {{ui:editor.tool.fillet}} with {{ui:edge.topEdges}} on the group as the last step: like every edge treatment on a group, it joins the group into one body.
+
+An AI can do the same through the MCP bridge with `layerling_push_face` (see the chapter [AI with MCP](chapter:ai-with-mcp)).
+
 ## Changing several parts at once
 
 With several parts selected, the properties panel on the right shows how many there are and offers what applies to all of them together: {{ui:inspector.solid}} or {{ui:inspector.hole}}, one colour for all (a click on {{ui:inspector.solid}} opens the colours) and the lock. With a mixed selection, one click makes them all solids or all holes. If any of the parts is locked, only the lock can be used. Sizes are changed with the handles, with {{ui:scalePercent.title}} or by typing a number into a size label. With several parts the number is the size of the whole selection: every part grows with it, the spaces between them too, as when you drag a handle. Solid and hole also work with a right-click or the [[S]] and [[H]] keys.

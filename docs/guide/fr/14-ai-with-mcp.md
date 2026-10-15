@@ -59,6 +59,7 @@ L'IA fonctionne avec les mêmes fonctions que vous, via le même chemin que votr
 | `layerling_place_on_face` | pose des objets sur une face d'une autre, également inclinée, comme la touche C |
 | `layerling_perforate_face` | découpe un motif de trous dans une face plate ; les trous restent groupés avec le corps |
 | `layerling_sweep_sketch` | tire une section rectangulaire ou ronde le long d'un chemin de points, comme un seul corps exact ; un chemin fermé donne un anneau |
+| `layerling_push_face` | tire une face plane vers l'extérieur ou y creuse une poche, avec un retrait depuis le bord et un rayon des coins ; la nouvelle pièce est un corps d'esquisse regroupé avec le corps |
 | `layerling_mate_faces` | amène la face d'un objet contre la face d'un autre, face à face ou à fleur |
 | `layerling_open_group` | ouvre un groupe pour que ses parties puissent être modifiées une par une, également un groupe à l'intérieur d'un groupe ouvert |
 | `layerling_close_group` | le referme ("Terminé") ou annule |

@@ -6797,13 +6797,13 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .shortcuts-or {
   color: #787878;
 }
 
-@media (max-width: 1953px) {
+@media (max-width: 1990px) {
   :root:where([data-theme="dark"][data-palette="graphite"]) {
     --toolbar-icon-size: calc(37px * var(--toolbar-scale));
   }
 }
 
-@media (max-width: 1657px) {
+@media (max-width: 1688px) {
   :root:where([data-theme="dark"][data-palette="graphite"]) {
     --toolbar-icon-size: calc(34px * var(--toolbar-scale));
   }

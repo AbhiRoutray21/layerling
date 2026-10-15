@@ -14349,7 +14349,7 @@ html[data-theme="dark"] .shortcuts-or {
    Gemessen (mit Lupen-, Vereinfachen- und Verlaufsknopf): in voller Groesse
    braucht das Band 1818 px, in der mittleren Stufe 1540 px, in der kleinen
    1415 px. Jeder neue Knopf verschiebt alle drei Schwellen: neu messen. */
-@media (max-width: 1953px) {
+@media (max-width: 1990px) {
   :root {
     --toolbar-icon-size: calc(37px * var(--toolbar-scale));
   }
@@ -14370,7 +14370,7 @@ html[data-theme="dark"] .shortcuts-or {
   }
 }
 
-@media (max-width: 1657px) {
+@media (max-width: 1688px) {
   :root {
     --toolbar-icon-size: calc(34px * var(--toolbar-scale));
   }
@@ -14391,7 +14391,7 @@ html[data-theme="dark"] .shortcuts-or {
    hides tools and cuts off every menu that hangs beneath it. The bar grows,
    and the editor passes its real height on (see --editor-toolbar-height).
    A new button in the bar moves both thresholds up: measure again. */
-@media (max-width: 1523px) {
+@media (max-width: 1544px) {
   .toolbar-mode-content,
   .sketch-toolbar-ribbon {
     flex-wrap: wrap;

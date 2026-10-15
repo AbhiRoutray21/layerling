@@ -1,4 +1,4 @@
-import type { SketchProfile, SketchStroke } from "@/types/layerling";
+import type { SketchInset, SketchProfile, SketchStroke } from "@/types/layerling";
 
 export type SketchCadBuildRequest = {
   type: "build";
@@ -11,10 +11,15 @@ export type SketchCadBuildRequest = {
   sweep?: true;
   /** Set for a stroked or widened sketch: the kernel moves the outlines itself (cadSketchStroke.ts). */
   stroke?: SketchStroke;
+  /** Set for a sketch built set in from its outlines (the face tool): the kernel moves them itself (cadSketchInset.ts). */
+  inset?: SketchInset;
 };
 
 /** The message of the error the worker answers with when a stroke is for the polygon route to build. */
 export const SKETCH_STROKE_UNSUPPORTED = "stroke-unsupported";
+
+/** The message of the error the worker answers with when an inset is for the polygon route to build. */
+export const SKETCH_INSET_UNSUPPORTED = "inset-unsupported";
 
 export type SketchCadBuildResponse =
   | {
