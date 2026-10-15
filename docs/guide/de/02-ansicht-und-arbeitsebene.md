@@ -17,7 +17,7 @@ Mit der Maus:
 
 Wie schnell das Mausrad zoomt, stellst du in den Einstellungen unter {{ui:workspace.appearance}} mit {{ui:workspace.zoomSpeed}} ein: ein Regler von 1 bis 10, zu Beginn 5.
 
-Auf einem Tablet oder Handy zoomen zwei Finger (spreizen und zusammenziehen) und verschieben die Ansicht (gemeinsam schieben). Ein Finger arbeitet am Entwurf, so wie die linke Maustaste. Wer mit einem Finger drehen möchte, schaltet in der Kameraleiste {{ui:camera.touchRotate}} ein. Der Schalter erscheint nur auf Geräten mit Touchscreen.
+Auf einem Tablet oder Handy zoomen zwei Finger (spreizen und zusammenziehen) und verschieben die Ansicht (gemeinsam schieben). Ein Finger auf leerer Fläche dreht die Ansicht, und ein Antippen dort hebt die Auswahl auf; auf einer Form oder einem Griff arbeitet er am Entwurf, so wie die linke Maustaste. Wer auch mit einem Finger drehen möchte, der auf einer Form beginnt, schaltet in der Kameraleiste {{ui:camera.touchRotate}} ein. Der Schalter erscheint auf Geräten mit Touchscreen.
 
 Ein Grafiktablett mit Stift verhält sich wie eine Maus: Die Spitze ist die linke Taste, die Seitentaste am Stift die rechte, zum Drehen der Ansicht und für das Menü. Die Schnelltasten des Tabletts belegst du in dessen Treiber mit layerlings [Tastenkürzeln](chapter:tastenkuerzel).
 
@@ -58,7 +58,7 @@ Ein Entwurf öffnet sich so, wie du ihn verlassen hast: Blickwinkel, Zoom und Au
 
 Das Fenster hängt an seinem Knopf. Verdeckt es etwas, ziehst du es an seiner Titelleiste frei über die Arbeitsfläche; dort öffnet es sich auch beim nächsten Mal. Ein Doppelklick auf die Titelleiste oder das Ablegen am Knopf bringt es zurück.
 
-[[Esc]] schließt das Fenster; der Schnitt bleibt, bis du ihn ausschaltest oder zur Entwurfsübersicht zurückgehst. Solange er an ist, ist der Knopf hervorgehoben. Was du dann auf der weggeschnittenen Seite ablegst, siehst du erst, wenn du den Schnitt ausschaltest.
+{{ui:camera.sectionConfirm}} schließt das Fenster und behält den Schnitt, {{ui:camera.sectionBack}} beendet erst das Messen und schließt dann das Fenster, für ein Tablet ohne [[Enter]] und [[Esc]]. [[Esc]] schließt das Fenster ebenfalls; der Schnitt bleibt, bis du ihn ausschaltest oder zur Entwurfsübersicht zurückgehst. Solange er an ist, ist der Knopf hervorgehoben. Was du dann auf der weggeschnittenen Seite ablegst, siehst du erst, wenn du den Schnitt ausschaltest.
 
 ## Die Arbeitsebene
 

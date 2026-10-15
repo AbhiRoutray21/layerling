@@ -6,6 +6,10 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **A handle dragged past the opposite side keeps growing there:** The side and corner handles of a shape or a selection, and the arrow on top, stopped at the smallest size when you pulled them over the other side, so you had to let go and pick up the opposite handle. Now the shape keeps growing on the other side of that edge, as in Tinkercad; a selection is mirrored with it. A body made of a mesh still stops at the smallest height. From @andrej-cds' list of iPad changes (#170), and asked for by @rondlh (#329).
+- **Easier on a tablet:** A finger that starts on empty space turns the view, and a tap there clears the selection, so the turn switch is not needed for it; a finger on a shape or a handle works as before, and the selection box stays with the mouse and Shift. The turn switch also shows on an iPad that does not report a coarse pointer. The section view has "Confirm" and "Back" buttons, because a tablet has no Enter or Esc. From @andrej-cds' list (#170).
+- **A picture plate no longer slows down a drag:** The material signature of a shape held the whole image data URL, several MB, and was rebuilt on every move. It now carries the length and four short samples. Found by @andrej-cds (#170).
+- **The lift arrow stays near tall bodies:** Its distance grew with the height of the body, so it stood far away over a tall one. It is capped at 12 mm now; smaller bodies look as before. Suggested by @andrej-cds (#170).
 - **An OBJ with a colour at every point opens (#351):** A model from a scan or an AI tool such as Tripo can carry its own colour at every point. layerling made one body per colour, and a file of 980,000 points became 125,000 bodies, which crashed the editor. A file with more than 64 vertex colours now comes in as one body in a single colour, with a note that the colour gradient is not kept; files with a few colours stay one body per colour. Reported by shanni1783 on GitHub.
 
 ## 1.76.0

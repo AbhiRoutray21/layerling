@@ -17,7 +17,7 @@ With the mouse:
 
 How fast the wheel zooms is set with {{ui:workspace.zoomSpeed}} in the settings, under {{ui:workspace.appearance}}: a slider from 1 to 10, 5 to begin with.
 
-On a tablet or phone, two fingers zoom (spread and pinch) and move the view (slide together). One finger works on the design, just like the left mouse button. To rotate with one finger, switch on {{ui:camera.touchRotate}} in the camera bar. That switch only shows on devices with a touch screen.
+On a tablet or phone, two fingers zoom (spread and pinch) and move the view (slide together). One finger on empty space turns the view, and a tap there clears the selection; on a shape or a handle it works on the design, just like the left mouse button. To turn the view with a finger that starts on a shape too, switch on {{ui:camera.touchRotate}} in the camera bar. That switch shows on devices with a touch screen.
 
 A graphics tablet with a pen behaves like a mouse: the tip is the left button, the barrel button on the pen the right one, for turning the view and for the menu. The tablet's hotkeys can be set in its driver to layerling's [keyboard shortcuts](chapter:shortcuts).
 
@@ -58,7 +58,7 @@ A design opens the way you left it: the angle, zoom and position of the view are
 
 The panel hangs on its button. If it covers something, drag it by its title bar anywhere on the workplane; it opens there next time too. Double-click the title bar or drop it at the button to put it back.
 
-[[Esc]] closes the panel; the cut stays until you switch it off or go back to the design overview. While it is on, its button stays highlighted. Anything you place on the side that is cut away only shows once you switch the cut off.
+{{ui:camera.sectionConfirm}} closes the panel and keeps the cut, and {{ui:camera.sectionBack}} ends the measuring first and then closes the panel, for a tablet that has no [[Enter]] or [[Esc]]. [[Esc]] closes the panel too; the cut stays until you switch it off or go back to the design overview. While it is on, its button stays highlighted. Anything you place on the side that is cut away only shows once you switch the cut off.
 
 ## The workplane
 
