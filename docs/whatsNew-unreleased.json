@@ -18,5 +18,15 @@
       "de": "Im Schnitt markiert ein kleines Kreuz die Mitte runder Umrisse, und die Mitte rastet beim Messen ein. Klickst du einen Punkt auf dem Kreis an und gehst dann zum Punkt gegenüber, landet der zweite Klick genau gegenüber der Mitte: Die Zahl trägt ein Ø und ist der Durchmesser. Von der Mitte zu einem Punkt auf dem Kreis liest du R, den Radius.",
       "en": "In the section view a small cross marks the centre of round outlines, and the centre snaps when you measure. Click a point on the circle and go to the point across from it: the second click lands exactly across the centre, and the number carries a Ø, the diameter. From the centre to a point on the circle you read R, the radius."
     }
+  },
+  {
+    "title": {
+      "de": "Tschechisch als Sprache",
+      "en": "Czech as a language"
+    },
+    "body": {
+      "de": "layerling gibt es jetzt auch auf Tschechisch: die ganze Oberfläche, die 16 Kapitel der Anleitung und die „Was ist neu\"-Karten. Die Sprache wird für einen Browser mit tschechischer Einstellung von selbst gewählt und lässt sich in der Sprachliste ändern. Übersetzt mit einem KI-Assistenten; falsche Wörter lassen sich mit einem kleinen Pull Request auf GitHub verbessern.",
+      "en": "layerling now speaks Czech: the whole interface, the 16 chapters of the guide and the release notes. The language is chosen automatically for a browser set to Czech and can be changed in the language list. It was translated with an AI assistant; wrong words are fixed with a small pull request on GitHub."
+    }
   }
 ]
