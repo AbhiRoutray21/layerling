@@ -30,5 +30,15 @@
       "de": "Eine gerade Schrift hielt bisher die Proportionen ihrer Buchstaben und blieb in der Mitte des Rahmens, auch wenn der Rahmen breiter oder tiefer gezogen war. Der neue Schalter „Buchstaben auf den Rahmen strecken“ in den Einstellungen des Textes füllt den ganzen Rahmen in beide Richtungen: Ein Großbuchstabe lässt sich niedriger oder schmaler machen, wie in Tinkercad. Die Umrisse für das Kantenwerkzeug und die Füllarten folgen.",
       "en": "A straight text used to keep the proportions of its letters and stay in the middle of its frame, even when the frame was pulled wider or deeper. The new switch \"Stretch letters to the frame\" in the text's settings fills the whole frame in both directions: a capital can be made lower or narrower, as in Tinkercad. The outlines for the edge tool and the fill modes follow."
     }
+  },
+  {
+    "title": {
+      "de": "Rohr und Ring mit Innendurchmesser",
+      "en": "Tube and ring with an inner diameter"
+    },
+    "body": {
+      "de": "Rohr und Ring hatten nur die Wandstärke. Jetzt steht daneben der Innendurchmesser: Tippst du das Maß der Welle ein, ergibt sich die Wand aus der Breite, ideal für eine Buchse. Stell zuerst die Breite ein; änderst du sie später, bleibt die Wand, und der Innendurchmesser ändert sich mit.",
+      "en": "The tube and the ring had only the wall thickness. Now the inner diameter stands beside it: type the size of the shaft and the wall follows from the width, handy for a bushing. Set the width first; if you change it later, the wall stays and the inner diameter changes with it."
+    }
   }
 ]
