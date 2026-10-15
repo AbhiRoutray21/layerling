@@ -325,6 +325,8 @@ extracted folder and start with `npm install`.
 
 Then open `http://127.0.0.1:3000/`. Leave the terminal open while you use the app; `Ctrl+C` stops the development server.
 
+To open the development server from another computer by a name, such as `http://myhost.local:3000/`, list that name in the environment variable `LAYERLING_ALLOWED_DEV_ORIGINS` before you start (several names separated by commas, `*.local` for every name ending in `.local`). Without it, the development server answers only to `localhost` and `127.0.0.1`. The static export and `npm run start` do not need it.
+
 On Linux and macOS, `scripts/start-layerling.sh` does the daily start for you: it updates the checkout first (skipped if you changed files in it), starts the server, waits until it answers and then opens the browser. Run it from anywhere, for example `~/layerling/scripts/start-layerling.sh`. It needs Git and Node.js, as above. If layerling already runs on that port, it only opens the browser instead of starting a second server. Port 3000 taken by something else? Start it with `PORT=3100 scripts/start-layerling.sh`. It has been tried on Debian Linux (without a desktop, so the browser step only prints the address) and in a Windows shell; macOS is untested – if it misbehaves on your system, please tell us in the discussions.
 
 ### Developing in a Container
