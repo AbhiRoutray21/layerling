@@ -8,5 +8,15 @@
       "de": "Neben der Schnittmenge gibt es einen Knopf „Gemeinsames Stück zeigen\": Er macht die markierten Formen durchsichtig und zeichnet grün, was sie gemeinsam haben. Du kannst jede Form einzeln markieren und verschieben, das grüne Stück folgt. Schnittmenge wendet es an, Esc schließt die Vorschau. Haben die Formen nichts gemeinsam, bleiben sie jetzt, statt zu verschwinden, und eine Meldung sagt es.",
       "en": "Beside Boolean Intersection there is a new button, \"Show common part\": it makes the selected shapes see-through and draws what they share in green. You can select and move each shape on its own and the green part follows. Intersection applies it, Esc closes the preview. If the shapes share nothing, they now stay instead of vanishing, and a message says so."
     }
+  },
+  {
+    "title": {
+      "de": "Messen am Kreis im Schnitt",
+      "en": "Measuring a circle in the section view"
+    },
+    "body": {
+      "de": "Im Schnitt markiert ein kleines Kreuz die Mitte runder Umrisse, und die Mitte rastet beim Messen ein. Klickst du einen Punkt auf dem Kreis an und gehst dann zum Punkt gegenüber, landet der zweite Klick genau gegenüber der Mitte: Die Zahl trägt ein Ø und ist der Durchmesser. Von der Mitte zu einem Punkt auf dem Kreis liest du R, den Radius.",
+      "en": "In the section view a small cross marks the centre of round outlines, and the centre snaps when you measure. Click a point on the circle and go to the point across from it: the second click lands exactly across the centre, and the number carries a Ø, the diameter. From the centre to a point on the circle you read R, the radius."
+    }
   }
 ]

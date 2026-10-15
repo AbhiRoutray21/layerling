@@ -1860,7 +1860,7 @@ export const MESSAGES_NL: Record<MessageKey, string> = {
   "camera.sectionFineHint": "Fijne schuifregelaar: ±{span} rond de grove positie",
   "camera.sectionMeasure": "Meten",
   "camera.sectionMeasureHint": "Meet wanddikte, openingen en speling direct op de snede",
-  "camera.sectionMeasureHelp": "Klik twee punten op de omtrek. Het tweede punt klikt haaks op zijn wand vast.",
+  "camera.sectionMeasureHelp": "Klik twee punten op de omtrek. Het tweede punt klikt haaks op zijn wand vast; op een cirkel klikken ook het middelpunt en het punt tegenover het eerste vast.",
   "camera.sectionShowPlane": "Snijvlak tonen",
   "panel.moveHint": "Sleep om te verplaatsen; dubbelklik of zet het op zijn oude plek neer om het terug te zetten",
   "camera.sectionMoveHint": "Sleep om te verplaatsen; zet het bij de doorsnedeknop neer of dubbelklik om het terug te zetten",

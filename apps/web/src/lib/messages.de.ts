@@ -1861,7 +1861,7 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "camera.sectionShowPlane": "Schnittebene anzeigen",
   "camera.sectionMeasure": "Messen",
   "camera.sectionMeasureHint": "Wandstärken, Spalte und Passungen direkt auf dem Schnitt messen",
-  "camera.sectionMeasureHelp": "Zwei Punkte auf dem Umriss anklicken. Der zweite rastet im rechten Winkel zur Wand ein.",
+  "camera.sectionMeasureHelp": "Zwei Punkte auf dem Umriss anklicken. Der zweite rastet im rechten Winkel zur Wand ein; auf einem Kreis rasten auch die Mitte und der Gegenpunkt zum ersten ein.",
   "panel.moveHint": "Ziehen zum Verschieben; doppelklicken oder an der alten Stelle ablegen bringt die Tafel zurück",
   "camera.sectionMoveHint": "Ziehen zum Verschieben; am Schnitt-Knopf ablegen oder doppelklicken bringt es zurück",
   "camera.sectionExportSvg": "Schnitt als SVG",

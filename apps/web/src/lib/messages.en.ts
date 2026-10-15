@@ -1861,7 +1861,7 @@ export const MESSAGES_EN = {
   "camera.sectionFineHint": "Fine slider: ±{span} around the coarse position",
   "camera.sectionMeasure": "Measure",
   "camera.sectionMeasureHint": "Measure wall thickness, gaps and clearances right on the cut",
-  "camera.sectionMeasureHelp": "Click two points on the outline. The second snaps square to its wall.",
+  "camera.sectionMeasureHelp": "Click two points on the outline. The second snaps square to its wall; on a circle the centre and the point across from the first snap too.",
   "camera.sectionShowPlane": "Show cutting plane",
   "panel.moveHint": "Drag to move; double-click or drop it at its old spot to put it back",
   "camera.sectionMoveHint": "Drag to move; drop it at the section button or double-click to put it back",

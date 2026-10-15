@@ -9102,7 +9102,7 @@ export function LayerlingEditor({
         if (loops.length === 0) throw new Error(t("status.sectionSvgMissed"));
         const from = snapSectionPoint(projectSectionPoint(readPoint(params.from, "from"), axis), loops, radius);
         const to = snapSectionPoint(projectSectionPoint(readPoint(params.to, "to"), axis), loops, radius, from.point);
-        const measured = sectionMeasurement(from.point, to.point, axis, offset);
+        const measured = sectionMeasurement(from.point, to.point, axis, offset, loops);
         const asEditor = (point: { u: number; v: number }) => {
           const [x, y, z] = sectionPointToWorld(point, axis, offset);
           return { x: Number(x.toFixed(4)), z: Number(z.toFixed(4)), elevation: Number(y.toFixed(4)) };
@@ -9117,6 +9117,7 @@ export function LayerlingEditor({
           deltaX: Number(measured.deltaX.toFixed(4)),
           deltaZ: Number(measured.deltaDepth.toFixed(4)),
           deltaElevation: Number(measured.deltaHeight.toFixed(4)),
+          circle: measured.circle,
         };
       }
 

@@ -7690,6 +7690,24 @@ html[data-theme="dark"] .inspector-bundle-note {
   stroke-width: 2;
 }
 
+.section-measure-center-halo {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 4;
+  opacity: 0.85;
+}
+
+.section-measure-center {
+  fill: none;
+  stroke: #7a3d00;
+  stroke-width: 1.5;
+}
+
+.section-measure-hover.center,
+.section-measure-hover.opposite {
+  fill: rgba(200, 106, 18, 0.22);
+}
+
 .section-measure-hover.free {
   stroke: #9a8b7b;
   stroke-dasharray: 3 2;
