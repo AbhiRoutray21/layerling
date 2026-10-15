@@ -10,7 +10,7 @@
  *
  * To add a language, see docs/TRANSLATING.md.
  */
-export const LANGUAGES = ["en", "de", "nl", "pl", "ru"] as const;
+export const LANGUAGES = ["en", "de", "nl", "fr", "pl", "ru"] as const;
 export type Language = (typeof LANGUAGES)[number];
 export const DEFAULT_LANGUAGE: Language = "en";
 
@@ -190,6 +190,52 @@ export const LANGUAGE_INFO: Readonly<Record<Language, LanguageInfo>> = {
       printAllLead: "Alle hoofdstukken achter elkaar, om af te drukken of als pdf op te slaan: druk op Ctrl+P en zet in de afdrukinstellingen \"Kop- en voetteksten\" uit. Wil je maar een deel afdrukken, kies daar dan de paginanummers.",
       printContents: "Inhoud",
       printButton: "Afdrukken",
+    },
+  },
+  fr: {
+    name: "Français",
+    htmlLang: "fr",
+    numberLocale: "fr-FR",
+    quotes: ["« ", " »"],
+    guideDir: "guide-fr",
+    communityUrl: GITHUB_DISCUSSIONS,
+    readme: "README.md",
+    quickstartAnchor: "windows-quickstart",
+    legal: { imprint: "Mentions légales", privacy: "Politique de confidentialité" },
+    keyNames: {
+      Ctrl: "Ctrl",
+      Shift: "Maj",
+      Delete: "Suppr",
+      Backspace: "Retour arrière",
+      Home: "Début",
+      Click: "Clic",
+      RightClick: "Clic droit",
+      Drag: "Glisser",
+    },
+    asciiUmlauts: false,
+    complete: true,
+    guide: {
+      site: "Manuel d'utilisation layerling",
+      home: "Manuel d'utilisation",
+      openEditor: "Ouvrir l'éditeur",
+      backToEditor: "Retour à l'éditeur",
+      editorElsewhere: "L'éditeur est déjà ouvert dans un autre onglet - basculez simplement vers lui.",
+      chapters: "Chapitres",
+      onThisPage: "Sur cette page",
+      previous: "Chapitre précédent",
+      next: "Chapitre suivant",
+      overviewLead: "Tout ce que layerling peut faire, pas à pas. Les images proviennent du programme en cours d'exécution et sont renouvelées à chaque version.",
+      sourceNote: "Ce manuel grandit avec le programme. Si quelque chose manque ou est inexact, dites-le nous dans les",
+      forum: "discussions",
+      notTranslated: "Ce chapitre n'est pas encore traduit en français. Le texte en anglais suit.",
+      languageMenu: "Langue",
+      search: "Rechercher dans le manuel",
+      searchNothing: "Aucun résultat trouvé.",
+      printAll: "Guide complet, à imprimer",
+      printAllTitle: "L'intégralité du guide sur une seule page",
+      printAllLead: "Tous les chapitres les uns après les autres, à imprimer ou à enregistrer au format PDF : appuyez sur Ctrl+P et désactivez « En-têtes et pieds de page » dans les paramètres d'impression. Pour imprimer seulement une partie, choisissez ses numéros de page dans la boîte de dialogue.",
+      printContents: "Table des matières",
+      printButton: "Imprimer",
     },
   },
   // Polish: added as a language that is fetched when chosen, not complete yet (missing sentences show in English).
