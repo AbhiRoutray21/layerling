@@ -169,6 +169,8 @@ export const MESSAGES_NL: Record<MessageKey, string> = {
   "installHint.body": "Eenmaal geïnstalleerd start layerling met een eigen pictogram en venster, ook offline.",
   "installHint.install": "Nu installeren",
   "installHint.dismiss": "Deze tip verbergen",
+  "storageNotice.title": "Je ontwerpen staan in deze browser – maak er back-ups van",
+  "storageNotice.body": "layerling neemt geen verantwoordelijkheid voor ontwerpen die in de browser zijn opgeslagen. Een browser kan fouten maken, en een update kan problemen geven. Maak daarom af en toe een back-up: „Alles back-uppen“ zet alle ontwerpen in één bestand, en een geopend ontwerp sla je met Exporteren (LYL) als bestand op.",
   "supportNudge.title": "Bevalt layerling je?",
   "supportNudge.body": "layerling is gratis en zonder advertenties. Heb je er iets aan, dan kun je helpen de server en de verdere ontwikkeling te betalen.",
   "supportNudge.more": "Steun het project",

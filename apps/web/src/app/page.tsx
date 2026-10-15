@@ -1,6 +1,6 @@
 "use client";
 
-import { Archive, ArrowLeft, Clock3, Copy, EllipsisVertical, FolderInput, FolderKanban, FolderPlus, FolderUp, Grid3X3, List, Pencil, Plus, RefreshCw, Search, Server, SlidersHorizontal, Sparkles, Trash2, X } from "lucide-react";
+import { Archive, ArrowLeft, Clock3, Copy, EllipsisVertical, FolderInput, FolderKanban, FolderPlus, FolderUp, Grid3X3, List, Pencil, Plus, RefreshCw, Search, Server, ShieldAlert, SlidersHorizontal, Sparkles, Trash2, X } from "lucide-react";
 import { Fragment, useCallback, useEffect, useMemo, useRef, useState, type DragEvent } from "react";
 import { AppFooter } from "@/components/AppFooter";
 import { LanguageSwitch } from "@/components/LanguageSwitch";
@@ -2932,6 +2932,22 @@ function Dashboard({
               ) : null}
               {whatsNew.view ? <WhatsNewCard view={whatsNew.view} current={LYL_CREATED_WITH_VERSION} onClose={whatsNew.dismiss} /> : null}
               <InstallAppHint />
+              {/* The designs live in the browser, and a browser can fail or break with an update: said plainly and always (not to be closed). */}
+              <aside className="storage-notice" aria-label={t("storageNotice.title")}>
+                <span className="storage-notice-icon" aria-hidden="true">
+                  <ShieldAlert size={24} strokeWidth={2.4} />
+                </span>
+                <div className="storage-notice-text">
+                  <strong>{t("storageNotice.title")}</strong>
+                  <span>{t("storageNotice.body")}</span>
+                </div>
+                {projects.length > 0 ? (
+                  <button className="storage-notice-button" type="button" title={t("dashboard.backupAllTitle")} onClick={onBackupAll}>
+                    <Archive size={16} strokeWidth={2.6} />
+                    <span>{t("dashboard.backupAll")}</span>
+                  </button>
+                ) : null}
+              </aside>
 
               <div className="dashboard-section-header">
                 <div>

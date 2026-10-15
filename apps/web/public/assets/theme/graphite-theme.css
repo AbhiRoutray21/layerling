@@ -405,6 +405,34 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .dashboard-trademark {
   color: #565656;
 }
 
+:where(html[data-theme="dark"][data-palette="graphite"]) .storage-notice {
+  background: #eeeeee;
+  border: 2px solid #e08a2c;
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .storage-notice-icon {
+  color: #ffffff;
+  background: #d9730d;
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .storage-notice-text strong {
+  color: #313131;
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .storage-notice-text span {
+  color: #494949;
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .storage-notice-button {
+  color: #ffffff;
+  background: #bf6508;
+  border: 0;
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .storage-notice-button:hover {
+  background: #a95805;
+}
+
 :where(html[data-theme="dark"][data-palette="graphite"]) .install-app-hint {
   background: #f7f7f7;
   border: 1px solid #d4d4d4;
@@ -5392,6 +5420,19 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .support-nudge-close {
 html[data-theme="dark"]:where([data-palette="graphite"]) .support-nudge-close:hover {
   color: #ebebeb;
   background: #2d2d2d;
+}
+
+html[data-theme="dark"]:where([data-palette="graphite"]) .storage-notice {
+  background: #272727;
+  border-color: #d9863a;
+}
+
+html[data-theme="dark"]:where([data-palette="graphite"]) .storage-notice-text strong {
+  color: #eaeaea;
+}
+
+html[data-theme="dark"]:where([data-palette="graphite"]) .storage-notice-text span {
+  color: #cccccc;
 }
 
 html[data-theme="dark"]:where([data-palette="graphite"]) .install-app-hint-icon {

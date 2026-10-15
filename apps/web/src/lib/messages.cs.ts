@@ -254,6 +254,8 @@ export const MESSAGES_CS: Record<MessageKey, string> = {
   "installHint.body": "Po instalaci se layerling spouští s vlastní ikonou a oknem i bez internetu.",
   "installHint.install": "Nainstalovat",
   "installHint.dismiss": "Skrýt tip",
+  "storageNotice.title": "Vaše návrhy jsou v tomto prohlížeči – zálohujte je",
+  "storageNotice.body": "layerling nenese odpovědnost za návrhy uložené v prohlížeči. Prohlížeč může selhat a aktualizace může způsobit potíže. Návrhy proto čas od času zálohujte: „Zálohovat vše“ uloží všechny návrhy do jednoho souboru a otevřený návrh lze uložit jako soubor přes Export (LYL).",
   "supportNudge.title": "Líbí se vám layerling?",
   "supportNudge.body": "Layerling je zdarma a bez reklam. Pokud vám pomáhá, můžete přispět na server a další vývoj.",
   "supportNudge.more": "Podpořit projekt",

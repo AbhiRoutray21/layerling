@@ -164,6 +164,8 @@ export const MESSAGES_FR: Partial<Record<MessageKey, string>> = {
   "installHint.body": "Une fois installé, layerling démarre avec sa propre icône et sa propre fenêtre, même hors ligne.",
   "installHint.install": "Installer maintenant",
   "installHint.dismiss": "Masquer cet indice",
+  "storageNotice.title": "Vos conceptions sont dans ce navigateur – sauvegardez-les",
+  "storageNotice.body": "layerling n'assume aucune responsabilité pour les conceptions conservées dans le navigateur. Un navigateur peut avoir des défaillances, et une mise à jour peut causer des problèmes. Sauvegardez donc vos conceptions de temps en temps : « Sauvegarder tout » les place toutes dans un fichier, et une conception ouverte s'enregistre comme fichier avec Exporter (LYL).",
   "supportNudge.title": "Vous appréciez layerling ?",
   "supportNudge.body": "layerling est gratuit et sans publicité. Si cela vous est utile, vous pouvez participer aux frais d'hébergement et au développement.",
   "supportNudge.more": "Soutenir le projet",

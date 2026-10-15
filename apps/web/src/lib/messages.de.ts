@@ -169,6 +169,8 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "installHint.body": "Einmal installiert, startet layerling mit eigenem Symbol und Fenster, auch offline.",
   "installHint.install": "Jetzt installieren",
   "installHint.dismiss": "Hinweis ausblenden",
+  "storageNotice.title": "Deine Entwürfe liegen in diesem Browser – sichere sie",
+  "storageNotice.body": "layerling übernimmt keine Verantwortung für Entwürfe, die im Browser gespeichert sind. Ein Browser kann Fehler machen, und ein Update kann Probleme bereiten. Sichere deine Entwürfe deshalb von Zeit zu Zeit: „Alle sichern“ legt alle in eine Datei, und ein geöffneter Entwurf lässt sich mit Exportieren (LYL) als Datei speichern.",
   "supportNudge.title": "Gefällt dir layerling?",
   "supportNudge.body": "layerling ist kostenlos und werbefrei. Wenn es dir nützt, kannst du helfen, Server und Weiterentwicklung zu bezahlen.",
   "supportNudge.more": "Projekt unterstützen",

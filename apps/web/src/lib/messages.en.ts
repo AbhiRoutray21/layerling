@@ -170,6 +170,8 @@ export const MESSAGES_EN = {
   "installHint.body": "Once installed, layerling starts with its own icon and window, even offline.",
   "installHint.install": "Install now",
   "installHint.dismiss": "Hide this hint",
+  "storageNotice.title": "Your designs live in this browser – back them up",
+  "storageNotice.body": "layerling takes no responsibility for designs kept in the browser. A browser can fail, or a browser update can cause problems. So save your designs from time to time: \"Back up all\" puts every design in one file, and an open design can be saved as a file with Export (LYL).",
   "supportNudge.title": "Enjoying layerling?",
   "supportNudge.body": "layerling is free and has no ads. If it is useful to you, you can help pay for the server and further development.",
   "supportNudge.more": "Support the project",

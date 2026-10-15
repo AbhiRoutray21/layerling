@@ -1411,6 +1411,79 @@ html[data-theme="dark"] .dashboard-trademark {
   font-weight: 800;
 }
 
+/* The designs live in this browser and nowhere else: said in bold, and it stays. */
+.storage-notice {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: -8px 0 22px;
+  padding: 14px 14px 14px 16px;
+  background: #fff1dc;
+  border: 2px solid #e08a2c;
+  border-radius: 10px;
+}
+
+.storage-notice-icon {
+  display: grid;
+  flex: none;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  color: #ffffff;
+  background: #d9730d;
+  border-radius: 10px;
+}
+
+.storage-notice-text {
+  display: grid;
+  flex: 1;
+  min-width: 0;
+  gap: 3px;
+}
+
+.storage-notice-text strong {
+  color: #4a2f10;
+  font-size: 16px;
+  font-weight: 900;
+}
+
+.storage-notice-text span {
+  color: #5e4630;
+  font-size: 13.5px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.storage-notice-button {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 15px;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 800;
+  background: #bf6508;
+  border: 0;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.storage-notice-button:hover {
+  background: #a95805;
+}
+
+@media (max-width: 560px) {
+  .storage-notice {
+    flex-wrap: wrap;
+  }
+
+  .storage-notice-button {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
 /* Installed as an app, layerling also starts offline - a quiet strip under the
    start tiles says so, with the browser's own install button where it has one. */
 .install-app-hint {
@@ -12708,6 +12781,19 @@ html[data-theme="dark"] .support-nudge-close {
 html[data-theme="dark"] .support-nudge-close:hover {
   color: #f3ede3;
   background: #3a2c16;
+}
+
+html[data-theme="dark"] .storage-notice {
+  background: #33230f;
+  border-color: #d9863a;
+}
+
+html[data-theme="dark"] .storage-notice-text strong {
+  color: #fbeed9;
+}
+
+html[data-theme="dark"] .storage-notice-text span {
+  color: #e2cfb6;
 }
 
 html[data-theme="dark"] .install-app-hint-icon {

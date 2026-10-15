@@ -168,6 +168,8 @@ export const MESSAGES_HU: Partial<Record<MessageKey, string>> = {
   "installHint.body": "Telepítés után a layerling saját ikonnal és ablakkal indul, offline is.",
   "installHint.install": "Telepítés most",
   "installHint.dismiss": "A tipp elrejtése",
+  "storageNotice.title": "A terveid ebben a böngészőben vannak – készíts róluk mentést",
+  "storageNotice.body": "A layerling nem vállal felelősséget a böngészőben tárolt tervekért. Egy böngésző hibázhat, és egy frissítés is okozhat problémát. Ezért időnként mentsd a terveidet: a „Minden mentése“ az összeset egy fájlba teszi, egy megnyitott tervet pedig az Exportálás (LYL) segítségével fájlként mentheted.",
   "supportNudge.title": "Tetszik a layerling?",
   "supportNudge.body": "A layerling ingyenes és reklámmentes. Ha hasznos számodra, segíthetsz fizetni a szervert és a további fejlesztést.",
   "supportNudge.more": "A projekt támogatása",

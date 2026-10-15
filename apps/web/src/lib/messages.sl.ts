@@ -156,6 +156,8 @@ export const MESSAGES_SL: Partial<Record<MessageKey, string>> = {
   "installHint.body": "Po namestitvi se layerling zažene z lastno ikono in oknom, tudi brez povezave.",
   "installHint.install": "Namesti zdaj",
   "installHint.dismiss": "Skrij ta namig",
+  "storageNotice.title": "Vaši projekti so v tem brskalniku – naredite varnostne kopije",
+  "storageNotice.body": "layerling ne prevzema odgovornosti za projekte, shranjene v brskalniku. Brskalnik lahko odpove, posodobitev pa lahko povzroči težave. Zato projekte občasno shranite: »Varnostna kopija vsega« vse projekte shrani v eno datoteko, odprt projekt pa lahko shranite kot datoteko z Izvozi (LYL).",
   "supportNudge.title": "Ti je layerling všeč?",
   "supportNudge.body": "Layerling Desktop je brezplačen in brez oglasov. Če ti je koristen, lahko podpreš delo na slovenski namizni različici.",
   "supportNudge.more": "Podpri Layerling Desktop",

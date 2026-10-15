@@ -176,6 +176,8 @@ export const MESSAGES_PL: Partial<Record<MessageKey, string>> = {
   "installHint.body": "Po instalacji layerling uruchamia się z własną ikoną i oknem, nawet offline.",
   "installHint.install": "Zainstaluj teraz",
   "installHint.dismiss": "Ukryj tę wskazówkę",
+  "storageNotice.title": "Twoje projekty są w tej przeglądarce – rób ich kopie zapasowe",
+  "storageNotice.body": "layerling nie ponosi odpowiedzialności za projekty zapisane w przeglądarce. Przeglądarka może zawieść, a jej aktualizacja może sprawiać kłopoty. Dlatego od czasu do czasu zapisuj projekty: „Kopia zapasowa wszystkiego“ zapisuje wszystkie w jednym pliku, a otwarty projekt możesz zapisać jako plik przez Eksportuj (LYL).",
   "supportNudge.title": "Podoba Ci się layerling?",
   "supportNudge.body": "layerling jest darmowy i nie ma reklam. Jeśli jest dla Ciebie przydatny, możesz pomóc opłacić serwer i dalszy rozwój.",
   "supportNudge.more": "Wesprzyj projekt",
