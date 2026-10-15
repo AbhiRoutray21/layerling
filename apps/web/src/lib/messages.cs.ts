@@ -2295,6 +2295,7 @@ export const MESSAGES_CS: Record<MessageKey, string> = {
   "edge.errorKernelMemoryFault": "CAD jádro narazilo na chybu paměti a obnovilo se. Spusťte nástroj úpravy hran znovu; stránku není třeba obnovovat.",
   "edge.errorKernelRestart": "CAD jádru došla paměť a bylo restartováno. Chvíli počkejte a spusťte nástroj úpravy hran znovu; stránku není třeba obnovovat.",
   "error.kernelNeedsSimd": "Jádro CAD potřebuje WebAssembly SIMD, které tento prohlížeč nebo počítač nenabízí. Použijte aktuální Chrome, Edge, Firefox nebo Safari.",
+  "error.outOfMemory": "Prohlížeči pro tento krok došla paměť. Návrh je velmi velký. Snižte počet trojúhelníků importovaných sítí nástrojem Zjednodušit polygonovou síť, zavřete ostatní karty a zkuste to znovu.",
 
   "split.title": "Rozdělení",
   "split.subtitle": "Umístěte rovinu a vytvořte dvě tělesa",

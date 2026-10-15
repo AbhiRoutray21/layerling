@@ -2302,6 +2302,7 @@ export const MESSAGES_PL: Partial<Record<MessageKey, string>> = {
   "edge.errorKernelMemoryFault": "Jądro CAD napotkało błąd pamięci i zostało zresetowane. Uruchom ponownie narzędzie krawędzi, odświeżanie strony nie jest potrzebne.",
   "edge.errorKernelRestart": "Jądru CAD zabrakło miejsca i zostało uruchomione ponownie. Zaczekaj chwilę, potem znów uruchom narzędzie krawędzi, odświeżanie strony nie jest potrzebne.",
   "error.kernelNeedsSimd": "Jądro CAD potrzebuje WebAssembly SIMD, którego ta przeglądarka lub ten komputer nie oferuje. Użyj aktualnej wersji Chrome, Edge, Firefox lub Safari.",
+  "error.outOfMemory": "Przeglądarce zabrakło pamięci na ten krok. Projekt jest bardzo duży. Zmniejsz liczbę trójkątów zaimportowanych siatek narzędziem Uprość siatkę, zamknij inne karty i spróbuj ponownie.",
 
   "split.title": "Podziel",
   "split.subtitle": "Ustaw płaszczyznę, potem utwórz dwie bryły",

@@ -2310,6 +2310,7 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "edge.errorKernelMemoryFault": "Der CAD-Rechenkern hatte einen Speicherfehler und wurde neu gestartet. Bitte Werkzeug erneut öffnen; kein Neuladen der Seite nötig.",
   "edge.errorKernelRestart": "Der CAD-Rechenkern wurde neu gestartet. Bitte kurz warten und das Werkzeug erneut öffnen; kein Neuladen der Seite nötig.",
   "error.kernelNeedsSimd": "Der CAD-Kern braucht WebAssembly SIMD, und dieser Browser oder Rechner bietet es nicht an. Nimm ein aktuelles Chrome, Edge, Firefox oder Safari.",
+  "error.outOfMemory": "Dem Browser ist für diesen Schritt der Speicher ausgegangen. Der Entwurf ist sehr groß. Verringere die Dreiecke importierter Netze mit Netz vereinfachen, schließe andere Tabs und versuche es noch einmal.",
 
   "split.title": "Teilen",
   "split.subtitle": "Ebene setzen, dann zwei Körper erzeugen",

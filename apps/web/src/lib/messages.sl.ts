@@ -1767,6 +1767,7 @@ export const MESSAGES_SL: Partial<Record<MessageKey, string>> = {
   "edge.errorKernelMemoryFault": "Jedro CAD je naletelo na napako pomnilnika in se je ponastavilo. Znova zaženi orodje za robove; osveževanje strani ni potrebno.",
   "edge.errorKernelRestart": "Jedru CAD je zmanjkalo prostora in se je znova zagnalo. Počakaj trenutek in znova zaženi orodje za robove; osveževanje strani ni potrebno.",
   "error.kernelNeedsSimd": "Jedro CAD potrebuje WebAssembly SIMD, ki ga ta brskalnik ali računalnik ne ponuja. Uporabite sodoben Chrome, Edge, Firefox ali Safari.",
+  "error.outOfMemory": "Brskalniku je za ta korak zmanjkalo pomnilnika. Projekt je zelo velik. Zmanjšajte število trikotnikov uvoženih mrež z orodjem Poenostavi mrežo, zaprite druge zavihke in poskusite znova.",
   "split.title": "Razdeli",
   "split.subtitle": "Postavi ravnino, nato ustvari dve telesi",
   "split.cancelAria": "Prekliči razdelitev",

@@ -2311,6 +2311,7 @@ export const MESSAGES_EN = {
   "edge.errorKernelMemoryFault": "The CAD kernel hit a memory fault and reset. Start the edge tool again; no page refresh is needed.",
   "edge.errorKernelRestart": "The CAD kernel ran out of room and was restarted. Wait a moment, then start the edge tool again; no page refresh is needed.",
   "error.kernelNeedsSimd": "The CAD kernel needs WebAssembly SIMD, which this browser or computer does not offer. Use a current Chrome, Edge, Firefox or Safari.",
+  "error.outOfMemory": "The browser has run out of memory for this step. The design is very large. Reduce the triangles of imported meshes with Simplify mesh, close other tabs and try again.",
 
   "split.title": "Split",
   "split.subtitle": "Position the plane, then create two bodies",

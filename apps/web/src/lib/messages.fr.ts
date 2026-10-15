@@ -2289,6 +2289,7 @@ export const MESSAGES_FR: Partial<Record<MessageKey, string>> = {
   "edge.errorKernelMemoryFault": "Le noyau CAD a rencontré une erreur de mémoire et s'est réinitialisé. Redémarrez l'outil de bord ; aucune actualisation de page n’est nécessaire.",
   "edge.errorKernelRestart": "Le noyau CAO a manqué d'espace et a été redémarré. Attendez un instant, puis redémarrez l'outil Edge ; aucune actualisation de page n’est nécessaire.",
   "error.kernelNeedsSimd": "Le noyau CAO a besoin de WebAssembly SIMD, que ce navigateur ou cet ordinateur ne propose pas. Utilisez une version récente de Chrome, Edge, Firefox ou Safari.",
+  "error.outOfMemory": "Le navigateur n'a plus assez de mémoire pour cette étape. La conception est très grande. Réduisez les triangles des maillages importés avec Simplifier le maillage, fermez les autres onglets et réessayez.",
   "split.title": "Diviser",
   "split.subtitle": "Positionnez le plan, puis créez deux corps",
   "split.cancelAria": "Annuler le partage",

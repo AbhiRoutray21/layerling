@@ -2292,6 +2292,7 @@ export const MESSAGES_HU: Partial<Record<MessageKey, string>> = {
   "edge.errorKernelMemoryFault": "A CAD-mag memóriahibába ütközött, és újraindult. Indítsd újra az élműveleti eszközt; az oldalt nem kell frissíteni.",
   "edge.errorKernelRestart": "A CAD-magnak elfogyott a helye, ezért újraindult. Várj egy pillanatot, majd indítsd újra az élműveleti eszközt; az oldalt nem kell frissíteni.",
   "error.kernelNeedsSimd": "A CAD-mag WebAssembly SIMD-et igényel, amit ez a böngésző vagy számítógép nem kínál. Használj friss Chrome-ot, Edge-et, Firefoxot vagy Safarit.",
+  "error.outOfMemory": "A böngészőnek elfogyott a memóriája ehhez a lépéshez. A terv nagyon nagy. Csökkentsd a behozott hálók háromszögeinek számát a Háló egyszerűsítése eszközzel, zárd be a többi lapot, és próbáld újra.",
   "split.title": "Kettévágás",
   "split.subtitle": "Helyezd el a síkot, majd hozz létre két testet",
   "split.cancelAria": "Kettévágás megszakítása",
