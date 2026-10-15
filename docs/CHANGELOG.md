@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+## 1.76.1
+
 - **A handle dragged past the opposite side keeps growing there:** The side and corner handles of a shape or a selection, and the arrow on top, stopped at the smallest size when you pulled them over the other side, so you had to let go and pick up the opposite handle. Now the shape keeps growing on the other side of that edge, as in Tinkercad; a selection is mirrored with it. A body made of a mesh still stops at the smallest height. From @andrej-cds' list of iPad changes (#170), and asked for by @rondlh (#329).
 - **Easier on a tablet:** A finger that starts on empty space turns the view, and a tap there clears the selection, so the turn switch is not needed for it; a finger on a shape or a handle works as before, and the selection box stays with the mouse and Shift. The turn switch also shows on an iPad that does not report a coarse pointer. The section view has "Confirm" and "Back" buttons, because a tablet has no Enter or Esc. From @andrej-cds' list (#170).
 - **A picture plate no longer slows down a drag:** The material signature of a shape held the whole image data URL, several MB, and was rebuilt on every move. It now carries the length and four short samples. Found by @andrej-cds (#170).
