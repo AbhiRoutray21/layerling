@@ -133,7 +133,7 @@ import { composedShapeRotation, geometryRotationDegreesForShortcut, geometryRota
 import { carryShapePivot, shapePivotFromWorld, shapePivotWorld, type PivotPoint } from "@/lib/rotationPivot";
 import { createLocalId } from "@/lib/localIds";
 import { canEditGroupAtLevel, openGroupLevelsStillOpen, trackOpenGroupLevels } from "@/lib/openGroupParts";
-import { projectExportFileName } from "@/lib/exportNames";
+import { projectExportFileName, stlNameAsksForNewFile } from "@/lib/exportNames";
 import { exportMeshesToObj } from "@/lib/objExport";
 import { rotateSketchPoints, selectedClosedSketchPoints } from "@/lib/sketchRotation";
 import { PROJECT_THUMBNAIL_IDLE_MS, projectThumbnailSceneChanged, type ProjectThumbnailSceneKey } from "@/lib/projectThumbnail";
@@ -9740,7 +9740,9 @@ export function LayerlingEditor({
     let target: LylFileHandle | "download" = "download";
     if (format === "stl" && lylFileAccessSupported()) {
       try {
-        const linked = chooseFile ? null : linkedStlFile(designId);
+        const linkedBefore = linkedStlFile(designId);
+        // A name typed in the window that is not the linked file's asks for a file of its own (reported by mail, 15.10.2026).
+        const linked = chooseFile || stlNameAsksForNewFile(exportName, projectName, linkedBefore?.name) ? null : linkedBefore;
         if (linked && !(await ensureLylFileWritable(linked))) {
           setNotice(t("status.fileNotWritable", { name: linked.name }), true);
           return;
@@ -13511,7 +13513,9 @@ function TopActionPanel({
 
           <footer className="export-dialog-footer">
             {exportFormat === "stl" && stlFileName ? (
-              <span className="export-linked-file" title={stlFileName}>{t("export.stlLinkedFile", { name: stlFileName })}</span>
+              stlNameAsksForNewFile(exportName, projectName, stlFileName)
+                ? <span className="export-linked-file" title={exportName}>{t("export.stlNewFile", { name: projectExportFileName(exportName.trim().replace(/\.stl$/i, ""), "stl") })}</span>
+                : <span className="export-linked-file" title={stlFileName}>{t("export.stlLinkedFile", { name: stlFileName })}</span>
             ) : null}
             <div>
               {exportFormat === "stl" && stlFileName ? (

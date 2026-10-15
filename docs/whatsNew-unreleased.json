@@ -58,5 +58,15 @@
       "de": "Neben jeder grünen Zahl des Winkellineals sitzt ein kleiner Schalter: Die Zahl zählt bis zum Rand oder bis zur Mitte des Körpers, jede für sich. So setzt du einen stehenden Zylinder mit der Mitte in den beiden Armen und der Unterseite in der Höhe, einen liegenden mit der Mitte quer und einem Ende längs. Der Knopf am Griff schaltet weiter alle drei zugleich. Die Höhenbemaßung steht jetzt außerhalb des Körpers, an der Kante, die auf dem Bildschirm am weitesten rechts liegt.",
       "en": "Beside each green number of the framing square sits a small switch: the number counts to the edge or to the middle of the body, each on its own. A standing cylinder is placed by its middle in the two arms and its bottom in height, a lying one by its middle across and an end along. The button at the handle still switches all three at once. The height dimension now stands outside the body, on the edge furthest right on the screen."
     }
+  },
+  {
+    "title": {
+      "de": "Neuer Name beim STL-Export fragt nach einer neuen Datei",
+      "en": "A new name in the STL export asks for a new file"
+    },
+    "body": {
+      "de": "In Chrome und Edge schrieb jeder STL-Export in die Datei, die du beim ersten Mal gewählt hast, und das Dateinamenfeld tat nichts mehr. Tippst du dort jetzt einen anderen Namen, fragt layerling, wo die neue Datei liegen soll. Unter dem Fenster steht, ob in die bisherige Datei geschrieben wird oder gefragt wird.",
+      "en": "In Chrome and Edge every STL export wrote into the file you chose the first time, and the file name field did nothing any more. If you now type another name there, layerling asks where the new file should go. The line under the window says whether the old file is written or you are asked."
+    }
   }
 ]
