@@ -1,7 +1,7 @@
 "use client";
 
 import { GuideHelpLink } from "@/components/GuideHelpLink";
-import { AlertTriangle, ArrowUpFromLine, Check, Percent, Circle as CircleIcon, CloudUpload, Download, Eye, EyeOff, FilePlus2, FolderOpen, Hexagon as HexagonIcon, Info, ListTree, Pencil, Pentagon as PentagonIcon, Rotate3d, Search, Square as SquareIcon, Star as StarIcon, Triangle as TriangleIcon, X } from "lucide-react";
+import { AlertTriangle, ArrowUpFromLine, Blend, Check, Percent, Circle as CircleIcon, CloudUpload, Download, Eye, EyeOff, FilePlus2, FolderOpen, Hexagon as HexagonIcon, Info, ListTree, Pencil, Pentagon as PentagonIcon, Rotate3d, Search, Square as SquareIcon, Star as StarIcon, Triangle as TriangleIcon, X } from "lucide-react";
 import { ObjectListPanel } from "@/components/workplane/ObjectListPanel";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import * as THREE from "three";
@@ -2331,6 +2331,9 @@ function readMcpEditorIdentity() {
 /** What a locked shape still lets through updateShape: none of it changes the body. */
 const LOCKED_SHAPE_PATCH_KEYS = new Set(["locked", "hidden", "name"]);
 
+/** A preview of an intersection is not calculated for more triangles than this: it would stutter while a shape is moved (#372). */
+const INTERSECT_PREVIEW_MAX_TRIANGLES = 40000;
+
 export function LayerlingEditor({
   initialAssets = [],
   initialShapes = [],
@@ -3293,7 +3296,7 @@ export function LayerlingEditor({
       : null),
     [holePatternTool?.face, holePatternTool?.settings],
   );
-  const viewportShapes = useMemo(
+  const baseViewportShapes = useMemo(
     () =>
       arrayPreview
         ? [...shapes, ...arrayPreview]
@@ -3308,6 +3311,19 @@ export function LayerlingEditor({
           : shapes,
     [alignAxes, alignMode, alignPreview, arrayPreview, edgeModifier?.preview, effectiveAlignAnchorId, holePatternPreview, mirrorMode, mirrorPreviewAxis, selectedIds, selectedShapes, shapes],
   );
+  // The preview of an intersection (#372): the operands see-through, and what they share as a body of its own on top.
+  const [intersectPreviewIds, setIntersectPreviewIds] = useState<string[] | null>(null);
+  const [intersectPreviewShape, setIntersectPreviewShape] = useState<WorkplaneShape | null>(null);
+  const intersectPreviewIdsRef = useRef<string[] | null>(null);
+  intersectPreviewIdsRef.current = intersectPreviewIds;
+  const intersectPreviewRunRef = useRef(0);
+  const intersectPreviewEmptyRef = useRef(false);
+  const viewportShapes = useMemo(() => {
+    if (!intersectPreviewIds) return baseViewportShapes;
+    const operands = new Set(intersectPreviewIds);
+    const ghosts = baseViewportShapes.map((shape) => (operands.has(shape.id) && !shape.hole ? { ...shape, transparent: true } : shape));
+    return intersectPreviewShape ? [...ghosts, intersectPreviewShape] : ghosts;
+  }, [baseViewportShapes, intersectPreviewIds, intersectPreviewShape]);
   const sketchReferenceShapes = useMemo(() => {
     // Only the sketch view shows them; outside it every body would be projected for nothing.
     if (!sketchActive) return shapes;
@@ -7167,9 +7183,66 @@ export function LayerlingEditor({
     commitShapes([...shapesRef.current.filter((shape) => !selected.has(shape.id)), bundle], bundle.id, t("status.bundledMany", { count: selectedShapes.length }));
   }, [refuseLockedSelection, commitShapes, selectedIds, selectedShapes]);
 
+  /** Ends the preview of an intersection: the operands show as they are again. */
+  const exitIntersectPreview = useCallback(() => {
+    intersectPreviewRunRef.current += 1;
+    setIntersectPreviewIds(null);
+    setIntersectPreviewShape(null);
+  }, []);
+
+  /** Shows what the selected shapes share, and keeps showing it while they are moved one by one (#372). */
+  const toggleIntersectPreview = useCallback(() => {
+    if (intersectPreviewIdsRef.current) {
+      exitIntersectPreview();
+      setNotice("");
+      return;
+    }
+    const operands = selectedShapes.filter((shape) => !isNonSolidShapeKind(shape.kind));
+    if (!canIntersectShapes(operands)) {
+      setNotice(t("status.selectSolidAndHole"));
+      return;
+    }
+    setIntersectPreviewIds(operands.map((shape) => shape.id));
+    setNotice(t("status.intersectPreviewOn", { tool: t("editor.tool.intersect") }));
+  }, [exitIntersectPreview, selectedShapes]);
+
+  // The common part is calculated again a moment after every change of the shapes, so moving one stays smooth.
+  useEffect(() => {
+    if (!intersectPreviewIds) return;
+    const operands = shapes.filter((shape) => intersectPreviewIds.includes(shape.id) && !isNonSolidShapeKind(shape.kind));
+    if (operands.length < 2 || !canIntersectShapes(operands)) {
+      exitIntersectPreview();
+      setNotice(t("status.intersectPreviewOff"));
+      return;
+    }
+    const run = intersectPreviewRunRef.current + 1;
+    intersectPreviewRunRef.current = run;
+    const timer = window.setTimeout(async () => {
+      const triangles = operands.reduce((sum, shape) => sum + (shape.importedMesh?.triangleCount ?? meshForShape(shape).faces.length), 0);
+      if (triangles > INTERSECT_PREVIEW_MAX_TRIANGLES) {
+        setIntersectPreviewShape(null);
+        setNotice(t("status.intersectPreviewTooBig"));
+        return;
+      }
+      const result = await buildIntersectionShapeFromSelection(operands, workspaceSettingsRef.current.booleanTriangleLimit);
+      if (intersectPreviewRunRef.current !== run) return;
+      if (result.group) {
+        intersectPreviewEmptyRef.current = false;
+        setIntersectPreviewShape({ ...result.group, id: "intersect-preview", name: t("editor.tool.intersectPreview"), color: "#19c37d", hole: false, transparent: false, locked: true, hidden: false, previewOnly: true, groupedShapes: undefined, groupOperation: undefined });
+        return;
+      }
+      setIntersectPreviewShape(null);
+      if (result.empty && !intersectPreviewEmptyRef.current) setNotice(t("status.intersectPreviewEmpty"));
+      intersectPreviewEmptyRef.current = Boolean(result.empty);
+    }, 220);
+    return () => window.clearTimeout(timer);
+  }, [exitIntersectPreview, intersectPreviewIds, shapes]);
+
   const intersectSelected = useCallback(async () => {
     if (refuseLockedSelection()) return;
-    const groupable = selectedShapes.filter((shape) => !isNonSolidShapeKind(shape.kind));
+    // While the preview shows, its shapes are the ones that are intersected, whatever is selected.
+    const previewIds = intersectPreviewIdsRef.current;
+    const groupable = (previewIds ? shapesRef.current.filter((shape) => previewIds.includes(shape.id)) : selectedShapes).filter((shape) => !isNonSolidShapeKind(shape.kind));
     if (!canIntersectShapes(groupable)) {
       setNotice(t("status.selectSolidAndHole"));
       return;
@@ -7190,7 +7263,8 @@ export function LayerlingEditor({
     const operandIds = new Set(groupable.map((shape) => shape.id));
     const remainingShapes = shapesRef.current.filter((shape) => !operandIds.has(shape.id));
     if (result.empty) {
-      commitShapes(remainingShapes, null, t("status.intersectionEmpty"));
+      // Nothing is shared: the shapes stay, instead of vanishing (#372). Move them over each other, or take one out.
+      setNotice(t("status.intersectionEmptyKept"));
       return;
     }
 
@@ -7198,8 +7272,9 @@ export function LayerlingEditor({
     if (!intersection) {
       return;
     }
+    exitIntersectPreview();
     commitShapes([...remainingShapes, intersection], intersection.id, t("status.intersectedMany", { count: groupable.length }));
-  }, [refuseLockedSelection, commitShapes, selectedShapes]);
+  }, [refuseLockedSelection, commitShapes, exitIntersectPreview, selectedShapes]);
 
   // Each step answers with what happened, so the buttons can show it and MCP can pass it on.
   const refuseOpenGroupStep = useCallback((message: string): OpenGroupOutcome => {
@@ -10619,6 +10694,12 @@ export function LayerlingEditor({
       if (event.key === "Escape") {
         // Erst das Werkzeug ablegen, dann die Auswahl - wer ein Werkzeug in der
         // Hand hat, meint mit Escape das Werkzeug.
+        if (intersectPreviewIdsRef.current) {
+          event.preventDefault();
+          exitIntersectPreview();
+          setNotice("");
+          return;
+        }
         if (carryIdsRef.current) {
           event.preventDefault();
           setCarryIds(null);
@@ -11119,6 +11200,8 @@ export function LayerlingEditor({
         onGroup={groupSelected}
         onBundle={bundleSelected}
         onIntersect={intersectSelected}
+        onIntersectPreview={toggleIntersectPreview}
+        intersectPreviewActive={Boolean(intersectPreviewIds)}
         onFillet={() => edgeModifier?.kind === "fillet" ? cancelEdgeModifier() : startEdgeModifier("fillet")}
         onHollow={startShellTool}
         hollowActive={Boolean(shellTool)}
@@ -11949,6 +12032,8 @@ function SecondaryToolbar({
   onGroup,
   onBundle,
   onIntersect,
+  onIntersectPreview,
+  intersectPreviewActive,
   onFillet,
   onHollow,
   hollowActive,
@@ -12061,6 +12146,8 @@ function SecondaryToolbar({
   onGroup: () => void;
   onBundle: () => void;
   onIntersect: () => void;
+  onIntersectPreview: () => void;
+  intersectPreviewActive: boolean;
   onFillet: () => void;
   onHollow: () => void;
   hollowActive: boolean;
@@ -12300,7 +12387,8 @@ function SecondaryToolbar({
     { id: "group", label: t("editor.tool.group"), icon: ToolbarGroupIcon, action: onGroup, enabled: canGroup },
     { id: "bundle", label: t("editor.tool.bundle"), icon: ToolbarBundleIcon, action: onBundle, enabled: canGroup },
     { id: "ungroup", label: t("editor.tool.ungroup"), icon: ToolbarUngroupIcon, action: onUngroup, enabled: canUngroup },
-    { id: "intersect", label: t("editor.tool.intersect"), icon: ToolbarIntersectionIcon, action: onIntersect, enabled: canIntersect },
+    { id: "intersect", label: t("editor.tool.intersect"), icon: ToolbarIntersectionIcon, action: onIntersect, enabled: canIntersect || intersectPreviewActive },
+    { id: "intersect-preview", label: t("editor.tool.intersectPreview"), icon: Blend, action: onIntersectPreview, enabled: canIntersect || intersectPreviewActive, active: intersectPreviewActive },
   ];
   const modifyTools = [
     { id: "mirror", label: t("editor.tool.mirror"), icon: ToolbarMirrorIcon, action: onMirror, enabled: canModifySelection, active: mirrorMode },

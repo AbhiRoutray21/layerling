@@ -6,6 +6,7 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **A preview of the intersection, and shapes that share nothing stay:** A new button beside Boolean Intersection, "Show common part", turns the selected shapes see-through and draws what they share in green. Select and move each shape on its own and the green part follows (it is calculated again a moment after every change; above 40,000 triangles the preview says it is too big). Boolean Intersection applies it, Esc closes the preview. And when the selected shapes share nothing, Intersection no longer removes them all: they stay and a message says so. Asked for by @prmod3d (#372).
 ## 1.75.0
 
 - **French:** The whole interface and the 16 chapters of the guide are in French, with the language list and the guide's language switch. It is picked automatically for a browser set to French. Made by @ZelTroN-2k3 with an AI assistant (pull request #368); a French reader is still welcome to go through it, wrong words are fixed with a small pull request.

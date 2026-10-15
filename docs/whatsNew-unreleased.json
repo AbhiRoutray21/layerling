@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "title": {
+      "de": "Schnittmenge mit Vorschau",
+      "en": "Intersection with a preview"
+    },
+    "body": {
+      "de": "Neben der Schnittmenge gibt es einen Knopf „Gemeinsames Stück zeigen\": Er macht die markierten Formen durchsichtig und zeichnet grün, was sie gemeinsam haben. Du kannst jede Form einzeln markieren und verschieben, das grüne Stück folgt. Schnittmenge wendet es an, Esc schließt die Vorschau. Haben die Formen nichts gemeinsam, bleiben sie jetzt, statt zu verschwinden, und eine Meldung sagt es.",
+      "en": "Beside Boolean Intersection there is a new button, \"Show common part\": it makes the selected shapes see-through and draws what they share in green. You can select and move each shape on its own and the green part follows. Intersection applies it, Esc closes the preview. If the shapes share nothing, they now stay instead of vanishing, and a message says so."
+    }
+  }
+]

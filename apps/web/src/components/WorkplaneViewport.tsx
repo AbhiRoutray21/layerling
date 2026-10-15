@@ -6069,7 +6069,7 @@ export function WorkplaneViewport({
       const shapeId = entry.object.userData.shapeId;
       if (typeof shapeId !== "string") return false;
       const shape = shapesRef.current.find((candidate) => candidate.id === shapeId);
-      return shape ? !shape.imagePlate : false;
+      return shape ? !shape.imagePlate && !shape.previewOnly : false;
     };
     const hit = state.raycaster.intersectObjects(state.shapeLayer.children, true).find(pickable);
     if (hit) {
