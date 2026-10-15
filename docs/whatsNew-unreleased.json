@@ -8,5 +8,15 @@
       "de": "Eine Wand dicker machen oder eine Tasche in ein fertiges Teil schneiden ging bisher nur über Arbeitsebene, nachgezeichnete Skizze und Gruppe. Das neue Werkzeug „Fläche“ neben dem Lochmuster setzt Material auf eine ebene Fläche oder schneidet eine Tasche hinein, auf Wunsch mit Abstand zum Rand und mit runden Ecken, auch bei einem importierten STL. Was es anlegt, bleibt ein gewöhnlicher Skizzenkörper in einer Gruppe.",
       "en": "Making a wall thicker or cutting a pocket into a finished part took a workplane, a traced sketch and a group, and on an imported STL there was no other way. The new tool \"Face\" next to the hole pattern adds material on a flat face or cuts a pocket into it, set in from the edge and with rounded corners if you like. What it adds stays an ordinary sketch body in a group."
     }
+  },
+  {
+    "title": {
+      "de": "Backup zweimal einspielen verdoppelt nichts mehr",
+      "en": "Restoring a backup twice no longer doubles your designs"
+    },
+    "body": {
+      "de": "Spielst du ein Backup in einen Browser ein, der einen Entwurf daraus schon hat, wird dieser übersprungen, und die Meldung sagt, wie viele schon da waren. Der Hinweis am Knopf „Alle sichern“ nennt jetzt auch, über welchen Knopf ein Backup zurückkommt.",
+      "en": "If you restore a backup into a browser that already has one of its designs, that one is skipped, and the notice says how many were already there. The tooltip of \"Back up all\" now also names the button that brings a backup back."
+    }
   }
 ]

@@ -44,7 +44,7 @@ import { writeDesignView } from "@/lib/designView";
 import { useFileAccept } from "@/lib/fileAccept";
 import { lylFileAccessSupported, pickFilesToImport, rememberLylFile, type LylFileHandle } from "@/lib/lylFileAccess";
 import { exportLylProject, importLylProject, LYL_CREATED_WITH_VERSION, LYL_MEDIA_TYPE } from "@/lib/lylProject";
-import { backupEntryNames, backupFileName, isBackupFileName, packBackup, unpackBackup, zipHoldsDesigns } from "@/lib/projectBackup";
+import { backupDesignAlreadyThere, backupEntryNames, backupFileName, isBackupFileName, packBackup, unpackBackup, zipHoldsDesigns } from "@/lib/projectBackup";
 import { customShapesBackupEntries, restoreCustomShapesFromBackup } from "@/lib/myShapes";
 import { SHARED_PROJECTS_ENDPOINT } from "@/lib/sharedProjectsEndpoint";
 import { PICTURE_FILE_ACCEPT } from "@/lib/pictureIcon";
@@ -1792,10 +1792,17 @@ export default function Home() {
     const restoredProjects: DashboardProject[] = [];
     const restoredEntries: Record<string, ProjectShapeCacheEntry> = {};
     let failed = 0;
+    let alreadyThere = 0;
     for (let index = 0; index < entries.length; index += 1) {
       setDashboardNotice(t("notice.restoringBackup", { index: index + 1, total: entries.length }));
       try {
         const restored = await importLylProject(entries[index].bytes);
+        // A restore keeps the creation time of a design, so the same name and creation time means it is already here (#407).
+        const restoredName = restored.projectName || projectNameFromFileName(entries[index].name);
+        if (backupDesignAlreadyThere(projects, { name: restoredName, createdAt: restored.createdAt })) {
+          alreadyThere += 1;
+          continue;
+        }
         const now = Date.now() + index;
         const project: DashboardProject = {
           ...newProject(restored.projectName || projectNameFromFileName(entries[index].name), projects.length + index, restored.shapes.length),
@@ -1819,10 +1826,15 @@ export default function Home() {
     }
     setProjectShapesById((current) => ({ ...current, ...restoredEntries }));
     setProjects((current) => [...restoredProjects, ...current]);
+    const skippedNote = alreadyThere > 0 && restoredProjects.length > 0 ? ` ${t("notice.backupAlreadyThere", { count: alreadyThere })}` : "";
+    if (restoredProjects.length === 0 && failed === 0 && alreadyThere > 0) {
+      setDashboardNotice(t("notice.backupAllThere", { count: alreadyThere, name: file.name }) + shapesNote);
+      return;
+    }
     setDashboardNotice((failed
       ? t("notice.backupRestoredPartly", { count: restoredProjects.length, failed, name: file.name })
-      : t("notice.backupRestored", { count: restoredProjects.length, name: file.name })) + shapesNote);
-  }, [projects.length]);
+      : t("notice.backupRestored", { count: restoredProjects.length, name: file.name })) + skippedNote + shapesNote);
+  }, [projects]);
 
   const importFilesFromDashboard = useCallback(
     async (files: File[], fileHandle?: LylFileHandle) => {
