@@ -7,10 +7,11 @@ Ne každý díl lze pohodlně sestavit ze základních tvarů. Pro držák, prof
 
 ## Zahájení náčrtu
 
-Nahoře přepněte z {{ui:editor.modeGeometry}} na {{ui:editor.modeSketch}}. Ve skupině {{ui:sketch.group.create}} na pásu nástrojů jsou vedle sebe dvě tlačítka pro výsledné těleso:
+Nahoře přepněte z {{ui:editor.modeGeometry}} na {{ui:editor.modeSketch}}. Ve skupině {{ui:sketch.group.create}} na pásu nástrojů jsou vedle sebe tři tlačítka pro výsledné těleso:
 
 - **{{ui:sketch.extrude}}:** vysune obrys vzhůru, například jako vykrajovátko.
 - **{{ui:sketch.revolve}}:** otočí profil kolem osy jako na soustruhu. Vznikají tak vázy, nádoby, kužely a další rotační díly.
+- **{{ui:sketch.sweep}}:** protáhne obrys podél dráhy: kabelový žlab se zatáčkou, potrubí, prstenec kolem tvaru. Viz níže Protažení podél dráhy.
 
 Zobrazí se kreslicí list s mřížkou.
 
@@ -84,6 +85,18 @@ Je-li pracovní rovina na boční ploše, kreslíte při pohledu na ni a horní 
 Nakreslete polovinu průřezu **nalevo od zobrazené osy**. Vedle náčrtu uvidíte průběžný 3D náhled. Obrys musí být uzavřený, nebo můžete použít otevřenou čáru rozšířenou na pás, viz níže. Dokončíte jej přes {{ui:sketch.finishRevolve}}.
 
 Rotační těleso má přesnou geometrii stejně jako vysunuté. Podporuje zaoblení, zkosení a dutiny pro nádoby či vázy. Starší verze vytvářely síť; otevřením {{ui:inspector.editSketch}} a opětovným dokončením získáte přesné těleso. Profil přesahující přes osu zůstává sítí, protože jej nelze přesně sestavit.
+
+## Protažení podél dráhy
+
+{{ui:sketch.sweep}} protáhne obrys podél dráhy: kabelový žlab, který zahýbá za roh, potrubí, kryt kolem řemene, prstenec kolem šestiúhelníku. Tlačítko je vedle {{ui:sketch.extrude}} a {{ui:sketch.revolve}} ve skupině {{ui:sketch.group.create}}.
+
+Na stejný list kreslíte dvě věci:
+
+- **Průřez** jako uzavřený obrys, jako obvykle. Kreslete ho tak, jak byste ho viděli při pohledu podél dráhy od jejího začátku: napříč dráhou je v náčrtu vlevo a vpravo, nahoře je nahoře na hotovém tělese. Dutý průřez, žlab nebo trubka, je obrys s dalším uvnitř. Průřez je napříč vystředěný na dráhu a těleso stojí nejnižším bodem průřezu na rovině náčrtu.
+
+- **Dráhu** jako {{ui:sketch.construction}}: zapněte ji a kreslete úsečky nebo křivky, jediný řetězec, otevřený nebo uzavřený (uzavřený řetězec dá prstenec). Dráha leží naplocho v rovině náčrtu.
+
+Nakreslete průřez u toho konce dráhy, kde má začínat; dráha začíná od nejbližšího konce. Pak klikněte na {{ui:sketch.finishSweep}}. Roh z rovných kousků se stane pokosem, křivka zůstane hladká a průřez zůstává po celé délce svislý. Těleso je přesné jako vytažené: zaoblení, zkosení a export STEP fungují. Chybí-li uzavřený obrys nebo dráha, nebo je několik oddělených drah, layerling to řekne. Přes {{ui:inspector.editSketch}} se vrátíte do náčrtu a změníte průřez nebo dráhu.
 
 ## Těleso z rozšířené čáry
 

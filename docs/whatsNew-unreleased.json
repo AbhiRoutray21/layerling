@@ -8,5 +8,15 @@
       "de": "Das Winkellineal besteht jetzt aus Linien im Raum: Ein Körper davor verdeckt es, die Zahlen an den Armen verblassen dort. Das kleine Auge unter dem Griff schaltet um, damit das Lineal über allem sichtbar bleibt. Die Hilfslinien der grünen Zahlen laufen am Boden entlang, und der Schalter jeder Zahl sitzt in ihrem Rahmen.",
       "en": "The framing square is now made of lines in the room: a body in front of it hides it, and the numbers on the arms fade there. The small eye below the handle switches that, to keep the square in view over everything. The guide lines of the green numbers run along the floor, and the switch of each number sits in its frame."
     }
+  },
+  {
+    "title": {
+      "de": "Skizze entlang eines Pfades ziehen",
+      "en": "Sweep a sketch along a path"
+    },
+    "body": {
+      "de": "Neben „Skizze hochziehen“ und „Skizze rotieren“ gibt es einen dritten Weg: Die neue **Skizze entlang Pfad** zieht einen Querschnitt an einem Pfad entlang, etwa einen Kabelkanal mit Ecke, eine Leitung oder einen Ring um ein Sechseck. Du zeichnest den Querschnitt als geschlossenen Umriss (ein zweiter Umriss darin macht ihn hohl) und den Pfad als Hilfslinie, eine Kette aus Linien oder Kurven, offen oder geschlossen. Ecken aus geraden Stücken werden eine Gehrung. Der Körper ist exakt, Verrundung, Fase und STEP-Export gehen. Die MCP-Brücke baut ihn aus Zahlen mit `layerling_sweep_sketch`.",
+      "en": "Next to Extrude and Revolve there is a third way: the new **Sweep sketch** pulls a cross-section along a path, for a cable channel that turns a corner, a conduit or a ring round a hexagon. You draw the cross-section as a closed outline (a second outline inside makes it hollow) and the path as a construction line, a chain of lines or curves, open or closed. A corner of straight pieces becomes a mitre. The body is exact, so Fillet, Chamfer and the STEP export work. The MCP bridge builds one from numbers with `layerling_sweep_sketch`."
+    }
   }
 ]

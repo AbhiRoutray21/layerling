@@ -9,6 +9,7 @@ import { revolveProfileFitsAxis } from "@/lib/cadSketchRevolve";
 import { buildSketchRevolveMesh, normalizeSketchRevolveSettings } from "@/lib/sketchRevolve";
 import { placementWorkplaneCoordinates, type PlacementWorkplane } from "@/lib/placementWorkplane";
 import { silhouetteSketchProfile } from "@/lib/sketchCadProfile";
+import { sweepPlan } from "@/lib/cadSketchSweep";
 import { filledGrowPockets, strokedSketchProfile } from "@/lib/sketchStroke";
 import { keyringSketchProfile } from "@/lib/sketchKeyring";
 import type { ManifoldToplevel } from "manifold-3d";
@@ -124,6 +125,53 @@ export async function cadShapeFromSketchProfile(profile: SketchProfile, height: 
   const shape = shapeFromCadMesh(source, response.positions, response.normals, response.indices, response.brep, SKETCH_CAD_DEFLECTION);
   if (!shape) throw new Error("OpenCascade returned an empty sketch solid");
   return { ...shape, sketchProfile: cloneSketchProfile(profile), sketchOperation: "extrude" as const };
+}
+
+/**
+ * A sketch swept along its path (#400): the closed outlines are the cross-section, the construction
+ * line the path. An exact CAD body like an extruded one, so Fillet, Chamfer and the STEP export work.
+ * Throws with a sentence for what is missing or what the kernel cannot sweep.
+ */
+export async function cadShapeFromSketchSweep(profile: SketchProfile, existing?: WorkplaneShape | null) {
+  const planned = sweepPlan(profile);
+  if ("problem" in planned) {
+    throw new Error(t(planned.problem === "no-profile" ? "sketch.sweepNoProfile" : planned.problem === "no-path" ? "sketch.sweepNoPath" : "sketch.sweepManyPaths"));
+  }
+  const worker = ensureSketchCadWorker();
+  const requestId = ++sketchCadRequestId;
+  const response = await new Promise<SketchCadBuildResponse>((resolve, reject) => {
+    const timer = window.setTimeout(() => {
+      sketchCadPending.delete(requestId);
+      reject(new Error("OpenCascade timed out while building the sketch"));
+    }, 30_000);
+    sketchCadPending.set(requestId, { resolve, reject, timer });
+    worker.postMessage({ type: "build", requestId, profile: cloneSketchProfile(profile), height: MIN_SHAPE_DIMENSION, sweep: true });
+  });
+  if (response.type === "error") throw new Error(t("sketch.sweepFailed"));
+  const source = canonicalizeShape({
+    ...(existing ?? {
+      id: createLocalId("sketch-sweep"),
+      name: "Sketch sweep",
+      kind: "mesh" as const,
+      color: "#3d8fb5",
+      x: 0,
+      z: 0,
+      size: 1,
+      width: 1,
+      depth: 1,
+      height: MIN_SHAPE_DIMENSION,
+      rotation: 0,
+    }),
+    sketchProfile: cloneSketchProfile(profile),
+    sketchOperation: "sweep",
+    edgeTreatments: undefined,
+    edgeTreatmentHistory: undefined,
+    cadDisplayEdges: undefined,
+    cadDisplayEdgesVersion: undefined,
+  });
+  const shape = shapeFromCadMesh(source, response.positions, response.normals, response.indices, response.brep, SKETCH_CAD_DEFLECTION);
+  if (!shape) throw new Error(t("sketch.sweepFailed"));
+  return { ...shape, sketchProfile: cloneSketchProfile(profile), sketchOperation: "sweep" as const };
 }
 
 /**

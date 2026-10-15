@@ -457,6 +457,32 @@ export const tools = [
     },
   },
   {
+    name: "layerling_sweep_sketch",
+    description: "Pull a cross-section along a path as one exact body, like the editor's Sweep sketch (#400): a cable channel that turns a corner, a conduit, a guard round a belt, a ring round a hexagon. The path is a list of points in the sketch plane, [x, z] in mm on the workplane (z runs towards the front), joined by straight lines; closed joins the last point to the first and makes a ring. The section is a rectangle (width across the path, height up) or a circle (width is the diameter), solid or hollow with a wall thickness. It is drawn at the first point and seen looking along the path, so it starts there. The body stands on the plane with the lowest point of the section, a corner of the path is a mitre, and the result is an exact body: fillet, chamfer and the STEP export work on it. Returns the new object.",
+    inputSchema: {
+      ...editorTargetSchema,
+      required: ["path", "section"],
+      properties: {
+        ...editorTargetSchema.properties,
+        path: { type: "array", items: { anyOf: [{ type: "array", items: { type: "number" }, minItems: 2, maxItems: 2 }, { type: "object", properties: { x: { type: "number" }, z: { type: "number" } } }] }, minItems: 2, description: "The points of the path, [x, z] or { x, z }, in mm." },
+        closed: { type: "boolean", description: "Join the last point to the first: a ring." },
+        section: {
+          type: "object",
+          description: "The cross-section.",
+          properties: {
+            kind: { type: "string", enum: ["rectangle", "circle"] },
+            width: { type: "number", description: "Across the path in mm; the diameter of a circle." },
+            height: { type: "number", description: "Up on the body in mm (rectangle only, default the width)." },
+            wall: { type: "number", description: "A wall thickness in mm makes the section hollow." },
+          },
+          required: ["kind", "width"],
+        },
+        name: { type: "string" },
+        color: { type: "string" },
+      },
+    },
+  },
+  {
     name: "layerling_perforate_face",
     description: "Cut a pattern of holes into a flat face of a solid body - the editor's Hole pattern tool (vents, speaker grilles, baskets). The holes are ordinary hole shapes standing on the face and grouped with the body (nothing is baked: ungroup frees them again). Name the body and a side of its own box (targetFace, snapped to the nearest real face; the whole flat face around its middle is used) or give point and normal on the face yourself. Only holes that lie wholly inside the face, at least margin away from its edge, are made. form: round (size = diameter), square (size = side), rectangle and slot (size = width, height = height), hexagon (size = diameter across the corners). spacing is centre to centre; staggered shifts every second row by half a spacing and packs the rows so each hole has neighbours one spacing away. Without depth the holes go through the whole body. A curved face is refused. One undo step.",
     inputSchema: {

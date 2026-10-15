@@ -58,6 +58,7 @@ Az MI ugyanazokkal a funkciókkal dolgozik, mint te, ugyanazon az úton, mint a 
 | `layerling_lay_flat` | egy objektumot az egyik lapjával a tárgyasztalra fektet |
 | `layerling_place_on_face` | objektumokat tesz le egy másik objektum lapjára, a ferdékre is, mint a C billentyű |
 | `layerling_perforate_face` | lyukmintát vág egy sík lapba; a lyukak a testtel csoportosított lyukak maradnak |
+| `layerling_sweep_sketch` | téglalap vagy kör keresztmetszetet húz végig egy pontokból álló pályán egyetlen pontos testként; zárt pálya gyűrűt ad |
 | `layerling_mate_faces` | egy objektum lapját egy másik lapjához illeszti, laptól lapig vagy egy síkba |
 | `layerling_open_group` | megnyit egy csoportot, hogy a részei egyenként módosíthatók legyenek, egy nyitott csoporton belüli csoportot is |
 | `layerling_close_group` | újra bezárja („Kész”) vagy megszakítja |

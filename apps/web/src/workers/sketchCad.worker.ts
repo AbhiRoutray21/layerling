@@ -5,6 +5,7 @@ import { CAD_MODIFIER_RUNTIME_BASE, SKETCH_CAD_DEFLECTION } from "@/lib/cadModif
 import { cadSketchRegions } from "@/lib/sketchCadProfile";
 import { buildRevolvedSketchSolid } from "@/lib/cadSketchRevolve";
 import { buildStrokedSketchSolid } from "@/lib/cadSketchStroke";
+import { buildSweptSketchSolid } from "@/lib/cadSketchSweep";
 import { pathWire } from "@/lib/sketchCadWire";
 import { buildMessage } from "@/lib/buildStamp";
 import { SKETCH_STROKE_UNSUPPORTED, type SketchCadBuildRequest, type SketchCadBuildResponse } from "@/lib/sketchCadTypes";
@@ -48,6 +49,8 @@ self.onmessage = async (event: MessageEvent<SketchCadBuildRequest>) => {
     let result: ShapeHandle;
     if (request.revolve) {
       result = buildRevolvedSketchSolid(cad, request.profile, request.revolve.startAngle, request.revolve.sweepAngle);
+    } else if (request.sweep) {
+      result = buildSweptSketchSolid(cad, request.profile);
     } else if (request.stroke) {
       const stroked = buildStrokedSketchSolid(cad, request.profile, request.stroke, request.height);
       if (!stroked) throw new Error(SKETCH_STROKE_UNSUPPORTED);

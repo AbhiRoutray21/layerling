@@ -7,10 +7,11 @@ Vsega ni mogoče sestaviti iz osnovnih oblik. Za dele z lastnim obrisom, na prim
 
 ## Začetek skice
 
-Zgoraj preklopi z {{ui:editor.modeGeometry}} na {{ui:editor.modeSketch}}. V skupini {{ui:sketch.group.create}} traku stojita drug ob drugem dva gumba za to, kaj naj postane obris:
+Zgoraj preklopi z {{ui:editor.modeGeometry}} na {{ui:editor.modeSketch}}. V skupini {{ui:sketch.group.create}} traku stojijo drug ob drugem trije gumbi za to, kaj naj postane obris:
 
 - **{{ui:sketch.extrude}}:** Obris se potegne v višino, kot modelček za piškote.
 - **{{ui:sketch.revolve}}:** Obris se zavrti okoli osi, kot na stružnici. Tako nastanejo vaze, kozarci, stožci in vse, kar je okroglo.
+- **{{ui:sketch.sweep}}:** Obris se povleče vzdolž poti: kabelski kanal z ovinkom, cev, obroč okoli oblike. Glej spodaj Vleka vzdolž poti.
 
 Potem urejevalnik pokaže list z mrežo. To je tvoja risalna površina.
 
@@ -84,6 +85,18 @@ Z {{ui:inspector.editSketch}} se kadarkoli vrneš v skico, da jo spremeniš. Dvo
 Pri vrtenju narišeš pol preseka **levo od osi**, ki je vrisana v skici. Poleg vidiš 3D-predogled vrtenja. Takoj pokaže, kako telo izgleda. Obris mora biti sklenjen, ali pa odprto črto zgradiš kot potezo, glej spodaj. Na koncu klikneš {{ui:sketch.finishRevolve}}.
 
 Zavrteno telo je natančno telo kot izvlečeno: sprejme posnetja in zaokrožitve ter ga lahko izdolbeš, za kozarec ali vazo. Telo, ki je bilo zavrteno s starejšo različico programa layerling, je mreža; odpri {{ui:inspector.editSketch}} in ga znova zaključi, pa bo natančno. Obris, ki sega čez os, ni mogoče zgraditi natančno in postane kot doslej mreža.
+
+## Vleka vzdolž poti
+
+{{ui:sketch.sweep}} povleče obris vzdolž poti: kabelski kanal, ki zavije za vogal, cev, zaščita okoli jermena, obroč okoli šestkotnika. Gumb stoji ob {{ui:sketch.extrude}} in {{ui:sketch.revolve}} v skupini {{ui:sketch.group.create}}.
+
+Na isti list narišeš dve stvari:
+
+- **Prerez** kot sklenjen obris, kot običajno. Nariši ga tako, kot bi ga videl, če gledaš vzdolž poti z njenega začetka: počez čez pot sta v skici levo in desno, zgoraj je zgoraj na končnem telesu. Votel prerez, kanal ali cev, je obris z drugim v njem. Prerez je počez na sredini poti, telo pa stoji z najnižjo točko prereza na ravnini skice.
+
+- **Pot** kot {{ui:sketch.construction}}: vklopi jo in riši črte ali krivulje, eno samo verigo, odprto ali sklenjeno (sklenjena veriga da obroč). Pot leži ravno v ravnini skice.
+
+Prerez nariši ob tisti konec poti, kjer naj se začne; pot se začne na koncu, ki mu je najbližje. Nato klikni {{ui:sketch.finishSweep}}. Vogal iz ravnih kosov postane zareza na gerung, krivulja ostane gladka, prerez pa ostane pokonci po vsej poti. Telo je natančno kot potegnjeno: zaobljenje, posnetje roba in izvoz STEP delujejo. Če manjka sklenjen obris ali pot, ali je več ločenih poti, layerling to pove. Z {{ui:inspector.editSketch}} se vrneš v skico in spremeniš prerez ali pot.
 
 ## Gradnja kot kontura
 

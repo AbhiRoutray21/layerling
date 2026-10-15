@@ -7,10 +7,11 @@ Not everything can be put together from basic shapes. For parts with a contour o
 
 ## Starting a sketch
 
-At the top, switch from {{ui:editor.modeGeometry}} to {{ui:editor.modeSketch}}. In the {{ui:sketch.group.create}} group of the ribbon, two buttons stand side by side for what the outline should become:
+At the top, switch from {{ui:editor.modeGeometry}} to {{ui:editor.modeSketch}}. In the {{ui:sketch.group.create}} group of the ribbon, three buttons stand side by side for what the outline should become:
 
 - **{{ui:sketch.extrude}}:** The outline is pulled upward, like a cookie cutter.
 - **{{ui:sketch.revolve}}:** The outline is spun about an axis, as on a lathe. That gives vases, cups, cones and everything round.
+- **{{ui:sketch.sweep}}:** The outline is pulled along a path: a cable channel that turns a corner, a conduit, a ring round a shape. See Sweeping along a path below.
 
 The editor then shows a sheet with a grid. That is your drawing surface.
 
@@ -84,6 +85,18 @@ With {{ui:inspector.editSketch}} you can return to the sketch at any time to cha
 When revolving, you draw half the cross-section **to the left of the axis** shown in the sketch. Next to it you see a 3D preview of the revolve. It shows at once what the body will look like. The outline must be closed, or you build an open line as a stroke, see below. At the end click {{ui:sketch.finishRevolve}}.
 
 A revolved body is an exact body, like an extruded one: it takes chamfers and fillets, and you can hollow it, for a cup or a vase. A body revolved with an older layerling is a mesh; open {{ui:inspector.editSketch}} and finish it again to make it exact. A profile that reaches across the axis cannot be built exactly and becomes a mesh, as before.
+
+## Sweeping along a path
+
+{{ui:sketch.sweep}} pulls an outline along a path: a cable channel that turns a corner, a conduit, a guard round a belt, a ring around a hexagon. It sits next to {{ui:sketch.extrude}} and {{ui:sketch.revolve}} in the {{ui:sketch.group.create}} group.
+
+You draw two things on the same sheet:
+
+- **The cross-section** as a closed outline, as usual. Draw it as you would see it looking along the path from its start: across the path is the sketch's left and right, up is up on the finished body. A hollow section, a channel or a tube, is an outline with another one inside it. The section is centred on the path, and the body stands on the sketch plane with the lowest point of the section.
+
+- **The path** as a {{ui:sketch.construction}}: switch it on and draw lines or curves, one chain, open or closed (a closed chain gives a ring). The path lies flat in the sketch plane.
+
+Draw the section near the end of the path where it should start; the path starts at the end nearest to it. Then click {{ui:sketch.finishSweep}}. A corner of straight pieces becomes a mitre, a curve stays smooth, and the section stays upright all the way. The body is exact, like an extruded one: fillet, chamfer and the STEP export work on it. If a closed outline or a path is missing, or there are several separate paths, layerling says so. With {{ui:inspector.editSketch}} you can return to the sketch and change the section or the path.
 
 ## Building as a stroke
 

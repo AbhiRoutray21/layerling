@@ -1,7 +1,7 @@
 "use client";
 
 import { GuideHelpLink } from "@/components/GuideHelpLink";
-import { AlertTriangle, ArrowUpFromLine, Blend, Check, Percent, Circle as CircleIcon, CloudUpload, Download, Eye, EyeOff, FilePlus2, FolderOpen, Hexagon as HexagonIcon, Info, ListTree, Pencil, Pentagon as PentagonIcon, Rotate3d, Search, Square as SquareIcon, Star as StarIcon, Triangle as TriangleIcon, X } from "lucide-react";
+import { AlertTriangle, ArrowUpFromLine, Blend, Check, Percent, Circle as CircleIcon, CloudUpload, Download, Eye, EyeOff, FilePlus2, FolderOpen, Hexagon as HexagonIcon, Info, ListTree, Pencil, Pentagon as PentagonIcon, Rotate3d, Route as RouteIcon, Search, Square as SquareIcon, Star as StarIcon, Triangle as TriangleIcon, X } from "lucide-react";
 import { ObjectListPanel } from "@/components/workplane/ObjectListPanel";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import * as THREE from "three";
@@ -223,7 +223,8 @@ import { type Vec3, type MeshData, type Cuboid, type ShapeUpdatePatch, type Mani
 import { cloneAsGroupChild, meshDataToManifoldMesh, shapeToManifoldSolid, splitShapesByPlane, unionOverlappingExportMeshes, exportBodiesWithLooseHoles, exportSolidVolume, type ExportSolidVolume, PRINT_MATERIAL_STORAGE_KEY, PRINT_INFILL_STORAGE_KEY, PRINT_WALLS_STORAGE_KEY, formatEstimateNumber, formatSectionOffset, SECTION_SEEN_FROM_KEYS, expandBundles, visibleExportShapes, multicolorExportSolids, exportFaceColors, colorSeparatedExportMeshes, disposeManifold, canIntersectShapes, buildIntersectionShapeFromSelection, groupedShape, quaternionForShape, rotationFromQuaternion, ARROW_KEYS, cleanShapePatch, restoreGroupedChildren, buildGroupedShapeFromSelection } from "@/lib/editorBooleans";
 import { booleanAutomationScene } from "@/lib/editorAutomation";
 import { debugShapeSummary, mcpPivotRequest, compactShapeSummary, mcpShapeSummary, mcpSketchFillProfile, mcpTextFont } from "@/lib/editorMcpSummary";
-import { emptySketchProfile, cadShapeFromSketchProfile, revolveBuildProfile, shapeFromRevolvedSketchProfile, shapeFromCadMesh, sketchReferenceShapeOnWorkplane, defaultMcpSketchProfile } from "@/lib/editorSketchCad";
+import { sweepPathFromParams, sweepSectionFromParams, sweepSketchProfile } from "@/lib/sweepSketch";
+import { emptySketchProfile, cadShapeFromSketchProfile, cadShapeFromSketchSweep, revolveBuildProfile, shapeFromRevolvedSketchProfile, shapeFromCadMesh, sketchReferenceShapeOnWorkplane, defaultMcpSketchProfile } from "@/lib/editorSketchCad";
 import { drawingLabelsInLanguage } from "@/lib/drawingLabels";
 import { offersTextLayers, textLayerStack, layeredTextShape, nameTagSource, nameTagsFor, offersIconLayers, iconLayerStack, iconTagArea, layeredIconShape, iconTagCopies, svgIconArea, iconTagFromSvg } from "@/lib/editorTextTags";
 
@@ -4206,8 +4207,8 @@ export function LayerlingEditor({
     setSketchMeasurement(null);
     setEditingSketchShapeId(editingId);
     setNotice(editingId
-      ? t(operation === "revolve" ? "status.editingRevolveProfile" : "status.editingProfile")
-      : operation === "revolve" ? t("status.revolveStarted") : t("status.sketchStarted"));
+      ? t(operation === "revolve" ? "status.editingRevolveProfile" : operation === "sweep" ? "status.editingSweepProfile" : "status.editingProfile")
+      : operation === "revolve" ? t("status.revolveStarted") : operation === "sweep" ? t("status.sweepStarted") : t("status.sketchStarted"));
   }, []);
 
   const beginSketchEdit = useCallback(() => {
@@ -4218,7 +4219,7 @@ export function LayerlingEditor({
     const operation = selectedShape.sketchOperation ?? (selectedShape.sketchRevolve ? "revolve" : "extrude");
     let editWorkplane: PlacementWorkplane | undefined;
     sketchEditAnchorRef.current = null;
-    if (operation === "extrude") {
+    if (operation === "extrude" || operation === "sweep") {
       const quaternion = quaternionForShape(selectedShape);
       const normal = new THREE.Vector3(0, 1, 0).applyQuaternion(quaternion).normalize();
       const xAxis = new THREE.Vector3(1, 0, 0).applyQuaternion(quaternion).normalize();
@@ -4856,7 +4857,10 @@ export function LayerlingEditor({
         }
       } else {
         setNotice(t("status.buildingSketch"), true);
-        const extrusion = await cadShapeFromSketchProfile(sketchProfile, height, existing);
+        // A sweep is built like an extrusion, from the outlines along the construction line (#400).
+        const extrusion = sketchOperation === "sweep"
+          ? await cadShapeFromSketchSweep(sketchProfile, existing)
+          : await cadShapeFromSketchProfile(sketchProfile, height, existing);
         resolved = placeSketchShape(extrusion, activeSketchWorkplane, existing);
         if (existing && resolved) {
           // Put the body where its outline is: it is centred on the new outline, and the edit may have moved that middle.
@@ -4873,7 +4877,7 @@ export function LayerlingEditor({
         }
       }
     } catch (error) {
-      setNotice(error instanceof Error ? localizedError(error.message) : t(sketchOperation === "revolve" ? "status.sketchCannotRevolve" : "status.sketchCannotExtrude"));
+      setNotice(error instanceof Error ? localizedError(error.message) : t(sketchOperation === "revolve" ? "status.sketchCannotRevolve" : sketchOperation === "sweep" ? "status.sketchCannotSweep" : "status.sketchCannotExtrude"));
       return;
     }
     if (!resolved) {
@@ -4885,10 +4889,12 @@ export function LayerlingEditor({
       nextShapes,
       resolved.id,
       existing
-        ? t(sketchOperation === "revolve" ? "status.revolveUpdated" : "status.sketchUpdated")
+        ? t(sketchOperation === "revolve" ? "status.revolveUpdated" : sketchOperation === "sweep" ? "status.sweepUpdated" : "status.sketchUpdated")
         : sketchOperation === "revolve"
           ? t("status.revolveCreated")
-          : t("status.exactSketchCreated"),
+          : sketchOperation === "sweep"
+            ? t("status.sweepCreated")
+            : t("status.exactSketchCreated"),
     );
     setSketchActive(false);
     setSketchStrokePanelOpen(false);
@@ -5030,7 +5036,7 @@ export function LayerlingEditor({
   const sketchFillUpdateTimerRef = useRef(new Map<string, number>());
   const rebuildSketchBodyFill = useCallback(async (id: string, profile: SketchProfile) => {
     const current = shapesRef.current.find((shape) => shape.id === id);
-    if (!current?.sketchProfile || current.sketchOperation === "revolve") throw new Error(t("status.selectSketchShape"));
+    if (!current?.sketchProfile || current.sketchOperation === "revolve" || current.sketchOperation === "sweep") throw new Error(t("status.selectSketchShape"));
     const stretch = sketchBodyStretch(current);
     const source = stretch ? stretchedSketchProfile(profile, stretch.x, stretch.z) : profile;
     const extrusion = await cadShapeFromSketchProfile(source, current.height, current);
@@ -5144,7 +5150,7 @@ export function LayerlingEditor({
       if (cleanedPatch.sketchProfile) {
         // Only the fill comes in this way (#197); the body is built again from its sketch.
         const source = shapesRef.current.find((shape) => shape.id === id);
-        if (source?.sketchProfile && source.sketchOperation !== "revolve") {
+        if (source?.sketchProfile && source.sketchOperation !== "revolve" && source.sketchOperation !== "sweep") {
           scheduleSketchFillUpdate(id, cleanedPatch.sketchProfile);
           return;
         }
@@ -8441,7 +8447,7 @@ export function LayerlingEditor({
         let updated = nextShapes.find((shape) => shape.id === target.id) as WorkplaneShape;
         commitShapes(nextShapes, target.id, t("status.shapeUpdatedMcp", { name: displayShapeName(updated) }));
         // The fill of an extruded sketch (#197): built again from its sketch, as the inspector does.
-        const fillProfile = updated.sketchProfile && updated.sketchOperation !== "revolve"
+        const fillProfile = updated.sketchProfile && updated.sketchOperation !== "revolve" && updated.sketchOperation !== "sweep"
           ? mcpSketchFillProfile(updated.sketchProfile, params)
           : null;
         if (fillProfile) {
@@ -8767,6 +8773,23 @@ export function LayerlingEditor({
         const next = layeredTextShape(source, layers, wasText ? [] : stack.ids, target.id, target, stack.source.text, keyring);
         commitShapes(currentShapes().map((shape) => (shape.id === target.id ? next : shape)), next.id, t("status.mcpTextLayered", { count: layers.length }));
         return { object: mcpShapeSummary(next), layers, keyring };
+      }
+
+      if (command.action === "sweep_sketch") {
+        // The same body the Sweep sketch builds: the outline of the section and the path as construction lines (#400).
+        const profile = sweepSketchProfile(
+          { path: sweepPathFromParams(params.path), closed: params.closed === true, section: sweepSectionFromParams(params.section) },
+          createLocalId,
+        );
+        const swept = await cadShapeFromSketchSweep(profile, null);
+        const named = {
+          ...swept,
+          ...(typeof params.name === "string" && params.name.trim() ? { name: params.name.trim().slice(0, 60) } : {}),
+          ...(typeof params.color === "string" && params.color.trim() ? { color: params.color.trim() } : {}),
+        };
+        const placed = placeSketchShape(named, placementWorkplaneRef.current, null);
+        commitShapes([...currentShapes(), placed], placed.id, t("status.sweepCreated"));
+        return { object: mcpShapeSummary(placed) };
       }
 
       if (command.action === "layer_icon") {
@@ -12513,6 +12536,7 @@ function SecondaryToolbar({
         return [
           plain("sketch-extrude", t("sketch.extrude"), createGroup, true, () => startSketch("extrude")),
           plain("sketch-revolve", t("sketch.revolve"), createGroup, true, () => startSketch("revolve")),
+          plain("sketch-sweep", t("sketch.sweep"), createGroup, true, () => startSketch("sweep")),
           plain("sketch-edit", t("sketch.editTo3d"), createGroup, canEditSketch, onEditSketch),
           modeCommand,
           ...helpCommands,
@@ -12544,7 +12568,7 @@ function SecondaryToolbar({
         plain("sketch-undo", t("editor.tool.undo"), t("editor.group.history"), sketchCanUndo, onSketchUndo, { icon: ToolbarUndoIcon }),
         plain("sketch-redo", t("editor.tool.redo"), t("editor.group.history"), sketchCanRedo, onSketchRedo, { icon: ToolbarRedoIcon }),
         plain("sketch-stroke", t("sketch.strokeHint"), finishGroup, true, () => onSketchStroke?.(), { icon: SKETCH_PALETTE_ICONS.line, active: Boolean(sketchStrokeActive) }),
-        plain("sketch-finish", sketchOperation === "revolve" ? t("sketch.finishRevolve") : t("sketch.finishSketch"), finishGroup, true, onSketchFinish),
+        plain("sketch-finish", sketchOperation === "revolve" ? t("sketch.finishRevolve") : sketchOperation === "sweep" ? t("sketch.finishSweep") : t("sketch.finishSketch"), finishGroup, true, onSketchFinish),
         plain("sketch-cancel", t("sketch.cancel"), finishGroup, true, onSketchCancel),
         modeCommand,
         ...helpCommands,
@@ -13030,7 +13054,7 @@ function SecondaryToolbar({
                     </button>
                     <button className="sketch-command-button primary" type="button" onClick={onSketchFinish}>
                       <Check />
-                      <span>{sketchOperation === "revolve" ? t("sketch.finishRevolve") : t("sketch.finishSketch")}</span>
+                      <span>{sketchOperation === "revolve" ? t("sketch.finishRevolve") : sketchOperation === "sweep" ? t("sketch.finishSweep") : t("sketch.finishSketch")}</span>
                     </button>
                     <button className="sketch-command-button cancel" type="button" onClick={onSketchCancel}>
                       <X />
@@ -13062,6 +13086,16 @@ function SecondaryToolbar({
                   >
                     <Rotate3d aria-hidden="true" />
                     <span>{t("sketch.revolve")}</span>
+                  </button>
+                  <button
+                    className="sketch-command-button primary"
+                    type="button"
+                    aria-label={t("sketch.sweep")}
+                    title={`${t("sketch.sweep")} - ${t("sketch.sweepHint")}`}
+                    onClick={() => startSketch("sweep")}
+                  >
+                    <RouteIcon aria-hidden="true" />
+                    <span>{t("sketch.sweep")}</span>
                   </button>
                   <GuideHelpLink section="sketchToBody" />
                   <button className={`sketch-command-button ${canEditSketch ? "" : "disabled"}`} type="button" aria-label={t("sketch.editTo3d")} title={t("sketch.editTo3d")} onClick={onEditSketch} disabled={!canEditSketch}>

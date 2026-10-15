@@ -78,6 +78,7 @@ export const GUIDE_SECTIONS = {
   customFonts: { chapter: "text", de: "eigene-schriften", en: "your-own-fonts", nl: "je-eigen-lettertypen", ru: "svoi-shrifty", cs: "vlastni-pisma", sl: "lastne-pisave", hu: "sajat-betutipusok" },
   sketchFill: { chapter: "sketches", de: "fuellung-und-silhouette", en: "fill-and-silhouette", nl: "vulling-en-silhouet", ru: "zalivka-i-siluet", cs: "vypln-a-silueta", sl: "polnilo-in-silhueta", hu: "kitoeltes-es-sziluett" },
   sketchDrawing: { chapter: "sketches", de: "zeichnen", en: "drawing", nl: "tekenen", ru: "risovanie", cs: "kresleni", sl: "risanje", hu: "rajzolas" },
+  sketchSweep: { chapter: "sketches", de: "entlang-eines-pfades-ziehen", en: "sweeping-along-a-path", nl: "langs-een-pad-trekken", fr: "balayer-le-long-d-un-chemin", ru: "protyagivanie-vdol-traektorii", cs: "protazeni-podel-drahy", sl: "vleka-vzdolz-poti" },
   sketchToBody: { chapter: "sketches", de: "ein-koerper-daraus-machen", en: "making-a-body-from-it", nl: "er-een-lichaam-van-maken", ru: "kak-sdelat-iz-nego-telo", cs: "vytvoreni-telesa", sl: "iz-tega-narediti-telo", hu: "test-keszitese-belole" },
   addShape: { chapter: "shapes", de: "eine-form-hinzufuegen", en: "adding-a-shape", nl: "een-vorm-toevoegen", ru: "dobavlenie-figury", cs: "pridani-tvaru", sl: "dodaj-obliko", hu: "alakzat-hozzaadasa" },
   selecting: { chapter: "select", de: "auswaehlen", en: "selecting", nl: "selecteren", ru: "vydelenie", cs: "vyber", sl: "izbiranje", hu: "kijeloeles" },
@@ -131,7 +132,7 @@ export function guideSectionForShape(shape: GuideShape): GuideSection | undefine
   }
   // A body made from a sketch, or a file brought in, is explained where it was made.
   // An extruded one shows its fill in the properties (#197); a revolved one, how it was made.
-  if (shape.sketchProfile) return shape.sketchOperation === "revolve" ? "sketchToBody" : "sketchFill";
+  if (shape.sketchProfile) return shape.sketchOperation === "revolve" ? "sketchToBody" : shape.sketchOperation === "sweep" ? "sketchSweep" : "sketchFill";
   if (shape.kind === "mesh" && shape.importedMesh && shape.importedMesh.sourceFormat !== "json") return "importing";
   switch (shape.kind) {
     case "text":

@@ -59,6 +59,7 @@ export const COMMAND_KEYWORDS: Readonly<Record<string, readonly string[]>> = {
   "sketch-cancel": ["cancel", "abort", "abbrechen", "verwerfen"],
   "sketch-extrude": ["extrude", "pull", "push", "extrudieren", "ziehen", "hochziehen", "aufziehen"],
   "sketch-revolve": ["revolve", "lathe", "rotate", "drehkoerper", "drehkörper", "rotieren"],
+  "sketch-sweep": ["sweep", "extrude along path", "path", "pipe", "conduit", "pfad", "entlang", "rohr", "leitung", "kabelkanal", "sweepen"],
   "sketch-edit": ["edit sketch", "skizze bearbeiten", "nachbearbeiten"],
 };
 

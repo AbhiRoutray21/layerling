@@ -11,6 +11,7 @@ En haut, passez de {{ui:editor.modeGeometry}} à {{ui:editor.modeSketch}}. Cliqu
 
 - **{{ui:sketch.extrude}} :** Le contour est tiré vers le haut, comme un emporte-pièce.
 - **{{ui:sketch.revolve}} :** Le contour tourne autour d'un axe, comme sur un tour. Cela donne des vases, des coupes, des cônes et tout ce qui est rond.
+- **{{ui:sketch.sweep}} :** Le contour est tiré le long d'un chemin : un chemin de câbles avec un coude, une conduite, un anneau autour d'une forme. Voir plus bas Balayer le long d'un chemin.
 
 L'éditeur affiche alors une feuille avec une grille. C'est votre surface de dessin.
 
@@ -84,6 +85,18 @@ Avec {{ui:inspector.editSketch}} vous pouvez revenir à l'esquisse à tout momen
 Lors d'une révolution, vous dessinez la moitié de la section **à gauche de l'axe** indiqué dans l'esquisse. À côté, vous voyez un aperçu 3D de la révolution. Cela montre immédiatement à quoi ressemblera le corps. Le contour doit être fermé. À la fin, cliquez sur {{ui:sketch.finishRevolve}}.
 
 Un corps de révolution est un corps exact, comme un corps extrudé : il prend des chanfreins et des congés, et on peut le creuser, pour une tasse ou un vase. Un corps tourné avec une version plus ancienne de layerling est un maillage ; ouvrez {{ui:inspector.editSketch}} et terminez-le à nouveau pour le rendre exact. Un profil qui traverse l'axe ne peut pas être construit exactement et devient un maillage, comme auparavant.
+
+## Balayer le long d'un chemin
+
+{{ui:sketch.sweep}} tire un contour le long d'un chemin : un chemin de câbles qui tourne à l'angle, une conduite, une protection autour d'une courroie, un anneau autour d'un hexagone. Le bouton se trouve à côté de {{ui:sketch.extrude}} et {{ui:sketch.revolve}} dans le groupe {{ui:sketch.group.create}}.
+
+Vous dessinez deux choses sur la même feuille :
+
+- **La section** comme contour fermé, comme d'habitude. Dessinez-la telle que vous la verriez en regardant le long du chemin depuis son début : en travers du chemin, c'est la gauche et la droite de l'esquisse, le haut est le haut du corps terminé. Une section creuse, un profilé en U ou un tube, est un contour avec un second à l'intérieur. La section est centrée en travers sur le chemin, et le corps repose sur le plan de l'esquisse par le point le plus bas de la section.
+
+- **Le chemin** comme {{ui:sketch.construction}} : activez-la et dessinez des lignes ou des courbes, une seule chaîne, ouverte ou fermée (une chaîne fermée donne un anneau). Le chemin est à plat dans le plan de l'esquisse.
+
+Dessinez la section près de l'extrémité du chemin où elle doit commencer ; le chemin commence par l'extrémité la plus proche. Cliquez ensuite sur {{ui:sketch.finishSweep}}. Un angle de segments droits devient une coupe d'onglet, une courbe reste lisse, et la section reste droite tout du long. Le corps est exact, comme un corps extrudé : congé, chanfrein et export STEP fonctionnent. S'il manque un contour fermé ou un chemin, ou s'il y a plusieurs chemins séparés, layerling le dit. Avec {{ui:inspector.editSketch}}, vous revenez à l'esquisse pour changer la section ou le chemin.
 
 ## Construire comme un trait
 

@@ -97,6 +97,7 @@ export type LayerlingMcpCommandName =
   | "lay_flat"
   | "place_on_face"
   | "perforate_face"
+  | "sweep_sketch"
   | "scale_objects"
   | "mate_faces"
   | "open_group"

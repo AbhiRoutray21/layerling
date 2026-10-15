@@ -12,7 +12,7 @@ import type { SketchProfile, WorkplaneShape } from "@/types/layerling";
 
 /** How much the body was stretched since its exact body was built, or null when it was not. */
 export function sketchBodyStretch(shape: WorkplaneShape) {
-  if (!shape.sketchProfile || shape.sketchOperation === "revolve" || !shape.cadBrep || !shape.cadBrepFrame) return null;
+  if (!shape.sketchProfile || shape.sketchOperation === "revolve" || shape.sketchOperation === "sweep" || !shape.cadBrep || !shape.cadBrepFrame) return null;
   if (shape.groupedShapes?.length || shape.edgeTreatments?.length || shape.locked) return null;
   const frame = shape.cadBrepFrame;
   const width = shape.width;

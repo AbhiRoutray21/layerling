@@ -391,7 +391,7 @@ export type SketchProfile = {
   keyring?: SketchKeyring;
 };
 
-export type SketchOperation = "extrude" | "revolve";
+export type SketchOperation = "extrude" | "revolve" | "sweep";
 
 /** Spur, helical, herringbone and bevel gears; a ring gear with its teeth pointing in and a rack (#201, #265). */
 export type GearType = "spur" | "helical" | "herringbone" | "bevel" | "internal" | "rack";

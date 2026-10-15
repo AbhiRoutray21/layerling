@@ -7,6 +7,8 @@ export type SketchCadBuildRequest = {
   height: number;
   /** Set for a revolve: the sketch is turned about the vertical axis instead of pulled up by `height`. */
   revolve?: { startAngle: number; sweepAngle: number };
+  /** Set for a sweep (#400): the outlines are the cross-section, the construction line is the path they are pulled along. */
+  sweep?: true;
   /** Set for a stroked or widened sketch: the kernel moves the outlines itself (cadSketchStroke.ts). */
   stroke?: SketchStroke;
 };

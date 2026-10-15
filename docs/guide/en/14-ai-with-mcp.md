@@ -62,6 +62,7 @@ The AI works with the same functions as you, through the same path as your opera
 | `layerling_lay_flat` | lays an object with one face on the plate |
 | `layerling_place_on_face` | sets objects down on a face of another, sloped ones too, like the C key |
 | `layerling_perforate_face` | cuts a hole pattern into a flat face; the holes stay as holes grouped with the body |
+| `layerling_sweep_sketch` | pulls a rectangular or round cross-section along a path of points as one exact body; a closed path makes a ring |
 | `layerling_mate_faces` | brings a face of one object against a face of another, face to face or flush |
 | `layerling_open_group` | opens a group so its parts can be changed one by one, also a group inside an open one |
 | `layerling_close_group` | closes it again ("Done") or cancels |

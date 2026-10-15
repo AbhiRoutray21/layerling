@@ -58,6 +58,7 @@ AI používá stejné funkce a stejné zpracování příkazů jako ruční ovl�
 | `layerling_lay_flat` | položí objekt vybranou plochou na podložku |
 | `layerling_place_on_face` | umístí objekty na plochu jiného tělesa, i šikmou, jako klávesa C |
 | `layerling_perforate_face` | vytvoří rastr otvorů na rovinné ploše; výřezy zůstanou sloučené s tělesem |
+| `layerling_sweep_sketch` | protáhne obdélníkový nebo kruhový průřez podél dráhy z bodů jako jedno přesné těleso; uzavřená dráha dá prstenec |
 | `layerling_mate_faces` | přiloží plochy dvou objektů proti sobě nebo do společné roviny |
 | `layerling_open_group` | otevře sloučený celek k úpravě částí, i uvnitř jiného otevřeného celku |
 | `layerling_close_group` | potvrdí úpravu celku nebo ji zruší |

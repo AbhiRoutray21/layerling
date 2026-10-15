@@ -54,7 +54,7 @@ const SHAPE_KINDS = new Set([
 ]);
 
 const FEATURE_TYPES = new Set([
-  "group", "boolean-subtraction", "boolean-intersection", "mirror", "sketch-extrusion", "sketch-revolve", "fillet", "chamfer", "shell",
+  "group", "boolean-subtraction", "boolean-intersection", "mirror", "sketch-extrusion", "sketch-revolve", "sketch-sweep", "fillet", "chamfer", "shell",
 ]);
 
 type LylAssetKind = "source" | "derived-mesh" | "brep" | "image" | "display-edges";
@@ -856,8 +856,8 @@ function activeProjectIndexes(state: LylStateV1) {
     (node.groupedShapeNodeIds ?? []).forEach(visit);
     let previous: string | undefined;
     if (node.definition.sketchProfile) {
-      const operation = node.definition.sketchOperation === "revolve" ? "revolve" : "extrude";
-      const featureType = operation === "revolve" ? "sketch-revolve" : "sketch-extrusion";
+      const operation = node.definition.sketchOperation === "revolve" ? "revolve" : node.definition.sketchOperation === "sweep" ? "sweep" : "extrude";
+      const featureType = operation === "revolve" ? "sketch-revolve" : operation === "sweep" ? "sketch-sweep" : "sketch-extrusion";
       const featureId = `feature/${safeNodeToken(node.nodeId)}/${featureType}`;
       features.push({
         id: featureId,
@@ -867,7 +867,9 @@ function activeProjectIndexes(state: LylStateV1) {
         dependsOnFeatureIds: [],
         parameters: operation === "revolve"
           ? { ...(node.definition.sketchRevolve as Record<string, unknown> | undefined), axis: "vertical-sketch-axis", mode: "create" }
-          : { depth: node.definition.height, direction: "positive-y", mode: "create" },
+          : operation === "sweep"
+            ? { path: "construction-line", mode: "create" }
+            : { depth: node.definition.height, direction: "positive-y", mode: "create" },
       });
       sketches.push({
         id: `sketch/${safeNodeToken(node.objectId)}`,
@@ -1292,7 +1294,7 @@ function validateShapeDefinition(definition: Record<string, unknown>, label: str
     }
   }
   if (definition.sketchProfile) validateSketchProfile(definition.sketchProfile, `${label}.sketchProfile`);
-  if (definition.sketchOperation !== undefined && definition.sketchOperation !== "extrude" && definition.sketchOperation !== "revolve") {
+  if (definition.sketchOperation !== undefined && definition.sketchOperation !== "extrude" && definition.sketchOperation !== "revolve" && definition.sketchOperation !== "sweep") {
     throw new Error(`${label}.sketchOperation is invalid`);
   }
   if (definition.sketchRevolve !== undefined) {
