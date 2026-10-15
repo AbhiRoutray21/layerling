@@ -48,5 +48,15 @@
       "de": "In den Einstellungen einer Form stehen die Tasten jetzt neben den Namen: Körper (S), Aussparung (H), Durchsichtig (T) und Gruppe bearbeiten (E). Mehrfarbig bekommt eine Taste, Umschalt+M, und steht in der Tastenkürzel-Liste. Sie schaltet markierte Gruppen zwischen jedem Teil in seiner Farbe und einer Farbe für die Gruppe um. Umschalt+M schaltete bisher den Spiegelmodus ein, das tut jetzt nur noch M allein.",
       "en": "The settings of a shape now show the keys next to the names: Solid (S), Hole (H), Transparent (T) and Edit group (E). Multicolor gets a key, Shift+M, and is in the shortcuts list: it switches the selected groups between each part in its own colour and one colour for the group. Shift+M used to start the mirror mode; now only M alone does."
     }
+  },
+  {
+    "title": {
+      "de": "Französisch als Sprache",
+      "en": "French as a language"
+    },
+    "body": {
+      "de": "layerling gibt es jetzt auch auf Französisch: die ganze Oberfläche und die 16 Kapitel der Anleitung. Die Sprache wird für einen Browser mit französischer Einstellung von selbst gewählt und lässt sich in der Sprachliste ändern. Übersetzt mit einem KI-Assistenten; falsche Wörter lassen sich mit einem kleinen Pull Request auf GitHub verbessern.",
+      "en": "layerling now speaks French: the whole interface and the 16 chapters of the guide. The language is chosen automatically for a browser set to French and can be changed in the language list. It was translated with an AI assistant; wrong words are fixed with a small pull request on GitHub."
+    }
   }
 ]
