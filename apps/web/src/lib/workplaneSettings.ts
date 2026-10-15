@@ -120,6 +120,11 @@ export const MAX_CUSTOM_SNAP_GRIDS = 12;
 export const MAX_CUSTOM_SNAP_GRID_NAME = 32;
 /** A custom measure snaps whole, halved and quartered: 1U, 0.5U and 0.25U (and with it 0.75U). */
 export const CUSTOM_SNAP_GRID_DIVISORS = [1, 2, 4] as const;
+
+/** The divisors a custom measure is offered with: all three, or only the whole when it is set to that (#329). */
+export function customSnapGridDivisors(grid: { wholeOnly?: boolean }): readonly number[] {
+  return grid.wholeOnly ? [1] : CUSTOM_SNAP_GRID_DIVISORS;
+}
 const CUSTOM_SNAP_GRID_FRACTIONS: Record<number, string> = { 1: "1", 2: "½", 4: "¼" };
 
 function cleanCustomSnapSize(value: number) {
@@ -153,6 +158,7 @@ export function normalizeCustomSnapGrids(value: unknown, fallback: CustomSnapGri
     grids.push({
       name: typeof name === "string" ? name.trim().slice(0, MAX_CUSTOM_SNAP_GRID_NAME) : "",
       size: cleanCustomSnapSize(size),
+      ...((entry as { wholeOnly?: unknown }).wholeOnly === true ? { wholeOnly: true } : {}),
     });
   }
   return grids;
@@ -163,9 +169,9 @@ export function snapGridOptionsForUnits(units: string): GridSize[] {
   return units === "Imperial" ? IMPERIAL_SNAP_GRIDS : METRIC_SNAP_GRIDS;
 }
 
-/** The snap menu: the steps of the unit system, then each custom measure whole, halved and quartered. */
+/** The snap menu: the steps of the unit system, then each custom measure whole, halved and quartered (or just whole, as set). */
 export function snapGridOptions(units: string, customGrids: CustomSnapGrid[] = []): GridSize[] {
-  const custom = customGrids.flatMap((grid) => CUSTOM_SNAP_GRID_DIVISORS.map((divisor) => customSnapGridSize(grid.size, divisor)));
+  const custom = customGrids.flatMap((grid) => customSnapGridDivisors(grid).map((divisor) => customSnapGridSize(grid.size, divisor)));
   return [...snapGridOptionsForUnits(units), ...new Set(custom)];
 }
 
