@@ -931,6 +931,7 @@ export const MESSAGES_FR: Partial<Record<MessageKey, string>> = {
   "status.importObjectParts": "{name} contient {objects} objets et se présente sous forme de {count} corps, chacun à sa place et tous sélectionnés.",
   "status.importSvgSkipped": "{count} formes de {name} n'ont pas pu être transformées en solide et ont été laissées de côté. Joignez les pièces qui se chevauchent dans le programme de dessin, fermez les contours et enregistrez à nouveau le SVG.",
   "status.importObjNoMtl": "Les couleurs de matériau pour {name} sont manquantes - sélectionnez le fichier .mtl avec celui-ci ou importez l'intégralité du ZIP.",
+  "status.importObjVertexColors": "{name} a une couleur propre presque à chaque point, un dégradé comme les scans et les modèles créés par IA. layerling ne peut pas l'afficher et a importé le fichier comme un seul corps d'une seule couleur.",
   "status.importMtlAlone": "Un fichier .mtl ne contient que des couleurs. Sélectionnez-le avec son .obj.",
   "status.importZipEmpty": "Le ZIP ne contient aucun fichier que layerling peut importer",
   "status.importZipUnreadable": "Le ZIP n'a pas pu être ouvert",

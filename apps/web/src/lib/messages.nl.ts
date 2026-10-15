@@ -942,6 +942,7 @@ export const MESSAGES_NL: Record<MessageKey, string> = {
   "status.importObjectParts": "{name} bevat {objects} objecten en komt binnen als {count} lichamen, elk op zijn plek en samen geselecteerd.",
   "status.importSvgSkipped": "{count} vorm(en) van {name} konden niet tot een massief lichaam worden opgebouwd en zijn weggelaten. Voeg overlappende stukken samen in het tekenprogramma, sluit de contouren en sla de SVG opnieuw op.",
   "status.importObjNoMtl": "De materiaalkleuren voor {name} ontbreken - selecteer het .mtl-bestand erbij of importeer de hele ZIP.",
+  "status.importObjVertexColors": "{name} heeft bijna op elk punt een eigen kleur, een kleurverloop zoals bij scans en AI-modellen. layerling kan dat niet tonen en heeft het bestand als één lichaam in één kleur overgenomen.",
   "status.importMtlAlone": "Een .mtl-bestand bevat alleen kleuren. Selecteer het samen met het bijbehorende .obj-bestand.",
   "status.importZipEmpty": "De ZIP bevat geen bestand dat layerling kan importeren",
   "status.importZipUnreadable": "De ZIP kon niet worden geopend",

@@ -1007,6 +1007,7 @@ export const MESSAGES_CS: Record<MessageKey, string> = {
   "status.importColoredParts": "Soubor {name} má {count} barev a vloží se jako {count} těles na původních místech se společným výběrem.",
   "status.importObjectParts": "Soubor {name} obsahuje {objects} objektů a vloží se jako {count} těles na původních místech se společným výběrem.",
   "status.importObjNoMtl": "Chybí barvy materiálů pro {name}. Vyberte spolu s ním soubor .mtl nebo importujte celý ZIP.",
+  "status.importObjVertexColors": "{name} má téměř v každém bodě vlastní barvu, barevný přechod jako u skenů a modelů vytvořených umělou inteligencí. layerling ho neumí zobrazit a soubor převzal jako jedno těleso v jedné barvě.",
   "status.importMtlAlone": "Soubor .mtl obsahuje jen barvy. Vyberte jej společně s .obj.",
   "status.importZipEmpty": "ZIP neobsahuje žádný soubor, který layerling umí importovat",
   "status.importZipUnreadable": "ZIP se nepodařilo otevřít",

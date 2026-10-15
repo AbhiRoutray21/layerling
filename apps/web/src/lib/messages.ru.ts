@@ -938,6 +938,7 @@ export const MESSAGES_RU: Partial<Record<MessageKey, string>> = {
   "status.importObjectParts": "{name}: объектов — {objects}, тел — {count}; каждое на своём месте, все выделены вместе.",
   "status.importSvgSkipped": "{count} фигур из {name} не построились в тело и были пропущены. Объедините пересекающиеся части в программе черчения, замкните контуры и сохраните SVG снова.",
   "status.importObjNoMtl": "У {name} отсутствуют цвета материалов — выберите вместе с ним файл .mtl или импортируйте весь ZIP.",
+  "status.importObjVertexColors": "У {name} почти в каждой точке свой цвет — градиент, как у сканов и моделей, созданных ИИ. layerling не может его показать и импортировал файл как одно тело одного цвета.",
   "status.importMtlAlone": "Файл .mtl содержит только цвета. Выберите его вместе с соответствующим .obj.",
   "status.importZipEmpty": "В ZIP нет файлов, которые layerling может импортировать",
   "status.importZipUnreadable": "Не удалось открыть ZIP",

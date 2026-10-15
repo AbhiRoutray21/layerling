@@ -943,6 +943,7 @@ export const MESSAGES_EN = {
   "status.importObjectParts": "{name} holds {objects} objects and comes in as {count} bodies, each in its place and selected together.",
   "status.importSvgSkipped": "{count} shape(s) of {name} did not build into a solid and were left out. Join overlapping pieces in the drawing program, close the outlines and save the SVG again.",
   "status.importObjNoMtl": "The material colours for {name} are missing - select the .mtl file with it or import the whole ZIP.",
+  "status.importObjVertexColors": "{name} has its own colour at almost every point, a colour gradient as scans and AI-made models have. layerling cannot show that and brought it in as one body in a single colour.",
   "status.importMtlAlone": "An .mtl file only holds colours. Select it together with its .obj.",
   "status.importZipEmpty": "The ZIP holds no file layerling can import",
   "status.importZipUnreadable": "The ZIP could not be opened",

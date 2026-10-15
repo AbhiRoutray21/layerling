@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **An OBJ with a colour at every point opens (#351):** A model from a scan or an AI tool such as Tripo can carry its own colour at every point. layerling made one body per colour, and a file of 980,000 points became 125,000 bodies, which crashed the editor. A file with more than 64 vertex colours now comes in as one body in a single colour, with a note that the colour gradient is not kept; files with a few colours stay one body per colour. Reported by shanni1783 on GitHub.
+
 ## 1.76.0
 
 - **The edge under the pointer is easy to see in the edge tools:** In Fillet and Chamfer the light blue line of the hovered edge had almost no contrast where it ran in front of the pale floor, so the near bottom edges were hard to pick, and worse when the shape was lifted off the plane. The hovered edge now has a dark outline around it and reads clearly on light and dark ground. Reported by @rondlh (#376).

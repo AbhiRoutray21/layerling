@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "title": {
+      "de": "OBJ mit Farbverlauf lässt sich öffnen",
+      "en": "OBJ files with a colour gradient open"
+    },
+    "body": {
+      "de": "Eine OBJ-Datei, die an jedem Punkt eine eigene Farbe trägt, wie Scans und KI-Modelle (zum Beispiel aus Tripo), machte aus jeder Farbe einen eigenen Körper, oft Hunderttausende. Der Editor stürzte dabei ab. Solche Dateien kommen jetzt als ein Körper in einer Farbe herein, mit einem Hinweis, dass der Farbverlauf nicht übernommen wird. Dateien mit wenigen Farben bleiben wie bisher ein Körper je Farbe.",
+      "en": "An OBJ file with its own colour at every point, like scans and AI-made models (from Tripo, for example), became one body per colour, often hundreds of thousands of them. The editor crashed on that. Such files now come in as one body in a single colour, with a note that the colour gradient is not kept. Files with just a few colours stay one body per colour, as before."
+    }
+  }
+]

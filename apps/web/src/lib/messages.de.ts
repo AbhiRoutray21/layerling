@@ -942,6 +942,7 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "status.importObjectParts": "{name} enthält {objects} Objekte und kommt als {count} Körper, alle an ihrem Platz und gemeinsam ausgewählt.",
   "status.importSvgSkipped": "Aus {name} wurde(n) {count} Form(en) weggelassen, weil sie sich nicht zu einem Körper bauen ließen. Füge überlappende Teile im Zeichenprogramm zusammen, schließe die Umrisse und speichere die SVG neu.",
   "status.importObjNoMtl": "Für {name} fehlen die Materialfarben – wähle die .mtl-Datei mit aus oder importiere das ganze ZIP.",
+  "status.importObjVertexColors": "{name} hat fast an jedem Punkt eine eigene Farbe, einen Farbverlauf wie bei Scans und KI-Modellen. Den kann layerling nicht darstellen und hat die Datei als einen Körper in einer Farbe übernommen.",
   "status.importMtlAlone": "Eine .mtl-Datei enthält nur Farben. Wähle sie zusammen mit der passenden .obj aus.",
   "status.importZipEmpty": "Im ZIP liegt keine Datei, die layerling importieren kann",
   "status.importZipUnreadable": "Das ZIP ließ sich nicht öffnen",
