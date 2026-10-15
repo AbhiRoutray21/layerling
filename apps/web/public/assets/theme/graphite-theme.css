@@ -433,6 +433,14 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .dashboard-trademark {
   background: #a95805;
 }
 
+:where(html[data-theme="dark"][data-palette="graphite"]) .storage-notice-help {
+  color: #8a5312;
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .storage-notice-help:hover {
+  color: #313131;
+}
+
 :where(html[data-theme="dark"][data-palette="graphite"]) .install-app-hint {
   background: #f7f7f7;
   border: 1px solid #d4d4d4;
@@ -5438,6 +5446,14 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .storage-notice-text st
 
 html[data-theme="dark"]:where([data-palette="graphite"]) .storage-notice-text span {
   color: #cccccc;
+}
+
+html[data-theme="dark"]:where([data-palette="graphite"]) .storage-notice-help {
+  color: #f3a452;
+}
+
+html[data-theme="dark"]:where([data-palette="graphite"]) .storage-notice-help:hover {
+  color: #eaeaea;
 }
 
 html[data-theme="dark"]:where([data-palette="graphite"]) .install-app-hint-icon {

@@ -1473,6 +1473,16 @@ html[data-theme="dark"] .dashboard-trademark {
   background: #a95805;
 }
 
+.storage-notice-help {
+  display: inline-flex;
+  vertical-align: text-bottom;
+  color: #8a5312;
+}
+
+.storage-notice-help:hover {
+  color: #4a2f10;
+}
+
 @media (max-width: 560px) {
   .storage-notice {
     flex-wrap: wrap;
@@ -12800,6 +12810,14 @@ html[data-theme="dark"] .storage-notice-text strong {
 
 html[data-theme="dark"] .storage-notice-text span {
   color: #e2cfb6;
+}
+
+html[data-theme="dark"] .storage-notice-help {
+  color: #f3a452;
+}
+
+html[data-theme="dark"] .storage-notice-help:hover {
+  color: #fbeed9;
 }
 
 html[data-theme="dark"] .install-app-hint-icon {

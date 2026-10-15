@@ -17,6 +17,7 @@ import { applyAppTheme, getAppThemePreference, hasStoredAppTheme, readStoredAppT
 import { hydrateEditorHistoryState, notesForHistoryIndex, type EditorHistoryEntry } from "@/lib/editorHistory";
 import { detectLanguage, setLanguage, t, translate, type Language } from "@/lib/i18n";
 import { localizedError } from "@/lib/userErrors";
+import { GuideHelpLink } from "@/components/GuideHelpLink";
 import { WelcomeGuideBody } from "@/components/WelcomeGuide";
 import { InstallAppHint } from "@/components/InstallAppHint";
 import { WhatsNewCard } from "@/components/WhatsNewCard";
@@ -2939,7 +2940,7 @@ function Dashboard({
                 </span>
                 <div className="storage-notice-text">
                   <strong>{t("storageNotice.title")}</strong>
-                  <span>{t("storageNotice.body")}</span>
+                  <span>{t("storageNotice.body")} <GuideHelpLink chapter="files" section="backingUp" className="storage-notice-help" /></span>
                 </div>
                 {projects.length > 0 ? (
                   <button className="storage-notice-button" type="button" title={t("dashboard.backupAllTitle")} onClick={onBackupAll}>
