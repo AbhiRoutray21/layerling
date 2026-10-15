@@ -1978,6 +1978,25 @@ export function restoreGroupedChildren(group: WorkplaneShape): WorkplaneShape[] 
   });
 }
 
+/**
+ * The bodies of a group for the edge tool, with the groups inside it opened where that changes nothing:
+ * a group of nothing but holes (the usual way to cut a pattern) or of nothing but solids. Left closed it
+ * reaches the kernel as one mesh of several loose pieces, and its curves are facets there; opened, every
+ * hole is the exact shape it was. A group that mixes solids and holes cuts only its own solids, so it stays closed (#394).
+ */
+export function restoreGroupedChildrenForEdges(group: WorkplaneShape): WorkplaneShape[] {
+  return restoreGroupedChildren(group).flatMap((child) => {
+    const grandChildren = child.groupedShapes ?? [];
+    const opensCleanly = grandChildren.length > 0
+      && !child.importedMesh
+      && !shapeHasShapeDeform(child)
+      && (child.groupOperation === undefined || child.groupOperation === "group")
+      && (grandChildren.every((part) => part.hole) || grandChildren.every((part) => !part.hole))
+      && (child.hole || grandChildren.every((part) => !part.hole));
+    return opensCleanly ? restoreGroupedChildrenForEdges(child) : [child];
+  });
+}
+
 function expandGroupsForBoolean(selection: WorkplaneShape[]): WorkplaneShape[] {
   return selection.flatMap((shape) => {
     if (shape.importedMesh) {

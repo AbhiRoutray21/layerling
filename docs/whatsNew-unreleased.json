@@ -28,5 +28,15 @@
       "de": "Die Knöpfe „Zurück“ und „Schließen“ (früher „Bestätigen“) am Fenster der Schnittansicht gibt es für ein Tablet ohne Esc-Taste. Auf einem Computer erscheinen sie nicht mehr, denn dort schließen das X und Esc das Fenster. Die Anleitung beschreibt das Schließen genauer.",
       "en": "The buttons \"Back\" and \"Close\" (before \"Confirm\") on the section view panel are for a tablet without an Esc key. A computer does not show them any more, as there the X and Esc close the panel. The guide describes the closing in more detail."
     }
+  },
+  {
+    "title": {
+      "de": "Verrunden an Körpern mit gruppierten Löchern",
+      "en": "Fillet on bodies with grouped holes"
+    },
+    "body": {
+      "de": "Wenn du mehrere Löcher zuerst zu einer Gruppe machst und diese dann mit einem Körper gruppierst, lassen sich Kanten jetzt verrunden oder abfasen. Vorher kam die Meldung, das Netz sei offen. Die Löcher bleiben dabei exakte Formen, ihr Rand ist eine echte Kurve.",
+      "en": "When you group several holes first and then group that with a body, its edges can be filleted or chamfered now. Before, a message said the mesh was open. The holes stay exact shapes, and their rim is a true curve."
+    }
   }
 ]

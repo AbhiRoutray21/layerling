@@ -468,11 +468,37 @@ function plainMeshSolid(cad: OcctKernel, part: CadModifierMeshPart) {
       candidate = cad.removeDegenerateEdges(candidate);
       candidate = cad.unifySameDomain(candidate);
       if (cad.isSolid(candidate) && cadShapeIsValid(cad, candidate)) return candidate;
+      // A mesh of several loose pieces (a group of holes, two bodies grouped side by side) sews to one
+      // shell per piece, which is no single solid; each piece becomes a solid and they are joined (#394).
+      const joined = joinedShellSolids(cad, candidate);
+      if (joined) return joined;
     } catch {
       // Try the next tolerance. Curved tessellations can need looser vertex sewing.
     }
   }
   throw new Error("The selected mesh is open or non-manifold. Repair it before adding edge treatments.");
+}
+
+/**
+ * The solids of a sewn mesh that came out as several closed shells, fused into one body. Null when
+ * there is only one shell or one of them is not closed - then the mesh really is open.
+ */
+function joinedShellSolids(cad: OcctKernel, sewn: ShapeHandle) {
+  const shells = cad.isShell(sewn) ? [sewn] : cad.getSubShapes(sewn, "shell");
+  if (shells.length < 2) return null;
+  const solids: ShapeHandle[] = [];
+  for (const shell of shells) {
+    let solid = cad.makeSolid(shell);
+    if (!(cad.getVolume(solid) > 0)) solid = cad.makeSolid(cad.reverseShape(shell));
+    if (!(cad.getVolume(solid) > 0) || !cadShapeIsValid(cad, solid)) return null;
+    solids.push(solid);
+  }
+  let joined = solids[0];
+  for (let index = 1; index < solids.length; index += 1) {
+    joined = cad.fuse(joined, solids[index]);
+  }
+  joined = cad.unifySameDomain(cad.simplify(joined));
+  return cad.getSubShapes(joined, "solid").length > 0 && cadShapeIsValid(cad, joined) ? joined : null;
 }
 
 function reconstructParts(cad: OcctKernel, parts: CadModifierMeshPart[]) {
