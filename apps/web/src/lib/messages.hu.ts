@@ -2288,6 +2288,7 @@ export const MESSAGES_HU: Partial<Record<MessageKey, string>> = {
   "edge.errorMeshNotSolid": "A kijelölt hálót nem sikerült zárt CAD-testté alakítani. Élműveletek hozzáadása előtt próbáld a Részek szétválasztását, a csoportbontást vagy az objektum egyszerűsítését.",
   "edge.errorKernelMemoryFault": "A CAD-mag memóriahibába ütközött, és újraindult. Indítsd újra az élműveleti eszközt; az oldalt nem kell frissíteni.",
   "edge.errorKernelRestart": "A CAD-magnak elfogyott a helye, ezért újraindult. Várj egy pillanatot, majd indítsd újra az élműveleti eszközt; az oldalt nem kell frissíteni.",
+  "error.kernelNeedsSimd": "A CAD-mag WebAssembly SIMD-et igényel, amit ez a böngésző vagy számítógép nem kínál. Használj friss Chrome-ot, Edge-et, Firefoxot vagy Safarit.",
   "split.title": "Kettévágás",
   "split.subtitle": "Helyezd el a síkot, majd hozz létre két testet",
   "split.cancelAria": "Kettévágás megszakítása",

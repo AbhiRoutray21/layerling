@@ -2305,6 +2305,7 @@ export const MESSAGES_NL: Record<MessageKey, string> = {
   "edge.errorMeshNotSolid": "De geselecteerde mesh kon niet worden omgezet in een gesloten CAD-lichaam. Probeer Delen scheiden, de groep op te heffen of het object te vereenvoudigen voordat je randbewerkingen toevoegt.",
   "edge.errorKernelMemoryFault": "De CAD-kernel kreeg een geheugenfout en is gereset. Start het randgereedschap opnieuw; de pagina hoeft niet te worden vernieuwd.",
   "edge.errorKernelRestart": "De CAD-kernel had geen ruimte meer en is opnieuw gestart. Wacht even en start daarna het randgereedschap opnieuw; de pagina hoeft niet te worden vernieuwd.",
+  "error.kernelNeedsSimd": "De CAD-kern heeft WebAssembly SIMD nodig, en deze browser of computer biedt dat niet aan. Gebruik een actuele versie van Chrome, Edge, Firefox of Safari.",
 
   "split.title": "Splitsen",
   "split.subtitle": "Plaats het vlak en maak dan twee lichamen",

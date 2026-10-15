@@ -2,6 +2,7 @@
 
 import { cadHasSolidBody } from "@/lib/cadSolidBody";
 import { OcctKernel, type ShapeHandle } from "occt-wasm";
+import { assertCadKernelRunnable } from "@/lib/wasmSupport";
 import { orientedFaceNormal, shellSolid } from "@/lib/cadShell";
 import type { CadModifierComponentMesh, CadModifierDeflection, CadModifierDisplayEdge, CadModifierEdge, CadModifierMeshPart, CadModifierPrimitivePart, CadModifierProfilePart, CadModifierWorkerRequest, CadModifierWorkerResponse } from "@/lib/cadModifierTypes";
 import { cadProfileSolidMismatch, profileExtrusionSolid } from "@/lib/cadProfileSolid";
@@ -39,6 +40,8 @@ function post(message: CadModifierWorkerResponse, transfer: Transferable[] = [])
 }
 
 function kernel() {
+  // Without WebAssembly SIMD the kernel cannot even compile; say so instead of failing inside it (#350).
+  assertCadKernelRunnable();
   const moduleUrl = `${CAD_MODIFIER_RUNTIME_BASE}/occt-wasm.js`;
   // Drop a rejected attempt so a transient failure (e.g. a network blip
   // fetching the 22 MB wasm) can be retried on the next call instead of

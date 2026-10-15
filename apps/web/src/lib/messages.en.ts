@@ -2306,6 +2306,7 @@ export const MESSAGES_EN = {
   "edge.errorMeshNotSolid": "The selected mesh could not be converted into a closed CAD solid. Try Separate Parts, ungrouping, or simplifying the object before adding edge features.",
   "edge.errorKernelMemoryFault": "The CAD kernel hit a memory fault and reset. Start the edge tool again; no page refresh is needed.",
   "edge.errorKernelRestart": "The CAD kernel ran out of room and was restarted. Wait a moment, then start the edge tool again; no page refresh is needed.",
+  "error.kernelNeedsSimd": "The CAD kernel needs WebAssembly SIMD, which this browser or computer does not offer. Use a current Chrome, Edge, Firefox or Safari.",
 
   "split.title": "Split",
   "split.subtitle": "Position the plane, then create two bodies",

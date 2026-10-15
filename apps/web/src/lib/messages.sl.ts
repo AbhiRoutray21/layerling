@@ -1762,6 +1762,7 @@ export const MESSAGES_SL: Partial<Record<MessageKey, string>> = {
   "edge.errorMeshNotSolid": "Izbrane mreže ni bilo mogoče pretvoriti v zaprto telo CAD. Pred dodajanjem obdelave robov poskusi Loči dele, razdruži ali poenostavi objekt.",
   "edge.errorKernelMemoryFault": "Jedro CAD je naletelo na napako pomnilnika in se je ponastavilo. Znova zaženi orodje za robove; osveževanje strani ni potrebno.",
   "edge.errorKernelRestart": "Jedru CAD je zmanjkalo prostora in se je znova zagnalo. Počakaj trenutek in znova zaženi orodje za robove; osveževanje strani ni potrebno.",
+  "error.kernelNeedsSimd": "Jedro CAD potrebuje WebAssembly SIMD, ki ga ta brskalnik ali računalnik ne ponuja. Uporabite sodoben Chrome, Edge, Firefox ali Safari.",
   "split.title": "Razdeli",
   "split.subtitle": "Postavi ravnino, nato ustvari dve telesi",
   "split.cancelAria": "Prekliči razdelitev",
