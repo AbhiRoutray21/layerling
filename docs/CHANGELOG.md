@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+## 1.76.0
+
 - **The edge under the pointer is easy to see in the edge tools:** In Fillet and Chamfer the light blue line of the hovered edge had almost no contrast where it ran in front of the pale floor, so the near bottom edges were hard to pick, and worse when the shape was lifted off the plane. The hovered edge now has a dark outline around it and reads clearly on light and dark ground. Reported by @rondlh (#376).
 - **A run of arrow presses is one step in the history:** Every press of an arrow key moving the selection (also Ctrl with Up and Down, and in the sketch) was a step of its own, so holding a key or tapping it a few times filled the history with tiny steps. Now a press that follows the last one within a second and a half, on the same selection and with nothing else done in between, replaces that step instead of adding one, so Undo takes back the whole run. A run that ends where it started leaves no step. (#370)
 - **Czech:** The whole interface, the 16 chapters of the guide, the release notes and the guide's own pages are in Czech, with the language list and the guide's language switch. It is picked automatically for a browser set to Czech. The PDF of a drawing writes the base letter where its standard typeface lacks a Czech or Polish accent (the SVG keeps the original). Made by @mispacek with an AI assistant (pull request #379); a second Czech reader is still welcome, wrong words are fixed with a small pull request.
