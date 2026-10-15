@@ -147,7 +147,7 @@ export function mcpShapeSummary(shape: WorkplaneShape): LayerlingMcpShapeSummary
     sketchPointCount: shape.sketchProfile?.points.length ?? 0,
     sketchSegmentCount: shape.sketchProfile?.segments.length ?? 0,
     ...(shape.sketchProfile && shape.sketchOperation !== "revolve" && shape.sketchOperation !== "sweep"
-      ? { sketchStroke: shape.sketchProfile.stroke ?? null, silhouette: Boolean(shape.sketchProfile.silhouette) }
+      ? { sketchStroke: shape.sketchProfile.stroke ?? null, silhouette: Boolean(shape.sketchProfile.silhouette), sketchInset: shape.sketchProfile.inset ?? null }
       : {}),
     // A text's fill (#215) reads like a sketch body's: its stroke, and whether the counters are left out.
     ...(shape.kind === "text" ? { textStroke: shape.textStroke ?? null, textSilhouette: Boolean(shape.textSilhouette), textStretch: Boolean(shape.textStretch), textEdge: shape.textEdge ?? null } : {}),

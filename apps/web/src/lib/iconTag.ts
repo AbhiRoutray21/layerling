@@ -44,7 +44,8 @@ export type IconLayerStack = {
 
 /** A body the icon layers can be built from or read back from: an extruded sketch, not a group. */
 export function isIconLayerBody(shape: WorkplaneShape | null | undefined): shape is WorkplaneShape & { sketchProfile: SketchProfile } {
-  return Boolean(shape?.sketchProfile && shape.sketchOperation !== "revolve" && shape.sketchOperation !== "sweep" && !shape.groupedShapes?.length && shape.kind !== "text");
+  // A face tool body is built set in from its sketch, which the layers would leave out.
+  return Boolean(shape?.sketchProfile && shape.sketchOperation !== "revolve" && shape.sketchOperation !== "sweep" && !shape.groupedShapes?.length && shape.kind !== "text" && !shape.sketchProfile.inset);
 }
 
 /**

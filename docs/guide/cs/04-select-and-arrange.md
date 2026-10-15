@@ -113,6 +113,23 @@ Výřezy zůstávají běžnými tvary sloučenými s tělesem jako po {{ui:edit
 
 AI může provést totéž přes `layerling_perforate_face`, viz [Modelování s AI](chapter:ai-with-mcp).
 
+## Vysunutí plochy ven nebo dovnitř
+
+Pro zesílení stěny, vyvýšenou plošku nebo vyříznutou kapsu pracuje nástroj {{ui:faceTool.title}} s jednou rovinnou plochou. Funguje i u importovaného STL, které nemá náčrt ke změně. Vyberte právě jedno těleso a spusťte {{ui:faceTool.title}} v {{ui:editor.group.modify}} vedle rastru otvorů, pravým tlačítkem nebo vyhledáváním [[Ctrl]]+[[K]].
+
+1. Klikněte na rovinnou plochu tělesa. Stejně jako u rastru otvorů se použije celá souvislá rovinná oblast; oblá plocha není podporovaná.
+2. V okně nastavte:
+   - **{{ui:faceTool.direction}}:** {{ui:faceTool.direction.out}} pro materiál na ploše, nebo {{ui:faceTool.direction.in}} pro kapsu vyříznutou do ní. Kapsa nejde hlouběji než těleso za plochou; u dutého tělesa může přesto dosáhnout do dutiny.
+   - **{{ui:faceTool.inset}}:** jak daleko zůstane nový obrys uvnitř okraje plochy. Směrem ven se při 0 vezme celá plocha, tak se stěna zesílí. Otvory v ploše se zvětší o stejnou hodnotu.
+   - **{{ui:faceTool.radius}}:** zaoblí každý roh obrysu, i vnitřní, takže ostrý hrot skončí obloukem. Zářez užší než dvojnásobek poloměru se uzavře a část plochy užší než dvojnásobek odsazení a poloměru dohromady odpadne.
+   - **{{ui:faceTool.depth}}:** jak daleko nový díl vystoupí z plochy, nebo jak hluboká bude kapsa.
+3. Výsledek se hned zobrazí jako náhled a sleduje každou hodnotu. {{ui:faceTool.repick}} vybere jinou plochu, [[Esc]] nástroj zavře.
+4. Teprve {{ui:faceTool.apply}} díl vytvoří.
+
+Nástroj přidá běžné těleso z náčrtu sloučené s tělesem; nic se nezapéká. {{ui:group.edit}} otevře sloučení a {{ui:inspector.editSketch}} u nového dílu ukáže obrys, ze kterého vychází. Na horní nebo spodní ploše jednoduchého tělesa z náčrtu - jedna oblast, nesloučené, nezrcadlené, bez zúžení, zkroucení a naklonění, bez obrysového pásu, kroužku na klíče, zkosení či zaoblení - je to vlastní obrys tělesa, při stavbě odsazený dovnitř, takže jeho čáry a oblouky zůstanou přesné všude, kde je CAD jádro dokáže odsadit, pro nástroje hran a export STEP. Při pozdější změně velikosti si díl odsazení ponechá. Na každé jiné ploše, i u importované sítě, sleduje obrys trojúhelníky plochy a křivka se skládá z krátkých rovných úseků. Vše je jediný krok {{ui:editor.tool.undo}}. Odsazení nebo poloměr později změníte tak, že krok vrátíte zpět a nástroj použijete znovu. Horní hranu potom zaoblíte nástrojem {{ui:editor.tool.fillet}} s volbou {{ui:edge.topEdges}} na sloučení jako posledním krokem: jako každá úprava hran sloučení z něj udělá jedno těleso.
+
+AI může provést totéž přes `layerling_push_face`, viz [Modelování s AI](chapter:ai-with-mcp).
+
 ## Současná změna více dílů
 
 Při více vybraných dílech ukazuje pravý panel jejich počet a společné vlastnosti: {{ui:inspector.solid}}, {{ui:inspector.hole}}, barvu po kliknutí na {{ui:inspector.solid}} a zámek. Smíšený výběr lze jedním kliknutím převést na všechna plná tělesa či výřezy. Obsahuje-li zamčený díl, dostupný zůstane jen zámek. Rozměry měníte úchyty, přes {{ui:scalePercent.title}} nebo číslem u kóty. Kóta označuje celý výběr a mění všechny části i mezery jako tažení úchytu. Plné těleso a výřez přepíná i pravá nabídka nebo [[S]] a [[H]].

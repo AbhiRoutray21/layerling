@@ -92,6 +92,7 @@ It is not a full CAD package: there is no parametric timeline and no assemblies.
 - **Hollowing** – turn a body into walls of one thickness, open on any sides you choose (top, bottom, front, back, left, right, in any combination) or closed – for boxes, cups and cases.
 - **Custom shapes** – keep bodies you need again and again at the top of the shape library and insert them into any design with a click or by dragging; in the browser, or with the shared store on the server for every device. "Back up all" takes them along.
 - **Hole pattern** – perforate a flat face of a body: pick the face, choose round, square, rectangular, hexagonal or slot holes, set size, spacing, grid or staggered, the margin to the edge and the depth (through the whole part or a set depth), and see the holes as a preview before creating them. They stay ordinary holes grouped with the body, so ungrouping frees them again.
+- **Face** – push a flat face of a body out or cut a pocket into it: pick the face, choose Out or In, set an inset from the edge, a corner radius and the depth, and see the result as a preview. It works on imported STLs too, and what it adds stays an ordinary sketch body grouped with the body.
 - **Wrap around a cylinder** – lay an SVG pattern, a logo or lettering onto the wall of a cup or tube, raised or engraved, and centre it on the cylinder.
 
 ### Files

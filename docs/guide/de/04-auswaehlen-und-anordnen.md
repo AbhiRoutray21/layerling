@@ -113,6 +113,23 @@ Die Löcher sind ganz gewöhnliche Aussparungen und mit dem Körper gruppiert, g
 
 Eine KI kann dasselbe über die MCP-Schnittstelle tun, mit `layerling_perforate_face` (siehe das Kapitel [KI mit MCP](chapter:ki-mit-mcp)).
 
+## Eine Fläche heraus- oder hineinziehen
+
+Für eine dickere Wand, eine Erhebung auf einer Fläche oder eine hineingeschnittene Tasche arbeitet das Werkzeug {{ui:faceTool.title}} an einer ebenen Fläche. Es geht auch bei einem importierten STL, an dem es keine Skizze zu ändern gibt. Wähle genau einen Körper aus und klicke in der Gruppe {{ui:editor.group.modify}} der Werkzeugleiste auf {{ui:faceTool.title}}, gleich neben dem Lochmuster. Du kannst auch mit der rechten Maustaste auf den Körper klicken oder es mit [[Strg]]+[[K]] suchen.
+
+1. Klicke eine ebene Fläche des Körpers an. Wie beim Lochmuster zählt die ganze ebene Fläche um deinen Klick; eine gewölbte Fläche geht nicht.
+2. Im Fenster:
+   - **{{ui:faceTool.direction}}:** {{ui:faceTool.direction.out}} für Material auf der Fläche oder {{ui:faceTool.direction.in}} für eine hineingeschnittene Tasche. Eine Tasche geht nicht tiefer als der Körper hinter der Fläche; bei einem ausgehöhlten Körper kann sie trotzdem bis in den Hohlraum reichen.
+   - **{{ui:faceTool.inset}}:** wie weit der neue Umriss innerhalb der Flächenkante bleibt. Nach außen nimmt 0 die ganze Fläche, so wird eine Wand dicker. Öffnungen in der Fläche werden um denselben Betrag größer.
+   - **{{ui:faceTool.radius}}:** rundet jede Ecke des Umrisses, auch die inneren, so endet eine spitze Ecke in einem Bogen. Eine Kerbe, die schmaler als der doppelte Radius ist, schließt sich, und ein Teil der Fläche, der schmaler ist als das Doppelte von Rand und Radius zusammen, fällt weg.
+   - **{{ui:faceTool.depth}}:** wie weit das neue Teil aus der Fläche ragt oder wie tief die Tasche wird.
+3. Das Ergebnis erscheint sofort als Vorschau und ändert sich mit jedem Wert. Mit {{ui:faceTool.repick}} wählst du eine andere Fläche, [[Esc]] schließt das Werkzeug.
+4. Erst {{ui:faceTool.apply}} legt es an.
+
+Was das Werkzeug anlegt, ist ein ganz gewöhnlicher Skizzenkörper, mit dem Körper gruppiert: Nichts ist eingebacken. {{ui:group.edit}} öffnet die Gruppe, und {{ui:inspector.editSketch}} am neuen Teil zeigt den Umriss, dem es folgt. Auf der Ober- oder Unterseite eines schlichten Skizzenkörpers - ein einziger Bereich, nicht gruppiert, gespiegelt, verjüngt, verdreht oder geneigt, ohne Kontur, Schlüsselringloch, Fase oder Verrundung - ist das der eigene Umriss des Körpers, beim Bauen nach innen versetzt, so bleiben seine Linien und Bögen exakt, wo der CAD-Kern sie versetzen kann, für die Kantenwerkzeuge und den STEP-Export. Später in der Größe geändert, behält das Teil seinen Rand. Auf jeder anderen Fläche, auch auf einem importierten Netz, folgt der Umriss den Dreiecken der Fläche, und eine Kurve besteht aus kurzen geraden Stücken. Das Ganze ist ein Schritt für {{ui:editor.tool.undo}}. Um Rand oder Radius später zu ändern, mach den Schritt rückgängig und nimm das Werkzeug noch einmal. Um die obere Kante danach zu runden, nimm {{ui:editor.tool.fillet}} mit {{ui:edge.topEdges}} an der Gruppe als letzten Schritt: Wie jede Kantenbehandlung an einer Gruppe macht sie die Gruppe zu einem Körper.
+
+Eine KI kann dasselbe über die MCP-Schnittstelle tun, mit `layerling_push_face` (siehe das Kapitel [KI mit MCP](chapter:ki-mit-mcp)).
+
 ## Mehrere Teile auf einmal ändern
 
 Sind mehrere Teile ausgewählt, zeigt das Eigenschaften-Feld rechts, wie viele es sind, und bietet an, was für alle zugleich gilt: {{ui:inspector.solid}} oder {{ui:inspector.hole}}, eine Farbe für alle (ein Klick auf {{ui:inspector.solid}} öffnet die Farben) und das Schloss zum Sperren. Ist die Auswahl gemischt, macht ein Klick alle zu Körpern oder alle zu Aussparungen. Ist eines der Teile gesperrt, lässt sich nur das Schloss bedienen. Maße änderst du mit den Griffen, mit {{ui:scalePercent.title}} oder indem du eine Zahl in ein Maßschild tippst. Bei mehreren Teilen ist die Zahl das Maß der ganzen Auswahl: Alle Teile wachsen mit, samt den Abständen dazwischen, wie beim Ziehen am Griff. Körper und Aussparung gehen auch per Rechtsklick oder mit [[S]] und [[H]].

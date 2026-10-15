@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **Push a flat face out or cut a pocket in (#404):** A thicker wall, a raised pad or a pocket on a finished part took a workplane on the face, a traced sketch, an extrusion and a group, and on an imported STL there was no other way. A new tool, **Face**, in the Modify group next to the hole pattern, does it in one step: click a flat face, go out or in, and set the depth, an inset from the face's edge and a corner radius that rounds the inner corners too. A pocket goes no deeper than the body behind the face. What it adds is an ordinary sketch body grouped with the body, so Edit group, Edit sketch and Undo work as usual. On the top or the bottom of a plain sketch body it keeps that body's own outline, set in exactly by the CAD kernel where it can, and the new part keeps its inset when it is resized; on any other face, and on every face of an imported mesh, it follows the face's triangles. Also as the MCP action `layerling_push_face`. Contributed by @mlugo-apx.
+
 ## 1.79.0
 
 - **Hollowing a rounded box with rounded top and bottom edges says why it fails (#401):** A rounded box whose top and bottom edges are rounded as well can only be hollowed with a wall clearly thinner than that rounding; with a thicker wall the panel only said that the walls cannot be this thick. It now adds the reason and what to do (a thinner wall, or the rounding set to 0 first) and points to the Bug report button in the footer, and the guide says so. Reported by @gquiring on GitHub.

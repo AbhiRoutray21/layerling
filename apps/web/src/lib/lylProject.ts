@@ -732,6 +732,7 @@ async function serializeShapeNode(
       ...(sketchProfile.stroke ? { stroke: sketchProfile.stroke } : {}),
       ...(sketchProfile.silhouette ? { silhouette: true } : {}),
       ...(sketchProfile.keyring ? { keyring: sketchProfile.keyring } : {}),
+      ...(sketchProfile.inset ? { inset: sketchProfile.inset } : {}),
     };
   }
 
@@ -1180,6 +1181,12 @@ function validateSketchProfile(value: unknown, label: string) {
   });
   if (profile.silhouette !== undefined && typeof profile.silhouette !== "boolean") throw new Error(`${label}.silhouette must be true or false`);
   if (profile.keyring !== undefined && !isSketchKeyring(profile.keyring)) throw new Error(`${label}.keyring must be { side, diameter, x, z }`);
+  if (profile.inset !== undefined) {
+    const inset = objectRecord(profile.inset, `${label}.inset`);
+    const distance = finiteNumber(inset.distance, `${label}.inset.distance`);
+    const radius = finiteNumber(inset.radius, `${label}.inset.radius`);
+    if (distance < 0 || radius < 0 || distance > 1e6 || radius > 1e6) throw new Error(`${label}.inset is outside the supported range`);
+  }
 }
 
 const BENT_TUBE_PROFILE_VALUES = new Set(["round", "square", "hexagon", "octagon"]);
