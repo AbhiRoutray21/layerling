@@ -327,6 +327,7 @@ export const MESSAGES_RU: Partial<Record<MessageKey, string>> = {
   "sketch.resetView": "Сбросить вид эскиза",
   "sketch.zoomIn": "Приблизить",
   "sketch.showMeasurements": "Показывать размеры",
+  "sketch.showPartEdges": "Показывать детали насквозь: все их рёбра на плоскости эскиза",
   "sketch.zoomOut": "Отдалить",
   "sketch.removeMeasurement": "Удалить измерение",
   "sketch.pointActions": "Действия с точкой",

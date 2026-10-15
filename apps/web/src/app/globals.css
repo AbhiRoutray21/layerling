@@ -6397,6 +6397,14 @@ html[data-theme="dark"] .sketch-shape-options .unit {
   vector-effect: non-scaling-stroke;
 }
 
+/* The parts seen through (#354): all their edges on the sketch plane, thin and faint, under the sketch. */
+.sketch-reference-edges {
+  fill: none;
+  stroke: rgba(160, 98, 18, 0.6);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
 .sketch-reference-images image {
   cursor: move;
   image-rendering: auto;

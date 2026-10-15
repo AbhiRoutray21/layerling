@@ -326,6 +326,7 @@ export const MESSAGES_EN = {
   "sketch.resetView": "Reset sketch view",
   "sketch.zoomIn": "Zoom in",
   "sketch.showMeasurements": "Show measurements",
+  "sketch.showPartEdges": "Show the parts seen through: all their edges on the sketch plane",
   "sketch.zoomOut": "Zoom out",
   "sketch.removeMeasurement": "Remove measurement",
   "sketch.pointActions": "Point actions",

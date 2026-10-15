@@ -1,6 +1,6 @@
 "use client";
 
-import { AlignCenterHorizontal, AlignCenterVertical, Check, ChevronUp, CornerDownRight, Crop, Crosshair, Home, Link, Link2Off, LockKeyhole, LockKeyholeOpen, Minus, Plus, Ruler, RulerDimensionLine, Slash, Spline, Split, Trash2, Waves, X } from "lucide-react";
+import { AlignCenterHorizontal, AlignCenterVertical, Check, ChevronUp, CornerDownRight, Crop, Crosshair, Home, Layers, Link, Link2Off, LockKeyhole, LockKeyholeOpen, Minus, Plus, Ruler, RulerDimensionLine, Slash, Spline, Split, Trash2, Waves, X } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties, type Dispatch, type SetStateAction, type FocusEvent as ReactFocusEvent, type KeyboardEvent as ReactKeyboardEvent, type MouseEvent as ReactMouseEvent, type PointerEvent as ReactPointerEvent, type WheelEvent as ReactWheelEvent } from "react";
 import { SnapGridControl } from "@/components/workplane/ShapeInspector";
 import { SketchRevolvePreview } from "@/components/SketchRevolvePreview";
@@ -45,6 +45,10 @@ type SketchWorkspaceProps = {
   referenceShapes: WorkplaneShape[];
   /** Where a workplane inside a body cuts it: the outline of the cut per body (id), as an SVG path of loops. */
   referenceSlices?: Record<string, string>;
+  /** All edges of the bodies seen through, projected onto the sketch plane, as one SVG path (#354). */
+  referenceEdges?: string;
+  showReferenceEdges?: boolean;
+  onToggleReferenceEdges?: () => void;
   tool: SketchTool;
   activePointId: string | null;
   selected: SketchSelection;
@@ -499,6 +503,9 @@ export function SketchWorkspace({
   revolvePreviewPositions = null,
   referenceShapes,
   referenceSlices,
+  referenceEdges,
+  showReferenceEdges,
+  onToggleReferenceEdges,
   tool,
   activePointId,
   selected,
@@ -1625,6 +1632,17 @@ export function SketchWorkspace({
         >
           <Ruler size={26} strokeWidth={2.2} aria-hidden="true" />
         </button>
+        {onToggleReferenceEdges ? (
+          <button
+            className={showReferenceEdges ? "active" : ""}
+            aria-label={t("sketch.showPartEdges")}
+            title={t("sketch.showPartEdges")}
+            aria-pressed={Boolean(showReferenceEdges)}
+            onClick={onToggleReferenceEdges}
+          >
+            <Layers size={26} strokeWidth={2.2} aria-hidden="true" />
+          </button>
+        ) : null}
       </div>
       <section ref={wrapRef} className="sketch-plate-wrap" aria-label="2D sketch plate">
         <svg
@@ -1763,6 +1781,7 @@ export function SketchWorkspace({
               );
             })}
           </g>
+          {showReferenceEdges && referenceEdges ? <path className="sketch-reference-edges" d={referenceEdges} fill="none" vectorEffect="non-scaling-stroke" pointerEvents="none" /> : null}
           <rect className="sketch-plate-border" x={-workspace.width / 2} y={-workspace.depth / 2} width={workspace.width} height={workspace.depth} pointerEvents="none" />
           {pointerAction?.kind === "marquee" ? (
             <rect

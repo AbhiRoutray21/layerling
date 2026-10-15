@@ -325,6 +325,7 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "sketch.resetView": "Skizzenansicht zurücksetzen",
   "sketch.zoomIn": "Hineinzoomen",
   "sketch.showMeasurements": "Maße anzeigen",
+  "sketch.showPartEdges": "Teile durchscheinend zeigen: alle ihre Kanten auf der Skizzenebene",
   "sketch.zoomOut": "Herauszoomen",
   "sketch.removeMeasurement": "Maß entfernen",
   "sketch.pointActions": "Punktaktionen",

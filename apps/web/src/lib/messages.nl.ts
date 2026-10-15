@@ -325,6 +325,7 @@ export const MESSAGES_NL: Record<MessageKey, string> = {
   "sketch.resetView": "Schetsweergave herstellen",
   "sketch.zoomIn": "Inzoomen",
   "sketch.showMeasurements": "Maten tonen",
+  "sketch.showPartEdges": "Onderdelen doorzichtig tonen: al hun randen op het schetsvlak",
   "sketch.zoomOut": "Uitzoomen",
   "sketch.removeMeasurement": "Maat verwijderen",
   "sketch.pointActions": "Puntacties",

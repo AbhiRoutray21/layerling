@@ -2548,6 +2548,11 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .sketch-shape-options .
   stroke: rgba(188, 113, 18, 0.7);
 }
 
+:where(html[data-theme="dark"][data-palette="graphite"]) .sketch-reference-edges {
+  fill: none;
+  stroke: rgba(160, 98, 18, 0.6);
+}
+
 :where(html[data-theme="dark"][data-palette="graphite"]) .sketch-reference-images image:hover {
   filter: saturate(1.08) contrast(1.03);
 }

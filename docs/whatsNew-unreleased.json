@@ -8,5 +8,15 @@
       "de": "Das Fenster Symbolschild nimmt jetzt auch PNG- und JPG-Dateien. Das Bild wird zu einem Umriss nachgezeichnet, die Vorschau zeigt ihn, und du wählst, ob sein dunkler oder sein heller Teil das Symbol wird. Eine SVG, die nur ein Bild enthält, wird genauso nachgezeichnet.",
       "en": "The icon tag window now takes PNG and JPG files too. The picture is traced into an outline, the preview shows it, and you choose whether its dark or its light part becomes the icon. An SVG that holds nothing but a picture is traced the same way."
     }
+  },
+  {
+    "title": {
+      "de": "Skizze: Teile durchscheinend zeigen",
+      "en": "Sketch: show the parts seen through"
+    },
+    "body": {
+      "de": "In der Skizze gibt es bei den Ansichtsknöpfen links einen neuen Knopf mit Schichten: Er zeichnet alle Kanten der Körper dünn und blass auf die Skizzenebene, in jeder Höhe, als sähest du durch sie hindurch. So zeichnest du an vorhandener Arbeit entlang; auf einer senkrechten Ebene an einer Vorderfläche ist es die Vorderansicht des Teils. Die Wahl bleibt im Browser.",
+      "en": "In the sketch there is a new button with layers among the view buttons on the left: it draws all the edges of the bodies on the sketch plane, thin and faint, at any height, as if you looked through them. That lets you trace round existing work; on an upright plane set on a front face it is the front view of the part. The choice stays in the browser."
+    }
   }
 ]

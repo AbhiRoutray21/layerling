@@ -208,6 +208,7 @@ import { DEFAULT_SKETCH_STROKE, normalizeSketchStroke, strokedSketchProfile } fr
 import { topCadModifierEdgeIds } from "@/lib/topEdges";
 import { movedWithEditedOutline, placeSketchShape, sketchBodyAnchor, type SketchAnchor } from "@/lib/sketchPlacement";
 import { meshSlicePath, planeCutsMesh } from "@/lib/sketchSlice";
+import { projectedEdgesPath } from "@/lib/sketchEdges";
 import { useRememberedFlag } from "@/lib/useRememberedFlag";
 import { BUG_REPORT_FILE, bugReportText, rememberBugReportEvent, type BugReportEvent } from "@/lib/bugReport";
 import { formatLengthMm, lengthDisplayUnit } from "@/lib/measurementUnits";
@@ -3338,6 +3339,22 @@ export function LayerlingEditor({
     });
     return slices;
   }, [activeSketchWorkplane, editingSketchShapeId, shapes, sketchActive]);
+  // The bodies seen through, all their edges projected onto the sketch plane, to trace round existing work (#354).
+  const [sketchShowPartEdges, setSketchShowPartEdges] = useRememberedFlag("layerling.sketch.showPartEdges");
+  const sketchReferenceEdges = useMemo(() => {
+    if (!sketchActive || !sketchShowPartEdges) return "";
+    return shapes
+      .filter((shape) => !shape.hidden && !shape.hole && shape.id !== editingSketchShapeId && !isNonSolidShapeKind(shape.kind))
+      .map((shape) => {
+        const mesh = meshForShape(shape);
+        const vertices = mesh.vertices.map(([x, y, z]) => {
+          const local = placementWorkplaneCoordinates(activeSketchWorkplane, { x, y, z });
+          return { x: local.x, h: local.y, z: local.z };
+        });
+        return projectedEdgesPath(vertices, mesh.faces);
+      })
+      .join("");
+  }, [activeSketchWorkplane, editingSketchShapeId, shapes, sketchActive, sketchShowPartEdges]);
   const debugState = useMemo(
     () =>
       JSON.stringify({
@@ -11170,6 +11187,9 @@ export function LayerlingEditor({
             revolvePreviewPositions={sketchRevolvePreview?.positions ?? null}
             referenceShapes={sketchReferenceShapes.filter((shape) => shape.id !== editingSketchShapeId)}
             referenceSlices={sketchReferenceSlices}
+            referenceEdges={sketchReferenceEdges}
+            showReferenceEdges={sketchShowPartEdges}
+            onToggleReferenceEdges={() => setSketchShowPartEdges((on) => !on)}
             tool={sketchTool}
             activePointId={sketchActivePointId}
             selected={sketchSelection}
