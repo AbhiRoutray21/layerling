@@ -324,10 +324,8 @@ export function computeCornerRulerRelativeCoordinates(
 
   const zTargetPoint = xTargetPoint.clone();
 
-  const elevationBasePoint = rulerCorner
-    .clone()
-    .addScaledVector(axisX, max.x)
-    .addScaledVector(axisZ, modes.z === "midpoint" ? z : min.z);
+  // The height arrow stands where the two guide lines meet, not at a corner of its own (DrJones, forum).
+  const elevationBasePoint = xTargetPoint.clone();
 
   const elevationTargetPoint = elevationBasePoint
     .clone()

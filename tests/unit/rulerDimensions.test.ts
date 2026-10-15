@@ -188,6 +188,10 @@ describe("computeCornerRulerRelativeCoordinates", () => {
       expect(coords.xTargetPoint.z).toBeCloseTo(coords.z, 6);
       // Die Hoehe hat ihren eigenen Pfeil, am Koerper entlang.
       expect(coords.elevationTargetPoint.y).toBeCloseTo(coords.elevation, 6);
+      // ... und er steht dort, wo sich die beiden Hilfslinien am Boden treffen.
+      expect(coords.elevationBasePoint.x).toBeCloseTo(coords.xTargetPoint.x, 6);
+      expect(coords.elevationBasePoint.z).toBeCloseTo(coords.xTargetPoint.z, 6);
+      expect(coords.elevationBasePoint.y).toBeCloseTo(0, 6);
     }
   });
 
