@@ -377,6 +377,9 @@ export type TextKeyringSide = "left" | "right" | "top";
  */
 export type TextKeyring = { side: TextKeyringSide; diameter: number; offset: number; ear?: boolean };
 
+/** A key ring hole in an extruded sketch (#391): its middle in the sketch's own mm, its size, the side it is on and whether the layer has the ear. */
+export type SketchKeyring = { side: TextKeyringSide; diameter: number; x: number; z: number; ear?: boolean };
+
 export type SketchProfile = {
   points: SketchPoint[];
   segments: SketchSegment[];
@@ -384,6 +387,8 @@ export type SketchProfile = {
   stroke?: SketchStroke;
   /** Built without its holes: only the outermost outlines count, as the usual Silhouette (#197). */
   silhouette?: boolean;
+  /** A key ring hole cut through the body, with its ear on the bottom layer of an icon tag (#391). */
+  keyring?: SketchKeyring;
 };
 
 export type SketchOperation = "extrude" | "revolve";

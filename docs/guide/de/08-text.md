@@ -117,6 +117,7 @@ Die Karte {{ui:iconTag.title}} oben in den Einstellungen enthält:
 - **{{ui:iconTag.replace}}:** setzt das Symbol einer anderen Datei (SVG, PNG oder JPG) auf das Schild; Schichten und Breite bleiben, wie sie sind.
 - **{{ui:iconTag.iconWidth}}:** wie breit das Symbol oben ist, in mm. Alle Schichten gehen mit und bleiben deckungsgleich.
 - **{{ui:nameTag.layers}}:** die Zeilen wie beim Namensschild - Farbe, um wie viel breiter, {{ui:nameTag.corners}}, Höhe und {{ui:nameTag.noHoles}}, **+** und **–**, zwei bis sechs Schichten. Die oberste Zeile ist das Symbol selbst.
+- **{{ui:nameTag.keyring}}:** wie beim Namensschild: ein Loch für den Schlüsselring durch jede Schicht, mit einer Lasche mit rundem Ende an der untersten Schicht, außerhalb des Symbols. {{ui:nameTag.keyringDiameter}} und {{ui:nameTag.keyringSide}} bestimmen Größe und Seite. Die Lasche richtet sich nach dem Umriss des Symbols; bei einem sehr zerklüfteten Symbol prüfst du, wo sie auf die Platte trifft.
 - **{{ui:iconTag.count}}:** wie viele Schilder du möchtest, 1 bis 100. {{ui:iconTag.fill}} rechnet es aus der Platte des Druckers aus, der in den Einstellungen gewählt ist, für kleine Logos eine volle Platte. Der Knopf darunter erzeugt sie, 5 mm auseinander, in der Mitte der Platte verteilt; das erste ist das Schild selbst.
 
 Die SVG braucht geschlossene Umrisse; eine Zeichnung nur aus offenen Linien wird kein Schild. Ein Skizzenkörper, dessen Füllung eine Linie ist, behält sie: Die Fläche dieser Linie ist das Symbol.

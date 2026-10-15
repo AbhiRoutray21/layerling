@@ -818,7 +818,7 @@ export const tools = [
   },
   {
     name: "layerling_layer_icon",
-    description: "An SVG icon as a layered tag for a multicolour print, like the editor's Icon tag (the shape library) and its card: the icon on top, under it the same outline a little wider in another colour, at the bottom a plate without holes - one bundle of extruded sketch bodies, each with its own colour and height. Two ways in. `svg` (the text of an SVG file) makes a new icon tag standing on the middle of the plate, named after `name`; the drawing is checked as the import checks it and refused when the kernel would build it differently. `id` of an extruded sketch body (an imported SVG, say) turns that body into an icon tag, or of an icon tag builds it again with a new width or new layers; the place and the turn stay. `width` is how wide the icon on top is, seen from above, in mm (2 to 250; 30 for a new tag, the current width otherwise). `layers` are the layers top to bottom as for layerling_layer_text - grow, height, color, silhouette, join - without the letter edge or a key ring hole; left out, a new tag gets the name tag's start layers (the icon, a 1.5 mm rim, a 3 mm plate without holes) and an existing one keeps its own. `count` (1 to 100) lays that many copies out on the middle of the plate 5 mm apart, the first being the tag itself - for small logos one prints a full plate. One undo step. The result returns the tag(s) and the layers.",
+    description: "An SVG icon as a layered tag for a multicolour print, like the editor's Icon tag (the shape library) and its card: the icon on top, under it the same outline a little wider in another colour, at the bottom a plate without holes - one bundle of extruded sketch bodies, each with its own colour and height. Two ways in. `svg` (the text of an SVG file) makes a new icon tag standing on the middle of the plate, named after `name`; the drawing is checked as the import checks it and refused when the kernel would build it differently. `id` of an extruded sketch body (an imported SVG, say) turns that body into an icon tag, or of an icon tag builds it again with a new width or new layers; the place and the turn stay. `width` is how wide the icon on top is, seen from above, in mm (2 to 250; 30 for a new tag, the current width otherwise). `layers` are the layers top to bottom as for layerling_layer_text - grow, height, color, silhouette, join - without the letter edge; left out, a new tag gets the name tag's start layers (the icon, a 1.5 mm rim, a 3 mm plate without holes) and an existing one keeps its own. `keyring` puts a key ring hole on the tag as on a name tag (a tab with a round end on the bottom layer, the hole through every layer, beyond the icon on the side chosen). `count` (1 to 100) lays that many copies out on the middle of the plate 5 mm apart, the first being the tag itself - for small logos one prints a full plate. One undo step. The result returns the tag(s) and the layers.",
     inputSchema: {
       ...editorTargetSchema,
       properties: {
@@ -841,6 +841,19 @@ export const tools = [
               join: { type: "string", enum: ["round", "bevel", "miter"], description: "How a wider layer goes round the corners of the icon: round (default), bevel or miter (sharp)." },
             },
           },
+        },
+        keyring: {
+          description: "A key ring hole: { side, diameter } puts it on (a tab with a round end on the bottom layer, the hole through every layer, beyond the icon), true puts a 3 mm hole on the left, false takes it off. Left out, it stays as it is. A side other than left, right or top, or a diameter outside 1 to 20 mm, is refused.",
+          anyOf: [
+            {
+              type: "object",
+              properties: {
+                side: { type: "string", enum: ["left", "right", "top"], description: "Where the ear sits, seen from above (default left)." },
+                diameter: { type: "number", minimum: 1, maximum: 20, description: "The hole's diameter in mm (default 3); the tab grows with it." },
+              },
+            },
+            { type: "boolean" },
+          ],
         },
         count: { type: "integer", minimum: 1, maximum: 100, description: "Copies of the tag on the plate (default 1)." },
       },

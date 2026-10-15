@@ -3195,7 +3195,7 @@ function NameTagCard({
 }
 
 /** What the icon tag card changes: the icon's width and the layers; the rest stays as it is. */
-export type IconLayerPatch = { width?: number; layers?: TextLayer[] };
+export type IconLayerPatch = { width?: number; layers?: TextLayer[]; keyring?: NameTagKeyring | null };
 
 /**
  * The icon tag card's wiring: the stack as it stands, the build, the copies on the plate, and
@@ -3297,6 +3297,26 @@ function IconTagCard({ shapeId, controls, workspace, disabled, onInteractionActi
           {replaceError ? <p className="name-tag-hint icon-tag-card-error" role="alert">{replaceError}</p> : null}
           <ShapePropertyRows properties={properties.slice(0, 1)} workspace={workspace} disabled={disabled} onInteractionActiveChange={onInteractionActiveChange} />
           <LayerRows layers={stack.layers} firstLabel={t("iconTag.icon")} workspace={workspace} disabled={disabled} onChange={(layers) => onLayer({ layers })} onInteractionActiveChange={onInteractionActiveChange} />
+          {/* The key ring hole as on the name tag (#391): its size and its side; the ear is on the bottom layer. */}
+          <ToggleProperty
+            label={t("nameTag.keyring")}
+            value={Boolean(stack.keyring)}
+            disabled={disabled}
+            onChange={(on) => onLayer({ keyring: on ? { side: "left", diameter: DEFAULT_KEYRING_DIAMETER } : null })}
+          />
+          {stack.keyring ? (
+            <>
+              <RangeProperty id="keyringDiameter" label={t("nameTag.keyringDiameter")} value={stack.keyring.diameter} min={MIN_KEYRING_DIAMETER} max={10} step={0.05} workspace={workspace} disabled={disabled} onChange={(diameter) => onLayer({ keyring: { ...stack.keyring!, diameter } })} onInteractionActiveChange={onInteractionActiveChange} />
+              <div className="name-tag-sides" role="radiogroup" aria-label={t("nameTag.keyringSide")}>
+                <span>{t("nameTag.keyringSide")}</span>
+                {TEXT_KEYRING_SIDES.map((side) => (
+                  <button key={side} type="button" role="radio" aria-checked={stack.keyring!.side === side} className={stack.keyring!.side === side ? "active" : ""} disabled={disabled} onClick={() => onLayer({ keyring: { ...stack.keyring!, side } })}>
+                    {t(`nameTag.side.${side}`)}
+                  </button>
+                ))}
+              </div>
+            </>
+          ) : null}
           <ShapePropertyRows properties={properties.slice(1)} workspace={workspace} disabled={disabled} onInteractionActiveChange={onInteractionActiveChange} />
           <button className="inspector-action-button" type="button" disabled={disabled} onClick={fill}>
             <Grid3x3 size={17} strokeWidth={2.5} />

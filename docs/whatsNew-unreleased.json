@@ -18,5 +18,15 @@
       "de": "Neue Form in der Formenliste, nach der Senkbohrung: ein Loch mit Fase auf beiden Seiten, für eine Platte, die vorn und hinten sauber aussehen soll. An jedem Ende öffnet sich ein Kegel auf den Kopfdurchmesser, dazwischen liegt der Schaft. Du stellst Kopfdurchmesser, Schaftdurchmesser, Kegelwinkel und Gesamtlänge ein. Ist das Loch zu kurz für zwei ganze Kegel, treffen sie sich in der Mitte, und der Schaft bleibt breiter als eingestellt. Als exakter Körper funktionieren Kantenwerkzeug und STEP-Export. Als Lochmuster gibt es sie noch nicht.",
       "en": "A new shape in the library, after the Countersink: a hole chamfered on both faces, for a plate that should look neat front and back. A cone at each end opens to the head diameter, the shaft sits between them. You set the head diameter, the shaft diameter, the cone angle and the total length. If the hole is too short for two full cones they meet in the middle and the shaft stays wider than set. As an exact body it works with the edge tools and the STEP export. It is not available as a pattern hole yet."
     }
+  },
+  {
+    "title": {
+      "de": "Schlüsselring-Loch am Symbolschild",
+      "en": "A key ring hole on the icon tag"
+    },
+    "body": {
+      "de": "Das Symbolschild hat jetzt wie das Namensschild ein Loch für den Schlüsselring: in der Karte des Schilds anschalten, Durchmesser und Seite wählen. Das Loch geht durch alle Schichten, die Lasche sitzt an der untersten Schicht außerhalb des Symbols, und die Schichten bleiben ausgerichtet.",
+      "en": "The icon tag now has a key ring hole like the name tag: switch it on in the tag's card and choose the diameter and the side. The hole goes through all layers, the tab sits on the bottom layer beyond the icon, and the layers stay lined up."
+    }
   }
 ]

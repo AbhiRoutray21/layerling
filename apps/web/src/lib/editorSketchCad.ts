@@ -10,6 +10,7 @@ import { buildSketchRevolveMesh, normalizeSketchRevolveSettings } from "@/lib/sk
 import { placementWorkplaneCoordinates, type PlacementWorkplane } from "@/lib/placementWorkplane";
 import { silhouetteSketchProfile } from "@/lib/sketchCadProfile";
 import { filledGrowPockets, strokedSketchProfile } from "@/lib/sketchStroke";
+import { keyringSketchProfile } from "@/lib/sketchKeyring";
 import type { ManifoldToplevel } from "manifold-3d";
 import type { CadModifierDeflection } from "@/lib/cadModifierTypes";
 import { SKETCH_STROKE_UNSUPPORTED, type SketchCadBuildResponse } from "@/lib/sketchCadTypes";
@@ -75,11 +76,15 @@ export async function cadShapeFromSketchProfile(profile: SketchProfile, height: 
     });
   };
   let response: SketchCadBuildResponse;
+  // A key ring hole (#391): the outline the sketch fills with its ear and its hole is worked out here and built as an area.
+  const withKeyring = profile.keyring ? keyringSketchProfile(await getManifoldRuntime(), profile) : null;
   // With No holes and a "Wider" line, parts that touch once wider can close a pocket between
   // them; without holes means without those too, as for a text (#215). Only then is the outline
   // worked out here, as the polygon stroke with its outer rings only, and built as an area.
   const pocketsFilled = profile.stroke?.align === "grow" && profile.silhouette ? filledGrowPockets(await getManifoldRuntime(), buildProfile) : null;
-  if (pocketsFilled) {
+  if (withKeyring) {
+    response = await buildOnWorker(withKeyring);
+  } else if (pocketsFilled) {
     response = await buildOnWorker(pocketsFilled);
   } else if (profile.stroke) {
     // The kernel moves the outlines of a stroked sketch itself, so its walls stay planes, arcs and

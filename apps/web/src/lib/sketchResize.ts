@@ -45,5 +45,7 @@ export function stretchedSketchProfile(profile: SketchProfile, x: number, z: num
     // The stroke keeps its width: a stretched frame keeps its wall.
     ...(profile.stroke ? { stroke: { ...profile.stroke } } : {}),
     ...(profile.silhouette ? { silhouette: true } : {}),
+    // The hole keeps its size and moves with the outline it sits beside.
+    ...(profile.keyring ? { keyring: { ...profile.keyring, ...map(profile.keyring) } } : {}),
   };
 }
