@@ -718,6 +718,8 @@ export const MESSAGES_EN = {
   "shortcuts.sketchFocusSelection": "Zoom to the selection in the sketch",
   "shortcuts.sketchZoom": "Zoom in or out of the sketch",
   "shortcuts.sketchNudge": "Move the selected points, lines or image by one grid step (Shift: a larger step)",
+  "shortcuts.sketchTools": "Pick a drawing tool: 1 Line, 2 Bezier Curve, 3 Smooth Curve, 4 Add or Remove Points (while no line is being drawn)",
+  "shortcuts.sketchHandleNudge": "Move a clicked curve handle by one grid step (Shift: a larger step)",
   "shortcuts.sketchAxisLock": "While dragging: keep the move on one axis",
   "shortcuts.sketchAngleSnap": "While drawing: snap the new line in 15° steps",
   "shortcuts.sketchTypedLine": "While drawing: type the length, \"<\" or Tab for the angle, Enter sets the point",

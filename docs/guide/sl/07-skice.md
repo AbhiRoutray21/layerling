@@ -30,6 +30,8 @@ Telo nastane samo iz **sklenjenega** obrisa.
 
 ![Obris v obliki črke L. Ob izbranem ogliščku zgoraj levo stojita dolžini obeh črt v milimetrih in kot med njima v stopinjah.](shot:sketch-outline)
 
+Tipke [[1]] do [[4]] izberejo orodja za risanje v vrstnem redu vrstice: {{ui:sketch.line}}, {{ui:sketch.bezier}}, {{ui:sketch.smooth}} in {{ui:sketch.refine}}. Delujejo, dokler se ne riše črta; med risanjem črte so številke njena dolžina (glej spodaj).
+
 ## Črte po meri
 
 Ko si z {{ui:sketch.line}} ali {{ui:sketch.smooth}} postavil prvo točko, preprosto vpiši številko: ob črti se odpreta dve polji, {{ui:sketch.typedLength}} v milimetrih in {{ui:sketch.typedAngle}} v stopinjah. S [[<]] ali [[Tab]] preskočiš na kot, tako da »50<30« da 50 mm dolgo črto pod 30°, kot v AutoCADu. [[Enter]] postavi točko in takoj vpišeš naslednjo črto; [[Esc]] zapre polji, ne da bi končal črtni potek.
@@ -38,7 +40,7 @@ Kot šteje od desne proti nasprotni smeri urnega kazalca: 0° v desno, 90° navz
 
 ## Ukrivljanje ravne stranice
 
-Izberi ravno črto in v vrstici, ki se pokaže, klikni {{ui:sketch.curveLine}}: stranica se zaobli v krivuljo kot v Tinkercadu in pokaže svoji dve ročici. Povleci ju, da oblikuješ krivuljo; dlje kot ročica štrli, močnejši je ovinek. {{ui:sketch.straightenLine}} stranico spet naredi ravno. Izbrano točko lahko z {{ui:sketch.smooth}} zaobliš: dobi lastni ročici, črti ob njej pa postaneta krivulji.
+Izberi ravno črto in v vrstici, ki se pokaže, klikni {{ui:sketch.curveLine}}: stranica se zaobli v krivuljo kot v Tinkercadu in pokaže svoji dve ročici. Povleci ju, da oblikuješ krivuljo; dlje kot ročica štrli, močnejši je ovinek. {{ui:sketch.straightenLine}} stranico spet naredi ravno. Izbrano točko lahko z {{ui:sketch.smooth}} zaobliš: dobi lastni ročici, črti ob njej pa postaneta krivulji. Klikni ročaj in zasveti: puščične tipke ga nato premaknejo za en korak mreže, s [[Shift]] za večji korak, tako da krivuljo nastaviš natančno.
 
 ![Spodnja stranica obrisa v obliki L, upognjena v krivuljo, z dvema ročicama na koncih.](shot:sketch-curve)
 

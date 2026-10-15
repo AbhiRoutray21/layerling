@@ -30,6 +30,8 @@ Ein Körper entsteht nur aus einem **geschlossenen** Umriss.
 
 ![Ein L-förmiger Umriss. Am gewählten Eckpunkt oben links stehen die Längen der beiden Linien in Millimetern und der Winkel dazwischen in Grad.](shot:sketch-outline)
 
+Die Tasten [[1]] bis [[4]] wählen die Zeichenwerkzeuge, in der Reihenfolge der Leiste: {{ui:sketch.line}}, {{ui:sketch.bezier}}, {{ui:sketch.smooth}} und {{ui:sketch.refine}}. Sie gelten, solange keine Linie gezeichnet wird; während einer Linie sind die Ziffern ihre Länge (siehe unten).
+
 ## Linien nach Maß
 
 Hast du mit {{ui:sketch.line}} oder {{ui:sketch.smooth}} den ersten Punkt gesetzt, tippst du einfach eine Zahl: Neben der Linie öffnen sich zwei Felder, {{ui:sketch.typedLength}} in Millimetern und {{ui:sketch.typedAngle}} in Grad. Mit [[<]] oder [[Tab]] wechselst du zum Winkel, so dass „50<30“ eine 50 mm lange Linie unter 30° ergibt, wie in AutoCAD. [[Enter]] setzt den Punkt, und du tippst gleich die nächste Linie; [[Esc]] schließt die Felder, ohne den Linienzug zu beenden.
@@ -38,7 +40,7 @@ Der Winkel zählt von rechts gegen den Uhrzeigersinn: 0° nach rechts, 90° nach
 
 ## Eine gerade Seite krümmen
 
-Wähle eine gerade Linie und klicke in der Leiste, die erscheint, auf {{ui:sketch.curveLine}}: Die Seite wölbt sich wie bei Tinkercad zu einer Kurve und zeigt ihre beiden Griffe. Ziehe daran, um die Kurve zu formen; je weiter ein Griff absteht, desto stärker die Biegung. {{ui:sketch.straightenLine}} macht die Seite wieder gerade. Einen gewählten Punkt kannst du mit {{ui:sketch.smooth}} rund machen: Er bekommt eigene Griffe, und die Linien daneben werden zu Kurven.
+Wähle eine gerade Linie und klicke in der Leiste, die erscheint, auf {{ui:sketch.curveLine}}: Die Seite wölbt sich wie bei Tinkercad zu einer Kurve und zeigt ihre beiden Griffe. Ziehe daran, um die Kurve zu formen; je weiter ein Griff absteht, desto stärker die Biegung. {{ui:sketch.straightenLine}} macht die Seite wieder gerade. Einen gewählten Punkt kannst du mit {{ui:sketch.smooth}} rund machen: Er bekommt eigene Griffe, und die Linien daneben werden zu Kurven. Klick auf einen Griff, und er leuchtet auf: Die Pfeiltasten verschieben ihn dann um einen Rasterschritt, mit [[Shift]] um einen größeren, so stellst du eine Kurve genau ein.
 
 ![Die untere Seite des L-förmigen Umrisses zu einer Kurve gebogen, mit ihren zwei Griffen an den Enden.](shot:sketch-curve)
 

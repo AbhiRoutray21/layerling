@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "title": {
+      "de": "Skizze: Tasten 1 bis 4 und Pfeiltasten am Griff",
+      "en": "Sketch: keys 1 to 4 and arrow keys on a handle"
+    },
+    "body": {
+      "de": "In der Skizze und der Dreh-Skizze wählen die Tasten 1, 2, 3 und 4 Linie, Bézier-Kurve, Weiche Kurve und Punkte setzen oder entfernen, wie in Tinkercad. Wird gerade eine Linie gezeichnet, bleiben die Ziffern ihre Länge. Ein angeklickter Kurvengriff leuchtet auf, und die Pfeiltasten verschieben ihn um einen Rasterschritt (Umschalt: größer), bei einem weichen Punkt zieht der Gegengriff mit. So lässt sich eine Kurve genau einstellen.",
+      "en": "In the sketch and the revolve sketch the keys 1, 2, 3 and 4 pick Line, Bezier Curve, Smooth Curve and Add or Remove Points, as in Tinkercad. While a line is being drawn the digits stay its length. A curve handle that you click lights up, and the arrow keys move it by one grid step (Shift: a larger step), a smooth point's other handle with it. That way a curve can be set precisely."
+    }
+  }
+]

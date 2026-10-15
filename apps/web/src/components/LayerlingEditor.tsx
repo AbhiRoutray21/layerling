@@ -4692,7 +4692,7 @@ export function LayerlingEditor({
     transformSketchPoints(rotateSketchPoints(selectedPoints), "Rotated closed sketch selection by 45°");
   }, [sketchProfile, sketchSelection, transformSketchPoints]);
 
-  const moveSketchHandle = useCallback((id: string, handle: "in" | "out", position: { x: number; z: number }) => {
+  const moveSketchHandle = useCallback((id: string, handle: "in" | "out", position: { x: number; z: number }, keyRunKey?: string) => {
     const next = cloneSketchProfile(sketchProfile);
     const point = next.points.find((entry) => entry.id === id);
     if (!point) return;
@@ -4703,7 +4703,7 @@ export function LayerlingEditor({
       if (handle === "in") point.handleOut = opposite;
       else point.handleIn = opposite;
     }
-    commitSketchProfile(next, t("status.sketchHandleAdjusted"));
+    commitSketchProfile(next, t("status.sketchHandleAdjusted"), keyRunKey);
   }, [commitSketchProfile, sketchProfile]);
 
   const setSketchPointMode = useCallback((id: string, mode: "corner" | "smooth" | "split") => {
@@ -11373,6 +11373,7 @@ export function LayerlingEditor({
             onMovePoint={moveSketchPoint}
             onTransformPoints={transformSketchPoints}
             onMoveHandle={moveSketchHandle}
+            onSelectTool={setActiveSketchTool}
             onInsertPoint={insertSketchPoint}
             onSetPointMode={setSketchPointMode}
             onCurveSegment={curveSketchSegmentAction}

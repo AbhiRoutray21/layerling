@@ -30,6 +30,8 @@ Těleso vzniká pouze z **uzavřeného** obrysu.
 
 ![Obrys tvaru L. U vybraného levého horního rohu jsou délky obou úseček v mm a jejich úhel ve stupních.](shot:sketch-outline)
 
+Klávesy [[1]] až [[4]] vybírají kreslicí nástroje v pořadí lišty: {{ui:sketch.line}}, {{ui:sketch.bezier}}, {{ui:sketch.smooth}} a {{ui:sketch.refine}}. Fungují, dokud se nekreslí úsečka; během úsečky jsou číslice její délka (viz níže).
+
 ## Číselné zadání úseček
 
 Po prvním bodu nástroje {{ui:sketch.line}} nebo {{ui:sketch.smooth}} začněte psát číslo. Otevřou se {{ui:sketch.typedLength}} v mm a {{ui:sketch.typedAngle}} ve stupních. [[<]] nebo [[Tab]] přepne na úhel. Zápis „50<30“ vytvoří úsečku délky 50 mm pod úhlem 30° jako v AutoCADu. [[Enter]] položí bod a můžete zadávat další úsek. [[Esc]] zavře pole, ale neukončí kreslení řetězce.
@@ -38,7 +40,7 @@ Po prvním bodu nástroje {{ui:sketch.line}} nebo {{ui:sketch.smooth}} začněte
 
 ## Prohnutí přímé strany
 
-Vyberte úsečku a v zobrazené liště zvolte {{ui:sketch.curveLine}}. Změní se na křivku se dvěma úchyty. Jejich tažením řídíte prohnutí; vzdálenější úchyt ohýbá více. {{ui:sketch.straightenLine}} obnoví přímku. Vybraný bod lze převést na plynulý pomocí {{ui:sketch.smooth}}; dostane úchyty a okolní úseky se stanou křivkami.
+Vyberte úsečku a v zobrazené liště zvolte {{ui:sketch.curveLine}}. Změní se na křivku se dvěma úchyty. Jejich tažením řídíte prohnutí; vzdálenější úchyt ohýbá více. {{ui:sketch.straightenLine}} obnoví přímku. Vybraný bod lze převést na plynulý pomocí {{ui:sketch.smooth}}; dostane úchyty a okolní úseky se stanou křivkami. Klikněte na úchyt a rozsvítí se: šipky ho pak posunou o krok mřížky, se [[Shift]] o větší krok, takže křivku nastavíte přesně.
 
 ![Spodní strana obrysu L je prohnutá a má úchyty u obou konců.](shot:sketch-curve)
 

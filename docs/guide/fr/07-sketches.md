@@ -30,6 +30,8 @@ Un corps vient uniquement d'un contour **fermé**.
 
 ![Un contour en forme de L. Au point d'angle sélectionné, en haut à gauche, les longueurs des deux lignes sont affichées en millimètres et l'angle entre elles en degrés.](shot:sketch-outline)
 
+Les touches [[1]] à [[4]] choisissent les outils de dessin, dans l'ordre de la barre : {{ui:sketch.line}}, {{ui:sketch.bezier}}, {{ui:sketch.smooth}} et {{ui:sketch.refine}}. Elles agissent tant qu'aucune ligne n'est en cours ; pendant une ligne, les chiffres sont sa longueur (voir ci-dessous).
+
 ## Lignes par numéros
 
 Une fois que vous avez défini le premier point avec {{ui:sketch.line}} ou {{ui:sketch.smooth}}, tapez simplement un nombre : deux champs s'ouvrent à côté de la ligne, {{ui:sketch.typedLength}} en millimètres et {{ui:sketch.typedAngle}} en degrés. [[<]] ou [[Tab]] se déplace vers l'angle, donc "50<30" donne une ligne de 50 mm de long à 30°, comme dans AutoCAD. [[Enter]] définit le point et vous pouvez taper la ligne suivante immédiatement ; [[Esc]] ferme les champs sans terminer la chaîne de lignes.
@@ -38,7 +40,7 @@ L'angle compte dans le sens inverse des aiguilles d'une montre à partir de la d
 
 ## Courber un côté droit
 
-Sélectionnez une ligne droite et cliquez sur {{ui:sketch.curveLine}} dans la barre qui apparaît : le côté s'incline en courbe, comme dans Tinkercad, et montre ses deux poignées. Faites-les glisser pour façonner la courbe ; plus une poignée est éloignée, plus la courbure est forte. {{ui:sketch.straightenLine}} rend le côté droit. Un point que vous sélectionnez peut être arrondi avec {{ui:sketch.smooth}} : il obtient ses propres poignées et les lignes à côté deviennent des courbes.
+Sélectionnez une ligne droite et cliquez sur {{ui:sketch.curveLine}} dans la barre qui apparaît : le côté s'incline en courbe, comme dans Tinkercad, et montre ses deux poignées. Faites-les glisser pour façonner la courbe ; plus une poignée est éloignée, plus la courbure est forte. {{ui:sketch.straightenLine}} rend le côté droit. Un point que vous sélectionnez peut être arrondi avec {{ui:sketch.smooth}} : il obtient ses propres poignées et les lignes à côté deviennent des courbes. Cliquez sur une poignée et elle s'allume : les touches fléchées la déplacent alors d'un pas de grille, avec [[Shift]] d'un pas plus grand, pour régler une courbe avec précision.
 
 ![Le côté inférieur du contour en forme de L est plié en courbe, avec ses deux poignées aux extrémités.](shot:sketch-curve)
 

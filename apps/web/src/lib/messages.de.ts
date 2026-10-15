@@ -717,6 +717,8 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "shortcuts.sketchFocusSelection": "Auf die Auswahl der Skizze zoomen",
   "shortcuts.sketchZoom": "In die Skizze hinein- oder herauszoomen",
   "shortcuts.sketchNudge": "Gewählte Punkte, Linien oder das Bild um einen Rasterschritt verschieben (Umschalt: größerer Schritt)",
+  "shortcuts.sketchTools": "Zeichenwerkzeug wählen: 1 Linie, 2 Bézier-Kurve, 3 Weiche Kurve, 4 Punkte setzen oder entfernen (solange keine Linie gezeichnet wird)",
+  "shortcuts.sketchHandleNudge": "Einen angeklickten Kurvengriff um einen Rasterschritt verschieben (Umschalt: größerer Schritt)",
   "shortcuts.sketchAxisLock": "Beim Ziehen: die Bewegung auf einer Achse halten",
   "shortcuts.sketchAngleSnap": "Beim Zeichnen: die neue Linie in 15°-Schritten einrasten",
   "shortcuts.sketchTypedLine": "Beim Zeichnen: Länge eintippen, „<“ oder Tab für den Winkel, Enter setzt den Punkt",

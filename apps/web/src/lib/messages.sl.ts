@@ -613,6 +613,8 @@ export const MESSAGES_SL: Partial<Record<MessageKey, string>> = {
   "shortcuts.sketchFocusSelection": "Povečaj izbor v skici",
   "shortcuts.sketchZoom": "Približaj ali oddalji skico",
   "shortcuts.sketchNudge": "Premakni izbrane točke, črte ali sliko za en korak mreže (Shift: večji korak)",
+  "shortcuts.sketchTools": "Izberi orodje za risanje: 1 Daljica, 2 Bézierova krivulja, 3 Gladka krivulja, 4 Dodaj ali odstrani točke (dokler se ne riše črta)",
+  "shortcuts.sketchHandleNudge": "Premakni kliknjeni ročaj krivulje za en korak mreže (Shift: večji korak)",
   "shortcuts.sketchAxisLock": "Med vlečenjem: omeji premik na eno os",
   "shortcuts.sketchDimensionSymmetric": "V polju dolžine črte: raste na obe strani",
   "shortcuts.edgeApply": "Uveljavi predogled",

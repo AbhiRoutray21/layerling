@@ -715,6 +715,8 @@ export const MESSAGES_RU: Partial<Record<MessageKey, string>> = {
   "shortcuts.sketchFocusSelection": "Приблизить к выделению в эскизе",
   "shortcuts.sketchZoom": "Приблизить или отдалить эскиз",
   "shortcuts.sketchNudge": "Сдвинуть выделенные точки, линии или изображение на один шаг сетки (Shift: больший шаг)",
+  "shortcuts.sketchTools": "Выбрать инструмент рисования: 1 Линия, 2 Кривая Безье, 3 Гладкая кривая, 4 Добавить или удалить точки (пока не рисуется линия)",
+  "shortcuts.sketchHandleNudge": "Сдвинуть выбранный щелчком маркер кривой на один шаг сетки (Shift: больший шаг)",
   "shortcuts.sketchAxisLock": "При перетаскивании: зафиксировать движение по одной оси",
   "shortcuts.sketchAngleSnap": "При рисовании: привязка новой линии к шагу 15°",
   "shortcuts.sketchTypedLine": "При рисовании: введите длину, «<» или Tab для угла, Enter для фиксации точки",

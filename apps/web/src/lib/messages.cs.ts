@@ -789,6 +789,8 @@ export const MESSAGES_CS: Record<MessageKey, string> = {
   "shortcuts.sketchResetView": "Zobrazit celý náčrt",
   "shortcuts.sketchFocusSelection": "Přiblížit výběr v náčrtu",
   "shortcuts.sketchNudge": "Posunout vybrané body, čáry nebo obrázek o krok mřížky (Shift: větší krok)",
+  "shortcuts.sketchTools": "Zvolit kreslicí nástroj: 1 Úsečka, 2 Bézierova křivka, 3 Hladká křivka, 4 Přidat nebo odebrat body (dokud se nekreslí úsečka)",
+  "shortcuts.sketchHandleNudge": "Posunout kliknutý úchyt křivky o krok mřížky (Shift: větší krok)",
   "shortcuts.sketchAxisLock": "Při tažení omezit posun na jednu osu",
   "shortcuts.sketchAngleSnap": "Při kreslení přichytávat novou úsečku po 15°",
   "shortcuts.sketchTypedLine": "Při kreslení zadat délku, „<“ nebo Tab pro úhel, Enter umístí bod",

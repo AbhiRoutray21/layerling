@@ -708,6 +708,8 @@ export const MESSAGES_FR: Partial<Record<MessageKey, string>> = {
   "shortcuts.sketchFocusSelection": "Zoom sur la sélection dans l'esquisse",
   "shortcuts.sketchZoom": "Zoomer ou dézoomer sur l'esquisse",
   "shortcuts.sketchNudge": "Déplacer les points, lignes ou images sélectionnés d'un pas de grille (Shift : un pas plus grand)",
+  "shortcuts.sketchTools": "Choisir un outil de dessin : 1 Ligne, 2 Courbe de Bézier, 3 Courbe douce, 4 Ajouter ou supprimer des points (tant qu'aucune ligne n'est en cours)",
+  "shortcuts.sketchHandleNudge": "Déplacer d'un pas de grille une poignée de courbe cliquée (Shift : un pas plus grand)",
   "shortcuts.sketchAxisLock": "Tout en faisant glisser : gardez le mouvement sur un axe",
   "shortcuts.sketchAngleSnap": "Pendant le dessin : capturez la nouvelle ligne par pas de 15 °",
   "shortcuts.sketchTypedLine": "Pendant le dessin : tapez la longueur, \"<\" ou Tab pour l'angle, Entrée définit le point",

@@ -30,6 +30,8 @@ Een lichaam ontstaat alleen uit een **gesloten** omtrek.
 
 ![Een L-vormige omtrek. Bij het geselecteerde hoekpunt linksboven staan de lengtes van de twee lijnen in millimeters, en de hoek ertussen in graden.](shot:sketch-outline)
 
+De toetsen [[1]] tot en met [[4]] kiezen de tekengereedschappen, in de volgorde van de balk: {{ui:sketch.line}}, {{ui:sketch.bezier}}, {{ui:sketch.smooth}} en {{ui:sketch.refine}}. Ze werken zolang er geen lijn wordt getekend; tijdens een lijn zijn de cijfers de lengte ervan (zie hieronder).
+
 ## Lijnen met getallen
 
 Heb je met {{ui:sketch.line}} of {{ui:sketch.smooth}} het eerste punt gezet, typ dan gewoon een getal: naast de lijn openen twee velden, {{ui:sketch.typedLength}} in millimeters en {{ui:sketch.typedAngle}} in graden. [[<]] of [[Tab]] springt naar de hoek, dus "50<30" geeft een lijn van 50 mm lang onder 30°, zoals in AutoCAD. [[Enter]] zet het punt, en je kunt meteen de volgende lijn intypen; [[Esc]] sluit de velden zonder de lijnketen te beëindigen.
@@ -38,7 +40,7 @@ De hoek telt tegen de klok in vanaf rechts: 0° naar rechts, 90° omhoog, 180° 
 
 ## Een rechte zijde buigen
 
-Selecteer een rechte lijn en klik op {{ui:sketch.curveLine}} in de balk die verschijnt: de zijde buigt uit tot een curve, zoals in Tinkercad, en toont zijn twee handgrepen. Sleep eraan om de curve te vormen; hoe verder een handgreep uitsteekt, hoe sterker de bocht. {{ui:sketch.straightenLine}} maakt de zijde weer recht. Een punt dat je selecteert kun je met {{ui:sketch.smooth}} rond maken: het krijgt eigen handgrepen en de lijnen ernaast worden curves.
+Selecteer een rechte lijn en klik op {{ui:sketch.curveLine}} in de balk die verschijnt: de zijde buigt uit tot een curve, zoals in Tinkercad, en toont zijn twee handgrepen. Sleep eraan om de curve te vormen; hoe verder een handgreep uitsteekt, hoe sterker de bocht. {{ui:sketch.straightenLine}} maakt de zijde weer recht. Een punt dat je selecteert kun je met {{ui:sketch.smooth}} rond maken: het krijgt eigen handgrepen en de lijnen ernaast worden curves. Klik op een greep en hij licht op: de pijltoetsen verplaatsen hem dan één rasterstap, met [[Shift]] een grotere stap, zodat je een kromme nauwkeurig instelt.
 
 ![De onderzijde van de L-vormige omtrek gebogen tot een curve, met zijn twee handgrepen aan de uiteinden.](shot:sketch-curve)
 

@@ -6620,6 +6620,12 @@ html[data-theme="dark"] .sketch-image-hint {
   vector-effect: non-scaling-stroke;
 }
 
+.sketch-curve-handles circle.sketch-handle-selected {
+  fill: #f08036;
+  stroke: #ffffff;
+  stroke-width: 3;
+}
+
 .sketch-drag-handles circle,
 .sketch-curve-handles circle {
   fill: #ffffff;

@@ -717,6 +717,8 @@ export const MESSAGES_NL: Record<MessageKey, string> = {
   "shortcuts.sketchFocusSelection": "Inzoomen op de selectie in de schets",
   "shortcuts.sketchZoom": "In- of uitzoomen in de schets",
   "shortcuts.sketchNudge": "Geselecteerde punten, lijnen of afbeelding één rasterstap verplaatsen (Shift: grotere stap)",
+  "shortcuts.sketchTools": "Tekengereedschap kiezen: 1 Lijn, 2 Bézierkromme, 3 Vloeiende kromme, 4 Punten toevoegen of verwijderen (zolang er geen lijn wordt getekend)",
+  "shortcuts.sketchHandleNudge": "Een aangeklikte krommegreep één rasterstap verplaatsen (Shift: grotere stap)",
   "shortcuts.sketchAxisLock": "Tijdens slepen: op één as blijven",
   "shortcuts.sketchAngleSnap": "Tijdens tekenen: de nieuwe lijn in stappen van 15° laten snappen",
   "shortcuts.sketchTypedLine": "Tijdens tekenen: typ de lengte, ‘<’ of Tab voor de hoek, Enter zet het punt",

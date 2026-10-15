@@ -2676,6 +2676,11 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .sketch-image-hint {
   stroke: #f08036;
 }
 
+:where(html[data-theme="dark"][data-palette="graphite"]) .sketch-curve-handles circle.sketch-handle-selected {
+  fill: #f08036;
+  stroke: #ffffff;
+}
+
 :where(html[data-theme="dark"][data-palette="graphite"]) .sketch-drag-handles circle,
 :where(html[data-theme="dark"][data-palette="graphite"]) .sketch-curve-handles circle {
   fill: #ffffff;
