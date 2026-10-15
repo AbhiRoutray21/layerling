@@ -6,6 +6,7 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **The lift arrow keeps its distance:** On a thin body the arrow that lifts the selection sat only 2 mm above the middle handle, a few pixels on the screen, and covered it. It now stays at least 30 pixels away, whatever the zoom and the view. Reported by @Mycraftymama (#353).
 - **Russian:** The whole interface, the 16 chapters of the guide and the guide's own pages are in Russian, with the language list and the guide's language switch. It is picked automatically for a browser set to Russian. Made by @CjCrash with an AI assistant (pull request #124); a second Russian reader is still welcome, wrong words are fixed with a small pull request. Along the way the guide builder learned two things any language profits from: a language without pictures of its own points at the English pictures instead of carrying a copy of them, and a heading in Cyrillic gets an id of its own instead of an empty one.
 ## 1.73.0
 

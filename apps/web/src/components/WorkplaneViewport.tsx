@@ -105,6 +105,7 @@ import { cleanNearZero, cleanRotationDegrees, isNonSolidShapeKind, mirroredAxisC
 import { sphereTessellation } from "@/lib/sphereTessellation";
 import { torusTessellation } from "@/lib/torusTessellation";
 import type { LayerlingMcpViewFace } from "@/lib/layerlingMcpProtocol";
+import { liftHandleScreenPoint } from "@/components/workplane/transformOverlayTypes";
 import {
   TransformOverlay,
   continuousSnappedWheelRotation,
@@ -10746,8 +10747,9 @@ function syncTransformOverlay(
     left: project(footprintWorld.left),
   };
   const heightPoint = project(showLowerHandles ? lowerCenterWorld : upperCenterWorld);
-  const liftPoint = project(liftHandle);
   const liftBasePoint = project(liftBaseWorld);
+  // A thin body puts the arrow a few pixels from the height handle; it keeps its distance on the screen.
+  const liftPoint = liftHandleScreenPoint(liftBasePoint, project(liftHandle), showLowerLiftHandle);
   const liftTargetAngle = THREE.MathUtils.radToDeg(
     Math.atan2(liftPoint.y - liftBasePoint.y, liftPoint.x - liftBasePoint.x),
   );
