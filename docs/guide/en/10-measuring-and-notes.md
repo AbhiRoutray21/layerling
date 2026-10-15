@@ -33,7 +33,7 @@ The framing square lies on the workplane. If that sits on the side of a body, th
 - **Dragging the handle** moves it.
 - **A short click on the handle** turns it by 90°.
 - **The ×** beside it removes it.
-- **The small button left of the handle** switches what is measured from: the outside of a body (endpoint, an icon with lines) or its middle (midpoint, a crosshair).
+- **The small button left of the handle** switches what is measured from: the outside of a body (endpoint, an icon with lines) or its middle (midpoint, a crosshair). A small switch of the same kind sits beside each green number and sets that number alone: for a standing cylinder the middle in the two arms and the bottom in height, for a lying one the middle across and an end along. When all three agree again, the button at the handle shows the common mode.
 
 If bodies stand at one of the arms, the framing square shows their dimensions automatically. That works on the base plate only, not on the side of a body.
 

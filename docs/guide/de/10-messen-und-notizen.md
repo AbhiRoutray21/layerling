@@ -33,7 +33,7 @@ Das Winkellineal legt sich auf die Arbeitsebene. Liegt sie auf der Seite eines K
 - **Am Griff ziehen** verschiebt es.
 - **Ein kurzer Klick auf den Griff** dreht es um 90°.
 - **Das ×** daneben entfernt es.
-- **Der kleine Knopf links am Griff** schaltet um, wovon aus gemessen wird: von der Außenkante eines Körpers (Eckpunkt, Symbol mit Linien) oder von seiner Mitte (Mittelpunkt, Fadenkreuz).
+- **Der kleine Knopf links am Griff** schaltet um, wovon aus gemessen wird: von der Außenkante eines Körpers (Eckpunkt, Symbol mit Linien) oder von seiner Mitte (Mittelpunkt, Fadenkreuz). Neben jeder grünen Zahl sitzt ein ebensolcher kleiner Schalter, der nur diese Zahl umstellt: bei einem stehenden Zylinder die Mitte in den beiden Armen und die Unterseite in der Höhe, bei einem liegenden die Mitte quer und ein Ende längs. Stimmen alle drei wieder überein, zeigt der Knopf am Griff den gemeinsamen Modus.
 
 Stehen Körper an einem der Arme, zeigt das Winkellineal automatisch deren Maße an. Das geht nur auf der Grundplatte, nicht auf der Seite eines Körpers.
 

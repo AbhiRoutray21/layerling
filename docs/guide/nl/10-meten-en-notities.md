@@ -33,7 +33,7 @@ De winkelhaak ligt op het werkvlak. Ligt dat op de zijkant van een lichaam, dan 
 - **De greep slepen** verplaatst hem.
 - **Een korte klik op de greep** draait hem 90°.
 - **Het ×** ernaast verwijdert hem.
-- **Het knopje links van de greep** wisselt waarvandaan gemeten wordt: de buitenkant van een lichaam (eindpunt, een icoon met lijnen) of het midden ervan (middelpunt, een vizierkruis).
+- **Het knopje links van de greep** wisselt waarvandaan gemeten wordt: de buitenkant van een lichaam (eindpunt, een icoon met lijnen) of het midden ervan (middelpunt, een vizierkruis). Naast elk groen getal zit zo'n klein schakelaartje dat alleen dat getal omzet: bij een staande cilinder het midden in de twee armen en de onderkant in de hoogte, bij een liggende het midden dwars en een uiteinde in de lengte. Komen alle drie weer overeen, dan toont het knopje bij de greep de gemeenschappelijke stand.
 
 Staan er lichamen bij een van de armen, dan toont de winkelhaak automatisch hun afmetingen. Dat werkt alleen op de bodemplaat, niet op de zijkant van een lichaam.
 

@@ -69,7 +69,7 @@ import { customFontRevision } from "@/lib/textFonts";
 import { readDesignView, writeDesignView } from "@/lib/designView";
 import { DIMENSION_FORMULA_FIELDS, formulaMatchesMillimeters, formulaToRemember, withFieldFormula } from "@/lib/fieldFormulas";
 import { displayToMillimeters, formatLengthMm, lengthDisplayUnit, millimetersToDisplay, parseLengthMm, parseMeasurementInput, resolveLengthMm, setLengthUnit } from "@/lib/measurementUnits";
-import { computeCornerRulerRelativeCoordinates, cornerRulerFrameForWorkplane, cornerRulerShiftVector, pointAlongRuler, rotateCornerRulerFrame, rulerDimensionMatch, type CornerRulerMode, type RulerDimensionField } from "@/lib/rulerDimensions";
+import { computeCornerRulerRelativeCoordinates, cornerRulerAxisModes, cornerRulerFrameForWorkplane, cornerRulerShiftVector, pointAlongRuler, rotateCornerRulerFrame, rulerDimensionMatch, toggledCornerRulerAxis, toggledCornerRulerMode, type CornerRulerAxis, type CornerRulerMode, type RulerDimensionField } from "@/lib/rulerDimensions";
 import { createMoveDimensionOverlay, type MoveDimensionAxis, type MoveDimensionOverlayData } from "@/lib/moveDimensionLines";
 import { computeOriginAxisDistance, createOriginDimensionOverlay, type OriginDimensionOverlayData } from "@/lib/originDimensionLines";
 import {
@@ -5544,9 +5544,16 @@ export function WorkplaneViewport({
     return formulaMatchesMillimeters(formula, extent, parseMeasureMm) ? formula : undefined;
   }, []);
 
+  // Whether the framing square counts this size to the middle of the body: typing it then grows the body to both sides.
+  const rulerCountsToMiddle = useCallback((axis: string) => {
+    const ruler = cornerRulerModelRef.current[0];
+    const modes = cornerRulerAxisModes(ruler?.mode, ruler?.axisModes);
+    return (axis === "width" ? modes.x : axis === "depth" ? modes.z : axis === "height" ? modes.elevation : "endpoint") === "midpoint";
+  }, []);
+
   const beginDimensionEdit = useCallback((mark: DimensionMark) => {
     const id = selectedIdsRef.current[0];
-    const isCornerRulerMidpoint = cornerRulerModelRef.current[0]?.mode === "midpoint";
+    const isCornerRulerMidpoint = rulerCountsToMiddle(mark.axis);
     if (id && (mark.axis === "width" || mark.axis === "depth" || mark.axis === "height") && !isCornerRulerMidpoint) {
       rememberResizeAnchor(id, mark.axis === "height" ? "height" : "scale", mark.handleKey);
     } else {
@@ -5603,7 +5610,7 @@ export function WorkplaneViewport({
         : sizeFrame?.height ?? shape.height;
     const value = resolveMeasureMm(text, currentExtent);
     if (!(Number.isFinite(value) && value > 0)) return null;
-    const isCornerRulerMidpoint = cornerRulerModelRef.current[0]?.mode === "midpoint";
+    const isCornerRulerMidpoint = rulerCountsToMiddle(axis);
     const customLimit = workspaceRef.current.shapeCustomizations[shape.kind]?.maxDimension;
     const nextValue = Math.min(customLimit ?? Number.POSITIVE_INFINITY, Math.max(MIN_SHAPE_SIZE, value));
     const anchor = isCornerRulerMidpoint ? null : lastResizeAnchorRef.current;
@@ -6315,6 +6322,7 @@ export function WorkplaneViewport({
 
   const placeCornerRuler = useCallback((point: PlacementPoint, workplane: PlacementWorkplane) => {
     const existingMode = cornerRulerModelRef.current[0]?.mode ?? "endpoint";
+    const existingAxisModes = cornerRulerModelRef.current[0]?.axisModes;
     const instance: CornerRulerInstance = {
       id: `corner-ruler-${++cornerRulerIdRef.current}`,
       corner: point,
@@ -6323,6 +6331,7 @@ export function WorkplaneViewport({
       armLengthX: CORNER_RULER_DEFAULT_ARM_X,
       armLengthZ: CORNER_RULER_DEFAULT_ARM_Z,
       mode: existingMode,
+      ...(existingAxisModes ? { axisModes: existingAxisModes } : {}),
     };
     storeCornerRulerModel([instance]);
   }, [storeCornerRulerModel]);
@@ -6331,8 +6340,20 @@ export function WorkplaneViewport({
     storeCornerRulerModel(
       cornerRulerModelRef.current.map((ruler) => {
         if (ruler.id !== id) return ruler;
-        const nextMode: CornerRulerMode = ruler.mode === "midpoint" ? "endpoint" : "midpoint";
-        return { ...ruler, mode: nextMode };
+        const { axisModes: _single, ...rest } = ruler;
+        return { ...rest, ...toggledCornerRulerMode(ruler.mode, ruler.axisModes) };
+      })
+    );
+  }, [storeCornerRulerModel]);
+
+  // One of the three green numbers counts to the edge or the middle on its own.
+  const toggleCornerRulerAxisMode = useCallback((id: string, axis: CornerRulerAxis) => {
+    storeCornerRulerModel(
+      cornerRulerModelRef.current.map((ruler) => {
+        if (ruler.id !== id) return ruler;
+        const { axisModes: _single, ...rest } = ruler;
+        const toggled = toggledCornerRulerAxis(ruler.mode, ruler.axisModes, axis);
+        return { ...rest, mode: toggled.mode, ...(toggled.axisModes ? { axisModes: toggled.axisModes } : {}) };
       })
     );
   }, [storeCornerRulerModel]);
@@ -6376,6 +6397,7 @@ export function WorkplaneViewport({
       rulerRotation: 0,
       frame,
       mode: ruler.mode,
+      axisModes: ruler.axisModes,
       bounds,
     });
     const currentVal = edit.axis === "elevation" ? coords.elevation : edit.axis === "x" ? coords.x : coords.z;
@@ -8633,6 +8655,7 @@ export function WorkplaneViewport({
               onHandlePointerUp={handleCornerRulerHandlePointerUp}
               onDelete={removeCornerRuler}
               onToggleMode={toggleCornerRulerMode}
+              onToggleAxisMode={toggleCornerRulerAxisMode}
               onCoordinateClick={beginRulerCoordinateEdit}
             />
           ) : null}
@@ -10817,9 +10840,21 @@ function syncTransformOverlay(
       return [handleKey, Array.from(axes).map((axis) => makeFootprintDimensionMark(handleKey, axis))];
     }),
   );
+  // The height runs along the vertical edge that stands furthest right on the screen, outside the
+  // body, not through its middle, where its number sits on the shape (DrJones, forum).
+  let heightEdge: { low: THREE.Vector3; high: THREE.Vector3; outward: THREE.Vector3; screenX: number } | null = null;
+  for (const [cornerX, cornerZ] of [[frame.min.x, frame.min.z], [frame.max.x, frame.min.z], [frame.max.x, frame.max.z], [frame.min.x, frame.max.z]]) {
+    const low = framePoint(frame, cornerX, frame.min.y, cornerZ);
+    const high = framePoint(frame, cornerX, frame.max.y, cornerZ);
+    const screenX = project(low.clone().lerp(high, 0.5)).x;
+    if (heightEdge && screenX <= heightEdge.screenX) continue;
+    const outward = xFootAxis.clone().multiplyScalar(Math.sign(cornerX)).addScaledVector(zFootAxis, Math.sign(cornerZ));
+    heightEdge = { low, high, outward: outward.lengthSq() > 1e-9 ? outward.normalize() : rightOut, screenX };
+  }
+  const heightMark = makeDimensionMark("height", heightHandleKey, "height", heightLabel, heightEdge?.low ?? lowerCenterWorld, heightEdge?.high ?? upperCenterWorld, heightEdge?.outward ?? rightOut, project);
   const dimensionMarks = {
     ...footprintDimensionMarks,
-    [heightHandleKey]: [makeDimensionMark("height", heightHandleKey, "height", heightLabel, lowerCenterWorld, upperCenterWorld, rightOut, project)],
+    [heightHandleKey]: [heightMark],
     [liftHandleKey]: [makeDimensionMark("elevation", liftHandleKey, "elevation", liftLabel, liftAnchor, liftTarget, liftDimensionOutward, project)],
   };
   const screenOffsetFromCenter = (point: { x: number; y: number }, distance: number) => {

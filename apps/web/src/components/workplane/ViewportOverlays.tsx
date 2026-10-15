@@ -10,7 +10,7 @@ import { LineSegmentsGeometry } from "three/examples/jsm/lines/LineSegmentsGeome
 import { type AppThemePalette, type ResolvedAppTheme } from "@/lib/appTheme";
 import { t } from "@/lib/i18n";
 import { displayToMillimeters, formatLengthMm, formatMeasurementNumber, lengthDisplayUnit, millimetersToDisplay, parseMeasurementInput } from "@/lib/measurementUnits";
-import { computeCornerRulerRelativeCoordinates, cornerRulerDimensionMatchesFromCorner, cornerRulerFlatRotation, cornerRulerTicks, pointAlongRuler, rulerDimensionMatch, type CornerRulerFrame, type CornerRulerMode, type RulerDimensionField, type RulerDimensionMatch } from "@/lib/rulerDimensions";
+import { computeCornerRulerRelativeCoordinates, cornerRulerAxisModes, cornerRulerDimensionMatchesFromCorner, cornerRulerFlatRotation, cornerRulerTicks, pointAlongRuler, rulerDimensionMatch, type CornerRulerAxis, type CornerRulerAxisModes, type CornerRulerFrame, type CornerRulerMode, type RulerDimensionField, type RulerDimensionMatch } from "@/lib/rulerDimensions";
 import { type PlacementPoint, type PlacementWorkplane } from "@/lib/placementWorkplane";
 import { capturePointer } from "@/lib/pointerCapture";
 import { GuideHelpLink } from "@/components/GuideHelpLink";
@@ -1168,6 +1168,8 @@ export type CornerRulerInstance = {
   armLengthX: number;
   armLengthZ: number;
   mode?: CornerRulerMode;
+  /** Single numbers that count differently from `mode`, for instance a standing body: the middle in x and z, the bottom in height. */
+  axisModes?: CornerRulerAxisModes;
 };
 
 type CornerRulerTickScreen = { x1: number; y1: number; x2: number; y2: number };
@@ -1179,6 +1181,7 @@ export type CornerRulerNeighborLabel = { key: string; x: number; y: number; text
 type CornerRulerOverlayItem = {
   id: string;
   mode: CornerRulerMode;
+  modes: Record<CornerRulerAxis, CornerRulerMode>;
   handleX: number;
   handleY: number;
   armXLine: { x1: number; y1: number; x2: number; y2: number };
@@ -1250,7 +1253,9 @@ export function syncCornerRulerToolOverlay(
 
     rulers.forEach((ruler) => {
       const armWidth = CORNER_RULER_ARM_WIDTH;
-      const mode: CornerRulerMode = ruler.mode ?? "endpoint";
+      const modes = cornerRulerAxisModes(ruler.mode, ruler.axisModes);
+      // The one button shows the middle only when all three numbers count to it.
+      const mode: CornerRulerMode = modes.x === "midpoint" && modes.z === "midpoint" && modes.elevation === "midpoint" ? "midpoint" : "endpoint";
       const xAxis = new THREE.Vector3(ruler.frame.xAxis.x, ruler.frame.xAxis.y, ruler.frame.xAxis.z).normalize();
       const zAxis = new THREE.Vector3(ruler.frame.zAxis.x, ruler.frame.zAxis.y, ruler.frame.zAxis.z).normalize();
       const yAxis = new THREE.Vector3(ruler.frame.normal.x, ruler.frame.normal.y, ruler.frame.normal.z).normalize();
@@ -1292,7 +1297,8 @@ export function syncCornerRulerToolOverlay(
           rulerCorner: ruler.corner,
           rulerRotation: 0,
           frame: ruler.frame,
-          mode,
+          mode: ruler.mode,
+          axisModes: ruler.axisModes,
           bounds,
         });
 
@@ -1391,6 +1397,7 @@ export function syncCornerRulerToolOverlay(
       items.push({
         id: ruler.id,
         mode,
+        modes,
         handleX: handleScreen.x,
         handleY: handleScreen.y,
         armXLine,
@@ -1418,6 +1425,7 @@ export function CornerRulerToolOverlay({
   onHandlePointerUp,
   onDelete,
   onToggleMode,
+  onToggleAxisMode,
   onCoordinateClick,
 }: {
   overlay: CornerRulerOverlayState;
@@ -1426,6 +1434,7 @@ export function CornerRulerToolOverlay({
   onHandlePointerUp: (event: ReactPointerEvent<SVGCircleElement>, id: string) => void;
   onDelete: (id: string) => void;
   onToggleMode: (id: string) => void;
+  onToggleAxisMode: (id: string, axis: CornerRulerAxis) => void;
   onCoordinateClick: (rulerId: string, shapeIds: string[], axis: "x" | "z" | "elevation", value: number, x: number, y: number) => void;
 }) {
   if (overlay.items.length === 0) {
@@ -1510,6 +1519,24 @@ export function CornerRulerToolOverlay({
               >
                 {item.selectedCoordinate.elevationLabel.text}
               </button>
+              {(["x", "z", "elevation"] as const).map((axis) => {
+                const label = axis === "x" ? item.selectedCoordinate!.xLabel : axis === "z" ? item.selectedCoordinate!.zLabel : item.selectedCoordinate!.elevationLabel;
+                const middle = item.modes[axis] === "midpoint";
+                return (
+                  <button
+                    key={axis}
+                    type="button"
+                    className="corner-ruler-mode-toggle ruler-axis-mode-toggle"
+                    style={{ left: label.x - Math.max(22, label.text.length * 4 + 12) - 12, top: label.y }}
+                    aria-label={`${t("aria.toggleCornerRulerMode")} (${axis === "x" ? "X" : axis === "z" ? "Y" : "Z"})`}
+                    title={middle ? t("ruler.mode.midpoint") : t("ruler.mode.endpoint")}
+                    onPointerDown={(event) => event.stopPropagation()}
+                    onClick={() => onToggleAxisMode(item.id, axis)}
+                  >
+                    {middle ? <Crosshair size={10} strokeWidth={2.5} aria-hidden="true" /> : <Rows3 size={10} strokeWidth={2.5} aria-hidden="true" />}
+                  </button>
+                );
+              })}
             </>
           ) : null}
           <button
