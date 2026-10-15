@@ -10466,8 +10466,13 @@ function pullModifierEdgeTowardCamera(material: THREE.LineBasicMaterial) {
 // Browsers draw a plain WebGL line 1px wide whatever its linewidth says, so the
 // hovered edge and the edge to unselect get a screen-space wide line at twice that.
 const WIDE_MODIFIER_EDGE_PX = 2;
+// The hovered edge also gets a darker, wider line under it: on the pale floor a
+// light blue line alone has hardly any contrast, the outline keeps it readable
+// on light and dark ground alike.
+const MODIFIER_EDGE_HALO_PX = 6;
+const MODIFIER_EDGE_HALO_COLOR = "#0a2a3a";
 
-function wideModifierEdgeLine(state: ThreeState, points: number[], color: string, renderOrder: number) {
+function wideModifierEdgeLine(state: ThreeState, points: number[], color: string, renderOrder: number, linewidth = WIDE_MODIFIER_EDGE_PX, opacity = 1) {
   const segments: number[] = [];
   for (let index = 3; index + 2 < points.length; index += 3) {
     segments.push(points[index - 3], points[index - 2], points[index - 1], points[index], points[index + 1], points[index + 2]);
@@ -10476,10 +10481,10 @@ function wideModifierEdgeLine(state: ThreeState, points: number[], color: string
   geometry.setPositions(segments);
   const material = new LineMaterial({
     color,
-    linewidth: WIDE_MODIFIER_EDGE_PX,
+    linewidth,
     worldUnits: false,
     transparent: true,
-    opacity: 1,
+    opacity,
     depthTest: false,
     depthWrite: false,
     alphaToCoverage: false,
@@ -10516,6 +10521,9 @@ function rebuildModifierEdges(
     const belowThreshold = !active && !hovered && !highlighted.has(edge.id);
     const style = modifierEdgeMaterialStyle(active, hovered, previewActive, belowThreshold, failed.has(edge.id));
     if (hovered || (active && failed.has(edge.id))) {
+      if (hovered) {
+        state.modifierLayer.add(wideModifierEdgeLine(state, edge.points, MODIFIER_EDGE_HALO_COLOR, 1002.5, MODIFIER_EDGE_HALO_PX, 0.85));
+      }
       state.modifierLayer.add(wideModifierEdgeLine(state, edge.points, style.color, hovered ? 1003 : 1002));
       return;
     }
