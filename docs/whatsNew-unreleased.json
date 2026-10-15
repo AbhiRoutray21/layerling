@@ -28,5 +28,15 @@
       "de": "Das Symbolschild hat jetzt wie das Namensschild ein Loch für den Schlüsselring: in der Karte des Schilds anschalten, Durchmesser und Seite wählen. Das Loch geht durch alle Schichten, die Lasche sitzt an der untersten Schicht außerhalb des Symbols, und die Schichten bleiben ausgerichtet.",
       "en": "The icon tag now has a key ring hole like the name tag: switch it on in the tag's card and choose the diameter and the side. The hole goes through all layers, the tab sits on the bottom layer beyond the icon, and the layers stay lined up."
     }
+  },
+  {
+    "title": {
+      "de": "Gesperrtes Objekt umbenennen und verstecken",
+      "en": "Rename and hide a locked object"
+    },
+    "body": {
+      "de": "Ein gesperrtes Objekt ließ sich in der Objektliste und mit den Tasten umbenennen oder verstecken, im Eigenschaftenfenster wurde das still verweigert. Jetzt geht es auch dort.",
+      "en": "A locked object could be renamed or hidden in the object list and with the keys, but the properties window silently refused. Now it works there too."
+    }
   }
 ]
