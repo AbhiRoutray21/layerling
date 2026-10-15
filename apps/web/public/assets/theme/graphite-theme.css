@@ -678,7 +678,6 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .whats-new-earlier:hove
 
 :where(html[data-theme="dark"][data-palette="graphite"]) .dashboard-action-tile.create {
   border-color: #f3a452;
-  background: #fafafa;
 }
 
 :where(html[data-theme="dark"][data-palette="graphite"]) .dashboard-action-icon {
@@ -5659,7 +5658,6 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .project-menu-trigger {
 
 html[data-theme="dark"]:where([data-palette="graphite"]) .dashboard-action-tile.create {
   color: #f2f2f2;
-  background: rgba(183, 100, 11, 0.14);
   border-color: #a3682b;
 }
 

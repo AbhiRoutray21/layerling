@@ -6,6 +6,7 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **The three start boxes share one ground:** On the start page the box "Create new 3D design" had a slightly different ground (off-white, or a tinted orange in the dark theme) from the two beside it. All three now have the same; the orange border and the orange icon still mark the first one.
 ## 1.74.0
 
 - **Snap grid: the dragged face lands on the grid:** Dragging the height handle snapped the change of the height by whole grid steps, so a body 0.5 mm high on a 1 mm grid went to 1.5 mm. Now the face you drag (the top, or the bottom for the lower handle) lands on the grid of the workplane, so it goes to 1.0 mm, and the lift arrow puts the bottom of the body on the grid the same way. A tilted selection keeps the old step. Reported by @rondlh (#329).

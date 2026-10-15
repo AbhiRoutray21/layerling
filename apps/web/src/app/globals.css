@@ -2014,9 +2014,9 @@ html[data-theme="dark"] .whats-new-earlier:hover {
   transform: translateY(-1px);
 }
 
+/* The create tile only differs by its orange border and icon: its ground is the one of the other tiles. */
 .dashboard-action-tile.create {
   border-color: #f3a452;
-  background: #fcfbf8;
 }
 
 .dashboard-action-icon {
@@ -13015,7 +13015,6 @@ html[data-theme="dark"] .project-menu-trigger {
 
 html[data-theme="dark"] .dashboard-action-tile.create {
   color: #f7f3ec;
-  background: rgba(183, 100, 11, 0.14);
   border-color: #a3682b;
 }
 
