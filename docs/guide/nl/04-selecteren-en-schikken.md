@@ -85,7 +85,7 @@ Voor gatenrasters, boutcirkels en getande ringen is er het {{ui:editor.tool.arra
 ![Het patroon in de modus "Cirkel": de kopieën verschijnen eerst als voorbeeld.](shot:pattern-tool)
 
 - **{{ui:array.mode.row}}:** De selectie wordt op gelijke afstanden herhaald. De rij stapt langs alle drie de assen tegelijk, met {{ui:array.spacingX}}, {{ui:array.spacingY}} en {{ui:array.spacingZ}}: één ervan geeft een rechte rij, twee of drie een diagonale rij of een trap. Een negatieve afstand legt de rij de andere kant op.
-- **{{ui:array.mode.circle}}:** De selectie wordt rond een middelpunt verdeeld. Hoeveel kopieën er zijn, stel je in onder {{ui:array.count}}, en de {{ui:array.angle}} is 360° voor een volle cirkel. Kies of de kopieën meedraaien. {{ui:array.rise}} tilt elke kopie iets hoger dan de vorige (een schroef of een oplopende spiraal), en {{ui:array.radiusChange}} zet haar verder van het middelpunt af of er dichter bij (een platte spiraal); samen geven ze een kegelvormige spiraal.
+- **{{ui:array.mode.circle}}:** De selectie wordt rond een middelpunt verdeeld. Hoeveel kopieën er zijn, stel je in onder {{ui:array.count}}, en de {{ui:array.angle}} is 360° voor een volle cirkel. Kies of de kopieën meedraaien. {{ui:array.rise}} tilt elke kopie iets hoger dan de vorige (een schroef of een oplopende spiraal), en {{ui:array.radiusChange}} zet haar verder van het middelpunt af of er dichter bij (een platte spiraal); samen geven ze een kegelvormige spiraal. Een spiraal maakt hooguit één winding: een hoek boven 360° telt als een volle cirkel, en er zijn hoogstens 100 kopieën.
 
 Tip: zet eerst met {{ui:editor.tool.rotationPivot}} het draaipunt op een vlak, dan ligt het middelpunt van de cirkel precies daar.
 

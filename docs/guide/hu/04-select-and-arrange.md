@@ -85,7 +85,7 @@ Lyukrácsokhoz, furatkörökhöz és foggyűrűkhöz ott van az {{ui:editor.tool
 ![Az ismétlés „Kör” módban: a másolatok előbb előnézetként jelennek meg.](shot:pattern-tool)
 
 - **{{ui:array.mode.row}}:** A kijelölés egyenlő távolságonként ismétlődik. A sor egyszerre mindhárom tengely mentén lép, a {{ui:array.spacingX}}, a {{ui:array.spacingY}} és a {{ui:array.spacingZ}} értékkel: ezek közül egy egyenes sort ad, kettő vagy három átlós sort vagy lépcsőt. Negatív távolsággal a sor a másik irányba halad.
-- **{{ui:array.mode.circle}}:** A kijelölés egy középpont körül oszlik el. Hogy hány másolat legyen, a {{ui:array.count}} alatt adod meg, a {{ui:array.angle}} pedig teljes körhöz 360°. Válaszd ki, hogy a másolatok forduljanak-e. Az {{ui:array.rise}} minden másolatot kicsit magasabbra emel az előzőnél (csavarvonal vagy emelkedő spirál), a {{ui:array.radiusChange}} pedig távolabb viszi a középponttól vagy közelebb hozza hozzá (lapos spirál); a kettő együtt kúpos spirált ad.
+- **{{ui:array.mode.circle}}:** A kijelölés egy középpont körül oszlik el. Hogy hány másolat legyen, a {{ui:array.count}} alatt adod meg, a {{ui:array.angle}} pedig teljes körhöz 360°. Válaszd ki, hogy a másolatok forduljanak-e. Az {{ui:array.rise}} minden másolatot kicsit magasabbra emel az előzőnél (csavarvonal vagy emelkedő spirál), a {{ui:array.radiusChange}} pedig távolabb viszi a középponttól vagy közelebb hozza hozzá (lapos spirál); a kettő együtt kúpos spirált ad. A spirál legfeljebb egyet fordul: a 360° feletti szög teljes körnek számít, és legfeljebb 100 másolat lehet.
 
 Tipp: előbb tedd a forgatási pontot egy lapra a {{ui:editor.tool.rotationPivot}} paranccsal, és a kör középpontja pontosan oda kerül.
 

@@ -85,7 +85,7 @@ Pro přiložení dvou dílů vyberte pohyblivý díl, spusťte {{ui:editor.tool.
 ![Opakování po kružnici nejprve zobrazuje náhled kopií.](shot:pattern-tool)
 
 - **{{ui:array.mode.row}}:** stejné rozestupy podél X, Y a Z přes {{ui:array.spacingX}}, {{ui:array.spacingY}} a {{ui:array.spacingZ}}. Jedna nenulová osa tvoří přímou řadu, více os šikmou řadu nebo schodiště. Záporný rozestup obrátí směr.
-- **{{ui:array.mode.circle}}:** rozmístění kolem středu s počtem {{ui:array.count}} a úhlem {{ui:array.angle}}, pro celý obvod 360°. Můžete zapnout společné natáčení kopií. {{ui:array.rise}} zvedá každou další kopii pro šroubovici, {{ui:array.radiusChange}} mění poloměr pro rovinnou spirálu. Kombinací vznikne kuželová spirála.
+- **{{ui:array.mode.circle}}:** rozmístění kolem středu s počtem {{ui:array.count}} a úhlem {{ui:array.angle}}, pro celý obvod 360°. Můžete zapnout společné natáčení kopií. {{ui:array.rise}} zvedá každou další kopii pro šroubovici, {{ui:array.radiusChange}} mění poloměr pro rovinnou spirálu. Kombinací vznikne kuželová spirála. Spirála udělá nejvýš jeden závit: úhel nad 360° se počítá jako celý kruh a kopií je nejvýš 100.
 
 Tip: nastavte nejprve {{ui:editor.tool.rotationPivot}} na plochu. Střed kružnice pak bude přesně tam.
 

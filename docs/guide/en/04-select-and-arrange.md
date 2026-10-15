@@ -85,7 +85,7 @@ For hole grids, bolt circles and rings of teeth there is the {{ui:editor.tool.ar
 ![The pattern in "Circle" mode: the copies first appear as a preview.](shot:pattern-tool)
 
 - **{{ui:array.mode.row}}:** The selection is repeated at equal distances. The row steps along all three axes at once, with {{ui:array.spacingX}}, {{ui:array.spacingY}} and {{ui:array.spacingZ}}: one of them gives a straight row, two or three a diagonal row or a staircase. A negative spacing lays the row the other way.
-- **{{ui:array.mode.circle}}:** The selection is spread around a centre. How many copies there are you set under {{ui:array.count}}, and the {{ui:array.angle}} is 360° for a full circle. Choose whether the copies turn along. {{ui:array.rise}} lifts every copy a little more than the one before (a screw or an ascending spiral), and {{ui:array.radiusChange}} moves it further from the centre or closer to it (a flat spiral); together they give a conical spiral.
+- **{{ui:array.mode.circle}}:** The selection is spread around a centre. How many copies there are you set under {{ui:array.count}}, and the {{ui:array.angle}} is 360° for a full circle. Choose whether the copies turn along. {{ui:array.rise}} lifts every copy a little more than the one before (a screw or an ascending spiral), and {{ui:array.radiusChange}} moves it further from the centre or closer to it (a flat spiral); together they give a conical spiral. A spiral winds once around at most: an angle above 360° counts as a full circle, and there are at most 100 copies.
 
 Tip: first set the pivot on a face with {{ui:editor.tool.rotationPivot}}, then the centre of the circle lies exactly there.
 
