@@ -1,5 +1,50 @@
 [
   {
+    "version": "1.80.0",
+    "items": [
+      {
+        "title": {
+          "de": "Eine Fläche heraus- oder hineinziehen",
+          "en": "Push a face out or in"
+        },
+        "body": {
+          "de": "Eine Wand dicker machen oder eine Tasche in ein fertiges Teil schneiden ging bisher nur über Arbeitsebene, nachgezeichnete Skizze und Gruppe. Das neue Werkzeug „Fläche“ neben dem Lochmuster setzt Material auf eine ebene Fläche oder schneidet eine Tasche hinein, auf Wunsch mit Abstand zum Rand und mit runden Ecken, auch bei einem importierten STL. Was es anlegt, bleibt ein gewöhnlicher Skizzenkörper in einer Gruppe.",
+          "en": "Making a wall thicker or cutting a pocket into a finished part took a workplane, a traced sketch and a group, and on an imported STL there was no other way. The new tool \"Face\" next to the hole pattern adds material on a flat face or cuts a pocket into it, set in from the edge and with rounded corners if you like. What it adds stays an ordinary sketch body in a group."
+        }
+      },
+      {
+        "title": {
+          "de": "Backup zweimal einspielen verdoppelt nichts mehr",
+          "en": "Restoring a backup twice no longer doubles your designs"
+        },
+        "body": {
+          "de": "Spielst du ein Backup in einen Browser ein, der einen Entwurf daraus schon hat, wird dieser übersprungen, und die Meldung sagt, wie viele schon da waren. Der Hinweis am Knopf „Alle sichern“ nennt jetzt auch, über welchen Knopf ein Backup zurückkommt.",
+          "en": "If you restore a backup into a browser that already has one of its designs, that one is skipped, and the notice says how many were already there. The tooltip of \"Back up all\" now also names the button that brings a backup back."
+        }
+      },
+      {
+        "title": {
+          "de": "Rückgängig-Schritte bleiben nach dem Neuladen erhalten",
+          "en": "Undo steps survive a reload"
+        },
+        "body": {
+          "de": "Hattest du den letzten Schritt mit der Arbeitsebene auf einer Fläche gemacht, ging der ganze Rückgängig-Verlauf beim erneuten Laden verloren, etwa nach einem Update mit „Speichern und neu laden“. Der Entwurf kam vollständig zurück, aber Rückgängig, Wiederholen und die Verlaufsansicht waren grau. Das ist behoben, der Verlauf bleibt.",
+          "en": "If the last step was made with the workplane on a face, the whole undo history was lost when the design was loaded again, for instance after an update with Save and reload. The design came back complete, but Undo, Redo and the history view were greyed out. That is fixed, the history stays."
+        }
+      },
+      {
+        "title": {
+          "de": "Dänisch als Sprache",
+          "en": "Danish as a language"
+        },
+        "body": {
+          "de": "layerling gibt es jetzt auch auf Dänisch (Dansk): die ganze Oberfläche und die 16 Kapitel der Anleitung. Die Sprache wird für einen Browser mit dänischer Einstellung von selbst gewählt und lässt sich in der Sprachliste ändern. Übersetzt mit KI-Hilfe und von einem Dänischsprachigen durchgelesen; falsche Wörter lassen sich mit einem kleinen Pull Request auf GitHub verbessern.",
+          "en": "layerling now speaks Danish (Dansk): the whole interface and the 16 chapters of the guide. The language is chosen automatically for a browser set to Danish and can be changed in the language list. It was translated with AI help and read through by a Danish speaker; wrong words are fixed with a small pull request on GitHub."
+        }
+      }
+    ]
+  },
+  {
     "version": "1.79.0",
     "items": [
       {
