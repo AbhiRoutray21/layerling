@@ -18,5 +18,15 @@
       "de": "Spielst du ein Backup in einen Browser ein, der einen Entwurf daraus schon hat, wird dieser übersprungen, und die Meldung sagt, wie viele schon da waren. Der Hinweis am Knopf „Alle sichern“ nennt jetzt auch, über welchen Knopf ein Backup zurückkommt.",
       "en": "If you restore a backup into a browser that already has one of its designs, that one is skipped, and the notice says how many were already there. The tooltip of \"Back up all\" now also names the button that brings a backup back."
     }
+  },
+  {
+    "title": {
+      "de": "Rückgängig-Schritte bleiben nach dem Neuladen erhalten",
+      "en": "Undo steps survive a reload"
+    },
+    "body": {
+      "de": "Hattest du den letzten Schritt mit der Arbeitsebene auf einer Fläche gemacht, ging der ganze Rückgängig-Verlauf beim erneuten Laden verloren, etwa nach einem Update mit „Speichern und neu laden“. Der Entwurf kam vollständig zurück, aber Rückgängig, Wiederholen und die Verlaufsansicht waren grau. Das ist behoben, der Verlauf bleibt.",
+      "en": "If the last step was made with the workplane on a face, the whole undo history was lost when the design was loaded again, for instance after an update with Save and reload. The design came back complete, but Undo, Redo and the history view were greyed out. That is fixed, the history stays."
+    }
   }
 ]
