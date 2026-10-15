@@ -128,7 +128,7 @@ import { DEFAULT_INFILL_PERCENT, DEFAULT_PRINT_MATERIAL, DEFAULT_WALLS, INFILL_C
 import { CAD_MODIFIER_MAX_SHARP_ANGLE, CAD_MODIFIER_REQUEST_TIMEOUT_MS, CAD_MODIFIER_PREPARE_TRIANGLE_LIMIT, cadModifierPrepareTimeoutMs, cadModifierTimeoutMessage, cadModifierUserErrorMessage, cadModifierWorkerFailureMessage, cadModifierCandidateEdge, defaultCadModifierTangentChain, rescueSharpAngleForEdges, selectableCadModifierEdge, type CadModifierRequestPhase } from "@/lib/cadModifierRuntime";
 import { createCadPreviewQueue } from "@/lib/cadPreviewQueue";
 import { cloneWorkplaneShapeSnapshot, compactEdgeTreatmentHistory, edgeTreatmentAppliedFrame, restoreShapeBeforeEdgeTreatment } from "@/lib/edgeTreatmentHistory";
-import { appendEditorHistorySnapshot, boundedEditorHistoryState, editorHistoryBranch, editorHistoryEntry, editorHistoryForExport, historyStateAt, hydrateEditorHistoryState, notesForHistoryIndex, projectSceneFingerprint, projectShapesFingerprint, workplaneForHistoryIndex, type EditorHistoryEntry, type EditorHistoryExportLimit, type EditorHistoryState } from "@/lib/editorHistory";
+import { appendEditorHistorySnapshot, boundedEditorHistoryState, continuesKeyRun, type KeyRun, editorHistoryBranch, editorHistoryEntry, editorHistoryForExport, historyStateAt, hydrateEditorHistoryState, notesForHistoryIndex, projectSceneFingerprint, projectShapesFingerprint, workplaneForHistoryIndex, type EditorHistoryEntry, type EditorHistoryExportLimit, type EditorHistoryState } from "@/lib/editorHistory";
 import { snapShapeFootprintToVisibleGrid, visibleGridStep } from "@/lib/gridSnap";
 import { composedShapeRotation, geometryRotationDegreesForShortcut, geometryRotationDelta, rotatedGeometryShapePatch } from "@/lib/geometryRotation";
 import { carryShapePivot, shapePivotFromWorld, shapePivotWorld, type PivotPoint } from "@/lib/rotationPivot";
@@ -3704,13 +3704,15 @@ export function LayerlingEditor({
     if (limitChanged) syncProjectShapes(shapesRef.current, true);
   }, [syncProjectShapes, workspaceSettings.historyLimit]);
 
-  const appendHistoryEntry = useCallback((entry: EditorHistoryEntry) => {
+  const appendHistoryEntry = useCallback((entry: EditorHistoryEntry, replaceCurrent = false) => {
     openGroupHistoryRef.current.set(entry.fingerprint, openGroupsRef.current);
     const result = appendEditorHistorySnapshot(
       historyRef.current,
       historyIndexRef.current,
       entry,
       workspaceSettingsRef.current.historyLimit,
+      Date.now(),
+      replaceCurrent,
     );
     if (result.entries !== historyRef.current) {
       historyRef.current = result.entries;
@@ -3727,8 +3729,9 @@ export function LayerlingEditor({
       nextSelection: string[],
       nextNotes: WorkplaneNote[] = notesRef.current,
       nextWorkplane: PlacementWorkplane = placementWorkplaneRef.current,
+      replaceCurrent = false,
     ) =>
-      appendHistoryEntry(editorHistoryEntry(nextShapes, nextSelection, nextNotes, nextWorkplane)),
+      appendHistoryEntry(editorHistoryEntry(nextShapes, nextSelection, nextNotes, nextWorkplane), replaceCurrent),
     [appendHistoryEntry],
   );
 
@@ -3834,8 +3837,11 @@ export function LayerlingEditor({
     });
   }, [onProjectWorkspaceChange, placementElevation, placementWorkplane, projectId, snapGrid]);
 
+  /** The arrow keys' last step in the 3D editor; a run of presses is one step of the history (#370). */
+  const keyRunRef = useRef<KeyRun | null>(null);
+
   const commitShapes = useCallback(
-    (next: WorkplaneShape[], nextSelection: string | string[] | null = selectedIds, message?: string) => {
+    (next: WorkplaneShape[], nextSelection: string | string[] | null = selectedIds, message?: string, keyRunKey?: string) => {
       // Solange der Verlaufsblick offen ist, zeigt die Flaeche nicht den
       // Entwurf. Eine Aenderung, die jetzt noch durchkaeme - ueber einen
       // Umweg, den die Leiste nicht kennt -, traefe etwas, das keiner sieht.
@@ -3863,7 +3869,15 @@ export function LayerlingEditor({
       setShapes(canonicalNext);
       setSelectedIds(validSelection);
       if (nextNotes !== notes) setNotes(nextNotes);
-      const changed = appendHistorySnapshot(canonicalNext, validSelection, nextNotes);
+      const now = Date.now();
+      const currentIndex = historyIndexRef.current;
+      const replaceCurrent = keyRunKey !== undefined && continuesKeyRun(keyRunRef.current, keyRunKey, now, historyRef.current[currentIndex], currentIndex === historyRef.current.length - 1);
+      const changed = appendHistorySnapshot(canonicalNext, validSelection, nextNotes, placementWorkplaneRef.current, replaceCurrent);
+      if (keyRunKey !== undefined) {
+        // Only a step the keys just made can be replaced by the next press.
+        const newest = historyRef.current[historyIndexRef.current];
+        keyRunRef.current = changed && newest ? { key: keyRunKey, at: now, entry: newest } : changed ? null : keyRunRef.current;
+      }
       if (message) {
         // Eine Bestaetigung: Etwas ist entstanden, hat sich geaendert oder ist
         // verschwunden - und das sieht man ohnehin. Sie geht nach Sekunden.
@@ -4125,8 +4139,11 @@ export function LayerlingEditor({
     setNotice(t("status.editingFeature", { label: restored.label }));
   }, [commitShapes, invalidateCadModifierSession, selectedEdgeFeatureCount, selectedEdgeHistoryOptions, selectedShape]);
 
+  /** The arrow keys' last step in the sketch; a run of presses is one step of its history (#370). */
+  const sketchKeyRunRef = useRef<KeyRun | null>(null);
+
   const commitSketchProfile = useCallback(
-    (next: SketchProfile, message?: string) => {
+    (next: SketchProfile, message?: string, keyRunKey?: string) => {
       const current = sketchHistoryRef.current;
       const currentIndex = Math.min(sketchHistoryIndexRef.current, Math.max(0, current.length - 1));
       const trimmed = current.slice(0, currentIndex + 1);
@@ -4140,7 +4157,14 @@ export function LayerlingEditor({
       if (latest && JSON.stringify(latest) === JSON.stringify(snapshot)) {
         return;
       }
-      const nextHistory = [...trimmed, cloneSketchProfile(snapshot)].slice(-MAX_SKETCH_HISTORY_ENTRIES);
+      const now = Date.now();
+      const replaceLatest = keyRunKey !== undefined && trimmed.length > 1 && continuesKeyRun(sketchKeyRunRef.current, keyRunKey, now, latest, true);
+      const stored = cloneSketchProfile(snapshot);
+      const nextHistory = replaceLatest
+        // A run that ends where it started leaves no step.
+        ? JSON.stringify(trimmed[trimmed.length - 2]) === JSON.stringify(snapshot) ? trimmed.slice(0, -1) : [...trimmed.slice(0, -1), stored]
+        : [...trimmed, stored].slice(-MAX_SKETCH_HISTORY_ENTRIES);
+      sketchKeyRunRef.current = keyRunKey !== undefined && nextHistory[nextHistory.length - 1] === stored ? { key: keyRunKey, at: now, entry: stored } : null;
       sketchHistoryRef.current = nextHistory;
       sketchHistoryIndexRef.current = nextHistory.length - 1;
       setSketchHistory(nextHistory);
@@ -4473,7 +4497,7 @@ export function LayerlingEditor({
     [commitSketchProfile, sketchProfile],
   );
 
-  const updateSketchImage = useCallback((id: string, patch: Partial<SketchImage>, message = "Sketch image updated") => {
+  const updateSketchImage = useCallback((id: string, patch: Partial<SketchImage>, message = "Sketch image updated", keyRunKey?: string) => {
     const image = (sketchProfile.images ?? []).find((entry) => entry.id === id);
     if (!image) return;
     if (image.locked && patch.locked !== false) {
@@ -4483,7 +4507,7 @@ export function LayerlingEditor({
     commitSketchProfile({
       ...sketchProfile,
       images: (sketchProfile.images ?? []).map((entry) => entry.id === id ? { ...entry, ...patch } : entry),
-    }, message);
+    }, message, keyRunKey);
     setSketchSelection({ kind: "image", id });
     setSketchActivePointId(null);
   }, [commitSketchProfile, sketchProfile]);
@@ -4646,13 +4670,13 @@ export function LayerlingEditor({
     commitSketchProfile(next, t("status.sketchPointMoved"));
   }, [commitSketchProfile, sketchProfile]);
 
-  const transformSketchPoints = useCallback((points: SketchPoint[], message = "Sketch geometry transformed") => {
+  const transformSketchPoints = useCallback((points: SketchPoint[], message = "Sketch geometry transformed", keyRunKey?: string) => {
     if (!points.length) return;
     const byId = new Map(points.map((point) => [point.id, point]));
     commitSketchProfile({
       ...sketchProfile,
       points: sketchProfile.points.map((point) => byId.get(point.id) ?? point),
-    }, message);
+    }, message, keyRunKey);
   }, [commitSketchProfile, sketchProfile]);
 
   const rotateSelectedClosedSketch45 = useCallback(() => {
@@ -6795,6 +6819,7 @@ export function LayerlingEditor({
         ),
         selectedIds,
         delta > 0 ? t("status.selectionRaised") : t("status.selectionLowered"),
+        `move:${selectedIds.join(",")}`,
       );
     },
     [refuseLockedSelection, commitShapes, hasSelection, placementWorkplane, selectedIds, shapes],
@@ -10544,6 +10569,7 @@ export function LayerlingEditor({
         ),
         selectedIds,
         selectedShapes.length === 1 ? t("status.movedOne") : t("status.movedMany", { count: selectedShapes.length }),
+        `move:${selectedIds.join(",")}`,
       );
     },
     [refuseLockedSelection, commitShapes, hasSelection, placementWorkplane, selectedIds, selectedShapes, shapes],
