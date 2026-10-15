@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **The icon tag takes PNG and JPG pictures:** The icon tag window's **Browse...** now also takes a PNG or JPG file. The picture is traced into an outline, and the preview shows the outline; under it, **Traced from** chooses whether the **Dark part** or the **Light part** of the picture becomes the icon, at first the part that is not the background, the background being the part that takes up more of the picture's edge. Transparent pixels never belong to the icon. An SVG that holds nothing but one picture, as Inkscape saves an imported bitmap, is traced the same way instead of being refused; an SVG that only links to a picture outside it now says so in plain words. **Another file...** on the icon tag card takes pictures as well. The tracer is layerling's own: the outline runs between the pixels, specks are left out and the line is straightened to at most 1200 pieces, so the CAD kernel builds the layers quickly. Suggested by @plazmabokor in #359.
+
 ## 1.74.0
 
 - **Snap grid: the dragged face lands on the grid:** Dragging the height handle snapped the change of the height by whole grid steps, so a body 0.5 mm high on a 1 mm grid went to 1.5 mm. Now the face you drag (the top, or the bottom for the lower handle) lands on the grid of the workplane, so it goes to 1.0 mm, and the lift arrow puts the bottom of the body on the grid the same way. A tilted selection keeps the old step. Reported by @rondlh (#329).

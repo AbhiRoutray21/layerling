@@ -112,9 +112,11 @@ export function validateSvgSourcePreflight(source: string) {
   }
 
   for (const href of [...attributeValues(source, "href"), ...attributeValues(source, "xlink:href")]) {
-    if (href && !href.trim().startsWith("#")) {
-      throw new Error("SVG external references are not supported; embed referenced artwork in the file");
-    }
+    const target = href.trim();
+    if (!target || target.startsWith("#")) continue;
+    // A picture inside the SVG is not a drawing; the icon tag traces it when it is all the SVG holds (#359).
+    if (/^data:/i.test(target)) throw new Error("SVG embedded pictures are not drawings; only an SVG that holds nothing but one picture is traced");
+    throw new Error("SVG external references are not supported; embed referenced artwork in the file");
   }
 }
 

@@ -21,6 +21,7 @@ import { NAME_TAG_LAYERS, NAME_TAG_LETTER_SIZE } from "@/lib/nameTag";
 import { DEFAULT_ICON_TAG_WIDTH, ICON_TAG_LAYERS, MAX_ICON_TAG_WIDTH, MIN_ICON_TAG_WIDTH, normalizeIconTagCount } from "@/lib/iconTag";
 import type { IconLayerPatch, IconTagControls, TextLayerPatch } from "@/components/workplane/ShapeInspector";
 import { IconTagPanel } from "@/components/workplane/IconTagPanel";
+import { iconSourceFromFile, type IconSource } from "@/lib/pictureIcon";
 import { loadedManifoldRuntime, onManifoldReady } from "@/lib/manifoldHandle";
 import { canApplySketchCornerTreatment } from "@/lib/sketchFilletChamfer";
 import {
@@ -7482,7 +7483,8 @@ export function LayerlingEditor({
     const current = selectedShapes.length === 1 && selectedShape?.layeredIcon ? selectedShape : null;
     const stack = current ? iconLayerStack(current) : null;
     if (!current || !stack) return;
-    const { area, name } = await svgIconArea(file.name, await file.text(), stack.width);
+    const source = await iconSourceFromFile(file);
+    const { area, name } = await svgIconArea(source.name, source.svg, stack.width);
     const next = await layeredIconShape(area, stack.layers, stack.place, stack.ids, current.id, { ...current, name });
     if (!shapesRef.current.some((shape) => shape.id === current.id)) return;
     commitShapes(shapesRef.current.map((shape) => (shape.id === current.id ? next : shape)), [next.id], t("status.iconReplaced", { name }));
@@ -7503,10 +7505,9 @@ export function LayerlingEditor({
     };
   }, [layerSelectedIcon, makeIconTags, replaceIconSvg, selectedIconStack, selectedShape, workspaceSettings.depth, workspaceSettings.width]);
 
-  /** The icon tag window's OK: the SVG as a new icon tag on the plate, selected. */
-  const createIconTag = useCallback(async (file: File, width: number) => {
-    const text = await file.text();
-    const tag = await iconTagFromSvg(file.name, text, width);
+  /** The icon tag window's OK: the SVG (or the traced picture) as a new icon tag on the plate, selected. */
+  const createIconTag = useCallback(async (source: IconSource, width: number) => {
+    const tag = await iconTagFromSvg(source.name, source.svg, width);
     commitShapes([...shapesRef.current, tag], [tag.id], t("status.iconTagAdded", { name: tag.name }));
     setIconTagPanelOpen(false);
   }, [commitShapes]);
