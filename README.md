@@ -220,6 +220,8 @@ Everyday commands:
 - **Restart:** `docker compose -f docker/compose.yml up -d`
 - **Update** (after pulling new code or extracting a new ZIP): `docker compose -f docker/compose.yml up -d --build`; with the ready-made image `docker compose -f docker/compose.yml pull` and then `up -d`
 
+**Installing as an app and offline use need https, and the static export.** A browser installs an app and keeps it for offline use only on `https://` or on `localhost`; on a plain `http://192.168.x.x:3000` address it offers neither (layerling hides its install hint there). Even with https, the offline files (`sw.js`) are written only into the static export (see [Static Hosting](#static-hosting-plain-files-on-a-web-server)), not into this image, which runs the server version. For installing and offline use on a network, serve the static export over https; for an https address in front of the container, use a reverse proxy such as Caddy or nginx with a certificate (for example from mkcert).
+
 The image runs `next start` in production mode, so the MCP bridge is off there unless you switch it on (see [Letting an AI client reach a copy on a NAS or server](#letting-an-ai-client-reach-a-copy-on-a-nas-or-server)). To offer a shared project folder, bind a writable directory and set `LAYERLING_SHARED_PROJECTS_DIR` in `compose.yml` to the path inside the container where it is mounted, for example `./shared-projects:/shared-projects` with `LAYERLING_SHARED_PROJECTS_DIR: "/shared-projects"` (see [Shared Designs on a Network](#shared-designs-on-a-network)). The container runs as the user with the number 999, so that user must be allowed to write to the folder: `sudo chown 999:999 ./shared-projects`, or add `user: "1000:1000"` to the service (your own user and group numbers, `id -u` and `id -g` show them) so that the container runs as you. Without it the folder shows up on the start page but nothing can be saved there. After changing it, run `docker compose up -d`: `docker compose restart` keeps the old setting. `docker exec <container> printenv LAYERLING_SHARED_PROJECTS_DIR` shows the one in use.
 
 To choose the colour theme people get on their first visit, set `LAYERLING_DEFAULT_THEME` to `system`, `light`, `dark` or `graphite` (the same way, in `compose.yml` or in the environment of `npm run start`). Anyone who has opened layerling before keeps the theme their browser already has, and anyone can still change it with the theme switch. Without the setting the theme follows the system. A copy served as plain files has no server to read it, so it does not apply there.
@@ -237,11 +239,12 @@ npm run export
 
 The finished site is in **`apps/web/.next-export/`**. Copy the **contents** of that folder (not the folder itself) into the web server's document root, so that `index.html` lies directly in it.
 
-Three things to know:
+Four things to know:
 
 - **layerling needs an address of its own.** The files refer to each other with paths that start at the root (`/_next/...`), so layerling must be served at the root of an address, such as `https://layerling.example.com/` or `http://192.168.0.5:8080/`. It does not work in a subfolder (`https://example.com/layerling/`) and cannot be opened from disk (`file://`). If you only see a block of plain text without any styling, the script and style files did not load: open the browser's developer tools (F12), look at the Network tab for red `/_next/...` entries and compare their address with where you put the files.
 - **Folders that start with an underscore must be served.** Some servers hide them (GitHub Pages does without a `.nojekyll` file, for example), and `_next` holds the whole program.
 - **A quick test on your own computer:** `npx serve apps/web/.next-export` and open the address it prints.
+- **Installing as an app and offline use need https.** The export holds the offline files (`sw.js`), but a browser uses them only on an `https://` address or on `localhost`, not on a plain `http://` address in your network.
 
 ### Shared Designs on a Network
 
