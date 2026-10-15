@@ -1510,7 +1510,7 @@ export const MESSAGES_FR: Partial<Record<MessageKey, string>> = {
   "nameTag.bundleNote": "Chaque couche est un corps à part entière dans sa propre couleur. Pour arrondir ou biseauter les bords d’une couche, ouvrez le paquet.",
   "shape.iconTag": "Balise d'icône",
   "iconTag.title": "Balise d'icône",
-  "iconTag.hint": "Choisissez un fichier SVG, PNG ou JPG : le symbole devient une étiquette en couches, comme un badge nominatif.",
+  "iconTag.hint": "Choisissez un fichier SVG, PNG ou JPG : le symbole devient une étiquette en couches, comme une étiquette de nom.",
   "iconTag.browse": "Parcourir…",
   "iconTag.noFile": "Aucun fichier choisi pour l'instant",
   "iconTag.preview": "Aperçu",
