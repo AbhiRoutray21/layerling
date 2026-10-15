@@ -1183,6 +1183,7 @@ export const MESSAGES_EN = {
   "status.duplicatedOne": "Duplicated 1 shape",
   "status.duplicatedMany": "Duplicated {count} shapes",
   "status.groupedMany": "Grouped {count} shapes",
+  "status.cutLeftOpen": "Cut, but the cut face is open: the surface of this part has gaps ({count} open edges), so layerling could not close it. Importing the part as STL or 3MF may give a closed mesh.",
   "status.bundledMany": "Bundled {count} shapes: they move together and keep their colour and kind",
   "status.selectTwoToBundle": "Select at least two shapes to bundle",
   "status.bundleNotOneBody": "A bundle is not one body. Group it (Ctrl+G) or work on its parts one by one (E opens it).",

@@ -1182,6 +1182,7 @@ export const MESSAGES_NL: Record<MessageKey, string> = {
   "status.duplicatedOne": "1 vorm gedupliceerd",
   "status.duplicatedMany": "{count} vormen gedupliceerd",
   "status.groupedMany": "{count} vormen gegroepeerd",
+  "status.cutLeftOpen": "Gesneden, maar het snijvlak blijft open: het oppervlak van dit onderdeel heeft gaten ({count} open randen), layerling kon het niet sluiten. Als STL of 3MF geïmporteerd is het net misschien gesloten.",
   "status.bundledMany": "{count} vormen gebundeld: ze bewegen samen en behouden hun kleur en soort",
   "status.selectTwoToBundle": "Selecteer minstens twee vormen om te bundelen",
   "status.bundleNotOneBody": "Een bundel is geen enkel lichaam. Groepeer hem (Ctrl+G) of bewerk de delen een voor een (E opent hem).",

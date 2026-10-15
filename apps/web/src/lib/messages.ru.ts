@@ -1176,6 +1176,7 @@ export const MESSAGES_RU: Partial<Record<MessageKey, string>> = {
   "status.duplicatedOne": "Продублирована 1 фигура",
   "status.duplicatedMany": "Продублировано фигур: {count}",
   "status.groupedMany": "Сгруппировано фигур: {count}",
+  "status.cutLeftOpen": "Вырезано, но грань среза осталась открытой: у поверхности этой детали есть щели ({count} открытых рёбер), и layerling не смог их закрыть. Если импортировать деталь как STL или 3MF, сетка может оказаться замкнутой.",
   "status.bundledMany": "Связано фигур: {count} — они перемещаются вместе и сохраняют цвет и тип",
   "status.selectTwoToBundle": "Выберите хотя бы две фигуры для связки",
   "status.bundleNotOneBody": "Связка — не одно тело. Сгруппируйте её (Ctrl+G) или работайте с её деталями по одной (E открывает её).",

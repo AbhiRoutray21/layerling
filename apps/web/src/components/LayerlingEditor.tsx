@@ -7098,7 +7098,11 @@ export function LayerlingEditor({
     }
     const selected = new Set(selectedIds);
     const editableGroup = canonicalizeShape({ ...group, groupOperation: "group" });
-    commitShapes([...shapesRef.current.filter((shape) => !selected.has(shape.id)), editableGroup], editableGroup.id, t("status.groupedMany", { count: selectedShapes.length }));
+    commitShapes(
+      [...shapesRef.current.filter((shape) => !selected.has(shape.id)), editableGroup],
+      editableGroup.id,
+      result.openGapEdges ? t("status.cutLeftOpen", { count: result.openGapEdges }) : t("status.groupedMany", { count: selectedShapes.length }),
+    );
   }, [refuseLockedSelection, commitShapes, selectedIds, selectedShapes]);
 
   /** the usual bundle (Ctrl+B): the parts move, turn and scale together and stay what they are. */

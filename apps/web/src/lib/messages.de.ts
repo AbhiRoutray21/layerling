@@ -1182,6 +1182,7 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "status.duplicatedOne": "1 Form dupliziert",
   "status.duplicatedMany": "{count} Formen dupliziert",
   "status.groupedMany": "{count} Formen gruppiert",
+  "status.cutLeftOpen": "Geschnitten, aber die Schnittfläche bleibt offen: Die Oberfläche dieses Teils hat Lücken ({count} offene Kanten), layerling konnte sie nicht schließen. Als STL oder 3MF importiert ist das Netz vielleicht geschlossen.",
   "status.bundledMany": "{count} Formen gebündelt: Sie bewegen sich zusammen und behalten Farbe und Art",
   "status.selectTwoToBundle": "Mindestens zwei Formen zum Bündeln auswählen",
   "status.bundleNotOneBody": "Ein Bündel ist kein einzelner Körper. Gruppiere es (Strg+G) oder bearbeite seine Teile einzeln (E öffnet es).",

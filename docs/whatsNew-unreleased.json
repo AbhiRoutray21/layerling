@@ -38,5 +38,15 @@
       "de": "Ausrichten und Am Raster ausrichten standen im Menüband unter Anpassen, bei Fase, Verrundung und Aushöhlen. Sie platzieren eine Form, sie verändern sie nicht, und stehen jetzt ganz vorn in der Gruppe Anordnen, neben Auf die Arbeitsebene fallen lassen, Auf Fläche legen und Zentrieren.",
       "en": "Align and Snap to Grid sat in the ribbon under Modify, beside Chamfer, Fillet and Hollow. They place a shape and do not change it, so they now head the Arrange group, beside Drop to workplane, Lay flat and Center on workplane."
     }
+  },
+  {
+    "title": {
+      "de": "Offener Schnitt wird gemeldet",
+      "en": "An open cut is reported"
+    },
+    "body": {
+      "de": "Hat die Oberfläche eines importierten Teils Lücken, etwa ein STEP-Teil mit kleinen Rissen im Netz, bleibt die Schnittfläche beim Gruppieren mit einem Loch offen, und das Teil ist innen hohl. Die Meldung danach sagt das jetzt mit der Zahl der offenen Kanten und schlägt vor, das Teil als STL oder 3MF zu importieren.",
+      "en": "When the surface of an imported part has gaps, a STEP part with a few cracks in its mesh for example, the cut face stays open when you group it with a hole, and the part is hollow inside. The message afterwards now says so, with the number of open edges, and suggests importing the part as STL or 3MF."
+    }
   }
 ]
