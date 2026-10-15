@@ -2444,7 +2444,7 @@ export const MESSAGES_SL: Partial<Record<MessageKey, string>> = {
   "drawing.note5": "se ne kotirajo samodejno.",
   "error.drawingTooManyHoles": "Ta risba bi imela več kot 200 okroglih lukenj. Izberi manjši del.",
   "error.drawingTooLarge": "Risba v merilu 1:1 bi bila večja od 5.080 mm. Izberi manjši del.",
-  "error.drawingTooManyTriangles": "Pogledi risbe vzamejo do 100.000 trikotnikov. Izberi manj ali preprostejših predmetov.",
+  "error.drawingTooManyTriangles": "Pogledi risbe vzamejo do {limit} trikotnikov, ti jih imajo {count}. Izberi manj ali preprostejših predmetov.",
   "error.drawingTooManyEdges": "Pogled ima za risbo preveč robov. Izberi manj ali preprostejših predmetov.",
   "error.drawingNoGeometry": "Ta pogled nima polne geometrije.",
   "camera.tapeWholeEdges": "Meri cele robove",

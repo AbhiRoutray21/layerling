@@ -1169,7 +1169,7 @@ export const MESSAGES_FR: Partial<Record<MessageKey, string>> = {
   "drawing.note5": "ne sont pas automatiquement dimensionnés.",
   "error.drawingTooManyHoles": "Ce dessin comporterait plus de 200 trous circulaires. Choisissez une partie plus petite.",
   "error.drawingTooLarge": "Le dessin au 1:1 serait supérieur à 5 080 mm. Choisissez une partie plus petite.",
-  "error.drawingTooManyTriangles": "Les vues d'un dessin occupent jusqu'à 100 000 triangles. Choisissez des objets moins nombreux ou plus simples.",
+  "error.drawingTooManyTriangles": "Les vues d'un dessin occupent jusqu'à {limit} triangles, celles-ci en occupent {count}. Choisissez des objets moins nombreux ou plus simples.",
   "error.drawingTooManyEdges": "Une vue comporte trop d'arêtes pour le dessin. Choisissez des objets moins nombreux ou plus simples.",
   "error.drawingNoGeometry": "Cette vue n'a pas de géométrie solide.",
   "status.exportStepFailed": "Impossible d'exporter STEP",

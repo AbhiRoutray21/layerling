@@ -1176,7 +1176,7 @@ export const MESSAGES_RU: Partial<Record<MessageKey, string>> = {
   "drawing.note5": "автоматически не проставляются.",
   "error.drawingTooManyHoles": "В этом чертеже было бы больше 200 круглых отверстий. Выберите деталь поменьше.",
   "error.drawingTooLarge": "Чертёж в масштабе 1:1 превышал бы 5 080 мм. Выберите деталь поменьше.",
-  "error.drawingTooManyTriangles": "На виды чертежа отводится до 100 000 треугольников. Выберите меньше объектов или попроще.",
+  "error.drawingTooManyTriangles": "На виды чертежа отводится до {limit} треугольников, здесь их {count}. Выберите меньше объектов или попроще.",
   "error.drawingTooManyEdges": "В одном из видов слишком много кромок для чертежа. Выберите меньше объектов или попроще.",
   "error.drawingNoGeometry": "В этом виде нет геометрии тел.",
   "status.exportStepFailed": "Не удалось экспортировать STEP",

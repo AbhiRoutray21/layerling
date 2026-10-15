@@ -1182,7 +1182,7 @@ export const MESSAGES_EN = {
   "drawing.note5": "are not automatically dimensioned.",
   "error.drawingTooManyHoles": "This drawing would have more than 200 circular holes. Choose a smaller part.",
   "error.drawingTooLarge": "The drawing at 1:1 would be larger than 5,080 mm. Choose a smaller part.",
-  "error.drawingTooManyTriangles": "The views of a drawing take up to 100,000 triangles. Choose fewer or simpler objects.",
+  "error.drawingTooManyTriangles": "The views of a drawing take up to {limit} triangles, these take {count}. Choose fewer or simpler objects.",
   "error.drawingTooManyEdges": "A view has too many edges for the drawing. Choose fewer or simpler objects.",
   "error.drawingNoGeometry": "This view has no solid geometry.",
   "status.exportStepFailed": "Could not export STEP",

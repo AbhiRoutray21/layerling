@@ -21,7 +21,14 @@ export const ERROR_RULES: ErrorRule[] = [
   // Drawing export (drawingExport.ts, drawingProjection.ts)
   { pattern: /more than 200 circular holes/i, key: "error.drawingTooManyHoles" },
   { pattern: /drawing exceeds 5,080 mm/i, key: "error.drawingTooLarge" },
-  { pattern: /Drawing views support up to 100,000 triangles/i, key: "error.drawingTooManyTriangles" },
+  {
+    pattern: /Drawing views support up to ([\d,]+) triangles; these views have ([\d,]+)/i,
+    key: "error.drawingTooManyTriangles",
+    values: (m) => {
+      const format = new Intl.NumberFormat(getLanguage());
+      return { limit: format.format(Number(m[1].replace(/,/g, ""))), count: format.format(Number(m[2].replace(/,/g, ""))) };
+    },
+  },
   { pattern: /view has too many drawing edges/i, key: "error.drawingTooManyEdges" },
   { pattern: /view has no solid geometry/i, key: "error.drawingNoGeometry" },
   // History view (also the answers the AI bridge gives while it is open)

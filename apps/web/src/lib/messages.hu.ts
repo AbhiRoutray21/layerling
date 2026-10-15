@@ -1170,7 +1170,7 @@ export const MESSAGES_HU: Partial<Record<MessageKey, string>> = {
   "drawing.note5": "nincsenek automatikusan beméretezve.",
   "error.drawingTooManyHoles": "Ezen a rajzon több mint 200 kör alakú furat lenne. Válassz kisebb alkatrészt.",
   "error.drawingTooLarge": "A rajz 1:1 méretarányban nagyobb lenne 5080 mm-nél. Válassz kisebb alkatrészt.",
-  "error.drawingTooManyTriangles": "Egy rajz nézetei legfeljebb 100 000 háromszöget kezelnek. Válassz kevesebb vagy egyszerűbb objektumot.",
+  "error.drawingTooManyTriangles": "Egy rajz nézetei legfeljebb {limit} háromszöget kezelnek, ezek {count} háromszöget tartalmaznak. Válassz kevesebb vagy egyszerűbb objektumot.",
   "error.drawingTooManyEdges": "Egy nézetnek túl sok éle van a rajzhoz. Válassz kevesebb vagy egyszerűbb objektumot.",
   "error.drawingNoGeometry": "Ebben a nézetben nincs tömör geometria.",
   "status.exportStepFailed": "Nem sikerült a STEP-exportálás",

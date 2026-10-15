@@ -1181,7 +1181,7 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "drawing.note5": "werden nicht automatisch bemaßt.",
   "error.drawingTooManyHoles": "Diese Zeichnung hätte mehr als 200 runde Bohrungen. Wähle ein kleineres Teil.",
   "error.drawingTooLarge": "Die Zeichnung im Maßstab 1:1 wäre größer als 5.080 mm. Wähle ein kleineres Teil.",
-  "error.drawingTooManyTriangles": "Die Ansichten einer Zeichnung vertragen bis zu 100.000 Dreiecke. Wähle weniger oder einfachere Objekte.",
+  "error.drawingTooManyTriangles": "Die Ansichten einer Zeichnung vertragen bis zu {limit} Dreiecke, diese haben {count}. Wähle weniger oder einfachere Objekte.",
   "error.drawingTooManyEdges": "Eine Ansicht hat zu viele Kanten für die Zeichnung. Wähle weniger oder einfachere Objekte.",
   "error.drawingNoGeometry": "Diese Ansicht hat keine feste Geometrie.",
   "status.exportStepFailed": "STEP konnte nicht exportiert werden",

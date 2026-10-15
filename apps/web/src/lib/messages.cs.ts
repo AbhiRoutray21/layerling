@@ -45,7 +45,7 @@ export const MESSAGES_CS: Record<MessageKey, string> = {
   "drawing.note5": "se automaticky nekótují.",
   "error.drawingTooManyHoles": "Výkres by obsahoval více než 200 kruhových otvorů. Vyberte menší díl.",
   "error.drawingTooLarge": "Výkres v měřítku 1:1 by přesahoval 5 080 mm. Vyberte menší díl.",
-  "error.drawingTooManyTriangles": "Pohledy ve výkresu zvládají nejvýše 100 000 trojúhelníků. Vyberte méně objektů nebo jednodušší objekty.",
+  "error.drawingTooManyTriangles": "Pohledy ve výkresu zvládají nejvýše {limit} trojúhelníků, tyto jich mají {count}. Vyberte méně objektů nebo jednodušší objekty.",
   "error.drawingTooManyEdges": "Pohled obsahuje příliš mnoho hran pro výkres. Vyberte méně objektů nebo jednodušší objekty.",
   "error.drawingNoGeometry": "Tento pohled neobsahuje geometrii plného tělesa.",
   "contextMenu.removeAllPoints": "Odstranit všechny referenční body ({count})",

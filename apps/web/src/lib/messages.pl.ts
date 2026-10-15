@@ -1172,7 +1172,7 @@ export const MESSAGES_PL: Partial<Record<MessageKey, string>> = {
   "drawing.note5": "nie są wymiarowane automatycznie.",
   "error.drawingTooManyHoles": "Ten rysunek miałby ponad 200 okrągłych otworów. Wybierz mniejszą część.",
   "error.drawingTooLarge": "Rysunek w skali 1:1 byłby większy niż 5080 mm. Wybierz mniejszą część.",
-  "error.drawingTooManyTriangles": "Widoki rysunku mieszczą do 100 000 trójkątów. Wybierz mniej lub prostsze obiekty.",
+  "error.drawingTooManyTriangles": "Widoki rysunku mieszczą do {limit} trójkątów, te zawierają ich {count}. Wybierz mniej lub prostsze obiekty.",
   "error.drawingTooManyEdges": "Widok ma za dużo krawędzi do rysunku. Wybierz mniej lub prostsze obiekty.",
   "error.drawingNoGeometry": "Ten widok nie ma geometrii bryłowej.",
   "status.exportStepFailed": "Nie udało się wyeksportować STEP",

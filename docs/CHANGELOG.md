@@ -6,6 +6,7 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **A 2D drawing of a smooth, curved part (#414):** The drawing export refused a part of a few centimetres with the message that its views take more than 100,000 triangles: a smooth, curved surface is cut into very many of them at export quality, whatever the size. The limit is 400,000 now, and the message says how many triangles the views really take. The projection needs about 0.6 s per 250,000 triangles, so the old limit was far too careful. Reported by @MartinShake on GitHub.
 ## 1.80.0
 
 - **The guide says how far a pattern spiral goes (#412):** The pattern's radius change was described as making a flat spiral, but an angle above 360° counts as a full circle and there are at most 100 copies, so it winds once around at most. The guide now says so in every language. Pointed out by @geoff315 on GitHub.

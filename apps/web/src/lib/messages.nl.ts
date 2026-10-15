@@ -1181,7 +1181,7 @@ export const MESSAGES_NL: Record<MessageKey, string> = {
   "drawing.note5": "krijgen niet automatisch maataanduidingen.",
   "error.drawingTooManyHoles": "Deze tekening zou meer dan 200 ronde gaten hebben. Kies een kleiner onderdeel.",
   "error.drawingTooLarge": "De tekening zou op 1:1 groter worden dan 5.080 mm. Kies een kleiner onderdeel.",
-  "error.drawingTooManyTriangles": "De aanzichten van een tekening kunnen tot 100.000 driehoeken bevatten. Kies minder of eenvoudigere objecten.",
+  "error.drawingTooManyTriangles": "De aanzichten van een tekening kunnen tot {limit} driehoeken bevatten, deze hebben er {count}. Kies minder of eenvoudigere objecten.",
   "error.drawingTooManyEdges": "Een aanzicht heeft te veel randen voor de tekening. Kies minder of eenvoudigere objecten.",
   "error.drawingNoGeometry": "Dit aanzicht bevat geen massieve geometrie.",
   "status.exportStepFailed": "Kon STEP niet exporteren",

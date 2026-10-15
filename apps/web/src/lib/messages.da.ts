@@ -1112,7 +1112,7 @@ export const MESSAGES_DA: Partial<Record<MessageKey, string>> = {
   "drawing.note5": "målsættes ikke automatisk.",
   "error.drawingTooManyHoles": "Denne tegning ville have mere end 200 runde huller. Vælg en mindre del.",
   "error.drawingTooLarge": "Tegningen i 1:1 ville være større end 5.080 mm. Vælg en mindre del.",
-  "error.drawingTooManyTriangles": "Visningerne i en tegning fylder op til 100.000 trekanter. Vælg færre eller enklere objekter.",
+  "error.drawingTooManyTriangles": "Visningerne i en tegning fylder op til {limit} trekanter, disse fylder {count}. Vælg færre eller enklere objekter.",
   "error.drawingTooManyEdges": "En visning har for mange kanter til tegningen. Vælg færre eller enklere objekter.",
   "error.drawingNoGeometry": "Denne visning har ingen solid geometri.",
   "status.exportStepFailed": "Kunne ikke eksportere STEP",
