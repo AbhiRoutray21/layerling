@@ -802,7 +802,7 @@ function getShapePropertiesWithAppLimits(shape: WorkplaneShape, onUpdate: ShapeI
     ];
   }
 
-  if (shape.kind === "counterbore" || shape.kind === "countersink") {
+  if (shape.kind === "counterbore" || shape.kind === "countersink" || shape.kind === "doubleCountersink") {
     const shaft = normalizeScrewHoleShaft(shape.screwHoleShaft, width);
     const shaftProperty: ShapePropertyConfig = {
       id: "screwHoleShaft",

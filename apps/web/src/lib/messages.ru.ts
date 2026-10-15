@@ -1395,6 +1395,7 @@ export const MESSAGES_RU: Partial<Record<MessageKey, string>> = {
   "shape.teardrop": "Каплевидное отверстие",
   "shape.counterbore": "Цековка",
   "shape.countersink": "Зенковка",
+  "shape.doubleCountersink": "Двойная зенковка",
   "shape.thread": "Резьба",
   "shape.spring": "Пружина",
   "shape.polygon": "Многоугольник",

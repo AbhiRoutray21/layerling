@@ -1402,6 +1402,7 @@ export const MESSAGES_NL: Record<MessageKey, string> = {
   "shape.teardrop": "Druppelgat",
   "shape.counterbore": "Verzinkboring",
   "shape.countersink": "Verzinking",
+  "shape.doubleCountersink": "Dubbele verzinking",
   "shape.thread": "Schroefdraad",
   "shape.spring": "Veer",
   "shape.polygon": "Veelhoek",

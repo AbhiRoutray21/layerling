@@ -162,6 +162,7 @@ export function guideSectionForShape(shape: GuideShape): GuideSection | undefine
       return "teardrop";
     case "counterbore":
     case "countersink":
+    case "doubleCountersink":
       return "screwHoles";
     case "ruler":
       return "ruler";
@@ -190,6 +191,7 @@ export function guideChapterForShape(shape: GuideShape): GuideChapter {
     case "teardrop":
     case "counterbore":
     case "countersink":
+    case "doubleCountersink":
       return "threads";
     case "ruler":
       return "measuring";

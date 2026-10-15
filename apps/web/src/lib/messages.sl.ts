@@ -1122,6 +1122,7 @@ export const MESSAGES_SL: Partial<Record<MessageKey, string>> = {
   "shape.teardrop": "Solzasta luknja",
   "shape.counterbore": "Vgrez z ravnim dnom",
   "shape.countersink": "Stožčasti vgrez",
+  "shape.doubleCountersink": "Dvostranski stožčasti vgrez",
   "shape.thread": "Navoj",
   "shape.spring": "Vzmet",
   "shape.polygon": "Mnogokotnik",

@@ -20,7 +20,7 @@ export const editorTargetSchema = {
 export const creatableShapeKinds = [
   "box", "roundedBox", "cube", "cylinder", "slot", "ellipse", "polygon", "sphere", "cone", "pyramid", "wedge",
   "roundRoof", "halfSphere", "torus", "loft", "tube", "bentTube", "star", "heart", "crescent", "text", "thread", "spring", "gear",
-  "hinge", "knurl", "dovetail", "counterbore", "countersink", "teardrop", "ruler", "sketch",
+  "hinge", "knurl", "dovetail", "counterbore", "countersink", "doubleCountersink", "teardrop", "ruler", "sketch",
 ];
 
 /**
@@ -59,7 +59,7 @@ export const threadSizeSetting = {
  * geprueft wie in den Einstellungen; was daneben liegt, wird eingefangen.
  */
 export const shapeSettingSchema = {
-  sides: { type: "number", description: "Cylinder, slot, cone, tube, polygon, pyramid, round roof, teardrop, counterbore, countersink, torus (around the ring). Left out on a round body, the side count follows the diameter." },
+  sides: { type: "number", description: "Cylinder, slot, cone, tube, polygon, pyramid, round roof, teardrop, counterbore, countersink, doubleCountersink, torus (around the ring). Left out on a round body, the side count follows the diameter." },
   steps: { type: "number", description: "Sphere and half sphere: how finely the surface is divided. Torus: how finely the tube is divided; left out, it follows the size." },
   bevel: { type: "number", description: "Tube: wall thickness. Text: rounding of the lettering." },
   segments: { type: "number", description: "Text only: steps in the rounding." },
@@ -125,9 +125,9 @@ export const shapeSettingSchema = {
   hingeLeafThickness: { type: "number", description: "Hinge only: thickness of the two leaves in mm (default 2), at most the knuckle radius less the bore radius so a leaf stays below the bore." },
   hingeClearance: { type: "number", description: "Hinge only: gap in mm between the moving parts (0.1 to 1, default 0.4) - around the pin, between the knuckles and in front of the leaves. Go up for a printer that tends to fuse, down for a tighter hinge." },
   dovetailNeckWidth: { type: "number", description: "Dovetail only: width of the narrow neck in mm; the shape's width is the wide end, its depth the length of the tail. Must be narrower than the width." },
-  screwHoleShaft: { type: "number", description: "Counterbore and countersink only: diameter of the shaft below the head in mm. The shape's width is the head diameter, its height the whole length; the head end is on top." },
+  screwHoleShaft: { type: "number", description: "Counterbore, countersink and doubleCountersink: diameter of the shaft below the head (on the doubleCountersink, between the two cones) in mm. The shape's width is the head diameter, its height the whole length; the head end of a counterbore and a countersink is on top." },
   screwHoleHeadDepth: { type: "number", description: "Counterbore only: depth of the cylindrical head pocket in mm." },
-  screwHoleAngle: { type: "number", description: "Countersink only: opening angle of the cone in degrees (30 to 150, default 90 for a countersunk screw)." },
+  screwHoleAngle: { type: "number", description: "Countersink and doubleCountersink: opening angle of the cone in degrees (30 to 150, default 90 for a countersunk screw). A doubleCountersink is chamfered on both faces; if it is too short for two cones they meet in the middle at this angle." },
   loftBottomOutline: { type: "string", enum: ["round", "rectangle", "polygon"], description: "Loft (transition) only: the outline at the bottom - round (a circle, or an ellipse when width and length differ), rectangle (corners rounded by loftBottomCorner) or polygon (loftBottomSides corners). A loft joins its bottom outline to its top outline with a straight-ruled wall: a hose adapter, a square fan onto a round duct, a stand. Its frame is what both ends need together; width and depth stretch both ends alike." },
   loftTopOutline: { type: "string", enum: ["round", "rectangle", "polygon"], description: "Loft only: the outline at the top, as loftBottomOutline." },
   loftBottomWidth: { type: "number", description: "Loft only: width (x) of the bottom outline in mm." },

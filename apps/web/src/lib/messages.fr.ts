@@ -1388,6 +1388,7 @@ export const MESSAGES_FR: Partial<Record<MessageKey, string>> = {
   "shape.teardrop": "Trou de larme",
   "shape.counterbore": "Lamage",
   "shape.countersink": "Fraisage",
+  "shape.doubleCountersink": "Double fraisage",
   "shape.thread": "Sujet",
   "shape.spring": "Printemps",
   "shape.polygon": "Polygone",

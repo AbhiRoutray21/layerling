@@ -49,7 +49,7 @@ export const LYL_LIMITS = {
 
 const SHAPE_KINDS = new Set([
   "box", "roundedBox", "cylinder", "slot", "ellipse", "sphere", "sketch", "scribble", "cone", "pyramid", "roof", "text", "roundRoof",
-  "halfSphere", "torus", "tube", "bentTube", "star", "heart", "crescent", "gear", "honeycomb", "hinge", "knurl", "dovetail", "counterbore", "countersink", "teardrop", "loft", "thread", "spring", "ring", "wedge", "polygon", "icosahedron", "ruler", "mesh",
+  "halfSphere", "torus", "tube", "bentTube", "star", "heart", "crescent", "gear", "honeycomb", "hinge", "knurl", "dovetail", "counterbore", "countersink", "doubleCountersink", "teardrop", "loft", "thread", "spring", "ring", "wedge", "polygon", "icosahedron", "ruler", "mesh",
 ]);
 
 const FEATURE_TYPES = new Set([
@@ -1485,7 +1485,7 @@ function validateShapeDefinition(definition: Record<string, unknown>, label: str
       }
     }
   }
-  if (kind === "counterbore" || kind === "countersink") {
+  if (kind === "counterbore" || kind === "countersink" || kind === "doubleCountersink") {
     // Lenient on purpose: the geometry clamps the values itself; only nonsense is refused.
     for (const key of ["screwHoleShaft", "screwHoleHeadDepth", "screwHoleAngle"] as const) {
       if (definition[key] === undefined) continue;

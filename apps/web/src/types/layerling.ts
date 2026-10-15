@@ -26,6 +26,7 @@ export type ShapeKind =
   | "dovetail"
   | "counterbore"
   | "countersink"
+  | "doubleCountersink"
   | "teardrop"
   | "loft"
   | "thread"
@@ -205,11 +206,11 @@ export type ShapeCustomization = {
   /** Transition: degrees the top end tilts about the x axis and about the z axis (#205). */
   loftTiltX?: number;
   loftTiltZ?: number;
-  /** Counterbore/countersink: diameter of the shaft below the head in mm. */
+  /** Counterbore/countersink: diameter of the shaft below the head in mm (double countersink: the shaft between the two cones). */
   screwHoleShaft?: number;
   /** Counterbore: depth of the head pocket in mm. */
   screwHoleHeadDepth?: number;
-  /** Countersink: opening angle of the cone in degrees. */
+  /** Countersink and double countersink: opening angle of the cone in degrees. */
   screwHoleAngle?: number;
   bentTubeProfile?: BentTubeProfile;
   bentTubeInnerProfile?: BentTubeInnerProfile;
@@ -660,11 +661,11 @@ export type WorkplaneShape = {
   /** Transition: degrees the top end tilts about the x axis and about the z axis (#205). */
   loftTiltX?: number;
   loftTiltZ?: number;
-  /** Counterbore/countersink: diameter of the shaft below the head in mm. */
+  /** Counterbore/countersink: diameter of the shaft below the head in mm (double countersink: the shaft between the two cones). */
   screwHoleShaft?: number;
   /** Counterbore: depth of the head pocket in mm. */
   screwHoleHeadDepth?: number;
-  /** Countersink: opening angle of the cone in degrees. */
+  /** Countersink and double countersink: opening angle of the cone in degrees. */
   screwHoleAngle?: number;
   cornerFillet?: number;
   topBottomFillet?: number;

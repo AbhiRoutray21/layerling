@@ -222,7 +222,7 @@ export function snapGridForUnits(units: string, snap: GridSize): GridSize {
 }
 const customizableShapeKinds: ShapeKind[] = [
   "box", "roundedBox", "cylinder", "slot", "ellipse", "sphere", "sketch", "scribble", "cone", "pyramid", "roof", "text", "roundRoof",
-  "halfSphere", "torus", "tube", "bentTube", "star", "heart", "crescent", "gear", "honeycomb", "hinge", "knurl", "dovetail", "counterbore", "countersink", "teardrop", "loft", "thread", "spring", "ring", "wedge", "polygon", "icosahedron", "ruler", "mesh",
+  "halfSphere", "torus", "tube", "bentTube", "star", "heart", "crescent", "gear", "honeycomb", "hinge", "knurl", "dovetail", "counterbore", "countersink", "doubleCountersink", "teardrop", "loft", "thread", "spring", "ring", "wedge", "polygon", "icosahedron", "ruler", "mesh",
 ];
 
 function numberOrDefault(value: unknown, fallback: number) {
@@ -294,7 +294,7 @@ export function normalizeShapeCustomizations(value: unknown, fallback: ShapeCust
     if (kind === "torus") {
       entry.sides = optionalShapeNumber(source.sides, fallbackEntry?.sides, 12, MAX_HIGH_RESOLUTION_SIDES, true);
     }
-    if (kind === "cylinder" || kind === "ellipse" || kind === "slot" || kind === "cone" || kind === "tube" || kind === "ring" || kind === "counterbore" || kind === "countersink" || kind === "teardrop") {
+    if (kind === "cylinder" || kind === "ellipse" || kind === "slot" || kind === "cone" || kind === "tube" || kind === "ring" || kind === "counterbore" || kind === "countersink" || kind === "doubleCountersink" || kind === "teardrop") {
       entry.sides = optionalShapeNumber(source.sides, fallbackEntry?.sides, 3, MAX_HIGH_RESOLUTION_SIDES, true);
     } else if (kind === "pyramid" || kind === "polygon") {
       entry.sides = optionalShapeNumber(source.sides, fallbackEntry?.sides, 3, 24, true);
@@ -333,7 +333,7 @@ export function normalizeShapeCustomizations(value: unknown, fallback: ShapeCust
       entry.honeycombWallThickness = optionalShapeNumber(source.honeycombWallThickness, fallbackEntry?.honeycombWallThickness, 0.4, 50);
       entry.honeycombFrameWidth = optionalShapeNumber(source.honeycombFrameWidth, fallbackEntry?.honeycombFrameWidth, 0, 100);
     }
-    if (kind === "counterbore" || kind === "countersink") {
+    if (kind === "counterbore" || kind === "countersink" || kind === "doubleCountersink") {
       entry.screwHoleShaft = optionalShapeNumber(source.screwHoleShaft, fallbackEntry?.screwHoleShaft, 0.1, MAX_CUSTOM_SHAPE_DIMENSION);
       entry.screwHoleHeadDepth = optionalShapeNumber(source.screwHoleHeadDepth, fallbackEntry?.screwHoleHeadDepth, 0.1, MAX_CUSTOM_SHAPE_DIMENSION);
       entry.screwHoleAngle = optionalShapeNumber(source.screwHoleAngle, fallbackEntry?.screwHoleAngle, 30, 150);

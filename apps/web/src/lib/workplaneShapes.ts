@@ -126,7 +126,7 @@ export function shapeTaperDimensions(shape: WorkplaneShape) {
  * Wabe und Schwalbenschwanz sie an. Die Liste steht hier, damit das Merkmalsfeld, die
  * Vorschau und die MCP-Bruecke nicht je ihre eigene fuehren.
  */
-const SHAPES_WITHOUT_TAPER = new Set<WorkplaneShape["kind"]>(["gear", "thread", "spring", "pyramid", "ruler", "hinge", "knurl", "counterbore", "countersink", "teardrop", "bentTube", "loft"]);
+const SHAPES_WITHOUT_TAPER = new Set<WorkplaneShape["kind"]>(["gear", "thread", "spring", "pyramid", "ruler", "hinge", "knurl", "counterbore", "countersink", "doubleCountersink", "teardrop", "bentTube", "loft"]);
 
 export function shapeSupportsTaper(kind: WorkplaneShape["kind"]) {
   return !SHAPES_WITHOUT_TAPER.has(kind);

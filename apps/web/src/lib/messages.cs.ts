@@ -1423,6 +1423,7 @@ export const MESSAGES_CS: Record<MessageKey, string> = {
   "shape.teardrop": "Kapkovitý otvor",
   "shape.counterbore": "Válcové zahloubení",
   "shape.countersink": "Kuželové zahloubení",
+  "shape.doubleCountersink": "Oboustranné kuželové zahloubení",
   "shape.thread": "Závit",
   "shape.spring": "Pružina",
   "shape.polygon": "Mnohoúhelník",

@@ -325,7 +325,7 @@ function specialFieldsForShape(
       { type: "number", key: "starQuality", label: t("prop.quality"), defaultValue: defaults.starQuality ?? 16, min: 4, max: 48, step: 2 },
     ];
   }
-  if (kind === "counterbore" || kind === "countersink") {
+  if (kind === "counterbore" || kind === "countersink" || kind === "doubleCountersink") {
     return [
       { type: "number", key: "screwHoleShaft", label: t("prop.screwHoleShaft"), defaultValue: defaults.screwHoleShaft ?? 3.4, min: 0.1, max: Math.max(0.2, dimensions.width * 0.95), unit: "mm" },
       kind === "counterbore"

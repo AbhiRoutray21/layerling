@@ -12144,7 +12144,8 @@ function createShapeObject(
     }
     case "counterbore":
     case "countersink":
-      addMesh(group, sharedShapeGeometry(geometryCacheKey, () => createScrewHoleGeometry({ kind: shape.kind as "counterbore" | "countersink", width, depth, height, screwHoleShaft: shape.screwHoleShaft, screwHoleHeadDepth: shape.screwHoleHeadDepth, screwHoleAngle: shape.screwHoleAngle, sides: roundSideCount(shape.sides, width, depth) })), material, shape);
+    case "doubleCountersink":
+      addMesh(group, sharedShapeGeometry(geometryCacheKey, () => createScrewHoleGeometry({ kind: shape.kind as "counterbore" | "countersink" | "doubleCountersink", width, depth, height, screwHoleShaft: shape.screwHoleShaft, screwHoleHeadDepth: shape.screwHoleHeadDepth, screwHoleAngle: shape.screwHoleAngle, sides: roundSideCount(shape.sides, width, depth) })), material, shape);
       break;
     case "teardrop":
       addMesh(group, sharedShapeGeometry(geometryCacheKey, () => createTeardropGeometry({ width, depth, height, sides: roundSideCount(shape.sides, width, depth) })), material, shape);
@@ -12642,7 +12643,7 @@ function addShapeEdgeDecorations(group: THREE.Group, mesh: THREE.Mesh, prepared:
   const complexEdges =
     shape.kind === "mesh" ||
     Boolean(shape.importedMesh) ||
-    ["cone", "pyramid", "roof", "roundRoof", "halfSphere", "torus", "tube", "ring", "star", "gear", "wedge", "polygon", "heart", "crescent", "slot", "dovetail", "hinge", "knurl", "teardrop", "counterbore", "countersink", "honeycomb", "loft"].includes(shape.kind);
+    ["cone", "pyramid", "roof", "roundRoof", "halfSphere", "torus", "tube", "ring", "star", "gear", "wedge", "polygon", "heart", "crescent", "slot", "dovetail", "hinge", "knurl", "teardrop", "counterbore", "countersink", "doubleCountersink", "honeycomb", "loft"].includes(shape.kind);
   const importedTriangleCount = shape.importedMesh?.triangleCount ?? 0;
   const skipHeavyImportedEdges = Boolean(shape.importedMesh) && importedTriangleCount > IMPORTED_SELECTED_EDGE_TRIANGLE_LIMIT;
   // The setting draws a line on every body, in the colour chosen.
