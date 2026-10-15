@@ -81,6 +81,7 @@ export function createCatalogueStore(
 const LOADERS: Partial<Record<Language, CatalogueLoader>> = {
   cs: () => import("@/lib/messages.cs").then((module) => module.MESSAGES_CS),
   nl: () => import("@/lib/messages.nl").then((module) => module.MESSAGES_NL),
+  da: () => import("@/lib/messages.da").then((module) => module.MESSAGES_DA),
   fr: () => import("@/lib/messages.fr").then((module) => module.MESSAGES_FR),
   // Polish is a separate chunk: only browsers that pick Polish download it.
   pl: () => import("@/lib/messages.pl").then((module) => module.MESSAGES_PL),

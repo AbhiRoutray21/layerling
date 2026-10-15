@@ -10,7 +10,7 @@
  *
  * To add a language, see docs/TRANSLATING.md.
  */
-export const LANGUAGES = ["en", "de", "nl", "fr", "pl", "ru", "cs", "sl", "hu"] as const;
+export const LANGUAGES = ["en", "de", "nl", "fr", "pl", "ru", "cs", "sl", "hu", "da"] as const;
 export type Language = (typeof LANGUAGES)[number];
 export const DEFAULT_LANGUAGE: Language = "en";
 
@@ -430,6 +430,45 @@ export const LANGUAGE_INFO: Readonly<Record<Language, LanguageInfo>> = {
       printAllLead: "Minden fejezet egymás után, nyomtatáshoz vagy PDF-be mentéshez: nyomd meg a Ctrl+P-t, és a nyomtatási beállításokban kapcsold ki a „Fejlécek és láblécek” lehetőséget. Ha csak egy részt nyomtatnál, ott válaszd ki az oldalszámokat.",
       printContents: "Tartalom",
       printButton: "Nyomtatás",
+    },
+  },
+  // Danish: the whole interface and the 16 chapters of the guide (PR #411). Not marked complete on purpose, like Hungarian:
+  // sentences added later show in English until the Danish ones follow in a small pull request. The README stays English.
+  da: {
+    name: "Dansk",
+    htmlLang: "da",
+    numberLocale: "da-DK",
+    quotes: ["“", "”"],
+    guideDir: "vejledning",
+    communityUrl: GITHUB_DISCUSSIONS,
+    readme: "README.md",
+    quickstartAnchor: "windows-quickstart",
+    legal: { imprint: "Impressum", privacy: "Privatlivspolitik" },
+    keyNames: { RightClick: "Højreklik" },
+    asciiUmlauts: false,
+    complete: false,
+    guide: {
+      site: "layerling brugervejledning",
+      home: "Brugervejledning",
+      openEditor: "Åbn editoren",
+      backToEditor: "Tilbage til editoren",
+      editorElsewhere: "Editoren er allerede åben i en anden fane – skift bare til den.",
+      chapters: "Kapitler",
+      onThisPage: "På denne side",
+      previous: "Forrige kapitel",
+      next: "Næste kapitel",
+      overviewLead: "Alt hvad layerling kan, trin for trin. Billederne er taget fra det kørende program og bliver fornyet med hver version.",
+      sourceNote: "Denne vejledning vokser sammen med programmet. Hvis noget mangler eller er forkert, så fortæl os i",
+      forum: "diskussioner",
+      notTranslated: "Dette kapitel er ikke oversat til dit sprog endnu. Den engelske tekst følger.",
+      languageMenu: "Sprog",
+      search: "Søg i vejledningen",
+      searchNothing: "Intet fundet.",
+      printAll: "Hele vejledningen, til udskrivning",
+      printAllTitle: "Hele vejledningen på én side",
+      printAllLead: "Hvert kapitel efter hinanden, til udskrivning eller til at gemme som PDF: tryk Ctrl+P og slå \"Sidehoveder og sidefødder\" fra i udskriftsindstillingerne. For kun at udskrive en del, vælg sidetallene der.",
+      printContents: "Indhold",
+      printButton: "Udskriv",
     },
   },
 };
