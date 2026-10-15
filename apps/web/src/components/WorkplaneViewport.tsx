@@ -2466,6 +2466,11 @@ function patchWithResizeAnchor(
   if ("elevation" in patch || "x" in patch || "z" in patch) {
     return patch;
   }
+  // A new name, hiding or locking leaves the body as it is; an added elevation
+  // would make a locked shape refuse the change.
+  if (Object.keys(patch).every((key) => key === "name" || key === "hidden" || key === "locked")) {
+    return patch;
+  }
   if (axis === "height") {
     return patchWithPreservedWorldYEdge(shape, patch, anchor?.shapeId === shape.id && anchor.pressedY === "bottom" ? "top" : "bottom");
   }
