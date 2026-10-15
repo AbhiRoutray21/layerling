@@ -623,7 +623,7 @@ export const MESSAGES_EN = {
   "guide.search.palette": "Can't find a tool? Ctrl+K (or the magnifying glass in the Help area) opens the command search: type \"Fillet\", \"Mirror\" or \"Cylinder\", choose with the arrow keys and press Enter. It understands German words too, shows the keyboard shortcuts and the toolbar area beside each entry, and lists greyed-out ones as well so you can see where they are.",
   "guide.group.settings": "Settings",
   "guide.settings.workspace": "The gear opens units, grid, plate size, colours, light and shadows, the size of the toolbar buttons, whether grid lines grow when you zoom, fast mode for slower computers and how much history is kept. Snap steps of your own, such as a 2.54 mm pin pitch, are added there too.",
-  "guide.settings.language": "The language is switched with the EN and DE buttons at the very top right, and in Settings on the start page.",
+  "guide.settings.language": "The language is chosen from the language list at the very top right, and in Settings on the start page.",
   "shortcuts.title": "Keyboard shortcuts",
   "shortcuts.close": "Close keyboard shortcuts",
   "shortcuts.intro": "Shortcuts work while the canvas has focus. They stay out of the way while you type in a field.",

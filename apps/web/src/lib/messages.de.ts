@@ -622,7 +622,7 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "guide.search.palette": "Du findest ein Werkzeug nicht? Strg+K (oder die Lupe im Bereich Hilfe) öffnet die Befehlssuche: Tippe „Verrunden“, „Spiegeln“ oder „Zylinder“, wähle mit den Pfeiltasten und drücke Enter. Sie versteht auch englische Wörter, zeigt die Tastenkürzel und den Bereich der Leiste dazu und listet Ausgegrautes mit auf, damit du siehst, wo es liegt.",
   "guide.group.settings": "Einstellungen",
   "guide.settings.workspace": "Das Zahnrad öffnet Maßeinheiten, Raster, Plattengröße, Farben, Licht und Schatten, die Größe der Werkzeugleiste, ob die Gitterlinien beim Zoomen wachsen, den Schnellmodus für langsamere Rechner und die Länge des Verlaufs. Eigene Rasterschritte, etwa ein Rastermaß von 2,54 mm, legst du dort ebenfalls an.",
-  "guide.settings.language": "Die Sprache stellst du mit den Knöpfen EN und DE ganz oben rechts um, und in den Einstellungen auf der Startseite.",
+  "guide.settings.language": "Die Sprache wählst du in der Sprachliste ganz oben rechts und in den Einstellungen auf der Startseite.",
   "shortcuts.title": "Tastenkürzel",
   "shortcuts.close": "Tastenkürzel schließen",
   "shortcuts.intro": "Die Kürzel wirken, solange die Arbeitsfläche den Fokus hat. Beim Tippen in einem Feld halten sie sich heraus.",

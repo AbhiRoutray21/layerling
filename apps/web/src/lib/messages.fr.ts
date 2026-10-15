@@ -613,7 +613,7 @@ export const MESSAGES_FR: Partial<Record<MessageKey, string>> = {
   "guide.search.palette": "Vous ne trouvez pas d'outil ? Ctrl+K (ou la loupe dans la zone Aide) ouvre la recherche de commandes : tapez \"Congé\", \"Miroir\" ou \"Cylindre\", choisissez avec les touches fléchées et appuyez sur Entrée. Il comprend également les mots allemands, affiche les raccourcis clavier et la zone de la barre d'outils à côté de chaque entrée, et répertorie également ceux grisés afin que vous puissiez voir où ils se trouvent.",
   "guide.group.settings": "Paramètres",
   "guide.settings.workspace": "L'engrenage ouvre les unités, la grille, la taille de la plaque, les couleurs, la lumière et les ombres, la taille des boutons de la barre d'outils, la croissance des lignes de la grille lorsque vous zoomez, le mode rapide pour les ordinateurs plus lents et la quantité d'historique conservée. Des étapes d'enclenchement personnalisées, telles qu'un pas de broche de 2,54 mm, y sont également ajoutées.",
-  "guide.settings.language": "La langue est changée avec les boutons EN et DE tout en haut à droite et dans Paramètres sur la page de démarrage.",
+  "guide.settings.language": "La langue se choisit dans la liste des langues tout en haut à droite et dans Paramètres sur la page de démarrage.",
   "shortcuts.title": "Raccourcis clavier",
   "shortcuts.close": "Fermer les raccourcis clavier",
   "shortcuts.intro": "Les raccourcis fonctionnent pendant que le canevas a le focus. Ils restent à l'écart pendant que vous tapez dans un champ.",

@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **The guide names the language list:** Two sentences still spoke of the EN and DE buttons, or of "German or English", from before the language list. The guide's page on settings and chapter 15 now say that the language is chosen from the list at the top right, in English, German, Dutch, French, Czech, Russian and Slovenian.
+
 ## 1.77.0
 
 - **The tube and the ring have an inner diameter:** Both had only the wall thickness, so a bushing for a shaft of a known size meant working out the wall by hand. The settings now have an **Inner diameter** beside the thickness: it is the width minus twice the wall, and typing it sets the wall. Set the width first; if you change it afterwards, the wall stays and the inner diameter changes with it. Asked for by @PotomacSharpening (#384).

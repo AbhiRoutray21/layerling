@@ -698,7 +698,7 @@ export const MESSAGES_CS: Record<MessageKey, string> = {
   "guide.search.palette": "Nemůžete najít nástroj? Ctrl+K nebo lupa v Nápovědě otevře hledání příkazů. Zadejte „Zaoblení“, „Zrcadlení“ nebo „Válec“, vyberte šipkami a stiskněte Enter. Hledání rozumí i anglickým a německým výrazům, ukazuje klávesové zkratky i část pásu nástrojů a zobrazuje také právě nedostupné příkazy.",
   "guide.group.settings": "Nastavení",
   "guide.settings.workspace": "Ozubené kolo otevře jednotky, mřížku, rozměry podložky, barvy, světlo a stíny, velikost tlačítek, zesilování mřížky při přiblížení, rychlý režim a délku historie. Zde přidáte také vlastní kroky přichytávání, například rozteč vývodů 2,54 mm.",
-  "guide.settings.language": "Jazyk přepnete tlačítky EN, DE a CS vpravo nahoře nebo v Nastavení na úvodní stránce.",
+  "guide.settings.language": "Jazyk zvolíte v seznamu jazyků vpravo nahoře nebo v Nastavení na úvodní stránce.",
   "shortcuts.title": "Klávesové zkratky",
   "shortcuts.close": "Zavřít klávesové zkratky",
   "shortcuts.intro": "Zkratky fungují při zaměření pracovní plochy. Při psaní do polí se neuplatňují.",

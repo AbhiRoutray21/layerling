@@ -622,7 +622,7 @@ export const MESSAGES_NL: Record<MessageKey, string> = {
   "guide.search.palette": "Kun je een gereedschap niet vinden? Ctrl+K (of het vergrootglas in het gebied Help) opent het zoeken naar commando’s: typ ‘Afronden’, ‘Spiegelen’ of ‘Cilinder’, kies met de pijltjestoetsen en druk op Enter. Het begrijpt ook Duitse woorden, toont bij elk item de sneltoetsen en het werkbalkgebied, en laat ook uitgegrijsde items zien zodat je ziet waar ze staan.",
   "guide.group.settings": "Instellingen",
   "guide.settings.workspace": "Het tandwiel opent eenheden, raster, plaatgrootte, kleuren, licht en schaduwen, de grootte van de werkbalkknoppen, of rasterlijnen meegroeien bij zoomen, de snelle modus voor tragere computers en hoeveel geschiedenis wordt bewaard. Eigen snapstappen, zoals een pinafstand van 2,54 mm, voeg je daar ook toe.",
-  "guide.settings.language": "De taal wissel je met de knoppen EN en DE helemaal rechtsboven, en bij Instellingen op de startpagina.",
+  "guide.settings.language": "De taal kies je in de taallijst helemaal rechtsboven en bij Instellingen op de startpagina.",
   "shortcuts.title": "Sneltoetsen",
   "shortcuts.close": "Sneltoetsen sluiten",
   "shortcuts.intro": "Sneltoetsen werken als het canvas de focus heeft. Ze zitten je niet in de weg terwijl je in een veld typt.",
