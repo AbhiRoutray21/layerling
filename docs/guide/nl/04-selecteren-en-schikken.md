@@ -72,6 +72,8 @@ Moeten twee onderdelen vlak tegen vlak komen, of strak gelijk liggen? Selecteer 
 
 ![Het paneel Vlakken uitlijnen: het onderdeel dat beweegt is gekozen, een vlak van het andere onderdeel komt daarna, dan vlak tegen vlak of gelijk, en een optionele tussenruimte.](shot:mate-faces)
 
+**Een exacte hoek tussen twee vlakken:** {{ui:editor.tool.mateFaces}} laat de vlakken evenwijdig; voor een hoek ertussen is er geen eigen gereedschap, maar zo kom je er. Breng eerst de vlakken samen met {{ui:editor.tool.mateFaces}}, zodat ze evenwijdig liggen. Zet dan het draaipunt op de rand waar ze elkaar ontmoeten ({{ui:editor.tool.rotationPivot}}, klik de rand of een hoek) en typ de hoek, bijvoorbeeld 15 of 30, in de kaart {{ui:inspector.rotation}} van het onderdeel. Het draait om dat draaipunt. De assen van de kaart zijn de assen van de plaat, dus dit werkt als de rand langs X, Y of Z loopt.
+
 Net zo eenvoudig zijn {{ui:editor.tool.dropToWorkplane}} ([[D]]), dat de selectie op het werkvlak laat zakken, en {{ui:editor.tool.centerOnWorkplane}}.
 
 [[C]] pakt de selectie op, zoals Cruise in Tinkercad: ze volgt de muisaanwijzer en gaat liggen op het vlak van een ander lichaam waar je boven bent, ook op schuine vlakken. Een klik zet haar daar neer, [[Esc]] laat haar waar ze was. Haar onderkant rust dan op het vlak, uitgelijnd op de randen van het vlak zoals een nieuwe vorm dat zou zijn; haar eigen draaiing om haar verticale as houdt ze. Meerdere onderdelen reizen samen en houden hun onderlinge afstand. Boven de lege plaat zet [[C]] een gekanteld onderdeel weer rechtop op het werkvlak.

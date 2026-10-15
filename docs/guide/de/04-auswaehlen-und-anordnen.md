@@ -72,6 +72,8 @@ Zwei Teile sollen Fläche an Fläche liegen oder bündig abschließen? Wähle da
 
 ![Das Fenster „Flächen ausrichten“: Das Teil, das sich bewegt, ist gewählt, als Nächstes kommt eine Fläche des anderen Teils, dann „Gegeneinander“ oder „Bündig“ und ein Abstand, wenn du willst.](shot:mate-faces)
 
+**Ein genauer Winkel zwischen zwei Flächen:** {{ui:editor.tool.mateFaces}} lässt die Flächen parallel; für einen Winkel dazwischen gibt es kein eigenes Werkzeug, aber so kommst du hin. Bring zuerst die Flächen mit {{ui:editor.tool.mateFaces}} zusammen, so dass sie parallel liegen. Setze dann den Drehpunkt auf die Kante, an der sie sich treffen ({{ui:editor.tool.rotationPivot}}, Kante oder Ecke anklicken) und tippe den Winkel, etwa 15 oder 30, in der Karte {{ui:inspector.rotation}} des Teils. Es dreht sich um diesen Drehpunkt. Die Achsen der Karte sind die Achsen der Platte, deshalb klappt das, wenn die Kante entlang X, Y oder Z läuft.
+
 Ähnlich einfach sind {{ui:editor.tool.dropToWorkplane}} ([[D]]), das die Auswahl auf die Arbeitsebene absetzt, und {{ui:editor.tool.centerOnWorkplane}}.
 
 Mit [[C]] nimmst du die Auswahl auf, wie mit Cruise in Tinkercad: Sie hängt am Mauszeiger und legt sich auf die Fläche eines anderen Körpers, über der du gerade bist, auch auf eine schräge. Ein Klick setzt sie dort ab, [[Esc]] lässt sie, wo sie war. Ihre Unterseite liegt dann auf der Fläche, und sie richtet sich nach deren Kanten aus wie eine neue Form; eine eigene Drehung um ihre Hochachse behält sie. Mehrere Teile wandern zusammen und behalten ihren Abstand. Über der leeren Platte stellt [[C]] ein gekipptes Teil wieder aufrecht auf die Arbeitsebene.
