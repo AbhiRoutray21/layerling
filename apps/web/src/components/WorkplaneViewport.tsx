@@ -88,7 +88,7 @@ import {
 import { capturePointer } from "@/lib/pointerCapture";
 import { printerPresetById } from "@/lib/printBed";
 import { GuideHelpLink } from "@/components/GuideHelpLink";
-import { groundFootprintForFrame, liftGeometryForFrame, type SelectionFrame } from "@/lib/liftGeometry";
+import { groundFootprintForFrame, heightWithFaceOnGrid, liftDeltaOnGrid, liftGeometryForFrame, type SelectionFrame } from "@/lib/liftGeometry";
 import { regularPolygonFootprintScale } from "@/lib/regularPolygonFootprint";
 import { roundSideCount } from "@/lib/roundSideCount";
 import { createPyramidGeometry } from "@/lib/pyramidGeometry";
@@ -5316,8 +5316,13 @@ export function WorkplaneViewport({
         const rawFrameHeight = transform.selectionFrame.height + (resizingFromBottom ? -rawDelta : rawDelta);
         const printerHeight = printerPresetById(workspaceRef.current.printer)?.height;
         const maxHeight = Math.max(...transform.items.map((item) => handleDimensionLimit(workspaceRef.current, item.startShape.kind, 180, "height", transform.selectionFrame.height, printerHeight)));
+        // The face you drag lands on the grid of the workplane; a tilted selection keeps the step from where it started.
+        const startLift = liftGeometryForFrame(transform.selectionFrame, placementWorkplaneRef.current);
+        const upright = transform.selectionFrame.yAxis.clone().normalize().dot(startLift.axis) > 0.9999;
         const nextFrameHeight = clamp(
-          transform.selectionFrame.height + snapValue(rawFrameHeight - transform.selectionFrame.height, step),
+          upright
+            ? heightWithFaceOnGrid(startLift.low, transform.selectionFrame.height, rawFrameHeight, resizingFromBottom, step)
+            : transform.selectionFrame.height + snapValue(rawFrameHeight - transform.selectionFrame.height, step),
           MIN_SHAPE_SIZE,
           maxHeight,
         );
@@ -5339,7 +5344,8 @@ export function WorkplaneViewport({
         const rawDelta = currentPoint && transform.liftStartPoint
           ? currentPoint.clone().sub(transform.liftStartPoint).dot(axis)
           : 0;
-        const delta = snapValue(rawDelta, step);
+        // The bottom lands on the grid of the workplane, not a step from where it stood.
+        const delta = liftDeltaOnGrid(liftGeometryForFrame(transform.selectionFrame, placementWorkplaneRef.current).low, rawDelta, step);
         transform.items.forEach((item) => {
           const nextCenter = item.startCenter.clone().addScaledVector(axis, delta);
           onUpdateShape(item.id, {
