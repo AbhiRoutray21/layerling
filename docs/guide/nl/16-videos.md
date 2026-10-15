@@ -7,6 +7,7 @@ summary: Video's die anderen over layerling hebben gemaakt.
 
 Deze video's komen niet van dit project. De links openen YouTube in een nieuw tabblad; er wordt pas iets van daar geladen als je klikt.
 
+- [10 things I love about Layerling and 3 things that Tinkercad does better](https://www.youtube.com/watch?v=WWhFSWFfG9g) – TECHNOBENTO (Engels). Een test van layerling van ongeveer 29 minuten: tien dingen die de maker er goed aan vindt en drie die Tinkercad beter doet.
 - [The PERFECT FREE CAD Program Between Tinkercad and Fusion 360!](https://youtu.be/GIoG-IHPXyg) – Print N Repeat (Engels). Een video over layerling als gratis CAD-programma tussen Tinkercad en Fusion 360.
 - [Layerling Tutorials](https://www.youtube.com/playlist?list=PLZ-ZWS0D1JIk) – HL ModTech (Engels). Een afspeellijst van een Tinkercad-gebruiker, tot nu toe met een kijkje in layerling van zo'n 23 minuten (gratis CAD in de browser dat Tinkercad uitbreidt), een diepere duik in de functies en een korte update over geprinte schroefdraad.
 - [Layerling – Playlist](https://www.youtube.com/playlist?list=PLCsBmX2kOGWs) – Making Layers (Engels). Een reeks over layerling, tot nu toe met "Tinkercad alternative / upgrade? Introducing Layerling!", een overzicht voor wie van Tinkercad komt, en "Layerling Sketch Tools!" over de schetsgereedschappen.

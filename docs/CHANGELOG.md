@@ -6,6 +6,7 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **Video list:** "10 things I love about Layerling and 3 things that Tinkercad does better" by TECHNOBENTO is now first in the list on the start page and in the guide.
 - **Center view reaches parts beyond the plate:** A part lying beyond the edge of the plate could not be brought to the middle of the screen, because the view's pivot could not leave the plate. Center view now goes as far out as the selected part; the house button takes it back. Reported by @Mycraftymama (#352).
 - **The three start boxes share one ground:** On the start page the box "Create new 3D design" had a cream ground, the two beside it white, and in the dark theme it was tinted orange. All three now have the same cream ground (in the dark theme the same dark one), and the icons of the two plain boxes no longer sit on a square of their own; the orange border and the solid orange icon still mark the first one.
 ## 1.74.0
