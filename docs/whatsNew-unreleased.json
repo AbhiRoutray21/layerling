@@ -28,5 +28,15 @@
       "de": "Die Objektliste (Strg+Umschalt+O) begann bei jedem Entwurf und nach jedem Neuladen geschlossen. Jetzt bleibt sie offen oder geschlossen, wie du sie verlassen hast, für alle Entwürfe, in diesem Browser.",
       "en": "The object list (Ctrl+Shift+O) started closed with every design and after every reload. It now stays open or closed as you left it, for all designs, in this browser."
     }
+  },
+  {
+    "title": {
+      "de": "Ausrichten und Raster-Einrasten unter Anordnen",
+      "en": "Align and Snap to Grid under Arrange"
+    },
+    "body": {
+      "de": "Ausrichten und Am Raster ausrichten standen im Menüband unter Anpassen, bei Fase, Verrundung und Aushöhlen. Sie platzieren eine Form, sie verändern sie nicht, und stehen jetzt ganz vorn in der Gruppe Anordnen, neben Auf die Arbeitsebene fallen lassen, Auf Fläche legen und Zentrieren.",
+      "en": "Align and Snap to Grid sat in the ribbon under Modify, beside Chamfer, Fillet and Hollow. They place a shape and do not change it, so they now head the Arrange group, beside Drop to workplane, Lay flat and Center on workplane."
+    }
   }
 ]
