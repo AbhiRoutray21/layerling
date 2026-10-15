@@ -12,6 +12,7 @@ Choisissez {{ui:shape.text}} dans la bibliothèque de formes et placez-le. Dans 
 - **{{ui:prop.height}} :** Dans quelle mesure le lettrage se détache de la surface.
 - **{{ui:prop.bevel}} :** Arrondit les bords des lettres pour qu'ils paraissent plus doux. Avec {{ui:prop.segments}}, vous décidez du nombre d'étapes.
 - **Taille :** Vous définissez la longueur et la largeur de la ligne comme pour n'importe quelle forme. Faites glisser les poignées ou saisissez les dimensions.
+- **{{ui:prop.textStretch}} :** Désactivé au départ : les lettres gardent leurs proportions et restent au milieu du cadre, donc un cadre étiré plus large ou plus profond que le mot n'en a besoin reste plus grand que les lettres. Activez-le et les lettres sont étirées dans les deux directions pour remplir tout le cadre : une majuscule peut être rendue plus basse ou plus étroite, comme dans Tinkercad. Il s'applique au texte droit ; le texte courbe a sa propre taille de lettre.
 
 Le texte est d’abord un seul corps. Si vous souhaitez traiter les lettres individuellement, cliquez sur {{ui:inspector.separateParts}}. Chaque lettre est alors une forme qui lui est propre.
 

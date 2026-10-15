@@ -12,6 +12,7 @@ Choose {{ui:shape.text}} in the shape library and place it. In the {{ui:prop.tex
 - **{{ui:prop.height}}:** How far the lettering stands out from the surface.
 - **{{ui:prop.bevel}}:** Rounds the letter edges so they look softer. With {{ui:prop.segments}} you decide in how many steps.
 - **Size:** You set the length and width of the line as with any shape. Drag the handles or type the dimensions.
+- **{{ui:prop.textStretch}}:** Off at first: the letters keep their proportions and sit in the middle of the frame, so a frame pulled wider or deeper than the word needs stays larger than the letters. Switch it on and the letters are stretched to fill the whole frame in both directions: a capital can be made lower or narrower, as in Tinkercad. It is for straight text; curved text has its own letter size.
 
 Text is at first a single body. If you want to treat the letters individually, click {{ui:inspector.separateParts}}. Then every letter is a shape of its own.
 

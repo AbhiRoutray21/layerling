@@ -15,7 +15,7 @@ Mit der Maus:
 | Mausrad | hinein- und herauszoomen |
 | [[Strg]] halten und mit links ziehen | ebenfalls verschieben |
 
-Wie schnell das Mausrad zoomt, stellst du in den Einstellungen unter {{ui:workspace.appearance}} mit {{ui:workspace.zoomSpeed}} ein: ein Regler von 1 bis 10, zu Beginn 5.
+Wie schnell das Mausrad zoomt, stellst du in den Einstellungen unter {{ui:workspace.appearance}} mit {{ui:workspace.zoomSpeed}} ein: ein Regler von 1 bis 10, zu Beginn 5. Eine Raste des Mausrads zoomt in jedem Browser gleich stark, ein Trackpad zoomt danach, wie weit du streichst.
 
 Auf einem Tablet oder Handy zoomen zwei Finger (spreizen und zusammenziehen) und verschieben die Ansicht (gemeinsam schieben). Ein Finger auf leerer Fläche dreht die Ansicht, und ein Antippen dort hebt die Auswahl auf; auf einer Form oder einem Griff arbeitet er am Entwurf, so wie die linke Maustaste. Wer auch mit einem Finger drehen möchte, der auf einer Form beginnt, schaltet in der Kameraleiste {{ui:camera.touchRotate}} ein. Der Schalter erscheint auf Geräten mit Touchscreen.
 

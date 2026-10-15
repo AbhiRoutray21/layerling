@@ -1444,6 +1444,7 @@ export const MESSAGES_PL: Partial<Record<MessageKey, string>> = {
   "prop.topRadius": "Promień górny",
   "prop.baseRadius": "Promień podstawy",
   "prop.thickness": "Grubość",
+  "prop.innerDiameter": "Śr. wewnętrzna",
   "prop.toothSize": "Rozmiar zęba",
   "prop.toothWidth": "Szerokość zęba",
   "prop.gearProfile": "Kształt zęba",
@@ -2298,6 +2299,7 @@ export const MESSAGES_PL: Partial<Record<MessageKey, string>> = {
   "edge.errorMeshNotSolid": "Nie udało się zamienić zaznaczonej siatki w zamkniętą bryłę CAD. Przed obróbką krawędzi spróbuj Rozdziel części, rozgrupowania albo uproszczenia obiektu.",
   "edge.errorKernelMemoryFault": "Jądro CAD napotkało błąd pamięci i zostało zresetowane. Uruchom ponownie narzędzie krawędzi, odświeżanie strony nie jest potrzebne.",
   "edge.errorKernelRestart": "Jądru CAD zabrakło miejsca i zostało uruchomione ponownie. Zaczekaj chwilę, potem znów uruchom narzędzie krawędzi, odświeżanie strony nie jest potrzebne.",
+  "error.kernelNeedsSimd": "Jądro CAD potrzebuje WebAssembly SIMD, którego ta przeglądarka lub ten komputer nie oferuje. Użyj aktualnej wersji Chrome, Edge, Firefox lub Safari.",
 
   "split.title": "Podziel",
   "split.subtitle": "Ustaw płaszczyznę, potem utwórz dwie bryły",

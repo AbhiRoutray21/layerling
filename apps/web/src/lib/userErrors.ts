@@ -49,6 +49,7 @@ export const ERROR_RULES: ErrorRule[] = [
   { pattern: /could not be mapped to its solid component/i, key: "error.edgeNotMapped" },
   { pattern: /Prepare an object before previewing/i, key: "error.prepareFirst" },
   { pattern: /isValid is not a function/i, key: "edge.errorKernelFailed" },
+  { pattern: /CAD kernel needs WebAssembly SIMD/i, key: "error.kernelNeedsSimd" },
   { pattern: /does not leave a closed solid/i, key: "edge.errorNoSolidResult" },
   { pattern: /stored STEP body holds no solid/i, key: "error.storedStepNoSolid" },
   { pattern: /Text fonts are not loaded yet/i, key: "error.fontsNotLoaded" },

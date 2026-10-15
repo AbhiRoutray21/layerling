@@ -1471,6 +1471,7 @@ export const MESSAGES_CS: Record<MessageKey, string> = {
   "prop.topRadius": "Horní poloměr",
   "prop.baseRadius": "Poloměr základny",
   "prop.thickness": "Tloušťka",
+  "prop.innerDiameter": "Vnitřní průměr",
   "prop.toothSize": "Velikost zubu",
   "prop.toothWidth": "Šířka zubu",
   "prop.gearProfile": "Profil zubu",
@@ -1641,6 +1642,7 @@ export const MESSAGES_CS: Record<MessageKey, string> = {
   "prop.font": "Písmo",
   "prop.text": "Text",
   "prop.textCurved": "Po oblouku",
+  "prop.textStretch": "Roztáhnout písmena na rámeček",
   "prop.textRadius": "Poloměr oblouku",
   "prop.textInward": "Podél spodní strany",
   "prop.textFlipped": "Vzhůru nohama",
@@ -2290,6 +2292,7 @@ export const MESSAGES_CS: Record<MessageKey, string> = {
   "edge.errorMeshNotSolid": "Vybranou síť nelze převést na uzavřené CAD těleso. Před úpravou hran zkuste oddělit části, rozdělit sloučení nebo objekt zjednodušit.",
   "edge.errorKernelMemoryFault": "CAD jádro narazilo na chybu paměti a obnovilo se. Spusťte nástroj úpravy hran znovu; stránku není třeba obnovovat.",
   "edge.errorKernelRestart": "CAD jádru došla paměť a bylo restartováno. Chvíli počkejte a spusťte nástroj úpravy hran znovu; stránku není třeba obnovovat.",
+  "error.kernelNeedsSimd": "Jádro CAD potřebuje WebAssembly SIMD, které tento prohlížeč nebo počítač nenabízí. Použijte aktuální Chrome, Edge, Firefox nebo Safari.",
 
   "split.title": "Rozdělení",
   "split.subtitle": "Umístěte rovinu a vytvořte dvě tělesa",

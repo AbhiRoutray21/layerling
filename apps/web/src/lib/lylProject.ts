@@ -31,7 +31,7 @@ function knownSchema(schema: unknown) {
 export const LYL_FORMAT_VERSION = 2;
 export const LYL_MINIMUM_READER_VERSION = 2;
 export const LYL_OLDEST_READABLE_FORMAT_VERSION = 1;
-export const LYL_CREATED_WITH_VERSION = "1.76.1";
+export const LYL_CREATED_WITH_VERSION = "1.77.0";
 export const LYL_MEDIA_TYPE = "application/vnd.layerling.project+zip";
 
 export const LYL_LIMITS = {
@@ -1250,6 +1250,9 @@ function validateShapeDefinition(definition: Record<string, unknown>, label: str
   }
   if (definition.textSilhouette !== undefined && typeof definition.textSilhouette !== "boolean") {
     throw new Error(`${label}.textSilhouette must be true or false`);
+  }
+  if (definition.textStretch !== undefined && typeof definition.textStretch !== "boolean") {
+    throw new Error(`${label}.textStretch must be true or false`);
   }
   // The top edge of a text's letters (#225): round or chamfer, with a size.
   if (definition.textEdge !== undefined && !normalizeTextEdge(definition.textEdge)) {

@@ -8406,6 +8406,8 @@ export function LayerlingEditor({
             }
           }
           if (typeof params.silhouette === "boolean") patch.textSilhouette = params.silhouette || undefined;
+          // Straight text only (#382): the letters stretched to fill the box, or fitted with their proportions.
+          if (typeof params.stretch === "boolean") patch.textStretch = params.stretch || undefined;
           // The top edge of the letters (#225): { kind: "round" | "chamfer", size } or null for none.
           if (params.letterEdge !== undefined) {
             if (params.letterEdge === null || params.letterEdge === false) {

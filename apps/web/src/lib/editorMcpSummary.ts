@@ -150,7 +150,7 @@ export function mcpShapeSummary(shape: WorkplaneShape): LayerlingMcpShapeSummary
       ? { sketchStroke: shape.sketchProfile.stroke ?? null, silhouette: Boolean(shape.sketchProfile.silhouette) }
       : {}),
     // A text's fill (#215) reads like a sketch body's: its stroke, and whether the counters are left out.
-    ...(shape.kind === "text" ? { textStroke: shape.textStroke ?? null, textSilhouette: Boolean(shape.textSilhouette), textEdge: shape.textEdge ?? null } : {}),
+    ...(shape.kind === "text" ? { textStroke: shape.textStroke ?? null, textSilhouette: Boolean(shape.textSilhouette), textStretch: Boolean(shape.textStretch), textEdge: shape.textEdge ?? null } : {}),
     // A name tag's key ring hole (#215), on the layers it goes through; the bottom one carries the ear.
     ...(shape.kind === "text" && shape.textKeyring ? { textKeyring: shape.textKeyring } : {}),
     ...(shape.layeredText ? { layeredText: true } : {}),
