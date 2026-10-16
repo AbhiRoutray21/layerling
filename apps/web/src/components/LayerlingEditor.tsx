@@ -11,7 +11,7 @@ import { t, type MessageKey } from "@/lib/i18n";
 import { useLanguage } from "@/lib/useLanguage";
 import { loftShapePatch, type LoftMeasures } from "@/lib/loftGeometry";
 import { hingeWorldParts } from "@/lib/hingeParts";
-import { decodeClipboardPayload, encodeClipboardPayload, LOCAL_CLIPBOARD_LIMIT, newestClipboard, type ClipboardPayload } from "@/lib/clipboardPayload";
+import { copyViaSelectionField, decodeClipboardPayload, encodeClipboardPayload, LOCAL_CLIPBOARD_LIMIT, newestClipboard, type ClipboardPayload } from "@/lib/clipboardPayload";
 import { bentTubeNaturalDimensions, normalizedBentTubeFields } from "@/lib/bentTubeGeometry";
 import { DEFAULT_THREAD_PROFILE, defaultThreadHeadHeight, normalizeThreadHeadHeight, threadNaturalFootprint, threadSettings } from "@/lib/threadGeometry";
 import { curvedTextPatch } from "@/lib/textGeometry";
@@ -521,8 +521,9 @@ function writeSharedClipboard(shapes: WorkplaneShape[], copiedAt: number) {
     }
   }
   const systemPayload = `${SYSTEM_CLIPBOARD_PREFIX}${serialized}`;
-  copyTextWithSelectionFallback(systemPayload);
-  if (navigator.clipboard?.writeText) {
+  const hasClipboardApi = Boolean(navigator.clipboard?.writeText);
+  if (copyViaSelectionField(systemPayload.length, hasClipboardApi)) copyTextWithSelectionFallback(systemPayload);
+  if (hasClipboardApi) {
     void navigator.clipboard.writeText(systemPayload).catch(() => {
       // Same-origin tabs still have the local-storage fallback.
     });

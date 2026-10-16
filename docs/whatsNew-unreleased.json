@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "title": {
+      "de": "Kopieren großer Modelle hängt nicht mehr",
+      "en": "Copying large models no longer freezes"
+    },
+    "body": {
+      "de": "Bei einem großen importierten Modell blieb die Seite beim Kopieren (Strg+C) sekunden- bis minutenlang stehen. Große Kopien gehen jetzt direkt in die Zwischenablage: Ein Modell mit 245.000 Dreiecken braucht statt 23 s weniger als eine Sekunde.",
+      "en": "With a large imported model the page stopped for seconds to minutes on a copy (Ctrl+C). Large copies now go straight to the clipboard: a model of 245,000 triangles takes under a second instead of 23 s."
+    }
+  }
+]
