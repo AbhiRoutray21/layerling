@@ -2019,7 +2019,7 @@ export const MESSAGES_AR: Partial<Record<MessageKey, string>> = {
   "workspace.doubleClickOpensGroup": "النقر المزدوج يفتح مجموعة أو حزمة",
   "workspace.selectBeforeMoving": "التحديد قبل التحريك",
   "workspace.frameByDirection": "اتجاه الإطار يحدد طريقة التحديد",
-  "workspace.frameByDirectionHint": "الإطار المسحوب إلى اليمين يحدد فقط ما يقع داخله بالكامل، والمسحوب إلى اليسار يحدد كل ما يلمسه (ويُرسم متقطعًا)، كما في SketchUp",
+  "workspace.frameByDirectionHint": "سحب الإطار إلى اليمين يحدد فقط العناصر الموجودة داخله بالكامل، بينما سحبه إلى اليسار يحدد كل ما يلامسه (يظهر الإطار حينها بخطوط متقطعة)، تمامًا كما في SketchUp",
   "workspace.objectSnap": "الالتقاط إلى الأشكال الأخرى أثناء التحريك",
   "workspace.overhangAngle": "تعليم البروزات من {angle}°",
   "workspace.overhangStrict": "30° (بحذر)",
