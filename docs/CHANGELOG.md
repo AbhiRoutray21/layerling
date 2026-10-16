@@ -6,6 +6,7 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **Select multiple for a tablet (#337):** A tablet has no Shift key, so only one body or all of them could be selected. The menu of a long press, on a shape or on empty space, has **Select multiple** now: each tap on a body adds it to the selection or takes it out again, a message says the mode is on, and a tap on empty space or [[Esc]] ends it and keeps the selection. A finger on empty space still turns the view. Suggested by @cyryllo on GitHub.
 - **Tab moves through the dimension numbers on the shape (#300):** The fix of 1.68.1 only covered the properties panel. In the number box that opens when you click a dimension on the shape, Tab left the box and landed on the corner handles. Now Tab keeps the number and opens the next one (width, depth, height), and Shift+Tab goes back. Reported by @Cowski4444 on GitHub.
 - **A Spanish video about layerling in the list:** "Layerling la nueva herramienta gratuita de modelado 3D, más completo que Tinkercad" by Fulcro 1900 is in the list of videos on the start page and in the guide.
 - **Separate Parts in the right-click menu:** A shape made of several loose pieces, such as an STL of separate parts or a text of single letters, could only be taken apart with the button in the properties. The entry is now in the menu of a right click on the shape as well. Asked for by a YouTuber who makes videos about layerling.

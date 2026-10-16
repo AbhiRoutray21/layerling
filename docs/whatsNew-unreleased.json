@@ -18,5 +18,15 @@
       "de": "Klickst du ein Maß an der Form an und drückst Tab, übernimmt layerling die Zahl und öffnet das nächste Feld: Breite, Tiefe, Höhe. Umschalt+Tab geht zurück. Vorher sprang Tab auf die Eckgriffe.",
       "en": "If you click a dimension on the shape and press Tab, layerling keeps the number and opens the next box: width, depth, height. Shift+Tab goes back. Before, Tab jumped to the corner handles."
     }
+  },
+  {
+    "title": {
+      "de": "Tablet: mehrere Körper auswählen",
+      "en": "Tablet: select several bodies"
+    },
+    "body": {
+      "de": "Im Menü des langen Drucks gibt es jetzt „Mehrere auswählen“: Jedes Tippen auf einen Körper nimmt ihn zur Auswahl dazu oder wieder heraus, bis du auf die leere Fläche tippst oder Esc drückst. So geht, was am Rechner Umschalt+Klick ist, auch ohne Taste.",
+      "en": "The long press menu now has “Select multiple”: each tap on a body adds it to the selection or takes it out again, until you tap empty space or press Esc. It does what Shift+click does on a computer, without the key."
+    }
   }
 ]

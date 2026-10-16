@@ -2559,6 +2559,7 @@ export function LayerlingEditor({
   const [drawingExporting, setDrawingExporting] = useState(false);
   const [lylExporting, setLylExporting] = useState(false);
   const [alignMode, setAlignMode] = useState(false);
+  const [multiSelect, setMultiSelect] = useState(false);
   const [alignAnchorId, setAlignAnchorId] = useState<string | null>(null);
   const [alignPreview, setAlignPreview] = useState<{ axis: AlignAxis; target: AlignTarget } | null>(null);
   const [mirrorMode, setMirrorMode] = useState(false);
@@ -11472,12 +11473,31 @@ export function LayerlingEditor({
     }
   }, [edgeModifier, invalidateCadModifierSession, selectedShapes, selectionLocked, splitSession]);
 
+  // Select multiple: a tap on a body adds it to the selection or takes it out, for a tablet without Shift.
+  const startMultiSelect = () => {
+    setMultiSelect(true);
+    setNotice(t("status.selectMultipleStart"), true);
+  };
+  const endMultiSelect = useCallback(() => {
+    setMultiSelect(false);
+    setNotice(t("status.selectMultipleEnd"));
+  }, [setNotice]);
+  useEffect(() => {
+    if (!multiSelect) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") endMultiSelect();
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [multiSelect, endMultiSelect]);
+
   const shapeContextMenuItems = (): ShapeContextMenuItem[] => {
     if (!shapeContextMenu) return [];
     if (!shapeContextMenu.onShape || !hasSelection) {
       const items: ShapeContextMenuItem[] = [
         { key: "paste", label: t("contextMenu.paste"), shortcut: "Ctrl+V", onSelect: () => void pasteShape() },
         { key: "selectAll", label: t("contextMenu.selectAll"), shortcut: "Ctrl+A", onSelect: selectAllVisible },
+        { key: "selectMultiple", label: t("contextMenu.selectMultiple"), onSelect: startMultiSelect },
       ];
       if (shapes.some((shape) => shape.hidden)) items.push({ key: "showHidden", label: t("contextMenu.showHidden"), shortcut: "Ctrl+Shift+H", onSelect: showHidden });
       return items;
@@ -11488,6 +11508,7 @@ export function LayerlingEditor({
     const items: ShapeContextMenuItem[] = [
       { key: "duplicate", label: t("common.duplicate"), shortcut: "Ctrl+D", onSelect: duplicateSelected },
       { key: "copy", label: t("editor.tool.copy"), shortcut: "Ctrl+C", onSelect: copySelected },
+      { key: "selectMultiple", label: t("contextMenu.selectMultiple"), onSelect: startMultiSelect },
     ];
     if (!selectionLocked) {
       items.push(allHoles
@@ -11807,6 +11828,8 @@ export function LayerlingEditor({
           shapes={historyViewState ? historyViewState.shapes : viewportShapes}
           selectedIds={historyViewState ? [] : selectedIds}
           alignMode={alignMode}
+          multiSelect={multiSelect}
+          onMultiSelectEnd={endMultiSelect}
           alignAnchorId={effectiveAlignAnchorId}
           alignHandles={alignHandleStatuses}
           alignAxes={alignAxes}

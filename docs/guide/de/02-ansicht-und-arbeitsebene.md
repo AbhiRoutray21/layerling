@@ -23,7 +23,7 @@ Ein Grafiktablett mit Stift verhält sich wie eine Maus: Die Spitze ist die link
 
 **Arbeite auf einem Tablet möglichst mit einem Stift.** Seine Spitze ist viel feiner als eine Fingerkuppe und verdeckt nicht, was du treffen willst: kleine Punkte, dünne Linien und Griffe in einer Skizze, Messpunkte und Kanten sitzen genau, und längeres Arbeiten ermüdet weniger. layerling lässt einen Finger zu Punkten, Linien, Griffen und Kanten schon etwas weiter greifen als einen Mauszeiger, aber mit einem Stift bleibt es genauer. Das gilt für einen Stift, den das Tablet als Stift kennt (S Pen, Apple Pencil und ähnliche). Ein einfacher Stift mit Gummispitze zählt für den Bildschirm wie ein Finger und ist nicht feiner als einer.
 
-Eine rechte Maustaste gibt es auf einem Tablet nicht: Halte einen Finger eine halbe Sekunde ruhig auf eine Form oder auf die leere Fläche, dann öffnet sich das Menü, das ein Rechtsklick öffnet, auf der leeren Fläche mit **Alles auswählen**. Die Griffe um eine gewählte Form lassen sich mit dem Finger auch ein Stück neben ihnen fassen.
+Eine rechte Maustaste gibt es auf einem Tablet nicht: Halte einen Finger eine halbe Sekunde ruhig auf eine Form oder auf die leere Fläche, dann öffnet sich das Menü, das ein Rechtsklick öffnet, auf der leeren Fläche mit **Alles auswählen**. **Mehrere auswählen** im selben Menü ersetzt auf dem Tablet die Umschalttaste: Jedes Tippen auf einen Körper nimmt ihn dann zur Auswahl dazu oder wieder heraus, bis du auf die leere Fläche tippst oder [[Esc]] drückst; ein Finger auf der leeren Fläche dreht weiterhin die Ansicht. Die Griffe um eine gewählte Form lassen sich mit dem Finger auch ein Stück neben ihnen fassen.
 
 ### Der Ansichtswürfel
 

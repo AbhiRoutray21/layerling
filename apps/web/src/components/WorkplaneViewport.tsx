@@ -330,6 +330,10 @@ type WorkplaneViewportProps = {
   shapes: WorkplaneShape[];
   selectedIds: string[];
   alignMode: boolean;
+  /** Select multiple (touch has no Shift): a tap on a body adds it to the selection or takes it out (#337). */
+  multiSelect?: boolean;
+  /** A tap on empty space ends the mode and keeps the selection. */
+  onMultiSelectEnd?: () => void;
   alignAnchorId: string | null;
   alignHandles: AlignHandleStatus[];
   /** The axes the align tool measures along when a workplane is set on a face (#232); null on the plate. */
@@ -3016,6 +3020,8 @@ export function WorkplaneViewport({
   shapes,
   selectedIds,
   alignMode,
+  multiSelect = false,
+  onMultiSelectEnd,
   alignAnchorId,
   alignHandles,
   alignAxes = null,
@@ -3323,6 +3329,10 @@ export function WorkplaneViewport({
   const cornerRulerDragRef = useRef<{ id: string; pointerId: number; moved: boolean } | null>(null);
   const rulerDuplicateDragRef = useRef<{ pointerId: number; rulerId: string; shapeId: string; baseAlong: number; planeY: number; sourceX: number; sourceZ: number } | null>(null);
   const alignModeRef = useRef(alignMode);
+  const multiSelectRef = useRef(multiSelect);
+  multiSelectRef.current = multiSelect;
+  const onMultiSelectEndRef = useRef(onMultiSelectEnd);
+  onMultiSelectEndRef.current = onMultiSelectEnd;
   const alignAnchorIdRef = useRef(alignAnchorId);
   const alignHandlesRef = useRef(alignHandles);
   const mirrorModeRef = useRef(mirrorMode);
@@ -7037,9 +7047,11 @@ export function WorkplaneViewport({
       }
 
       const id = pickShape(event.clientX, event.clientY, event.pointerType);
-      const additive = event.shiftKey;
-      if (event.pointerType === "touch" && !additive) beginLongPress(event);
-      if (!id && event.pointerType === "touch" && !additive) {
+      // Select multiple does what Shift does, for a tablet without the key; a finger on empty space
+      // still turns the view and a long press still opens the menu.
+      const additive = event.shiftKey || multiSelectRef.current;
+      if (event.pointerType === "touch" && !event.shiftKey) beginLongPress(event);
+      if (!id && event.pointerType === "touch" && !event.shiftKey) {
         // A finger on empty space turns the view, as in Tinkercad, so a tablet needs no switch for it;
         // the selection box stays with the mouse and Shift. A tap that does not move still clears the
         // selection (finishDrag).
@@ -7593,7 +7605,9 @@ export function WorkplaneViewport({
         if (emptyTap && emptyTap.pointerId === event.pointerId) {
           touchEmptyTapRef.current = null;
           if (touchPointersRef.current.size === 1 && Math.hypot(event.clientX - emptyTap.x, event.clientY - emptyTap.y) < 8) {
-            onSelectShape(null);
+            // In Select multiple a tap on empty space ends the mode and leaves the selection as it is.
+            if (multiSelectRef.current) onMultiSelectEndRef.current?.();
+            else onSelectShape(null);
           }
         }
         touchPointersRef.current.delete(event.pointerId);
