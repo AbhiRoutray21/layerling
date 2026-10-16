@@ -7,6 +7,7 @@ summary: Videók, amelyeket mások készítettek a layerlingről.
 
 Ezek a videók nem ebből a projektből származnak. A linkek új lapon nyitják meg a YouTube-ot; onnan semmi sem töltődik be, amíg nem kattintasz.
 
+- [Layerling - Tussen Tinkercad en Fusion 360 in, en Helemaal Gratis!](https://youtu.be/X-UuvsfDI-s) – Werkplaats Marc (holland). Első bepillantás a layerlingbe Tinkercad-felhasználóknak: kivájás, lekerekítés, lyukminta, játékkal készült menetek, saját betűtípusok és nyomtatóprofilok, a különbség bemutatására egy játékkal és játék nélkül kinyomtatott csavarral.
 - [10 things I love about Layerling and 3 things that Tinkercad does better](https://www.youtube.com/watch?v=WWhFSWFfG9g) – TECHNOBENTO (angol). Nagyjából 29 perces teszt a layerlingről: tíz dolog, ami a készítőnek tetszik benne, és három, amit a Tinkercad jobban csinál.
 - [The PERFECT FREE CAD Program Between Tinkercad and Fusion 360!](https://youtu.be/GIoG-IHPXyg) – Print N Repeat (angol). Videó a layerlingről mint a Tinkercad és a Fusion 360 közötti ingyenes CAD-programról.
 - [Layerling Tutorials](https://www.youtube.com/playlist?list=PLZ-ZWS0D1JIk) – HL ModTech (angol). Egy Tinkercad-felhasználó lejátszási listája, eddig egy nagyjából 23 perces bemutatóval a layerlingről (ingyenes, böngészőalapú CAD, amely kibővíti a Tinkercadet), egy alaposabb betekintéssel a funkcióiba és egy rövid frissítéssel a nyomtatott menetekről.

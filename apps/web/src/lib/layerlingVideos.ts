@@ -6,6 +6,12 @@
  */
 export const LAYERLING_VIDEOS = [
   {
+    title: "Layerling - Tussen Tinkercad en Fusion 360 in, en Helemaal Gratis!",
+    channel: "Werkplaats Marc",
+    lang: "NL",
+    url: "https://youtu.be/X-UuvsfDI-s",
+  },
+  {
     title: "10 things I love about Layerling and 3 things that Tinkercad does better",
     channel: "TECHNOBENTO",
     lang: "EN",

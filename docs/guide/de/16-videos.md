@@ -7,6 +7,7 @@ summary: Videos, die andere über layerling gemacht haben.
 
 Diese Videos stammen nicht von diesem Projekt. Die Links öffnen YouTube in einem neuen Tab; von dort wird erst etwas geladen, wenn du klickst.
 
+- [Layerling - Tussen Tinkercad en Fusion 360 in, en Helemaal Gratis!](https://youtu.be/X-UuvsfDI-s) – Werkplaats Marc (Niederländisch). Ein erster Blick auf layerling für Tinkercad-Umsteiger: Aushöhlen, Verrundungen, Lochmuster, Gewinde mit Spiel, eigene Schriften und Druckerprofile, dazu eine Schraube mit und ohne Spiel gedruckt, um den Unterschied zu zeigen.
 - [10 things I love about Layerling and 3 things that Tinkercad does better](https://www.youtube.com/watch?v=WWhFSWFfG9g) – TECHNOBENTO (Englisch). Ein Test von layerling von etwa 29 Minuten: zehn Dinge, die dem Macher daran gefallen, und drei, die Tinkercad besser macht.
 - [The PERFECT FREE CAD Program Between Tinkercad and Fusion 360!](https://youtu.be/GIoG-IHPXyg) – Print N Repeat (Englisch). Ein Video über layerling als kostenloses CAD-Programm zwischen Tinkercad und Fusion 360.
 - [Layerling Tutorials](https://www.youtube.com/playlist?list=PLZ-ZWS0D1JIk) – HL ModTech (Englisch). Eine Playlist von einem Tinkercad-Nutzer, bisher mit einem Blick auf layerling von etwa 23 Minuten (kostenloses CAD im Browser, das Tinkercad erweitert), einem tieferen Einstieg in die Funktionen und einem kurzen Update zu gedruckten Gewinden.

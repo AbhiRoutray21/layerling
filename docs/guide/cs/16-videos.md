@@ -7,6 +7,7 @@ summary: Videa, která o Layerlingu vytvořili další autoři.
 
 Tato videa nepocházejí od autorů projektu. Odkazy otevřou YouTube v nové kartě. Dokud na odkaz nekliknete, nic se z YouTube nenačítá.
 
+- [Layerling - Tussen Tinkercad en Fusion 360 in, en Helemaal Gratis!](https://youtu.be/X-UuvsfDI-s) – Werkplaats Marc, nizozemsky. První seznámení s Layerlingem pro uživatele Tinkercadu: vytváření dutin, zaoblení, vzor děr, závity s vůlí, vlastní písma a profily tiskáren; pro srovnání je vytištěný šroub s vůlí i bez ní.
 - [10 things I love about Layerling and 3 things that Tinkercad does better](https://www.youtube.com/watch?v=WWhFSWFfG9g) – TECHNOBENTO, anglicky. Přibližně 29minutové vyzkoušení Layerlingu: deset věcí, které se autorovi líbí, a tři, které podle něj zvládá Tinkercad lépe.
 - [The PERFECT FREE CAD Program Between Tinkercad and Fusion 360!](https://youtu.be/GIoG-IHPXyg) – Print N Repeat, anglicky. Layerling jako bezplatný CAD mezi Tinkercadem a Fusion 360.
 - [Layerling Tutorials](https://www.youtube.com/playlist?list=PLZ-ZWS0D1JIk) – HL ModTech, anglicky. Seznam videí od uživatele Tinkercadu: zatím přibližně 23minutové představení bezplatného CADu v prohlížeči, podrobnější průzkum funkcí a krátká aktualizace o tištěných závitech.

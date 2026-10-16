@@ -7,6 +7,7 @@ summary: مقاطع فيديو صنعها أشخاص آخرون عن layerling.
 
 هذه المقاطع ليست من هذا المشروع. تفتح الروابط YouTube في تبويب جديد؛ ولا يُحمَّل شيء من هناك حتى تنقر.
 
+- [Layerling - Tussen Tinkercad en Fusion 360 in, en Helemaal Gratis!](https://youtu.be/X-UuvsfDI-s) – Werkplaats Marc (بالهولندية). نظرة أولى على layerling لمستخدمي Tinkercad: التجويف والتنعيم ونمط الثقوب والأسنان اللولبية مع خلوص والخطوط المخصصة وملفات الطابعة، مع مسمار مطبوع بخلوص وبدونه لإظهار الفرق.
 - [10 things I love about Layerling and 3 things that Tinkercad does better](https://www.youtube.com/watch?v=WWhFSWFfG9g) – TECHNOBENTO (بالإنجليزية). اختبار لـlayerling مدته نحو 29 دقيقة: عشرة أشياء يحبها صاحب الفيديو فيه، وثلاثة يؤديها Tinkercad أفضل.
 - [The PERFECT FREE CAD Program Between Tinkercad and Fusion 360!](https://youtu.be/GIoG-IHPXyg) – Print N Repeat (بالإنجليزية). فيديو عن layerling كبرنامج CAD مجاني يقع بين Tinkercad وFusion 360.
 - [Layerling Tutorials](https://www.youtube.com/playlist?list=PLZ-ZWS0D1JIk) – HL ModTech (بالإنجليزية). قائمة تشغيل من مستخدم لـTinkercad، فيها حتى الآن نظرة على layerling مدتها نحو 23 دقيقة (برنامج CAD مجاني يعمل في المتصفح ويوسّع Tinkercad)، وتعمّق أكثر في ميزاته، وتحديث قصير عن الأسنان اللولبية المطبوعة.

@@ -7,6 +7,7 @@ summary: Videos that other people have made about layerling.
 
 These videos are not from this project. The links open YouTube in a new tab; nothing is loaded from there until you click.
 
+- [Layerling - Tussen Tinkercad en Fusion 360 in, en Helemaal Gratis!](https://youtu.be/X-UuvsfDI-s) – Werkplaats Marc (Dutch). A first look at layerling for Tinkercad users: hollowing, fillets, the hole pattern, threads with clearance, custom fonts and printer profiles, with a bolt printed with and without clearance to show the difference.
 - [10 things I love about Layerling and 3 things that Tinkercad does better](https://www.youtube.com/watch?v=WWhFSWFfG9g) – TECHNOBENTO (English). A test of layerling of about 29 minutes: ten things the maker likes about it and three that Tinkercad does better.
 - [The PERFECT FREE CAD Program Between Tinkercad and Fusion 360!](https://youtu.be/GIoG-IHPXyg) – Print N Repeat (English). A video about layerling as a free CAD program between Tinkercad and Fusion 360.
 - [Layerling Tutorials](https://www.youtube.com/playlist?list=PLZ-ZWS0D1JIk) – HL ModTech (English). A playlist by a Tinkercad user, so far with a look at layerling of about 23 minutes (free, browser-based CAD that extends Tinkercad), a deeper dive into its features and a short update on printed threads.
