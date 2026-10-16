@@ -10,7 +10,13 @@
  *
  * To add a language, see docs/TRANSLATING.md.
  */
-export const LANGUAGES = ["en", "de", "nl", "fr", "pl", "ru", "cs", "sl", "hu", "da", "it", "ar"] as const;
+/*
+ * The order of the language menu. English comes first, as the language everything falls back to;
+ * then the languages written in the Latin alphabet, sorted by the name each one gives itself
+ * (Čeština, Dansk, Deutsch, Français, ...); then the others, by the name in their own script.
+ * A new language goes in at its place, not at the end.
+ */
+export const LANGUAGES = ["en", "cs", "da", "de", "fr", "it", "hu", "nl", "pl", "sl", "ru", "ar"] as const;
 export type Language = (typeof LANGUAGES)[number];
 export const DEFAULT_LANGUAGE: Language = "en";
 

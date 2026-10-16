@@ -6,6 +6,7 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **The language menu is sorted:** The languages stood in the order they were added, with every new one at the end. Now English comes first, then the languages in the Latin alphabet by the name each gives itself (Čeština, Dansk, Deutsch, Français, Italiano, Magyar, Nederlands, Polski, Slovenščina), then Русский and العربية. TRANSLATING.md says where a new language goes in.
 ## 1.83.0
 
 - **A round tube or ring has an outer diameter, and outer, inner and wall follow one another (forum):** The tube had a width, a length and an inner diameter but no outer diameter, and typing the inner diameter first clamped it to the width minus 1, which left the wall at its thinnest, so setting the width afterwards ended 0.5 mm off. A round tube or ring now shows **Outer diameter**, **Inner diameter** and **Wall thickness**, and any two give the third whichever you type first: the outer diameter keeps the bore, the inner diameter keeps the outer one, and a bore wider than the tube makes the outer diameter grow by the wall. The two sides Length and Width, and the old rule that the wall stays, only remain for a tube that is oval. The inner and outer diameter can be typed beyond their sliders. Reported by @Jenserer in the forum.
