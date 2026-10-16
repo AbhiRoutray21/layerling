@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "title": {
+      "de": "Der Browser übersetzt layerling nicht mehr",
+      "en": "The browser no longer translates layerling"
+    },
+    "body": {
+      "de": "Ein deutscher Chrome übersetzte die installierte App und machte aus „Hell“ im Farbmenü „Hölle“. Die Seite sagt dem Browser jetzt, dass sie nicht übersetzt werden soll, denn layerling bringt seine Sprachen selbst mit.",
+      "en": "A German Chrome translated the installed app and turned \"Hell\" in the colour menu into \"Hölle\". The page now tells the browser not to translate it, as layerling brings its languages itself."
+    }
+  }
+]

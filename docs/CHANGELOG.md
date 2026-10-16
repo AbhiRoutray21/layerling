@@ -6,6 +6,7 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **The browser no longer translates layerling (forum):** In the installed app in Chrome, a German browser translated the page: "Hell" in the theme menu came out as "Hölle" ("Hell" is also an English word), and an English menu showed German words. The page said it was English until the chosen language was in, so the translator started on it. The page now says it is not to be translated (`translate="no"` and the `notranslate` hint), as layerling has its own languages. Reported by @Noberty in the forum.
 - **The question mark of the notice about designs in the browser sits in its heading:** On the start page it stood at the end of the text, where its box made the last line stand further from the others than the rest. It is behind the heading now, smaller, and the three lines of the text are even.
 
 ## 1.81.0

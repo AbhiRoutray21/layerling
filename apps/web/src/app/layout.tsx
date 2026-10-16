@@ -41,6 +41,9 @@ export const metadata: Metadata = {
   title: TITLE,
   description: DESCRIPTION,
   applicationName: NAME,
+  // layerling speaks its languages itself. A browser's translator reads the page as English before the chosen
+  // language is in, and makes "Hell" into "Hölle" or an English menu into German (forum).
+  other: { google: "notranslate" },
   manifest: "/manifest.webmanifest",
   icons: {
     // Das SVG ist das eigentliche Symbol; die .ico steht daneben fuer alles,
@@ -86,7 +89,7 @@ export default function RootLayout({
 }>) {
   return (
     // Translate tools add classes such as translated-ltr to <html>; that must not end in a hydration error (#191).
-    <html lang="en" style={{ colorScheme: "light" }} suppressHydrationWarning>
+    <html lang="en" translate="no" style={{ colorScheme: "light" }} suppressHydrationWarning>
       <head>
         {/* Before any of React's scripts: a page rearranged by Translate must not crash it (#186). */}
         <script dangerouslySetInnerHTML={{ __html: DOM_MUTATION_GUARD_SCRIPT }} />
