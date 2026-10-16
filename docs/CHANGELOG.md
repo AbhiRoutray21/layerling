@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+## 1.84.0
+
 - **A hinge without the printed pin (#445):** A switch in the hinge settings, **Without pin (use your own)**, leaves the printed pin out and runs the bore (the pin diameter plus the clearance) through every knuckle, the ends included, for a pin of your own such as a piece of filament, which is smoother than a printed pin on a small hinge. Before, you had to make a hinge, make a cylinder of the hole size, line it up and punch the hole by hand. The exact body for the fillet tool and the STEP export follows it, and the AI bridge takes `hingePinless`. Suggested by @vinmangraphics on GitHub.
 - **A Dutch video about layerling in the list:** "Layerling - Tussen Tinkercad en Fusion 360 in, en Helemaal Gratis!" by Werkplaats Marc, a first look for Tinkercad users, is in the list of videos on the start page and in the guide.
 - **An imported SVG whose outlines touch can be cut with (#420):** A drawing made of panels that share edges - a football drawn as an outline with its panels inside - came in as a body that looked right but was not a clean solid: its top and bottom faces overlapped, so grouping it as a hole with another body did nothing, after about ten seconds of waiting, and some such drawings lost whole shapes on import. The body is now made by the exact kernel, where outlines that touch or lie over each other come out as one clean solid. Designs already in your list keep their old body; import the SVG again. Reported by @stainlessdmc12 on GitHub.
