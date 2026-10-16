@@ -146,7 +146,7 @@ import { NOTICE_AFTER_HOVER_MS, noticeDurationMs } from "@/lib/noticeTiming";
 import { rotateSketchPoints, selectedClosedSketchPoints } from "@/lib/sketchRotation";
 import { PROJECT_THUMBNAIL_IDLE_MS, projectThumbnailSceneChanged, type ProjectThumbnailSceneKey } from "@/lib/projectThumbnail";
 import { importedShapeFromObj } from "@/lib/objImport";
-import { readKeepSvgPage, storeKeepSvgPage } from "@/lib/importPreferences";
+import { readImportSvgWidth, readKeepSvgPage, setImportSvgWidth, storeKeepSvgPage, takeImportSvgWidth } from "@/lib/importPreferences";
 import { importFailureSummary, importModelFiles } from "@/lib/modelImport";
 import { dedupeProjectAssets } from "@/lib/projectAssets";
 import { customShapesBackupEntries, deleteMyShape, listMyShapes, myShapeNameFromFile, restoreCustomShapesFromBackup, myShapesBackupFileName, onMyShapesChanged, readMyShapePackage, renameMyShape, saveMyShape, shapesForLibrary, shapesFromLibrary, type MyShapeMeta } from "@/lib/myShapes";
@@ -8093,7 +8093,7 @@ export function LayerlingEditor({
   }, [buildSectionSvg, projectName]);
 
   // Der Dateiimport steht weiter unten; die MCP-Aktion nimmt denselben Weg.
-  const importFilesRef = useRef<((files: File[], fileHandle?: LylFileHandle, options?: { keepSvgPage?: boolean }) => Promise<{ importedIds: string[]; failures: Array<{ fileName: string; reason: string }> }>) | null>(null);
+  const importFilesRef = useRef<((files: File[], fileHandle?: LylFileHandle, options?: { keepSvgPage?: boolean; svgWidth?: number | null }) => Promise<{ importedIds: string[]; failures: Array<{ fileName: string; reason: string }> }>) | null>(null);
 
   // Custom shapes (#109): kept in this browser (IndexedDB) and, where the
   // shared store is on, in its "Custom shapes" folder. Shown on top of the
@@ -9745,7 +9745,7 @@ export function LayerlingEditor({
         const files = [new File([bytes as BlobPart], fileName)];
         if (typeof params.mtl === "string") files.push(new File([params.mtl], fileName.replace(/\.[^.]+$/, "") + ".mtl"));
         // Through MCP the answer does not depend on a setting of the browser: only a wish keeps the page.
-        const result = await importer(files, undefined, { keepSvgPage: params.keepPagePosition === true });
+        const result = await importer(files, undefined, { keepSvgPage: params.keepPagePosition === true, svgWidth: typeof params.svgWidth === "number" && params.svgWidth > 0 ? params.svgWidth : null });
         if (!result.importedIds.length) throw new Error(result.failures.map((failure) => `${failure.fileName}: ${failure.reason}`).join("; ") || "Nothing was imported");
         const imported = currentShapes().filter((shape) => result.importedIds.includes(shape.id));
         return {
@@ -10901,7 +10901,7 @@ export function LayerlingEditor({
     }
   }, [commitShapes]);
 
-  const importFiles = useCallback(async (selected: File[], fileHandle?: LylFileHandle, importOptions?: { keepSvgPage?: boolean }): Promise<{ importedIds: string[]; failures: Array<{ fileName: string; reason: string }> }> => {
+  const importFiles = useCallback(async (selected: File[], fileHandle?: LylFileHandle, importOptions?: { keepSvgPage?: boolean; svgWidth?: number | null }): Promise<{ importedIds: string[]; failures: Array<{ fileName: string; reason: string }> }> => {
     const none = { importedIds: [] as string[], failures: [] as Array<{ fileName: string; reason: string }> };
     if (!selected.length) return none;
     const projectFiles = selected.filter((file) => /\.(lyl|skf)$/i.test(file.name));
@@ -10924,6 +10924,8 @@ export function LayerlingEditor({
     const result = await importModelFiles(selected, {
       cancelled: () => projectInfoRef.current.projectId !== sourceProjectId,
       svgKeepPagePosition: importOptions?.keepSvgPage,
+      // Typed in the import window it counts once; through the AI bridge it is asked for in the call.
+      svgWidth: importOptions?.svgWidth !== undefined ? importOptions.svgWidth : takeImportSvgWidth(),
       // An SVG comes in as a sketch body, its fill changeable afterwards (#197); should the
       // kernel build it differently from the mesh, the mesh stays.
       svgAsSketch: async (mesh, profile) => {
@@ -13774,6 +13776,8 @@ function TopActionPanel({
 }) {
   const [keepSvgPage, setKeepSvgPage] = useState(false);
   useEffect(() => setKeepSvgPage(readKeepSvgPage()), []);
+  // The width a picture or an SVG comes in at; empty keeps its own size, and it counts for the next import only.
+  const [svgWidthText, setSvgWidthText] = useState(() => { const width = readImportSvgWidth(); return width ? String(width) : ""; });
   const [exportFormat, setExportFormat] = useState<ExportFormat>("stl");
   const [drawingFormat, setDrawingFormat] = useState<"svg" | "pdf">("pdf");
   const [exportName, setExportName] = useState(projectName);
@@ -13987,6 +13991,21 @@ function TopActionPanel({
               }}
             />
             <span>{t("import.keepSvgPage")}</span>
+          </label>
+          <label className="import-option import-width-option" title={t("import.svgWidthHint")}>
+            <span>{t("import.svgWidth")}</span>
+            <input
+              type="text"
+              inputMode="decimal"
+              value={svgWidthText}
+              placeholder={t("import.svgWidthPlaceholder")}
+              onChange={(event) => {
+                const text = event.currentTarget.value;
+                setSvgWidthText(text);
+                const width = Number(text.replace(",", "."));
+                setImportSvgWidth(text.trim() && Number.isFinite(width) && width > 0 ? width : null);
+              }}
+            />
           </label>
         </div>
       ) : null}

@@ -284,6 +284,7 @@ export const tools = [
         text: { type: "string", description: "The file content as text. Give text or base64, not both." },
         base64: { type: "string", description: "The file content as base64, for binary files." },
         mtl: { type: "string", description: "The .mtl material file of an OBJ, as text, for its colours." },
+        svgWidth: { type: "number", description: "SVG and pictures (PNG, JPG): bring the drawing in at this width in millimetres, scaled from its own size, as the width field of the import window does. Left out, it comes in at its own size." },
         keepPagePosition: { type: "boolean", description: "SVG only: keep the drawing's place on its page (its viewBox) instead of centring it on itself, so that several files exported from one page - the layers of one document - line up when imported one after the other. Default false; a drawing that states no page is centred anyway." },
       },
     },

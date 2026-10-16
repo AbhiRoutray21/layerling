@@ -1882,6 +1882,9 @@ export const MESSAGES_PL: Partial<Record<MessageKey, string>> = {
   "import.dropZoneHint": "albo kliknij, aby wybrać z komputera",
   "import.keepSvgPage": "SVG: zachowaj miejsce na stronie rysunku",
   "import.keepSvgPageHint": "Rysunki wykonane na jednej stronie, np. warstwy jednego dokumentu wyeksportowane jako osobne pliki, znów się zrównają, gdy zaimportujesz je jeden po drugim. Bez tej opcji każdy rysunek jest wyśrodkowany na sobie.",
+  "import.svgWidth": "SVG i obraz: szerokość w mm",
+  "import.svgWidthHint": "Wpisz szerokość, jaką ma mieć rysunek lub obraz przy imporcie; puste zostawia własny rozmiar. Dotyczy tylko następnego importu.",
+  "import.svgWidthPlaceholder": "własny rozmiar",
   "status.importSvgNoPage": "{name} nie podaje rozmiaru strony, więc został wyśrodkowany jak zwykle.",
 
   "view.cube": "Kostka orientacji widoku",

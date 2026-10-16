@@ -1883,6 +1883,9 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "import.dropZone": "STL-, OBJ- (mit .mtl oder als ZIP), 3MF-, STEP-, SVG-, PNG- oder JPG-Dateien hier ablegen",
   "import.keepSvgPage": "SVG: Lage auf der Zeichenfläche beibehalten",
   "import.keepSvgPageHint": "Zeichnungen, die auf einer Seite entstanden sind, etwa die Ebenen eines Dokuments als einzelne Dateien, liegen nach dem Import nacheinander wieder deckungsgleich. Ohne das wird jede Zeichnung auf sich selbst zentriert.",
+  "import.svgWidth": "SVG und Bild: Breite in mm",
+  "import.svgWidthHint": "Tippe die Breite ein, die eine Zeichnung oder ein Bild beim Import haben soll; leer lässt die eigene Größe. Gilt nur für den nächsten Import.",
+  "import.svgWidthPlaceholder": "eigene Größe",
   "status.importSvgNoPage": "{name} nennt keine Seitengröße und wurde deshalb wie sonst zentriert.",
   "import.dropZoneHint": "oder hier klicken, um eine Datei auszuwählen",
 

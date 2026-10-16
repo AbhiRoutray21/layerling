@@ -5992,6 +5992,24 @@ html[data-toolbar-size="large"] .shape-menu-dropdown:not(.sketch-shape-menu-drop
   accent-color: #b3680f;
 }
 
+/* The width an SVG or a picture comes in at (#448): a number field, not a tick box. */
+.import-option.import-width-option input {
+  width: 6.5em;
+  height: auto;
+  padding: 4px 6px;
+  border: 1px solid #d8c4a5;
+  border-radius: 6px;
+  background: #fffaf1;
+  color: inherit;
+  font: inherit;
+  font-weight: 600;
+}
+
+html[data-theme="dark"] .import-option.import-width-option input {
+  border-color: #5a4a36;
+  background: #2a241c;
+}
+
 html[data-theme="dark"] .import-option {
   color: #f0e7d9;
 }

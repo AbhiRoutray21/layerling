@@ -38,5 +38,15 @@
       "de": "In der Verlaufsansicht klickst du ein Objekt an (mit Umschalt mehrere) und drückst „In den Entwurf holen“: Es kommt als Kopie zurück, so und dort, wie es in diesem Stand war, und heißt zum Beispiel „Box (12:32)“. Das ist ein Schritt, den Rückgängig wieder zurücknimmt.",
       "en": "In the History view you click an object (with Shift several) and press Bring into design: it comes back as a copy, as it was and where it was in that state, named for example Box (12:32). It is one step that Undo takes back."
     }
+  },
+  {
+    "title": {
+      "de": "Breite für SVG und Bilder beim Import",
+      "en": "A width for SVG and pictures at the import"
+    },
+    "body": {
+      "de": "Im Importfenster gibt es jetzt das Feld „SVG und Bild: Breite in mm“. Tippe die Breite ein, wähle die Datei, und die Zeichnung kommt in dieser Größe auf die Arbeitsfläche, wie in Tinkercad. Leer bleibt die eigene Größe. Die Breite gilt nur für den nächsten Import.",
+      "en": "The import window has a new field “SVG and picture: width in mm”. Type the width, choose the file, and the drawing lands on the plate at that size, as in Tinkercad. Empty keeps its own size. The width counts for the next import only."
+    }
   }
 ]
