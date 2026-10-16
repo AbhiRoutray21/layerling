@@ -7,7 +7,7 @@ summary: Waar je ontwerpen staan, hoe je er een back-up van maakt, welke formate
 
 layerling slaat alles op in de browser op je computer. Er is geen account en er wordt niets geüpload. Elke wijziging slaat zichzelf op. De voorbeeldafbeelding op de startpagina toont de weergave die je het laatst voor je had toen je met {{ui:editor.homeDashboard}} terugging. Open je layerling dagen later in dezelfde browser, dan staat alles er nog.
 
-Ga je terug naar de startpagina vanuit een ontwerp waar niets in staat, dan vraagt layerling of het bewaard moet blijven. {{ui:confirm.yes}} of [[Enter]] bewaart het, {{ui:confirm.no}} verwijdert het, zodat lege ontwerpen zich niet opstapelen. Bij ontwerpen in een gedeelde map op een server wordt dat niet gevraagd.
+Ga je terug naar de startpagina vanuit een ontwerp waar niets in staat, dan vraagt layerling of het bewaard moet blijven. {{ui:confirm.yes}} of [[Enter]] bewaart het, {{ui:confirm.no}} verwijdert het, zodat lege ontwerpen zich niet opstapelen. Bij een ontwerp in een gedeelde map op een server verwijdert {{ui:confirm.no}} het bestand van de server, voor iedereen die die server gebruikt.
 
 Dat heeft een keerzijde: wie de browseropslag wist of op een andere computer verdergaat, is de ontwerpen kwijt. **Maak van belangrijk werk dus een back-up in een bestand.**
 

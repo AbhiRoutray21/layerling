@@ -777,6 +777,11 @@ export default function Home() {
   const backupRestoreInputRef = useRef<HTMLInputElement | null>(null);
   const nextProjectRevisionRef = useRef(0);
   const projectShapeSaveQueuesRef = useRef<Record<string, Promise<void>>>({});
+  /** The upload to the server still running per design, so removing it can wait for its revision. */
+  const sharedSavesRef = useRef<Record<string, Promise<SharedProject | undefined>>>({});
+  /** The newest list, for work that resumes after waiting on a save. */
+  const projectsRef = useRef(projects);
+  projectsRef.current = projects;
   const [projectSaveFailure, setProjectSaveFailure] = useState<{ message: string; at: number } | null>(null);
   const editorLoadingStartedAtRef = useRef(0);
 
@@ -1517,8 +1522,17 @@ export default function Home() {
     const formData = new FormData();
     formData.append("project", new Blob([body], { type: LYL_MEDIA_TYPE }), fileName);
     formData.append("thumbnail", thumbnail, `${fileName}.png`);
-    const response = await fetch(`${SHARED_PROJECTS_ENDPOINT}?${storeQuery(targetPath, fileName)}`, { method: "POST", headers, body: formData });
-    const payload = await response.json().catch(() => ({})) as { error?: string; project?: SharedProject };
+    const upload = (async () => {
+      const response = await fetch(`${SHARED_PROJECTS_ENDPOINT}?${storeQuery(targetPath, fileName)}`, { method: "POST", headers, body: formData });
+      const payload = await response.json().catch(() => ({})) as { error?: string; project?: SharedProject };
+      return { response, payload };
+    })();
+    const tracked = upload.then(({ response, payload }) => (response.ok ? payload.project : undefined), () => undefined);
+    sharedSavesRef.current[activeProject.id] = tracked;
+    void tracked.then(() => {
+      if (sharedSavesRef.current[activeProject.id] === tracked) delete sharedSavesRef.current[activeProject.id];
+    });
+    const { response, payload } = await upload;
     if (!response.ok || !payload.project) {
       const failure = new Error(payload.error ?? t("notice.saveSharedFailed"));
       // 409 and 412 mean somebody else changed the file; retrying would either
@@ -1927,8 +1941,7 @@ export default function Home() {
 
   const openDashboard = (leaving?: { itemCount: number }) => {
     const leavingProject = activeProjectId ? projects.find((project) => project.id === activeProjectId) : undefined;
-    // A design on the server belongs to the folder; only a local one is offered for removal.
-    if (leavingProject && !leavingProject.sharedProject && leaving?.itemCount === 0) {
+    if (leavingProject && leaving?.itemCount === 0) {
       setEmptyProjectPromptId(leavingProject.id);
     }
     if (activeProjectId) {
@@ -1967,6 +1980,25 @@ export default function Home() {
     if (!emptyProjectPrompt) return;
     const projectId = emptyProjectPrompt.id;
     setEmptyProjectPromptId(null);
+    if (emptyProjectPrompt.sharedProject) {
+      // Leaving the editor sends it to the server once more; the removal waits for that upload,
+      // or it would ask for a revision the file no longer has.
+      const pendingUpload = sharedSavesRef.current[projectId] ?? Promise.resolve(undefined);
+      void pendingUpload.then((uploaded) => {
+        const project = projectsRef.current.find((candidate) => candidate.id === projectId);
+        const binding = project?.sharedProject;
+        if (!project || !binding) return;
+        void deleteSharedProject({
+          fileName: binding.fileName,
+          path: binding.path ?? "",
+          name: project.name,
+          revision: uploaded?.revision ?? binding.revision,
+          updatedAt: project.updatedAt,
+          size: 0,
+        });
+      });
+      return;
+    }
     // The last save on the way out may still be writing; removing first would let it bring the design back.
     const pendingSave = projectShapeSaveQueuesRef.current[projectId] ?? Promise.resolve();
     void pendingSave.catch(() => undefined).then(() => deleteProject(projectId));

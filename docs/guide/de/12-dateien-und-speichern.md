@@ -7,7 +7,7 @@ summary: Wo deine Entwürfe liegen, wie du sie sicherst, welche Formate layerlin
 
 layerling speichert alles im Browser auf deinem Rechner. Es gibt kein Konto, und nichts wird hochgeladen. Jede Änderung sichert sich von selbst. Das Vorschaubild auf der Startseite zeigt die Ansicht, die du zuletzt vor dir hattest, als du mit {{ui:editor.homeDashboard}} zurückgegangen bist. Öffnest du layerling nach Tagen wieder im selben Browser, ist alles da.
 
-Gehst du von einem Entwurf, in dem nichts liegt, zurück zur Startseite, fragt layerling, ob er bleiben soll. {{ui:confirm.yes}} oder [[Enter]] behält ihn, {{ui:confirm.no}} entfernt ihn, damit sich keine leeren Entwürfe ansammeln. Entwürfe im gemeinsamen Ordner auf einem Server sind davon ausgenommen.
+Gehst du von einem Entwurf, in dem nichts liegt, zurück zur Startseite, fragt layerling, ob er bleiben soll. {{ui:confirm.yes}} oder [[Enter]] behält ihn, {{ui:confirm.no}} entfernt ihn, damit sich keine leeren Entwürfe ansammeln. Bei einem Entwurf im gemeinsamen Ordner auf einem Server löscht {{ui:confirm.no}} die Datei vom Server, für alle, die ihn benutzen.
 
 Das hat eine Kehrseite: Wer den Browserspeicher löscht oder auf einen anderen Rechner wechselt, verliert die Entwürfe. **Sichere deshalb wichtige Arbeiten in eine Datei.**
 

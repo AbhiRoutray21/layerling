@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **An empty design on the server is asked about too:** Going back to the start page from an empty design asked whether to keep it only for a design saved in the browser; one in a shared folder on a server stayed in the folder without a question. Both are asked now, with the same question. **No** on a server design deletes the file from the server, for everyone who uses it, together with its working copy in the browser, as **Delete** in the folder does. The removal waits for the upload that leaving the editor starts, so it does not fail on a file that has just changed.
+
 ## 1.83.0
 
 - **A round tube or ring has an outer diameter, and outer, inner and wall follow one another (forum):** The tube had a width, a length and an inner diameter but no outer diameter, and typing the inner diameter first clamped it to the width minus 1, which left the wall at its thinnest, so setting the width afterwards ended 0.5 mm off. A round tube or ring now shows **Outer diameter**, **Inner diameter** and **Wall thickness**, and any two give the third whichever you type first: the outer diameter keeps the bore, the inner diameter keeps the outer one, and a bore wider than the tube makes the outer diameter grow by the wall. The two sides Length and Width, and the old rule that the wall stays, only remain for a tube that is oval. The inner and outer diameter can be typed beyond their sliders. Reported by @Jenserer in the forum.

@@ -7,7 +7,7 @@ summary: Kje ležijo tvoji načrti, kako jih varnostno shraniš, katere oblike l
 
 layerling vse shranjuje v brskalniku na tvojem računalniku. Računa ni in nič se ne nalaga na splet. Vsaka sprememba se shrani sama. Sličica predogleda na začetni strani kaže pogled, ki si ga imel nazadnje pred seboj, ko si se z {{ui:editor.homeDashboard}} vrnil nazaj. Če layerling po nekaj dneh spet odpreš v istem brskalniku, je vse tam.
 
-Če se iz načrta, v katerem ni nič, vrneš na začetno stran, layerling vpraša, ali naj ostane. {{ui:confirm.yes}} ali [[Enter]] ga obdrži, {{ui:confirm.no}} ga odstrani, da se ne kopičijo prazni načrti. Načrti v skupni mapi na strežniku so izvzeti.
+Če se iz načrta, v katerem ni nič, vrneš na začetno stran, layerling vpraša, ali naj ostane. {{ui:confirm.yes}} ali [[Enter]] ga obdrži, {{ui:confirm.no}} ga odstrani, da se ne kopičijo prazni načrti. Pri načrtu v skupni mapi na strežniku {{ui:confirm.no}} izbriše datoteko s strežnika, za vse, ki ga uporabljajo.
 
 To ima svojo slabo stran: kdor izbriše pomnilnik brskalnika ali preide na drug računalnik, izgubi načrte. **Zato pomembna dela shrani v datoteko.**
 
