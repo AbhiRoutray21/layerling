@@ -1,7 +1,7 @@
 "use client";
 
 import { GuideHelpLink } from "@/components/GuideHelpLink";
-import { AlertTriangle, ArrowUpFromLine, Blend, Check, Percent, Circle as CircleIcon, CloudUpload, Download, Eye, EyeOff, FilePlus2, FolderOpen, Hexagon as HexagonIcon, Info, ListTree, Pencil, Pentagon as PentagonIcon, Rotate3d, Route as RouteIcon, Search, Square as SquareIcon, Star as StarIcon, Triangle as TriangleIcon, X } from "lucide-react";
+import { AlertTriangle, ArrowUpFromLine, Blend, Check, CircleHelp, Percent, Circle as CircleIcon, CloudUpload, Download, Eye, EyeOff, FilePlus2, FolderOpen, Hexagon as HexagonIcon, Info, ListTree, Pencil, Pentagon as PentagonIcon, Rotate3d, Route as RouteIcon, Search, Square as SquareIcon, Star as StarIcon, Triangle as TriangleIcon, X } from "lucide-react";
 import { ObjectListPanel } from "@/components/workplane/ObjectListPanel";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import * as THREE from "three";
@@ -117,6 +117,7 @@ import { NO_SPLIT_ROTATION, modelSplitPlane, snapSplitPositionToVertices, splitO
 import { GuideModal } from "./workplane/GuideModal";
 import { HistoryViewOverlay, historyStateNameSuffix } from "./workplane/HistoryViewOverlay";
 import { ShortcutsModal } from "./workplane/ShortcutsModal";
+import { InteractiveHelp } from "./InteractiveHelp";
 import { CommandPalette, type PaletteCommand } from "./workplane/CommandPalette";
 import { COMMAND_KEYWORDS, SHAPE_KEYWORDS } from "@/lib/commandKeywords";
 import { ShapeContextMenu, type ShapeContextMenuItem } from "./workplane/ShapeContextMenu";
@@ -2494,6 +2495,28 @@ export function LayerlingEditor({
   /** The icon tag window: an SVG file, its width and OK (the library's Icon tag). */
   const [iconTagPanelOpen, setIconTagPanelOpen] = useState(false);
   const [shortcutsOpen, setShortcutsOpen] = useState(false);
+  // Interactive Help: while on, a click asks the guide about the element instead of using it.
+  const [interactiveHelp, setInteractiveHelp] = useState(false);
+  const toggleInteractiveHelp = useCallback(() => {
+    setInteractiveHelp((on) => {
+      setNotice(t(on ? "interactiveHelp.ended" : "interactiveHelp.started"));
+      return !on;
+    });
+  }, []);
+  useEffect(() => {
+    // Shift+F1 from anywhere in the editor, also while a field has the focus.
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key !== "F1" || !event.shiftKey || event.ctrlKey || event.metaKey || event.altKey) return;
+      event.preventDefault();
+      toggleInteractiveHelp();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [toggleInteractiveHelp]);
+  // An editor that is hidden behind the overview is no place to ask.
+  useEffect(() => {
+    if (!editorOpen) setInteractiveHelp(false);
+  }, [editorOpen]);
   const [guideOpen, setGuideOpen] = useState(false);
   // The object list stays open or closed as it was left, in this browser, for every design (#356).
   const [outlinerOpen, setOutlinerOpen] = useRememberedFlag("layerling.editor.objectListOpen");
@@ -11591,6 +11614,8 @@ export function LayerlingEditor({
         onUngroup={ungroupSelected}
         onUndo={undo}
         onShortcuts={() => setShortcutsOpen(true)}
+        onInteractiveHelp={toggleInteractiveHelp}
+        interactiveHelpActive={interactiveHelp}
         onGuide={() => setGuideOpen(true)}
         noteMode={noteMode}
         notesVisible={notesVisible}
@@ -12210,6 +12235,7 @@ export function LayerlingEditor({
       {shortcutsOpen ? (
         <ShortcutsModal sketchMode={toolbarMode === "sketch"} onClose={() => setShortcutsOpen(false)} />
       ) : null}
+      {interactiveHelp ? <InteractiveHelp onExit={toggleInteractiveHelp} /> : null}
       {guideOpen ? <GuideModal sharedStore={sharedProjectsEnabled} sketchMode={toolbarMode === "sketch"} onClose={() => setGuideOpen(false)} /> : null}
       {notice ? (
         <p className="editor-status" role="status" aria-live="polite" onMouseEnter={holdNotice} onMouseLeave={releaseNotice}>
@@ -12329,6 +12355,7 @@ const COMMAND_SHORTCUTS: Readonly<Record<string, string>> = {
   drop: "D",
   note: "N",
   import: "Ctrl+I",
+  "interactive-help": "Shift+F1",
   export: "Ctrl+E",
   "sketch-copy": "Ctrl+C",
   "sketch-paste": "Ctrl+V",
@@ -12461,6 +12488,8 @@ function SecondaryToolbar({
   onTopPanel,
   onAddShape,
   onShortcuts,
+  onInteractiveHelp,
+  interactiveHelpActive,
   onGuide,
   noteMode,
   notesVisible,
@@ -12578,6 +12607,8 @@ function SecondaryToolbar({
   onTopPanel: (panel: TopPanel) => void;
   onAddShape: (shape: ShapeAsset) => void;
   onShortcuts: () => void;
+  onInteractiveHelp: () => void;
+  interactiveHelpActive: boolean;
   onGuide: () => void;
   noteMode: boolean;
   notesVisible: boolean;
@@ -12877,6 +12908,7 @@ function SecondaryToolbar({
     const helpCommands = [
       plain("guide", t("editor.guide"), helpGroup, true, onGuide, { icon: ToolbarGuideIcon }),
       plain("shortcuts", t("editor.keyboardShortcuts"), helpGroup, true, onShortcuts, { icon: ToolbarKeyboardIcon }),
+      plain("interactive-help", t("interactiveHelp.title"), helpGroup, true, onInteractiveHelp, { icon: CircleHelp, active: interactiveHelpActive }),
     ];
     if (toolbarMode === "sketch") {
       const modeGroup = t("palette.group.mode");
@@ -13233,6 +13265,9 @@ function SecondaryToolbar({
           <button className="action-icon-button" aria-label={t("editor.keyboardShortcuts")} title={t("editor.keyboardShortcuts")} onClick={onShortcuts}>
             <ToolbarKeyboardIcon />
           </button>
+          <button className={`action-icon-button ${interactiveHelpActive ? "active" : ""}`} type="button" aria-label={t("interactiveHelp.title")} title={`${t("interactiveHelp.title")} (${COMMAND_SHORTCUTS["interactive-help"]})`} aria-pressed={interactiveHelpActive} data-layerling-tool="interactive-help" data-help-exempt onClick={onInteractiveHelp}>
+            <CircleHelp className="toolbar-search-icon" aria-hidden="true" />
+          </button>
         </div>
       </div>
           </>
@@ -13467,6 +13502,9 @@ function SecondaryToolbar({
                 </button>
                 <button className="action-icon-button" aria-label={t("editor.keyboardShortcuts")} title={t("editor.keyboardShortcuts")} onClick={onShortcuts}>
                   <ToolbarKeyboardIcon />
+                </button>
+                <button className={`action-icon-button ${interactiveHelpActive ? "active" : ""}`} type="button" aria-label={t("interactiveHelp.title")} title={`${t("interactiveHelp.title")} (${COMMAND_SHORTCUTS["interactive-help"]})`} aria-pressed={interactiveHelpActive} data-layerling-tool="interactive-help" data-help-exempt onClick={onInteractiveHelp}>
+                  <CircleHelp className="toolbar-search-icon" aria-hidden="true" />
                 </button>
               </div>
             </div>

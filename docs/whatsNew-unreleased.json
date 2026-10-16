@@ -48,5 +48,15 @@
       "de": "Neben „Alle scharfen Kanten“ und „Obere Kanten“ gibt es jetzt „Senkrechte Kanten“. Es wählt alle Kanten, die senkrecht stehen, etwa die Ecken eines Quaders, damit eine Verrundung oder Fase alle senkrechten Ecken auf einmal erfasst.",
       "en": "Next to “All sharp edges” and “Top edges” there is “Vertical edges” now. It picks all edges that stand straight up, such as the corners of a box, so one fillet or chamfer takes all the vertical corners at once."
     }
+  },
+  {
+    "title": {
+      "de": "Interaktive Hilfe: anklicken und nachlesen",
+      "en": "Interactive Help: click it and read about it"
+    },
+    "body": {
+      "de": "Ein Fragezeichen im Bereich Hilfe (oder Umschalt+F1) schaltet die Interaktive Hilfe ein: Ein Klick auf einen Knopf, ein Feld oder ein Fenster öffnet ein kleines Fenster mit dem passenden Stück der Anleitung und führt auf Wunsch genau dorthin. Mit Esc ist sie wieder aus.",
+      "en": "A question mark in the Help group (or Shift+F1) turns on Interactive Help: a click on a button, a field or a window opens a small window with the matching part of the guide and takes you straight there if you like. Esc turns it off again."
+    }
   }
 ]

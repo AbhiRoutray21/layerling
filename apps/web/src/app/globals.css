@@ -14460,10 +14460,13 @@ html[data-theme="dark"] .shortcuts-or {
 /* Das Menueband traegt neun Gruppen. Zwischen Laptop und breitem Schirm passen
    sie nicht mehr in voller Groesse nebeneinander - bisher wurde die letzte
    Gruppe einfach abgeschnitten, jetzt gehen die Symbole eine Stufe zurueck.
-   Gemessen (mit Lupen-, Vereinfachen- und Verlaufsknopf): in voller Groesse
-   braucht das Band 1818 px, in der mittleren Stufe 1540 px, in der kleinen
-   1415 px. Jeder neue Knopf verschiebt alle drei Schwellen: neu messen. */
-@media (max-width: 1990px) {
+   Gemessen (Breite von der linken Kante der ersten bis zur rechten der letzten
+   Gruppe, mit Lupen-, Anleitungs-, Kuerzel- und Hilfeknopf): in voller Groesse
+   braucht das Band 2038 px, in der mittleren Stufe 1728 px, in der kleinen
+   1582 px (1581,1). Ohne den Knopf der Interaktiven Hilfe waren es 1990, 1688
+   und 1544 px, also genau die alten Schwellen: Jeder neue Knopf verschiebt
+   alle drei Schwellen um das, was er braucht - neu messen. */
+@media (max-width: 2038px) {
   :root {
     --toolbar-icon-size: calc(37px * var(--toolbar-scale));
   }
@@ -14484,7 +14487,7 @@ html[data-theme="dark"] .shortcuts-or {
   }
 }
 
-@media (max-width: 1688px) {
+@media (max-width: 1728px) {
   :root {
     --toolbar-icon-size: calc(34px * var(--toolbar-scale));
   }
@@ -14499,13 +14502,14 @@ html[data-theme="dark"] .shortcuts-or {
   }
 }
 
-/* Below the width even the smallest step needs (1415 px, measured with the
-   command search, simplify and history buttons; the middle step needs 1540 px) the groups
-   wrap onto a further row instead of scrolling sideways: a scrolling bar
-   hides tools and cuts off every menu that hangs beneath it. The bar grows,
-   and the editor passes its real height on (see --editor-toolbar-height).
-   A new button in the bar moves both thresholds up: measure again. */
-@media (max-width: 1544px) {
+/* Below the width even the smallest step needs (1582 px, measured with the
+   command search, guide, shortcuts and Interactive Help buttons; the middle
+   step needs 1728 px and the full size 2038 px) the groups wrap onto a
+   further row instead of scrolling sideways: a scrolling bar hides tools and
+   cuts off every menu that hangs beneath it. The bar grows, and the editor
+   passes its real height on (see --editor-toolbar-height). A new button in
+   the bar moves all three thresholds up: measure again. */
+@media (max-width: 1582px) {
   .toolbar-mode-content,
   .sketch-toolbar-ribbon {
     flex-wrap: wrap;
@@ -16449,4 +16453,97 @@ html[data-theme="dark"] .top-action-body .icon-tag-ok {
   color: white;
   background: #cf6a12;
   border-color: #b45a0c;
+}
+
+/* Interactive Help (#424): while it is on the pointer is a question mark and whatever has a name
+   under it is outlined; a click asks the guide about it. The window is a tool panel of its own,
+   at the left edge so it stands beside the tool panels at the right, and above every dialog. */
+body.help-mode,
+body.help-mode * {
+  cursor: help !important;
+}
+
+body.help-mode [data-help-window],
+body.help-mode [data-help-window] *,
+body.help-mode [data-help-exempt],
+body.help-mode [data-help-exempt] * {
+  cursor: auto !important;
+}
+
+body.help-mode [data-help-window] a,
+body.help-mode [data-help-window] button,
+body.help-mode [data-help-exempt],
+body.help-mode [data-help-exempt] * {
+  cursor: pointer !important;
+}
+
+[data-help-hover] {
+  outline: 2px solid #1a73c9 !important;
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+
+html[data-theme="dark"] [data-help-hover] {
+  outline-color: #6db3ff !important;
+}
+
+.action-buttons .action-icon-button.active {
+  background: rgba(204, 112, 17, 0.16);
+  box-shadow: inset 0 0 0 1px #cc7011;
+}
+
+.interactive-help-window {
+  top: calc(var(--editor-toolbar-height) + 14px);
+  right: auto;
+  left: 84px;
+  z-index: 260;
+  width: min(360px, calc(100vw - 28px));
+}
+
+.interactive-help-note,
+.interactive-help-answer p {
+  margin: 10px 0 0;
+  font-size: 12.5px;
+  line-height: 1.45;
+}
+
+.interactive-help-answer,
+.interactive-help-more {
+  margin-top: 10px;
+}
+
+.interactive-help-answer small,
+.interactive-help-more small {
+  display: block;
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  opacity: 0.72;
+}
+
+.interactive-help-more ul {
+  margin: 4px 0 0;
+  padding-left: 17px;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.interactive-help-window a:not(.primary):not(.secondary):not(.guide-help-link) {
+  color: #8a4b0a;
+}
+
+html[data-theme="dark"] .interactive-help-window a:not(.primary):not(.secondary):not(.guide-help-link) {
+  color: #f0b565;
+}
+
+.edge-modifier-footer a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 0 11px;
+  border: 1px solid #d8c8b7;
+  border-radius: 7px;
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: none;
 }

@@ -23,4 +23,16 @@ Le guide que vous lisez dispose également d'un champ de recherche, en haut de c
 - Le nom d'un corps dans votre conception trouve ce corps et le sélectionne, ce qui facilite une conception comportant de nombreuses pièces. Les corps n'apparaissent qu'une fois que vous tapez.
 - Cela fonctionne également en mode esquisse, avec les outils d'esquisse.
 
+## Aide interactive
+
+Vous ne trouvez pas où lire quelque chose sur un bouton ou un champ ? Laissez le programme vous y conduire. Cliquez sur le point d'interrogation dans la zone {{ui:editor.group.help}} ou appuyez sur [[Shift]]+[[F1]]. Le pointeur devient un point d'interrogation, et ce qui se trouve dessous est entouré.
+
+- Cliquez sur un bouton, un champ, un interrupteur, une poignée, un groupe du ruban ou la barre de titre d'une fenêtre. Il ne fait **pas** ce qu'il fait d'habitude. À la place, une petite fenêtre s'ouvre avec le nom de l'élément, un court résumé de la partie de ce guide qui en parle, jusqu'à deux autres endroits qui le mentionnent, et {{ui:interactiveHelp.open}}.
+- L'aide concerne l'élément que vous avez désigné, pas toute la fenêtre autour. Un élément sans nom propre prend le plus proche autour de lui ; dans une fenêtre, il se rabat sur le point d'interrogation de cette fenêtre.
+- {{ui:interactiveHelp.open}} ouvre le guide à cet endroit dans un nouvel onglet. La section y est entourée d'une couleur, de son titre jusqu'à sa fin, pour que vous voyiez où elle commence et s'arrête.
+- Si le guide ne dit rien de l'élément, la fenêtre le dit et propose {{ui:interactiveHelp.search}}.
+- [[Esc]], ou de nouveau le point d'interrogation, quitte le mode. Sur un écran tactile, il n'y a pas de survol : un appui sur un élément ouvre directement la fenêtre.
+
+La fenêtre se déplace par sa barre de titre comme les autres. Le programme trouve la section grâce au nom de l'élément - l'intitulé d'un bouton, le nom d'un champ - parce que ce guide écrit chaque bouton comme il s'appelle dans le programme. Il le cherche avec la même recherche que la zone en haut de chaque page du guide, dans la langue que vous utilisez, et tout se passe dans votre navigateur.
+
 {{raccourcis}}

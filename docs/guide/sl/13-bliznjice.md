@@ -24,4 +24,16 @@ Navodila, ki jih bereš, imajo tudi iskalno polje, na vrhu vsake strani: vpiši 
 - Ime telesa v tvojem načrtu najde to telo in ga izbere, praktično pri načrtih z mnogimi deli. Telesa se pokažejo šele, ko začneš tipkati.
 - Deluje tudi v skicirnem načinu, tam s skicirnimi orodji.
 
+## Interaktivna pomoč
+
+Ne najdeš, kje prebrati o gumbu ali polju? Naj te program pripelje tja. Klikni vprašaj v območju {{ui:editor.group.help}} ali pritisni [[Shift]]+[[F1]]. Kazalec postane vprašaj, vse pod njim pa dobi okvir.
+
+- Klikni gumb, polje, stikalo, ročaj, skupino traku ali naslovno vrstico okna. Ne naredi **tistega**, kar sicer naredi. Namesto tega se odpre majhno okno z imenom elementa, kratkim povzetkom dela tega priročnika, ki govori o njem, do dvema dodatnima mestoma, kjer je omenjen, in {{ui:interactiveHelp.open}}.
+- Pomoč velja za element, na katerega si pokazal, ne za celotno okno okoli njega. Element brez lastnega imena vzame najbližjega okoli sebe; v oknu se vrne na vprašaj tega okna.
+- {{ui:interactiveHelp.open}} odpre priročnik pri tem razdelku v novem zavihku. Tam je razdelek barvno obrobljen od naslova do konca, da vidiš, kje se začne in konča.
+- Če priročnik o elementu ne pove nič, okno to sporoči in ponudi {{ui:interactiveHelp.search}}.
+- [[Esc]] ali ponovno vprašaj konča način. Na zaslonu na dotik ni lebdenja: dotik elementa odpre okno takoj.
+
+Okno premakneš za naslovno vrstico kot druga. Program najde razdelek po imenu elementa - napisu na gumbu, imenu polja -, ker ta priročnik vsak gumb zapiše tako, kot se imenuje v programu. Išče ga z istim iskanjem kot polje na vrhu vsake strani priročnika, v jeziku, ki ga uporabljaš, in vse teče v tvojem brskalniku.
+
 {{shortcuts}}
