@@ -253,6 +253,7 @@ const HISTORY_VIEW_MCP_ACTIONS = new Set([
   "show_workplane",
   "export_section_svg",
   "export_drawing",
+  "export_mesh",
   "capture_image",
   "set_history_view",
   "clear_history",
@@ -9668,6 +9669,65 @@ export function LayerlingEditor({
           result.pdfBase64 = btoa(binary);
         }
         return result;
+      }
+
+      if (command.action === "export_mesh") {
+        // The file the export window writes as STL, 3MF or OBJ, from the same bodies: visible solids only, loose
+        // holes taken off, overlapping bodies merged (STL) or separated by colour (3MF, OBJ), and the tiny loose
+        // pieces left out. ids limit it to those objects (holes still cut).
+        const format = params.format === undefined ? "stl" : mcpString(params.format, "stl").toLowerCase();
+        if (format !== "stl" && format !== "3mf" && format !== "obj") throw new Error("format must be stl, 3mf or obj");
+        const ids = Array.isArray(params.ids) ? params.ids.filter((id): id is string => typeof id === "string") : [];
+        const all = currentShapes();
+        const chosen = ids.length ? all.filter((shape) => ids.includes(shape.id)) : all;
+        if (ids.length && chosen.length === 0) throw new Error("None of the ids is an object in this design");
+        const scoped = ids.length ? [...chosen, ...all.filter((shape) => shape.hole && !chosen.some((picked) => picked.id === shape.id))] : chosen;
+        const { visible, hiddenNote } = visibleExportShapes(scoped);
+        if (!visible.some((shape) => !shape.hole && !isNonSolidShapeKind(shape.kind))) throw new Error(t(hiddenNote ? "status.exportOnlyHidden" : "status.addSolidBeforeExport"));
+        const invalidSvg = visible.map(invalidSvgMeshReason).find((reason): reason is string => Boolean(reason));
+        if (invalidSvg) throw new Error(t("status.svgInvalid", { reason: invalidSvg }));
+        const { solids: cutSolids, meshes, holeCutsFailed } = await exportBodiesWithLooseHoles(visible);
+        const joined = await (format === "stl" ? unionOverlappingExportMeshes(cutSolids, meshes) : colorSeparatedExportMeshes(cutSolids, meshes));
+        // A group showing its parts in their own colours keeps them in 3MF and OBJ (#153).
+        const partFaceColors = (mesh: MeshData, sourceIndex: number) => {
+          const source = cutSolids[sourceIndex];
+          const solids = source ? multicolorExportSolids(source) : null;
+          if (!source || !solids) return undefined;
+          const colors = exportFaceColors(mesh, solids, source.color);
+          solids.forEach(({ probe }) => {
+            disposeBoundsTree.call(probe.geometry);
+            probe.geometry.dispose();
+            (probe.material as THREE.Material).dispose();
+          });
+          return colors;
+        };
+        let bytes: Uint8Array;
+        if (format === "stl") {
+          bytes = new Uint8Array(exportMeshesToStl(joined.meshes));
+        } else {
+          const bodies = joined.meshes.map((mesh, index) => ({
+            ...mesh,
+            ...(format === "3mf" ? { name: cutSolids[joined.quellen[index]]?.name || mesh.name } : {}),
+            color: cutSolids[joined.quellen[index]]?.color,
+            faceColors: partFaceColors(mesh, joined.quellen[index]),
+          }));
+          bytes = format === "3mf"
+            ? exportMeshesTo3mf(bodies, { title: projectName }) as Uint8Array
+            : new TextEncoder().encode(exportMeshesToObj(bodies));
+        }
+        let binary = "";
+        for (let index = 0; index < bytes.length; index += 8192) binary += String.fromCharCode(...bytes.subarray(index, index + 8192));
+        return {
+          format,
+          fileName: projectExportFileName(projectName, format),
+          bytes: bytes.length,
+          bodies: joined.meshes.length,
+          triangles: joined.meshes.reduce((total, mesh) => total + mesh.faces.length, 0),
+          mergedBodies: joined.verschmolzen,
+          failedMerges: joined.gescheitert + holeCutsFailed,
+          loosePiecesLeftOut: joined.splinters,
+          base64: btoa(binary),
+        };
       }
 
       if (command.action === "set_workplane") {

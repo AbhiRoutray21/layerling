@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+import { mkdir, writeFile } from "node:fs/promises";
+import { dirname, resolve as resolvePath } from "node:path";
 import { tools } from "./layerling-mcp-tools.mjs";
 import { isLocalBridgeUrl, openEditorAndWait } from "./layerling-mcp-open.mjs";
 
@@ -186,6 +188,17 @@ async function callTool(name, args) {
       return bridgeCommand("export_section_svg", args);
     case "layerling_export_drawing":
       return bridgeCommand("export_drawing", args);
+    case "layerling_export_mesh": {
+      // With a path the file is written here, by this server, and the answer carries no file content.
+      const { path: outputPath, ...rest } = args || {};
+      const data = await bridgeCommand("export_mesh", rest, 180000);
+      if (typeof outputPath !== "string" || !outputPath.trim()) return data;
+      const { base64, ...summary } = data;
+      const target = resolvePath(outputPath.trim());
+      await mkdir(dirname(target), { recursive: true });
+      await writeFile(target, Buffer.from(base64, "base64"));
+      return { ...summary, path: target };
+    }
     case "layerling_import_file":
       return bridgeCommand("import_file", args);
     case "layerling_add_font":

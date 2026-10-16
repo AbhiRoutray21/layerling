@@ -48,5 +48,15 @@
       "de": "Das Feld „Z (Höhe)“ sprang bisher bei 220 mm zurück, auch im Modus „Kein Drucker – freie Größe“. Jetzt lässt sich dort jede Zahl eintippen, nach oben und unten, und ebenso bei X und Y. Der Regler reicht so weit wie die Platte und die Druckhöhe.",
       "en": "The field “Z (height)” used to jump back at 220 mm, also in the mode “No printer – free size”. Now any number can be typed in, up and down, and the same for X and Y. The slider reaches as far as the plate and the printer height."
     }
+  },
+  {
+    "title": {
+      "de": "STL, 3MF und OBJ über die KI-Anbindung",
+      "en": "STL, 3MF and OBJ over the AI connection"
+    },
+    "body": {
+      "de": "Die MCP-Anbindung kann jetzt auch das Modell als STL, 3MF oder OBJ schreiben, aus denselben Körpern wie das Exportfenster. Eine KI kann so einen Entwurf bauen und gleich die Druckdatei an einen Pfad auf dem Rechner legen lassen.",
+      "en": "The MCP connection can now write the model as STL, 3MF or OBJ as well, from the same bodies as the export window. An AI can build a design and have the print file written straight to a path on the computer."
+    }
   }
 ]

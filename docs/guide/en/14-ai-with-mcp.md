@@ -99,6 +99,7 @@ The AI works with the same functions as you, through the same path as your opera
 | `layerling_set_history_view` | looks back at an earlier state of the project, like the History view (the real design stays untouched; changing tools wait until it is closed) |
 | `layerling_export_section_svg` | returns the outlines on a cutting plane as an SVG at 1:1, from the same bodies as the export |
 | `layerling_export_drawing` | makes the workshop drawing of the "2D" export: three views at 1:1 on an ISO sheet with overall sizes and a table of the round bores, as SVG text or PDF |
+| `layerling_export_mesh` | writes the file of the export window as STL, 3MF or OBJ, from the same bodies; to a path on this computer, or as base64 |
 | `layerling_set_workplane` | puts the workplane on a side of a body or back on the base plate, and hides or shows it |
 | `layerling_capture_image` | takes a picture of the view: front, top, side, diagonally from a corner and more |
 

@@ -135,6 +135,7 @@ export type LayerlingMcpCommandName =
   | "show_workplane"
   | "export_section_svg"
   | "export_drawing"
+  | "export_mesh"
   | "import_file"
   | "add_font"
   | "list_fonts"
