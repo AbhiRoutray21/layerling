@@ -1,6 +1,6 @@
 "use client";
 
-import { Archive, ArrowLeft, Clock3, Copy, EllipsisVertical, FolderInput, FolderKanban, FolderPlus, FolderUp, Grid3X3, List, Pencil, Plus, RefreshCw, Search, Server, ShieldAlert, SlidersHorizontal, Sparkles, Trash2, X } from "lucide-react";
+import { Archive, ArchiveRestore, ArrowLeft, Clock3, Copy, EllipsisVertical, FolderInput, FolderKanban, FolderPlus, FolderUp, Grid3X3, List, Pencil, Plus, RefreshCw, Search, Server, ShieldAlert, SlidersHorizontal, Sparkles, Trash2, X } from "lucide-react";
 import { Fragment, useCallback, useEffect, useMemo, useRef, useState, type DragEvent } from "react";
 import { AppFooter } from "@/components/AppFooter";
 import { LanguageSwitch } from "@/components/LanguageSwitch";
@@ -774,6 +774,7 @@ export default function Home() {
   // Left open on an iPad, which greys out files of types it does not know (#219).
   const dashboardImportAccept = useFileAccept(`.lyl,.skf,.zip,.stl,.obj,.mtl,.3mf,.step,.stp,.svg,image/svg+xml,${PICTURE_FILE_ACCEPT}`);
   const dashboardImportInputRef = useRef<HTMLInputElement | null>(null);
+  const backupRestoreInputRef = useRef<HTMLInputElement | null>(null);
   const nextProjectRevisionRef = useRef(0);
   const projectShapeSaveQueuesRef = useRef<Record<string, Promise<void>>>({});
   const [projectSaveFailure, setProjectSaveFailure] = useState<{ message: string; at: number } | null>(null);
@@ -2136,6 +2137,21 @@ export default function Home() {
           event.currentTarget.value = "";
         }}
       />
+      {/* The backup button in the storage notice: the same restore as "Open a design or import geometry", but asks for a ZIP only. */}
+      <input
+        ref={backupRestoreInputRef}
+        className="hidden-file-input"
+        type="file"
+        accept=".zip,application/zip"
+        aria-label={t("dashboard.restoreBackup")}
+        onChange={(event) => {
+          const files = event.currentTarget.files ? Array.from(event.currentTarget.files) : [];
+          if (files.length) {
+            void importFilesFromDashboard(files);
+          }
+          event.currentTarget.value = "";
+        }}
+      />
       {view === "dashboard" ? (
         <Dashboard
           dashboardSection={dashboardSection}
@@ -2171,6 +2187,7 @@ export default function Home() {
           onDuplicateSharedProject={(project) => void duplicateSharedProject(project)}
           onImportFile={() => void pickDashboardImport()}
           onBackupAll={() => void backupAllProjects()}
+          onRestoreBackup={() => backupRestoreInputRef.current?.click()}
           onOpenSharedProject={(project) => void openSharedProject(project)}
           onOpenProject={openEditor}
           onQueryChange={setQuery}
@@ -2371,6 +2388,7 @@ function Dashboard({
   onDuplicateSharedProject,
   onImportFile,
   onBackupAll,
+  onRestoreBackup,
   newDesignsOnServer,
   newDesignsOnServerLocked,
   onNewDesignsOnServerChange,
@@ -2415,6 +2433,7 @@ function Dashboard({
   onDuplicateSharedProject: (project: SharedProject) => void;
   onImportFile: () => void;
   onBackupAll: () => void;
+  onRestoreBackup: () => void;
   newDesignsOnServer: boolean;
   newDesignsOnServerLocked: boolean;
   onNewDesignsOnServerChange: (on: boolean) => void;
@@ -2954,12 +2973,19 @@ function Dashboard({
                   <strong>{t("storageNotice.title")}</strong>
                   <span>{t("storageNotice.body")} <GuideHelpLink chapter="files" section="backingUp" className="storage-notice-help" /></span>
                 </div>
-                {projects.length > 0 ? (
-                  <button className="storage-notice-button" type="button" title={t("dashboard.backupAllTitle")} onClick={onBackupAll}>
-                    <Archive size={16} strokeWidth={2.6} />
-                    <span>{t("dashboard.backupAll")}</span>
+                <div className="storage-notice-actions">
+                  {projects.length > 0 ? (
+                    <button className="storage-notice-button" type="button" title={t("dashboard.backupAllTitle")} onClick={onBackupAll}>
+                      <Archive size={16} strokeWidth={2.6} />
+                      <span>{t("dashboard.backupAll")}</span>
+                    </button>
+                  ) : null}
+                  {/* Also shown on a new computer with no designs yet: that is where a backup is restored. */}
+                  <button className="storage-notice-button secondary" type="button" title={t("dashboard.restoreBackupTitle")} onClick={onRestoreBackup}>
+                    <ArchiveRestore size={16} strokeWidth={2.6} />
+                    <span>{t("dashboard.restoreBackup")}</span>
                   </button>
-                ) : null}
+                </div>
               </aside>
 
               <div className="dashboard-section-header">

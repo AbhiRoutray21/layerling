@@ -184,6 +184,8 @@ export const MESSAGES_CS: Record<MessageKey, string> = {
   "dashboard.sortLabel": "Řazení projektů",
   "dashboard.backupAll": "Zálohovat vše",
   "dashboard.backupAllTitle": "Uložit všechny projekty a vlastní tvary do jednoho souboru; „Otevřít projekt nebo importovat geometrii“ vše obnoví, i na jiném počítači",
+  "dashboard.restoreBackup": "Obnovit ze zálohy",
+  "dashboard.restoreBackupTitle": "Vyberte soubor vytvořený tlačítkem „Zálohovat vše“: vrátí se všechny jeho projekty a vlastní tvary, projekty, které už tu jsou, se přeskočí",
   "dashboard.backupFallbackName": "Projekt",
   "dashboard.sortRecent": "Naposledy upravené",
   "dashboard.sortName": "Název",

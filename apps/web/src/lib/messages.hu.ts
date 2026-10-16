@@ -98,6 +98,8 @@ export const MESSAGES_HU: Partial<Record<MessageKey, string>> = {
   "dashboard.sendAllToServer": "Mind fel a szerverre",
   "dashboard.sendAllToServerTitle": "A böngésző összes tervét a szerver mappájába teszi. Ettől kezdve mindegyik ott menti magát.",
   "dashboard.backupAllTitle": "Minden terv és a saját alakzatok mentése egyetlen fájlba – a „Terv megnyitása vagy geometria importálása” mindet visszaadja, másik számítógépen is",
+  "dashboard.restoreBackup": "Mentés visszaállítása",
+  "dashboard.restoreBackupTitle": "Válassz egy fájlt, amelyet a „Minden mentése” készített: minden terve és saját alakzata visszatér, a már meglévő terveket kihagyja",
   "dashboard.backupFallbackName": "Terv",
   "dashboard.sortRecent": "Legutóbbi",
   "dashboard.sortName": "Név",

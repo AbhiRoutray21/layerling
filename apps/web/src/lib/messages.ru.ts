@@ -105,6 +105,8 @@ export const MESSAGES_RU: Partial<Record<MessageKey, string>> = {
   "dashboard.sendAllToServer": "Отправить все на сервер",
   "dashboard.sendAllToServerTitle": "Переносит все проекты из этого браузера в папку сервера. Дальше каждый сохраняется уже там.",
   "dashboard.backupAllTitle": "Сохранить все проекты и собственные фигуры в один файл — «Открыть проект или импортировать геометрию» вернёт их на место, в том числе на другом компьютере",
+  "dashboard.restoreBackup": "Восстановить из копии",
+  "dashboard.restoreBackupTitle": "Выберите файл, созданный кнопкой «Создать резервную копию»: все его проекты и собственные фигуры вернутся, уже имеющиеся проекты будут пропущены",
   "dashboard.backupFallbackName": "Проект",
   "dashboard.sortRecent": "Недавние",
   "dashboard.sortName": "Имя",

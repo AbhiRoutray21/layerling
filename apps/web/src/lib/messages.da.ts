@@ -88,6 +88,8 @@ export const MESSAGES_DA: Partial<Record<MessageKey, string>> = {
   "dashboard.sendAllToServer": "Læg alle på serveren",
   "dashboard.sendAllToServerTitle": "Lægger alle designs fra denne browser i servermappen. Hver enkelt gemmer sig selv der fra da af.",
   "dashboard.backupAllTitle": "Gem alle designs og egne former i én fil – åbner man den, kommer de alle tilbage",
+  "dashboard.restoreBackup": "Gendan sikkerhedskopi",
+  "dashboard.restoreBackupTitle": "Vælg en fil lavet med „Sikkerhedskopiér alle“: alle designs og egne former kommer tilbage, designs der allerede er her springes over",
   "dashboard.backupFallbackName": "Design",
   "dashboard.sortRecent": "Seneste",
   "dashboard.sortName": "Navn",

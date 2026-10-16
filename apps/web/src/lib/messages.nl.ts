@@ -99,6 +99,8 @@ export const MESSAGES_NL: Record<MessageKey, string> = {
   "dashboard.sendAllToServer": "Alles op de server zetten",
   "dashboard.sendAllToServerTitle": "Zet alle ontwerpen van deze browser in de servermap. Elk slaat zichzelf daarna daar op.",
   "dashboard.backupAllTitle": "Alle ontwerpen en de eigen vormen in één bestand opslaan - met \"Een ontwerp openen of geometrie importeren\" komen ze allemaal terug, ook op een andere computer",
+  "dashboard.restoreBackup": "Back-up terugzetten",
+  "dashboard.restoreBackupTitle": "Kies een back-upbestand dat “Alles back-uppen” heeft gemaakt: alle ontwerpen en eigen vormen komen terug, ontwerpen die er al zijn worden overgeslagen",
   "dashboard.backupFallbackName": "Ontwerp",
   "dashboard.sortRecent": "Recent",
   "dashboard.sortName": "Naam",

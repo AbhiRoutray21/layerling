@@ -1473,6 +1473,24 @@ html[data-theme="dark"] .dashboard-trademark {
   background: #a95805;
 }
 
+/* "Back up all" and "Restore backup" side by side; the restore one is the quieter of the two. */
+.storage-notice-actions {
+  display: flex;
+  flex: none;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.storage-notice-button.secondary {
+  color: #8a4a05;
+  background: #ffffff;
+  box-shadow: inset 0 0 0 2px #bf6508;
+}
+
+.storage-notice-button.secondary:hover {
+  background: #ffe9cc;
+}
+
 .storage-notice-help {
   display: inline-flex;
   vertical-align: text-bottom;
@@ -1488,8 +1506,12 @@ html[data-theme="dark"] .dashboard-trademark {
     flex-wrap: wrap;
   }
 
-  .storage-notice-button {
+  .storage-notice-actions {
     width: 100%;
+  }
+
+  .storage-notice-button {
+    flex: 1 1 140px;
     justify-content: center;
   }
 }
@@ -12863,6 +12885,16 @@ html[data-theme="dark"] .storage-notice-text strong {
 
 html[data-theme="dark"] .storage-notice-text span {
   color: #e2cfb6;
+}
+
+html[data-theme="dark"] .storage-notice-button.secondary {
+  color: #fbeed9;
+  background: #33230f;
+  box-shadow: inset 0 0 0 2px #d9863a;
+}
+
+html[data-theme="dark"] .storage-notice-button.secondary:hover {
+  background: #4a3318;
 }
 
 html[data-theme="dark"] .storage-notice-help {

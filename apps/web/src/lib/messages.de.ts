@@ -99,6 +99,8 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "dashboard.sendAllToServer": "Alle auf den Server legen",
   "dashboard.sendAllToServerTitle": "Legt alle Entwürfe dieses Browsers in den Serverordner. Jeder sichert sich danach dort selbst.",
   "dashboard.backupAllTitle": "Alle Entwürfe und die eigenen Formen als eine Datei sichern - über „Entwurf öffnen oder Geometrie importieren“ kommen sie wieder zurück, auch auf einem anderen Rechner",
+  "dashboard.restoreBackup": "Sicherung wiederherstellen",
+  "dashboard.restoreBackupTitle": "Eine mit „Alle sichern“ erzeugte Sicherungsdatei wählen: alle ihre Entwürfe und eigenen Formen kommen zurück, schon vorhandene Entwürfe werden übersprungen",
   "dashboard.backupFallbackName": "Entwurf",
   "dashboard.sortRecent": "Zuletzt benutzt",
   "dashboard.sortName": "Name",

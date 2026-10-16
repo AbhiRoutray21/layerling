@@ -433,6 +433,16 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .dashboard-trademark {
   background: #a95805;
 }
 
+:where(html[data-theme="dark"][data-palette="graphite"]) .storage-notice-button.secondary {
+  color: #8a4a05;
+  background: #ffffff;
+  box-shadow: inset 0 0 0 2px #bf6508;
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .storage-notice-button.secondary:hover {
+  background: #e6e6e6;
+}
+
 :where(html[data-theme="dark"][data-palette="graphite"]) .storage-notice-help {
   color: #8a5312;
 }
@@ -5474,6 +5484,16 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .storage-notice-text st
 
 html[data-theme="dark"]:where([data-palette="graphite"]) .storage-notice-text span {
   color: #cccccc;
+}
+
+html[data-theme="dark"]:where([data-palette="graphite"]) .storage-notice-button.secondary {
+  color: #eaeaea;
+  background: #272727;
+  box-shadow: inset 0 0 0 2px #d9863a;
+}
+
+html[data-theme="dark"]:where([data-palette="graphite"]) .storage-notice-button.secondary:hover {
+  background: #353535;
 }
 
 html[data-theme="dark"]:where([data-palette="graphite"]) .storage-notice-help {

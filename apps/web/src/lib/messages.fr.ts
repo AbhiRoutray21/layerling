@@ -94,6 +94,8 @@ export const MESSAGES_FR: Partial<Record<MessageKey, string>> = {
   "dashboard.sendAllToServer": "Mettez tout sur le serveur",
   "dashboard.sendAllToServerTitle": "Place chaque conception de ce navigateur dans le dossier du serveur. Chacun s'y sauve désormais.",
   "dashboard.backupAllTitle": "Enregistrez chaque motif et les formes personnalisées dans un seul fichier - « Ouvrir une conception ou importer une géométrie » les ramène tous, aussi sur un autre ordinateur",
+  "dashboard.restoreBackup": "Restaurer la sauvegarde",
+  "dashboard.restoreBackupTitle": "Choisissez un fichier de sauvegarde créé par « Sauvegarder tout » : tous ses motifs et formes personnalisées reviennent, ceux qui sont déjà là sont ignorés",
   "dashboard.backupFallbackName": "Conception",
   "dashboard.sortRecent": "Récents",
   "dashboard.sortName": "Nom",

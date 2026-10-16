@@ -88,6 +88,8 @@ export const MESSAGES_SL: Partial<Record<MessageKey, string>> = {
   "dashboard.sendAllToServerTitle": "Vse načrte tega brskalnika prestavi v mapo na strežniku. Vsak se od tam naprej shranjuje tam.",
   "dashboard.backupAll": "Varnostna kopija vsega",
   "dashboard.backupAllTitle": "Shrani vse projekte in lastne oblike v eno datoteko – „Odpri projekt ali uvozi geometrijo“ jih vse vrne, tudi na drugem računalniku",
+  "dashboard.restoreBackup": "Obnovi varnostno kopijo",
+  "dashboard.restoreBackupTitle": "Izberite datoteko, ki jo je naredil gumb „Varnostna kopija vsega“: vsi njeni projekti in lastne oblike se vrnejo, projekti, ki so že tu, se preskočijo",
   "dashboard.backupFallbackName": "Projekt",
   "dashboard.sortRecent": "Nedavni",
   "dashboard.sortName": "Ime",

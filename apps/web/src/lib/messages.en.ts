@@ -100,6 +100,8 @@ export const MESSAGES_EN = {
   "dashboard.sendAllToServer": "Put all on the server",
   "dashboard.sendAllToServerTitle": "Puts every design of this browser into the server folder. Each one saves itself there from then on.",
   "dashboard.backupAllTitle": "Save every design and the custom shapes in one file - \"Open a design or import geometry\" brings them all back, also on another computer",
+  "dashboard.restoreBackup": "Restore backup",
+  "dashboard.restoreBackupTitle": "Pick a backup file that “Back up all” made: all its designs and custom shapes come back, and designs that are already here are skipped",
   "dashboard.backupFallbackName": "Design",
   "dashboard.sortRecent": "Recent",
   "dashboard.sortName": "Name",

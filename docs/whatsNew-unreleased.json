@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "title": {
+      "de": "Sicherung wiederherstellen: eigener Knopf",
+      "en": "Restore backup: a button of its own"
+    },
+    "body": {
+      "de": "Neben „Alle sichern“ gibt es jetzt den Knopf „Sicherung wiederherstellen“. Du wählst die Sicherungsdatei, und alle Entwürfe und eigenen Formen kommen zurück; was schon da ist, wird übersprungen. Der Knopf steht auch auf einem neuen Rechner ohne Entwürfe da.",
+      "en": "Next to “Back up all” there is a “Restore backup” button now. You pick the backup file, and all designs and custom shapes come back; whatever is already there is skipped. The button is also there on a new computer with no designs yet."
+    }
+  }
+]
