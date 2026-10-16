@@ -50,7 +50,7 @@ export const LYL_LIMITS = {
 
 const SHAPE_KINDS = new Set([
   "box", "roundedBox", "cylinder", "slot", "ellipse", "sphere", "sketch", "scribble", "cone", "pyramid", "roof", "text", "roundRoof",
-  "halfSphere", "torus", "tube", "bentTube", "star", "heart", "crescent", "gear", "honeycomb", "hinge", "knurl", "dovetail", "counterbore", "countersink", "doubleCountersink", "teardrop", "loft", "thread", "spring", "ring", "wedge", "polygon", "icosahedron", "ruler", "mesh",
+  "halfSphere", "torus", "tube", "bentTube", "star", "heart", "crescent", "gear", "honeycomb", "hinge", "knurl", "dovetail", "counterbore", "countersink", "doubleCountersink", "teardrop", "loft", "thread", "spring", "gridfinity", "ring", "wedge", "polygon", "icosahedron", "ruler", "mesh",
 ]);
 
 const FEATURE_TYPES = new Set([
@@ -1514,6 +1514,15 @@ function validateShapeDefinition(definition: Record<string, unknown>, label: str
     }
     if (definition.knurlPattern !== undefined && definition.knurlPattern !== "straight" && definition.knurlPattern !== "diamond" && definition.knurlPattern !== "round") {
       throw new Error(`${label}.knurlPattern must be straight, diamond or round`);
+    }
+  }
+  if (kind === "gridfinity") {
+    // The size is rounded to whole grid units on loading; only a type or a switch it cannot read is refused.
+    if (definition.gridfinityType !== undefined && definition.gridfinityType !== "bin" && definition.gridfinityType !== "baseplate") {
+      throw new Error(`${label}.gridfinityType is invalid`);
+    }
+    for (const key of ["gridfinityLip", "gridfinityMagnets"] as const) {
+      if (definition[key] !== undefined && typeof definition[key] !== "boolean") throw new Error(`${label}.${key} must be true or false`);
     }
   }
   if (kind === "hinge") {

@@ -113,6 +113,15 @@ A {{ui:prop.loftTwist}} felfelé haladva egyenletesen elforgatja a keresztmetsze
 
 Az átmenet pontos test, csavarva és döntve is: az élei letörhetők és lekerekíthetők, és a STEP-export is megtartja. Egy csavarlyukas karimát a szokásos módon adj hozzá, és csoportosítsd őket.
 
+## Gridfinity
+
+A {{ui:shape.gridfinity}} alakzat Zack Freedman nyílt tárolórendszeréhez készít alkatrészeket: 42 mm-es rácsra épülő rekeszeket, amelyek alapkeretbe állnak és egymásra rakhatók. A méretek a közzétett Gridfinity-specifikációt követik, így egy layerlingben készült rekesz illik egy más generátorral készült alapkeretbe, és fordítva. A {{ui:prop.gridfinityType}} mezőben választhatsz:
+
+- **{{ui:gridfinity.bin}}:** rekesz, minden rácsegység alatt egy lábbal. Az {{ui:prop.gridfinityUnitsX}} és az {{ui:prop.gridfinityUnitsZ}} 42 mm-es rácsegységeket számol (a rekesz 0,5 mm-rel kisebb, egy egységnél 41,5 mm); minden magassági egység ({{ui:prop.gridfinityUnitsY}}) 7 mm, legfeljebb 20. A fal tetején lévő {{ui:prop.gridfinityLip}} fogadja a következő rekesz lábait, és 4,4 mm-rel magasabbá teszi a rekeszt: egy 3 egységes, peremes rekesz 25,4 mm magas. A {{ui:prop.gridfinityMagnets}} bekapcsolásával minden láb minden sarkába lyuk kerül egy 6 × 2 mm-es mágnesnek.
+- **{{ui:gridfinity.baseplate}}:** a keret, amelybe a rekeszek állnak, 5 mm magas, minden rácsegységhez egy fészekkel. Nyitott keret, fenék és mágneslyukak nélkül.
+
+A méret mindig egész rácsegység, legfeljebb 6 × 6 (252 mm, elfér egy 256 mm-es tárgyasztalon); ha húzod a fogantyút, a méret a legközelebbi egységre ugrik. A fal (0,95 mm), a fenék (1,2 mm) és a mágneslyukak mélysége (2,4 mm) nincs a specifikációban, és rögzített; a specifikáció M3-as csavarlyukai nem készülnek el. A perem teteje éles, ahogy a specifikáció rajzolja; ha a nyomtatód egyenetlenre nyomtatja, kerekítsd le vagy törd le az élműveleti eszközzel. A rekesz és az alapkeret pontos test, így a lekerekítés, a letörés és a STEP-export működik rajtuk. Egy rekeszt úgy osztasz fel, hogy vékony dobozokat csoportosítasz bele falként: állítsd őket a fenékre, 5,95 mm magasan, és peremes rekesznél a tetejük legalább 0,5 mm-rel maradjon a magassági egységenkénti 7 mm alatt, a rekesz aljától mérve (3 egységnél 20,5 mm), mert a következő rekesz lábai 0,35 mm-re benyúlnak a rekeszbe. A rekeszeket és az alapkereteket támasz nélkül nyomtasd, úgy állítva, ahogy a tárgyasztalon állnak.
+
 ## Zsanér
 
 A {{ui:shape.hinge}} egy darabban nyomtatódik, és utána mozog (print-in-place): két, laposan nyitva a tárgyasztalon fekvő szárny, köztük egy tengelyen váltakozó csuklókkal. A csap a hátsó szárnyhoz tartozik, és játékkal fut át az elülső szárny csuklóin. Beállítod a {{ui:prop.hingeLength}}, a {{ui:prop.hingeOpenWidth}} és a {{ui:prop.hingeKnuckleDiameter}} értékét, valamint a {{ui:prop.hingeKnuckles}} számát (páratlan, hogy a csapot mindkét végén tartsa), a {{ui:prop.hingePinDiameter}} és a {{ui:prop.hingeLeafThickness}} értékét.

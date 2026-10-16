@@ -17,7 +17,7 @@ const SHAPE_DEFAULT_FIELDS = [
   "springWire", "springHand", "springQuality", "starPoints", "starInnerSize", "starOuterFillet", "starInnerFillet",
   "starQuality", "heartTipFillet", "heartQuality", "crescentThickness", "crescentTipFillet", "crescentQuality",
   "honeycombCellSize", "honeycombWallThickness", "honeycombFrameWidth", "hingeKnuckles", "hingePinDiameter",
-  "hingeLeafThickness", "hingeClearance", "knurlPattern", "knurlCount", "knurlDepth", "knurlAngle", "knurlChamfer",
+  "hingeLeafThickness", "hingeClearance", "gridfinityType", "gridfinityLip", "gridfinityMagnets", "knurlPattern", "knurlCount", "knurlDepth", "knurlAngle", "knurlChamfer",
   "dovetailNeckWidth", "dovetailClearance", "loftBottomOutline", "loftTopOutline", "loftBottomWidth", "loftBottomDepth", "loftTopWidth", "loftTopDepth", "loftBottomCorner", "loftTopCorner", "loftBottomSides", "loftTopSides", "loftOffsetX", "loftOffsetZ", "loftWall", "loftTwist", "loftSmooth", "loftTiltX", "loftTiltZ", "slotEndRatio", "screwHoleShaft", "screwHoleHeadDepth", "screwHoleAngle", "bentTubeProfile",
   "bentTubeInnerProfile", "bentTubeSize", "bentTubeWall", "bentTubeQuality", "font", "textCurved", "textRadius",
   "textSize", "textInward", "textFlipped",

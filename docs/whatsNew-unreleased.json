@@ -48,5 +48,15 @@
       "de": "Eine Zeichnung aus Feldern, die sich Kanten teilen, etwa ein Fußball mit seinen Flächen, kam als Körper herein, der nicht sauber geschlossen war: Als Loch gruppiert tat er nichts, und es dauerte etwa zehn Sekunden. Jetzt baut der genaue Kern den Körper, und berührende oder überlappende Umrisse werden ein sauberer Körper. Bereits importierte SVGs bitte noch einmal importieren.",
       "en": "A drawing made of panels that share edges, such as a football with its panels, came in as a body that was not cleanly closed: grouped as a hole it did nothing, after about ten seconds. Now the exact kernel builds the body, and touching or overlapping outlines come out as one clean body. Please import SVGs that are already in a design again."
     }
+  },
+  {
+    "title": {
+      "de": "Gridfinity: Behälter und Bodenplatten",
+      "en": "Gridfinity bins and baseplates"
+    },
+    "body": {
+      "de": "Die neue Form „Gridfinity“ in der Formenbibliothek baut Behälter und Bodenplatten für das offene Aufbewahrungssystem im Raster von 42 mm: Einheiten in Breite, Tiefe und Höhe, Stapelrand und Magnetlöcher nach Wunsch. Die Maße folgen der Spezifikation, so passen die Teile zu Behältern und Bodenplatten aus anderen Generatoren.",
+      "en": "The new shape \"Gridfinity\" in the shape library makes bins and baseplates for the open storage system on a 42 mm grid: units across, deep and high, the stacking lip and magnet holes if you like. The measures follow the specification, so the parts fit bins and baseplates made with other generators."
+    }
   }
 ]

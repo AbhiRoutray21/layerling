@@ -177,6 +177,7 @@ import { customFontList, textFontLabel } from "@/lib/textFonts";
 import { MIN_SLOT_END_RATIO, normalizeSlotEndRatio, taperedSlotOutline } from "@/lib/slotGeometry";
 import { loftMeasures, loftShapePatch, loftTiltLimit, maxLoftWall, MAX_LOFT_SIDES, MAX_LOFT_TWIST, MIN_LOFT_SIDES, MIN_LOFT_SIZE, normalizeLoftOutline, type LoftMeasures } from "@/lib/loftGeometry";
 import { MAX_KNURL_ANGLE, MIN_KNURL_ANGLE, MIN_KNURL_COUNT, MIN_KNURL_DEPTH, knurlSettings, maxKnurlChamfer, maxKnurlCount, maxKnurlDepth, maxRoundKnurlDepth, normalizeKnurlAngle, normalizeKnurlChamfer, normalizeKnurlCount, normalizeKnurlDepth, normalizeKnurlPattern } from "@/lib/knurlGeometry";
+import { MAX_GRIDFINITY_HEIGHT_UNITS, MAX_GRIDFINITY_UNITS, MIN_GRIDFINITY_UNITS, gridfinityPlan, gridfinityShapePatch, normalizeGridfinityType } from "@/lib/gridfinityGeometry";
 import { MAX_HINGE_CLEARANCE, MAX_HINGE_KNUCKLES, MIN_HINGE_CLEARANCE, MIN_HINGE_KNUCKLES, hingePlan, minimumHingeDepth, normalizeHingeClearance, normalizeHingeKnuckles, normalizeHingeLeafThickness, normalizeHingePinDiameter } from "@/lib/hingeGeometry";
 import { useLanguage } from "@/lib/useLanguage";
 import { useMovablePanel, type MovablePanelOptions } from "@/lib/useMovablePanel";
@@ -896,6 +897,36 @@ function getShapePropertiesWithAppLimits(shape: WorkplaneShape, onUpdate: ShapeI
     ];
     if (knurl.pattern === "diamond") {
       properties.push({ id: "knurlAngle", label: t("prop.knurlAngle"), value: knurl.angle, min: MIN_KNURL_ANGLE, max: MAX_KNURL_ANGLE, step: 1, onChange: (value) => onUpdate({ knurlAngle: normalizeKnurlAngle(value) }) });
+    }
+    return properties;
+  }
+
+  if (shape.kind === "gridfinity") {
+    const plan = gridfinityPlan({ ...shape, depth });
+    // The size is whole grid units; every change writes the box they make.
+    const apply = (next: Parameters<typeof gridfinityShapePatch>[1]) => {
+      const patch = gridfinityShapePatch({ ...shape, depth }, next);
+      onUpdate({ ...patch, size: resizedShapeSize(patch.width, patch.depth) });
+    };
+    const properties: ShapePropertyConfig[] = [
+      {
+        type: "select",
+        id: "gridfinityType",
+        label: t("prop.gridfinityType"),
+        value: plan.type,
+        options: [{ value: "bin", label: t("gridfinity.bin") }, { value: "baseplate", label: t("gridfinity.baseplate") }],
+        hint: t(plan.type === "bin" ? "gridfinity.binHint" : "gridfinity.baseplateHint"),
+        onChange: (value) => apply({ type: normalizeGridfinityType(value) }),
+      },
+      { id: "gridfinityUnitsX", label: t("prop.gridfinityUnitsX"), value: plan.count.x, min: MIN_GRIDFINITY_UNITS, max: MAX_GRIDFINITY_UNITS, step: 1, onChange: (value) => apply({ x: Math.round(value) }) },
+      { id: "gridfinityUnitsZ", label: t("prop.gridfinityUnitsZ"), value: plan.count.z, min: MIN_GRIDFINITY_UNITS, max: MAX_GRIDFINITY_UNITS, step: 1, onChange: (value) => apply({ z: Math.round(value) }) },
+    ];
+    if (plan.type === "bin") {
+      properties.push(
+        { id: "gridfinityUnitsY", label: t("prop.gridfinityUnitsY"), value: plan.count.y, min: MIN_GRIDFINITY_UNITS, max: MAX_GRIDFINITY_HEIGHT_UNITS, step: 1, onChange: (value) => apply({ y: Math.round(value) }) },
+        { type: "toggle", id: "gridfinityLip", label: t("prop.gridfinityLip"), value: plan.lip, onChange: (value) => apply({ lip: value }) },
+        { type: "toggle", id: "gridfinityMagnets", label: t("prop.gridfinityMagnets"), value: plan.magnets, onChange: (value) => onUpdate({ gridfinityMagnets: value }) },
+      );
     }
     return properties;
   }

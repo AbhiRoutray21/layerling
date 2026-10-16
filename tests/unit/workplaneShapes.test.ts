@@ -213,6 +213,13 @@ describe("workplane shape helpers", () => {
     expect(rack.depth).toBe(7.5);
   });
 
+  it("rounds a Gridfinity bin or baseplate to whole grid units, however its box was dragged", () => {
+    const bin = canonicalizeShape(shape({ kind: "gridfinity", gridfinityType: "bin", width: 100, depth: 30, height: 40 }));
+    expect(bin).toMatchObject({ width: 83.5, depth: 41.5, height: 39.4, size: 83.5 });
+    const plate = canonicalizeShape(shape({ kind: "gridfinity", gridfinityType: "baseplate", width: 130, depth: 90, height: 12 }));
+    expect(plate).toMatchObject({ width: 126, depth: 84, height: 5, size: 126 });
+  });
+
   it("keeps rotated groups editable so they can still be ungrouped", () => {
     const child = shape({ id: "child" });
     const group = shape({

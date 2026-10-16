@@ -113,6 +113,15 @@ Robno orodje in izvoz STEP vzameta vzmet kot natančno telo: okrogla žica vzdol
 
 Prehod je natančno telo, tudi zasukan in nagnjen: njegove robove lahko posnameš in zaobliš, izvoz STEP ga ohrani. Prirobnico z luknjami za vijake dodaš kot običajno in združiš v skupino.
 
+## Gridfinity
+
+Oblika {{ui:shape.gridfinity}} izdela dele za odprti sistem za shranjevanje Zacka Freedmana: posode na mreži po 42 mm, ki stojijo v podstavku in se zlagajo druga na drugo. Mere sledijo objavljeni specifikaciji Gridfinity, zato posoda iz layerlinga ustreza podstavku iz drugega generatorja in obratno. Pod {{ui:prop.gridfinityType}} izbereš:
+
+- **{{ui:gridfinity.bin}}:** posodo z nogo pod vsako enoto mreže. {{ui:prop.gridfinityUnitsX}} in {{ui:prop.gridfinityUnitsZ}} štejeta enote mreže po 42 mm (posoda je za 0,5 mm manjša, 41,5 mm za eno enoto); vsaka višinska enota ({{ui:prop.gridfinityUnitsY}}) meri 7 mm, največ 20. {{ui:prop.gridfinityLip}} na vrhu stene sprejme noge naslednje posode in posodo zviša za 4,4 mm: posoda s 3 enotami in obrobo je visoka 25,4 mm. Če vklopiš {{ui:prop.gridfinityMagnets}}, dobi vsaka noga v vsakem kotu luknjo za magnet 6 × 2 mm.
+- **{{ui:gridfinity.baseplate}}:** podstavek, v katerem stojijo posode, visok 5 mm, z ležiščem za vsako enoto mreže. Je odprt okvir brez dna in brez lukenj za magnete.
+
+Velikost je vedno celo število enot mreže, do 6 × 6 (252 mm, kar gre na tiskalno ploščo 256 mm); ko vlečeš ročico, se velikost zaskoči na najbližjo enoto. Stena (0,95 mm), dno (1,2 mm) in globina lukenj za magnete (2,4 mm) niso v specifikaciji in so stalni; luknje za vijake M3 iz specifikacije niso narejene. Vrh obrobe je oster, kot ga riše specifikacija; če ga tvoj tiskalnik razcefra, ga zaokroži ali posnemi z robnim orodjem. Posoda in podstavek sta natančni telesi, zato zaokrožitev, posnetje in izvoz STEP delujejo na njiju. Posodo razdeliš tako, da vanjo združiš tanke kvadre kot stene: postavi jih na dno, na višino 5,95 mm, pri posodi z obrobo pa naj njihov vrh ostane vsaj 0,5 mm pod 7 mm na višinsko enoto, merjeno od spodnje strani posode (20,5 mm pri 3 enotah), ker noge naslednje posode segajo 0,35 mm v posodo. Posode in podstavke tiskaj brez podpor, postavljene tako, kot stojijo na tiskalni plošči.
+
 ## Tečaj
 
 {{ui:shape.hinge}} se natisne v enem kosu in se potem premika (print-in-place): dva lista, ki odprta ležita ravno na plošči, vmes izmenični členi na osi. Zatič spada k zadnjemu listu in teče z zračnostjo skozi člene sprednjega. Nastaviš {{ui:prop.hingeLength}}, {{ui:prop.hingeOpenWidth}} in {{ui:prop.hingeKnuckleDiameter}}, poleg tega število {{ui:prop.hingeKnuckles}} (liho, da zatič drži na obeh koncih), {{ui:prop.hingePinDiameter}} in {{ui:prop.hingeLeafThickness}}.

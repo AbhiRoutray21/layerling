@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { taperedSlotOutline } from "@/lib/slotGeometry";
 import type { WorkplaneShape } from "@/types/layerling";
-import type { CadModifierProfileLoop, CadModifierProfilePart, CadModifierProfileSegment, CadModifierHelicalGearPart, CadModifierSpringPart, CadModifierSweepPiece, CadModifierThreadPart } from "@/lib/cadModifierTypes";
+import type { CadModifierProfileLoop, CadModifierProfilePart, CadModifierProfileSegment, CadModifierGridfinityPart, CadModifierHelicalGearPart, CadModifierSpringPart, CadModifierSweepPiece, CadModifierThreadPart } from "@/lib/cadModifierTypes";
 import { profileArcPoint, profileLoopBounds, validateCadProfile } from "@/lib/cadProfileSolid";
 import { cadTransformFromMatrix } from "@/lib/cadBakeMetadata";
 import { CAD_MODIFIER_EXACT_SEGMENT_LIMIT } from "@/lib/cadModifierRuntime";
@@ -27,6 +27,7 @@ import { textFillComponents, textFillPieceGeometry, textHasFill } from "@/lib/te
 import { loadedManifoldRuntime } from "@/lib/manifoldHandle";
 import { threadBuildPlan, WHITWORTH_PROFILE_CONSTANTS } from "@/lib/threadGeometry";
 import { springBuildPlan, springRingSectionShare } from "@/lib/springGeometry";
+import { gridfinityPlan } from "@/lib/gridfinityGeometry";
 import { knurlCorners, knurlSettings, roundKnurlWave } from "@/lib/knurlGeometry";
 import { BEVEL_GEAR_TOP_SCALE, gearHelixTwist, gearOutlineCorners, internalGearMeasures, internalGearOutline, involuteFlankPoint, involuteGearMeasures, involuteOutlineStretch, involuteToothCentre, normalizeGearCenterHoleSize, normalizeGearProfile, normalizeGearToothSize, normalizeGearType, rackMeasures, rackOutlinePoints, rackToothArcs, roundGearMeasures, roundInternalMeasures, roundToothArcs, type GearOutlineOptions, type InternalGearOptions, type InvoluteGearMeasures, type RackOptions, type RoundWave } from "@/lib/gearGeometry";
 
@@ -1361,6 +1362,31 @@ export function cadModifierSpringForShape(shape: WorkplaneShape): CadModifierSpr
     // The mesh is drawn round at the larger of width and depth and stretched
     // to the shape's footprint; the body takes the same stretch.
     transform: profileTransformForShape(shape, new THREE.Matrix4().makeScale(plan.scaleX, 1, plan.scaleZ)),
+  };
+}
+
+/**
+ * A Gridfinity bin or baseplate as the exact body its display mesh draws, or
+ * null: the size and settings go to `gridfinitySolid.ts`, which builds the
+ * body from the same `gridfinityPlan` as the mesh.
+ */
+export function cadModifierGridfinityForShape(shape: WorkplaneShape): CadModifierGridfinityPart | null {
+  if (shape.kind !== "gridfinity") return null;
+  if (shape.importedMesh || shape.groupedShapes?.length || shape.cadBrep || shape.imagePlate || shapeHasShapeDeform(shape)) return null;
+  const width = shapeWidth(shape);
+  const depth = shapeDepth(shape);
+  if (![width, depth, shape.height].every((value) => Number.isFinite(value) && value > 0)) return null;
+  const plan = gridfinityPlan({ width, depth, height: shape.height, gridfinityType: shape.gridfinityType, gridfinityLip: shape.gridfinityLip, gridfinityMagnets: shape.gridfinityMagnets });
+  return {
+    width: plan.size.width,
+    depth: plan.size.depth,
+    height: plan.size.height,
+    gridfinityType: plan.type,
+    gridfinityLip: plan.lip,
+    gridfinityMagnets: plan.magnets,
+    // Mesh and body are built at the size of the grid units, which canonicalizeShape
+    // keeps the shape's box at; a box that differs anyway stretches the body to it.
+    transform: profileTransformForShape(shape, new THREE.Matrix4().makeScale(width / plan.size.width, shape.height / plan.size.height, depth / plan.size.depth)),
   };
 }
 

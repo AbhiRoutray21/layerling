@@ -113,6 +113,15 @@ Kuželové kolo zmenšuje evolventní profil směrem nahoru. Jde o přiblížen�
 
 Přesná geometrie platí i při zkroucení a náklonu, takže lze zaoblovat, zkosovat a exportovat do STEP. Přírubu s otvory přidejte a slučte běžným postupem.
 
+## Gridfinity
+
+Tvar {{ui:shape.gridfinity}} vytváří díly pro otevřený úložný systém Zacka Freedmana: krabičky v mřížce po 42 mm, které stojí v nosné desce a dají se stohovat na sebe. Rozměry odpovídají zveřejněné specifikaci Gridfinity, takže krabička z layerlingu sedí v nosné desce z jiného generátoru a naopak. V poli {{ui:prop.gridfinityType}} vyberete:
+
+- **{{ui:gridfinity.bin}}:** krabičku s nožkou pod každou jednotkou mřížky. {{ui:prop.gridfinityUnitsX}} a {{ui:prop.gridfinityUnitsZ}} počítají jednotky mřížky po 42 mm (krabička je o 0,5 mm menší, 41,5 mm na jednu jednotku); každá výšková jednotka ({{ui:prop.gridfinityUnitsY}}) měří 7 mm, nejvýš 20. {{ui:prop.gridfinityLip}} nahoře na stěně drží nožky další krabičky a krabičku zvýší o 4,4 mm: krabička o 3 jednotkách s okrajem je vysoká 25,4 mm. Když zapnete {{ui:prop.gridfinityMagnets}}, dostane každá nožka v každém rohu otvor pro magnet 6 × 2 mm.
+- **{{ui:gridfinity.baseplate}}:** desku, ve které krabičky stojí, vysokou 5 mm, s lůžkem pro každou jednotku mřížky. Je to otevřený rám bez dna a bez otvorů pro magnety.
+
+Velikost je vždy celý počet jednotek mřížky, až 6 × 6 (252 mm, vejde se na podložku 256 mm); při tažení za úchyt velikost přiskočí k nejbližší jednotce. Stěna (0,95 mm), dno (1,2 mm) a hloubka otvorů pro magnety (2,4 mm) ve specifikaci nejsou a jsou pevné; otvory pro šrouby M3 ze specifikace se nevytvářejí. Horní hrana okraje je ostrá, jak ji specifikace kreslí; pokud ji vaše tiskárna roztřepí, zaoblete ji nebo zkoste nástrojem hran. Krabička i deska jsou přesná tělesa, takže zaoblení, zkosení i export do STEP na nich fungují. Krabičku rozdělíte tak, že do ní seskupíte tenké kvádry jako přepážky: postavte je na dno, do výšky 5,95 mm, a u krabičky s okrajem nechte jejich horní hranu aspoň 0,5 mm pod 7 mm na výškovou jednotku, měřeno od spodku krabičky (20,5 mm u 3 jednotek), protože nožky další krabičky zasahují do krabičky 0,35 mm. Krabičky i desky tiskněte bez podpor, postavené tak, jak stojí na podložce.
+
 ## Pant
 
 {{ui:shape.hinge}} se tiskne vcelku a po vytištění rozhýbe: dvě otevřená křídla na podložce, mezi nimi střídavé klouby kolem společné osy. Čep patří zadnímu křídlu a s vůlí prochází klouby předního. Nastavte {{ui:prop.hingeLength}}, {{ui:prop.hingeOpenWidth}}, {{ui:prop.hingeKnuckleDiameter}}, lichý počet {{ui:prop.hingeKnuckles}} pro uchycení čepu na obou koncích, {{ui:prop.hingePinDiameter}} a {{ui:prop.hingeLeafThickness}}.

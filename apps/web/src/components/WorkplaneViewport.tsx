@@ -55,6 +55,7 @@ import { createDovetailGeometry } from "@/lib/dovetailGeometry";
 import { createLoftGeometry } from "@/lib/loftGeometry";
 import { carriedOntoFace } from "@/lib/carryOntoFace";
 import { createHingeGeometry } from "@/lib/hingeGeometry";
+import { createGridfinityGeometry, gridfinityFootprintPatch } from "@/lib/gridfinityGeometry";
 import { createKnurlGeometry } from "@/lib/knurlGeometry";
 import { visibleWorkArea } from "@/lib/visibleWorkArea";
 import { createTeardropGeometry } from "@/lib/teardropGeometry";
@@ -1000,6 +1001,9 @@ function tapeShapeTopologyKey(shape: WorkplaneShape): string {
     hingePinDiameter: shape.hingePinDiameter,
     hingeLeafThickness: shape.hingeLeafThickness,
     hingeClearance: shape.hingeClearance,
+    gridfinityType: shape.gridfinityType,
+    gridfinityLip: shape.gridfinityLip,
+    gridfinityMagnets: shape.gridfinityMagnets,
     knurlPattern: shape.knurlPattern,
     knurlCount: shape.knurlCount,
     knurlDepth: shape.knurlDepth,
@@ -1258,6 +1262,9 @@ function shapeGeometrySignature(shape: WorkplaneShape): string {
     hingePinDiameter: shape.hingePinDiameter,
     hingeLeafThickness: shape.hingeLeafThickness,
     hingeClearance: shape.hingeClearance,
+    gridfinityType: shape.gridfinityType,
+    gridfinityLip: shape.gridfinityLip,
+    gridfinityMagnets: shape.gridfinityMagnets,
     knurlPattern: shape.knurlPattern,
     knurlCount: shape.knurlCount,
     knurlDepth: shape.knurlDepth,
@@ -2608,6 +2615,13 @@ function resizeShapeFromFrameHandle(
     // Past the opposite corner both sides cross together.
     flipX = flipZ = flipX || flipZ;
   }
+  // A Gridfinity bin or baseplate is whole grid units: the box is rounded to them before the
+  // middle is placed, so the side that is not dragged stays where it is.
+  if (shape.kind === "gridfinity" && (signs.x || signs.z)) {
+    const footprint = gridfinityFootprintPatch({ ...shape, width: nextWidth, depth: nextDepth });
+    nextWidth = footprint.width;
+    nextDepth = footprint.depth;
+  }
   const heightAnchorY = altKey ? frame.center.y : selectionWorldYBounds(frame).min;
 
   const centerSigns = { x: flipX ? -signs.x : signs.x, z: flipZ ? -signs.z : signs.z };
@@ -2780,8 +2794,12 @@ function resizeShapeAlongFrameNormal(
     return importedPatch;
   }
 
+  // A Gridfinity bin is whole height units: the height is rounded before the fixed face is kept.
+  const frameHeight = shape.kind === "gridfinity" && !shape.rotationX && !shape.rotationZ
+    ? gridfinityFootprintPatch({ ...shape, height: Math.abs(nextFrameHeight) }).height
+    : nextFrameHeight;
   // Negative past the other face: the centre crosses the fixed face, the sizes stay positive.
-  const scale = nextFrameHeight / Math.max(MIN_SHAPE_SIZE, frame.height);
+  const scale = frameHeight / Math.max(MIN_SHAPE_SIZE, frame.height);
   const currentCenter = shapeCenter(shape);
   const currentCenterLocalY = frameLocalPoint(frame, currentCenter).y;
   const anchorLocal = resizingFromBottom ? frame.max.y : frame.min.y;
@@ -12337,6 +12355,9 @@ function createShapeObject(
         sides: shape.sides,
       })), material, shape);
       break;
+    case "gridfinity":
+      addMesh(group, sharedShapeGeometry(geometryCacheKey, () => createGridfinityGeometry({ width, depth, height, gridfinityType: shape.gridfinityType, gridfinityLip: shape.gridfinityLip, gridfinityMagnets: shape.gridfinityMagnets })), material, shape);
+      break;
     case "loft":
       addMesh(group, sharedShapeGeometry(geometryCacheKey, () => createLoftGeometry({ ...shape, width, depth, height })), material, shape);
       break;
@@ -12815,7 +12836,7 @@ function addShapeEdgeDecorations(group: THREE.Group, mesh: THREE.Mesh, prepared:
   const complexEdges =
     shape.kind === "mesh" ||
     Boolean(shape.importedMesh) ||
-    ["cone", "pyramid", "roof", "roundRoof", "halfSphere", "torus", "tube", "ring", "star", "gear", "wedge", "polygon", "heart", "crescent", "slot", "dovetail", "hinge", "knurl", "teardrop", "counterbore", "countersink", "doubleCountersink", "honeycomb", "loft"].includes(shape.kind);
+    ["cone", "pyramid", "roof", "roundRoof", "halfSphere", "torus", "tube", "ring", "star", "gear", "wedge", "polygon", "heart", "crescent", "slot", "dovetail", "hinge", "gridfinity", "knurl", "teardrop", "counterbore", "countersink", "doubleCountersink", "honeycomb", "loft"].includes(shape.kind);
   const importedTriangleCount = shape.importedMesh?.triangleCount ?? 0;
   const skipHeavyImportedEdges = Boolean(shape.importedMesh) && importedTriangleCount > IMPORTED_SELECTED_EDGE_TRIANGLE_LIMIT;
   // The setting draws a line on every body, in the colour chosen.

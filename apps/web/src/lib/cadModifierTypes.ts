@@ -1,4 +1,4 @@
-import type { ShellEdges, ShellOpenings } from "@/types/layerling";
+import type { GridfinityType, ShellEdges, ShellOpenings } from "@/types/layerling";
 
 export type CadModifierKind = "chamfer" | "fillet" | "shell";
 
@@ -265,6 +265,23 @@ export type CadModifierHelicalGearPart = {
   expected?: { bounds: number[]; volume: number };
 };
 
+/**
+ * A Gridfinity bin or baseplate, as the exact body its display mesh draws:
+ * the size and settings it is built from (`gridfinityPlan`), in the shape's
+ * own frame (y up, the bottom at y = 0, centred on x and z); `transform`
+ * places it.
+ */
+export type CadModifierGridfinityPart = {
+  width: number;
+  depth: number;
+  height: number;
+  gridfinityType: GridfinityType;
+  gridfinityLip: boolean;
+  gridfinityMagnets: boolean;
+  transform?: number[];
+  expected?: { bounds: number[]; volume: number };
+};
+
 export type CadModifierMeshPart = {
   positions?: Float32Array;
   indices?: Uint32Array;
@@ -284,6 +301,8 @@ export type CadModifierMeshPart = {
   spring?: CadModifierSpringPart;
   /** A helical gear's exact body; positions/indices (if any) are only the fallback if it cannot be built. */
   helicalGear?: CadModifierHelicalGearPart;
+  /** A Gridfinity bin or baseplate's exact body; positions/indices (if any) are only the fallback if it cannot be built. */
+  gridfinity?: CadModifierGridfinityPart;
   primitive?: CadModifierPrimitivePart;
   /** When set, positions/indices (if any) are only the fallback if the exact body fails. */
   profile?: CadModifierProfilePart;

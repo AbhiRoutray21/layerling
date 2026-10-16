@@ -19,7 +19,7 @@ Ce que propose la bibliothèque :
 - **Tubes :** {{ui:shape.tube}} et {{ui:shape.bentTube}}, composés d'un maximum de douze pièces droites avec des coudes entre les deux, et le {{ui:shape.loft}} d'un contour à l'autre, disons du carré au rond.
 - **Formes décoratives :** {{ui:shape.star}}, {{ui:shape.heart}} et {{ui:shape.crescent}}.
 - **Lettrage :** {{ui:shape.text}}, également selon un arc de cercle. Plus dans [Texte](chapter:text).
-- **Mécanique :** {{ui:shape.thread}} (tige filetée, vis, écrou et trou taraudé), {{ui:shape.spring}}, {{ui:shape.gear}} et le {{ui:shape.knurl}} pour les poignées. Plus d'informations dans [Threads et mécanique](chapter:threads-and-mechanics).
+- **Mécanique :** {{ui:shape.thread}} (tige filetée, vis, écrou et trou taraudé), {{ui:shape.spring}}, des bacs et socles {{ui:shape.gridfinity}}, {{ui:shape.gear}} et le {{ui:shape.knurl}} pour les poignées. Plus d'informations dans [Threads et mécanique](chapter:threads-and-mechanics).
 - **Pour les constructions :** les {{ui:shape.hinge}}, {{ui:shape.dovetail}}, les {{ui:shape.teardrop}} pour les trous horizontaux, les {{ui:shape.counterbore}} et {{ui:shape.countersink}} pour les têtes de vis et le {{ui:shape.ruler}}, qui n'est qu'un outil de mesure et n'apparaît jamais dans une exportation.
 
 Vous obtenez un triangle de deux manières : le {{ui:shape.polygon}} à trois côtés est un triangle isocèle, le "Toit" de Tinkercad, et le {{ui:shape.wedge}} est un triangle rectangle. Les deux sont de véritables prismes triangulaires. Pour un trou triangulaire, copiez la forme, réduisez la taille de la copie, marquez-la comme un trou et alignez-la avec {{ui:editor.tool.centerOnWorkplane}} ou {{ui:editor.tool.align}}. Les deux fonctionnent avec le cadre de délimitation de la forme, le plus petit cadre qui l'entoure, de sorte qu'un carré divisé en deux compte toujours comme un carré entier. La recherche par commande ([[Ctrl]]+[[K]]) trouve également les deux formes sous « triangle » ou « toit ».
@@ -43,7 +43,7 @@ Les paramètres sont ancrés sur le bord droit. S'ils couvrent quelque chose que
 
 ![Un groupe composé d'un bloc orange, d'une cheville bleue et d'un trou, découpés en un seul corps. Lorsque Multicolor est activé, le piquet reste bleu, le bloc orange et les parois du trou prennent la couleur du bloc.](shot:group-multicolor)
 
-Le cône et la torsion fonctionnent sur presque toutes les formes. Seuls l'engrenage, le filetage, le ressort, la molette, la charnière, la pyramide, le tube courbé, la larme, les fraises à tête de vis et la règle les laissent de côté : ils ont leurs propres mesures fixes ou, comme la pyramide, un sommet qui leur est déjà propre.
+Le cône et la torsion fonctionnent sur presque toutes les formes. Seuls l'engrenage, le filetage, le ressort, Gridfinity, la molette, la charnière, la pyramide, le tube courbé, la larme, les fraises à tête de vis et la règle les laissent de côté : ils ont leurs propres mesures fixes ou, comme la pyramide, un sommet qui leur est déjà propre.
 
 ![Un cône dont le rayon supérieur et la hauteur ont été modifiés : une petite flèche à côté de chacun reprend la valeur, et les deux boutons du bas enregistrent ou réinitialisent les valeurs par défaut de la forme.](shot:property-reset)
 

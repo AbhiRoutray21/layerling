@@ -19,7 +19,7 @@ Knihovna nabízí:
 - **Trubky:** {{ui:shape.tube}}, {{ui:shape.bentTube}} až z dvanácti přímých úseků spojených ohyby a {{ui:shape.loft}} mezi různými obrysy, například čtvercem a kruhem.
 - **Dekorace:** {{ui:shape.star}}, {{ui:shape.heart}} a {{ui:shape.crescent}}.
 - **Nápisy:** {{ui:shape.text}}, i po oblouku, viz [Text](chapter:text).
-- **Mechanické díly:** {{ui:shape.thread}} jako závitová tyč, šroub, matice a závitový otvor, dále {{ui:shape.spring}}, {{ui:shape.gear}} a {{ui:shape.knurl}} pro úchopy. Viz [Závity a mechanické díly](chapter:threads-and-mechanics).
+- **Mechanické díly:** {{ui:shape.thread}} jako závitová tyč, šroub, matice a závitový otvor, dále {{ui:shape.spring}}, krabičky a nosné desky {{ui:shape.gridfinity}}, {{ui:shape.gear}} a {{ui:shape.knurl}} pro úchopy. Viz [Závity a mechanické díly](chapter:threads-and-mechanics).
 - **Konstrukční prvky:** {{ui:shape.hinge}} tisknutelný vcelku, {{ui:shape.dovetail}}, {{ui:shape.teardrop}} pro vodorovné otvory, {{ui:shape.counterbore}}, {{ui:shape.countersink}} pro hlavy šroubů a {{ui:shape.ruler}}, které pouze měří a neexportuje se.
 
 Trojúhelník získáte dvěma způsoby. {{ui:shape.polygon}} se třemi stranami tvoří rovnoramenný trojúhelník, obdobu střechy v Tinkercadu. {{ui:shape.wedge}} má pravoúhlý trojúhelník. Oba jsou skutečné trojboké hranoly. Pro trojúhelníkový otvor tvar zkopírujte, zmenšete, přepněte na výřez a zarovnejte přes {{ui:editor.tool.centerOnWorkplane}} nebo {{ui:editor.tool.align}}. Při práci s ohraničením pamatujte, že jde o nejmenší kvádr obklopující tvar: i polovina čtverce má stejné krajní rozměry jako celý čtverec. Vyhledávání [[Ctrl]]+[[K]] najde oba tvary i pod názvy „triangle“ nebo „roof“.
@@ -44,7 +44,7 @@ Panel je ukotvený u pravého okraje. Tažením záhlaví jej můžete nechat pl
 
 ![Sloučení oranžového kvádru, modrého kolíku a výřezu. Vícebarevný režim zachová barvy a stěny otvoru převezmou oranžovou.](shot:group-multicolor)
 
-Zúžení a zkroucení podporuje většina tvarů. Výjimkami jsou ozubené kolo, závit, pružina, rýhovaný úchop, pant, jehlan, ohnutá trubka, kapkovitý otvor, zahloubení pro šrouby a pravítko. Mají vlastní pevné rozměry nebo již vlastní podobu vrcholu.
+Zúžení a zkroucení podporuje většina tvarů. Výjimkami jsou ozubené kolo, závit, pružina, Gridfinity, rýhovaný úchop, pant, jehlan, ohnutá trubka, kapkovitý otvor, zahloubení pro šrouby a pravítko. Mají vlastní pevné rozměry nebo již vlastní podobu vrcholu.
 
 ![Změněný poloměr vrcholu a výška kuželu. Šipka obnoví jednotlivou hodnotu; spodní tlačítka ukládají a obnovují výchozí nastavení.](shot:property-reset)
 

@@ -9,6 +9,7 @@ import { cadProfileSolidMismatch, profileExtrusionSolid } from "@/lib/cadProfile
 import { importedStepBody } from "@/lib/cadImportedStep";
 import { threadPartSolid } from "@/lib/threadSolid";
 import { springPartSolid } from "@/lib/springSolid";
+import { gridfinityPartSolid } from "@/lib/gridfinitySolid";
 import { helicalGearPartSolid } from "@/lib/gearSolid";
 import { meshTreatedBody } from "@/lib/cadMeshAccuracy";
 import { planarMeshFaces } from "@/lib/cadPlanarMesh";
@@ -377,6 +378,23 @@ function reconstructSolid(cad: OcctKernel, part: CadModifierMeshPart) {
       }
     }
   }
+  if (part.gridfinity) {
+    try {
+      const placed = applyCadTransform(cad, gridfinityPartSolid(cad, part.gridfinity), part.gridfinity.transform);
+      if (!cadShapeIsValid(cad, placed)) throw new Error("The exact Gridfinity body is not valid after placing it");
+      const mismatch = cadProfileSolidMismatch(cad, placed, part.gridfinity.expected);
+      if (mismatch) throw new Error(`The exact Gridfinity body does not match the shape (${mismatch})`);
+      exactProfileBodiesUsed += 1;
+      return placed;
+    } catch (error) {
+      // As for a profile: with its mesh along, the part goes the way it always went.
+      if (isFatalKernelFault(error)) throw error;
+      if (!part.positions || !part.indices) {
+        const reason = error instanceof Error ? error.message : String(error ?? "");
+        throw new Error(`This Gridfinity part could not be built as an exact body, and its mesh is too dense for edge treatment. ${reason}`.trim());
+      }
+    }
+  }
   if (part.step) {
     try {
       const restored = restoredExactSolid(cad, importedStepBody(cad, part.step), part.brepTransform);
@@ -551,14 +569,14 @@ function reconstructPartsWithFallback(cad: OcctKernel, parts: CadModifierMeshPar
   try {
     return reconstructParts(cad, parts);
   } catch (error) {
-    const exactParts = parts.filter((part) => part.profile || part.step || part.thread || part.spring || part.helicalGear);
+    const exactParts = parts.filter((part) => part.profile || part.step || part.thread || part.spring || part.helicalGear || part.gridfinity);
     if (
       isFatalKernelFault(error) ||
       exactProfileBodiesUsed === 0 ||
       exactParts.some((part) => !part.positions || !part.indices)
     ) throw error;
     releaseSession(cad);
-    return reconstructParts(cad, parts.map((part) => (part.profile || part.step || part.thread || part.spring || part.helicalGear ? { ...part, profile: undefined, step: undefined, thread: undefined, spring: undefined, helicalGear: undefined } : part)));
+    return reconstructParts(cad, parts.map((part) => (part.profile || part.step || part.thread || part.spring || part.helicalGear || part.gridfinity ? { ...part, profile: undefined, step: undefined, thread: undefined, spring: undefined, helicalGear: undefined, gridfinity: undefined } : part)));
   }
 }
 

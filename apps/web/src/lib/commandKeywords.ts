@@ -78,6 +78,7 @@ export const SHAPE_KEYWORDS: Readonly<Record<string, readonly string[]>> = {
   thread: ["screw", "bolt", "nut", "gewinde", "schraube", "mutter"],
   hinge: ["scharnier", "gelenk"],
   spring: ["coil", "feder", "spirale"],
+  gridfinity: ["bin", "baseplate", "storage", "organizer", "organiser", "drawer", "box", "behaelter", "behälter", "bodenplatte", "aufbewahrung", "sortierkasten", "schublade", "kiste"],
   tube: ["pipe", "hollow cylinder", "rohr", "huelse", "hülse"],
   loft: ["loft", "transition", "adapter", "reducer", "funnel", "duct", "uebergang", "übergang", "trichter", "reduzierstueck", "reduzierstück", "eckig auf rund", "square to round"],
   torus: ["ring", "donut", "o-ring", "oring"],

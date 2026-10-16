@@ -31,6 +31,7 @@ export type ShapeKind =
   | "loft"
   | "thread"
   | "spring"
+  | "gridfinity"
   | "ring"
   | "wedge"
   | "polygon"
@@ -164,6 +165,12 @@ export type ShapeCustomization = {
   hingeLeafThickness?: number;
   /** Hinge: gap in mm between the moving parts - around the pin, between knuckles and before the leaves. */
   hingeClearance?: number;
+  /** Gridfinity: a bin or the baseplate it stands in; the size counts grid units of 42 mm (height units of 7 mm). */
+  gridfinityType?: GridfinityType;
+  /** Gridfinity bin: the stacking lip on top of the wall; missing means on. */
+  gridfinityLip?: boolean;
+  /** Gridfinity bin: holes for 6 x 2 mm magnets under each foot. */
+  gridfinityMagnets?: boolean;
   /** Knurling: grooves straight along the axis, or crossed into diamonds. */
   knurlPattern?: "straight" | "diamond" | "round";
   /** Knurling: number of grooves around the grip. */
@@ -409,6 +416,9 @@ export type SketchOperation = "extrude" | "revolve" | "sweep";
 export type GearType = "spur" | "helical" | "herringbone" | "bevel" | "internal" | "rack";
 export type GearProfile = "involute" | "round" | "simple";
 
+/** A Gridfinity bin, or the baseplate bins stand in. */
+export type GridfinityType = "bin" | "baseplate";
+
 /** Was aus dem Gewinde wird: Stange, Schraube, Mutter oder das Loch dafuer. */
 export type ThreadRole = "rod" | "screw" | "nut" | "bore";
 export type ThreadHead = "cylinder" | "countersunk" | "hex";
@@ -636,6 +646,12 @@ export type WorkplaneShape = {
   hingeLeafThickness?: number;
   /** Hinge: gap in mm between the moving parts - around the pin, between knuckles and before the leaves. */
   hingeClearance?: number;
+  /** Gridfinity: a bin or the baseplate it stands in; the size counts grid units of 42 mm (height units of 7 mm). */
+  gridfinityType?: GridfinityType;
+  /** Gridfinity bin: the stacking lip on top of the wall; missing means on. */
+  gridfinityLip?: boolean;
+  /** Gridfinity bin: holes for 6 x 2 mm magnets under each foot. */
+  gridfinityMagnets?: boolean;
   /** Knurling: grooves straight along the axis, or crossed into diamonds. */
   knurlPattern?: "straight" | "diamond" | "round";
   /** Knurling: number of grooves around the grip. */

@@ -113,6 +113,15 @@ De {{ui:shape.loft}} verbindt een omtrek aan de onderkant met een andere aan de 
 
 De loft is een exact lichaam, ook gedraaid en gekanteld: de randen kunnen worden afgeschuind en afgerond, en de STEP-export behoudt hem. Voeg zoals gewoonlijk een flens met schroefgaten toe en groepeer ze.
 
+## Gridfinity
+
+De vorm {{ui:shape.gridfinity}} maakt onderdelen voor het open opbergsysteem van Zack Freedman: bakken op een raster van 42 mm die in een draagplaat staan en op elkaar stapelen. De maten volgen de gepubliceerde Gridfinity-specificatie, dus een bak uit layerling past in een draagplaat uit een andere generator, en andersom. Onder {{ui:prop.gridfinityType}} kies je:
+
+- **{{ui:gridfinity.bin}}:** een bak met een voet onder elke rastereenheid. {{ui:prop.gridfinityUnitsX}} en {{ui:prop.gridfinityUnitsZ}} tellen rastereenheden van 42 mm (een bak is 0,5 mm kleiner, 41,5 mm bij één eenheid); {{ui:prop.gridfinityUnitsY}} telt hoogte-eenheden van 7 mm, tot 20. De {{ui:prop.gridfinityLip}} boven op de wand houdt de voeten van de volgende bak vast en maakt de bak 4,4 mm hoger: een bak van 3 eenheden met lip is 25,4 mm hoog. Zet je {{ui:prop.gridfinityMagnets}} aan, dan krijgt elke voet in elke hoek een gat voor een magneet van 6 × 2 mm.
+- **{{ui:gridfinity.baseplate}}:** de plaat waarin de bakken staan, 5 mm hoog, met een vak voor elke rastereenheid. Het is een open raam zonder bodem en zonder magneetgaten.
+
+De maat is altijd een geheel aantal rastereenheden, tot 6 × 6 (252 mm, past op een printbed van 256 mm); een sleep aan een greep laat de maat naar de dichtstbijzijnde eenheid springen. De wand (0,95 mm), de bodem (1,2 mm) en de diepte van de magneetgaten (2,4 mm) staan niet in de specificatie en liggen vast; de M3-schroefgaten uit de specificatie worden niet gemaakt. De bovenkant van de lip is scherp, zoals de specificatie hem tekent; rafelt hij bij je printer, rond hem dan af of schuin hem af met het randgereedschap. Bak en draagplaat zijn exacte lichamen, dus afronden, afschuinen en de STEP-export werken erop. Een bak verdeel je door dunne blokken als wanden erin te groeperen: zet ze op de bodem, op 5,95 mm hoogte, en laat bij een bak met lip hun bovenkant minstens 0,5 mm onder 7 mm per hoogte-eenheid eindigen, gemeten vanaf de onderkant van de bak (20,5 mm bij 3 eenheden), want de voeten van de volgende bak steken 0,35 mm in de bak. Print bakken en draagplaten zonder ondersteuning, staand zoals ze op het printbed staan.
+
 ## Scharnier
 
 Het {{ui:shape.hinge}} print in één stuk en beweegt daarna (print-in-place): twee bladen die open plat op de plaat liggen, met afwisselende knokkels op één as ertussen. De pen hoort bij het achterste blad en loopt met speling door de knokkels van het voorste. Je stelt de {{ui:prop.hingeLength}}, de {{ui:prop.hingeOpenWidth}} en de {{ui:prop.hingeKnuckleDiameter}} in, plus het aantal {{ui:prop.hingeKnuckles}} (oneven, zodat de pen aan beide uiteinden vastzit), de {{ui:prop.hingePinDiameter}} en de {{ui:prop.hingeLeafThickness}}.
