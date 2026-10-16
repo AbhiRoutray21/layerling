@@ -1214,6 +1214,7 @@ export const MESSAGES_CS: Record<MessageKey, string> = {
   "status.stlSavedToFile": "STL uložen do souboru {name}. Další exporty STL tohoto projektu se uloží do stejného souboru; jiný vyberete pomocí „Uložit jako“ v okně exportu.",
   "status.exportUnioned": "Uloženo jako {label}; překrývající se tělesa sloučena (počet: {count})",
   "status.exportUnionFailed": "Překrývající se tělesa se nepodařilo sloučit; v souboru jsou samostatně",
+  "status.exportSplinters": "Do souboru se nezapsalo: {count} drobných volných kousků, které po řezu zbyly.",
   "status.exportStepFailed": "Export STEP se nezdařil",
   "status.exportStepNothing": "Nic zde nelze zapsat jako STEP. Použijte STL",
   "status.exportStepSkippedList": " · ve STEP chybí: {list}",

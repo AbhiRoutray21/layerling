@@ -1153,6 +1153,7 @@ export const MESSAGES_NL: Record<MessageKey, string> = {
   "status.stlSavedToFile": "STL opgeslagen in {name}. Latere STL-exports van dit ontwerp gaan ook naar dit bestand; met Opslaan als in het exportvenster kies je een ander.",
   "status.exportUnioned": "Opgeslagen als {label} - {count} overlappende lichamen zijn samengevoegd",
   "status.exportUnionFailed": "Overlappende lichamen konden niet worden samengevoegd - ze staan los in het bestand",
+  "status.exportSplinters": "Niet in het bestand gezet: {count} kleine losse stukjes die een snede had achtergelaten.",
   "export.drawing.label": "Tekening",
   "export.drawing.description": "Voor-, boven- en rechterzijaanzicht met buitenmaten en posities van ronde gaten, op 1:1.",
   "export.drawing.note": "Download als SVG of vector-PDF. Het blad groeit mee met het ontwerp; print op 100% / werkelijke grootte. De gatentabel bevat ronde boringen evenwijdig aan de assen; schuine gaten, schroefdraad, diepten en toleranties worden niet automatisch bemaat.",

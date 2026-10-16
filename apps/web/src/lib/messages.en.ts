@@ -1154,6 +1154,7 @@ export const MESSAGES_EN = {
   "status.stlSavedToFile": "Saved STL to {name}. Later STL exports of this design go into this file too; Save as in the export window picks another.",
   "status.exportUnioned": "Saved as {label} - {count} overlapping bodies were merged",
   "status.exportUnionFailed": "Overlapping bodies could not be merged - they are in the file separately",
+  "status.exportSplinters": "Left out of the file: {count} tiny loose pieces that a cut had left behind.",
   "export.drawing.label": "Drawing",
   "export.drawing.description": "Front, top and right-side views with overall dimensions and circular-hole positions, at 1:1.",
   "export.drawing.note": "Download SVG or vector PDF. The sheet grows to fit the design; print at 100% / actual size. Hole tables cover axis-aligned round bores; angled holes, threads, depths and tolerances are not automatically dimensioned.",

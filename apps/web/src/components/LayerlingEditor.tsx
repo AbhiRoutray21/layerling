@@ -10157,7 +10157,7 @@ export function LayerlingEditor({
         const joined = await (format === "stl" ? unionOverlappingExportMeshes(cutSolids, meshes) : colorSeparatedExportMeshes(cutSolids, meshes));
         return { ...joined, gescheitert: joined.gescheitert + holeCutsFailed };
       })
-      .then(async ({ meshes: fertig, quellen, verschmolzen, gescheitert }) => {
+      .then(async ({ meshes: fertig, quellen, verschmolzen, gescheitert, splinters }) => {
         if (format === "stl") {
           const bytes = new Uint8Array(exportMeshesToStl(fertig));
           if (target === "download") {
@@ -10184,10 +10184,13 @@ export function LayerlingEditor({
         // The file is written either way; the notice below only adds a caveat.
         setTopPanel(null);
         const exportOverhangs = bedPrinter ? bedOverhangs(exportable, bedPrinter.width, bedPrinter.depth, bedPrinter.height) : [];
+        // Tiny loose pieces a cut left behind are not written (#352); the notice says how many.
+        const splinterNote = splinters > 0 ? ` ${t("status.exportSplinters", { count: splinters })}` : "";
         if (gescheitert > 0) setNotice(t("status.exportUnionFailed"), true);
         else if (bedPrinter && exportOverhangs.length > 0) setNotice(bedOverhangMessage(exportOverhangs, `${bedPrinter.vendor} ${bedPrinter.model}`), true);
-        else if (verschmolzen > 0) setNotice(t("status.exportUnioned", { count: verschmolzen, label }) + hiddenNote);
-        else if (savedFile) setNotice(t("status.stlSavedToFile", { name: savedFile.name }) + hiddenNote);
+        else if (verschmolzen > 0) setNotice(t("status.exportUnioned", { count: verschmolzen, label }) + hiddenNote + splinterNote);
+        else if (savedFile) setNotice(t("status.stlSavedToFile", { name: savedFile.name }) + hiddenNote + splinterNote);
+        else if (splinters > 0) setNotice(t("status.exportSplinters", { count: splinters }));
         else finishNotice(label);
       })
       .catch((error: unknown) => failNotice(label, error));

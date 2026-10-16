@@ -1084,6 +1084,7 @@ export const MESSAGES_DA: Partial<Record<MessageKey, string>> = {
   "status.stlSavedToFile": "Gemte STL til {name}. Senere STL-eksporter af dette design går også til denne fil; Gem som i eksportvinduet vælger en anden.",
   "status.exportUnioned": "Gemte som {label} – {count} overlappende former blev flettet",
   "status.exportUnionFailed": "Overlappende former kunne ikke flettes – de er i filen hver for sig",
+  "status.exportSplinters": "Ikke skrevet i filen: {count} små løse stykker, som et snit havde efterladt.",
   "export.drawing.label": "Tegning",
   "export.drawing.description": "For-, top- og højre-sidevisninger med totalmål og positioner på runde huller, i 1:1.",
   "export.drawing.note": "Download SVG eller vektor-PDF. Arket vokser for at passe til designet; print i 100% / faktisk størrelse. Hul-tabeller dækker aksejusterede runde boringer; skrå huller, gevind, dybder og tolerancer målsættes ikke automatisk.",

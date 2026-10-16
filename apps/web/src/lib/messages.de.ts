@@ -1153,6 +1153,7 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "status.stlSavedToFile": "STL in {name} gespeichert. Weitere STL-Exporte dieses Entwurfs gehen ebenfalls in diese Datei; „Speichern unter“ im Export-Fenster wählt eine andere.",
   "status.exportUnioned": "Als {label} gespeichert - {count} überlappende Körper wurden dabei verschmolzen",
   "status.exportUnionFailed": "Überlappende Körper ließen sich nicht verschmelzen - sie stehen einzeln in der Datei",
+  "status.exportSplinters": "Nicht in die Datei geschrieben: {count} winzige lose Stücke, die ein Schnitt hinterlassen hatte.",
   "export.drawing.label": "Zeichnung",
   "export.drawing.description": "Vorder-, Drauf- und rechte Seitenansicht mit Gesamtmaßen und Positionen runder Bohrungen, im Maßstab 1:1.",
   "export.drawing.note": "SVG oder Vektor-PDF herunterladen. Das Blatt wächst mit dem Entwurf; bei 100 % / tatsächlicher Größe drucken. Bohrungstabellen erfassen achsparallele runde Bohrungen; schräge Bohrungen, Gewinde, Tiefen und Toleranzen werden nicht automatisch bemaßt.",

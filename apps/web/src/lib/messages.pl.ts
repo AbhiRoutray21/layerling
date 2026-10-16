@@ -1144,6 +1144,7 @@ export const MESSAGES_PL: Partial<Record<MessageKey, string>> = {
   "status.stlSavedToFile": "Zapisano STL do {name}. Kolejne eksporty STL tego projektu też trafią do tego pliku. Zapisz jako w oknie eksportu wybiera inny.",
   "status.exportUnioned": "Zapisano jako {label}, scalone nakładające się bryły: {count}",
   "status.exportUnionFailed": "Nie udało się scalić nakładających się brył, są w pliku osobno",
+  "status.exportSplinters": "Nie zapisano w pliku: {count} drobnych luźnych kawałków pozostawionych przez cięcie.",
   "export.drawing.label": "Rysunek",
   "export.drawing.description": "Widoki z przodu, z góry i z prawej z wymiarami gabarytowymi i położeniem okrągłych otworów, w skali 1:1.",
   "export.drawing.note": "Pobierz SVG lub wektorowy PDF. Arkusz rośnie, aby pomieścić projekt. Drukuj w skali 100% / rzeczywisty rozmiar. Tabele otworów obejmują okrągłe otwory równoległe do osi. Otwory skośne, gwinty, głębokości i tolerancje nie są wymiarowane automatycznie.",

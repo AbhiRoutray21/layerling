@@ -1141,6 +1141,7 @@ export const MESSAGES_FR: Partial<Record<MessageKey, string>> = {
   "status.stlSavedToFile": "STL enregistré dans {name}. Les exportations STL ultérieures de cette conception sont également placées dans ce fichier ; Enregistrer sous dans la fenêtre d'exportation en choisit un autre.",
   "status.exportUnioned": "Enregistré sous {label} — {count} corps superposés ont été fusionnés.",
   "status.exportUnionFailed": "Les corps qui se chevauchent n'ont pas pu être fusionnés : ils se trouvent séparément dans le fichier.",
+  "status.exportSplinters": "Non écrits dans le fichier : {count} minuscules morceaux détachés laissés par une coupe.",
   "export.drawing.label": "Dessin",
   "export.drawing.description": "Vues de face, de dessus et de droite avec dimensions globales et positions des trous circulaires, à l'échelle 1:1.",
   "export.drawing.note": "Téléchargez SVG ou PDF vectoriel. La feuille s'agrandit pour s'adapter au design ; imprimer à 100% / taille réelle. Les tables de perçage couvrent les alésages ronds alignés sur les axes ; Les trous coudés, les filetages, les profondeurs et les tolérances ne sont pas automatiquement dimensionnés.",
