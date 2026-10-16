@@ -2375,6 +2375,17 @@ html:where([data-theme="dark"][data-palette="graphite"])[data-toolbar-size="larg
   accent-color: #b3680f;
 }
 
+:where(html[data-theme="dark"][data-palette="graphite"]) .import-option.import-width-option input {
+  border: 1px solid #bfbfbf;
+  background: #f8f8f8;
+  color: inherit;
+}
+
+html[data-theme="dark"]:where([data-palette="graphite"]) .import-option.import-width-option input {
+  border-color: #4a4a4a;
+  background: #282828;
+}
+
 html[data-theme="dark"]:where([data-palette="graphite"]) .import-option {
   color: #e4e4e4;
 }
