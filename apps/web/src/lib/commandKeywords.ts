@@ -71,6 +71,10 @@ export const SHAPE_KEYWORDS: Readonly<Record<string, readonly string[]>> = {
   roundedBox: ["rounded cube", "abgerundet", "rounded box", "rundquader"],
   cylinder: ["tube", "pipe", "rod", "zylinder", "rohr", "stab", "walze"],
   sphere: ["ball", "kugel"],
+  // The French names have left the carpenter's and the machinist's words behind; the old ones still find the shape.
+  dovetail: ["queue d'aronde", "schwalbenschwanz", "trapezoid", "trapèze"],
+  knurl: ["moletage", "moleté", "rändel", "rändelung"],
+  teardrop: ["trou de larme", "tropfenbohrung", "larme"],
   cone: ["kegel", "spitze"],
   text: ["font", "letters", "schrift", "buchstaben", "beschriftung"],
   nameTag: ["name tag", "key ring", "keychain", "multicolour", "multicolor", "layers", "namensschild", "schlüsselanhänger", "schluesselanhaenger", "mehrfarbig", "schichten"],

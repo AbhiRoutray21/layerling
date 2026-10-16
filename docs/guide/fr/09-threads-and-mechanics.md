@@ -128,19 +128,19 @@ La {{ui:shape.hinge}} s'imprime d'un seul tenant et se déplace ensuite (print-i
 
 {{ui:prop.hingeClearance}} est l'écart entre les pièces mobiles : autour de l'axe, entre les charnons et devant les vantaux. Avec 0,4 mm, une imprimante bien réglée se libère généralement avec une petite torsion ; si les pièces fusionnent, relevez-le, s'il vacille trop, abaissez-le. Imprimez la charnière couchée telle qu'elle apparaît sur la plaque, sans supports. Vous pouvez ajouter des trous aux feuilles ou les regrouper en une partie plus grande, comme un couvercle.
 
-## Moletage
+## Cylindre moleté
 
 Le {{ui:shape.knurl}} est une poignée ronde avec des rainures tout autour, pour les boutons, les molettes et les poignées d'outils. Sous {{ui:prop.knurlPattern}}, vous choisissez {{ui:knurl.straight}}, rainures le long de l'axe comme sur un bouton de commande, {{ui:knurl.diamond}} : deux rangées inclinées de rainures se croisant en petits losanges, ou {{ui:knurl.round}} : rainures et crêtes le long de l'axe comme une douce vague d'arcs, une prise agréable sans arêtes vives. Les rainures rondes restent moins profondes qu'un demi-pas, sinon les arêtes se renfleraient à leur pied ; une trop grande profondeur cède. Vous définissez le {{ui:prop.diameter}} et le {{ui:prop.height}}, le nombre de {{ui:prop.knurlCount}} et le {{ui:prop.knurlDepth}} ; pour le moletage croisé également le {{ui:prop.knurlAngle}} à l'axe. Le {{ui:prop.knurlChamfer}} casse les deux extrémités à 45 degrés, comme sur un bouton tourné ; 0 les laisse nets.
 
 Les moletages droits et ronds sont des corps exacts, leurs bords peuvent donc être cassés et arrondis. Le moletage croisé reste un maillage, car en tant que corps exact, il faudrait presque une minute pour calculer avec 30 rainures. Pour un bouton sur un arbre, regroupez la molette avec un trou, tel qu'un {{ui:shape.thread}} défini comme trou taraudé. Les rainures inférieures à 0,4 mm sont pratiquement impossibles à imprimer proprement, et layerling ne les place pas à moins de 0,8 mm autour du grip : un grip fin en obtient moins.
 
-## Queue d'aronde
+## Prisme trapézoïdal
 
 Le {{ui:shape.dovetail}} est l'articulation dans laquelle deux pièces s'emboîtent l'une dans l'autre et ne peuvent coulisser ensemble que latéralement. Vous définissez la largeur à l'extrémité large, le {{ui:prop.dovetailNeckWidth}} et la longueur de la queue. Copiez la queue de l'autre côté et faites un trou dans la copie : {{ui:prop.dovetailClearance}} donne alors un peu de jeu pour que le joint ne se coince pas après l'impression.
 
 > **Conseil :** Un trou taraudé coupe la partie qu'il chevauche lorsqu'il est regroupé. Mettez-en donc un peu dans le matériau plutôt que de simplement toucher la surface.
 
-## Trou de larme
+## Goutte d'eau
 
 Un trou situé sur le côté fait passer un pont sur son sommet lors de l'impression, et le pont s'affaisse. Le {{ui:shape.teardrop}} a donc un point au dessus : chaque couche repose sur celle du dessous, et le trou ressort assez rond sans supports. Réglez le {{ui:prop.teardropDiameter}} à la taille du trou, environ 3,4 mm pour une vis M3, et le {{ui:prop.teardropLength}} suffisamment long pour traverser la pièce. Le {{ui:prop.teardropTipAngle}} fait 90°, donc les flancs se rejoignent à 45°. La plupart des imprimantes gèrent cela proprement ; un point plus plat a besoin de plus de hauteur, un point plus raide l'enregistre.
 
