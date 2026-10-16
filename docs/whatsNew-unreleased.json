@@ -18,5 +18,15 @@
       "de": "Wenn du einen Text über seinen Rahmen kleiner machst, schrumpft der Rahmen jetzt mit den Buchstaben: Die Maße und Griffe stehen an den Buchstaben statt weit daneben. Machst du den Rahmen größer, bleibt alles, wie es war.",
       "en": "When you make a text smaller through its box, the box now shrinks with the letters: the measures and handles stand at the letters instead of far from them. If you make the box larger, everything stays as it was."
     }
+  },
+  {
+    "title": {
+      "de": "Französisch: weitere Formnamen berichtigt",
+      "en": "French: more shape names corrected"
+    },
+    "body": {
+      "de": "Auf Französisch hieß das Gewinde „Sujet“ und die Mutter „Noix“, der Keil „Coin“. Sie heißen jetzt „Filetage“, „Écrou“ und „Prisme triangulaire“, dazu „Anneau“, „Moletage“, „Ellipse“ und „Cœur“.",
+      "en": "In French the thread was called \"Sujet\", the nut \"Noix\" and the wedge \"Coin\". They are now \"Filetage\", \"Écrou\" and \"Prisme triangulaire\", and also \"Anneau\", \"Moletage\", \"Ellipse\" and \"Cœur\"."
+    }
   }
 ]
