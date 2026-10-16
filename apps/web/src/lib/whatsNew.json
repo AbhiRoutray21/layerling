@@ -1,5 +1,90 @@
 [
   {
+    "version": "1.83.0",
+    "items": [
+      {
+        "title": {
+          "de": "Kopieren großer Modelle hängt nicht mehr",
+          "en": "Copying large models no longer freezes"
+        },
+        "body": {
+          "de": "Bei einem großen importierten Modell blieb die Seite beim Kopieren (Strg+C) sekunden- bis minutenlang stehen. Große Kopien gehen jetzt direkt in die Zwischenablage: Ein Modell mit 245.000 Dreiecken braucht statt 23 s weniger als eine Sekunde.",
+          "en": "With a large imported model the page stopped for seconds to minutes on a copy (Ctrl+C). Large copies now go straight to the clipboard: a model of 245,000 triangles takes under a second instead of 23 s."
+        }
+      },
+      {
+        "title": {
+          "de": "Ein verkleinerter Text nimmt seinen Rahmen mit",
+          "en": "A text made smaller takes its box with it"
+        },
+        "body": {
+          "de": "Wenn du einen Text über seinen Rahmen kleiner machst, schrumpft der Rahmen jetzt mit den Buchstaben: Die Maße und Griffe stehen an den Buchstaben statt weit daneben. Machst du den Rahmen größer, bleibt alles, wie es war.",
+          "en": "When you make a text smaller through its box, the box now shrinks with the letters: the measures and handles stand at the letters instead of far from them. If you make the box larger, everything stays as it was."
+        }
+      },
+      {
+        "title": {
+          "de": "Französisch: weitere Formnamen berichtigt",
+          "en": "French: more shape names corrected"
+        },
+        "body": {
+          "de": "Auf Französisch hieß das Gewinde „Sujet“ und die Mutter „Noix“, der Keil „Coin“. Sie heißen jetzt „Filetage“, „Écrou“ und „Prisme triangulaire“, dazu „Anneau“, „Moletage“, „Ellipse“ und „Cœur“.",
+          "en": "In French the thread was called \"Sujet\", the nut \"Noix\" and the wedge \"Coin\". They are now \"Filetage\", \"Écrou\" and \"Prisme triangulaire\", and also \"Anneau\", \"Moletage\", \"Ellipse\" and \"Cœur\"."
+        }
+      },
+      {
+        "title": {
+          "de": "Hilfe-Modus: der Zeiger zeigt, wo es keine Hilfe gibt",
+          "en": "Help mode: the pointer shows where there is no help"
+        },
+        "body": {
+          "de": "Im Hilfe-Modus wird der Mauszeiger über Stellen, zu denen die Anleitung nichts sagt, zum Verbotszeichen statt zum Fragezeichen, etwa über leeren Flächen der Menüleiste. So spart man sich Klicks ins Leere.",
+          "en": "In the help mode the pointer turns into the \"not allowed\" sign instead of the question mark over places the guide has nothing about, such as the empty parts of the ribbon. That saves clicks into the void."
+        }
+      },
+      {
+        "title": {
+          "de": "Auswahlrahmen: die Ziehrichtung entscheidet",
+          "en": "Selection frame: the direction decides"
+        },
+        "body": {
+          "de": "Neuer Schalter in den Einstellungen (Bereich Darstellung): Ein Rahmen, der von links nach rechts gezogen wird, wählt dann nur Körper, die ganz darin liegen, nach links gezogen alles, was er berührt (gestrichelt). So lässt sich ein Teil aus einem Haufen herauspicken. Standardmäßig aus.",
+          "en": "A new switch in the settings (area Appearance): a frame dragged from left to right then selects only bodies that lie completely inside it, dragged to the left everything it touches (dashed). That picks one part out of a cluster. Off by default."
+        }
+      },
+      {
+        "title": {
+          "de": "Italienisch",
+          "en": "Italian"
+        },
+        "body": {
+          "de": "Die Oberfläche gibt es jetzt auch auf Italienisch (Italiano), und ein Browser in italienischer Sprache wählt sie von selbst. Noch nicht alles ist übersetzt: Was fehlt, steht auf Englisch, auch die Anleitung.",
+          "en": "The interface now comes in Italian (Italiano), and a browser set to Italian picks it by itself. Not everything is translated yet: what is missing shows in English, the guide included."
+        }
+      },
+      {
+        "title": {
+          "de": "Arabisch",
+          "en": "Arabic"
+        },
+        "body": {
+          "de": "Oberfläche und Anleitung gibt es jetzt auch auf Arabisch (العربية), und ein Browser in arabischer Sprache wählt sie von selbst. Die Anordnung ist noch nicht von rechts nach links gespiegelt, und ein zweiter Leser hat die Texte noch nicht geprüft.",
+          "en": "The interface and the guide now come in Arabic (العربية), and a browser set to Arabic picks it by itself. The layout is not mirrored from right to left yet, and a second reader has not checked the texts."
+        }
+      },
+      {
+        "title": {
+          "de": "Rohr und Ring: Außen-Ø, Innen-Ø und Wandstärke",
+          "en": "Tube and ring: outer, inner diameter and wall"
+        },
+        "body": {
+          "de": "Ein rundes Rohr oder ein Ring hat jetzt einen Außen-Ø neben Innen-Ø und Wandstärke. Je zwei davon ergeben das dritte, in beliebiger Reihenfolge der Eingabe; ein Innen-Ø, der nicht ins Rohr passt, lässt den Außen-Ø mitwachsen. Die Länge des Rohrs ist seine Höhe.",
+          "en": "A round tube or ring now has an outer diameter beside the inner diameter and the wall. Any two give the third, in whatever order you type them; an inner diameter that does not fit makes the outer one grow. The length of a tube is its height."
+        }
+      }
+    ]
+  },
+  {
     "version": "1.82.0",
     "items": [
       {
