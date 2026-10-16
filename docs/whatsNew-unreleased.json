@@ -38,5 +38,15 @@
       "de": "Ein Schnitt und die Farbtrennung beim 3MF-Export können viele winzige lose Stücke hinterlassen, kleine Körnchen in oder auf einer Schicht. Im Editor sieht man sie nicht, im Slicer erscheinen sie als Spitzen und können einen flachen Entwurf von der Platte abheben. STL, 3MF und OBJ lassen sie jetzt weg, und die Meldung sagt, wie viele. Der Körper selbst und kleine gewollte Teile bleiben.",
       "en": "A cut and the colour separation of a 3MF export can leave many tiny loose pieces behind, small grains in or on a layer. You do not see them in the editor, but a slicer shows them as spikes, and they can lift a flat design off the plate. STL, 3MF and OBJ now leave them out, and the notice says how many. The body itself and small parts you drew stay."
     }
+  },
+  {
+    "title": {
+      "de": "Höhe über 220 mm",
+      "en": "Heights above 220 mm"
+    },
+    "body": {
+      "de": "Das Feld „Z (Höhe)“ sprang bisher bei 220 mm zurück, auch im Modus „Kein Drucker – freie Größe“. Jetzt lässt sich dort jede Zahl eintippen, nach oben und unten, und ebenso bei X und Y. Der Regler reicht so weit wie die Platte und die Druckhöhe.",
+      "en": "The field “Z (height)” used to jump back at 220 mm, also in the mode “No printer – free size”. Now any number can be typed in, up and down, and the same for X and Y. The slider reaches as far as the plate and the printer height."
+    }
   }
 ]

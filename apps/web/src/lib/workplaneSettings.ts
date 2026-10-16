@@ -492,6 +492,20 @@ export function shapeDimensionLimit(workspace: WorkplaneWorkspaceSettings, kind:
 }
 
 /**
+ * The most a position can be typed in, in mm (100 m): far beyond any plate, only a guard against a typo
+ * such as 1e9 (#425). The sliders and handles reach as far as the plate does, see `positionReach`.
+ */
+export const POSITION_TYPED_LIMIT = 100_000;
+
+/**
+ * How far the sliders of a position reach, along the plate and up: a plate and a half across, up to the
+ * printer's height, never less than the 220 mm they always had. A number can be typed beyond it.
+ */
+export function positionReach(workspace: Pick<WorkplaneWorkspaceSettings, "width" | "depth">, printerHeight?: number | null) {
+  return Math.max(220, Math.max(workspace.width, workspace.depth) * 1.5, printerHeight ?? 0);
+}
+
+/**
  * How far a handle may pull a body (#181). The fixed ceilings (220 mm across, 180 mm high) date
  * from the fixed 200 mm plate; a larger plate or printer lets the handles go as far as it reaches,
  * and a body already larger - typed in - never shrinks the moment it is grabbed. A custom size
