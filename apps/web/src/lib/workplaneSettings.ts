@@ -213,6 +213,16 @@ export function gridBlockForUnits(units: string, preset: string, size: number): 
   return { gridBlockPreset: preset, gridBlockSize: size };
 }
 
+/**
+ * The workspace in another unit system, as the unit field of the settings makes it: the plate's grid follows
+ * (an inch preset with Imperial, a millimetre one otherwise) and the scale is one the system has (#422). The
+ * snap step follows through `snapGridForUnits`.
+ */
+export function workspaceForUnits<T extends Pick<WorkplaneWorkspaceSettings, "units" | "gridBlockPreset" | "gridBlockSize" | "scale">>(workspace: T, units: string): T {
+  const next = { ...workspace, units, ...gridBlockForUnits(units, workspace.gridBlockPreset, workspace.gridBlockSize) };
+  return { ...next, scale: normalizeScaleForUnits(next.units, next.scale) };
+}
+
 /** Keeps the current snap step when the unit system offers it, else the usual default (1.0 mm or 1/8 in). */
 export function snapGridForUnits(units: string, snap: GridSize): GridSize {
   // A measure of the user's own is millimetres whatever the plate is ruled in.

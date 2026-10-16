@@ -99,7 +99,7 @@ import { scaledHorizontalShapePatch } from "@/lib/scaleByPercent";
 import { displayYTurn, insideZ } from "@/lib/displayAxes";
 import { positionsForTwist, twistBandCount } from "@/lib/heightSlices";
 import { toCreasedNormals } from "three/examples/jsm/utils/BufferGeometryUtils.js";
-import { canBeginShapeDrag, handleDimensionLimit, POSITION_TYPED_LIMIT, DEFAULT_SNAP_GRID, DEFAULT_WORKPLANE_WORKSPACE, effectiveViewSettings, viewPixelRatio, normalizeSnapGrid, normalizeWorkspaceSettings, orbitControlsZoomSpeed, readWorkspaceDefault, saveWorkspaceDefault, snapGridForUnits, snapGridStep as snapStep, workplaneSettingsFingerprint, workspaceHydrationSyncDecision, zoomDistanceScale } from "@/lib/workplaneSettings";
+import { canBeginShapeDrag, handleDimensionLimit, POSITION_TYPED_LIMIT, DEFAULT_SNAP_GRID, DEFAULT_WORKPLANE_WORKSPACE, effectiveViewSettings, viewPixelRatio, normalizeSnapGrid, normalizeWorkspaceSettings, orbitControlsZoomSpeed, readWorkspaceDefault, saveWorkspaceDefault, snapGridForUnits, snapGridStep as snapStep, workplaneSettingsFingerprint, workspaceForUnits, workspaceHydrationSyncDecision, zoomDistanceScale } from "@/lib/workplaneSettings";
 import { withShapeDefaults } from "@/lib/shapeDefaults";
 import { workplaneGridBandWidths, AXIS_ARROW_COLORS, axisArrowLayout, DEFAULT_EDGE_LINE_COLOR, fillLightPosition, keyLightPosition, sceneLightLevels, shadowBlurRadius, workplaneGridLayout, workplaneGridLines, workplaneGridPalette, workplaneLabelLayout, workplaneThemePalette, WORKPLANE_LABEL_ASPECT, WORKPLANE_LINE_ELEVATION, type WorkplaneGridLayout } from "@/lib/workplaneGrid";
 import { cleanNearZero, cleanRotationDegrees, isNonSolidShapeKind, mirroredAxisCount, mirrorSign, preservesEdgeTreatmentSize, proportionalResizeScale, resizedImportedCoordinates, resizedImportedMeshPositions, resizedShapeSize, shapeDepth, shapeExtrudeDeformAt, shapeHasExtrudeDeform, shapeHasShapeDeform, shapeHasTaper, shapeSupportsTaper, shapeTaperDimensions, shapeTaperScaleAt, shapeWidth, shapeWithParametricSource } from "@/lib/workplaneShapes";
@@ -253,6 +253,9 @@ const CAMERA_HOME = new THREE.Vector3(118, 96, 118);
 const CAMERA_TARGET = new THREE.Vector3(0, 0, 0);
 const MIN_SHAPE_SIZE = 0.01;
 // A height is no longer held to the 220 mm of the old plate: the plate sets how far the sliders reach, the guard is for a typo (#425).
+/** A finger held this long (ms) without moving more than this (px) opens the context menu (#337). */
+const LONG_PRESS_MS = 550;
+const LONG_PRESS_SLOP_PX = 8;
 const MIN_ELEVATION = -POSITION_TYPED_LIMIT;
 const MAX_ELEVATION = POSITION_TYPED_LIMIT;
 /** World-space offset from the height handle to the lift handle, as a fraction of selection height. */
@@ -3189,6 +3192,9 @@ export function WorkplaneViewport({
   const cameraTouchRef = useRef(false);
   const touchRotateRef = useRef(false);
   const touchEmptyTapRef = useRef<{ pointerId: number; x: number; y: number } | null>(null);
+  // A finger held still on a body or on empty space opens the menu a right click opens (#337).
+  const longPressRef = useRef<{ pointerId: number; timer: number; stop: () => void } | null>(null);
+  const longPressFiredRef = useRef<number | null>(null);
   const moveDimensionSessionRef = useRef<MoveDimensionSession | null>(null);
   const moveDimensionOverlayRef = useRef<MoveDimensionOverlayState | null>(null);
   const moveDimensionsEnabledRef = useRef(true);
@@ -3625,6 +3631,12 @@ export function WorkplaneViewport({
   const chooseSnapGrid = useCallback<Dispatch<SetStateAction<GridSize>>>((value) => {
     pendingWorkspaceHydrationFingerprintRef.current = null;
     setSnap(value);
+  }, []);
+  /** The unit switch beside the snap grid: as the settings change the unit, the grid and the snap step follow (#422). */
+  const changeUnits = useCallback((units: string) => {
+    pendingWorkspaceHydrationFingerprintRef.current = null;
+    setWorkspace((current) => workspaceForUnits(current, units));
+    setSnap((current) => snapGridForUnits(units, current));
   }, []);
   /** Same as the grid: switched from the snap menu, so never a hydration echo. */
   const changeObjectSnap = useCallback((objectSnap: boolean) => {
@@ -6617,6 +6629,47 @@ export function WorkplaneViewport({
     };
   }, []);
 
+  const cancelLongPress = useCallback(() => {
+    const press = longPressRef.current;
+    if (!press) return;
+    window.clearTimeout(press.timer);
+    press.stop();
+    longPressRef.current = null;
+  }, []);
+
+  const beginLongPress = useCallback((event: ReactPointerEvent<HTMLDivElement>) => {
+    cancelLongPress();
+    if (!onShapeContextMenu || event.pointerType !== "touch") return;
+    const { pointerId, clientX: x, clientY: y } = event;
+    const onMove = (move: PointerEvent) => {
+      if (move.pointerId === pointerId && Math.hypot(move.clientX - x, move.clientY - y) >= LONG_PRESS_SLOP_PX) cancelLongPress();
+    };
+    const onEnd = (end: PointerEvent) => {
+      if (end.pointerId === pointerId) cancelLongPress();
+    };
+    window.addEventListener("pointermove", onMove, true);
+    window.addEventListener("pointerup", onEnd, true);
+    window.addEventListener("pointercancel", onEnd, true);
+    const stop = () => {
+      window.removeEventListener("pointermove", onMove, true);
+      window.removeEventListener("pointerup", onEnd, true);
+      window.removeEventListener("pointercancel", onEnd, true);
+    };
+    const timer = window.setTimeout(() => {
+      if (longPressRef.current?.pointerId !== pointerId) return;
+      cancelLongPress();
+      // A second finger belongs to the camera.
+      if (touchPointersRef.current.size !== 1) return;
+      longPressFiredRef.current = pointerId;
+      const shapeId = pickShape(x, y, "touch");
+      if (shapeId && !selectedIdsRef.current.includes(shapeId)) onSelectShape(shapeId);
+      onShapeContextMenu({ shapeId, clientX: x, clientY: y });
+    }, LONG_PRESS_MS);
+    longPressRef.current = { pointerId, timer, stop };
+  }, [cancelLongPress, onSelectShape, onShapeContextMenu, pickShape]);
+
+  useEffect(() => cancelLongPress, [cancelLongPress]);
+
   const handlePointerDown = useCallback(
     (event: ReactPointerEvent<HTMLDivElement>) => {
       // Wer auf die Arbeitsflaeche klickt, ist mit dem Schreiben fertig. Von
@@ -6637,7 +6690,10 @@ export function WorkplaneViewport({
       // wieder ankommt.
       if (event.pointerType === "touch") {
         touchPointersRef.current.set(event.pointerId, { x: event.clientX, y: event.clientY });
-        if (touchPointersRef.current.size >= 2) touchEmptyTapRef.current = null;
+        if (touchPointersRef.current.size >= 2) {
+          touchEmptyTapRef.current = null;
+          cancelLongPress();
+        }
         if (cameraTouchRef.current) return;
         const wantsCamera = touchPointersRef.current.size >= 2 || touchRotateRef.current;
         // Wer gerade an einem Anfasser zieht, meint auch das - dann bleibt
@@ -6934,6 +6990,7 @@ export function WorkplaneViewport({
 
       const id = pickShape(event.clientX, event.clientY, event.pointerType);
       const additive = event.shiftKey;
+      if (event.pointerType === "touch" && !additive) beginLongPress(event);
       if (!id && event.pointerType === "touch" && !additive) {
         // A finger on empty space turns the view, as in Tinkercad, so a tablet needs no switch for it;
         // the selection box stays with the mouse and Shift. A tap that does not move still clears the
@@ -7132,6 +7189,8 @@ export function WorkplaneViewport({
       toFreePlacementWorkplanePoint,
       toRawPlanePoint,
       onAddShape,
+      beginLongPress,
+      cancelLongPress,
     ],
   );
 
@@ -7441,6 +7500,11 @@ export function WorkplaneViewport({
         return;
       }
       if (event.pointerType === "touch") {
+        if (longPressFiredRef.current === event.pointerId) {
+          // The menu opened on this press: lifting the finger is no tap that clears the selection.
+          longPressFiredRef.current = null;
+          touchEmptyTapRef.current = null;
+        }
         const emptyTap = touchEmptyTapRef.current;
         if (emptyTap && emptyTap.pointerId === event.pointerId) {
           touchEmptyTapRef.current = null;
@@ -8872,6 +8936,7 @@ export function WorkplaneViewport({
           shape={shapeWithParametricSource(selectedShape)}
           snap={snap}
           snapOpen={snapOpen}
+          onUnitsChange={changeUnits}
           workspace={workspace}
           onUpdate={(patch, options) => {
             clearMoveDimensions();
@@ -8916,6 +8981,7 @@ export function WorkplaneViewport({
         <div className="grid-settings">
           <SnapGridControl
             units={workspace.units}
+            onUnitsChange={changeUnits}
             customGrids={workspace.customSnapGrids}
             snap={snap}
             snapOpen={snapOpen}

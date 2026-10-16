@@ -8,5 +8,25 @@
       "de": "Ein deutscher Chrome übersetzte die installierte App und machte aus „Hell“ im Farbmenü „Hölle“. Die Seite sagt dem Browser jetzt, dass sie nicht übersetzt werden soll, denn layerling bringt seine Sprachen selbst mit.",
       "en": "A German Chrome translated the installed app and turned \"Hell\" in the colour menu into \"Hölle\". The page now tells the browser not to translate it, as layerling brings its languages itself."
     }
+  },
+  {
+    "title": {
+      "de": "Schalter für Millimeter und Zoll",
+      "en": "A switch for millimetres and inches"
+    },
+    "body": {
+      "de": "Neben dem Fangraster unten im Eigenschaftenfenster sitzt jetzt ein kleiner Schalter „mm | in“. Er wechselt die Einheit wie die Einstellungen: Das Raster der Platte und die Fangstufe ziehen mit, für diesen Entwurf.",
+      "en": "A small switch \"mm | in\" now sits beside the snap grid at the bottom of the properties window. It changes the unit as the settings do: the plate's grid and the snap step follow, for this design."
+    }
+  },
+  {
+    "title": {
+      "de": "Meldungen bleiben, bis man sie gelesen hat",
+      "en": "Messages stay until you have read them"
+    },
+    "body": {
+      "de": "Eine Meldung oben auf der Arbeitsfläche verschwand nach vier Sekunden, auch eine lange Fehlermeldung. Jetzt richtet sich die Zeit nach der Länge, die Meldung bleibt, solange der Mauszeiger auf ihr steht, und ein kleines Kreuz schließt sie sofort.",
+      "en": "A message at the top of the work area went after four seconds, even a long error message. Now the time follows the length, the message stays while the pointer rests on it, and a small cross closes it at once."
+    }
   }
 ]

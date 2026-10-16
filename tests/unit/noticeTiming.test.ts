@@ -1,0 +1,40 @@
+import { describe, expect, it } from "vitest";
+import { NOTICE_LINGER_MS, NOTICE_PATIENT_MS, noticeDurationMs } from "@/lib/noticeTiming";
+import { DEFAULT_WORKPLANE_WORKSPACE, snapGridForUnits, workspaceForUnits } from "@/lib/workplaneSettings";
+
+describe("how long a message of the status line stays (#422)", () => {
+  it("keeps a short message for the usual few seconds", () => {
+    expect(noticeDurationMs("Saved")).toBe(NOTICE_LINGER_MS);
+    expect(noticeDurationMs("x".repeat(30))).toBe(NOTICE_LINGER_MS);
+  });
+
+  it("keeps a long message longer, in step with its length", () => {
+    const medium = noticeDurationMs("x".repeat(100));
+    const long = noticeDurationMs("x".repeat(250));
+    expect(medium).toBeGreaterThan(NOTICE_LINGER_MS);
+    expect(long).toBeGreaterThan(medium);
+  });
+
+  it("never keeps a message longer than the patient time, and a patient one at least that long", () => {
+    expect(noticeDurationMs("x".repeat(5000))).toBe(NOTICE_PATIENT_MS);
+    expect(noticeDurationMs("Short but patient", true)).toBe(NOTICE_PATIENT_MS);
+  });
+});
+
+describe("the unit switch beside the snap grid (#422)", () => {
+  it("moves the plate's grid and the scale into inches and back, as the settings do", () => {
+    const metric = { ...DEFAULT_WORKPLANE_WORKSPACE };
+    const imperial = workspaceForUnits(metric, "Imperial");
+    expect(imperial.units).toBe("Imperial");
+    // The grid of the plate is an inch preset now, not the millimetre one.
+    expect(imperial.gridBlockPreset).not.toBe(metric.gridBlockPreset);
+    const back = workspaceForUnits(imperial, "Metric (Default)");
+    expect(back.units).toBe("Metric (Default)");
+    expect(back.gridBlockPreset).toBe(metric.gridBlockPreset);
+  });
+
+  it("gives the snap step one the unit system offers", () => {
+    expect(snapGridForUnits("Imperial", "1.0 mm")).toBe("1/8 in");
+    expect(snapGridForUnits("Metric (Default)", "1/8 in")).toBe("1.0 mm");
+  });
+});

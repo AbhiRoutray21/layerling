@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **A switch between millimetres and inches beside the snap grid (#422):** The unit was only in the settings, and changing it there each time took a detour. The small switch **mm | in** beside the snap grid at the bottom of the properties window does what the unit field of the settings does: the unit, the plate's grid and the snap step follow, for this design. Suggested by @Mycraftymama on GitHub.
+- **Messages stay as long as they take to read, and can be closed (#422):** A message of the status line went after four seconds whatever its length, and an error text of two lines was gone before it could be read. Its time now follows its length (up to half a minute), it stays while the pointer rests on it, and a small cross closes it at once. Suggested by @Mycraftymama on GitHub.
 - **The browser no longer translates layerling (forum):** In the installed app in Chrome, a German browser translated the page: "Hell" in the theme menu came out as "Hölle" ("Hell" is also an English word), and an English menu showed German words. The page said it was English until the chosen language was in, so the translator started on it. The page now says it is not to be translated (`translate="no"` and the `notranslate` hint), as layerling has its own languages. Reported by @Noberty in the forum.
 - **The question mark of the notice about designs in the browser sits in its heading:** On the start page it stood at the end of the text, where its box made the last line stand further from the others than the rest. It is behind the heading now, smaller, and the three lines of the text are even.
 

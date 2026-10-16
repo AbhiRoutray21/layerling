@@ -140,6 +140,7 @@ import { createLocalId } from "@/lib/localIds";
 import { canEditGroupAtLevel, openGroupLevelsStillOpen, trackOpenGroupLevels } from "@/lib/openGroupParts";
 import { projectExportFileName, stlNameAsksForNewFile } from "@/lib/exportNames";
 import { exportMeshesToObj } from "@/lib/objExport";
+import { NOTICE_AFTER_HOVER_MS, noticeDurationMs } from "@/lib/noticeTiming";
 import { rotateSketchPoints, selectedClosedSketchPoints } from "@/lib/sketchRotation";
 import { PROJECT_THUMBNAIL_IDLE_MS, projectThumbnailSceneChanged, type ProjectThumbnailSceneKey } from "@/lib/projectThumbnail";
 import { importedShapeFromObj } from "@/lib/objImport";
@@ -421,14 +422,6 @@ const PROJECT_SYNC_HELD_MAX_MS = 2000;
  */
 const NOTE_COMMIT_IDLE_MS = 700;
 
-/** So lange bleibt eine gewoehnliche Meldung stehen. */
-const NOTICE_LINGER_MS = 4000;
-/**
- * So lange bleibt eine Meldung stehen, die etwas will oder auf Arbeit wartet.
- * Auch sie geht irgendwann: Ein Fenster, das nie verschwindet, ist ein Fleck
- * auf der Arbeitsflaeche.
- */
-const NOTICE_PATIENT_MS = 30000;
 const MAX_SKETCH_HISTORY_ENTRIES = 100;
 const NORMAL_SELECTION_CAD_EDGE_MIN_ANGLE = 60;
 const MIN_EDGE_MODIFIER_AMOUNT = 0.001;
@@ -2618,7 +2611,24 @@ export function LayerlingEditor({
     noticeTimerRef.current = window.setTimeout(() => {
       noticeTimerRef.current = null;
       setNoticeText("");
-    }, patient ? NOTICE_PATIENT_MS : NOTICE_LINGER_MS);
+    }, noticeDurationMs(message, patient));
+  }, []);
+  // A message stays while the pointer rests on it, and goes a few seconds after it leaves (#422).
+  const holdNotice = useCallback(() => {
+    if (noticeTimerRef.current !== null) window.clearTimeout(noticeTimerRef.current);
+    noticeTimerRef.current = null;
+  }, []);
+  const releaseNotice = useCallback(() => {
+    if (noticeTimerRef.current !== null) window.clearTimeout(noticeTimerRef.current);
+    noticeTimerRef.current = window.setTimeout(() => {
+      noticeTimerRef.current = null;
+      setNoticeText("");
+    }, NOTICE_AFTER_HOVER_MS);
+  }, []);
+  const dismissNotice = useCallback(() => {
+    if (noticeTimerRef.current !== null) window.clearTimeout(noticeTimerRef.current);
+    noticeTimerRef.current = null;
+    setNoticeText("");
   }, []);
 
   useEffect(() => () => {
@@ -12194,8 +12204,11 @@ export function LayerlingEditor({
       ) : null}
       {guideOpen ? <GuideModal sharedStore={sharedProjectsEnabled} sketchMode={toolbarMode === "sketch"} onClose={() => setGuideOpen(false)} /> : null}
       {notice ? (
-        <p className="editor-status" role="status" aria-live="polite" title={notice}>
-          {notice}
+        <p className="editor-status" role="status" aria-live="polite" onMouseEnter={holdNotice} onMouseLeave={releaseNotice}>
+          <span className="editor-status-text">{notice}</span>
+          <button className="editor-status-close" type="button" aria-label={t("status.dismiss")} title={t("status.dismiss")} onClick={dismissNotice}>
+            <X size={13} strokeWidth={2.6} aria-hidden="true" />
+          </button>
         </p>
       ) : null}
       <pre data-codex-state hidden>

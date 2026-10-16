@@ -2089,6 +2089,7 @@ export function ShapeInspector({
   onUpdate: onUpdateShape,
   onSnapChange,
   onSnapOpenChange,
+  onUnitsChange,
   onObjectSnapChange,
   onEditSketch,
   onOpenGroup,
@@ -2113,6 +2114,7 @@ export function ShapeInspector({
   onUpdate: ShapeInspectorUpdate;
   onSnapChange: Dispatch<SetStateAction<GridSize>>;
   onSnapOpenChange: Dispatch<SetStateAction<boolean>>;
+  onUnitsChange?: (units: string) => void;
   onObjectSnapChange?: (enabled: boolean) => void;
   onEditSketch?: () => void;
   /** Opens a group so its parts can be changed one by one. */
@@ -2852,7 +2854,7 @@ export function ShapeInspector({
       ) : null}
       {!movable.moved ? (
         <div className="inspector-snap-dock">
-          <SnapGridControl units={workspace.units} customGrids={workspace.customSnapGrids} snap={snap} snapOpen={snapOpen} onSnapChange={onSnapChange} onSnapOpenChange={onSnapOpenChange} objectSnap={workspace.objectSnap} onObjectSnapChange={onObjectSnapChange} />
+          <SnapGridControl units={workspace.units} onUnitsChange={onUnitsChange} customGrids={workspace.customSnapGrids} snap={snap} snapOpen={snapOpen} onSnapChange={onSnapChange} onSnapOpenChange={onSnapOpenChange} objectSnap={workspace.objectSnap} onObjectSnapChange={onObjectSnapChange} />
         </div>
       ) : null}
         </>
@@ -3642,8 +3644,11 @@ export function SnapGridControl({
   onSnapOpenChange,
   objectSnap,
   onObjectSnapChange,
+  onUnitsChange,
 }: {
   units: string;
+  /** Switches between millimetres and inches without the settings window (#422). */
+  onUnitsChange?: (units: string) => void;
   /** The user's own snap measures, listed after the fixed steps. */
   customGrids?: CustomSnapGrid[];
   snap: GridSize;
@@ -3662,6 +3667,12 @@ export function SnapGridControl({
         <span className="snap-select-label">{label(snap)}</span>
         <ChevronDown size={12} fill="currentColor" />
       </button>
+      {onUnitsChange ? (
+        <span className="snap-units" role="group" aria-label={t("inspector.unitsSwitch")} title={t("inspector.unitsSwitch")}>
+          <button type="button" aria-pressed={units === "Metric (Default)"} onClick={() => onUnitsChange("Metric (Default)")}>mm</button>
+          <button type="button" aria-pressed={units === "Imperial"} onClick={() => onUnitsChange("Imperial")}>in</button>
+        </span>
+      ) : null}
       {snapOpen ? (
         <div className="snap-menu">
           {snapGridOptions(units, customGrids).map((size) => (

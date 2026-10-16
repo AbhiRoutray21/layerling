@@ -6049,7 +6049,11 @@ html[data-theme="dark"] .import-option {
   border: 1px solid #ded0c2;
   border-radius: 12px;
   box-shadow: 0 2px 12px rgba(68, 49, 28, 0.16);
-  pointer-events: none;
+  /* The pointer on it keeps it, and the cross closes it (#422). */
+  pointer-events: auto;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
 }
 
 /* Die 400 px Abstand gelten der Einstellungstafel rechts. Auf einem schmalen
@@ -6059,6 +6063,32 @@ html[data-theme="dark"] .import-option {
   .editor-status {
     max-width: calc(100vw - 120px);
   }
+}
+
+.editor-status-text {
+  min-width: 0;
+}
+
+.editor-status-close {
+  display: grid;
+  flex: none;
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  padding: 0;
+  place-items: center;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  border-radius: 6px;
+  cursor: pointer;
+  opacity: 0.6;
+}
+
+.editor-status-close:hover,
+.editor-status-close:focus-visible {
+  background: rgba(127, 127, 127, 0.2);
+  opacity: 1;
 }
 
 .editor-body {
@@ -8986,6 +9016,22 @@ html[data-theme="dark"] .inspector-bundle-note {
   will-change: transform;
 }
 
+/* A finger drags a handle without the browser taking the gesture for a scroll and ending the drag (#337). */
+.transform-handle,
+.rotate-handle {
+  touch-action: none;
+}
+
+/* For a finger or a rubber-tip stylus the handles keep their look and catch from further away. */
+@media (pointer: coarse) {
+  .transform-handle::before,
+  .rotate-handle::before {
+    position: absolute;
+    inset: -15px;
+    content: "";
+  }
+}
+
 .transform-handle {
   z-index: 5;
   background: #f2eee8;
@@ -11050,6 +11096,38 @@ html[data-theme="dark"] .shape-inspector .name-tag-start .name-tag-start-button:
   font-weight: 500;
   line-height: 22px;
   white-space: nowrap;
+}
+
+.snap-units {
+  display: inline-flex;
+  margin-left: 2px;
+  overflow: hidden;
+  border: 1px solid currentColor;
+  border-radius: 7px;
+  opacity: 0.85;
+}
+
+.snap-units button {
+  min-width: 26px;
+  height: 20px;
+  margin: 0;
+  padding: 0 6px;
+  color: inherit;
+  font: inherit;
+  font-size: 11.5px;
+  font-weight: 700;
+  line-height: 20px;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
+
+.snap-units button + button {
+  border-left: 1px solid currentColor;
+}
+
+.snap-units button[aria-pressed="true"] {
+  background: rgba(127, 127, 127, 0.28);
 }
 
 .snap-select {

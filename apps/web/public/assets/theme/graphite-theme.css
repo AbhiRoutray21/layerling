@@ -2394,6 +2394,17 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .import-option {
   box-shadow: 0 2px 12px rgba(52, 52, 52, 0.16);
 }
 
+:where(html[data-theme="dark"][data-palette="graphite"]) .editor-status-close {
+  color: inherit;
+  background: transparent;
+  border: 0;
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .editor-status-close:hover,
+:where(html[data-theme="dark"][data-palette="graphite"]) .editor-status-close:focus-visible {
+  background: rgba(127, 127, 127, 0.2);
+}
+
 :where(html[data-theme="dark"][data-palette="graphite"]) .editor-body {
   background: var(--background);
 }
@@ -4634,6 +4645,24 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .shape-inspector .name-
 
 :where(html[data-theme="dark"][data-palette="graphite"]) .snap-row {
   color: #505050;
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .snap-units {
+  border: 1px solid currentColor;
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .snap-units button {
+  color: inherit;
+  background: transparent;
+  border: 0;
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .snap-units button + button {
+  border-left: 1px solid currentColor;
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .snap-units button[aria-pressed="true"] {
+  background: rgba(127, 127, 127, 0.28);
 }
 
 :where(html[data-theme="dark"][data-palette="graphite"]) .snap-select {
