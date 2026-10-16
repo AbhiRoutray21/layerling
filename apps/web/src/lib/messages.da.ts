@@ -1084,7 +1084,7 @@ export const MESSAGES_DA: Partial<Record<MessageKey, string>> = {
   "status.stlSavedToFile": "Gemte STL til {name}. Senere STL-eksporter af dette design går også til denne fil; Gem som i eksportvinduet vælger en anden.",
   "status.exportUnioned": "Gemte som {label} – {count} overlappende former blev flettet",
   "status.exportUnionFailed": "Overlappende former kunne ikke flettes – de er i filen hver for sig",
-  "status.exportSplinters": "Ikke skrevet i filen: {count} små løse stykker, som et snit havde efterladt.",
+  "status.exportSplinters": "Udeladt fra filen: {count} små løse stykker som et snit havde efterladt.",
   "status.dismiss": "Luk meddelelsen",
   "export.drawing.label": "Tegning",
   "export.drawing.description": "For-, top- og højre-sidevisninger med totalmål og positioner på runde huller, i 1:1.",
