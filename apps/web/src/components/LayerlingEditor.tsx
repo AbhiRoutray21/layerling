@@ -210,7 +210,7 @@ import { sketchBodyStretch, stretchedSketchProfile } from "@/lib/sketchResize";
 import { silhouetteSketchProfile } from "@/lib/sketchCadProfile";
 import { svgSketchMatchesMesh } from "@/lib/svgSketch";
 import { DEFAULT_SKETCH_STROKE, normalizeSketchStroke, strokedSketchProfile } from "@/lib/sketchStroke";
-import { topCadModifierEdgeIds } from "@/lib/topEdges";
+import { topCadModifierEdgeIds, verticalCadModifierEdgeIds } from "@/lib/topEdges";
 import { movedWithEditedOutline, placeSketchShape, sketchBodyAnchor, type SketchAnchor } from "@/lib/sketchPlacement";
 import { meshSlicePath, planeCutsMesh } from "@/lib/sketchSlice";
 import { projectedEdgesPath } from "@/lib/sketchEdges";
@@ -6184,7 +6184,10 @@ export function LayerlingEditor({
       : params.edgeIds === "top"
         // The rim along the very top, as the panel's "Top edges" picks it (#154).
         ? topCadModifierEdgeIds(response.edges, selectableIds)
-        : requestedIds.filter((edgeId) => selectableIds.includes(edgeId));
+        : params.edgeIds === "vertical"
+          // Every edge that stands straight up, as the panel's "Vertical edges" picks it (#427).
+          ? verticalCadModifierEdgeIds(response.edges, selectableIds)
+          : requestedIds.filter((edgeId) => selectableIds.includes(edgeId));
     const missingIds = requestedIds.filter((edgeId) => !selectableIds.includes(edgeId));
     if (selectedEdgeIds.length === 0) {
       throw new Error("Select at least one valid highlighted edge ID");
@@ -12100,6 +12103,11 @@ export function LayerlingEditor({
             if (!current?.prepared) return current;
             const topIds = topCadModifierEdgeIds(current.edges, modifierAvailableEdgeIds);
             return { ...current, selectedEdgeIds: topIds, preview: null, busy: topIds.length > 0, error: topIds.length ? null : t("edge.noTopEdges") };
+          })}
+          onSelectVertical={() => setEdgeModifier((current) => {
+            if (!current?.prepared) return current;
+            const verticalIds = verticalCadModifierEdgeIds(current.edges, modifierAvailableEdgeIds);
+            return { ...current, selectedEdgeIds: verticalIds, preview: null, busy: verticalIds.length > 0, error: verticalIds.length ? null : t("edge.noVerticalEdges") };
           })}
           onClear={() => setEdgeModifier((current) => current?.prepared ? { ...current, selectedEdgeIds: [], preview: null, busy: false, error: t("edge.selectAtLeastOne") } : current)}
           onRemoveFeature={removeEdgeTreatment}

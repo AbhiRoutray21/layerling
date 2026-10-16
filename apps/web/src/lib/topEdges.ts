@@ -5,6 +5,33 @@ import type { CadModifierEdge } from "@/lib/cadModifierTypes";
  * level, such as the rim of a cookie cutter built from a stroked sketch. Picked from `candidateIds`
  * (the edges the tool offers at its threshold); the points are in the world, y up.
  */
+/**
+ * The edges that stand straight up: every point of the edge over the same place, only the height changes -
+ * the corners of a box, the walls' meeting lines of an extruded outline (#427). Picked from `candidateIds`
+ * (the edges the tool offers at its threshold); the points are in the world, y up.
+ */
+export function verticalCadModifierEdgeIds(edges: readonly CadModifierEdge[], candidateIds: readonly number[]): number[] {
+  const candidates = new Set(candidateIds);
+  return edges
+    .filter((edge) => candidates.has(edge.id) && edge.points.length >= 6)
+    .filter((edge) => {
+      let minY = Number.POSITIVE_INFINITY;
+      let maxY = Number.NEGATIVE_INFINITY;
+      for (let index = 1; index < edge.points.length; index += 3) {
+        minY = Math.min(minY, edge.points[index]);
+        maxY = Math.max(maxY, edge.points[index]);
+      }
+      const height = maxY - minY;
+      if (!(height > 0.01)) return false;
+      const tolerance = Math.max(0.001, height * 1e-3);
+      for (let index = 3; index + 2 < edge.points.length; index += 3) {
+        if (Math.abs(edge.points[index] - edge.points[0]) > tolerance || Math.abs(edge.points[index + 2] - edge.points[2]) > tolerance) return false;
+      }
+      return true;
+    })
+    .map((edge) => edge.id);
+}
+
 export function topCadModifierEdgeIds(edges: readonly CadModifierEdge[], candidateIds: readonly number[]): number[] {
   const candidates = new Set(candidateIds);
   let top = Number.NEGATIVE_INFINITY;
