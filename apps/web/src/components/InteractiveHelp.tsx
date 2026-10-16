@@ -27,6 +27,32 @@ type Asked =
   | { state: "panel"; name: string; href: string }
   | { state: "noIndex"; name: string };
 
+/**
+ * A control that is switched off ignores the pointer, and a click lands on whatever lies behind it.
+ * The help is about it all the same - "why can I not use this?" is a question for the guide -, so the
+ * controls that are off are measured by hand: the smallest one under the point wins.
+ */
+function disabledControlAt(x: number, y: number): Element | null {
+  let found: Element | null = null;
+  let smallest = Infinity;
+  document.querySelectorAll("button:disabled, button.disabled, input:disabled, select:disabled, textarea:disabled, [aria-disabled=true]").forEach((control) => {
+    if (control.closest(EXEMPT)) return;
+    const rect = control.getBoundingClientRect();
+    if (rect.width === 0 || rect.height === 0 || x < rect.left || x > rect.right || y < rect.top || y > rect.bottom) return;
+    const area = rect.width * rect.height;
+    if (area < smallest) {
+      smallest = area;
+      found = control;
+    }
+  });
+  return found;
+}
+
+/** What is under the pointer, counting the controls that are switched off. */
+function elementAt(x: number, y: number, fallback: Element | null): Element | null {
+  return disabledControlAt(x, y) ?? fallback;
+}
+
 function setHover(element: Element | null) {
   const previous = document.querySelector("[data-help-hover]");
   if (previous === element) return;
@@ -68,7 +94,8 @@ export function InteractiveHelp({ onExit }: { onExit: () => void }) {
       event.preventDefault();
       event.stopPropagation();
       event.stopImmediatePropagation();
-      const target = event.target instanceof Element ? resolveHelpTarget(event.target) : null;
+      const hit = event.target instanceof Element ? elementAt(event.clientX, event.clientY, event.target) : null;
+      const target = hit ? resolveHelpTarget(hit) : null;
       const request = requestRef.current + 1;
       requestRef.current = request;
       if (!target) {
@@ -93,7 +120,7 @@ export function InteractiveHelp({ onExit }: { onExit: () => void }) {
 
     const hover = (event: PointerEvent) => {
       if (event.pointerType === "touch") return;
-      const under = document.elementFromPoint(event.clientX, event.clientY);
+      const under = elementAt(event.clientX, event.clientY, document.elementFromPoint(event.clientX, event.clientY));
       if (!under || under.closest(EXEMPT)) {
         setHover(null);
         return;
