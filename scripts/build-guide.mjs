@@ -418,6 +418,9 @@ table.keys { table-layout: fixed; }
 table.keys td:first-child { width: 42%; }
 th, td { padding: 7px 12px; border-bottom: 1px solid var(--edge); text-align: left; vertical-align: top; }
 th { color: var(--muted); font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; }
+/* Where a link from the program lands, the section is outlined from its heading to its end. */
+.guide-part:has(> :is(h2, h3):target) { outline: 3px solid var(--accent); outline-offset: 10px; border-radius: 6px; }
+:is(h2, h3):target { scroll-margin-top: 24px; }
 .toc { margin: 0 0 24px; padding: 12px 16px; border: 1px solid var(--edge); border-radius: 8px; background: var(--card); font-size: 14.5px; }
 .toc b { display: block; margin-bottom: 4px; color: var(--muted); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; }
 .toc ul { margin: 0; padding-left: 18px; }
@@ -522,48 +525,35 @@ export function searchEntries({ title, summary, html, path }) {
 }
 
 /**
- * The matching, kept apart from the page so a test can run it. It folds case and accents one letter
- * for one letter (so a position in the folded text is a position in the real one), wants every word
- * of the query somewhere in a section, and ranks a word in the heading above one in the chapter's
- * title above one in the text. "ss" and the sharp s are the same to it, whichever one is typed and
- * whichever one the text has; where people write "ae", "oe" and "ue" for the umlauts, those find
- * them too. Written for browsers, so plain ES5 and no backslashes.
+ * Wraps every section of a chapter (a heading and what follows it up to the next heading of the same
+ * or a higher level) in an element of its own, so the section a link points at can be outlined as a
+ * whole: `.guide-part:has(> h2:target)`. Only the chapter page gets this, the search index and the
+ * print page keep the plain text.
  */
-export const GUIDE_SEARCH_CORE = `
-function guideFold(text){var out="";for(var i=0;i<text.length;i++){out+=text.charAt(i).toLowerCase().normalize("NFD").charAt(0);}return out;}
-function guideForms(word,umlauts){
-  var forms=[word];
-  if(umlauts){var plain=word.split("ae").join("a").split("oe").join("o").split("ue").join("u");if(plain!==word)forms.push(plain);}
-  if(word.indexOf("ss")>=0)forms.push(word.split("ss").join(String.fromCharCode(223)));
-  if(word.indexOf(String.fromCharCode(223))>=0)forms.push(word.split(String.fromCharCode(223)).join("ss"));
-  return forms;
+export function wrapSections(html) {
+  const open = [];
+  let out = "";
+  let last = 0;
+  for (const match of html.matchAll(HEADING_PATTERN)) {
+    out += html.slice(last, match.index);
+    const level = Number(match[1]);
+    while (open.length && open[open.length - 1] >= level) { open.pop(); out += "</section>"; }
+    open.push(level);
+    out += '<section class="guide-part">';
+    last = match.index;
+  }
+  out += html.slice(last);
+  while (open.length) { open.pop(); out += "</section>"; }
+  return out;
 }
-function guideFind(text,forms,from){
-  var best=null;
-  for(var i=0;i<forms.length;i++){var k=text.indexOf(forms[i],from);if(k>=0&&(!best||k<best.at))best={at:k,len:forms[i].length};}
-  return best;
-}
-function guidePrepare(entries){return entries.map(function(e){return {e:e,c:guideFold(e.c),h:guideFold(e.h),t:guideFold(e.t)};});}
-function guideTokens(query){return guideFold(query).split(" ").filter(function(w){return w.length>0;});}
-function guideSearch(prepared,query,limit,umlauts){
-  var tokens=guideTokens(query);if(!tokens.length)return [];
-  var forms=tokens.map(function(w){return guideForms(w,umlauts);}),phrase=guideForms(tokens.join(" "),umlauts),found=[];
-  prepared.forEach(function(p){
-    var score=0;
-    for(var i=0;i<tokens.length;i++){
-      var inH=guideFind(p.h,forms[i],0),inC=guideFind(p.c,forms[i],0),at=guideFind(p.t,forms[i],0);
-      if(!inH&&!inC&&!at)return;
-      if(inH)score+=10;
-      if(inC)score+=3;
-      if(at){score+=1;var n=0,k=at;while(k&&n<5){n++;k=guideFind(p.t,forms[i],k.at+k.len);}score+=n*0.3;}
-    }
-    if(tokens.length>1&&(guideFind(p.h,phrase,0)||guideFind(p.t,phrase,0)))score+=6;
-    found.push({entry:p.e,score:score,folded:p.t,forms:forms});
-  });
-  found.sort(function(a,b){return b.score-a.score;});
-  return found.slice(0,limit||8);
-}
-`;
+
+/**
+ * The matching, kept apart from the page so a test can run it and the editor's Interactive Help can
+ * use it: the functions live in apps/web/src/lib/guideSearchCore.ts, and this is their text, which
+ * every page embeds. Written for browsers, so plain ES5 and no backslashes there.
+ */
+const searchCore = await import(pathToFileURL(join(root, "apps", "web", "src", "lib", "guideSearchCore.ts")).href);
+export const GUIDE_SEARCH_CORE = "\n" + searchCore.GUIDE_SEARCH_CORE_FUNCTIONS.map((fn) => fn.toString()).join("\n") + "\n";
 
 const GUIDE_SEARCH_PAGE = `
 function guideSnippet(hit){
@@ -847,7 +837,7 @@ export async function buildGuide({ log = console.log } = {}) {
         : "";
       const pager = `<div class="pager">${previous ? `<a href="/${strings.dir}/${previous.slug}.html"><small>${escapeHtml(strings.previous)}</small>${escapeHtml(previous.title)}</a>` : ""}${next ? `<a class="next" href="/${strings.dir}/${next.slug}.html"><small>${escapeHtml(strings.next)}</small>${escapeHtml(next.title)}</a>` : ""}</div>`;
       const notice = chapter.fallback ? `<p class="not-translated" role="note" lang="${strings.htmlLang}">${escapeHtml(strings.notTranslated)}</p>\n` : "";
-      const body = `<h1>${escapeHtml(chapter.title)}</h1>\n<p class="lead">${escapeHtml(chapter.summary)}</p>\n${notice}${toc}\n${rendered.html}\n${pager}`;
+      const body = `<h1>${escapeHtml(chapter.title)}</h1>\n<p class="lead">${escapeHtml(chapter.summary)}</p>\n${notice}${toc}\n${wrapSections(rendered.html)}\n${pager}`;
       const page = pageShell({
         language, title: `${chapter.title} - ${strings.site}`, description: chapter.summary, path, alternates, chapters,
         current: chapter.slug, body, footer, languageLinks: languageLinksFor(chapter.number), englishPath,

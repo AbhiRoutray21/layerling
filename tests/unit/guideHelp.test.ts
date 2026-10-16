@@ -1,0 +1,185 @@
+// @vitest-environment jsdom
+import { beforeEach, describe, expect, it } from "vitest";
+import { guidePrepare, type GuideSearchEntry } from "@/lib/guideSearchCore";
+import { guideIndexUrl, helpNameOf, helpSummary, loadGuideIndex, lookupHelp, panelGuideHref, resolveHelpTarget } from "@/lib/guideHelp";
+
+/*
+ * Interactive Help: the name of an element, the walk up to one that has a name, and what the guide's
+ * index says about it.
+ */
+
+function page(html: string) {
+  document.body.innerHTML = html;
+  return document;
+}
+
+describe("the name of an element", () => {
+  it("takes data-help before everything else", () => {
+    page('<button id="b" data-help="Mirror" aria-label="Flip" title="Turn">X</button>');
+    expect(helpNameOf(document.getElementById("b")!)).toBe("Mirror");
+  });
+
+  it("takes the aria-label, then the title, then the words on a button", () => {
+    page('<button id="a" aria-label="Align faces" title="Other">A</button><button id="b" title="Group">B</button><button id="c"> Mirror  </button>');
+    expect(helpNameOf(document.getElementById("a")!)).toBe("Align faces");
+    expect(helpNameOf(document.getElementById("b")!)).toBe("Group");
+    expect(helpNameOf(document.getElementById("c")!)).toBe("Mirror");
+  });
+
+  it("leaves the keys at the end of a title out", () => {
+    page('<button id="a" title="Import (Ctrl+I)">i</button><button id="b" title="Command search (Ctrl+K)">k</button><button id="c" title="Hide (H)">h</button><button id="d" title="Snap (grid)">s</button>');
+    expect(helpNameOf(document.getElementById("a")!)).toBe("Import");
+    expect(helpNameOf(document.getElementById("b")!)).toBe("Command search");
+    expect(helpNameOf(document.getElementById("c")!)).toBe("Hide");
+    // Words in brackets that are no keys stay.
+    expect(helpNameOf(document.getElementById("d")!)).toBe("Snap (grid)");
+  });
+
+  it("reads the label of a field, wherever the label is", () => {
+    page('<label for="w">Width</label><input id="w" type="text"><label class="slider"><span class="range-property-name">Wall thickness</span><input id="t" type="range"></label><span id="n">Depth</span><input id="d" aria-labelledby="n">');
+    expect(helpNameOf(document.getElementById("w")!)).toBe("Width");
+    expect(helpNameOf(document.getElementById("t")!)).toBe("Wall thickness");
+    expect(helpNameOf(document.getElementById("d")!)).toBe("Depth");
+  });
+
+  it("calls a panel or a ribbon group by its heading, not by everything in it", () => {
+    page('<div class="edge-modifier-header" id="h"><div><strong>Hole pattern</strong><span>Holes in a flat face</span></div></div><div data-group="modify" id="g"><div class="toolbar-section-label">Modify</div><button>Align</button></div>');
+    expect(helpNameOf(document.getElementById("h")!)).toBe("Hole pattern");
+    expect(helpNameOf(document.getElementById("g")!)).toBe("Modify");
+  });
+
+  it("has no name for a container, a number or a sentence", () => {
+    page('<div id="c"><button>Mirror</button></div><button id="n">12.5</button><button id="s">This is a long sentence that explains a thing the button does and so it is no name at all.</button><svg id="v" aria-hidden="true"></svg>');
+    expect(helpNameOf(document.getElementById("c")!)).toBe("");
+    expect(helpNameOf(document.getElementById("n")!)).toBe("");
+    expect(helpNameOf(document.getElementById("s")!)).toBe("");
+    expect(helpNameOf(document.getElementById("v")!)).toBe("");
+  });
+});
+
+describe("the element the user pointed at", () => {
+  it("is the nearest one with a name, found from an icon inside a button", () => {
+    page('<div class="toolbar"><button id="b" aria-label="Mirror"><svg><path id="p"/></svg></button></div>');
+    const target = resolveHelpTarget(document.getElementById("p"));
+    expect(target?.name).toBe("Mirror");
+    expect(target?.element.id).toBe("b");
+  });
+
+  it("is the field itself, not the window around it", () => {
+    page('<div role="dialog" aria-label="Hole pattern"><label><span class="range-property-name">Margin</span><input id="m" type="range"></label></div>');
+    const target = resolveHelpTarget(document.getElementById("m"));
+    expect(target?.name).toBe("Margin");
+  });
+
+  it("passes over an element without a name to the one around it", () => {
+    page('<section data-group="arrange" id="g"><div class="toolbar-section-label">Arrange</div><div class="tools" id="t"><span id="s"></span></div></section>');
+    const target = resolveHelpTarget(document.getElementById("s"));
+    expect(target?.name).toBe("Arrange");
+    expect(target?.element.id).toBe("g");
+  });
+
+  it("falls back to the question mark of the panel when nothing has a name", () => {
+    page('<div class="edge-modifier-panel"><div class="panel-header-actions"><a class="guide-help-link" href="/guide/select-and-arrange.html#hole-pattern-on-a-face"></a></div><div><i id="x"></i></div></div>');
+    expect(panelGuideHref(document.getElementById("x")!)).toBe("/guide/select-and-arrange.html#hole-pattern-on-a-face");
+    const target = resolveHelpTarget(document.getElementById("x"));
+    expect(target?.name).toBe("");
+    expect(target?.guideHref).toBe("/guide/select-and-arrange.html#hole-pattern-on-a-face");
+  });
+
+  it("is nothing on bare ground, and nothing inside what asks to be left alone", () => {
+    page('<div id="x"></div><div data-help-ignore><button id="b">Mirror</button></div>');
+    expect(resolveHelpTarget(document.getElementById("x"))).toBeNull();
+    expect(resolveHelpTarget(document.getElementById("b"))).toBeNull();
+  });
+
+  it("carries the question mark of its panel along with a name", () => {
+    page('<div role="dialog"><a class="guide-help-link" href="/guide/shortcuts.html"></a><button id="b">Close</button></div>');
+    expect(resolveHelpTarget(document.getElementById("b"))?.guideHref).toBe("/guide/shortcuts.html");
+  });
+});
+
+const entries: GuideSearchEntry[] = [
+  { c: "Selecting and arranging", h: "", u: "/guide/select.html", t: "Moving, aligning and mirroring parts." },
+  { c: "Selecting and arranging", h: "Mirror", u: "/guide/select.html#mirror", t: "Flips the selection across a plane. Click “Mirror” and pick an axis. A copy needs Duplicate first." },
+  { c: "Selecting and arranging", h: "Align", u: "/guide/select.html#align", t: "Align lays bodies on one edge. Use “Align” with several bodies. Mirror is next to it." },
+  { c: "Solids and holes", h: "Grouping", u: "/guide/solids.html#grouping", t: "A hole cuts a solid when you press “Group”. To mirror a group, select it first." },
+  { c: "Shapes", h: "The shape's settings", u: "/guide/shapes.html#settings", t: "Every shape has settings such as the wall thickness." },
+];
+const index = guidePrepare(entries);
+
+describe("what the guide says about a name", () => {
+  it("puts the section whose heading is the name first", () => {
+    const result = lookupHelp(index, "Mirror", "en");
+    expect(result.best?.entry.u).toBe("/guide/select.html#mirror");
+    expect(result.more.map((match) => match.entry.u)).toEqual(expect.arrayContaining(["/guide/select.html#align"]));
+    expect(result.more.length).toBeLessThanOrEqual(2);
+  });
+
+  it("prefers the section that writes the name as a button, over one that only has the word", () => {
+    const result = lookupHelp(index, "Group", "en");
+    expect(result.best?.entry.u).toBe("/guide/solids.html#grouping");
+  });
+
+  it("answers with nothing when the guide has nothing", () => {
+    const result = lookupHelp(index, "Teleport", "en");
+    expect(result.best).toBeNull();
+    expect(result.more).toEqual([]);
+  });
+
+  it("finds a name that needs every word and ignores case and accents", () => {
+    expect(lookupHelp(index, "wall THICKNESS", "en").best?.entry.u).toBe("/guide/shapes.html#settings");
+  });
+
+  it("matches ae and ue for the umlauts of German", () => {
+    const german = guidePrepare([{ c: "Auswählen", h: "Teile ändern", u: "/anleitung/a.html#aendern", t: "Ändere die Teile über die Griffe." }]);
+    expect(lookupHelp(german, "Teile aendern", "de").best?.entry.u).toBe("/anleitung/a.html#aendern");
+    // English does not do that.
+    expect(lookupHelp(german, "Teile aendern", "en").best).toBeNull();
+  });
+
+  it("uses the quotation marks of the language", () => {
+    const german = guidePrepare([
+      { c: "Körper", h: "Verbinden", u: "/anleitung/k.html#v", t: "Mit „Gruppieren“ wird aus Teilen eins." },
+      { c: "Körper", h: "Anderes", u: "/anleitung/k.html#a", t: "Gruppieren ist auch im Menü. Gruppieren, gruppieren." },
+    ]);
+    expect(lookupHelp(german, "Gruppieren", "de").best?.entry.u).toBe("/anleitung/k.html#v");
+  });
+
+  it("summarises with the sentence that mentions the name", () => {
+    const entry = entries[1];
+    expect(helpSummary(entry, "Mirror")).toBe("Click “Mirror” and pick an axis. A copy needs Duplicate first.");
+    const long = { c: "C", h: "H", u: "/u", t: `${"Intro sentence here. ".repeat(20)}The “Margin” is the clear distance to the edge. ${"Then more words follow. ".repeat(20)}` };
+    const summary = helpSummary(long, "Margin");
+    expect(summary.startsWith("The “Margin” is the clear distance")).toBe(true);
+    expect(summary.length).toBeLessThanOrEqual(270);
+    expect(summary.endsWith("...")).toBe(true);
+    // Without the name, the beginning.
+    expect(helpSummary({ ...long, t: "Short text." }, "Nothing")).toBe("Short text.");
+  });
+});
+
+describe("the index of a language", () => {
+  beforeEach(() => {
+    document.body.innerHTML = "";
+  });
+
+  it("lives in the guide folder of the language", () => {
+    expect(guideIndexUrl("en")).toBe("/guide/search-index.json");
+    expect(guideIndexUrl("de")).toBe("/anleitung/search-index.json");
+  });
+
+  it("is fetched once, and a failure is not remembered", async () => {
+    let calls = 0;
+    const ok = (async () => { calls += 1; return { ok: true, json: async () => entries }; }) as unknown as typeof fetch;
+    const first = await loadGuideIndex("nl", ok);
+    const second = await loadGuideIndex("nl", ok);
+    expect(first).toHaveLength(entries.length);
+    expect(second).toBe(first);
+    expect(calls).toBe(1);
+
+    const broken = (async () => ({ ok: false, json: async () => null })) as unknown as typeof fetch;
+    expect(await loadGuideIndex("fr", broken)).toBeNull();
+    const fixed = (async () => ({ ok: true, json: async () => entries })) as unknown as typeof fetch;
+    expect(await loadGuideIndex("fr", fixed)).toHaveLength(entries.length);
+  });
+});
