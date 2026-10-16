@@ -106,6 +106,23 @@ export function textLetterSize(shape: WorkplaneShape): number {
 }
 
 /**
+ * A straight text shrunk by its box takes the box with it (#432): the letters fit their box in one scale, so a box
+ * made lower than the line needs leaves it much wider than the letters, and the measures and handles stand far from
+ * them. When a change of the box makes the letters smaller, the box becomes the one the letters at that size need.
+ * A box made larger leaves the letters and the box as they are, and a stretched text fills its box anyway.
+ */
+export function textShrinkPatch(shape: WorkplaneShape, patch: Partial<WorkplaneShape>): Partial<WorkplaneShape> {
+  if (shape.kind !== "text" || shape.textCurved || !("width" in patch || "depth" in patch)) return patch;
+  const next = { ...shape, ...patch } as WorkplaneShape;
+  if (next.textStretch || next.textCurved) return patch;
+  const measures = layoutMeasures(next);
+  const before = textFitScale(shape, textLetterBox(shape), measures).x;
+  const after = textFitScale(next, textLetterBox(next), measures).x;
+  if (!(after < before - 1e-6)) return patch;
+  return { ...patch, ...textBoxAroundLetters(next, { width: measures.width * after, depth: measures.depth * after }) };
+}
+
+/**
  * The change that makes the capitals of a text `size` mm tall: a straight text gets the box its
  * line needs at that size, the fill's and an ear's reach added, so other words or another font keep the
  * size; curved text takes it as its letter size.

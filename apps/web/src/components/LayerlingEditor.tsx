@@ -17,7 +17,7 @@ import { DEFAULT_THREAD_PROFILE, defaultThreadHeadHeight, normalizeThreadHeadHei
 import { curvedTextPatch } from "@/lib/textGeometry";
 import { normalizeTextEdge } from "@/lib/textEdge";
 import { DEFAULT_TEXT_LAYERS, layerTextKeyringArgument, layerTextLayersError, nameTagOffsets, normalizeTextLayers, type NameTagKeyring } from "@/lib/textLayers";
-import { NAME_TAG_LAYERS, NAME_TAG_LETTER_SIZE } from "@/lib/nameTag";
+import { NAME_TAG_LAYERS, NAME_TAG_LETTER_SIZE, textShrinkPatch } from "@/lib/nameTag";
 import { DEFAULT_ICON_TAG_WIDTH, ICON_TAG_LAYERS, MAX_ICON_TAG_WIDTH, MIN_ICON_TAG_WIDTH, normalizeIconTagCount } from "@/lib/iconTag";
 import type { IconLayerPatch, IconTagControls, TextLayerPatch } from "@/components/workplane/ShapeInspector";
 import { IconTagPanel } from "@/components/workplane/IconTagPanel";
@@ -5221,7 +5221,7 @@ export function LayerlingEditor({
           // das Netz verbiegen. Ein Zug am Anfasser trifft dagegen nur den
           // Rahmen und laesst das gebackene Netz in Ruhe.
           const neugebaut = patchTouchesBodyParameters(cleanedPatch) ? rebuiltParametricShape(shape, cleanedPatch) : null;
-          const patched = neugebaut ?? { ...shape, ...curvedTextPatch(shape, cleanedPatch) };
+          const patched = neugebaut ?? { ...shape, ...textShrinkPatch(shape, curvedTextPatch(shape, cleanedPatch)) };
           const canonicalBase = canonicalizeShape("hole" in cleanedPatch ? withHoleMode(patched, Boolean(cleanedPatch.hole), cleanedPatch.color) : patched);
           const canonical = bakeTransform ? canonicalizeShape(bakeShapeTransformIntoMesh(canonicalBase)) : canonicalBase;
           if (workplaneShapesEqual(shape, canonical)) {
@@ -8635,7 +8635,7 @@ export function LayerlingEditor({
           const sauber = cleanShapePatch(patch);
           const neugebaut = patchTouchesBodyParameters(sauber) ? rebuiltParametricShape(shape, sauber) : null;
           if (neugebaut) return withPivotRequest(neugebaut);
-          const merged = { ...shape, ...curvedTextPatch(shape, sauber) };
+          const merged = { ...shape, ...textShrinkPatch(shape, curvedTextPatch(shape, sauber)) };
           // Solid/hole goes through the same rule as the inspector: a mixed group keeps its parts' own state.
           const patched = typeof sauber.hole === "boolean" ? withHoleMode(merged, sauber.hole, sauber.color) : merged;
           const width = shapeWidth(patched);

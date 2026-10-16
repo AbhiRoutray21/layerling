@@ -6,6 +6,7 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **A text made smaller takes its box with it (#432):** The letters of a straight text fit their box in one scale, so a box made much lower than the line needs stayed as wide as before, and the measures and handles stood far from the small letters, out of reach when zoomed in. When a change of the box makes the letters smaller, the box now becomes the one the letters need at that size; a box made larger, a stretched text and a curved text are left as they were. Reported by @MartinSpanjaard on GitHub.
 - **Copying a large imported model no longer freezes the page (#431):** A copy was also written through a hidden text field and the browser's copy command, and selecting a text of tens of megabytes in a field takes seconds, and more the larger it is: a mesh of 45,000 triangles held the page for 4 s, one of 245,000 for 23 s, one of 720,000 for minutes, so the browser had to be closed. The copy is now written through the clipboard API alone when it is larger than a megabyte (the hidden field stays for small copies and for pages without the API); the same copies now take 0.2 s, 0.9 s and 2.5 s, and pasting them is as fast as before. Reported by @Cranborlie on GitHub.
 
 ## 1.82.0

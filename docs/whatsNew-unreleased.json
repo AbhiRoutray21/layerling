@@ -8,5 +8,15 @@
       "de": "Bei einem großen importierten Modell blieb die Seite beim Kopieren (Strg+C) sekunden- bis minutenlang stehen. Große Kopien gehen jetzt direkt in die Zwischenablage: Ein Modell mit 245.000 Dreiecken braucht statt 23 s weniger als eine Sekunde.",
       "en": "With a large imported model the page stopped for seconds to minutes on a copy (Ctrl+C). Large copies now go straight to the clipboard: a model of 245,000 triangles takes under a second instead of 23 s."
     }
+  },
+  {
+    "title": {
+      "de": "Ein verkleinerter Text nimmt seinen Rahmen mit",
+      "en": "A text made smaller takes its box with it"
+    },
+    "body": {
+      "de": "Wenn du einen Text über seinen Rahmen kleiner machst, schrumpft der Rahmen jetzt mit den Buchstaben: Die Maße und Griffe stehen an den Buchstaben statt weit daneben. Machst du den Rahmen größer, bleibt alles, wie es war.",
+      "en": "When you make a text smaller through its box, the box now shrinks with the letters: the measures and handles stand at the letters instead of far from them. If you make the box larger, everything stays as it was."
+    }
   }
 ]
