@@ -58,5 +58,15 @@
       "de": "Die Oberfläche gibt es jetzt auch auf Italienisch (Italiano), und ein Browser in italienischer Sprache wählt sie von selbst. Noch nicht alles ist übersetzt: Was fehlt, steht auf Englisch, auch die Anleitung.",
       "en": "The interface now comes in Italian (Italiano), and a browser set to Italian picks it by itself. Not everything is translated yet: what is missing shows in English, the guide included."
     }
+  },
+  {
+    "title": {
+      "de": "Arabisch",
+      "en": "Arabic"
+    },
+    "body": {
+      "de": "Oberfläche und Anleitung gibt es jetzt auch auf Arabisch (العربية), und ein Browser in arabischer Sprache wählt sie von selbst. Die Anordnung ist noch nicht von rechts nach links gespiegelt, und ein zweiter Leser hat die Texte noch nicht geprüft.",
+      "en": "The interface and the guide now come in Arabic (العربية), and a browser set to Arabic picks it by itself. The layout is not mirrored from right to left yet, and a second reader has not checked the texts."
+    }
   }
 ]
