@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **The question mark of the notice about designs in the browser sits in its heading:** On the start page it stood at the end of the text, where its box made the last line stand further from the others than the rest. It is behind the heading now, smaller, and the three lines of the text are even.
+
 ## 1.81.0
 
 - **`layerling_export_mesh`: STL, 3MF and OBJ over the AI connection:** The MCP bridge could import files and make a drawing, but not write a model file. The new action writes what the export window writes, from the same bodies (visible solids, loose holes taken off, overlapping bodies merged for STL or separated by colour for 3MF and OBJ, tiny loose pieces left out). `format` picks stl, 3mf or obj, `ids` limits it to some objects, and with `path` the file is written to that place on the computer; without it the file comes back as base64. The answer lists size, bodies, triangles, merged bodies and the loose pieces left out. Chapter 14 of the guide and the skill list it.

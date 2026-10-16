@@ -1492,8 +1492,12 @@ html[data-theme="dark"] .dashboard-trademark {
 }
 
 .storage-notice-help {
-  display: inline-flex;
-  vertical-align: text-bottom;
+  display: inline-grid;
+  width: 22px;
+  height: 22px;
+  /* In the heading: a box of the usual 30 px would make its line taller than the others. */
+  margin-block: -6px;
+  vertical-align: middle;
   color: #8a5312;
 }
 

@@ -2970,8 +2970,8 @@ function Dashboard({
                   <ShieldAlert size={24} strokeWidth={2.4} />
                 </span>
                 <div className="storage-notice-text">
-                  <strong>{t("storageNotice.title")}</strong>
-                  <span>{t("storageNotice.body")} <GuideHelpLink chapter="files" section="backingUp" className="storage-notice-help" /></span>
+                  <strong>{t("storageNotice.title")} <GuideHelpLink chapter="files" section="backingUp" className="storage-notice-help" iconSize={16} /></strong>
+                  <span>{t("storageNotice.body")}</span>
                 </div>
                 <div className="storage-notice-actions">
                   {projects.length > 0 ? (
