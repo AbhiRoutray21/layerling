@@ -5,7 +5,7 @@ import { importedShapesFromObj } from "@/lib/objImport";
 import { attachProjectAsset, projectAssetFromBytes, sourceFormatForFileName } from "@/lib/projectAssets";
 import { importedShapeFromStl } from "@/lib/stlImport";
 import { readKeepSvgPage } from "@/lib/importPreferences";
-import { importedShapeFromSvgWithReport } from "@/lib/svgImport";
+import { importedShapeFromSvgWithReport, prepareSvgImport } from "@/lib/svgImport";
 import { importedShapesFrom3mf } from "@/lib/threemfImport";
 import { sketchProfileFromSvg } from "@/lib/svgSketch";
 import { importedPictureSvg, isPictureFile, svgEmbeddedPicture } from "@/lib/pictureIcon";
@@ -153,6 +153,7 @@ export async function importModelFiles(
         // The mesh lies mirrored top to bottom - turned up out of the drawing - and older designs
         // rebuild it so from their file. A new import mirrors it back to read right from above (#197).
         // A traced picture has no page of its own to keep.
+        await prepareSvgImport();
         const svg = importedShapeFromSvgWithReport(file.name, text, { keepPagePosition: !traced && (options.svgKeepPagePosition ?? readKeepSvgPage()) });
         shape = { ...svg.shape, mirrorZ: true };
         if (svg.pageKept === false) result.notes.push(t("status.importSvgNoPage", { name: file.name }));

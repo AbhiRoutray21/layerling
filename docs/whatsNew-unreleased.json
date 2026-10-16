@@ -38,5 +38,15 @@
       "de": "Wer einen Körper verschiebt oder an einem Anfasser zieht und dabei Esc drückt, nimmt das Ziehen sofort zurück: Alles steht wieder wie vorher, im Verlauf kommt kein Schritt dazu und die Auswahl bleibt. Vorher musste man die Änderung rückgängig machen.",
       "en": "If you move a body or pull a handle and press Esc while still holding the mouse button, the drag is taken back at once: everything stands as before, no step is added to the history and the selection stays. Before, you had to undo the change."
     }
+  },
+  {
+    "title": {
+      "de": "SVG mit sich berührenden Umrissen lässt sich ausschneiden",
+      "en": "An SVG with touching outlines can be cut with"
+    },
+    "body": {
+      "de": "Eine Zeichnung aus Feldern, die sich Kanten teilen, etwa ein Fußball mit seinen Flächen, kam als Körper herein, der nicht sauber geschlossen war: Als Loch gruppiert tat er nichts, und es dauerte etwa zehn Sekunden. Jetzt baut der genaue Kern den Körper, und berührende oder überlappende Umrisse werden ein sauberer Körper. Bereits importierte SVGs bitte noch einmal importieren.",
+      "en": "A drawing made of panels that share edges, such as a football with its panels, came in as a body that was not cleanly closed: grouped as a hole it did nothing, after about ten seconds. Now the exact kernel builds the body, and touching or overlapping outlines come out as one clean body. Please import SVGs that are already in a design again."
+    }
   }
 ]
