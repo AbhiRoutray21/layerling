@@ -23,4 +23,16 @@ Vyhledávací pole má i tato příručka, nahoře na každé stránce. Zadejte 
 - Názvem tělesa vyhledáte a vyberete příslušný objekt v projektu. Pomůže to ve složitém modelu. Objekty se nabízejí až po zadání textu.
 - Vyhledávání funguje i v režimu náčrtu a nabízí jeho nástroje.
 
+## Interaktivní nápověda
+
+Nevíte, kde si o tlačítku nebo políčku přečíst? Nechte se k tomu zavést programem. Klikněte na otazník v oblasti {{ui:editor.group.help}} nebo stiskněte [[Shift]]+[[F1]]. Ukazatel se změní na otazník a to, co je pod ním, dostane rámeček.
+
+- Klikněte na tlačítko, políčko, přepínač, úchyt, skupinu pásu karet nebo na záhlaví okna. Nestane se to, co obvykle. Místo toho se otevře malé okno s názvem prvku, krátkým shrnutím části tohoto návodu, která o něm pojednává, až dvěma dalšími místy, kde se zmiňuje, a tlačítkem {{ui:interactiveHelp.open}}.
+- Nápověda se týká prvku, na který jste ukázali, ne celého okna kolem něj. Prvek bez vlastního názvu použije nejbližší název kolem sebe; uvnitř okna se vrátí k otazníku tohoto okna.
+- {{ui:interactiveHelp.open}} otevře návod na této části v novém panelu. Část je tam barevně orámovaná od nadpisu až po konec, takže vidíte, kde začíná a končí.
+- Pokud o prvku návod nic neříká, okno to sdělí a nabídne {{ui:interactiveHelp.search}}.
+- [[Esc]] nebo další klepnutí na otazník režim ukončí. Na dotykové obrazovce nic nenajíždí: klepnutí na prvek okno otevře rovnou.
+
+Okno se přesouvá za záhlaví jako ostatní. Program najde část podle názvu prvku - popisku tlačítka, názvu políčka - protože tento návod píše každé tlačítko tak, jak se jmenuje v programu. Hledá ho stejným vyhledáváním jako pole nahoře na každé stránce návodu, v jazyce, který používáte, a vše běží ve vašem prohlížeči.
+
 {{shortcuts}}
