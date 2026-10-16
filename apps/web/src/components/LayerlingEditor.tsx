@@ -8,7 +8,7 @@ import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, typ
 import * as THREE from "three";
 import type { AppThemePreference, ResolvedAppTheme } from "@/lib/appTheme";
 import type { ComponentType, ReactNode, SVGProps } from "react";
-import { t, type MessageKey } from "@/lib/i18n";
+import { t, translate, type MessageKey } from "@/lib/i18n";
 import { useLanguage } from "@/lib/useLanguage";
 import { loftShapePatch, type LoftMeasures } from "@/lib/loftGeometry";
 import { hingeWorldParts } from "@/lib/hingeParts";
@@ -141,6 +141,7 @@ import { DEFAULT_INFILL_PERCENT, DEFAULT_PRINT_MATERIAL, DEFAULT_WALLS, INFILL_C
 import { CAD_MODIFIER_MAX_SHARP_ANGLE, CAD_MODIFIER_REQUEST_TIMEOUT_MS, CAD_MODIFIER_PREPARE_TRIANGLE_LIMIT, cadModifierPrepareTimeoutMs, cadModifierTimeoutMessage, cadModifierUserErrorMessage, cadModifierWorkerFailureMessage, cadModifierCandidateEdge, defaultCadModifierTangentChain, rescueSharpAngleForEdges, selectableCadModifierEdge, type CadModifierRequestPhase } from "@/lib/cadModifierRuntime";
 import { createCadPreviewQueue } from "@/lib/cadPreviewQueue";
 import { cloneWorkplaneShapeSnapshot, compactEdgeTreatmentHistory, edgeTreatmentAppliedFrame, groupBeforeEdgeTreatments, restoreShapeBeforeEdgeTreatment, wasGroupBeforeEdgeTreatments } from "@/lib/edgeTreatmentHistory";
+import { describeHistoryStep } from "@/lib/historyStepDescription";
 import { appendEditorHistorySnapshot, boundedEditorHistoryState, continuesKeyRun, type KeyRun, editorHistoryBranch, editorHistoryEntry, editorHistoryForExport, historyStateAt, hydrateEditorHistoryState, notesForHistoryIndex, projectSceneFingerprint, projectShapesFingerprint, workplaneForHistoryIndex, type EditorHistoryEntry, type EditorHistoryExportLimit, type EditorHistoryState } from "@/lib/editorHistory";
 import { snapShapeFootprintToVisibleGrid, visibleGridStep } from "@/lib/gridSnap";
 import { composedShapeRotation, geometryRotationDegreesForShortcut, geometryRotationDelta, rotatedGeometryShapePatch } from "@/lib/geometryRotation";
@@ -2481,6 +2482,15 @@ export function LayerlingEditor({
     () => (historyViewIndex === null ? null : historyStateAt(history, historyViewIndex)),
     [history, historyViewIndex],
   );
+  // What the arrows of the history view would undo and redo from the state it shows.
+  const historyViewSteps = useMemo(() => {
+    if (!historyViewState) return null;
+    const { index } = historyViewState;
+    return {
+      last: index > 0 ? describeHistoryStep(history[index - 1], history[index]) : null,
+      next: index < history.length - 1 ? describeHistoryStep(history[index], history[index + 1]) : null,
+    };
+  }, [history, historyViewState]);
   const historyViewStateRef = useRef(historyViewState);
   historyViewStateRef.current = historyViewState;
   const [placementWorkplane, setPlacementWorkplane] = useState<PlacementWorkplane>(
@@ -8591,12 +8601,19 @@ export function LayerlingEditor({
         const state = historyStateAt(entries, requested);
         if (!state) throw new Error("There is no earlier state to look at yet");
         setHistoryViewIndex(state.index);
+        const stepText = (before: number, after: number) => {
+          if (before < 0 || after >= entries.length) return null;
+          const step = describeHistoryStep(entries[before], entries[after]);
+          return translate("en", step.key, step.values);
+        };
         return {
           open: true,
           index: state.index,
           states: entries.length,
           current: historyIndexRef.current,
           recordedAt: state.entry.at ?? null,
+          lastStep: stepText(state.index - 1, state.index),
+          nextStep: stepText(state.index, state.index + 1),
           shapeCount: state.shapes.length,
           objects: state.shapes.map((shape) => ({ id: shape.id, name: shape.name, kind: shape.kind, x: shape.x, z: shape.z, width: shape.width, depth: shape.depth, height: shape.height, hidden: Boolean(shape.hidden), ...historyStatePartsTree(shape) })),
         };
@@ -12313,6 +12330,8 @@ export function LayerlingEditor({
           liveIndex={historyIndex}
           recordedAt={historyViewState.entry.at}
           objectCount={historyViewState.shapes.length}
+          lastStep={historyViewSteps?.last ?? null}
+          nextStep={historyViewSteps?.next ?? null}
           creating={historyProjectCreating}
           canCreateProject={Boolean(onCreateProjectFromState)}
           pickedCount={historyView.picked.length}
