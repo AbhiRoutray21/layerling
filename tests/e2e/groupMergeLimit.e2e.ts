@@ -7,7 +7,7 @@ import { rememberManifoldRuntime } from "@/lib/manifoldHandle";
 /**
  * Grouping imported solids merges them into one closed body. Above the triangle limit the kernel is
  * skipped and the meshes are only laid together, which an export keeps as overlapping parts that
- * slicers report as non-manifold edges: the group has to say niet instead of looking merged.
+ * slicers report as non-manifold edges: the group has to say so instead of looking merged.
  */
 const kernel = vi.hoisted(() => ({ runtime: null as Promise<unknown> | null }));
 vi.mock("@/lib/editorMeshCore", async (importOriginal) => ({
