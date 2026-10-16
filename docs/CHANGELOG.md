@@ -6,6 +6,7 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **Separate Parts in the right-click menu:** A shape made of several loose pieces, such as an STL of separate parts or a text of single letters, could only be taken apart with the button in the properties. The entry is now in the menu of a right click on the shape as well. Asked for by a YouTuber who makes videos about layerling.
 ## 1.84.0
 
 - **A hinge without the printed pin (#445):** A switch in the hinge settings, **Without pin (use your own)**, leaves the printed pin out and runs the bore (the pin diameter plus the clearance) through every knuckle, the ends included, for a pin of your own such as a piece of filament, which is smoother than a printed pin on a small hinge. Before, you had to make a hinge, make a cylinder of the hole size, line it up and punch the hole by hand. The exact body for the fillet tool and the STEP export follows it, and the AI bridge takes `hingePinless`. Suggested by @vinmangraphics on GitHub.

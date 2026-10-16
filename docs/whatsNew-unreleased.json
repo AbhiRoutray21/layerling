@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "title": {
+      "de": "„Teile trennen“ per Rechtsklick",
+      "en": "Separate Parts by right-click"
+    },
+    "body": {
+      "de": "Besteht eine Form aus mehreren losen Stücken, etwa ein STL aus getrennten Teilen oder ein Text aus einzelnen Buchstaben, findest du „Teile trennen“ jetzt auch im Menü, das sich mit einem Rechtsklick auf die Form öffnet.",
+      "en": "If a shape is made of several loose pieces, such as an STL of separate parts or a text of single letters, you now find Separate Parts in the menu that opens with a right click on the shape too."
+    }
+  }
+]
