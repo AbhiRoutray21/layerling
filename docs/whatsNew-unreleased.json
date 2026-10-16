@@ -68,5 +68,15 @@
       "de": "Neuer Schalter bei den Scharnier-Einstellungen: Der gedruckte Stift entfällt, und die Bohrung läuft durch alle Knöchel, auch die an den Enden, für einen eigenen Stift aus Filament oder Draht.",
       "en": "A new switch in the hinge settings: the printed pin is left out and the bore runs through every knuckle, the ends included, for a pin of your own made of filament or wire."
     }
+  },
+  {
+    "title": {
+      "de": "Leere Entwürfe auf dem Server werden auch nachgefragt",
+      "en": "An empty design on the server is asked about too"
+    },
+    "body": {
+      "de": "Gehst du aus einem leeren Entwurf zurück zur Startseite, fragt layerling jetzt auch bei einem Entwurf im gemeinsamen Serverordner, ob er bleiben soll, wie schon bei einem im Browser. „Nein“ entfernt dort die leere Datei vom Server.",
+      "en": "When you go back to the start page from an empty design, layerling now also asks about a design in the shared server folder, as it already did for one in the browser. \"No\" removes the empty file from the server."
+    }
   }
 ]
