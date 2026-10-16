@@ -1983,6 +1983,8 @@ export const MESSAGES_PL: Partial<Record<MessageKey, string>> = {
   "workspace.doubleClickOpensSketch": "Dwuklik otwiera szkic",
   "workspace.doubleClickOpensGroup": "Dwuklik otwiera grupę lub zestaw",
   "workspace.selectBeforeMoving": "Zaznacz przed przesunięciem",
+  "workspace.frameByDirection": "Kierunek ramki decyduje",
+  "workspace.frameByDirectionHint": "Ramka przeciągnięta w prawo zaznacza tylko to, co leży w niej w całości, w lewo wszystko, czego dotyka (rysowana linią przerywaną), jak w SketchUp",
   "workspace.objectSnap": "Przyciągaj do innych kształtów podczas przesuwania",
   "workspace.overhangAngle": "Oznaczaj nawisy od {angle}°",
   "workspace.overhangStrict": "30° (ostrożnie)",

@@ -2000,6 +2000,8 @@ export const MESSAGES_RU: Partial<Record<MessageKey, string>> = {
   "workspace.doubleClickOpensSketch": "Двойной щелчок открывает эскиз",
   "workspace.doubleClickOpensGroup": "Двойной щелчок открывает группу или связку",
   "workspace.selectBeforeMoving": "Выделять перед перемещением",
+  "workspace.frameByDirection": "Направление рамки решает",
+  "workspace.frameByDirectionHint": "Рамка, проведённая вправо, выделяет только то, что целиком внутри неё, влево — всё, чего она касается (рисуется пунктиром), как в SketchUp",
   "workspace.objectSnap": "Привязка к другим фигурам при перемещении",
   "workspace.overhangAngle": "Отмечать нависания от {angle}°",
   "workspace.overhangStrict": "30° (осторожно)",

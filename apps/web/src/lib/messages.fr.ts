@@ -1993,6 +1993,8 @@ export const MESSAGES_FR: Partial<Record<MessageKey, string>> = {
   "workspace.doubleClickOpensSketch": "Un double-clic ouvre l'esquisse",
   "workspace.doubleClickOpensGroup": "Un double-clic ouvre un groupe ou un bundle",
   "workspace.selectBeforeMoving": "Sélectionner avant de déplacer",
+  "workspace.frameByDirection": "Le sens du cadre décide",
+  "workspace.frameByDirectionHint": "Un cadre tiré vers la droite ne sélectionne que ce qui est entièrement dedans, tiré vers la gauche tout ce qu'il touche (tracé en pointillés), comme dans SketchUp",
   "workspace.objectSnap": "Accrochez-vous à d'autres formes tout en vous déplaçant",
   "workspace.overhangAngle": "Marquer les surplombs à partir de {angle}°",
   "workspace.overhangStrict": "30° (attention)",

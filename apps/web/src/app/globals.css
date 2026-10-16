@@ -7954,6 +7954,11 @@ html[data-theme="dark"] .inspector-bundle-note {
   pointer-events: none;
 }
 
+/* A frame that takes whatever it touches, where the direction of the drag decides (#430). */
+.selection-marquee.touching {
+  border-style: dashed;
+}
+
 .move-dimension-overlay {
   position: absolute;
   inset: 0;

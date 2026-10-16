@@ -99,6 +99,7 @@ import { scaledHorizontalShapePatch } from "@/lib/scaleByPercent";
 import { displayYTurn, insideZ } from "@/lib/displayAxes";
 import { positionsForTwist, twistBandCount } from "@/lib/heightSlices";
 import { toCreasedNormals } from "three/examples/jsm/utils/BufferGeometryUtils.js";
+import { boundsInsideRect, marqueeMode } from "@/lib/marqueeSelection";
 import { canBeginShapeDrag, handleDimensionLimit, POSITION_TYPED_LIMIT, DEFAULT_SNAP_GRID, DEFAULT_WORKPLANE_WORKSPACE, effectiveViewSettings, viewPixelRatio, normalizeSnapGrid, normalizeWorkspaceSettings, orbitControlsZoomSpeed, readWorkspaceDefault, saveWorkspaceDefault, snapGridForUnits, snapGridStep as snapStep, workplaneSettingsFingerprint, workspaceForUnits, workspaceHydrationSyncDecision, zoomDistanceScale } from "@/lib/workplaneSettings";
 import { withShapeDefaults } from "@/lib/shapeDefaults";
 import { workplaneGridBandWidths, AXIS_ARROW_COLORS, axisArrowLayout, DEFAULT_EDGE_LINE_COLOR, fillLightPosition, keyLightPosition, sceneLightLevels, shadowBlurRadius, workplaneGridLayout, workplaneGridLines, workplaneGridPalette, workplaneLabelLayout, workplaneThemePalette, WORKPLANE_LABEL_ASPECT, WORKPLANE_LINE_ELEVATION, type WorkplaneGridLayout } from "@/lib/workplaneGrid";
@@ -3091,6 +3092,8 @@ export function WorkplaneViewport({
   const [alignOverlay, setAlignOverlay] = useState<AlignOverlayState | null>(null);
   const [mirrorOverlay, setMirrorOverlay] = useState<MirrorOverlayState | null>(null);
   const [marqueeRect, setMarqueeRect] = useState<{ left: number; top: number; width: number; height: number } | null>(null);
+  /** The frame is dashed where it takes whatever it touches, and the direction decides (#430). */
+  const [marqueeTouching, setMarqueeTouching] = useState(false);
   const [hoverMeasureKey, setHoverMeasureKey] = useState<string | null>(null);
   const [pinnedMeasureKey, setPinnedMeasureKey] = useState<string | null>(null);
   const [rotationReadout, setRotationReadout] = useState<RotationReadout>(null);
@@ -5065,6 +5068,7 @@ export function WorkplaneViewport({
       setMarqueeRect(null);
       return;
     }
+    setMarqueeTouching(workspaceRef.current.frameByDirection && marqueeMode(true, marquee.startX, marquee.currentX) === "touch");
     const left = Math.min(marquee.startX, marquee.currentX);
     const top = Math.min(marquee.startY, marquee.currentY);
     setMarqueeRect({
@@ -5075,7 +5079,7 @@ export function WorkplaneViewport({
     });
   }, []);
 
-  const shapesInMarquee = useCallback((rect: { left: number; top: number; right: number; bottom: number }) => {
+  const shapesInMarquee = useCallback((rect: { left: number; top: number; right: number; bottom: number }, enclose = false) => {
     const state = threeRef.current;
     if (!state) {
       return [];
@@ -5086,6 +5090,7 @@ export function WorkplaneViewport({
       .filter((shape) => {
         const bounds = shapeScreenBounds(state, shape);
         if (!bounds || !boundsIntersectRect(bounds, rect)) return false;
+        if (enclose) return boundsInsideRect(bounds, rect);
         // The frame only says where the body could be. A spool's bore or the
         // gap between the parts of a group is inside it and still empty.
         return shapeGeometryTouchesScreenRect(state, shape.id, rect) ?? true;
@@ -7572,7 +7577,7 @@ export function WorkplaneViewport({
             top: Math.min(marquee.startY, marquee.currentY),
             bottom: Math.max(marquee.startY, marquee.currentY),
           };
-          const selected = shapesInMarquee(rect);
+          const selected = shapesInMarquee(rect, marqueeMode(workspaceRef.current.frameByDirection, marquee.startX, marquee.currentX) === "enclose");
           if (marquee.additive) {
             // Shift turns each body in the box around, as a Shift click does
             // for one: what was selected leaves the selection, the rest joins.
@@ -8748,7 +8753,7 @@ export function WorkplaneViewport({
             onPointerCancel={finishDrag}
             onPointerLeave={handlePointerLeave}
           />
-          {!workplaneMode && !splitActive && marqueeRect ? <div className="selection-marquee" style={marqueeRect} /> : null}
+          {!workplaneMode && !splitActive && marqueeRect ? <div className={marqueeTouching ? "selection-marquee touching" : "selection-marquee"} style={marqueeRect} /> : null}
           {!workplaneMode && !splitActive && moveDimensionsEnabled && moveDimensionOverlay ? (
             <MoveDimensionOverlay
               overlay={moveDimensionOverlay}

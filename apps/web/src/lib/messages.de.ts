@@ -2007,6 +2007,8 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "workspace.showRotationAngles": "Drehwinkel gedrehter Körper anzeigen",
   "workspace.startInPerspective": "Editor in perspektivischer Ansicht starten",
   "workspace.selectBeforeMoving": "Erst auswählen, dann verschieben",
+  "workspace.frameByDirection": "Ziehrichtung des Auswahlrahmens zählt",
+  "workspace.frameByDirectionHint": "Ein Rahmen nach rechts gezogen wählt nur, was ganz darin liegt, nach links gezogen alles, was er berührt (gestrichelt gezeichnet), wie in SketchUp",
   "workspace.doubleClickOpensSketch": "Doppelklick öffnet die Skizze",
   "workspace.doubleClickOpensGroup": "Doppelklick öffnet Gruppe oder Bündel",
   "workspace.objectSnap": "Beim Verschieben an anderen Formen fangen",

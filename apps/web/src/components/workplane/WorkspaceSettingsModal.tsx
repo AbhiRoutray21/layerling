@@ -827,6 +827,12 @@ export function WorkspaceSettingsModal({
                     onChange={(selectBeforeMove) => patchWorkspace({ selectBeforeMove })}
                   />
                   <WorkspaceToggle
+                    label={t("workspace.frameByDirection")}
+                    description={t("workspace.frameByDirectionHint")}
+                    checked={workspace.frameByDirection}
+                    onChange={(frameByDirection) => patchWorkspace({ frameByDirection })}
+                  />
+                  <WorkspaceToggle
                     label={t("workspace.doubleClickOpensSketch")}
                     checked={workspace.doubleClickOpensSketch}
                     onChange={(doubleClickOpensSketch) => patchWorkspace({ doubleClickOpensSketch })}

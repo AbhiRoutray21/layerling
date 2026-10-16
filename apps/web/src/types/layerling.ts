@@ -289,6 +289,8 @@ export type WorkplaneWorkspaceSettings = {
   showGrid: boolean;
   clickToPlaceShapes: boolean;
   selectBeforeMove: boolean;
+  /** The selection frame takes only what it encloses when dragged to the right, what it touches when dragged to the left (#430). */
+  frameByDirection: boolean;
   /** A double click on a sketch body opens its sketch; on a group or bundle, opens it for editing (#150). */
   doubleClickOpensSketch: boolean;
   doubleClickOpensGroup: boolean;

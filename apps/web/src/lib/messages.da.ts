@@ -1922,6 +1922,8 @@ export const MESSAGES_DA: Partial<Record<MessageKey, string>> = {
   "workspace.doubleClickOpensSketch": "Dobbeltklik åbner skitsen",
   "workspace.doubleClickOpensGroup": "Dobbeltklik åbner en gruppe eller et bundt",
   "workspace.selectBeforeMoving": "Vælg før du flytter",
+  "workspace.frameByDirection": "Rammens retning afgør",
+  "workspace.frameByDirectionHint": "En ramme trukket mod højre vælger kun det, der ligger helt inde i den, en trukket mod venstre alt, den rører ved (tegnet stiplet), som i SketchUp",
   "workspace.objectSnap": "Snap til andre former mens du flytter",
   "workspace.overhangAngle": "Markér overhæng fra {angle}°",
   "workspace.overhangStrict": "30° (forsigtig)",

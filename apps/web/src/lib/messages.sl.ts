@@ -1480,6 +1480,8 @@ export const MESSAGES_SL: Partial<Record<MessageKey, string>> = {
   "workspace.dimensionsAlwaysVisible": "Mere vedno vidne",
   "workspace.startInPerspective": "Zaženi urejevalnik v perspektivnem pogledu",
   "workspace.selectBeforeMoving": "Izberi pred premikanjem",
+  "workspace.frameByDirection": "Smer okvirja odloča",
+  "workspace.frameByDirectionHint": "Okvir, povlečen v desno, izbere samo tisto, kar leži v celoti znotraj njega, povlečen v levo vse, česar se dotakne (nariše se črtkano), kot v SketchUpu",
   "workspace.objectSnap": "Pripni na druge oblike med premikanjem",
   "workspace.overhangAngle": "Označi previse od {angle}°",
   "workspace.overhangStrict": "30° (previdno)",

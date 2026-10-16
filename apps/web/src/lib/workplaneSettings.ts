@@ -68,6 +68,7 @@ export const DEFAULT_WORKPLANE_WORKSPACE: WorkplaneWorkspaceSettings = {
   showGrid: true,
   clickToPlaceShapes: true,
   selectBeforeMove: false,
+  frameByDirection: false,
   doubleClickOpensSketch: true,
   doubleClickOpensGroup: true,
   objectSnap: true,
@@ -636,6 +637,7 @@ export function normalizeWorkspaceSettings(value: unknown, fallback: WorkplaneWo
     // with 1.18.8 click placement is on for everyone unless switched off again.
     clickToPlaceShapes: booleanOrDefault(candidate.clickToPlaceShapes, fallback.clickToPlaceShapes),
     selectBeforeMove: booleanOrDefault(candidate.selectBeforeMove, fallback.selectBeforeMove),
+    frameByDirection: booleanOrDefault(candidate.frameByDirection, fallback.frameByDirection),
     doubleClickOpensSketch: booleanOrDefault(candidate.doubleClickOpensSketch, fallback.doubleClickOpensSketch),
     doubleClickOpensGroup: booleanOrDefault(candidate.doubleClickOpensGroup, fallback.doubleClickOpensGroup),
     objectSnap: booleanOrDefault(candidate.objectSnap, fallback.objectSnap),

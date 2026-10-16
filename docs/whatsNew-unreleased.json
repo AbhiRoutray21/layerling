@@ -38,5 +38,15 @@
       "de": "Im Hilfe-Modus wird der Mauszeiger über Stellen, zu denen die Anleitung nichts sagt, zum Verbotszeichen statt zum Fragezeichen, etwa über leeren Flächen der Menüleiste. So spart man sich Klicks ins Leere.",
       "en": "In the help mode the pointer turns into the \"not allowed\" sign instead of the question mark over places the guide has nothing about, such as the empty parts of the ribbon. That saves clicks into the void."
     }
+  },
+  {
+    "title": {
+      "de": "Auswahlrahmen: die Ziehrichtung entscheidet",
+      "en": "Selection frame: the direction decides"
+    },
+    "body": {
+      "de": "Neuer Schalter in den Einstellungen (Bereich Darstellung): Ein Rahmen, der von links nach rechts gezogen wird, wählt dann nur Körper, die ganz darin liegen, nach links gezogen alles, was er berührt (gestrichelt). So lässt sich ein Teil aus einem Haufen herauspicken. Standardmäßig aus.",
+      "en": "A new switch in the settings (area Appearance): a frame dragged from left to right then selects only bodies that lie completely inside it, dragged to the left everything it touches (dashed). That picks one part out of a cluster. Off by default."
+    }
   }
 ]

@@ -2003,6 +2003,8 @@ export const MESSAGES_CS: Record<MessageKey, string> = {
   "workspace.doubleClickOpensSketch": "Dvojklik otevře náčrt",
   "workspace.doubleClickOpensGroup": "Dvojklik otevře sloučení nebo seskupení",
   "workspace.selectBeforeMoving": "Před posunem vyžadovat výběr",
+  "workspace.frameByDirection": "Směr rámečku rozhoduje",
+  "workspace.frameByDirectionHint": "Rámeček tažený doprava vybere jen to, co leží celé uvnitř, tažený doleva vše, čeho se dotkne (kreslí se čárkovaně), jako v SketchUpu",
   "workspace.objectSnap": "Při posunu přichytávat k jiným tvarům",
   "workspace.overhangAngle": "Vyznačit převisy od {angle}°",
   "workspace.overhangStrict": "30° (opatrně)",
