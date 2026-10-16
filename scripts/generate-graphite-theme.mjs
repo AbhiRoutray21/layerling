@@ -213,12 +213,18 @@ export function graphiteThemeCss(sourceCss) {
   ].join("\n");
 }
 
-export const GRAPHITE_SOURCE = "apps/web/src/app/globals.css";
+/** The style sheets the app loads, in the order layout.tsx imports them. */
+export const GRAPHITE_SOURCES = ["apps/web/src/app/globals.css", "apps/web/src/app/historyView.css"];
 export const GRAPHITE_TARGET = "apps/web/public/assets/theme/graphite-theme.css";
+
+/** The app's style sheets as one text, in the order they apply. */
+export function readGraphiteSources(root) {
+  return GRAPHITE_SOURCES.map((source) => readFileSync(path.join(root, source), "utf8")).join("\n");
+}
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-  const css = graphiteThemeCss(readFileSync(path.join(root, GRAPHITE_SOURCE), "utf8"));
+  const css = graphiteThemeCss(readGraphiteSources(root));
   writeFileSync(path.join(root, GRAPHITE_TARGET), css);
   console.log(`Wrote ${GRAPHITE_TARGET}`);
 }
