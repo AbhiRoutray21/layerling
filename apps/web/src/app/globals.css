@@ -16463,6 +16463,12 @@ body.help-mode * {
   cursor: help !important;
 }
 
+/* Over a place the help has nothing about, the pointer says so before a click is wasted. */
+body.help-mode.help-void,
+body.help-mode.help-void * {
+  cursor: not-allowed !important;
+}
+
 body.help-mode [data-help-window],
 body.help-mode [data-help-window] *,
 body.help-mode [data-help-exempt],

@@ -123,9 +123,13 @@ export function InteractiveHelp({ onExit }: { onExit: () => void }) {
       const under = elementAt(event.clientX, event.clientY, document.elementFromPoint(event.clientX, event.clientY));
       if (!under || under.closest(EXEMPT)) {
         setHover(null);
+        document.body.classList.remove("help-void");
         return;
       }
-      setHover(resolveHelpTarget(under)?.element ?? null);
+      const target = resolveHelpTarget(under);
+      setHover(target?.element ?? null);
+      // Where the help has nothing to say, the pointer shows it before a click is wasted (#424).
+      document.body.classList.toggle("help-void", !target);
     };
 
     const keys = (event: KeyboardEvent) => {
@@ -151,7 +155,7 @@ export function InteractiveHelp({ onExit }: { onExit: () => void }) {
     window.addEventListener("pointermove", hover, { capture: true, passive: true });
     window.addEventListener("keydown", keys, true);
     return () => {
-      document.body.classList.remove("help-mode");
+      document.body.classList.remove("help-mode", "help-void");
       setHover(null);
       BLOCKED_POINTER_EVENTS.forEach((type) => window.removeEventListener(type, block, options));
       BLOCKED_TOUCH_EVENTS.forEach((type) => window.removeEventListener(type, block, options));

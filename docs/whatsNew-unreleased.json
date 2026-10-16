@@ -28,5 +28,15 @@
       "de": "Auf Französisch hieß das Gewinde „Sujet“ und die Mutter „Noix“, der Keil „Coin“. Sie heißen jetzt „Filetage“, „Écrou“ und „Prisme triangulaire“, dazu „Anneau“, „Moletage“, „Ellipse“ und „Cœur“.",
       "en": "In French the thread was called \"Sujet\", the nut \"Noix\" and the wedge \"Coin\". They are now \"Filetage\", \"Écrou\" and \"Prisme triangulaire\", and also \"Anneau\", \"Moletage\", \"Ellipse\" and \"Cœur\"."
     }
+  },
+  {
+    "title": {
+      "de": "Hilfe-Modus: der Zeiger zeigt, wo es keine Hilfe gibt",
+      "en": "Help mode: the pointer shows where there is no help"
+    },
+    "body": {
+      "de": "Im Hilfe-Modus wird der Mauszeiger über Stellen, zu denen die Anleitung nichts sagt, zum Verbotszeichen statt zum Fragezeichen, etwa über leeren Flächen der Menüleiste. So spart man sich Klicks ins Leere.",
+      "en": "In the help mode the pointer turns into the \"not allowed\" sign instead of the question mark over places the guide has nothing about, such as the empty parts of the ribbon. That saves clicks into the void."
+    }
   }
 ]
