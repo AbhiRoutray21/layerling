@@ -16368,3 +16368,96 @@ html[data-theme="dark"] .top-action-body .icon-tag-ok {
   background: #cf6a12;
   border-color: #b45a0c;
 }
+
+/* Interactive Help (#424): while it is on the pointer is a question mark and whatever has a name
+   under it is outlined; a click asks the guide about it. The window is a tool panel of its own,
+   at the left edge so it stands beside the tool panels at the right, and above every dialog. */
+body.help-mode,
+body.help-mode * {
+  cursor: help !important;
+}
+
+body.help-mode [data-help-window],
+body.help-mode [data-help-window] *,
+body.help-mode [data-help-exempt],
+body.help-mode [data-help-exempt] * {
+  cursor: auto !important;
+}
+
+body.help-mode [data-help-window] a,
+body.help-mode [data-help-window] button,
+body.help-mode [data-help-exempt],
+body.help-mode [data-help-exempt] * {
+  cursor: pointer !important;
+}
+
+[data-help-hover] {
+  outline: 2px solid #1a73c9 !important;
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+
+html[data-theme="dark"] [data-help-hover] {
+  outline-color: #6db3ff !important;
+}
+
+.action-buttons .action-icon-button.active {
+  background: rgba(204, 112, 17, 0.16);
+  box-shadow: inset 0 0 0 1px #cc7011;
+}
+
+.interactive-help-window {
+  top: calc(var(--editor-toolbar-height) + 14px);
+  right: auto;
+  left: 84px;
+  z-index: 260;
+  width: min(360px, calc(100vw - 28px));
+}
+
+.interactive-help-note,
+.interactive-help-answer p {
+  margin: 10px 0 0;
+  font-size: 12.5px;
+  line-height: 1.45;
+}
+
+.interactive-help-answer,
+.interactive-help-more {
+  margin-top: 10px;
+}
+
+.interactive-help-answer small,
+.interactive-help-more small {
+  display: block;
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  opacity: 0.72;
+}
+
+.interactive-help-more ul {
+  margin: 4px 0 0;
+  padding-left: 17px;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.interactive-help-window a:not(.primary):not(.secondary):not(.guide-help-link) {
+  color: #8a4b0a;
+}
+
+html[data-theme="dark"] .interactive-help-window a:not(.primary):not(.secondary):not(.guide-help-link) {
+  color: #f0b565;
+}
+
+.edge-modifier-footer a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 0 11px;
+  border: 1px solid #d8c8b7;
+  border-radius: 7px;
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: none;
+}

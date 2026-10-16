@@ -43,6 +43,7 @@ export const COMMAND_KEYWORDS: Readonly<Record<string, readonly string[]>> = {
   import: ["import", "open", "load", "stl", "3mf", "obj", "step", "svg", "oeffnen", "öffnen", "laden"],
   export: ["export", "save", "download", "print", "stl", "3mf", "step", "speichern", "drucken", "lyl", "drawing", "pdf", "zeichnung", "plan"],
   settings: ["settings", "options", "units", "grid", "einstellungen", "optionen", "einheit", "mm", "zoll"],
+  "interactive-help": ["help", "interactive", "what is this", "explain", "question mark", "hilfe", "interaktiv", "was ist das", "erklaeren", "erklären", "fragezeichen"],
   guide: ["guide", "help", "manual", "tutorial", "anleitung", "hilfe", "kurzanleitung"],
   shortcuts: ["shortcuts", "keys", "keyboard", "tastenkuerzel", "tastenkürzel", "tastatur", "hotkeys"],
   "mode-geometry": ["3d", "editor", "geometry", "bodies", "koerper", "körper"],

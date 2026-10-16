@@ -7770,6 +7770,32 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .top-action-body .icon-
   border-color: #b45a0c;
 }
 
+:where(html[data-theme="dark"][data-palette="graphite"]) [data-help-hover] {
+  outline: 2px solid #1a73c9 !important;
+}
+
+html[data-theme="dark"]:where([data-palette="graphite"]) [data-help-hover] {
+  outline-color: #6db3ff !important;
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .action-buttons .action-icon-button.active {
+  background: rgba(204, 112, 17, 0.16);
+  box-shadow: inset 0 0 0 1px #cc7011;
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .interactive-help-window a:not(.primary):not(.secondary):not(.guide-help-link) {
+  color: #8a4b0a;
+}
+
+html[data-theme="dark"]:where([data-palette="graphite"]) .interactive-help-window a:not(.primary):not(.secondary):not(.guide-help-link) {
+  color: #f0b565;
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .edge-modifier-footer a {
+  border: 1px solid #c8c8c8;
+  text-decoration: none;
+}
+
 :where(html[data-theme="dark"][data-palette="graphite"]) .toolbar-section-tools,
 :where(html[data-theme="dark"][data-palette="graphite"]) .toolbar-section .action-buttons {
   background: var(--toolbar-tile);
