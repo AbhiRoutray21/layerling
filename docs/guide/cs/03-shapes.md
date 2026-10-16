@@ -86,7 +86,7 @@ Vedle číselných polí jsou úchyty přímo na tvaru:
 - **Rohy a hrany** mění velikost. [[Shift]] při tažení rohu zachovává poměr šířky, hloubky a výšky, [[Alt]] mění velikost vůči středu místo protějšího rohu. Bez držení klávesy zapněte {{ui:inspector.keepProportions}}. Rohy pak zachovávají poměry vždy a zadání jednoho rozměru přepočítá zbývající. Volba se pamatuje.
 - **Horní šipka** mění výšku, **prostřední úchyt** zvedá nebo spouští celé těleso.
 - **Obloukové šipky** otáčejí.
-- **Čísla** vedle tělesa umožňují přímé zadání. [[Enter]] mění rozměr od protějšího okraje jako tažení; [[Alt]]+[[Enter]] souměrně vůči středu, aby se zachovalo zarovnání. Platí pro délku a šířku. Výška roste vždy od spodní strany vzhůru. Pravý panel zachovává střed i bez klávesy.
+- **Čísla** vedle tělesa umožňují přímé zadání. [[Enter]] mění rozměr od protějšího okraje jako tažení; [[Alt]]+[[Enter]] souměrně vůči středu, aby se zachovalo zarovnání. Platí pro délku a šířku. Výška roste vždy od spodní strany vzhůru. Pravý panel zachovává střed i bez klávesy. [[Tab]] převezme číslo a otevře další pole (šířka, hloubka, výška); [[Shift]]+[[Tab]] jde zpět.
 - **Kliknutí na roh bez tažení** otevře šířku a hloubku společně. Zadejte první, [[Tab]] přejděte na druhou a [[Enter]] potvrďte obě. [[Esc]] zruší změnu.
 
 Po natočení o pravý úhel, například položením přes {{ui:editor.tool.layFlat}}, odpovídají názvy rozměrů jejich současným směrům: {{ui:prop.height}} jde vzhůru, {{ui:prop.width}} podél X a {{ui:prop.length}} podél Y. Změna výšky ležícího dílu proto upraví svislý rozměr a spodek zůstane na podložce. U jiných úhlů panel ukazuje vlastní rozměry tělesa a doplní vysvětlení.

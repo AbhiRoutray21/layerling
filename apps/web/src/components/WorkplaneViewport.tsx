@@ -5905,6 +5905,25 @@ export function WorkplaneViewport({
     setPinnedMeasureKey(null);
   }, [applyTypedSelectionSize, dimensionPatchFor, editingDimension, onInteractionActiveChange, onUpdateShape]);
 
+  /**
+   * Tab in a dimension box (#300): the value is kept and the next box opens - width, depth, height, and round
+   * again; Shift goes back. The next one opens when the body has its new size and the marks stand in their new
+   * places. A box of another kind (the height above the plate) just keeps its value.
+   */
+  const tabDimensionEdit = useCallback((backwards: boolean) => {
+    const order = ["width", "depth", "height"] as const;
+    const current = editingDimension?.axis;
+    const index = order.findIndex((axis) => axis === current);
+    commitDimensionEdit();
+    if (index < 0) return;
+    const next = order[(index + (backwards ? order.length - 1 : 1)) % order.length];
+    window.setTimeout(() => {
+      const marks = Object.values(transformOverlayRef.current?.dimensions ?? {}).flat();
+      const mark = marks.find((entry) => entry.axis === next);
+      if (mark) beginDimensionEdit(mark);
+    }, 60);
+  }, [beginDimensionEdit, commitDimensionEdit, editingDimension?.axis]);
+
   // A click on a corner opens its width and depth together; Tab moves between them.
   const beginCornerEdit = useCallback((handleKey: string) => {
     if (suppressNextCornerEditRef.current) {
@@ -8859,6 +8878,7 @@ export function WorkplaneViewport({
               onCancelCornerEdit={cancelCornerEdit}
               onEditingDimensionChange={(value) => setEditingDimension((current) => (current ? { ...current, value } : current))}
               onCommitDimensionEdit={commitDimensionEdit}
+              onTabDimensionEdit={tabDimensionEdit}
               onCancelDimensionEdit={cancelDimensionEdit}
               onBeginRotationEdit={beginRotationEdit}
               onEditingRotationChange={(value) => setEditingRotation((current) => (current ? { ...current, value } : current))}

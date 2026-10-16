@@ -8,5 +8,15 @@
       "de": "Besteht eine Form aus mehreren losen Stücken, etwa ein STL aus getrennten Teilen oder ein Text aus einzelnen Buchstaben, findest du „Teile trennen“ jetzt auch im Menü, das sich mit einem Rechtsklick auf die Form öffnet.",
       "en": "If a shape is made of several loose pieces, such as an STL of separate parts or a text of single letters, you now find Separate Parts in the menu that opens with a right click on the shape too."
     }
+  },
+  {
+    "title": {
+      "de": "Tab springt durch die Maßfelder an der Form",
+      "en": "Tab moves through the dimension boxes on the shape"
+    },
+    "body": {
+      "de": "Klickst du ein Maß an der Form an und drückst Tab, übernimmt layerling die Zahl und öffnet das nächste Feld: Breite, Tiefe, Höhe. Umschalt+Tab geht zurück. Vorher sprang Tab auf die Eckgriffe.",
+      "en": "If you click a dimension on the shape and press Tab, layerling keeps the number and opens the next box: width, depth, height. Shift+Tab goes back. Before, Tab jumped to the corner handles."
+    }
   }
 ]
