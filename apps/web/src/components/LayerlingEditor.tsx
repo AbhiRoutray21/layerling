@@ -115,7 +115,8 @@ import { bedOverhangs, printerPresetById, shapeBedFootprint, type BedOverhang } 
 import { SplitPanel } from "./workplane/SplitPanel";
 import { NO_SPLIT_ROTATION, modelSplitPlane, snapSplitPositionToVertices, splitOrientationForNormal, splitAxisFromLabel, splitAxisLabel, splitRotationAxes, type SplitRotation } from "@/lib/modelSplit";
 import { GuideModal } from "./workplane/GuideModal";
-import { HistoryViewOverlay, historyStateNameSuffix } from "./workplane/HistoryViewOverlay";
+import { HistoryViewOverlay, formatHistoryStateTime, historyStateNameSuffix } from "./workplane/HistoryViewOverlay";
+import { broughtBackShapes, historyStateClockLabel, historyStatePartsTree } from "@/lib/historyRestore";
 import { ShortcutsModal } from "./workplane/ShortcutsModal";
 import { InteractiveHelp } from "./InteractiveHelp";
 import { CommandPalette, type PaletteCommand } from "./workplane/CommandPalette";
@@ -259,6 +260,7 @@ const HISTORY_VIEW_MCP_ACTIONS = new Set([
   "export_mesh",
   "capture_image",
   "set_history_view",
+  "restore_from_history",
   "clear_history",
 ]);
 
@@ -5580,6 +5582,61 @@ export function LayerlingEditor({
     });
   }, []);
 
+  /**
+   * The objects picked in the History view, to bring back into the design.
+   * Picking selects nothing in the design itself; moving to another state
+   * keeps what that state still holds.
+   */
+  const [historyViewPicked, setHistoryViewPicked] = useState<string[]>([]);
+  useEffect(() => {
+    setHistoryViewPicked((current) => {
+      if (!historyViewState) return current.length ? [] : current;
+      const kept = current.filter((id) => historyViewState.shapes.some((shape) => shape.id === id));
+      return kept.length === current.length ? current : kept;
+    });
+  }, [historyViewState]);
+  const pickInHistoryView = useCallback((id: string | null, toggle: boolean) => {
+    setHistoryViewPicked((current) => {
+      if (!id) return toggle ? current : [];
+      if (!toggle) return [id];
+      return current.includes(id) ? current.filter((entry) => entry !== id) : [...current, id];
+    });
+  }, []);
+  const historyViewPickOnly = useMemo(
+    () => (historyViewState ? { ids: historyViewPicked, onPick: pickInHistoryView } : null),
+    [historyViewPicked, historyViewState, pickInHistoryView],
+  );
+
+  /**
+   * Adds copies of objects from a state of the history to the design, as they
+   * were then and where they were then, as one step that Undo takes back. The
+   * History view closes first: it blocks every edit while it is open.
+   */
+  const bringBackFromHistory = useCallback((index: number, ids: readonly string[]) => {
+    const state = historyStateAt(historyRef.current, index);
+    if (!state) return [];
+    // Named after the time of the state, so they are easy to tell from the versions the design has now.
+    const clock = historyStateClockLabel(state.entry.at, editorLanguage);
+    const originals = broughtBackShapes(state.shapes, ids);
+    const copies = originals.map((copy) => (
+      clock ? { ...copy, name: t("historyView.copyName", { name: displayShapeName(copy), time: clock }) } : copy
+    ));
+    if (copies.length === 0) return [];
+    if (historyViewStateRef.current) {
+      setHistoryViewIndex(null);
+      setTopPanel(null);
+      // The view state follows on the next render; the step below must not wait for it.
+      historyViewStateRef.current = null;
+    }
+    const time = formatHistoryStateTime(state.entry.at, editorLanguage);
+    const values = { name: displayShapeName(originals[0]), count: copies.length, time: time ?? "", index: state.index + 1 };
+    const message = copies.length === 1
+      ? t(time ? "status.broughtBackOne" : "status.broughtBackOneNoTime", values)
+      : t(time ? "status.broughtBackMany" : "status.broughtBackManyNoTime", values);
+    commitShapes([...shapesRef.current, ...copies], copies.map((shape) => shape.id), message);
+    return copies;
+  }, [commitShapes, editorLanguage]);
+
   const createProjectFromHistoryState = useCallback(async () => {
     const view = historyViewStateRef.current;
     if (!view || historyProjectCreating) return;
@@ -8356,8 +8413,21 @@ export function LayerlingEditor({
           current: historyIndexRef.current,
           recordedAt: state.entry.at ?? null,
           shapeCount: state.shapes.length,
-          objects: state.shapes.map((shape) => ({ id: shape.id, name: shape.name, kind: shape.kind, x: shape.x, z: shape.z, width: shape.width, depth: shape.depth, height: shape.height, hidden: Boolean(shape.hidden) })),
+          objects: state.shapes.map((shape) => ({ id: shape.id, name: shape.name, kind: shape.kind, x: shape.x, z: shape.z, width: shape.width, depth: shape.depth, height: shape.height, hidden: Boolean(shape.hidden), ...historyStatePartsTree(shape) })),
         };
+      }
+
+      if (command.action === "restore_from_history") {
+        const entries = historyRef.current;
+        if (params.index === undefined) throw new Error("Give the index of the state to bring objects back from (layerling_set_history_view lists the states)");
+        const index = Math.round(mcpNumber(params.index, -1));
+        if (index < 0 || index >= entries.length) throw new Error(`There is no state ${index}; the history has states 0 to ${entries.length - 1}`);
+        const ids = Array.isArray(params.ids) ? params.ids.filter((id): id is string => typeof id === "string") : [];
+        if (ids.length === 0) throw new Error("Give the ids of the objects to bring back, as layerling_set_history_view lists them for that state");
+        if (projectInteractionActiveRef.current) throw new Error("Finish the current action before bringing objects back");
+        const copies = bringBackFromHistory(index, ids);
+        if (copies.length === 0) throw new Error(`State ${index} holds none of these objects: ${ids.join(", ")}`);
+        return { broughtBack: copies.map(mcpShapeSummary), states: historyRef.current.length, current: historyIndexRef.current };
       }
 
       if (command.action === "list_objects") {
@@ -11827,6 +11897,7 @@ export function LayerlingEditor({
           projectId={editorOpen ? projectId ?? null : null}
           shapes={historyViewState ? historyViewState.shapes : viewportShapes}
           selectedIds={historyViewState ? [] : selectedIds}
+          pickOnly={historyViewPickOnly}
           alignMode={alignMode}
           multiSelect={multiSelect}
           onMultiSelectEnd={endMultiSelect}
@@ -11950,6 +12021,8 @@ export function LayerlingEditor({
           objectCount={historyViewState.shapes.length}
           creating={historyProjectCreating}
           canCreateProject={Boolean(onCreateProjectFromState)}
+          pickedCount={historyViewPicked.length}
+          onBringBack={() => bringBackFromHistory(historyViewState.index, historyViewPicked)}
           onIndexChange={(index) => setHistoryViewIndex(Math.min(Math.max(0, index), Math.max(0, history.length - 1)))}
           onExport={() => setTopPanel((current) => (current === "export" ? null : "export"))}
           onCreateProject={() => void createProjectFromHistoryState()}
