@@ -58,5 +58,35 @@
       "de": "Die MCP-Anbindung kann jetzt auch das Modell als STL, 3MF oder OBJ schreiben, aus denselben Körpern wie das Exportfenster. Eine KI kann so einen Entwurf bauen und gleich die Druckdatei an einen Pfad auf dem Rechner legen lassen.",
       "en": "The MCP connection can now write the model as STL, 3MF or OBJ as well, from the same bodies as the export window. An AI can build a design and have the print file written straight to a path on the computer."
     }
+  },
+  {
+    "title": {
+      "de": "2D-Zeichnung glatter, runder Teile",
+      "en": "2D drawing of smooth, round parts"
+    },
+    "body": {
+      "de": "Die 2D-Zeichnung lehnte kleine Teile mit vielen gewölbten Flächen ab, weil sie zu viele Dreiecke hatten. Die Grenze liegt jetzt viermal so hoch, und die Meldung sagt, wie viele Dreiecke die Ansichten wirklich brauchen.",
+      "en": "The 2D drawing refused small parts with many curved faces because they had too many triangles. The limit is four times as high now, and the message says how many triangles the views really need."
+    }
+  },
+  {
+    "title": {
+      "de": "Gruppieren sagt, wenn nur zusammengelegt wurde",
+      "en": "Grouping says when parts were only laid together"
+    },
+    "body": {
+      "de": "Über der Dreiecksgrenze werden importierte Körper beim Gruppieren nicht verschmolzen, sondern nur zusammengelegt, und ein Slicer meldet dann Kanten, die nicht in Ordnung sind. Die Statuszeile sagt das jetzt mit der Dreieckszahl und der Grenze.",
+      "en": "Above the triangle limit, grouping imported bodies does not merge them but only lays them together, and a slicer then reports faulty edges. The status line now says so, with the triangle count and the limit."
+    }
+  },
+  {
+    "title": {
+      "de": "Bild mit durchsichtigem Rand wird als Figur nachgezeichnet",
+      "en": "A picture with a transparent edge is traced as its figure"
+    },
+    "body": {
+      "de": "Ein schwarzer Aufkleber auf durchsichtigem Grund kam als lose Einzelteile an statt als eine Umrisslinie. Ist der Rand des Bildes überwiegend durchsichtig, gilt jetzt das Durchsichtige als Hintergrund, und die Figur wird nachgezeichnet.",
+      "en": "A black sticker on a transparent background came in as loose pieces instead of one outline. When most of the edge of the picture is transparent, the transparency now counts as the background, and the figure is traced."
+    }
   }
 ]
