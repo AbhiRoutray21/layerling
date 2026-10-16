@@ -19,7 +19,7 @@ Wat de bibliotheek te bieden heeft:
 - **Buizen:** {{ui:shape.tube}} en {{ui:shape.bentTube}}, opgebouwd uit maximaal twaalf rechte stukken met bochten ertussen, en de {{ui:shape.loft}} van de ene omtrek naar de andere, bijvoorbeeld van vierkant naar rond.
 - **Decoratieve vormen:** {{ui:shape.star}}, {{ui:shape.heart}} en {{ui:shape.crescent}}.
 - **Belettering:** {{ui:shape.text}}, ook langs een cirkelboog. Meer in [Tekst](chapter:tekst).
-- **Mechanica:** {{ui:shape.thread}} (draadstang, schroef, moer en getapt gat), {{ui:shape.spring}}, {{ui:shape.gear}} en de {{ui:shape.knurl}} voor handgrepen. Meer in [Schroefdraad en mechanica](chapter:schroefdraad-en-mechanica).
+- **Mechanica:** {{ui:shape.thread}} (draadstang, schroef, moer en getapt gat), {{ui:shape.spring}}, {{ui:shape.gridfinity}}-bakken en -draagplaten, {{ui:shape.gear}} en de {{ui:shape.knurl}} voor handgrepen. Meer in [Schroefdraad en mechanica](chapter:schroefdraad-en-mechanica).
 - **Voor constructies:** het in één keer te printen {{ui:shape.hinge}}, {{ui:shape.dovetail}}, het {{ui:shape.teardrop}} voor horizontale gaten, de {{ui:shape.counterbore}} en {{ui:shape.countersink}} voor schroefkoppen en de {{ui:shape.ruler}}, die alleen een meetinstrument is en nooit in een export terechtkomt.
 
 Een driehoek krijg je op twee manieren: de {{ui:shape.polygon}} met drie zijden is een gelijkbenige driehoek, het "Roof" van Tinkercad, en de {{ui:shape.wedge}} is een rechthoekige driehoek. Beide zijn echte driehoekige prisma's. Voor een driehoekig gat kopieer je de vorm, maak je de kopie kleiner, markeer je hem als gat en lijn je hem uit met {{ui:editor.tool.centerOnWorkplane}} of {{ui:editor.tool.align}}. Beide werken met de omhullende doos van de vorm, de kleinste doos waar hij in past, dus een gehalveerd vierkant telt nog steeds als een heel vierkant. Opdrachten zoeken ([[Ctrl]]+[[K]]) vindt beide vormen ook onder "driehoek" of "dak".
@@ -44,7 +44,7 @@ De instellingen zijn vastgezet aan de rechterrand. Zitten ze in de weg, sleep ze
 
 ![Een groep van een oranje blok, een blauwe pen en een gat, gesneden tot één lichaam. Met Meerkleurig aan blijft de pen blauw, het blok oranje, en de wanden van het gat krijgen de kleur van het blok.](shot:group-multicolor)
 
-Taps maken en tordieren werken op bijna elke vorm. Alleen het tandwiel, de schroefdraad, de veer, de kartel, het scharnier, de piramide, de gebogen buis, het druppelgat, de schroefkopfrezen en de liniaal doen niet mee: die hebben eigen vaste maten of, zoals de piramide, al een eigen top.
+Taps maken en tordieren werken op bijna elke vorm. Alleen het tandwiel, de schroefdraad, de veer, Gridfinity, de kartel, het scharnier, de piramide, de gebogen buis, het druppelgat, de schroefkopfrezen en de liniaal doen niet mee: die hebben eigen vaste maten of, zoals de piramide, al een eigen top.
 
 ![Een kegel waarvan de bovenstraal en de hoogte zijn veranderd: een klein pijltje naast elk zet de waarde terug, en de twee knoppen onderaan bewaren of herstellen de standaardwaarden van de vorm.](shot:property-reset)
 

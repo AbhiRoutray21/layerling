@@ -38,5 +38,15 @@
       "de": "Wer einen Körper verschiebt oder an einem Anfasser zieht und dabei Esc drückt, nimmt das Ziehen sofort zurück: Alles steht wieder wie vorher, im Verlauf kommt kein Schritt dazu und die Auswahl bleibt. Vorher musste man die Änderung rückgängig machen.",
       "en": "If you move a body or pull a handle and press Esc while still holding the mouse button, the drag is taken back at once: everything stands as before, no step is added to the history and the selection stays. Before, you had to undo the change."
     }
+  },
+  {
+    "title": {
+      "de": "Gridfinity: Behälter und Bodenplatten",
+      "en": "Gridfinity bins and baseplates"
+    },
+    "body": {
+      "de": "Die neue Form „Gridfinity“ in der Formenbibliothek baut Behälter und Bodenplatten für das offene Aufbewahrungssystem im Raster von 42 mm: Einheiten in Breite, Tiefe und Höhe, Stapelrand und Magnetlöcher nach Wunsch. Die Maße folgen der Spezifikation, so passen die Teile zu Behältern und Bodenplatten aus anderen Generatoren.",
+      "en": "The new shape \"Gridfinity\" in the shape library makes bins and baseplates for the open storage system on a 42 mm grid: units across, deep and high, the stacking lip and magnet holes if you like. The measures follow the specification, so the parts fit bins and baseplates made with other generators."
+    }
   }
 ]

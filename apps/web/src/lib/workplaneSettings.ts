@@ -243,7 +243,7 @@ export function snapGridForUnits(units: string, snap: GridSize): GridSize {
 }
 const customizableShapeKinds: ShapeKind[] = [
   "box", "roundedBox", "cylinder", "slot", "ellipse", "sphere", "sketch", "scribble", "cone", "pyramid", "roof", "text", "roundRoof",
-  "halfSphere", "torus", "tube", "bentTube", "star", "heart", "crescent", "gear", "honeycomb", "hinge", "knurl", "dovetail", "counterbore", "countersink", "doubleCountersink", "teardrop", "loft", "thread", "spring", "ring", "wedge", "polygon", "icosahedron", "ruler", "mesh",
+  "halfSphere", "torus", "tube", "bentTube", "star", "heart", "crescent", "gear", "honeycomb", "hinge", "knurl", "dovetail", "counterbore", "countersink", "doubleCountersink", "teardrop", "loft", "thread", "spring", "gridfinity", "ring", "wedge", "polygon", "icosahedron", "ruler", "mesh",
 ];
 
 function numberOrDefault(value: unknown, fallback: number) {
@@ -364,6 +364,11 @@ export function normalizeShapeCustomizations(value: unknown, fallback: ShapeCust
       entry.hingePinDiameter = optionalShapeNumber(source.hingePinDiameter, fallbackEntry?.hingePinDiameter, 0.2, MAX_CUSTOM_SHAPE_DIMENSION);
       entry.hingeLeafThickness = optionalShapeNumber(source.hingeLeafThickness, fallbackEntry?.hingeLeafThickness, 0.1, MAX_CUSTOM_SHAPE_DIMENSION);
       entry.hingeClearance = optionalShapeNumber(source.hingeClearance, fallbackEntry?.hingeClearance, 0.1, 1);
+    }
+    if (kind === "gridfinity") {
+      entry.gridfinityType = source.gridfinityType === "bin" || source.gridfinityType === "baseplate" ? source.gridfinityType : fallbackEntry?.gridfinityType;
+      entry.gridfinityLip = typeof source.gridfinityLip === "boolean" ? source.gridfinityLip : fallbackEntry?.gridfinityLip;
+      entry.gridfinityMagnets = typeof source.gridfinityMagnets === "boolean" ? source.gridfinityMagnets : fallbackEntry?.gridfinityMagnets;
     }
     if (kind === "knurl") {
       entry.knurlPattern = source.knurlPattern === "straight" || source.knurlPattern === "diamond" || source.knurlPattern === "round" ? source.knurlPattern : fallbackEntry?.knurlPattern;

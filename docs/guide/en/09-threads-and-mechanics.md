@@ -113,6 +113,15 @@ The {{ui:shape.loft}} joins one outline at the bottom to another at the top, lik
 
 The loft is an exact body, twisted and tilted too: its edges can be chamfered and filleted, and STEP export keeps it. Add a flange with screw holes as usual and group them.
 
+## Gridfinity
+
+The {{ui:shape.gridfinity}} shape makes parts for the open storage system by Zack Freedman: bins on a 42 mm grid that stand in a baseplate and stack on one another. The measures follow the published Gridfinity specification, so a bin from layerling fits a baseplate made with another generator, and the other way round. Under {{ui:prop.gridfinityType}} you choose:
+
+- **{{ui:gridfinity.bin}}:** a bin with a foot under every grid unit. {{ui:prop.gridfinityUnitsX}} and {{ui:prop.gridfinityUnitsZ}} count grid units of 42 mm (a bin is 0.5 mm smaller, 41.5 mm for one unit); {{ui:prop.gridfinityUnitsY}} counts height units of 7 mm, up to 20. The {{ui:prop.gridfinityLip}} on top of the wall holds the feet of the next bin and makes the bin 4.4 mm taller: a bin of 3 units with the lip is 25.4 mm tall. With {{ui:prop.gridfinityMagnets}} every foot gets a hole for a 6 × 2 mm magnet in each corner.
+- **{{ui:gridfinity.baseplate}}:** the plate the bins stand in, 5 mm tall, with a socket for every grid unit. It is an open frame with no floor and no magnet holes.
+
+The size is always whole grid units, up to 6 × 6 (252 mm, which fits a 256 mm print bed); a drag on a handle snaps to the nearest unit. The wall (0.95 mm), the floor (1.2 mm) and the depth of the magnet holes (2.4 mm) are not in the specification and are fixed; the specification's M3 screw holes are not made. The top of the lip is sharp, as the specification draws it; if your printer leaves it ragged, round or chamfer it with the edge tool. Bin and baseplate are exact bodies, so fillet, chamfer and the STEP export work on them. To divide a bin, group thin boxes into it as walls: stand them on the floor, 5.95 mm up, and on a bin with the lip keep their top at least 0.5 mm below 7 mm per height unit, measured from the underside of the bin (20.5 mm for 3 units), because the feet of the next bin reach 0.35 mm down into the bin. Print bins and baseplates without supports, standing as they are on the print bed.
+
 ## Hinge
 
 The {{ui:shape.hinge}} prints in one piece and moves afterwards (print-in-place): two leaves lying open flat on the plate, with alternating knuckles on one axis between them. The pin belongs to the back leaf and runs with play through the knuckles of the front one. You set the {{ui:prop.hingeLength}}, the {{ui:prop.hingeOpenWidth}} and the {{ui:prop.hingeKnuckleDiameter}}, plus the number of {{ui:prop.hingeKnuckles}} (odd, so the pin is held at both ends), the {{ui:prop.hingePinDiameter}} and the {{ui:prop.hingeLeafThickness}}.

@@ -1,6 +1,7 @@
 import { createLocalId } from "@/lib/localIds";
 import { fieldFormulasEqual } from "@/lib/fieldFormulas";
 import { threadFootprintPatch } from "@/lib/threadGeometry";
+import { gridfinityFootprintPatch } from "@/lib/gridfinityGeometry";
 import { MCP_SHAPE_SETTING_KEYS } from "@/lib/mcpShapeSettings";
 import { bentTubeSegmentsEqual } from "@/lib/bentTubeGeometry";
 import type { SketchStroke, WorkplaneShape } from "@/types/layerling";
@@ -126,7 +127,7 @@ export function shapeTaperDimensions(shape: WorkplaneShape) {
  * Wabe und Schwalbenschwanz sie an. Die Liste steht hier, damit das Merkmalsfeld, die
  * Vorschau und die MCP-Bruecke nicht je ihre eigene fuehren.
  */
-const SHAPES_WITHOUT_TAPER = new Set<WorkplaneShape["kind"]>(["gear", "thread", "spring", "pyramid", "ruler", "hinge", "knurl", "counterbore", "countersink", "doubleCountersink", "teardrop", "bentTube", "loft"]);
+const SHAPES_WITHOUT_TAPER = new Set<WorkplaneShape["kind"]>(["gear", "thread", "spring", "pyramid", "ruler", "hinge", "knurl", "counterbore", "countersink", "doubleCountersink", "teardrop", "bentTube", "loft", "gridfinity"]);
 
 export function shapeSupportsTaper(kind: WorkplaneShape["kind"]) {
   return !SHAPES_WITHOUT_TAPER.has(kind);
@@ -434,6 +435,12 @@ export function canonicalizeShape(shape: WorkplaneShape): WorkplaneShape {
     Object.assign(next, footprint);
     next.size = resizedShapeSize(footprint.width, footprint.depth);
   }
+  // A Gridfinity bin or baseplate is whole grid units, whatever set its box.
+  if (shape.kind === "gridfinity") {
+    const footprint = gridfinityFootprintPatch(next);
+    Object.assign(next, footprint);
+    next.size = resizedShapeSize(footprint.width, footprint.depth);
+  }
   // A cylinder's cross-section must always stay circular - width is
   // authoritative, depth follows. This is the single enforcement point: every
   // creation, edit and project load runs through canonicalizeShape.
@@ -563,6 +570,9 @@ export function workplaneShapesEqual(a: WorkplaneShape, b: WorkplaneShape) {
     a.hingePinDiameter === b.hingePinDiameter &&
     a.hingeLeafThickness === b.hingeLeafThickness &&
     a.hingeClearance === b.hingeClearance &&
+    a.gridfinityType === b.gridfinityType &&
+    a.gridfinityLip === b.gridfinityLip &&
+    a.gridfinityMagnets === b.gridfinityMagnets &&
     a.dovetailNeckWidth === b.dovetailNeckWidth &&
     a.dovetailClearance === b.dovetailClearance &&
     a.loftBottomOutline === b.loftBottomOutline &&

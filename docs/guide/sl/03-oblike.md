@@ -19,7 +19,7 @@ Kaj ponuja knjižnica:
 - **Cevi:** {{ui:shape.tube}} in {{ui:shape.bentTube}} iz do dvanajst ravnih kosov z ovinki vmes, poleg tega {{ui:shape.loft}} od enega obrisa do drugega, na primer od oglatega do okroglega.
 - **Okrasne oblike:** {{ui:shape.star}}, {{ui:shape.heart}} in {{ui:shape.crescent}}.
 - **Napisi:** {{ui:shape.text}}, tudi na krožnem loku. Več v poglavju [Besedilo](chapter:besedilo).
-- **Mehanika:** {{ui:shape.thread}} (navojna palica, vijak, matica in navojna luknja), {{ui:shape.spring}}, {{ui:shape.gear}} in {{ui:shape.knurl}} za ročaje. Več v poglavju [Navoji in mehanika](chapter:navoji-in-mehanika).
+- **Mehanika:** {{ui:shape.thread}} (navojna palica, vijak, matica in navojna luknja), {{ui:shape.spring}}, posode in podstavki {{ui:shape.gridfinity}}, {{ui:shape.gear}} in {{ui:shape.knurl}} za ročaje. Več v poglavju [Navoji in mehanika](chapter:navoji-in-mehanika).
 - **Za konstrukcije:** tiskljivi {{ui:shape.hinge}}, {{ui:shape.dovetail}}, {{ui:shape.teardrop}} za vodoravne luknje, {{ui:shape.counterbore}} in {{ui:shape.countersink}} za glave vijakov ter {{ui:shape.ruler}}, ki je samo merilno orodje in se v nobenem izvozu ne pojavi.
 
 Trikotnik dobiš na dva načina: {{ui:shape.polygon}} s tremi stranicami je enakokraki trikotnik, »streha« iz Tinkercada, {{ui:shape.wedge}} pa pravokotni. Oba sta prava trikotna prizma. Za trikotno luknjo oblike kopiraš, kopijo narediš manjšo, jo označiš kot luknjo in jo poravnaš z {{ui:editor.tool.centerOnWorkplane}} ali {{ui:editor.tool.align}}. Oboje dela z obdajajočo škatlo oblike, torej najmanjšim kvadrom, ki jo obdaja; razpolovljen kvadrat zato še vedno velja kot cel kvadrat. Z iskanjem ukazov ([[Ctrl]]+[[K]]) najdeš obe obliki tudi pod »trikotnik« ali »streha«.
@@ -45,7 +45,7 @@ Nastavitve so zasidrane ob desnem robu. Če kaj zakrivajo, jih povlečeš stran 
 
 ![Skupina iz oranžnega bloka, modrega čepa in luknje, izračunana v eno telo. Z Večbarvno ostane čep moder, blok oranžen, stene luknje pa prevzamejo barvo bloka.](shot:group-multicolor)
 
-Zožanje in zasuk imajo skoraj vse oblike. Samo zobnik, navoj, vzmet, narebričenje, tečaj, piramida, ukrivljena cev, kaplja, udirki in ravnilo ju nimajo: te oblike imajo svoje fiksne mere ali, kot piramida, že svojo zgornjo stran.
+Zožanje in zasuk imajo skoraj vse oblike. Samo zobnik, navoj, vzmet, Gridfinity, narebričenje, tečaj, piramida, ukrivljena cev, kaplja, udirki in ravnilo ju nimajo: te oblike imajo svoje fiksne mere ali, kot piramida, že svojo zgornjo stran.
 
 ![Stožec, pri katerem sta bila spremenjena polmer zgoraj in višina: majhna puščica ob vsaki vrednosti jo vrne nazaj, spodnja gumba pa shranita ali ponastavita privzete vrednosti oblike.](shot:property-reset)
 

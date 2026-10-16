@@ -14,6 +14,7 @@ import { createSlotGeometry } from "@/lib/slotGeometry";
 import { createDovetailGeometry } from "@/lib/dovetailGeometry";
 import { createLoftGeometry } from "@/lib/loftGeometry";
 import { createHingeGeometry } from "@/lib/hingeGeometry";
+import { createGridfinityGeometry } from "@/lib/gridfinityGeometry";
 import { createKnurlGeometry } from "@/lib/knurlGeometry";
 import { createTeardropGeometry } from "@/lib/teardropGeometry";
 import { createScrewHoleGeometry } from "@/lib/screwHoleGeometry";
@@ -471,6 +472,9 @@ function geometryMeshForShape(shape: WorkplaneShape): MeshData | null {
         hingeClearance: shape.hingeClearance,
         sides: shape.sides,
       });
+      break;
+    case "gridfinity":
+      geometry = createGridfinityGeometry({ width, depth, height, gridfinityType: shape.gridfinityType, gridfinityLip: shape.gridfinityLip, gridfinityMagnets: shape.gridfinityMagnets });
       break;
     case "loft":
       geometry = createLoftGeometry({ ...shape, width, depth, height });

@@ -170,7 +170,7 @@ type ShapeSpecialNumberKey = "steps" | "sides" | "bevel" | "segments" | "topRadi
   | "loftBottomWidth" | "loftBottomDepth" | "loftTopWidth" | "loftTopDepth" | "loftWall";
 type ShapeSpecialField =
   | { type: "number"; key: ShapeSpecialNumberKey; label: string; defaultValue: number; min: number; max: number; step?: number; unit?: string }
-  | { type: "select"; key: "font" | "gearType" | "gearProfile" | "threadRole" | "threadHead" | "threadHand" | "threadProfile" | "springHand" | "bentTubeProfile" | "bentTubeInnerProfile" | "knurlPattern" | "loftBottomOutline" | "loftTopOutline"; label: string; defaultValue: string; options: Array<{ value: string; label: string }> }
+  | { type: "select"; key: "font" | "gearType" | "gearProfile" | "threadRole" | "threadHead" | "threadHand" | "threadProfile" | "springHand" | "bentTubeProfile" | "bentTubeInnerProfile" | "knurlPattern" | "gridfinityType" | "loftBottomOutline" | "loftTopOutline"; label: string; defaultValue: string; options: Array<{ value: string; label: string }> }
   | { type: "text"; key: "text"; label: string; defaultValue: string; maxLength: number };
 
 function clamp(value: number, min: number, max: number) {
@@ -344,6 +344,12 @@ function specialFieldsForShape(
       { type: "number", key: "knurlDepth", label: t("prop.knurlDepth"), defaultValue: defaults.knurlDepth ?? 0.6, min: 0.1, max: Math.max(0.2, dimensions.width / 6), step: 0.05, unit: "mm" },
       { type: "number", key: "knurlAngle", label: t("prop.knurlAngle"), defaultValue: defaults.knurlAngle ?? 30, min: 10, max: 60, step: 1, unit: "°" },
       { type: "number", key: "knurlChamfer", label: t("prop.knurlChamfer"), defaultValue: defaults.knurlChamfer ?? 0.5, min: 0, max: Math.max(0.05, Math.min(dimensions.width / 4, dimensions.height / 2 - 0.05)), step: 0.05, unit: "mm" },
+    ];
+  }
+  if (kind === "gridfinity") {
+    // The lip and the magnet holes are switches, which this list has no field for; saving a bin as the default from its panel keeps them.
+    return [
+      { type: "select", key: "gridfinityType", label: t("prop.gridfinityType"), defaultValue: defaults.gridfinityType ?? "bin", options: [{ value: "bin", label: t("gridfinity.bin") }, { value: "baseplate", label: t("gridfinity.baseplate") }] },
     ];
   }
   if (kind === "hinge") {

@@ -19,7 +19,7 @@ Amit a tár kínál:
 - **Csövek:** {{ui:shape.tube}} és {{ui:shape.bentTube}}, ez utóbbi legfeljebb tizenkét egyenes darabból áll, köztük hajlításokkal, valamint az {{ui:shape.loft}}, amely egyik körvonalból a másikba vezet át, mondjuk négyzetből körbe.
 - **Díszítő alakzatok:** {{ui:shape.star}}, {{ui:shape.heart}} és {{ui:shape.crescent}}.
 - **Feliratok:** {{ui:shape.text}}, körív mentén is. Bővebben a [Szöveg](chapter:text) fejezetben.
-- **Mechanika:** {{ui:shape.thread}} (menetes szár, csavar, anya és menetes furat), {{ui:shape.spring}}, {{ui:shape.gear}} és a fogantyúkhoz való {{ui:shape.knurl}}. Bővebben a [Menetek és mechanika](chapter:threads-and-mechanics) fejezetben.
+- **Mechanika:** {{ui:shape.thread}} (menetes szár, csavar, anya és menetes furat), {{ui:shape.spring}}, {{ui:shape.gridfinity}}-rekeszek és -alapkeretek, {{ui:shape.gear}} és a fogantyúkhoz való {{ui:shape.knurl}}. Bővebben a [Menetek és mechanika](chapter:threads-and-mechanics) fejezetben.
 - **Szerkezetekhez:** az egyben nyomtatható {{ui:shape.hinge}}, a {{ui:shape.dovetail}}, a vízszintes lyukakhoz való {{ui:shape.teardrop}}, a csavarfejekhez való {{ui:shape.counterbore}} és {{ui:shape.countersink}}, valamint a {{ui:shape.ruler}}, amely csak mérőeszköz, és sosem kerül bele egy exportba.
 
 Háromszöget kétféleképpen kapsz: a háromoldalú {{ui:shape.polygon}} egyenlő szárú háromszög, a Tinkercad „Roof” (tető) alakzata, az {{ui:shape.wedge}} pedig derékszögű háromszög. Mindkettő valódi háromszög alapú hasáb. Háromszög alakú lyukhoz másold le az alakzatot, kisebbítsd a másolatot, jelöld lyuknak, és igazítsd a {{ui:editor.tool.centerOnWorkplane}} vagy az {{ui:editor.tool.align}} paranccsal. Mindkettő az alakzat befoglaló dobozával dolgozik, a legkisebb dobozzal, amely körülveszi, így egy félbevágott négyzet is egész négyzetnek számít. A parancskereső ([[Ctrl]]+[[K]]) mindkét alakzatot megtalálja a „háromszög” vagy a „tető” szóra is.
@@ -44,7 +44,7 @@ A beállítások a jobb szélhez rögzítve vannak. Ha eltakarnak valamit, amit 
 
 ![Egy narancssárga hasábból, egy kék csapból és egy lyukból álló csoport, egyetlen testté vágva. Bekapcsolt Többszínűvel a csap kék marad, a hasáb narancssárga, a lyuk falai pedig a hasáb színét kapják.](shot:group-multicolor)
 
-A kúposítás és a csavarás szinte minden alakzaton működik. Csak a fogaskerék, a menet, a rugó, a recézés, a zsanér, a gúla, a hajlított cső, a csepp alakú lyuk, a csavarfej-süllyesztők és a vonalzó maradnak ki: ezeknek saját, rögzített méreteik vannak, vagy – mint a gúlának – már saját tetejük.
+A kúposítás és a csavarás szinte minden alakzaton működik. Csak a fogaskerék, a menet, a rugó, a Gridfinity, a recézés, a zsanér, a gúla, a hajlított cső, a csepp alakú lyuk, a csavarfej-süllyesztők és a vonalzó maradnak ki: ezeknek saját, rögzített méreteik vannak, vagy – mint a gúlának – már saját tetejük.
 
 ![Egy kúp, amelynek a felső sugarát és a magasságát megváltoztatták: mindkettő mellett egy kis nyíl visszaveszi az értéket, az alul lévő két gomb pedig menti vagy visszaállítja az alakzat alapértékeit.](shot:property-reset)
 

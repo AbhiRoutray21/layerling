@@ -60,6 +60,7 @@ export const GUIDE_SECTIONS = {
   springs: { chapter: "threads", de: "federn", en: "springs", nl: "veren", ru: "pruzhiny", cs: "pruziny", sl: "vzmeti", hu: "rugok" },
   bentTubes: { chapter: "threads", de: "gebogene-rohre", en: "bent-tubes", nl: "gebogen-buizen", ru: "izognutye-truby", cs: "ohnute-trubky", sl: "ukrivljene-cevi", hu: "hajlitott-csoevek" },
   loft: { chapter: "threads", de: "uebergang", en: "loft", nl: "loft", ru: "perekhod", cs: "propojeni-profilu", sl: "prehod", hu: "atmenet" },
+  gridfinity: { chapter: "threads", de: "gridfinity", en: "gridfinity", nl: "gridfinity", ru: "gridfinity", cs: "gridfinity", sl: "gridfinity", hu: "gridfinity" },
   hinge: { chapter: "threads", de: "scharnier", en: "hinge", nl: "scharnier", ru: "petlya", cs: "pant", sl: "tecaj", hu: "zsaner" },
   knurl: { chapter: "threads", de: "raendelung", en: "knurling", nl: "kartel", ru: "nakatka", cs: "ryhovane-uchopy", sl: "narebricenje", hu: "recezes" },
   dovetail: { chapter: "threads", de: "schwalbenschwanz", en: "dovetail", nl: "zwaluwstaart", ru: "lastochkin-khvost", cs: "rybinovy-spoj", sl: "lastovicji-rep", hu: "fecskefark" },
@@ -155,6 +156,8 @@ export function guideSectionForShape(shape: GuideShape): GuideSection | undefine
     case "honeycomb":
       // No longer a shape of its own: the hole pattern tool took its place (#223).
       return "holePattern";
+    case "gridfinity":
+      return "gridfinity";
     case "hinge":
       return "hinge";
     case "knurl":
@@ -188,6 +191,7 @@ export function guideChapterForShape(shape: GuideShape): GuideChapter {
     case "gear":
     case "bentTube":
     case "loft":
+    case "gridfinity":
     case "hinge":
     case "knurl":
     case "dovetail":

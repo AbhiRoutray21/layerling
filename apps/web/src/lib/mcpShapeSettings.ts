@@ -35,6 +35,7 @@ export const MCP_SHAPE_SETTING_KEYS = [
   "heartTipFillet", "heartQuality",
   "crescentThickness", "crescentTipFillet", "crescentQuality",
   "hingeKnuckles", "hingePinDiameter", "hingeLeafThickness", "hingeClearance",
+  "gridfinityType", "gridfinityLip", "gridfinityMagnets",
   "knurlPattern", "knurlCount", "knurlDepth", "knurlAngle", "knurlChamfer",
   "dovetailNeckWidth", "dovetailClearance",
   "loftBottomOutline", "loftTopOutline", "loftBottomWidth", "loftBottomDepth", "loftTopWidth", "loftTopDepth", "loftBottomCorner", "loftTopCorner", "loftBottomSides", "loftTopSides", "loftOffsetX", "loftOffsetZ", "loftWall", "loftTwist", "loftTiltX", "loftTiltZ", "loftSmooth", "slotEndRatio",

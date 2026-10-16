@@ -113,6 +113,15 @@ Le {{ui:shape.loft}} joint un contour en bas à un autre en haut, comme un loft 
 
 Le lissage est un corps exact, également tordu et incliné : ses bords peuvent être chanfreinés et arrondis, et l'exportation STEP le conserve. Ajoutez une bride avec des trous de vis comme d'habitude et regroupez-les.
 
+## Gridfinity
+
+La forme {{ui:shape.gridfinity}} crée des pièces pour le système de rangement ouvert de Zack Freedman : des bacs sur une grille de 42 mm qui se posent dans un socle et s'empilent les uns sur les autres. Les mesures suivent la spécification Gridfinity publiée, donc un bac de layerling va dans un socle fait avec un autre générateur, et inversement. Sous {{ui:prop.gridfinityType}}, vous choisissez :
+
+- **{{ui:gridfinity.bin}} :** un bac avec un pied sous chaque unité de grille. {{ui:prop.gridfinityUnitsX}} et {{ui:prop.gridfinityUnitsZ}} comptent des unités de grille de 42 mm (un bac est plus petit de 0,5 mm, 41,5 mm pour une unité) ; chacune des {{ui:prop.gridfinityUnitsY}} mesure 7 mm, jusqu'à 20. Le {{ui:prop.gridfinityLip}} en haut de la paroi reçoit les pieds du bac suivant et rend le bac plus haut de 4,4 mm : un bac de 3 unités avec rebord mesure 25,4 mm de haut. Avec {{ui:prop.gridfinityMagnets}}, chaque pied reçoit dans chaque coin un trou pour un aimant de 6 × 2 mm.
+- **{{ui:gridfinity.baseplate}} :** le socle dans lequel se posent les bacs, 5 mm de haut, avec un logement pour chaque unité de grille. C'est un cadre ouvert, sans fond ni trous pour aimants.
+
+La taille est toujours un nombre entier d'unités de grille, jusqu'à 6 × 6 (252 mm, qui tient sur un plateau de 256 mm) ; une poignée tirée fait s'aligner la taille sur l'unité la plus proche. La paroi (0,95 mm), le fond (1,2 mm) et la profondeur des trous pour aimants (2,4 mm) ne figurent pas dans la spécification et sont fixes ; les trous de vis M3 de la spécification ne sont pas réalisés. Le haut du rebord est vif, comme le dessine la spécification ; si votre imprimante l'effiloche, arrondissez-le ou chanfreinez-le avec l'outil de bord. Bac et socle sont des corps exacts, donc congé, chanfrein et export STEP fonctionnent sur eux. Pour diviser un bac, groupez-y de fines boîtes comme cloisons : posez-les sur le fond, à 5,95 mm de hauteur, et, sur un bac avec rebord, gardez leur haut au moins 0,5 mm sous 7 mm par unité de hauteur, mesurés depuis le dessous du bac (20,5 mm pour 3 unités), car les pieds du bac suivant descendent de 0,35 mm dans le bac. Imprimez bacs et socles sans supports, posés tels qu'ils sont sur le plateau.
+
 ## Charnière
 
 La {{ui:shape.hinge}} s'imprime d'un seul tenant et se déplace ensuite (print-in-place) : deux feuilles posées ouvertes à plat sur la plaque, avec des jointures alternées sur un axe entre elles. La goupille appartient à la feuille arrière et traverse avec jeu les articulations de la feuille avant. Vous définissez le {{ui:prop.hingeLength}}, le {{ui:prop.hingeOpenWidth}} et le {{ui:prop.hingeKnuckleDiameter}}, plus le nombre de {{ui:prop.hingeKnuckles}} (impair, donc la broche est maintenue aux deux extrémités), le {{ui:prop.hingePinDiameter}} et le {{ui:prop.hingeLeafThickness}}.
