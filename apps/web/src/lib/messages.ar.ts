@@ -2018,6 +2018,8 @@ export const MESSAGES_AR: Partial<Record<MessageKey, string>> = {
   "workspace.doubleClickOpensSketch": "النقر المزدوج يفتح الرسم التخطيطي",
   "workspace.doubleClickOpensGroup": "النقر المزدوج يفتح مجموعة أو حزمة",
   "workspace.selectBeforeMoving": "التحديد قبل التحريك",
+  "workspace.frameByDirection": "اتجاه الإطار يحدد طريقة التحديد",
+  "workspace.frameByDirectionHint": "الإطار المسحوب إلى اليمين يحدد فقط ما يقع داخله بالكامل، والمسحوب إلى اليسار يحدد كل ما يلمسه (ويُرسم متقطعًا)، كما في SketchUp",
   "workspace.objectSnap": "الالتقاط إلى الأشكال الأخرى أثناء التحريك",
   "workspace.overhangAngle": "تعليم البروزات من {angle}°",
   "workspace.overhangStrict": "30° (بحذر)",
