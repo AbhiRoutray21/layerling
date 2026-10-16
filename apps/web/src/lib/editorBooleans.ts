@@ -2080,12 +2080,29 @@ export function openSurfaceEdgeCount(solids: WorkplaneShape[]) {
 /** The fallback cut ("hollow subtraction") takes the material away but does not cap the cut face. */
 const OPEN_CUT_ID = /^grouped-import-(?:rescue-)?hollow-cut/;
 
-export async function buildGroupedShapeFromSelection(groupable: WorkplaneShape[], triangleLimit: number): Promise<GroupBuildResult> {
-  const booleanSelection = expandGroupsForBoolean(groupable);
+/**
+ * A group of several colours that is brought into another group opens into its parts there, so the outer group can
+ * show each part in its colour (#418): a group made of a red and a white part, grouped with a hole, used to
+ * come out in one colour, as the outer group only knew the inner group as one body. A group of one colour, a hole,
+ * a bundle and a group that does not show its parts in their colours stay as they are.
+ */
+function withMulticolorGroupsOpened(selection: WorkplaneShape[]): WorkplaneShape[] {
+  return selection.flatMap((shape) => {
+    if (shape.hole || shape.groupOperation === "bundle" || !shape.groupedShapes?.length || !groupShowsPartColors(shape)) return [shape];
+    const parts = shape.groupedShapes.filter((part) => !part.hole && !part.hidden);
+    if (new Set(parts.map((part) => part.color)).size < 2) return [shape];
+    return restoreGroupedChildren(shape);
+  });
+}
+
+export async function buildGroupedShapeFromSelection(selected: WorkplaneShape[], triangleLimit: number): Promise<GroupBuildResult> {
+  // What the group carries as its parts; the cut itself is made from what was selected.
+  const groupable = withMulticolorGroupsOpened(selected);
+  const booleanSelection = expandGroupsForBoolean(selected);
   const hasSolid = booleanSelection.some((shape) => !shape.hole);
   const hasHole = booleanSelection.some((shape) => shape.hole);
   const hasImportedMesh = booleanSelection.some((shape) => Boolean(shape.importedMesh));
-  const boxBooleanSelection = hasSolid && hasHole ? expandGroupsForBoxBoolean(groupable) : [];
+  const boxBooleanSelection = hasSolid && hasHole ? expandGroupsForBoxBoolean(selected) : [];
   // Der Boolesche Kern rechnet auf der geflachten Auswahl, aber das Ergebnis
   // soll trotzdem die urspruenglichen, ungeflachten Formen als seine
   // "groupedShapes" tragen - sonst geht eine mitgebrachte Gruppe (z. B. vier
