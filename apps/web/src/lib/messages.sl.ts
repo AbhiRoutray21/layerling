@@ -1200,6 +1200,7 @@ export const MESSAGES_SL: Partial<Record<MessageKey, string>> = {
   "prop.topRadius": "Zgornji polmer",
   "prop.baseRadius": "Polmer osnove",
   "prop.thickness": "Debelina",
+  "prop.outerDiameter": "Zunanji premer",
   "prop.innerDiameter": "Notranji premer",
   "prop.toothSize": "Velikost zoba",
   "prop.toothWidth": "Širina zoba",

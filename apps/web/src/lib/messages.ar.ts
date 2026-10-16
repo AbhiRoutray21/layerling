@@ -1518,6 +1518,7 @@ export const MESSAGES_AR: Partial<Record<MessageKey, string>> = {
   "prop.topRadius": "نصف القطر العلوي",
   "prop.baseRadius": "نصف قطر القاعدة",
   "prop.thickness": "السمك",
+  "prop.outerDiameter": "القطر الخارجي",
   "prop.innerDiameter": "القطر الداخلي",
   "prop.toothSize": "حجم السن",
   "prop.toothWidth": "عرض السن",

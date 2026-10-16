@@ -1510,6 +1510,7 @@ export const MESSAGES_EN = {
   "prop.topRadius": "Top Radius",
   "prop.baseRadius": "Base Radius",
   "prop.thickness": "Thickness",
+  "prop.outerDiameter": "Outer diameter",
   "prop.innerDiameter": "Inner diameter",
   "prop.toothSize": "Tooth Size",
   "prop.toothWidth": "Tooth Width",

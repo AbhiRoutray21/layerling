@@ -207,6 +207,7 @@ import { canToggleGroupColors, groupShowsPartColors } from "@/lib/groupColors";
 import { shapePivotFromWorld, shapePivotWorld } from "@/lib/rotationPivot";
 import { signedDegrees } from "@/lib/geometryRotation";
 import { orientedMeasures, withOrientedMeasures } from "@/lib/orientedMeasures";
+import { tubeAfterInner, tubeAfterOuter, tubeInnerDiameter } from "@/lib/tubeDiameters";
 
 /**
  * Docked at the right edge, full height. Moved away, it floats: no longer
@@ -1212,6 +1213,38 @@ function getShapePropertiesWithAppLimits(shape: WorkplaneShape, onUpdate: ShapeI
     // seen from the other side: width minus twice the wall, so typing it sets the wall from the width.
     const wall = shape.bevel ?? 4;
     const wallLimit = Math.max(0.5, Math.min(width, depth) / 2 - 0.1);
+    if (Math.abs(width - depth) < 0.01) {
+      // A round tube has one outer diameter, and outer, inner and wall follow one another whatever is typed
+      // first (see tubeDiameters.ts); the two sides Length and Width only come back for an oval one.
+      const inner = tubeInnerDiameter(width, wall);
+      return [
+        ...roundSideProperties(shape, width, depth, onUpdate),
+        {
+          id: "outerDiameter",
+          label: t("prop.outerDiameter"),
+          value: width,
+          min: MIN_SHAPE_SIZE,
+          max: 160,
+          onChange: (outer) => {
+            const next = tubeAfterOuter(outer, inner);
+            onUpdate({ ...widthPatch(next.outer), depth: next.outer, size: resizedShapeSize(next.outer, next.outer), bevel: next.wall }, { resizeAxis: "width" });
+          },
+        },
+        {
+          id: "innerDiameter",
+          label: t("prop.innerDiameter"),
+          value: inner,
+          min: 0.2,
+          max: Math.max(0.2, width - 1),
+          onChange: (typed) => {
+            const next = tubeAfterInner(typed, width, wall);
+            onUpdate({ ...widthPatch(next.outer), depth: next.outer, size: resizedShapeSize(next.outer, next.outer), bevel: next.wall }, { resizeAxis: "width" });
+          },
+        },
+        { id: "thickness", label: t("prop.thickness"), value: wall, min: 0.5, max: 20, onChange: (bevel) => onUpdate({ bevel: clamp(bevel, 0.5, wallLimit) }) },
+        { id: "height", label: t("prop.height"), value: shape.height, min: MIN_SHAPE_SIZE, max: 160, onChange: setHeight },
+      ];
+    }
     return [
       ...roundSideProperties(shape, width, depth, onUpdate),
       { id: "thickness", label: t("prop.thickness"), value: wall, min: 0.5, max: 20, onChange: (bevel) => onUpdate({ bevel }) },
@@ -3787,7 +3820,7 @@ function RangeProperty({
     window.clearTimeout(sliderReleaseTimerRef.current);
     sliderReleaseTimerRef.current = window.setTimeout(() => { draggingSliderRef.current = false; }, 120);
   };
-  const allowsAboveSliderMax = ["length", "width", "height", "starOuterSize", "starInnerSize", "crescentThickness", "honeycombCellSize", "honeycombWallThickness", "honeycombFrameWidth", "bentTubeSize", "bentTubeBendRadius"].includes(id) || id.endsWith("Length") || id.endsWith("Width");
+  const allowsAboveSliderMax = ["length", "width", "height", "outerDiameter", "innerDiameter", "starOuterSize", "starInnerSize", "crescentThickness", "honeycombCellSize", "honeycombWallThickness", "honeycombFrameWidth", "bentTubeSize", "bentTubeBendRadius"].includes(id) || id.endsWith("Length") || id.endsWith("Width");
   const isLength = propertyUsesLengthUnit(id);
   const accuracy = workspace.accuracy;
   // A position can be typed beyond the slider, on both sides (#425).

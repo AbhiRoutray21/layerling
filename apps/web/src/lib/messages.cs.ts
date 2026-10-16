@@ -1530,6 +1530,7 @@ export const MESSAGES_CS: Record<MessageKey, string> = {
   "prop.topRadius": "Horní poloměr",
   "prop.baseRadius": "Poloměr základny",
   "prop.thickness": "Tloušťka",
+  "prop.outerDiameter": "Vnější průměr",
   "prop.innerDiameter": "Vnitřní průměr",
   "prop.toothSize": "Velikost zubu",
   "prop.toothWidth": "Šířka zubu",

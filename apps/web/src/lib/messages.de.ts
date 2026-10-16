@@ -1509,6 +1509,7 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "prop.topRadius": "Radius oben",
   "prop.baseRadius": "Radius unten",
   "prop.thickness": "Wandstärke",
+  "prop.outerDiameter": "Außen-Ø",
   "prop.innerDiameter": "Innen-Ø",
   "prop.toothSize": "Zahngröße",
   "prop.toothWidth": "Zahnbreite",

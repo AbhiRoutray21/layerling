@@ -1495,6 +1495,7 @@ export const MESSAGES_FR: Partial<Record<MessageKey, string>> = {
   "prop.topRadius": "Rayon supérieur",
   "prop.baseRadius": "Rayon de base",
   "prop.thickness": "Épaisseur",
+  "prop.outerDiameter": "Diam. extérieur",
   "prop.innerDiameter": "Diam. intérieur",
   "prop.toothSize": "Taille des dents",
   "prop.toothWidth": "Largeur des dents",

@@ -68,5 +68,15 @@
       "de": "Oberfläche und Anleitung gibt es jetzt auch auf Arabisch (العربية), und ein Browser in arabischer Sprache wählt sie von selbst. Die Anordnung ist noch nicht von rechts nach links gespiegelt, und ein zweiter Leser hat die Texte noch nicht geprüft.",
       "en": "The interface and the guide now come in Arabic (العربية), and a browser set to Arabic picks it by itself. The layout is not mirrored from right to left yet, and a second reader has not checked the texts."
     }
+  },
+  {
+    "title": {
+      "de": "Rohr und Ring: Außen-Ø, Innen-Ø und Wandstärke",
+      "en": "Tube and ring: outer, inner diameter and wall"
+    },
+    "body": {
+      "de": "Ein rundes Rohr oder ein Ring hat jetzt einen Außen-Ø neben Innen-Ø und Wandstärke. Je zwei davon ergeben das dritte, in beliebiger Reihenfolge der Eingabe; ein Innen-Ø, der nicht ins Rohr passt, lässt den Außen-Ø mitwachsen. Die Länge des Rohrs ist seine Höhe.",
+      "en": "A round tube or ring now has an outer diameter beside the inner diameter and the wall. Any two give the third, in whatever order you type them; an inner diameter that does not fit makes the outer one grow. The length of a tube is its height."
+    }
   }
 ]

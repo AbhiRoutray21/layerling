@@ -1502,6 +1502,7 @@ export const MESSAGES_RU: Partial<Record<MessageKey, string>> = {
   "prop.topRadius": "Радиус верха",
   "prop.baseRadius": "Радиус основания",
   "prop.thickness": "Толщина",
+  "prop.outerDiameter": "Внешн. диаметр",
   "prop.innerDiameter": "Внутр. диаметр",
   "prop.toothSize": "Размер зуба",
   "prop.toothWidth": "Ширина зуба",

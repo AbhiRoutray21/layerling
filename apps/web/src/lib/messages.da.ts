@@ -2425,6 +2425,7 @@ export const MESSAGES_DA: Partial<Record<MessageKey, string>> = {
   "notice.backupAllThere": "Alle {count} design fra {name} er allerede her, intet tilføjet.",
   "notice.backupAlreadyThere": "{count} var der allerede, ikke tilføjet igen.",
   "point.deleteAll": "Slet alle ({count})",
+  "prop.outerDiameter": "Udvendig diameter",
   "prop.innerDiameter": "Indvendig diameter",
   "prop.textStretch": "Stræk bogstaver til rammen",
   "ruler.occlude.off": "Lineal altid synlig (klik for at lade former skjule den)",

@@ -1480,6 +1480,7 @@ export const MESSAGES_HU: Partial<Record<MessageKey, string>> = {
   "prop.topRadius": "Felső sugár",
   "prop.baseRadius": "Alsó sugár",
   "prop.thickness": "Vastagság",
+  "prop.outerDiameter": "Külső átmérő",
   "prop.innerDiameter": "Belső átmérő",
   "prop.toothSize": "Fogméret",
   "prop.toothWidth": "Fogszélesség",

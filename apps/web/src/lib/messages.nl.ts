@@ -1509,6 +1509,7 @@ export const MESSAGES_NL: Record<MessageKey, string> = {
   "prop.topRadius": "Straal boven",
   "prop.baseRadius": "Straal onder",
   "prop.thickness": "Dikte",
+  "prop.outerDiameter": "Buitendiameter",
   "prop.innerDiameter": "Binnendiameter",
   "prop.toothSize": "Tandgrootte",
   "prop.toothWidth": "Tandbreedte",
