@@ -1,5 +1,70 @@
 [
   {
+    "version": "1.82.0",
+    "items": [
+      {
+        "title": {
+          "de": "Der Browser übersetzt layerling nicht mehr",
+          "en": "The browser no longer translates layerling"
+        },
+        "body": {
+          "de": "Ein deutscher Chrome übersetzte die installierte App und machte aus „Hell“ im Farbmenü „Hölle“. Die Seite sagt dem Browser jetzt, dass sie nicht übersetzt werden soll, denn layerling bringt seine Sprachen selbst mit.",
+          "en": "A German Chrome translated the installed app and turned \"Hell\" in the colour menu into \"Hölle\". The page now tells the browser not to translate it, as layerling brings its languages itself."
+        }
+      },
+      {
+        "title": {
+          "de": "Schalter für Millimeter und Zoll",
+          "en": "A switch for millimetres and inches"
+        },
+        "body": {
+          "de": "Neben dem Fangraster unten im Eigenschaftenfenster sitzt jetzt ein kleiner Schalter „mm | in“. Er wechselt die Einheit wie die Einstellungen: Das Raster der Platte und die Fangstufe ziehen mit, für diesen Entwurf.",
+          "en": "A small switch \"mm | in\" now sits beside the snap grid at the bottom of the properties window. It changes the unit as the settings do: the plate's grid and the snap step follow, for this design."
+        }
+      },
+      {
+        "title": {
+          "de": "Meldungen bleiben, bis man sie gelesen hat",
+          "en": "Messages stay until you have read them"
+        },
+        "body": {
+          "de": "Eine Meldung oben auf der Arbeitsfläche verschwand nach vier Sekunden, auch eine lange Fehlermeldung. Jetzt richtet sich die Zeit nach der Länge, die Meldung bleibt, solange der Mauszeiger auf ihr steht, und ein kleines Kreuz schließt sie sofort.",
+          "en": "A message at the top of the work area went after four seconds, even a long error message. Now the time follows the length, the message stays while the pointer rests on it, and a small cross closes it at once."
+        }
+      },
+      {
+        "title": {
+          "de": "Tablet: Griffe halten, langer Druck öffnet das Menü",
+          "en": "Tablet: handles hold, a long press opens the menu"
+        },
+        "body": {
+          "de": "Beim Ziehen an einem Griff mit dem Finger hört der Zug nicht mehr nach wenigen Pixeln auf, und die Griffe lassen sich auch ein Stück daneben fassen. Ein Finger, der eine halbe Sekunde auf einer Form oder auf der leeren Fläche ruht, öffnet das Menü eines Rechtsklicks, dort auch „Alles auswählen“.",
+          "en": "Dragging a handle with a finger no longer ends after a few pixels, and the handles can be caught from a little beside them. A finger held still for half a second on a shape or on empty space opens the menu of a right click, with “Select all” there."
+        }
+      },
+      {
+        "title": {
+          "de": "Senkrechte Kanten im Kantenwerkzeug",
+          "en": "Vertical edges in the edge tool"
+        },
+        "body": {
+          "de": "Neben „Alle scharfen Kanten“ und „Obere Kanten“ gibt es jetzt „Senkrechte Kanten“. Es wählt alle Kanten, die senkrecht stehen, etwa die Ecken eines Quaders, damit eine Verrundung oder Fase alle senkrechten Ecken auf einmal erfasst.",
+          "en": "Next to “All sharp edges” and “Top edges” there is “Vertical edges” now. It picks all edges that stand straight up, such as the corners of a box, so one fillet or chamfer takes all the vertical corners at once."
+        }
+      },
+      {
+        "title": {
+          "de": "Interaktive Hilfe: anklicken und nachlesen",
+          "en": "Interactive Help: click it and read about it"
+        },
+        "body": {
+          "de": "Ein Fragezeichen im Bereich Hilfe (oder Umschalt+F1) schaltet die Interaktive Hilfe ein: Ein Klick auf einen Knopf, ein Feld oder ein Fenster öffnet ein kleines Fenster mit dem passenden Stück der Anleitung und führt auf Wunsch genau dorthin. Mit Esc ist sie wieder aus.",
+          "en": "A question mark in the Help group (or Shift+F1) turns on Interactive Help: a click on a button, a field or a window opens a small window with the matching part of the guide and takes you straight there if you like. Esc turns it off again."
+        }
+      }
+    ]
+  },
+  {
     "version": "1.81.0",
     "items": [
       {
