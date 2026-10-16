@@ -165,6 +165,8 @@ export type ShapeCustomization = {
   hingeLeafThickness?: number;
   /** Hinge: gap in mm between the moving parts - around the pin, between knuckles and before the leaves. */
   hingeClearance?: number;
+  /** Hinge: no printed pin; the bore runs through every knuckle for a pin of one's own (filament, wire). */
+  hingePinless?: boolean;
   /** Gridfinity: a bin or the baseplate it stands in; the size counts grid units of 42 mm (height units of 7 mm). */
   gridfinityType?: GridfinityType;
   /** Gridfinity bin: the stacking lip on top of the wall; missing means on. */
@@ -646,6 +648,8 @@ export type WorkplaneShape = {
   hingeLeafThickness?: number;
   /** Hinge: gap in mm between the moving parts - around the pin, between knuckles and before the leaves. */
   hingeClearance?: number;
+  /** Hinge: no printed pin; the bore runs through every knuckle for a pin of one's own (filament, wire). */
+  hingePinless?: boolean;
   /** Gridfinity: a bin or the baseplate it stands in; the size counts grid units of 42 mm (height units of 7 mm). */
   gridfinityType?: GridfinityType;
   /** Gridfinity bin: the stacking lip on top of the wall; missing means on. */
