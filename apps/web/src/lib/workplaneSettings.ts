@@ -217,10 +217,20 @@ export function gridBlockForUnits(units: string, preset: string, size: number): 
 /**
  * The workspace in another unit system, as the unit field of the settings makes it: the plate's grid follows
  * (an inch preset with Imperial, a millimetre one otherwise) and the scale is one the system has (#422). The
- * snap step follows through `snapGridForUnits`.
+ * snap step follows through `snapGridForUnits`. The grid of the system left behind is remembered, so switching
+ * to inches and back brings "1 mm" back and not the usual 5 mm (#442).
  */
-export function workspaceForUnits<T extends Pick<WorkplaneWorkspaceSettings, "units" | "gridBlockPreset" | "gridBlockSize" | "scale">>(workspace: T, units: string): T {
-  const next = { ...workspace, units, ...gridBlockForUnits(units, workspace.gridBlockPreset, workspace.gridBlockSize) };
+export function workspaceForUnits<T extends Pick<WorkplaneWorkspaceSettings, "units" | "gridBlockPreset" | "gridBlockSize" | "scale"> & { gridBlockOtherUnits?: string }>(workspace: T, units: string): T {
+  if (units === workspace.units) return workspace;
+  const remembered = workspace.gridBlockOtherUnits;
+  const arrivingInInches = units === "Imperial";
+  const rememberedFits = remembered !== undefined && remembered !== "Custom" && (inchGridPresetMm(remembered) !== null) === arrivingInInches;
+  const grid = rememberedFits
+    ? { gridBlockPreset: remembered, gridBlockSize: inchGridPresetMm(remembered) ?? Number.parseFloat(remembered) }
+    : gridBlockForUnits(units, workspace.gridBlockPreset, workspace.gridBlockSize);
+  // A custom size goes with the user to the other system as it is, so only a preset is worth remembering.
+  const left = workspace.gridBlockPreset !== "Custom" ? workspace.gridBlockPreset : remembered;
+  const next = { ...workspace, units, ...grid, gridBlockOtherUnits: left };
   return { ...next, scale: normalizeScaleForUnits(next.units, next.scale) };
 }
 
@@ -607,6 +617,7 @@ export function normalizeWorkspaceSettings(value: unknown, fallback: WorkplaneWo
       stringOrDefault(candidate.gridBlockPreset, fallback.gridBlockPreset),
       numberOrDefault(candidate.gridBlockSize, fallback.gridBlockSize),
     ),
+    gridBlockOtherUnits: typeof candidate.gridBlockOtherUnits === "string" && candidate.gridBlockOtherUnits.trim() ? candidate.gridBlockOtherUnits : fallback.gridBlockOtherUnits,
     gridColor: migratedLegacyColor(colorOrDefault(candidate.gridColor, fallback.gridColor), LEGACY_GRID_COLOR, fallback.gridColor),
     gridMajorInterval: candidate.gridMajorInterval === 10 ? 10 : candidate.gridMajorInterval === 5 ? 5 : fallback.gridMajorInterval,
     gridMajorColor: candidate.gridMajorColor === "" ? "" : colorOrDefault(candidate.gridMajorColor, fallback.gridMajorColor),

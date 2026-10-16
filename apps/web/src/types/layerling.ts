@@ -241,6 +241,8 @@ export type WorkplaneWorkspaceSettings = {
   printer: string;
   gridBlockSize: number;
   gridBlockPreset: string;
+  /** The grid preset of the unit system left by the last switch between mm and in, so switching back finds it again (#442). */
+  gridBlockOtherUnits?: string;
   gridColor: string;
   /** Every how many grid steps a darker line is drawn on a millimetre grid: 5 or 10 (#143). */
   gridMajorInterval: number;

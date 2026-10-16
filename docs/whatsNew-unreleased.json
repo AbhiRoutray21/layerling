@@ -18,5 +18,15 @@
       "de": "Eine Gruppe aus einem roten und einem weißen Teil, die du danach mit einem Loch gruppiert hast, kam einfarbig heraus, und „Mehrfarbig“ schaltete nur zwischen den beiden Farben um. Jetzt öffnet sich eine Gruppe aus mehreren Farben beim Gruppieren in ihre Teile, und „Mehrfarbig“ zeigt beide Farben.",
       "en": "A group of a red and a white part that you then grouped with a hole came out in one colour, and Multicolor only switched between the two. Now a group of several colours opens into its parts when grouped, and Multicolor shows both colours."
     }
+  },
+  {
+    "title": {
+      "de": "Raster bleibt beim Wechsel mm/in",
+      "en": "The grid stays when you switch mm/in"
+    },
+    "body": {
+      "de": "Wer von Millimeter auf Zoll und zurück schaltete, bekam als Raster der Platte wieder 5 mm, auch wenn vorher 1 mm eingestellt war. Jetzt merkt sich layerling das Raster des Einheitensystems, das du verlässt, und stellt es beim Zurückschalten wieder her.",
+      "en": "Switching from millimetres to inches and back set the plate's grid to 5 mm again, even if it was 1 mm before. Now layerling remembers the grid of the unit system you leave and restores it when you switch back."
+    }
   }
 ]

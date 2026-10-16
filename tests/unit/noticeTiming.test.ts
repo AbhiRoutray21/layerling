@@ -33,6 +33,24 @@ describe("the unit switch beside the snap grid (#422)", () => {
     expect(back.gridBlockPreset).toBe(metric.gridBlockPreset);
   });
 
+  it("brings the grid back that was set before, after a trip to inches (#442)", () => {
+    const metric = { ...DEFAULT_WORKPLANE_WORKSPACE, gridBlockPreset: "1 mm", gridBlockSize: 1 };
+    const imperial = workspaceForUnits(metric, "Imperial");
+    expect(imperial.gridBlockPreset).not.toBe("1 mm");
+    const back = workspaceForUnits(imperial, "Metric (Default)");
+    expect(back.gridBlockPreset).toBe("1 mm");
+    expect(back.gridBlockSize).toBe(1);
+    // An inch grid is remembered the same way.
+    const again = workspaceForUnits({ ...back, gridBlockOtherUnits: imperial.gridBlockPreset }, "Imperial");
+    expect(again.gridBlockPreset).toBe(imperial.gridBlockPreset);
+    // A custom size is never lost, and the remembered preset is not overwritten by it.
+    const custom = workspaceForUnits({ ...metric, gridBlockPreset: "Custom", gridBlockSize: 12 }, "Imperial");
+    expect(custom.gridBlockSize).toBe(12);
+    expect(workspaceForUnits(custom, "Metric (Default)").gridBlockSize).toBe(12);
+    // The same unit system changes nothing.
+    expect(workspaceForUnits(metric, "Metric (Default)")).toBe(metric);
+  });
+
   it("gives the snap step one the unit system offers", () => {
     expect(snapGridForUnits("Imperial", "1.0 mm")).toBe("1/8 in");
     expect(snapGridForUnits("Metric (Default)", "1/8 in")).toBe("1.0 mm");
