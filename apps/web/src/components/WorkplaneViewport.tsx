@@ -107,6 +107,7 @@ import { sphereTessellation } from "@/lib/sphereTessellation";
 import { torusTessellation } from "@/lib/torusTessellation";
 import type { LayerlingMcpViewFace } from "@/lib/layerlingMcpProtocol";
 import { liftHandleScreenPoint } from "@/components/workplane/transformOverlayTypes";
+import { ownSideForMark } from "@/lib/dimensionSides";
 import {
   TransformOverlay,
   continuousSnappedWheelRotation,
@@ -5675,8 +5676,12 @@ export function WorkplaneViewport({
 
   // The patch a typed width, depth or height makes to a shape, or null when the
   // text is not a usable size. Shared by the single mark and the corner pair.
-  const dimensionSizePatchFor = useCallback((shape: WorkplaneShape, axis: "width" | "depth" | "height", text: string): Partial<WorkplaneShape> | null => {
+  const dimensionSizePatchFor = useCallback((shape: WorkplaneShape, markAxis: "width" | "depth" | "height", text: string): Partial<WorkplaneShape> | null => {
     const sizeFrame = selectionFrameForShapes([shape], [shape.id]);
+    // The mark counts along the workplane the box on screen was drawn in; the shape's fields along its own sides (#419).
+    const markFrame = selectionFrameForShapes([shape], [shape.id], placementWorkplaneRef.current);
+    const ownSide = markFrame && sizeFrame && markAxis !== "height" ? ownSideForMark(markFrame, sizeFrame, markAxis) : null;
+    const axis: "width" | "depth" | "height" = ownSide?.axis ?? markAxis;
     const currentExtent = axis === "width"
       ? sizeFrame?.width ?? shapeWidth(shape)
       : axis === "depth"
@@ -5684,10 +5689,14 @@ export function WorkplaneViewport({
         : sizeFrame?.height ?? shape.height;
     const value = resolveMeasureMm(text, currentExtent);
     if (!(Number.isFinite(value) && value > 0)) return null;
-    const isCornerRulerMidpoint = rulerCountsToMiddle(axis);
+    const isCornerRulerMidpoint = rulerCountsToMiddle(markAxis);
     const customLimit = workspaceRef.current.shapeCustomizations[shape.kind]?.maxDimension;
     const nextValue = Math.min(customLimit ?? Number.POSITIVE_INFINITY, Math.max(MIN_SHAPE_SIZE, value));
-    const anchor = isCornerRulerMidpoint ? null : lastResizeAnchorRef.current;
+    const rememberedAnchor = isCornerRulerMidpoint ? null : lastResizeAnchorRef.current;
+    // The held edge was pressed in the workplane's frame; the patch below reads it in the shape's own.
+    const anchor = rememberedAnchor && ownSide && rememberedAnchor.shapeId === shape.id
+      ? { ...rememberedAnchor, signs: ownSide.convertSigns(rememberedAnchor.signs) }
+      : rememberedAnchor;
     if (axis === "width") {
       const frame = sizeFrame;
       if (shapeHasTaper(shape) && frame) {

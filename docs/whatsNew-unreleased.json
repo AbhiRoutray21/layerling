@@ -18,5 +18,15 @@
       "de": "Ein großer Kreis oder eine lange Kurve in einer importierten SVG kam bisher mit sichtbaren Ecken an, weil jede Kurve in gleich wenige Stücke zerlegt wurde. Jetzt richtet sich die Zahl der Stücke nach der Länge der Kurve: Große Kreise werden rund, kleine Kurven bleiben so leicht wie zuvor. Eine Einstellung ist dafür nicht nötig.",
       "en": "A large circle or a long curve in an imported SVG used to arrive with visible corners, because every curve was cut into the same few pieces. Now the number of pieces follows the length of the curve: large circles come out round, and small curves stay as light as before. No setting is needed."
     }
+  },
+  {
+    "title": {
+      "de": "Maßzahl an gedrehten Körpern",
+      "en": "Edge numbers on turned bodies"
+    },
+    "body": {
+      "de": "Wenn ein Körper um 90° gedreht ist und die Arbeitsebene auf einer Fläche liegt, änderte die Zahl an der langen Kante die andere Seite. Jetzt ändert die Zahl an einer Kante die Seite, an der sie steht, und die festgehaltene Kante bleibt, wo sie war.",
+      "en": "When a body is turned by 90° and the workplane is on a face, the number on the long edge used to change the other side. Now the number on an edge changes the side it stands at, and the edge that was held stays where it was."
+    }
   }
 ]
