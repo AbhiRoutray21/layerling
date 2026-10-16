@@ -241,7 +241,7 @@ export const MESSAGES_EN = {
   "welcome.moreHistoryTitle": "History",
   "welcome.moreLookTitle": "Look as you like it",
   "welcome.moreLookBody": "Background and workplane, axis arrows for X, Y and Z, edge lines on every body, the sketch colours, and the contrast, the shadows and the direction of the light are yours to set in the settings - for example so dark bodies do not run into each other. On slower computers, fast mode turns everything costly off at once.",
-  "welcome.moreHistoryBody": "look back at any earlier state of the project with a slider, without changing anything - export that state or start a new project from it.",
+  "welcome.moreHistoryBody": "look back at any earlier state of the project with a slider, without changing anything - export that state, start a new project from it or bring single objects back from it.",
   "welcome.moreDrawingTitle": "Drawing for the workshop",
   "welcome.moreDrawingBody": "Export → Drawing: front, top and side views at 1:1 on an ISO sheet, with overall sizes, hidden edges and a table of the round bores – as PDF or SVG, to print or to take to the lathe and mill.",
   "welcome.moreSearchBody": "Press Ctrl+K and type the name of a tool, a shape or a command to jump straight to it - in English or German, with the keyboard shortcuts shown beside each one. The bodies of your design are found by name as well.",

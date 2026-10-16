@@ -240,7 +240,7 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "welcome.moreHistoryTitle": "Verlauf",
   "welcome.moreLookTitle": "Darstellung nach Wunsch",
   "welcome.moreLookBody": "Hintergrund und Arbeitsebene, Achsenpfeile für X, Y und Z, Kantenlinien an allen Körpern, die Farben der Skizze sowie Kontrast, Schatten und die Richtung des Lichts stellst du in den Einstellungen selbst ein - zum Beispiel, damit dunkle Körper nicht ineinander verschwimmen. Auf langsameren Rechnern schaltet der Schnellmodus alles Aufwendige auf einmal ab.",
-  "welcome.moreHistoryBody": "mit einem Schieber auf jeden früheren Stand des Projekts zurückschauen, ohne etwas zu ändern - diesen Stand exportieren oder als neues Projekt anlegen.",
+  "welcome.moreHistoryBody": "mit einem Schieber auf jeden früheren Stand des Projekts zurückschauen, ohne etwas zu ändern - diesen Stand exportieren, als neues Projekt anlegen oder einzelne Objekte daraus zurückholen.",
   "welcome.moreDrawingTitle": "Zeichnung für die Werkstatt",
   "welcome.moreDrawingBody": "Exportieren → Zeichnung: Vorder-, Drauf- und Seitenansicht im Maßstab 1:1 auf einem ISO-Blatt, mit Gesamtmaßen, verdeckten Kanten und einer Tabelle der runden Bohrungen – als PDF oder SVG, zum Ausdrucken oder für Drehbank und Fräse.",
   "welcome.moreSearchBody": "Mit Strg+K tippst du den Namen eines Werkzeugs, einer Form oder eines Befehls und springst direkt dorthin - auch auf Englisch, mit allen Tastenkürzeln daneben. Auch die Körper deines Entwurfs findest du mit ihrem Namen.",
