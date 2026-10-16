@@ -43,7 +43,8 @@ function textOf(element: Element): string {
   // A panel's or a ribbon group's title is its heading, not everything written in it.
   if (element.matches("header, [class*=-header], [data-group]")) {
     const heading = element.querySelector("strong, h1, h2, h3, h4, .toolbar-section-label");
-    if (heading) return clean(heading.textContent);
+    // A header with no heading in it (the line above a slider holds its name and its unit) names nothing.
+    return heading ? clean(heading.textContent) : "";
   }
   return clean(element.textContent);
 }
@@ -78,6 +79,11 @@ export function helpNameOf(element: Element): string {
     const name = wrapping.querySelector(".range-property-name, span");
     const named = clean(name?.textContent ?? wrapping.textContent);
     if (named) return named;
+  }
+  // The label around a slider holds its name and its unit: the name is the part to ask about.
+  if (element.matches("label")) {
+    const name = clean(element.querySelector(".range-property-name")?.textContent);
+    if (name) return name;
   }
   if (element.matches(NAMED_BY_TEXT) || element.matches("header, [class*=-header], [data-group]")) return textOf(element);
   return "";

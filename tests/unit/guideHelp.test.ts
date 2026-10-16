@@ -42,6 +42,18 @@ describe("the name of an element", () => {
     expect(helpNameOf(document.getElementById("d")!)).toBe("Depth");
   });
 
+  it("calls the label around a slider by its name, not by its unit", () => {
+    page('<label id="l" class="range-property"><span class="range-property-header"><span class="range-property-name">Length</span><span class="range-value-control"><input type="text"><span>mm</span></span></span><input type="range"></label>');
+    expect(helpNameOf(document.getElementById("l")!)).toBe("Length");
+  });
+
+  it("asks for the name of a slider from the line above it, which holds the name and the unit", () => {
+    page('<label class="range-property"><span class="range-property-header" id="h"><span class="range-property-name" id="n">Length</span><span class="range-value-unit">mm</span></span></label>');
+    expect(helpNameOf(document.getElementById("h")!)).toBe("");
+    expect(resolveHelpTarget(document.getElementById("n"))?.name).toBe("Length");
+    expect(resolveHelpTarget(document.getElementById("h"))?.name).toBe("Length");
+  });
+
   it("calls a panel or a ribbon group by its heading, not by everything in it", () => {
     page('<div class="edge-modifier-header" id="h"><div><strong>Hole pattern</strong><span>Holes in a flat face</span></div></div><div data-group="modify" id="g"><div class="toolbar-section-label">Modify</div><button>Align</button></div>');
     expect(helpNameOf(document.getElementById("h")!)).toBe("Hole pattern");

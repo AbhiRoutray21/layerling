@@ -138,7 +138,8 @@ export function InteractiveHelp({ onExit }: { onExit: () => void }) {
       }
       // Keys that would change the design wait; the ones that move through the page and press the focused button go on.
       if (FREE_KEYS.has(event.key) || event.ctrlKey || event.metaKey || event.altKey) return;
-      if (event.target instanceof Element && event.target.closest(EXEMPT)) return;
+      // The button that switched the mode on keeps the focus; the keys it gets are not its own either.
+      if (event.target instanceof Element && event.target.closest("[data-help-window]")) return;
       event.stopPropagation();
       event.stopImmediatePropagation();
     };
