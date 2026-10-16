@@ -10,7 +10,7 @@
  *
  * To add a language, see docs/TRANSLATING.md.
  */
-export const LANGUAGES = ["en", "de", "nl", "fr", "pl", "ru", "cs", "sl", "hu", "da"] as const;
+export const LANGUAGES = ["en", "de", "nl", "fr", "pl", "ru", "cs", "sl", "hu", "da", "it"] as const;
 export type Language = (typeof LANGUAGES)[number];
 export const DEFAULT_LANGUAGE: Language = "en";
 
@@ -471,6 +471,57 @@ export const LANGUAGE_INFO: Readonly<Record<Language, LanguageInfo>> = {
       printButton: "Udskriv",
     },
   },
+  // Italiano: interfaccia e guida utente in corso di traduzione. Non viene contrassegnata
+  // come completa intenzionalmente. Le frasi aggiunte successivamente rimangono in inglese
+  // finché non vengono tradotte in un aggiornamento successivo, così una nuova versione
+  // del programma non deve attendere il completamento della traduzione. Il README rimane
+  // in inglese, quindi readme e quickstartAnchor puntano a quelli inglesi.
+  it: {
+    name: "Italiano",
+    htmlLang: "it",
+    numberLocale: "it-IT",
+    quotes: ["«", "»"],
+    guideDir: "it",
+    communityUrl: GITHUB_DISCUSSIONS,
+    readme: "README.md",
+    quickstartAnchor: "windows-quickstart",
+    legal: { imprint: "Note legali", privacy: "Informativa sulla privacy" },
+    keyNames: {
+      Ctrl: "Ctrl",
+      Shift: "Maiusc",
+      Delete: "Canc",
+      Backspace: "Backspace",
+      Home: "Home",
+      Click: "Clic",
+      RightClick: "Clic destro",
+      Drag: "Trascina",
+    },
+    asciiUmlauts: false,
+    complete: false,
+    guide: {
+      site: "Guida utente di layerling",
+      home: "Guida utente",
+      openEditor: "Apri l'editor",
+      backToEditor: "Torna all'editor",
+      editorElsewhere: "L'editor è già aperto in un'altra scheda: passa semplicemente a quella.",
+      chapters: "Capitoli",
+      onThisPage: "In questa pagina",
+      previous: "Capitolo precedente",
+      next: "Capitolo successivo",
+      overviewLead: "Tutto quello che layerling può fare, passo dopo passo. Le immagini sono tratte dal programma in esecuzione e vengono aggiornate a ogni versione.",
+      sourceNote: "Questa guida cresce insieme al programma. Se manca qualcosa o trovi un errore, segnalalo nelle",
+      forum: "discussioni",
+      notTranslated: "Questo capitolo non è ancora tradotto in italiano. Segue il testo inglese.",
+      languageMenu: "Lingua",
+      search: "Cerca nella guida",
+      searchNothing: "Nessun risultato.",
+      printAll: "Guida completa da stampare",
+      printAllTitle: "La guida completa in una sola pagina",
+      printAllLead: "Tutti i capitoli in sequenza, da stampare o salvare come PDF: premi Ctrl+P e disattiva le intestazioni e i piè di pagina nelle impostazioni di stampa. Per stampare solo una parte, seleziona i numeri delle pagine.",
+      printContents: "Indice",
+      printButton: "Stampa",
+    },
+  }, 
 };
 
 export function isLanguage(value: unknown): value is Language {

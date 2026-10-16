@@ -76,3 +76,5 @@ apps/web/public/prirucka/
 apps/web/public/utmutato/
 # Built Danish user guide.
 apps/web/public/vejledning/
+# Built Italian user guide.
+apps/web/public/it/
