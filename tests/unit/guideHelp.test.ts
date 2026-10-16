@@ -47,6 +47,12 @@ describe("the name of an element", () => {
     expect(helpNameOf(document.getElementById("l")!)).toBe("Length");
   });
 
+  it("calls the number field inside a slider by the slider's name, not by its name and unit together", () => {
+    page('<label class="range-property"><span class="range-property-header"><span class="range-property-name">Length<button type="button" title="Reset"></button></span><span class="range-value-control"><input id="t" type="text" value="30.00"><span>mm</span></span></span><input id="s" type="range"></label>');
+    expect(helpNameOf(document.getElementById("t")!)).toBe("Length");
+    expect(helpNameOf(document.getElementById("s")!)).toBe("Length");
+  });
+
   it("asks for the name of a slider from the line above it, which holds the name and the unit", () => {
     page('<label class="range-property"><span class="range-property-header" id="h"><span class="range-property-name" id="n">Length</span><span class="range-value-unit">mm</span></span></label>');
     expect(helpNameOf(document.getElementById("h")!)).toBe("");

@@ -68,6 +68,12 @@ export function helpNameOf(element: Element): string {
   }
   const title = clean(element.getAttribute("title"));
   if (title) return title;
+  // The label around a slider holds its name, its value and its unit ("Length 30.00 mm"): ask about the name.
+  const sliderName = element.matches("input, select, textarea") ? element.closest("label")?.querySelector(".range-property-name") : null;
+  if (sliderName) {
+    const named = clean(sliderName.textContent);
+    if (named) return named;
+  }
   const labels = (element as HTMLInputElement).labels;
   if (labels && labels.length > 0) {
     const named = clean(labels[0].textContent);
