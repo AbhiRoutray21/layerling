@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "title": {
+      "de": "Zwei-Finger-Zoom am Touchpad in Safari",
+      "en": "Pinch to zoom on the trackpad in Safari"
+    },
+    "body": {
+      "de": "In Safari auf dem Mac tat das Spreizen und Zusammenziehen mit zwei Fingern auf dem Touchpad nichts. Jetzt zoomt es die Ansicht wie das Mausrad, mit der Zoomgeschwindigkeit der Einstellungen und zum Zeiger hin.",
+      "en": "In Safari on a Mac, spreading and pinching two fingers on the trackpad did nothing. Now it zooms the view like the mouse wheel, at the zoom speed of the settings and towards the pointer."
+    }
+  }
+]

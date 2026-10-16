@@ -64,7 +64,7 @@ import { createBentTubeGeometry, createBentTubeSegmentGeometry } from "@/lib/ben
 import { createThreadGeometry } from "@/lib/threadGeometry";
 import { createSpringGeometry } from "@/lib/springGeometry";
 import { textDisplayGeometry } from "@/lib/textFill";
-import { wheelZoomDelta } from "@/lib/wheelZoom";
+import { pinchWheelDelta, wheelZoomDelta } from "@/lib/wheelZoom";
 import { manifoldRevision } from "@/lib/manifoldHandle";
 import { customFontRevision } from "@/lib/textFonts";
 import { readDesignView, writeDesignView } from "@/lib/designView";
@@ -9268,8 +9268,30 @@ function createThreeScene(host: HTMLDivElement): ThreeState {
    * bevor die Kamera sie sieht. Auf allem ausser Safari gibt es diese
    * Ereignisse gar nicht.
    */
+  // Safari on a Mac sends no wheel steps for a pinch on the trackpad, only gestures with a scale; each change of it
+  // is passed on as the Ctrl wheel step that other browsers send, so the pinch zooms as the wheel does.
+  let gestureScale = 1;
   const preventSafariGesture = (event: Event) => {
     if (event.cancelable) event.preventDefault();
+    if (event.type === "gesturestart") {
+      gestureScale = 1;
+      return;
+    }
+    if (event.type !== "gesturechange") return;
+    const gesture = event as Event & { scale?: number; clientX?: number; clientY?: number };
+    const ratio = typeof gesture.scale === "number" && gesture.scale > 0 ? gesture.scale / gestureScale : NaN;
+    if (typeof gesture.scale === "number" && gesture.scale > 0) gestureScale = gesture.scale;
+    const deltaY = pinchWheelDelta(ratio, controls.zoomSpeed);
+    if (deltaY === null) return;
+    renderer.domElement.dispatchEvent(new WheelEvent("wheel", {
+      deltaY,
+      deltaMode: 0,
+      ctrlKey: true,
+      clientX: gesture.clientX ?? renderer.domElement.getBoundingClientRect().left + renderer.domElement.clientWidth / 2,
+      clientY: gesture.clientY ?? renderer.domElement.getBoundingClientRect().top + renderer.domElement.clientHeight / 2,
+      bubbles: true,
+      cancelable: true,
+    }));
   };
   const SAFARI_GESTURES = ["gesturestart", "gesturechange", "gestureend"] as const;
   const pullPivotToSurface = (event: WheelEvent) => {

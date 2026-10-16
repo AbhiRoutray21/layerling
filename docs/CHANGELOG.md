@@ -6,6 +6,7 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **A pinch on the trackpad zooms in Safari on a Mac (forum):** Safari sends no wheel steps for a pinch with two fingers on a trackpad, only gestures with a scale, and layerling threw those away so that the page itself would not zoom; the pinch did nothing. Each change of the scale is now passed on as the wheel step other browsers send for a pinch, with the zoom speed of the settings, so spreading the fingers comes closer and pinching them together goes away, towards the pointer as the wheel does. Reported by @Jenserer in the forum.
 - **The language menu is sorted:** The languages stood in the order they were added, with every new one at the end. Now English comes first, then the languages in the Latin alphabet by the name each gives itself (Čeština, Dansk, Deutsch, Français, Italiano, Magyar, Nederlands, Polski, Slovenščina), then Русский and العربية. TRANSLATING.md says where a new language goes in.
 ## 1.83.0
 
