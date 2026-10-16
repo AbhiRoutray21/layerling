@@ -68,6 +68,10 @@ export type ThreeState = {
   layFlatHoverLayer?: THREE.Group;
   /** The bent-tube segment the settings are about, drawn over the tube. */
   bentTubeSegmentLayer?: THREE.Group;
+  /** Delete face: the faces picked and the one under the pointer. */
+  cadFaceLayer?: THREE.Group;
+  /** Delete face: the prepared body's tessellation it picks on, kept out of the scene. */
+  cadFacePickMesh?: THREE.Mesh;
   shapeLayer: THREE.Group;
   helperLayer: THREE.Group;
   splitLayer: THREE.Group;

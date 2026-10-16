@@ -36,6 +36,7 @@ export const COMMAND_KEYWORDS: Readonly<Record<string, readonly string[]>> = {
   fillet: ["fillet", "round", "radius", "verrunden", "abrunden", "runden", "kante", "afronden", "rand"],
   simplify: ["simplify", "decimate", "reduce", "fewer triangles", "optimize", "vereinfachen", "reduzieren", "dezimieren", "weniger dreiecke", "netz", "mesh", "optimieren"],
   hollow: ["hollow", "shell", "aushoehlen", "aushöhlen", "wand", "wandstaerke", "wandstärke", "hohl"],
+  deleteFace: ["delete face", "remove face", "defeature", "remove fillet", "fill hole", "close hole", "flaeche loeschen", "fläche löschen", "flaeche entfernen", "fläche entfernen", "rundung entfernen", "loch schliessen", "loch schließen"],
   drop: ["drop", "lower", "absenken", "auf arbeitsebene", "boden", "ground"],
   layFlat: ["lay flat", "flat", "face down", "auf flaeche legen", "auf fläche legen", "flach", "drucken"],
   center: ["center", "centre", "mitte", "zentrieren", "mittig"],
