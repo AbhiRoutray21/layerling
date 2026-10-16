@@ -10,7 +10,7 @@
  *
  * To add a language, see docs/TRANSLATING.md.
  */
-export const LANGUAGES = ["en", "de", "nl", "fr", "pl", "ru", "cs", "sl", "hu", "da"] as const;
+export const LANGUAGES = ["en", "de", "nl", "fr", "pl", "ru", "cs", "sl", "hu", "da", "ar"] as const;
 export type Language = (typeof LANGUAGES)[number];
 export const DEFAULT_LANGUAGE: Language = "en";
 
@@ -469,6 +469,46 @@ export const LANGUAGE_INFO: Readonly<Record<Language, LanguageInfo>> = {
       printAllLead: "Hvert kapitel efter hinanden, til udskrivning eller til at gemme som PDF: tryk Ctrl+P og slå \"Sidehoveder og sidefødder\" fra i udskriftsindstillingerne. For kun at udskrive en del, vælg sidetallene der.",
       printContents: "Indhold",
       printButton: "Udskriv",
+    },
+  },
+  // Arabic (Modern Standard Arabic): in progress, not complete. The interface is not mirrored for
+  // right-to-left yet; the sentences come first, the layout is a separate change.
+  ar: {
+    name: "العربية",
+    htmlLang: "ar",
+    // ar-AE: Western digits (1, 2, 3) and a decimal point, the way measurements are typed in a CAD program.
+    numberLocale: "ar-AE",
+    quotes: ["«", "»"],
+    guideDir: "dalil",
+    communityUrl: GITHUB_DISCUSSIONS,
+    readme: "README.md",
+    quickstartAnchor: "windows-quickstart",
+    legal: { imprint: "بيانات الناشر", privacy: "سياسة الخصوصية" },
+    keyNames: { Click: "نقرة", RightClick: "نقرة بالزر الأيمن", Drag: "سحب" },
+    asciiUmlauts: false,
+    complete: false,
+    guide: {
+      site: "دليل استخدام layerling",
+      home: "دليل الاستخدام",
+      openEditor: "افتح المحرّر",
+      backToEditor: "العودة إلى المحرّر",
+      editorElsewhere: "المحرّر مفتوح بالفعل في علامة تبويب أخرى، فانتقل إليها.",
+      chapters: "الفصول",
+      onThisPage: "في هذه الصفحة",
+      previous: "الفصل السابق",
+      next: "الفصل التالي",
+      overviewLead: "كل ما يستطيع layerling فعله، خطوة بخطوة. الصور مأخوذة من البرنامج أثناء تشغيله وتُحدَّث مع كل إصدار.",
+      sourceNote: "ينمو هذا الدليل مع البرنامج. إذا كان هناك شيء ناقص أو خاطئ، فأخبرنا في",
+      forum: "النقاشات",
+      notTranslated: "لم يُترجَم هذا الفصل إلى لغتك بعد، ويليه النص الإنجليزي.",
+      languageMenu: "اللغة",
+      search: "ابحث في الدليل",
+      searchNothing: "لم يُعثر على شيء.",
+      printAll: "الدليل كاملًا للطباعة",
+      printAllTitle: "الدليل كاملًا في صفحة واحدة",
+      printAllLead: "جميع الفصول متتالية، للطباعة أو للحفظ بصيغة PDF: اضغط Ctrl+P وألغِ خيار \"الرؤوس والتذييلات\" في إعدادات الطباعة. لطباعة جزء فقط، اختر أرقام صفحاته هناك.",
+      printContents: "المحتويات",
+      printButton: "طباعة",
     },
   },
 };
