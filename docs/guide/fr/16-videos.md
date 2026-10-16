@@ -7,6 +7,7 @@ summary: Vidéos que d'autres personnes ont réalisées sur layerling.
 
 Ces vidéos ne proviennent pas de ce projet. Les liens ouvrent YouTube dans un nouvel onglet ; rien n'est chargé à partir de là jusqu'à ce que vous cliquiez.
 
+- [Layerling la nueva herramienta gratuita de modelado 3D, más completo que Tinkercad](https://youtu.be/-EEt0RSINoY) – Fulcro 1900 (espagnol). Une vidéo sur layerling, un nouvel outil de modélisation 3D gratuit, plus complet que Tinkercad.
 - [Layerling - Tussen Tinkercad en Fusion 360 in, en Helemaal Gratis!](https://youtu.be/X-UuvsfDI-s) – Werkplaats Marc (néerlandais). Un premier aperçu de layerling pour les utilisateurs de Tinkercad : évidement, congés, motif de trous, filetages avec jeu, polices personnalisées et profils d'imprimante, avec un boulon imprimé avec et sans jeu pour montrer la différence.
 - [Le ​​programme de CAO GRATUIT PARFAIT entre Tinkercad et Fusion 360 !](https://youtu.be/GIoG-IHPXyg) – Print N Repeat (anglais). Une vidéo sur layerling en tant que programme de CAO gratuit entre Tinkercad et Fusion 360.
 - [Découvrez la CAO basée sur un navigateur gratuit Layerling qui ÉTEND Tinkercad !](https://youtu.be/979_Ohy9ESM) – HL ModTech (anglais). Un aperçu de layerling par un utilisateur de Tinkercad, environ 23 minutes : une CAO gratuite basée sur un navigateur qui étend Tinkercad.

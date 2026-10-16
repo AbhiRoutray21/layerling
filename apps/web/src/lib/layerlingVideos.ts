@@ -6,6 +6,12 @@
  */
 export const LAYERLING_VIDEOS = [
   {
+    title: "Layerling la nueva herramienta gratuita de modelado 3D, más completo que Tinkercad",
+    channel: "Fulcro 1900",
+    lang: "ES",
+    url: "https://youtu.be/-EEt0RSINoY",
+  },
+  {
     title: "Layerling - Tussen Tinkercad en Fusion 360 in, en Helemaal Gratis!",
     channel: "Werkplaats Marc",
     lang: "NL",

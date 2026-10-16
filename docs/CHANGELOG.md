@@ -6,6 +6,7 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **A Spanish video about layerling in the list:** "Layerling la nueva herramienta gratuita de modelado 3D, más completo que Tinkercad" by Fulcro 1900 is in the list of videos on the start page and in the guide.
 - **Separate Parts in the right-click menu:** A shape made of several loose pieces, such as an STL of separate parts or a text of single letters, could only be taken apart with the button in the properties. The entry is now in the menu of a right click on the shape as well. Asked for by a YouTuber who makes videos about layerling.
 ## 1.84.0
 
