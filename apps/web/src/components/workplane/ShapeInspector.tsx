@@ -967,6 +967,7 @@ function getShapePropertiesWithAppLimits(shape: WorkplaneShape, onUpdate: ShapeI
         step: 0.1,
         onChange: (value) => onUpdate({ hingeLeafThickness: normalizeHingeLeafThickness(value, shape.height, plan.pinRadius * 2, plan.clearance) }),
       },
+      { type: "toggle", id: "hingePinless", label: t("prop.hingePinless"), value: plan.pinless, onChange: (value) => onUpdate({ hingePinless: value }) },
       {
         id: "hingeClearance",
         label: t("prop.hingeClearance"),

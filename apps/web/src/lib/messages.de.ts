@@ -1752,6 +1752,7 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "prop.hingeKnuckles": "Knöchel",
   "prop.hingePinDiameter": "Stiftdurchmesser",
   "prop.hingeLeafThickness": "Blattstärke",
+  "prop.hingePinless": "Ohne Stift (eigener Stift)",
   "prop.hingeClearance": "Spiel",
   "prop.gridfinityType": "Art",
   "gridfinity.bin": "Behälter",

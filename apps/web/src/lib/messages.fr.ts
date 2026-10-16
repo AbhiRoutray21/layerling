@@ -1738,6 +1738,7 @@ export const MESSAGES_FR: Partial<Record<MessageKey, string>> = {
   "prop.hingeKnuckles": "Jointures",
   "prop.hingePinDiameter": "Diamètre de la broche",
   "prop.hingeLeafThickness": "Épaisseur des feuilles",
+  "prop.hingePinless": "Sans broche (votre propre broche)",
   "prop.hingeClearance": "Liquidation",
   "prop.gridfinityType": "Type",
   "gridfinity.bin": "Bac",

@@ -1745,6 +1745,7 @@ export const MESSAGES_RU: Partial<Record<MessageKey, string>> = {
   "prop.hingeKnuckles": "Проушины",
   "prop.hingePinDiameter": "Диаметр оси",
   "prop.hingeLeafThickness": "Толщина полотна",
+  "prop.hingePinless": "Без оси (своя ось)",
   "prop.hingeClearance": "Зазор",
   "prop.gridfinityType": "Тип",
   "gridfinity.bin": "Контейнер",

@@ -1273,6 +1273,7 @@ export const MESSAGES_SL: Partial<Record<MessageKey, string>> = {
   "prop.hingeKnuckles": "Členki",
   "prop.hingePinDiameter": "Premer čepa",
   "prop.hingeLeafThickness": "Debelina krila",
+  "prop.hingePinless": "Brez čepa (lasten čep)",
   "prop.hingeClearance": "Zračnost",
   "prop.gridfinityType": "Vrsta",
   "gridfinity.bin": "Posoda",

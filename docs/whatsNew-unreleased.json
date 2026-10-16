@@ -58,5 +58,15 @@
       "de": "Die neue Form „Gridfinity“ in der Formenbibliothek baut Behälter und Bodenplatten für das offene Aufbewahrungssystem im Raster von 42 mm: Einheiten in Breite, Tiefe und Höhe, Stapelrand und Magnetlöcher nach Wunsch. Die Maße folgen der Spezifikation, so passen die Teile zu Behältern und Bodenplatten aus anderen Generatoren.",
       "en": "The new shape \"Gridfinity\" in the shape library makes bins and baseplates for the open storage system on a 42 mm grid: units across, deep and high, the stacking lip and magnet holes if you like. The measures follow the specification, so the parts fit bins and baseplates made with other generators."
     }
+  },
+  {
+    "title": {
+      "de": "Scharnier ohne gedruckten Stift",
+      "en": "A hinge without the printed pin"
+    },
+    "body": {
+      "de": "Neuer Schalter bei den Scharnier-Einstellungen: Der gedruckte Stift entfällt, und die Bohrung läuft durch alle Knöchel, auch die an den Enden, für einen eigenen Stift aus Filament oder Draht.",
+      "en": "A new switch in the hinge settings: the printed pin is left out and the bore runs through every knuckle, the ends included, for a pin of your own made of filament or wire."
+    }
   }
 ]

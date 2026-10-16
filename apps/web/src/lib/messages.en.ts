@@ -1753,6 +1753,7 @@ export const MESSAGES_EN = {
   "prop.hingeKnuckles": "Knuckles",
   "prop.hingePinDiameter": "Pin diameter",
   "prop.hingeLeafThickness": "Leaf thickness",
+  "prop.hingePinless": "Without pin (use your own)",
   "prop.hingeClearance": "Clearance",
   "prop.gridfinityType": "Type",
   "gridfinity.bin": "Bin",

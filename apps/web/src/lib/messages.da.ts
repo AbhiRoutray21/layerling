@@ -1671,6 +1671,7 @@ export const MESSAGES_DA: Partial<Record<MessageKey, string>> = {
   "prop.hingeKnuckles": "Led",
   "prop.hingePinDiameter": "Pinddiameter",
   "prop.hingeLeafThickness": "Bladtykkelse",
+  "prop.hingePinless": "Uden pind (egen pind)",
   "prop.hingeClearance": "Frirum",
   "prop.gridfinityType": "Type",
   "gridfinity.bin": "Bakke",

@@ -1759,6 +1759,7 @@ export const MESSAGES_CS: Record<MessageKey, string> = {
   "prop.hingeKnuckles": "Počet článků pantu",
   "prop.hingePinDiameter": "Průměr čepu",
   "prop.hingeLeafThickness": "Tloušťka křídla",
+  "prop.hingePinless": "Bez čepu (vlastní čep)",
   "prop.hingeClearance": "Vůle",
   "prop.gridfinityType": "Typ",
   "gridfinity.bin": "Krabička",

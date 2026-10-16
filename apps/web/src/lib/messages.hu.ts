@@ -1722,6 +1722,7 @@ export const MESSAGES_HU: Partial<Record<MessageKey, string>> = {
   "prop.hingeKnuckles": "Csuklók",
   "prop.hingePinDiameter": "Csapátmérő",
   "prop.hingeLeafThickness": "Szárnyvastagság",
+  "prop.hingePinless": "Csap nélkül (saját csap)",
   "prop.hingeClearance": "Hézag",
   "prop.gridfinityType": "Típus",
   "gridfinity.bin": "Rekesz",

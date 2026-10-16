@@ -34,7 +34,7 @@ export const MCP_SHAPE_SETTING_KEYS = [
   "starPoints", "starInnerSize", "starOuterFillet", "starInnerFillet", "starQuality",
   "heartTipFillet", "heartQuality",
   "crescentThickness", "crescentTipFillet", "crescentQuality",
-  "hingeKnuckles", "hingePinDiameter", "hingeLeafThickness", "hingeClearance",
+  "hingeKnuckles", "hingePinDiameter", "hingeLeafThickness", "hingeClearance", "hingePinless",
   "gridfinityType", "gridfinityLip", "gridfinityMagnets",
   "knurlPattern", "knurlCount", "knurlDepth", "knurlAngle", "knurlChamfer",
   "dovetailNeckWidth", "dovetailClearance",

@@ -1693,6 +1693,7 @@ export const MESSAGES_IT: Partial<Record<MessageKey, string>> = {
   "prop.hingeKnuckles": "Nocche",
   "prop.hingePinDiameter": "Diametro del perno",
   "prop.hingeLeafThickness": "Spessore dell'ala",
+  "prop.hingePinless": "Senza perno (perno proprio)",
   "prop.hingeClearance": "Gioco",
   "prop.gridfinityType": "Tipo",
   "gridfinity.bin": "Contenitore",

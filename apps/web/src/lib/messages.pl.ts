@@ -1726,6 +1726,7 @@ export const MESSAGES_PL: Partial<Record<MessageKey, string>> = {
   "prop.hingeKnuckles": "Tuleje",
   "prop.hingePinDiameter": "Średnica sworznia",
   "prop.hingeLeafThickness": "Grubość skrzydełka",
+  "prop.hingePinless": "Bez sworznia (własny sworzeń)",
   "prop.hingeClearance": "Luz",
   "prop.gridfinityType": "Rodzaj",
   "gridfinity.bin": "Pojemnik",

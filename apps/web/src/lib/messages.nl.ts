@@ -1752,6 +1752,7 @@ export const MESSAGES_NL: Record<MessageKey, string> = {
   "prop.hingeKnuckles": "Scharnierogen",
   "prop.hingePinDiameter": "Pendiameter",
   "prop.hingeLeafThickness": "Bladdikte",
+  "prop.hingePinless": "Zonder pen (eigen pen)",
   "prop.hingeClearance": "Speling",
   "prop.gridfinityType": "Type",
   "gridfinity.bin": "Bak",

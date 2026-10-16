@@ -126,7 +126,7 @@ The size is always whole grid units, up to 6 × 6 (252 mm, which fits a 256 mm p
 
 The {{ui:shape.hinge}} prints in one piece and moves afterwards (print-in-place): two leaves lying open flat on the plate, with alternating knuckles on one axis between them. The pin belongs to the back leaf and runs with play through the knuckles of the front one. You set the {{ui:prop.hingeLength}}, the {{ui:prop.hingeOpenWidth}} and the {{ui:prop.hingeKnuckleDiameter}}, plus the number of {{ui:prop.hingeKnuckles}} (odd, so the pin is held at both ends), the {{ui:prop.hingePinDiameter}} and the {{ui:prop.hingeLeafThickness}}.
 
-{{ui:prop.hingeClearance}} is the gap between the moving parts: around the pin, between the knuckles and in front of the leaves. With 0.4 mm a well-tuned printer usually breaks free with a small twist; if the parts fuse, raise it, if it wobbles too much, lower it. Print the hinge lying down as it appears on the plate, without supports. You can add holes to the leaves or group them into a larger part, such as a lid.
+{{ui:prop.hingeClearance}} is the gap between the moving parts: around the pin, between the knuckles and in front of the leaves. With 0.4 mm a well-tuned printer usually breaks free with a small twist; if the parts fuse, raise it, if it wobbles too much, lower it. Print the hinge lying down as it appears on the plate, without supports. If you would rather use a pin of your own, such as a piece of filament or wire, which is smoother than a printed pin on a small hinge, switch on {{ui:prop.hingePinless}}: the printed pin is left out and the bore, the pin diameter plus the clearance, runs through every knuckle, the ends included. You can add holes to the leaves or group them into a larger part, such as a lid.
 
 ## Knurling
 

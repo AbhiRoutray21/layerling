@@ -1761,6 +1761,7 @@ export const MESSAGES_AR: Partial<Record<MessageKey, string>> = {
   "prop.hingeKnuckles": "المفاصل",
   "prop.hingePinDiameter": "قطر الدبوس",
   "prop.hingeLeafThickness": "سمك الجناح",
+  "prop.hingePinless": "بدون دبوس (دبوسك الخاص)",
   "prop.hingeClearance": "الخلوص",
   "prop.gridfinityType": "النوع",
   "gridfinity.bin": "علبة",
