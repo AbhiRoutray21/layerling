@@ -7,7 +7,7 @@ summary: Kde jsou projekty uložené, jak je zálohovat, podporované formáty a
 
 Layerling ukládá vše do prohlížeče na vašem počítači. Nemáte účet a nic se neodesílá na server. Každá změna se ukládá automaticky. Náhled na úvodní stránce zachycuje poslední pohled před návratem přes {{ui:editor.homeDashboard}}. Ve stejném prohlížeči najdete projekty i po několika dnech.
 
-Při návratu z prázdného projektu se program zeptá, zda jej ponechat. {{ui:confirm.yes}} nebo [[Enter]] jej zachová, {{ui:confirm.no}} odstraní, aby se nehromadily prázdné projekty. Na projekty ve sdílené serverové složce se toto potvrzení nevztahuje.
+Při návratu z prázdného projektu se program zeptá, zda jej ponechat. {{ui:confirm.yes}} nebo [[Enter]] jej zachová, {{ui:confirm.no}} odstraní, aby se nehromadily prázdné projekty. U projektu ve sdílené serverové složce {{ui:confirm.no}} smaže soubor ze serveru, a to pro všechny, kdo server používají.
 
 Nevýhodou je ztráta projektů při vymazání úložiště prohlížeče nebo přechodu na jiný počítač. **Důležitou práci proto zálohujte do souboru.**
 

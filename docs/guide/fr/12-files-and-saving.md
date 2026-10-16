@@ -7,7 +7,7 @@ summary: Où se trouvent vos conceptions, comment les sauvegarder, quels formats
 
 layerling enregistre tout dans le navigateur de votre ordinateur. Il n'y a pas de compte et rien n'est téléchargé. Chaque changement se sauve. L'image d'aperçu sur la page de démarrage montre la dernière vue que vous aviez devant vous lorsque vous êtes revenu avec {{ui:editor.homeDashboard}}. Si vous ouvrez layerling dans le même navigateur quelques jours plus tard, tout est là.
 
-Si vous revenez à la page de démarrage à partir d'un dessin ne contenant rien, layerling vous demande s'il faut le conserver. {{ui:confirm.yes}} ou [[Enter]] le conserve, {{ui:confirm.no}} le supprime, afin que les designs vides ne s'empilent pas. Les conceptions dans un dossier partagé sur un serveur ne sont pas interrogées.
+Si vous revenez à la page de démarrage à partir d'un dessin ne contenant rien, layerling vous demande s'il faut le conserver. {{ui:confirm.yes}} ou [[Enter]] le conserve, {{ui:confirm.no}} le supprime, afin que les designs vides ne s'empilent pas. Pour une conception dans un dossier partagé sur un serveur, {{ui:confirm.no}} supprime le fichier du serveur, pour tous ceux qui l'utilisent.
 
 Cela a un inconvénient : quiconque efface l'espace de stockage du navigateur ou passe à un autre ordinateur perd les dessins. **Alors sauvegardez le travail important dans un fichier.**
 
