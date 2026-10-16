@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "title": {
+      "de": "Interaktive Hilfe: anklicken und nachlesen",
+      "en": "Interactive Help: click it and read about it"
+    },
+    "body": {
+      "de": "Ein Fragezeichen im Bereich Hilfe (oder Umschalt+F1) schaltet die Interaktive Hilfe ein: Ein Klick auf einen Knopf, ein Feld oder ein Fenster öffnet ein kleines Fenster mit dem passenden Stück der Anleitung und führt auf Wunsch genau dorthin. Mit Esc ist sie wieder aus.",
+      "en": "A question mark in the Help group (or Shift+F1) turns on Interactive Help: a click on a button, a field or a window opens a small window with the matching part of the guide and takes you straight there if you like. Esc turns it off again."
+    }
+  }
+]
