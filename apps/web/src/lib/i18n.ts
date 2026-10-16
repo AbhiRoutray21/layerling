@@ -90,6 +90,7 @@ const LOADERS: Partial<Record<Language, CatalogueLoader>> = {
   sl: () => import("@/lib/messages.sl").then((module) => module.MESSAGES_SL),
   hu: () => import("@/lib/messages.hu").then((module) => module.MESSAGES_HU),
   it: () => import("@/lib/messages.it").then((module) => module.MESSAGES_IT),
+  ar: () => import("@/lib/messages.ar").then((module) => module.MESSAGES_AR),
 };
 
 const catalogues = createCatalogueStore({ en: MESSAGES_EN, de: MESSAGES_DE }, LOADERS);
