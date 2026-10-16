@@ -1212,6 +1212,7 @@ export const MESSAGES_PL: Partial<Record<MessageKey, string>> = {
   "status.cruisePlace": "Kliknij, aby umieścić {name}. Esc anuluje.",
   "status.carryPlace": "Zaznaczenie podąża za wskaźnikiem: nad bryłą kładzie się na ścianie pod spodem. Kliknij, aby je odłożyć, Esc anuluje.",
   "status.carryCancelled": "Odkładanie anulowane",
+  "status.dragCancelled": "Anulowano, wszystko jak wcześniej",
   "status.carryPlaced": "Części odłożone na ścianę: {count}",
   "status.cruiseCancelled": "Umieszczanie anulowane",
   "status.shapeAdded": "Dodano: {name}",

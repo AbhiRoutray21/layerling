@@ -1223,6 +1223,7 @@ export const MESSAGES_FR: Partial<Record<MessageKey, string>> = {
   "status.cruisePlace": "Cliquez pour placer {name}. Echap pour annuler.",
   "status.carryPlace": "La sélection suit le pointeur : sur un corps il se couche sur le visage en dessous. Cliquez pour le définir, Esc pour annuler.",
   "status.carryCancelled": "Dépose annulée",
+  "status.dragCancelled": "Annulé, tout est revenu comme avant",
   "status.carryPlaced": "{count} pièce(s) déposée(s) sur le visage",
   "status.cruiseCancelled": "Placement annulé",
   "status.shapeAdded": "{name} ajouté",

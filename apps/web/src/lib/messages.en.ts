@@ -1237,6 +1237,7 @@ export const MESSAGES_EN = {
   "status.cruisePlace": "Click to place {name}. Esc to cancel.",
   "status.carryPlace": "The selection follows the pointer: over a body it lies down on the face below. Click to set it down, Esc to cancel.",
   "status.carryCancelled": "Setting down cancelled",
+  "status.dragCancelled": "Cancelled, everything is back as it was",
   "status.carryPlaced": "{count} part(s) set down on the face",
   "status.cruiseCancelled": "Placement cancelled",
   "status.shapeAdded": "{name} added",

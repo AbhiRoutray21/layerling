@@ -1166,6 +1166,7 @@ export const MESSAGES_DA: Partial<Record<MessageKey, string>> = {
   "status.cruisePlace": "Klik for at placere {name}. Esc for at annullere.",
   "status.carryPlace": "Markeringen følger markøren: over en form lægger den sig ned på fladen nedenunder. Klik for at sætte den ned, Esc for at annullere.",
   "status.carryCancelled": "Nedlægning annulleret",
+  "status.dragCancelled": "Annulleret, alt er som før",
   "status.carryPlaced": "{count} del(e) sat ned på fladen",
   "status.cruiseCancelled": "Placering annulleret",
   "status.shapeAdded": "{name} tilføjet",

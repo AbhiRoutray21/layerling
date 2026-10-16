@@ -1236,6 +1236,7 @@ export const MESSAGES_NL: Record<MessageKey, string> = {
   "status.cruisePlace": "Klik om {name} te plaatsen. Esc om te annuleren.",
   "status.carryPlace": "De selectie volgt de aanwijzer: boven een lichaam gaat ze op het vlak eronder liggen. Klik om neer te zetten, Esc om te annuleren.",
   "status.carryCancelled": "Neerzetten geannuleerd",
+  "status.dragCancelled": "Geannuleerd, alles staat weer zoals het was",
   "status.carryPlaced": "{count} deel/delen op het vlak neergezet",
   "status.cruiseCancelled": "Plaatsen geannuleerd",
   "status.shapeAdded": "{name} toegevoegd",

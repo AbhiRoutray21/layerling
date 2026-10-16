@@ -1209,6 +1209,7 @@ export const MESSAGES_HU: Partial<Record<MessageKey, string>> = {
   "status.cruisePlace": "Kattints az elhelyezéshez: {name}. Esc: mégse.",
   "status.carryPlace": "A kijelölés követi a mutatót: egy test fölött az alatta lévő lapra fekszik. Kattints a letételhez, Esc: mégse.",
   "status.carryCancelled": "Letétel megszakítva",
+  "status.dragCancelled": "Megszakítva, minden olyan, mint előtte",
   "status.carryPlaced": "{count} rész letéve a lapra",
   "status.cruiseCancelled": "Elhelyezés megszakítva",
   "status.shapeAdded": "Hozzáadva: {name}",

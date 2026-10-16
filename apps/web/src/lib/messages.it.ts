@@ -1179,6 +1179,7 @@ export const MESSAGES_IT: Partial<Record<MessageKey, string>> = {
   "status.cruisePlace": "Fai clic per posizionare {name}. Esc per annullare.",
   "status.carryPlace": "La selezione segue il puntatore: sopra un corpo si appoggia alla faccia sottostante. Fai clic per posizionarla, Esc per annullare.",
   "status.carryCancelled": "Posizionamento annullato",
+  "status.dragCancelled": "Annullato, tutto com'era prima",
   "status.carryPlaced": "{count} parti posizionate sulla faccia",
   "status.cruiseCancelled": "Posizionamento annullato",
   "status.shapeAdded": "{name} aggiunto",

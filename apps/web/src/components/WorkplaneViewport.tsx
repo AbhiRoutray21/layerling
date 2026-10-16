@@ -1,5 +1,6 @@
 "use client";
 
+import { markEscapeHandled } from "@/lib/escapeHandled";
 import { ArrowDownToLine, Check, ChevronLeft, ChevronRight, Crosshair, Cuboid, Download, Eye, EyeOff, FlipHorizontal, GripVertical, Home, Layers, Minus, MousePointer2, PanelsTopLeft, Plus, Rotate3d, RotateCcw, Ruler, RulerDimensionLine, Slice, Spline, Trash2, X } from "lucide-react";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type Dispatch, type DragEvent, type MouseEvent as ReactMouseEvent, type MutableRefObject, type PointerEvent as ReactPointerEvent, type ReactNode, type SetStateAction, type WheelEvent as ReactWheelEvent } from "react";
 import { objectSnapOffset, shiftSnapBox, type ObjectSnapGuide, type SnapBox } from "@/lib/objectSnap";
@@ -376,6 +377,8 @@ type WorkplaneViewportProps = {
   onSetPlacementWorkplane: (workplane: PlacementWorkplane, source: "shape" | "base") => void;
   onToggleWorkplaneTool: () => void;
   onInteractionActiveChange?: (active: boolean) => void;
+  /** Esc during a drag: the editor puts the shapes back as they were when the drag began (#440). */
+  onCancelInteraction?: () => void;
   onEditSketch?: () => void;
   onOpenGroup?: (id: string) => void;
   canSeparateParts?: boolean;
@@ -3030,6 +3033,7 @@ export function WorkplaneViewport({
   onSetPlacementWorkplane,
   onToggleWorkplaneTool,
   onInteractionActiveChange,
+  onCancelInteraction,
   onEditSketch,
   onOpenGroup,
   canSeparateParts = false,
@@ -7481,6 +7485,42 @@ export function WorkplaneViewport({
     onInteractionActiveChange?.(false);
   }, [clearMoveDimensions, onInteractionActiveChange, setMarqueeFromState]);
 
+  /**
+   * Esc while the mouse button is held (#440): a move drag only previews, so its preview goes back; a handle drag
+   * has changed the shapes as it went, so the editor puts them back. Nothing is taken over when the button is let go.
+   * Says whether there was something to cancel.
+   */
+  const cancelActiveDrag = useCallback(() => {
+    const state = threeRef.current;
+    const transform = transformRef.current;
+    if (transform) {
+      onCancelInteraction?.();
+      transformRef.current = null;
+      setActiveRotationWheel(false);
+      setActiveTransformKind(null);
+      setPinnedRotationWheelView(null);
+      setRotationReadout(null);
+      setPinnedMeasureKey(null);
+      setHoverMeasureKey(null);
+      if (state) {
+        setSelectionHelpersVisible(state, true);
+        state.controls.enabled = true;
+        state.needsRender = true;
+      }
+      onInteractionActiveChange?.(false);
+      return true;
+    }
+    if (dragRef.current || marqueeRef.current) {
+      if (dragRef.current) onCancelInteraction?.();
+      cancelGestureForCamera();
+      if (state) state.controls.enabled = true;
+      return true;
+    }
+    return false;
+  }, [cancelGestureForCamera, onCancelInteraction, onInteractionActiveChange]);
+  const cancelActiveDragRef = useRef(cancelActiveDrag);
+  cancelActiveDragRef.current = cancelActiveDrag;
+
   const handlePointerLeave = useCallback(() => {
     if (workplaneModeRef.current) {
       syncWorkplaneHoverPreview(threeRef.current, null, workspaceRef.current, resolvedThemeRef.current);
@@ -8241,7 +8281,11 @@ export function WorkplaneViewport({
       }
 
       const key = event.key.toLowerCase();
-      if (event.key === "Escape" && workplaneModeRef.current) {
+      if (event.key === "Escape" && (transformRef.current || dragRef.current || marqueeRef.current)) {
+        event.preventDefault();
+        markEscapeHandled(event);
+        cancelActiveDragRef.current();
+      } else if (event.key === "Escape" && workplaneModeRef.current) {
         event.preventDefault();
         // Wie ein Klick ins Leere: zurueck auf die Grundplatte, so steht es in der Anleitung (#108).
         onSetPlacementWorkplane(horizontalPlacementWorkplane(), "base");

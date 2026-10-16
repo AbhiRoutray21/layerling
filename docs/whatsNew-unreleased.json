@@ -28,5 +28,15 @@
       "de": "Wer von Millimeter auf Zoll und zurück schaltete, bekam als Raster der Platte wieder 5 mm, auch wenn vorher 1 mm eingestellt war. Jetzt merkt sich layerling das Raster des Einheitensystems, das du verlässt, und stellt es beim Zurückschalten wieder her.",
       "en": "Switching from millimetres to inches and back set the plate's grid to 5 mm again, even if it was 1 mm before. Now layerling remembers the grid of the unit system you leave and restores it when you switch back."
     }
+  },
+  {
+    "title": {
+      "de": "Esc bricht das Ziehen ab",
+      "en": "Esc cancels a drag"
+    },
+    "body": {
+      "de": "Wer einen Körper verschiebt oder an einem Anfasser zieht und dabei Esc drückt, nimmt das Ziehen sofort zurück: Alles steht wieder wie vorher, im Verlauf kommt kein Schritt dazu und die Auswahl bleibt. Vorher musste man die Änderung rückgängig machen.",
+      "en": "If you move a body or pull a handle and press Esc while still holding the mouse button, the drag is taken back at once: everything stands as before, no step is added to the history and the selection stays. Before, you had to undo the change."
+    }
   }
 ]

@@ -1230,6 +1230,7 @@ export const MESSAGES_RU: Partial<Record<MessageKey, string>> = {
   "status.cruisePlace": "Щёлкните, чтобы поставить {name}. Esc — отмена.",
   "status.carryPlace": "Выделение следует за указателем: над телом оно ложится на грань под ним. Щёлкните, чтобы поставить его на место, Esc — отмена.",
   "status.carryCancelled": "Размещение отменено",
+  "status.dragCancelled": "Отменено, всё вернулось как было",
   "status.carryPlaced": "Размещено на грани: {count}",
   "status.cruiseCancelled": "Размещение отменено",
   "status.shapeAdded": "Добавлено: {name}",

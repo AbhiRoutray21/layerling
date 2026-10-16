@@ -1245,6 +1245,7 @@ export const MESSAGES_AR: Partial<Record<MessageKey, string>> = {
   "status.cruisePlace": "انقر لوضع {name}. Esc للإلغاء.",
   "status.carryPlace": "التحديد يتبع المؤشر: فوق جسم يستقر على الوجه تحته. انقر لوضعه، وEsc للإلغاء.",
   "status.carryCancelled": "تم إلغاء الوضع",
+  "status.dragCancelled": "تم الإلغاء وعاد كل شيء كما كان",
   "status.carryPlaced": "تم وضع الأجزاء على الوجه: {count}",
   "status.cruiseCancelled": "تم إلغاء الوضع",
   "status.shapeAdded": "تمت إضافة {name}",

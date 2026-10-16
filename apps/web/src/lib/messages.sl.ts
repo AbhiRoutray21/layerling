@@ -2053,6 +2053,7 @@ export const MESSAGES_SL: Partial<Record<MessageKey, string>> = {
   "shortcuts.sketchTypedLine": "Med risanjem: vtipkaj dolžino, »<« ali Tab za kot, Enter postavi točko",
   "status.carryPlace": "Izbira sledi kazalcu: nad telesom se položi na ploskev pod njim. Klik jo odloži, Esc prekliče.",
   "status.carryCancelled": "Odlaganje preklicano",
+  "status.dragCancelled": "Preklicano, vse je spet kot prej",
   "status.carryPlaced": "Delov odloženih na ploskev: {count}",
   "shape.loft": "Prehod",
   "prop.loftBottomOutline": "Spodnji obris",

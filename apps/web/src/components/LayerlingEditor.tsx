@@ -227,6 +227,7 @@ import { projectSectionPoint, SECTION_VIEW_FACE, sectionSvgDocument, sliceMeshCo
 import type { AlignAxis, AlignHandleStatus, AlignTarget, GridSize, ParametricSource, ProjectAsset, ShapeAsset, ShapeCustomization, ShapeKind, SketchImage, SketchOperation, SketchPoint, SketchProfile, SketchRevolveSettings, SketchSegment, ShellEdges, ShellOpenings, ShellSide, WorkplaneNote, WorkplaneShape, WorkplaneWorkspaceSettings } from "@/types/layerling";
 import { type Vec3, type MeshData, type Cuboid, type ShapeUpdatePatch, type ManifoldSolid, MIN_SHAPE_DIMENSION, resetManifoldRuntime, cleanModelDimension, getManifoldRuntime, meshForShape, appendMeshData, formatTriangleCount, shapeAabb, boundsForShapes, boundsForCuboids, meshAabb, boundsForPositions, quantizedPointKey } from "@/lib/editorMeshCore";
 import { cloneAsGroupChild, meshDataToManifoldMesh, shapeToManifoldSolid, splitShapesByPlane, unionOverlappingExportMeshes, exportBodiesWithLooseHoles, exportSolidVolume, type ExportSolidVolume, PRINT_MATERIAL_STORAGE_KEY, PRINT_INFILL_STORAGE_KEY, PRINT_WALLS_STORAGE_KEY, formatEstimateNumber, formatSectionOffset, SECTION_SEEN_FROM_KEYS, expandBundles, visibleExportShapes, multicolorExportSolids, exportFaceColors, colorSeparatedExportMeshes, disposeManifold, canIntersectShapes, buildIntersectionShapeFromSelection, groupedShape, quaternionForShape, rotationFromQuaternion, ARROW_KEYS, cleanShapePatch, restoreGroupedChildren, restoreGroupedChildrenForEdges, buildGroupedShapeFromSelection } from "@/lib/editorBooleans";
+import { escapeWasHandled } from "@/lib/escapeHandled";
 import { booleanAutomationScene } from "@/lib/editorAutomation";
 import { debugShapeSummary, mcpPivotRequest, compactShapeSummary, mcpShapeSummary, mcpSketchFillProfile, mcpTextFont } from "@/lib/editorMcpSummary";
 import { sweepPathFromParams, sweepSectionFromParams, sweepSketchProfile } from "@/lib/sweepSketch";
@@ -3818,6 +3819,19 @@ export function LayerlingEditor({
     return () => window.clearTimeout(timer);
   }, [projectInteractionActive, syncProjectShapes]);
 
+  /** The shapes as they stood when the drag now going on began, for Esc to put back (#440). */
+  const interactionStartShapesRef = useRef<WorkplaneShape[] | null>(null);
+  const cancelInteraction = useCallback(() => {
+    const start = interactionStartShapesRef.current;
+    if (!start || !projectInteractionActiveRef.current) return;
+    shapesRef.current = start;
+    setShapes(start);
+    syncProjectShapes(start);
+    // Nothing happened as far as the history is concerned: no step for a drag that was taken back.
+    interactionHistoryChangedRef.current = false;
+    setNotice(t("status.dragCancelled"));
+  }, [syncProjectShapes]);
+
   const updateProjectInteractionActive = useCallback(
     (active: boolean) => {
       if (active) {
@@ -3829,6 +3843,7 @@ export function LayerlingEditor({
         if (!projectInteractionActiveRef.current) {
           interactionHistoryStartRef.current = projectSceneFingerprint(shapesRef.current, notesRef.current, placementWorkplaneRef.current);
           interactionHistoryChangedRef.current = false;
+          interactionStartShapesRef.current = shapesRef.current;
         }
         projectInteractionActiveRef.current = true;
         setProjectInteractionActive((current) => (current ? current : true));
@@ -11072,6 +11087,8 @@ export function LayerlingEditor({
       }
 
       if (event.key === "Escape") {
+        // A drag that the work area cancels with this key is all the key does (#440).
+        if (projectInteractionActiveRef.current || escapeWasHandled(event)) return;
         // Erst das Werkzeug ablegen, dann die Auswahl - wer ein Werkzeug in der
         // Hand hat, meint mit Escape das Werkzeug.
         if (intersectPreviewIdsRef.current) {
@@ -11813,6 +11830,7 @@ export function LayerlingEditor({
           onSetPlacementWorkplane={setViewportPlacementWorkplane}
           onToggleWorkplaneTool={activateWorkplaneTool}
           onInteractionActiveChange={updateProjectInteractionActive}
+          onCancelInteraction={cancelInteraction}
           onEditSketch={beginSketchEdit}
           onOpenGroup={selectedShapes.length === 1 && canEditGroup(selectedShape) ? openGroupForEditing : undefined}
           canSeparateParts={canSeparateSelectedParts}

@@ -1263,6 +1263,7 @@ export const MESSAGES_CS: Record<MessageKey, string> = {
   "status.cruisePlace": "Kliknutím umístěte {name}. Esc akci zruší.",
   "status.carryPlace": "Výběr sleduje ukazatel a nad tělesem se položí na plochu pod ním. Kliknutím jej umístíte, Esc akci zruší.",
   "status.carryCancelled": "Umístění na plochu bylo zrušeno",
+  "status.dragCancelled": "Zrušeno, vše je zase jako předtím",
   "status.carryPlaced": "Díly umístěné na plochu: {count}",
   "status.cruiseCancelled": "Umístění bylo zrušeno",
   "status.shapeAdded": "Přidáno: {name}",

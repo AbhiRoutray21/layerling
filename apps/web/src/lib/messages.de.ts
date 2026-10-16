@@ -1236,6 +1236,7 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "status.cruisePlace": "Klick, um {name} abzulegen. Esc bricht ab.",
   "status.carryPlace": "Die Auswahl hängt am Zeiger: über einem Körper legt sie sich auf die Fläche darunter. Klick setzt sie ab, Esc bricht ab.",
   "status.carryCancelled": "Absetzen abgebrochen",
+  "status.dragCancelled": "Abgebrochen, alles wie vorher",
   "status.carryPlaced": "{count} Teil(e) auf die Fläche gesetzt",
   "status.cruiseCancelled": "Ablegen abgebrochen",
   "status.shapeAdded": "{name} hinzugefügt",
