@@ -168,5 +168,15 @@
       "de": "Ränder und Ecken der Formenbibliothek ziehen ihre Breite und Höhe, so groß oder klein, wie dein Bildschirm es braucht; die Größe merkt sich der Browser. Ist die Bibliothek schmal, zeigt sie nur die Bilder ohne Namen, der Name steht dann im Tooltip.",
       "en": "The edges and corners of the shape library pull its width and height, as large or small as your screen needs; the browser remembers the size. When the library is narrow, it shows only the pictures without names, and the name is in the tooltip."
     }
+  },
+  {
+    "title": {
+      "de": "Das Lineal lässt sich mit den Griffen auf 500 mm ziehen",
+      "en": "The ruler can be pulled to 500 mm by its handles"
+    },
+    "body": {
+      "de": "Die Griffe des Lineals hörten bei der Größe der Platte auf, mindestens bei 220 mm, der Schieber ging aber bis 500 mm. Jetzt reichen auch die Griffe so weit wie der Schieber.",
+      "en": "The handles of the ruler stopped at the size of the plate, at least 220 mm, while its slider went up to 500 mm. Now the handles reach as far as the slider does."
+    }
   }
 ]

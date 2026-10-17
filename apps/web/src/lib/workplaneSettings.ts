@@ -534,6 +534,9 @@ export function positionReach(workspace: Pick<WorkplaneWorkspaceSettings, "width
   return Math.max(220, Math.max(workspace.width, workspace.depth) * 1.5, printerHeight ?? 0);
 }
 
+/** The longest a ruler gets: what its Length slider reaches, and how far its handles pull it (#500). */
+export const RULER_MAX_LENGTH = 500;
+
 /**
  * How far a handle may pull a body (#181). The fixed ceilings (220 mm across, 180 mm high) date
  * from the fixed 200 mm plate; a larger plate or printer lets the handles go as far as it reaches,
@@ -551,6 +554,8 @@ export function handleDimensionLimit(
   const custom = workspace.shapeCustomizations[kind]?.maxDimension;
   const current = Number.isFinite(currentSize) ? currentSize : 0;
   if (custom !== undefined) return Math.max(custom, current);
+  // A ruler only measures and is never printed, so the plate is no limit for it: the handles go as far as its slider (#500).
+  if (kind === "ruler" && axis === "across") return Math.max(RULER_MAX_LENGTH, workspace.width, workspace.depth, current);
   const plate = axis === "across"
     ? Math.max(workspace.width, workspace.depth)
     : printerHeight ?? Math.max(workspace.width, workspace.depth);
