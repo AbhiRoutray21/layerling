@@ -1,5 +1,20 @@
 [
   {
+    "version": "1.86.1",
+    "items": [
+      {
+        "title": {
+          "de": "Eine Zahl am Rand eines liegenden Körpers ändert das richtige Maß",
+          "en": "A number on the edge of a body lying on its side changes the right measure"
+        },
+        "body": {
+          "de": "Bei einer Arbeitsfläche auf einer Fläche und einem Körper, der auf der Seite liegt (zum Beispiel ein um 90° gedrehtes Rundes Dach), landete die Zahl an der senkrechten Kante im falschen Feld: Gabst du eine neue Höhe ein, änderte sich eine andere Seite. Die Zahl gehört jetzt zu der Seite, an der sie steht, wie bei einem Quader, der um eine Vierteldrehung gedreht ist.",
+          "en": "With a workplane on a face and a body lying on its side (a Round Roof turned by 90°, for example), the number on the vertical edge went into the wrong field: type a new height and another side changed. The number now belongs to the side it stands at, as it already does for a box turned by a quarter."
+        }
+      }
+    ]
+  },
+  {
     "version": "1.86.0",
     "items": [
       {
