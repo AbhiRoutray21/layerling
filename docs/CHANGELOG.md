@@ -6,6 +6,7 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **"Save as default" keeps the colour, too (#483):** Suggested by @bdeboer58, who would like to see colours for the shapes of the library. The pictures in the library stay as they are, but the colour is now part of what the button **Save as default** in the Properties panel keeps for a kind of shape: colour a cylinder green, save, and every new cylinder starts green; **Reset defaults** gives the app's own colour back, and the other kinds keep theirs. **A flaw found on the way:** inside one design, a second **Save as default** and **Reset defaults** did not reach the next new shape, because the editor took the change for an echo of its own settings and kept the old ones until the page was reloaded. The default of a size was affected as well as the colour. The settings window used the same route and passes it the same way now.
 - **A copy can be moved with the mouse and copied again (#484):** Duplicate, move the copy, duplicate again repeats the step (1.10.0). It only held when the copy was moved with the keys: with the mouse, the press landed on the copy and on the original it lies on at the same distance, the ray took whichever came first in the list - the original - and selected and moved that one, so the chain of copies was gone and the next copy stayed at the old place. Among bodies that lie at the same spot, a press now means the one already selected. Reported by @willi1955 on GitHub.
 ## 1.86.2
 

@@ -8,5 +8,15 @@
       "de": "Nach dem Duplizieren liegt die Kopie genau auf dem Original. Ein Mausklick darauf traf manchmal das Original statt der ausgewählten Kopie, und das Original wanderte. So riss die Kette ab, die das nächste Duplizieren um denselben Versatz weiterschiebt (zum Beispiel für eine Lochreihe), und die nächste Kopie blieb am Platz. Jetzt zählt bei Körpern, die genau aufeinander liegen, der schon ausgewählte.",
       "en": "After duplicating, the copy lies exactly on the original. A mouse press on it sometimes hit the original instead of the selected copy, and the original moved. That broke the chain that lets the next duplicate carry on by the same step (for a row of holes, say), and the next copy stayed where it was. Where bodies lie exactly on one another, the one that is already selected now wins."
     }
+  },
+  {
+    "title": {
+      "de": "„Als Vorgabe speichern“ merkt sich auch die Farbe",
+      "en": "\"Save as default\" keeps the colour, too"
+    },
+    "body": {
+      "de": "Färbe eine Form, zum Beispiel einen Zylinder, und drücke im Eigenschaften-Fenster „Als Vorgabe speichern“: Jeder neue Zylinder startet dann in dieser Farbe, die anderen Arten behalten ihre eigenen. „Vorgaben zurücksetzen“ gibt die Farbe der App zurück. Außerdem kam ein zweites Speichern oder Zurücksetzen im selben Entwurf bei neuen Formen nicht an; das ist behoben.",
+      "en": "Colour a shape, a cylinder for example, and press \"Save as default\" in the Properties panel: every new cylinder then starts in that colour, and the other kinds keep their own. \"Reset defaults\" gives the app's colour back. Also, a second save or reset in the same design did not reach new shapes; that is fixed."
+    }
   }
 ]

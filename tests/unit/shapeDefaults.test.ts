@@ -51,3 +51,40 @@ describe("saving a shape's values as its defaults", () => {
     expect(fresh.topRadius).toBe(3);
   });
 });
+
+describe("the colour is part of a shape's defaults (#483)", () => {
+  it("has nothing to save while the colour is the app's own", () => {
+    expect(shapeDefaultsFromShape(shapeOf("cylinder"))).toBeNull();
+    // The same colour written another way is still the app's colour.
+    expect(shapeDefaultsFromShape(shapeOf("cylinder", { color: "#D97813" }))).toBeNull();
+  });
+
+  it("keeps a colour that differs, on its own or with a size", () => {
+    expect(shapeDefaultsFromShape(shapeOf("cylinder", { color: "#2f9e44" }))).toEqual({ color: "#2f9e44" });
+    expect(shapeDefaultsFromShape(shapeOf("box", { color: "#1c7ed6", height: 33 }))).toMatchObject({ color: "#1c7ed6", height: 33 });
+  });
+
+  it("starts a new shape of the kind in the saved colour, and the other kinds in their own", () => {
+    const entry = shapeDefaultsFromShape(shapeOf("cylinder", { color: "#2f9e44" }));
+    const settings = normalizeWorkspaceSettings({ shapeCustomizations: { cylinder: entry } });
+    const cylinder = shapeDefaultsAsset("cylinder");
+    const box = shapeDefaultsAsset("box");
+    if (!cylinder || !box) throw new Error("no asset");
+    expect(makeShapeFromAsset(cylinder, undefined, settings.shapeCustomizations.cylinder).color).toBe("#2f9e44");
+    expect(makeShapeFromAsset(box, undefined, settings.shapeCustomizations.box).color).toBe(box.color);
+  });
+
+  it("reads a colour from the settings only if it is one, and writes it as #rrggbb", () => {
+    const settings = normalizeWorkspaceSettings({ shapeCustomizations: { box: { color: "red" }, cylinder: { color: "#0f0" }, cone: { color: "#AA5500" } } });
+    expect(settings.shapeCustomizations.box).toBeUndefined();
+    expect(settings.shapeCustomizations.cylinder).toEqual({ color: "#00ff00" });
+    expect(settings.shapeCustomizations.cone).toEqual({ color: "#aa5500" });
+  });
+
+  it("keeps the colour when other defaults of the kind are changed, and drops it with the entry", () => {
+    const map = { cylinder: { color: "#2f9e44", height: 40 } };
+    const settings = normalizeWorkspaceSettings({ shapeCustomizations: { cylinder: { ...map.cylinder, height: 50 } } });
+    expect(settings.shapeCustomizations.cylinder).toEqual({ color: "#2f9e44", height: 50 });
+    expect(withShapeDefaults(map, "cylinder", null)).toEqual({});
+  });
+});

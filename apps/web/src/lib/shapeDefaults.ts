@@ -1,3 +1,4 @@
+import { normalizeHexColor } from "@/lib/coloredImport";
 import { makeShapeFromAsset, toolbarShapeAssets } from "@/lib/shapeCatalog";
 import { normalizeShapeCustomizations } from "@/lib/workplaneSettings";
 import { shapeDepth, shapeWidth } from "@/lib/workplaneShapes";
@@ -50,6 +51,8 @@ export function shapeDefaultsFromShape(shape: WorkplaneShape, existing: ShapeCus
     picked[key] = value;
     appValues[key] = appValue;
   };
+  // The colour counts as a setting of the kind, too: a new shape of it starts with the colour saved here.
+  take("color", normalizeHexColor(shape.color), normalizeHexColor(app.color));
   take("width", shapeWidth(shape), shapeWidth(app));
   take("depth", shapeDepth(shape), shapeDepth(app));
   take("height", shape.height, app.height);

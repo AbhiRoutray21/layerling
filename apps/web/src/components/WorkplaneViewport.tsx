@@ -3687,6 +3687,16 @@ export function WorkplaneViewport({
     setWorkspace((current) => workspaceForUnits(current, units));
     setSnap((current) => snapGridForUnits(units, current));
   }, []);
+  /**
+   * What the settings window and the "Save as default" button change: a choice, so never a hydration
+   * echo either. Without disarming the guard the first change after the parent had handed the settings
+   * back was swallowed, and the editor kept the old ones: a second "Save as default", or "Reset defaults",
+   * did not reach the next new shape (#483).
+   */
+  const changeWorkspace = useCallback<Dispatch<SetStateAction<WorkspaceSettings>>>((value) => {
+    pendingWorkspaceHydrationFingerprintRef.current = null;
+    setWorkspace(value);
+  }, []);
   /** Same as the grid: switched from the snap menu, so never a hydration echo. */
   const changeObjectSnap = useCallback((objectSnap: boolean) => {
     pendingWorkspaceHydrationFingerprintRef.current = null;
@@ -9044,7 +9054,7 @@ export function WorkplaneViewport({
           proportionLock={proportionLock}
           onProportionLockChange={changeProportionLock}
           onBentTubeSegmentChange={changeBentTubeSegment}
-          onShapeDefaultsChange={(kind, entry) => setWorkspace((current) => ({ ...current, shapeCustomizations: withShapeDefaults(current.shapeCustomizations, kind, entry) }))}
+          onShapeDefaultsChange={(kind, entry) => changeWorkspace((current) => ({ ...current, shapeCustomizations: withShapeDefaults(current.shapeCustomizations, kind, entry) }))}
           onSnapChange={chooseSnapGrid}
           onSnapOpenChange={setSnapOpen}
           onObjectSnapChange={changeObjectSnap}
@@ -9096,7 +9106,7 @@ export function WorkplaneViewport({
           moveDimensionsEnabled={moveDimensionsEnabled}
           originDimensionsEnabled={originDimensionsEnabled}
           startInPerspective={startInPerspective}
-          onWorkspaceChange={setWorkspace}
+          onWorkspaceChange={changeWorkspace}
           onSnapChange={chooseSnapGrid}
           onThemePreferenceChange={onThemePreferenceChange}
           onMoveDimensionsEnabledChange={changeMoveDimensionsEnabled}

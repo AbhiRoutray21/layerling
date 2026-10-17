@@ -91,6 +91,8 @@ export type MeasurementAccuracy = 1 | 2 | 3;
 export type HistoryRetentionLimit = "unlimited" | number;
 
 export type ShapeCustomization = {
+  /** The colour a new shape of this kind starts with ("#rrggbb"); the app's own colour of the kind when absent. */
+  color?: string;
   width?: number;
   depth?: number;
   height?: number;

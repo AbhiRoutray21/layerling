@@ -800,7 +800,7 @@ export function makeShapeFromAsset(
     id: createLocalId(asset.id),
     name: asset.name,
     kind: asset.kind,
-    color: asset.color,
+    color: customization.color ?? asset.color,
     hole: asset.hole,
     x: point?.x ?? 0,
     z: point?.z ?? 0,
