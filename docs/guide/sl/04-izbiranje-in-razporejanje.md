@@ -9,6 +9,8 @@ Klik na obliko jo izbere. S [[Shift]] dodaš še druge ali jih spet odvzameš. D
 
 Kar ti je v napoto, skriješ ({{ui:editor.tool.hideSelected}}, [[Ctrl]]+[[H]]). Skrite oblike ostanejo v načrtu, samo niso vidne in ne pridejo v izvoz; okno izvoza vnaprej pove, koliko jih je. S [[Ctrl]]+[[Shift]]+[[H]] vrneš vse nazaj. Kar naj ostane na mestu, zakleneš s ključavnico zgoraj v nastavitvah ali s [[Ctrl]]+[[L]]. Zaklenjene oblike ni mogoče premikati, spreminjati velikosti, vrteti, barvati ali izbrisati: njene ročice posivijo, ob puščici zgoraj se pokaže ključavnica, orodja, ki bi jo spremenila, pa so zatemnjena. Ko miško pelješ čez ročico, se mere še vedno pokažejo, tipka, ki bi jo spremenila, pa pove »Objekt zaklenjen«. Dokler je v izboru ena zaklenjena oblika, se tudi pri drugih nič ne spremeni. Skrivanje, preimenovanje, kopiranje in podvajanje še delujejo.
 
+Število na gumbu skupine {{ui:editor.group.visibility}} pove, koliko oblik je skritih, klik nanj pa jih spet prikaže vse. Projekt, odprt s skritimi oblikami, to enkrat sporoči z obvestilom z gumbom za prikaz.
+
 ## Seznam objektov
 
 Pri mnogih delih v pogledu zlahka izgubiš pregled. Seznam objektov ({{ui:editor.tool.showOutliner}} ali [[Ctrl]]+[[Shift]]+[[O]]) pokaže vse oblike kot seznam. Ostane odprt ali zaprt, kakor si ga pustil, za vse načrte, dokler ga ne zapreš; izbira se shrani v brskalniku.

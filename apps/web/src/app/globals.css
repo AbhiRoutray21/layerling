@@ -6171,6 +6171,62 @@ html[data-theme="dark"] .import-option {
   min-width: 0;
 }
 
+/* The button a message may carry (#489): what can be done about it right away. */
+.editor-status-action {
+  flex: none;
+  margin: 0 2px 0 4px;
+  padding: 3px 10px;
+  color: #fff;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 900;
+  background: #cf6a12;
+  border: 0;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.editor-status-action:hover,
+.editor-status-action:focus-visible {
+  background: #b45a0c;
+}
+
+/* The number of hidden shapes on the visibility button, so that it is seen without opening the menu (#489). */
+.visibility-trigger-wrap {
+  position: relative;
+  display: inline-flex;
+}
+
+.visibility-hidden-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  z-index: 2;
+  display: grid;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  place-items: center;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 900;
+  line-height: 1;
+  background: #d9730d;
+  border: 2px solid #fffaf2;
+  border-radius: 999px;
+  box-shadow: 0 1px 3px rgba(60, 40, 10, 0.35);
+  cursor: pointer;
+}
+
+.visibility-hidden-badge:hover,
+.visibility-hidden-badge:focus-visible {
+  background: #b45a0c;
+}
+
+html[data-theme="dark"] .visibility-hidden-badge {
+  border-color: #2a2118;
+}
+
 .editor-status-close {
   display: grid;
   flex: none;

@@ -2441,6 +2441,33 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .import-option {
   box-shadow: 0 2px 12px rgba(52, 52, 52, 0.16);
 }
 
+:where(html[data-theme="dark"][data-palette="graphite"]) .editor-status-action {
+  color: #fff;
+  background: #cf6a12;
+  border: 0;
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .editor-status-action:hover,
+:where(html[data-theme="dark"][data-palette="graphite"]) .editor-status-action:focus-visible {
+  background: #b45a0c;
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .visibility-hidden-badge {
+  color: #fff;
+  background: #d9730d;
+  border: 2px solid #f9f9f9;
+  box-shadow: 0 1px 3px rgba(40, 40, 40, 0.35);
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .visibility-hidden-badge:hover,
+:where(html[data-theme="dark"][data-palette="graphite"]) .visibility-hidden-badge:focus-visible {
+  background: #b45a0c;
+}
+
+html[data-theme="dark"]:where([data-palette="graphite"]) .visibility-hidden-badge {
+  border-color: #272727;
+}
+
 :where(html[data-theme="dark"][data-palette="graphite"]) .editor-status-close {
   color: inherit;
   background: transparent;

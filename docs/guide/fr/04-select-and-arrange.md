@@ -9,6 +9,8 @@ Un clic sur une forme la sélectionne. Avec [[Shift]], vous en ajoutez ou en sup
 
 Qu'est-ce qui vous gêne ({{ui:editor.tool.hideSelected}}, [[Ctrl]]+[[H]]). Les formes cachées restent dans la conception, elles ne sont tout simplement pas visibles et ne sont pas exportées ; la fenêtre d'export indique à l'avance combien il y en a. [[Ctrl]]+[[Shift]]+[[H]] les ramène tous. Ce qui doit rester, vous le verrouillez avec le cadenas en haut des paramètres ou avec [[Ctrl]]+[[L]]. Une forme verrouillée ne peut pas être déplacée, redimensionnée, tournée, recolorée ou supprimée : ses poignées deviennent grises, un cadenas apparaît à côté de la flèche en haut et les outils qui permettraient de la modifier sont grisés. Le survol d'une poignée affiche toujours ses tailles, et une clé qui la modifierait indique "Objet verrouillé". Tant qu'une forme verrouillée est dans la sélection, rien ne change non plus pour les autres. Masquer, renommer, copier et dupliquer fonctionne toujours.
 
+Un nombre sur le bouton du groupe {{ui:editor.group.visibility}} indique combien de formes sont masquées, et un clic dessus les affiche toutes de nouveau. Un dessin ouvert avec des formes masquées le signale une fois, avec un bouton pour les afficher.
+
 ## La liste des objets
 
 Avec de nombreuses pièces, il est facile de perdre le fil de la vue. La liste d'objets ({{ui:editor.tool.showOutliner}} ou [[Ctrl]]+[[Shift]]+[[O]]) affiche toutes les formes sous forme de liste.

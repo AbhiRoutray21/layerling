@@ -78,5 +78,15 @@
       "de": "Im Fenster mit den Eigenschaften verschwand der Knopf mit dem Auge, sobald mehr als ein Körper ausgewählt war, und man musste das Menü „Sichtbarkeit“ nehmen. Jetzt steht er neben dem Schloss auch bei mehreren Körpern: Er blendet alle ausgewählten aus, und sind alle schon ausgeblendet, blendet er sie wieder ein. Dasselbe tut Strg+H.",
       "en": "In the properties window the button with the eye disappeared as soon as more than one body was selected, and you had to use the Visibility menu. Now it stands beside the lock for several bodies too: it hides all the selected ones, and when all of them are hidden it shows them again. Ctrl+H does the same."
     }
+  },
+  {
+    "title": {
+      "de": "Ausgeblendete Formen sieht man jetzt",
+      "en": "Hidden shapes can be seen now"
+    },
+    "body": {
+      "de": "Sind Formen ausgeblendet, steht eine kleine Zahl am Knopf der Gruppe „Sichtbarkeit“; ein Klick darauf blendet alle wieder ein. Öffnest du einen Entwurf mit ausgeblendeten Formen, sagt es dir einmal eine Meldung, mit einem Knopf „Alle einblenden“. Ausgeblendetes bleibt aber ausgeblendet, wenn du nichts tust.",
+      "en": "When shapes are hidden, a small number sits on the button of the Visibility group; a click on it shows them all again. If you open a design that has hidden shapes, a message tells you once, with a button “Show all”. Hidden shapes stay hidden if you do nothing."
+    }
   }
 ]

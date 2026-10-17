@@ -2634,6 +2634,12 @@ export function LayerlingEditor({
   // Leer heisst Ruhe: Dann steht kein Fenster auf der Arbeitsflaeche. Ein
   // „Bereit" braucht niemand zu lesen - dass nichts los ist, sieht man.
   const [notice, setNoticeText] = useState("");
+  // A message may carry one button, for what the person can do about it right away (#489).
+  const [noticeAction, setNoticeAction] = useState<{ label: string; run: () => void } | null>(null);
+  const showHiddenRef = useRef<() => void>(() => undefined);
+  // The design for which the hidden shapes were told once, when its shapes first arrived (#489).
+  const hiddenNoticedProjectRef = useRef<string | null>(null);
+  const hiddenNoticePendingRef = useRef(false);
   const noticeTimerRef = useRef<number | null>(null);
 
   /**
@@ -2659,13 +2665,15 @@ export function LayerlingEditor({
       window.removeEventListener("unhandledrejection", onRejection);
     };
   }, []);
-  const setNotice = useCallback((message: string, patient = false) => {
+  const setNotice = useCallback((message: string, patient = false, action: { label: string; run: () => void } | null = null) => {
     reportNoticesRef.current = rememberBugReportEvent(reportNoticesRef.current, message);
     setNoticeText(message);
+    setNoticeAction(action);
     if (noticeTimerRef.current !== null) window.clearTimeout(noticeTimerRef.current);
     noticeTimerRef.current = window.setTimeout(() => {
       noticeTimerRef.current = null;
       setNoticeText("");
+      setNoticeAction(null);
     }, noticeDurationMs(message, patient));
   }, []);
   // A message stays while the pointer rests on it, and goes a few seconds after it leaves (#422).
@@ -2678,12 +2686,14 @@ export function LayerlingEditor({
     noticeTimerRef.current = window.setTimeout(() => {
       noticeTimerRef.current = null;
       setNoticeText("");
+      setNoticeAction(null);
     }, NOTICE_AFTER_HOVER_MS);
   }, []);
   const dismissNotice = useCallback(() => {
     if (noticeTimerRef.current !== null) window.clearTimeout(noticeTimerRef.current);
     noticeTimerRef.current = null;
     setNoticeText("");
+    setNoticeAction(null);
   }, []);
 
   useEffect(() => () => {
@@ -5067,7 +5077,32 @@ export function LayerlingEditor({
     serverSavedFingerprintRef.current = { projectId: projectId ?? null, fingerprint: projectSceneFingerprint(incoming, incomingNotes) };
     // Ein geoeffneter Entwurf ist keine Meldung wert: Dass er da ist, sieht man.
     setNotice("");
+    // Anders, was man nicht sieht: A design that is opened with hidden shapes says so once, with a button to show them (#489).
+    // After a reload the shapes arrive a moment after the design is chosen, so it is the first batch of
+    // shapes of a design that counts, not the change of design.
+    if (projectId && incoming.length > 0 && hiddenNoticedProjectRef.current !== projectId) {
+      hiddenNoticedProjectRef.current = projectId;
+      // Said a moment later (below): a language that settles after a reload clears every standing message.
+      if (incoming.some((shape) => shape.hidden)) hiddenNoticePendingRef.current = true;
+    }
   }, [initialAssets, initialHistory, initialHistoryIndex, initialPlacementElevation, initialPlacementWorkplane, initialShapes, projectId, projectRevision]);
+
+  // A design opened with hidden shapes says so once, with a button to show them (#489). Only once the
+  // language and the shapes have settled, or the message would be wiped as out of date.
+  useEffect(() => {
+    if (!hiddenNoticePendingRef.current) return;
+    const timer = window.setTimeout(() => {
+      hiddenNoticePendingRef.current = false;
+      const hidden = shapesRef.current.filter((shape) => shape.hidden).length;
+      if (hidden === 0) return;
+      setNotice(
+        hidden === 1 ? t("status.hiddenOnOpenOne") : t("status.hiddenOnOpenMany", { count: hidden }),
+        true,
+        { label: t("status.hiddenOnOpenShow"), run: () => showHiddenRef.current() },
+      );
+    }, 900);
+    return () => window.clearTimeout(timer);
+  }, [editorLanguage, projectId, setNotice, shapes]);
 
   useEffect(() => {
     if (!projectId || !onProjectShapesChange) {
@@ -6925,6 +6960,7 @@ export function LayerlingEditor({
       hiddenCount === 1 ? t("status.shownHiddenOne") : t("status.shownHiddenMany", { count: hiddenCount }),
     );
   }, [commitShapes, selectedIds, shapes]);
+  showHiddenRef.current = showHidden;
 
   const toggleLocked = useCallback(() => {
     if (!hasSelection) {
@@ -12263,6 +12299,7 @@ export function LayerlingEditor({
           onSelectionHole={setSelectionHoleMode}
           onSelectionColor={setSelectionColor}
           onSelectionLock={toggleLocked}
+          onSelectionHide={toggleHidden}
           onWrapAroundCylinder={selectedShapes.length === 1 && offersCylinderWrap(selectedShape) ? wrapSelectionAroundCylinder : undefined}
           onLayerText={selectedShapes.length === 1 && offersTextLayers(selectedShape) ? layerSelectedText : undefined}
           onTextTags={selectedShapes.length === 1 && offersTextLayers(selectedShape) ? makeTextTags : undefined}
@@ -12299,7 +12336,6 @@ export function LayerlingEditor({
           onNoteRemove={removeNote}
           onNoteModeChange={setNoteMode}
           onWorkspaceSettingsChange={updateProjectWorkspaceSettings}
-          onSelectionHide={toggleHidden}
           onWorkplaneModeChange={closeViewportWorkplaneMode}
           modifierActive={Boolean(edgeModifier)}
           modifierPreviewActive={Boolean(edgeModifier?.preview)}
@@ -12714,6 +12750,19 @@ export function LayerlingEditor({
       {notice ? (
         <p className="editor-status" role="status" aria-live="polite" onMouseEnter={holdNotice} onMouseLeave={releaseNotice}>
           <span className="editor-status-text">{notice}</span>
+          {noticeAction ? (
+            <button
+              className="editor-status-action"
+              type="button"
+              onClick={() => {
+                const run = noticeAction.run;
+                dismissNotice();
+                run();
+              }}
+            >
+              {noticeAction.label}
+            </button>
+          ) : null}
           <button className="editor-status-close" type="button" aria-label={t("status.dismiss")} title={t("status.dismiss")} onClick={dismissNotice}>
             <X size={13} strokeWidth={2.6} aria-hidden="true" />
           </button>
@@ -13639,17 +13688,31 @@ function SecondaryToolbar({
           <div className="toolbar-section-label">{t("editor.group.visibility")}</div>
           <div className="toolbar-section-tools">
             {visibilityTools.map(renderToolButton)}
-            <button
-              className={`toolbar-icon visibility-menu-trigger ${visibilityOpen ? "active" : ""}`}
-              type="button"
-              aria-label={t("editor.visibilityOptions")}
-              title={t("editor.visibilityOptions")}
-              aria-haspopup="menu"
-              aria-expanded={visibilityOpen}
-              onClick={toggleVisibilityMenu}
-            >
-              <ToolbarCaretDownIcon />
-            </button>
+            <span className="visibility-trigger-wrap">
+              <button
+                className={`toolbar-icon visibility-menu-trigger ${visibilityOpen ? "active" : ""}`}
+                type="button"
+                aria-label={t("editor.visibilityOptions")}
+                title={t("editor.visibilityOptions")}
+                aria-haspopup="menu"
+                aria-expanded={visibilityOpen}
+                onClick={toggleVisibilityMenu}
+              >
+                <ToolbarCaretDownIcon />
+              </button>
+              {hiddenShapeCount > 0 ? (
+                // What is hidden is seen without opening the menu; a click shows it all (#489).
+                <button
+                  className="visibility-hidden-badge"
+                  type="button"
+                  aria-label={t("visibility.showAllHidden", { count: hiddenShapeCount })}
+                  title={t("visibility.showAllHidden", { count: hiddenShapeCount })}
+                  onClick={onShowHidden}
+                >
+                  {hiddenShapeCount}
+                </button>
+              ) : null}
+            </span>
           </div>
           {visibilityOpen ? (
             <div

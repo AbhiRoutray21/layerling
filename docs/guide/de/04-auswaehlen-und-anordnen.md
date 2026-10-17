@@ -9,6 +9,8 @@ Ein Klick auf eine Form wählt sie aus. Mit [[Umschalt]] nimmst du weitere dazu 
 
 Was du im Weg hast, blendest du aus ({{ui:editor.tool.hideSelected}}, [[Strg]]+[[H]]). Ausgeblendete Formen bleiben im Entwurf, sie sind nur nicht zu sehen und kommen nicht mit in den Export; das Exportfenster sagt vorher, wie viele es sind. Mit [[Strg]]+[[Umschalt]]+[[H]] holst du alle zurück. Was liegen bleiben soll, sperrst du mit dem Schloss oben in den Einstellungen oder mit [[Strg]]+[[L]]. Eine gesperrte Form lässt sich weder verschieben noch in Größe, Drehung oder Farbe ändern oder löschen: Ihre Griffe werden grau, neben dem Pfeil oben zeigt sich ein Schloss, und die Werkzeuge, die sie ändern würden, sind ausgegraut. Fährst du über einen Griff, siehst du trotzdem ihre Maße, und eine Taste, die sie ändern würde, meldet „Objekt gesperrt“. Solange eine gesperrte Form in der Auswahl ist, ändert sich auch an den anderen nichts. Ausblenden, Umbenennen, Kopieren und Duplizieren gehen weiterhin.
 
+Eine Zahl am Knopf der Gruppe {{ui:editor.group.visibility}} sagt, wie viele Formen ausgeblendet sind, und ein Klick darauf blendet sie alle wieder ein. Wird ein Entwurf mit ausgeblendeten Formen geöffnet, sagt das einmal eine Meldung, mit einem Knopf zum Einblenden.
+
 ## Die Objektliste
 
 Bei vielen Teilen verliert man in der Ansicht leicht den Überblick. Die Objektliste ({{ui:editor.tool.showOutliner}} oder [[Strg]]+[[Umschalt]]+[[O]]) zeigt alle Formen als Liste. Sie bleibt offen oder geschlossen, wie du sie verlassen hast, für jeden Entwurf, bis du sie schließt; die Wahl wird im Browser gemerkt.

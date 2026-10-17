@@ -9,6 +9,8 @@ Egy alakzatra kattintva kijelölöd. A [[Shift]] billentyűvel továbbiakat adsz
 
 Ami útban van, azt elrejted ({{ui:editor.tool.hideSelected}}, [[Ctrl]]+[[H]]). Az elrejtett alakzatok a tervben maradnak, csak nem látszanak, és kimaradnak az exportból; az exportálási ablak előre megmondja, hány ilyen van. A [[Ctrl]]+[[Shift]]+[[H]] mindet visszahozza. Ami maradjon a helyén, azt a beállítások tetején lévő lakattal vagy a [[Ctrl]]+[[L]] billentyűvel zárolod. Egy zárolt alakzatot nem lehet mozgatni, átméretezni, forgatni, átszínezni vagy törölni: a fogantyúi szürkék lesznek, a felső nyíl mellett lakat jelenik meg, és az eszközök, amelyek megváltoztatnák, szürkék. Ha egy fogantyú fölé viszed az egeret, a méreteit továbbra is mutatja, egy billentyű pedig, amely megváltoztatná, azt írja ki: „Az objektum zárolva van”. Amíg egy zárolt alakzat a kijelölésben van, a többin sem változik semmi. Az elrejtés, az átnevezés, a másolás és a másolatkészítés továbbra is működik.
 
+A {{ui:editor.group.visibility}} csoport gombján egy szám mutatja, hány alakzat van elrejtve, és egy kattintás mindet újra megjeleníti. Ha elrejtett alakzatokat tartalmazó tervet nyitsz meg, azt egyszer egy üzenet jelzi, a megjelenítésükhöz gombbal.
+
 ## Az objektumlista
 
 Sok résznél a nézetben könnyű elveszíteni a fonalat. Az objektumlista ({{ui:editor.tool.showOutliner}} vagy [[Ctrl]]+[[Shift]]+[[O]]) listában mutatja az összes alakzatot. Nyitva vagy zárva marad, ahogy hagytad, minden tervnél, amíg be nem zárod; a választás a böngészőben megmarad.

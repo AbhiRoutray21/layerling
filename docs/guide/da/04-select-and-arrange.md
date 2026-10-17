@@ -9,6 +9,8 @@ Et klik på en form vælger den. Med [[Shift]] tilføjer du flere eller tager de
 
 Hvad der er i vejen skjuler du ({{ui:editor.tool.hideSelected}}, [[Ctrl]]+[[H]]). Skjulte former bliver i designet, de er bare ikke synlige og er ude af eksporten; eksportvinduet siger på forhånd hvor mange der er. [[Ctrl]]+[[Shift]]+[[H]] bringer dem alle tilbage. Hvad der skal blive låser du med hængelåsen øverst i indstillingerne eller med [[Ctrl]]+[[L]]. En låst form kan ikke flyttes, ændres størrelse på, vendes, omfarves eller slettes: dens håndtag bliver grå, der vises en hængelås ved siden af pilen øverst, og de værktøjer der ville ændre den er grået ud. At holde musen over et håndtag viser stadig dets størrelser, og en tast der ville ændre den siger "Objekt låst". Mens én låst form er i markeringen, ændres intet for de andre heller. Skjul, omdøb, kopier og duplikering virker stadig.
 
+Et tal på knappen for gruppen {{ui:editor.group.visibility}} fortæller, hvor mange former der er skjult, og et klik på det viser dem alle igen. Et design, der åbnes med skjulte former, siger det én gang med en besked og en knap til at vise dem.
+
 ## Objektlisten
 
 Med mange dele er det let at miste overblikket i visningen. Objektlisten ({{ui:editor.tool.showOutliner}} eller [[Ctrl]]+[[Shift]]+[[O]]) viser alle former som en liste.

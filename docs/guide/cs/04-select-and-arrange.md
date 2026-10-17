@@ -9,6 +9,8 @@ Kliknutí vybere tvar, [[Shift]] přidává nebo odebírá další. Dokud drží
 
 Překážející objekt skryjte pomocí {{ui:editor.tool.hideSelected}}, [[Ctrl]]+[[H]]. V projektu zůstane, ale nebude viditelný ani zahrnutý v exportu. Exportní okno předem uvede počet skrytých dílů. [[Ctrl]]+[[Shift]]+[[H]] všechny zobrazí. Proti nechtěným změnám chrání zámek nahoře v nastavení nebo [[Ctrl]]+[[L]]. Zamčený tvar nelze přesouvat, měnit jeho rozměry, otáčet, přebarvovat ani mazat. Úchyty zešednou, u horní šipky se objeví zámek a editační nástroje se vypnou. Rozměry lze stále zjistit najetím na úchyt. Klávesa pro změnu ohlásí zamčený objekt. Obsahuje-li výběr zamčený tvar, nemění se ani ostatní části. Skrytí, přejmenování, kopírování a duplikování zůstávají dostupné.
 
+Číslo na tlačítku skupiny {{ui:editor.group.visibility}} říká, kolik tvarů je skrytých, a kliknutím na něj se všechny znovu zobrazí. Projekt otevřený se skrytými tvary to jednou oznámí zprávou s tlačítkem pro jejich zobrazení.
+
 ## Seznam objektů
 
 U složitého modelu pomůže seznam všech tvarů: {{ui:editor.tool.showOutliner}} nebo [[Ctrl]]+[[Shift]]+[[O]]. V tomto prohlížeči si pamatuje, zda jste jej nechali otevřený nebo zavřený, a toto nastavení platí pro všechny projekty.

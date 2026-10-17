@@ -9,6 +9,8 @@ Een klik op een vorm selecteert hem. Met [[Shift]] voeg je er meer toe of haal j
 
 Wat in de weg zit, verberg je ({{ui:editor.tool.hideSelected}}, [[Ctrl]]+[[H]]). Verborgen vormen blijven in het ontwerp, ze zijn alleen niet te zien en gaan niet mee in de export; het exportvenster zegt vooraf hoeveel het er zijn. [[Ctrl]]+[[Shift]]+[[H]] haalt ze allemaal terug. Wat moet blijven staan, vergrendel je met het hangslot bovenaan in de instellingen of met [[Ctrl]]+[[L]]. Een vergrendelde vorm kun je niet verplaatsen, van grootte veranderen, draaien, een andere kleur geven of verwijderen: zijn grepen worden grijs, naast de pijl bovenop verschijnt een hangslot, en de gereedschappen die hem zouden veranderen zijn grijs. Als je over een greep beweegt, zie je nog steeds zijn maten, en een toets die hem zou veranderen meldt "Object vergrendeld". Zolang er één vergrendelde vorm in de selectie zit, verandert er ook aan de andere niets. Verbergen, hernoemen, kopiëren en dupliceren werken nog gewoon.
 
+Een getal bij de knop van de groep {{ui:editor.group.visibility}} zegt hoeveel vormen verborgen zijn, en een klik erop toont ze allemaal weer. Een ontwerp dat met verborgen vormen wordt geopend, meldt dat één keer, met een knop om ze te tonen.
+
 ## De objectlijst
 
 Met veel onderdelen raak je in de weergave makkelijk het overzicht kwijt. De objectlijst ({{ui:editor.tool.showOutliner}} of [[Ctrl]]+[[Shift]]+[[O]]) toont alle vormen als een lijst. Ze blijft open of dicht zoals je haar achterliet, voor elk ontwerp, tot je haar sluit; de keuze wordt in de browser onthouden.
