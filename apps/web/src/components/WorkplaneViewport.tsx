@@ -11275,9 +11275,19 @@ function syncTransformOverlay(
     heightEdge = { low, high, outward: outward.lengthSq() > 1e-9 ? outward.normalize() : rightOut, screenX };
   }
   const heightMark = makeDimensionMark("height", heightHandleKey, "height", heightLabel, heightEdge?.low ?? lowerCenterWorld, heightEdge?.high ?? upperCenterWorld, heightEdge?.outward ?? rightOut, project);
+  // The height value stands at the edge, off the body (DrJones). Pulling the handle far from that edge - or zoomed
+  // in so that the edge is out of view - left the value somewhere else or nowhere (#488), so it stands at the
+  // handle too, above it (below, for the lower handle), and can be clicked and typed there as well.
+  const heightAtHandle: DimensionMark = {
+    ...heightMark,
+    key: "height-at-handle",
+    labelOnly: true,
+    labelX: heightPoint.x,
+    labelY: heightPoint.y + (showLowerHandles ? 30 : -30),
+  };
   const dimensionMarks = {
     ...footprintDimensionMarks,
-    [heightHandleKey]: [heightMark],
+    [heightHandleKey]: [heightMark, heightAtHandle],
     [liftHandleKey]: [makeDimensionMark("elevation", liftHandleKey, "elevation", liftLabel, liftAnchor, liftTarget, liftDimensionOutward, project)],
   };
   const screenOffsetFromCenter = (point: { x: number; y: number }, distance: number) => {

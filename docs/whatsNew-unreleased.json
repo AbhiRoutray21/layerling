@@ -58,5 +58,15 @@
       "de": "Neben „Obere Kanten“ gibt es im Verrunden- und Fasen-Werkzeug jetzt „Untere Kanten“: ein Klick wählt nur die Kanten ganz unten am Körper, etwa den Fuß eines Teils. So rundest oder fasst du nur das untere Ende, ohne die Kanten einzeln anzuklicken. Auch die KI-Anbindung versteht es („bottom“).",
       "en": "Next to “Top edges”, the Fillet and Chamfer tools now have “Bottom edges”: one click picks only the edges along the very bottom of the body, such as the foot of a part. That rounds or chamfers just the lower end without clicking the edges one by one. The AI connection understands it too (“bottom”)."
     }
+  },
+  {
+    "title": {
+      "de": "Der Höhenwert steht auch am Höhengriff",
+      "en": "The height value also stands at the height handle"
+    },
+    "body": {
+      "de": "Beim Ziehen am oberen Mittelgriff stand der Höhenwert nur an der senkrechten Kante, oft weit weg vom Griff, und beim Hineinzoomen verschwand er ganz. Jetzt steht er zusätzlich direkt am Griff (darüber, am unteren Griff darunter), immer im Bild, und lässt sich dort anklicken, um eine Zahl einzutippen. Das Maß an der Kante bleibt, wie es war.",
+      "en": "When you pulled the top middle handle, the height value stood only at the vertical edge, often far from the handle, and it vanished when you zoomed in. Now it also stands right at the handle (above it, below the lower handle), always in view, and can be clicked there to type a number. The measure at the edge stays as it was."
+    }
   }
 ]

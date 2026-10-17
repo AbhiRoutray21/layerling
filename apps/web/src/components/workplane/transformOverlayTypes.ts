@@ -317,6 +317,11 @@ export type DimensionMark = {
   e2y2: number;
   labelX: number;
   labelY: number;
+  /**
+   * Only the number, without rails: the second place of the height value, right at the height handle, shown
+   * while the handle is hovered or pulled (#488). It is left out where marks stand on their own.
+   */
+  labelOnly?: boolean;
 };
 
 export type TransformOverlayState = {
