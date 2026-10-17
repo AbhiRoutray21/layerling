@@ -1,5 +1,40 @@
 [
   {
+    "version": "1.86.2",
+    "items": [
+      {
+        "title": {
+          "de": "Eine Zahl am Mauszeiger zählt die Auswahl mit",
+          "en": "A number at the mouse pointer counts the selection"
+        },
+        "body": {
+          "de": "Wenn du mit Umschalt mehrere Körper auswählst, steht jetzt eine kleine Zahl unter dem Mauszeiger, solange Umschalt gehalten wird und zwei oder mehr Körper ausgewählt sind. So behältst du beim Anklicken im Blick, wie viele es schon sind, ohne zum Eigenschaften-Fenster zu schauen. Nur mit der Maus: Ein Finger würde die Zahl verdecken.",
+          "en": "When you select several bodies with Shift, a small number now stands below the mouse pointer while Shift is held and two or more bodies are selected. While clicking you keep the tally in view without glancing at the Properties panel. Mouse only: a finger would cover the number."
+        }
+      },
+      {
+        "title": {
+          "de": "Interaktive Hilfe antwortet auch bei ausgegrauten Knöpfen",
+          "en": "Interactive Help also answers for greyed-out buttons"
+        },
+        "body": {
+          "de": "Bei einem ausgegrauten Knopf, etwa „Ansicht auf die Auswahl zentrieren“, solange nichts ausgewählt ist, blieb die Interaktive Hilfe stumm. Jetzt antwortet sie auch dort und führt zum passenden Abschnitt der Anleitung, so kannst du nachlesen, wozu der Knopf da ist und warum er gerade nicht geht.",
+          "en": "With a greyed-out button, such as \"Center view on selection\" while nothing is selected, Interactive Help stayed silent. Now it answers there too and leads to the matching section of the guide, so you can read what the button is for and why it does not work at the moment."
+        }
+      },
+      {
+        "title": {
+          "de": "Die Formen-Bibliothek lässt sich verschieben und offen halten",
+          "en": "The shape library can be moved and kept open"
+        },
+        "body": {
+          "de": "Die Bibliothek der Formen deckte beim Platzieren die Stelle ab, auf die du zielst. Jetzt verschiebst du sie an ihrer Titelleiste, zum Beispiel über das Eigenschaften-Fenster; ein Doppelklick auf die Titelleiste setzt sie zurück unter ihren Knopf. Mit der Stecknadel in der Titelleiste bleibt sie offen, wenn du mehrere Formen nacheinander setzen willst. Ohne Nadel schließt sie sich wie bisher nach jeder Form. Das gilt auch für die Formen in der Skizze.",
+          "en": "The shape library covered the spot you aim at while placing. Now you move it by its title bar, over the Properties panel for example; a double-click on the title bar puts it back under its button. The pin in the title bar keeps it open when you want to put several shapes one after the other. Without the pin it closes after each shape, as it did. The same goes for the shapes of the sketch."
+        }
+      }
+    ]
+  },
+  {
     "version": "1.86.1",
     "items": [
       {
