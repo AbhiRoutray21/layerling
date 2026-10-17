@@ -208,5 +208,15 @@
       "de": "Wer Teile weit neben der Platte abgelegt hat, kam mit der Maus nicht bis zu ihnen: Der Punkt, um den die Ansicht schwenkt und dreht, blieb auf der Platte, außer nach „Ansicht auf Auswahl zentrieren“. Er reicht jetzt bis zum entferntesten Körper des Entwurfs.",
       "en": "If you had parked parts far beside the plate, the mouse could not take the view over to them: the point the view pans and turns around stayed on the plate, except after “Center view on selection”. It now reaches the farthest body of the design."
     }
+  },
+  {
+    "title": {
+      "de": "Die Formenbibliothek stößt beim Verschieben nicht mehr an eine unsichtbare Kante",
+      "en": "The shape library no longer meets an invisible edge when moved"
+    },
+    "body": {
+      "de": "Mit kleiner oder großer Werkzeugleiste blieb die Formenbibliothek beim Verschieben vor dem Fensterrand hängen oder lief rechts und unten aus dem Fenster. Jetzt geht sie bei jeder Werkzeugleistengröße bis zum Fensterrand.",
+      "en": "With a small or large toolbar the shape library stopped short of the window's edge when moved, or ran out of the window on the right and below. Now it goes as far as the window's edge at every toolbar size."
+    }
   }
 ]

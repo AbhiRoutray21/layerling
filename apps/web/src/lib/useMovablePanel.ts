@@ -67,13 +67,16 @@ export function useMovablePanel<T extends HTMLElement = HTMLDivElement>(storageK
     const base = parent && parentRect
       ? { left: parentRect.left + parent.clientLeft, top: parentRect.top + parent.clientTop }
       : { left: 0, top: 0 };
-    const scale = parent && parentRect && parent.offsetWidth > 0 ? parentRect.width / parent.offsetWidth || 1 : 1;
+    const computed = window.getComputedStyle(panel);
+    // The panel's own CSS zoom (the shape library follows the toolbar size, #509) scales its lengths, its offsets
+    // and its left and top alike: an offset of 10 lies 7.5 screen pixels from its parent at a zoom of 0.75.
+    const ownZoom = Number.parseFloat(computed.zoom);
+    const scale = (parent && parentRect && parent.offsetWidth > 0 ? parentRect.width / parent.offsetWidth || 1 : 1) * (Number.isFinite(ownZoom) && ownZoom > 0 ? ownZoom : 1);
     const areaRect = areaElement.getBoundingClientRect();
     const current = {
       left: base.left + panel.offsetLeft * scale - (areaRect.left + areaElement.clientLeft),
       top: base.top + panel.offsetTop * scale - (areaRect.top + areaElement.clientTop),
     };
-    const computed = window.getComputedStyle(panel);
     // Floating, the panel is placed absolutely: its left/top count from the offset parent's corner.
     // A panel the stylesheet only sets in the flow - the settings window is centred by its
     // container and is `position: relative` - stands somewhere else when docked, and taking that
