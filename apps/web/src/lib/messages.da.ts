@@ -2248,7 +2248,7 @@ export const MESSAGES_DA: Partial<Record<MessageKey, string>> = {
   "error.revolveNoProfile": "Tegn mindst én lukket profil til venstre for revolveringsaksen.",
   "error.revolveNoArea": "Revolverprofilen har intet fyldt areal.",
   "error.revolveNotValid": "Profilen kunne ikke revolveres til en gyldig form.",
-  "error.sketchOpenPaths": "Alle profilstier er åbne. Luk mindst én løkke før du afslutter skitsen.",
+  "error.sketchOpenPaths": "Alle profilstier er åbne. Luk mindst én løkke før du afslutter skitsen. Eller slå „Byg som en streg“ til, så bygges den åbne linje selv med en bredde.",
   "error.svgEmpty": "SVG-filen er tom.",
   "error.svgTooLarge": "SVG-filen er for stor. Maksimum er {size} MB.",
   "error.svgEntities": "Denne SVG-fil bruger enheder eller en dokumenttype af sin egen. Kun et almindeligt SVG-dokument understøttes.",

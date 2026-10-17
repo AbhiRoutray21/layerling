@@ -2352,7 +2352,7 @@ export const MESSAGES_CS: Record<MessageKey, string> = {
   "error.revolveNoProfile": "Nakreslete alespoň jeden uzavřený profil vlevo od osy rotace.",
   "error.revolveNoArea": "Rotační profil nemá vyplněnou plochu.",
   "error.revolveNotValid": "Rotací profilu nelze vytvořit platné těleso.",
-  "error.sketchOpenPaths": "Všechny obrysy profilu jsou otevřené. Před dokončením náčrtu uzavřete alespoň jednu smyčku.",
+  "error.sketchOpenPaths": "Všechny obrysy profilu jsou otevřené. Před dokončením náčrtu uzavřete alespoň jednu smyčku. Nebo zapněte „Vytvořit jako obrysový pás“ a otevřená čára se vytvoří sama se šířkou.",
   "error.svgEmpty": "SVG soubor je prázdný.",
   "error.svgTooLarge": "SVG soubor je příliš velký. Maximum je {size} MB.",
   "error.svgEntities": "SVG používá entity nebo vlastní typ dokumentu. Podporován je pouze běžný SVG dokument.",

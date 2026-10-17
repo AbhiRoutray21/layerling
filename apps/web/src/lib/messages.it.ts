@@ -2278,7 +2278,7 @@ export const MESSAGES_IT: Partial<Record<MessageKey, string>> = {
   "error.revolveNoProfile": "Disegna almeno un profilo chiuso sul lato sinistro dell'asse di rivoluzione.",
   "error.revolveNoArea": "Il profilo da ruotare non contiene un'area piena.",
   "error.revolveNotValid": "Non è stato possibile ruotare il profilo per creare un corpo valido.",
-  "error.sketchOpenPaths": "Tutti i percorsi del profilo sono aperti. Chiudi almeno un contorno prima di terminare lo schizzo.",
+  "error.sketchOpenPaths": "Tutti i percorsi del profilo sono aperti. Chiudi almeno un contorno prima di terminare lo schizzo. Oppure attiva «Crea come tratto» per creare la linea aperta stessa con uno spessore.",
   "error.svgEmpty": "Il file SVG è vuoto.",
   "error.svgTooLarge": "Il file SVG è troppo grande. Il limite massimo è {size} MB.",
   "error.svgEntities": "Questo file SVG utilizza entità o un tipo di documento personalizzato. È supportato solo un documento SVG semplice.",

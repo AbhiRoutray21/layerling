@@ -2362,7 +2362,7 @@ export const MESSAGES_PL: Partial<Record<MessageKey, string>> = {
   "error.revolveNoProfile": "Narysuj co najmniej jeden zamknięty profil po lewej stronie osi obrotu.",
   "error.revolveNoArea": "Profil obrotu nie ma wypełnionej powierzchni.",
   "error.revolveNotValid": "Nie udało się obrócić profilu w poprawną bryłę.",
-  "error.sketchOpenPaths": "Wszystkie ścieżki profilu są otwarte. Zamknij co najmniej jedną pętlę przed zakończeniem szkicu.",
+  "error.sketchOpenPaths": "Wszystkie ścieżki profilu są otwarte. Zamknij co najmniej jedną pętlę przed zakończeniem szkicu. Albo włącz „Buduj jako obrys”, aby zbudować samą otwartą linię z szerokością.",
   "error.svgEmpty": "Plik SVG jest pusty.",
   "error.svgTooLarge": "Plik SVG jest za duży. Maksimum to {size} MB.",
   "error.svgEntities": "Ten plik SVG używa encji lub własnego typu dokumentu. Obsługiwany jest tylko zwykły dokument SVG.",

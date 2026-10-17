@@ -2365,7 +2365,7 @@ export const MESSAGES_EN = {
   "error.revolveNoProfile": "Draw at least one closed profile on the left side of the revolve axis.",
   "error.revolveNoArea": "The revolve profile has no filled area.",
   "error.revolveNotValid": "The profile could not be revolved into a valid body.",
-  "error.sketchOpenPaths": "All profile paths are open. Close at least one loop before finishing the sketch.",
+  "error.sketchOpenPaths": "All profile paths are open. Close at least one loop before finishing the sketch. Or switch on 'Build as a stroke' to build the open line itself with a width.",
   "error.svgEmpty": "The SVG file is empty.",
   "error.svgTooLarge": "The SVG file is too large. The maximum is {size} MB.",
   "error.svgEntities": "This SVG file uses entities or a document type of its own. Only a plain SVG document is supported.",

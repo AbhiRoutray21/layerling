@@ -2365,7 +2365,7 @@ export const MESSAGES_AR: Partial<Record<MessageKey, string>> = {
   "error.revolveNoProfile": "ارسم مقطعًا مغلقًا واحدًا على الأقل على الجانب الأيسر من محور الدوران.",
   "error.revolveNoArea": "ليس لمقطع الدوران مساحة معبأة.",
   "error.revolveNotValid": "تعذر تحويل المقطع إلى جسم دوراني صالح.",
-  "error.sketchOpenPaths": "كل مسارات المقطع مفتوحة. أغلق حلقة واحدة على الأقل قبل إنهاء الرسم التخطيطي.",
+  "error.sketchOpenPaths": "كل مسارات المقطع مفتوحة. أغلق حلقة واحدة على الأقل قبل إنهاء الرسم التخطيطي. أو فعّل «البناء كخط بعرض» لبناء الخط المفتوح نفسه بعرض.",
   "error.svgEmpty": "ملف SVG فارغ.",
   "error.svgTooLarge": "ملف SVG كبير جدًا. الحد الأقصى هو {size} ميجابايت.",
   "error.svgEntities": "يستخدم ملف SVG هذا كيانات أو نوع مستند خاصًا به. لا يُدعم إلا مستند SVG عادي.",

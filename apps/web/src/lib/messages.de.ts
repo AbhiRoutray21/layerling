@@ -2364,7 +2364,7 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "error.revolveNoProfile": "Zeichne mindestens ein geschlossenes Profil links von der Drehachse.",
   "error.revolveNoArea": "Das Profil für die Drehung hat keine Fläche.",
   "error.revolveNotValid": "Das Profil ließ sich nicht zu einem gültigen Körper drehen.",
-  "error.sketchOpenPaths": "Alle Pfade der Skizze sind offen. Schließe mindestens eine Kontur, bevor du die Skizze beendest.",
+  "error.sketchOpenPaths": "Alle Pfade der Skizze sind offen. Schließe mindestens eine Kontur, bevor du die Skizze beendest. Oder schalte „Als Kontur bauen“ ein, dann wird die offene Linie selbst mit einer Breite gebaut.",
   "error.svgEmpty": "Die SVG-Datei ist leer.",
   "error.svgTooLarge": "Die SVG-Datei ist zu groß. Erlaubt sind höchstens {size} MB.",
   "error.svgEntities": "Diese SVG-Datei nutzt Entitäten oder eine eigene Dokumenttyp-Definition. Erlaubt ist nur ein einfaches SVG-Dokument.",

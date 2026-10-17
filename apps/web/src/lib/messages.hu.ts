@@ -2306,7 +2306,7 @@ export const MESSAGES_HU: Partial<Record<MessageKey, string>> = {
   "error.revolveNoProfile": "Rajzolj legalább egy zárt profilt a forgatási tengely bal oldalára.",
   "error.revolveNoArea": "A forgatási profilnak nincs kitöltött felülete.",
   "error.revolveNotValid": "A profilt nem sikerült érvényes testté forgatni.",
-  "error.sketchOpenPaths": "Minden profilútvonal nyitott. A vázlat befejezése előtt zárj le legalább egy hurkot.",
+  "error.sketchOpenPaths": "Minden profilútvonal nyitott. A vázlat befejezése előtt zárj le legalább egy hurkot. Vagy kapcsold be a „Vonalként készüljön” beállítást, és a nyitott vonal maga épül fel szélességgel.",
   "error.svgEmpty": "Az SVG-fájl üres.",
   "error.svgTooLarge": "Az SVG-fájl túl nagy. A legnagyobb megengedett méret {size} MB.",
   "error.svgEntities": "Ez az SVG-fájl saját entitásokat vagy saját dokumentumtípust használ. Csak egyszerű SVG-dokumentum támogatott.",

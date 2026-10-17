@@ -1793,7 +1793,7 @@ export const MESSAGES_SL: Partial<Record<MessageKey, string>> = {
   "error.revolveNoProfile": "Nariši vsaj en zaprt profil na levi strani osi vrtenja.",
   "error.revolveNoArea": "Profil vrtenja nima zapolnjene površine.",
   "error.revolveNotValid": "Profila ni bilo mogoče zavrteti v veljavno telo.",
-  "error.sketchOpenPaths": "Vse poti profila so odprte. Pred zaključkom skice zapri vsaj eno zanko.",
+  "error.sketchOpenPaths": "Vse poti profila so odprte. Pred zaključkom skice zapri vsaj eno zanko. Ali vklopite »Zgradi kot potezo«, da se odprta črta zgradi sama s širino.",
   "error.svgEmpty": "Datoteka SVG je prazna.",
   "error.svgTooLarge": "Datoteka SVG je prevelika. Največ je {size} MB.",
   "error.svgEntities": "Ta datoteka SVG uporablja entitete ali lastno vrsto dokumenta. Podprt je samo navaden dokument SVG.",

@@ -2364,7 +2364,7 @@ export const MESSAGES_NL: Record<MessageKey, string> = {
   "error.revolveNoProfile": "Teken minstens één gesloten profiel links van de draaias.",
   "error.revolveNoArea": "Het draaiprofiel heeft geen gevuld oppervlak.",
   "error.revolveNotValid": "Het profiel kon niet tot een geldig lichaam worden gedraaid.",
-  "error.sketchOpenPaths": "Alle profielpaden zijn open. Sluit minstens één lus voordat je de schets afrondt.",
+  "error.sketchOpenPaths": "Alle profielpaden zijn open. Sluit minstens één lus voordat je de schets afrondt. Of zet „Als lijn bouwen” aan om de open lijn zelf met een breedte te bouwen.",
   "error.svgEmpty": "Het SVG-bestand is leeg.",
   "error.svgTooLarge": "Het SVG-bestand is te groot. Het maximum is {size} MB.",
   "error.svgEntities": "Dit SVG-bestand gebruikt eigen entiteiten of een eigen documenttype. Alleen een gewoon SVG-document wordt ondersteund.",
