@@ -7,9 +7,10 @@ summary: Видео о layerling, сделанные другими людьми
 
 Эти видео не от этого проекта. Ссылки открывают YouTube в новой вкладке; оттуда ничего не загружается, пока вы не нажмёте.
 
+- [10 Things Layerling Can Do That Tinkercad Can't!](https://youtu.be/cx0OVHgUsJM) — Print N Repeat (англ.). Второе видео этого канала: десять вещей, которые умеет layerling и не умеет Tinkercad.
 - [Layerling la nueva herramienta gratuita de modelado 3D, más completo que Tinkercad](https://youtu.be/-EEt0RSINoY) — Fulcro 1900 (исп.). Видео о layerling как о новом бесплатном инструменте 3D-моделирования, более полном, чем Tinkercad.
 - [Layerling - Tussen Tinkercad en Fusion 360 in, en Helemaal Gratis!](https://youtu.be/X-UuvsfDI-s) — Werkplaats Marc (нидерл.). Первое знакомство с layerling для пользователей Tinkercad: выемка, скругления, узор из отверстий, резьба с зазором, собственные шрифты и профили принтеров; для наглядности напечатан болт с зазором и без него.
-- [10 things I love about Layerling and 3 things that Tinkercad does better](https://www.youtube.com/watch?v=WWhFSWFfG9g) — TECHNOBENTO (англ.). Тест layerling длиной около 29 минут: десять вещей, которые автору в нём нравятся, и три, которые лучше сделаны в Tinkercad.
+- [Layerling](https://www.youtube.com/playlist?list=PLYqVFeqYBrPE) — TECHNOBENTO (англ.). Плейлист о layerling, пока с видео «A new way to sketch in Layerling».
 - [The PERFECT FREE CAD Program Between Tinkercad and Fusion 360!](https://youtu.be/GIoG-IHPXyg) — Print N Repeat (англ.). Видео о layerling как о бесплатной CAD-программе между Tinkercad и Fusion 360.
 - [Layerling Tutorials](https://www.youtube.com/playlist?list=PLZ-ZWS0D1JIk) — HL ModTech (англ.). Плейлист от пользователя Tinkercad: пока обзор layerling примерно на 23 минуты (бесплатный браузерный CAD, расширяющий Tinkercad), более подробный разбор возможностей и короткое обновление про напечатанную резьбу.
 - [Layerling – Playlist](https://www.youtube.com/playlist?list=PLCsBmX2kOGWs) — Making Layers (англ.). Серия о layerling, пока с роликами «Tinkercad alternative / upgrade? Introducing Layerling!», обзором для тех, кто переходит с Tinkercad, и «Layerling Sketch Tools!» об инструментах эскиза.

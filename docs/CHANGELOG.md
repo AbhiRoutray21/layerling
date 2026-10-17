@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **Video list:** "10 Things Layerling Can Do That Tinkercad Can't!" by Print N Repeat is added at the top, in the start page list and in the guide. The video "10 things I love about Layerling and 3 things that Tinkercad does better" by TECHNOBENTO gives way to that channel's playlist "Layerling", where new videos arrive without a release.
+
 ## 1.87.0
 
 - **Turkish interface (#511):** The interface is available in Türkçe, translated by @murartdursun25 with the help of Claude and read by him as a native speaker: 2547 of 2562 sentences; the others and the chapters of the guide show in English until they are translated.
