@@ -290,6 +290,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/text.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/text.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/tekst.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/text.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/besedilo.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/text.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/text.html"/>
@@ -515,6 +516,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/text.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/text.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/tekst.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/text.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/besedilo.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/text.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/text.html"/>
@@ -740,6 +742,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/text.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/text.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/tekst.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/text.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/besedilo.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/text.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/text.html"/>
@@ -955,6 +958,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/text.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/text.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/tekst.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/text.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/besedilo.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/text.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/text.html"/>
@@ -1180,6 +1184,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/text.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/text.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/tekst.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/text.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/besedilo.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/text.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/text.html"/>
@@ -1405,6 +1410,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/text.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/text.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/tekst.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/text.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/besedilo.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/text.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/text.html"/>
@@ -1620,6 +1626,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/text.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/text.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/tekst.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/text.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/besedilo.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/text.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/text.html"/>
@@ -1837,6 +1844,20 @@
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/sketches.html"/>
   </url>
   <url>
+    <loc>https://layerling.com/instrukcja/text.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://layerling.com/guide/text.html"/>
+    <xhtml:link rel="alternate" hreflang="cs" href="https://layerling.com/prirucka/text.html"/>
+    <xhtml:link rel="alternate" hreflang="da" href="https://layerling.com/vejledning/text.html"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://layerling.com/anleitung/text.html"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/text.html"/>
+    <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/text.html"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/tekst.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/text.html"/>
+    <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/besedilo.html"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/text.html"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/text.html"/>
+  </url>
+  <url>
     <loc>https://layerling.com/navodila/prvi-koraki.html</loc>
     <xhtml:link rel="alternate" hreflang="en" href="https://layerling.com/guide/getting-started.html"/>
     <xhtml:link rel="alternate" hreflang="cs" href="https://layerling.com/prirucka/getting-started.html"/>
@@ -1943,6 +1964,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/text.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/text.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/tekst.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/text.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/besedilo.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/text.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/text.html"/>
@@ -2168,6 +2190,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/text.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/text.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/tekst.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/text.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/besedilo.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/text.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/text.html"/>
@@ -2393,6 +2416,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/text.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/text.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/tekst.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/text.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/besedilo.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/text.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/text.html"/>
