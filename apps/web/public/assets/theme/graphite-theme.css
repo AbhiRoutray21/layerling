@@ -453,21 +453,21 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .dashboard-trademark {
 
 :where(html[data-theme="dark"][data-palette="graphite"]) .install-app-hint {
   background: linear-gradient(135deg, #f0f0f0 0%, #e1e1e1 100%);
-  border: 2px solid #e8a04d;
+  border: 2px solid #e08a2c;
   box-shadow: 0 6px 18px rgba(191, 101, 8, 0.14);
 }
 
 :where(html[data-theme="dark"][data-palette="graphite"]) .install-app-hint-icon {
   color: #ffffff;
-  background: #bf6508;
+  background: #d9730d;
 }
 
 :where(html[data-theme="dark"][data-palette="graphite"]) .install-app-hint-text strong {
-  color: #414141;
+  color: #313131;
 }
 
 :where(html[data-theme="dark"][data-palette="graphite"]) .install-app-hint-text span {
-  color: #565656;
+  color: #494949;
 }
 
 :where(html[data-theme="dark"][data-palette="graphite"]) .install-app-hint-button {
@@ -504,6 +504,10 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .dashboard-trademark {
 :where(html[data-theme="dark"][data-palette="graphite"]) .install-app-hint-close:hover {
   color: #414141;
   background: #dcdcdc;
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .install-app-hint.install-app-hint-floating {
+  box-shadow: 0 10px 28px rgba(40, 40, 40, 0.28);
 }
 
 :where(html[data-theme="dark"][data-palette="graphite"]) .support-nudge {
@@ -5520,10 +5524,15 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .store-trail button.dro
   box-shadow: inset 0 0 0 1px #f3a452;
 }
 
-html[data-theme="dark"]:where([data-palette="graphite"]) .install-app-hint,
 html[data-theme="dark"]:where([data-palette="graphite"]) .support-nudge {
   background: var(--panel);
   border-color: #4a4a4a;
+}
+
+html[data-theme="dark"]:where([data-palette="graphite"]) .install-app-hint {
+  background: #272727;
+  border-color: #d9863a;
+  box-shadow: none;
 }
 
 html[data-theme="dark"]:where([data-palette="graphite"]) .support-nudge-icon {
@@ -5576,23 +5585,20 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .storage-notice-help:ho
   color: #eaeaea;
 }
 
-html[data-theme="dark"]:where([data-palette="graphite"]) .install-app-hint-icon {
-  color: #f3a452;
-  background: #2d2d2d;
-}
-
 html[data-theme="dark"]:where([data-palette="graphite"]) .install-app-hint-text strong {
-  color: #ebebeb;
+  color: #eaeaea;
 }
 
 html[data-theme="dark"]:where([data-palette="graphite"]) .install-app-hint-text span,
-html[data-theme="dark"]:where([data-palette="graphite"]) .install-app-hint-close {
-  color: #929292;
+html[data-theme="dark"]:where([data-palette="graphite"]) .install-app-hint-close,
+html[data-theme="dark"]:where([data-palette="graphite"]) .install-app-hint-later {
+  color: #cccccc;
 }
 
-html[data-theme="dark"]:where([data-palette="graphite"]) .install-app-hint-close:hover {
-  color: #ebebeb;
-  background: #2d2d2d;
+html[data-theme="dark"]:where([data-palette="graphite"]) .install-app-hint-close:hover,
+html[data-theme="dark"]:where([data-palette="graphite"]) .install-app-hint-later:hover {
+  color: #eaeaea;
+  background: #353535;
 }
 
 html[data-theme="dark"]:where([data-palette="graphite"]) .dashboard-welcome {

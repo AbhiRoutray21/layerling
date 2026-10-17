@@ -7,6 +7,7 @@ import { useLanguage } from "@/lib/useLanguage";
 import { SOURCE_CODE_URL, releaseNotesUrl, type AppUpdateInfo } from "@/lib/appUpdate";
 import { useAppUpdate } from "@/lib/useAppUpdate";
 import { SHOW_WHATS_NEW_EVENT } from "@/lib/useWhatsNew";
+import { InstallAppHint } from "@/components/InstallAppHint";
 import { SupportNudge } from "@/components/SupportNudge";
 import { supportCardEnabled, supportLink, type SupportSettings } from "@/lib/supportLink";
 
@@ -115,6 +116,7 @@ export function AppFooter({
 
   return (
     <>
+    {variant === "editor" ? <InstallAppHint variant="editor" /> : null}
     {sponsor && supportCardEnabled(SUPPORT_SETTINGS) ? <SupportNudge href={sponsor.href} /> : null}
     <footer className={variant === "editor" ? "dashboard-legal editor-legal" : "dashboard-legal"}>
       <div className="dashboard-legal-group">

@@ -105,8 +105,8 @@
       "en": "Install layerling as an app"
     },
     "body": {
-      "de": "Auf der Startseite empfiehlt jetzt eine auffällige Karte, layerling als App zu installieren: Sie startet schneller, läuft ohne Internet und muss nicht jedes Mal neu geladen werden. Du verlierst nichts, denn neue Versionen zeigt layerling weiter an. „Jetzt nicht“ blendet die Karte zwei Wochen aus.",
-      "en": "The start page now has a card that recommends installing layerling as an app: it starts faster, works without internet and does not have to be loaded each time. You lose nothing, as layerling still tells you about new versions. \"Not now\" hides the card for two weeks."
+      "de": "Auf der Startseite und im Editor (dort nach einer halben Minute Arbeit) empfiehlt jetzt eine auffällige Karte, layerling als App zu installieren: Sie startet schneller, läuft ohne Internet und muss nicht jedes Mal neu geladen werden. Du verlierst nichts, denn neue Versionen zeigt layerling weiter an. „Jetzt nicht“ blendet die Karte zwei Wochen aus.",
+      "en": "The start page and the editor (there after half a minute of work) now have a card that recommends installing layerling as an app: it starts faster, works without internet and does not have to be loaded each time. You lose nothing, as layerling still tells you about new versions. \"Not now\" hides the card for two weeks."
     }
   }
 ]

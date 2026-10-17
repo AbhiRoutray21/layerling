@@ -1526,43 +1526,43 @@ html[data-theme="dark"] .dashboard-trademark {
 .install-app-hint {
   display: flex;
   align-items: center;
-  gap: 18px;
-  margin: -4px 0 24px;
-  padding: 18px 16px 18px 20px;
+  gap: 14px;
+  margin: -8px 0 22px;
+  padding: 14px 14px 14px 16px;
   background: linear-gradient(135deg, #fff3e0 0%, #ffe6c2 100%);
-  border: 2px solid #e8a04d;
-  border-radius: 14px;
+  border: 2px solid #e08a2c;
+  border-radius: 10px;
   box-shadow: 0 6px 18px rgba(191, 101, 8, 0.14);
 }
 
 .install-app-hint-icon {
   display: grid;
   flex: none;
-  width: 52px;
-  height: 52px;
+  width: 42px;
+  height: 42px;
   place-items: center;
   color: #ffffff;
-  background: #bf6508;
-  border-radius: 14px;
+  background: #d9730d;
+  border-radius: 10px;
 }
 
 .install-app-hint-text {
   display: grid;
   flex: 1;
   min-width: 0;
-  gap: 4px;
+  gap: 3px;
 }
 
 .install-app-hint-text strong {
-  color: #573f26;
-  font-size: 17px;
-  font-weight: 800;
+  color: #4a2f10;
+  font-size: 16px;
+  font-weight: 900;
 }
 
 .install-app-hint-text span {
-  color: #6b5640;
+  color: #5e4630;
   font-size: 13.5px;
-  font-weight: 600;
+  font-weight: 700;
   line-height: 1.5;
 }
 
@@ -1632,14 +1632,41 @@ a.install-app-hint-button {
   background: #fbe1bd;
 }
 
+/* In the editor the same card floats at the foot of the work area, above the footer, until it is
+   answered; the start page keeps it in the flow. */
+.install-app-hint.install-app-hint-floating {
+  position: fixed;
+  bottom: 52px;
+  left: 50%;
+  z-index: 55;
+  width: min(680px, calc(100vw - 32px));
+  margin: 0;
+  transform: translateX(-50%);
+  box-shadow: 0 10px 28px rgba(60, 40, 10, 0.28);
+}
+
+/* Where the support reminder shares the foot of the screen, the install card steps up above it
+   instead of covering it (its 380 px sit at the right, the card is centred). */
+@media (max-width: 1400px) {
+  body:has(.support-nudge) .install-app-hint.install-app-hint-floating {
+    bottom: 190px;
+  }
+}
+
 @media (max-width: 700px) {
+  .install-app-hint.install-app-hint-floating {
+    left: 16px;
+    transform: none;
+    width: calc(100vw - 32px);
+  }
+
   .install-app-hint {
     flex-wrap: wrap;
   }
 
   .install-app-hint-actions {
     order: 3;
-    margin-left: 70px;
+    margin-left: 56px;
   }
 }
 
@@ -13006,10 +13033,15 @@ html[data-theme="dark"] .store-trail button.drop-target:not(:disabled) {
   box-shadow: inset 0 0 0 1px #f3a452;
 }
 
-html[data-theme="dark"] .install-app-hint,
 html[data-theme="dark"] .support-nudge {
   background: var(--panel);
   border-color: #6a4a26;
+}
+
+html[data-theme="dark"] .install-app-hint {
+  background: #33230f;
+  border-color: #d9863a;
+  box-shadow: none;
 }
 
 html[data-theme="dark"] .support-nudge-icon {
@@ -13062,23 +13094,20 @@ html[data-theme="dark"] .storage-notice-help:hover {
   color: #fbeed9;
 }
 
-html[data-theme="dark"] .install-app-hint-icon {
-  color: #f3a452;
-  background: #3a2c16;
-}
-
 html[data-theme="dark"] .install-app-hint-text strong {
-  color: #f3ede3;
+  color: #fbeed9;
 }
 
 html[data-theme="dark"] .install-app-hint-text span,
-html[data-theme="dark"] .install-app-hint-close {
-  color: #bda78e;
+html[data-theme="dark"] .install-app-hint-close,
+html[data-theme="dark"] .install-app-hint-later {
+  color: #e2cfb6;
 }
 
-html[data-theme="dark"] .install-app-hint-close:hover {
-  color: #f3ede3;
-  background: #3a2c16;
+html[data-theme="dark"] .install-app-hint-close:hover,
+html[data-theme="dark"] .install-app-hint-later:hover {
+  color: #fbeed9;
+  background: #4a3318;
 }
 
 html[data-theme="dark"] .dashboard-welcome {
