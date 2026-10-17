@@ -16,7 +16,7 @@
  * (Čeština, Dansk, Deutsch, Français, ...); then the others, by the name in their own script.
  * A new language goes in at its place, not at the end.
  */
-export const LANGUAGES = ["en", "cs", "da", "de", "fr", "it", "hu", "nl", "pl", "sl", "ru", "ar"] as const;
+export const LANGUAGES = ["en", "cs", "da", "de", "fr", "it", "hu", "nl", "pl", "sl", "tr", "ru", "ar"] as const;
 export type Language = (typeof LANGUAGES)[number];
 export const DEFAULT_LANGUAGE: Language = "en";
 
@@ -320,6 +320,45 @@ export const LANGUAGE_INFO: Readonly<Record<Language, LanguageInfo>> = {
       printAllLead: "Wszystkie rozdziały jeden po drugim, do wydrukowania lub zapisania jako PDF: naciśnij Ctrl+P i wyłącz w ustawieniach drukowania „Nagłówki i stopki”. Aby wydrukować tylko część, wybierz tam numery stron.",
       printContents: "Spis treści",
       printButton: "Drukuj",
+    },
+  },
+  tr: {
+    name: "Türkçe",
+    htmlLang: "tr",
+    numberLocale: "tr-TR",
+    // Turkish uses the plain double quotation marks.
+    quotes: ["“", "”"],
+    guideDir: "kilavuz",
+    communityUrl: GITHUB_DISCUSSIONS,
+    readme: "README.md",
+    quickstartAnchor: "windows-quickstart",
+    legal: { imprint: "Künye", privacy: "Gizlilik" },
+    // Turkish keyboards label the keys in English; only the mouse actions get Turkish names.
+    keyNames: { Click: "Tık", RightClick: "Sağ tık", Drag: "Sürükle" },
+    asciiUmlauts: false,
+    complete: false,
+    guide: {
+      site: "layerling kılavuzu",
+      home: "Kılavuz",
+      openEditor: "Editörü aç",
+      backToEditor: "Editöre dön",
+      editorElsewhere: "Editör zaten başka bir sekmede açık – oraya geçmen yeterli.",
+      chapters: "Bölümler",
+      onThisPage: "Bu sayfada",
+      previous: "Önceki bölüm",
+      next: "Sonraki bölüm",
+      overviewLead: "layerling'in yapabildiği her şey, adım adım. Resimler çalışan programdan alınır ve her sürümle yenilenir.",
+      sourceNote: "Bu kılavuz programla birlikte büyür. Bir şey eksik veya yanlışsa bunu şurada söyle:",
+      forum: "forum",
+      notTranslated: "Bu bölüm henüz Türkçeye çevrilmedi. Aşağıda İngilizce metin var.",
+      languageMenu: "Dil",
+      search: "Kılavuzda ara",
+      searchNothing: "Sonuç yok.",
+      printAll: "Yazdırmak için tüm kılavuz",
+      printAllTitle: "Tüm kılavuz tek sayfada",
+      printAllLead: "Tüm bölümler art arda, yazdırmak veya PDF olarak kaydetmek için: Ctrl+P'ye bas ve yazdırma ayarlarında „Üst bilgi ve alt bilgi” seçeneğini kapat. Sadece bir kısmını yazdırmak istiyorsan orada sayfa numaralarını seç.",
+      printContents: "İçindekiler",
+      printButton: "Yazdır",
     },
   },
   ru: {
