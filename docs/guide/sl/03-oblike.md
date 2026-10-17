@@ -11,6 +11,8 @@ V orodni vrstici klikni {{ui:editor.addShape}}. Odpre se knjižnica oblik.
 
 ![Knjižnica oblik. Vsaka sličica je narisana iz prave geometrije oblike.](shot:shape-menu)
 
+Knjižnica se zapre po vsaki izbrani obliki. Z naslovno vrstico jo premakneš tja, kjer ne zakriva mesta, na katero ciljaš, na primer nad ploščo Lastnosti; dvoklik na naslovno vrstico jo vrne pod njen gumb, kje si jo pustil, pa si zapomni brskalnik. Žebljiček v naslovni vrstici drži knjižnico odprto, medtem ko postavljaš več oblik zapored.
+
 Izberi obliko. Zdaj visi na kazalcu miške in pristane tja, kamor klikneš. Če pri tem zapelješ čez telo, se položi na ploskev pod kazalcem, tudi na poševno, kot pri Cruiseu v Tinkercadu; nad prazno ploščo pristane na delovni ravnini. Če pritisneš [[Esc]], se odlaganje prekine. Orodje, ki čaka na klik, na primer merilni trak, kotomer, opomba, {{ui:camera.placeWorkplane}}, {{ui:editor.tool.layFlat}} ali robna orodja, se ob izbiri oblike izklopi, da klik odloži obliko. Obratno vklop enega teh orodij obliko spet odloži. Kdor želi obliko raje kar na sredino plošče, lahko odlaganje s klikom izklopi v nastavitvah (področje {{ui:workspace.appearance}}, stikalo {{ui:workspace.cruise}}).
 
 Kaj ponuja knjižnica:

@@ -11,6 +11,8 @@ Cliquez sur {{ui:editor.addShape}} dans le ruban. La bibliothèque de formes s'o
 
 ![La bibliothèque de formes. Chaque petite image est rendue à partir de la géométrie réelle de la forme.](shot:shape-menu)
 
+La bibliothèque se ferme après chaque forme choisie. Sa barre de titre la déplace, de sorte que vous pouvez la mettre là où elle ne cache pas l'endroit que vous visez, par exemple sur le panneau Propriétés ; un double-clic sur la barre de titre la remet sous son bouton, et l'endroit où vous l'avez laissée est gardé dans le navigateur. L'épingle dans la barre de titre garde la bibliothèque ouverte pendant que vous placez plusieurs formes l'une après l'autre.
+
 Choisissez une forme. Il se bloque désormais sur le pointeur de la souris et atterrit là où vous cliquez. Déplacez-le sur un corps et il se couche sur le visage sous le pointeur, incliné également, comme Cruise dans Tinkercad ; au-dessus de l'assiette vide, il atterrit sur le plan de travail. [[Esc]] annule le placement. Un outil qui attend un clic, tel que le ruban à mesurer, le carré d'encadrement, une note, {{ui:camera.placeWorkplane}}, {{ui:editor.tool.layFlat}} ou les outils de bord, est désactivé lorsque vous choisissez une forme, le clic place donc la forme. Dans l’autre sens, l’activation de l’un de ces outils remet la forme en place. Si vous préférez que la forme apparaisse au milieu de la plaque, vous pouvez désactiver le placement en cliquant dans les paramètres (zone {{ui:workspace.appearance}}, interrupteur {{ui:workspace.cruise}}).
 
 Ce que propose la bibliothèque :

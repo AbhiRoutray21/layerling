@@ -1,6 +1,7 @@
 "use client";
 
 import { GuideHelpLink } from "@/components/GuideHelpLink";
+import { ShapeMenuPanel } from "@/components/workplane/ShapeMenuPanel";
 import { AlertTriangle, ArrowUpFromLine, Blend, Check, CircleHelp, Percent, Circle as CircleIcon, CloudUpload, Download, Eye, EyeOff, FilePlus2, FolderOpen, Hexagon as HexagonIcon, Info, ListTree, Pencil, Pentagon as PentagonIcon, Rotate3d, Route as RouteIcon, Search, Square as SquareIcon, Star as StarIcon, Triangle as TriangleIcon, X } from "lucide-react";
 import { ObjectListPanel } from "@/components/workplane/ObjectListPanel";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties } from "react";
@@ -13093,6 +13094,30 @@ function SecondaryToolbar({
   onSelectObject: (id: string) => void;
 }) {
   const [shapesOpen, setShapesOpen] = useState(false);
+  // The Shapes panel kept open while shapes are placed one after the other (#433); remembered in this browser.
+  const [shapesPinned, setShapesPinned] = useState(false);
+  const shapesPinnedRef = useRef(false);
+  shapesPinnedRef.current = shapesPinned;
+  useEffect(() => {
+    try {
+      setShapesPinned(window.localStorage.getItem("layerling.editor.shapeMenuPinned") === "true");
+    } catch {
+      // Blocked storage: the panel closes after each shape, as it always did.
+    }
+  }, []);
+  const toggleShapesPinned = () => {
+    const next = !shapesPinnedRef.current;
+    setShapesPinned(next);
+    try {
+      window.localStorage.setItem("layerling.editor.shapeMenuPinned", String(next));
+    } catch {
+      // The pin still works for this visit.
+    }
+  };
+  /** Picking a shape closes the panel, unless it is pinned open. */
+  const closeShapesAfterPick = () => {
+    if (!shapesPinnedRef.current) setShapesOpen(false);
+  };
   // On a narrow window the tools wrap onto more rows. Their real height goes
   // into --editor-toolbar-height, which the workplane, the status and the menus
   // below the bar are placed by.
@@ -13157,11 +13182,11 @@ function SecondaryToolbar({
   };
   const addShapeFromMenu = (shape: ShapeAsset) => {
     onAddShape({ ...shape, name: shapeAssetLabel(shape) });
-    setShapesOpen(false);
+    closeShapesAfterPick();
   };
   const addSketchShapeFromMenu = (primitive: SketchPrimitive) => {
     onSketchPrimitive(primitive);
-    setShapesOpen(false);
+    closeShapesAfterPick();
   };
   const startSketch = (operation: SketchOperation) => {
     onStartSketch(operation);
@@ -13196,11 +13221,12 @@ function SecondaryToolbar({
   }, [sketchActive]);
   useEffect(() => {
     if (!shapesOpen) return;
+    // Pinned open, a click elsewhere is the click that puts the shape, and Esc cancels the placing: neither closes the panel.
     const closeOnPointerDown = (event: PointerEvent) => {
-      if (!shapesMenuRef.current?.contains(event.target as Node)) setShapesOpen(false);
+      if (!shapesPinnedRef.current && !shapesMenuRef.current?.contains(event.target as Node)) setShapesOpen(false);
     };
     const closeOnEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setShapesOpen(false);
+      if (event.key === "Escape" && !shapesPinnedRef.current) setShapesOpen(false);
     };
     window.addEventListener("pointerdown", closeOnPointerDown);
     window.addEventListener("keydown", closeOnEscape);
@@ -13514,15 +13540,15 @@ function SecondaryToolbar({
             </button>
           </div>
           {shapesOpen ? (
-            <div className="shape-menu-dropdown">
-              <div className="shape-menu-title">
-                {t("shape.basicShapes")}
-                <GuideHelpLink section="addShape" />
-              </div>
+            <ShapeMenuPanel
+              title={<>{t("shape.basicShapes")}<GuideHelpLink section="addShape" /></>}
+              pinned={shapesPinned}
+              onTogglePinned={toggleShapesPinned}
+            >
               <div className="shape-menu-body">
               {renderMyShapes ? (
                 <>
-                  {renderMyShapes(() => setShapesOpen(false))}
+                  {renderMyShapes(closeShapesAfterPick)}
                   <div className="shape-menu-subtitle">{t("myShapes.basicShapes")}</div>
                 </>
               ) : null}
@@ -13585,7 +13611,7 @@ function SecondaryToolbar({
                       event.dataTransfer.effectAllowed = "copy";
                       event.dataTransfer.setData("application/x-layerling-shape", JSON.stringify(shape));
                     }}
-                    onDragEnd={() => setShapesOpen(false)}
+                    onDragEnd={closeShapesAfterPick}
                   >
                     <img src={shape.menuIcon} alt="" draggable={false} />
                     <span className={shapeAssetMenuLabel(shape).split(/\s+/).some((word) => word.length > 13) ? "long-word" : undefined}>{shapeAssetMenuLabel(shape)}</span>
@@ -13593,7 +13619,7 @@ function SecondaryToolbar({
                 ))}
               </div>
               </div>
-            </div>
+            </ShapeMenuPanel>
           ) : null}
         </div>
       </div>
@@ -13779,11 +13805,14 @@ function SecondaryToolbar({
                     </button>
                   </div>
                   {shapesOpen ? (
-                    <div className="shape-menu-dropdown sketch-shape-menu-dropdown" role="menu" aria-label={t("sketch.shapesMenu")}>
-                      <div className="shape-menu-title">
-                        {t("sketch.shapesTitle")}
-                        <GuideHelpLink section="sketchDrawing" />
-                      </div>
+                    <ShapeMenuPanel
+                      className="sketch-shape-menu-dropdown"
+                      role="menu"
+                      ariaLabel={t("sketch.shapesMenu")}
+                      title={<>{t("sketch.shapesTitle")}<GuideHelpLink section="sketchDrawing" /></>}
+                      pinned={shapesPinned}
+                      onTogglePinned={toggleShapesPinned}
+                    >
                       <div className="shape-menu-list">
                         {sketchShapeMenuItems.map(({ primitive, label, icon: Icon }) => (
                           <button
@@ -13798,7 +13827,7 @@ function SecondaryToolbar({
                               event.dataTransfer.effectAllowed = "copy";
                               event.dataTransfer.setData("application/x-layerling-sketch-primitive", primitive);
                             }}
-                            onDragEnd={() => setShapesOpen(false)}
+                            onDragEnd={closeShapesAfterPick}
                           >
                             <Icon className="sketch-shape-menu-icon" aria-hidden="true" />
                             <span>{t(label)}</span>
@@ -13824,7 +13853,7 @@ function SecondaryToolbar({
                           onChange={(innerPercent) => onSketchShapeOptions({ ...sketchShapeOptions, innerPercent })}
                         />
                       </div>
-                    </div>
+                    </ShapeMenuPanel>
                   ) : null}
                 </div>
                 <div className="toolbar-section sketch-edit-section" data-group="select">

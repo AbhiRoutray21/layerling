@@ -11,6 +11,8 @@ Kattints a szalagon az {{ui:editor.addShape}} gombra. Megnyílik az alakzattár.
 
 ![Az alakzattár. Minden kis kép az alakzat valódi geometriájából készül.](shot:shape-menu)
 
+A könyvtár minden kiválasztott alakzat után bezárul. A címsorral áthelyezheted oda, ahol nem takarja el a célzott helyet, például a Tulajdonságok panel fölé; a címsor dupla kattintása visszateszi a gombja alá, és a böngésző megjegyzi, hol hagytad. A címsorban lévő tű nyitva tartja a könyvtárat, amíg több alakzatot teszel egymás után.
+
 Válassz egy alakzatot. Most az egérmutatón lóg, és oda kerül, ahová kattintasz. Ha egy test fölé viszed, a mutató alatti lapra fekszik, a ferdékre is, mint a Cruise a Tinkercadben; az üres tárgyasztal fölött a munkasíkra kerül. Az [[Esc]] megszakítja az elhelyezést. Egy kattintásra váró eszköz, például a mérőszalag, a derékszögvonalzó, egy jegyzet, a {{ui:camera.placeWorkplane}}, a {{ui:editor.tool.layFlat}} vagy az élműveleti eszközök kikapcsolnak, amikor alakzatot választasz, így a kattintás az alakzatot helyezi el. Fordítva is igaz: ha bekapcsolod valamelyik ilyen eszközt, az alakzat újra lekerül. Ha inkább azt szeretnéd, hogy az alakzat a tárgyasztal közepén jelenjen meg, a kattintással történő elhelyezést kikapcsolhatod a beállításokban ({{ui:workspace.appearance}} rész, {{ui:workspace.cruise}} kapcsoló).
 
 Amit a tár kínál:

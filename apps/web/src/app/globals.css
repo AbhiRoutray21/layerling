@@ -15540,6 +15540,58 @@ html[data-theme="dark"] .open-group-cancel {
   justify-content: space-between;
 }
 
+/* The title bar moves the panel (#433); the pin keeps it open. */
+.shape-menu-title {
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+
+.shape-menu-dropdown.moving .shape-menu-title {
+  cursor: grabbing;
+}
+
+.shape-menu-title-text {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.shape-menu-pin {
+  display: grid;
+  width: 28px;
+  height: 28px;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 4px;
+  color: #8c735d;
+  background: transparent;
+  cursor: pointer;
+}
+
+.shape-menu-pin:hover {
+  background: #f3e7d8;
+}
+
+.shape-menu-pin.active {
+  color: #bf6508;
+  background: #fdf0dc;
+}
+
+html[data-theme="dark"] .shape-menu-pin {
+  color: #bda78e;
+}
+
+html[data-theme="dark"] .shape-menu-pin:hover {
+  background: #3a2c16;
+}
+
+html[data-theme="dark"] .shape-menu-pin.active {
+  color: #f3a452;
+  background: #3a2c16;
+}
+
 .shape-menu-title .guide-help-link,
 .guide-modal h3 .guide-help-link,
 .outliner-help-link {
