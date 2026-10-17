@@ -143,7 +143,7 @@ import {
 import { cuboidCorners, pointAlongAxes, type AlignAxes, type FrameCuboid } from "@/lib/alignFrame";
 import type { AlignAxis, AlignHandleStatus, AlignTarget, GridSize, MeasurementAccuracy, ShapeAsset, WorkplaneNote, WorkplaneNoteAnchor, WorkplaneShape, WorkplaneWorkspaceSettings } from "@/types/layerling";
 import { referencePoints } from "@/lib/workplaneNotes";
-import { pivotKeptAhead, ZOOM_PIVOT_REACH_MM, pivotHeightRange } from "@/lib/zoomPivot";
+import { pivotKeptAhead, ZOOM_PIVOT_REACH_MM, pivotHeightRange, pivotPlateReach } from "@/lib/zoomPivot";
 import { pointerReach } from "@/lib/pointerReach";
 import { measurementMiddle, nearestReferenceOnScreen, type ReferencePosition } from "@/lib/referencePoints";
 import { planarFaceCentroid, planarFaceTriangles, type PivotPoint } from "@/lib/rotationPivot";
@@ -9647,12 +9647,17 @@ function orbitCameraByDrag(state: ThreeState, dx: number, dy: number) {
 function constrainCamera(state: ThreeState, workspace: WorkspaceSettings) {
   // The pivot stays on the plate, but as far out as the part "Center view" went to, so that part can be centred (#352).
   const reach = state.focusReach;
-  const halfWidth = Math.max(workspace.width / 2, reach ? Math.max(Math.abs(reach.min.x), Math.abs(reach.max.x)) : 0);
-  const halfDepth = Math.max(workspace.depth / 2, reach ? Math.max(Math.abs(reach.min.z), Math.abs(reach.max.z)) : 0);
+  const bodies = Array.from(state.shapeRecords.values(), ({ shape }) => ({ x: shape.x, z: shape.z, elevation: shape.elevation ?? 0, extent: Math.max(shape.height, shapeWidth(shape), shapeDepth(shape)) }));
+  // Sideways the pivot reaches the farthest body too, not only the part "Center view" last went to: parts
+  // parked far beside the plate could not be panned to with the mouse (#502).
+  const { halfWidth, halfDepth } = pivotPlateReach(bodies, {
+    halfWidth: Math.max(workspace.width / 2, reach ? Math.max(Math.abs(reach.min.x), Math.abs(reach.max.x)) : 0),
+    halfDepth: Math.max(workspace.depth / 2, reach ? Math.max(Math.abs(reach.min.z), Math.abs(reach.max.z)) : 0),
+  });
   // The pivot may rise to the top of the highest body (and sink to the foot of the lowest): a body
   // set high above the plate (#425) could not be centred or zoomed into with the pivot held to 120 mm.
   const { minY, maxY } = pivotHeightRange(
-    Array.from(state.shapeRecords.values(), ({ shape }) => ({ elevation: shape.elevation ?? 0, extent: Math.max(shape.height, shapeWidth(shape), shapeDepth(shape)) })),
+    bodies,
     { minY: CAMERA_MIN_TARGET_Y, maxY: CAMERA_MAX_TARGET_Y },
     reach ? { minY: reach.min.y, maxY: reach.max.y } : null,
   );

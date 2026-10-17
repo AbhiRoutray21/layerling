@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import * as THREE from "three";
-import { pivotKeptAhead, pivotHeightRange, ZOOM_PIVOT_REACH_MM } from "@/lib/zoomPivot";
+import { pivotKeptAhead, pivotHeightRange, pivotPlateReach, ZOOM_PIVOT_REACH_MM } from "@/lib/zoomPivot";
 
 const limits = { halfWidth: 110, halfDepth: 110, minY: -70, maxY: 120 };
 const v = (x: number, y: number, z: number) => new THREE.Vector3(x, y, z);
@@ -56,5 +56,25 @@ describe("pivotHeightRange (#425)", () => {
 
   it("takes in the part the camera was last sent to", () => {
     expect(pivotHeightRange([], base, { minY: 300, maxY: 500 })).toEqual({ minY: -70, maxY: 500 });
+  });
+});
+
+describe("how far to the sides the pivot may go", () => {
+  const plate = { halfWidth: 110, halfDepth: 110 };
+
+  it("stays on the plate when every body is on it", () => {
+    expect(pivotPlateReach([{ x: 20, z: -30, extent: 40 }], plate)).toEqual(plate);
+    expect(pivotPlateReach([], plate)).toEqual(plate);
+  });
+
+  it("reaches a body parked beside the plate, out to its far side (#502)", () => {
+    const reach = pivotPlateReach([{ x: -400, z: 10, extent: 60 }], plate);
+    expect(reach.halfWidth).toBe(430);
+    expect(reach.halfDepth).toBe(110);
+  });
+
+  it("takes both directions from the farthest body, whatever side it lies on", () => {
+    const reach = pivotPlateReach([{ x: 150, z: 20, extent: 20 }, { x: -50, z: -300, extent: 100 }], plate);
+    expect(reach).toEqual({ halfWidth: 160, halfDepth: 350 });
   });
 });

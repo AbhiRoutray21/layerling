@@ -63,3 +63,21 @@ export function pivotHeightRange(
   }
   return { minY, maxY };
 }
+
+/**
+ * How far out to the sides and to the back the orbit pivot may go: at least the plate, and as far as
+ * the farthest body, so a design with parts parked beside the plate can be panned and turned about
+ * all of them, not only the ones the view was last centred on (#502). A body counts as wide as its
+ * largest side, as it may lie turned.
+ */
+export function pivotPlateReach(
+  bodies: Iterable<{ x: number; z: number; extent: number }>,
+  plate: { halfWidth: number; halfDepth: number },
+): { halfWidth: number; halfDepth: number } {
+  let { halfWidth, halfDepth } = plate;
+  for (const body of bodies) {
+    halfWidth = Math.max(halfWidth, Math.abs(body.x) + body.extent / 2);
+    halfDepth = Math.max(halfDepth, Math.abs(body.z) + body.extent / 2);
+  }
+  return { halfWidth, halfDepth };
+}

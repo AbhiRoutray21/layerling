@@ -198,5 +198,15 @@
       "de": "In den Eigenschaften des Textes rundest du die obere Kante der Buchstaben ab oder setzt eine Fase an, mit einer Größe bis 5 mm, so wie beim Namensschild. Die Rundung geht so weit, wie die Striche breit sind, die Unterseite bleibt flach.",
       "en": "In the Text properties you can round or chamfer the top edge of the letters, with a size of up to 5 mm, as on a name tag. A rounding goes as far as the strokes are wide, and the underside stays flat."
     }
+  },
+  {
+    "title": {
+      "de": "Die Ansicht lässt sich zu Teilen neben der Platte schwenken",
+      "en": "The view can be panned to parts beside the plate"
+    },
+    "body": {
+      "de": "Wer Teile weit neben der Platte abgelegt hat, kam mit der Maus nicht bis zu ihnen: Der Punkt, um den die Ansicht schwenkt und dreht, blieb auf der Platte, außer nach „Ansicht auf Auswahl zentrieren“. Er reicht jetzt bis zum entferntesten Körper des Entwurfs.",
+      "en": "If you had parked parts far beside the plate, the mouse could not take the view over to them: the point the view pans and turns around stayed on the plate, except after “Center view on selection”. It now reaches the farthest body of the design."
+    }
   }
 ]
