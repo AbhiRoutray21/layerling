@@ -18,5 +18,25 @@
       "de": "Färbe eine Form, zum Beispiel einen Zylinder, und drücke im Eigenschaften-Fenster „Als Vorgabe speichern“: Jeder neue Zylinder startet dann in dieser Farbe, die anderen Arten behalten ihre eigenen. „Vorgaben zurücksetzen“ gibt die Farbe der App zurück. Außerdem kam ein zweites Speichern oder Zurücksetzen im selben Entwurf bei neuen Formen nicht an; das ist behoben.",
       "en": "Colour a shape, a cylinder for example, and press \"Save as default\" in the Properties panel: every new cylinder then starts in that colour, and the other kinds keep their own. \"Reset defaults\" gives the app's colour back. Also, a second save or reset in the same design did not reach new shapes; that is fixed."
     }
+  },
+  {
+    "title": {
+      "de": "Eingetippte Maße gelten auch beim Klick daneben",
+      "en": "A typed measure also counts when you click beside the box"
+    },
+    "body": {
+      "de": "Wenn du in einem Maßfeld am Körper (oder im Winkelfeld) eine Zahl getippt hast und mit der linken Maustaste ins Leere klickst, übernimmt layerling die Zahl jetzt, wie es der Rechtsklick schon tat. Vorher ging sie bei Linksklick verloren. Esc bricht weiterhin ab.",
+      "en": "If you typed a number into a measure box on a body (or into the angle box) and click on empty space with the left mouse button, layerling now applies the number, as the right click already did. Before, a left click lost it. Esc still cancels."
+    }
+  },
+  {
+    "title": {
+      "de": "Ausrichten: die Griffe bleiben auseinander",
+      "en": "Align: the handles keep apart"
+    },
+    "body": {
+      "de": "Bei kleinen Teilen lagen die Griffe von „Ausrichten“ so dicht, dass man sie nicht einzeln anklicken konnte, und beim starken Hineinzoomen verschwanden sie ganz. Jetzt halten die drei Griffe einer Achse einen Mindestabstand ein, und Griffe, die noch vor der Kamera liegen, bleiben auch beim Zoomen sichtbar.",
+      "en": "On small parts the handles of Align lay so close that you could not click them one by one, and zooming far in made them disappear. Now the three handles of an axis keep a minimum distance, and handles that are still in front of the camera stay visible when you zoom."
+    }
   }
 ]

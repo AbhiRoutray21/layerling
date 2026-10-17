@@ -19,6 +19,7 @@ import { LineSegments2 } from "three/examples/jsm/lines/LineSegments2.js";
 import { LineSegmentsGeometry } from "three/examples/jsm/lines/LineSegmentsGeometry.js";
 import { FramingSquareIcon } from "@/components/FramingSquareIcon";
 import { GridEyeIcon } from "@/components/GridEyeIcon";
+import { spreadAlignHandles } from "@/lib/alignHandleSpread";
 import { AlignOverlay, MirrorOverlay, type AlignOverlayState, type MirrorOverlayState } from "@/components/workplane/ActionOverlays";
 import { MoveDimensionOverlay } from "@/components/workplane/MoveDimensionOverlay";
 import { OriginDimensionOverlay } from "@/components/workplane/OriginDimensionOverlay";
@@ -6026,6 +6027,19 @@ export function WorkplaneViewport({
     return () => window.removeEventListener("pointerdown", applyOnOutsidePress, true);
   }, [commitCornerEdit, editingCorner]);
 
+  // The same for a single dimension box (#486): a left click on the empty plate takes the selection away,
+  // and with it the box, before it could ever lose its focus - the typed value was thrown away, while a
+  // right click, which selects nothing, applied it. Any press outside the box applies it first.
+  useEffect(() => {
+    if (!editingDimension) return;
+    const applyOnOutsidePress = (event: PointerEvent) => {
+      if ((event.target as HTMLElement | null)?.closest?.(".dimension-input")) return;
+      commitDimensionEdit();
+    };
+    window.addEventListener("pointerdown", applyOnOutsidePress, true);
+    return () => window.removeEventListener("pointerdown", applyOnOutsidePress, true);
+  }, [commitDimensionEdit, editingDimension]);
+
   const cancelCornerEdit = useCallback(() => {
     setEditingCorner(null);
     setPinnedMeasureKey(null);
@@ -6216,6 +6230,17 @@ export function WorkplaneViewport({
     setEditingCorner(null);
     setActiveRotationWheel(false);
   }, [editingRotation, onUpdateShape]);
+
+  // The angle box too (#486): a press outside applies the typed value before the selection can go.
+  useEffect(() => {
+    if (!editingRotation) return;
+    const applyOnOutsidePress = (event: PointerEvent) => {
+      if ((event.target as HTMLElement | null)?.closest?.(".rotation-edit")) return;
+      commitRotationEdit();
+    };
+    window.addEventListener("pointerdown", applyOnOutsidePress, true);
+    return () => window.removeEventListener("pointerdown", applyOnOutsidePress, true);
+  }, [commitRotationEdit, editingRotation]);
 
   const cancelRotationEdit = useCallback(() => {
     setEditingRotation(null);
@@ -11481,20 +11506,16 @@ function syncAlignOverlay(
   const corners = info
     ? cuboidCorners(info.bounds, info.axes).map((corner) => new THREE.Vector3(corner.x, corner.y, corner.z))
     : selectionFrameCorners(frame!);
-  const projectedCorners = corners.map((corner) => {
-    const cameraSpace = corner.clone().applyMatrix4(state.camera.matrixWorldInverse);
-    const projected = corner.clone().project(state.camera);
-    return { cameraSpace, projected };
-  });
-  // The flat view draws what is behind its camera too: nothing there is out of sight.
+  // The flat view draws what is behind its camera too: nothing there is out of sight. Close up, in the
+  // perspective view, one corner of the selection can come to lie at or behind the camera while the
+  // handles are still in front of it; one such corner used to take all nine handles away (#486), so each
+  // handle is judged by its own place.
   const nearPlane = state.camera instanceof THREE.PerspectiveCamera ? state.camera.near : -Infinity;
-  if (projectedCorners.some(({ cameraSpace, projected }) => cameraSpace.z > -nearPlane * 1.5 || !Number.isFinite(projected.x) || !Number.isFinite(projected.y))) {
-    clear();
-    return;
-  }
-
   const project = (point: THREE.Vector3) => {
+    const cameraSpace = point.clone().applyMatrix4(state.camera.matrixWorldInverse);
+    if (cameraSpace.z > -nearPlane * 1.5) return null;
     const projected = point.clone().project(state.camera);
+    if (!Number.isFinite(projected.x) || !Number.isFinite(projected.y)) return null;
     return {
       x: ((projected.x + 1) / 2) * rect.width,
       y: ((1 - projected.y) / 2) * rect.height,
@@ -11532,49 +11553,49 @@ function syncAlignOverlay(
   const offset = Math.max(8, Math.max(worldMaxX - worldMinX, worldMaxY - worldMinY, worldMaxZ - worldMinZ) * 0.16);
   const statusByKey = new Map(statuses.map((status) => [`${status.axis}:${status.target}`, status]));
 
-  const guidePoints = {
-    x0: project(at(worldMinX, worldMinY, worldMaxZ + offset)),
-    x1: project(at(worldMaxX, worldMinY, worldMaxZ + offset)),
-    z0: project(at(worldMaxX + offset, worldMinY, worldMinZ)),
-    z1: project(at(worldMaxX + offset, worldMinY, worldMaxZ)),
-    y0: project(at(worldMinX - offset, worldMinY, worldMaxZ + offset)),
-    y1: project(at(worldMinX - offset, worldMaxY, worldMaxZ + offset)),
-  };
+  // The three handles of an axis, minimum, middle and maximum, stand on one line. Where they land close
+  // together on the screen they are pushed apart (alignHandleSpread.ts), so each can still be picked.
+  const groups: Array<{ axis: AlignAxis; points: [THREE.Vector3, THREE.Vector3, THREE.Vector3]; along: THREE.Vector3 }> = [
+    {
+      axis: "x",
+      points: [at(worldMinX, worldMinY, worldMaxZ + offset), at(worldCenterX, worldMinY, worldMaxZ + offset), at(worldMaxX, worldMinY, worldMaxZ + offset)],
+      along: at(1, 0, 0),
+    },
+    {
+      axis: "z",
+      points: [at(worldMaxX + offset, worldMinY, worldMinZ), at(worldMaxX + offset, worldMinY, worldCenterZ), at(worldMaxX + offset, worldMinY, worldMaxZ)],
+      along: at(0, 0, 1),
+    },
+    {
+      axis: "y",
+      points: [at(worldMinX - offset, worldMinY, worldMaxZ + offset), at(worldMinX - offset, worldCenterY, worldMaxZ + offset), at(worldMinX - offset, worldMaxY, worldMaxZ + offset)],
+      along: at(0, 1, 0),
+    },
+  ];
+  const targets: AlignTarget[] = ["min", "center", "max"];
+  const handles: AlignOverlayState["handles"] = [];
+  const guides: AlignOverlayState["guides"] = [];
+  groups.forEach(({ axis, points, along }) => {
+    const screen = points.map(project);
+    if (screen.some((point) => !point)) return;
+    const [lo, mid, hi] = screen as Array<{ x: number; y: number }>;
+    // Which way the axis runs on the screen, from a point a unit further along it.
+    const ahead = project(points[1].clone().add(along));
+    const direction = ahead ? { x: ahead.x - mid.x, y: ahead.y - mid.y } : { x: 1, y: 0 };
+    const spread = spreadAlignHandles(lo, mid, hi, direction);
+    guides.push({ key: axis, x1: spread[0].x, y1: spread[0].y, x2: spread[2].x, y2: spread[2].y });
+    targets.forEach((target, index) => {
+      const status = statusByKey.get(`${axis}:${target}`);
+      if (!status) return;
+      handles.push({ ...status, key: `${axis}-${target}`, x: spread[index].x, y: spread[index].y });
+    });
+  });
+  if (handles.length === 0) {
+    clear();
+    return;
+  }
 
-  const makeHandle = (axis: AlignAxis, target: AlignTarget, point: THREE.Vector3) => {
-    const status = statusByKey.get(`${axis}:${target}`);
-    if (!status) {
-      return null;
-    }
-    const screen = project(point);
-    return {
-      ...status,
-      key: `${axis}-${target}`,
-      x: screen.x,
-      y: screen.y,
-    };
-  };
-
-  const handles = [
-    makeHandle("x", "min", at(worldMinX, worldMinY, worldMaxZ + offset)),
-    makeHandle("x", "center", at(worldCenterX, worldMinY, worldMaxZ + offset)),
-    makeHandle("x", "max", at(worldMaxX, worldMinY, worldMaxZ + offset)),
-    makeHandle("z", "min", at(worldMaxX + offset, worldMinY, worldMinZ)),
-    makeHandle("z", "center", at(worldMaxX + offset, worldMinY, worldCenterZ)),
-    makeHandle("z", "max", at(worldMaxX + offset, worldMinY, worldMaxZ)),
-    makeHandle("y", "min", at(worldMinX - offset, worldMinY, worldMaxZ + offset)),
-    makeHandle("y", "center", at(worldMinX - offset, worldCenterY, worldMaxZ + offset)),
-    makeHandle("y", "max", at(worldMinX - offset, worldMaxY, worldMaxZ + offset)),
-  ].filter((handle): handle is AlignOverlayState["handles"][number] => Boolean(handle));
-
-  const next = {
-    guides: [
-      { key: "x", x1: guidePoints.x0.x, y1: guidePoints.x0.y, x2: guidePoints.x1.x, y2: guidePoints.x1.y },
-      { key: "z", x1: guidePoints.z0.x, y1: guidePoints.z0.y, x2: guidePoints.z1.x, y2: guidePoints.z1.y },
-      { key: "y", x1: guidePoints.y0.x, y1: guidePoints.y0.y, x2: guidePoints.y1.x, y2: guidePoints.y1.y },
-    ],
-    handles,
-  };
+  const next = { guides, handles };
 
   overlayRef.current = next;
   setOverlay(next);
