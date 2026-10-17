@@ -1520,62 +1520,72 @@ html[data-theme="dark"] .dashboard-trademark {
   }
 }
 
-/* Installed as an app, layerling also starts offline - a quiet strip under the
-   start tiles says so, with the browser's own install button where it has one. */
+/* The recommendation to install layerling as an app: a card under the start tiles that is meant
+   to be seen - what it brings, an install button where the browser has one, "Not now" for two
+   weeks and a cross for good. */
 .install-app-hint {
   display: flex;
   align-items: center;
-  gap: 14px;
-  margin: -8px 0 22px;
-  padding: 12px 12px 12px 16px;
-  background: #fff8ee;
-  border: 1px solid #f0d9b8;
-  border-radius: 10px;
+  gap: 18px;
+  margin: -4px 0 24px;
+  padding: 18px 16px 18px 20px;
+  background: linear-gradient(135deg, #fff3e0 0%, #ffe6c2 100%);
+  border: 2px solid #e8a04d;
+  border-radius: 14px;
+  box-shadow: 0 6px 18px rgba(191, 101, 8, 0.14);
 }
 
 .install-app-hint-icon {
   display: grid;
   flex: none;
-  width: 38px;
-  height: 38px;
+  width: 52px;
+  height: 52px;
   place-items: center;
-  color: #bf6508;
-  background: #fdebd3;
-  border-radius: 9px;
+  color: #ffffff;
+  background: #bf6508;
+  border-radius: 14px;
 }
 
 .install-app-hint-text {
   display: grid;
   flex: 1;
   min-width: 0;
-  gap: 2px;
+  gap: 4px;
 }
 
 .install-app-hint-text strong {
   color: #573f26;
-  font-size: 14px;
+  font-size: 17px;
   font-weight: 800;
 }
 
 .install-app-hint-text span {
-  color: #7a6650;
-  font-size: 13px;
+  color: #6b5640;
+  font-size: 13.5px;
   font-weight: 600;
-  line-height: 1.45;
+  line-height: 1.5;
+}
+
+.install-app-hint-actions {
+  display: grid;
+  flex: none;
+  gap: 6px;
+  justify-items: stretch;
 }
 
 .install-app-hint-button {
   display: inline-flex;
   flex: none;
   align-items: center;
-  gap: 7px;
-  padding: 8px 14px;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 18px;
   color: #ffffff;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 800;
   background: #bf6508;
   border: 0;
-  border-radius: 8px;
+  border-radius: 9px;
   cursor: pointer;
 }
 
@@ -1587,9 +1597,26 @@ a.install-app-hint-button {
   background: #a95805;
 }
 
+.install-app-hint-later {
+  padding: 5px 10px;
+  color: #7a5a35;
+  font-size: 13px;
+  font-weight: 700;
+  background: transparent;
+  border: 0;
+  border-radius: 7px;
+  cursor: pointer;
+}
+
+.install-app-hint-later:hover {
+  color: #573f26;
+  background: #fbe1bd;
+}
+
 .install-app-hint-close {
   display: grid;
   flex: none;
+  align-self: flex-start;
   width: 30px;
   height: 30px;
   place-items: center;
@@ -1602,17 +1629,17 @@ a.install-app-hint-button {
 
 .install-app-hint-close:hover {
   color: #573f26;
-  background: #f6e9d6;
+  background: #fbe1bd;
 }
 
-@media (max-width: 560px) {
+@media (max-width: 700px) {
   .install-app-hint {
     flex-wrap: wrap;
   }
 
-  .install-app-hint-button {
+  .install-app-hint-actions {
     order: 3;
-    margin-left: 52px;
+    margin-left: 70px;
   }
 }
 

@@ -452,13 +452,14 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .dashboard-trademark {
 }
 
 :where(html[data-theme="dark"][data-palette="graphite"]) .install-app-hint {
-  background: #f7f7f7;
-  border: 1px solid #d4d4d4;
+  background: linear-gradient(135deg, #f0f0f0 0%, #e1e1e1 100%);
+  border: 2px solid #e8a04d;
+  box-shadow: 0 6px 18px rgba(191, 101, 8, 0.14);
 }
 
 :where(html[data-theme="dark"][data-palette="graphite"]) .install-app-hint-icon {
-  color: #bf6508;
-  background: #e8e8e8;
+  color: #ffffff;
+  background: #bf6508;
 }
 
 :where(html[data-theme="dark"][data-palette="graphite"]) .install-app-hint-text strong {
@@ -466,7 +467,7 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .dashboard-trademark {
 }
 
 :where(html[data-theme="dark"][data-palette="graphite"]) .install-app-hint-text span {
-  color: #595959;
+  color: #565656;
 }
 
 :where(html[data-theme="dark"][data-palette="graphite"]) .install-app-hint-button {
@@ -483,6 +484,17 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .dashboard-trademark {
   background: #a95805;
 }
 
+:where(html[data-theme="dark"][data-palette="graphite"]) .install-app-hint-later {
+  color: #585858;
+  background: transparent;
+  border: 0;
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .install-app-hint-later:hover {
+  color: #414141;
+  background: #dcdcdc;
+}
+
 :where(html[data-theme="dark"][data-palette="graphite"]) .install-app-hint-close {
   color: #717171;
   background: transparent;
@@ -491,7 +503,7 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .dashboard-trademark {
 
 :where(html[data-theme="dark"][data-palette="graphite"]) .install-app-hint-close:hover {
   color: #414141;
-  background: #e6e6e6;
+  background: #dcdcdc;
 }
 
 :where(html[data-theme="dark"][data-palette="graphite"]) .support-nudge {

@@ -1,12 +1,13 @@
 "use client";
 
-import { Download, WifiOff, X } from "lucide-react";
+import { Download, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { t, type MessageKey } from "@/lib/i18n";
-import { installHintKey } from "@/lib/installHint";
+import { installHintKey, installHintSnoozed } from "@/lib/installHint";
 import { useLanguage } from "@/lib/useLanguage";
 
 const DISMISSED_KEY = "layerling.installHintDismissed";
+const SNOOZED_KEY = "layerling.installHintSnoozed";
 
 type InstallPromptEvent = Event & { prompt: () => Promise<void>; userChoice: Promise<{ outcome: string }> };
 
@@ -23,10 +24,12 @@ function runsAsInstalledApp() {
 }
 
 /**
- * A strip on the start page: layerling can be installed as an app and then
- * starts without internet. Shown only where both work - https with service
- * workers - so the plain-http home server never promises what it cannot do;
- * never inside the installed app itself, and gone for good once dismissed.
+ * A card on the start page that recommends installing layerling as an app: it
+ * starts faster, works without internet and need not be loaded again each time,
+ * and the update notice still reaches the person. Shown only where both work -
+ * https with service workers - so the plain-http home server never promises what
+ * it cannot do; never inside the installed app itself. "Not now" hides it for two
+ * weeks, the cross for good.
  */
 export function InstallAppHint() {
   useLanguage();
@@ -38,6 +41,7 @@ export function InstallAppHint() {
     if (!window.isSecureContext || !("serviceWorker" in navigator) || runsAsInstalledApp()) return;
     try {
       if (window.localStorage.getItem(DISMISSED_KEY) === "1") return;
+      if (installHintSnoozed(window.localStorage.getItem(SNOOZED_KEY), Date.now())) return;
     } catch {
       // Storage blocked: show the hint, it just cannot remember being closed.
     }
@@ -63,6 +67,15 @@ export function InstallAppHint() {
     }
   };
 
+  const later = () => {
+    setVisible(false);
+    try {
+      window.localStorage.setItem(SNOOZED_KEY, String(Date.now()));
+    } catch {
+      // nothing to remember it in
+    }
+  };
+
   const install = async () => {
     if (!prompt) return;
     await prompt.prompt();
@@ -75,18 +88,23 @@ export function InstallAppHint() {
   return (
     <aside className="install-app-hint" aria-label={t("installHint.title")}>
       <span className="install-app-hint-icon" aria-hidden="true">
-        <WifiOff size={20} strokeWidth={2.4} />
+        <Download size={24} strokeWidth={2.4} />
       </span>
       <div className="install-app-hint-text">
         <strong>{t("installHint.title")}</strong>
         <span>{t("installHint.body")} {prompt ? null : t(fallbackKey)}</span>
       </div>
-      {prompt ? (
-        <button className="install-app-hint-button" type="button" onClick={install}>
-          <Download size={16} strokeWidth={2.6} />
-          <span>{t("installHint.install")}</span>
+      <div className="install-app-hint-actions">
+        {prompt ? (
+          <button className="install-app-hint-button" type="button" onClick={install}>
+            <Download size={16} strokeWidth={2.6} />
+            <span>{t("installHint.install")}</span>
+          </button>
+        ) : null}
+        <button className="install-app-hint-later" type="button" onClick={later}>
+          {t("installHint.later")}
         </button>
-      ) : null}
+      </div>
       <button className="install-app-hint-close" type="button" aria-label={t("installHint.dismiss")} title={t("installHint.dismiss")} onClick={dismiss}>
         <X size={16} />
       </button>

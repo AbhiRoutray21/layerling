@@ -98,5 +98,15 @@
       "de": "Seit die Höhe nicht mehr bei 220 mm endet, konnte die Ansicht einen Körper hoch über der Platte nicht in die Mitte nehmen: „Auf die Auswahl zoomen“ ließ ihn am oberen Rand verschwinden, und der Drehpunkt blieb bei 120 mm hängen. Der Drehpunkt reicht jetzt bis zur Oberkante des höchsten Körpers (und nach unten bis zum Fuß des tiefsten), so zoomt, verschiebt und dreht die Ansicht auch dort.",
       "en": "Since a height no longer ends at 220 mm, the view could not take a body high above the plate into its middle: Zoom to the selection let it slip off the top edge, and the pivot stayed stuck at 120 mm. The pivot now reaches up to the top of the highest body (and down to the foot of the lowest), so the view zooms, shifts and turns up there as well."
     }
+  },
+  {
+    "title": {
+      "de": "layerling als App installieren",
+      "en": "Install layerling as an app"
+    },
+    "body": {
+      "de": "Auf der Startseite empfiehlt jetzt eine auffällige Karte, layerling als App zu installieren: Sie startet schneller, läuft ohne Internet und muss nicht jedes Mal neu geladen werden. Du verlierst nichts, denn neue Versionen zeigt layerling weiter an. „Jetzt nicht“ blendet die Karte zwei Wochen aus.",
+      "en": "The start page now has a card that recommends installing layerling as an app: it starts faster, works without internet and does not have to be loaded each time. You lose nothing, as layerling still tells you about new versions. \"Not now\" hides the card for two weeks."
+    }
   }
 ]
