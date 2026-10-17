@@ -1555,6 +1555,8 @@ export const MESSAGES_SL: Partial<Record<MessageKey, string>> = {
   "workspace.overhangLoose": "70° (dobro hlajenje)",
   "workspace.showShadows": "Prikaži sence",
   "workspace.showGrid": "Prikaži mrežo",
+  "workspace.resetGrid": "Ponastavi mrežo",
+  "workspace.resetGridHint": "Vidnost, barve, razmik in debelina črt mreže se vrnejo na standard, tukaj in v privzetih vrednostih, shranjenih z „Nastavi kot privzeto“.",
   "workspace.cruise": "Križarjenje ob dodajanju novih oblik",
   "workspace.zoomSpeed": "Hitrost povečave",
   "workspace.slow": "Počasi",

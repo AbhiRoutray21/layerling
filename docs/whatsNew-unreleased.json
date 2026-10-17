@@ -148,5 +148,15 @@
       "de": "Ein Zylinder mit Verjüngung oder Neigung, den man um 90 Grad gedreht hatte, kam beim Gruppieren (und beim Exportieren) ungedreht heraus, die Gruppe hatte dann andere Maße als die Teile. Die Drehung bleibt jetzt erhalten.",
       "en": "A cylinder with a taper or a lean that you had turned by 90 degrees came out unturned when grouped (and when exported), so the group had other measures than its parts. The turn is kept now."
     }
+  },
+  {
+    "title": {
+      "de": "Das Raster lässt sich auf den Standard zurücksetzen",
+      "en": "The grid can be reset to the standard"
+    },
+    "body": {
+      "de": "Wer die Rasterfarbe versehentlich so gestellt hat, dass man kein Raster mehr sieht, kommt jetzt mit einem Klick zurück: Am Ende der Seite Arbeitsebene in den Einstellungen setzt „Raster zurücksetzen“ Sichtbarkeit, Farben, Abstand und Linienstärke auf den Standard, für den Entwurf und für die mit „Als Vorgabe sichern“ gesicherte Vorgabe. Größe und Drucker der Platte bleiben, wie sie sind.",
+      "en": "If the grid colour was set so that no grid can be seen any more, one click brings it back: at the end of the Workplane page in the settings, “Reset grid” puts visibility, colours, spacing and line weight back to the standard, for the design and for the default saved with “Make default”. The plate's size and printer stay as they are."
+    }
   }
 ]

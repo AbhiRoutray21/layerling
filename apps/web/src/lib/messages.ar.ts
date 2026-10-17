@@ -2095,6 +2095,8 @@ export const MESSAGES_AR: Partial<Record<MessageKey, string>> = {
   "workspace.fastModeHint": "للأجهزة الأبطأ: يوقف الظلال وخطوط الحواف على كل الأجسام واستمرار دوران الكاميرا، ويرسم العرض بدقة الشاشة فقط. وتُحفظ إعداداتك الخاصة لوقت لاحق.",
   "workspace.offInFastMode": "معطل في الوضع السريع",
   "workspace.showGrid": "إظهار الشبكة",
+  "workspace.resetGrid": "إعادة ضبط الشبكة",
+  "workspace.resetGridHint": "تعود رؤية الشبكة وألوانها وتباعدها وسماكة خطوطها إلى القياسي، هنا وفي الإعدادات المحفوظة بزر «جعلها افتراضية».",
   "workspace.cruise": "الوضع بالنقر عند إضافة أشكال جديدة (Cruise)",
   "workspace.zoomSpeed": "سرعة التكبير/التصغير",
   "workspace.slow": "بطيء",

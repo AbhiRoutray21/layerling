@@ -2095,6 +2095,8 @@ export const MESSAGES_EN = {
   "workspace.fastModeHint": "For slower computers: turns off shadows, edge lines on all bodies and the camera's inertia, and draws the view at screen resolution only. Your own settings are kept for later.",
   "workspace.offInFastMode": "Off in fast mode",
   "workspace.showGrid": "Show grid",
+  "workspace.resetGrid": "Reset grid",
+  "workspace.resetGridHint": "The grid’s visibility, colours, spacing and line weight go back to the standard, here and in the default saved with “Make default”.",
   "workspace.cruise": "Cruise when adding new shapes",
   "workspace.zoomSpeed": "Zoom speed",
   "workspace.slow": "Slow",

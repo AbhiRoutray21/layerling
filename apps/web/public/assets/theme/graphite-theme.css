@@ -5081,6 +5081,28 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .workspace-custom-snap-
   border: 1px solid #cecece;
 }
 
+:where(html[data-theme="dark"][data-palette="graphite"]) .workspace-reset-row {
+  color: #595959;
+  border-top: 1px solid #e8e8e8;
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .workspace-reset-row button {
+  color: #585858;
+  background: #fff;
+  border: 1px solid #cecece;
+}
+
+html[data-theme="dark"]:where([data-palette="graphite"]) .workspace-reset-row {
+  color: #b9b9b9;
+  border-top-color: #3e3e3e;
+}
+
+html[data-theme="dark"]:where([data-palette="graphite"]) .workspace-reset-row button {
+  color: #cecece;
+  background: #2d2d2d;
+  border-color: #4e4e4e;
+}
+
 :where(html[data-theme="dark"][data-palette="graphite"]) .workspace-shape-dimensions label {
   color: #595959;
 }

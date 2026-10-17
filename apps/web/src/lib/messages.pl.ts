@@ -2100,6 +2100,8 @@ export const MESSAGES_PL: Partial<Record<MessageKey, string>> = {
   "workspace.fastModeHint": "Dla wolniejszych komputerów: wyłącza cienie, linie krawędzi na wszystkich bryłach i bezwładność kamery, a widok rysuje tylko w rozdzielczości ekranu. Twoje ustawienia zostają zachowane na później.",
   "workspace.offInFastMode": "Wyłączone w trybie szybkim",
   "workspace.showGrid": "Pokazuj siatkę",
+  "workspace.resetGrid": "Przywróć siatkę",
+  "workspace.resetGridHint": "Widoczność, kolory, odstęp i grubość linii siatki wracają do standardu, tutaj i w ustawieniach zapisanych przyciskiem „Ustaw jako domyślne”.",
   "workspace.cruise": "Prowadź nowy kształt za kursorem przy dodawaniu",
   "workspace.zoomSpeed": "Szybkość przybliżania",
   "workspace.slow": "Wolno",

@@ -2078,6 +2078,8 @@ export const MESSAGES_FR: Partial<Record<MessageKey, string>> = {
   "workspace.fastModeHint": "Pour les ordinateurs plus lents : désactive les ombres, les lignes de bord sur tous les corps et l'inertie de la caméra, et dessine la vue uniquement à la résolution de l'écran. Vos propres paramètres sont conservés pour plus tard.",
   "workspace.offInFastMode": "Éteint en mode rapide",
   "workspace.showGrid": "Afficher la grille",
+  "workspace.resetGrid": "Réinitialiser la grille",
+  "workspace.resetGridHint": "La visibilité, les couleurs, l'espacement et l'épaisseur des lignes de la grille reviennent au réglage standard, ici et dans les réglages enregistrés avec « Par défaut ».",
   "workspace.cruise": "Croisière lors de l'ajout de nouvelles formes",
   "workspace.zoomSpeed": "Vitesse de zoom",
   "workspace.slow": "Lent",

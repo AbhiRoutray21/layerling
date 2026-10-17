@@ -2054,6 +2054,8 @@ export const MESSAGES_HU: Partial<Record<MessageKey, string>> = {
   "workspace.fastModeHint": "Lassabb gépekhez: kikapcsolja az árnyékokat, az élvonalakat minden testen és a kamera tehetetlenségét, és a nézetet csak képernyőfelbontásban rajzolja. A saját beállításaid megmaradnak későbbre.",
   "workspace.offInFastMode": "Gyors módban kikapcsolva",
   "workspace.showGrid": "Rács mutatása",
+  "workspace.resetGrid": "Rács visszaállítása",
+  "workspace.resetGridHint": "A rács láthatósága, színei, távolsága és vonalvastagsága visszaáll az alapértelmezettre, itt és a „Legyen alapértelmezett” gombbal mentett alapértelmezésben is.",
   "workspace.cruise": "Új alakzatok elhelyezése kattintással (Cruise)",
   "workspace.zoomSpeed": "Nagyítási sebesség",
   "workspace.slow": "Lassú",

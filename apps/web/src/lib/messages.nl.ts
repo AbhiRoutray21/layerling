@@ -2094,6 +2094,8 @@ export const MESSAGES_NL: Record<MessageKey, string> = {
   "workspace.fastModeHint": "Voor langzamere computers: zet schaduwen, randlijnen op alle lichamen en het doordraaien van de camera uit, en tekent de weergave alleen op schermresolutie. Je eigen instellingen blijven bewaard voor later.",
   "workspace.offInFastMode": "Instelling niet beschikbaar in snelle modus",
   "workspace.showGrid": "Raster tonen",
+  "workspace.resetGrid": "Raster terugzetten",
+  "workspace.resetGridHint": "Zichtbaarheid, kleuren, afstand en lijndikte van het raster gaan terug naar de standaard, hier en in de standaard die met ‘Als standaard instellen’ is bewaard.",
   "workspace.cruise": "Meebewegen bij toevoegen van nieuwe vormen",
   "workspace.zoomSpeed": "Zoomsnelheid",
   "workspace.slow": "Langzaam",

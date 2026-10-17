@@ -2088,6 +2088,8 @@ export const MESSAGES_CS: Record<MessageKey, string> = {
   "workspace.fastModeHint": "Pro pomalejší počítače: vypne stíny, hrany všech těles a setrvačnost pohledu a vykresluje jen v rozlišení obrazovky. Vaše nastavení zůstane zachované pro pozdější použití.",
   "workspace.offInFastMode": "V rychlém režimu vypnuto",
   "workspace.showGrid": "Zobrazit mřížku",
+  "workspace.resetGrid": "Obnovit mřížku",
+  "workspace.resetGridHint": "Viditelnost, barvy, rozestup a tloušťka čar mřížky se vrátí na standard, zde i ve výchozím nastavení uloženém tlačítkem „Nastavit jako výchozí“.",
   "workspace.cruise": "Pokládat nové tvary na plochy pod ukazatelem",
   "workspace.zoomSpeed": "Rychlost přiblížení",
   "workspace.slow": "Pomalu",

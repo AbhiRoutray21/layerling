@@ -1998,6 +1998,8 @@ export const MESSAGES_DA: Partial<Record<MessageKey, string>> = {
   "workspace.fastModeHint": "Til langsommere computere: slår skygger, kantlinjer på alle former og kameraets inerti fra, og tegner kun visningen i skærmopløsning. Dine egne indstillinger gemmes til senere.",
   "workspace.offInFastMode": "Fra i hurtig tilstand",
   "workspace.showGrid": "Vis gitter",
+  "workspace.resetGrid": "Nulstil gitter",
+  "workspace.resetGridHint": "Gitterets synlighed, farver, afstand og stregtykkelse går tilbage til standard, her og i den standard, der er gemt med „Gør til standard“.",
   "workspace.cruise": "Cruise når nye former tilføjes",
   "workspace.zoomSpeed": "Zoomhastighed",
   "workspace.slow": "Langsom",

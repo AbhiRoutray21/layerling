@@ -2024,6 +2024,8 @@ export const MESSAGES_IT: Partial<Record<MessageKey, string>> = {
   "workspace.fastModeHint": "Per computer meno potenti: disattiva le ombre, le linee dei bordi su tutti i corpi e l'inerzia della telecamera, e visualizza la scena solo alla risoluzione dello schermo. Le tue impostazioni personali vengono conservate per un uso successivo.",
   "workspace.offInFastMode": "Disattivato in modalità veloce",
   "workspace.showGrid": "Mostra la griglia",
+  "workspace.resetGrid": "Ripristina la griglia",
+  "workspace.resetGridHint": "Visibilità, colori, spaziatura e spessore delle linee della griglia tornano allo standard, qui e nelle impostazioni salvate con «Imposta come predefinito».",
   "workspace.cruise": "Posiziona le nuove forme seguendo il puntatore (Cruise)",
   "workspace.zoomSpeed": "Velocità dello zoom",
   "workspace.slow": "Lenta",

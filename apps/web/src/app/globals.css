@@ -12182,6 +12182,47 @@ html[data-theme="dark"] .workspace-custom-snap-add:hover {
   opacity: 0.48;
 }
 
+/* "Reset grid" at the end of the Workplane page (#503), a button like the one of the shape defaults. */
+.workspace-reset-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding-top: 14px;
+  color: #7a6550;
+  border-top: 1px solid #f0eae0;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.workspace-reset-row button {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 6px;
+  min-height: 32px;
+  padding: 0 10px;
+  color: #72583d;
+  background: #fff;
+  border: 1px solid #dacfc2;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+html[data-theme="dark"] .workspace-reset-row {
+  color: #cbbba6;
+  border-top-color: #4a3b2c;
+}
+
+html[data-theme="dark"] .workspace-reset-row button {
+  color: #e1ceba;
+  background: #35281b;
+  border-color: #5d4d3c;
+}
+
 .workspace-shape-dimensions {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));

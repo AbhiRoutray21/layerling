@@ -2085,6 +2085,8 @@ export const MESSAGES_RU: Partial<Record<MessageKey, string>> = {
   "workspace.fastModeHint": "Для слабых компьютеров: отключает тени, линии кромок на всех телах и инерцию камеры, рисует вид только в разрешении экрана. Ваши настройки сохраняются на потом.",
   "workspace.offInFastMode": "Выключено в быстром режиме",
   "workspace.showGrid": "Показывать сетку",
+  "workspace.resetGrid": "Сбросить сетку",
+  "workspace.resetGridHint": "Видимость, цвета, шаг и толщина линий сетки возвращаются к стандартным, здесь и в значениях, сохранённых кнопкой «Сделать по умолчанию».",
   "workspace.cruise": "Фигура следует за указателем при добавлении",
   "workspace.zoomSpeed": "Скорость приближения",
   "workspace.slow": "Медленно",

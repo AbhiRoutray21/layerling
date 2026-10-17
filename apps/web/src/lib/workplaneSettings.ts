@@ -708,6 +708,35 @@ function browserStorage(): Storage | null {
   }
 }
 
+/**
+ * The grid as the app starts it - visibility, colours, spacing and line weight - for "Reset grid" on the
+ * Workplane page (#503: a grid colour that matched the plate hid every line, and a new design started from
+ * the same saved default). Inch grids go back to their own standard spacing; the size of the plate and the
+ * printer are not touched.
+ */
+export function standardGridSettings(units: string) {
+  const inches = units === "Imperial";
+  return {
+    showGrid: DEFAULT_WORKPLANE_WORKSPACE.showGrid,
+    gridColor: DEFAULT_WORKPLANE_WORKSPACE.gridColor,
+    gridMajorColor: DEFAULT_WORKPLANE_WORKSPACE.gridMajorColor,
+    gridMajorInterval: DEFAULT_WORKPLANE_WORKSPACE.gridMajorInterval,
+    gridLinesGrow: DEFAULT_WORKPLANE_WORKSPACE.gridLinesGrow,
+    gridBlockPreset: inches ? DEFAULT_IMPERIAL_GRID_BLOCK_PRESET : DEFAULT_METRIC_GRID_BLOCK_PRESET,
+    gridBlockSize: inches ? (inchGridPresetMm(DEFAULT_IMPERIAL_GRID_BLOCK_PRESET) ?? DEFAULT_WORKPLANE_WORKSPACE.gridBlockSize) : DEFAULT_WORKPLANE_WORKSPACE.gridBlockSize,
+  };
+}
+
+/**
+ * Puts the grid of the default saved with "Make default" back to the standard, leaving everything else of it
+ * as it is, so that new designs start with a visible grid too. False when there is no saved default.
+ */
+export function resetGridInSavedDefault(storage: Storage | null = browserStorage()) {
+  const saved = readWorkspaceDefault(storage);
+  if (!saved || !storage) return false;
+  return saveWorkspaceDefault({ ...saved.workspace, ...standardGridSettings(saved.workspace.units) }, saved.snap, storage);
+}
+
 export function readWorkspaceDefault(storage: Storage | null = browserStorage()) {
   if (!storage) {
     return null;
