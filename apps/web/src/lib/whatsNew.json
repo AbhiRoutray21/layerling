@@ -1,5 +1,230 @@
 [
   {
+    "version": "1.87.0",
+    "items": [
+      {
+        "title": {
+          "de": "Eine Kopie lässt sich mit der Maus verschieben und noch einmal kopieren",
+          "en": "A copy can be moved with the mouse and copied again"
+        },
+        "body": {
+          "de": "Nach dem Duplizieren liegt die Kopie genau auf dem Original. Ein Mausklick darauf traf manchmal das Original statt der ausgewählten Kopie, und das Original wanderte. So riss die Kette ab, die das nächste Duplizieren um denselben Versatz weiterschiebt (zum Beispiel für eine Lochreihe), und die nächste Kopie blieb am Platz. Jetzt zählt bei Körpern, die genau aufeinander liegen, der schon ausgewählte.",
+          "en": "After duplicating, the copy lies exactly on the original. A mouse press on it sometimes hit the original instead of the selected copy, and the original moved. That broke the chain that lets the next duplicate carry on by the same step (for a row of holes, say), and the next copy stayed where it was. Where bodies lie exactly on one another, the one that is already selected now wins."
+        }
+      },
+      {
+        "title": {
+          "de": "„Als Vorgabe speichern“ merkt sich auch die Farbe",
+          "en": "\"Save as default\" keeps the colour, too"
+        },
+        "body": {
+          "de": "Färbe eine Form, zum Beispiel einen Zylinder, und drücke im Eigenschaften-Fenster „Als Vorgabe speichern“: Jeder neue Zylinder startet dann in dieser Farbe, die anderen Arten behalten ihre eigenen. „Vorgaben zurücksetzen“ gibt die Farbe der App zurück. Außerdem kam ein zweites Speichern oder Zurücksetzen im selben Entwurf bei neuen Formen nicht an; das ist behoben.",
+          "en": "Colour a shape, a cylinder for example, and press \"Save as default\" in the Properties panel: every new cylinder then starts in that colour, and the other kinds keep their own. \"Reset defaults\" gives the app's colour back. Also, a second save or reset in the same design did not reach new shapes; that is fixed."
+        }
+      },
+      {
+        "title": {
+          "de": "Eingetippte Maße gelten auch beim Klick daneben",
+          "en": "A typed measure also counts when you click beside the box"
+        },
+        "body": {
+          "de": "Wenn du in einem Maßfeld am Körper (oder im Winkelfeld) eine Zahl getippt hast und mit der linken Maustaste ins Leere klickst, übernimmt layerling die Zahl jetzt, wie es der Rechtsklick schon tat. Vorher ging sie bei Linksklick verloren. Esc bricht weiterhin ab.",
+          "en": "If you typed a number into a measure box on a body (or into the angle box) and click on empty space with the left mouse button, layerling now applies the number, as the right click already did. Before, a left click lost it. Esc still cancels."
+        }
+      },
+      {
+        "title": {
+          "de": "Ausrichten: die Griffe bleiben auseinander",
+          "en": "Align: the handles keep apart"
+        },
+        "body": {
+          "de": "Bei kleinen Teilen lagen die Griffe von „Ausrichten“ so dicht, dass man sie nicht einzeln anklicken konnte, und beim starken Hineinzoomen verschwanden sie ganz. Jetzt halten die drei Griffe einer Achse einen Mindestabstand ein, und Griffe, die noch vor der Kamera liegen, bleiben auch beim Zoomen sichtbar.",
+          "en": "On small parts the handles of Align lay so close that you could not click them one by one, and zooming far in made them disappear. Now the three handles of an axis keep a minimum distance, and handles that are still in front of the camera stay visible when you zoom."
+        }
+      },
+      {
+        "title": {
+          "de": "Pfeiltasten: die Ansicht zieht nur noch bei Bedarf mit",
+          "en": "Arrow keys: the view follows only when needed"
+        },
+        "body": {
+          "de": "Die Pfeiltasten schieben einen Körper, und die Ansicht geht mit, wenn er sonst aus dem Bild liefe. Bisher zog sie auch mit, wenn der Körper schon am Rand oder außerhalb lag, zum Beispiel nach starkem Zoom: Dann stand er still, und alles andere wanderte. Jetzt geht die Ansicht nur noch mit, wenn der Körper im Bild ist und es verlassen würde.",
+          "en": "The arrow keys move a body, and the view goes along when it would otherwise leave the picture. Before, it also went along when the body already lay at the edge or outside, after zooming in far for example: then the body stood still and everything else slid past. Now the view goes along only when the body is in the picture and would leave it."
+        }
+      },
+      {
+        "title": {
+          "de": "Verrunden und Fasen: „Untere Kanten“",
+          "en": "Fillet and chamfer: “Bottom edges”"
+        },
+        "body": {
+          "de": "Neben „Obere Kanten“ gibt es im Verrunden- und Fasen-Werkzeug jetzt „Untere Kanten“: ein Klick wählt nur die Kanten ganz unten am Körper, etwa den Fuß eines Teils. So rundest oder fasst du nur das untere Ende, ohne die Kanten einzeln anzuklicken. Auch die KI-Anbindung versteht es („bottom“).",
+          "en": "Next to “Top edges”, the Fillet and Chamfer tools now have “Bottom edges”: one click picks only the edges along the very bottom of the body, such as the foot of a part. That rounds or chamfers just the lower end without clicking the edges one by one. The AI connection understands it too (“bottom”)."
+        }
+      },
+      {
+        "title": {
+          "de": "Der Höhenwert steht auch am Höhengriff",
+          "en": "The height value also stands at the height handle"
+        },
+        "body": {
+          "de": "Beim Ziehen am oberen Mittelgriff stand der Höhenwert nur an der senkrechten Kante, oft weit weg vom Griff, und beim Hineinzoomen verschwand er ganz. Jetzt steht er zusätzlich direkt am Griff (darüber, am unteren Griff darunter), immer im Bild, und lässt sich dort anklicken, um eine Zahl einzutippen. Das Maß an der Kante bleibt, wie es war.",
+          "en": "When you pulled the top middle handle, the height value stood only at the vertical edge, often far from the handle, and it vanished when you zoomed in. Now it also stands right at the handle (above it, below the lower handle), always in view, and can be clicked there to type a number. The measure at the edge stays as it was."
+        }
+      },
+      {
+        "title": {
+          "de": "Der Ausblenden-Knopf bleibt bei mehreren gewählten Körpern",
+          "en": "The hide button stays when several bodies are selected"
+        },
+        "body": {
+          "de": "Im Fenster mit den Eigenschaften verschwand der Knopf mit dem Auge, sobald mehr als ein Körper ausgewählt war, und man musste das Menü „Sichtbarkeit“ nehmen. Jetzt steht er neben dem Schloss auch bei mehreren Körpern: Er blendet alle ausgewählten aus, und sind alle schon ausgeblendet, blendet er sie wieder ein. Dasselbe tut Strg+H.",
+          "en": "In the properties window the button with the eye disappeared as soon as more than one body was selected, and you had to use the Visibility menu. Now it stands beside the lock for several bodies too: it hides all the selected ones, and when all of them are hidden it shows them again. Ctrl+H does the same."
+        }
+      },
+      {
+        "title": {
+          "de": "Ausgeblendete Formen sieht man jetzt",
+          "en": "Hidden shapes can be seen now"
+        },
+        "body": {
+          "de": "Sind Formen ausgeblendet, steht eine kleine Zahl am Knopf der Gruppe „Sichtbarkeit“; ein Klick darauf blendet alle wieder ein. Öffnest du einen Entwurf mit ausgeblendeten Formen, sagt es dir einmal eine Meldung, mit einem Knopf „Alle einblenden“. Ausgeblendetes bleibt aber ausgeblendet, wenn du nichts tust.",
+          "en": "When shapes are hidden, a small number sits on the button of the Visibility group; a click on it shows them all again. If you open a design that has hidden shapes, a message tells you once, with a button “Show all”. Hidden shapes stay hidden if you do nothing."
+        }
+      },
+      {
+        "title": {
+          "de": "Die Mondsichel ist dicht und wird nicht mehr hohl",
+          "en": "The Crescent is closed and no longer comes out hollow"
+        },
+        "body": {
+          "de": "Die beiden Deckel der Mondsichel waren gegenüber den Wänden falsch herum ausgerichtet. Der Slicer hielt die Stelle, an der sie einen anderen Körper überlappt, deshalb für ein Loch, und beim Export ließ sie sich nicht mit anderen Körpern zusammenführen. Jetzt ist das Netz geschlossen, und die Mondsichel verhält sich wie jede andere Form.",
+          "en": "The two lids of the Crescent faced the wrong way against its walls. A slicer therefore took the place where it overlaps another body for a hole, and in the export it could not be merged with other bodies. The mesh is closed now, and the Crescent behaves like any other shape."
+        }
+      },
+      {
+        "title": {
+          "de": "Die KI kann das Projekt als .lyl speichern",
+          "en": "The AI can save the project as a .lyl"
+        },
+        "body": {
+          "de": "Über die MCP-Schnittstelle konnte eine KI bisher STL, 3MF und OBJ in einen Pfad schreiben, aber nicht den bearbeitbaren Entwurf. Das neue Werkzeug „layerling_save_project“ speichert den ganzen Entwurf als .lyl-Datei an einen Pfad auf dem Rechner des MCP-Servers, ohne Dialog. Eine vorhandene Datei wird nur ersetzt, wenn man es sagt, und das Ziel von Strg+S im Editor bleibt, wie es war.",
+          "en": "Through the MCP connection an AI could write STL, 3MF and OBJ to a path, but not the editable design. The new tool layerling_save_project saves the whole design as a .lyl file at a path on the computer of the MCP server, without a dialog. An existing file is only replaced when you say so, and the target of Ctrl+S in the editor stays as it was."
+        }
+      },
+      {
+        "title": {
+          "de": "Die Anleitung gibt es jetzt auch auf Polnisch",
+          "en": "The user guide is now also in Polish"
+        },
+        "body": {
+          "de": "Alle 17 Kapitel der Anleitung sind ins Polnische übersetzt, und die Schaltflächen heißen darin genau wie in der polnischen Oberfläche. Außerdem findet die Suche (Strg+K und die Suche in der Anleitung) Wörter mit „ł“ jetzt auch, wenn du „l“ tippst. In zwei Sätzen der Anleitung stand in jeder Sprache ein rohes „{count}“; das ist behoben.",
+          "en": "All 17 chapters of the guide are translated into Polish, and the buttons are named in it exactly as in the Polish interface. The search (Ctrl+K and the search in the guide) now also finds words with \"ł\" when you type \"l\". Two sentences in the guide showed a raw \"{count}\" in every language; that is fixed."
+        }
+      },
+      {
+        "title": {
+          "de": "Die Kürzelliste lässt sich drucken",
+          "en": "The list of shortcuts can be printed"
+        },
+        "body": {
+          "de": "Im Fenster mit den Tastenkürzeln, im Editor wie in der Skizze, gibt es neben dem Fragezeichen einen Druckerknopf. Er druckt nur die Liste, schwarz auf weiß und in großer Schrift. Im Druckdialog des Browsers lässt sie sich auch als PDF speichern. Strg+P bei geöffnetem Fenster tut dasselbe.",
+          "en": "The window with the keyboard shortcuts, in the editor and in sketch mode alike, has a printer button next to the question mark. It prints only the list, black on white and in large type. In the print dialog of the browser you can also save it as a PDF. Ctrl+P while the window is open does the same."
+        }
+      },
+      {
+        "title": {
+          "de": "Der Apple Pencil zeigt beim Schweben die Namen der Knöpfe",
+          "en": "A hovering Apple Pencil shows the names of buttons"
+        },
+        "body": {
+          "de": "Auf dem iPad zeigt layerling jetzt den Namen eines Knopfes oder Feldes in einer kleinen Blase, wenn der Apple Pencil einen Moment darüber schwebt, so wie die Maus einen Tooltip zeigt. Das gilt für iPads, deren Pencil schweben kann.",
+          "en": "On an iPad layerling now shows the name of a button or field in a small bubble when the Apple Pencil rests above it for a moment, as a mouse shows a tooltip. This works on iPads whose Pencil can hover."
+        }
+      },
+      {
+        "title": {
+          "de": "Verjüngte, gedrehte Zylinder behalten beim Gruppieren ihre Drehung",
+          "en": "Tapered, turned cylinders keep their turn when grouped"
+        },
+        "body": {
+          "de": "Ein Zylinder mit Verjüngung oder Neigung, den man um 90 Grad gedreht hatte, kam beim Gruppieren (und beim Exportieren) ungedreht heraus, die Gruppe hatte dann andere Maße als die Teile. Die Drehung bleibt jetzt erhalten.",
+          "en": "A cylinder with a taper or a lean that you had turned by 90 degrees came out unturned when grouped (and when exported), so the group had other measures than its parts. The turn is kept now."
+        }
+      },
+      {
+        "title": {
+          "de": "Das Raster lässt sich auf den Standard zurücksetzen",
+          "en": "The grid can be reset to the standard"
+        },
+        "body": {
+          "de": "Wer die Rasterfarbe versehentlich so gestellt hat, dass man kein Raster mehr sieht, kommt jetzt mit einem Klick zurück: Am Ende der Seite Arbeitsebene in den Einstellungen setzt „Raster zurücksetzen“ Sichtbarkeit, Farben, Abstand und Linienstärke auf den Standard, für den Entwurf und für die mit „Als Vorgabe sichern“ gesicherte Vorgabe. Größe und Drucker der Platte bleiben, wie sie sind.",
+          "en": "If the grid colour was set so that no grid can be seen any more, one click brings it back: at the end of the Workplane page in the settings, “Reset grid” puts visibility, colours, spacing and line weight back to the standard, for the design and for the default saved with “Make default”. The plate's size and printer stay as they are."
+        }
+      },
+      {
+        "title": {
+          "de": "Die Formenbibliothek lässt sich in der Größe ziehen",
+          "en": "The shape library can be pulled to any size"
+        },
+        "body": {
+          "de": "Ränder und Ecken der Formenbibliothek ziehen ihre Breite und Höhe, so groß oder klein, wie dein Bildschirm es braucht; die Größe merkt sich der Browser. Ist die Bibliothek schmal, zeigt sie nur die Bilder ohne Namen, der Name steht dann im Tooltip.",
+          "en": "The edges and corners of the shape library pull its width and height, as large or small as your screen needs; the browser remembers the size. When the library is narrow, it shows only the pictures without names, and the name is in the tooltip."
+        }
+      },
+      {
+        "title": {
+          "de": "Das Lineal lässt sich mit den Griffen auf 500 mm ziehen",
+          "en": "The ruler can be pulled to 500 mm by its handles"
+        },
+        "body": {
+          "de": "Die Griffe des Lineals hörten bei der Größe der Platte auf, mindestens bei 220 mm, der Schieber ging aber bis 500 mm. Jetzt reichen auch die Griffe so weit wie der Schieber.",
+          "en": "The handles of the ruler stopped at the size of the plate, at least 220 mm, while its slider went up to 500 mm. Now the handles reach as far as the slider does."
+        }
+      },
+      {
+        "title": {
+          "de": "Eigene Farben lassen sich dauerhaft behalten",
+          "en": "Colours of your own can be kept for good"
+        },
+        "body": {
+          "de": "Die Farben, die du selbst mischst, standen schon unter „Zuletzt benutzt“, aber nur acht, und die älteste fiel heraus. Mit der Stecknadel in der neuen Reihe „Behalten“ hältst du die gewählte Farbe fest: Sie steht in einer eigenen Reihe, neuere Farben verdrängen sie nie, und dieselbe Nadel gibt sie wieder frei. Bis zu 21 Farben bleiben in diesem Browser erhalten.",
+          "en": "The colours you mix yourself were already listed under “Recently used”, but only eight, and the oldest dropped out. The pin in the new row “Kept” holds the colour you have chosen: it stands in a row of its own, newer colours never push it out, and the same pin lets go of it again. Up to 21 colours are kept in this browser."
+        }
+      },
+      {
+        "title": {
+          "de": "Der Text bekommt eine Buchstabenkante",
+          "en": "The Text shape gets a letter edge"
+        },
+        "body": {
+          "de": "In den Eigenschaften des Textes rundest du die obere Kante der Buchstaben ab oder setzt eine Fase an, mit einer Größe bis 5 mm, so wie beim Namensschild. Die Rundung geht so weit, wie die Striche breit sind, die Unterseite bleibt flach.",
+          "en": "In the Text properties you can round or chamfer the top edge of the letters, with a size of up to 5 mm, as on a name tag. A rounding goes as far as the strokes are wide, and the underside stays flat."
+        }
+      },
+      {
+        "title": {
+          "de": "Die Ansicht lässt sich zu Teilen neben der Platte schwenken",
+          "en": "The view can be panned to parts beside the plate"
+        },
+        "body": {
+          "de": "Wer Teile weit neben der Platte abgelegt hat, kam mit der Maus nicht bis zu ihnen: Der Punkt, um den die Ansicht schwenkt und dreht, blieb auf der Platte, außer nach „Ansicht auf Auswahl zentrieren“. Er reicht jetzt bis zum entferntesten Körper des Entwurfs.",
+          "en": "If you had parked parts far beside the plate, the mouse could not take the view over to them: the point the view pans and turns around stayed on the plate, except after “Center view on selection”. It now reaches the farthest body of the design."
+        }
+      },
+      {
+        "title": {
+          "de": "Die Formenbibliothek stößt beim Verschieben nicht mehr an eine unsichtbare Kante",
+          "en": "The shape library no longer meets an invisible edge when moved"
+        },
+        "body": {
+          "de": "Mit kleiner oder großer Werkzeugleiste blieb die Formenbibliothek beim Verschieben vor dem Fensterrand hängen oder lief rechts und unten aus dem Fenster. Jetzt geht sie bei jeder Werkzeugleistengröße bis zum Fensterrand.",
+          "en": "With a small or large toolbar the shape library stopped short of the window's edge when moved, or ran out of the window on the right and below. Now it goes as far as the window's edge at every toolbar size."
+        }
+      }
+    ]
+  },
+  {
     "version": "1.86.2",
     "items": [
       {
