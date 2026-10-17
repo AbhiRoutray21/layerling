@@ -18,5 +18,15 @@
       "de": "Die Anleitung hat ein neues Kapitel „Tablet und Touch“: Gesten, mehrere Körper wählen, das Menü des langen Drucks, der Stift und was auf dem iPad zu wissen ist. Auf einem Touchgerät weist ein Hinweis auf der Startseite einmal darauf hin.",
       "en": "The guide has a new chapter “Tablet and touch”: gestures, selecting several bodies, the long press menu, the stylus and what to know on an iPad. On a touch device a hint on the start page points to it once."
     }
+  },
+  {
+    "title": {
+      "de": "Fläche löschen",
+      "en": "Delete face"
+    },
+    "body": {
+      "de": "Mit dem neuen Werkzeug „Fläche löschen“ nimmst du eine Verrundung, ein Loch oder einen Zapfen wieder vom Körper: Klicke die Flächen an und dann auf „Löschen“, und die Flächen ringsum schließen die Lücke. Der Körper bleibt exakt, Verrundung, Fase und STEP-Export funktionieren also weiter.",
+      "en": "The new tool \"Delete face\" takes a fillet, a hole or a boss off a body again: click its faces, then \"Delete\", and the faces around them close the gap. The body stays exact, so Fillet, Chamfer and the STEP export still work on it."
+    }
   }
 ]

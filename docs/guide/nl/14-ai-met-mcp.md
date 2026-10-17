@@ -72,6 +72,8 @@ De AI werkt met dezelfde functies als jij, via dezelfde weg als jouw bediening i
 | `layerling_list_edges` | somt de echte CAD-randen van een object op |
 | `layerling_apply_edge_treatment` | schuint gekozen randen af of rondt ze af |
 | `layerling_hollow_object` | holt een lichaam uit met een gelijkmatige wand |
+| `layerling_list_faces` | somt de vlakken van een exact lichaam op |
+| `layerling_delete_faces` | verwijdert vlakken en sluit de opening |
 | `layerling_array_objects` | vermenigvuldigt in een rij of op een cirkel |
 | `layerling_bundle_objects` | bundelt objecten zoals Ctrl+B: ze bewegen samen, houden hun kleur en soort en gaan bij een export apart mee |
 | `layerling_layer_text` | maakt van een tekst een stapel lagen voor een meerkleurenprint (letters, bredere randen, een plaat zonder gaten) of bouwt een stapel opnieuw op, met een sleutelringgat, de hoeken per laag en een afgeronde of afgeschuinde letterrand; met een namenlijst één label per naam |

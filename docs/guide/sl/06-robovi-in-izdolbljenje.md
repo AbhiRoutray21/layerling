@@ -78,3 +78,17 @@ Izdolbiš lahko tudi telo z žepom, na primer kvader z luknjo, ki ne gre skozi d
 Če pozneje spremeniš velikost izdolbenega telesa, ga layerling takoj znova izdolbe v novi velikosti. Stena ostane tako debela, kot si jo izbral, tudi pri okroglih telesih. Valj, ki ga pri tem v eno smer povlečeš bolj kot v drugo, postane elipsa.
 
 > **Namig:** Pri šobi 0,4 mm je dobro izhodišče debelina stene od 1,2 do 2 mm: dovolj tanka, da prihraniš material, dovolj debela za stabilen del.
+
+## Brisanje ploskev
+
+Zaokrožitev, ki moti, luknja na napačnem mestu, izboklina, ki je ne potrebuješ več: {{ui:editor.tool.deleteFace}} jih spet odstrani s telesa, ne da bi ga moral graditi na novo.
+
+1. Izberi telo in klikni {{ui:editor.tool.deleteFace}}, ali klikni z desnim gumbom na telo in izberi v meniju.
+2. Klikni vsako ploskev tistega, kar naj izgine: ploskve zaobljenega roba, steno luknje, stranico in vrh izbokline. Izbrana ploskev zasveti; ob ponovnem kliku jo spet odstraniš iz izbire. Okno šteje ploskve.
+3. Klikni {{ui:deleteFace.apply}} ali pritisni [[Del]]. [[Esc]] zapre orodje, ne da bi kaj spremenil.
+
+Okoliške ploskve rastejo, dokler se vrzel ne zapre. Kvader z zaobljenimi zgornjimi robovi dobi nazaj ostre robove, luknja se zapolni, izboklina izgine. Telo ostane natančno: lahko ga znova zaokrožiš in posnameš, izvoz STEP pa ohrani njegove prave ploskve. [[Ctrl]]+[[Z]] brisanje prekliče v enem koraku. Poleg tega je pod {{ui:edge.featureHistory}} tako kot zaokrožitve in posnetja, kjer ga prekliče {{ui:edge.revertAction}}; {{ui:edge.editAction}} zanj ni. Pri skupini iz tega nastane eno samo telo, kot pri obdelavi robov.
+
+Izberi vse ploskve tistega, kar naj izgine, in samo te. Če okoliške ploskve vrzeli ne morejo zapreti, ti layerling to pove in nič se ne spremeni: glavna stranica kvadra na primer nima sosednje ploskve, ki bi stopila na njeno mesto. Če izbrišeš samo dno žepa, nastane luknja skoz in skoz, ker se stene žepa nadaljujejo do druge strani.
+
+{{ui:editor.tool.deleteFace}} potrebuje natančne ploskve: deluje na delih, uvoženih kot STEP, in na oblikah layerlinga. Kar layerling hrani kot mrežo, jih nima: uvožen STL, OBJ ali 3MF, razdeljeno, okoli valja ovito ali poenostavljeno telo ali zelo podrobna oblika, na primer dolgo besedilo. Če lahko, uvozi del kot STEP. Pri podrobnem uvoženem delu je lahko nekaj ploskev preveč za jedro CAD: po 45 sekundah se brisanje ustavi in nič se ne spremeni. Telo, ki mu je bila po obdelavi robov z ohranjeno velikostjo robov spremenjena velikost, v novi velikosti nima natančnih ploskev, dokler sprememba velikosti ni preklicana.

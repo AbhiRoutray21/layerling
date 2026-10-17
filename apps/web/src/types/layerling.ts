@@ -456,8 +456,8 @@ export type ShellOpenings = "none" | "top" | "bottom" | "top-bottom" | ShellSide
 export type ShellEdges = "round" | "sharp";
 
 export type EdgeTreatmentFeature = {
-  /** "shell" hollows the body: `amount` is then the wall thickness. */
-  kind: "fillet" | "chamfer" | "shell";
+  /** "shell" hollows the body: `amount` is then the wall thickness. "deleteFace" deletes faces and closes the gap (#451). */
+  kind: "fillet" | "chamfer" | "shell" | "deleteFace";
   amount: number;
   edgeCount: number;
   /** The edges picked, as the tool numbered them on the body before this treatment: "Edit" picks them again (#227). */
@@ -466,6 +466,9 @@ export type EdgeTreatmentFeature = {
   openings?: ShellOpenings;
   /** Only for "shell"; missing means "round". */
   shellEdges?: ShellEdges;
+  /** Only for "deleteFace": the faces deleted, as the tool numbered them on the body before. */
+  faceIds?: number[];
+  faceCount?: number;
 };
 
 export type EdgeTreatmentHistoryEntry = {

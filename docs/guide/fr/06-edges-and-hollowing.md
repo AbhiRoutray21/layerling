@@ -78,3 +78,17 @@ Un corps avec une poche - un bloc avec un trou qui ne traverse pas complètement
 Si vous redimensionnez un corps évidé ultérieurement, layerling le creuse immédiatement à nouveau à la nouvelle taille. Le mur reste aussi épais que vous l'avez choisi, corps ronds inclus. Un cylindre que vous tirez plus loin dans un sens que dans l’autre devient une ellipse.
 
 > **Astuce :** Avec une buse de 0,4 mm, 1,2 à 2 mm de paroi est un bon début : suffisamment fin pour économiser de la matière, suffisamment épais pour une pièce solide.
+
+## Supprimer des faces
+
+Un congé qui gêne, un trou au mauvais endroit, un bossage dont vous n'avez plus besoin : {{ui:editor.tool.deleteFace}} les retire du corps, sans avoir à le reconstruire.
+
+1. Sélectionnez le corps et cliquez sur {{ui:editor.tool.deleteFace}}, ou cliquez avec le bouton droit sur le corps et sélectionnez-le dans le menu.
+2. Cliquez sur chaque face de ce qui doit disparaître : les faces d'un bord arrondi, la paroi d'un trou, le côté et le dessus d'un bossage. Une face choisie s'allume ; un nouveau clic la retire. Le panneau compte les faces.
+3. Cliquez sur {{ui:deleteFace.apply}} ou appuyez sur [[Delete]]. [[Esc]] ferme l'outil sans rien changer.
+
+Les faces autour s'étendent jusqu'à refermer le vide. Un bloc aux bords supérieurs arrondis retrouve ses arêtes vives, un trou est comblé, un bossage disparaît. Le corps reste exact : il peut à nouveau recevoir des congés et des chanfreins, et l'export STEP garde ses vraies faces. [[Ctrl]]+[[Z]] annule la suppression en une étape. Elle figure aussi sous {{ui:edge.featureHistory}}, au même titre que les congés et les chanfreins, où {{ui:edge.revertAction}} l'annule ; il n'y a pas de {{ui:edge.editAction}} pour elle. Sur un groupe, le résultat est un seul corps, comme pour un traitement de bord.
+
+Choisissez toutes les faces de ce qui doit disparaître, et seulement celles-là. Si les faces autour ne peuvent pas refermer le vide, layerling le signale et rien ne change : une face principale d'un bloc, par exemple, n'a pas de voisine qui puisse prendre sa place. Supprimer seulement le fond d'une poche en fait un trou traversant, car les parois de la poche se prolongent jusqu'à l'autre côté.
+
+{{ui:editor.tool.deleteFace}} a besoin de faces exactes : il fonctionne sur les pièces importées en STEP et sur les formes de layerling. Ce que layerling garde comme maillage n'en a pas : un fichier STL, OBJ ou 3MF importé, un corps divisé, enroulé autour d'un cylindre ou simplifié, ou une forme très détaillée comme un long texte. Importez une pièce en STEP si possible. Sur une pièce importée détaillée, quelques faces peuvent être trop lourdes pour le noyau CAO : au bout de 45 secondes, la suppression est arrêtée et rien ne change. Un corps redimensionné après un traitement de bord en gardant la taille des bords n'a pas de faces exactes à sa nouvelle taille tant que le redimensionnement n'est pas annulé.

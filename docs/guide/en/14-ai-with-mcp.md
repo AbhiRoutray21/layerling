@@ -76,6 +76,8 @@ The AI works with the same functions as you, through the same path as your opera
 | `layerling_list_edges` | lists the real CAD edges of an object |
 | `layerling_apply_edge_treatment` | chamfers or fillets chosen edges |
 | `layerling_hollow_object` | hollows a body with an even wall |
+| `layerling_list_faces` | lists the faces of an exact body |
+| `layerling_delete_faces` | deletes faces and closes the gap |
 | `layerling_array_objects` | multiplies in a row or on a circle |
 | `layerling_bundle_objects` | bundles objects like Ctrl+B: they move together, keep their colour and kind and go out separately in an export |
 | `layerling_layer_text` | turns a text into a stack of layers for a multicolour print (letters, wider rims, a plate without holes) or builds a stack again, with a key ring hole, the corners per layer and a rounded or chamfered letter edge; with a name list, one tag per name |

@@ -149,6 +149,8 @@ import { outwardFaceNormal } from "@/lib/layFlat";
 import { OVERHANG_PLATE_TOLERANCE, overhangDownwardLimit } from "@/lib/overhangLimits";
 import { directionIsOwnShapeAxis, rotatedGeometryShapePatch, rotationPatchFromQuaternion as sharedRotationPatchFromQuaternion, signedDegrees } from "@/lib/geometryRotation";
 import type { CadModifierEdge } from "@/lib/cadModifierTypes";
+import { cadFaceHighlightPositions, type CadFacePick } from "@/lib/cadFacePick";
+import { cadFacePickMesh, disposeCadFacePickMesh } from "@/lib/cadFacePickMesh";
 import { circleOfEdgePoints, pointAcrossCircle, pointOnCircle } from "@/lib/tapeCircle";
 import { syncHistoryPickHighlight } from "@/components/workplane/historyPickHighlight";
 import { aimPickRay, pickShapeAt, pickShapeIdAt, pointerRayFor, RENDER_LAYER_SHAPES, usePickOnlyPointer, type PickOnlySelection } from "@/components/workplane/viewportPicking";
@@ -427,6 +429,9 @@ type WorkplaneViewportProps = {
   /** "Align faces" waiting for a click on a face of one of these bodies. */
   mateFacePick?: { shapeIds: string[] } | null;
   onMateFacePick?: (pick: LayFlatPick | null) => void;
+  /** "Delete face" waiting for clicks on faces of the prepared body; a click toggles the face. */
+  cadFacePick?: CadFacePick | null;
+  onCadFacePick?: (faceId: number) => void;
   onNoteAdd?: (note: { x: number; y: number; z: number; anchor?: WorkplaneNoteAnchor }) => string | null;
   /** Puts reference points in the scene; answers with the ids it made (none if they are there already). */
   onAddReferencePoints?: (positions: ReferencePosition[]) => string[];
@@ -3082,6 +3087,8 @@ export function WorkplaneViewport({
   onLayFlatPick,
   mateFacePick = null,
   onMateFacePick,
+  cadFacePick = null,
+  onCadFacePick,
   onNoteAdd,
   onAddReferencePoints,
   onRemoveAllReferencePoints,
@@ -3309,6 +3316,9 @@ export function WorkplaneViewport({
   layFlatPickModeRef.current = layFlatPickMode;
   const mateFacePickRef = useRef(mateFacePick);
   mateFacePickRef.current = mateFacePick;
+  const cadFacePickRef = useRef(cadFacePick);
+  cadFacePickRef.current = cadFacePick;
+  const cadFaceHoverRef = useRef<number | null>(null);
   const notesVisibleRef = useRef(notesVisible);
   const noteOverlayRef = useRef<NoteOverlayState | null>(null);
   const noteDragRef = useRef<NoteDragState | null>(null);
@@ -3953,6 +3963,11 @@ export function WorkplaneViewport({
     if (!layFlatPickMode && !mateFacePick) syncLayFlatHover(threeRef.current, [], resolvedThemeRef.current, null, null);
   }, [layFlatPickMode, mateFacePick]);
 
+  useEffect(() => {
+    if (!cadFacePick) cadFaceHoverRef.current = null;
+    syncCadFaceLayer(threeRef.current, cadFacePick, resolvedTheme, cadFaceHoverRef.current);
+  }, [cadFacePick, resolvedTheme]);
+
   useLayoutEffect(() => {
     rotationPivotRef.current = rotationPivot;
     const state = threeRef.current;
@@ -4226,6 +4241,7 @@ export function WorkplaneViewport({
         state.workplanePreviewLayer,
         state.layFlatHoverLayer ?? null,
         state.bentTubeSegmentLayer ?? null,
+        state.cadFaceLayer ?? null,
         state.helperLayer,
         state.transformGuideLayer,
         state.moveDimensionLayer,
@@ -4389,6 +4405,8 @@ export function WorkplaneViewport({
       if (state.bentTubeSegmentLayer) {
         disposeChildren(state.bentTubeSegmentLayer);
       }
+      if (state.cadFaceLayer) disposeChildren(state.cadFaceLayer);
+      if (state.cadFacePickMesh) disposeCadFacePickMesh(state.cadFacePickMesh);
       disposeChildren(state.shapeLayer);
       state.shapeRecords.clear();
       disposeChildren(state.helperLayer);
@@ -6804,6 +6822,13 @@ export function WorkplaneViewport({
         return;
       }
 
+      if (cadFacePickRef.current) {
+        event.preventDefault();
+        const faceId = pickCadFace(state, cadFacePickRef.current, event.clientX, event.clientY);
+        if (faceId !== null) onCadFacePick?.(faceId);
+        return;
+      }
+
       if (noteModeRef.current) {
         event.preventDefault();
         const anchor = resolveNoteAnchor(event.clientX, event.clientY);
@@ -7270,6 +7295,14 @@ export function WorkplaneViewport({
       }
       if (mateFacePickRef.current) {
         syncLayFlatHover(threeRef.current, mateFacePickRef.current.shapeIds, resolvedThemeRef.current, event.clientX, event.clientY);
+        return;
+      }
+      if (cadFacePickRef.current && threeRef.current) {
+        const hovered = pickCadFace(threeRef.current, cadFacePickRef.current, event.clientX, event.clientY);
+        if (hovered !== cadFaceHoverRef.current) {
+          cadFaceHoverRef.current = hovered;
+          syncCadFaceLayer(threeRef.current, cadFacePickRef.current, resolvedThemeRef.current, hovered);
+        }
         return;
       }
       if (modifierActiveRef.current) {
@@ -8785,7 +8818,7 @@ export function WorkplaneViewport({
         )}
       </div>
 
-      <section className={`workplane-wrap ${noteMode ? "note-mode" : ""} ${workplaneMode ? "placing-workplane" : ""} ${splitActive ? "split-mode" : ""} ${splitHandleState ? `split-handle-${splitHandleState}` : ""} ${splitSurfacePick ? "split-picking" : ""} ${splitSurfacePick && splitPickOverFace ? "split-pick-over-face" : ""} ${cruiseAsset || carryIds?.length ? "cruising" : ""} ${tapeMode ? "tape-mode" : ""} ${tapeDeleteMode ? "tape-delete-mode" : ""} ${tapeMoveMode ? "tape-move-mode" : ""} ${cornerRulerMode ? "corner-ruler-mode" : ""} ${pivotPickMode || layFlatPickMode || mateFacePick ? "pivot-pick-mode" : ""} ${modifierActive ? "modifier-edge-pick" : ""} ${sectionMeasureMode && sectionSettings.enabled ? "section-measure-mode" : ""}`} aria-label={t("aria.workplane")}>
+      <section className={`workplane-wrap ${noteMode ? "note-mode" : ""} ${workplaneMode ? "placing-workplane" : ""} ${splitActive ? "split-mode" : ""} ${splitHandleState ? `split-handle-${splitHandleState}` : ""} ${splitSurfacePick ? "split-picking" : ""} ${splitSurfacePick && splitPickOverFace ? "split-pick-over-face" : ""} ${cruiseAsset || carryIds?.length ? "cruising" : ""} ${tapeMode ? "tape-mode" : ""} ${tapeDeleteMode ? "tape-delete-mode" : ""} ${tapeMoveMode ? "tape-move-mode" : ""} ${cornerRulerMode ? "corner-ruler-mode" : ""} ${pivotPickMode || layFlatPickMode || mateFacePick || cadFacePick ? "pivot-pick-mode" : ""} ${modifierActive ? "modifier-edge-pick" : ""} ${sectionMeasureMode && sectionSettings.enabled ? "section-measure-mode" : ""}`} aria-label={t("aria.workplane")}>
         <div className="workplane-plane">
           <div
             className="three-workplane-host"
@@ -8812,7 +8845,7 @@ export function WorkplaneViewport({
           {!workplaneMode && !splitActive && originDimensionsEnabled && originDimensionOverlay ? (
             <OriginDimensionOverlay overlay={originDimensionOverlay} />
           ) : null}
-          {!workplaneMode && !splitActive && !pivotPickMode && !layFlatPickMode && !mateFacePick && transformOverlay && !alignMode && !mirrorMode && !tapeMode && !tapeDeleteMode && !tapeMoveMode && !modifierActive ? (
+          {!workplaneMode && !splitActive && !pivotPickMode && !layFlatPickMode && !mateFacePick && !cadFacePick && transformOverlay && !alignMode && !mirrorMode && !tapeMode && !tapeDeleteMode && !tapeMoveMode && !modifierActive ? (
             <TransformOverlay
               box={transformOverlay}
               measureKey={pinnedMeasureKey ?? hoverMeasureKey}
@@ -10522,6 +10555,8 @@ function applySectionClipping(state: ThreeState | null, plane: THREE.Plane | nul
   };
   sharedShapeMaterialCache.forEach((entry) => setPlanes(entry.material));
   sharedLineMaterialCache.forEach(setPlanes);
+  // The faces Delete face lights up are cut like the body under them.
+  state.cadFaceLayer?.children.forEach((child) => setPlanes((child as THREE.Mesh).material as THREE.Material));
 
   state.needsRender = true;
 }
@@ -11844,6 +11879,108 @@ function syncLayFlatHover(
   layer.add(highlight);
   layer.userData.key = key;
   layer.visible = true;
+  state.needsRender = true;
+}
+
+/**
+ * Delete face: the prepared body's own tessellation, kept out of the scene,
+ * answers which face is under the pointer. A face hidden behind another body
+ * or cut away by the section view is not picked; the body itself does not
+ * hide its own faces, its display mesh lies on the same surface.
+ */
+function cadFacePickLayerMesh(state: ThreeState, pick: CadFacePick) {
+  let layer = state.cadFaceLayer;
+  if (!layer) {
+    layer = new THREE.Group();
+    layer.name = "CadFacePick";
+    layer.layers.set(RENDER_LAYER_PREVIEWS);
+    layer.visible = false;
+    state.cadFaceLayer = layer;
+    state.scene.add(layer);
+  }
+  const existing = state.cadFacePickMesh;
+  if (existing && existing.userData.positions === pick.positions) return existing;
+  if (existing) disposeCadFacePickMesh(existing);
+  const mesh = cadFacePickMesh(pick.positions, pick.indices, RENDER_LAYER_SHAPES);
+  mesh.userData.positions = pick.positions;
+  state.cadFacePickMesh = mesh;
+  return mesh;
+}
+
+function pickCadFace(state: ThreeState, pick: CadFacePick, clientX: number, clientY: number) {
+  const mesh = cadFacePickLayerMesh(state, pick);
+  const rect = state.renderer.domElement.getBoundingClientRect();
+  state.pointer.x = ((clientX - rect.left) / rect.width) * 2 - 1;
+  state.pointer.y = -((clientY - rect.top) / rect.height) * 2 + 1;
+  state.raycaster.setFromCamera(state.pointer, state.camera);
+  state.raycaster.layers.set(RENDER_LAYER_SHAPES);
+  const cut = (point: THREE.Vector3) => Boolean(state.sectionPlane && state.sectionPlane.distanceToPoint(point) < -0.001);
+  // The shared raycaster stops at the first hit of a bounds tree; with the section view on, that hit
+  // can lie in the part that is cut away, so every hit is needed to find the first one that is shown.
+  const raycaster = state.raycaster as THREE.Raycaster & { firstHitOnly?: boolean };
+  const firstHitOnly = raycaster.firstHitOnly;
+  if (state.sectionPlane) raycaster.firstHitOnly = false;
+  try {
+    const hit = raycaster.intersectObject(mesh, false).find((entry) => !cut(entry.point));
+    if (!hit || hit.faceIndex === undefined || hit.faceIndex === null) return null;
+    // The body's own display mesh lies on the same surface and is left out of the test, which also spares a heavy body the brute-force pass.
+    const blocker = raycaster
+      .intersectObjects(state.shapeLayer.children.filter((child) => child.userData.shapeId !== pick.shapeId), true)
+      .find((entry) => !cut(entry.point) && entry.object instanceof THREE.Mesh && typeof entry.object.userData.shapeId === "string" && entry.object.userData.shapeId !== pick.shapeId);
+    if (blocker && blocker.distance < hit.distance - 1e-3) return null;
+    const faceId = pick.triangleFaces[hit.faceIndex];
+    return faceId === undefined || faceId < 0 ? null : faceId;
+  } finally {
+    raycaster.firstHitOnly = firstHitOnly;
+  }
+}
+
+function syncCadFaceLayer(state: ThreeState | null, pick: CadFacePick | null, theme: ResolvedAppTheme, hoverFaceId: number | null) {
+  if (!state) return;
+  if (!pick) {
+    if (state.cadFaceLayer) {
+      disposeChildren(state.cadFaceLayer);
+      state.cadFaceLayer.visible = false;
+      state.needsRender = true;
+    }
+    if (state.cadFacePickMesh) {
+      disposeCadFacePickMesh(state.cadFacePickMesh);
+      state.cadFacePickMesh = undefined;
+    }
+    return;
+  }
+  cadFacePickLayerMesh(state, pick);
+  const layer = state.cadFaceLayer;
+  if (!layer) return;
+  disposeChildren(layer);
+  const color = theme === "dark" ? "#69d9ff" : "#079bc6";
+  const highlight = (faceIds: number[], opacity: number, renderOrder: number) => {
+    const corners = cadFaceHighlightPositions(pick.positions, pick.indices, pick.triangleFaces, faceIds);
+    if (corners.length === 0) return;
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute("position", new THREE.BufferAttribute(corners, 3));
+    const mesh = new THREE.Mesh(
+      geometry,
+      new THREE.MeshBasicMaterial({
+        color,
+        transparent: true,
+        opacity,
+        side: THREE.DoubleSide,
+        depthWrite: false,
+        polygonOffset: true,
+        polygonOffsetFactor: -3,
+        polygonOffsetUnits: -3,
+        clippingPlanes: state.sectionPlane ? [state.sectionPlane] : null,
+      }),
+    );
+    mesh.layers.set(RENDER_LAYER_PREVIEWS);
+    mesh.renderOrder = renderOrder;
+    mesh.raycast = () => undefined;
+    layer.add(mesh);
+  };
+  highlight(pick.selectedFaceIds, 0.55, 960);
+  if (hoverFaceId !== null && !pick.selectedFaceIds.includes(hoverFaceId)) highlight([hoverFaceId], 0.3, 961);
+  layer.visible = layer.children.length > 0;
   state.needsRender = true;
 }
 

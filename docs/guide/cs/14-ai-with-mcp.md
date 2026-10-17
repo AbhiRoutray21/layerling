@@ -72,6 +72,8 @@ AI používá stejné funkce a stejné zpracování příkazů jako ruční ovl�
 | `layerling_list_edges` | vypíše skutečné CAD hrany objektu |
 | `layerling_apply_edge_treatment` | zkosí nebo zaoblí vybrané hrany |
 | `layerling_hollow_object` | vytvoří dutinu s rovnoměrnou stěnou |
+| `layerling_list_faces` | vypíše plochy přesného tělesa |
+| `layerling_delete_faces` | smaže plochy a uzavře mezeru |
 | `layerling_array_objects` | opakuje objekty v řadě nebo po kružnici |
 | `layerling_bundle_objects` | seskupí objekty jako Ctrl+B: společný pohyb, zachované barvy a typy, samostatná tělesa při exportu |
 | `layerling_layer_text` | vytvoří vrstvenou jmenovku: písmena, širší okraje a souvislou podložku; podporuje otvor na kroužek, rohy po vrstvách, úpravu hran písmen a seznam jmen |
