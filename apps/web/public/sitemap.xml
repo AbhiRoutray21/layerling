@@ -220,6 +220,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/shapes.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/shapes.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/vormen.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/shapes.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/oblike.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/shapes.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/shapes.html"/>
@@ -440,6 +441,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/shapes.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/shapes.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/vormen.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/shapes.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/oblike.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/shapes.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/shapes.html"/>
@@ -660,6 +662,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/shapes.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/shapes.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/vormen.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/shapes.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/oblike.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/shapes.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/shapes.html"/>
@@ -870,6 +873,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/shapes.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/shapes.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/vormen.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/shapes.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/oblike.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/shapes.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/shapes.html"/>
@@ -1090,6 +1094,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/shapes.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/shapes.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/vormen.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/shapes.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/oblike.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/shapes.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/shapes.html"/>
@@ -1310,6 +1315,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/shapes.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/shapes.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/vormen.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/shapes.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/oblike.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/shapes.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/shapes.html"/>
@@ -1520,6 +1526,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/shapes.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/shapes.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/vormen.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/shapes.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/oblike.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/shapes.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/shapes.html"/>
@@ -1732,6 +1739,20 @@
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/view-and-workplane.html"/>
   </url>
   <url>
+    <loc>https://layerling.com/instrukcja/shapes.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://layerling.com/guide/shapes.html"/>
+    <xhtml:link rel="alternate" hreflang="cs" href="https://layerling.com/prirucka/shapes.html"/>
+    <xhtml:link rel="alternate" hreflang="da" href="https://layerling.com/vejledning/shapes.html"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://layerling.com/anleitung/formen.html"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/shapes.html"/>
+    <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/shapes.html"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/vormen.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/shapes.html"/>
+    <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/oblike.html"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/shapes.html"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/shapes.html"/>
+  </url>
+  <url>
     <loc>https://layerling.com/navodila/prvi-koraki.html</loc>
     <xhtml:link rel="alternate" hreflang="en" href="https://layerling.com/guide/getting-started.html"/>
     <xhtml:link rel="alternate" hreflang="cs" href="https://layerling.com/prirucka/getting-started.html"/>
@@ -1768,6 +1789,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/shapes.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/shapes.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/vormen.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/shapes.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/oblike.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/shapes.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/shapes.html"/>
@@ -1988,6 +2010,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/shapes.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/shapes.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/vormen.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/shapes.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/oblike.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/shapes.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/shapes.html"/>
@@ -2208,6 +2231,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/shapes.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/shapes.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/vormen.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/shapes.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/oblike.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/shapes.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/shapes.html"/>
