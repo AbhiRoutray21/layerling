@@ -88,5 +88,15 @@
       "de": "Ein Stern, den du über seine Höhe verdrehst, drehte sich um die Mitte seines Kastens statt um seine eigene Mitte. Weil ein Fünfstern im Kasten nicht zentriert ist, kreiste seine Mitte um die Achse, und die Zacken ragten unterschiedlich weit heraus. Jetzt dreht der Stern sich um seine eigene Mitte, und die Achse bleibt gerade.",
       "en": "A star that you twist over its height turned about the middle of its box instead of its own middle. As a five-pointed star is not centred in its box, its middle circled round the axis and the tips stuck out by different amounts. Now the star turns about its own middle and the axis stays straight."
     }
+  },
+  {
+    "title": {
+      "de": "Die Ansicht folgt Körpern, die hoch über der Platte stehen",
+      "en": "The view follows bodies set high above the plate"
+    },
+    "body": {
+      "de": "Seit die Höhe nicht mehr bei 220 mm endet, konnte die Ansicht einen Körper hoch über der Platte nicht in die Mitte nehmen: „Auf die Auswahl zoomen“ ließ ihn am oberen Rand verschwinden, und der Drehpunkt blieb bei 120 mm hängen. Der Drehpunkt reicht jetzt bis zur Oberkante des höchsten Körpers (und nach unten bis zum Fuß des tiefsten), so zoomt, verschiebt und dreht die Ansicht auch dort.",
+      "en": "Since a height no longer ends at 220 mm, the view could not take a body high above the plate into its middle: Zoom to the selection let it slip off the top edge, and the pivot stayed stuck at 120 mm. The pivot now reaches up to the top of the highest body (and down to the foot of the lowest), so the view zooms, shifts and turns up there as well."
+    }
   }
 ]

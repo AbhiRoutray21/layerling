@@ -141,7 +141,7 @@ import {
 import { cuboidCorners, pointAlongAxes, type AlignAxes, type FrameCuboid } from "@/lib/alignFrame";
 import type { AlignAxis, AlignHandleStatus, AlignTarget, GridSize, MeasurementAccuracy, ShapeAsset, WorkplaneNote, WorkplaneNoteAnchor, WorkplaneShape, WorkplaneWorkspaceSettings } from "@/types/layerling";
 import { referencePoints } from "@/lib/workplaneNotes";
-import { pivotKeptAhead, ZOOM_PIVOT_REACH_MM } from "@/lib/zoomPivot";
+import { pivotKeptAhead, ZOOM_PIVOT_REACH_MM, pivotHeightRange } from "@/lib/zoomPivot";
 import { pointerReach } from "@/lib/pointerReach";
 import { measurementMiddle, nearestReferenceOnScreen, type ReferencePosition } from "@/lib/referencePoints";
 import { planarFaceCentroid, planarFaceTriangles, type PivotPoint } from "@/lib/rotationPivot";
@@ -203,7 +203,7 @@ function movePivotToDepthUnder(state: ThreeState, ndcX: number, ndcY: number) {
   // Nothing to zoom towards under the pointer (the sky, a spot past the plate): the pivot stays ahead of the camera.
   const keepAhead = () => {
     const limits = state.pivotLimits;
-    const ahead = pivotKeptAhead(state.camera.position, state.controls.target, forward, ZOOM_PIVOT_REACH_MM, limits ? { halfWidth: limits.halfWidth, halfDepth: limits.halfDepth, minY: CAMERA_MIN_TARGET_Y, maxY: CAMERA_MAX_TARGET_Y } : null);
+    const ahead = pivotKeptAhead(state.camera.position, state.controls.target, forward, ZOOM_PIVOT_REACH_MM, limits ? { halfWidth: limits.halfWidth, halfDepth: limits.halfDepth, minY: limits.minY, maxY: limits.maxY } : null);
     if (ahead) state.controls.target.copy(ahead);
   };
   if (!point) { keepAhead(); return; }
@@ -211,7 +211,7 @@ function movePivotToDepthUnder(state: ThreeState, ndcX: number, ndcY: number) {
   if (!(depth > 0) || depth > CAMERA_MAX_DISTANCE) { keepAhead(); return; }
   const target = state.camera.position.clone().addScaledVector(forward, depth);
   const limits = state.pivotLimits;
-  if (limits && (Math.abs(target.x) > limits.halfWidth || Math.abs(target.z) > limits.halfDepth || target.y < CAMERA_MIN_TARGET_Y || target.y > CAMERA_MAX_TARGET_Y)) { keepAhead(); return; }
+  if (limits && (Math.abs(target.x) > limits.halfWidth || Math.abs(target.z) > limits.halfDepth || target.y < limits.minY || target.y > limits.maxY)) { keepAhead(); return; }
   state.controls.target.copy(target);
 }
 
@@ -9597,11 +9597,18 @@ function constrainCamera(state: ThreeState, workspace: WorkspaceSettings) {
   const reach = state.focusReach;
   const halfWidth = Math.max(workspace.width / 2, reach ? Math.max(Math.abs(reach.min.x), Math.abs(reach.max.x)) : 0);
   const halfDepth = Math.max(workspace.depth / 2, reach ? Math.max(Math.abs(reach.min.z), Math.abs(reach.max.z)) : 0);
-  state.pivotLimits = { halfWidth, halfDepth };
+  // The pivot may rise to the top of the highest body (and sink to the foot of the lowest): a body
+  // set high above the plate (#425) could not be centred or zoomed into with the pivot held to 120 mm.
+  const { minY, maxY } = pivotHeightRange(
+    Array.from(state.shapeRecords.values(), ({ shape }) => ({ elevation: shape.elevation ?? 0, extent: Math.max(shape.height, shapeWidth(shape), shapeDepth(shape)) })),
+    { minY: CAMERA_MIN_TARGET_Y, maxY: CAMERA_MAX_TARGET_Y },
+    reach ? { minY: reach.min.y, maxY: reach.max.y } : null,
+  );
+  state.pivotLimits = { halfWidth, halfDepth, minY, maxY };
   const target = state.controls.target;
   const previousTarget = target.clone();
   target.x = clamp(target.x, -halfWidth, halfWidth);
-  target.y = clamp(target.y, CAMERA_MIN_TARGET_Y, CAMERA_MAX_TARGET_Y);
+  target.y = clamp(target.y, minY, maxY);
   target.z = clamp(target.z, -halfDepth, halfDepth);
 
   const targetShift = target.clone().sub(previousTarget);
