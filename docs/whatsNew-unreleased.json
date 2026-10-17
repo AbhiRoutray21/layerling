@@ -128,5 +128,15 @@
       "de": "Im Fenster mit den Tastenkürzeln, im Editor wie in der Skizze, gibt es neben dem Fragezeichen einen Druckerknopf. Er druckt nur die Liste, schwarz auf weiß und in großer Schrift. Im Druckdialog des Browsers lässt sie sich auch als PDF speichern. Strg+P bei geöffnetem Fenster tut dasselbe.",
       "en": "The window with the keyboard shortcuts, in the editor and in sketch mode alike, has a printer button next to the question mark. It prints only the list, black on white and in large type. In the print dialog of the browser you can also save it as a PDF. Ctrl+P while the window is open does the same."
     }
+  },
+  {
+    "title": {
+      "de": "Der Apple Pencil zeigt beim Schweben die Namen der Knöpfe",
+      "en": "A hovering Apple Pencil shows the names of buttons"
+    },
+    "body": {
+      "de": "Auf dem iPad zeigt layerling jetzt den Namen eines Knopfes oder Feldes in einer kleinen Blase, wenn der Apple Pencil einen Moment darüber schwebt, so wie die Maus einen Tooltip zeigt. Das gilt für iPads, deren Pencil schweben kann.",
+      "en": "On an iPad layerling now shows the name of a button or field in a small bubble when the Apple Pencil rests above it for a moment, as a mouse shows a tooltip. This works on iPads whose Pencil can hover."
+    }
   }
 ]

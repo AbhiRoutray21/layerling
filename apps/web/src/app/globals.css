@@ -1653,6 +1653,25 @@ a.install-app-hint-button {
   }
 }
 
+/* The name of a control under a hovering Apple Pencil, like a mouse's tooltip (#495). */
+.pen-hover-tip {
+  position: fixed;
+  z-index: 3000;
+  box-sizing: border-box;
+  max-width: 260px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  background: #2b2118;
+  color: #fff7ea;
+  box-shadow: 0 4px 14px rgba(43, 33, 24, 0.35);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.35;
+  overflow-wrap: break-word;
+  pointer-events: none;
+  transform: translateX(-50%);
+}
+
 /* On a tablet over https both cards can float at once (install and tablet): the tablet card steps up. */
 body:has(.install-app-hint-floating:not(.tablet-hint)) .install-app-hint.install-app-hint-floating.tablet-hint {
   bottom: 230px;

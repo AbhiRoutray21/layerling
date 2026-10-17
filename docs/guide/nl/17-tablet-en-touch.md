@@ -32,7 +32,7 @@ De beeldkubus linksboven draait het beeld als je eraan sleept, en een tik op een
 
 ## Hendels, kleine punten en een stylus
 
-Een vingertop bedekt waar hij op mikt. layerling laat een vinger iets verder naar hendels, punten, lijnen en randen reiken dan een muisaanwijzer, maar een stylus is fijner. Dat geldt voor een pen die de tablet als pen kent, zoals een Apple Pencil of een S Pen. Een gewone stylus met rubberen punt geldt voor het scherm als vinger en is niet fijner dan een vinger; werk er dus mee als met een vinger.
+Een vingertop bedekt waar hij op mikt. layerling laat een vinger iets verder naar hendels, punten, lijnen en randen reiken dan een muisaanwijzer, maar een stylus is fijner. Dat geldt voor een pen die de tablet als pen kent, zoals een Apple Pencil of een S Pen. Een gewone stylus met rubberen punt geldt voor het scherm als vinger en is niet fijner dan een vinger; werk er dus mee als met een vinger. Zweeft een Apple Pencil op de iPad boven een knop, dan verschijnt na een moment de naam in een klein tekstballonnetje, zoals bij de muis de tooltip.
 
 Verschuiven lichamen doordat kinderen of haastige handen ze aanraken, zet dan in de instellingen {{ui:workspace.selectBeforeMoving}} aan: een lichaam moet dan eerst geselecteerd zijn, en pas de volgende sleep verplaatst het.
 

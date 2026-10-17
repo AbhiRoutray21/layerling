@@ -32,7 +32,7 @@ Kostka widoku w lewym górnym rogu obraca widok, gdy ją przeciągasz, a stukni�
 
 ## Uchwyty, małe punkty i rysik
 
-Opuszek palca zasłania to, w co celuje. layerling pozwala palcowi sięgać do uchwytów, punktów, linii i krawędzi nieco dalej niż wskaźnikowi myszy, ale rysik jest dokładniejszy. Dotyczy to piórka, które tablet rozpoznaje jako piórko, takiego jak Apple Pencil albo S Pen. Zwykły rysik z gumową końcówką ekran traktuje jak palec i nie jest od niego dokładniejszy, więc pracuj nim jak palcem.
+Opuszek palca zasłania to, w co celuje. layerling pozwala palcowi sięgać do uchwytów, punktów, linii i krawędzi nieco dalej niż wskaźnikowi myszy, ale rysik jest dokładniejszy. Dotyczy to piórka, które tablet rozpoznaje jako piórko, takiego jak Apple Pencil albo S Pen. Zwykły rysik z gumową końcówką ekran traktuje jak palec i nie jest od niego dokładniejszy, więc pracuj nim jak palcem. Gdy Apple Pencil zawisa nad przyciskiem na iPadzie, po chwili jego nazwa pojawia się w małej chmurce, tak jak podpowiedź przy myszy.
 
 Jeśli bryły się przesuwają, gdy dotykają ich dzieci albo pośpieszne ręce, włącz w ustawieniach {{ui:workspace.selectBeforeMoving}}: bryłę trzeba wtedy najpierw zaznaczyć, a dopiero następne przeciągnięcie ją przesuwa.
 

@@ -32,7 +32,7 @@ Der Ansichtswürfel oben links dreht die Ansicht, wenn du ihn ziehst, und ein Ti
 
 ## Griffe, kleine Punkte und ein Stift
 
-Eine Fingerspitze verdeckt, worauf sie zielt. layerling lässt einen Finger an Griffe, Punkte, Linien und Kanten etwas weiter heranreichen als einen Mauszeiger, aber ein Stift ist feiner. Das gilt für einen Stift, den das Tablet als Stift kennt, etwa einen Apple Pencil oder einen S Pen. Ein einfacher Stift mit Gummispitze gilt für den Bildschirm als Finger und ist nicht feiner als einer, arbeite damit also wie mit dem Finger.
+Eine Fingerspitze verdeckt, worauf sie zielt. layerling lässt einen Finger an Griffe, Punkte, Linien und Kanten etwas weiter heranreichen als einen Mauszeiger, aber ein Stift ist feiner. Das gilt für einen Stift, den das Tablet als Stift kennt, etwa einen Apple Pencil oder einen S Pen. Ein einfacher Stift mit Gummispitze gilt für den Bildschirm als Finger und ist nicht feiner als einer, arbeite damit also wie mit dem Finger. Schwebt ein Apple Pencil auf dem iPad über einem Knopf, erscheint nach einem Moment sein Name in einer kleinen Blase, wie bei der Maus der Tooltip.
 
 Wenn Körper verrutschen, weil Kinder oder eilige Hände sie berühren, schalte in den Einstellungen {{ui:workspace.selectBeforeMoving}} ein: Ein Körper muss dann erst gewählt sein, und erst der nächste Zug verschiebt ihn.
 

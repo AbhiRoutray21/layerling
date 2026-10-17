@@ -510,6 +510,12 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .dashboard-trademark {
   box-shadow: 0 10px 28px rgba(40, 40, 40, 0.28);
 }
 
+:where(html[data-theme="dark"][data-palette="graphite"]) .pen-hover-tip {
+  background: #272727;
+  color: #f4f4f4;
+  box-shadow: 0 4px 14px rgba(39, 39, 39, 0.35);
+}
+
 :where(html[data-theme="dark"][data-palette="graphite"]) .support-nudge {
   background: #f7f7f7;
   border: 1px solid #d4d4d4;
