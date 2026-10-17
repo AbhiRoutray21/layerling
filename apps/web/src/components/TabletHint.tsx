@@ -44,7 +44,7 @@ export function TabletHint() {
   };
 
   return (
-    <aside className="install-app-hint tablet-hint" aria-label={t("tabletHint.title")}>
+    <section className="install-app-hint tablet-hint" aria-label={t("tabletHint.title")}>
       <span className="install-app-hint-icon" aria-hidden="true">
         <TabletSmartphone size={20} strokeWidth={2.4} />
       </span>
@@ -59,6 +59,6 @@ export function TabletHint() {
       <button className="install-app-hint-close" type="button" aria-label={t("tabletHint.dismiss")} title={t("tabletHint.dismiss")} onClick={dismiss}>
         <X size={16} />
       </button>
-    </aside>
+    </section>
   );
 }

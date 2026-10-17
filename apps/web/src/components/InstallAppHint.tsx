@@ -116,7 +116,7 @@ export function InstallAppHint({ variant = "dashboard" }: { variant?: "dashboard
   };
 
   return (
-    <aside className={variant === "editor" ? "install-app-hint install-app-hint-floating" : "install-app-hint"} aria-label={t("installHint.title")}>
+    <section className={variant === "editor" ? "install-app-hint install-app-hint-floating" : "install-app-hint"} aria-label={t("installHint.title")}>
       <span className="install-app-hint-icon" aria-hidden="true">
         <Download size={24} strokeWidth={2.4} />
       </span>
@@ -138,6 +138,6 @@ export function InstallAppHint({ variant = "dashboard" }: { variant?: "dashboard
       <button className="install-app-hint-close" type="button" aria-label={t("installHint.dismiss")} title={t("installHint.dismiss")} onClick={dismiss}>
         <X size={16} />
       </button>
-    </aside>
+    </section>
   );
 }

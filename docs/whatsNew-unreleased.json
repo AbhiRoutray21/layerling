@@ -108,5 +108,25 @@
       "de": "Auf der Startseite und im Editor (dort nach einer halben Minute Arbeit) empfiehlt jetzt eine auffällige Karte, layerling als App zu installieren: Sie startet schneller, läuft ohne Internet und muss nicht jedes Mal neu geladen werden. Du verlierst nichts, denn neue Versionen zeigt layerling weiter an. „Jetzt nicht“ blendet die Karte zwei Wochen aus.",
       "en": "The start page and the editor (there after half a minute of work) now have a card that recommends installing layerling as an app: it starts faster, works without internet and does not have to be loaded each time. You lose nothing, as layerling still tells you about new versions. \"Not now\" hides the card for two weeks."
     }
+  },
+  {
+    "title": {
+      "de": "Offene Skizzenlinie: die Meldung nennt den Weg",
+      "en": "Open sketch line: the message names the way"
+    },
+    "body": {
+      "de": "Eine offene Linie in der Skizze lässt sich nicht ausformen, weil die Kontur geschlossen sein muss. Die Meldung sagt jetzt dazu, dass du die Linie als Kontur bauen kannst: Schalte „Als Kontur bauen“ ein, dann bekommt sie eine Breite.",
+      "en": "An open line in the sketch cannot be extruded, as the outline has to be closed. The message now adds that you can build the line as a stroke: tick \"Build as a stroke\" in the Finish section and it gets a width."
+    }
+  },
+  {
+    "title": {
+      "de": "Französisch: treffendere Namen für fünf Formen",
+      "en": "French: better names for five shapes"
+    },
+    "body": {
+      "de": "Die Senker, das gebogene Rohr und der Halbzylinder heißen auf Französisch jetzt so, wie sie in der Werkstatt heißen: Trou lamé, Trou fraisé, Trou doublement fraisé, Tube cintré und Demi-cylindre. Auch die „Kontur“ hieß dort versehentlich wie ein Schlaganfall und heißt jetzt „Trait“.",
+      "en": "The counterbores, the bent tube and the half cylinder now carry the names they have in a French workshop: Trou lamé, Trou fraisé, Trou doublement fraisé, Tube cintré and Demi-cylindre. The \"stroke\" was also called a stroke in the medical sense by mistake; it is \"Trait\" now."
+    }
   }
 ]
