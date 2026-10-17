@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **The tablet hint now also shows on an iPad (#467):** The card on the start page that points to the guide chapter for tablets looked at the media queries for a touch screen without a mouse. Safari on an iPad has answered those differently from one iPadOS version to the next, with a trackpad or a Pencil attached, so on an iPad the card stayed away. An iPad and an iPhone are now recognised by what they call themselves (a Mac with several touch points, or an iPhone/iPad), as the file picker already did; an Android tablet is still recognised by the queries, and a computer with a touch screen and a mouse still sees no card.
+
 ## 1.86.0
 
 - **A clear recommendation to install layerling as an app:** The small strip on the start page is now a card that is meant to be seen: as an app layerling starts faster, works without internet, has its own icon and window and does not have to be loaded again each time, and nothing is lost, as layerling still tells you when a new version is out. Where the browser has an install button it is on the card; "Not now" hides the card for two weeks, the cross for good. In the editor the same card appears at the foot of the work area after half a minute of work, so it never gets in the way of the first clicks, and it steps above the support reminder when both are there. Its icon is the same size as the one on the backup notice. It still shows only where installing works (https), never inside the installed app, and not in an ordinary browser tab either once the app has been installed or opened on this computer. The guide's chapter on installing says why it is worth it.

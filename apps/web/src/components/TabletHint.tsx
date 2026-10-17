@@ -4,13 +4,19 @@ import { BookOpen, TabletSmartphone, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { guideHref } from "@/lib/guideLinks";
 import { t } from "@/lib/i18n";
+import { isTouchFirst } from "@/lib/touchFirst";
 import { useLanguage } from "@/lib/useLanguage";
 
 const DISMISSED_KEY = "layerling.tabletHintDismissed";
 
-/** A device whose main way in is a finger: a touch screen without a mouse or trackpad that can hover. */
+/** A device whose main way in is a finger: a touch screen without a mouse or trackpad that can hover, or an iPad or iPhone. */
 function usesTouchFirst() {
-  return window.matchMedia("(pointer: coarse)").matches && window.matchMedia("(hover: none)").matches;
+  return isTouchFirst({
+    coarse: window.matchMedia("(pointer: coarse)").matches,
+    hoverNone: window.matchMedia("(hover: none)").matches,
+    userAgent: navigator.userAgent,
+    maxTouchPoints: navigator.maxTouchPoints ?? 0,
+  });
 }
 
 /**
