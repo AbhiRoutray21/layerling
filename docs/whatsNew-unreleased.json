@@ -178,5 +178,15 @@
       "de": "Die Griffe des Lineals hörten bei der Größe der Platte auf, mindestens bei 220 mm, der Schieber ging aber bis 500 mm. Jetzt reichen auch die Griffe so weit wie der Schieber.",
       "en": "The handles of the ruler stopped at the size of the plate, at least 220 mm, while its slider went up to 500 mm. Now the handles reach as far as the slider does."
     }
+  },
+  {
+    "title": {
+      "de": "Eigene Farben lassen sich dauerhaft behalten",
+      "en": "Colours of your own can be kept for good"
+    },
+    "body": {
+      "de": "Die Farben, die du selbst mischst, standen schon unter „Zuletzt benutzt“, aber nur acht, und die älteste fiel heraus. Mit der Stecknadel in der neuen Reihe „Behalten“ hältst du die gewählte Farbe fest: Sie steht in einer eigenen Reihe, neuere Farben verdrängen sie nie, und dieselbe Nadel gibt sie wieder frei. Bis zu 21 Farben bleiben in diesem Browser erhalten.",
+      "en": "The colours you mix yourself were already listed under “Recently used”, but only eight, and the oldest dropped out. The pin in the new row “Kept” holds the colour you have chosen: it stands in a row of its own, newer colours never push it out, and the same pin lets go of it again. Up to 21 colours are kept in this browser."
+    }
   }
 ]

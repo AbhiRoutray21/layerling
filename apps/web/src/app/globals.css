@@ -16078,6 +16078,49 @@ html[data-theme="dark"] .my-shape-tile-actions {
   text-transform: uppercase;
 }
 
+/* The row of kept colours: its label carries the pin that keeps or lets go of the colour chosen now (#507). */
+.color-kept-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.color-keep-button {
+  display: grid;
+  width: 24px;
+  height: 22px;
+  place-items: center;
+  padding: 0;
+  color: #72583d;
+  background: transparent;
+  border: 1px solid rgba(68, 50, 31, 0.22);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.color-keep-button[aria-pressed="true"] {
+  color: #fff;
+  background: #c06a12;
+  border-color: #c06a12;
+}
+
+.color-keep-button:disabled {
+  cursor: default;
+  opacity: 0.45;
+}
+
+html[data-theme="dark"] .color-keep-button {
+  color: #e1ceba;
+  border-color: rgba(237, 228, 212, 0.28);
+}
+
+html[data-theme="dark"] .color-keep-button[aria-pressed="true"] {
+  color: #1d1308;
+  background: #e0903a;
+  border-color: #e0902f;
+}
+
 /* Rechtsklick-Menue auf Koerpern. */
 .shape-context-menu {
   position: fixed;

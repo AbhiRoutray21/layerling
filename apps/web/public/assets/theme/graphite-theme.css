@@ -7633,6 +7633,29 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .my-shape-tile-actions 
   color: #636363;
 }
 
+:where(html[data-theme="dark"][data-palette="graphite"]) .color-keep-button {
+  color: #585858;
+  background: transparent;
+  border: 1px solid rgba(53, 53, 53, 0.22);
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .color-keep-button[aria-pressed="true"] {
+  color: #fff;
+  background: #c06a12;
+  border-color: #c06a12;
+}
+
+html[data-theme="dark"]:where([data-palette="graphite"]) .color-keep-button {
+  color: #cecece;
+  border-color: rgba(225, 225, 225, 0.28);
+}
+
+html[data-theme="dark"]:where([data-palette="graphite"]) .color-keep-button[aria-pressed="true"] {
+  color: #1a1a1a;
+  background: #e0903a;
+  border-color: #e0902f;
+}
+
 :where(html[data-theme="dark"][data-palette="graphite"]) .shape-context-menu {
   color: #414141;
   background: rgba(255, 255, 255, 0.98);

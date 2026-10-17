@@ -164,7 +164,7 @@ import { MAX_SCREW_HOLE_ANGLE, MIN_SCREW_HOLE_ANGLE, normalizeScrewHoleAngle, no
 import { MAX_TEARDROP_TIP_ANGLE, MIN_TEARDROP_TIP_ANGLE, normalizeTeardropTipAngle, teardropHeightForTipAngle, teardropTipAngle } from "@/lib/teardropGeometry";
 import { MAX_DOVETAIL_CLEARANCE, normalizeDovetailClearance, normalizeDovetailNeckWidth } from "@/lib/dovetailGeometry";
 import { DEFAULT_SKETCH_STROKE, MAX_SKETCH_STROKE_WIDTH, MIN_SKETCH_STROKE_WIDTH, normalizeSketchStroke, SKETCH_STROKE_JOINS } from "@/lib/sketchStroke";
-import { MAX_TEXT_EDGE, MIN_TEXT_EDGE } from "@/lib/textEdge";
+import { MAX_TEXT_EDGE, MIN_TEXT_EDGE, normalizeTextEdge } from "@/lib/textEdge";
 import { textHasFill } from "@/lib/textFill";
 import { TEXT_FILL_CHOICES, textFillChoice, textLineSettingsInView, textStrokeForChoice, textStrokeWider, type TextFillChoice } from "@/lib/textFillChoice";
 import { MAX_TEXT_LAYERS, MAX_TEXT_LAYER_GROW, MIN_TEXT_LAYER_HEIGHT, namesFromList, type NameTagKeyring, type TextLayer } from "@/lib/textLayers";
@@ -203,7 +203,8 @@ import { printerPresetById } from "@/lib/printBed";
 import type { BentTubeInnerProfile, BentTubeProfile, CustomSnapGrid, GearType, GridSize, MeasurementAccuracy, ShapeCustomization, SketchProfile, SketchStroke, SketchStrokeAlign, SketchStrokeJoin, ThreadHead, ThreadProfile, ThreadRole, WorkplaneShape, WorkplaneWorkspaceSettings } from "@/types/layerling";
 import { selectWholeValue } from "@/lib/numberField";
 import { formulaMatchesValue, formulaToRemember, withFieldFormula, type FieldFormulas } from "@/lib/fieldFormulas";
-import { useRecentColors } from "@/lib/recentColors";
+import { useKeptColors, useRecentColors } from "@/lib/recentColors";
+import { ColorKeepRows } from "@/components/workplane/ColorKeepRows";
 import { canToggleGroupColors, groupShowsPartColors } from "@/lib/groupColors";
 import { shapePivotFromWorld, shapePivotWorld } from "@/lib/rotationPivot";
 import { signedDegrees } from "@/lib/geometryRotation";
@@ -357,7 +358,7 @@ const RELATIVE_SIZE_PROPERTY_IDS = new Set(["width", "height", "length", "diamet
 const ROTATION_PROPERTY_IDS = new Set(["rotateX", "rotateY", "rotateZ"]);
 
 function propertyUsesLengthUnit(key: string) {
-  return ["textLineWidth", "letterSize", "iconWidth", "keyringDiameter", "positionX", "positionY", "positionZ", "pivotX", "pivotY", "pivotZ", "radius", "length", "width", "height", "bevel", "topRadius", "baseRadius", "thickness", "innerDiameter", "toothSize", "toothWidth", "gearBacklash", "centerHole", "slotSmallEnd", "slotCentreDistance", "sketchLineWidth", "topLength", "topWidth", "bottomLength", "bottomWidth", "diameter", "pitch", "clearance", "axialClearance", "boltClearance", "threadDepth", "threadCoreDiameter", "threadLength", "headHeight", "chamfer", "chamferBottom", "headChamfer", "wire", "starOuterSize", "starInnerSize", "starOuterFillet", "starInnerFillet", "heartTipFillet", "crescentThickness", "crescentTipFillet", "honeycombCellSize", "honeycombWallThickness", "honeycombFrameWidth", "cornerFillet", "topBottomFillet", "bentTubeSize", "bentTubeWall", "bentTubeSegmentLength", "bentTubeBendRadius", "dovetailNeckWidth", "dovetailClearance", "hingePinDiameter", "hingeLeafThickness", "hingeClearance", "screwHoleShaft", "screwHoleHeadDepth", "knurlDepth", "knurlChamfer", "loftBottomWidth", "loftBottomDepth", "loftTopWidth", "loftTopDepth", "loftBottomCorner", "loftTopCorner", "loftOffsetX", "loftOffsetZ", "loftWall"].includes(key);
+  return ["textLineWidth", "textEdgeSize", "letterSize", "iconWidth", "keyringDiameter", "positionX", "positionY", "positionZ", "pivotX", "pivotY", "pivotZ", "radius", "length", "width", "height", "bevel", "topRadius", "baseRadius", "thickness", "innerDiameter", "toothSize", "toothWidth", "gearBacklash", "centerHole", "slotSmallEnd", "slotCentreDistance", "sketchLineWidth", "topLength", "topWidth", "bottomLength", "bottomWidth", "diameter", "pitch", "clearance", "axialClearance", "boltClearance", "threadDepth", "threadCoreDiameter", "threadLength", "headHeight", "chamfer", "chamferBottom", "headChamfer", "wire", "starOuterSize", "starInnerSize", "starOuterFillet", "starInnerFillet", "heartTipFillet", "crescentThickness", "crescentTipFillet", "honeycombCellSize", "honeycombWallThickness", "honeycombFrameWidth", "cornerFillet", "topBottomFillet", "bentTubeSize", "bentTubeWall", "bentTubeSegmentLength", "bentTubeBendRadius", "dovetailNeckWidth", "dovetailClearance", "hingePinDiameter", "hingeLeafThickness", "hingeClearance", "screwHoleShaft", "screwHoleHeadDepth", "knurlDepth", "knurlChamfer", "loftBottomWidth", "loftBottomDepth", "loftTopWidth", "loftTopDepth", "loftBottomCorner", "loftTopCorner", "loftOffsetX", "loftOffsetZ", "loftWall"].includes(key);
 }
 
 /**
@@ -1914,8 +1915,10 @@ function getShapePropertiesWithAppLimits(shape: WorkplaneShape, onUpdate: ShapeI
       { id: "letterSize", label: t("nameTag.letterSize"), value: textLetterSize(shape), min: MIN_LETTER_SIZE, max: 60, step: 0.5, hint: t("nameTag.letterSizeHint"), onChange: (size) => onUpdate(textLetterSizePatch(shape, size)) },
       { id: "height", label: t("prop.height"), value: shape.height, min: MIN_SHAPE_SIZE, max: 40, hint: t("prop.textHeightHint"), onChange: setHeight },
       ...textFillProperties(shape, onUpdate),
+      // The top edge of the letters (#499), as on a name tag; a rounded or chamfered edge takes the place of the bevel.
+      ...textEdgeProperties(shape, onUpdate),
       // A fill mode or the silhouette draws the letters flat; bevel and segments belong to the filled letters.
-      ...(textHasFill(shape) ? [] : [
+      ...(textHasFill(shape) || shape.textEdge ? [] : [
         { id: "bevel", label: t("prop.bevel"), value: shape.bevel ?? 0, min: 0, max: 8, onChange: (bevel: number) => onUpdate({ bevel }) },
         { id: "segments", label: t("prop.segments"), value: shape.segments ?? 0, min: 0, max: 24, step: 1, onChange: (segments: number) => onUpdate({ segments: Math.round(segments) }) },
       ] satisfies ShapePropertyConfig[]),
@@ -1982,6 +1985,30 @@ function getShapePropertiesWithAppLimits(shape: WorkplaneShape, onUpdate: ShapeI
  */
 const TEXT_FILL_MORE_IDS = new Set(["textWiderCorners", "textSilhouette", "textWider"]);
 const TEXT_FILL_IN_VIEW_IDS = new Set(["textFill", "textLineWidth", "textCorners"]);
+
+/** The letters' top edge, round or chamfered, and how large (#499): the setting the name tag has for its top layer. */
+function textEdgeProperties(shape: WorkplaneShape, onUpdate: ShapeInspectorUpdate): ShapePropertyConfig[] {
+  const edge = normalizeTextEdge(shape.textEdge);
+  return [
+    {
+      type: "select",
+      id: "textEdge",
+      label: t("nameTag.letterEdge"),
+      value: edge?.kind ?? "none",
+      options: (["none", "round", "chamfer"] as const).map((value) => ({ value, label: t(`nameTag.edge.${value}`) })),
+      onChange: (value) => onUpdate({ textEdge: value === "round" || value === "chamfer" ? { kind: value, size: edge?.size ?? Math.min(0.4, shape.height) } : undefined }),
+    },
+    ...(edge ? [{
+      id: "textEdgeSize",
+      label: t("nameTag.letterEdgeSize"),
+      value: edge.size,
+      min: MIN_TEXT_EDGE,
+      max: Math.max(MIN_TEXT_EDGE, Math.min(MAX_TEXT_EDGE, shape.height)),
+      step: 0.05,
+      onChange: (size: number) => onUpdate({ textEdge: { kind: edge.kind, size } }),
+    } satisfies ShapePropertyConfig] : []),
+  ];
+}
 
 function textFillProperties(shape: WorkplaneShape, onUpdate: ShapeInspectorUpdate): ShapePropertyConfig[] {
   const stroke = normalizeSketchStroke(shape.textStroke);
@@ -2398,6 +2425,7 @@ export function ShapeInspector({
   const [gearHelixOpen, setGearHelixOpen] = useState(true);
   const [colorOpen, setColorOpen] = useState(false);
   const { colors: recentColors, remember: rememberColor } = useRecentColors(SOLID_COLORS);
+  const { colors: keptColors, toggle: toggleKeptColor } = useKeptColors();
   const [minimized, setMinimized] = useState(false);
   // Renaming here works like the pencil in the object list.
   const [nameDraft, setNameDraft] = useState<string | null>(null);
@@ -2586,29 +2614,20 @@ export function ShapeInspector({
               <span>{t("inspector.custom")}</span>
             </label>
           </div>
-          {recentColors.length > 0 ? (
-            <div className="color-recent">
-              <span className="color-recent-label">{t("inspector.recentColors")}</span>
-              <div className="color-grid">
-                {recentColors.map((color) => (
-                  <button
-                    key={color}
-                    className={solidColor.toLowerCase() === color && !shape.hole ? "selected" : ""}
-                    type="button"
-                    style={{ "--shape-swatch": color } as CSSProperties}
-                    title={color.toUpperCase()}
-                    aria-label={t("aria.setColor", { color })}
-                    disabled={locked}
-                    onClick={() => {
-                      onUpdate({ color, hole: false, ...singleColorPatch });
-                      rememberColor(color);
-                      setColorOpen(false);
-                    }}
-                  />
-                ))}
-              </div>
-            </div>
-          ) : null}
+          <ColorKeepRows
+            recent={recentColors}
+            kept={keptColors}
+            current={shape.hole ? null : solidColor}
+            palette={SOLID_COLORS}
+            disabled={locked}
+            isSelected={(color) => solidColor.toLowerCase() === color && !shape.hole}
+            onPick={(color) => {
+              onUpdate({ color, hole: false, ...singleColorPatch });
+              if (!keptColors.includes(color)) rememberColor(color);
+              setColorOpen(false);
+            }}
+            onToggleKeep={toggleKeptColor}
+          />
         </div>
       ) : null}
 
@@ -4213,6 +4232,7 @@ export function SelectionInspector({
   const allHidden = shapes.length > 0 && shapes.every((shape) => shape.hidden);
   const [colorOpen, setColorOpen] = useState(false);
   const { colors: recentColors, remember: rememberColor } = useRecentColors(SOLID_COLORS);
+  const { colors: keptColors, toggle: toggleKeptColor } = useKeptColors();
   const solidKinds = shapes.filter((shape) => !isNonSolidShapeKind(shape.kind));
   const allLocked = shapes.length > 0 && shapes.every((shape) => shape.locked);
   const anyLocked = shapes.some((shape) => shape.locked);
@@ -4306,25 +4326,16 @@ export function SelectionInspector({
               <span>{t("inspector.custom")}</span>
             </label>
           </div>
-          {recentColors.length > 0 ? (
-            <div className="color-recent">
-              <span className="color-recent-label">{t("inspector.recentColors")}</span>
-              <div className="color-grid">
-                {recentColors.map((color) => (
-                  <button
-                    key={color}
-                    className={sharedColor?.toLowerCase() === color ? "selected" : ""}
-                    type="button"
-                    style={{ "--shape-swatch": color } as CSSProperties}
-                    title={color.toUpperCase()}
-                    aria-label={t("aria.setColor", { color })}
-                    disabled={anyLocked}
-                    onClick={() => pick(color)}
-                  />
-                ))}
-              </div>
-            </div>
-          ) : null}
+          <ColorKeepRows
+            recent={recentColors}
+            kept={keptColors}
+            current={sharedColor}
+            palette={SOLID_COLORS}
+            disabled={anyLocked}
+            isSelected={(color) => sharedColor?.toLowerCase() === color}
+            onPick={pick}
+            onToggleKeep={toggleKeptColor}
+          />
         </div>
       ) : null}
       {gearPair ? (
