@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "title": {
+      "de": "Eine Kopie lässt sich mit der Maus verschieben und noch einmal kopieren",
+      "en": "A copy can be moved with the mouse and copied again"
+    },
+    "body": {
+      "de": "Nach dem Duplizieren liegt die Kopie genau auf dem Original. Ein Mausklick darauf traf manchmal das Original statt der ausgewählten Kopie, und das Original wanderte. So riss die Kette ab, die das nächste Duplizieren um denselben Versatz weiterschiebt (zum Beispiel für eine Lochreihe), und die nächste Kopie blieb am Platz. Jetzt zählt bei Körpern, die genau aufeinander liegen, der schon ausgewählte.",
+      "en": "After duplicating, the copy lies exactly on the original. A mouse press on it sometimes hit the original instead of the selected copy, and the original moved. That broke the chain that lets the next duplicate carry on by the same step (for a row of holes, say), and the next copy stayed where it was. Where bodies lie exactly on one another, the one that is already selected now wins."
+    }
+  }
+]

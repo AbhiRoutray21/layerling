@@ -6,6 +6,7 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **A copy can be moved with the mouse and copied again (#484):** Duplicate, move the copy, duplicate again repeats the step (1.10.0). It only held when the copy was moved with the keys: with the mouse, the press landed on the copy and on the original it lies on at the same distance, the ray took whichever came first in the list - the original - and selected and moved that one, so the chain of copies was gone and the next copy stayed at the old place. Among bodies that lie at the same spot, a press now means the one already selected. Reported by @willi1955 on GitHub.
 ## 1.86.2
 
 - **The shape library moves, and can be kept open (#433, #447):** The library that the Shapes button opens hung under its button and covered the spot where a shape is going to be put. Its title bar now moves it - over the Properties panel, say - and where it stands is kept in the browser; a double-click on the title bar puts it back under its button. A pin in the title bar keeps it open while several shapes are put one after the other; the click that places a shape and Esc then leave it open. Without the pin it closes after each shape, as before. The sketch's shapes use the same panel. The order of the ribbon is untouched. Suggested by @prmod3d, with the idea of splitting the group by @RobbieKnobbie noted next to it.

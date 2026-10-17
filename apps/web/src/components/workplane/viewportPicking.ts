@@ -15,6 +15,8 @@ export const RENDER_LAYER_SHAPES = 1;
 const PICK_TOLERANCE_PIXELS = 6;
 const PICK_TOLERANCE_PIXELS_TOUCH = 16;
 const PICK_TOLERANCE_RAYS = 8;
+/** Two surfaces this far apart along the ray (mm) are the same spot: bodies lying exactly on one another, a copy on its original. */
+const PICK_TIE_DISTANCE = 0.01;
 /** How far a press may travel and still be a click rather than a turn of the view, in screen pixels. */
 const PICK_ONLY_CLICK_PIXELS = 5;
 
@@ -45,7 +47,15 @@ export function pointerRayFor(state: PickRayState, clientX: number, clientY: num
  * cut away by the section view does not, and neither do image plates or
  * previews. A press that just misses still finds the body next to it.
  */
-export function pickShapeAt(state: ThreeState, shapes: readonly WorkplaneShape[], clientX: number, clientY: number, pointerType = "mouse") {
+export function pickShapeAt(
+  state: ThreeState,
+  shapes: readonly WorkplaneShape[],
+  clientX: number,
+  clientY: number,
+  pointerType = "mouse",
+  /** The selected bodies: where several lie at the same spot, the press means the one already selected (#484). */
+  preferIds: readonly string[] = [],
+) {
   const tolerance = pointerType === "touch" ? PICK_TOLERANCE_PIXELS_TOUCH : PICK_TOLERANCE_PIXELS;
   const rect = aimPickRay(state, clientX, clientY, RENDER_LAYER_SHAPES);
 
@@ -59,9 +69,16 @@ export function pickShapeAt(state: ThreeState, shapes: readonly WorkplaneShape[]
     const shape = shapes.find((candidate) => candidate.id === shapeId);
     return shape ? !shape.imagePlate && !shape.previewOnly : false;
   };
-  const hit = state.raycaster.intersectObjects(state.shapeLayer.children, true).find(pickable);
+  const pickableHits = state.raycaster.intersectObjects(state.shapeLayer.children, true).filter(pickable);
+  const hit = pickableHits[0];
   if (hit) {
-    return hit.object.userData.shapeId as string;
+    // A copy lies exactly on its original, so the ray meets both at the same distance and the one
+    // that comes first in the list wins - the original, though the copy is the body that is selected.
+    // Pressing on it then selected the original and moved that, and the copy chain was gone (#484).
+    const tied = preferIds.length > 0
+      ? pickableHits.find((entry) => entry.distance - hit.distance <= PICK_TIE_DISTANCE && preferIds.includes(entry.object.userData.shapeId as string))
+      : undefined;
+    return (tied ?? hit).object.userData.shapeId as string;
   }
 
   // A press that just misses still means the body next to it: a thin wall or

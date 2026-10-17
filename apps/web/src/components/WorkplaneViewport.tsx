@@ -6215,7 +6215,7 @@ export function WorkplaneViewport({
 
   const pickShape = useCallback((clientX: number, clientY: number, pointerType = "mouse") => {
     const state = threeRef.current;
-    return state ? pickShapeAt(state, shapesRef.current, clientX, clientY, pointerType) : null;
+    return state ? pickShapeAt(state, shapesRef.current, clientX, clientY, pointerType, selectedIdsRef.current) : null;
   }, []);
   const pickOnlyPointer = usePickOnlyPointer(pickOnly, pickShape);
   const pickOnlyKey = pickOnly ? pickOnly.ids.join("\0") : null;
