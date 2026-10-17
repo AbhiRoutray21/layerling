@@ -2,8 +2,10 @@
 
 import { Pin, PinOff } from "lucide-react";
 import type { ReactNode } from "react";
+import { GuideHelpLink } from "@/components/GuideHelpLink";
 import { t } from "@/lib/i18n";
 import { useLanguage } from "@/lib/useLanguage";
+import type { GuideSection } from "@/lib/guideLinks";
 import { useMovablePanel } from "@/lib/useMovablePanel";
 
 /**
@@ -19,6 +21,7 @@ export function ShapeMenuPanel({
   role,
   ariaLabel,
   title,
+  helpSection,
   pinned,
   onTogglePinned,
   children,
@@ -26,8 +29,10 @@ export function ShapeMenuPanel({
   className?: string;
   role?: "menu";
   ariaLabel?: string;
-  /** The words and the help link in the title bar. */
-  title: ReactNode;
+  /** The words in the title bar. */
+  title: string;
+  /** The part of the guide the question mark in the title bar opens. */
+  helpSection: GuideSection;
   pinned: boolean;
   onTogglePinned: () => void;
   children: ReactNode;
@@ -47,7 +52,10 @@ export function ShapeMenuPanel({
       aria-label={ariaLabel}
     >
       <div className="shape-menu-title" title={t("shapeMenu.moveHint")} {...movable.handleProps}>
-        <span className="shape-menu-title-text">{title}</span>
+        <span className="shape-menu-title-text">
+          {title}
+          <GuideHelpLink section={helpSection} />
+        </span>
         <button
           className={`shape-menu-pin ${pinned ? "active" : ""}`}
           type="button"

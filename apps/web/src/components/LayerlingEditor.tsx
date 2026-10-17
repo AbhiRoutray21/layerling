@@ -13541,7 +13541,8 @@ function SecondaryToolbar({
           </div>
           {shapesOpen ? (
             <ShapeMenuPanel
-              title={<>{t("shape.basicShapes")}<GuideHelpLink section="addShape" /></>}
+              title={t("shape.basicShapes")}
+              helpSection="addShape"
               pinned={shapesPinned}
               onTogglePinned={toggleShapesPinned}
             >
@@ -13809,7 +13810,8 @@ function SecondaryToolbar({
                       className="sketch-shape-menu-dropdown"
                       role="menu"
                       ariaLabel={t("sketch.shapesMenu")}
-                      title={<>{t("sketch.shapesTitle")}<GuideHelpLink section="sketchDrawing" /></>}
+                      title={t("sketch.shapesTitle")}
+                      helpSection="sketchDrawing"
                       pinned={shapesPinned}
                       onTogglePinned={toggleShapesPinned}
                     >
