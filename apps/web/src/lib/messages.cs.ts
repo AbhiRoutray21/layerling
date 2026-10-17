@@ -764,6 +764,7 @@ export const MESSAGES_CS: Record<MessageKey, string> = {
   "guide.settings.language": "Jazyk zvolíte v seznamu jazyků vpravo nahoře nebo v Nastavení na úvodní stránce.",
   "shortcuts.title": "Klávesové zkratky",
   "shortcuts.close": "Zavřít klávesové zkratky",
+  "shortcuts.print": "Tisk nebo uložení do PDF",
   "shortcuts.intro": "Zkratky fungují při zaměření pracovní plochy. Při psaní do polí se neuplatňují.",
   "shortcuts.or": "nebo",
   "shortcuts.click": "Kliknutí",

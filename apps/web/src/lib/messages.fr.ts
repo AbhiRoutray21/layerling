@@ -676,6 +676,7 @@ export const MESSAGES_FR: Partial<Record<MessageKey, string>> = {
   "guide.settings.language": "La langue se choisit dans la liste des langues tout en haut à droite et dans Paramètres sur la page de démarrage.",
   "shortcuts.title": "Raccourcis clavier",
   "shortcuts.close": "Fermer les raccourcis clavier",
+  "shortcuts.print": "Imprimer ou enregistrer en PDF",
   "shortcuts.intro": "Les raccourcis fonctionnent pendant que le canevas a le focus. Ils restent à l'écart pendant que vous tapez dans un champ.",
   "shortcuts.or": "ou",
   "shortcuts.click": "Cliquez",

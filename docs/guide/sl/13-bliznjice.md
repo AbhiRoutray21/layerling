@@ -5,7 +5,7 @@ summary: Vse tipke na prvi pogled – prevzete neposredno iz programa, da je sez
 
 Bližnjice delujejo, dokler ima delovna površina fokus. Pri vpisovanju v polje se ne vmešavajo. Na Macu povsod tam, kjer tu piše [[Ctrl]], velja [[Cmd]].
 
-V urejevalniku {{ui:editor.keyboardShortcuts}} v področju {{ui:editor.group.help}} odpre isti seznam kot okno.
+V urejevalniku {{ui:editor.keyboardShortcuts}} v področju {{ui:editor.group.help}} odpre isti seznam kot okno. Gumb s tiskalnikom v oknu ({{ui:shortcuts.print}}) natisne samo seznam, črno na belem in z veliko pisavo; pogovorno okno za tiskanje v brskalniku ponuja tudi shranjevanje v PDF.
 
 ![Okno z bližnjicami na tipkovnici v urejevalniku.](shot:shortcuts)
 

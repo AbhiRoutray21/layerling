@@ -657,6 +657,7 @@ export const MESSAGES_DA: Partial<Record<MessageKey, string>> = {
   "guide.settings.language": "Sproget skiftes med EN- og DE-knapperne øverst til højre, og i Indstillinger på startsiden.",
   "shortcuts.title": "Tastaturgenveje",
   "shortcuts.close": "Luk tastaturgenveje",
+  "shortcuts.print": "Udskriv eller gem som PDF",
   "shortcuts.intro": "Genveje virker mens lærredet har fokus. De holder sig væk mens du skriver i et felt.",
   "shortcuts.or": "eller",
   "shortcuts.click": "Klik",

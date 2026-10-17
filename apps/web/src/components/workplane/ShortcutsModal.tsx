@@ -1,7 +1,8 @@
 "use client";
 
-import { X } from "lucide-react";
+import { Printer, X } from "lucide-react";
 import { Fragment, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { useMovablePanel } from "@/lib/useMovablePanel";
 import { t, type MessageKey } from "@/lib/i18n";
 import { useLanguage } from "@/lib/useLanguage";
@@ -198,8 +199,59 @@ function ShortcutKeys({ combos }: { combos: string[] }) {
   );
 }
 
+/** The groups with their rows, the same markup in the window and on the printed sheet. */
+function ShortcutGroups({ groups }: { groups: ShortcutGroup[] }) {
+  return (
+    <div className="shortcuts-groups">
+      {groups.map((group) => (
+        <section className="shortcuts-group" key={group.title}>
+          <h3>{t(group.title)}</h3>
+          <dl>
+            {group.shortcuts.map((shortcut) => (
+              <div className="shortcuts-row" key={`${group.title}:${shortcut.label}`}>
+                <dt>{t(shortcut.label)}</dt>
+                <dd>
+                  <ShortcutKeys combos={shortcut.combos} />
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </section>
+      ))}
+    </div>
+  );
+}
+
+/** While this attribute is on the page, the print style shows the sheet of shortcuts and nothing else. */
+const PRINT_ATTRIBUTE = "data-print-shortcuts";
+
+/**
+ * Prints only the list, black on white and in large type (a wish of someone who reads it a lot and found
+ * screenshots too blurred). The sheet sits in the body next to the app, hidden on screen; the print style
+ * hides everything else while the attribute is set. The attribute comes on with the button and with
+ * Ctrl+P alike (beforeprint) and goes away again after printing.
+ */
+function useShortcutsPrinting() {
+  useEffect(() => {
+    const on = () => document.documentElement.setAttribute(PRINT_ATTRIBUTE, "");
+    const off = () => document.documentElement.removeAttribute(PRINT_ATTRIBUTE);
+    window.addEventListener("beforeprint", on);
+    window.addEventListener("afterprint", off);
+    return () => {
+      window.removeEventListener("beforeprint", on);
+      window.removeEventListener("afterprint", off);
+      off();
+    };
+  }, []);
+  return () => {
+    document.documentElement.setAttribute(PRINT_ATTRIBUTE, "");
+    window.print();
+  };
+}
+
 export function ShortcutsModal({ sketchMode, onClose }: { sketchMode: boolean; onClose: () => void }) {
   useLanguage();
+  const print = useShortcutsPrinting();
   const groups = SHORTCUT_GROUPS.filter((group) => (group.mode === "sketch") === sketchMode);
   // Moved by its title bar like every panel, and remembered where it stood.
   const movable = useMovablePanel<HTMLDivElement>("layerling.editor.shortcutsPosition", { floatingStyle: { position: "absolute", margin: 0 } });
@@ -238,6 +290,9 @@ export function ShortcutsModal({ sketchMode, onClose }: { sketchMode: boolean; o
           <strong>{t("shortcuts.title")}</strong>
           <div className="panel-header-actions">
             <GuideHelpLink chapter="shortcuts" />
+            <button aria-label={t("shortcuts.print")} title={t("shortcuts.print")} onClick={print}>
+              <Printer size={18} />
+            </button>
             <button aria-label={t("shortcuts.close")} onClick={onClose}>
               <X size={18} />
             </button>
@@ -246,23 +301,7 @@ export function ShortcutsModal({ sketchMode, onClose }: { sketchMode: boolean; o
         <div className="workspace-modal-content">
           <div className="workspace-modal-body shortcuts-modal-body">
             <p className="shortcuts-intro">{t("shortcuts.intro")}</p>
-            <div className="shortcuts-groups">
-              {groups.map((group) => (
-                <section className="shortcuts-group" key={group.title}>
-                  <h3>{t(group.title)}</h3>
-                  <dl>
-                    {group.shortcuts.map((shortcut) => (
-                      <div className="shortcuts-row" key={`${group.title}:${shortcut.label}`}>
-                        <dt>{t(shortcut.label)}</dt>
-                        <dd>
-                          <ShortcutKeys combos={shortcut.combos} />
-                        </dd>
-                      </div>
-                    ))}
-                  </dl>
-                </section>
-              ))}
-            </div>
+            <ShortcutGroups groups={groups} />
           </div>
           <div className="workspace-modal-footer">
             <span>{t("shortcuts.footer")}</span>
@@ -270,6 +309,15 @@ export function ShortcutsModal({ sketchMode, onClose }: { sketchMode: boolean; o
         </div>
       </div>
       <button className="workspace-modal-backdrop" aria-label={t("shortcuts.close")} onClick={onClose} />
+      {typeof document === "undefined"
+        ? null
+        : createPortal(
+            <div className="shortcuts-print-sheet" aria-hidden="true">
+              <h1>{t("shortcuts.title")}</h1>
+              <ShortcutGroups groups={groups} />
+            </div>,
+            document.body,
+          )}
     </div>
   );
 }

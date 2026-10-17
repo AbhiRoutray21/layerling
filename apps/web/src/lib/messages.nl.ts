@@ -685,6 +685,7 @@ export const MESSAGES_NL: Record<MessageKey, string> = {
   "guide.settings.language": "De taal kies je in de taallijst helemaal rechtsboven en bij Instellingen op de startpagina.",
   "shortcuts.title": "Sneltoetsen",
   "shortcuts.close": "Sneltoetsen sluiten",
+  "shortcuts.print": "Afdrukken of opslaan als pdf",
   "shortcuts.intro": "Sneltoetsen werken als het canvas de focus heeft. Ze zitten je niet in de weg terwijl je in een veld typt.",
   "shortcuts.or": "of",
   "shortcuts.click": "Klik",

@@ -118,5 +118,15 @@
       "de": "Alle 17 Kapitel der Anleitung sind ins Polnische übersetzt, und die Schaltflächen heißen darin genau wie in der polnischen Oberfläche. Außerdem findet die Suche (Strg+K und die Suche in der Anleitung) Wörter mit „ł“ jetzt auch, wenn du „l“ tippst. In zwei Sätzen der Anleitung stand in jeder Sprache ein rohes „{count}“; das ist behoben.",
       "en": "All 17 chapters of the guide are translated into Polish, and the buttons are named in it exactly as in the Polish interface. The search (Ctrl+K and the search in the guide) now also finds words with \"ł\" when you type \"l\". Two sentences in the guide showed a raw \"{count}\" in every language; that is fixed."
     }
+  },
+  {
+    "title": {
+      "de": "Die Kürzelliste lässt sich drucken",
+      "en": "The list of shortcuts can be printed"
+    },
+    "body": {
+      "de": "Im Fenster mit den Tastenkürzeln, im Editor wie in der Skizze, gibt es neben dem Fragezeichen einen Druckerknopf. Er druckt nur die Liste, schwarz auf weiß und in großer Schrift. Im Druckdialog des Browsers lässt sie sich auch als PDF speichern. Strg+P bei geöffnetem Fenster tut dasselbe.",
+      "en": "The window with the keyboard shortcuts, in the editor and in sketch mode alike, has a printer button next to the question mark. It prints only the list, black on white and in large type. In the print dialog of the browser you can also save it as a PDF. Ctrl+P while the window is open does the same."
+    }
   }
 ]

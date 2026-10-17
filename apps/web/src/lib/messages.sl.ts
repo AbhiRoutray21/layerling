@@ -586,6 +586,7 @@ export const MESSAGES_SL: Partial<Record<MessageKey, string>> = {
   "guide.settings.language": "Jezik se preklopi v Nastavitvah na začetni strani.",
   "shortcuts.title": "Bližnjice na tipkovnici",
   "shortcuts.close": "Zapri bližnjice na tipkovnici",
+  "shortcuts.print": "Natisni ali shrani kot PDF",
   "shortcuts.intro": "Bližnjice delujejo, ko je fokus na platnu. Med vnosom v polje ne posegajo vmes.",
   "shortcuts.or": "ali",
   "shortcuts.click": "Klik",

@@ -686,6 +686,7 @@ export const MESSAGES_EN = {
   "guide.settings.language": "The language is chosen from the language list at the very top right, and in Settings on the start page.",
   "shortcuts.title": "Keyboard shortcuts",
   "shortcuts.close": "Close keyboard shortcuts",
+  "shortcuts.print": "Print or save as PDF",
   "shortcuts.intro": "Shortcuts work while the canvas has focus. They stay out of the way while you type in a field.",
   "shortcuts.or": "or",
   "shortcuts.click": "Click",

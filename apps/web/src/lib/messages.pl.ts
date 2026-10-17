@@ -691,6 +691,7 @@ export const MESSAGES_PL: Partial<Record<MessageKey, string>> = {
   "guide.settings.language": "Język zmienisz listą w prawym górnym rogu oraz w Ustawieniach na ekranie startowym.",
   "shortcuts.title": "Skróty klawiszowe",
   "shortcuts.close": "Zamknij skróty klawiszowe",
+  "shortcuts.print": "Drukuj lub zapisz jako PDF",
   "shortcuts.intro": "Skróty działają, gdy obszar roboczy jest aktywny. Nie przeszkadzają podczas wpisywania w pole.",
   "shortcuts.or": "lub",
   "shortcuts.click": "Klik",

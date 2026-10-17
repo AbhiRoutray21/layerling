@@ -694,6 +694,7 @@ export const MESSAGES_AR: Partial<Record<MessageKey, string>> = {
   "guide.settings.language": "تُختار اللغة من قائمة اللغات في أعلى اليمين تمامًا، ومن الإعدادات في الصفحة الرئيسية.",
   "shortcuts.title": "اختصارات لوحة المفاتيح",
   "shortcuts.close": "إغلاق اختصارات لوحة المفاتيح",
+  "shortcuts.print": "طباعة أو حفظ بصيغة PDF",
   "shortcuts.intro": "الاختصارات تعمل طالما أن التركيز على منطقة العرض. ولا تتدخل أثناء الكتابة في حقل.",
   "shortcuts.or": "أو",
   "shortcuts.click": "نقرة",

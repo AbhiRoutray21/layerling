@@ -664,6 +664,7 @@ export const MESSAGES_IT: Partial<Record<MessageKey, string>> = {
   "guide.settings.language": "La lingua si cambia con i pulsanti EN e DE nell'angolo in alto a destra oppure nelle Impostazioni della pagina iniziale.",
   "shortcuts.title": "Scorciatoie da tastiera",
   "shortcuts.close": "Chiudi le scorciatoie da tastiera",
+  "shortcuts.print": "Stampa o salva come PDF",
   "shortcuts.intro": "Le scorciatoie funzionano quando l'area di lavoro è attiva. Non interferiscono con la digitazione nei campi di testo.",
   "shortcuts.or": "oppure",
   "shortcuts.click": "Clic",

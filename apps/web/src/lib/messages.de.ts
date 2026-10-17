@@ -685,6 +685,7 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "guide.settings.language": "Die Sprache wählst du in der Sprachliste ganz oben rechts und in den Einstellungen auf der Startseite.",
   "shortcuts.title": "Tastenkürzel",
   "shortcuts.close": "Tastenkürzel schließen",
+  "shortcuts.print": "Drucken oder als PDF speichern",
   "shortcuts.intro": "Die Kürzel wirken, solange die Arbeitsfläche den Fokus hat. Beim Tippen in einem Feld halten sie sich heraus.",
   "shortcuts.or": "oder",
   "shortcuts.click": "Klick",

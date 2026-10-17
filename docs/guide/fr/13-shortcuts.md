@@ -5,7 +5,7 @@ summary: Toutes les clés en un coup d'œil, extraites directement du programme 
 
 Les raccourcis fonctionnent tant que le plan de travail a le focus. Pendant que vous tapez dans un champ, ils restent à l'écart. Sur Mac, [[Cmd]] s'applique partout où [[Ctrl]] est répertorié ici.
 
-Sous l'éditeur, {{ui:editor.keyboardShortcuts}} dans la zone {{ui:editor.group.help}} ouvre la même liste sous forme de fenêtre.
+Sous l'éditeur, {{ui:editor.keyboardShortcuts}} dans la zone {{ui:editor.group.help}} ouvre la même liste sous forme de fenêtre. Le bouton d'imprimante de la fenêtre ({{ui:shortcuts.print}}) imprime la liste seule, en noir sur blanc et en gros caractères ; la boîte de dialogue d'impression du navigateur propose aussi de l'enregistrer en PDF.
 
 ![La fenêtre des raccourcis clavier dans l'éditeur.](shot:shortcuts)
 

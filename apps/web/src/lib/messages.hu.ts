@@ -664,6 +664,7 @@ export const MESSAGES_HU: Partial<Record<MessageKey, string>> = {
   "guide.settings.language": "A nyelvet a jobb felső sarokban lévő nyelvlistában váltod, és a kezdőlapon a Beállításokban is.",
   "shortcuts.title": "Billentyűparancsok",
   "shortcuts.close": "Billentyűparancsok bezárása",
+  "shortcuts.print": "Nyomtatás vagy mentés PDF-ként",
   "shortcuts.intro": "A parancsok akkor működnek, amikor a munkaterület van fókuszban. Amíg egy mezőbe gépelsz, nem lépnek közbe.",
   "shortcuts.or": "vagy",
   "shortcuts.click": "Kattintás",

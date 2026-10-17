@@ -682,6 +682,7 @@ export const MESSAGES_RU: Partial<Record<MessageKey, string>> = {
   "guide.settings.language": "Язык переключается в выпадающем списке в самом верхнем правом углу, а также в настройках на стартовой странице.",
   "shortcuts.title": "Сочетания клавиш",
   "shortcuts.close": "Закрыть сочетания клавиш",
+  "shortcuts.print": "Печать или сохранение в PDF",
   "shortcuts.intro": "Сочетания работают, пока фокус на холсте. При вводе в поле они не мешают.",
   "shortcuts.or": "или",
   "shortcuts.click": "Щелчок",

@@ -5,7 +5,7 @@ summary: Přehled kláves přímo z programu, aby vždy odpovídal skutečnému 
 
 Zkratky fungují, když je aktivní pracovní plocha. Při psaní do textového pole nepřekážejí. Na Macu používejte [[Cmd]] tam, kde je zde uvedeno [[Ctrl]].
 
-Stejný seznam otevřete v editoru pomocí {{ui:editor.keyboardShortcuts}} v části {{ui:editor.group.help}}.
+Stejný seznam otevřete v editoru pomocí {{ui:editor.keyboardShortcuts}} v části {{ui:editor.group.help}}. Tlačítko tiskárny v okně ({{ui:shortcuts.print}}) vytiskne samotný seznam černě na bílém a velkým písmem; dialog tisku v prohlížeči nabízí i uložení do PDF.
 
 ![Okno klávesových zkratek v editoru.](shot:shortcuts)
 
