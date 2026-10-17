@@ -139,6 +139,7 @@ export type LayerlingMcpCommandName =
   | "export_section_svg"
   | "export_drawing"
   | "export_mesh"
+  | "save_project"
   | "import_file"
   | "add_font"
   | "list_fonts"

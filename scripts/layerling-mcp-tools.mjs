@@ -1119,6 +1119,20 @@ export const tools = [
     },
   },
   {
+    name: "layerling_save_project",
+    description: "Save the whole editable design as a .lyl file, as the export window's Layerling project (.lyl) does: shapes, groups, sketches, CAD and imported assets, settings, notes and the undo history as chosen. The file is written at path on the computer where this MCP server runs, without any dialog. An existing file is only replaced with overwrite true; the file is written through a temporary one, so a failure leaves no half file. It does not change the file that Ctrl+S in the editor saves to. The answer gives the full path, the size in bytes and how many objects and history steps the file holds. In the History view it saves the state shown.",
+    inputSchema: {
+      ...editorTargetSchema,
+      properties: {
+        ...editorTargetSchema.properties,
+        path: { type: "string", description: "Where to write the file, e.g. C:/Projects/drawer/drawer-r01.lyl. A missing .lyl ending is added. Directories are made as needed." },
+        overwrite: { type: "boolean", description: "Replace a file that is already there. Defaults to false: the call fails and leaves the file alone." },
+        history: { description: "How much undo history goes into the file: a number of steps (0 for none) or \"all\". Defaults to the limit set under Workspace settings.", anyOf: [{ type: "number" }, { type: "string", enum: ["all"] }] },
+      },
+      required: ["path"],
+    },
+  },
+  {
     name: "layerling_set_workplane",
     description: "Set, reset or hide the workplane. A workplane on a face of a body makes new shapes land on that face (layerling_create_shape places onto it), and rotating turns about its normal - the editor's W and a click. id with face puts it on that side of the object's own box, snapped to the real face and centred on it; a face standing up keeps the sketch's up pointing up. flip: true turns it to face inwards. reset: true puts it back on the base plate. visible: false hides a face workplane without dropping it - it still applies, only the drawing goes, which gives a clear view or picture; visible: true shows it again. Setting a new workplane shows it again by itself. Call with no settings to read the state; layerling_read_scene reports it as workplane.",
     inputSchema: {

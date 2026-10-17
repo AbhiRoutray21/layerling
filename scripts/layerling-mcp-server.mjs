@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir, rename, rm, stat, writeFile } from "node:fs/promises";
 import { dirname, resolve as resolvePath } from "node:path";
 import { tools } from "./layerling-mcp-tools.mjs";
 import { isLocalBridgeUrl, openEditorAndWait } from "./layerling-mcp-open.mjs";
@@ -204,6 +204,27 @@ async function callTool(name, args) {
       await mkdir(dirname(target), { recursive: true });
       await writeFile(target, Buffer.from(base64, "base64"));
       return { ...summary, path: target };
+    }
+    case "layerling_save_project": {
+      // The editor packs the project; this server writes it, so the path is one on this computer (#494).
+      const { path: outputPath, overwrite, ...rest } = args || {};
+      if (typeof outputPath !== "string" || !outputPath.trim()) throw new Error("path is required");
+      let target = resolvePath(outputPath.trim());
+      if (!/\.lyl$/i.test(target)) target += ".lyl";
+      const exists = await stat(target).then((info) => info.isFile(), () => false);
+      if (exists && overwrite !== true) throw new Error(`${target} already exists; pass overwrite: true to replace it`);
+      const data = await bridgeCommand("save_project", rest, 180000);
+      const { base64, ...summary } = data;
+      await mkdir(dirname(target), { recursive: true });
+      const temporary = `${target}.${process.pid}.tmp`;
+      try {
+        await writeFile(temporary, Buffer.from(base64, "base64"));
+        await rename(temporary, target);
+      } catch (error) {
+        await rm(temporary, { force: true }).catch(() => undefined);
+        throw new Error(`Could not write ${target}: ${error instanceof Error ? error.message : String(error)}`);
+      }
+      return { ...summary, path: target, overwritten: exists };
     }
     case "layerling_import_file":
       return bridgeCommand("import_file", args);

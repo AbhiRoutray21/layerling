@@ -98,5 +98,15 @@
       "de": "Die beiden Deckel der Mondsichel waren gegenüber den Wänden falsch herum ausgerichtet. Der Slicer hielt die Stelle, an der sie einen anderen Körper überlappt, deshalb für ein Loch, und beim Export ließ sie sich nicht mit anderen Körpern zusammenführen. Jetzt ist das Netz geschlossen, und die Mondsichel verhält sich wie jede andere Form.",
       "en": "The two lids of the Crescent faced the wrong way against its walls. A slicer therefore took the place where it overlaps another body for a hole, and in the export it could not be merged with other bodies. The mesh is closed now, and the Crescent behaves like any other shape."
     }
+  },
+  {
+    "title": {
+      "de": "Die KI kann das Projekt als .lyl speichern",
+      "en": "The AI can save the project as a .lyl"
+    },
+    "body": {
+      "de": "Über die MCP-Schnittstelle konnte eine KI bisher STL, 3MF und OBJ in einen Pfad schreiben, aber nicht den bearbeitbaren Entwurf. Das neue Werkzeug „layerling_save_project“ speichert den ganzen Entwurf als .lyl-Datei an einen Pfad auf dem Rechner des MCP-Servers, ohne Dialog. Eine vorhandene Datei wird nur ersetzt, wenn man es sagt, und das Ziel von Strg+S im Editor bleibt, wie es war.",
+      "en": "Through the MCP connection an AI could write STL, 3MF and OBJ to a path, but not the editable design. The new tool layerling_save_project saves the whole design as a .lyl file at a path on the computer of the MCP server, without a dialog. An existing file is only replaced when you say so, and the target of Ctrl+S in the editor stays as it was."
+    }
   }
 ]

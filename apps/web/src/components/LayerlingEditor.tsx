@@ -261,6 +261,7 @@ const HISTORY_VIEW_MCP_ACTIONS = new Set([
   "export_section_svg",
   "export_drawing",
   "export_mesh",
+  "save_project",
   "capture_image",
   "set_history_view",
   "restore_from_history",
@@ -10186,6 +10187,48 @@ export function LayerlingEditor({
           mergedBodies: joined.verschmolzen,
           failedMerges: joined.gescheitert + holeCutsFailed,
           loosePiecesLeftOut: joined.splinters,
+          base64: btoa(binary),
+        };
+      }
+
+      if (command.action === "save_project") {
+        // The project the export window packs as .lyl, handed to the MCP server, which writes it where the caller
+        // asked (#494). The editor's own save target is left as it is, so Ctrl+S goes on writing where it wrote.
+        if (projectInteractionActiveRef.current) throw new Error(t("status.finishBeforeSave"));
+        const requested = params.history;
+        let historyLimit: LylHistoryLimit = workspaceSettingsRef.current.historyLimit;
+        if (requested === "all") historyLimit = "unlimited";
+        else if (typeof requested === "number" && Number.isFinite(requested)) historyLimit = Math.max(0, Math.round(requested));
+        else if (requested !== undefined) throw new Error("history must be a number of steps or \"all\"");
+        const view = historyViewStateRef.current;
+        const exportedHistory = view
+          ? editorHistoryBranch(historyRef.current, view.index, historyLimit)
+          : editorHistoryForExport(historyRef.current, historyIndexRef.current, historyLimit);
+        const projectShapes = view ? view.shapes : shapesRef.current;
+        const bytes = await exportLylProject({
+          projectId: projectInfoRef.current.projectId,
+          projectName,
+          createdAt: projectCreatedAt,
+          modifiedAt: projectModifiedAt,
+          shapes: projectShapes,
+          notes: view ? view.notes : notesRef.current,
+          history: exportedHistory.entries,
+          historyIndex: exportedHistory.index,
+          assets: projectAssetsRef.current,
+          workspace: workspaceSettingsRef.current,
+          snapGrid,
+          placementElevation: view ? view.placementElevation : placementElevation,
+          placementWorkplane: view ? view.placementWorkplane : placementWorkplane,
+          sketchPlacementWorkplane: view ? view.placementWorkplane : placementWorkplane,
+        });
+        let binary = "";
+        for (let index = 0; index < bytes.length; index += 8192) binary += String.fromCharCode(...bytes.subarray(index, index + 8192));
+        return {
+          fileName: projectExportFileName(projectName, "lyl"),
+          bytes: bytes.length,
+          objects: projectShapes.length,
+          historySteps: exportedHistory.entries.length,
+          historyView: Boolean(view),
           base64: btoa(binary),
         };
       }
