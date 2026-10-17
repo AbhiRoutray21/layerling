@@ -2600,7 +2600,6 @@ export function LayerlingEditor({
     settings: FaceToolSettings;
     busy: boolean;
   } | null>(null);
-  const faceToolSettingsRef = useRef<FaceToolSettings>(DEFAULT_FACE_TOOL);
   const [faceToolPreview, setFaceToolPreview] = useState<{ shape: WorkplaneShape | null; empty: boolean } | null>(null);
   const faceToolPreviewRunRef = useRef(0);
   const [cruiseAsset, setCruiseAsset] = useState<ShapeAsset | null>(null);
@@ -7236,7 +7235,8 @@ export function LayerlingEditor({
     setMateTool(null);
     setArrayTool(null);
     setScalePercentTool(null);
-    setFaceTool({ sourceId: source.id, step: "pick", face: null, settings: faceToolSettingsRef.current, busy: false });
+    // Always from the defaults: an inset that fitted the last face can be too wide for this one.
+    setFaceTool({ sourceId: source.id, step: "pick", face: null, settings: DEFAULT_FACE_TOOL, busy: false });
     setNotice(t("status.faceToolStart"));
   }, [refuseLockedSelection, edgeModifier, faceTool, selectedShapes, shellTool, simplifyToolId, splitSession, stopCruise]);
 
@@ -7262,7 +7262,6 @@ export function LayerlingEditor({
       const normalized = normalizeFaceTool({ ...current.settings, ...patch });
       // A pocket goes no deeper than the body behind the picked face; the panel shows what it gets.
       const settings = current.face ? faceToolSettingsOn(current.face, normalized) : normalized;
-      faceToolSettingsRef.current = settings;
       return { ...current, settings };
     });
   }, []);
