@@ -88,5 +88,15 @@
       "de": "Sind Formen ausgeblendet, steht eine kleine Zahl am Knopf der Gruppe „Sichtbarkeit“; ein Klick darauf blendet alle wieder ein. Öffnest du einen Entwurf mit ausgeblendeten Formen, sagt es dir einmal eine Meldung, mit einem Knopf „Alle einblenden“. Ausgeblendetes bleibt aber ausgeblendet, wenn du nichts tust.",
       "en": "When shapes are hidden, a small number sits on the button of the Visibility group; a click on it shows them all again. If you open a design that has hidden shapes, a message tells you once, with a button “Show all”. Hidden shapes stay hidden if you do nothing."
     }
+  },
+  {
+    "title": {
+      "de": "Die Mondsichel ist dicht und wird nicht mehr hohl",
+      "en": "The Crescent is closed and no longer comes out hollow"
+    },
+    "body": {
+      "de": "Die beiden Deckel der Mondsichel waren gegenüber den Wänden falsch herum ausgerichtet. Der Slicer hielt die Stelle, an der sie einen anderen Körper überlappt, deshalb für ein Loch, und beim Export ließ sie sich nicht mit anderen Körpern zusammenführen. Jetzt ist das Netz geschlossen, und die Mondsichel verhält sich wie jede andere Form.",
+      "en": "The two lids of the Crescent faced the wrong way against its walls. A slicer therefore took the place where it overlaps another body for a hole, and in the export it could not be merged with other bodies. The mesh is closed now, and the Crescent behaves like any other shape."
+    }
   }
 ]
