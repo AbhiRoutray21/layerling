@@ -48,5 +48,15 @@
       "de": "Ein Entwurf mit sehr großen Netzen und langem Verlauf scheiterte bei fast jeder Änderung am Speichern, nur mit dem Hinweis „Die Formen konnten nicht gespeichert werden“. Jetzt nennt die Meldung den Grund (zu groß für die Projektdatei oder kein Platz mehr im Browser). Ist nur der ganze Verlauf zu viel, behält die gespeicherte Kopie die neuesten Schritte, die passen, und sagt es einmal. Rückgängig geht in der offenen Sitzung weiter über alle Schritte.",
       "en": "A design with very large meshes and a long history failed to save after almost every change, with only the note that the shapes could not be saved. Now the message names the reason (too big for the project file, or no room left in the browser). If only the whole history is too much, the stored copy keeps the newest steps that fit, and says so once. Undo in the open session still goes through every step."
     }
+  },
+  {
+    "title": {
+      "de": "Eine Linie um eine nachgezeichnete Skizze läuft nicht mehr in die Zeitüberschreitung",
+      "en": "A line round a traced sketch no longer times out"
+    },
+    "body": {
+      "de": "Eine Skizze aus einem SVG mit vielen kleinen Kurven (eine nachgezeichnete Zeichnung) brach mit „OpenCascade timed out while building the sketch“ ab, sobald eine Linie darum gelegt wurde. Die Kurven werden jetzt nur so fein in Stücke geteilt, wie es für 0,01 mm nötig ist, und die Gültigkeitsprüfung, die bei sehr vielen Kanten Minuten brauchte, entfällt bei so großen Skizzen. Ein solcher Körper entsteht nun in wenigen Sekunden statt in einer Minute.",
+      "en": "A sketch from an SVG with many small curves (a traced drawing) stopped with “OpenCascade timed out while building the sketch” as soon as a line was set round it. The curves are now cut into pieces only as finely as 0.01 mm needs, and the validity check, which took minutes with very many edges, is left out for sketches that large. Such a body now builds in a few seconds instead of a minute."
+    }
   }
 ]
