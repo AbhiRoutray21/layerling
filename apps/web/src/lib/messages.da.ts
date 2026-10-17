@@ -1445,6 +1445,8 @@ export const MESSAGES_DA: Partial<Record<MessageKey, string>> = {
   "shapeMenu.moveHint": "Træk i titellinjen for at flytte panelet; dobbeltklik sætter det tilbage under sin knap",
   "shapeMenu.keepOpen": "Hold åben, mens du placerer former",
   "shapeMenu.keepOpenOn": "Forbliver åben, til du løsner det",
+  "shapeMenu.resize": "Ændr størrelsen på formbiblioteket",
+  "shapeMenu.resizeHint": "Træk i en kant eller et hjørne for at ændre størrelsen; dobbeltklik sætter den tilbage. Når den er smal, bliver kun billederne tilbage",
   "myShapes.title": "Egne former",
   "myShapes.basicShapes": "Basiske former",
   "myShapes.saveSelection": "Gem markering",

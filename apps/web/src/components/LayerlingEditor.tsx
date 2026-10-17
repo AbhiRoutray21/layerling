@@ -13646,6 +13646,7 @@ function SecondaryToolbar({
               helpSection="addShape"
               pinned={shapesPinned}
               onTogglePinned={toggleShapesPinned}
+              resizable
             >
               <div className="shape-menu-body">
               {renderMyShapes ? (
@@ -13660,6 +13661,8 @@ function SecondaryToolbar({
                     className="shape-menu-item"
                     key={shape.id}
                     type="button"
+                    title={shapeAssetMenuLabel(shape).replace(/\s+/g, " ")}
+                    aria-label={shapeAssetMenuLabel(shape).replace(/\s+/g, " ")}
                     draggable
                     onClick={() => {
                       if (suppressNextShapeClickRef.current) {

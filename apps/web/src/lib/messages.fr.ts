@@ -1513,6 +1513,8 @@ export const MESSAGES_FR: Partial<Record<MessageKey, string>> = {
   "shapeMenu.moveHint": "Faites glisser la barre de titre pour déplacer ce panneau ; un double-clic le remet sous son bouton",
   "shapeMenu.keepOpen": "Garder ouvert pendant le placement des formes",
   "shapeMenu.keepOpenOn": "Reste ouvert jusqu'à ce que vous le détachiez",
+  "shapeMenu.resize": "Redimensionner la bibliothèque de formes",
+  "shapeMenu.resizeHint": "Faites glisser un bord ou un coin pour changer la taille ; un double-clic la rétablit. Quand elle est étroite, seules les images restent",
   "myShapes.title": "Formes personnalisées",
   "myShapes.basicShapes": "Formes de base",
   "myShapes.saveSelection": "Enregistrer la sélection",

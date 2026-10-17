@@ -1527,6 +1527,8 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "shapeMenu.moveHint": "Titelleiste ziehen verschiebt das Fenster; Doppelklick setzt es zurück unter seinen Knopf",
   "shapeMenu.keepOpen": "Beim Platzieren offen halten",
   "shapeMenu.keepOpenOn": "Bleibt offen, bis du es wieder löst",
+  "shapeMenu.resize": "Größe der Formenbibliothek ändern",
+  "shapeMenu.resizeHint": "Rand oder Ecke ziehen ändert die Größe; Doppelklick setzt sie zurück. Ist sie schmal, bleiben nur die Bilder",
   "myShapes.title": "Eigene Formen",
   "myShapes.basicShapes": "Grundformen",
   "myShapes.saveSelection": "Auswahl speichern",

@@ -1460,6 +1460,8 @@ export const MESSAGES_IT: Partial<Record<MessageKey, string>> = {
   "shapeMenu.moveHint": "Trascina la barra del titolo per spostare il pannello; un doppio clic lo riporta sotto il suo pulsante",
   "shapeMenu.keepOpen": "Mantieni aperto mentre posizioni le forme",
   "shapeMenu.keepOpenOn": "Resta aperto finché non lo sblocchi",
+  "shapeMenu.resize": "Ridimensiona la libreria di forme",
+  "shapeMenu.resizeHint": "Trascina un bordo o un angolo per ridimensionare; il doppio clic la ripristina. Quando è stretta restano solo le immagini",
   "myShapes.title": "Forme personalizzate",
   "myShapes.basicShapes": "Forme di base",
   "myShapes.saveSelection": "Salva selezione",

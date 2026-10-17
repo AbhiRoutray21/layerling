@@ -1520,6 +1520,8 @@ export const MESSAGES_RU: Partial<Record<MessageKey, string>> = {
   "shapeMenu.moveHint": "Перетащите заголовок, чтобы переместить панель; двойной щелчок возвращает её под кнопку",
   "shapeMenu.keepOpen": "Держать открытой при размещении фигур",
   "shapeMenu.keepOpenOn": "Остаётся открытой, пока вы не открепите её",
+  "shapeMenu.resize": "Изменить размер библиотеки фигур",
+  "shapeMenu.resizeHint": "Потяните за край или угол, чтобы изменить размер; двойной щелчок возвращает прежний. Когда окно узкое, остаются только картинки",
   "myShapes.title": "Собственные фигуры",
   "myShapes.basicShapes": "Основные фигуры",
   "myShapes.saveSelection": "Сохранить выделение",

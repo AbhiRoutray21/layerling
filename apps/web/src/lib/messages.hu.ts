@@ -1490,6 +1490,8 @@ export const MESSAGES_HU: Partial<Record<MessageKey, string>> = {
   "shapeMenu.moveHint": "A címsor húzásával mozgathatod a panelt; a dupla kattintás visszateszi a gombja alá",
   "shapeMenu.keepOpen": "Maradjon nyitva alakzatok elhelyezése közben",
   "shapeMenu.keepOpenOn": "Nyitva marad, amíg le nem választod",
+  "shapeMenu.resize": "Az alakzattár átméretezése",
+  "shapeMenu.resizeHint": "Húzza az élét vagy a sarkát az átméretezéshez; a dupla kattintás visszaállítja. Ha keskeny, csak a képek maradnak",
   "myShapes.title": "Saját alakzatok",
   "myShapes.basicShapes": "Alapalakzatok",
   "myShapes.saveSelection": "Kijelölés mentése",

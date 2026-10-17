@@ -1551,6 +1551,8 @@ export const MESSAGES_CS: Record<MessageKey, string> = {
   "shapeMenu.moveHint": "Přetažením záhlaví panel přesunete; dvojklik ho vrátí pod jeho tlačítko",
   "shapeMenu.keepOpen": "Nechat otevřené při umisťování tvarů",
   "shapeMenu.keepOpenOn": "Zůstane otevřené, dokud ho neuvolníte",
+  "shapeMenu.resize": "Změnit velikost knihovny tvarů",
+  "shapeMenu.resizeHint": "Tažením okraje nebo rohu změníte velikost; dvojklik ji vrátí zpět. Když je úzká, zůstanou jen obrázky",
   "myShapes.title": "Vlastní tvary",
   "myShapes.basicShapes": "Základní tvary",
   "myShapes.saveSelection": "Uložit výběr",

@@ -1960,6 +1960,16 @@ html:where([data-theme="dark"][data-palette="graphite"])[data-toolbar-size="larg
   --shape-menu-columns: 3;
 }
 
+:where(html[data-theme="dark"][data-palette="graphite"]) .shape-menu-resize {
+  background: transparent;
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .shape-menu-resize:hover,
+:where(html[data-theme="dark"][data-palette="graphite"]) .shape-menu-resize:focus-visible {
+  background: rgba(217, 120, 19, 0.32);
+  outline: none;
+}
+
 :where(html[data-theme="dark"][data-palette="graphite"]) .shape-menu-subtitle {
   color: #5e5e5e;
 }

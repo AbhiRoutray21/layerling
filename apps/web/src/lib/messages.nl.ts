@@ -1527,6 +1527,8 @@ export const MESSAGES_NL: Record<MessageKey, string> = {
   "shapeMenu.moveHint": "Sleep de titelbalk om het paneel te verplaatsen; dubbelklik zet het terug onder zijn knop",
   "shapeMenu.keepOpen": "Open houden tijdens het plaatsen van vormen",
   "shapeMenu.keepOpenOn": "Blijft open totdat je het losmaakt",
+  "shapeMenu.resize": "Formaat van de vormenbibliotheek wijzigen",
+  "shapeMenu.resizeHint": "Sleep een rand of hoek om het formaat te wijzigen; dubbelklikken zet het terug. Is het smal, dan blijven alleen de plaatjes over",
   "myShapes.title": "Eigen vormen",
   "myShapes.basicShapes": "Basisvormen",
   "myShapes.saveSelection": "Selectie bewaren",

@@ -1217,6 +1217,8 @@ export const MESSAGES_SL: Partial<Record<MessageKey, string>> = {
   "shapeMenu.moveHint": "Povleci naslovno vrstico, da premakneš ploščo; dvoklik jo vrne pod njen gumb",
   "shapeMenu.keepOpen": "Pusti odprto med postavljanjem oblik",
   "shapeMenu.keepOpenOn": "Ostane odprto, dokler je ne odpneš",
+  "shapeMenu.resize": "Spremeni velikost knjižnice oblik",
+  "shapeMenu.resizeHint": "Povlecite rob ali vogal za spremembo velikosti; dvoklik jo povrne. Ko je ozka, ostanejo samo slike",
   "myShapes.title": "Oblike po meri",
   "myShapes.basicShapes": "Osnovne oblike",
   "myShapes.saveSelection": "Shrani izbor",

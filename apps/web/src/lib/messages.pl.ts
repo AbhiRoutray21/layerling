@@ -1533,6 +1533,8 @@ export const MESSAGES_PL: Partial<Record<MessageKey, string>> = {
   "shapeMenu.moveHint": "Przeciągnij pasek tytułu, aby przenieść panel; dwukrotne kliknięcie przywraca go pod jego przycisk",
   "shapeMenu.keepOpen": "Zostaw otwarty podczas umieszczania brył",
   "shapeMenu.keepOpenOn": "Pozostaje otwarty, dopóki go nie odepniesz",
+  "shapeMenu.resize": "Zmień rozmiar biblioteki kształtów",
+  "shapeMenu.resizeHint": "Przeciągnij krawędź lub róg, aby zmienić rozmiar; podwójne kliknięcie przywraca go. Gdy jest wąska, zostają tylko obrazki",
   "myShapes.title": "Własne kształty",
   "myShapes.basicShapes": "Podstawowe kształty",
   "myShapes.saveSelection": "Zapisz zaznaczenie",

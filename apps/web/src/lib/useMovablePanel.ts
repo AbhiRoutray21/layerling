@@ -93,11 +93,11 @@ export function useMovablePanel<T extends HTMLElement = HTMLDivElement>(storageK
     };
   }, []);
 
-  const place = useCallback((next: PanelPosition) => {
+  const place = useCallback((next: PanelPosition, screenWidth?: number) => {
     const measured = measure();
     if (!measured) return null;
     const { panel, area: areaElement, origin, scale } = measured;
-    const position = clampPanelPosition(next, { width: panel.offsetWidth * scale }, { width: areaElement.clientWidth, height: areaElement.clientHeight });
+    const position = clampPanelPosition(next, { width: screenWidth ?? panel.offsetWidth * scale }, { width: areaElement.clientWidth, height: areaElement.clientHeight });
     return { position, origin, scale, areaHeight: areaElement.clientHeight };
   }, [measure]);
 
@@ -130,6 +130,28 @@ export function useMovablePanel<T extends HTMLElement = HTMLDivElement>(storageK
     window.addEventListener("resize", onResize);
     return () => window.removeEventListener("resize", onResize);
   }, [place]);
+
+  /**
+   * Where the panel stands in its area right now, in screen pixels, and the scale between its own pixels and the
+   * screen's - for a panel that is pulled larger from its left edge and has to move with it.
+   */
+  const currentPosition = useCallback(() => {
+    const measured = measure();
+    return measured ? { ...measured.current, scale: measured.scale } : null;
+  }, [measure]);
+
+  /** Puts the panel at `next` as if it had been dragged there; `screenWidth` is the width it is about to have. */
+  const moveTo = useCallback((next: PanelPosition, screenWidth?: number) => {
+    const placed = place(next, screenWidth);
+    if (placed) setPlacement(placed);
+    return placed?.position ?? null;
+  }, [place]);
+
+  /** Keeps where the panel stands now, after a move that was not a drag of the title bar. */
+  const keepPosition = useCallback(() => {
+    const position = placementRef.current?.position;
+    if (position) store(position);
+  }, [store]);
 
   const onPointerDown = useCallback((event: PointerEvent<HTMLElement>) => {
     const measured = measure();
@@ -191,6 +213,9 @@ export function useMovablePanel<T extends HTMLElement = HTMLDivElement>(storageK
     /** True once the panel has been moved away from where the stylesheet puts it. */
     moved: placement !== null,
     dragging,
+    currentPosition,
+    moveTo,
+    keepPosition,
     handleProps: { onPointerDown, onPointerMove, onPointerUp: endDrag, onPointerCancel: endDrag, onDoubleClick },
   };
 }

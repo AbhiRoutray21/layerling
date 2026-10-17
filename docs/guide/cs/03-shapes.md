@@ -11,7 +11,7 @@ Kliknutím na {{ui:editor.addShape}} otevřete knihovnu.
 
 ![Knihovna tvarů. Náhledy jsou vykreslené ze skutečné geometrie jednotlivých tvarů.](shot:shape-menu)
 
-Knihovna se zavře po každém vybraném tvaru. Záhlavím ji přesunete tam, kde nezakrývá místo, na které míříte, třeba nad panel Vlastnosti; dvojklik na záhlaví ji vrátí pod její tlačítko a kde jste ji nechali, si pamatuje prohlížeč. Připínáček v záhlaví drží knihovnu otevřenou, dokud umisťujete několik tvarů za sebou.
+Knihovna se zavře po každém vybraném tvaru. Záhlavím ji přesunete tam, kde nezakrývá místo, na které míříte, třeba nad panel Vlastnosti; dvojklik na záhlaví ji vrátí pod její tlačítko a kde jste ji nechali, si pamatuje prohlížeč. Připínáček v záhlaví drží knihovnu otevřenou, dokud umisťujete několik tvarů za sebou. Okraji a rohy měníte její velikost, tak široce a vysoko, jak vaše obrazovka dovolí; i tu si prohlížeč pamatuje a dvojklik na okraj ji vrátí zpět. Když knihovnu zúžíte, vynechá názvy a ukáže jen obrázky; název se objeví, když na tvar ukážete.
 
 Vybraný tvar sleduje myš a položí se kliknutím. Nad tělesem se orientuje podle plochy pod ukazatelem, i šikmé, podobně jako Cruise v Tinkercadu. Nad prázdnou podložkou dopadne na pracovní rovinu. [[Esc]] umísťování zruší. Nástroje čekající na kliknutí, například měření, úhelník, poznámka, {{ui:camera.placeWorkplane}}, {{ui:editor.tool.layFlat}} nebo úpravy hran, se při výběru tvaru vypnou. Kliknutí pak skutečně umístí tvar. Obráceně zapnutí takového nástroje ukončí umísťování tvaru. Chcete-li nové tvary rovnou uprostřed podložky, vypněte {{ui:workspace.cruise}} v části {{ui:workspace.appearance}}.
 

@@ -1528,6 +1528,8 @@ export const MESSAGES_AR: Partial<Record<MessageKey, string>> = {
   "shapeMenu.moveHint": "اسحب شريط العنوان لنقل اللوحة؛ والنقر المزدوج يعيدها تحت زرها",
   "shapeMenu.keepOpen": "أبقِها مفتوحة أثناء وضع الأشكال",
   "shapeMenu.keepOpenOn": "تبقى مفتوحة حتى تفكّ تثبيتها",
+  "shapeMenu.resize": "تغيير حجم مكتبة الأشكال",
+  "shapeMenu.resizeHint": "اسحب حافة أو زاوية لتغيير الحجم؛ النقر المزدوج يعيده كما كان. عندما تكون ضيقة تبقى الصور فقط",
   "myShapes.title": "الأشكال المخصصة",
   "myShapes.basicShapes": "الأشكال الأساسية",
   "myShapes.saveSelection": "حفظ التحديد",

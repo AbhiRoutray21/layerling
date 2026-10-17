@@ -1528,6 +1528,8 @@ export const MESSAGES_EN = {
   "shapeMenu.moveHint": "Drag the title bar to move this panel; double-click it to put it back under its button",
   "shapeMenu.keepOpen": "Keep open while placing shapes",
   "shapeMenu.keepOpenOn": "Stays open until you unpin it",
+  "shapeMenu.resize": "Resize the shape library",
+  "shapeMenu.resizeHint": "Drag an edge or corner to resize; double-click sets it back. When it is narrow, only the pictures stay",
   "myShapes.title": "Custom shapes",
   "myShapes.basicShapes": "Basic shapes",
   "myShapes.saveSelection": "Save selection",

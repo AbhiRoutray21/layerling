@@ -4977,6 +4977,98 @@ html[data-toolbar-size="large"] .shape-menu-dropdown:not(.sketch-shape-menu-drop
   }
 }
 
+/* A library pulled to its own size (#505). The width and height come from the title bar's edges and corners; the
+   stylesheet's columns give way to as many as fit, and the list scrolls inside the height that was chosen. */
+.shape-menu-dropdown.shape-menu-sized-width:not(.sketch-shape-menu-dropdown) .shape-menu-list {
+  grid-template-columns: repeat(auto-fill, minmax(206px, 1fr));
+}
+
+.shape-menu-dropdown.shape-menu-sized-height:not(.sketch-shape-menu-dropdown) .shape-menu-body {
+  max-height: calc(var(--shape-menu-height) - 46px);
+}
+
+/* Narrow: only the pictures stay, as in Tinkercad. The name is in each tile's tooltip. */
+.shape-menu-dropdown.shape-menu-icons-only:not(.sketch-shape-menu-dropdown) .shape-menu-list {
+  grid-template-columns: repeat(auto-fill, minmax(58px, 1fr));
+  gap: 2px;
+  padding: 6px;
+}
+
+.shape-menu-icons-only .shape-menu-item {
+  justify-content: center;
+  padding: 5px;
+}
+
+.shape-menu-icons-only .shape-menu-item > span:not(.my-shape-no-preview) {
+  display: none;
+}
+
+.shape-menu-icons-only .shape-menu-title {
+  padding: 0 8px;
+}
+
+.shape-menu-icons-only .shape-menu-subtitle {
+  padding-inline: 8px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.shape-menu-resize {
+  position: absolute;
+  z-index: 3;
+  touch-action: none;
+  background: transparent;
+  transition: background 120ms ease;
+}
+
+.shape-menu-resize:hover,
+.shape-menu-resize:focus-visible {
+  background: rgba(217, 120, 19, 0.32);
+  outline: none;
+}
+
+.shape-menu-resize-left,
+.shape-menu-resize-right {
+  top: 0;
+  bottom: 0;
+  width: 7px;
+  cursor: ew-resize;
+}
+
+.shape-menu-resize-left {
+  left: 0;
+}
+
+.shape-menu-resize-right {
+  right: 0;
+}
+
+.shape-menu-resize-bottom {
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 7px;
+  cursor: ns-resize;
+}
+
+.shape-menu-resize-bottom-left,
+.shape-menu-resize-bottom-right {
+  bottom: 0;
+  width: 14px;
+  height: 14px;
+}
+
+.shape-menu-resize-bottom-left {
+  left: 0;
+  cursor: nesw-resize;
+}
+
+.shape-menu-resize-bottom-right {
+  right: 0;
+  cursor: nwse-resize;
+}
+
 .shape-menu-subtitle {
   padding: 8px 15px 0;
   color: #8a6d4c;
@@ -15748,8 +15840,11 @@ html[data-theme="dark"] .open-group-cancel {
 
 .shape-menu-title-text {
   display: inline-flex;
+  min-width: 0;
   align-items: center;
   gap: 6px;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 .shape-menu-pin {

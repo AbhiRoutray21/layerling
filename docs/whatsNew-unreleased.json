@@ -158,5 +158,15 @@
       "de": "Wer die Rasterfarbe versehentlich so gestellt hat, dass man kein Raster mehr sieht, kommt jetzt mit einem Klick zurück: Am Ende der Seite Arbeitsebene in den Einstellungen setzt „Raster zurücksetzen“ Sichtbarkeit, Farben, Abstand und Linienstärke auf den Standard, für den Entwurf und für die mit „Als Vorgabe sichern“ gesicherte Vorgabe. Größe und Drucker der Platte bleiben, wie sie sind.",
       "en": "If the grid colour was set so that no grid can be seen any more, one click brings it back: at the end of the Workplane page in the settings, “Reset grid” puts visibility, colours, spacing and line weight back to the standard, for the design and for the default saved with “Make default”. The plate's size and printer stay as they are."
     }
+  },
+  {
+    "title": {
+      "de": "Die Formenbibliothek lässt sich in der Größe ziehen",
+      "en": "The shape library can be pulled to any size"
+    },
+    "body": {
+      "de": "Ränder und Ecken der Formenbibliothek ziehen ihre Breite und Höhe, so groß oder klein, wie dein Bildschirm es braucht; die Größe merkt sich der Browser. Ist die Bibliothek schmal, zeigt sie nur die Bilder ohne Namen, der Name steht dann im Tooltip.",
+      "en": "The edges and corners of the shape library pull its width and height, as large or small as your screen needs; the browser remembers the size. When the library is narrow, it shows only the pictures without names, and the name is in the tooltip."
+    }
   }
 ]

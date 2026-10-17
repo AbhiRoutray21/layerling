@@ -125,7 +125,8 @@ export function MyShapesSection({ shapes, serverAvailable, canSave, defaultName,
             className="shape-menu-item my-shape-item"
             type="button"
             draggable
-            title={t("myShapes.insertHint")}
+            title={`${shape.name}: ${t("myShapes.insertHint")}`}
+            aria-label={shape.name}
             onClick={() => onInsert(shape.id)}
             onDragStart={(event) => {
               event.dataTransfer.effectAllowed = "copy";
