@@ -138,5 +138,15 @@
       "de": "Auf dem iPad zeigt layerling jetzt den Namen eines Knopfes oder Feldes in einer kleinen Blase, wenn der Apple Pencil einen Moment darüber schwebt, so wie die Maus einen Tooltip zeigt. Das gilt für iPads, deren Pencil schweben kann.",
       "en": "On an iPad layerling now shows the name of a button or field in a small bubble when the Apple Pencil rests above it for a moment, as a mouse shows a tooltip. This works on iPads whose Pencil can hover."
     }
+  },
+  {
+    "title": {
+      "de": "Verjüngte, gedrehte Zylinder behalten beim Gruppieren ihre Drehung",
+      "en": "Tapered, turned cylinders keep their turn when grouped"
+    },
+    "body": {
+      "de": "Ein Zylinder mit Verjüngung oder Neigung, den man um 90 Grad gedreht hatte, kam beim Gruppieren (und beim Exportieren) ungedreht heraus, die Gruppe hatte dann andere Maße als die Teile. Die Drehung bleibt jetzt erhalten.",
+      "en": "A cylinder with a taper or a lean that you had turned by 90 degrees came out unturned when grouped (and when exported), so the group had other measures than its parts. The turn is kept now."
+    }
   }
 ]

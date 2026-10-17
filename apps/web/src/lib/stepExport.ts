@@ -144,7 +144,8 @@ export function shapeYawDegrees(shape: WorkplaneShape): number {
   const circular = Math.abs(shapeWidth(shape) - shapeDepth(shape)) < SIZE_EPS;
   // Tipped about Z first, the yaw decides where a round body points (meshYawDegrees).
   const tippedAboutZ = Math.abs(shape.rotationZ ?? 0) > 1e-9;
-  return round && circular && !tippedAboutZ ? 0 : shape.rotation;
+  // A taper or a lean follows the body's own axes, so the yaw stays (meshYawDegrees, #504).
+  return round && circular && !tippedAboutZ && !shapeHasShapeDeform(shape) ? 0 : shape.rotation;
 }
 
 type BuildOutcome = { solid: BrepSolid } | { skip: string };

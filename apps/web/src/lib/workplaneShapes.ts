@@ -279,6 +279,10 @@ export function meshYawDegrees(shape: WorkplaneShape) {
   // the yaw decides where it points (forum 617836: pins laid round a ring all faced one way once
   // grouped).
   if (Math.abs(shape.rotationZ ?? 0) > 1e-9) return shape.rotation;
+  // A taper or a lean follows the body's own X and Z axes, so such a round body is no longer the same turned
+  // by a side step: dropping its yaw laid a tapered cylinder turned by 90 degrees back as it was before once
+  // it was grouped or exported (#504).
+  if (shapeHasShapeDeform(shape)) return shape.rotation;
 
   // A tessellated circular primitive is only invariant by one whole side step.
   // Preserve the remaining yaw so low-sided cylinders are baked and used in
