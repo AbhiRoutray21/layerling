@@ -1,6 +1,6 @@
 ---
 name: layerling-mcp-skill
-description: Control a live local layerling editor through its MCP server. Use when the assistant needs to list currently open layerling editor tabs, target a tab by editorNumber/projectName, read the current scene, list or select objects, create any of the editor's shapes including threads, springs, gears and raised text, update dimensions/position/rotation, align objects, group/ungroup/cut/separate parts, split solids or holes in two with a plane, list exact CAD edge ids, apply chamfer/fillet to specific edges, hollow bodies into walls, repeat objects in rows or circles (hole rows, bolt circles, teeth), cut the view open with the section view to look inside, inspect editor errors, or capture viewport images from view-cube angles.
+description: Control a live local layerling editor through its MCP server. Use when the assistant needs to list currently open layerling editor tabs, target a tab by editorNumber/projectName, read the current scene, list or select objects, create any of the editor's shapes including threads, springs, gears and raised text, update dimensions/position/rotation, align objects, group/ungroup/cut/separate parts, split solids or holes in two with a plane, list exact CAD edge ids, apply chamfer/fillet to specific edges, hollow bodies into walls, list and delete faces of exact bodies, repeat objects in rows or circles (hole rows, bolt circles, teeth), cut the view open with the section view to look inside, inspect editor errors, or capture viewport images from view-cube angles.
 ---
 
 # layerling MCP
@@ -87,6 +87,7 @@ Useful tools:
 - `layerling_separate_parts`: separate the disconnected parts of one object.
 - `layerling_split_objects`: cut solids or holes in two with a plane, like the editor's Split tool. `axis` as in a slicer (`x`, `y` front-back, `z` up, the default), `position` in the numbers `layerling_read_scene` reports (position.x, position.z or elevation; the middle when omitted), `rotationX`/`rotationY`/`rotationZ` in degrees for an angled cut, about either or both of the two axes it does not cut across. Each object the plane crosses becomes two mesh bodies (two holes for a hole; a hollow keeps its cavity), one undo step.
 - `layerling_hollow_object`: hollow a solid into walls of equal thickness, open on top, bottom, both, or closed.
+- `layerling_list_faces` / `layerling_delete_faces`: list the faces of an exact body, then delete some of them; the faces around them close the gap (a fillet, a hole or a boss is gone).
 - `layerling_array_objects`: repeat objects n times in a row or around a circle (hole rows, bolt circles, teeth) as one undo step.
 - `layerling_show_overhangs`: overhangs that would need supports, like "Show overhangs" in the visibility menu. `enabled` switches the red-and-white hatching in the view, `angle` (30-70, default 45, degrees from vertical) is kept in the design's settings. Returns `overhangAreaMm2` and `lowestOverhangHeight` for each visible solid (or `ids`); 0 means it prints without supports at that angle. Faces on the plate do not count, a face resting on another body does. Call it again after `layerling_lay_flat` or a rotation to compare print orientations.
 - `layerling_bundle_objects`: hold objects together like Tinkercad's Ctrl+B without merging them - every part keeps its colour and its solid/hole state, holes cut nothing, and an STL/3MF/OBJ export writes each part as its own body (a two-colour logo on a plate stays two coloured parts). Ungroup or open it like a group; the edge tools and hollowing refuse it. Use `layerling_group_objects` when holes should cut.
@@ -110,6 +111,16 @@ For chamfer/fillet, never guess edge ids.
 ## Hollowing
 
 For a box, cup, case or any body with walls, build the outside shape and hollow it with `layerling_hollow_object({ editorNumber, id, thickness, openings })`. Do not fake walls by subtracting a smaller copy of the shape - that gives uneven walls on anything but a box. The walls grow inward, so the outside keeps its size. `openings` is a list of the sides to leave open - any of `top`, `bottom`, `front` (+z), `back` (-z), `left` (-x) and `right` (+x), e.g. `["front"]` for a drawer slot, `[]` for a sealed cavity - or one of the older names `top` (default), `bottom`, `top-bottom` or `none`; every side needs a flat face at the very edge of the body, measured against the world's axes. `edges` is `round` (default; where the body steps or has an opening, the inner walls meet in a rounding as big as the wall) or `sharp` (they meet in a sharp edge). Too thick a wall is refused with an error - use a thinner one. Resizing a hollowed body later (`layerling_update_object` or the handles) hollows it again at the new size a moment afterwards, so the walls keep their thickness; a cylinder stretched unevenly comes back as an ellipse. Wait a second before measuring the walls.
+
+## Deleting Faces
+
+To take a feature off an exact body - a fillet, a hole, a boss, a step - delete its faces instead of rebuilding the body. Never guess face ids.
+
+1. Call `layerling_list_faces({ editorNumber, id })`. Each face has its `id`, `kind`, `area`, `center` and, for a flat face, its outward `normal`, in world coordinates (y up).
+2. Pick every face of the feature: the four faces of a box's rounded top edges, the cylinder of a hole, the side and the top of a boss.
+3. Call `layerling_delete_faces({ editorNumber, id, faceIds })`.
+
+The faces around them grow until they close the gap, and the body stays exact: fillet, chamfer and STEP export still work on it. When they cannot close it - a main side of a box, for example - nothing changes and the call fails with that reason. Deleting only the floor of a pocket makes it a hole straight through. Whatever layerling keeps as a mesh has no exact faces: an imported STL, OBJ or 3MF, a split, wrapped or simplified body, a very detailed shape such as a long text. A STEP import has. One undo step, undone like an edge treatment.
 
 ## Patterns
 

@@ -72,6 +72,8 @@ Die KI arbeitet mit denselben Funktionen wie du, sie läuft über denselben Weg 
 | `layerling_list_edges` | listet die echten CAD-Kanten eines Objekts |
 | `layerling_apply_edge_treatment` | fast oder verrundet ausgewählte Kanten |
 | `layerling_hollow_object` | höhlt einen Körper mit gleichmäßiger Wand aus |
+| `layerling_list_faces` | listet die Flächen eines exakten Körpers |
+| `layerling_delete_faces` | löscht Flächen und schließt die Lücke |
 | `layerling_array_objects` | vervielfältigt in einer Reihe oder auf einem Kreis |
 | `layerling_bundle_objects` | bündelt Objekte wie Strg+B: sie bewegen sich zusammen, behalten Farbe und Art und gehen einzeln in den Export |
 | `layerling_layer_text` | macht aus einem Text einen Stapel aus Schichten für den Mehrfarbdruck (Buchstaben, breitere Ränder, Platte ohne Löcher) oder baut einen Stapel neu, mit Loch für den Schlüsselring, Ecken je Schicht und gerundeter oder abgeschrägter Buchstabenkante; mit einer Namensliste ein Schild je Name |

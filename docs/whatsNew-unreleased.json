@@ -8,5 +8,15 @@
       "de": "Das Werkzeug „Fläche“ startete mit den Werten vom letzten Mal, auch wenn nichts erzeugt wurde, so konnte ein Rand, der zu einer Fläche passte, für die nächste zu breit sein. Jetzt beginnt es jedes Mal mit Rand 0, ohne Eckenradius, mit 2 mm Tiefe und „Heraus: Material hinzufügen“.",
       "en": "The Face tool opened with the values from last time, even when nothing was created, so an inset that fitted one face could be too wide for the next. Now it starts each time with an inset of 0, no corner radius, a depth of 2 mm and “Out: add material”."
     }
+  },
+  {
+    "title": {
+      "de": "Fläche löschen",
+      "en": "Delete face"
+    },
+    "body": {
+      "de": "Mit dem neuen Werkzeug „Fläche löschen“ nimmst du eine Verrundung, ein Loch oder einen Zapfen wieder vom Körper: Klicke die Flächen an und dann auf „Löschen“, und die Flächen ringsum schließen die Lücke. Der Körper bleibt exakt, Verrundung, Fase und STEP-Export funktionieren also weiter.",
+      "en": "The new tool \"Delete face\" takes a fillet, a hole or a boss off a body again: click its faces, then \"Delete\", and the faces around them close the gap. The body stays exact, so Fillet, Chamfer and the STEP export still work on it."
+    }
   }
 ]

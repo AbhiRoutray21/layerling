@@ -72,6 +72,8 @@ L'IA fonctionne avec les mêmes fonctions que vous, via le même chemin que votr
 | `layerling_list_edges` | répertorie les véritables bords CAO d'un objet |
 | `layerling_apply_edge_treatment` | chanfreins ou congés arêtes choisies |
 | `layerling_hollow_object` | creuse un corps avec une paroi plane |
+| `layerling_list_faces` | répertorie les faces d'un corps exact |
+| `layerling_delete_faces` | supprime des faces et referme le vide |
 | `layerling_array_objects` | se multiplie en ligne ou sur un cercle |
 | `layerling_bundle_objects` | regroupe les objets comme Ctrl+B : ils se déplacent ensemble, gardent leur couleur et leur nature et sortent séparément lors d'un export |
 | `layerling_layer_text` | transforme un texte en une pile de calques pour une impression multicolore (lettres, bords plus larges, plaque sans trous) ou reconstitue une pile, avec un trou en porte-clés, les coins par calque et un bord de lettre arrondi ou chanfreiné ; avec une liste de noms, une balise par nom |

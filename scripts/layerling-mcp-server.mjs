@@ -150,6 +150,10 @@ async function callTool(name, args) {
       return bridgeCommand("delete_custom_shape", args);
     case "layerling_list_edges":
       return bridgeCommand("list_edges", args, 30000);
+    case "layerling_list_faces":
+      return bridgeCommand("list_faces", args, 30000);
+    case "layerling_delete_faces":
+      return bridgeCommand("delete_faces", args, 90000);
     case "layerling_hollow_object":
       return bridgeCommand("hollow_object", args, 90000);
     case "layerling_array_objects":

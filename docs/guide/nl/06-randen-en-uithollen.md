@@ -78,3 +78,17 @@ Een lichaam met een kamer, een blok met een gat dat niet helemaal doorloopt, gem
 Verander je later de maat van een uitgehold lichaam, dan holt layerling het meteen opnieuw uit op de nieuwe maat. De wand blijft zo dik als je hebt gekozen, ook bij ronde lichamen. Een cilinder die je de ene kant verder uittrekt dan de andere wordt een ellips.
 
 > **Tip:** Met een spuitmond van 0,4 mm is 1,2 tot 2 mm wand een goed begin: dun genoeg om materiaal te besparen, dik genoeg voor een stevig onderdeel.
+
+## Vlakken verwijderen
+
+Een afronding die in de weg zit, een gat op de verkeerde plek, een nok die je niet meer nodig hebt: {{ui:editor.tool.deleteFace}} haalt ze weer van het lichaam af, zonder dat je het opnieuw hoeft op te bouwen.
+
+1. Selecteer het lichaam en klik op {{ui:editor.tool.deleteFace}}, of klik met de rechtermuisknop op het lichaam en kies het in het menu.
+2. Klik op elk vlak van wat weg moet: de vlakken van een afgeronde rand, de wand van een gat, de zijkant en de bovenkant van een nok. Een gekozen vlak licht op; nog een klik haalt het er weer uit. Het venster telt de vlakken.
+3. Klik op {{ui:deleteFace.apply}} of druk op [[Delete]]. [[Esc]] sluit het gereedschap zonder iets te veranderen.
+
+De vlakken eromheen groeien tot de opening dicht is. Een blok met afgeronde bovenranden krijgt zijn scherpe randen terug, een gat is dicht, een nok is weg. Het lichaam blijft exact: je kunt het weer afronden en afschuinen, en de STEP-export houdt zijn echte vlakken. [[Ctrl]]+[[Z]] draait het verwijderen in één stap terug. Het staat ook onder {{ui:edge.featureHistory}} bij de afrondingen en afschuiningen, waar {{ui:edge.revertAction}} het terugdraait; {{ui:edge.editAction}} is er niet voor. Bij een groep wordt het resultaat één lichaam, zoals bij een randbewerking.
+
+Kies alle vlakken van wat weg moet, en alleen die. Als de vlakken eromheen de opening niet kunnen sluiten, zegt layerling dat en verandert er niets: een hoofdzijde van een blok heeft bijvoorbeeld geen buurvlak dat zijn plaats kan innemen. Verwijder je alleen de bodem van een kamer, dan wordt het een gat dat er helemaal doorheen gaat, omdat de wanden van de kamer doorlopen tot de andere kant.
+
+{{ui:editor.tool.deleteFace}} heeft exacte vlakken nodig: het werkt op onderdelen die als STEP zijn geïmporteerd en op de vormen van layerling. Wat layerling als mesh bewaart, heeft ze niet: een geïmporteerde STL, OBJ of 3MF, een gesplitst, om een cilinder gewikkeld of vereenvoudigd lichaam, of een heel gedetailleerde vorm zoals een lange tekst. Importeer een onderdeel als STEP als dat kan. Bij een gedetailleerd geïmporteerd onderdeel kunnen enkele vlakken te veel zijn voor de CAD-kernel: na 45 seconden wordt het verwijderen gestopt en verandert er niets. Een lichaam dat na een randbewerking met behouden randgrootte van grootte is veranderd, heeft op de nieuwe grootte geen exacte vlakken tot de grootteverandering is teruggedraaid.

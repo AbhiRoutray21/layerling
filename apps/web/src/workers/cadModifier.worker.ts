@@ -4,7 +4,8 @@ import { cadHasSolidBody } from "@/lib/cadSolidBody";
 import { OcctKernel, type ShapeHandle } from "occt-wasm";
 import { assertCadKernelRunnable } from "@/lib/wasmSupport";
 import { orientedFaceNormal, shellSolid } from "@/lib/cadShell";
-import type { CadModifierComponentMesh, CadModifierDeflection, CadModifierDisplayEdge, CadModifierEdge, CadModifierMeshPart, CadModifierPrimitivePart, CadModifierProfilePart, CadModifierWorkerRequest, CadModifierWorkerResponse } from "@/lib/cadModifierTypes";
+import { cadFaceList, cadFaceTessellation, DELETE_FACES_UNCHANGED_MESSAGE, deleteFacesSolid } from "@/lib/cadDeleteFaces";
+import type { CadModifierComponentMesh, CadModifierDeflection, CadModifierDisplayEdge, CadModifierEdge, CadModifierFaces, CadModifierMeshPart, CadModifierPrimitivePart, CadModifierProfilePart, CadModifierWorkerRequest, CadModifierWorkerResponse } from "@/lib/cadModifierTypes";
 import { cadProfileSolidMismatch, profileExtrusionSolid } from "@/lib/cadProfileSolid";
 import { importedStepBody } from "@/lib/cadImportedStep";
 import { threadPartSolid } from "@/lib/threadSolid";
@@ -25,6 +26,8 @@ let baseShape: ShapeHandle | null = null;
 let baseSolids: ShapeHandle[] = [];
 let edgeHandles: ShapeHandle[] = [];
 let edgeOwners: number[] = [];
+let faceHandles: ShapeHandle[] = [];
+let faceOwners: number[] = [];
 
 type CollectedCadEdgeGeometry = Omit<CadModifierEdge, "display" | "selectable"> & {
   curveType: string;
@@ -70,6 +73,8 @@ function releaseSession(cad: OcctKernel) {
   baseSolids = [];
   edgeHandles = [];
   edgeOwners = [];
+  faceHandles = [];
+  faceOwners = [];
 }
 
 function cadShapeIsValid(cad: OcctKernel, shape: ShapeHandle) {
@@ -723,6 +728,8 @@ function verwirfKernel(cad: OcctKernel | null) {
   baseSolids = [];
   edgeHandles = [];
   edgeOwners = [];
+  faceHandles = [];
+  faceOwners = [];
 }
 
 // Testing each edge alone costs one kernel call per edge, on a heavy body a
@@ -766,6 +773,31 @@ function culpritEdgeIds(cad: OcctKernel, solid: ShapeHandle, entries: { id: numb
   return failing.length ? failing : all;
 }
 
+// Which solid of the body each edge or face belongs to, found by hash and isSame.
+function componentOwners(cad: OcctKernel, handles: ShapeHandle[], type: "edge" | "face", unmappedMessage: string) {
+  const ownerHandles = baseSolids.map((solid) => cad.getSubShapes(solid, type));
+  try {
+    const ownerCandidates = new Map<number, Array<{ owner: number; handle: ShapeHandle }>>();
+    ownerHandles.forEach((componentHandles, owner) => {
+      componentHandles.forEach((handle) => {
+        const hash = cad.hashCode(handle, HASH_UPPER_BOUND);
+        const candidates = ownerCandidates.get(hash) ?? [];
+        candidates.push({ owner, handle });
+        ownerCandidates.set(hash, candidates);
+      });
+    });
+    return handles.map((handle) => {
+      const hash = cad.hashCode(handle, HASH_UPPER_BOUND);
+      const candidates = ownerCandidates.get(hash) ?? [];
+      const exact = candidates.find((candidate) => cad.isSame(handle, candidate.handle));
+      if (!exact) throw new Error(unmappedMessage);
+      return exact.owner;
+    });
+  } finally {
+    ownerHandles.forEach((componentHandles) => releaseHandles(cad, componentHandles));
+  }
+}
+
 async function bearbeiteAnfrage(request: CadModifierWorkerRequest, halter: { cad: OcctKernel | null }) {
   const cad = await kernel();
   halter.cad = cad;
@@ -782,26 +814,15 @@ async function bearbeiteAnfrage(request: CadModifierWorkerRequest, halter: { cad
     edgeHandles = collected.handles;
     baseSolids = activeCad.isSolid(baseShape) ? [baseShape] : activeCad.getSubShapes(baseShape, "solid");
     if (baseSolids.length === 0) throw new Error("The selected group contains no closed solid components");
-    const ownerEdgeHandles = baseSolids.map((solid) => activeCad.getSubShapes(solid, "edge"));
-    try {
-      const ownerCandidates = new Map<number, Array<{ owner: number; edge: ShapeHandle }>>();
-      ownerEdgeHandles.forEach((componentEdges, owner) => {
-        componentEdges.forEach((edge) => {
-          const hash = activeCad.hashCode(edge, HASH_UPPER_BOUND);
-          const candidates = ownerCandidates.get(hash) ?? [];
-          candidates.push({ owner, edge });
-          ownerCandidates.set(hash, candidates);
-        });
-      });
-      edgeOwners = edgeHandles.map((edge) => {
-        const hash = activeCad.hashCode(edge, HASH_UPPER_BOUND);
-        const candidates = ownerCandidates.get(hash) ?? [];
-        const exact = candidates.find((candidate) => activeCad.isSame(edge, candidate.edge));
-        if (!exact) throw new Error("A CAD edge could not be mapped to its solid component; restart the edge tool");
-        return exact.owner;
-      });
-    } finally {
-      ownerEdgeHandles.forEach((componentEdges) => releaseHandles(activeCad, componentEdges));
+    edgeOwners = componentOwners(activeCad, edgeHandles, "edge", "A CAD edge could not be mapped to its solid component; restart the edge tool");
+    let faces: CadModifierFaces | undefined;
+    if (request.faces) {
+      faceHandles = activeCad.getSubShapes(baseShape, "face");
+      faceOwners = componentOwners(activeCad, faceHandles, "face", "A CAD face could not be mapped to its solid component; restart the tool");
+      faces = {
+        list: cadFaceList(activeCad, baseShape).map((face) => ({ ...face, owner: faceOwners[face.id] ?? 0 })),
+        ...(request.faceMesh ? { mesh: cadFaceTessellation(activeCad, baseShape, tessellationOptions(cadModifierTessellationDeflection("standard", 1))) } : {}),
+      };
     }
     post({
       type: "ready",
@@ -809,12 +830,17 @@ async function bearbeiteAnfrage(request: CadModifierWorkerRequest, halter: { cad
       edges: collected.edges.map((edge) => ({ ...edge, owner: edgeOwners[edge.id] ?? 0 })),
       selectableEdgeIds: collected.selectableEdgeIds,
       sourceType: activeCad.getShapeType(baseShape),
-    });
+      ...(faces ? { faces } : {}),
+    }, faces?.mesh ? [faces.mesh.positions.buffer, faces.mesh.indices.buffer, faces.mesh.triangleFaces.buffer] : []);
     return;
   }
   if (baseShape === null) throw new Error("Prepare an object before previewing the modifier");
   const selected = request.edgeIds.map((id) => ({ id, edge: edgeHandles[id], owner: edgeOwners[id] })).filter((entry): entry is { id: number; edge: ShapeHandle; owner: number } => entry.edge !== undefined);
-  if (selected.length === 0 && request.kind !== "shell") throw new Error("Select at least one highlighted edge");
+  const selectedFaces = request.kind === "deleteFace"
+    ? (request.faceIds ?? []).map((id) => ({ id, face: faceHandles[id], owner: faceOwners[id] })).filter((entry): entry is { id: number; face: ShapeHandle; owner: number } => entry.face !== undefined)
+    : [];
+  if (request.kind === "deleteFace" && selectedFaces.length === 0) throw new Error("Select at least one face");
+  if (selected.length === 0 && request.kind !== "shell" && request.kind !== "deleteFace") throw new Error("Select at least one highlighted edge");
   const componentResults: ShapeHandle[] = [];
   let result: ShapeHandle | null = null;
   try {
@@ -825,6 +851,9 @@ async function bearbeiteAnfrage(request: CadModifierWorkerRequest, halter: { cad
       let component: ShapeHandle;
       if (request.kind === "shell") {
         component = shellSolid(activeCad, solid, request.amount, request.shellOpenings ?? "none", request.shellEdges);
+      } else if (request.kind === "deleteFace") {
+        const componentFaces = selectedFaces.filter((entry) => entry.owner === owner).map((entry) => entry.face);
+        component = componentFaces.length ? deleteFacesSolid(activeCad, solid, componentFaces) : activeCad.copy(solid);
       } else if (componentEdges.length === 0) {
         component = activeCad.copy(solid);
       } else {
@@ -845,7 +874,7 @@ async function bearbeiteAnfrage(request: CadModifierWorkerRequest, halter: { cad
       componentResults.push(component);
     }
     result = componentResults.length === 1 ? componentResults[0] : activeCad.makeCompound(componentResults);
-    if (!cadShapeIsValid(activeCad, result)) throw new Error("The chosen size creates invalid or overlapping edge geometry");
+    if (!cadShapeIsValid(activeCad, result)) throw new Error(request.kind === "deleteFace" ? DELETE_FACES_UNCHANGED_MESSAGE : "The chosen size creates invalid or overlapping edge geometry");
     const loose = cadModifierTessellationDeflection(request.quality, request.amount, request.minDeflection);
     const meshed = meshTreatedBody(activeCad, [...componentResults], result, loose, cadModifierCappedDeflection(request.quality, loose));
     // The body may have been replaced by fresh copies, meshed with the old angle.
@@ -931,9 +960,11 @@ self.onmessage = async (event: MessageEvent<CadModifierWorkerRequest>) => {
   }
   const kernelRefused = request.type === "preview" && (rawMessage.includes("WebAssembly.Exception") || rawMessage.includes("fillet:") || rawMessage.includes("chamfer:") || rawMessage.includes("chamferDistAngle:"));
   const message = kernelRefused
-    ? request.kind === "shell"
-      ? "The walls cannot be this thick for this body. Choose a thinner wall."
-      : `The selected edges cannot be ${request.kind === "fillet" ? "filleted" : "chamfered"} together at this size. Reduce the size or select fewer connected edges.`
+    ? request.kind === "deleteFace"
+      ? DELETE_FACES_UNCHANGED_MESSAGE
+      : request.kind === "shell"
+        ? "The walls cannot be this thick for this body. Choose a thinner wall."
+        : `The selected edges cannot be ${request.kind === "fillet" ? "filleted" : "chamfered"} together at this size. Reduce the size or select fewer connected edges.`
     : rawMessage || "The CAD kernel could not complete this edge treatment";
   if (request.type === "prepare" && halter.cad) releaseSession(halter.cad);
   const failedEdgeIds = kernelRefused && error instanceof EdgeTreatmentError ? error.failedEdgeIds : undefined;

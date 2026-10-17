@@ -79,3 +79,17 @@ Auch ein Körper mit einer Tasche lässt sich aushöhlen, etwa ein Block mit ein
 Änderst du später die Größe des ausgehöhlten Körpers, höhlt layerling ihn in der neuen Größe gleich noch einmal aus. Die Wand bleibt so dick, wie du sie gewählt hast, auch bei runden Körpern. Ein Zylinder, den du dabei in eine Richtung mehr ziehst als in die andere, wird zur Ellipse.
 
 > **Tipp:** Bei einer 0,4-mm-Düse sind 1,2 bis 2 mm Wandstärke ein guter Anfang: dünn genug, um Material zu sparen, dick genug für ein stabiles Teil.
+
+## Flächen löschen
+
+Eine Verrundung, die stört, ein Loch an der falschen Stelle, ein Zapfen, der nicht mehr gebraucht wird: {{ui:editor.tool.deleteFace}} nimmt sie wieder vom Körper, ohne dass du ihn neu bauen musst.
+
+1. Wähle den Körper aus und klicke auf {{ui:editor.tool.deleteFace}}, oder klicke mit der rechten Maustaste auf den Körper und wähle es im Menü.
+2. Klicke alle Flächen des Teils an, das weg soll: die Flächen einer gerundeten Kante, die Wand eines Lochs, Seite und Deckel eines Zapfens. Eine gewählte Fläche leuchtet auf; ein zweiter Klick nimmt sie wieder heraus. Das Fenster zählt die Flächen.
+3. Klicke auf {{ui:deleteFace.apply}} oder drücke [[Entf]]. [[Esc]] schließt das Werkzeug, ohne etwas zu ändern.
+
+Die Flächen ringsum wachsen, bis die Lücke geschlossen ist. Ein Quader mit gerundeten Oberkanten bekommt seine scharfen Kanten zurück, ein Loch ist geschlossen, ein Zapfen ist weg. Der Körper bleibt exakt: Er lässt sich wieder verrunden und fasen, und der STEP-Export behält seine echten Flächen. [[Strg]]+[[Z]] nimmt das Löschen in einem Schritt zurück. Es steht außerdem unter {{ui:edge.featureHistory}} bei den Verrundungen und Fasen, wo {{ui:edge.revertAction}} es zurücknimmt; {{ui:edge.editAction}} gibt es dafür nicht. Bei einer Gruppe wird daraus ein einziger Körper, wie bei einer Kantenbearbeitung.
+
+Wähle alle Flächen des Teils, das weg soll, und nur diese. Können die Flächen ringsum die Lücke nicht schließen, sagt layerling das, und nichts ändert sich: Eine Hauptseite eines Quaders etwa hat keine Nachbarfläche, die an ihre Stelle treten könnte. Löschst du nur den Boden einer Tasche, wird daraus ein durchgehendes Loch, weil die Wände der Tasche bis zur anderen Seite weiterlaufen.
+
+{{ui:editor.tool.deleteFace}} braucht exakte Flächen: Es geht bei Teilen, die als STEP importiert wurden, und bei layerlings Formen. Was layerling als Netz führt, hat keine: eine importierte STL-, OBJ- oder 3MF-Datei, ein geteilter, um einen Zylinder gewickelter oder vereinfachter Körper oder eine sehr detailreiche Form wie ein langer Text. Importiere ein Teil als STEP, wenn es das gibt. Bei einem detailreichen importierten Teil können einzelne Flächen den CAD-Rechenkern überfordern: Nach 45 Sekunden wird das Löschen abgebrochen, und nichts ändert sich. Ein Körper, der nach einer Kantenbearbeitung mit beibehaltener Kantengröße in der Größe geändert wurde, hat in der neuen Größe keine exakten Flächen, bis die Größenänderung zurückgenommen ist.

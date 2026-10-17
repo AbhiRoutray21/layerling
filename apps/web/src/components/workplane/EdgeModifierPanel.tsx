@@ -30,6 +30,8 @@ export type EdgeHistoryOption = {
   kind: CadModifierKind;
   amount: number;
   edgeCount: number;
+  /** Only for a deletion of faces. */
+  faceCount?: number;
   targetName: string;
   removesNewerCount: number;
   /** Opens the tool again with the value and edges it had. */
@@ -40,6 +42,9 @@ export type EdgeHistoryOption = {
 function edgeHistoryLabel(option: EdgeHistoryOption) {
   const size = String(Number(option.amount.toFixed(2)));
   if (option.kind === "shell") return t("edge.revertShell", { size });
+  if (option.kind === "deleteFace") {
+    return option.faceCount === 1 ? t("edge.revertDeleteFaceOne") : t("edge.revertDeleteFaceMany", { count: option.faceCount ?? 0 });
+  }
   if (option.edgeCount === 1) {
     return t(option.kind === "fillet" ? "edge.revertFilletOne" : "edge.revertChamferOne", { size });
   }
@@ -47,9 +52,9 @@ function edgeHistoryLabel(option: EdgeHistoryOption) {
 }
 
 /**
- * The treatments a body already has - fillets, chamfers, hollowing - with "Revert" for each and
+ * The treatments a body already has - fillets, chamfers, hollowing, deleted faces - with "Revert" for each and
  * "Edit" where the tool can be opened again with the same values (#227). The fillet and chamfer
- * tool and the hollow tool show the same list (#237).
+ * tool, the hollow tool and Delete face show the same list (#237).
  */
 export function EdgeFeatureHistory({
   appliedFeatureCount,

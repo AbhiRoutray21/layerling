@@ -726,6 +726,31 @@ export const tools = [
     },
   },
   {
+    name: "layerling_list_faces",
+    description: "List the faces of one object's exact body, for layerling_delete_faces: each with its id, its kind (plane, cylinder, cone, sphere, torus, bspline, ...), its area in square millimetres, its middle and, for a flat face, its outward normal, in world coordinates (y up). Only for exact bodies, STEP imports and layerling's shapes; whatever layerling keeps as a mesh (an imported STL, OBJ or 3MF, a split, wrapped or simplified body, a very detailed shape such as a long text) has no exact faces.",
+    inputSchema: {
+      ...editorTargetSchema,
+      required: ["id"],
+      properties: {
+        ...editorTargetSchema.properties,
+        id: { type: "string" },
+      },
+    },
+  },
+  {
+    name: "layerling_delete_faces",
+    description: "Delete faces of an exact body, as the editor's Delete face tool does: the faces around them grow until they close the gap, so a fillet, a hole, a boss or a step is gone and the body stays exact (fillet, chamfer and STEP export still work on it). Give every face of the feature, with ids from layerling_list_faces - the four faces of a box's rounded top edges, the wall of a hole, the side and top of a boss. When the faces around them cannot close the gap, nothing changes and the answer says so. Deleting only the floor of a pocket makes it a hole straight through. One undo step; undone like an edge treatment.",
+    inputSchema: {
+      ...editorTargetSchema,
+      required: ["id", "faceIds"],
+      properties: {
+        ...editorTargetSchema.properties,
+        id: { type: "string" },
+        faceIds: { type: "array", items: { type: "integer" }, description: "Face ids from layerling_list_faces." },
+      },
+    },
+  },
+  {
     name: "layerling_hollow_object",
     description: "Hollow a solid into walls of equal thickness, like a box, cup or case. The walls grow inward, so the outside keeps its size. `openings` chooses which flat sides stay open, measured against the world's axes: a list of any of top, bottom, front (+z), back (-z), left (-x) and right (+x) - for example [\"front\"] for a drawer slot - or one of the names top (default), bottom, top-bottom, or none for a sealed cavity. A side asked for in a list must have a flat face at the very edge of the body on that side. `edges` sets how the inner walls meet where the body has a step or opening: round (default, radius = wall thickness) or sharp. Can be undone like an edge treatment. Resizing the body later hollows it again at the new size a moment afterwards, so the walls keep their thickness.",
     inputSchema: {
