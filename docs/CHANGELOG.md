@@ -6,6 +6,7 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **A number at the mouse pointer counts the selection (#481):** Suggested by @prmod3d. While Shift is held and two or more bodies are selected, a small number follows the mouse pointer, just below it, so the tally of what has been selected stays where the eye is while clicking one body after the other. It is hidden over the panels, and shows for a mouse only: a finger would cover it.
 - **Back up all stands once on the start page:** The button was there twice, in the notice about designs kept in the browser and again in the row above the design cards, with the same words one below the other. The one in the row is gone; the notice keeps Back up all and Restore backup.
 ## 1.86.1
 

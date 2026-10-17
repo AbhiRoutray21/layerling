@@ -5,7 +5,7 @@ summary: Výběr objektů, seznam objektů, zarovnání, zrcadlení, otáčení,
 
 ## Výběr
 
-Kliknutí vybere tvar, [[Shift]] přidává nebo odebírá další. Kliknutí na prázdné místo a [[Esc]] výběr zruší. Tažením rámečku na prázdné pracovní ploše vyberete všechny dotčené tvary. Se [[Shift]] se dosud nevybrané přidají a vybrané odeberou. [[Ctrl]]+[[A]] vybere všechna viditelná tělesa. Když táhneš těleso nebo úchyt rámečku, [[Esc]] akci zruší, dokud je tlačítko myši ještě stisknuté: vše se vrátí do původního stavu a do historie se nic nepřidá.
+Kliknutí vybere tvar, [[Shift]] přidává nebo odebírá další. Dokud držíte [[Shift]] a jsou vybrány dva nebo více tvarů, počítá je malé číslo pod ukazatelem myši. Kliknutí na prázdné místo a [[Esc]] výběr zruší. Tažením rámečku na prázdné pracovní ploše vyberete všechny dotčené tvary. Se [[Shift]] se dosud nevybrané přidají a vybrané odeberou. [[Ctrl]]+[[A]] vybere všechna viditelná tělesa. Když táhneš těleso nebo úchyt rámečku, [[Esc]] akci zruší, dokud je tlačítko myši ještě stisknuté: vše se vrátí do původního stavu a do historie se nic nepřidá.
 
 Překážející objekt skryjte pomocí {{ui:editor.tool.hideSelected}}, [[Ctrl]]+[[H]]. V projektu zůstane, ale nebude viditelný ani zahrnutý v exportu. Exportní okno předem uvede počet skrytých dílů. [[Ctrl]]+[[Shift]]+[[H]] všechny zobrazí. Proti nechtěným změnám chrání zámek nahoře v nastavení nebo [[Ctrl]]+[[L]]. Zamčený tvar nelze přesouvat, měnit jeho rozměry, otáčet, přebarvovat ani mazat. Úchyty zešednou, u horní šipky se objeví zámek a editační nástroje se vypnou. Rozměry lze stále zjistit najetím na úchyt. Klávesa pro změnu ohlásí zamčený objekt. Obsahuje-li výběr zamčený tvar, nemění se ani ostatní části. Skrytí, přejmenování, kopírování a duplikování zůstávají dostupné.
 

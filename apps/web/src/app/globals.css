@@ -8047,6 +8047,28 @@ html[data-theme="dark"] .inspector-bundle-note {
   height: 100%;
 }
 
+.selection-counter {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 60;
+  min-width: 22px;
+  padding: 1px 7px;
+  border-radius: 999px;
+  color: #fff;
+  background: #bf6508;
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 20px;
+  text-align: center;
+  pointer-events: none;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+}
+
+.selection-counter[hidden] {
+  display: none;
+}
+
 .selection-marquee {
   position: absolute;
   z-index: 3;

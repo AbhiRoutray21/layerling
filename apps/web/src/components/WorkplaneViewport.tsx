@@ -111,6 +111,7 @@ import { torusTessellation } from "@/lib/torusTessellation";
 import type { LayerlingMcpViewFace } from "@/lib/layerlingMcpProtocol";
 import { liftHandleScreenPoint } from "@/components/workplane/transformOverlayTypes";
 import { ownSideForMark } from "@/lib/dimensionSides";
+import { SelectionCounter } from "@/components/workplane/SelectionCounter";
 import {
   TransformOverlay,
   continuousSnappedWheelRotation,
@@ -8840,6 +8841,7 @@ export function WorkplaneViewport({
             onPointerCancel={pickOnly ? pickOnlyPointer.onPointerCancel : finishDrag}
             onPointerLeave={handlePointerLeave}
           />
+          {!workplaneMode && !splitActive ? <SelectionCounter count={selectedIds.length} hostRef={hostRef} /> : null}
           {!workplaneMode && !splitActive && marqueeRect ? <div className={marqueeTouching ? "selection-marquee touching" : "selection-marquee"} style={marqueeRect} /> : null}
           {!workplaneMode && !splitActive && moveDimensionsEnabled && moveDimensionOverlay ? (
             <MoveDimensionOverlay

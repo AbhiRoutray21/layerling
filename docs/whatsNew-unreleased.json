@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "title": {
+      "de": "Eine Zahl am Mauszeiger zählt die Auswahl mit",
+      "en": "A number at the mouse pointer counts the selection"
+    },
+    "body": {
+      "de": "Wenn du mit Umschalt mehrere Körper auswählst, steht jetzt eine kleine Zahl unter dem Mauszeiger, solange Umschalt gehalten wird und zwei oder mehr Körper ausgewählt sind. So behältst du beim Anklicken im Blick, wie viele es schon sind, ohne zum Eigenschaften-Fenster zu schauen. Nur mit der Maus: Ein Finger würde die Zahl verdecken.",
+      "en": "When you select several bodies with Shift, a small number now stands below the mouse pointer while Shift is held and two or more bodies are selected. While clicking you keep the tally in view without glancing at the Properties panel. Mouse only: a finger would cover the number."
+    }
+  }
+]
