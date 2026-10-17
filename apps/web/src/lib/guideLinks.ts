@@ -23,6 +23,7 @@ export const GUIDE_CHAPTERS = {
   files: { de: "dateien-und-speichern", en: "files-and-saving", nl: "bestanden-en-opslaan", ru: "files-and-saving", cs: "files-and-saving", sl: "datoteke-in-shranjevanje", hu: "files-and-saving" },
   shortcuts: { de: "tastenkuerzel", en: "shortcuts", nl: "sneltoetsen", ru: "shortcuts", cs: "shortcuts", sl: "bliznjice", hu: "shortcuts" },
   ai: { de: "ki-mit-mcp", en: "ai-with-mcp", nl: "ai-met-mcp", ru: "ai-with-mcp", cs: "ai-with-mcp", sl: "ai-z-mcp", hu: "ai-with-mcp" },
+  tablet: { de: "tablet-und-touch", en: "tablet-and-touch", nl: "tablet-en-touch", ru: "tablet-and-touch", cs: "tablet-and-touch", sl: "tablica-in-dotik", hu: "tablet-and-touch" },
   offline: { de: "offline-und-installieren", en: "offline-and-install", nl: "offline-en-installeren", ru: "offline-and-install", cs: "offline-and-install", sl: "offline-in-namestitev", hu: "offline-and-install" },
 } as const satisfies Record<string, { en: string } & Partial<Record<Language, string>>>;
 

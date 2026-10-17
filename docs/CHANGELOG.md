@@ -6,6 +6,7 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **A chapter of the guide for tablets, and a hint on the start page (#467):** What a tablet needs was spread over the guide: the long press menu, Select multiple, turning with one finger, the Touch rotate switch, the stylus. The new chapter **Tablet and touch** (chapter 17) puts it in one place, with what to know on an iPad: install it as an app from the Home Screen, that Safari deletes what a website stored after seven days without a visit unless it is a Home Screen app (as WebKit describes it), downloads instead of saving into a folder, and **Back up all**. It is there in English, German, Dutch, French, Russian, Czech and Slovenian; the others show the English text. On a device whose main input is touch, a strip on the start page points to it once: it has a button to the chapter, a cross, and is gone for good after either. A computer with a mouse never shows it. Suggested after a question from an iPad user.
 - **The Face tool starts from its defaults (#471):** It opened with the values of its last use, even when nothing was created, so an inset that fitted one face came along to the next, where it could be too wide and leave little of the face, or nothing. Each time it opens it now starts from an inset of 0, no corner radius, a depth of 2 mm and **Out: add material**; choosing another face while it is open keeps the values. Contributed by @mlugo-apx.
 
 ## 1.85.0

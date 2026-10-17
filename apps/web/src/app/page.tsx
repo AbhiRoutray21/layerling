@@ -20,6 +20,7 @@ import { localizedError } from "@/lib/userErrors";
 import { GuideHelpLink } from "@/components/GuideHelpLink";
 import { WelcomeGuideBody } from "@/components/WelcomeGuide";
 import { InstallAppHint } from "@/components/InstallAppHint";
+import { TabletHint } from "@/components/TabletHint";
 import { WhatsNewCard } from "@/components/WhatsNewCard";
 import { UpdatePreview } from "@/components/UpdatePreview";
 import { useWhatsNew } from "@/lib/useWhatsNew";
@@ -2996,6 +2997,7 @@ function Dashboard({
               ) : null}
               {whatsNew.view ? <WhatsNewCard view={whatsNew.view} current={LYL_CREATED_WITH_VERSION} onClose={whatsNew.dismiss} /> : null}
               <InstallAppHint />
+              <TabletHint />
               {/* The designs live in the browser, and a browser can fail or break with an update: said plainly and always (not to be closed). */}
               <aside className="storage-notice" aria-label={t("storageNotice.title")}>
                 <span className="storage-notice-icon" aria-hidden="true">

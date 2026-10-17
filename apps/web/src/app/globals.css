@@ -1579,6 +1579,10 @@ html[data-theme="dark"] .dashboard-trademark {
   cursor: pointer;
 }
 
+a.install-app-hint-button {
+  text-decoration: none;
+}
+
 .install-app-hint-button:hover {
   background: #a95805;
 }

@@ -475,6 +475,10 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .dashboard-trademark {
   border: 0;
 }
 
+:where(html[data-theme="dark"][data-palette="graphite"]) a.install-app-hint-button {
+  text-decoration: none;
+}
+
 :where(html[data-theme="dark"][data-palette="graphite"]) .install-app-hint-button:hover {
   background: #a95805;
 }
