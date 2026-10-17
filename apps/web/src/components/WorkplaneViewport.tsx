@@ -4154,18 +4154,21 @@ export function WorkplaneViewport({
         if (object) bounds.expandByObject(object);
       });
       if (bounds.isEmpty()) return;
-      const moved = bounds.getCenter(new THREE.Vector3()).add(new THREE.Vector3(translation.x, translation.y, translation.z));
-      const projected = moved.clone().project(state.camera);
-      // Past the part of the picture really seen - not under the camera bar or
-      // the settings - less a margin, the view takes the same step, so the
-      // bodies stay where they are on screen.
+      const center = bounds.getCenter(new THREE.Vector3());
+      const moved = center.clone().add(new THREE.Vector3(translation.x, translation.y, translation.z));
+      // Past the part of the picture really seen - not under the camera bar or the settings -, the view
+      // takes the same step, so the bodies stay where they are on screen. Only for a body that was in
+      // the picture and would leave it: one that already lies outside simply moves.
+      // Following that too made the body stand still and everything else slide past (#486).
       const canvas = state.renderer.domElement;
       const area = visibleWorkArea(canvas, canvas.clientWidth, canvas.clientHeight);
-      const px = (projected.x + 1) / 2 * canvas.clientWidth;
-      const py = (1 - projected.y) / 2 * canvas.clientHeight;
-      const margin = 60;
-      const inside = projected.z < 1 && px >= area.left + margin && px <= area.right - margin && py >= area.top + margin && py <= area.bottom - margin;
-      if (inside) return;
+      const isInPicture = (point: THREE.Vector3) => {
+        const projected = point.clone().project(state.camera);
+        const px = (projected.x + 1) / 2 * canvas.clientWidth;
+        const py = (1 - projected.y) / 2 * canvas.clientHeight;
+        return projected.z < 1 && px >= area.left && px <= area.right && py >= area.top && py <= area.bottom;
+      };
+      if (!isInPicture(center) || isInPicture(moved)) return;
       const step = new THREE.Vector3(translation.x, translation.y, translation.z);
       state.camera.position.add(step);
       state.controls.target.add(step);

@@ -38,5 +38,15 @@
       "de": "Bei kleinen Teilen lagen die Griffe von „Ausrichten“ so dicht, dass man sie nicht einzeln anklicken konnte, und beim starken Hineinzoomen verschwanden sie ganz. Jetzt halten die drei Griffe einer Achse einen Mindestabstand ein, und Griffe, die noch vor der Kamera liegen, bleiben auch beim Zoomen sichtbar.",
       "en": "On small parts the handles of Align lay so close that you could not click them one by one, and zooming far in made them disappear. Now the three handles of an axis keep a minimum distance, and handles that are still in front of the camera stay visible when you zoom."
     }
+  },
+  {
+    "title": {
+      "de": "Pfeiltasten: die Ansicht zieht nur noch bei Bedarf mit",
+      "en": "Arrow keys: the view follows only when needed"
+    },
+    "body": {
+      "de": "Die Pfeiltasten schieben einen Körper, und die Ansicht geht mit, wenn er sonst aus dem Bild liefe. Bisher zog sie auch mit, wenn der Körper schon am Rand oder außerhalb lag, zum Beispiel nach starkem Zoom: Dann stand er still, und alles andere wanderte. Jetzt geht die Ansicht nur noch mit, wenn der Körper im Bild ist und es verlassen würde.",
+      "en": "The arrow keys move a body, and the view goes along when it would otherwise leave the picture. Before, it also went along when the body already lay at the edge or outside, after zooming in far for example: then the body stood still and everything else slid past. Now the view goes along only when the body is in the picture and would leave it."
+    }
   }
 ]
