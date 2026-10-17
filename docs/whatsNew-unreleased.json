@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "title": {
+      "de": "Das Werkzeug „Fläche“ beginnt mit seinen Vorgaben",
+      "en": "The Face tool starts from its defaults"
+    },
+    "body": {
+      "de": "Das Werkzeug „Fläche“ startete mit den Werten vom letzten Mal, auch wenn nichts erzeugt wurde, so konnte ein Rand, der zu einer Fläche passte, für die nächste zu breit sein. Jetzt beginnt es jedes Mal mit Rand 0, ohne Eckenradius, mit 2 mm Tiefe und „Heraus: Material hinzufügen“.",
+      "en": "The Face tool opened with the values from last time, even when nothing was created, so an inset that fitted one face could be too wide for the next. Now it starts each time with an inset of 0, no corner radius, a depth of 2 mm and “Out: add material”."
+    }
+  }
+]

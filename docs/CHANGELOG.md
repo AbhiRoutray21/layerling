@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **The Face tool starts from its defaults (#471):** It opened with the values of its last use, even when nothing was created, so an inset that fitted one face came along to the next, where it could be too wide and leave little of the face, or nothing. Each time it opens it now starts from an inset of 0, no corner radius, a depth of 2 mm and **Out: add material**; choosing another face while it is open keeps the values. Contributed by @mlugo-apx.
+
 ## 1.85.0
 
 - **A width for an SVG or a picture in the import window (#448):** An SVG came in at its own size and had to be resized afterwards, where Tinkercad asks for the size before the drawing lands on the plate. The import window has a field **SVG and picture: width in mm** now: type the width, choose the file, and the drawing is scaled to it, its sketch with it, so the body is built clean at that size. Empty keeps the own size (a picture 50 mm wide as before). The width counts for the next import only and is empty again after it. Through the AI bridge `layerling_import_file` takes `svgWidth`. Asked for by @shanni1783 on GitHub.
