@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import * as THREE from "three";
-import { pivotKeptAhead, ZOOM_PIVOT_REACH_MM } from "@/lib/zoomPivot";
+import { pivotKeptAhead, pivotHeightRange, ZOOM_PIVOT_REACH_MM } from "@/lib/zoomPivot";
 
 const limits = { halfWidth: 110, halfDepth: 110, minY: -70, maxY: 120 };
 const v = (x: number, y: number, z: number) => new THREE.Vector3(x, y, z);
@@ -36,4 +36,25 @@ describe("keeping the pivot ahead of the camera while zooming at nothing", () =>
     expect(next.z).toBeGreaterThanOrEqual(-limits.halfDepth - 1e-9);
   });
 
+});
+
+describe("pivotHeightRange (#425)", () => {
+  const base = { minY: -70, maxY: 120 };
+
+  it("keeps the range the pivot always had when the bodies are low", () => {
+    expect(pivotHeightRange([{ elevation: 0, extent: 30 }], base)).toEqual(base);
+    expect(pivotHeightRange([], base)).toEqual(base);
+  });
+
+  it("reaches up to the top of a body set high above the plate", () => {
+    expect(pivotHeightRange([{ elevation: 0, extent: 30 }, { elevation: 900, extent: 30 }], base)).toEqual({ minY: -70, maxY: 930 });
+  });
+
+  it("reaches down to the foot of a body sunk below the plate", () => {
+    expect(pivotHeightRange([{ elevation: -400, extent: 30 }], base).minY).toBe(-400);
+  });
+
+  it("takes in the part the camera was last sent to", () => {
+    expect(pivotHeightRange([], base, { minY: 300, maxY: 500 })).toEqual({ minY: -70, maxY: 500 });
+  });
 });

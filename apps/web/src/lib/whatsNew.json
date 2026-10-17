@@ -1,5 +1,245 @@
 [
   {
+    "version": "1.86.2",
+    "items": [
+      {
+        "title": {
+          "de": "Eine Zahl am Mauszeiger zählt die Auswahl mit",
+          "en": "A number at the mouse pointer counts the selection"
+        },
+        "body": {
+          "de": "Wenn du mit Umschalt mehrere Körper auswählst, steht jetzt eine kleine Zahl unter dem Mauszeiger, solange Umschalt gehalten wird und zwei oder mehr Körper ausgewählt sind. So behältst du beim Anklicken im Blick, wie viele es schon sind, ohne zum Eigenschaften-Fenster zu schauen. Nur mit der Maus: Ein Finger würde die Zahl verdecken.",
+          "en": "When you select several bodies with Shift, a small number now stands below the mouse pointer while Shift is held and two or more bodies are selected. While clicking you keep the tally in view without glancing at the Properties panel. Mouse only: a finger would cover the number."
+        }
+      },
+      {
+        "title": {
+          "de": "Interaktive Hilfe antwortet auch bei ausgegrauten Knöpfen",
+          "en": "Interactive Help also answers for greyed-out buttons"
+        },
+        "body": {
+          "de": "Bei einem ausgegrauten Knopf, etwa „Ansicht auf die Auswahl zentrieren“, solange nichts ausgewählt ist, blieb die Interaktive Hilfe stumm. Jetzt antwortet sie auch dort und führt zum passenden Abschnitt der Anleitung, so kannst du nachlesen, wozu der Knopf da ist und warum er gerade nicht geht.",
+          "en": "With a greyed-out button, such as \"Center view on selection\" while nothing is selected, Interactive Help stayed silent. Now it answers there too and leads to the matching section of the guide, so you can read what the button is for and why it does not work at the moment."
+        }
+      },
+      {
+        "title": {
+          "de": "Die Formen-Bibliothek lässt sich verschieben und offen halten",
+          "en": "The shape library can be moved and kept open"
+        },
+        "body": {
+          "de": "Die Bibliothek der Formen deckte beim Platzieren die Stelle ab, auf die du zielst. Jetzt verschiebst du sie an ihrer Titelleiste, zum Beispiel über das Eigenschaften-Fenster; ein Doppelklick auf die Titelleiste setzt sie zurück unter ihren Knopf. Mit der Stecknadel in der Titelleiste bleibt sie offen, wenn du mehrere Formen nacheinander setzen willst. Ohne Nadel schließt sie sich wie bisher nach jeder Form. Das gilt auch für die Formen in der Skizze.",
+          "en": "The shape library covered the spot you aim at while placing. Now you move it by its title bar, over the Properties panel for example; a double-click on the title bar puts it back under its button. The pin in the title bar keeps it open when you want to put several shapes one after the other. Without the pin it closes after each shape, as it did. The same goes for the shapes of the sketch."
+        }
+      }
+    ]
+  },
+  {
+    "version": "1.86.1",
+    "items": [
+      {
+        "title": {
+          "de": "Eine Zahl am Rand eines liegenden Körpers ändert das richtige Maß",
+          "en": "A number on the edge of a body lying on its side changes the right measure"
+        },
+        "body": {
+          "de": "Bei einer Arbeitsfläche auf einer Fläche und einem Körper, der auf der Seite liegt (zum Beispiel ein um 90° gedrehtes Rundes Dach), landete die Zahl an der senkrechten Kante im falschen Feld: Gabst du eine neue Höhe ein, änderte sich eine andere Seite. Die Zahl gehört jetzt zu der Seite, an der sie steht, wie bei einem Quader, der um eine Vierteldrehung gedreht ist.",
+          "en": "With a workplane on a face and a body lying on its side (a Round Roof turned by 90°, for example), the number on the vertical edge went into the wrong field: type a new height and another side changed. The number now belongs to the side it stands at, as it already does for a box turned by a quarter."
+        }
+      }
+    ]
+  },
+  {
+    "version": "1.86.0",
+    "items": [
+      {
+        "title": {
+          "de": "Das Werkzeug „Fläche“ beginnt mit seinen Vorgaben",
+          "en": "The Face tool starts from its defaults"
+        },
+        "body": {
+          "de": "Das Werkzeug „Fläche“ startete mit den Werten vom letzten Mal, auch wenn nichts erzeugt wurde, so konnte ein Rand, der zu einer Fläche passte, für die nächste zu breit sein. Jetzt beginnt es jedes Mal mit Rand 0, ohne Eckenradius, mit 2 mm Tiefe und „Heraus: Material hinzufügen“.",
+          "en": "The Face tool opened with the values from last time, even when nothing was created, so an inset that fitted one face could be too wide for the next. Now it starts each time with an inset of 0, no corner radius, a depth of 2 mm and “Out: add material”."
+        }
+      },
+      {
+        "title": {
+          "de": "Ein Kapitel für Tablets",
+          "en": "A chapter for tablets"
+        },
+        "body": {
+          "de": "Die Anleitung hat ein neues Kapitel „Tablet und Touch“: Gesten, mehrere Körper wählen, das Menü des langen Drucks, der Stift und was auf dem iPad zu wissen ist. Auf einem Touchgerät weist ein Hinweis auf der Startseite einmal darauf hin.",
+          "en": "The guide has a new chapter “Tablet and touch”: gestures, selecting several bodies, the long press menu, the stylus and what to know on an iPad. On a touch device a hint on the start page points to it once."
+        }
+      },
+      {
+        "title": {
+          "de": "Fläche löschen",
+          "en": "Delete face"
+        },
+        "body": {
+          "de": "Mit dem neuen Werkzeug „Fläche löschen“ nimmst du eine Verrundung, ein Loch oder einen Zapfen wieder vom Körper: Klicke die Flächen an und dann auf „Löschen“, und die Flächen ringsum schließen die Lücke. Der Körper bleibt exakt, Verrundung, Fase und STEP-Export funktionieren also weiter.",
+          "en": "The new tool \"Delete face\" takes a fillet, a hole or a boss off a body again: click its faces, then \"Delete\", and the faces around them close the gap. The body stays exact, so Fillet, Chamfer and the STEP export still work on it."
+        }
+      },
+      {
+        "title": {
+          "de": "Eigene Formen hängen am Zeiger",
+          "en": "Custom shapes hang on the pointer"
+        },
+        "body": {
+          "de": "Ein Klick auf eine eigene Form setzte sie sofort in die Mitte der Arbeitsfläche. Jetzt hängt sie wie die Formen der Bibliothek am Zeiger, folgt ihm auch über die Flächen anderer Körper, und ein Klick setzt sie ab. Esc legt sie weg.",
+          "en": "A click on a custom shape put it into the middle of the workplane at once. Now it hangs on the pointer like the shapes of the library, follows it also over the faces of other bodies, and a click sets it down. Esc puts it away."
+        }
+      },
+      {
+        "title": {
+          "de": "Zu große Entwürfe werden trotzdem gespeichert",
+          "en": "A design that is too big is saved anyway"
+        },
+        "body": {
+          "de": "Ein Entwurf mit sehr großen Netzen und langem Verlauf scheiterte bei fast jeder Änderung am Speichern, nur mit dem Hinweis „Die Formen konnten nicht gespeichert werden“. Jetzt nennt die Meldung den Grund (zu groß für die Projektdatei oder kein Platz mehr im Browser). Ist nur der ganze Verlauf zu viel, behält die gespeicherte Kopie die neuesten Schritte, die passen, und sagt es einmal. Rückgängig geht in der offenen Sitzung weiter über alle Schritte.",
+          "en": "A design with very large meshes and a long history failed to save after almost every change, with only the note that the shapes could not be saved. Now the message names the reason (too big for the project file, or no room left in the browser). If only the whole history is too much, the stored copy keeps the newest steps that fit, and says so once. Undo in the open session still goes through every step."
+        }
+      },
+      {
+        "title": {
+          "de": "Eine Linie um eine nachgezeichnete Skizze läuft nicht mehr in die Zeitüberschreitung",
+          "en": "A line round a traced sketch no longer times out"
+        },
+        "body": {
+          "de": "Eine Skizze aus einem SVG mit vielen kleinen Kurven (eine nachgezeichnete Zeichnung) brach mit „OpenCascade timed out while building the sketch“ ab, sobald eine Linie darum gelegt wurde. Die Kurven werden jetzt nur so fein in Stücke geteilt, wie es für 0,01 mm nötig ist, und die Gültigkeitsprüfung, die bei sehr vielen Kanten Minuten brauchte, entfällt bei so großen Skizzen. Ein solcher Körper entsteht nun in wenigen Sekunden statt in einer Minute.",
+          "en": "A sketch from an SVG with many small curves (a traced drawing) stopped with “OpenCascade timed out while building the sketch” as soon as a line was set round it. The curves are now cut into pieces only as finely as 0.01 mm needs, and the validity check, which took minutes with very many edges, is left out for sketches that large. Such a body now builds in a few seconds instead of a minute."
+        }
+      },
+      {
+        "title": {
+          "de": "Die Interaktive Hilfe trifft mehr Knöpfe",
+          "en": "Interactive Help hits more buttons"
+        },
+        "body": {
+          "de": "Für einige Knöpfe fand die Interaktive Hilfe nichts oder führte zur falschen Stelle: Einfügen, Löschen, Gruppierung aufheben, Arbeitsbereich-Einstellungen, Farbschema, die Fußzeile und andere. Das erste Kapitel der Anleitung hat jetzt den Abschnitt „Die Knöpfe rund um die Arbeitsfläche“, und die Hilfe führt dorthin.",
+          "en": "For some buttons Interactive Help found nothing or led to the wrong section: Paste, Delete, Ungroup, Workspace settings, Theme, the footer and others. The first chapter of the guide now has a section, The buttons around the work area, and the help leads there."
+        }
+      },
+      {
+        "title": {
+          "de": "F zoomt auf die Auswahl, wie in Tinkercad",
+          "en": "F zooms to the selection, as in Tinkercad"
+        },
+        "body": {
+          "de": "Die Taste F zoomt jetzt auf das, was ausgewählt ist, und holt die ganze Szene ins Bild, wenn nichts ausgewählt ist. Bisher zeigte F immer die ganze Szene, und für die Auswahl brauchte man Umschalt+F, das weiterhin geht. Die ganze Szene zeigt auch jetzt immer die Taste Pos1 und der Haus-Knopf. In der Skizze gilt dasselbe.",
+          "en": "The F key now zooms to what is selected, and brings the whole scene into view when nothing is selected. Until now F always showed the whole scene, and the selection needed Shift+F, which still works. The whole scene is always shown by the Home key and the house button. The sketch works the same way."
+        }
+      },
+      {
+        "title": {
+          "de": "Verdrehte Sterne bleiben gerade",
+          "en": "A twisted star stays straight"
+        },
+        "body": {
+          "de": "Ein Stern, den du über seine Höhe verdrehst, drehte sich um die Mitte seines Kastens statt um seine eigene Mitte. Weil ein Fünfstern im Kasten nicht zentriert ist, kreiste seine Mitte um die Achse, und die Zacken ragten unterschiedlich weit heraus. Jetzt dreht der Stern sich um seine eigene Mitte, und die Achse bleibt gerade.",
+          "en": "A star that you twist over its height turned about the middle of its box instead of its own middle. As a five-pointed star is not centred in its box, its middle circled round the axis and the tips stuck out by different amounts. Now the star turns about its own middle and the axis stays straight."
+        }
+      },
+      {
+        "title": {
+          "de": "Die Ansicht folgt Körpern, die hoch über der Platte stehen",
+          "en": "The view follows bodies set high above the plate"
+        },
+        "body": {
+          "de": "Seit die Höhe nicht mehr bei 220 mm endet, konnte die Ansicht einen Körper hoch über der Platte nicht in die Mitte nehmen: „Auf die Auswahl zoomen“ ließ ihn am oberen Rand verschwinden, und der Drehpunkt blieb bei 120 mm hängen. Der Drehpunkt reicht jetzt bis zur Oberkante des höchsten Körpers (und nach unten bis zum Fuß des tiefsten), so zoomt, verschiebt und dreht die Ansicht auch dort.",
+          "en": "Since a height no longer ends at 220 mm, the view could not take a body high above the plate into its middle: Zoom to the selection let it slip off the top edge, and the pivot stayed stuck at 120 mm. The pivot now reaches up to the top of the highest body (and down to the foot of the lowest), so the view zooms, shifts and turns up there as well."
+        }
+      },
+      {
+        "title": {
+          "de": "layerling als App installieren",
+          "en": "Install layerling as an app"
+        },
+        "body": {
+          "de": "Auf der Startseite und im Editor (dort nach einer halben Minute Arbeit) empfiehlt jetzt eine auffällige Karte, layerling als App zu installieren: Sie startet schneller, läuft ohne Internet und muss nicht jedes Mal neu geladen werden. Du verlierst nichts, denn neue Versionen zeigt layerling weiter an. „Jetzt nicht“ blendet die Karte zwei Wochen aus.",
+          "en": "The start page and the editor (there after half a minute of work) now have a card that recommends installing layerling as an app: it starts faster, works without internet and does not have to be loaded each time. You lose nothing, as layerling still tells you about new versions. \"Not now\" hides the card for two weeks."
+        }
+      },
+      {
+        "title": {
+          "de": "Offene Skizzenlinie: die Meldung nennt den Weg",
+          "en": "Open sketch line: the message names the way"
+        },
+        "body": {
+          "de": "Eine offene Linie in der Skizze lässt sich nicht ausformen, weil die Kontur geschlossen sein muss. Die Meldung sagt jetzt dazu, dass du die Linie als Kontur bauen kannst: Schalte „Als Kontur bauen“ ein, dann bekommt sie eine Breite.",
+          "en": "An open line in the sketch cannot be extruded, as the outline has to be closed. The message now adds that you can build the line as a stroke: tick \"Build as a stroke\" in the Finish section and it gets a width."
+        }
+      },
+      {
+        "title": {
+          "de": "Französisch: treffendere Namen für fünf Formen",
+          "en": "French: better names for five shapes"
+        },
+        "body": {
+          "de": "Die Senker, das gebogene Rohr und der Halbzylinder heißen auf Französisch jetzt so, wie sie in der Werkstatt heißen: Trou lamé, Trou fraisé, Trou doublement fraisé, Tube cintré und Demi-cylindre. Auch die „Kontur“ hieß dort versehentlich wie ein Schlaganfall und heißt jetzt „Trait“.",
+          "en": "The counterbores, the bent tube and the half cylinder now carry the names they have in a French workshop: Trou lamé, Trou fraisé, Trou doublement fraisé, Tube cintré and Demi-cylindre. The \"stroke\" was also called a stroke in the medical sense by mistake; it is \"Trait\" now."
+        }
+      }
+    ]
+  },
+  {
+    "version": "1.85.0",
+    "items": [
+      {
+        "title": {
+          "de": "„Teile trennen“ per Rechtsklick",
+          "en": "Separate Parts by right-click"
+        },
+        "body": {
+          "de": "Besteht eine Form aus mehreren losen Stücken, etwa ein STL aus getrennten Teilen oder ein Text aus einzelnen Buchstaben, findest du „Teile trennen“ jetzt auch im Menü, das sich mit einem Rechtsklick auf die Form öffnet.",
+          "en": "If a shape is made of several loose pieces, such as an STL of separate parts or a text of single letters, you now find Separate Parts in the menu that opens with a right click on the shape too."
+        }
+      },
+      {
+        "title": {
+          "de": "Tab springt durch die Maßfelder an der Form",
+          "en": "Tab moves through the dimension boxes on the shape"
+        },
+        "body": {
+          "de": "Klickst du ein Maß an der Form an und drückst Tab, übernimmt layerling die Zahl und öffnet das nächste Feld: Breite, Tiefe, Höhe. Umschalt+Tab geht zurück. Vorher sprang Tab auf die Eckgriffe.",
+          "en": "If you click a dimension on the shape and press Tab, layerling keeps the number and opens the next box: width, depth, height. Shift+Tab goes back. Before, Tab jumped to the corner handles."
+        }
+      },
+      {
+        "title": {
+          "de": "Tablet: mehrere Körper auswählen",
+          "en": "Tablet: select several bodies"
+        },
+        "body": {
+          "de": "Im Menü des langen Drucks gibt es jetzt „Mehrere auswählen“: Jedes Tippen auf einen Körper nimmt ihn zur Auswahl dazu oder wieder heraus, bis du auf die leere Fläche tippst oder Esc drückst. So geht, was am Rechner Umschalt+Klick ist, auch ohne Taste.",
+          "en": "The long press menu now has “Select multiple”: each tap on a body adds it to the selection or takes it out again, until you tap empty space or press Esc. It does what Shift+click does on a computer, without the key."
+        }
+      },
+      {
+        "title": {
+          "de": "Objekte aus dem Verlauf zurückholen",
+          "en": "Bring objects back from the history"
+        },
+        "body": {
+          "de": "In der Verlaufsansicht klickst du ein Objekt an (mit Umschalt mehrere) und drückst „In den Entwurf holen“: Es kommt als Kopie zurück, so und dort, wie es in diesem Stand war, und heißt zum Beispiel „Box (12:32)“. Das ist ein Schritt, den Rückgängig wieder zurücknimmt.",
+          "en": "In the History view you click an object (with Shift several) and press Bring into design: it comes back as a copy, as it was and where it was in that state, named for example Box (12:32). It is one step that Undo takes back."
+        }
+      },
+      {
+        "title": {
+          "de": "Breite für SVG und Bilder beim Import",
+          "en": "A width for SVG and pictures at the import"
+        },
+        "body": {
+          "de": "Im Importfenster gibt es jetzt das Feld „SVG und Bild: Breite in mm“. Tippe die Breite ein, wähle die Datei, und die Zeichnung kommt in dieser Größe auf die Arbeitsfläche, wie in Tinkercad. Leer bleibt die eigene Größe. Die Breite gilt nur für den nächsten Import.",
+          "en": "The import window has a new field “SVG and picture: width in mm”. Type the width, choose the file, and the drawing lands on the plate at that size, as in Tinkercad. Empty keeps its own size. The width counts for the next import only."
+        }
+      }
+    ]
+  },
+  {
     "version": "1.84.0",
     "items": [
       {

@@ -11,6 +11,8 @@ Click {{ui:editor.addShape}} in the ribbon. The shape library opens.
 
 ![The shape library. Every little picture is rendered from the shape's real geometry.](shot:shape-menu)
 
+The library closes after each shape you pick. Its title bar moves it, so you can put it where it does not cover the spot you are aiming at, over the Properties panel for example; a double-click on the title bar puts it back under its button, and where you left it is kept in the browser. The pin in the title bar keeps the library open while you put several shapes one after the other.
+
 Pick a shape. It now hangs on the mouse pointer and lands where you click. Move it over a body and it lies down on the face under the pointer, sloped ones too, like Cruise in Tinkercad; over the empty plate it lands on the workplane. [[Esc]] cancels placing. A tool that waits for a click, such as the tape measure, the framing square, a note, {{ui:camera.placeWorkplane}}, {{ui:editor.tool.layFlat}} or the edge tools, is switched off when you pick a shape, so the click places the shape. The other way round, switching one of those tools on puts the shape down again. If you would rather have the shape appear in the middle of the plate, you can switch off placing by click in the settings (area {{ui:workspace.appearance}}, switch {{ui:workspace.cruise}}).
 
 What the library offers:
@@ -86,7 +88,7 @@ Besides the settings there are handles on the shape itself:
 - The **corners and edges** make the shape larger or smaller. Drag one past the opposite side and the shape keeps growing there, on the other side of that edge. The arrow on top does the same below the base. Hold [[Shift]] while dragging a corner to scale width, depth and height together and keep the proportions; hold [[Alt]] to scale from the center instead of the opposite corner. Without a keyboard, or if you do not want to hold a key, switch on {{ui:inspector.keepProportions}} at the top of the properties: then the corners always keep the proportions, and typing one of width, depth or height scales the other two by the same factor. The setting is remembered.
 - The **arrow on top** changes the height, the handle **in the middle** lifts or lowers the shape.
 - The **curved arrows** rotate it.
-- The **numbers** beside the shape show the dimensions. A click on one opens a field in which you type the number you want. With [[Enter]] the shape grows from the edge opposite the number, as when you drag; with [[Alt]]+[[Enter]] it grows round its middle, so a shape that was aligned with another stays aligned. That holds for width and length; the height always grows upward from the underside. The fields in the properties on the right keep the middle without a key.
+- The **numbers** beside the shape show the dimensions. A click on one opens a field in which you type the number you want. With [[Enter]] the shape grows from the edge opposite the number, as when you drag; with [[Alt]]+[[Enter]] it grows round its middle, so a shape that was aligned with another stays aligned. That holds for width and length; the height always grows upward from the underside. The fields in the properties on the right keep the middle without a key. [[Tab]] keeps the number and opens the next one (width, depth, height); [[Shift]]+[[Tab]] goes back.
 - A **click on a corner** (without dragging) opens width and depth together. Type the first, press [[Tab]] for the second and [[Enter]] to apply both. [[Esc]] cancels.
 
 Once a shape is turned by right angles, for instance laid on its side with {{ui:editor.tool.layFlat}}, the fields in the properties are named after the direction each measure runs in now: {{ui:prop.height}} is what goes up, {{ui:prop.width}} runs along X and {{ui:prop.length}} along Y. Typing the height of a shape lying down therefore changes the vertical measure, and its underside stays on the plate. A shape tilted at any other angle shows its own measures in the fields, and a note below says so.
@@ -109,7 +111,7 @@ A holder, a grip or a base plate you need again and again goes into the {{ui:myS
 
 1. Select one or more bodies, holes, groups or an imported model included.
 2. Open the shape library and click {{ui:myShapes.saveSelection}}. Enter a name and confirm with {{ui:common.save}}.
-3. In any design, a click on the tile inserts the shape, like any other shape. You can also drag the tile onto the workplane; it then lands where you let go.
+3. In any design, a click on the tile inserts the shape, like any other shape. You can also drag the tile onto the workplane; it then lands where you let go. The shape then hangs on the pointer, like any other: it follows it, also over the faces of other bodies, and a click sets it down; [[Esc]] puts it away.
 
 Several bodies come back together, placed as they stood to each other, and stay selectable one by one. The pencil on a tile renames it, the bin removes it after asking. Shapes already inserted into designs stay as they are.
 

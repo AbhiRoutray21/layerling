@@ -23,7 +23,7 @@ A graphics tablet with a pen behaves like a mouse: the tip is the left button, t
 
 **On a tablet, work with a stylus if you can.** Its tip is far finer than a fingertip and does not cover what you aim at, so small points, thin lines and handles in a sketch, measuring points and edges are hit exactly, and longer work is less tiring. layerling already lets a finger reach a little further to points, lines, handles and edges than a mouse pointer does, but a stylus remains the more precise way. This holds for a pen that the tablet knows as a pen (an S Pen, an Apple Pencil and the like). A plain stylus with a rubber tip counts as a finger for the screen and is not finer than one.
 
-There is no right mouse button on a tablet: hold a finger still on a shape or on empty space for half a second, and the menu opens that a right click opens, with **Select all** on empty space. The handles around a selected shape can be caught by a finger from a little beside them.
+There is no right mouse button on a tablet: hold a finger still on a shape or on empty space for half a second, and the menu opens that a right click opens, with **Select all** on empty space. **Select multiple** in the same menu stands in for Shift on a tablet: each tap on a body then adds it to the selection or takes it out again, until you tap empty space or press [[Esc]]; a finger on empty space still turns the view. The handles around a selected shape can be caught by a finger from a little beside them.
 
 ### The view cube
 
@@ -35,8 +35,8 @@ Drag the cube to turn the view around, just like dragging with the right mouse b
 
 At the left edge is a narrow bar. From the top:
 
-- {{ui:camera.home}} brings the whole scene back into view. The key is [[F]] or [[Home]].
-- {{ui:camera.focusSelection}} zooms to the selection ([[Shift]]+[[F]]).
+- {{ui:camera.home}} brings the whole scene back into view. The key is [[Home]]; [[F]] does it too when nothing is selected.
+- {{ui:camera.focusSelection}} zooms to the selection ([[F]] or [[Shift]]+[[F]]).
 - {{ui:camera.zoomIn}} and {{ui:camera.zoomOut}} zoom step by step, as do the keys [[+]] and [[−]].
 - {{ui:camera.orthographic}} switches to a flat view in which parallel edges stay parallel. For measuring and lining up edges that is often more comfortable than the perspective view. [[O]] switches back and forth, and a second click returns.
 - {{ui:camera.hideWorkplane}} (the eye over a grid) hides the plate with its grid, so you can look at the underside of a design from below. Only the view changes: new shapes still land on the workplane. A second click shows it again.

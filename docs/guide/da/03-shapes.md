@@ -11,6 +11,8 @@ Klik på {{ui:editor.addShape}} i båndet. Formbiblioteket åbnes.
 
 ![Formbiblioteket. Hvert lille billede er gengivet fra formens virkelige geometri.](shot:shape-menu)
 
+Biblioteket lukker efter hver form, du vælger. Med titellinjen flytter du det derhen, hvor det ikke dækker det sted, du sigter mod, for eksempel over panelet Egenskaber; et dobbeltklik på titellinjen sætter det tilbage under sin knap, og hvor du lod det stå, husker browseren. Nålen i titellinjen holder biblioteket åbent, mens du sætter flere former efter hinanden.
+
 Vælg en form. Den hænger nu på din musemarkør og lander hvor du klikker. Flyt den over en form og den lægger sig ned på fladen under markøren, også skrå, ligesom Cruise i Tinkercad; over den tomme plade lander den på arbejdsplanet. [[Esc]] annullerer placering. Et værktøj der venter på et klik, såsom målebåndet, vinkelmåleren, en note, {{ui:camera.placeWorkplane}}, {{ui:editor.tool.layFlat}} eller kantværktøjerne, slås fra når du vælger en form, så klikket placerer formen. Den anden vej, hvis du slår et af disse værktøjer til, lægger formen sig ned igen. Hvis du hellere vil have formen til at dukke op i midten af pladen, kan du slå placering ved klik fra i indstillingerne (område {{ui:workspace.appearance}}, kontakt {{ui:workspace.cruise}}).
 
 Hvad biblioteket tilbyder:
@@ -109,7 +111,7 @@ En holder, et greb eller en grundplade du har brug for igen og igen kommer i {{u
 
 1. Vælg en eller flere former, huller, grupper eller en importeret model inkluderet.
 2. Åbn formbiblioteket og klik på {{ui:myShapes.saveSelection}}. Indtast et navn og bekræft med {{ui:common.save}}.
-3. I et hvilket som helst design indsætter et klik på flisen formen, som enhver anden form. Du kan også trække flisen ind på arbejdsplanet; den lander så dér hvor du slap.
+3. I et hvilket som helst design indsætter et klik på flisen formen, som enhver anden form. Du kan også trække flisen ind på arbejdsplanet; den lander så dér hvor du slap. Formen hænger derefter på markøren som enhver anden: Den følger den, også over andre legemers flader, et klik sætter den ned, [[Esc]] lægger den væk.
 
 Flere former kommer tilbage sammen, placeret som de stod i forhold til hinanden, og forbliver valgbare én ad gangen. Blyanten på en flis omdøber den, skraldespanden fjerner den efter at have spurgt. Former der allerede er indsat i designs forbliver som de er.
 

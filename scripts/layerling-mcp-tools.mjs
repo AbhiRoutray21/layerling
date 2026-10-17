@@ -284,6 +284,7 @@ export const tools = [
         text: { type: "string", description: "The file content as text. Give text or base64, not both." },
         base64: { type: "string", description: "The file content as base64, for binary files." },
         mtl: { type: "string", description: "The .mtl material file of an OBJ, as text, for its colours." },
+        svgWidth: { type: "number", description: "SVG and pictures (PNG, JPG): bring the drawing in at this width in millimetres, scaled from its own size, as the width field of the import window does. Left out, it comes in at its own size." },
         keepPagePosition: { type: "boolean", description: "SVG only: keep the drawing's place on its page (its viewBox) instead of centring it on itself, so that several files exported from one page - the layers of one document - line up when imported one after the other. Default false; a drawing that states no page is centred anyway." },
       },
     },
@@ -725,6 +726,31 @@ export const tools = [
     },
   },
   {
+    name: "layerling_list_faces",
+    description: "List the faces of one object's exact body, for layerling_delete_faces: each with its id, its kind (plane, cylinder, cone, sphere, torus, bspline, ...), its area in square millimetres, its middle and, for a flat face, its outward normal, in world coordinates (y up). Only for exact bodies, STEP imports and layerling's shapes; whatever layerling keeps as a mesh (an imported STL, OBJ or 3MF, a split, wrapped or simplified body, a very detailed shape such as a long text) has no exact faces.",
+    inputSchema: {
+      ...editorTargetSchema,
+      required: ["id"],
+      properties: {
+        ...editorTargetSchema.properties,
+        id: { type: "string" },
+      },
+    },
+  },
+  {
+    name: "layerling_delete_faces",
+    description: "Delete faces of an exact body, as the editor's Delete face tool does: the faces around them grow until they close the gap, so a fillet, a hole, a boss or a step is gone and the body stays exact (fillet, chamfer and STEP export still work on it). Give every face of the feature, with ids from layerling_list_faces - the four faces of a box's rounded top edges, the wall of a hole, the side and top of a boss. When the faces around them cannot close the gap, nothing changes and the answer says so. Deleting only the floor of a pocket makes it a hole straight through. One undo step; undone like an edge treatment.",
+    inputSchema: {
+      ...editorTargetSchema,
+      required: ["id", "faceIds"],
+      properties: {
+        ...editorTargetSchema.properties,
+        id: { type: "string" },
+        faceIds: { type: "array", items: { type: "integer" }, description: "Face ids from layerling_list_faces." },
+      },
+    },
+  },
+  {
     name: "layerling_hollow_object",
     description: "Hollow a solid into walls of equal thickness, like a box, cup or case. The walls grow inward, so the outside keeps its size. `openings` chooses which flat sides stay open, measured against the world's axes: a list of any of top, bottom, front (+z), back (-z), left (-x) and right (+x) - for example [\"front\"] for a drawer slot - or one of the names top (default), bottom, top-bottom, or none for a sealed cavity. A side asked for in a list must have a flat face at the very edge of the body on that side. `edges` sets how the inner walls meet where the body has a step or opening: round (default, radius = wall thickness) or sharp. Can be undone like an edge treatment. Resizing the body later hollows it again at the new size a moment afterwards, so the walls keep their thickness.",
     inputSchema: {
@@ -1020,13 +1046,26 @@ export const tools = [
   },
   {
     name: "layerling_set_history_view",
-    description: "Look back at an earlier state of the project, like the editor's History view: the workplane shows that state while the real design stays untouched. Give `index` (0 is the oldest state, the last one is the current design) to open the view at that state or move it, `open: false` to close it, or no settings to read where it stands. While it is open, tools that change the design answer with an error - close it first; reading, `layerling_capture_image` (a picture of the shown state) and the section view still work. `layerling_read_scene` keeps describing the live design. Returns the state shown, how many there are and its bodies.",
+    description: "Look back at an earlier state of the project, like the editor's History view: the workplane shows that state while the real design stays untouched. Give `index` (0 is the oldest state, the last one is the current design) to open the view at that state or move it, `open: false` to close it, or no settings to read where it stands. While it is open, tools that change the design answer with an error - close it first; reading, `layerling_capture_image` (a picture of the shown state) and the section view still work. `layerling_read_scene` keeps describing the live design. Returns the state shown, how many there are and its bodies; a group lists its `parts` at every depth, whose ids `layerling_restore_from_history` takes.",
     inputSchema: {
       ...editorTargetSchema,
       properties: {
         ...editorTargetSchema.properties,
         open: { type: "boolean", description: "false closes the view; true (or an index) opens it." },
         index: { type: "number", description: "The state to show, 0 = oldest. Clamped to the existing states." },
+      },
+    },
+  },
+  {
+    name: "layerling_restore_from_history",
+    description: "Bring objects back from an earlier state of the history into the current design, as the History view's \"Bring into design\" button does: each comes in as a copy with new ids, exactly as it was in that state and at the spot it had there, and the copies end up selected. Each copy is named after the time of that state, such as \"Box (12:32)\" (the date too for a state of an earlier day), so it is easy to tell from the current version. A part inside a group can be brought back on its own - give its id from the `parts` that `layerling_set_history_view` lists for a group; it comes out where opening the group would put it, and the group itself stays untouched. It is one step: Undo takes it back. Closes the History view if it is open. Notes and reference points attached to the objects are not brought along. Returns the new objects.",
+    inputSchema: {
+      ...editorTargetSchema,
+      required: ["index", "ids"],
+      properties: {
+        ...editorTargetSchema.properties,
+        index: { type: "number", description: "The state to bring the objects back from, 0 = oldest, as layerling_set_history_view numbers them." },
+        ids: { type: "array", items: { type: "string" }, description: "Ids of objects in that state, at any depth inside groups." },
       },
     },
   },

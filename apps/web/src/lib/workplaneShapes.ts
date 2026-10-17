@@ -211,6 +211,16 @@ export function shapeSupportsExtrudeDeform(kind: WorkplaneShape["kind"]) {
   return shapeSupportsTaper(kind);
 }
 
+/**
+ * Shapes drawn around their own middle without filling their box: a star's tips lie on a circle round the origin,
+ * and a five-pointed one reaches further up than down. Their taper and twist work about that middle, not about the
+ * middle of their box - a twist about the box would let the star's middle circle round the axis (#476). A polygon
+ * is stretched to fill its box, so its box middle is its origin already.
+ */
+export function deformsAboutOrigin(kind: WorkplaneShape["kind"]) {
+  return kind === "star";
+}
+
 export function shapeHasExtrudeDeform(shape: WorkplaneShape) {
   if (!shapeSupportsExtrudeDeform(shape.kind)) return false;
   return Math.abs(shape.extrudeTwist ?? 0) > 1e-6 || Math.abs(shape.extrudeTopOffsetX ?? 0) > 1e-6 || Math.abs(shape.extrudeTopOffsetZ ?? 0) > 1e-6;

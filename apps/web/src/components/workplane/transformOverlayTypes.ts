@@ -409,6 +409,8 @@ export type TransformOverlayProps = {
   onCancelCornerEdit: () => void;
   onEditingDimensionChange: (value: string) => void;
   onCommitDimensionEdit: (aroundCenter?: boolean) => void;
+  /** Tab in a dimension box: keep the value and open the next one (Shift: the one before) (#300). */
+  onTabDimensionEdit: (backwards: boolean) => void;
   onCancelDimensionEdit: () => void;
   onBeginRotationEdit: (handleKey: string, x: number, y: number) => void;
   onEditingRotationChange: (value: string) => void;

@@ -452,21 +452,22 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .dashboard-trademark {
 }
 
 :where(html[data-theme="dark"][data-palette="graphite"]) .install-app-hint {
-  background: #f7f7f7;
-  border: 1px solid #d4d4d4;
+  background: linear-gradient(135deg, #f0f0f0 0%, #e1e1e1 100%);
+  border: 2px solid #e08a2c;
+  box-shadow: 0 6px 18px rgba(191, 101, 8, 0.14);
 }
 
 :where(html[data-theme="dark"][data-palette="graphite"]) .install-app-hint-icon {
-  color: #bf6508;
-  background: #e8e8e8;
+  color: #ffffff;
+  background: #d9730d;
 }
 
 :where(html[data-theme="dark"][data-palette="graphite"]) .install-app-hint-text strong {
-  color: #414141;
+  color: #313131;
 }
 
 :where(html[data-theme="dark"][data-palette="graphite"]) .install-app-hint-text span {
-  color: #595959;
+  color: #494949;
 }
 
 :where(html[data-theme="dark"][data-palette="graphite"]) .install-app-hint-button {
@@ -475,8 +476,23 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .dashboard-trademark {
   border: 0;
 }
 
+:where(html[data-theme="dark"][data-palette="graphite"]) a.install-app-hint-button {
+  text-decoration: none;
+}
+
 :where(html[data-theme="dark"][data-palette="graphite"]) .install-app-hint-button:hover {
   background: #a95805;
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .install-app-hint-later {
+  color: #585858;
+  background: transparent;
+  border: 0;
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .install-app-hint-later:hover {
+  color: #414141;
+  background: #dcdcdc;
 }
 
 :where(html[data-theme="dark"][data-palette="graphite"]) .install-app-hint-close {
@@ -487,7 +503,11 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .dashboard-trademark {
 
 :where(html[data-theme="dark"][data-palette="graphite"]) .install-app-hint-close:hover {
   color: #414141;
-  background: #e6e6e6;
+  background: #dcdcdc;
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .install-app-hint.install-app-hint-floating {
+  box-shadow: 0 10px 28px rgba(40, 40, 40, 0.28);
 }
 
 :where(html[data-theme="dark"][data-palette="graphite"]) .support-nudge {
@@ -643,6 +663,14 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .dashboard-trademark {
   background: #e6e6e6;
 }
 
+:where(html[data-theme="dark"][data-palette="graphite"]) .whats-new-note {
+  color: #595959;
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .whats-new-note a {
+  color: #bf6508;
+}
+
 :where(html[data-theme="dark"][data-palette="graphite"]) .whats-new-version h2 {
   color: #bf6508;
 }
@@ -685,6 +713,14 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .whats-new {
 html[data-theme="dark"]:where([data-palette="graphite"]) .whats-new-icon {
   color: #f3a452;
   background: #2d2d2d;
+}
+
+html[data-theme="dark"]:where([data-palette="graphite"]) .whats-new-note {
+  color: #929292;
+}
+
+html[data-theme="dark"]:where([data-palette="graphite"]) .whats-new-note a {
+  color: #f3a452;
 }
 
 html[data-theme="dark"]:where([data-palette="graphite"]) .whats-new-version h2 {
@@ -2375,6 +2411,17 @@ html:where([data-theme="dark"][data-palette="graphite"])[data-toolbar-size="larg
   accent-color: #b3680f;
 }
 
+:where(html[data-theme="dark"][data-palette="graphite"]) .import-option.import-width-option input {
+  border: 1px solid #bfbfbf;
+  background: #f8f8f8;
+  color: inherit;
+}
+
+html[data-theme="dark"]:where([data-palette="graphite"]) .import-option.import-width-option input {
+  border-color: #4a4a4a;
+  background: #282828;
+}
+
 html[data-theme="dark"]:where([data-palette="graphite"]) .import-option {
   color: #e4e4e4;
 }
@@ -3289,6 +3336,12 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .inspector-bundle-note 
 
 :where(html[data-theme="dark"][data-palette="graphite"]) .workplane-plane {
   background: #fafafa;
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .selection-counter {
+  color: #fff;
+  background: #bf6508;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
 }
 
 :where(html[data-theme="dark"][data-palette="graphite"]) .selection-marquee {
@@ -5477,10 +5530,15 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .store-trail button.dro
   box-shadow: inset 0 0 0 1px #f3a452;
 }
 
-html[data-theme="dark"]:where([data-palette="graphite"]) .install-app-hint,
 html[data-theme="dark"]:where([data-palette="graphite"]) .support-nudge {
   background: var(--panel);
   border-color: #4a4a4a;
+}
+
+html[data-theme="dark"]:where([data-palette="graphite"]) .install-app-hint {
+  background: #272727;
+  border-color: #d9863a;
+  box-shadow: none;
 }
 
 html[data-theme="dark"]:where([data-palette="graphite"]) .support-nudge-icon {
@@ -5533,23 +5591,20 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .storage-notice-help:ho
   color: #eaeaea;
 }
 
-html[data-theme="dark"]:where([data-palette="graphite"]) .install-app-hint-icon {
-  color: #f3a452;
-  background: #2d2d2d;
-}
-
 html[data-theme="dark"]:where([data-palette="graphite"]) .install-app-hint-text strong {
-  color: #ebebeb;
+  color: #eaeaea;
 }
 
 html[data-theme="dark"]:where([data-palette="graphite"]) .install-app-hint-text span,
-html[data-theme="dark"]:where([data-palette="graphite"]) .install-app-hint-close {
-  color: #929292;
+html[data-theme="dark"]:where([data-palette="graphite"]) .install-app-hint-close,
+html[data-theme="dark"]:where([data-palette="graphite"]) .install-app-hint-later {
+  color: #cccccc;
 }
 
-html[data-theme="dark"]:where([data-palette="graphite"]) .install-app-hint-close:hover {
-  color: #ebebeb;
-  background: #2d2d2d;
+html[data-theme="dark"]:where([data-palette="graphite"]) .install-app-hint-close:hover,
+html[data-theme="dark"]:where([data-palette="graphite"]) .install-app-hint-later:hover {
+  color: #eaeaea;
+  background: #353535;
 }
 
 html[data-theme="dark"]:where([data-palette="graphite"]) .dashboard-welcome {
@@ -6846,13 +6901,13 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .shortcuts-or {
   color: #787878;
 }
 
-@media (max-width: 2038px) {
+@media (max-width: 2081px) {
   :root:where([data-theme="dark"][data-palette="graphite"]) {
     --toolbar-icon-size: calc(37px * var(--toolbar-scale));
   }
 }
 
-@media (max-width: 1728px) {
+@media (max-width: 1765px) {
   :root:where([data-theme="dark"][data-palette="graphite"]) {
     --toolbar-icon-size: calc(34px * var(--toolbar-scale));
   }
@@ -7320,6 +7375,34 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .open-group-cancel {
 :where(html[data-theme="dark"][data-palette="graphite"]) .guide-help-link:hover,
 :where(html[data-theme="dark"][data-palette="graphite"]) .guide-help-link:focus-visible {
   background: rgba(127, 127, 127, 0.16);
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .shape-menu-pin {
+  border: 0;
+  color: #676767;
+  background: transparent;
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .shape-menu-pin:hover {
+  background: #e5e5e5;
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .shape-menu-pin.active {
+  color: #bf6508;
+  background: #ededed;
+}
+
+html[data-theme="dark"]:where([data-palette="graphite"]) .shape-menu-pin {
+  color: #929292;
+}
+
+html[data-theme="dark"]:where([data-palette="graphite"]) .shape-menu-pin:hover {
+  background: #2d2d2d;
+}
+
+html[data-theme="dark"]:where([data-palette="graphite"]) .shape-menu-pin.active {
+  color: #f3a452;
+  background: #2d2d2d;
 }
 
 :where(html[data-theme="dark"][data-palette="graphite"]) .outliner-panel.collapsed .outliner-header {

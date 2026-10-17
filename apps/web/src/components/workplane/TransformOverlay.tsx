@@ -83,6 +83,7 @@ export function TransformOverlay({
   onCancelCornerEdit,
   onEditingDimensionChange,
   onCommitDimensionEdit,
+  onTabDimensionEdit,
   onCancelDimensionEdit,
   onBeginRotationEdit,
   onEditingRotationChange,
@@ -232,6 +233,10 @@ export function TransformOverlay({
             }
             if (event.key === "Escape") {
               onCancelDimensionEdit();
+            }
+            if (event.key === "Tab") {
+              event.preventDefault();
+              onTabDimensionEdit(event.shiftKey);
             }
           }}
         />

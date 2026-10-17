@@ -33,8 +33,8 @@ Tažením krychle otáčíte pohledem jako pravým tlačítkem myši. Není-li n
 
 U levého okraje je úzká lišta. Shora obsahuje:
 
-- {{ui:camera.home}} zobrazí celou scénu; klávesa [[F]] nebo [[Home]].
-- {{ui:camera.focusSelection}} přiblíží výběr, [[Shift]]+[[F]].
+- {{ui:camera.home}} zobrazí celou scénu; klávesa [[Home]]; [[F]] to udělá také, když není nic vybráno.
+- {{ui:camera.focusSelection}} přiblíží výběr, [[F]] nebo [[Shift]]+[[F]].
 - {{ui:camera.zoomIn}} a {{ui:camera.zoomOut}} mění přiblížení po krocích, stejně jako [[+]] a [[−]].
 - {{ui:camera.orthographic}} zapne rovnoběžné promítání bez perspektivy. Rovnoběžné hrany zůstávají rovnoběžné, což usnadňuje měření a zarovnávání. Přepíná je i [[O]]; dalším kliknutím se vrátíte.
 - {{ui:camera.hideWorkplane}}, oko nad mřížkou, skryje podložku, aby bylo vidět spodní strany modelu. Mění pouze zobrazení; nové tvary stále dopadají na pracovní rovinu. Další kliknutí ji ukáže.

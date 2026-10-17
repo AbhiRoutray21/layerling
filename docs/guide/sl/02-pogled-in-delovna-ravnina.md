@@ -33,8 +33,8 @@ Kocka zgoraj levo kaže, kam trenutno gledaš. Klik na eno od njenih stranic sko
 
 Ob levem robu je ozka vrstica. Od zgoraj navzdol:
 
-- {{ui:camera.home}} spet postavi celoten prizor v sliko. Tipka za to je [[F]] ali [[Home]].
-- {{ui:camera.focusSelection}} se približa izboru ([[Shift]]+[[F]]).
+- {{ui:camera.home}} spet postavi celoten prizor v sliko. Tipka za to je [[Home]]; [[F]] stori isto, ko ni nič izbrano.
+- {{ui:camera.focusSelection}} se približa izboru ([[F]] ali [[Shift]]+[[F]]).
 - {{ui:camera.zoomIn}} in {{ui:camera.zoomOut}} zumirata po korakih, prav tako tipki [[+]] in [[−]].
 - {{ui:camera.orthographic}} preklopi na ploski pogled, v katerem vzporedni robovi ostanejo vzporedni. To je za merjenje in za poravnavanje robov pogosto prijetnejše kot perspektivni pogled. S [[O]] preklapljaš sem in tja, drugi klik gre nazaj.
 - {{ui:camera.hideWorkplane}} (oko nad mrežo) skrije ploščo z mrežo, da lahko spodnjo stran načrta pogledaš od spodaj. Spremeni se samo pogled: nove oblike še naprej pristanejo na delovni ravnini. Drugi klik jo spet prikaže.

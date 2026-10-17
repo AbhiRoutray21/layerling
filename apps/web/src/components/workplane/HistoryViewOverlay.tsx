@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronLeft, ChevronRight, Download, FilePlus2, LoaderCircle, Trash2, X } from "lucide-react";
+import { ArchiveRestore, ChevronLeft, ChevronRight, Download, FilePlus2, LoaderCircle, Trash2, X } from "lucide-react";
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { GuideHelpLink } from "@/components/GuideHelpLink";
 import { t } from "@/lib/i18n";
@@ -57,6 +57,8 @@ export function HistoryViewOverlay({
   objectCount,
   creating,
   canCreateProject,
+  pickedCount,
+  onBringBack,
   onIndexChange,
   onExport,
   onCreateProject,
@@ -72,6 +74,10 @@ export function HistoryViewOverlay({
   objectCount: number;
   creating: boolean;
   canCreateProject: boolean;
+  /** How many objects of the shown state are picked to bring back. */
+  pickedCount: number;
+  /** Adds copies of the picked objects to the design, as they were in this state. */
+  onBringBack: () => void;
   onIndexChange: (index: number) => void;
   onExport: () => void;
   onCreateProject: () => void;
@@ -176,6 +182,10 @@ export function HistoryViewOverlay({
         <button type="button" className="delete-history" disabled={confirmingDelete || count <= 1} title={count <= 1 ? t("historyView.deleteNothing") : t("historyView.deleteHint")} onClick={() => setConfirmingDelete(true)}>
           <Trash2 size={16} aria-hidden="true" />
           {t("historyView.delete")}
+        </button>
+        <button type="button" className="secondary" disabled={pickedCount === 0} title={pickedCount === 0 ? t("historyView.bringBackNothing") : t("historyView.bringBackHint")} data-testid="history-view-bring-back" onClick={onBringBack}>
+          <ArchiveRestore size={16} aria-hidden="true" />
+          {pickedCount > 1 ? t("historyView.bringBackMany", { count: pickedCount }) : t("historyView.bringBack")}
         </button>
         <button type="button" className="secondary" onClick={onExport}>
           <Download size={16} aria-hidden="true" />

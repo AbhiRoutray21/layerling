@@ -53,7 +53,7 @@ export type ShapeRenderRecord = {
 
 export type ThreeState = {
   /** How far the orbit pivot may travel (the plate), as the camera clamp last saw it; the wheel zoom stays within it. */
-  pivotLimits?: { halfWidth: number; halfDepth: number };
+  pivotLimits?: { halfWidth: number; halfDepth: number; minY: number; maxY: number };
   /** Where "Center view" last went: a part beyond the plate edge may be centred, so the pivot may reach as far as that part. */
   focusReach?: THREE.Box3 | null;
   /** Colour set on top of light/dark; only the canvas reads it. */
@@ -68,6 +68,10 @@ export type ThreeState = {
   layFlatHoverLayer?: THREE.Group;
   /** The bent-tube segment the settings are about, drawn over the tube. */
   bentTubeSegmentLayer?: THREE.Group;
+  /** Delete face: the faces picked and the one under the pointer. */
+  cadFaceLayer?: THREE.Group;
+  /** Delete face: the prepared body's tessellation it picks on, kept out of the scene. */
+  cadFacePickMesh?: THREE.Mesh;
   shapeLayer: THREE.Group;
   helperLayer: THREE.Group;
   splitLayer: THREE.Group;

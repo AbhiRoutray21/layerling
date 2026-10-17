@@ -11,6 +11,8 @@ Klik op {{ui:editor.addShape}} in het lint. De vormenbibliotheek gaat open.
 
 ![De vormenbibliotheek. Elk plaatje wordt getekend uit de echte geometrie van de vorm.](shot:shape-menu)
 
+De bibliotheek sluit na elke vorm die je kiest. Met de titelbalk verplaats je haar naar een plek waar ze het doel niet bedekt, bijvoorbeeld over het paneel Eigenschappen; een dubbelklik op de titelbalk zet haar terug onder haar knop, en waar je haar liet staan, onthoudt de browser. De punaise in de titelbalk houdt de bibliotheek open terwijl je meerdere vormen na elkaar plaatst.
+
 Kies een vorm. Die hangt nu aan de muisaanwijzer en landt waar je klikt. Beweeg je hem over een lichaam, dan gaat hij op het vlak onder de aanwijzer liggen, ook op schuine vlakken, net als Cruise in Tinkercad; boven de lege plaat landt hij op het werkvlak. [[Esc]] breekt het plaatsen af. Een gereedschap dat op een klik wacht, zoals het meetlint, de winkelhaak, een notitie, {{ui:camera.placeWorkplane}}, {{ui:editor.tool.layFlat}} of de randgereedschappen, wordt uitgezet zodra je een vorm kiest, zodat de klik de vorm plaatst. Andersom zet het aanzetten van zo'n gereedschap de vorm weer neer. Wil je liever dat de vorm midden op de plaat verschijnt, dan kun je plaatsen met een klik uitzetten in de instellingen (onderdeel {{ui:workspace.appearance}}, schakelaar {{ui:workspace.cruise}}).
 
 Wat de bibliotheek te bieden heeft:
@@ -86,7 +88,7 @@ Naast de instellingen zitten er grepen op de vorm zelf:
 - De **hoeken en randen** maken de vorm groter of kleiner. Houd [[Shift]] ingedrukt terwijl je een hoek sleept om breedte, diepte en hoogte samen te schalen en de verhoudingen te behouden; houd [[Alt]] ingedrukt om vanuit het midden te schalen in plaats van vanuit de tegenoverliggende hoek. Zonder toetsenbord, of als je geen toets wilt vasthouden, zet je {{ui:inspector.keepProportions}} bovenaan de eigenschappen aan: dan houden de hoeken altijd de verhoudingen, en als je breedte, diepte of hoogte typt, schalen de andere twee met dezelfde factor mee. De instelling wordt onthouden.
 - De **pijl bovenop** verandert de hoogte, de greep **in het midden** tilt de vorm op of laat hem zakken.
 - De **gebogen pijlen** draaien hem.
-- De **getallen** naast de vorm tonen de maten. Een klik op een ervan opent een veld waarin je het gewenste getal typt. Met [[Enter]] groeit de vorm vanaf de rand tegenover het getal, zoals bij slepen; met [[Alt]]+[[Enter]] groeit hij rond zijn midden, zodat een vorm die met een andere was uitgelijnd uitgelijnd blijft. Dat geldt voor breedte en lengte; de hoogte groeit altijd omhoog vanaf de onderkant. De velden in de eigenschappen rechts houden het midden zonder toets.
+- De **getallen** naast de vorm tonen de maten. Een klik op een ervan opent een veld waarin je het gewenste getal typt. Met [[Enter]] groeit de vorm vanaf de rand tegenover het getal, zoals bij slepen; met [[Alt]]+[[Enter]] groeit hij rond zijn midden, zodat een vorm die met een andere was uitgelijnd uitgelijnd blijft. Dat geldt voor breedte en lengte; de hoogte groeit altijd omhoog vanaf de onderkant. De velden in de eigenschappen rechts houden het midden zonder toets. [[Tab]] neemt het getal over en opent het volgende veld (breedte, diepte, hoogte); [[Shift]]+[[Tab]] gaat terug.
 - Een **klik op een hoek** (zonder te slepen) opent breedte en diepte samen. Typ de eerste, druk op [[Tab]] voor de tweede en op [[Enter]] om beide toe te passen. [[Esc]] breekt af.
 
 Is een vorm over rechte hoeken gedraaid, bijvoorbeeld op zijn kant gelegd met {{ui:editor.tool.layFlat}}, dan zijn de velden in de eigenschappen genoemd naar de richting waarin elke maat nu loopt: {{ui:prop.height}} is wat omhoog gaat, {{ui:prop.width}} loopt langs X en {{ui:prop.length}} langs Y. Typ je de hoogte van een liggende vorm, dan verander je dus de verticale maat, en zijn onderkant blijft op de plaat. Een vorm die onder een andere hoek gekanteld is, toont zijn eigen maten in de velden, en een opmerking eronder zegt dat.
@@ -109,7 +111,7 @@ Een houder, een handgreep of een grondplaat die je steeds opnieuw nodig hebt, ga
 
 1. Selecteer een of meer lichamen, gaten, groepen, een geïmporteerd model inbegrepen.
 2. Open de vormenbibliotheek en klik op {{ui:myShapes.saveSelection}}. Voer een naam in en bevestig met {{ui:common.save}}.
-3. In elk ontwerp voegt een klik op de tegel de vorm in, net als elke andere vorm. Je kunt de tegel ook naar het werkvlak slepen; hij landt dan waar je loslaat.
+3. In elk ontwerp voegt een klik op de tegel de vorm in, net als elke andere vorm. Je kunt de tegel ook naar het werkvlak slepen; hij landt dan waar je loslaat. De vorm hangt dan aan de aanwijzer, net als elke andere: hij volgt die, ook over de vlakken van andere lichamen, een klik zet hem neer, [[Esc]] legt hem weg.
 
 Meerdere lichamen komen samen terug, geplaatst zoals ze ten opzichte van elkaar stonden, en blijven elk afzonderlijk te selecteren. Het potlood op een tegel geeft hem een andere naam, de prullenbak verwijdert hem na een vraag. Vormen die al in ontwerpen zijn ingevoegd, blijven zoals ze zijn.
 

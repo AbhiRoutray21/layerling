@@ -1253,8 +1253,8 @@ export function SketchWorkspace({
   );
 
   // Like the 3D editor's Shift+F: frame the selection with a little room around it.
-  const focusSelection = useCallback(() => {
-    if (!focusBounds) return;
+  const focusSelection = useCallback((): boolean => {
+    if (!focusBounds) return false;
     const margin = 1.3;
     // A lone point or a tiny selection has next to no extent; a quarter of the
     // plate keeps it in context instead of diving straight to the maximum zoom.
@@ -1268,6 +1268,7 @@ export function SketchWorkspace({
         z: clamp((focusBounds.minZ + focusBounds.maxZ) / 2, -workspace.depth / 2, workspace.depth / 2),
       },
     });
+    return true;
   }, [focusBounds, workspace.depth, workspace.width]);
 
   useEffect(() => {
@@ -1316,7 +1317,11 @@ export function SketchWorkspace({
       if (event.key.toLowerCase() === "f" && event.shiftKey) {
         event.preventDefault();
         focusSelection();
-      } else if (event.key.toLowerCase() === "f" || event.key === "Home") {
+      } else if (event.key.toLowerCase() === "f") {
+        // As in the 3D view: F looks at the selection, and at the whole sketch when nothing is selected (#465).
+        event.preventDefault();
+        if (!focusSelection()) resetView();
+      } else if (event.key === "Home") {
         event.preventDefault();
         resetView();
       } else if (event.key === "+" || event.key === "=") {
@@ -1638,13 +1643,13 @@ export function SketchWorkspace({
       <div className="sketch-mode-badge">{operation === "revolve" ? t("sketch.modeBadgeRevolve") : operation === "sweep" ? t("sketch.modeBadgeSweep") : t("sketch.modeBadge")}</div>
       {operation === "revolve" ? <SketchRevolvePreview positions={revolvePreviewPositions} /> : null}
       <div className="camera-controls sketch-camera-controls" aria-label={t("sketch.viewControls")}>
-        <button aria-label={t("sketch.resetView")} aria-keyshortcuts="F" title={t("camera.shortcut", { label: t("sketch.resetView"), keys: "F" })} onClick={resetView}><Home size={28} /></button>
+        <button aria-label={t("sketch.resetView")} aria-keyshortcuts="Home" title={t("camera.shortcut", { label: t("sketch.resetView"), keys: "Home" })} onClick={resetView}><Home size={28} /></button>
         <button
           aria-label={t("camera.focusSelection")}
-          aria-keyshortcuts="Shift+F"
-          title={t("camera.shortcut", { label: t("camera.focusSelection"), keys: "Shift+F" })}
+          aria-keyshortcuts="F Shift+F"
+          title={t("camera.shortcut", { label: t("camera.focusSelection"), keys: "F" })}
           disabled={!focusBounds}
-          onClick={focusSelection}
+          onClick={() => focusSelection()}
         >
           <Crosshair size={28} />
         </button>

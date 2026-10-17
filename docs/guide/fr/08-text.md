@@ -105,7 +105,7 @@ Chaque changement apparaît en même temps. L'étiquette est un paquet : elle s
 
 Tapez les noms dans {{ui:textLayers.names}}, un par ligne, jusqu'à cent. Le bouton ci-dessous indique le nombre de balises à créer, par exemple "Créer 12 balises de nom". Chaque étiquette a les mêmes calques, la même taille de lettre et le même trou pour le porte-clés et est un objet à part entière ; ils sont disposés en rangées inférieures à la première, espacées de 5 mm. Un texte brut contient également la liste de noms, plus bas dans ses paramètres.
 
-## Balises d'icône
+## Badges d'icône
 
 Une balise icône est la même balise avec une icône SVG au lieu de lettres : un cœur, un nuage, le logo d'un club. L'icône en haut, en dessous le même contour un peu plus large dans une seconde couleur, en bas une plaque sans trous.
 

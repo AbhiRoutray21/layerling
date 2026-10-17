@@ -11,6 +11,8 @@ Cliquez sur {{ui:editor.addShape}} dans le ruban. La bibliothèque de formes s'o
 
 ![La bibliothèque de formes. Chaque petite image est rendue à partir de la géométrie réelle de la forme.](shot:shape-menu)
 
+La bibliothèque se ferme après chaque forme choisie. Sa barre de titre la déplace, de sorte que vous pouvez la mettre là où elle ne cache pas l'endroit que vous visez, par exemple sur le panneau Propriétés ; un double-clic sur la barre de titre la remet sous son bouton, et l'endroit où vous l'avez laissée est gardé dans le navigateur. L'épingle dans la barre de titre garde la bibliothèque ouverte pendant que vous placez plusieurs formes l'une après l'autre.
+
 Choisissez une forme. Il se bloque désormais sur le pointeur de la souris et atterrit là où vous cliquez. Déplacez-le sur un corps et il se couche sur le visage sous le pointeur, incliné également, comme Cruise dans Tinkercad ; au-dessus de l'assiette vide, il atterrit sur le plan de travail. [[Esc]] annule le placement. Un outil qui attend un clic, tel que le ruban à mesurer, le carré d'encadrement, une note, {{ui:camera.placeWorkplane}}, {{ui:editor.tool.layFlat}} ou les outils de bord, est désactivé lorsque vous choisissez une forme, le clic place donc la forme. Dans l’autre sens, l’activation de l’un de ces outils remet la forme en place. Si vous préférez que la forme apparaisse au milieu de la plaque, vous pouvez désactiver le placement en cliquant dans les paramètres (zone {{ui:workspace.appearance}}, interrupteur {{ui:workspace.cruise}}).
 
 Ce que propose la bibliothèque :
@@ -43,7 +45,7 @@ Les paramètres sont ancrés sur le bord droit. S'ils couvrent quelque chose que
 
 ![Un groupe composé d'un bloc orange, d'une cheville bleue et d'un trou, découpés en un seul corps. Lorsque Multicolor est activé, le piquet reste bleu, le bloc orange et les parois du trou prennent la couleur du bloc.](shot:group-multicolor)
 
-Le cône et la torsion fonctionnent sur presque toutes les formes. Seuls l'engrenage, le filetage, le ressort, Gridfinity, la molette, la charnière, la pyramide, le tube courbé, la larme, les fraises à tête de vis et la règle les laissent de côté : ils ont leurs propres mesures fixes ou, comme la pyramide, un sommet qui leur est déjà propre.
+Le cône et la torsion fonctionnent sur presque toutes les formes. Seuls l'engrenage, le filetage, le ressort, Gridfinity, la molette, la charnière, la pyramide, le tube cintré, la larme, les fraises à tête de vis et la règle les laissent de côté : ils ont leurs propres mesures fixes ou, comme la pyramide, un sommet qui leur est déjà propre.
 
 ![Un cône dont le rayon supérieur et la hauteur ont été modifiés : une petite flèche à côté de chacun reprend la valeur, et les deux boutons du bas enregistrent ou réinitialisent les valeurs par défaut de la forme.](shot:property-reset)
 
@@ -85,7 +87,7 @@ Outre les paramètres, il existe des poignées sur la forme elle-même :
 - Les **coins et bords** agrandissent ou réduisent la forme. Maintenez [[Shift]] tout en faisant glisser un coin pour redimensionner ensemble la largeur, la profondeur et la hauteur et conserver les proportions ; maintenez [[Alt]] pour mettre à l'échelle à partir du centre au lieu du coin opposé. Sans clavier, ou si vous ne souhaitez pas maintenir une touche, activez {{ui:inspector.keepProportions}} en haut des propriétés : alors les coins gardent toujours les proportions, et en tapant l'un de largeur, de profondeur ou de hauteur, les deux autres sont mis à l'échelle du même facteur. Le réglage est mémorisé.
 - La **flèche en haut** change la hauteur, la poignée **au milieu** soulève ou abaisse la forme.
 - Les **flèches courbes** le font pivoter.
-- Les **nombres** à côté de la forme indiquent les dimensions. Un clic sur l'un d'eux ouvre un champ dans lequel vous saisissez le nombre souhaité. Avec [[Enter]], la forme grandit à partir du bord opposé au nombre, comme lorsque vous faites glisser ; avec [[Alt]]+[[Enter]], elle grandit autour de son milieu, de sorte qu'une forme alignée avec une autre reste alignée. Cela vaut pour la largeur et la longueur ; la hauteur grandit toujours vers le haut depuis le dessous. Les champs des propriétés à droite conservent le milieu sans touche.
+- Les **nombres** à côté de la forme indiquent les dimensions. Un clic sur l'un d'eux ouvre un champ dans lequel vous saisissez le nombre souhaité. Avec [[Enter]], la forme grandit à partir du bord opposé au nombre, comme lorsque vous faites glisser ; avec [[Alt]]+[[Enter]], elle grandit autour de son milieu, de sorte qu'une forme alignée avec une autre reste alignée. Cela vaut pour la largeur et la longueur ; la hauteur grandit toujours vers le haut depuis le dessous. Les champs des propriétés à droite conservent le milieu sans touche. [[Tab]] garde le nombre et ouvre le champ suivant (largeur, profondeur, hauteur) ; [[Maj]]+[[Tab]] revient en arrière.
 - Un **clic sur un coin** (sans glisser) ouvre simultanément la largeur et la profondeur. Tapez le premier, appuyez sur [[Tab]] pour le second et [[Enter]] pour appliquer les deux. [[Esc]] annule.
 
 Une fois qu'une forme est tournée à angle droit, par exemple posée sur le côté avec {{ui:editor.tool.layFlat}}, les champs dans les propriétés sont nommés d'après la direction dans laquelle chaque mesure s'exécute maintenant : {{ui:prop.height}} est ce qui monte, {{ui:prop.width}} court le long de X et {{ui:prop.length}} le long de Y. Taper la hauteur d'une forme couchée change donc la mesure verticale, et son dessous reste sur la plaque. Une forme inclinée selon un autre angle affiche ses propres mesures dans les champs, et une note ci-dessous l'indique.
@@ -108,7 +110,7 @@ Un support, une poignée ou une plaque de base dont vous avez besoin encore et e
 
 1. Sélectionnez un ou plusieurs corps, trous, groupes ou un modèle importé inclus.
 2. Ouvrez la bibliothèque de formes et cliquez sur {{ui:myShapes.saveSelection}}. Saisissez un nom et confirmez avec {{ui:common.save}}.
-3. Dans n'importe quelle conception, un clic sur la tuile insère la forme, comme n'importe quelle autre forme. Vous pouvez également faire glisser la vignette sur le plan de travail ; il atterrit ensuite là où vous le lâchez.
+3. Dans n'importe quelle conception, un clic sur la tuile insère la forme, comme n'importe quelle autre forme. Vous pouvez également faire glisser la vignette sur le plan de travail ; il atterrit ensuite là où vous le lâchez. La forme est alors accrochée au pointeur, comme toute autre : elle le suit, aussi sur les faces d'autres corps, un clic la dépose, [[Esc]] la range.
 
 Plusieurs corps se rassemblent, placés les uns à côté des autres, et restent sélectionnables un à un. Le crayon sur un carreau le renomme, le bac l'enlève après demande. Les formes déjà insérées dans les dessins restent telles quelles.
 

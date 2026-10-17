@@ -11,6 +11,8 @@ Kattints a szalagon az {{ui:editor.addShape}} gombra. Megnyílik az alakzattár.
 
 ![Az alakzattár. Minden kis kép az alakzat valódi geometriájából készül.](shot:shape-menu)
 
+A könyvtár minden kiválasztott alakzat után bezárul. A címsorral áthelyezheted oda, ahol nem takarja el a célzott helyet, például a Tulajdonságok panel fölé; a címsor dupla kattintása visszateszi a gombja alá, és a böngésző megjegyzi, hol hagytad. A címsorban lévő tű nyitva tartja a könyvtárat, amíg több alakzatot teszel egymás után.
+
 Válassz egy alakzatot. Most az egérmutatón lóg, és oda kerül, ahová kattintasz. Ha egy test fölé viszed, a mutató alatti lapra fekszik, a ferdékre is, mint a Cruise a Tinkercadben; az üres tárgyasztal fölött a munkasíkra kerül. Az [[Esc]] megszakítja az elhelyezést. Egy kattintásra váró eszköz, például a mérőszalag, a derékszögvonalzó, egy jegyzet, a {{ui:camera.placeWorkplane}}, a {{ui:editor.tool.layFlat}} vagy az élműveleti eszközök kikapcsolnak, amikor alakzatot választasz, így a kattintás az alakzatot helyezi el. Fordítva is igaz: ha bekapcsolod valamelyik ilyen eszközt, az alakzat újra lekerül. Ha inkább azt szeretnéd, hogy az alakzat a tárgyasztal közepén jelenjen meg, a kattintással történő elhelyezést kikapcsolhatod a beállításokban ({{ui:workspace.appearance}} rész, {{ui:workspace.cruise}} kapcsoló).
 
 Amit a tár kínál:
@@ -86,7 +88,7 @@ A beállítások mellett magán az alakzaton is vannak fogantyúk:
 - A **sarkok és élek** nagyobbá vagy kisebbé teszik az alakzatot. Ha egyet a szemközti oldalon túlra húzol, az alakzat ott, annak az élnek a túloldalán tovább nő. A felső nyíl ugyanezt teszi az alap alatt. Egy sarok húzása közben tartsd nyomva a [[Shift]] billentyűt, hogy a szélesség, a mélység és a magasság együtt változzon, és megmaradjanak az arányok; az [[Alt]] nyomva tartásával a középpontból méretez a szemközti sarok helyett. Billentyűzet nélkül, vagy ha nem akarsz billentyűt nyomva tartani, kapcsold be a tulajdonságok tetején az {{ui:inspector.keepProportions}} kapcsolót: ilyenkor a sarkok mindig megtartják az arányokat, és ha a szélesség, a mélység vagy a magasság közül egyet begépelsz, a másik kettő ugyanazzal a szorzóval változik. A beállítás megmarad.
 - A **felső nyíl** a magasságot változtatja, a **középső** fogantyú emeli vagy süllyeszti az alakzatot.
 - Az **íves nyilak** forgatják.
-- Az alakzat melletti **számok** a méreteket mutatják. Ha egyre rákattintasz, megnyílik egy mező, amelybe begépeled a kívánt számot. Az [[Enter]] billentyűvel az alakzat a számmal szemközti éltől nő, mint húzáskor; az [[Alt]]+[[Enter]] billentyűvel a közepe körül nő, így egy másik alakzathoz igazított alakzat igazítva marad. Ez a szélességre és a hosszra vonatkozik; a magasság mindig az aljától felfelé nő. A jobb oldali tulajdonságmezők billentyű nélkül is megtartják a közepet.
+- Az alakzat melletti **számok** a méreteket mutatják. Ha egyre rákattintasz, megnyílik egy mező, amelybe begépeled a kívánt számot. Az [[Enter]] billentyűvel az alakzat a számmal szemközti éltől nő, mint húzáskor; az [[Alt]]+[[Enter]] billentyűvel a közepe körül nő, így egy másik alakzathoz igazított alakzat igazítva marad. Ez a szélességre és a hosszra vonatkozik; a magasság mindig az aljától felfelé nő. A jobb oldali tulajdonságmezők billentyű nélkül is megtartják a közepet. A [[Tab]] megtartja a számot, és megnyitja a következő mezőt (szélesség, mélység, magasság); a [[Shift]]+[[Tab]] visszalép.
 - Egy **kattintás egy sarokra** (húzás nélkül) a szélességet és a mélységet együtt nyitja meg. Gépeld be az elsőt, nyomj [[Tab]] billentyűt a másodikhoz, és [[Enter]] billentyűt, hogy mindkettőt alkalmazd. Az [[Esc]] elveti.
 
 Ha egy alakzatot derékszögben elforgattál, például a {{ui:editor.tool.layFlat}} paranccsal az oldalára fektetted, a tulajdonságmezők arról az irányról kapják a nevüket, amerre az adott méret most fut: a {{ui:prop.height}} az, ami felfelé megy, a {{ui:prop.width}} X mentén, a {{ui:prop.length}} pedig Y mentén fut. Egy fekvő alakzat magasságát begépelve tehát a függőleges méretet változtatod, és az alja a tárgyasztalon marad. Egy bármilyen más szögben döntött alakzat a mezőkben a saját méreteit mutatja, és egy megjegyzés alatta ezt jelzi is.
@@ -109,7 +111,7 @@ Egy újra és újra szükséges tartó, fogantyú vagy alaplap a {{ui:myShapes.t
 
 1. Jelölj ki egy vagy több testet, akár lyukakat, csoportokat vagy importált modellt is.
 2. Nyisd meg az alakzattárat, és kattints a {{ui:myShapes.saveSelection}} gombra. Adj meg egy nevet, és erősítsd meg a {{ui:common.save}} gombbal.
-3. Bármelyik tervben egy kattintás a csempére beilleszti az alakzatot, mint bármelyik másikat. A csempét a munkasíkra is húzhatod; ilyenkor oda kerül, ahol elengeded.
+3. Bármelyik tervben egy kattintás a csempére beilleszti az alakzatot, mint bármelyik másikat. A csempét a munkasíkra is húzhatod; ilyenkor oda kerül, ahol elengeded. Az alakzat ezután a mutatóra lóg, mint bármelyik másik: követi azt, más testek lapjain is, egy kattintás leteszi, az [[Esc]] félreteszi.
 
 Több test együtt tér vissza, úgy elhelyezve, ahogy egymáshoz képest álltak, és egyenként is kijelölhetők maradnak. Egy csempén a ceruza átnevezi, a kuka rákérdezés után eltávolítja. A tervekbe már beillesztett alakzatok változatlanok maradnak.
 

@@ -3728,14 +3728,14 @@ export function SnapGridControl({
   return (
     <div className="snap-row">
       <span>{t("inspector.snapGrid")}</span>
-      <button className="snap-select" onClick={() => onSnapOpenChange((value) => !value)}>
+      <button className="snap-select" data-help={t("inspector.snapGrid")} onClick={() => onSnapOpenChange((value) => !value)}>
         <span className="snap-select-label">{label(snap)}</span>
         <ChevronDown size={12} fill="currentColor" />
       </button>
       {onUnitsChange ? (
         <span className="snap-units" role="group" aria-label={t("inspector.unitsSwitch")} title={t("inspector.unitsSwitch")}>
-          <button type="button" aria-pressed={units === "Metric (Default)"} onClick={() => onUnitsChange("Metric (Default)")}>mm</button>
-          <button type="button" aria-pressed={units === "Imperial"} onClick={() => onUnitsChange("Imperial")}>in</button>
+          <button type="button" data-help={t("inspector.unitsSwitch")} aria-pressed={units === "Metric (Default)"} onClick={() => onUnitsChange("Metric (Default)")}>mm</button>
+          <button type="button" data-help={t("inspector.unitsSwitch")} aria-pressed={units === "Imperial"} onClick={() => onUnitsChange("Imperial")}>in</button>
         </span>
       ) : null}
       {snapOpen ? (

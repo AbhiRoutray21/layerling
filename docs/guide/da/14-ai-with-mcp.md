@@ -70,6 +70,8 @@ AI'en arbejder med de samme funktioner som dig, gennem den samme vej som din han
 | `layerling_list_edges` | lister objektets rigtige CAD-kanter |
 | `layerling_apply_edge_treatment` | faser eller runder valgte kanter |
 | `layerling_hollow_object` | udhuler en form med jævn væg |
+| `layerling_list_faces` | lister fladerne på en eksakt form |
+| `layerling_delete_faces` | sletter flader og lukker åbningen |
 | `layerling_array_objects` | mangfoldiggør i en række eller på en cirkel |
 | `layerling_bundle_objects` | bundter objekter som Ctrl+B: de flytter sammen, beholder deres farve og slags og går ud hver for sig i en eksport |
 | `layerling_layer_text` | laver en tekst om til en stak lag til et flerfarvet print (bogstaver, bredere kanter, en plade uden huller) eller bygger en stak igen, med et nøgleringshul, hjørnerne pr. lag og en rundet eller faset bogstavkant; med en navneliste, ét tag pr. navn |
@@ -91,6 +93,7 @@ AI'en arbejder med de samme funktioner som dig, gennem den samme vej som din han
 | `layerling_set_section_view` | skærer visningen op langs et plan for at kigge indeni (kun visningen, intet skæres fra hinanden) |
 | `layerling_clear_history` | sletter hvert fortryd-trin for evigt, som historikvisningens "Slet historik"-knap; kræver `confirm: true` |
 | `layerling_set_history_view` | ser tilbage på en tidligere tilstand af projektet, som historikvisningen (det rigtige design forbliver urørt; ændringsværktøjer venter indtil den er lukket) |
+| `layerling_restore_from_history` | henter objekter (også dele i grupper) fra en tidligere tilstand tilbage i designet som kopier, som historikvisningens knap til at hente ind i designet - ét trin, som fortryd tager tilbage |
 | `layerling_export_section_svg` | returnerer omridsene på et skæreplan som en SVG i 1:1, fra de samme former som eksporten |
 | `layerling_export_drawing` | laver værkstedstegningen fra "2D"-eksporten: tre visninger i 1:1 på et ISO-ark med samlede størrelser og en tabel over de runde boringer, som SVG-tekst eller PDF |
 | `layerling_export_mesh` | skriver eksportvinduets fil som STL, 3MF eller OBJ af de samme legemer; til en sti på denne computer eller som base64 |

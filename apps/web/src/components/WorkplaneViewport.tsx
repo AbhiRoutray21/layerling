@@ -105,12 +105,13 @@ import { boundsInsideRect, marqueeMode } from "@/lib/marqueeSelection";
 import { canBeginShapeDrag, handleDimensionLimit, POSITION_TYPED_LIMIT, DEFAULT_SNAP_GRID, DEFAULT_WORKPLANE_WORKSPACE, effectiveViewSettings, viewPixelRatio, normalizeSnapGrid, normalizeWorkspaceSettings, orbitControlsZoomSpeed, readWorkspaceDefault, saveWorkspaceDefault, snapGridForUnits, snapGridStep as snapStep, workplaneSettingsFingerprint, workspaceForUnits, workspaceHydrationSyncDecision, zoomDistanceScale } from "@/lib/workplaneSettings";
 import { withShapeDefaults } from "@/lib/shapeDefaults";
 import { workplaneGridBandWidths, AXIS_ARROW_COLORS, axisArrowLayout, DEFAULT_EDGE_LINE_COLOR, fillLightPosition, keyLightPosition, sceneLightLevels, shadowBlurRadius, workplaneGridLayout, workplaneGridLines, workplaneGridPalette, workplaneLabelLayout, workplaneThemePalette, WORKPLANE_LABEL_ASPECT, WORKPLANE_LINE_ELEVATION, type WorkplaneGridLayout } from "@/lib/workplaneGrid";
-import { cleanNearZero, cleanRotationDegrees, isNonSolidShapeKind, mirroredAxisCount, mirrorSign, preservesEdgeTreatmentSize, proportionalResizeScale, resizedImportedCoordinates, resizedImportedMeshPositions, resizedShapeSize, shapeDepth, shapeExtrudeDeformAt, shapeHasExtrudeDeform, shapeHasShapeDeform, shapeHasTaper, shapeSupportsTaper, shapeTaperDimensions, shapeTaperScaleAt, shapeWidth, shapeWithParametricSource } from "@/lib/workplaneShapes";
+import { cleanNearZero, deformsAboutOrigin, cleanRotationDegrees, isNonSolidShapeKind, mirroredAxisCount, mirrorSign, preservesEdgeTreatmentSize, proportionalResizeScale, resizedImportedCoordinates, resizedImportedMeshPositions, resizedShapeSize, shapeDepth, shapeExtrudeDeformAt, shapeHasExtrudeDeform, shapeHasShapeDeform, shapeHasTaper, shapeSupportsTaper, shapeTaperDimensions, shapeTaperScaleAt, shapeWidth, shapeWithParametricSource } from "@/lib/workplaneShapes";
 import { sphereTessellation } from "@/lib/sphereTessellation";
 import { torusTessellation } from "@/lib/torusTessellation";
 import type { LayerlingMcpViewFace } from "@/lib/layerlingMcpProtocol";
 import { liftHandleScreenPoint } from "@/components/workplane/transformOverlayTypes";
 import { ownSideForMark } from "@/lib/dimensionSides";
+import { SelectionCounter } from "@/components/workplane/SelectionCounter";
 import {
   TransformOverlay,
   continuousSnappedWheelRotation,
@@ -141,7 +142,7 @@ import {
 import { cuboidCorners, pointAlongAxes, type AlignAxes, type FrameCuboid } from "@/lib/alignFrame";
 import type { AlignAxis, AlignHandleStatus, AlignTarget, GridSize, MeasurementAccuracy, ShapeAsset, WorkplaneNote, WorkplaneNoteAnchor, WorkplaneShape, WorkplaneWorkspaceSettings } from "@/types/layerling";
 import { referencePoints } from "@/lib/workplaneNotes";
-import { pivotKeptAhead, ZOOM_PIVOT_REACH_MM } from "@/lib/zoomPivot";
+import { pivotKeptAhead, ZOOM_PIVOT_REACH_MM, pivotHeightRange } from "@/lib/zoomPivot";
 import { pointerReach } from "@/lib/pointerReach";
 import { measurementMiddle, nearestReferenceOnScreen, type ReferencePosition } from "@/lib/referencePoints";
 import { planarFaceCentroid, planarFaceTriangles, type PivotPoint } from "@/lib/rotationPivot";
@@ -149,7 +150,11 @@ import { outwardFaceNormal } from "@/lib/layFlat";
 import { OVERHANG_PLATE_TOLERANCE, overhangDownwardLimit } from "@/lib/overhangLimits";
 import { directionIsOwnShapeAxis, rotatedGeometryShapePatch, rotationPatchFromQuaternion as sharedRotationPatchFromQuaternion, signedDegrees } from "@/lib/geometryRotation";
 import type { CadModifierEdge } from "@/lib/cadModifierTypes";
+import { cadFaceHighlightPositions, type CadFacePick } from "@/lib/cadFacePick";
+import { cadFacePickMesh, disposeCadFacePickMesh } from "@/lib/cadFacePickMesh";
 import { circleOfEdgePoints, pointAcrossCircle, pointOnCircle } from "@/lib/tapeCircle";
+import { syncHistoryPickHighlight } from "@/components/workplane/historyPickHighlight";
+import { aimPickRay, pickShapeAt, pickShapeIdAt, pointerRayFor, RENDER_LAYER_SHAPES, usePickOnlyPointer, type PickOnlySelection } from "@/components/workplane/viewportPicking";
 import { RENDER_LAYER_HELPERS, sharedShapeGeometryCache, sharedEdgesGeometryCache, sharedShapeMaterialCache, type PointCardOffset, type ShapeRenderRecord, type ThreeState, type MoveDimensionSession, type NoteOverlayState, type TapePoint, type TapeAttachment, type TapeEdgeAttachment, type TapeModel, type TapeOverlayState, type TapeCandidate, type RotationHandleSide, type RotationHandleSides, type DragItem, quaternionForShape, projectToScreen, syncMoveDimensionWorldLines, syncTransformGuideWorldLines, tapeShapeDimensions, tapePointWorld, tapeEdgeWorldPoints, tapeSegmentWorldPoints, syncTapeOverlay, syncNoteOverlay, NoteOverlay, TapeOverlay, type RulerDimensionOverlayItem, type RulerDimensionOverlayState, syncRulerDimensionOverlay, RulerDimensionOverlay, type CornerRulerInstance, type CornerRulerOverlayState, syncCornerRulerToolOverlay, CornerRulerToolOverlay, syncOriginDimensionWorldLines, shapeCenter, shapeLocalExtents, projectShapeExtent, projectShapesExtent, type OriginDimensionFrame, setObjectRenderLayer, freezeStaticObjectMatrices, formatMeasure, findShapeObject, trimSharedShapeGeometryCache, releaseSharedShapeGeometry, trimSharedShapeMaterialCache, releaseSharedShapeMaterials, disposeMaterialResource, disposeChildren, disposeObject } from "@/components/workplane/ViewportOverlays";
 
 const WORKPLANE_WIDTH = 200;
@@ -199,7 +204,7 @@ function movePivotToDepthUnder(state: ThreeState, ndcX: number, ndcY: number) {
   // Nothing to zoom towards under the pointer (the sky, a spot past the plate): the pivot stays ahead of the camera.
   const keepAhead = () => {
     const limits = state.pivotLimits;
-    const ahead = pivotKeptAhead(state.camera.position, state.controls.target, forward, ZOOM_PIVOT_REACH_MM, limits ? { halfWidth: limits.halfWidth, halfDepth: limits.halfDepth, minY: CAMERA_MIN_TARGET_Y, maxY: CAMERA_MAX_TARGET_Y } : null);
+    const ahead = pivotKeptAhead(state.camera.position, state.controls.target, forward, ZOOM_PIVOT_REACH_MM, limits ? { halfWidth: limits.halfWidth, halfDepth: limits.halfDepth, minY: limits.minY, maxY: limits.maxY } : null);
     if (ahead) state.controls.target.copy(ahead);
   };
   if (!point) { keepAhead(); return; }
@@ -207,7 +212,7 @@ function movePivotToDepthUnder(state: ThreeState, ndcX: number, ndcY: number) {
   if (!(depth > 0) || depth > CAMERA_MAX_DISTANCE) { keepAhead(); return; }
   const target = state.camera.position.clone().addScaledVector(forward, depth);
   const limits = state.pivotLimits;
-  if (limits && (Math.abs(target.x) > limits.halfWidth || Math.abs(target.z) > limits.halfDepth || target.y < CAMERA_MIN_TARGET_Y || target.y > CAMERA_MAX_TARGET_Y)) { keepAhead(); return; }
+  if (limits && (Math.abs(target.x) > limits.halfWidth || Math.abs(target.z) > limits.halfDepth || target.y < limits.minY || target.y > limits.maxY)) { keepAhead(); return; }
   state.controls.target.copy(target);
 }
 
@@ -274,11 +279,6 @@ const CAMERA_MIN_TARGET_Y = -70;
 const CAMERA_MAX_TARGET_Y = 120;
 const ROTATION_PROTRACTOR_OUTER_RADIUS = 94;
 const RENDER_LAYER_WORKPLANE = 0;
-const RENDER_LAYER_SHAPES = 1;
-/** How far beside a body a press may land and still mean it, in screen pixels: a fingertip covers more than a mouse pointer. */
-const PICK_TOLERANCE_PIXELS = 6;
-const PICK_TOLERANCE_PIXELS_TOUCH = 16;
-const PICK_TOLERANCE_RAYS = 8;
 const RENDER_LAYER_MODIFIERS = 3;
 const RENDER_LAYER_PREVIEWS = 4;
 const BVH_PICKING_TRIANGLE_THRESHOLD = 512;
@@ -330,6 +330,10 @@ type WorkplaneViewportProps = {
   shapes: WorkplaneShape[];
   selectedIds: string[];
   alignMode: boolean;
+  /** Select multiple (touch has no Shift): a tap on a body adds it to the selection or takes it out (#337). */
+  multiSelect?: boolean;
+  /** A tap on empty space ends the mode and keeps the selection. */
+  onMultiSelectEnd?: () => void;
   alignAnchorId: string | null;
   alignHandles: AlignHandleStatus[];
   /** The axes the align tool measures along when a workplane is set on a face (#232); null on the plate. */
@@ -340,6 +344,8 @@ type WorkplaneViewportProps = {
   mirrorMode: boolean;
   mirrorReferenceShapes: WorkplaneShape[];
   splitActive?: boolean;
+  /** With `splitActive`: objects can still be picked and show the selection outline, but nothing can be edited (History view). */
+  pickOnly?: PickOnlySelection | null;
   splitPlane?: ModelSplitPlane | null;
   /** Dragging the plane's arrow head moves the plane along its normal. */
   onSplitPositionChange?: (position: number) => void;
@@ -424,6 +430,9 @@ type WorkplaneViewportProps = {
   /** "Align faces" waiting for a click on a face of one of these bodies. */
   mateFacePick?: { shapeIds: string[] } | null;
   onMateFacePick?: (pick: LayFlatPick | null) => void;
+  /** "Delete face" waiting for clicks on faces of the prepared body; a click toggles the face. */
+  cadFacePick?: CadFacePick | null;
+  onCadFacePick?: (faceId: number) => void;
   onNoteAdd?: (note: { x: number; y: number; z: number; anchor?: WorkplaneNoteAnchor }) => string | null;
   /** Puts reference points in the scene; answers with the ids it made (none if they are there already). */
   onAddReferencePoints?: (positions: ReferencePosition[]) => string[];
@@ -1650,10 +1659,7 @@ function pickModelTapeCandidate(state: ThreeState, shapeIds: string[], clientX: 
   if (vertexCandidates[0]) return vertexCandidates[0].candidate;
   if (edgeCandidates[0]) return edgeCandidates[0].candidate;
 
-  state.pointer.x = ((clientX - rect.left) / rect.width) * 2 - 1;
-  state.pointer.y = -((clientY - rect.top) / rect.height) * 2 + 1;
-  state.raycaster.setFromCamera(state.pointer, state.camera);
-  state.raycaster.layers.set(RENDER_LAYER_SHAPES);
+  aimPickRay(state, clientX, clientY, RENDER_LAYER_SHAPES);
   const surfaceHit = state.raycaster.intersectObjects(targets, true).find((entry) => entry.object instanceof THREE.Mesh);
   if (!surfaceHit) return null;
   const shapeId = surfaceHit.object.userData.shapeId as string;
@@ -2352,10 +2358,7 @@ function rotationAxisVectorForFrame(handleKey: string, frame: SelectionFrame) {
 }
 
 function rayPointOnRotationPlane(state: ThreeState, clientX: number, clientY: number, pivot: THREE.Vector3, axis: THREE.Vector3) {
-  const rect = state.renderer.domElement.getBoundingClientRect();
-  state.pointer.x = ((clientX - rect.left) / rect.width) * 2 - 1;
-  state.pointer.y = -((clientY - rect.top) / rect.height) * 2 + 1;
-  state.raycaster.setFromCamera(state.pointer, state.camera);
+  aimPickRay(state, clientX, clientY);
   const plane = new THREE.Plane().setFromNormalAndCoplanarPoint(axis.clone().normalize(), pivot);
   return state.raycaster.ray.intersectPlane(plane, new THREE.Vector3());
 }
@@ -3016,6 +3019,8 @@ export function WorkplaneViewport({
   shapes,
   selectedIds,
   alignMode,
+  multiSelect = false,
+  onMultiSelectEnd,
   alignAnchorId,
   alignHandles,
   alignAxes = null,
@@ -3024,6 +3029,7 @@ export function WorkplaneViewport({
   mirrorMode,
   mirrorReferenceShapes,
   splitActive = false,
+  pickOnly = null,
   splitPlane = null,
   onSplitPositionChange,
   splitSurfacePick = false,
@@ -3082,6 +3088,8 @@ export function WorkplaneViewport({
   onLayFlatPick,
   mateFacePick = null,
   onMateFacePick,
+  cadFacePick = null,
+  onCadFacePick,
   onNoteAdd,
   onAddReferencePoints,
   onRemoveAllReferencePoints,
@@ -3309,6 +3317,9 @@ export function WorkplaneViewport({
   layFlatPickModeRef.current = layFlatPickMode;
   const mateFacePickRef = useRef(mateFacePick);
   mateFacePickRef.current = mateFacePick;
+  const cadFacePickRef = useRef(cadFacePick);
+  cadFacePickRef.current = cadFacePick;
+  const cadFaceHoverRef = useRef<number | null>(null);
   const notesVisibleRef = useRef(notesVisible);
   const noteOverlayRef = useRef<NoteOverlayState | null>(null);
   const noteDragRef = useRef<NoteDragState | null>(null);
@@ -3323,6 +3334,10 @@ export function WorkplaneViewport({
   const cornerRulerDragRef = useRef<{ id: string; pointerId: number; moved: boolean } | null>(null);
   const rulerDuplicateDragRef = useRef<{ pointerId: number; rulerId: string; shapeId: string; baseAlong: number; planeY: number; sourceX: number; sourceZ: number } | null>(null);
   const alignModeRef = useRef(alignMode);
+  const multiSelectRef = useRef(multiSelect);
+  multiSelectRef.current = multiSelect;
+  const onMultiSelectEndRef = useRef(onMultiSelectEnd);
+  onMultiSelectEndRef.current = onMultiSelectEnd;
   const alignAnchorIdRef = useRef(alignAnchorId);
   const alignHandlesRef = useRef(alignHandles);
   const mirrorModeRef = useRef(mirrorMode);
@@ -3365,6 +3380,8 @@ export function WorkplaneViewport({
   const drawnWorkplane = () => (workplaneHiddenRef.current ? horizontalPlacementWorkplane() : placementWorkplaneRef.current);
   workplaneModeRef.current = workplaneMode;
   splitActiveRef.current = splitActive;
+  const pickOnlyRef = useRef(pickOnly);
+  pickOnlyRef.current = pickOnly;
   splitPlaneRef.current = splitPlane;
   const onSplitPositionChangeRef = useRef(onSplitPositionChange);
   onSplitPositionChangeRef.current = onSplitPositionChange;
@@ -3392,6 +3409,11 @@ export function WorkplaneViewport({
       workplaneModeRef.current || splitActiveRef.current || (modifierActiveRef.current && !modifierPreviewActiveRef.current) ? [] : ids
     ),
     [],
+  );
+  /** The bodies drawn with the selection outline: the selection, or what is picked in pick-only mode. */
+  const shapeOutlineIds = useCallback(
+    (ids = selectedIdsRef.current) => pickOnlyRef.current?.ids ?? renderSelectionIds(ids),
+    [renderSelectionIds],
   );
   /**
    * Die ausgewaehlten Formen, solange gerade nichts anderes den Bildschirm
@@ -3690,7 +3712,7 @@ export function WorkplaneViewport({
     rebuildShapes(
       threeRef.current,
       shapes,
-      renderSelectionIds(),
+      shapeOutlineIds(),
       modifierActiveRef.current,
       placementWorkplaneRef.current,
     );
@@ -3771,7 +3793,7 @@ export function WorkplaneViewport({
     rebuildShapes(
       threeRef.current,
       shapesRef.current,
-      renderSelectionIds(selectedIds),
+      shapeOutlineIds(selectedIds),
       modifierActiveRef.current,
       placementWorkplaneRef.current,
     );
@@ -3812,24 +3834,24 @@ export function WorkplaneViewport({
     rebuildShapes(
       threeRef.current,
       shapesRef.current,
-      renderSelectionIds(),
+      shapeOutlineIds(),
       modifierActive,
       placementWorkplaneRef.current,
     );
     if (threeRef.current) threeRef.current.needsRender = true;
-  }, [modifierActive, renderSelectionIds]);
+  }, [modifierActive, renderSelectionIds, shapeOutlineIds]);
 
   useEffect(() => {
     modifierPreviewActiveRef.current = modifierPreviewActive;
     rebuildShapes(
       threeRef.current,
       shapesRef.current,
-      renderSelectionIds(),
+      shapeOutlineIds(),
       modifierActiveRef.current,
       placementWorkplaneRef.current,
     );
     if (threeRef.current) threeRef.current.needsRender = true;
-  }, [modifierPreviewActive, renderSelectionIds]);
+  }, [modifierPreviewActive, renderSelectionIds, shapeOutlineIds]);
 
   useEffect(() => {
     if (hoverModifierEdgeId !== null && !modifierEdges.some((edge) => edge.id === hoverModifierEdgeId)) {
@@ -3942,6 +3964,11 @@ export function WorkplaneViewport({
     if (!layFlatPickMode && !mateFacePick) syncLayFlatHover(threeRef.current, [], resolvedThemeRef.current, null, null);
   }, [layFlatPickMode, mateFacePick]);
 
+  useEffect(() => {
+    if (!cadFacePick) cadFaceHoverRef.current = null;
+    syncCadFaceLayer(threeRef.current, cadFacePick, resolvedTheme, cadFaceHoverRef.current);
+  }, [cadFacePick, resolvedTheme]);
+
   useLayoutEffect(() => {
     rotationPivotRef.current = rotationPivot;
     const state = threeRef.current;
@@ -3968,7 +3995,7 @@ export function WorkplaneViewport({
     rebuildShapes(
       state,
       shapesRef.current,
-      renderSelectionIds(),
+      shapeOutlineIds(),
       modifierActiveRef.current,
       placementWorkplaneRef.current,
     );
@@ -4010,7 +4037,7 @@ export function WorkplaneViewport({
     if (!workplaneMode) {
       syncWorkplaneHoverPreview(threeRef.current, null, workspaceRef.current, resolvedThemeRef.current);
     }
-  }, [clearMoveDimensions, renderSelectionIds, splitActive, workplaneMode]);
+  }, [clearMoveDimensions, renderSelectionIds, shapeOutlineIds, splitActive, workplaneMode]);
 
   useEffect(() => {
     if (splitActive) return;
@@ -4044,7 +4071,7 @@ export function WorkplaneViewport({
     if (threeRef.current) threeRef.current.palette = appThemePalette(themePreference);
     // Edge lines on all bodies: shapes already built have to take the setting up.
     if (setEdgeLineStyle(effectiveViewSettings(workspace).edgeLines, workspace.edgeColor)) {
-      rebuildShapes(threeRef.current, shapesRef.current, renderSelectionIds(), modifierActiveRef.current, placementWorkplaneRef.current);
+      rebuildShapes(threeRef.current, shapesRef.current, shapeOutlineIds(), modifierActiveRef.current, placementWorkplaneRef.current);
     }
     rebuildWorkplane(threeRef.current, workspace, resolvedTheme, workplaneHidden ? horizontalPlacementWorkplane() : placementWorkplane, projectName);
     rebuildSelectionHelpers(threeRef.current, shapesRef.current, renderSelectionIds(), placementWorkplane);
@@ -4215,6 +4242,7 @@ export function WorkplaneViewport({
         state.workplanePreviewLayer,
         state.layFlatHoverLayer ?? null,
         state.bentTubeSegmentLayer ?? null,
+        state.cadFaceLayer ?? null,
         state.helperLayer,
         state.transformGuideLayer,
         state.moveDimensionLayer,
@@ -4277,7 +4305,7 @@ export function WorkplaneViewport({
     };
     perfRef.current.lastSample = performance.now();
     resetCamera(state);
-    rebuildShapes(state, shapesRef.current, renderSelectionIds(), false, placementWorkplaneRef.current);
+    rebuildShapes(state, shapesRef.current, shapeOutlineIds(), false, placementWorkplaneRef.current);
     syncSplitPlane(state, splitPlaneRef.current);
 
     const animate = () => {
@@ -4378,6 +4406,8 @@ export function WorkplaneViewport({
       if (state.bentTubeSegmentLayer) {
         disposeChildren(state.bentTubeSegmentLayer);
       }
+      if (state.cadFaceLayer) disposeChildren(state.cadFaceLayer);
+      if (state.cadFacePickMesh) disposeCadFacePickMesh(state.cadFacePickMesh);
       disposeChildren(state.shapeLayer);
       state.shapeRecords.clear();
       disposeChildren(state.helperLayer);
@@ -4557,10 +4587,7 @@ export function WorkplaneViewport({
       return null;
     }
 
-    const rect = state.renderer.domElement.getBoundingClientRect();
-    state.pointer.x = ((clientX - rect.left) / rect.width) * 2 - 1;
-    state.pointer.y = -((clientY - rect.top) / rect.height) * 2 + 1;
-    state.raycaster.setFromCamera(state.pointer, state.camera);
+    aimPickRay(state, clientX, clientY);
 
     const hit = new THREE.Vector3();
     if (!state.raycaster.ray.intersectPlane(plane, hit)) {
@@ -5722,7 +5749,7 @@ export function WorkplaneViewport({
     const sizeFrame = selectionFrameForShapes([shape], [shape.id]);
     // The mark counts along the workplane the box on screen was drawn in; the shape's fields along its own sides (#419).
     const markFrame = selectionFrameForShapes([shape], [shape.id], placementWorkplaneRef.current);
-    const ownSide = markFrame && sizeFrame && markAxis !== "height" ? ownSideForMark(markFrame, sizeFrame, markAxis) : null;
+    const ownSide = markFrame && sizeFrame ? ownSideForMark(markFrame, sizeFrame, markAxis) : null;
     const axis: "width" | "depth" | "height" = ownSide?.axis ?? markAxis;
     const currentExtent = axis === "width"
       ? sizeFrame?.width ?? shapeWidth(shape)
@@ -5904,6 +5931,25 @@ export function WorkplaneViewport({
     setEditingDimension(null);
     setPinnedMeasureKey(null);
   }, [applyTypedSelectionSize, dimensionPatchFor, editingDimension, onInteractionActiveChange, onUpdateShape]);
+
+  /**
+   * Tab in a dimension box (#300): the value is kept and the next box opens - width, depth, height, and round
+   * again; Shift goes back. The next one opens when the body has its new size and the marks stand in their new
+   * places. A box of another kind (the height above the plate) just keeps its value.
+   */
+  const tabDimensionEdit = useCallback((backwards: boolean) => {
+    const order = ["width", "depth", "height"] as const;
+    const current = editingDimension?.axis;
+    const index = order.findIndex((axis) => axis === current);
+    commitDimensionEdit();
+    if (index < 0) return;
+    const next = order[(index + (backwards ? order.length - 1 : 1)) % order.length];
+    window.setTimeout(() => {
+      const marks = Object.values(transformOverlayRef.current?.dimensions ?? {}).flat();
+      const mark = marks.find((entry) => entry.axis === next);
+      if (mark) beginDimensionEdit(mark);
+    }, 60);
+  }, [beginDimensionEdit, commitDimensionEdit, editingDimension?.axis]);
 
   // A click on a corner opens its width and depth together; Tab moves between them.
   const beginCornerEdit = useCallback((handleKey: string) => {
@@ -6169,61 +6215,22 @@ export function WorkplaneViewport({
 
   const pickShape = useCallback((clientX: number, clientY: number, pointerType = "mouse") => {
     const state = threeRef.current;
-    if (!state) {
-      return null;
-    }
-    const tolerance = pointerType === "touch" ? PICK_TOLERANCE_PIXELS_TOUCH : PICK_TOLERANCE_PIXELS;
-
-    const rect = state.renderer.domElement.getBoundingClientRect();
-    state.pointer.x = ((clientX - rect.left) / rect.width) * 2 - 1;
-    state.pointer.y = -((clientY - rect.top) / rect.height) * 2 + 1;
-    state.raycaster.setFromCamera(state.pointer, state.camera);
-    state.raycaster.layers.set(RENDER_LAYER_SHAPES);
-
-    const pickable = (entry: THREE.Intersection) => {
-      // Only surfaces pick a body. Its edge lines count as hit within 1.15 mm of the ray, so
-      // through a slot narrower than about 3 mm the rim always won over the body behind it (#193).
-      if (!(entry.object instanceof THREE.Mesh)) return false;
-      if (state.sectionPlane && state.sectionPlane.distanceToPoint(entry.point) < -0.001) return false;
-      const shapeId = entry.object.userData.shapeId;
-      if (typeof shapeId !== "string") return false;
-      const shape = shapesRef.current.find((candidate) => candidate.id === shapeId);
-      return shape ? !shape.imagePlate && !shape.previewOnly : false;
-    };
-    const hit = state.raycaster.intersectObjects(state.shapeLayer.children, true).find(pickable);
-    if (hit) {
-      return hit.object.userData.shapeId as string;
-    }
-
-    // A press that just misses still means the body next to it: a thin wall or
-    // a small part is hard to hit exactly. So the same test runs once more on
-    // a small ring around the pointer - but no further. The middle of a bore
-    // or the gap between two parts of a group is empty space and stays so.
-    let nearestId: string | null = null;
-    let nearestDistance = Number.POSITIVE_INFINITY;
-    for (let step = 0; step < PICK_TOLERANCE_RAYS; step += 1) {
-      const angle = (step / PICK_TOLERANCE_RAYS) * Math.PI * 2;
-      state.pointer.x = ((clientX + Math.cos(angle) * tolerance - rect.left) / rect.width) * 2 - 1;
-      state.pointer.y = -((clientY + Math.sin(angle) * tolerance - rect.top) / rect.height) * 2 + 1;
-      state.raycaster.setFromCamera(state.pointer, state.camera);
-      const near = state.raycaster.intersectObjects(state.shapeLayer.children, true).find(pickable);
-      if (near && near.distance < nearestDistance) {
-        nearestId = near.object.userData.shapeId as string;
-        nearestDistance = near.distance;
-      }
-    }
-
-    return nearestId;
+    return state ? pickShapeAt(state, shapesRef.current, clientX, clientY, pointerType) : null;
   }, []);
+  const pickOnlyPointer = usePickOnlyPointer(pickOnly, pickShape);
+  const pickOnlyKey = pickOnly ? pickOnly.ids.join("\0") : null;
+  useEffect(() => {
+    const state = threeRef.current;
+    if (!state) return;
+    rebuildShapes(state, shapesRef.current, shapeOutlineIds(), modifierActiveRef.current, placementWorkplaneRef.current);
+    // After the bodies: moving to another state rebuilds them, and the marking follows.
+    syncHistoryPickHighlight(state, pickOnlyRef.current?.ids ?? []);
+  }, [pickOnlyKey, shapeOutlineIds, shapes]);
 
   const pickPlacementSurface = useCallback((clientX: number, clientY: number, reverse: boolean, skip?: ReadonlySet<string>) => {
     const state = threeRef.current;
     if (!state) return null;
-    const rect = state.renderer.domElement.getBoundingClientRect();
-    state.pointer.x = ((clientX - rect.left) / rect.width) * 2 - 1;
-    state.pointer.y = -((clientY - rect.top) / rect.height) * 2 + 1;
-    state.raycaster.setFromCamera(state.pointer, state.camera);
-    state.raycaster.layers.set(RENDER_LAYER_SHAPES);
+    const rect = aimPickRay(state, clientX, clientY, RENDER_LAYER_SHAPES);
 
     const hit = state.raycaster
       .intersectObjects(state.shapeLayer.children, true)
@@ -6315,11 +6322,7 @@ export function WorkplaneViewport({
   const resolveNoteAnchor = useCallback((clientX: number, clientY: number) => {
     const state = threeRef.current;
     if (!state) return null;
-    const rect = state.renderer.domElement.getBoundingClientRect();
-    state.pointer.x = ((clientX - rect.left) / rect.width) * 2 - 1;
-    state.pointer.y = -((clientY - rect.top) / rect.height) * 2 + 1;
-    state.raycaster.setFromCamera(state.pointer, state.camera);
-    state.raycaster.layers.set(RENDER_LAYER_SHAPES);
+    aimPickRay(state, clientX, clientY, RENDER_LAYER_SHAPES);
     const hit = state.raycaster.intersectObjects(state.shapeLayer.children, true).find((entry) => {
       // A note sits on a surface; an edge line near the pointer is not one (#193).
       if (!(entry.object instanceof THREE.Mesh)) return false;
@@ -6638,11 +6641,7 @@ export function WorkplaneViewport({
       return null;
     }
 
-    const rect = state.renderer.domElement.getBoundingClientRect();
-    state.pointer.x = ((clientX - rect.left) / rect.width) * 2 - 1;
-    state.pointer.y = -((clientY - rect.top) / rect.height) * 2 + 1;
-    state.raycaster.setFromCamera(state.pointer, state.camera);
-    state.raycaster.layers.set(RENDER_LAYER_HELPERS);
+    aimPickRay(state, clientX, clientY, RENDER_LAYER_HELPERS);
 
     const intersections = state.raycaster.intersectObjects(state.helperLayer.children, true);
     const hit = intersections.find((entry) => typeof entry.object.userData.transformHandle === "string");
@@ -6821,6 +6820,13 @@ export function WorkplaneViewport({
       if (mateFacePickRef.current) {
         event.preventDefault();
         onMateFacePick?.(pickLayFlatFace(state, event.clientX, event.clientY));
+        return;
+      }
+
+      if (cadFacePickRef.current) {
+        event.preventDefault();
+        const faceId = pickCadFace(state, cadFacePickRef.current, event.clientX, event.clientY);
+        if (faceId !== null) onCadFacePick?.(faceId);
         return;
       }
 
@@ -7018,9 +7024,11 @@ export function WorkplaneViewport({
       }
 
       const id = pickShape(event.clientX, event.clientY, event.pointerType);
-      const additive = event.shiftKey;
-      if (event.pointerType === "touch" && !additive) beginLongPress(event);
-      if (!id && event.pointerType === "touch" && !additive) {
+      // Select multiple does what Shift does, for a tablet without the key; a finger on empty space
+      // still turns the view and a long press still opens the menu.
+      const additive = event.shiftKey || multiSelectRef.current;
+      if (event.pointerType === "touch" && !event.shiftKey) beginLongPress(event);
+      if (!id && event.pointerType === "touch" && !event.shiftKey) {
         // A finger on empty space turns the view, as in Tinkercad, so a tablet needs no switch for it;
         // the selection box stays with the mouse and Shift. A tap that does not move still clears the
         // selection (finishDrag).
@@ -7288,6 +7296,14 @@ export function WorkplaneViewport({
       }
       if (mateFacePickRef.current) {
         syncLayFlatHover(threeRef.current, mateFacePickRef.current.shapeIds, resolvedThemeRef.current, event.clientX, event.clientY);
+        return;
+      }
+      if (cadFacePickRef.current && threeRef.current) {
+        const hovered = pickCadFace(threeRef.current, cadFacePickRef.current, event.clientX, event.clientY);
+        if (hovered !== cadFaceHoverRef.current) {
+          cadFaceHoverRef.current = hovered;
+          syncCadFaceLayer(threeRef.current, cadFacePickRef.current, resolvedThemeRef.current, hovered);
+        }
         return;
       }
       if (modifierActiveRef.current) {
@@ -7574,7 +7590,9 @@ export function WorkplaneViewport({
         if (emptyTap && emptyTap.pointerId === event.pointerId) {
           touchEmptyTapRef.current = null;
           if (touchPointersRef.current.size === 1 && Math.hypot(event.clientX - emptyTap.x, event.clientY - emptyTap.y) < 8) {
-            onSelectShape(null);
+            // In Select multiple a tap on empty space ends the mode and leaves the selection as it is.
+            if (multiSelectRef.current) onMultiSelectEndRef.current?.();
+            else onSelectShape(null);
           }
         }
         touchPointersRef.current.delete(event.pointerId);
@@ -7757,9 +7775,10 @@ export function WorkplaneViewport({
     [onAddShape, onDropMyShape, toPlacementWorkplanePoint],
   );
 
-  const focusSelection = useCallback(() => {
+  /** Zooms to the selection; false when there is none to look at. */
+  const focusSelection = useCallback((): boolean => {
     const state = threeRef.current;
-    if (!state) return;
+    if (!state) return false;
     // The real selection, not renderSelectionIds: the workplane and edge tools hide
     // the outline while they are open, but the objects are still what to look at.
     const bounds = new THREE.Box3();
@@ -7767,7 +7786,7 @@ export function WorkplaneViewport({
       const record = state.shapeRecords.get(id);
       if (record) bounds.expandByObject(record.object);
     });
-    if (bounds.isEmpty()) return;
+    if (bounds.isEmpty()) return false;
 
     const center = bounds.getCenter(new THREE.Vector3());
     const radius = Math.max(bounds.getSize(new THREE.Vector3()).length() / 2, 0.5);
@@ -7799,6 +7818,7 @@ export function WorkplaneViewport({
     state.controls.update();
     syncViewCube(state, viewCubeRef.current);
     state.needsRender = true;
+    return true;
   }, []);
 
   const resetView = useCallback(() => {
@@ -8343,7 +8363,11 @@ export function WorkplaneViewport({
       } else if (key === "f" && event.shiftKey) {
         event.preventDefault();
         focusSelection();
-      } else if (key === "f" || event.key === "Home") {
+      } else if (key === "f") {
+        // As in Tinkercad: F looks at what is selected, and at everything when nothing is (#465).
+        event.preventDefault();
+        if (!focusSelection()) resetView();
+      } else if (event.key === "Home") {
         event.preventDefault();
         resetView();
       } else if (key === "o" && !event.ctrlKey && !event.metaKey && !event.altKey) {
@@ -8394,15 +8418,15 @@ export function WorkplaneViewport({
             <button className="camera-controls-toggle" aria-label={t("camera.hide")} title={t("camera.hideShort")} aria-expanded={true} onClick={collapseCameraControls}>
               <ChevronLeft size={24} strokeWidth={2.25} aria-hidden="true" />
             </button>
-            <button aria-label={t("camera.home")} aria-keyshortcuts="F" title={t("camera.shortcut", { label: t("camera.home"), keys: "F" })} onClick={resetView}>
+            <button aria-label={t("camera.home")} aria-keyshortcuts="Home" title={t("camera.shortcut", { label: t("camera.home"), keys: "Home" })} onClick={resetView}>
               <Home size={24} strokeWidth={2.25} />
             </button>
             <button
               aria-label={t("camera.focusSelection")}
-              aria-keyshortcuts="Shift+F"
-              title={t("camera.shortcut", { label: t("camera.focusSelection"), keys: "Shift+F" })}
+              aria-keyshortcuts="F Shift+F"
+              title={t("camera.shortcut", { label: t("camera.focusSelection"), keys: "F" })}
               disabled={selectedIds.length === 0}
-              onClick={focusSelection}
+              onClick={() => focusSelection()}
             >
               <Crosshair size={24} strokeWidth={2.25} />
             </button>
@@ -8801,7 +8825,7 @@ export function WorkplaneViewport({
         )}
       </div>
 
-      <section className={`workplane-wrap ${noteMode ? "note-mode" : ""} ${workplaneMode ? "placing-workplane" : ""} ${splitActive ? "split-mode" : ""} ${splitHandleState ? `split-handle-${splitHandleState}` : ""} ${splitSurfacePick ? "split-picking" : ""} ${splitSurfacePick && splitPickOverFace ? "split-pick-over-face" : ""} ${cruiseAsset || carryIds?.length ? "cruising" : ""} ${tapeMode ? "tape-mode" : ""} ${tapeDeleteMode ? "tape-delete-mode" : ""} ${tapeMoveMode ? "tape-move-mode" : ""} ${cornerRulerMode ? "corner-ruler-mode" : ""} ${pivotPickMode || layFlatPickMode || mateFacePick ? "pivot-pick-mode" : ""} ${modifierActive ? "modifier-edge-pick" : ""} ${sectionMeasureMode && sectionSettings.enabled ? "section-measure-mode" : ""}`} aria-label={t("aria.workplane")}>
+      <section className={`workplane-wrap ${noteMode ? "note-mode" : ""} ${workplaneMode ? "placing-workplane" : ""} ${splitActive ? "split-mode" : ""} ${splitHandleState ? `split-handle-${splitHandleState}` : ""} ${splitSurfacePick ? "split-picking" : ""} ${splitSurfacePick && splitPickOverFace ? "split-pick-over-face" : ""} ${cruiseAsset || carryIds?.length ? "cruising" : ""} ${tapeMode ? "tape-mode" : ""} ${tapeDeleteMode ? "tape-delete-mode" : ""} ${tapeMoveMode ? "tape-move-mode" : ""} ${cornerRulerMode ? "corner-ruler-mode" : ""} ${pivotPickMode || layFlatPickMode || mateFacePick || cadFacePick ? "pivot-pick-mode" : ""} ${modifierActive ? "modifier-edge-pick" : ""} ${sectionMeasureMode && sectionSettings.enabled ? "section-measure-mode" : ""}`} aria-label={t("aria.workplane")}>
         <div className="workplane-plane">
           <div
             className="three-workplane-host"
@@ -8811,12 +8835,13 @@ export function WorkplaneViewport({
               event.dataTransfer.dropEffect = "copy";
             }}
             onDrop={handleDrop}
-            onPointerDown={handlePointerDown}
+            onPointerDown={pickOnly ? pickOnlyPointer.onPointerDown : handlePointerDown}
             onPointerMove={handlePointerMove}
-            onPointerUp={finishDrag}
-            onPointerCancel={finishDrag}
+            onPointerUp={pickOnly ? pickOnlyPointer.onPointerUp : finishDrag}
+            onPointerCancel={pickOnly ? pickOnlyPointer.onPointerCancel : finishDrag}
             onPointerLeave={handlePointerLeave}
           />
+          {!workplaneMode && !splitActive ? <SelectionCounter count={selectedIds.length} hostRef={hostRef} /> : null}
           {!workplaneMode && !splitActive && marqueeRect ? <div className={marqueeTouching ? "selection-marquee touching" : "selection-marquee"} style={marqueeRect} /> : null}
           {!workplaneMode && !splitActive && moveDimensionsEnabled && moveDimensionOverlay ? (
             <MoveDimensionOverlay
@@ -8828,7 +8853,7 @@ export function WorkplaneViewport({
           {!workplaneMode && !splitActive && originDimensionsEnabled && originDimensionOverlay ? (
             <OriginDimensionOverlay overlay={originDimensionOverlay} />
           ) : null}
-          {!workplaneMode && !splitActive && !pivotPickMode && !layFlatPickMode && !mateFacePick && transformOverlay && !alignMode && !mirrorMode && !tapeMode && !tapeDeleteMode && !tapeMoveMode && !modifierActive ? (
+          {!workplaneMode && !splitActive && !pivotPickMode && !layFlatPickMode && !mateFacePick && !cadFacePick && transformOverlay && !alignMode && !mirrorMode && !tapeMode && !tapeDeleteMode && !tapeMoveMode && !modifierActive ? (
             <TransformOverlay
               box={transformOverlay}
               measureKey={pinnedMeasureKey ?? hoverMeasureKey}
@@ -8859,6 +8884,7 @@ export function WorkplaneViewport({
               onCancelCornerEdit={cancelCornerEdit}
               onEditingDimensionChange={(value) => setEditingDimension((current) => (current ? { ...current, value } : current))}
               onCommitDimensionEdit={commitDimensionEdit}
+              onTabDimensionEdit={tabDimensionEdit}
               onCancelDimensionEdit={cancelDimensionEdit}
               onBeginRotationEdit={beginRotationEdit}
               onEditingRotationChange={(value) => setEditingRotation((current) => (current ? { ...current, value } : current))}
@@ -9573,11 +9599,18 @@ function constrainCamera(state: ThreeState, workspace: WorkspaceSettings) {
   const reach = state.focusReach;
   const halfWidth = Math.max(workspace.width / 2, reach ? Math.max(Math.abs(reach.min.x), Math.abs(reach.max.x)) : 0);
   const halfDepth = Math.max(workspace.depth / 2, reach ? Math.max(Math.abs(reach.min.z), Math.abs(reach.max.z)) : 0);
-  state.pivotLimits = { halfWidth, halfDepth };
+  // The pivot may rise to the top of the highest body (and sink to the foot of the lowest): a body
+  // set high above the plate (#425) could not be centred or zoomed into with the pivot held to 120 mm.
+  const { minY, maxY } = pivotHeightRange(
+    Array.from(state.shapeRecords.values(), ({ shape }) => ({ elevation: shape.elevation ?? 0, extent: Math.max(shape.height, shapeWidth(shape), shapeDepth(shape)) })),
+    { minY: CAMERA_MIN_TARGET_Y, maxY: CAMERA_MAX_TARGET_Y },
+    reach ? { minY: reach.min.y, maxY: reach.max.y } : null,
+  );
+  state.pivotLimits = { halfWidth, halfDepth, minY, maxY };
   const target = state.controls.target;
   const previousTarget = target.clone();
   target.x = clamp(target.x, -halfWidth, halfWidth);
-  target.y = clamp(target.y, CAMERA_MIN_TARGET_Y, CAMERA_MAX_TARGET_Y);
+  target.y = clamp(target.y, minY, maxY);
   target.z = clamp(target.z, -halfDepth, halfDepth);
 
   const targetShift = target.clone().sub(previousTarget);
@@ -10537,6 +10570,8 @@ function applySectionClipping(state: ThreeState | null, plane: THREE.Plane | nul
   };
   sharedShapeMaterialCache.forEach((entry) => setPlanes(entry.material));
   sharedLineMaterialCache.forEach(setPlanes);
+  // The faces Delete face lights up are cut like the body under them.
+  state.cadFaceLayer?.children.forEach((child) => setPlanes((child as THREE.Mesh).material as THREE.Material));
 
   state.needsRender = true;
 }
@@ -11671,27 +11706,8 @@ function pivotVector(point: PivotPoint | null | undefined) {
  * on the part the selection is meant to line up with.
  */
 /** The id of the body under the pointer, the nearest one the section view leaves visible. */
-function pickShapeIdAt(state: ThreeState, clientX: number, clientY: number): string | null {
-  const rect = state.renderer.domElement.getBoundingClientRect();
-  state.pointer.x = ((clientX - rect.left) / rect.width) * 2 - 1;
-  state.pointer.y = -((clientY - rect.top) / rect.height) * 2 + 1;
-  state.raycaster.setFromCamera(state.pointer, state.camera);
-  state.raycaster.layers.set(RENDER_LAYER_SHAPES);
-  const hit = state.raycaster
-    .intersectObjects(state.shapeLayer.children, true)
-    .find((entry) => {
-      if (state.sectionPlane && state.sectionPlane.distanceToPoint(entry.point) < -0.001) return false;
-      return entry.object instanceof THREE.Mesh && typeof entry.object.userData.shapeId === "string";
-    });
-  return hit ? (hit.object.userData.shapeId as string) : null;
-}
-
 function pickRotationPivot(state: ThreeState, clientX: number, clientY: number): PivotPoint | null {
-  const rect = state.renderer.domElement.getBoundingClientRect();
-  state.pointer.x = ((clientX - rect.left) / rect.width) * 2 - 1;
-  state.pointer.y = -((clientY - rect.top) / rect.height) * 2 + 1;
-  state.raycaster.setFromCamera(state.pointer, state.camera);
-  state.raycaster.layers.set(RENDER_LAYER_SHAPES);
+  aimPickRay(state, clientX, clientY, RENDER_LAYER_SHAPES);
   const hit = state.raycaster
     .intersectObjects(state.shapeLayer.children, true)
     .find((entry) => {
@@ -11722,11 +11738,7 @@ function pickRotationPivot(state: ThreeState, clientX: number, clientY: number):
  * the surface. Beside every body it slides in the plane through `depth` facing the camera.
  */
 function resolvePivotDragPoint(state: ThreeState, clientX: number, clientY: number, depth: THREE.Vector3): THREE.Vector3 | null {
-  const rect = state.renderer.domElement.getBoundingClientRect();
-  state.pointer.x = ((clientX - rect.left) / rect.width) * 2 - 1;
-  state.pointer.y = -((clientY - rect.top) / rect.height) * 2 + 1;
-  state.raycaster.setFromCamera(state.pointer, state.camera);
-  state.raycaster.layers.set(RENDER_LAYER_SHAPES);
+  const rect = aimPickRay(state, clientX, clientY, RENDER_LAYER_SHAPES);
   const hit = state.raycaster
     .intersectObjects(state.shapeLayer.children, true)
     .find((entry) => {
@@ -11758,11 +11770,7 @@ export type LayFlatPick = { shapeId: string; normal: { x: number; y: number; z: 
 
 /** The clicked face of any body, as the body's id and the face's outward normal in world space. */
 function pickLayFlatFace(state: ThreeState, clientX: number, clientY: number): LayFlatPick | null {
-  const rect = state.renderer.domElement.getBoundingClientRect();
-  state.pointer.x = ((clientX - rect.left) / rect.width) * 2 - 1;
-  state.pointer.y = -((clientY - rect.top) / rect.height) * 2 + 1;
-  state.raycaster.setFromCamera(state.pointer, state.camera);
-  state.raycaster.layers.set(RENDER_LAYER_SHAPES);
+  aimPickRay(state, clientX, clientY, RENDER_LAYER_SHAPES);
   const hit = state.raycaster
     .intersectObjects(state.shapeLayer.children, true)
     .find((entry) => {
@@ -11812,11 +11820,7 @@ function syncLayFlatHover(
     return;
   }
 
-  const rect = state.renderer.domElement.getBoundingClientRect();
-  state.pointer.x = ((clientX - rect.left) / rect.width) * 2 - 1;
-  state.pointer.y = -((clientY - rect.top) / rect.height) * 2 + 1;
-  state.raycaster.setFromCamera(state.pointer, state.camera);
-  state.raycaster.layers.set(RENDER_LAYER_SHAPES);
+  aimPickRay(state, clientX, clientY, RENDER_LAYER_SHAPES);
   const hit = state.raycaster
     .intersectObjects(state.shapeLayer.children, true)
     .find((entry) => {
@@ -11890,6 +11894,108 @@ function syncLayFlatHover(
   layer.add(highlight);
   layer.userData.key = key;
   layer.visible = true;
+  state.needsRender = true;
+}
+
+/**
+ * Delete face: the prepared body's own tessellation, kept out of the scene,
+ * answers which face is under the pointer. A face hidden behind another body
+ * or cut away by the section view is not picked; the body itself does not
+ * hide its own faces, its display mesh lies on the same surface.
+ */
+function cadFacePickLayerMesh(state: ThreeState, pick: CadFacePick) {
+  let layer = state.cadFaceLayer;
+  if (!layer) {
+    layer = new THREE.Group();
+    layer.name = "CadFacePick";
+    layer.layers.set(RENDER_LAYER_PREVIEWS);
+    layer.visible = false;
+    state.cadFaceLayer = layer;
+    state.scene.add(layer);
+  }
+  const existing = state.cadFacePickMesh;
+  if (existing && existing.userData.positions === pick.positions) return existing;
+  if (existing) disposeCadFacePickMesh(existing);
+  const mesh = cadFacePickMesh(pick.positions, pick.indices, RENDER_LAYER_SHAPES);
+  mesh.userData.positions = pick.positions;
+  state.cadFacePickMesh = mesh;
+  return mesh;
+}
+
+function pickCadFace(state: ThreeState, pick: CadFacePick, clientX: number, clientY: number) {
+  const mesh = cadFacePickLayerMesh(state, pick);
+  const rect = state.renderer.domElement.getBoundingClientRect();
+  state.pointer.x = ((clientX - rect.left) / rect.width) * 2 - 1;
+  state.pointer.y = -((clientY - rect.top) / rect.height) * 2 + 1;
+  state.raycaster.setFromCamera(state.pointer, state.camera);
+  state.raycaster.layers.set(RENDER_LAYER_SHAPES);
+  const cut = (point: THREE.Vector3) => Boolean(state.sectionPlane && state.sectionPlane.distanceToPoint(point) < -0.001);
+  // The shared raycaster stops at the first hit of a bounds tree; with the section view on, that hit
+  // can lie in the part that is cut away, so every hit is needed to find the first one that is shown.
+  const raycaster = state.raycaster as THREE.Raycaster & { firstHitOnly?: boolean };
+  const firstHitOnly = raycaster.firstHitOnly;
+  if (state.sectionPlane) raycaster.firstHitOnly = false;
+  try {
+    const hit = raycaster.intersectObject(mesh, false).find((entry) => !cut(entry.point));
+    if (!hit || hit.faceIndex === undefined || hit.faceIndex === null) return null;
+    // The body's own display mesh lies on the same surface and is left out of the test, which also spares a heavy body the brute-force pass.
+    const blocker = raycaster
+      .intersectObjects(state.shapeLayer.children.filter((child) => child.userData.shapeId !== pick.shapeId), true)
+      .find((entry) => !cut(entry.point) && entry.object instanceof THREE.Mesh && typeof entry.object.userData.shapeId === "string" && entry.object.userData.shapeId !== pick.shapeId);
+    if (blocker && blocker.distance < hit.distance - 1e-3) return null;
+    const faceId = pick.triangleFaces[hit.faceIndex];
+    return faceId === undefined || faceId < 0 ? null : faceId;
+  } finally {
+    raycaster.firstHitOnly = firstHitOnly;
+  }
+}
+
+function syncCadFaceLayer(state: ThreeState | null, pick: CadFacePick | null, theme: ResolvedAppTheme, hoverFaceId: number | null) {
+  if (!state) return;
+  if (!pick) {
+    if (state.cadFaceLayer) {
+      disposeChildren(state.cadFaceLayer);
+      state.cadFaceLayer.visible = false;
+      state.needsRender = true;
+    }
+    if (state.cadFacePickMesh) {
+      disposeCadFacePickMesh(state.cadFacePickMesh);
+      state.cadFacePickMesh = undefined;
+    }
+    return;
+  }
+  cadFacePickLayerMesh(state, pick);
+  const layer = state.cadFaceLayer;
+  if (!layer) return;
+  disposeChildren(layer);
+  const color = theme === "dark" ? "#69d9ff" : "#079bc6";
+  const highlight = (faceIds: number[], opacity: number, renderOrder: number) => {
+    const corners = cadFaceHighlightPositions(pick.positions, pick.indices, pick.triangleFaces, faceIds);
+    if (corners.length === 0) return;
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute("position", new THREE.BufferAttribute(corners, 3));
+    const mesh = new THREE.Mesh(
+      geometry,
+      new THREE.MeshBasicMaterial({
+        color,
+        transparent: true,
+        opacity,
+        side: THREE.DoubleSide,
+        depthWrite: false,
+        polygonOffset: true,
+        polygonOffsetFactor: -3,
+        polygonOffsetUnits: -3,
+        clippingPlanes: state.sectionPlane ? [state.sectionPlane] : null,
+      }),
+    );
+    mesh.layers.set(RENDER_LAYER_PREVIEWS);
+    mesh.renderOrder = renderOrder;
+    mesh.raycast = () => undefined;
+    layer.add(mesh);
+  };
+  highlight(pick.selectedFaceIds, 0.55, 960);
+  if (hoverFaceId !== null && !pick.selectedFaceIds.includes(hoverFaceId)) highlight([hoverFaceId], 0.3, 961);
+  layer.visible = layer.children.length > 0;
   state.needsRender = true;
 }
 
@@ -12694,8 +12800,10 @@ function taperGeometryForShape(geometry: THREE.BufferGeometry, shape: WorkplaneS
   }
   const position = tapered.getAttribute("position");
   const height = Math.max(1e-6, box.max.y - box.min.y);
-  const centerX = (box.min.x + box.max.x) / 2;
-  const centerZ = (box.min.z + box.max.z) / 2;
+  // A star turns about its own middle, not about the middle of its box (#476).
+  const aboutOrigin = deformsAboutOrigin(shape.kind);
+  const centerX = aboutOrigin ? 0 : (box.min.x + box.max.x) / 2;
+  const centerZ = aboutOrigin ? 0 : (box.min.z + box.max.z) / 2;
   const deformed = shapeHasExtrudeDeform(shape);
   // A box, cylinder, polygon or sphere is drawn as a unit body (1 or 2 across) and stretched to
   // size afterwards; a turn and a lean belong to the stretched body, so they are worked out in
@@ -13366,14 +13474,6 @@ function syncSplitPlane(state: ThreeState | null, plane: ModelSplitPlane | null,
   state.splitLayer.add(root);
   state.splitLayer.visible = true;
   state.needsRender = true;
-}
-
-function pointerRayFor(state: ThreeState, clientX: number, clientY: number) {
-  const rect = state.renderer.domElement.getBoundingClientRect();
-  state.pointer.x = ((clientX - rect.left) / rect.width) * 2 - 1;
-  state.pointer.y = -((clientY - rect.top) / rect.height) * 2 + 1;
-  state.raycaster.setFromCamera(state.pointer, state.camera);
-  return state.raycaster.ray;
 }
 
 function pickSplitPlaneHandle(state: ThreeState, clientX: number, clientY: number) {

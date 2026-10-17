@@ -11,6 +11,8 @@ V orodni vrstici klikni {{ui:editor.addShape}}. Odpre se knjižnica oblik.
 
 ![Knjižnica oblik. Vsaka sličica je narisana iz prave geometrije oblike.](shot:shape-menu)
 
+Knjižnica se zapre po vsaki izbrani obliki. Z naslovno vrstico jo premakneš tja, kjer ne zakriva mesta, na katero ciljaš, na primer nad ploščo Lastnosti; dvoklik na naslovno vrstico jo vrne pod njen gumb, kje si jo pustil, pa si zapomni brskalnik. Žebljiček v naslovni vrstici drži knjižnico odprto, medtem ko postavljaš več oblik zapored.
+
 Izberi obliko. Zdaj visi na kazalcu miške in pristane tja, kamor klikneš. Če pri tem zapelješ čez telo, se položi na ploskev pod kazalcem, tudi na poševno, kot pri Cruiseu v Tinkercadu; nad prazno ploščo pristane na delovni ravnini. Če pritisneš [[Esc]], se odlaganje prekine. Orodje, ki čaka na klik, na primer merilni trak, kotomer, opomba, {{ui:camera.placeWorkplane}}, {{ui:editor.tool.layFlat}} ali robna orodja, se ob izbiri oblike izklopi, da klik odloži obliko. Obratno vklop enega teh orodij obliko spet odloži. Kdor želi obliko raje kar na sredino plošče, lahko odlaganje s klikom izklopi v nastavitvah (področje {{ui:workspace.appearance}}, stikalo {{ui:workspace.cruise}}).
 
 Kaj ponuja knjižnica:
@@ -87,7 +89,7 @@ Poleg nastavitev so na sami obliki ročice:
 - **Vogali in robovi** povlečejo obliko večjo ali manjšo. Če pri vlečenju vogala držiš [[Shift]], rasteta širina, globina in višina skupaj in razmerja se ohranijo; z [[Alt]] oblika raste od sredine namesto od nasprotnega vogala. Brez tipkovnice ali če nočeš držati tipke, zgoraj v lastnostih vklopiš {{ui:inspector.keepProportions}}: potem vogali vedno ohranijo razmerja, in če vpišeš širino, globino ali višino, se drugi dve spremenita za isti faktor. Nastavitev se zapomni.
 - **Puščica zgoraj** spremeni višino, ročica **na sredini** obliko dvigne ali spusti.
 - **Zakrivljene puščice** jo vrtijo.
-- Na **številkah** ob obliki vidiš mere. Klik nanje odpre polje, v katero vpišeš želeno številko. Z [[Enter]] oblika raste od roba, ki je nasproten številki, kot pri vlečenju; z [[Alt]]+[[Enter]] raste okoli svoje sredine, zato oblika, ki je bila poravnana z drugo, ostane poravnana. To velja za širino in dolžino; višina vedno raste navzgor od spodnje ploskve. Polja v lastnostih na desni ohranijo sredino brez tipke.
+- Na **številkah** ob obliki vidiš mere. Klik nanje odpre polje, v katero vpišeš želeno številko. Z [[Enter]] oblika raste od roba, ki je nasproten številki, kot pri vlečenju; z [[Alt]]+[[Enter]] raste okoli svoje sredine, zato oblika, ki je bila poravnana z drugo, ostane poravnana. To velja za širino in dolžino; višina vedno raste navzgor od spodnje ploskve. Polja v lastnostih na desni ohranijo sredino brez tipke. [[Tab]] obdrži številko in odpre naslednje polje (širina, globina, višina); [[Shift]]+[[Tab]] gre nazaj.
 - **Klik na vogal** (brez vlečenja) odpre širino in globino skupaj. Vpiši prvo številko, s [[Tab]] preskoči na drugo in obe sprejmi z [[Enter]]. [[Esc]] prekine.
 
 Če si obliko zavrtel za prave kote, na primer z {{ui:editor.tool.layFlat}} položil na stran, se polja v lastnostih imenujejo po smeri, v katero mera zdaj teče: {{ui:prop.height}} je tisto, kar gre navzgor, {{ui:prop.width}} teče vzdolž X in {{ui:prop.length}} vzdolž Y. Če pri ležeči obliki vpišeš višino, se torej spremeni navpična mera, spodnja stran pa ostane na plošči. Če oblika stoji poševno pod drugim kotom, polja kažejo njene lastne mere, opomba pod njimi pa to pove.
@@ -110,7 +112,7 @@ Držalo, ročaj ali osnovna plošča, ki jo potrebuješ znova in znova, pride me
 
 1. Označi eno ali več teles, tudi luknje, skupine ali uvožen model.
 2. Odpri seznam oblik in klikni {{ui:myShapes.saveSelection}}. Vpiši ime in potrdi z {{ui:common.save}}.
-3. V vsakem načrtu klik na ploščico vstavi obliko kot vsako drugo. Ploščico lahko tudi povlečeš na delovno površino, potem pristane tam, kjer jo spustiš.
+3. V vsakem načrtu klik na ploščico vstavi obliko kot vsako drugo. Ploščico lahko tudi povlečeš na delovno površino, potem pristane tam, kjer jo spustiš. Oblika nato visi na kazalcu kot vsaka druga: sledi mu, tudi čez ploskve drugih teles, klik jo odloži, [[Esc]] jo umakne.
 
 Več teles pride ven skupaj, tako kot so stala drugo glede na drugo, in ostanejo posamezno izbirna. Svinčnik na ploščici jo preimenuje, koš jo odstrani po vprašanju. Kar je že v načrtih, ostane pri tem ohranjeno.
 
