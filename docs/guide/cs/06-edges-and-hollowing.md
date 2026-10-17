@@ -24,6 +24,7 @@ Panel nabízí:
 - **{{ui:edge.radius}}** určuje poloměr zaoblení. U zkosení zadáváte {{ui:edge.distance}} nebo {{ui:edge.angle}}.
 - {{ui:edge.sharpThreshold}} rozhoduje, které hrany se považují za ostré. Hodnota 25° zachytí zřetelné zlomy a vynechá téměř rovinné přechody.
 - {{ui:edge.topEdges}} vybere pouze hrany na horním obvodu tělesa. Hodí se pro vykrajovátko: vytvořte obrys náčrtem jako rozšířenou čáru a pak zkoste jeho horní hrany. {{ui:edge.angle}} určuje sklon zkosení; to nesmí zasahovat dále než do tloušťky stěny.
+- {{ui:edge.bottomEdges}} vybere pouze hrany úplně dole na tělese, protějšek tlačítka {{ui:edge.topEdges}}. Je to rychlý způsob, jak zaoblit nebo zkosit jen patu součásti.
 - {{ui:edge.onlyVisibleEdges}} skryje hrany za tělesem. Ve výchozím stavu prosvítají všechny, což může být u složitého dílu nepřehledné. Po zapnutí vybíráte pouze hrany obrácené k vám; pro ostatní otočte pohled. Chybová červená hrana se zobrazuje vždy.
 - {{ui:edge.tangentChains}} přidává po kliknutí i plynule navazující hrany, například celý obvod plochy se zaoblenými rohy. Volba ovlivňuje jen výběr kliknutím. CAD jádro vždy pokračuje v úpravě podél tečně navazujících hran. Panel uvádí, kolik dalších hran se tím upraví.
 - {{ui:edge.keepSize}} zachová velikost zkosení či zaoblení i při pozdější změně velikosti tělesa.

@@ -252,6 +252,7 @@ export function EdgeModifierPanel({
   onPreserveEdgeSizeChange,
   onSelectAll,
   onSelectTop,
+  onSelectBottom,
   onSelectVertical,
   onClear,
   onRemoveFeature,
@@ -292,6 +293,7 @@ export function EdgeModifierPanel({
   onSelectAll: () => void;
   /** Picks only the edges along the very top, e.g. the rim of a cookie cutter (#154). */
   onSelectTop?: () => void;
+  onSelectBottom?: () => void;
   onSelectVertical?: () => void;
   onClear: () => void;
   onRemoveFeature: (id: string) => void;
@@ -344,6 +346,7 @@ export function EdgeModifierPanel({
       <div className="edge-modifier-quick-actions">
         <button type="button" disabled={!prepared} onClick={onSelectAll}>{t("edge.allSharpEdges")}</button>
         {onSelectTop ? <button type="button" disabled={!prepared} title={t("edge.topEdgesHint")} onClick={onSelectTop}>{t("edge.topEdges")}</button> : null}
+        {onSelectBottom ? <button type="button" disabled={!prepared} title={t("edge.bottomEdgesHint")} onClick={onSelectBottom}>{t("edge.bottomEdges")}</button> : null}
         {onSelectVertical ? <button type="button" disabled={!prepared} title={t("edge.verticalEdgesHint")} onClick={onSelectVertical}>{t("edge.verticalEdges")}</button> : null}
         <button type="button" disabled={!prepared} onClick={onClear}>{t("edge.clear")}</button>
       </div>

@@ -215,7 +215,7 @@ import { sketchBodyStretch, stretchedSketchProfile } from "@/lib/sketchResize";
 import { silhouetteSketchProfile } from "@/lib/sketchCadProfile";
 import { svgSketchMatchesMesh } from "@/lib/svgSketch";
 import { DEFAULT_SKETCH_STROKE, normalizeSketchStroke, strokedSketchProfile } from "@/lib/sketchStroke";
-import { topCadModifierEdgeIds, verticalCadModifierEdgeIds } from "@/lib/topEdges";
+import { bottomCadModifierEdgeIds, topCadModifierEdgeIds, verticalCadModifierEdgeIds } from "@/lib/topEdges";
 import { movedWithEditedOutline, placeSketchShape, sketchBodyAnchor, type SketchAnchor } from "@/lib/sketchPlacement";
 import { meshSlicePath, planeCutsMesh } from "@/lib/sketchSlice";
 import { projectedEdgesPath } from "@/lib/sketchEdges";
@@ -6329,6 +6329,9 @@ export function LayerlingEditor({
       : params.edgeIds === "top"
         // The rim along the very top, as the panel's "Top edges" picks it (#154).
         ? topCadModifierEdgeIds(response.edges, selectableIds)
+        : params.edgeIds === "bottom"
+        // The foot along the very bottom, as the panel's "Bottom edges" picks it (#473).
+        ? bottomCadModifierEdgeIds(response.edges, selectableIds)
         : params.edgeIds === "vertical"
           // Every edge that stands straight up, as the panel's "Vertical edges" picks it (#427).
           ? verticalCadModifierEdgeIds(response.edges, selectableIds)
@@ -12593,6 +12596,11 @@ export function LayerlingEditor({
             if (!current?.prepared) return current;
             const topIds = topCadModifierEdgeIds(current.edges, modifierAvailableEdgeIds);
             return { ...current, selectedEdgeIds: topIds, preview: null, busy: topIds.length > 0, error: topIds.length ? null : t("edge.noTopEdges") };
+          })}
+          onSelectBottom={() => setEdgeModifier((current) => {
+            if (!current?.prepared) return current;
+            const bottomIds = bottomCadModifierEdgeIds(current.edges, modifierAvailableEdgeIds);
+            return { ...current, selectedEdgeIds: bottomIds, preview: null, busy: bottomIds.length > 0, error: bottomIds.length ? null : t("edge.noBottomEdges") };
           })}
           onSelectVertical={() => setEdgeModifier((current) => {
             if (!current?.prepared) return current;

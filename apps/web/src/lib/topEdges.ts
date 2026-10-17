@@ -32,6 +32,33 @@ export function verticalCadModifierEdgeIds(edges: readonly CadModifierEdge[], ca
     .map((edge) => edge.id);
 }
 
+/**
+ * The edges along the very bottom of a body (#473), the mirror of the top edges: every point of the
+ * edge at the body's lowest level, such as the foot of a part. Picked from `candidateIds`.
+ */
+export function bottomCadModifierEdgeIds(edges: readonly CadModifierEdge[], candidateIds: readonly number[]): number[] {
+  const candidates = new Set(candidateIds);
+  let top = Number.NEGATIVE_INFINITY;
+  let bottom = Number.POSITIVE_INFINITY;
+  edges.forEach((edge) => {
+    for (let index = 1; index < edge.points.length; index += 3) {
+      top = Math.max(top, edge.points[index]);
+      bottom = Math.min(bottom, edge.points[index]);
+    }
+  });
+  if (!Number.isFinite(bottom)) return [];
+  const tolerance = Math.max(0.001, (top - bottom) * 1e-4);
+  return edges
+    .filter((edge) => candidates.has(edge.id) && edge.points.length >= 6)
+    .filter((edge) => {
+      for (let index = 1; index < edge.points.length; index += 3) {
+        if (edge.points[index] > bottom + tolerance) return false;
+      }
+      return true;
+    })
+    .map((edge) => edge.id);
+}
+
 export function topCadModifierEdgeIds(edges: readonly CadModifierEdge[], candidateIds: readonly number[]): number[] {
   const candidates = new Set(candidateIds);
   let top = Number.NEGATIVE_INFINITY;

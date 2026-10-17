@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { topCadModifierEdgeIds, verticalCadModifierEdgeIds } from "@/lib/topEdges";
+import { bottomCadModifierEdgeIds, topCadModifierEdgeIds, verticalCadModifierEdgeIds } from "@/lib/topEdges";
 import type { CadModifierEdge } from "@/lib/cadModifierTypes";
 
 const edge = (id: number, points: number[]): CadModifierEdge => ({ id, points, display: true, selectable: true, angle: 90, boundary: false, manifold: true });
@@ -52,5 +52,30 @@ describe("vertical edges (#427)", () => {
 
   it("finds none on a body without upright edges", () => {
     expect(verticalCadModifierEdgeIds([edges[4], edges[5], edges[6]], [5, 6, 7])).toEqual([]);
+  });
+});
+
+describe("bottom edges (#473)", () => {
+  // The same 10 mm high frame: rim at y = 10, foot at y = 0, one upright edge between them.
+  const edges = [
+    edge(1, [0, 10, 0, 20, 10, 0]),
+    edge(2, [20, 10, 0, 20, 10, 20]),
+    edge(3, [0, 0, 0, 20, 0, 0]),
+    edge(4, [0, 0, 0, 0, 10, 0]),
+    edge(5, [20, 0, 0, 20, 0, 20]),
+  ];
+
+  it("picks the edges whose every point lies at the lowest level", () => {
+    expect(bottomCadModifierEdgeIds(edges, [1, 2, 3, 4, 5])).toEqual([3, 5]);
+  });
+
+  it("is the mirror of the top edges", () => {
+    const mirrored = edges.map((e) => ({ ...e, points: e.points.map((v, i) => (i % 3 === 1 ? 10 - v : v)) }));
+    expect(bottomCadModifierEdgeIds(mirrored, [1, 2, 3, 4, 5])).toEqual(topCadModifierEdgeIds(edges, [1, 2, 3, 4, 5]));
+  });
+
+  it("only offers edges the tool can treat, and finds nothing in an empty body", () => {
+    expect(bottomCadModifierEdgeIds(edges, [3, 1])).toEqual([3]);
+    expect(bottomCadModifierEdgeIds([], [])).toEqual([]);
   });
 });
