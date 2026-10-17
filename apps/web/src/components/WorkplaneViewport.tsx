@@ -3405,16 +3405,25 @@ export function WorkplaneViewport({
   useEffect(() => {
     syncBentTubeSegment(threeRef.current, selectedShape, bentTubeSegment);
   }, [bentTubeSegment, selectedShape]);
-  const renderSelectionIds = useCallback(
+  // Parts hanging on the pointer (C, or a custom shape from the library, #463) move on the screen only; their
+  // measures and handles are worked out from where the parts stand in the design, so they would show at the old
+  // place until the click sets the parts down. They stay out while the parts are carried.
+  const carryActive = Boolean(carryIds?.length);
+  const outlineSelectionIds = useCallback(
     (ids = selectedIdsRef.current) => (
       workplaneModeRef.current || splitActiveRef.current || (modifierActiveRef.current && !modifierPreviewActiveRef.current) ? [] : ids
     ),
     [],
   );
+  // Read from the ref: handlers made earlier keep this function, and must see the parts being carried too.
+  const renderSelectionIds = useCallback(
+    (ids = selectedIdsRef.current) => (carryIdsRef.current?.length ? [] : outlineSelectionIds(ids)),
+    [outlineSelectionIds],
+  );
   /** The bodies drawn with the selection outline: the selection, or what is picked in pick-only mode. */
   const shapeOutlineIds = useCallback(
-    (ids = selectedIdsRef.current) => pickOnlyRef.current?.ids ?? renderSelectionIds(ids),
-    [renderSelectionIds],
+    (ids = selectedIdsRef.current) => pickOnlyRef.current?.ids ?? outlineSelectionIds(ids),
+    [outlineSelectionIds],
   );
   /**
    * Die ausgewaehlten Formen, solange gerade nichts anderes den Bildschirm
@@ -3999,7 +4008,7 @@ export function WorkplaneViewport({
       workspaceRef.current.dimensionsAlwaysVisible,
     );
     state.needsRender = true;
-  }, [renderSelectionIds, rotationPivot]);
+  }, [renderSelectionIds, rotationPivot, carryActive]);
 
   useLayoutEffect(() => {
     const state = threeRef.current;
