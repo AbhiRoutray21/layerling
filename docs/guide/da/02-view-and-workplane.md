@@ -29,8 +29,8 @@ Træk i kuben for at dreje visningen rundt, ligesom at trække med højre musekn
 
 Ved venstre kant er en smal bjælke. Fra toppen:
 
-- {{ui:camera.home}} bringer hele scenen tilbage i visningen. Tasten er [[F]] eller [[Home]].
-- {{ui:camera.focusSelection}} zoomer til markeringen ([[Shift]]+[[F]]).
+- {{ui:camera.home}} bringer hele scenen tilbage i visningen. Tasten er [[Home]]; [[F]] gør det også, når intet er markeret.
+- {{ui:camera.focusSelection}} zoomer til markeringen ([[F]] eller [[Shift]]+[[F]]).
 - {{ui:camera.zoomIn}} og {{ui:camera.zoomOut}} zoomer skridt for skridt, ligesom tasterne [[+]] og [[−]].
 - {{ui:camera.orthographic}} skifter til en flad visning hvor parallelle kanter forbliver parallelle. Til måling og justering af kanter er det ofte mere behageligt end perspektivvisningen. [[O]] skifter frem og tilbage, og endnu et klik vender tilbage.
 - {{ui:camera.hideWorkplane}} (øjet over et gitter) skjuler pladen med sit gitter, så du kan se undersiden af et design nedefra. Kun visningen ændres: nye former lander stadig på arbejdsplanet. Endnu et klik viser den igen.

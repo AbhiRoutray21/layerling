@@ -7774,9 +7774,10 @@ export function WorkplaneViewport({
     [onAddShape, onDropMyShape, toPlacementWorkplanePoint],
   );
 
-  const focusSelection = useCallback(() => {
+  /** Zooms to the selection; false when there is none to look at. */
+  const focusSelection = useCallback((): boolean => {
     const state = threeRef.current;
-    if (!state) return;
+    if (!state) return false;
     // The real selection, not renderSelectionIds: the workplane and edge tools hide
     // the outline while they are open, but the objects are still what to look at.
     const bounds = new THREE.Box3();
@@ -7784,7 +7785,7 @@ export function WorkplaneViewport({
       const record = state.shapeRecords.get(id);
       if (record) bounds.expandByObject(record.object);
     });
-    if (bounds.isEmpty()) return;
+    if (bounds.isEmpty()) return false;
 
     const center = bounds.getCenter(new THREE.Vector3());
     const radius = Math.max(bounds.getSize(new THREE.Vector3()).length() / 2, 0.5);
@@ -7816,6 +7817,7 @@ export function WorkplaneViewport({
     state.controls.update();
     syncViewCube(state, viewCubeRef.current);
     state.needsRender = true;
+    return true;
   }, []);
 
   const resetView = useCallback(() => {
@@ -8360,7 +8362,11 @@ export function WorkplaneViewport({
       } else if (key === "f" && event.shiftKey) {
         event.preventDefault();
         focusSelection();
-      } else if (key === "f" || event.key === "Home") {
+      } else if (key === "f") {
+        // As in Tinkercad: F looks at what is selected, and at everything when nothing is (#465).
+        event.preventDefault();
+        if (!focusSelection()) resetView();
+      } else if (event.key === "Home") {
         event.preventDefault();
         resetView();
       } else if (key === "o" && !event.ctrlKey && !event.metaKey && !event.altKey) {
@@ -8411,15 +8417,15 @@ export function WorkplaneViewport({
             <button className="camera-controls-toggle" aria-label={t("camera.hide")} title={t("camera.hideShort")} aria-expanded={true} onClick={collapseCameraControls}>
               <ChevronLeft size={24} strokeWidth={2.25} aria-hidden="true" />
             </button>
-            <button aria-label={t("camera.home")} aria-keyshortcuts="F" title={t("camera.shortcut", { label: t("camera.home"), keys: "F" })} onClick={resetView}>
+            <button aria-label={t("camera.home")} aria-keyshortcuts="Home" title={t("camera.shortcut", { label: t("camera.home"), keys: "Home" })} onClick={resetView}>
               <Home size={24} strokeWidth={2.25} />
             </button>
             <button
               aria-label={t("camera.focusSelection")}
-              aria-keyshortcuts="Shift+F"
-              title={t("camera.shortcut", { label: t("camera.focusSelection"), keys: "Shift+F" })}
+              aria-keyshortcuts="F Shift+F"
+              title={t("camera.shortcut", { label: t("camera.focusSelection"), keys: "F" })}
               disabled={selectedIds.length === 0}
-              onClick={focusSelection}
+              onClick={() => focusSelection()}
             >
               <Crosshair size={24} strokeWidth={2.25} />
             </button>

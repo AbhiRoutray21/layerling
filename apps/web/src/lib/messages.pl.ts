@@ -668,7 +668,7 @@ export const MESSAGES_PL: Partial<Record<MessageKey, string>> = {
   "guide.sketchGroup.clipboard": "Schowek",
   "guide.sketchClipboard.use": "Kopiuj, wytnij (Ctrl+X), wklej i duplikuj (Ctrl+D) działają na zaznaczeniu. Kopia ląduje w wolnym miejscu obok oryginału, więc nie łączy się z nim.",
   "guide.sketchGroup.view": "Poruszanie się i pomiary",
-  "guide.sketchView.zoom": "Kółko przybliża. F mieści cały szkic w widoku, Shift+F przybliża do zaznaczenia.",
+  "guide.sketchView.zoom": "Kółko przybliża. Home mieści cały szkic w widoku, F przybliża do zaznaczenia.",
   "guide.sketchView.measure": "Taśma miernicza na pasku bocznym mierzy między dwoma punktami. Kliknięcie linii lub punktu pokazuje jej długości. Na prostej linii można wpisać długość w jej etykietę wymiaru.",
   "guide.sketchGroup.finish": "Tworzenie bryły",
   "guide.sketchFinish.body": "„Zakończ szkic” zamienia zamknięty kontur w bryłę. Przy obrocie narysuj połowę przekroju po lewej stronie osi i użyj „Zakończ obrót”.",

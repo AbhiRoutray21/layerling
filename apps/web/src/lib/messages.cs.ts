@@ -741,7 +741,7 @@ export const MESSAGES_CS: Record<MessageKey, string> = {
   "guide.sketchGroup.clipboard": "Schránka",
   "guide.sketchClipboard.use": "Kopírování, vyjmutí (Ctrl+X), vložení a duplikování (Ctrl+D) pracují s výběrem. Kopie se umístí vedle originálu na volné místo, aby se s ním nespojila.",
   "guide.sketchGroup.view": "Pohled a měření",
-  "guide.sketchView.zoom": "Kolečko přibližuje. F zobrazí celý náčrt, Shift+F přiblíží výběr.",
+  "guide.sketchView.zoom": "Kolečko přibližuje. Home zobrazí celý náčrt, F přiblíží výběr.",
   "guide.sketchView.measure": "Měření vzdáleností na bočním panelu měří mezi dvěma body. Kliknutí na čáru nebo bod ukáže rozměry; délku úsečky lze zadat přímo do jejího popisku.",
   "guide.sketchGroup.finish": "Vytvoření tělesa",
   "guide.sketchFinish.body": "„Dokončit náčrt“ vytvoří z uzavřeného obrysu těleso. Pro rotaci nakreslete polovinu průřezu vlevo od osy a použijte „Dokončit rotaci“.",

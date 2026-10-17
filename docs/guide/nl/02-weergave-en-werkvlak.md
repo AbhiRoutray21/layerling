@@ -33,8 +33,8 @@ Sleep aan de kubus om de weergave te draaien, net als slepen met de rechtermuisk
 
 Aan de linkerrand staat een smalle balk. Van boven naar beneden:
 
-- {{ui:camera.home}} brengt de hele scène weer in beeld. De toets is [[F]] of [[Home]].
-- {{ui:camera.focusSelection}} zoomt in op de selectie ([[Shift]]+[[F]]).
+- {{ui:camera.home}} brengt de hele scène weer in beeld. De toets is [[Home]]; [[F]] doet het ook als er niets is geselecteerd.
+- {{ui:camera.focusSelection}} zoomt in op de selectie ([[F]] of [[Shift]]+[[F]]).
 - {{ui:camera.zoomIn}} en {{ui:camera.zoomOut}} zoomen stap voor stap, net als de toetsen [[+]] en [[−]].
 - {{ui:camera.orthographic}} schakelt naar een platte weergave waarin evenwijdige randen evenwijdig blijven. Voor meten en randen uitlijnen is dat vaak prettiger dan de perspectiefweergave. [[O]] schakelt heen en weer, en een tweede klik zet het terug.
 - {{ui:camera.hideWorkplane}} (het oog boven een raster) verbergt de plaat met het raster, zodat je een ontwerp van onderen kunt bekijken. Alleen de weergave verandert: nieuwe vormen komen nog steeds op het werkvlak terecht. Een tweede klik toont de plaat weer.

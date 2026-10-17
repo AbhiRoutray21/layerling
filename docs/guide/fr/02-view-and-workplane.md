@@ -31,8 +31,8 @@ Faites glisser le cube pour inverser la vue, tout comme en le faisant glisser av
 
 Sur le bord gauche se trouve une barre étroite. Du haut :
 
-- {{ui:camera.home}} ramène toute la scène en vue. La clé est [[F]] ou [[Home]].
-- {{ui:camera.focusSelection}} effectue un zoom sur la sélection ([[Shift]]+[[F]]).
+- {{ui:camera.home}} ramène toute la scène en vue. La touche est [[Home]] ; [[F]] le fait aussi quand rien n'est sélectionné.
+- {{ui:camera.focusSelection}} effectue un zoom sur la sélection ([[F]] ou [[Shift]]+[[F]]).
 - {{ui:camera.zoomIn}} et {{ui:camera.zoomOut}} zooment pas à pas, tout comme les touches [[+]] et [[−]].
 - {{ui:camera.orthographic}} passe à une vue plate dans laquelle les bords parallèles restent parallèles. Pour mesurer et aligner les bords, c'est souvent plus confortable que la vue en perspective. [[O]] bascule d'avant en arrière et un deuxième clic revient.
 - {{ui:camera.hideWorkplane}} (l'œil au-dessus d'une grille) cache la plaque avec sa grille, vous pouvez donc regarder le dessous d'un dessin par le bas. Seule la vue change : de nouvelles formes atterrissent toujours sur le plan de travail. Un deuxième clic l'affiche à nouveau.

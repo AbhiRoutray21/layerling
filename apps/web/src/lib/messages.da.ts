@@ -634,7 +634,7 @@ export const MESSAGES_DA: Partial<Record<MessageKey, string>> = {
   "guide.sketchGroup.clipboard": "Udklipsholder",
   "guide.sketchClipboard.use": "Kopiér, klip (Ctrl+X), indsæt og duplikér (Ctrl+D) virker på markeringen. Kopien lander på en fri plads ved siden af originalen, så den ikke er forbundet med den.",
   "guide.sketchGroup.view": "Bevæge sig rundt og måle",
-  "guide.sketchView.zoom": "Hjulet zoomer. F tilpasser hele skitsen til visningen, Shift+F zoomer til markeringen.",
+  "guide.sketchView.zoom": "Hjulet zoomer. Home tilpasser hele skitsen til visningen, F zoomer til markeringen.",
   "guide.sketchView.measure": "Målebåndet i sidebjælken måler mellem to punkter. Et klik på en linje eller et punkt viser dets længder; på en lige linje kan du taste længden ind i dens målpille.",
   "guide.sketchGroup.finish": "Lav en form",
   "guide.sketchFinish.body": "\"Afslut skitse\" laver et lukket omrids om til en form. Når du revolverer, tegn halvdelen af tværsnittet til venstre for aksen og brug \"Afslut revolvering\".",

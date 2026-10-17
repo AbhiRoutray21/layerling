@@ -662,7 +662,7 @@ export const MESSAGES_NL: Record<MessageKey, string> = {
   "guide.sketchGroup.clipboard": "Klembord",
   "guide.sketchClipboard.use": "Kopiëren, knippen (Ctrl+X), plakken en dupliceren (Ctrl+D) werken op de selectie. De kopie komt op een vrije plek naast het origineel terecht, zodat ze er niet mee verbonden is.",
   "guide.sketchGroup.view": "Rondkijken en meten",
-  "guide.sketchView.zoom": "Het wieltje zoomt. F past de hele schets in beeld, Shift+F zoomt naar de selectie.",
+  "guide.sketchView.zoom": "Het wieltje zoomt. Home past de hele schets in beeld, F zoomt naar de selectie.",
   "guide.sketchView.measure": "Het meetlint in de zijbalk meet tussen twee punten. Een klik op een lijn of punt toont de lengtes; bij een rechte lijn typ je de lengte in het maatlabel.",
   "guide.sketchGroup.finish": "Een lichaam maken",
   "guide.sketchFinish.body": "‘Schets voltooien’ maakt van een gesloten omtrek een lichaam. Bij omwentelen teken je de halve doorsnede links van de as en gebruik je ‘Omwenteling voltooien’.",

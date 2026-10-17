@@ -653,7 +653,7 @@ export const MESSAGES_FR: Partial<Record<MessageKey, string>> = {
   "guide.sketchGroup.clipboard": "Presse-papiers",
   "guide.sketchClipboard.use": "Copiez, coupez (Ctrl+X), collez et dupliquez (Ctrl+D) le travail sur la sélection. La copie atterrit sur un emplacement libre à côté de l'original, elle n'est donc pas jointe à celui-ci.",
   "guide.sketchGroup.view": "Se déplacer et mesurer",
-  "guide.sketchView.zoom": "La roue effectue un zoom. F ajuste l'intégralité de l'esquisse dans la vue, Maj+F effectue un zoom sur la sélection.",
+  "guide.sketchView.zoom": "La roue effectue un zoom. Home ajuste l'intégralité de l'esquisse dans la vue, F effectue un zoom sur la sélection.",
   "guide.sketchView.measure": "Le ruban à mesurer dans la barre latérale mesure entre deux points. Un clic sur une ligne ou un point montre ses longueurs ; sur une ligne droite, vous pouvez saisir la longueur dans sa pilule de dimension.",
   "guide.sketchGroup.finish": "Fabriquer un corps",
   "guide.sketchFinish.body": "\"Terminer l'esquisse\" transforme un contour fermé en corps. Lors d'une révolution, dessinez la moitié de la section transversale à gauche de l'axe et utilisez \"Terminer la révolution\".",

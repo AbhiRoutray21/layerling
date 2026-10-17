@@ -35,8 +35,8 @@ Ziehst du am Würfel, drehst du die Ansicht, genau wie beim Ziehen mit der recht
 
 Am linken Rand liegt eine schmale Leiste. Von oben nach unten:
 
-- {{ui:camera.home}} holt die ganze Szene wieder ins Bild. Die Taste dazu ist [[F]] oder [[Pos1]].
-- {{ui:camera.focusSelection}} zoomt auf die Auswahl ([[Umschalt]]+[[F]]).
+- {{ui:camera.home}} holt die ganze Szene wieder ins Bild. Die Taste dazu ist [[Pos1]]; [[F]] tut es auch, wenn nichts ausgewählt ist.
+- {{ui:camera.focusSelection}} zoomt auf die Auswahl ([[F]] oder [[Umschalt]]+[[F]]).
 - {{ui:camera.zoomIn}} und {{ui:camera.zoomOut}} zoomen schrittweise, ebenso die Tasten [[+]] und [[−]].
 - {{ui:camera.orthographic}} schaltet auf eine flache Ansicht um, in der parallele Kanten parallel bleiben. Das ist zum Messen und zum Ausrichten von Kanten oft angenehmer als die perspektivische Ansicht. Mit [[O]] wechselst du hin und her, ein zweiter Klick geht zurück.
 - {{ui:camera.hideWorkplane}} (das Auge über dem Gitter) blendet die Platte mit ihrem Gitter aus, damit du die Unterseite eines Entwurfs von unten ansehen kannst. Es ändert sich nur die Ansicht: Neue Formen landen weiter auf der Arbeitsebene. Ein zweiter Klick blendet sie wieder ein.

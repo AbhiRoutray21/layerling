@@ -33,8 +33,8 @@ A kockát húzva forgathatod a nézetet, pont mint a jobb egérgombos húzással
 
 A bal szélen egy keskeny sáv van. Felülről lefelé:
 
-- A {{ui:camera.home}} az egész jelenetet visszahozza a képbe. A billentyűje az [[F]] vagy a [[Home]].
-- A {{ui:camera.focusSelection}} a kijelölésre nagyít ([[Shift]]+[[F]]).
+- A {{ui:camera.home}} az egész jelenetet visszahozza a képbe. A billentyűje a [[Home]]; az [[F]] is ezt teszi, ha nincs semmi kijelölve.
+- A {{ui:camera.focusSelection}} a kijelölésre nagyít ([[F]] vagy [[Shift]]+[[F]]).
 - A {{ui:camera.zoomIn}} és a {{ui:camera.zoomOut}} lépésenként nagyít és kicsinyít, ahogy a [[+]] és a [[−]] billentyű is.
 - Az {{ui:camera.orthographic}} lapos nézetre vált, amelyben a párhuzamos élek párhuzamosak maradnak. Méréshez és élek egymáshoz igazításához ez gyakran kényelmesebb, mint a perspektivikus nézet. Az [[O]] oda-vissza vált, és egy második kattintás visszavált.
 - A {{ui:camera.hideWorkplane}} (a rács fölötti szem) elrejti a tárgyasztalt a rácsával együtt, így alulról is megnézheted egy terv alját. Csak a nézet változik: az új alakzatok továbbra is a munkasíkra kerülnek. Egy második kattintás újra megmutatja.

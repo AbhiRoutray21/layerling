@@ -563,7 +563,7 @@ export const MESSAGES_SL: Partial<Record<MessageKey, string>> = {
   "guide.sketchGroup.clipboard": "Odložišče",
   "guide.sketchClipboard.use": "Kopiraj, izreži (Ctrl+X), prilepi in podvoji (Ctrl+D) delujejo na izboru. Kopija pristane na prostem mestu ob izvirniku, zato ni povezana z njim.",
   "guide.sketchGroup.view": "Premikanje in merjenje",
-  "guide.sketchView.zoom": "Kolesce povečuje in pomanjšuje. F prilagodi vso skico pogledu, Shift+F poveča izbor.",
+  "guide.sketchView.zoom": "Kolesce povečuje in pomanjšuje. Home prilagodi vso skico pogledu, F poveča izbor.",
   "guide.sketchView.measure": "Merilni trak v stranski vrstici meri med dvema točkama. Klik na črto ali točko pokaže njene dolžine; pri ravni črti lahko dolžino vneseš v njeno oznako mere.",
   "guide.sketchGroup.finish": "Izdelava telesa",
   "guide.sketchFinish.body": "»Končaj skico« spremeni sklenjen obris v telo. Pri vrtenju nariši polovico preseka levo od osi in uporabi »Končaj vrtenje«.",

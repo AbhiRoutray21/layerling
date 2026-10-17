@@ -641,7 +641,7 @@ export const MESSAGES_IT: Partial<Record<MessageKey, string>> = {
   "guide.sketchGroup.clipboard": "Appunti",
   "guide.sketchClipboard.use": "Copia, taglia (Ctrl+X), incolla e duplica (Ctrl+D) agiscono sulla selezione. La copia viene posizionata in uno spazio libero accanto all'originale, così non risulta unita a esso.",
   "guide.sketchGroup.view": "Navigazione e misurazioni",
-  "guide.sketchView.zoom": "La rotellina regola lo zoom. F adatta l'intero schizzo alla vista, mentre Maiusc+F ingrandisce la selezione.",
+  "guide.sketchView.zoom": "La rotellina regola lo zoom. Home adatta l'intero schizzo alla vista, mentre F ingrandisce la selezione.",
   "guide.sketchView.measure": "Il metro nella barra laterale misura la distanza tra due punti. Facendo clic su una linea o su un punto vengono mostrate le relative lunghezze; su una linea retta puoi inserire la lunghezza direttamente nell'etichetta della quota.",
   "guide.sketchGroup.finish": "Creazione di un corpo",
   "guide.sketchFinish.body": "«Termina schizzo» trasforma un contorno chiuso in un corpo. Per una rivoluzione, disegna metà della sezione a sinistra dell'asse e usa «Termina rivoluzione».",

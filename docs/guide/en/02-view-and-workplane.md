@@ -35,8 +35,8 @@ Drag the cube to turn the view around, just like dragging with the right mouse b
 
 At the left edge is a narrow bar. From the top:
 
-- {{ui:camera.home}} brings the whole scene back into view. The key is [[F]] or [[Home]].
-- {{ui:camera.focusSelection}} zooms to the selection ([[Shift]]+[[F]]).
+- {{ui:camera.home}} brings the whole scene back into view. The key is [[Home]]; [[F]] does it too when nothing is selected.
+- {{ui:camera.focusSelection}} zooms to the selection ([[F]] or [[Shift]]+[[F]]).
 - {{ui:camera.zoomIn}} and {{ui:camera.zoomOut}} zoom step by step, as do the keys [[+]] and [[−]].
 - {{ui:camera.orthographic}} switches to a flat view in which parallel edges stay parallel. For measuring and lining up edges that is often more comfortable than the perspective view. [[O]] switches back and forth, and a second click returns.
 - {{ui:camera.hideWorkplane}} (the eye over a grid) hides the plate with its grid, so you can look at the underside of a design from below. Only the view changes: new shapes still land on the workplane. A second click shows it again.

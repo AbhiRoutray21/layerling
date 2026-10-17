@@ -68,5 +68,15 @@
       "de": "Für einige Knöpfe fand die Interaktive Hilfe nichts oder führte zur falschen Stelle: Einfügen, Löschen, Gruppierung aufheben, Arbeitsbereich-Einstellungen, Farbschema, die Fußzeile und andere. Das erste Kapitel der Anleitung hat jetzt den Abschnitt „Die Knöpfe rund um die Arbeitsfläche“, und die Hilfe führt dorthin.",
       "en": "For some buttons Interactive Help found nothing or led to the wrong section: Paste, Delete, Ungroup, Workspace settings, Theme, the footer and others. The first chapter of the guide now has a section, The buttons around the work area, and the help leads there."
     }
+  },
+  {
+    "title": {
+      "de": "F zoomt auf die Auswahl, wie in Tinkercad",
+      "en": "F zooms to the selection, as in Tinkercad"
+    },
+    "body": {
+      "de": "Die Taste F zoomt jetzt auf das, was ausgewählt ist, und holt die ganze Szene ins Bild, wenn nichts ausgewählt ist. Bisher zeigte F immer die ganze Szene, und für die Auswahl brauchte man Umschalt+F, das weiterhin geht. Die ganze Szene zeigt auch jetzt immer die Taste Pos1 und der Haus-Knopf. In der Skizze gilt dasselbe.",
+      "en": "The F key now zooms to what is selected, and brings the whole scene into view when nothing is selected. Until now F always showed the whole scene, and the selection needed Shift+F, which still works. The whole scene is always shown by the Home key and the house button. The sketch works the same way."
+    }
   }
 ]

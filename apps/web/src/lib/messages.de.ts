@@ -662,7 +662,7 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "guide.sketchGroup.clipboard": "Zwischenablage",
   "guide.sketchClipboard.use": "Kopieren, Ausschneiden (Strg+X), Einfügen und Duplizieren (Strg+D) wirken auf die Auswahl. Die Kopie landet auf einem freien Platz neben dem Original und wird deshalb nicht mit ihm verbunden.",
   "guide.sketchGroup.view": "Sich bewegen und messen",
-  "guide.sketchView.zoom": "Das Rad zoomt. F holt die ganze Skizze ins Bild, Umschalt+F zoomt auf die Auswahl.",
+  "guide.sketchView.zoom": "Das Rad zoomt. Pos1 holt die ganze Skizze ins Bild, F zoomt auf die Auswahl.",
   "guide.sketchView.measure": "Das Maßband in der Seitenleiste misst zwischen zwei Punkten. Ein Klick auf eine Linie oder einen Punkt zeigt deren Längen; bei einer geraden Linie lässt sich die Länge in der Maßblase eintippen.",
   "guide.sketchGroup.finish": "Einen Körper daraus machen",
   "guide.sketchFinish.body": "„Skizze abschließen“ macht aus einem geschlossenen Umriss einen Körper. Beim Rotieren zeichnest du den halben Querschnitt links von der Achse und nimmst „Rotation abschließen“.",

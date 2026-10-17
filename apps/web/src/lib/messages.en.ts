@@ -663,7 +663,7 @@ export const MESSAGES_EN = {
   "guide.sketchGroup.clipboard": "Clipboard",
   "guide.sketchClipboard.use": "Copy, cut (Ctrl+X), paste and duplicate (Ctrl+D) work on the selection. The copy lands on a free spot beside the original, so it is not joined to it.",
   "guide.sketchGroup.view": "Moving around and measuring",
-  "guide.sketchView.zoom": "The wheel zooms. F fits the whole sketch in the view, Shift+F zooms to the selection.",
+  "guide.sketchView.zoom": "The wheel zooms. Home fits the whole sketch in the view, F zooms to the selection.",
   "guide.sketchView.measure": "The tape measure in the side bar measures between two points. A click on a line or a point shows its lengths; on a straight line you can type the length into its dimension pill.",
   "guide.sketchGroup.finish": "Making a body",
   "guide.sketchFinish.body": "\"Finish sketch\" turns a closed outline into a body. When revolving, draw half the cross-section to the left of the axis and use \"Finish revolve\".",

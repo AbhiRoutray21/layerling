@@ -641,7 +641,7 @@ export const MESSAGES_HU: Partial<Record<MessageKey, string>> = {
   "guide.sketchGroup.clipboard": "Vágólap",
   "guide.sketchClipboard.use": "A másolás, a kivágás (Ctrl+X), a beillesztés és a másolatkészítés (Ctrl+D) a kijelölésen működik. A másolat egy szabad helyre kerül az eredeti mellé, így nem kapcsolódik hozzá.",
   "guide.sketchGroup.view": "Mozgás és mérés",
-  "guide.sketchView.zoom": "A görgő nagyít. Az F az egész vázlatot a nézetbe illeszti, a Shift+F a kijelölésre nagyít.",
+  "guide.sketchView.zoom": "A görgő nagyít. A Home az egész vázlatot a nézetbe illeszti, az F a kijelölésre nagyít.",
   "guide.sketchView.measure": "Az oldalsávban lévő mérőszalag két pont között mér. Egy vonalra vagy pontra kattintva látod a hosszait; egy egyenes vonalnál a hossz a méretcímkéjébe is beírható.",
   "guide.sketchGroup.finish": "Test készítése",
   "guide.sketchFinish.body": "A „Vázlat befejezése” egy zárt körvonalat testté alakít. Forgatásnál a keresztmetszet felét rajzold a tengelytől balra, és használd a „Forgatás befejezése” gombot.",
