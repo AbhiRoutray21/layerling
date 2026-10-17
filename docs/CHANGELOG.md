@@ -6,6 +6,7 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **Interactive Help answers for buttons that are switched off (#424):** A button that is greyed out, because nothing is selected, got no answer at all from Interactive Help: the browser sends no mouse event for a disabled button, not even to the page, so the click was lost and the window stayed as it was. Reported by @prmod3d for "Center view on selection"; the same held for every greyed-out button (Copy, Delete, Group, Fillet and the rest, 30 in an empty design). While the help is on, a disabled button now lets the pointer pass, and the help finds it by its place, as it was meant to. Checked by clicking all 30 in an empty design: each one answers with its own name.
 - **A number at the mouse pointer counts the selection (#481):** Suggested by @prmod3d. While Shift is held and two or more bodies are selected, a small number follows the mouse pointer, just below it, so the tally of what has been selected stays where the eye is while clicking one body after the other. It is hidden over the panels, and shows for a mouse only: a finger would cover it.
 - **Back up all stands once on the start page:** The button was there twice, in the notice about designs kept in the browser and again in the row above the design cards, with the same words one below the other. The one in the row is gone; the notice keeps Back up all and Restore backup.
 ## 1.86.1

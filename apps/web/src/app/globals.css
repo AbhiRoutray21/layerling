@@ -16615,6 +16615,14 @@ body.help-mode [data-help-exempt] * {
   cursor: pointer !important;
 }
 
+/* A control that is switched off with the disabled attribute gets no mouse event at all in the browser,
+   not even to the page: a click on it was lost and the help stayed silent (#424, "Center view on
+   selection"). Letting the pointer pass through puts the click on what lies behind, and the help finds
+   the control by its position (disabledControlAt in InteractiveHelp.tsx). */
+body.help-mode :is(button, input, select, textarea):disabled {
+  pointer-events: none;
+}
+
 [data-help-hover] {
   outline: 2px solid #1a73c9 !important;
   outline-offset: 2px;
