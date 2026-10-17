@@ -192,6 +192,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/getting-started.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/getting-started.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/aan-de-slag.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/getting-started.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/prvi-koraki.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/getting-started.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/getting-started.html"/>
@@ -205,6 +206,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/view-and-workplane.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/view-and-workplane.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/weergave-en-werkvlak.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/view-and-workplane.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/pogled-in-delovna-ravnina.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/view-and-workplane.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/view-and-workplane.html"/>
@@ -218,6 +220,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/shapes.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/shapes.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/vormen.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/shapes.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/oblike.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/shapes.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/shapes.html"/>
@@ -231,6 +234,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/select-and-arrange.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/select-and-arrange.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/selecteren-en-schikken.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/select-and-arrange.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/izbiranje-in-razporejanje.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/select-and-arrange.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/select-and-arrange.html"/>
@@ -244,6 +248,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/solids-and-holes.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/solids-and-holes.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/lichamen-en-gaten.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/solids-and-holes.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/telesa-in-luknje.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/solids-and-holes.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/solids-and-holes.html"/>
@@ -257,6 +262,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/edges-and-hollowing.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/edges-and-hollowing.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/randen-en-uithollen.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/edges-and-hollowing.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/robovi-in-izdolbljenje.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/edges-and-hollowing.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/edges-and-hollowing.html"/>
@@ -270,6 +276,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/sketches.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/sketches.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/schetsen.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/sketches.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/skice.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/sketches.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/sketches.html"/>
@@ -283,6 +290,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/text.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/text.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/tekst.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/text.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/besedilo.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/text.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/text.html"/>
@@ -296,6 +304,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/threads-and-mechanics.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/threads-and-mechanics.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/schroefdraad-en-mechanica.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/threads-and-mechanics.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/navoji-in-mehanika.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/threads-and-mechanics.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/threads-and-mechanics.html"/>
@@ -309,6 +318,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/measuring-and-notes.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/measuring-and-notes.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/meten-en-notities.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/measuring-and-notes.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/merjenje-in-opombe.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/measuring-and-notes.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/measuring-and-notes.html"/>
@@ -322,6 +332,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/printing.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/printing.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/printen.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/printing.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/tiskanje.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/printing.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/printing.html"/>
@@ -335,6 +346,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/files-and-saving.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/files-and-saving.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/bestanden-en-opslaan.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/files-and-saving.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/datoteke-in-shranjevanje.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/files-and-saving.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/files-and-saving.html"/>
@@ -348,6 +360,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/shortcuts.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/shortcuts.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/sneltoetsen.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/shortcuts.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/bliznjice.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/shortcuts.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/shortcuts.html"/>
@@ -361,6 +374,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/ai-with-mcp.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/ai-with-mcp.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/ai-met-mcp.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/ai-with-mcp.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/ai-z-mcp.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/ai-with-mcp.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/ai-with-mcp.html"/>
@@ -374,6 +388,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/offline-and-install.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/offline-and-install.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/offline-en-installeren.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/offline-and-install.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/offline-in-namestitev.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/offline-and-install.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/offline-and-install.html"/>
@@ -387,6 +402,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/videos.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/videos.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/videos.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/videos.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/videi.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/videos.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/videos.html"/>
@@ -398,6 +414,7 @@
     <xhtml:link rel="alternate" hreflang="de" href="https://layerling.com/anleitung/tablet-und-touch.html"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/tablet-and-touch.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/tablet-en-touch.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/tablet-and-touch.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/tablica-in-dotik.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/tablet-and-touch.html"/>
   </url>
@@ -410,6 +427,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/getting-started.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/getting-started.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/aan-de-slag.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/getting-started.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/prvi-koraki.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/getting-started.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/getting-started.html"/>
@@ -423,6 +441,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/view-and-workplane.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/view-and-workplane.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/weergave-en-werkvlak.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/view-and-workplane.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/pogled-in-delovna-ravnina.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/view-and-workplane.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/view-and-workplane.html"/>
@@ -436,6 +455,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/shapes.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/shapes.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/vormen.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/shapes.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/oblike.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/shapes.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/shapes.html"/>
@@ -449,6 +469,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/select-and-arrange.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/select-and-arrange.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/selecteren-en-schikken.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/select-and-arrange.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/izbiranje-in-razporejanje.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/select-and-arrange.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/select-and-arrange.html"/>
@@ -462,6 +483,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/solids-and-holes.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/solids-and-holes.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/lichamen-en-gaten.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/solids-and-holes.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/telesa-in-luknje.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/solids-and-holes.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/solids-and-holes.html"/>
@@ -475,6 +497,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/edges-and-hollowing.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/edges-and-hollowing.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/randen-en-uithollen.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/edges-and-hollowing.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/robovi-in-izdolbljenje.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/edges-and-hollowing.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/edges-and-hollowing.html"/>
@@ -488,6 +511,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/sketches.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/sketches.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/schetsen.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/sketches.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/skice.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/sketches.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/sketches.html"/>
@@ -501,6 +525,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/text.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/text.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/tekst.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/text.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/besedilo.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/text.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/text.html"/>
@@ -514,6 +539,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/threads-and-mechanics.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/threads-and-mechanics.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/schroefdraad-en-mechanica.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/threads-and-mechanics.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/navoji-in-mehanika.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/threads-and-mechanics.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/threads-and-mechanics.html"/>
@@ -527,6 +553,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/measuring-and-notes.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/measuring-and-notes.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/meten-en-notities.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/measuring-and-notes.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/merjenje-in-opombe.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/measuring-and-notes.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/measuring-and-notes.html"/>
@@ -540,6 +567,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/printing.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/printing.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/printen.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/printing.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/tiskanje.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/printing.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/printing.html"/>
@@ -553,6 +581,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/files-and-saving.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/files-and-saving.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/bestanden-en-opslaan.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/files-and-saving.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/datoteke-in-shranjevanje.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/files-and-saving.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/files-and-saving.html"/>
@@ -566,6 +595,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/shortcuts.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/shortcuts.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/sneltoetsen.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/shortcuts.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/bliznjice.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/shortcuts.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/shortcuts.html"/>
@@ -579,6 +609,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/ai-with-mcp.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/ai-with-mcp.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/ai-met-mcp.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/ai-with-mcp.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/ai-z-mcp.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/ai-with-mcp.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/ai-with-mcp.html"/>
@@ -592,6 +623,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/offline-and-install.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/offline-and-install.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/offline-en-installeren.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/offline-and-install.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/offline-in-namestitev.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/offline-and-install.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/offline-and-install.html"/>
@@ -605,6 +637,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/videos.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/videos.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/videos.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/videos.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/videi.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/videos.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/videos.html"/>
@@ -616,6 +649,7 @@
     <xhtml:link rel="alternate" hreflang="de" href="https://layerling.com/anleitung/tablet-und-touch.html"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/tablet-and-touch.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/tablet-en-touch.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/tablet-and-touch.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/tablica-in-dotik.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/tablet-and-touch.html"/>
   </url>
@@ -628,6 +662,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/getting-started.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/getting-started.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/aan-de-slag.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/getting-started.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/prvi-koraki.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/getting-started.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/getting-started.html"/>
@@ -641,6 +676,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/view-and-workplane.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/view-and-workplane.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/weergave-en-werkvlak.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/view-and-workplane.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/pogled-in-delovna-ravnina.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/view-and-workplane.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/view-and-workplane.html"/>
@@ -654,6 +690,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/shapes.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/shapes.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/vormen.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/shapes.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/oblike.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/shapes.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/shapes.html"/>
@@ -667,6 +704,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/select-and-arrange.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/select-and-arrange.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/selecteren-en-schikken.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/select-and-arrange.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/izbiranje-in-razporejanje.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/select-and-arrange.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/select-and-arrange.html"/>
@@ -680,6 +718,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/solids-and-holes.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/solids-and-holes.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/lichamen-en-gaten.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/solids-and-holes.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/telesa-in-luknje.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/solids-and-holes.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/solids-and-holes.html"/>
@@ -693,6 +732,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/edges-and-hollowing.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/edges-and-hollowing.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/randen-en-uithollen.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/edges-and-hollowing.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/robovi-in-izdolbljenje.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/edges-and-hollowing.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/edges-and-hollowing.html"/>
@@ -706,6 +746,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/sketches.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/sketches.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/schetsen.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/sketches.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/skice.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/sketches.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/sketches.html"/>
@@ -719,6 +760,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/text.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/text.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/tekst.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/text.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/besedilo.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/text.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/text.html"/>
@@ -732,6 +774,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/threads-and-mechanics.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/threads-and-mechanics.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/schroefdraad-en-mechanica.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/threads-and-mechanics.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/navoji-in-mehanika.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/threads-and-mechanics.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/threads-and-mechanics.html"/>
@@ -745,6 +788,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/measuring-and-notes.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/measuring-and-notes.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/meten-en-notities.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/measuring-and-notes.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/merjenje-in-opombe.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/measuring-and-notes.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/measuring-and-notes.html"/>
@@ -758,6 +802,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/printing.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/printing.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/printen.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/printing.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/tiskanje.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/printing.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/printing.html"/>
@@ -771,6 +816,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/files-and-saving.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/files-and-saving.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/bestanden-en-opslaan.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/files-and-saving.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/datoteke-in-shranjevanje.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/files-and-saving.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/files-and-saving.html"/>
@@ -784,6 +830,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/shortcuts.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/shortcuts.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/sneltoetsen.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/shortcuts.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/bliznjice.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/shortcuts.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/shortcuts.html"/>
@@ -797,6 +844,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/ai-with-mcp.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/ai-with-mcp.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/ai-met-mcp.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/ai-with-mcp.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/ai-z-mcp.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/ai-with-mcp.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/ai-with-mcp.html"/>
@@ -810,6 +858,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/offline-and-install.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/offline-and-install.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/offline-en-installeren.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/offline-and-install.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/offline-in-namestitev.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/offline-and-install.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/offline-and-install.html"/>
@@ -823,6 +872,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/videos.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/videos.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/videos.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/videos.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/videi.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/videos.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/videos.html"/>
@@ -836,6 +886,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/getting-started.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/getting-started.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/aan-de-slag.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/getting-started.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/prvi-koraki.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/getting-started.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/getting-started.html"/>
@@ -849,6 +900,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/view-and-workplane.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/view-and-workplane.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/weergave-en-werkvlak.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/view-and-workplane.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/pogled-in-delovna-ravnina.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/view-and-workplane.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/view-and-workplane.html"/>
@@ -862,6 +914,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/shapes.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/shapes.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/vormen.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/shapes.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/oblike.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/shapes.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/shapes.html"/>
@@ -875,6 +928,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/select-and-arrange.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/select-and-arrange.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/selecteren-en-schikken.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/select-and-arrange.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/izbiranje-in-razporejanje.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/select-and-arrange.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/select-and-arrange.html"/>
@@ -888,6 +942,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/solids-and-holes.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/solids-and-holes.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/lichamen-en-gaten.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/solids-and-holes.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/telesa-in-luknje.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/solids-and-holes.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/solids-and-holes.html"/>
@@ -901,6 +956,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/edges-and-hollowing.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/edges-and-hollowing.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/randen-en-uithollen.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/edges-and-hollowing.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/robovi-in-izdolbljenje.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/edges-and-hollowing.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/edges-and-hollowing.html"/>
@@ -914,6 +970,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/sketches.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/sketches.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/schetsen.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/sketches.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/skice.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/sketches.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/sketches.html"/>
@@ -927,6 +984,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/text.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/text.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/tekst.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/text.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/besedilo.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/text.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/text.html"/>
@@ -940,6 +998,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/threads-and-mechanics.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/threads-and-mechanics.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/schroefdraad-en-mechanica.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/threads-and-mechanics.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/navoji-in-mehanika.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/threads-and-mechanics.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/threads-and-mechanics.html"/>
@@ -953,6 +1012,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/measuring-and-notes.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/measuring-and-notes.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/meten-en-notities.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/measuring-and-notes.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/merjenje-in-opombe.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/measuring-and-notes.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/measuring-and-notes.html"/>
@@ -966,6 +1026,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/printing.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/printing.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/printen.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/printing.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/tiskanje.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/printing.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/printing.html"/>
@@ -979,6 +1040,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/files-and-saving.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/files-and-saving.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/bestanden-en-opslaan.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/files-and-saving.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/datoteke-in-shranjevanje.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/files-and-saving.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/files-and-saving.html"/>
@@ -992,6 +1054,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/shortcuts.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/shortcuts.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/sneltoetsen.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/shortcuts.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/bliznjice.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/shortcuts.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/shortcuts.html"/>
@@ -1005,6 +1068,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/ai-with-mcp.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/ai-with-mcp.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/ai-met-mcp.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/ai-with-mcp.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/ai-z-mcp.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/ai-with-mcp.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/ai-with-mcp.html"/>
@@ -1018,6 +1082,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/offline-and-install.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/offline-and-install.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/offline-en-installeren.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/offline-and-install.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/offline-in-namestitev.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/offline-and-install.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/offline-and-install.html"/>
@@ -1031,6 +1096,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/videos.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/videos.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/videos.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/videos.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/videi.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/videos.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/videos.html"/>
@@ -1042,6 +1108,7 @@
     <xhtml:link rel="alternate" hreflang="de" href="https://layerling.com/anleitung/tablet-und-touch.html"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/tablet-and-touch.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/tablet-en-touch.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/tablet-and-touch.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/tablica-in-dotik.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/tablet-and-touch.html"/>
   </url>
@@ -1054,6 +1121,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/getting-started.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/getting-started.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/aan-de-slag.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/getting-started.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/prvi-koraki.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/getting-started.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/getting-started.html"/>
@@ -1067,6 +1135,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/view-and-workplane.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/view-and-workplane.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/weergave-en-werkvlak.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/view-and-workplane.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/pogled-in-delovna-ravnina.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/view-and-workplane.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/view-and-workplane.html"/>
@@ -1080,6 +1149,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/shapes.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/shapes.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/vormen.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/shapes.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/oblike.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/shapes.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/shapes.html"/>
@@ -1093,6 +1163,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/select-and-arrange.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/select-and-arrange.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/selecteren-en-schikken.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/select-and-arrange.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/izbiranje-in-razporejanje.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/select-and-arrange.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/select-and-arrange.html"/>
@@ -1106,6 +1177,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/solids-and-holes.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/solids-and-holes.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/lichamen-en-gaten.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/solids-and-holes.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/telesa-in-luknje.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/solids-and-holes.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/solids-and-holes.html"/>
@@ -1119,6 +1191,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/edges-and-hollowing.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/edges-and-hollowing.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/randen-en-uithollen.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/edges-and-hollowing.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/robovi-in-izdolbljenje.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/edges-and-hollowing.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/edges-and-hollowing.html"/>
@@ -1132,6 +1205,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/sketches.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/sketches.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/schetsen.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/sketches.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/skice.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/sketches.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/sketches.html"/>
@@ -1145,6 +1219,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/text.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/text.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/tekst.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/text.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/besedilo.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/text.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/text.html"/>
@@ -1158,6 +1233,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/threads-and-mechanics.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/threads-and-mechanics.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/schroefdraad-en-mechanica.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/threads-and-mechanics.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/navoji-in-mehanika.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/threads-and-mechanics.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/threads-and-mechanics.html"/>
@@ -1171,6 +1247,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/measuring-and-notes.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/measuring-and-notes.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/meten-en-notities.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/measuring-and-notes.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/merjenje-in-opombe.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/measuring-and-notes.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/measuring-and-notes.html"/>
@@ -1184,6 +1261,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/printing.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/printing.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/printen.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/printing.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/tiskanje.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/printing.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/printing.html"/>
@@ -1197,6 +1275,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/files-and-saving.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/files-and-saving.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/bestanden-en-opslaan.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/files-and-saving.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/datoteke-in-shranjevanje.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/files-and-saving.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/files-and-saving.html"/>
@@ -1210,6 +1289,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/shortcuts.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/shortcuts.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/sneltoetsen.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/shortcuts.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/bliznjice.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/shortcuts.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/shortcuts.html"/>
@@ -1223,6 +1303,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/ai-with-mcp.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/ai-with-mcp.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/ai-met-mcp.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/ai-with-mcp.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/ai-z-mcp.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/ai-with-mcp.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/ai-with-mcp.html"/>
@@ -1236,6 +1317,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/offline-and-install.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/offline-and-install.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/offline-en-installeren.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/offline-and-install.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/offline-in-namestitev.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/offline-and-install.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/offline-and-install.html"/>
@@ -1249,6 +1331,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/videos.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/videos.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/videos.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/videos.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/videi.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/videos.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/videos.html"/>
@@ -1260,6 +1343,7 @@
     <xhtml:link rel="alternate" hreflang="de" href="https://layerling.com/anleitung/tablet-und-touch.html"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/tablet-and-touch.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/tablet-en-touch.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/tablet-and-touch.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/tablica-in-dotik.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/tablet-and-touch.html"/>
   </url>
@@ -1272,6 +1356,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/getting-started.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/getting-started.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/aan-de-slag.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/getting-started.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/prvi-koraki.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/getting-started.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/getting-started.html"/>
@@ -1285,6 +1370,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/view-and-workplane.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/view-and-workplane.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/weergave-en-werkvlak.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/view-and-workplane.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/pogled-in-delovna-ravnina.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/view-and-workplane.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/view-and-workplane.html"/>
@@ -1298,6 +1384,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/shapes.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/shapes.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/vormen.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/shapes.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/oblike.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/shapes.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/shapes.html"/>
@@ -1311,6 +1398,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/select-and-arrange.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/select-and-arrange.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/selecteren-en-schikken.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/select-and-arrange.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/izbiranje-in-razporejanje.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/select-and-arrange.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/select-and-arrange.html"/>
@@ -1324,6 +1412,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/solids-and-holes.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/solids-and-holes.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/lichamen-en-gaten.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/solids-and-holes.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/telesa-in-luknje.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/solids-and-holes.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/solids-and-holes.html"/>
@@ -1337,6 +1426,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/edges-and-hollowing.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/edges-and-hollowing.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/randen-en-uithollen.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/edges-and-hollowing.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/robovi-in-izdolbljenje.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/edges-and-hollowing.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/edges-and-hollowing.html"/>
@@ -1350,6 +1440,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/sketches.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/sketches.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/schetsen.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/sketches.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/skice.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/sketches.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/sketches.html"/>
@@ -1363,6 +1454,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/text.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/text.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/tekst.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/text.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/besedilo.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/text.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/text.html"/>
@@ -1376,6 +1468,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/threads-and-mechanics.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/threads-and-mechanics.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/schroefdraad-en-mechanica.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/threads-and-mechanics.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/navoji-in-mehanika.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/threads-and-mechanics.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/threads-and-mechanics.html"/>
@@ -1389,6 +1482,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/measuring-and-notes.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/measuring-and-notes.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/meten-en-notities.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/measuring-and-notes.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/merjenje-in-opombe.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/measuring-and-notes.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/measuring-and-notes.html"/>
@@ -1402,6 +1496,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/printing.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/printing.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/printen.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/printing.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/tiskanje.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/printing.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/printing.html"/>
@@ -1415,6 +1510,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/files-and-saving.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/files-and-saving.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/bestanden-en-opslaan.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/files-and-saving.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/datoteke-in-shranjevanje.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/files-and-saving.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/files-and-saving.html"/>
@@ -1428,6 +1524,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/shortcuts.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/shortcuts.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/sneltoetsen.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/shortcuts.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/bliznjice.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/shortcuts.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/shortcuts.html"/>
@@ -1441,6 +1538,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/ai-with-mcp.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/ai-with-mcp.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/ai-met-mcp.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/ai-with-mcp.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/ai-z-mcp.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/ai-with-mcp.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/ai-with-mcp.html"/>
@@ -1454,6 +1552,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/offline-and-install.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/offline-and-install.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/offline-en-installeren.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/offline-and-install.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/offline-in-namestitev.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/offline-and-install.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/offline-and-install.html"/>
@@ -1467,6 +1566,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/videos.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/videos.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/videos.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/videos.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/videi.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/videos.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/videos.html"/>
@@ -1480,6 +1580,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/getting-started.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/getting-started.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/aan-de-slag.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/getting-started.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/prvi-koraki.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/getting-started.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/getting-started.html"/>
@@ -1493,6 +1594,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/view-and-workplane.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/view-and-workplane.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/weergave-en-werkvlak.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/view-and-workplane.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/pogled-in-delovna-ravnina.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/view-and-workplane.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/view-and-workplane.html"/>
@@ -1506,6 +1608,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/shapes.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/shapes.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/vormen.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/shapes.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/oblike.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/shapes.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/shapes.html"/>
@@ -1519,6 +1622,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/select-and-arrange.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/select-and-arrange.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/selecteren-en-schikken.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/select-and-arrange.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/izbiranje-in-razporejanje.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/select-and-arrange.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/select-and-arrange.html"/>
@@ -1532,6 +1636,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/solids-and-holes.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/solids-and-holes.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/lichamen-en-gaten.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/solids-and-holes.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/telesa-in-luknje.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/solids-and-holes.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/solids-and-holes.html"/>
@@ -1545,6 +1650,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/edges-and-hollowing.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/edges-and-hollowing.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/randen-en-uithollen.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/edges-and-hollowing.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/robovi-in-izdolbljenje.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/edges-and-hollowing.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/edges-and-hollowing.html"/>
@@ -1558,6 +1664,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/sketches.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/sketches.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/schetsen.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/sketches.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/skice.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/sketches.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/sketches.html"/>
@@ -1571,6 +1678,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/text.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/text.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/tekst.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/text.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/besedilo.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/text.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/text.html"/>
@@ -1584,6 +1692,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/threads-and-mechanics.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/threads-and-mechanics.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/schroefdraad-en-mechanica.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/threads-and-mechanics.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/navoji-in-mehanika.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/threads-and-mechanics.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/threads-and-mechanics.html"/>
@@ -1597,6 +1706,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/measuring-and-notes.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/measuring-and-notes.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/meten-en-notities.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/measuring-and-notes.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/merjenje-in-opombe.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/measuring-and-notes.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/measuring-and-notes.html"/>
@@ -1610,6 +1720,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/printing.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/printing.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/printen.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/printing.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/tiskanje.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/printing.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/printing.html"/>
@@ -1623,6 +1734,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/files-and-saving.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/files-and-saving.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/bestanden-en-opslaan.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/files-and-saving.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/datoteke-in-shranjevanje.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/files-and-saving.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/files-and-saving.html"/>
@@ -1636,6 +1748,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/shortcuts.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/shortcuts.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/sneltoetsen.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/shortcuts.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/bliznjice.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/shortcuts.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/shortcuts.html"/>
@@ -1649,6 +1762,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/ai-with-mcp.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/ai-with-mcp.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/ai-met-mcp.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/ai-with-mcp.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/ai-z-mcp.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/ai-with-mcp.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/ai-with-mcp.html"/>
@@ -1662,6 +1776,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/offline-and-install.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/offline-and-install.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/offline-en-installeren.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/offline-and-install.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/offline-in-namestitev.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/offline-and-install.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/offline-and-install.html"/>
@@ -1675,6 +1790,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/videos.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/videos.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/videos.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/videos.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/videi.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/videos.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/videos.html"/>
@@ -1686,6 +1802,242 @@
     <xhtml:link rel="alternate" hreflang="de" href="https://layerling.com/anleitung/tablet-und-touch.html"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/tablet-and-touch.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/tablet-en-touch.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/tablet-and-touch.html"/>
+    <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/tablica-in-dotik.html"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/tablet-and-touch.html"/>
+  </url>
+  <url>
+    <loc>https://layerling.com/instrukcja/getting-started.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://layerling.com/guide/getting-started.html"/>
+    <xhtml:link rel="alternate" hreflang="cs" href="https://layerling.com/prirucka/getting-started.html"/>
+    <xhtml:link rel="alternate" hreflang="da" href="https://layerling.com/vejledning/getting-started.html"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://layerling.com/anleitung/erste-schritte.html"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/getting-started.html"/>
+    <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/getting-started.html"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/aan-de-slag.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/getting-started.html"/>
+    <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/prvi-koraki.html"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/getting-started.html"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/getting-started.html"/>
+  </url>
+  <url>
+    <loc>https://layerling.com/instrukcja/view-and-workplane.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://layerling.com/guide/view-and-workplane.html"/>
+    <xhtml:link rel="alternate" hreflang="cs" href="https://layerling.com/prirucka/view-and-workplane.html"/>
+    <xhtml:link rel="alternate" hreflang="da" href="https://layerling.com/vejledning/view-and-workplane.html"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://layerling.com/anleitung/ansicht-und-arbeitsebene.html"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/view-and-workplane.html"/>
+    <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/view-and-workplane.html"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/weergave-en-werkvlak.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/view-and-workplane.html"/>
+    <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/pogled-in-delovna-ravnina.html"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/view-and-workplane.html"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/view-and-workplane.html"/>
+  </url>
+  <url>
+    <loc>https://layerling.com/instrukcja/shapes.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://layerling.com/guide/shapes.html"/>
+    <xhtml:link rel="alternate" hreflang="cs" href="https://layerling.com/prirucka/shapes.html"/>
+    <xhtml:link rel="alternate" hreflang="da" href="https://layerling.com/vejledning/shapes.html"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://layerling.com/anleitung/formen.html"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/shapes.html"/>
+    <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/shapes.html"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/vormen.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/shapes.html"/>
+    <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/oblike.html"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/shapes.html"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/shapes.html"/>
+  </url>
+  <url>
+    <loc>https://layerling.com/instrukcja/select-and-arrange.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://layerling.com/guide/select-and-arrange.html"/>
+    <xhtml:link rel="alternate" hreflang="cs" href="https://layerling.com/prirucka/select-and-arrange.html"/>
+    <xhtml:link rel="alternate" hreflang="da" href="https://layerling.com/vejledning/select-and-arrange.html"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://layerling.com/anleitung/auswaehlen-und-anordnen.html"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/select-and-arrange.html"/>
+    <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/select-and-arrange.html"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/selecteren-en-schikken.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/select-and-arrange.html"/>
+    <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/izbiranje-in-razporejanje.html"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/select-and-arrange.html"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/select-and-arrange.html"/>
+  </url>
+  <url>
+    <loc>https://layerling.com/instrukcja/solids-and-holes.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://layerling.com/guide/solids-and-holes.html"/>
+    <xhtml:link rel="alternate" hreflang="cs" href="https://layerling.com/prirucka/solids-and-holes.html"/>
+    <xhtml:link rel="alternate" hreflang="da" href="https://layerling.com/vejledning/solids-and-holes.html"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://layerling.com/anleitung/koerper-und-aussparungen.html"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/solids-and-holes.html"/>
+    <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/solids-and-holes.html"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/lichamen-en-gaten.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/solids-and-holes.html"/>
+    <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/telesa-in-luknje.html"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/solids-and-holes.html"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/solids-and-holes.html"/>
+  </url>
+  <url>
+    <loc>https://layerling.com/instrukcja/edges-and-hollowing.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://layerling.com/guide/edges-and-hollowing.html"/>
+    <xhtml:link rel="alternate" hreflang="cs" href="https://layerling.com/prirucka/edges-and-hollowing.html"/>
+    <xhtml:link rel="alternate" hreflang="da" href="https://layerling.com/vejledning/edges-and-hollowing.html"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://layerling.com/anleitung/kanten-und-aushoehlen.html"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/edges-and-hollowing.html"/>
+    <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/edges-and-hollowing.html"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/randen-en-uithollen.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/edges-and-hollowing.html"/>
+    <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/robovi-in-izdolbljenje.html"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/edges-and-hollowing.html"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/edges-and-hollowing.html"/>
+  </url>
+  <url>
+    <loc>https://layerling.com/instrukcja/sketches.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://layerling.com/guide/sketches.html"/>
+    <xhtml:link rel="alternate" hreflang="cs" href="https://layerling.com/prirucka/sketches.html"/>
+    <xhtml:link rel="alternate" hreflang="da" href="https://layerling.com/vejledning/sketches.html"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://layerling.com/anleitung/skizzen.html"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/sketches.html"/>
+    <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/sketches.html"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/schetsen.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/sketches.html"/>
+    <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/skice.html"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/sketches.html"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/sketches.html"/>
+  </url>
+  <url>
+    <loc>https://layerling.com/instrukcja/text.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://layerling.com/guide/text.html"/>
+    <xhtml:link rel="alternate" hreflang="cs" href="https://layerling.com/prirucka/text.html"/>
+    <xhtml:link rel="alternate" hreflang="da" href="https://layerling.com/vejledning/text.html"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://layerling.com/anleitung/text.html"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/text.html"/>
+    <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/text.html"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/tekst.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/text.html"/>
+    <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/besedilo.html"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/text.html"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/text.html"/>
+  </url>
+  <url>
+    <loc>https://layerling.com/instrukcja/threads-and-mechanics.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://layerling.com/guide/threads-and-mechanics.html"/>
+    <xhtml:link rel="alternate" hreflang="cs" href="https://layerling.com/prirucka/threads-and-mechanics.html"/>
+    <xhtml:link rel="alternate" hreflang="da" href="https://layerling.com/vejledning/threads-and-mechanics.html"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://layerling.com/anleitung/gewinde-und-mechanik.html"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/threads-and-mechanics.html"/>
+    <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/threads-and-mechanics.html"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/schroefdraad-en-mechanica.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/threads-and-mechanics.html"/>
+    <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/navoji-in-mehanika.html"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/threads-and-mechanics.html"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/threads-and-mechanics.html"/>
+  </url>
+  <url>
+    <loc>https://layerling.com/instrukcja/measuring-and-notes.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://layerling.com/guide/measuring-and-notes.html"/>
+    <xhtml:link rel="alternate" hreflang="cs" href="https://layerling.com/prirucka/measuring-and-notes.html"/>
+    <xhtml:link rel="alternate" hreflang="da" href="https://layerling.com/vejledning/measuring-and-notes.html"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://layerling.com/anleitung/messen-und-notizen.html"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/measuring-and-notes.html"/>
+    <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/measuring-and-notes.html"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/meten-en-notities.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/measuring-and-notes.html"/>
+    <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/merjenje-in-opombe.html"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/measuring-and-notes.html"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/measuring-and-notes.html"/>
+  </url>
+  <url>
+    <loc>https://layerling.com/instrukcja/printing.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://layerling.com/guide/printing.html"/>
+    <xhtml:link rel="alternate" hreflang="cs" href="https://layerling.com/prirucka/printing.html"/>
+    <xhtml:link rel="alternate" hreflang="da" href="https://layerling.com/vejledning/printing.html"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://layerling.com/anleitung/drucken.html"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/printing.html"/>
+    <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/printing.html"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/printen.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/printing.html"/>
+    <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/tiskanje.html"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/printing.html"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/printing.html"/>
+  </url>
+  <url>
+    <loc>https://layerling.com/instrukcja/files-and-saving.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://layerling.com/guide/files-and-saving.html"/>
+    <xhtml:link rel="alternate" hreflang="cs" href="https://layerling.com/prirucka/files-and-saving.html"/>
+    <xhtml:link rel="alternate" hreflang="da" href="https://layerling.com/vejledning/files-and-saving.html"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://layerling.com/anleitung/dateien-und-speichern.html"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/files-and-saving.html"/>
+    <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/files-and-saving.html"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/bestanden-en-opslaan.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/files-and-saving.html"/>
+    <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/datoteke-in-shranjevanje.html"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/files-and-saving.html"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/files-and-saving.html"/>
+  </url>
+  <url>
+    <loc>https://layerling.com/instrukcja/shortcuts.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://layerling.com/guide/shortcuts.html"/>
+    <xhtml:link rel="alternate" hreflang="cs" href="https://layerling.com/prirucka/shortcuts.html"/>
+    <xhtml:link rel="alternate" hreflang="da" href="https://layerling.com/vejledning/shortcuts.html"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://layerling.com/anleitung/tastenkuerzel.html"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/shortcuts.html"/>
+    <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/shortcuts.html"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/sneltoetsen.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/shortcuts.html"/>
+    <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/bliznjice.html"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/shortcuts.html"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/shortcuts.html"/>
+  </url>
+  <url>
+    <loc>https://layerling.com/instrukcja/ai-with-mcp.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://layerling.com/guide/ai-with-mcp.html"/>
+    <xhtml:link rel="alternate" hreflang="cs" href="https://layerling.com/prirucka/ai-with-mcp.html"/>
+    <xhtml:link rel="alternate" hreflang="da" href="https://layerling.com/vejledning/ai-with-mcp.html"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://layerling.com/anleitung/ki-mit-mcp.html"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/ai-with-mcp.html"/>
+    <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/ai-with-mcp.html"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/ai-met-mcp.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/ai-with-mcp.html"/>
+    <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/ai-z-mcp.html"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/ai-with-mcp.html"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/ai-with-mcp.html"/>
+  </url>
+  <url>
+    <loc>https://layerling.com/instrukcja/offline-and-install.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://layerling.com/guide/offline-and-install.html"/>
+    <xhtml:link rel="alternate" hreflang="cs" href="https://layerling.com/prirucka/offline-and-install.html"/>
+    <xhtml:link rel="alternate" hreflang="da" href="https://layerling.com/vejledning/offline-and-install.html"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://layerling.com/anleitung/offline-und-installieren.html"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/offline-and-install.html"/>
+    <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/offline-and-install.html"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/offline-en-installeren.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/offline-and-install.html"/>
+    <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/offline-in-namestitev.html"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/offline-and-install.html"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/offline-and-install.html"/>
+  </url>
+  <url>
+    <loc>https://layerling.com/instrukcja/videos.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://layerling.com/guide/videos.html"/>
+    <xhtml:link rel="alternate" hreflang="cs" href="https://layerling.com/prirucka/videos.html"/>
+    <xhtml:link rel="alternate" hreflang="da" href="https://layerling.com/vejledning/videos.html"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://layerling.com/anleitung/videos.html"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/videos.html"/>
+    <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/videos.html"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/videos.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/videos.html"/>
+    <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/videi.html"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/videos.html"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/videos.html"/>
+  </url>
+  <url>
+    <loc>https://layerling.com/instrukcja/tablet-and-touch.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://layerling.com/guide/tablet-and-touch.html"/>
+    <xhtml:link rel="alternate" hreflang="cs" href="https://layerling.com/prirucka/tablet-and-touch.html"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://layerling.com/anleitung/tablet-und-touch.html"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/tablet-and-touch.html"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/tablet-en-touch.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/tablet-and-touch.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/tablica-in-dotik.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/tablet-and-touch.html"/>
   </url>
@@ -1698,6 +2050,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/getting-started.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/getting-started.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/aan-de-slag.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/getting-started.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/prvi-koraki.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/getting-started.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/getting-started.html"/>
@@ -1711,6 +2064,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/view-and-workplane.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/view-and-workplane.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/weergave-en-werkvlak.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/view-and-workplane.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/pogled-in-delovna-ravnina.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/view-and-workplane.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/view-and-workplane.html"/>
@@ -1724,6 +2078,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/shapes.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/shapes.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/vormen.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/shapes.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/oblike.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/shapes.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/shapes.html"/>
@@ -1737,6 +2092,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/select-and-arrange.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/select-and-arrange.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/selecteren-en-schikken.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/select-and-arrange.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/izbiranje-in-razporejanje.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/select-and-arrange.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/select-and-arrange.html"/>
@@ -1750,6 +2106,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/solids-and-holes.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/solids-and-holes.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/lichamen-en-gaten.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/solids-and-holes.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/telesa-in-luknje.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/solids-and-holes.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/solids-and-holes.html"/>
@@ -1763,6 +2120,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/edges-and-hollowing.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/edges-and-hollowing.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/randen-en-uithollen.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/edges-and-hollowing.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/robovi-in-izdolbljenje.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/edges-and-hollowing.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/edges-and-hollowing.html"/>
@@ -1776,6 +2134,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/sketches.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/sketches.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/schetsen.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/sketches.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/skice.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/sketches.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/sketches.html"/>
@@ -1789,6 +2148,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/text.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/text.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/tekst.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/text.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/besedilo.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/text.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/text.html"/>
@@ -1802,6 +2162,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/threads-and-mechanics.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/threads-and-mechanics.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/schroefdraad-en-mechanica.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/threads-and-mechanics.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/navoji-in-mehanika.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/threads-and-mechanics.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/threads-and-mechanics.html"/>
@@ -1815,6 +2176,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/measuring-and-notes.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/measuring-and-notes.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/meten-en-notities.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/measuring-and-notes.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/merjenje-in-opombe.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/measuring-and-notes.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/measuring-and-notes.html"/>
@@ -1828,6 +2190,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/printing.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/printing.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/printen.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/printing.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/tiskanje.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/printing.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/printing.html"/>
@@ -1841,6 +2204,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/files-and-saving.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/files-and-saving.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/bestanden-en-opslaan.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/files-and-saving.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/datoteke-in-shranjevanje.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/files-and-saving.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/files-and-saving.html"/>
@@ -1854,6 +2218,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/shortcuts.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/shortcuts.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/sneltoetsen.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/shortcuts.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/bliznjice.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/shortcuts.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/shortcuts.html"/>
@@ -1867,6 +2232,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/ai-with-mcp.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/ai-with-mcp.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/ai-met-mcp.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/ai-with-mcp.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/ai-z-mcp.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/ai-with-mcp.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/ai-with-mcp.html"/>
@@ -1880,6 +2246,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/offline-and-install.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/offline-and-install.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/offline-en-installeren.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/offline-and-install.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/offline-in-namestitev.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/offline-and-install.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/offline-and-install.html"/>
@@ -1893,6 +2260,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/videos.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/videos.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/videos.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/videos.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/videi.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/videos.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/videos.html"/>
@@ -1904,6 +2272,7 @@
     <xhtml:link rel="alternate" hreflang="de" href="https://layerling.com/anleitung/tablet-und-touch.html"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/tablet-and-touch.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/tablet-en-touch.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/tablet-and-touch.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/tablica-in-dotik.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/tablet-and-touch.html"/>
   </url>
@@ -1916,6 +2285,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/getting-started.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/getting-started.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/aan-de-slag.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/getting-started.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/prvi-koraki.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/getting-started.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/getting-started.html"/>
@@ -1929,6 +2299,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/view-and-workplane.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/view-and-workplane.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/weergave-en-werkvlak.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/view-and-workplane.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/pogled-in-delovna-ravnina.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/view-and-workplane.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/view-and-workplane.html"/>
@@ -1942,6 +2313,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/shapes.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/shapes.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/vormen.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/shapes.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/oblike.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/shapes.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/shapes.html"/>
@@ -1955,6 +2327,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/select-and-arrange.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/select-and-arrange.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/selecteren-en-schikken.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/select-and-arrange.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/izbiranje-in-razporejanje.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/select-and-arrange.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/select-and-arrange.html"/>
@@ -1968,6 +2341,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/solids-and-holes.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/solids-and-holes.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/lichamen-en-gaten.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/solids-and-holes.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/telesa-in-luknje.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/solids-and-holes.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/solids-and-holes.html"/>
@@ -1981,6 +2355,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/edges-and-hollowing.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/edges-and-hollowing.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/randen-en-uithollen.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/edges-and-hollowing.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/robovi-in-izdolbljenje.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/edges-and-hollowing.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/edges-and-hollowing.html"/>
@@ -1994,6 +2369,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/sketches.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/sketches.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/schetsen.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/sketches.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/skice.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/sketches.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/sketches.html"/>
@@ -2007,6 +2383,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/text.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/text.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/tekst.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/text.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/besedilo.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/text.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/text.html"/>
@@ -2020,6 +2397,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/threads-and-mechanics.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/threads-and-mechanics.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/schroefdraad-en-mechanica.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/threads-and-mechanics.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/navoji-in-mehanika.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/threads-and-mechanics.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/threads-and-mechanics.html"/>
@@ -2033,6 +2411,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/measuring-and-notes.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/measuring-and-notes.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/meten-en-notities.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/measuring-and-notes.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/merjenje-in-opombe.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/measuring-and-notes.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/measuring-and-notes.html"/>
@@ -2046,6 +2425,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/printing.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/printing.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/printen.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/printing.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/tiskanje.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/printing.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/printing.html"/>
@@ -2059,6 +2439,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/files-and-saving.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/files-and-saving.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/bestanden-en-opslaan.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/files-and-saving.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/datoteke-in-shranjevanje.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/files-and-saving.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/files-and-saving.html"/>
@@ -2072,6 +2453,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/shortcuts.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/shortcuts.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/sneltoetsen.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/shortcuts.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/bliznjice.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/shortcuts.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/shortcuts.html"/>
@@ -2085,6 +2467,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/ai-with-mcp.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/ai-with-mcp.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/ai-met-mcp.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/ai-with-mcp.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/ai-z-mcp.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/ai-with-mcp.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/ai-with-mcp.html"/>
@@ -2098,6 +2481,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/offline-and-install.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/offline-and-install.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/offline-en-installeren.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/offline-and-install.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/offline-in-namestitev.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/offline-and-install.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/offline-and-install.html"/>
@@ -2111,6 +2495,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/videos.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/videos.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/videos.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/videos.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/videi.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/videos.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/videos.html"/>
@@ -2122,6 +2507,7 @@
     <xhtml:link rel="alternate" hreflang="de" href="https://layerling.com/anleitung/tablet-und-touch.html"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/tablet-and-touch.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/tablet-en-touch.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/tablet-and-touch.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/tablica-in-dotik.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/tablet-and-touch.html"/>
   </url>
@@ -2134,6 +2520,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/getting-started.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/getting-started.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/aan-de-slag.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/getting-started.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/prvi-koraki.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/getting-started.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/getting-started.html"/>
@@ -2147,6 +2534,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/view-and-workplane.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/view-and-workplane.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/weergave-en-werkvlak.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/view-and-workplane.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/pogled-in-delovna-ravnina.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/view-and-workplane.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/view-and-workplane.html"/>
@@ -2160,6 +2548,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/shapes.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/shapes.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/vormen.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/shapes.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/oblike.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/shapes.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/shapes.html"/>
@@ -2173,6 +2562,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/select-and-arrange.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/select-and-arrange.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/selecteren-en-schikken.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/select-and-arrange.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/izbiranje-in-razporejanje.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/select-and-arrange.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/select-and-arrange.html"/>
@@ -2186,6 +2576,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/solids-and-holes.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/solids-and-holes.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/lichamen-en-gaten.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/solids-and-holes.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/telesa-in-luknje.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/solids-and-holes.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/solids-and-holes.html"/>
@@ -2199,6 +2590,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/edges-and-hollowing.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/edges-and-hollowing.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/randen-en-uithollen.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/edges-and-hollowing.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/robovi-in-izdolbljenje.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/edges-and-hollowing.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/edges-and-hollowing.html"/>
@@ -2212,6 +2604,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/sketches.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/sketches.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/schetsen.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/sketches.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/skice.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/sketches.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/sketches.html"/>
@@ -2225,6 +2618,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/text.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/text.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/tekst.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/text.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/besedilo.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/text.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/text.html"/>
@@ -2238,6 +2632,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/threads-and-mechanics.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/threads-and-mechanics.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/schroefdraad-en-mechanica.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/threads-and-mechanics.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/navoji-in-mehanika.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/threads-and-mechanics.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/threads-and-mechanics.html"/>
@@ -2251,6 +2646,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/measuring-and-notes.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/measuring-and-notes.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/meten-en-notities.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/measuring-and-notes.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/merjenje-in-opombe.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/measuring-and-notes.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/measuring-and-notes.html"/>
@@ -2264,6 +2660,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/printing.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/printing.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/printen.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/printing.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/tiskanje.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/printing.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/printing.html"/>
@@ -2277,6 +2674,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/files-and-saving.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/files-and-saving.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/bestanden-en-opslaan.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/files-and-saving.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/datoteke-in-shranjevanje.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/files-and-saving.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/files-and-saving.html"/>
@@ -2290,6 +2688,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/shortcuts.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/shortcuts.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/sneltoetsen.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/shortcuts.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/bliznjice.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/shortcuts.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/shortcuts.html"/>
@@ -2303,6 +2702,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/ai-with-mcp.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/ai-with-mcp.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/ai-met-mcp.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/ai-with-mcp.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/ai-z-mcp.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/ai-with-mcp.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/ai-with-mcp.html"/>
@@ -2316,6 +2716,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/offline-and-install.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/offline-and-install.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/offline-en-installeren.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/offline-and-install.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/offline-in-namestitev.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/offline-and-install.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/offline-and-install.html"/>
@@ -2329,6 +2730,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://layerling.com/guide-fr/videos.html"/>
     <xhtml:link rel="alternate" hreflang="hu" href="https://layerling.com/utmutato/videos.html"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://layerling.com/handleiding/videos.html"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://layerling.com/instrukcja/videos.html"/>
     <xhtml:link rel="alternate" hreflang="sl" href="https://layerling.com/navodila/videi.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://layerling.com/ru/videos.html"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://layerling.com/dalil/videos.html"/>
