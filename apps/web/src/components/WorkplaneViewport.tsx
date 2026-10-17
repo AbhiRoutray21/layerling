@@ -5748,7 +5748,7 @@ export function WorkplaneViewport({
     const sizeFrame = selectionFrameForShapes([shape], [shape.id]);
     // The mark counts along the workplane the box on screen was drawn in; the shape's fields along its own sides (#419).
     const markFrame = selectionFrameForShapes([shape], [shape.id], placementWorkplaneRef.current);
-    const ownSide = markFrame && sizeFrame && markAxis !== "height" ? ownSideForMark(markFrame, sizeFrame, markAxis) : null;
+    const ownSide = markFrame && sizeFrame ? ownSideForMark(markFrame, sizeFrame, markAxis) : null;
     const axis: "width" | "depth" | "height" = ownSide?.axis ?? markAxis;
     const currentExtent = axis === "width"
       ? sizeFrame?.width ?? shapeWidth(shape)
