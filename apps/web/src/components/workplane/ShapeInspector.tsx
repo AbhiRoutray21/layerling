@@ -4197,16 +4197,20 @@ export function SelectionInspector({
   onSetHole,
   onSetColor,
   onToggleLocked,
+  onToggleHidden,
   onInteractionActiveChange,
 }: {
   shapes: readonly WorkplaneShape[];
   onSetHole: (hole: boolean) => void;
   onSetColor: (color: string) => void;
   onToggleLocked: () => void;
+  /** Hides the selected parts, or shows them again when all of them are hidden (#491); the button of a single part's panel. */
+  onToggleHidden?: () => void;
   onInteractionActiveChange?: (active: boolean) => void;
 }) {
   useLanguage();
   const movable = useMovablePanel<HTMLElement>("layerling.editor.inspectorPosition", INSPECTOR_PANEL);
+  const allHidden = shapes.length > 0 && shapes.every((shape) => shape.hidden);
   const [colorOpen, setColorOpen] = useState(false);
   const { colors: recentColors, remember: rememberColor } = useRecentColors(SOLID_COLORS);
   const solidKinds = shapes.filter((shape) => !isNonSolidShapeKind(shape.kind));
@@ -4241,6 +4245,11 @@ export function SelectionInspector({
           <button className={allLocked ? "inspector-header-icon active" : "inspector-header-icon"} aria-label={allLocked ? t("outliner.unlock") : t("outliner.lock")} aria-keyshortcuts="Control+L" title={t("camera.shortcut", { label: allLocked ? t("outliner.unlock") : t("outliner.lock"), keys: "Ctrl+L" })} onClick={onToggleLocked}>
             {allLocked ? <Lock size={16} /> : <Unlock size={16} />}
           </button>
+          {onToggleHidden ? (
+            <button className={allHidden ? "inspector-header-icon active" : "inspector-header-icon"} aria-label={allHidden ? t("outliner.show") : t("outliner.hide")} aria-keyshortcuts="Control+H" title={t("camera.shortcut", { label: allHidden ? t("outliner.show") : t("outliner.hide"), keys: "Ctrl+H" })} onClick={onToggleHidden}>
+              {allHidden ? <EyeOff size={16} /> : <Eye size={16} />}
+            </button>
+          ) : null}
         </div>
       </div>
       {solidKinds.length > 0 ? (

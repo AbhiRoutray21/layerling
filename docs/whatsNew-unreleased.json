@@ -68,5 +68,15 @@
       "de": "Beim Ziehen am oberen Mittelgriff stand der Höhenwert nur an der senkrechten Kante, oft weit weg vom Griff, und beim Hineinzoomen verschwand er ganz. Jetzt steht er zusätzlich direkt am Griff (darüber, am unteren Griff darunter), immer im Bild, und lässt sich dort anklicken, um eine Zahl einzutippen. Das Maß an der Kante bleibt, wie es war.",
       "en": "When you pulled the top middle handle, the height value stood only at the vertical edge, often far from the handle, and it vanished when you zoomed in. Now it also stands right at the handle (above it, below the lower handle), always in view, and can be clicked there to type a number. The measure at the edge stays as it was."
     }
+  },
+  {
+    "title": {
+      "de": "Der Ausblenden-Knopf bleibt bei mehreren gewählten Körpern",
+      "en": "The hide button stays when several bodies are selected"
+    },
+    "body": {
+      "de": "Im Fenster mit den Eigenschaften verschwand der Knopf mit dem Auge, sobald mehr als ein Körper ausgewählt war, und man musste das Menü „Sichtbarkeit“ nehmen. Jetzt steht er neben dem Schloss auch bei mehreren Körpern: Er blendet alle ausgewählten aus, und sind alle schon ausgeblendet, blendet er sie wieder ein. Dasselbe tut Strg+H.",
+      "en": "In the properties window the button with the eye disappeared as soon as more than one body was selected, and you had to use the Visibility menu. Now it stands beside the lock for several bodies too: it hides all the selected ones, and when all of them are hidden it shows them again. Ctrl+H does the same."
+    }
   }
 ]

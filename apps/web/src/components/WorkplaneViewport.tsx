@@ -395,6 +395,7 @@ type WorkplaneViewportProps = {
   onSelectionHole?: (hole: boolean) => void;
   onSelectionColor?: (color: string) => void;
   onSelectionLock?: () => void;
+  onSelectionHide?: () => void;
   /** Wraps the selected body around a cylinder of this diameter (#106). */
   onWrapAroundCylinder?: (diameter: number, inward: boolean) => void;
   onLayerText?: (patch: TextLayerPatch) => void;
@@ -3068,6 +3069,7 @@ export function WorkplaneViewport({
   onSelectionHole,
   onSelectionColor,
   onSelectionLock,
+  onSelectionHide,
   onWrapAroundCylinder,
   onLayerText,
   onTextTags,
@@ -9115,6 +9117,7 @@ export function WorkplaneViewport({
           onSetHole={onSelectionHole}
           onSetColor={onSelectionColor}
           onToggleLocked={onSelectionLock}
+          onToggleHidden={onSelectionHide}
           onInteractionActiveChange={onInteractionActiveChange}
         />
       ) : null}
