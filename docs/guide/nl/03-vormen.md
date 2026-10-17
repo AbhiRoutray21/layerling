@@ -109,7 +109,7 @@ Een houder, een handgreep of een grondplaat die je steeds opnieuw nodig hebt, ga
 
 1. Selecteer een of meer lichamen, gaten, groepen, een geïmporteerd model inbegrepen.
 2. Open de vormenbibliotheek en klik op {{ui:myShapes.saveSelection}}. Voer een naam in en bevestig met {{ui:common.save}}.
-3. In elk ontwerp voegt een klik op de tegel de vorm in, net als elke andere vorm. Je kunt de tegel ook naar het werkvlak slepen; hij landt dan waar je loslaat.
+3. In elk ontwerp voegt een klik op de tegel de vorm in, net als elke andere vorm. Je kunt de tegel ook naar het werkvlak slepen; hij landt dan waar je loslaat. De vorm hangt dan aan de aanwijzer, net als elke andere: hij volgt die, ook over de vlakken van andere lichamen, een klik zet hem neer, [[Esc]] legt hem weg.
 
 Meerdere lichamen komen samen terug, geplaatst zoals ze ten opzichte van elkaar stonden, en blijven elk afzonderlijk te selecteren. Het potlood op een tegel geeft hem een andere naam, de prullenbak verwijdert hem na een vraag. Vormen die al in ontwerpen zijn ingevoegd, blijven zoals ze zijn.
 

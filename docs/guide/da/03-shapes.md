@@ -109,7 +109,7 @@ En holder, et greb eller en grundplade du har brug for igen og igen kommer i {{u
 
 1. Vælg en eller flere former, huller, grupper eller en importeret model inkluderet.
 2. Åbn formbiblioteket og klik på {{ui:myShapes.saveSelection}}. Indtast et navn og bekræft med {{ui:common.save}}.
-3. I et hvilket som helst design indsætter et klik på flisen formen, som enhver anden form. Du kan også trække flisen ind på arbejdsplanet; den lander så dér hvor du slap.
+3. I et hvilket som helst design indsætter et klik på flisen formen, som enhver anden form. Du kan også trække flisen ind på arbejdsplanet; den lander så dér hvor du slap. Formen hænger derefter på markøren som enhver anden: Den følger den, også over andre legemers flader, et klik sætter den ned, [[Esc]] lægger den væk.
 
 Flere former kommer tilbage sammen, placeret som de stod i forhold til hinanden, og forbliver valgbare én ad gangen. Blyanten på en flis omdøber den, skraldespanden fjerner den efter at have spurgt. Former der allerede er indsat i designs forbliver som de er.
 

@@ -110,7 +110,7 @@ Ein Halter, ein Griff oder eine Grundplatte, die du immer wieder brauchst, kommt
 
 1. Markiere einen oder mehrere Körper, auch Aussparungen, Gruppen oder ein importiertes Modell.
 2. Öffne die Formenliste und klicke auf {{ui:myShapes.saveSelection}}. Gib einen Namen ein und bestätige mit {{ui:common.save}}.
-3. In jedem Entwurf setzt ein Klick auf die Kachel die Form ein, wie jede andere Form. Du kannst die Kachel auch auf die Arbeitsfläche ziehen, dann landet sie dort, wo du loslässt.
+3. In jedem Entwurf setzt ein Klick auf die Kachel die Form ein, wie jede andere Form. Du kannst die Kachel auch auf die Arbeitsfläche ziehen, dann landet sie dort, wo du loslässt. Die Form hängt dann am Zeiger, wie jede andere: Sie folgt ihm, auch über den Flächen anderer Körper, ein Klick setzt sie ab, [[Esc]] legt sie weg.
 
 Mehrere Körper kommen zusammen wieder heraus, so wie sie zueinander standen, und bleiben einzeln auswählbar. Der Stift auf einer Kachel benennt sie um, der Papierkorb entfernt sie nach einer Rückfrage. Was schon in Entwürfen steckt, bleibt dabei erhalten.
 

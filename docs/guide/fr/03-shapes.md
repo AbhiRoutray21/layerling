@@ -108,7 +108,7 @@ Un support, une poignée ou une plaque de base dont vous avez besoin encore et e
 
 1. Sélectionnez un ou plusieurs corps, trous, groupes ou un modèle importé inclus.
 2. Ouvrez la bibliothèque de formes et cliquez sur {{ui:myShapes.saveSelection}}. Saisissez un nom et confirmez avec {{ui:common.save}}.
-3. Dans n'importe quelle conception, un clic sur la tuile insère la forme, comme n'importe quelle autre forme. Vous pouvez également faire glisser la vignette sur le plan de travail ; il atterrit ensuite là où vous le lâchez.
+3. Dans n'importe quelle conception, un clic sur la tuile insère la forme, comme n'importe quelle autre forme. Vous pouvez également faire glisser la vignette sur le plan de travail ; il atterrit ensuite là où vous le lâchez. La forme est alors accrochée au pointeur, comme toute autre : elle le suit, aussi sur les faces d'autres corps, un clic la dépose, [[Esc]] la range.
 
 Plusieurs corps se rassemblent, placés les uns à côté des autres, et restent sélectionnables un à un. Le crayon sur un carreau le renomme, le bac l'enlève après demande. Les formes déjà insérées dans les dessins restent telles quelles.
 

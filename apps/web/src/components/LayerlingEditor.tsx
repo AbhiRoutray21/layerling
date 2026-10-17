@@ -12067,7 +12067,14 @@ export function LayerlingEditor({
             defaultName={selectedShapes.length === 1 ? displayShapeName(selectedShapes[0]) : t("myShapes.defaultName")}
             onInsert={(id) => {
               close();
-              void insertMyShape(id).catch((error) => setNotice(error instanceof Error ? localizedError(error.message) : String(error)));
+              void insertMyShape(id).then((inserted) => {
+                // Like the shapes of the library, it hangs on the pointer and sits down where you click, also on a
+                // face (#463). Without "click to place" it stays where it was put.
+                if (!workspaceSettingsRef.current.clickToPlaceShapes || inserted.length === 0) return;
+                setCruiseAsset(null);
+                setCarryIds(inserted.map((shape) => shape.id));
+                setNotice(t("status.carryPlace"));
+              }).catch((error) => setNotice(error instanceof Error ? localizedError(error.message) : String(error)));
             }}
             onSave={async (name, location) => {
               try {

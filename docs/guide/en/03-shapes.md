@@ -109,7 +109,7 @@ A holder, a grip or a base plate you need again and again goes into the {{ui:myS
 
 1. Select one or more bodies, holes, groups or an imported model included.
 2. Open the shape library and click {{ui:myShapes.saveSelection}}. Enter a name and confirm with {{ui:common.save}}.
-3. In any design, a click on the tile inserts the shape, like any other shape. You can also drag the tile onto the workplane; it then lands where you let go.
+3. In any design, a click on the tile inserts the shape, like any other shape. You can also drag the tile onto the workplane; it then lands where you let go. The shape then hangs on the pointer, like any other: it follows it, also over the faces of other bodies, and a click sets it down; [[Esc]] puts it away.
 
 Several bodies come back together, placed as they stood to each other, and stay selectable one by one. The pencil on a tile renames it, the bin removes it after asking. Shapes already inserted into designs stay as they are.
 

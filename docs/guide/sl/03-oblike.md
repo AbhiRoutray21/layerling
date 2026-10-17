@@ -110,7 +110,7 @@ Držalo, ročaj ali osnovna plošča, ki jo potrebuješ znova in znova, pride me
 
 1. Označi eno ali več teles, tudi luknje, skupine ali uvožen model.
 2. Odpri seznam oblik in klikni {{ui:myShapes.saveSelection}}. Vpiši ime in potrdi z {{ui:common.save}}.
-3. V vsakem načrtu klik na ploščico vstavi obliko kot vsako drugo. Ploščico lahko tudi povlečeš na delovno površino, potem pristane tam, kjer jo spustiš.
+3. V vsakem načrtu klik na ploščico vstavi obliko kot vsako drugo. Ploščico lahko tudi povlečeš na delovno površino, potem pristane tam, kjer jo spustiš. Oblika nato visi na kazalcu kot vsaka druga: sledi mu, tudi čez ploskve drugih teles, klik jo odloži, [[Esc]] jo umakne.
 
 Več teles pride ven skupaj, tako kot so stala drugo glede na drugo, in ostanejo posamezno izbirna. Svinčnik na ploščici jo preimenuje, koš jo odstrani po vprašanju. Kar je že v načrtih, ostane pri tem ohranjeno.
 

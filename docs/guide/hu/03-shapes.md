@@ -109,7 +109,7 @@ Egy újra és újra szükséges tartó, fogantyú vagy alaplap a {{ui:myShapes.t
 
 1. Jelölj ki egy vagy több testet, akár lyukakat, csoportokat vagy importált modellt is.
 2. Nyisd meg az alakzattárat, és kattints a {{ui:myShapes.saveSelection}} gombra. Adj meg egy nevet, és erősítsd meg a {{ui:common.save}} gombbal.
-3. Bármelyik tervben egy kattintás a csempére beilleszti az alakzatot, mint bármelyik másikat. A csempét a munkasíkra is húzhatod; ilyenkor oda kerül, ahol elengeded.
+3. Bármelyik tervben egy kattintás a csempére beilleszti az alakzatot, mint bármelyik másikat. A csempét a munkasíkra is húzhatod; ilyenkor oda kerül, ahol elengeded. Az alakzat ezután a mutatóra lóg, mint bármelyik másik: követi azt, más testek lapjain is, egy kattintás leteszi, az [[Esc]] félreteszi.
 
 Több test együtt tér vissza, úgy elhelyezve, ahogy egymáshoz képest álltak, és egyenként is kijelölhetők maradnak. Egy csempén a ceruza átnevezi, a kuka rákérdezés után eltávolítja. A tervekbe már beillesztett alakzatok változatlanok maradnak.
 

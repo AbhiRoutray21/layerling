@@ -109,7 +109,7 @@ Opakovaně používaný držák, úchop nebo desku uložte do {{ui:myShapes.titl
 
 1. Vyberte jedno či více těles, výřezů, sloučených celků nebo importovaných modelů.
 2. Otevřete knihovnu, zvolte {{ui:myShapes.saveSelection}}, pojmenujte tvar a potvrďte {{ui:common.save}}.
-3. V libovolném projektu jej vložte kliknutím na dlaždici nebo přetažením na pracovní rovinu, kde dopadne na místo uvolnění.
+3. V libovolném projektu jej vložte kliknutím na dlaždici nebo přetažením na pracovní rovinu, kde dopadne na místo uvolnění. Tvar pak visí na ukazateli jako každý jiný: následuje ho, i po plochách jiných těles, kliknutí ho položí, [[Esc]] ho odloží.
 
 Více těles zachová vzájemné rozmístění a každé lze vybírat samostatně. Tužka přejmenuje tvar, koš jej po potvrzení odstraní. Již vložená tělesa se nezmění.
 

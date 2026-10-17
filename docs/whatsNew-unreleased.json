@@ -28,5 +28,15 @@
       "de": "Mit dem neuen Werkzeug „Fläche löschen“ nimmst du eine Verrundung, ein Loch oder einen Zapfen wieder vom Körper: Klicke die Flächen an und dann auf „Löschen“, und die Flächen ringsum schließen die Lücke. Der Körper bleibt exakt, Verrundung, Fase und STEP-Export funktionieren also weiter.",
       "en": "The new tool \"Delete face\" takes a fillet, a hole or a boss off a body again: click its faces, then \"Delete\", and the faces around them close the gap. The body stays exact, so Fillet, Chamfer and the STEP export still work on it."
     }
+  },
+  {
+    "title": {
+      "de": "Eigene Formen hängen am Zeiger",
+      "en": "Custom shapes hang on the pointer"
+    },
+    "body": {
+      "de": "Ein Klick auf eine eigene Form setzte sie sofort in die Mitte der Arbeitsfläche. Jetzt hängt sie wie die Formen der Bibliothek am Zeiger, folgt ihm auch über die Flächen anderer Körper, und ein Klick setzt sie ab. Esc legt sie weg.",
+      "en": "A click on a custom shape put it into the middle of the workplane at once. Now it hangs on the pointer like the shapes of the library, follows it also over the faces of other bodies, and a click sets it down. Esc puts it away."
+    }
   }
 ]
