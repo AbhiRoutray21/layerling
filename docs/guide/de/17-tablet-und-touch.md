@@ -18,7 +18,7 @@ layerling läuft im Browser eines Tablets und als App vom Startbildschirm. Ein F
 | Die Ansicht drehen | Ein Finger auf der leeren Fläche oder am Ansichtswürfel ziehen. |
 | Die Ansicht zoomen | Zwei Finger: auseinanderziehen kommt näher, zusammenziehen geht weg. |
 | Die Ansicht verschieben | Zwei Finger gemeinsam schieben. |
-| Die Auswahl aufheben | Auf die leere Fläche tippen. |
+| Die Auswahl aufheben | Auf die leere Fläche tippen. Nicht, solange {{ui:camera.touchRotate}} an ist, denn dann dreht ein Finger die Ansicht; und in {{ui:contextMenu.selectMultiple}} beendet der erste Tipp auf die leere Fläche nur den Modus und lässt die Auswahl stehen, erst der nächste hebt sie auf. |
 
 ## Mehrere Körper wählen
 

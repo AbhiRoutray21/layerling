@@ -18,7 +18,7 @@ layerling draait in de browser van een tablet en als app vanaf het beginscherm. 
 | Het beeld draaien | Eén vinger op de lege ruimte, of sleep aan de beeldkubus. |
 | Het beeld zoomen | Twee vingers: uit elkaar voor dichterbij, naar elkaar toe voor verder weg. |
 | Het beeld verschuiven | Schuif twee vingers samen. |
-| De selectie opheffen | Tik op de lege ruimte. |
+| De selectie opheffen | Tik op de lege ruimte. Niet zolang {{ui:camera.touchRotate}} aan staat, want dan draait één vinger het beeld; en in {{ui:contextMenu.selectMultiple}} beëindigt de eerste tik op lege ruimte alleen de modus en laat de selectie staan, pas de volgende heft haar op. |
 
 ## Meerdere lichamen selecteren
 

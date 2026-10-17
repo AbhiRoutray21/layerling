@@ -18,7 +18,7 @@ layerling teče v brskalniku tablice in kot aplikacija z domačega zaslona. Prst
 | Zavrteti pogled | En prst na praznem mestu ali povleči kocko pogleda. |
 | Približati pogled | Dva prsta: razmakni za približanje, skupaj za oddaljitev. |
 | Premakniti pogled | Dva prsta skupaj podrsaj. |
-| Odstraniti izbor | Tapniti na prazno mesto. |
+| Odstraniti izbor | Tapniti na prazno mesto. Ne, dokler je vklopljeno {{ui:camera.touchRotate}}, ko en prst vrti pogled; in v {{ui:contextMenu.selectMultiple}} prvi tap na prazno mesto samo konča način in pusti izbor, kakršen je, šele naslednji ga odstrani. |
 
 ## Izbira več teles
 

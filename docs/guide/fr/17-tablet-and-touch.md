@@ -18,7 +18,7 @@ layerling fonctionne dans le navigateur d'une tablette, et comme application dep
 | Tourner la vue | Un doigt sur l'espace vide, ou faire glisser le cube de la vue. |
 | Zoomer la vue | Deux doigts : écartez pour se rapprocher, pincez pour s'éloigner. |
 | Déplacer la vue | Faites glisser deux doigts ensemble. |
-| Effacer la sélection | Toucher l'espace vide. |
+| Effacer la sélection | Toucher l'espace vide. Pas tant que {{ui:camera.touchRotate}} est activé, car un doigt tourne alors la vue ; et dans {{ui:contextMenu.selectMultiple}}, le premier toucher sur l'espace vide met seulement fin au mode et laisse la sélection telle quelle, le suivant l'efface. |
 
 ## Sélectionner plusieurs corps
 

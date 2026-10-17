@@ -18,7 +18,7 @@ layerling běží v prohlížeči tabletu i jako aplikace z domovské obrazovky.
 | Otočit pohled | Jeden prst na prázdném místě, nebo táhnout za krychli pohledu. |
 | Přiblížit pohled | Dva prsty: roztažením se přiblížíte, stažením oddálíte. |
 | Posunout pohled | Posuňte dva prsty společně. |
-| Zrušit výběr | Klepnout na prázdné místo. |
+| Zrušit výběr | Klepnout na prázdné místo. Ne při zapnutém {{ui:camera.touchRotate}}, kdy jeden prst otáčí pohled; a v {{ui:contextMenu.selectMultiple}} první klepnutí na prázdné místo jen ukončí režim a výběr nechá, jaký je, teprve další ho zruší. |
 
 ## Výběr více těles
 

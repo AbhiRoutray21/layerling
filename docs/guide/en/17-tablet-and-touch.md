@@ -18,7 +18,7 @@ layerling runs in the browser of a tablet, and as an app from its home screen. A
 | Turn the view | One finger on empty space, or drag the view cube. |
 | Zoom the view | Two fingers: spread to come closer, pinch to go away. |
 | Move the view | Slide two fingers together. |
-| Clear the selection | Tap empty space. |
+| Clear the selection | Tap empty space. Not while {{ui:camera.touchRotate}} is on, where one finger turns the view; and in {{ui:contextMenu.selectMultiple}} the first tap on empty space only ends the mode and leaves the selection as it is, the next one clears it. |
 
 ## Selecting several bodies
 
