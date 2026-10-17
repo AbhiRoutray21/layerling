@@ -57,6 +57,7 @@ export const MESSAGES_SL: Partial<Record<MessageKey, string>> = {
   "notice.createdFromHistory": "Projekt »{name}« je ustvarjen iz tega stanja. Čaka v pregledu.",
   "dashboard.projectOnGitHub": "Več o projektu na GitHubu",
   "dashboard.releaseNotes": "Opombe ob izdaji v{version}",
+  "dashboard.footerHelp": "Noga okna",
   "dashboard.forum": "Razprave",
   "dashboard.userGuide": "Uporabniški priročnik",
   "dashboard.sponsor": "Podpri Layerling Desktop",

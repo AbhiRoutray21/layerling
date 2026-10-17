@@ -61,6 +61,7 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "notice.createdFromHistory": "„{name}“ aus diesem Stand angelegt. Es wartet in der Übersicht.",
   "dashboard.projectOnGitHub": "Mehr Informationen zum Projekt auf GitHub",
   "dashboard.releaseNotes": "Versionshinweise v{version}",
+  "dashboard.footerHelp": "Die Fußzeile",
   "dashboard.forum": "Forum",
   "dashboard.userGuide": "Anleitung",
   "footer.trademark": "Tinkercad ist eine Marke von Autodesk, Inc. layerling ist ein unabhängiges Projekt und steht in keiner Verbindung zu Autodesk, wird nicht von Autodesk unterstützt oder gesponsert.",

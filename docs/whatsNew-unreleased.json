@@ -58,5 +58,15 @@
       "de": "Eine Skizze aus einem SVG mit vielen kleinen Kurven (eine nachgezeichnete Zeichnung) brach mit „OpenCascade timed out while building the sketch“ ab, sobald eine Linie darum gelegt wurde. Die Kurven werden jetzt nur so fein in Stücke geteilt, wie es für 0,01 mm nötig ist, und die Gültigkeitsprüfung, die bei sehr vielen Kanten Minuten brauchte, entfällt bei so großen Skizzen. Ein solcher Körper entsteht nun in wenigen Sekunden statt in einer Minute.",
       "en": "A sketch from an SVG with many small curves (a traced drawing) stopped with “OpenCascade timed out while building the sketch” as soon as a line was set round it. The curves are now cut into pieces only as finely as 0.01 mm needs, and the validity check, which took minutes with very many edges, is left out for sketches that large. Such a body now builds in a few seconds instead of a minute."
     }
+  },
+  {
+    "title": {
+      "de": "Die Interaktive Hilfe trifft mehr Knöpfe",
+      "en": "Interactive Help hits more buttons"
+    },
+    "body": {
+      "de": "Für einige Knöpfe fand die Interaktive Hilfe nichts oder führte zur falschen Stelle: Einfügen, Löschen, Gruppierung aufheben, Arbeitsbereich-Einstellungen, Farbschema, die Fußzeile und andere. Das erste Kapitel der Anleitung hat jetzt den Abschnitt „Die Knöpfe rund um die Arbeitsfläche“, und die Hilfe führt dorthin.",
+      "en": "For some buttons Interactive Help found nothing or led to the wrong section: Paste, Delete, Ungroup, Workspace settings, Theme, the footer and others. The first chapter of the guide now has a section, The buttons around the work area, and the help leads there."
+    }
   }
 ]

@@ -184,7 +184,7 @@ export function AppFooter({
               {t("whatsNew.footerLink")}
             </a>
           ) : null,
-          <a href={releaseNotesUrl()} target="_blank" rel="noreferrer" key="releases">
+          <a href={releaseNotesUrl()} target="_blank" rel="noreferrer" key="releases" data-help={t("dashboard.footerHelp")}>
             {t("dashboard.releaseNotes", { version })}
           </a>,
           update ? (

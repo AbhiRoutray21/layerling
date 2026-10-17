@@ -61,6 +61,7 @@ export const MESSAGES_IT: Partial<Record<MessageKey, string>> = {
   "notice.createdFromHistory": "Creato il progetto \"{name}\" a partire da uno stato precedente. Lo trovi nella panoramica dei progetti.",
   "dashboard.projectOnGitHub": "Scopri di più sul progetto su GitHub",
   "dashboard.releaseNotes": "Note di rilascio v{version}",
+  "dashboard.footerHelp": "Piè di pagina",
   "dashboard.forum": "Discussioni",
   "dashboard.userGuide": "Guida utente",
   "dashboard.sponsor": "Sostieni il progetto",

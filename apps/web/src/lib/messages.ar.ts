@@ -70,6 +70,7 @@ export const MESSAGES_AR: Partial<Record<MessageKey, string>> = {
   "notice.createdFromHistory": "تم إنشاء \"{name}\" من تلك الحالة. وهو بانتظارك في النظرة العامة.",
   "dashboard.projectOnGitHub": "المزيد عن المشروع على GitHub",
   "dashboard.releaseNotes": "ملاحظات الإصدار v{version}",
+  "dashboard.footerHelp": "تذييل الصفحة",
   "dashboard.forum": "المناقشات",
   "dashboard.userGuide": "دليل المستخدم",
   "dashboard.sponsor": "دعم المشروع",

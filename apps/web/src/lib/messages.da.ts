@@ -50,6 +50,7 @@ export const MESSAGES_DA: Partial<Record<MessageKey, string>> = {
   "notice.createdFromHistory": "Oprettede \"{name}\" fra den tilstand. Det venter i overblikket.",
   "dashboard.projectOnGitHub": "Mere om projektet på GitHub",
   "dashboard.releaseNotes": "Udgivelsesnoter v{version}",
+  "dashboard.footerHelp": "Sidefoden",
   "dashboard.forum": "Diskussioner",
   "dashboard.userGuide": "Brugervejledning",
   "dashboard.sponsor": "Støt projektet",

@@ -155,6 +155,7 @@ export const MESSAGES_CS: Record<MessageKey, string> = {
   "notice.createdFromHistory": "Z vybraného stavu vznikl projekt „{name}“. Najdete ho v přehledu.",
   "dashboard.projectOnGitHub": "Více o projektu na GitHubu",
   "dashboard.releaseNotes": "Poznámky k vydání v{version}",
+  "dashboard.footerHelp": "Zápatí",
   "dashboard.forum": "Diskuze",
   "dashboard.userGuide": "Uživatelská příručka",
   "dashboard.sponsor": "Podpořit projekt",

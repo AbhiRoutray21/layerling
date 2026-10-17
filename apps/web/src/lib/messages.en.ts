@@ -62,6 +62,7 @@ export const MESSAGES_EN = {
   "notice.createdFromHistory": "Created \"{name}\" from that state. It is waiting in the overview.",
   "dashboard.projectOnGitHub": "More about the project on GitHub",
   "dashboard.releaseNotes": "Release notes v{version}",
+  "dashboard.footerHelp": "The footer",
   "dashboard.forum": "Discussions",
   "dashboard.userGuide": "User guide",
   "dashboard.sponsor": "Support the project",

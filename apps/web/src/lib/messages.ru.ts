@@ -67,6 +67,7 @@ export const MESSAGES_RU: Partial<Record<MessageKey, string>> = {
   "notice.createdFromHistory": "Создан проект «{name}» из этого состояния. Он уже ждёт вас на главной странице.",
   "dashboard.projectOnGitHub": "Подробнее о проекте на GitHub",
   "dashboard.releaseNotes": "Заметки о выпуске v{version}",
+  "dashboard.footerHelp": "Нижняя строка",
   "dashboard.forum": "Обсуждения",
   "dashboard.userGuide": "Руководство пользователя",
   "dashboard.sponsor": "Поддержать проект",

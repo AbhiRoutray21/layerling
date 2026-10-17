@@ -61,6 +61,7 @@ export const MESSAGES_NL: Record<MessageKey, string> = {
   "notice.createdFromHistory": "“{name}” is gemaakt vanuit die toestand. Het staat klaar in het overzicht.",
   "dashboard.projectOnGitHub": "Meer over het project op GitHub",
   "dashboard.releaseNotes": "Release notes v{version}",
+  "dashboard.footerHelp": "De voettekst",
   "dashboard.forum": "Discussies",
   "dashboard.userGuide": "Handleiding",
   "dashboard.sponsor": "Steun het project",
