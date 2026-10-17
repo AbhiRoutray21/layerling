@@ -3081,12 +3081,6 @@ function Dashboard({
                       <span>{t("dashboard.sendAllToServer")}</span>
                     </button>
                   ) : null}
-                  {projects.length > 0 ? (
-                    <button className="dashboard-select dashboard-backup-button" type="button" title={t("dashboard.backupAllTitle")} onClick={onBackupAll}>
-                      <Archive size={17} />
-                      <span>{t("dashboard.backupAll")}</span>
-                    </button>
-                  ) : null}
                   <label className="dashboard-select">
                     <SlidersHorizontal size={17} />
                     <select value={sortMode} onChange={(event) => onSortModeChange(event.currentTarget.value)} aria-label={t("dashboard.sortLabel")}>

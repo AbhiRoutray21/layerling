@@ -6,6 +6,7 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **Back up all stands once on the start page:** The button was there twice, in the notice about designs kept in the browser and again in the row above the design cards, with the same words one below the other. The one in the row is gone; the notice keeps Back up all and Restore backup.
 ## 1.86.1
 
 - **A number on the edge of a body lying on its side changes the right measure (#480):** With a workplane on a face, 1.81.0 matched the numbers on the horizontal edges to the body's own sides for a body turned by a quarter, but not the number on the vertical edge. A Round Roof turned by 90° about X and given a new height by that number changed its depth or width instead, because the two swap places when the body lies down. Every mark - width, depth and height - is now matched to the side it stands at. Reported by @SteveGork on GitHub.
