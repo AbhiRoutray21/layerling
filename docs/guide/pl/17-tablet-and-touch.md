@@ -18,7 +18,7 @@ layerling działa w przeglądarce tabletu oraz jako aplikacja z jego ekranu pocz
 | Obrócić widok | Jeden palec na pustym miejscu albo przeciągnięcie kostki widoku. |
 | Przybliżyć widok | Dwa palce: rozsuń, aby się zbliżyć, ściągnij, aby się oddalić. |
 | Przesunąć widok | Przesuń dwa palce razem. |
-| Wyczyścić zaznaczenie | Stuknij puste miejsce. |
+| Wyczyścić zaznaczenie | Stuknij puste miejsce. Nie, gdy włączone jest {{ui:camera.touchRotate}}, bo wtedy jeden palec obraca widok; a w trybie {{ui:contextMenu.selectMultiple}} pierwsze stuknięcie w puste miejsce tylko kończy tryb i zostawia zaznaczenie, dopiero następne je czyści. |
 
 ## Zaznaczanie kilku brył
 

@@ -40,6 +40,20 @@ describe("guide markdown", () => {
     expect(english).toContain("“Group”");
   });
 
+  it("fills the {count} of a counting sentence from the number after the bar", async () => {
+    expect(renderInline("{{ui:workspace.gridMajorSteps|10}}", await contextFor("en"))).toContain("“10 grid steps”");
+    expect(renderInline("{{ui:workspace.gridMajorSteps|10}}", await contextFor("de"))).toContain("„10 Rasterschritte“");
+  });
+
+  it("never writes a {count} placeholder into a built guide page", async () => {
+    for (const language of LANGUAGES) {
+      for (const chapter of await readChapters(language)) {
+        const html = renderInline(chapter.body.replace(/^#.*$/gm, ""), await contextFor(language));
+        expect(html, `${language}/${chapter.file}`).not.toContain("{count}");
+      }
+    }
+  });
+
   it("takes the program's numbers from roundness.ts, written as the language writes them", async () => {
     const { EXACT_ROUND_TOLERANCE, MIN_AUTOMATIC_SIDES } = await import("@/lib/roundness");
     expect(renderInline("{{value:EXACT_ROUND_TOLERANCE}} mm, {{value:MIN_AUTOMATIC_SIDES}}", await contextFor("de"))).toBe(`${String(EXACT_ROUND_TOLERANCE).replace(".", ",")} mm, ${MIN_AUTOMATIC_SIDES}`);
@@ -93,6 +107,7 @@ describe("guide markdown", () => {
 
   it("spells a heading in Cyrillic out, so it has an id of its own", () => {
     expect(slugify("Резьба и механика")).toBe("rezba-i-mekhanika");
+    expect(slugify("Własne czcionki")).toBe("wlasne-czcionki");
     expect(slugify("Как отменить обработку кромки")).toBe("kak-otmenit-obrabotku-kromki");
   });
 

@@ -115,7 +115,7 @@ const CYRILLIC_TRANSLITERATION = {
 export function slugify(text) {
   return text
     .toLowerCase()
-    .replace(/ä/g, "ae").replace(/ö/g, "oe").replace(/ü/g, "ue").replace(/ß/g, "ss").replace(/č/g, "c").replace(/š/g, "s").replace(/ž/g, "z").replace(/đ/g, "d")
+    .replace(/ä/g, "ae").replace(/ö/g, "oe").replace(/ü/g, "ue").replace(/ß/g, "ss").replace(/č/g, "c").replace(/š/g, "s").replace(/ž/g, "z").replace(/đ/g, "d").replace(/ł/g, "l")
     // Cyrillic is spelled out first - the accent stripping below would take the
     // breve off "й" and leave "и", which would spell "Настройки" as "nastroiki"
     // and move the id a Russian heading already had.
@@ -165,11 +165,16 @@ export function renderInline(text, context) {
   });
   work = escapeHtml(work);
   const [open, close] = GUIDE_LANGUAGES[context.language].quotes;
-  work = work.replace(/\{\{ui:([A-Za-z0-9_.-]+)\}\}/g, (_, key) => {
+  // {{ui:key|10}} fills the {count} of a sentence that counts something, so "{count} grid steps" reads "10 grid steps".
+  work = work.replace(/\{\{ui:([A-Za-z0-9_.-]+)(?:\|(\d+))?\}\}/g, (_, key, count) => {
     const label = context.messages?.[key];
     context.references?.uiKeys.add(key);
     if (label === undefined) throw new Error(`Unknown interface text {{ui:${key}}}`);
-    return `<strong class="ui">${open}${escapeHtml(label)}${close}</strong>`;
+    // Without a number a count in brackets is left out ("Show earlier versions ({count})" is a button whose
+    // number changes); any other {count} needs its number, or the page would print the placeholder.
+    const written = (count === undefined ? label.replace(/\s*\(\{count\}\)/g, "") : label).replace(/\{count\}/g, count ?? "{count}");
+    if (written.includes("{count}")) throw new Error(`{{ui:${key}}} needs a number: {{ui:${key}|10}}`);
+    return `<strong class="ui">${open}${escapeHtml(written)}${close}</strong>`;
   });
   work = work.replace(/\{\{value:([A-Za-z0-9_]+)\}\}/g, (_, name) => {
     const value = context.values?.[name];

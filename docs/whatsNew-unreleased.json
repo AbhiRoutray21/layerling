@@ -108,5 +108,15 @@
       "de": "Über die MCP-Schnittstelle konnte eine KI bisher STL, 3MF und OBJ in einen Pfad schreiben, aber nicht den bearbeitbaren Entwurf. Das neue Werkzeug „layerling_save_project“ speichert den ganzen Entwurf als .lyl-Datei an einen Pfad auf dem Rechner des MCP-Servers, ohne Dialog. Eine vorhandene Datei wird nur ersetzt, wenn man es sagt, und das Ziel von Strg+S im Editor bleibt, wie es war.",
       "en": "Through the MCP connection an AI could write STL, 3MF and OBJ to a path, but not the editable design. The new tool layerling_save_project saves the whole design as a .lyl file at a path on the computer of the MCP server, without a dialog. An existing file is only replaced when you say so, and the target of Ctrl+S in the editor stays as it was."
     }
+  },
+  {
+    "title": {
+      "de": "Die Anleitung gibt es jetzt auch auf Polnisch",
+      "en": "The user guide is now also in Polish"
+    },
+    "body": {
+      "de": "Alle 17 Kapitel der Anleitung sind ins Polnische übersetzt, und die Schaltflächen heißen darin genau wie in der polnischen Oberfläche. Außerdem findet die Suche (Strg+K und die Suche in der Anleitung) Wörter mit „ł“ jetzt auch, wenn du „l“ tippst. In zwei Sätzen der Anleitung stand in jeder Sprache ein rohes „{count}“; das ist behoben.",
+      "en": "All 17 chapters of the guide are translated into Polish, and the buttons are named in it exactly as in the Polish interface. The search (Ctrl+K and the search in the guide) now also finds words with \"ł\" when you type \"l\". Two sentences in the guide showed a raw \"{count}\" in every language; that is fixed."
+    }
   }
 ]

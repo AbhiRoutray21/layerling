@@ -82,6 +82,14 @@ describe("searchCommands", () => {
     expect(searchWords("Aushöhlen")).toEqual(expect.arrayContaining(["aushoehlen", "aushohlen"]));
   });
 
+  it("finds a Polish label by its word without the ł", () => {
+    const commands: Cmd[] = [{ id: "flat", label: "Połóż płasko na ścianie", group: "Edycja" }];
+    const found = (query: string) => searchCommands(commands, query).map((command) => command.id);
+    expect(found("polóz")).toEqual(["flat"]);
+    expect(found("poloz plasko")).toEqual(["flat"]);
+    expect(found("połóż")).toEqual(["flat"]);
+  });
+
   it("finds Delete face by the words other programs use, in both languages", () => {
     const commands: Cmd[] = [
       { id: "delete", label: "Delete", group: "Edit", keywords: COMMAND_KEYWORDS.delete },

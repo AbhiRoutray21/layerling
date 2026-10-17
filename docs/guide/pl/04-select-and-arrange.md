@@ -9,6 +9,8 @@ Kliknięcie kształtu go zaznacza. Z [[Shift]] dodajesz kolejne albo je odznacza
 
 To, co przeszkadza, ukrywasz ({{ui:editor.tool.hideSelected}}, [[Ctrl]]+[[H]]). Ukryte kształty zostają w projekcie, po prostu ich nie widać i nie trafiają do eksportu. Okno eksportu mówi wcześniej, ile ich jest. [[Ctrl]]+[[Shift]]+[[H]] przywraca je wszystkie. To, co ma zostać na miejscu, blokujesz kłódką na górze ustawień albo przez [[Ctrl]]+[[L]]. Zablokowanego kształtu nie da się przesunąć, zmienić jego rozmiaru, obrócić, przemalować ani usunąć: jego uchwyty robią się szare, obok strzałki na górze pojawia się kłódka, a narzędzia, które by go zmieniły, są wyszarzone. Najechanie na uchwyt nadal pokazuje wymiary, a klawisz, który by go zmienił, wyświetla „Obiekt zablokowany”. Dopóki w zaznaczeniu jest jeden zablokowany kształt, nic się nie zmienia także dla pozostałych. Ukrywanie, zmiana nazwy, kopiowanie i duplikowanie nadal działają.
 
+Liczba na przycisku grupy {{ui:editor.group.visibility}} mówi, ile kształtów jest ukrytych, a kliknięcie jej pokazuje je wszystkie z powrotem. Projekt otwarty z ukrytymi kształtami mówi o tym raz, z przyciskiem, który je pokazuje.
+
 ## Lista obiektów
 
 Przy wielu częściach łatwo zgubić się w widoku. Lista obiektów ({{ui:editor.tool.showOutliner}} albo [[Ctrl]]+[[Shift]]+[[O]]) pokazuje wszystkie kształty jako listę. Zostaje otwarta lub zamknięta tak, jak ją zostawiłeś, w każdym projekcie, dopóki jej nie zamkniesz. Ten wybór zapamiętuje przeglądarka.

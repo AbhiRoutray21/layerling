@@ -25,7 +25,11 @@ export type GuideHit = { entry: GuideSearchEntry; score: number; folded: string;
 
 export function guideFold(text: string): string {
   var out = "";
-  for (var i = 0; i < text.length; i++) { out += text.charAt(i).toLowerCase().normalize("NFD").charAt(0); }
+  for (var i = 0; i < text.length; i++) {
+    var letter = text.charAt(i).toLowerCase().normalize("NFD").charAt(0);
+    // "ł" has no decomposition, so it is mapped by hand (Polish): one letter in, one letter out.
+    out += letter === "ł" ? "l" : letter;
+  }
   return out;
 }
 
