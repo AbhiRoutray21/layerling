@@ -1653,6 +1653,11 @@ a.install-app-hint-button {
   }
 }
 
+/* On a tablet over https both cards can float at once (install and tablet): the tablet card steps up. */
+body:has(.install-app-hint-floating:not(.tablet-hint)) .install-app-hint.install-app-hint-floating.tablet-hint {
+  bottom: 230px;
+}
+
 @media (max-width: 700px) {
   .install-app-hint.install-app-hint-floating {
     left: 16px;

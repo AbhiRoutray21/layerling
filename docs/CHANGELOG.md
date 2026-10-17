@@ -6,7 +6,7 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
-- **The tablet hint now also shows on an iPad (#467):** The card on the start page that points to the guide chapter for tablets looked at the media queries for a touch screen without a mouse. Safari on an iPad has answered those differently from one iPadOS version to the next, with a trackpad or a Pencil attached, so on an iPad the card stayed away. An iPad and an iPhone are now recognised by what they call themselves (a Mac with several touch points, or an iPhone/iPad), as the file picker already did; an Android tablet is still recognised by the queries, and a computer with a touch screen and a mouse still sees no card.
+- **The tablet hint now also shows on an iPad, and in the editor (#467):** The card also floats up in the editor now, after a quarter of a minute, once (closing it on either page closes it for good): whoever opens layerling on a tablet often lands straight in a design, for the installed app opens the last one, and never saw the card on the start page. **Detection:** The card that points to the guide chapter for tablets looked at the media queries for a touch screen without a mouse. Safari on an iPad has answered those differently from one iPadOS version to the next, with a trackpad or a Pencil attached, so on an iPad the card stayed away. An iPad and an iPhone are now recognised by what they call themselves (a Mac with several touch points, or an iPhone/iPad), as the file picker already did; an Android tablet is still recognised by the queries, and a computer with a touch screen and a mouse still sees no card.
 
 ## 1.86.0
 
