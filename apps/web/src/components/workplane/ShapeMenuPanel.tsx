@@ -275,7 +275,7 @@ export function ShapeMenuPanel({
           title={t(pinned ? "shapeMenu.keepOpenOn" : "shapeMenu.keepOpen")}
           onClick={onTogglePinned}
         >
-          <PinIcon size={16} strokeWidth={2.4} aria-hidden="true" />
+          <PinIcon size={20} strokeWidth={2.4} aria-hidden="true" />
         </button>
       </div>
       {children}
