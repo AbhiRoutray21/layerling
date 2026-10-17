@@ -1,6 +1,6 @@
 ---
 title: Fils, engrenages et autres pièces
-summary: Vis, écrous et trous taraudés qui s'emboîtent, plus engrenage, ressort, tube courbé, queue d'aronde, trou en forme de goutte, lamage et fraisage.
+summary: Vis, écrous et trous taraudés qui s'emboîtent, plus engrenage, ressort, tube cintré, queue d'aronde, trou en forme de goutte, trou lamé et trou fraisé.
 ---
 
 Outre les formes de base, la bibliothèque contient certaines pièces qui seraient fastidieuses à assembler soi-même. Tous peuvent être modifiés ultérieurement dans leurs paramètres.
