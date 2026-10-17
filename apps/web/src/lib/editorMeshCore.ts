@@ -31,7 +31,7 @@ import { textDisplayGeometry } from "@/lib/textFill";
 import { rememberManifoldRuntime, setManifoldLoader } from "@/lib/manifoldHandle";
 import { meshForTwist, twistBandCount } from "@/lib/heightSlices";
 import { groupedContentScale, scaleGroupedVertices } from "@/lib/groupScale";
-import { meshYawDegrees, mirroredAxisCount, mirrorSign, resizedImportedMeshPositions, shapeDepth, shapeExtrudeDeformAt, shapeHasExtrudeDeform, shapeHasTaper, shapeTaperScaleAt, shapeWidth } from "@/lib/workplaneShapes";
+import { deformsAboutOrigin, meshYawDegrees, mirroredAxisCount, mirrorSign, resizedImportedMeshPositions, shapeDepth, shapeExtrudeDeformAt, shapeHasExtrudeDeform, shapeHasTaper, shapeTaperScaleAt, shapeWidth } from "@/lib/workplaneShapes";
 import type { WorkplaneShape } from "@/types/layerling";
 
 export type Vec3 = [number, number, number];
@@ -135,6 +135,11 @@ export function transformMesh(mesh: MeshData, shape: WorkplaneShape): MeshData {
     });
     deformCenterX = (minX + maxX) / 2;
     deformCenterZ = (minZ + maxZ) / 2;
+    // A star turns about its own middle, not about the middle of its box (#476).
+    if (deformsAboutOrigin(shape.kind)) {
+      deformCenterX = 0;
+      deformCenterZ = 0;
+    }
   }
   const taperHeight = Math.max(1e-6, maxLocalY - minLocalY);
   // A twist needs vertices partway up to turn: cut the mesh into bands first, as the viewport does (#184).

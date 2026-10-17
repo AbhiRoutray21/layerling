@@ -5,7 +5,7 @@ import type { CadModifierProfileLoop, CadModifierProfilePart, CadModifierProfile
 import { profileArcPoint, profileLoopBounds, validateCadProfile } from "@/lib/cadProfileSolid";
 import { cadTransformFromMatrix } from "@/lib/cadBakeMetadata";
 import { CAD_MODIFIER_EXACT_SEGMENT_LIMIT } from "@/lib/cadModifierRuntime";
-import { meshYawDegrees, mirrorSign, shapeDepth, shapeHasShapeDeform, shapeTaperDimensions, shapeWidth } from "@/lib/workplaneShapes";
+import { deformsAboutOrigin, meshYawDegrees, mirrorSign, shapeDepth, shapeHasShapeDeform, shapeTaperDimensions, shapeWidth } from "@/lib/workplaneShapes";
 import { regularPolygonFootprintScale } from "@/lib/regularPolygonFootprint";
 import { roundSideCount } from "@/lib/roundSideCount";
 import { drawnRound, ROUND_FROM_BENT_TUBE_QUALITY, ROUND_FROM_HALF_SPHERE_STEPS, ROUND_FROM_ROOF_SIDES, ROUND_FROM_SIDES, ROUND_FROM_SPHERE_STEPS } from "@/lib/roundness";
@@ -1200,8 +1200,9 @@ function deformedLoftProfile(shape: WorkplaneShape, width: number, depth: number
   // The display mesh narrows towards the middle of its outline's extent, not
   // towards the origin; a star or a heart is not centred on it.
   const bounds = loops.map(profileLoopBounds);
-  const centerX = (Math.min(...bounds.map((b) => b[0])) + Math.max(...bounds.map((b) => b[2]))) / 2;
-  const centerZ = (Math.min(...bounds.map((b) => b[1])) + Math.max(...bounds.map((b) => b[3]))) / 2;
+  const aboutOrigin = deformsAboutOrigin(shape.kind);
+  const centerX = aboutOrigin ? 0 : (Math.min(...bounds.map((b) => b[0])) + Math.max(...bounds.map((b) => b[2]))) / 2;
+  const centerZ = aboutOrigin ? 0 : (Math.min(...bounds.map((b) => b[1])) + Math.max(...bounds.map((b) => b[3]))) / 2;
   const section = (loop: CadModifierProfileLoop, sx: number, sz: number, shiftX: number, shiftZ: number) =>
     mapLoop(loop, sx, centerX * (1 - sx) + shiftX, sz, centerZ * (1 - sz) + shiftZ);
   const part: CadModifierProfilePart = {

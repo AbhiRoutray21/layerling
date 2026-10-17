@@ -78,5 +78,15 @@
       "de": "Die Taste F zoomt jetzt auf das, was ausgewählt ist, und holt die ganze Szene ins Bild, wenn nichts ausgewählt ist. Bisher zeigte F immer die ganze Szene, und für die Auswahl brauchte man Umschalt+F, das weiterhin geht. Die ganze Szene zeigt auch jetzt immer die Taste Pos1 und der Haus-Knopf. In der Skizze gilt dasselbe.",
       "en": "The F key now zooms to what is selected, and brings the whole scene into view when nothing is selected. Until now F always showed the whole scene, and the selection needed Shift+F, which still works. The whole scene is always shown by the Home key and the house button. The sketch works the same way."
     }
+  },
+  {
+    "title": {
+      "de": "Verdrehte Sterne bleiben gerade",
+      "en": "A twisted star stays straight"
+    },
+    "body": {
+      "de": "Ein Stern, den du über seine Höhe verdrehst, drehte sich um die Mitte seines Kastens statt um seine eigene Mitte. Weil ein Fünfstern im Kasten nicht zentriert ist, kreiste seine Mitte um die Achse, und die Zacken ragten unterschiedlich weit heraus. Jetzt dreht der Stern sich um seine eigene Mitte, und die Achse bleibt gerade.",
+      "en": "A star that you twist over its height turned about the middle of its box instead of its own middle. As a five-pointed star is not centred in its box, its middle circled round the axis and the tips stuck out by different amounts. Now the star turns about its own middle and the axis stays straight."
+    }
   }
 ]
