@@ -11,6 +11,7 @@ V knihovně vyberte {{ui:shape.text}} a položte jej na plochu. Do pole {{ui:pro
 - **{{ui:nameTag.letterSize}}:** velikost písmen při pohledu shora; jejich tloušťku určuje {{ui:prop.height}}.
 - **{{ui:prop.height}}:** vzdálenost, o kterou nápis vystupuje z povrchu.
 - **{{ui:prop.bevel}}:** změkčí hrany písmen. Počet kroků určuje {{ui:prop.segments}}.
+- **{{ui:nameTag.letterEdge}}:** zaoblí nebo zkosí horní hranu písmen, jako u jmenovky: {{ui:nameTag.edge.none}}, {{ui:nameTag.edge.round}} nebo {{ui:nameTag.edge.chamfer}}, s hodnotou {{ui:nameTag.letterEdgeSize}} (nejdřív 0,4 mm, nejvýš tak vysoká jako text). Jde dál než {{ui:prop.bevel}}, ale jen tak daleko, jak jsou tahy široké: kde je tah tenčí než dvojnásobek velikosti, hrana skončí užší horní plochou. Spodek zůstává rovný, takže jednotlivá písmena lze pak nalepit. Dokud je hrana zvolená, nahrazuje {{ui:prop.bevel}}.
 - **Rozměry:** délku a šířku nápisu upravíte úchyty nebo číselně stejně jako u jiných tvarů.
 - **{{ui:prop.textStretch}}:** Zpočátku vypnuto: písmena si drží proporce a stojí uprostřed rámečku, takže rámeček natažený víc do šířky nebo do hloubky, než slovo potřebuje, zůstane větší než písmena. Po zapnutí se písmena natáhnou v obou směrech na celý rámeček: velké písmeno lze udělat nižší nebo užší jako v Tinkercadu. Platí pro rovný text; zakřivený text má vlastní velikost písmen.
 

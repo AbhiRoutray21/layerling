@@ -188,5 +188,15 @@
       "de": "Die Farben, die du selbst mischst, standen schon unter „Zuletzt benutzt“, aber nur acht, und die älteste fiel heraus. Mit der Stecknadel in der neuen Reihe „Behalten“ hältst du die gewählte Farbe fest: Sie steht in einer eigenen Reihe, neuere Farben verdrängen sie nie, und dieselbe Nadel gibt sie wieder frei. Bis zu 21 Farben bleiben in diesem Browser erhalten.",
       "en": "The colours you mix yourself were already listed under “Recently used”, but only eight, and the oldest dropped out. The pin in the new row “Kept” holds the colour you have chosen: it stands in a row of its own, newer colours never push it out, and the same pin lets go of it again. Up to 21 colours are kept in this browser."
     }
+  },
+  {
+    "title": {
+      "de": "Der Text bekommt eine Buchstabenkante",
+      "en": "The Text shape gets a letter edge"
+    },
+    "body": {
+      "de": "In den Eigenschaften des Textes rundest du die obere Kante der Buchstaben ab oder setzt eine Fase an, mit einer Größe bis 5 mm, so wie beim Namensschild. Die Rundung geht so weit, wie die Striche breit sind, die Unterseite bleibt flach.",
+      "en": "In the Text properties you can round or chamfer the top edge of the letters, with a size of up to 5 mm, as on a name tag. A rounding goes as far as the strokes are wide, and the underside stays flat."
+    }
   }
 ]

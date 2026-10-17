@@ -11,6 +11,7 @@ V knjižnici oblik izberi {{ui:shape.text}} in ga odloži. V polje {{ui:prop.tex
 - **{{ui:nameTag.letterSize}}:** Kako velike so črke, gledano od zgoraj; {{ui:prop.height}} določa, kako debele so.
 - **{{ui:prop.height}}:** Kako visoko pisava štrli iz ploskve.
 - **{{ui:prop.bevel}}:** Zaobli robove črk, da delujejo mehkeje. Z {{ui:prop.segments}} določiš, v koliko stopnjah.
+- **{{ui:nameTag.letterEdge}}:** zaobli ali posname zgornji rob črk, kakor pri imenski tablici: {{ui:nameTag.edge.none}}, {{ui:nameTag.edge.round}} ali {{ui:nameTag.edge.chamfer}}, z velikostjo {{ui:nameTag.letterEdgeSize}} (na začetku 0,4 mm, največ tako visoka kot besedilo). Gre dlje kot {{ui:prop.bevel}}, a le toliko, kolikor so črte široke: kjer je črta tanjša od dvakratne velikosti, se rob konča z ožjo zgornjo ploskvijo. Spodnja stran ostane ravna, zato lahko posamezne črke pozneje prilepiš. Dokler je rob izbran, nadomesti {{ui:prop.bevel}}.
 - **Velikost:** Dolžino in širino vrstice nastaviš kot pri vsaki obliki. Povleci ročice ali vpiši mere.
 - **{{ui:prop.textStretch}}:** Na začetku izklopljeno: črke obdržijo razmerja in stojijo na sredini okvirja, zato okvir, ki je razvlečen širše ali globlje, kot besedilo potrebuje, ostane večji od črk. Če vklopiš, se črke raztegnejo v obe smeri čez ves okvir: veliko črko lahko narediš nižjo ali ožjo, kot v Tinkercadu. Velja za ravno besedilo; ukrivljeno besedilo ima svojo velikost črk.
 

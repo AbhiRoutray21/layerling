@@ -11,6 +11,7 @@ Vælg {{ui:shape.text}} i formbiblioteket og placér den. I feltet {{ui:prop.tex
 - **{{ui:nameTag.letterSize}}:** Hvor store bogstaverne er, set fra oven; {{ui:prop.height}} sætter hvor tykke de er.
 - **{{ui:prop.height}}:** Hvor langt bogstaverne stikker ud fra overfladen.
 - **{{ui:prop.bevel}}:** Rund bogstavkanterne så de ser blødere ud. Med {{ui:prop.segments}} bestemmer du i hvor mange trin.
+- **{{ui:nameTag.letterEdge}}:** runder eller affaser bogstavernes overkant, som på et navneskilt: {{ui:nameTag.edge.none}}, {{ui:nameTag.edge.round}} eller {{ui:nameTag.edge.chamfer}}, med {{ui:nameTag.letterEdgeSize}} (først 0,4 mm, højst lige så høj som teksten). Den går længere end {{ui:prop.bevel}}, men kun så langt, som stregerne er brede: hvor en streg er tyndere end to gange størrelsen, ender kanten i en smallere top. Undersiden forbliver flad, så enkelte bogstaver kan limes på bagefter. Så længe en kant er valgt, træder den i stedet for {{ui:prop.bevel}}.
 - **Størrelse:** Du sætter længden og bredden som med enhver form. Træk håndtagene eller tast dimensionerne.
 
 Tekst er i starten én krop. Hvis du vil behandle bogstaverne enkeltvis, klik på {{ui:inspector.separateParts}}. Så er hvert bogstav sin egen form.

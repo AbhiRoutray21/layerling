@@ -11,6 +11,7 @@ Válaszd az alakzattárban a {{ui:shape.text}} alakzatot, és helyezd el. Jobbra
 - **{{ui:nameTag.letterSize}}:** Milyen nagyok a betűk felülről nézve; a {{ui:prop.height}} azt adja meg, milyen vastagok.
 - **{{ui:prop.height}}:** Milyen messze áll ki a felirat a felületből.
 - **{{ui:prop.bevel}}:** Lekerekíti a betűk éleit, hogy lágyabbnak tűnjenek. A {{ui:prop.segments}} értékkel döntöd el, hány lépésben.
+- **{{ui:nameTag.letterEdge}}:** lekerekíti vagy letöri a betűk felső élét, ahogy egy névtáblán: {{ui:nameTag.edge.none}}, {{ui:nameTag.edge.round}} vagy {{ui:nameTag.edge.chamfer}}, a {{ui:nameTag.letterEdgeSize}} értékkel (kezdetben 0,4 mm, legfeljebb olyan magas, mint a szöveg). Tovább megy, mint a {{ui:prop.bevel}}, de csak addig, amíg a vonások szélesek: ahol egy vonás vékonyabb a méret kétszeresénél, az él keskenyebb tetőben végződik. Az alja lapos marad, így az egyes betűk utólag felragaszthatók. Amíg egy él ki van választva, az a {{ui:prop.bevel}} helyét veszi át.
 - **Méret:** A sor hosszát és szélességét úgy állítod, mint bármely alakzatnál. Húzd a fogantyúkat, vagy gépeld be a méreteket.
 
 A szöveg kezdetben egyetlen test. Ha a betűket egyenként kezelnéd, kattints a {{ui:inspector.separateParts}} gombra. Ekkor minden betű önálló alakzat lesz.
