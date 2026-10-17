@@ -8,6 +8,8 @@ import { useLanguage } from "@/lib/useLanguage";
 
 const DISMISSED_KEY = "layerling.installHintDismissed";
 const SNOOZED_KEY = "layerling.installHintSnoozed";
+/** Set once layerling has run as an installed app or the browser reported the installation: from then on this browser stays quiet, also in an ordinary tab. */
+const INSTALLED_KEY = "layerling.installedApp";
 /** In the editor the card waits this long, so it does not meet someone who has just started. */
 const EDITOR_DELAY_MS = 30_000;
 
@@ -30,7 +32,7 @@ function runsAsInstalledApp() {
  * starts faster, works without internet and need not be loaded again each time,
  * and the update notice still reaches the person. Shown only where both work -
  * https with service workers - so the plain-http home server never promises what
- * it cannot do; never inside the installed app itself. "Not now" hides it for two
+ * it cannot do; never inside the installed app itself, and not in a browser tab either once the app has been installed on this computer. "Not now" hides it for two
  * weeks, the cross for good.
  */
 export function InstallAppHint({ variant = "dashboard" }: { variant?: "dashboard" | "editor" }) {
@@ -40,8 +42,18 @@ export function InstallAppHint({ variant = "dashboard" }: { variant?: "dashboard
   const [fallbackKey, setFallbackKey] = useState<MessageKey>("installHint.chromium");
 
   useEffect(() => {
-    if (!window.isSecureContext || !("serviceWorker" in navigator) || runsAsInstalledApp()) return;
+    if (!window.isSecureContext || !("serviceWorker" in navigator)) return;
+    if (runsAsInstalledApp()) {
+      // Chromium and Safari keep the storage of the app and of the browser's tabs together, so the app leaves a note for them.
+      try {
+        window.localStorage.setItem(INSTALLED_KEY, "1");
+      } catch {
+        // nothing to remember it in
+      }
+      return;
+    }
     try {
+      if (window.localStorage.getItem(INSTALLED_KEY) === "1") return;
       if (window.localStorage.getItem(DISMISSED_KEY) === "1") return;
       if (installHintSnoozed(window.localStorage.getItem(SNOOZED_KEY), Date.now())) return;
     } catch {
@@ -57,10 +69,20 @@ export function InstallAppHint({ variant = "dashboard" }: { variant?: "dashboard
     // and floats above the work area until it is answered.
     const timer = variant === "editor" ? window.setTimeout(() => setVisible(true), EDITOR_DELAY_MS) : null;
     if (variant !== "editor") setVisible(true);
+    const installed = () => {
+      setVisible(false);
+      try {
+        window.localStorage.setItem(INSTALLED_KEY, "1");
+      } catch {
+        // nothing to remember it in
+      }
+    };
     window.addEventListener("layerling-install-prompt", sync);
+    window.addEventListener("appinstalled", installed);
     return () => {
       if (timer !== null) window.clearTimeout(timer);
       window.removeEventListener("layerling-install-prompt", sync);
+      window.removeEventListener("appinstalled", installed);
     };
   }, [variant]);
 
