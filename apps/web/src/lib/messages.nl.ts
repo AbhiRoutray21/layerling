@@ -200,6 +200,8 @@ export const MESSAGES_NL: Record<MessageKey, string> = {
   "whatsNew.dismiss": "Begrepen",
   "whatsNew.close": "Deze tip sluiten",
   "whatsNew.footerLink": "Wat is er nieuw?",
+  "whatsNew.excerpt": "Dit is slechts een selectie. Een release kan meer, kleinere wijzigingen en bugfixes bevatten.",
+  "whatsNew.releaseNotes": "Alle wijzigingen staan in de release notes op GitHub.",
   "palette.open": "Opdrachten zoeken (Ctrl+K)",
   "palette.title": "Opdrachten zoeken",
   "palette.placeholder": "Zoek een gereedschap, vorm of opdracht …",

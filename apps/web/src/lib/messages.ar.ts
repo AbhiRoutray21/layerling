@@ -209,6 +209,8 @@ export const MESSAGES_AR: Partial<Record<MessageKey, string>> = {
   "whatsNew.dismiss": "فهمت",
   "whatsNew.close": "إغلاق هذا التلميح",
   "whatsNew.footerLink": "ما الجديد؟",
+  "whatsNew.excerpt": "هذا مجرد مقتطف. قد يتضمن الإصدار تغييرات أصغر وإصلاحات أخطاء إضافية.",
+  "whatsNew.releaseNotes": "كل التغييرات موجودة في ملاحظات الإصدار على GitHub.",
   "palette.open": "البحث عن الأوامر (Ctrl+K)",
   "palette.title": "البحث عن الأوامر",
   "palette.placeholder": "ابحث عن أداة، شكل أو أمر …",

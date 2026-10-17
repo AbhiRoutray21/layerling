@@ -647,6 +647,14 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .dashboard-trademark {
   background: #e6e6e6;
 }
 
+:where(html[data-theme="dark"][data-palette="graphite"]) .whats-new-note {
+  color: #595959;
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .whats-new-note a {
+  color: #bf6508;
+}
+
 :where(html[data-theme="dark"][data-palette="graphite"]) .whats-new-version h2 {
   color: #bf6508;
 }
@@ -689,6 +697,14 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .whats-new {
 html[data-theme="dark"]:where([data-palette="graphite"]) .whats-new-icon {
   color: #f3a452;
   background: #2d2d2d;
+}
+
+html[data-theme="dark"]:where([data-palette="graphite"]) .whats-new-note {
+  color: #929292;
+}
+
+html[data-theme="dark"]:where([data-palette="graphite"]) .whats-new-note a {
+  color: #f3a452;
 }
 
 html[data-theme="dark"]:where([data-palette="graphite"]) .whats-new-version h2 {

@@ -184,6 +184,8 @@ export const MESSAGES_SL: Partial<Record<MessageKey, string>> = {
   "whatsNew.dismiss": "Razumem",
   "whatsNew.close": "Zapri ta namig",
   "whatsNew.footerLink": "Kaj je novega?",
+  "whatsNew.excerpt": "To je le izbor. Izdaja lahko vsebuje še druge, manjše spremembe in popravke napak.",
+  "whatsNew.releaseNotes": "Vse spremembe so v opombah ob izdaji na GitHubu.",
   "palette.open": "Išči ukaze (Ctrl+K)",
   "palette.title": "Iskanje ukazov",
   "palette.placeholder": "Poišči orodje, obliko ali ukaz …",

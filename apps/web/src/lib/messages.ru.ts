@@ -204,6 +204,8 @@ export const MESSAGES_RU: Partial<Record<MessageKey, string>> = {
   "whatsNew.dismiss": "Понятно",
   "whatsNew.close": "Закрыть подсказку",
   "whatsNew.footerLink": "Что нового?",
+  "whatsNew.excerpt": "Это только выдержка. Релиз может содержать и другие, более мелкие изменения и исправления ошибок.",
+  "whatsNew.releaseNotes": "Все изменения перечислены в примечаниях к релизу на GitHub.",
   "palette.open": "Поиск команд (Ctrl+K)",
   "palette.title": "Поиск команд",
   "palette.placeholder": "Найти инструмент, фигуру или команду…",

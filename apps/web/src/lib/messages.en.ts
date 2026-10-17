@@ -201,6 +201,8 @@ export const MESSAGES_EN = {
   "whatsNew.dismiss": "Got it",
   "whatsNew.close": "Close this hint",
   "whatsNew.footerLink": "What is new?",
+  "whatsNew.excerpt": "This is only an excerpt. A release can contain more, smaller changes and bug fixes.",
+  "whatsNew.releaseNotes": "All changes are in the release notes on GitHub.",
   "palette.open": "Search commands (Ctrl+K)",
   "palette.title": "Command search",
   "palette.placeholder": "Search for a tool, shape or command …",

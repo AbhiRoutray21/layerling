@@ -200,6 +200,8 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "whatsNew.dismiss": "Verstanden",
   "whatsNew.close": "Hinweis schließen",
   "whatsNew.footerLink": "Was ist neu?",
+  "whatsNew.excerpt": "Das ist nur ein Auszug. Ein Release kann weitere, kleinere Änderungen und Fehlerbehebungen enthalten.",
+  "whatsNew.releaseNotes": "Alle Änderungen stehen in den Release Notes auf GitHub.",
   "palette.open": "Befehle suchen (Strg+K)",
   "palette.title": "Befehlssuche",
   "palette.placeholder": "Werkzeug, Form oder Befehl suchen …",

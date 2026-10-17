@@ -288,6 +288,8 @@ export const MESSAGES_CS: Record<MessageKey, string> = {
   "whatsNew.dismiss": "Rozumím",
   "whatsNew.close": "Zavřít tip",
   "whatsNew.footerLink": "Co je nového?",
+  "whatsNew.excerpt": "Toto je jen výběr. Vydání může obsahovat další, menší změny a opravy chyb.",
+  "whatsNew.releaseNotes": "Všechny změny najdete v poznámkách k vydání na GitHubu.",
   "palette.open": "Hledat příkazy (Ctrl+K)",
   "palette.title": "Vyhledávání příkazů",
   "palette.placeholder": "Hledat nástroj, tvar nebo příkaz…",

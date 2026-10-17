@@ -1989,6 +1989,19 @@ a.install-app-hint-button {
   overflow-y: auto;
 }
 
+.whats-new-note {
+  margin: 0;
+  color: #7a6650;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.whats-new-note a {
+  color: #bf6508;
+  font-weight: 800;
+}
+
 .whats-new-version h2 {
   margin: 0 0 6px;
   color: #bf6508;
@@ -2080,6 +2093,14 @@ html[data-theme="dark"] .whats-new {
 html[data-theme="dark"] .whats-new-icon {
   color: #f3a452;
   background: #3a2c16;
+}
+
+html[data-theme="dark"] .whats-new-note {
+  color: #bda78e;
+}
+
+html[data-theme="dark"] .whats-new-note a {
+  color: #f3a452;
 }
 
 html[data-theme="dark"] .whats-new-version h2 {

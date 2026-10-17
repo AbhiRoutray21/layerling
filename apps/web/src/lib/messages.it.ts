@@ -196,6 +196,8 @@ export const MESSAGES_IT: Partial<Record<MessageKey, string>> = {
   "whatsNew.dismiss": "Ho capito",
   "whatsNew.close": "Chiudi questo suggerimento",
   "whatsNew.footerLink": "Novità",
+  "whatsNew.excerpt": "Questa è solo una selezione. Una versione può contenere altre modifiche più piccole e correzioni di bug.",
+  "whatsNew.releaseNotes": "Tutte le modifiche sono nelle note di rilascio su GitHub.",
   "palette.open": "Cerca comandi (Ctrl+K)",
   "palette.title": "Ricerca comandi",
   "palette.placeholder": "Cerca uno strumento, una forma o un comando…",

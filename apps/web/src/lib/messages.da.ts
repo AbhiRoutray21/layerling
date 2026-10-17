@@ -187,6 +187,8 @@ export const MESSAGES_DA: Partial<Record<MessageKey, string>> = {
   "whatsNew.dismiss": "Forstået",
   "whatsNew.close": "Luk dette tip",
   "whatsNew.footerLink": "Hvad er nyt?",
+  "whatsNew.excerpt": "Dette er kun et udpluk. En udgivelse kan indeholde flere, mindre ændringer og fejlrettelser.",
+  "whatsNew.releaseNotes": "Alle ændringer står i udgivelsesnoterne på GitHub.",
   "palette.open": "Søg efter kommandoer (Ctrl+K)",
   "palette.title": "Søg efter en kommando eller form",
   "palette.placeholder": "Søg…",

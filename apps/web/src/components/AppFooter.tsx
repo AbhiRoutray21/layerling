@@ -4,7 +4,7 @@ import { Heart, Sparkles } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
 import { LANGUAGE_INFO, t, type Language } from "@/lib/i18n";
 import { useLanguage } from "@/lib/useLanguage";
-import { SOURCE_CODE_URL, type AppUpdateInfo } from "@/lib/appUpdate";
+import { SOURCE_CODE_URL, releaseNotesUrl, type AppUpdateInfo } from "@/lib/appUpdate";
 import { useAppUpdate } from "@/lib/useAppUpdate";
 import { SHOW_WHATS_NEW_EVENT } from "@/lib/useWhatsNew";
 import { SupportNudge } from "@/components/SupportNudge";
@@ -15,13 +15,6 @@ export { SOURCE_CODE_URL };
 /** Der Verweis in der Fußzeile zeigt auf die Anleitung in der gewählten Sprache. */
 function readmeUrl(language: Language) {
   return `${SOURCE_CODE_URL.replace(/\/+$/, "")}/blob/main/${LANGUAGE_INFO[language].readme}`;
-}
-
-// The release list rather than the tag of this build: a fork that never
-// publishes a release still lands on a page that exists, and readers see what
-// came after the version they are running.
-function releaseNotesUrl() {
-  return `${SOURCE_CODE_URL.replace(/\/+$/, "")}/releases`;
 }
 
 // German readers are already gathered in the drucktipps3d forum this project

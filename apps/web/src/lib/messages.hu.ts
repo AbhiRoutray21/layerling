@@ -199,6 +199,8 @@ export const MESSAGES_HU: Partial<Record<MessageKey, string>> = {
   "whatsNew.dismiss": "Értem",
   "whatsNew.close": "A tipp bezárása",
   "whatsNew.footerLink": "Mi az újdonság?",
+  "whatsNew.excerpt": "Ez csak egy válogatás. Egy kiadás további, kisebb változtatásokat és hibajavításokat is tartalmazhat.",
+  "whatsNew.releaseNotes": "Minden változás a GitHubon, a kiadási jegyzetekben található.",
   "palette.open": "Parancsok keresése (Ctrl+K)",
   "palette.title": "Parancskereső",
   "palette.placeholder": "Eszköz, alakzat vagy parancs keresése …",
