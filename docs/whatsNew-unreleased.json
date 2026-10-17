@@ -38,5 +38,15 @@
       "de": "Ein Klick auf eine eigene Form setzte sie sofort in die Mitte der Arbeitsfläche. Jetzt hängt sie wie die Formen der Bibliothek am Zeiger, folgt ihm auch über die Flächen anderer Körper, und ein Klick setzt sie ab. Esc legt sie weg.",
       "en": "A click on a custom shape put it into the middle of the workplane at once. Now it hangs on the pointer like the shapes of the library, follows it also over the faces of other bodies, and a click sets it down. Esc puts it away."
     }
+  },
+  {
+    "title": {
+      "de": "Zu große Entwürfe werden trotzdem gespeichert",
+      "en": "A design that is too big is saved anyway"
+    },
+    "body": {
+      "de": "Ein Entwurf mit sehr großen Netzen und langem Verlauf scheiterte bei fast jeder Änderung am Speichern, nur mit dem Hinweis „Die Formen konnten nicht gespeichert werden“. Jetzt nennt die Meldung den Grund (zu groß für die Projektdatei oder kein Platz mehr im Browser). Ist nur der ganze Verlauf zu viel, behält die gespeicherte Kopie die neuesten Schritte, die passen, und sagt es einmal. Rückgängig geht in der offenen Sitzung weiter über alle Schritte.",
+      "en": "A design with very large meshes and a long history failed to save after almost every change, with only the note that the shapes could not be saved. Now the message names the reason (too big for the project file, or no room left in the browser). If only the whole history is too much, the stored copy keeps the newest steps that fit, and says so once. Undo in the open session still goes through every step."
+    }
   }
 ]

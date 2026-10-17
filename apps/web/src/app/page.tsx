@@ -17,6 +17,7 @@ import { applyAppTheme, getAppThemePreference, hasStoredAppTheme, readStoredAppT
 import { hydrateEditorHistoryState, notesForHistoryIndex, type EditorHistoryEntry } from "@/lib/editorHistory";
 import { detectLanguage, setLanguage, t, translate, type Language } from "@/lib/i18n";
 import { localizedError } from "@/lib/userErrors";
+import { historyTrimSteps, isProjectTooLargeError, isStorageFullError, trimHistoryWindow } from "@/lib/historyTrim";
 import { GuideHelpLink } from "@/components/GuideHelpLink";
 import { WelcomeGuideBody } from "@/components/WelcomeGuide";
 import { InstallAppHint } from "@/components/InstallAppHint";
@@ -490,16 +491,19 @@ async function loadProjectPackage(projectId: string): Promise<Uint8Array | null>
   return stored ? new Uint8Array(stored) : null;
 }
 
-async function saveProjectShapes(projectId: string, entry: ProjectShapeCacheEntry, context: ProjectShapeSaveContext) {
-  const lylPackage = await exportLylProject({
+/** What a save did besides saving: the stored copy keeps a part of the history only, because the whole one was too big (#475). */
+type ProjectShapesSaveResult = { historyTrimmed?: { kept: number; total: number } };
+
+async function saveProjectShapes(projectId: string, entry: ProjectShapeCacheEntry, context: ProjectShapeSaveContext): Promise<ProjectShapesSaveResult> {
+  const pack = (history: ProjectShapeCacheEntry["history"], historyIndex: number) => exportLylProject({
     projectId,
     projectName: context.projectName,
     createdAt: context.createdAt,
     modifiedAt: entry.revision,
     shapes: entry.shapes,
-    notes: notesForHistoryIndex(entry.history, entry.historyIndex),
-    history: entry.history,
-    historyIndex: entry.historyIndex,
+    notes: notesForHistoryIndex(history, historyIndex),
+    history,
+    historyIndex,
     assets: entry.assets,
     workspace: context.workspace,
     snapGrid: context.snapGrid,
@@ -508,8 +512,29 @@ async function saveProjectShapes(projectId: string, entry: ProjectShapeCacheEntr
     sketchPlacementWorkplane: context.sketchPlacementWorkplane,
     compressionLevel: 1,
   });
+  let lylPackage: Awaited<ReturnType<typeof exportLylProject>>;
+  let historyTrimmed: ProjectShapesSaveResult["historyTrimmed"];
+  try {
+    lylPackage = await pack(entry.history, entry.historyIndex);
+  } catch (error) {
+    if (!isProjectTooLargeError(error) || entry.history.length <= 1) throw error;
+    // Too big with the whole history: keep the newest steps that fit, so the design is saved all the same.
+    let packed: Awaited<ReturnType<typeof exportLylProject>> | null = null;
+    for (const keep of historyTrimSteps(entry.history.length)) {
+      const trimmed = trimHistoryWindow(entry.history, entry.historyIndex, keep);
+      try {
+        packed = await pack(trimmed.history, trimmed.historyIndex);
+        historyTrimmed = { kept: trimmed.history.length, total: entry.history.length };
+        break;
+      } catch (retryError) {
+        if (!isProjectTooLargeError(retryError)) throw retryError;
+      }
+    }
+    if (!packed) throw error;
+    lylPackage = packed;
+  }
   const database = await openProjectShapesDb();
-  return new Promise<void>((resolve, reject) => {
+  return new Promise<ProjectShapesSaveResult>((resolve, reject) => {
     const transaction = database.transaction(PROJECT_SHAPES_STORE_NAME, "readwrite");
     const store = transaction.objectStore(PROJECT_SHAPES_STORE_NAME);
     const existingRequest = store.get(projectId);
@@ -530,7 +555,7 @@ async function saveProjectShapes(projectId: string, entry: ProjectShapeCacheEntr
     };
     transaction.oncomplete = () => {
       database.close();
-      resolve();
+      resolve({ historyTrimmed });
     };
     transaction.onerror = () => {
       database.close();
@@ -546,13 +571,13 @@ async function saveProjectShapes(projectId: string, entry: ProjectShapeCacheEntr
 /** The newest revision of each project that the editor has asked to be saved. */
 const newestRequestedRevision = new Map<string, number>();
 
-function saveProjectShapesWhenIdle(projectId: string, entry: ProjectShapeCacheEntry, context: ProjectShapeSaveContext) {
+function saveProjectShapesWhenIdle(projectId: string, entry: ProjectShapeCacheEntry, context: ProjectShapeSaveContext): Promise<ProjectShapesSaveResult | void> {
   // Saves of one project run one after another. Each change queues one, so a
   // run of quick changes would otherwise be written once per change, and a
   // dense design takes over a second to write. An older state whose newer one
   // is already waiting is skipped: the newer save holds everything it has.
   const superseded = () => (newestRequestedRevision.get(projectId) ?? 0) > entry.revision;
-  return new Promise<void>((resolve, reject) => {
+  return new Promise<ProjectShapesSaveResult | void>((resolve, reject) => {
     const save = () => {
       if (superseded()) {
         resolve();
@@ -777,7 +802,9 @@ export default function Home() {
   const dashboardImportInputRef = useRef<HTMLInputElement | null>(null);
   const backupRestoreInputRef = useRef<HTMLInputElement | null>(null);
   const nextProjectRevisionRef = useRef(0);
-  const projectShapeSaveQueuesRef = useRef<Record<string, Promise<void>>>({});
+  const projectShapeSaveQueuesRef = useRef<Record<string, Promise<ProjectShapesSaveResult | void>>>({});
+  /** Designs whose stored history was cut for size and that were told so already (#475). */
+  const trimmedHistoryToldRef = useRef<Set<string>>(new Set());
   /** The upload to the server still running per design, so removing it can wait for its revision. */
   const sharedSavesRef = useRef<Record<string, Promise<SharedProject | undefined>>>({});
   /** The newest list, for work that resumes after waiting on a save. */
@@ -1217,8 +1244,14 @@ export default function Home() {
     projectShapeSaveQueuesRef.current[snapshot.projectId] = queuedSave;
 
     void queuedSave
-      .then(() => {
+      .then((result) => {
         setProjectSaveFailure(null);
+        // Said once per design and session: the stored copy keeps only the newest steps of a very large history (#475).
+        const trimmed = result?.historyTrimmed;
+        if (trimmed && !trimmedHistoryToldRef.current.has(snapshot.projectId)) {
+          trimmedHistoryToldRef.current.add(snapshot.projectId);
+          setProjectSaveFailure({ message: t("notice.projectHistoryTrimmed", { kept: trimmed.kept, total: trimmed.total }), at: Date.now() });
+        }
         setProjects((current) =>
           current.map((project) =>
             project.id === snapshot.projectId && (project.revision ?? 0) <= revision
@@ -1231,7 +1264,12 @@ export default function Home() {
         if (projectShapeSaveQueuesRef.current[snapshot.projectId] === queuedSave) {
           setDashboardNotice(error instanceof Error ? localizedError(error.message) : t("notice.projectShapesSaveFailed"));
           // The dashboard is not on screen while someone works; the editor has to say it too.
-          setProjectSaveFailure({ message: t("notice.projectShapesSaveFailed"), at: Date.now() });
+          // With the reason when it is one a person can act on: too big for the project file, or no room left (#475).
+          const known = isProjectTooLargeError(error) || isStorageFullError(error);
+          setProjectSaveFailure({
+            message: known && error instanceof Error ? t("notice.projectShapesSaveFailedWhy", { reason: localizedError(error.message) }) : t("notice.projectShapesSaveFailed"),
+            at: Date.now(),
+          });
         }
       })
       .finally(() => {
