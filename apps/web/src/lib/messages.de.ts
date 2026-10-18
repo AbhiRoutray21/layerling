@@ -1907,6 +1907,8 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "prop.gridfinityMagnets": "Magnetlöcher",
   "prop.gridfinityHalfGrid": "Halbes Raster (21 mm)",
   "gridfinity.halfGridHint": "Einheiten breit und tief zählen Zellen von 21 mm, jede mit einem eigenen Fuß; vier stehen in einer Mulde der Bodenplatte.",
+  "prop.gridfinityFloorHeight": "Bodenhöhe",
+  "gridfinity.floorHeightHint": "Bis zu dieser Höhe, von der Unterseite an gemessen, ist der Behälter massiv: ein Rohling, in den du Formen schneidest.",
   "prop.gridfinityLabelBack": "Etikettenleiste hinten",
   "prop.gridfinityLabelFront": "Etikettenleiste vorne",
   "prop.gridfinityLabelLeft": "Etikettenleiste links",

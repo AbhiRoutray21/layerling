@@ -1899,6 +1899,8 @@ export const MESSAGES_PL: Partial<Record<MessageKey, string>> = {
   "prop.gridfinityMagnets": "Otwory na magnesy",
   "prop.gridfinityHalfGrid": "Siatka połówkowa (21 mm)",
   "gridfinity.halfGridHint": "Jednostki wszerz i w głąb liczą komórki po 21 mm, każdą z własną stopką; cztery stoją w jednym gnieździe podstawki.",
+  "prop.gridfinityFloorHeight": "Wysokość dna",
+  "gridfinity.floorHeightHint": "Do tej wysokości, mierząc od spodu, pojemnik jest pełny: półfabrykat, w którym wytniesz kształty.",
   "prop.gridfinityLabelBack": "Półka na etykietę z tyłu",
   "prop.gridfinityLabelFront": "Półka na etykietę z przodu",
   "prop.gridfinityLabelLeft": "Półka na etykietę z lewej",

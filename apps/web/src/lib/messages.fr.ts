@@ -1893,6 +1893,8 @@ export const MESSAGES_FR: Partial<Record<MessageKey, string>> = {
   "prop.gridfinityMagnets": "Trous pour aimants",
   "prop.gridfinityHalfGrid": "Demi-grille (21 mm)",
   "gridfinity.halfGridHint": "Les unités en largeur et en profondeur comptent des cellules de 21 mm, chacune avec son propre pied ; quatre se posent dans un logement du socle.",
+  "prop.gridfinityFloorHeight": "Hauteur du fond",
+  "gridfinity.floorHeightHint": "Jusqu'à cette hauteur, mesurée depuis le dessous, le bac est plein : une ébauche dans laquelle découper des formes.",
   "prop.gridfinityLabelBack": "Tablette d'étiquette à l'arrière",
   "prop.gridfinityLabelFront": "Tablette d'étiquette à l'avant",
   "prop.gridfinityLabelLeft": "Tablette d'étiquette à gauche",

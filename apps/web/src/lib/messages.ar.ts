@@ -1916,6 +1916,8 @@ export const MESSAGES_AR: Partial<Record<MessageKey, string>> = {
   "prop.gridfinityMagnets": "ثقوب المغناطيس",
   "prop.gridfinityHalfGrid": "نصف شبكة (21 مم)",
   "gridfinity.halfGridHint": "تحسب الوحدات في العرض والعمق خلايا من 21 مم، لكل منها قدم خاصة بها؛ وتقف أربع منها في تجويف واحد من لوح الشبكة.",
+  "prop.gridfinityFloorHeight": "ارتفاع الأرضية",
+  "gridfinity.floorHeightHint": "حتى هذا الارتفاع، مقيسًا من الأسفل، تكون العلبة مصمتة: قطعة خام تقطع فيها الأشكال.",
   "prop.gridfinityLabelBack": "رف الملصق في الخلف",
   "prop.gridfinityLabelFront": "رف الملصق في الأمام",
   "prop.gridfinityLabelLeft": "رف الملصق على اليسار",

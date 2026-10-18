@@ -1917,6 +1917,8 @@ export const MESSAGES_CS: Record<MessageKey, string> = {
   "prop.gridfinityMagnets": "Otvory pro magnety",
   "prop.gridfinityHalfGrid": "Poloviční mřížka (21 mm)",
   "gridfinity.halfGridHint": "Jednotky do šířky a do hloubky počítají buňky po 21 mm, každou s vlastní nožkou; čtyři stojí v jednom lůžku nosné desky.",
+  "prop.gridfinityFloorHeight": "Výška dna",
+  "gridfinity.floorHeightHint": "Až do této výšky, měřeno od spodku, je krabička plná: polotovar, do kterého vyříznete tvary.",
   "prop.gridfinityLabelBack": "Polička na štítek vzadu",
   "prop.gridfinityLabelFront": "Polička na štítek vpředu",
   "prop.gridfinityLabelLeft": "Polička na štítek vlevo",

@@ -302,6 +302,7 @@ export type CadModifierGridfinityPart = {
   gridfinityScoopLeft?: boolean;
   gridfinityScoopRight?: boolean;
   gridfinityScoopRadius?: number;
+  gridfinityFloorHeight?: number;
   transform?: number[];
   expected?: { bounds: number[]; volume: number };
 };

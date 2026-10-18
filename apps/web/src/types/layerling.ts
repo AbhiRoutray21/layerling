@@ -223,6 +223,8 @@ export type ShapeCustomization = {
   gridfinityScoopRight?: boolean;
   /** Gridfinity bin: the finger scoops' radius in mm; missing is half the height from the floor up to the lip's support, or to the top without the lip. */
   gridfinityScoopRadius?: number;
+  /** Gridfinity bin: the floor's height inside in mm, measured from the underside; missing is 5.95, and at the highest the bin is solid up to the lip's support, or to the top without the lip. */
+  gridfinityFloorHeight?: number;
   /** Knurling: grooves straight along the axis, or crossed into diamonds. */
   knurlPattern?: "straight" | "diamond" | "round";
   /** Knurling: number of grooves around the grip. */
@@ -759,6 +761,8 @@ export type WorkplaneShape = {
   gridfinityScoopRight?: boolean;
   /** Gridfinity bin: the finger scoops' radius in mm; missing is half the height from the floor up to the lip's support, or to the top without the lip. */
   gridfinityScoopRadius?: number;
+  /** Gridfinity bin: the floor's height inside in mm, measured from the underside; missing is 5.95, and at the highest the bin is solid up to the lip's support, or to the top without the lip. */
+  gridfinityFloorHeight?: number;
   /** Knurling: grooves straight along the axis, or crossed into diamonds. */
   knurlPattern?: "straight" | "diamond" | "round";
   /** Knurling: number of grooves around the grip. */

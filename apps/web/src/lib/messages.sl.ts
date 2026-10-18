@@ -1373,6 +1373,8 @@ export const MESSAGES_SL: Partial<Record<MessageKey, string>> = {
   "prop.gridfinityMagnets": "Luknje za magnete",
   "prop.gridfinityHalfGrid": "Polovična mreža (21 mm)",
   "gridfinity.halfGridHint": "Enote v širino in globino štejejo celice po 21 mm, vsako s svojo nogo; štiri stojijo v enem ležišču podstavka.",
+  "prop.gridfinityFloorHeight": "Višina dna",
+  "gridfinity.floorHeightHint": "Do te višine, merjeno od spodnje strani, je posoda polna: surovec, v katerega izrežeš oblike.",
   "prop.gridfinityLabelBack": "Polička za nalepko zadaj",
   "prop.gridfinityLabelFront": "Polička za nalepko spredaj",
   "prop.gridfinityLabelLeft": "Polička za nalepko levo",
