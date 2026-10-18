@@ -6,6 +6,7 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **The outer diameter of a tube shows its unit (#522):** With inches set, the Outer diameter of a round tube or ring still stood in millimetres ("109.60") while the inner diameter and the wall showed inches. Outer diameter, the radius of curved text and the two offsets of an extruded outline's top now follow the unit like every other length. Reported by @WagnerBoyzRacing.
 - **Video list:** "10 Things Layerling Can Do That Tinkercad Can't!" by Print N Repeat is added at the top, in the start page list and in the guide. The video "10 things I love about Layerling and 3 things that Tinkercad does better" by TECHNOBENTO gives way to that channel's playlist "Layerling", where new videos arrive without a release.
 
 ## 1.87.0
