@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **Folders for custom shapes:** The custom shapes can be sorted into folders. The new folder button next to Save selection makes one, in this browser or on the server; a folder opens and closes with its arrow, and its pencil and bin rename and delete it (deleting takes the shapes in it along, after asking). Saving a selection offers the folders next to the name, and a new button on each tile moves the shape into another folder or back out. Folders are one level deep. On the server they are folders inside `Custom shapes`, so the start page shows them too; in the browser a backup keeps them. The MCP action `layerling_save_custom_shape` takes a `folder`, and `layerling_list_custom_shapes` reports the folder of each shape.
+
 ## 1.90.0
 
 - **Custom shapes keep their pinned notes (#109):** A custom shape saved from bodies that had notes pinned to them takes the notes along. When the shape is put into a design they come in closed, pinned to the new bodies and with new numbers: if the design already has the notes 1 to 3, the shape's two notes become 4 and 5. Free notes and reference points belong to the design and stay behind; a design that has no room for more notes takes as many as fit and says so. The guide's chapter on custom shapes says so too. Contributed by @gogades.

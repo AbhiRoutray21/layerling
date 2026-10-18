@@ -678,7 +678,7 @@ export const tools = [
   },
   {
     name: "layerling_save_custom_shape",
-    description: "Keep bodies as a custom shape, as the shape library's \"Save selection\" does, to insert them into any design later. Several bodies become one shape and come back together. The shape is kept centred, standing on the plate. Where the shared server store is on, it goes to the server's \"Custom shapes\" folder unless location says \"browser\"; otherwise it stays in this browser. Returns the new shape's id, name and location.",
+    description: "Keep bodies as a custom shape, as the shape library's \"Save selection\" does, to insert them into any design later. Several bodies become one shape and come back together. The shape is kept centred, standing on the plate. Where the shared server store is on, it goes to the server's \"Custom shapes\" folder unless location says \"browser\"; otherwise it stays in this browser. Returns the new shape's id, name, location and folder.",
     inputSchema: {
       ...editorTargetSchema,
       properties: {
@@ -686,12 +686,13 @@ export const tools = [
         ids: { type: "array", items: { type: "string" }, description: "The bodies to keep; defaults to the selection." },
         name: { type: "string", description: "Name shown in the library; defaults to the body's name. On the server it is also the file name, so it must not be taken yet." },
         location: { type: "string", enum: ["server", "browser"], description: "Where to keep it. Default: the server when there is one, else the browser." },
+        folder: { type: "string", description: "Folder to put it in, on that side (browser or server); made when there is none of that name. Default: no folder, the top of the list." },
       },
     },
   },
   {
     name: "layerling_list_custom_shapes",
-    description: "List the custom shapes: those on the server (ids start with \"server:\") and those in this browser, with name, location and size. serverAvailable says whether this installation has the shared store.",
+    description: "List the custom shapes: those on the server (ids start with \"server:\") and those in this browser, with name, location, folder (null for none) and size, plus the folders on each side. serverAvailable says whether this installation has the shared store.",
     inputSchema: editorTargetSchema,
   },
   {

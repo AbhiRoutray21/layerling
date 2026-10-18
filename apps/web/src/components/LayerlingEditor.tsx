@@ -156,11 +156,10 @@ import { importedShapeFromObj } from "@/lib/objImport";
 import { readImportSvgWidth, readKeepSvgPage, setImportSvgWidth, storeKeepSvgPage, takeImportSvgWidth } from "@/lib/importPreferences";
 import { importFailureSummary, importModelFiles } from "@/lib/modelImport";
 import { dedupeProjectAssets } from "@/lib/projectAssets";
-import { customShapesBackupEntries, deleteMyShape, listMyShapes, myShapeNameFromFile, restoreCustomShapesFromBackup, myShapesBackupFileName, onMyShapesChanged, readMyShapePackage, renameMyShape, saveMyShape, type MyShapeMeta } from "@/lib/myShapes";
-import { customShapeFingerprint, packCustomShape, placeCustomShape, type PackedCustomShape } from "@/lib/customShapePackage";
+import { myShapeNameFromFile } from "@/lib/myShapes";
+import { useCustomShapes } from "@/lib/useCustomShapes";
 import { packBackup, unpackBackup } from "@/lib/projectBackup";
 import { MyShapesSection, type CustomShapeEntry, type CustomShapeLocation } from "@/components/workplane/MyShapesSection";
-import { deleteServerCustomShape, listServerCustomShapes, readServerCustomShape, renameServerCustomShape, saveServerCustomShape, type ServerCustomShape } from "@/lib/customShapesServer";
 import { addLineIntersectionPoints, onlyMovesPoints, splitSketchSegment } from "@/lib/sketchPointRefinement";
 import { mirrorSketchSelection, SKETCH_MIRROR_HORIZONTAL, SKETCH_MIRROR_VERTICAL, sketchMirrorAxisThroughSegment } from "@/lib/sketchMirror";
 import { copySketchSelection, freeSketchPasteOffset, pasteSketchClipboard, type SketchClipboard } from "@/lib/sketchClipboard";
@@ -8522,229 +8521,16 @@ export function LayerlingEditor({
   // Der Dateiimport steht weiter unten; die MCP-Aktion nimmt denselben Weg.
   const importFilesRef = useRef<((files: File[], fileHandle?: LylFileHandle, options?: { keepSvgPage?: boolean; svgWidth?: number | null }) => Promise<{ importedIds: string[]; failures: Array<{ fileName: string; reason: string }> }>) | null>(null);
 
-  // Custom shapes (#109): kept in this browser (IndexedDB) and, where the
-  // shared store is on, in its "Custom shapes" folder. Shown on top of the
-  // shape library; server entries carry the id "server:<file name>".
-  const [myShapes, setMyShapes] = useState<MyShapeMeta[]>([]);
-  const myShapesRef = useRef<MyShapeMeta[]>([]);
-  const [serverShapes, setServerShapes] = useState<ServerCustomShape[] | null>(null);
-  const serverShapesRef = useRef<ServerCustomShape[] | null>(null);
-  const myShapesFileInputRef = useRef<HTMLInputElement | null>(null);
-  const refreshMyShapes = useCallback(async () => {
-    try {
-      const list = await listMyShapes();
-      myShapesRef.current = list;
-      setMyShapes(list);
-      return list;
-    } catch {
-      return myShapesRef.current;
-    }
-  }, []);
-  const refreshServerShapes = useCallback(async () => {
-    if (!sharedProjectsEnabled) {
-      serverShapesRef.current = null;
-      setServerShapes(null);
-      return null;
-    }
-    try {
-      const list = await listServerCustomShapes();
-      serverShapesRef.current = list;
-      setServerShapes(list);
-      return list;
-    } catch {
-      return serverShapesRef.current;
-    }
-  }, [sharedProjectsEnabled]);
-  useEffect(() => {
-    void refreshMyShapes();
-    return onMyShapesChanged(() => void refreshMyShapes());
-  }, [refreshMyShapes]);
-  useEffect(() => {
-    void refreshServerShapes();
-  }, [refreshServerShapes]);
-
-  const customShapeEntries = useMemo<CustomShapeEntry[]>(() => [
-    ...myShapes.map((shape) => ({ id: shape.id, name: shape.name, thumbnail: shape.thumbnail, location: "browser" as const })),
-    ...(serverShapes ?? []).map((shape) => ({ id: `server:${shape.fileName}`, name: shape.name, thumbnail: shape.thumbnailUrl ?? "", location: "server" as const })),
-  ], [myShapes, serverShapes]);
-
-  const serverShapeFor = (id: string) => (id.startsWith("server:")
-    ? serverShapesRef.current?.find((shape) => shape.fileName === id.slice("server:".length)) ?? null
-    : null);
-  const customShapeName = (id: string) => serverShapeFor(id)?.name ?? myShapesRef.current.find((shape) => shape.id === id)?.name ?? id;
-
-  const packCurrentCustomShape = (parts: WorkplaneShape[], name: string, assets: ProjectAsset[], notes: WorkplaneNote[]) => packCustomShape(
-    parts, name, assets, notes, { workspace: workspaceSettingsRef.current, snapGrid: snapGridRef.current },
-  );
-
-  const keepInBrowser = useCallback(async (packed: PackedCustomShape, name: string) => {
-    const meta: MyShapeMeta = {
-      id: createLocalId("my-shape"),
-      name,
-      createdAt: packed.createdAt,
-      thumbnail: packed.thumbnail,
-      bodyCount: packed.bodyCount,
-      byteLength: packed.bytes.byteLength,
-      fingerprint: packed.fingerprint,
-    };
-    await saveMyShape(meta, packed.bytes);
-    return meta;
-  }, []);
-
-  /** Where a new custom shape goes when nobody says: the server, when there is one. */
-  const defaultCustomShapeLocation = (): CustomShapeLocation => (serverShapesRef.current ? "server" : "browser");
-
-  const saveSelectionAsMyShape = useCallback(async (name: string, ids?: string[], location: CustomShapeLocation = defaultCustomShapeLocation()) => {
-    const wanted = new Set(ids ?? selectedIdsRef.current);
-    const parts = shapesRef.current.filter((shape) => wanted.has(shape.id));
-    if (parts.length === 0) throw new Error(t("myShapes.selectFirst"));
-    const packed = await packCurrentCustomShape(parts, name, projectAssetsRef.current, notesRef.current);
-    let entry: { id: string; name: string; location: CustomShapeLocation; bodyCount: number; byteLength: number };
-    if (location === "server") {
-      const saved = await saveServerCustomShape(name, packed.bytes, packed.thumbnail, t("status.myShapeNameTaken", { name }));
-      await refreshServerShapes();
-      entry = { id: `server:${saved.fileName}`, name: saved.name, location, bodyCount: packed.bodyCount, byteLength: packed.bytes.byteLength };
-    } else {
-      const meta = await keepInBrowser(packed, name);
-      await refreshMyShapes();
-      entry = { id: meta.id, name, location, bodyCount: meta.bodyCount, byteLength: meta.byteLength };
-    }
-    setNotice(t(location === "server" ? "status.myShapeSavedServer" : "status.myShapeSaved", { name: entry.name }));
-    return entry;
-  }, [keepInBrowser, refreshMyShapes, refreshServerShapes]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  const readCustomShapePackage = (id: string) => {
-    const server = serverShapeFor(id);
-    if (id.startsWith("server:")) {
-      if (!server) throw new Error(t("status.myShapeGone"));
-      return readServerCustomShape(server.fileName);
-    }
-    return readMyShapePackage(id);
-  };
-
-  const insertMyShape = useCallback(async (id: string, point?: PlacementPoint) => {
-    const sourceProjectId = projectInfoRef.current.projectId;
-    const name = customShapeName(id);
-    const restored = await importLylProject(await readCustomShapePackage(id));
-    if (projectInfoRef.current.projectId !== sourceProjectId) throw new Error(t("status.pasteCancelled"));
-    if (restored.shapes.length === 0) throw new Error(t("status.insertDesignEmpty", { name }));
-    const { shapes: inserted, notes: insertedNotes, dropped } = placeCustomShape(restored, point ?? placementWorkplaneRef.current.origin, notesRef.current);
-    if (restored.assets.length > 0) {
-      const nextAssets = dedupeProjectAssets([...projectAssetsRef.current, ...restored.assets]);
-      projectAssetsRef.current = nextAssets;
-      setProjectAssets(nextAssets);
-    }
-    // Its notes go in with the bodies, in the same undo step.
-    if (insertedNotes.length > 0 && !historyViewStateRef.current) notesRef.current = [...notesRef.current, ...insertedNotes];
-    commitShapes([...shapesRef.current, ...inserted], inserted.map((shape) => shape.id), t("status.myShapeInserted", { name }));
-    if (dropped > 0 && !historyViewStateRef.current) setNotice(t("status.noteLimitReached", { count: NOTE_COUNT_LIMIT }));
-    return inserted;
-  }, [commitShapes]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  const renameMyShapeEntry = useCallback(async (id: string, name: string) => {
-    const server = serverShapeFor(id);
-    if (server) {
-      await renameServerCustomShape(server, name, t("status.myShapeNameTaken", { name }));
-      await refreshServerShapes();
-      return;
-    }
-    await renameMyShape(id, name);
-    await refreshMyShapes();
-  }, [refreshMyShapes, refreshServerShapes]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  const deleteMyShapeEntry = useCallback(async (id: string) => {
-    const name = customShapeName(id);
-    const server = serverShapeFor(id);
-    if (server) {
-      await deleteServerCustomShape(server);
-      await refreshServerShapes();
-    } else {
-      await deleteMyShape(id);
-      await refreshMyShapes();
-    }
-    setNotice(t("status.myShapeDeleted", { name }));
-  }, [refreshMyShapes, refreshServerShapes]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  /** A shape from this browser onto the server. A move, as on the start page: it is not kept twice. */
-  const moveMyShapeToServer = useCallback(async (id: string) => {
-    const meta = myShapesRef.current.find((shape) => shape.id === id);
-    if (!meta) throw new Error(t("status.myShapeGone"));
-    const bytes = await readMyShapePackage(id);
-    await saveServerCustomShape(meta.name, bytes, meta.thumbnail, t("status.myShapeNameTaken", { name: meta.name }));
-    await deleteMyShape(id);
-    await Promise.all([refreshMyShapes(), refreshServerShapes()]);
-    setNotice(t("status.myShapeMovedToServer", { name: meta.name }));
-  }, [refreshMyShapes, refreshServerShapes]);
-
-  const backUpMyShapes = useCallback(async () => {
-    const entries = await customShapesBackupEntries();
-    const count = entries.length - 1;
-    if (count <= 0) {
-      setNotice(t("status.myShapesNoneToBackUp"));
-      return;
-    }
-    const zipped = packBackup(entries);
-    const buffer = zipped.buffer.slice(zipped.byteOffset, zipped.byteOffset + zipped.byteLength) as ArrayBuffer;
-    await downloadBlobFile(myShapesBackupFileName(new Date()), new Blob([buffer], { type: "application/zip" }));
-    setNotice(t("status.myShapesBackedUp", { count }));
-  }, []);
-
-  /**
-   * Adds shapes to this browser: the custom shapes of a backup ZIP (from here
-   * or from "Back up all" on the start page), the designs of a ZIP without
-   * any, or single .lyl designs. One already kept is skipped.
-   */
-  const loadMyShapeFiles = useCallback(async (files: File[]) => {
-    let added = 0;
-    let skipped = 0;
-    const failures: string[] = [];
-    const packEntry = async (entry: { name: string; bytes: Uint8Array }) => {
-      const restored = await importLylProject(entry.bytes);
-      if (restored.shapes.length === 0) {
-        failures.push(entry.name);
-        return;
-      }
-      const name = myShapeNameFromFile(entry.name, t("myShapes.defaultName"));
-      const fingerprint = customShapeFingerprint(restored.shapes);
-      if (myShapesRef.current.some((shape) => shape.name === name && shape.fingerprint === fingerprint)) {
-        skipped += 1;
-        return;
-      }
-      const meta = await keepInBrowser(await packCurrentCustomShape(restored.shapes, name, restored.assets, restored.notes ?? []), name);
-      myShapesRef.current = [...myShapesRef.current, meta];
-      added += 1;
-    };
-    for (const file of files) {
-      try {
-        const bytes = new Uint8Array(await file.arrayBuffer());
-        if (!/\.zip$/i.test(file.name)) {
-          await packEntry({ name: file.name, bytes });
-          continue;
-        }
-        const fromBackup = await restoreCustomShapesFromBackup(bytes);
-        added += fromBackup.added;
-        skipped += fromBackup.skipped;
-        await refreshMyShapes();
-        const loose = fromBackup.added + fromBackup.skipped + fromBackup.unlisted.length > 0 ? fromBackup.unlisted : unpackBackup(bytes);
-        if (loose.length === 0 && fromBackup.added + fromBackup.skipped === 0) failures.push(file.name);
-        for (const entry of loose) {
-          try {
-            await packEntry(entry);
-          } catch {
-            failures.push(entry.name);
-          }
-        }
-      } catch {
-        failures.push(file.name);
-      }
-    }
-    await refreshMyShapes();
-    setNotice(failures.length
-      ? t("status.myShapesLoadFailed", { count: added, names: failures.join(", ") })
-      : skipped
-        ? t("status.myShapesLoadedSkipped", { count: added, skipped })
-        : t("status.myShapesLoaded", { count: added }));
-  }, [keepInBrowser, packCustomShape, refreshMyShapes]);
+  const {
+    customShapeEntries, customShapeFolders, serverAvailable: customShapesServerAvailable, myShapesFileInputRef,
+    refreshServerShapes, saveSelectionAsMyShape, insertMyShape, renameMyShapeEntry, deleteMyShapeEntry,
+    moveMyShapeToServer, moveMyShapeToFolder, createShapeFolder, renameShapeFolder, deleteShapeFolder,
+    backUpMyShapes, loadMyShapeFiles, listCustomShapesForMcp, folderIdForMcp,
+  } = useCustomShapes({
+    sharedProjectsEnabled, setNotice, commitShapes, setProjectAssets, downloadBlob: downloadBlobFile,
+    shapesRef, selectedIdsRef, notesRef, historyViewStateRef, projectAssetsRef, workspaceSettingsRef, snapGridRef, projectInfoRef, placementWorkplaneRef,
+  });
+  const noticeError = (error: unknown) => setNotice(error instanceof Error ? localizedError(error.message) : String(error));
 
   /**
    * Throws away every earlier step of the design: it keeps the state it has now, as its only one
@@ -9774,26 +9560,16 @@ export function LayerlingEditor({
         const location: CustomShapeLocation = params.location === "browser" || params.location === "server" ? params.location : servers ? "server" : "browser";
         const fallback = parts.length === 1 ? displayShapeName(parts[0]) : t("myShapes.defaultName");
         const name = myShapeNameFromFile(typeof params.name === "string" ? params.name : "", fallback);
-        return { customShape: await saveSelectionAsMyShape(name, parts.map((shape) => shape.id), location) };
+        const folderId = await folderIdForMcp(typeof params.folder === "string" ? params.folder : undefined, location);
+        return { customShape: await saveSelectionAsMyShape(name, parts.map((shape) => shape.id), location, folderId) };
       }
 
       if (command.action === "list_custom_shapes") {
-        const [browser, server] = await Promise.all([refreshMyShapes(), refreshServerShapes()]);
-        return {
-          serverAvailable: server !== null,
-          customShapes: [
-            ...(server ?? []).map((shape) => ({ id: `server:${shape.fileName}`, name: shape.name, location: "server", byteLength: shape.size, savedAt: new Date(shape.updatedAt).toISOString() })),
-            ...browser.map((shape) => ({ id: shape.id, name: shape.name, location: "browser", bodyCount: shape.bodyCount, byteLength: shape.byteLength, savedAt: new Date(shape.createdAt).toISOString() })),
-          ],
-        };
+        return await listCustomShapesForMcp();
       }
 
       if (command.action === "insert_custom_shape" || command.action === "delete_custom_shape") {
-        await Promise.all([refreshMyShapes(), refreshServerShapes()]);
-        const all = [
-          ...(serverShapesRef.current ?? []).map((shape) => ({ id: `server:${shape.fileName}`, name: shape.name })),
-          ...myShapesRef.current.map((shape) => ({ id: shape.id, name: shape.name })),
-        ];
+        const all = (await listCustomShapesForMcp()).customShapes;
         const wanted = typeof params.id === "string" ? params.id : typeof params.name === "string" ? params.name : "";
         const byId = all.filter((shape) => shape.id === wanted);
         const found = byId.length ? byId : all.filter((shape) => shape.name.toLowerCase() === wanted.toLowerCase());
@@ -10477,9 +10253,10 @@ export function LayerlingEditor({
     openHistoryView,
     deleteMyShapeEntry,
     insertMyShape,
-    refreshMyShapes,
     refreshServerShapes,
     saveSelectionAsMyShape,
+    listCustomShapesForMcp,
+    folderIdForMcp,
   ]);
 
   useEffect(() => {
@@ -12306,7 +12083,8 @@ export function LayerlingEditor({
         renderMyShapes={(close) => (
           <MyShapesSection
             shapes={customShapeEntries}
-            serverAvailable={serverShapes !== null}
+            folders={customShapeFolders}
+            serverAvailable={customShapesServerAvailable}
             canSave={selectedIds.length > 0}
             defaultName={selectedShapes.length === 1 ? displayShapeName(selectedShapes[0]) : t("myShapes.defaultName")}
             onInsert={(id) => {
@@ -12318,21 +12096,31 @@ export function LayerlingEditor({
                 setCruiseAsset(null);
                 setCarryIds(inserted.map((shape) => shape.id));
                 setNotice(t("status.carryPlace"));
-              }).catch((error) => setNotice(error instanceof Error ? localizedError(error.message) : String(error)));
+              }).catch(noticeError);
             }}
-            onSave={async (name, location) => {
+            onSave={async (name, location, folderId) => {
               try {
-                await saveSelectionAsMyShape(name, undefined, location);
+                await saveSelectionAsMyShape(name, undefined, location, folderId);
                 return true;
               } catch (error) {
                 setNotice(error instanceof Error ? localizedError(error.message) : String(error));
                 return false;
               }
             }}
-            onRename={(id, name) => void renameMyShapeEntry(id, name).catch((error) => setNotice(error instanceof Error ? localizedError(error.message) : String(error)))}
-            onDelete={(id) => void deleteMyShapeEntry(id).catch((error) => setNotice(error instanceof Error ? localizedError(error.message) : String(error)))}
-            onBackup={() => void backUpMyShapes().catch((error) => setNotice(error instanceof Error ? localizedError(error.message) : String(error)))}
-            onMoveToServer={(id) => void moveMyShapeToServer(id).catch((error) => setNotice(error instanceof Error ? localizedError(error.message) : String(error)))}
+            onRename={(id, name) => void renameMyShapeEntry(id, name).catch(noticeError)}
+            onDelete={(id) => void deleteMyShapeEntry(id).catch(noticeError)}
+            onBackup={() => void backUpMyShapes().catch(noticeError)}
+            onMoveToServer={(id) => void moveMyShapeToServer(id).catch(noticeError)}
+            onMoveToFolder={(id, folderId) => void moveMyShapeToFolder(id, folderId).catch(noticeError)}
+            onCreateFolder={(name, location) => createShapeFolder(name, location).catch((error) => {
+              noticeError(error);
+              return null;
+            })}
+            onRenameFolder={(id, name) => renameShapeFolder(id, name).catch((error) => {
+              noticeError(error);
+              return null;
+            })}
+            onDeleteFolder={(id) => void deleteShapeFolder(id).catch(noticeError)}
             onLoad={() => myShapesFileInputRef.current?.click()}
             onShown={() => void refreshServerShapes()}
             onDragDone={close}
@@ -12485,7 +12273,7 @@ export function LayerlingEditor({
           onCarryDrop={dropCarried}
           onCancelCruise={stopCruise}
           onAddShape={addShape}
-          onDropMyShape={(id, point) => void insertMyShape(id, point).catch((error) => setNotice(error instanceof Error ? localizedError(error.message) : String(error)))}
+          onDropMyShape={(id, point) => void insertMyShape(id, point).catch(noticeError)}
           onAlignAnchorChange={chooseAlignAnchor}
           onAlignPreview={previewAlignSelection}
           onAlignPreviewClear={clearAlignPreview}
