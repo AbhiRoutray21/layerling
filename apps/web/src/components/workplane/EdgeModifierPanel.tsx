@@ -56,6 +56,12 @@ function edgeHistoryLabel(option: EdgeHistoryOption) {
  * "Edit" where the tool can be opened again with the same values (#227). The fillet and chamfer
  * tool, the hollow tool and Delete face show the same list (#237).
  */
+/**
+ * Whether the list was open when it was last left. Taking a feature back opens the tool again on the restored body, which
+ * builds the panel anew, and a list that shut itself after every click made taking back several in a row a chore (#517).
+ */
+let historyListWasOpen = false;
+
 export function EdgeFeatureHistory({
   appliedFeatureCount,
   reversibleFeatureCount,
@@ -69,7 +75,14 @@ export function EdgeFeatureHistory({
   onRemoveFeature: (id: string) => void;
   onEditFeature?: (id: string) => void;
 }) {
-  const [historyOpen, setHistoryOpen] = useState(false);
+  const [historyOpen, setHistoryOpenState] = useState(historyListWasOpen);
+  const setHistoryOpen = (update: (open: boolean) => boolean) => {
+    setHistoryOpenState((open) => {
+      const next = update(open);
+      historyListWasOpen = next;
+      return next;
+    });
+  };
   if (appliedFeatureCount === 0) return null;
   return (
     <div className="edge-modifier-history-actions">
