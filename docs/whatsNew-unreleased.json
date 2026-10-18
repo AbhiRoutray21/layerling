@@ -18,5 +18,15 @@
       "de": "Auf einem Mac mit Safari zoomte das Spreizen und Zusammenziehen auf dem Touchpad in der Skizze die ganze Seite statt der Zeichenfläche. Jetzt zoomt es die Skizze, zu den Fingern hin, in der Geschwindigkeit der Einstellungen, wie im 3D-Fenster. Danach die App einmal neu starten.",
       "en": "On a Mac with Safari, spreading and pinching on the trackpad in the sketch zoomed the whole page instead of the drawing plate. Now it zooms the sketch, towards the fingers, at the speed of the settings, as in the 3D window. Restart the app once afterwards."
     }
+  },
+  {
+    "title": {
+      "de": "Fase und Rundung an einer Gruppe starten beim zweiten Mal schneller",
+      "en": "Chamfer and Fillet on a group start faster the second time"
+    },
+    "body": {
+      "de": "Eine Gruppe, die schon verrundete oder gefaste Teile enthält, musste bei jedem Start des Fase- oder Rundungs-Werkzeugs wieder aus ihrem Netz in einen exakten Körper zurückgerechnet werden, bei einer Tasche in einem verrundeten Körper rund zehn Sekunden. Jetzt merkt sich layerling das Ergebnis, solange das Netz gleich bleibt: Abbrechen und neu starten, oder Rückgängig und wieder vor, geht in einem Drittel der Zeit. Das erste Mal dauert so lange wie bisher.",
+      "en": "A group that already holds filleted or chamfered parts had to be turned from its mesh back into an exact body every time the Chamfer or Fillet tool started, about ten seconds for a pocket in a filleted body. Now layerling keeps the result as long as the mesh stays the same: cancelling and starting again, or Undo and Redo, takes a third of the time. The first time takes as long as before."
+    }
   }
 ]
