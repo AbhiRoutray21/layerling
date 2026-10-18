@@ -22,7 +22,7 @@ The tape measure sits at the lower end of the camera bar on the left edge ({{ui:
 
 ## The ruler
 
-You fetch the {{ui:shape.ruler}} from the shape library. It is purely a measuring tool: it appears in no export and can neither be grouped nor cut. For every body that touches or overlaps the ruler, it shows the extent as a floating number right in the view. You can change that number right there, and the body follows. The floating plus symbol creates a copy of the measured shape.
+You fetch the {{ui:shape.ruler}} from the shape library. It is purely a measuring tool: it appears in no export and can neither be grouped nor cut. For every body that touches or overlaps the ruler, it shows the extent as a floating number right in the view. You can change that number right there, and the body follows. The floating plus symbol creates a copy of the measured shape. Its printed scale is in millimetres; once the unit is switched to inches (the switch at the bottom right), it is in inches, with a line every sixteenth of an inch and the whole inches numbered.
 
 ## The framing square
 

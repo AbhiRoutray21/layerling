@@ -44,7 +44,7 @@ Upravené těleso lze upravovat znovu. Vyberte je a otevřete zaoblení, zkosen�
 
 Vedle úpravy je i {{ui:edge.editAction}}. Původní úpravu vrátí stejným způsobem, ale rovnou otevře její nástroj s původním výběrem hran a hodnotou. Zaoblení 3 mm tak změníte na 5 mm bez opakovaného výběru. I zde se zruší navazující úpravy. Možnost platí pro nově vytvořené úpravy; u starších a u jednotlivých částí sloučeného celku lze úpravu pouze vrátit.
 
-Na sloučeném celku, například válci s otvorem, patří upravovaná hrana výslednému tělesu, nikoli některé jeho části. Celek se proto změní na jediné těleso a {{ui:editor.tool.ungroup}} přestane být dostupné. Vrácením úpravy se obnoví i původní části. Nejjednodušší je upravovat hrany až nakonec. Platí to i pro závity: nástroj pracuje s jejich přesnou geometrií, takže lze zaoblit kvádr se závitovým otvorem a závit zachovat. Příprava hran závitu trvá déle než u jednoduchého tvaru, u M6 několik sekund, u trubkového G1/2 přibližně půl minuty.
+Na sloučeném celku, například válci s otvorem, patří upravovaná hrana výslednému tělesu, nikoli některé jeho části. Celek se proto změní na jediné těleso. {{ui:editor.tool.ungroup}} přesto funguje: nejdřív vrátí úpravy hran a pak skupinu rozpustí, jedním krokem, který [[Ctrl]]+[[Z]] vrátí zpět. Vrácením úpravy se obnoví i původní části. Nejjednodušší je upravovat hrany až nakonec. Platí to i pro závity: nástroj pracuje s jejich přesnou geometrií, takže lze zaoblit kvádr se závitovým otvorem a závit zachovat. Příprava hran závitu trvá déle než u jednoduchého tvaru, u M6 několik sekund, u trubkového G1/2 přibližně půl minuty.
 
 > **Dobré vědět:** Layerling při zkosení a zaoblení používá skutečnou CAD geometrii. Zaoblená hrana proto zůstává oblou plochou i při exportu STEP.
 

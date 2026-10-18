@@ -46,7 +46,7 @@ Načrt se odpre tako, kot si ga zapustil: zorni kot, povečava in izrez pogleda 
 
 ## Pogled v notranjost: prerezni pogled
 
-{{ui:camera.sectionView}}, zadnji gumb vrstice (orodje za prerez), prereže pogled vzdolž ravnine. Tako preveriš stene, votline in dele, ki segajo drug v drugega. Prereže se samo pogled: načrt, datoteke in vsak izvoz ostanejo popolni.
+{{ui:camera.sectionView}}, zadnji gumb vrstice (orodje za prerez), prereže pogled vzdolž ravnine. Tako preveriš stene, votline in dele, ki segajo drug v drugega. Prereže se samo pogled: načrt, datoteke in vsak izvoz ostanejo popolni. Kjer ravnina poteka skozi telo, je rez zapolnjen z nekoliko temnejšo barvo telesa, izdolbina v njem pa ostane prazna, tako da ločiš polno od votlega; zapolnjena ploskev se pokaže trenutek, potem ko se ravnina ustavi.
 
 - Izberi os, pravokotno na katero stoji ravnina: X (širina), Y (globina) ali Z (višina), kot pri poljih za lego. Začne se na sredini tvojega načrta.
 - {{ui:camera.sectionCoarse}} premika ravnino čez celoten načrt, {{ui:camera.sectionFine}} samo za košček okoli njenega trenutnega mesta, za desetinke milimetra. Lego lahko tudi vpišeš.

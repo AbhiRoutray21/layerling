@@ -1,7 +1,18 @@
 import { describe, expect, it } from "vitest";
-import { isSketchPanGesture, SKETCH_MANUAL_MAX_ZOOM, SKETCH_MAX_ZOOM, sketchWheelZoomFactor, zoomSketchViewAt } from "@/lib/sketchPointerControls";
+import { isChainDrawingTool, isSketchPanGesture, rightClickEndsChain, SKETCH_MANUAL_MAX_ZOOM, SKETCH_MAX_ZOOM, sketchWheelZoomFactor, zoomSketchViewAt } from "@/lib/sketchPointerControls";
 
 describe("sketch pointer controls", () => {
+  it("ends a chain with a right click that did not move, but not with a right-drag pan (#520)", () => {
+    expect(rightClickEndsChain({ x: 100, y: 100 }, { x: 102, y: 101 })).toBe(true);
+    expect(rightClickEndsChain({ x: 100, y: 100 }, { x: 160, y: 100 })).toBe(false);
+    expect(rightClickEndsChain(null, { x: 100, y: 100 })).toBe(false);
+  });
+
+  it("knows the tools that draw a chain of points (#520)", () => {
+    expect(["line", "bezier", "smooth"].every(isChainDrawingTool)).toBe(true);
+    expect(["select", "erase", "rectangle"].some(isChainDrawingTool)).toBe(false);
+  });
+
   it("pans with the middle mouse button", () => {
     expect(isSketchPanGesture({ button: 1, ctrlKey: false, metaKey: false, shiftKey: false })).toBe(true);
   });

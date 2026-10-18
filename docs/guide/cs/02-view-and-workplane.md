@@ -46,7 +46,7 @@ Projekt se otevírá s naposledy použitým úhlem, přiblížením a polohou po
 
 ## Pohled dovnitř: řez
 
-{{ui:camera.sectionView}}, poslední tlačítko lišty, zobrazí model proříznutý rovinou. Můžete kontrolovat stěny, dutiny i vzájemné uložení dílů. Skutečnou geometrii nemění: projekt, soubory i exporty zůstávají celé.
+{{ui:camera.sectionView}}, poslední tlačítko lišty, zobrazí model proříznutý rovinou. Můžete kontrolovat stěny, dutiny i vzájemné uložení dílů. Skutečnou geometrii nemění: projekt, soubory i exporty zůstávají celé. Tam, kde rovina prochází tělesem, je řez vyplněn o něco tmavší barvou tělesa a otvor v něm zůstane prázdný, takže poznáš plné od dutého; vyplněná plocha se objeví chvíli poté, co se rovina zastaví.
 
 - Zvolte osu kolmou k rovině: X pro šířku, Y pro hloubku a Z pro výšku, stejně jako u polohy. Rovina začíná uprostřed modelu.
 - {{ui:camera.sectionCoarse}} posouvá rovinu přes celý model, {{ui:camera.sectionFine}} jemně kolem současné polohy po desetinách milimetru. Polohu lze i zadat.

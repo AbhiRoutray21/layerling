@@ -1,4 +1,6 @@
 import { LANGUAGE_INFO, type Language } from "@/lib/languages";
+import { guideHref, type GuideSection } from "@/lib/guideLinks";
+import { getLanguage, t } from "@/lib/i18n";
 import {
   guideFold,
   guidePrepare,
@@ -102,6 +104,8 @@ export type HelpTarget = {
   name: string;
   /** Where the question mark of the panel around it points, if it has one. */
   guideHref: string | null;
+  /** The name is only a heading for a part that the guide has a section about: the link is the answer, there is nothing to look up. */
+  sectionOnly?: boolean;
 };
 
 /** The address a panel's question mark opens, if it has one. */
@@ -117,11 +121,55 @@ export function panelGuideHref(element: Element): string | null {
  * name, the question mark of the panel around it stands in; the name stays empty then. Returns null
  * when there is neither.
  */
+/** The names a button of a tool window carries that say nothing about the tool: the window's own title answers for them (#424). */
+const GENERIC_PANEL_KEYS = [
+  "common.cancel", "common.delete", "common.rename", "panel.close", "edge.apply", "edge.clear", "edge.cancelChamfer", "edge.cancelFillet",
+  "split.apply", "split.cancelAria", "deleteFace.apply", "deleteFace.cancel", "shell.apply", "shell.cancel", "holePattern.apply", "holePattern.cancel",
+  "holePattern.repick", "array.apply", "array.cancel", "faceTool.apply", "faceTool.cancel", "faceTool.repick", "simplify.apply", "mate.apply",
+  "mate.cancel", "scalePercent.apply",
+] as const;
+
+/** Fields, sliders and the rows around them: they belong to the tool whose window they stand in. */
+const PANEL_FIELDS = "input, select, textarea, label, .range-property, [role=slider]";
+
+/**
+ * A tool window (a movable panel with a title) answers for the things in it that have no name of their own in the
+ * guide: its generic buttons (Cancel, Create, Clear ...), its fields and its sliders. They ask the guide about the
+ * window's title, "Chamfer edges" say, and not about "Cancel" or "Depth", which dozens of sections write.
+ */
+function panelTitleFor(node: Element, name: string): string {
+  const panel = node.closest("[data-help-panel]");
+  const title = clean(panel?.getAttribute("data-help-panel"));
+  if (!panel || !title) return "";
+  const folded = guideFold(name);
+  const generic = GENERIC_PANEL_KEYS.some((key) => guideFold(t(key)) === folded);
+  return generic || node.matches(PANEL_FIELDS) ? title : "";
+}
+
+/** The target for a whole part of the program that the guide has a section about, whatever its parts are called. */
+const SECTION_NAMES: Record<string, string> = { addShape: "editor.addShape", objectList: "outliner.title", viewCube: "view.cube", cameraBar: "camera.controls", exporting: "panel.export" };
+
+function sectionTarget(element: Element, section: string): HelpTarget {
+  const key = SECTION_NAMES[section];
+  return { element, name: key ? t(key as never) : "", guideHref: guideHref(getLanguage(), undefined, section as GuideSection), sectionOnly: true };
+}
+
 export function resolveHelpTarget(start: Element | null, limit?: Element | null): HelpTarget | null {
   if (start?.closest("[data-help-ignore]")) return null;
+  // The question mark of a window leads to the part of the guide it points at.
+  const question = start?.closest("a.guide-help-link");
+  if (question) return { element: question, name: "", guideHref: question.getAttribute("href") };
+  // Some places answer as a whole (the shape library, the object list, the view cube): everything in them leads to their section.
+  const whole = start?.closest("[data-help-section-all]");
+  if (start && whole && !start.closest("[data-help-keep]")) {
+    return sectionTarget(start.closest("button, input, select, label, [role=button]") ?? whole, whole.getAttribute("data-help-section-all") ?? "");
+  }
   for (let node: Element | null = start; node && node !== limit && node !== node.ownerDocument.documentElement; node = node.parentElement) {
+    // A container that the guide has a section about answers for itself, where nothing in it names a closer answer.
+    const containerSection = node.getAttribute("data-help-section");
+    if (containerSection) return sectionTarget(node, containerSection);
     const name = helpNameOf(node);
-    if (name) return { element: node, name, guideHref: panelGuideHref(node) };
+    if (name) return { element: node, name: panelTitleFor(node, name) || name, guideHref: panelGuideHref(node) };
   }
   const link = start ? panelGuideHref(start) : null;
   if (!link || !start) return null;

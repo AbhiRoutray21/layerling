@@ -48,7 +48,7 @@ Projekt otwiera się tak, jak go zostawiłeś: kąt, przybliżenie i położenie
 
 ## Zajrzyj do środka: widok przekroju
 
-{{ui:camera.sectionView}}, ostatni przycisk na pasku (narzędzie cięcia), rozcina widok wzdłuż płaszczyzny, żeby sprawdzić ścianki, wnęki i części, które w siebie wchodzą. Nic nie jest naprawdę cięte: projekt, jego pliki i każdy eksport zostają całe.
+{{ui:camera.sectionView}}, ostatni przycisk na pasku (narzędzie cięcia), rozcina widok wzdłuż płaszczyzny, żeby sprawdzić ścianki, wnęki i części, które w siebie wchodzą. Nic nie jest naprawdę cięte: projekt, jego pliki i każdy eksport zostają całe. Tam, gdzie płaszczyzna przechodzi przez bryłę, przekrój jest wypełniony nieco ciemniejszym kolorem bryły, a otwór w niej zostaje pusty, dzięki czemu widać, co jest pełne, a co puste; wypełniona powierzchnia pojawia się chwilę po zatrzymaniu płaszczyzny.
 
 - Wybierz oś, w poprzek której stoi płaszczyzna: X (szerokość), Y (głębokość) albo Z (wysokość), tak jak w polach pozycji. Płaszczyzna zaczyna na środku projektu.
 - {{ui:camera.sectionCoarse}} przesuwa płaszczyznę przez cały projekt, {{ui:camera.sectionFine}} przesuwa ją odrobinę w jedną lub drugą stronę od miejsca, w którym stoi, o dziesiąte części milimetra. Położenie możesz też wpisać.

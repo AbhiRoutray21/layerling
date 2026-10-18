@@ -22,7 +22,7 @@ Mit [[Esc]] verlässt du den Messmodus.
 
 ## Das Lineal
 
-Aus der Formenbibliothek holst du das {{ui:shape.ruler}}. Es ist ein reines Messwerkzeug: Es erscheint in keinem Export und lässt sich weder gruppieren noch verschneiden. Für jeden Körper, der das Lineal berührt oder überlappt, zeigt es die Ausdehnung als schwebende Zahl direkt in der Ansicht. Diese Zahl kannst du direkt dort ändern, und der Körper passt sich an. Über das schwebende Plus-Symbol legst du eine Kopie der gemessenen Form an.
+Aus der Formenbibliothek holst du das {{ui:shape.ruler}}. Es ist ein reines Messwerkzeug: Es erscheint in keinem Export und lässt sich weder gruppieren noch verschneiden. Für jeden Körper, der das Lineal berührt oder überlappt, zeigt es die Ausdehnung als schwebende Zahl direkt in der Ansicht. Diese Zahl kannst du direkt dort ändern, und der Körper passt sich an. Über das schwebende Plus-Symbol legst du eine Kopie der gemessenen Form an. Seine aufgedruckte Skala ist in Millimetern; stellst du die Einheit auf Zoll um (der Schalter unten rechts), ist sie in Zoll, mit einem Strich je Sechzehntelzoll und nummerierten ganzen Zoll.
 
 ## Das Winkellineal
 

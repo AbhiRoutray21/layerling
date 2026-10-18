@@ -254,6 +254,7 @@ export function EdgeModifierPanel({
   onSelectTop,
   onSelectBottom,
   onSelectVertical,
+  activeQuickSelection = null,
   onClear,
   onRemoveFeature,
   onEditFeature,
@@ -295,6 +296,8 @@ export function EdgeModifierPanel({
   onSelectTop?: () => void;
   onSelectBottom?: () => void;
   onSelectVertical?: () => void;
+  /** Which of the quick buttons made the edges picked now, to light it up (#517). */
+  activeQuickSelection?: "all" | "top" | "bottom" | "vertical" | null;
   onClear: () => void;
   onRemoveFeature: (id: string) => void;
   /** Takes a treatment back and opens the tool again with its value and edges (#227). */
@@ -344,10 +347,10 @@ export function EdgeModifierPanel({
       </div>
 
       <div className="edge-modifier-quick-actions">
-        <button type="button" disabled={!prepared} onClick={onSelectAll}>{t("edge.allSharpEdges")}</button>
-        {onSelectTop ? <button type="button" disabled={!prepared} title={t("edge.topEdgesHint")} onClick={onSelectTop}>{t("edge.topEdges")}</button> : null}
-        {onSelectBottom ? <button type="button" disabled={!prepared} title={t("edge.bottomEdgesHint")} onClick={onSelectBottom}>{t("edge.bottomEdges")}</button> : null}
-        {onSelectVertical ? <button type="button" disabled={!prepared} title={t("edge.verticalEdgesHint")} onClick={onSelectVertical}>{t("edge.verticalEdges")}</button> : null}
+        <button type="button" className={activeQuickSelection === "all" ? "active" : ""} aria-pressed={activeQuickSelection === "all"} disabled={!prepared} onClick={onSelectAll}>{t("edge.allSharpEdges")}</button>
+        {onSelectTop ? <button type="button" className={activeQuickSelection === "top" ? "active" : ""} aria-pressed={activeQuickSelection === "top"} disabled={!prepared} title={t("edge.topEdgesHint")} onClick={onSelectTop}>{t("edge.topEdges")}</button> : null}
+        {onSelectBottom ? <button type="button" className={activeQuickSelection === "bottom" ? "active" : ""} aria-pressed={activeQuickSelection === "bottom"} disabled={!prepared} title={t("edge.bottomEdgesHint")} onClick={onSelectBottom}>{t("edge.bottomEdges")}</button> : null}
+        {onSelectVertical ? <button type="button" className={activeQuickSelection === "vertical" ? "active" : ""} aria-pressed={activeQuickSelection === "vertical"} disabled={!prepared} title={t("edge.verticalEdgesHint")} onClick={onSelectVertical}>{t("edge.verticalEdges")}</button> : null}
         <button type="button" disabled={!prepared} onClick={onClear}>{t("edge.clear")}</button>
       </div>
 

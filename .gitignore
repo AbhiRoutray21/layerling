@@ -85,3 +85,6 @@ apps/web/public/dalil/
 
 # Built Turkish user guide.
 apps/web/public/kilavuz/
+
+# The Japanese typeface, cut from Zen Maru Gothic by scripts/build-japanese-typeface.mjs
+apps/web/public/fonts/japanese/

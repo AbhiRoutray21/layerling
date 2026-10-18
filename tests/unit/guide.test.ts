@@ -270,7 +270,7 @@ describe("guide content", () => {
       for (const [name, section] of Object.entries(GUIDE_SECTIONS)) {
         const file = readdirSync(directory).find((entry) => entry.endsWith(`-${GUIDE_CHAPTERS[section.chapter][language]}.md`));
         expect(file, `${language}: ${name}`).toBeTruthy();
-        const ids = readFileSync(join(directory, file!), "utf8").split(/\r?\n/).filter((line) => line.startsWith("## ")).map((line) => slugify(line.slice(3).trim()));
+        const ids = readFileSync(join(directory, file!), "utf8").split(/\r?\n/).filter((line) => /^#{2,3} /.test(line)).map((line) => slugify(line.replace(/^#{2,3} /, "").trim()));
         expect(ids, `${language}: ${name}`).toContain(section[language]);
       }
     }

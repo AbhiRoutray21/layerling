@@ -781,6 +781,24 @@ export function readWorkspaceDefault(storage: Storage | null = browserStorage())
   }
 }
 
+/**
+ * "Save as default" on a shape (#483): the values of its kind also go into the browser's default workspace, so a new
+ * design starts with them, not only the design that is open. Only that kind's entry changes, whatever else the
+ * default holds; with no entry (Reset defaults) the kind goes back to what the app starts it with.
+ */
+export function saveShapeDefaultsForNewDesigns(
+  kind: ShapeKind,
+  entry: ShapeCustomization | null,
+  storage: Storage | null = browserStorage(),
+) {
+  const stored = readWorkspaceDefault(storage);
+  const base = stored?.workspace ?? normalizeWorkspaceSettings(undefined);
+  const shapeCustomizations = { ...base.shapeCustomizations };
+  if (entry) shapeCustomizations[kind] = entry;
+  else delete shapeCustomizations[kind];
+  return saveWorkspaceDefault({ ...base, shapeCustomizations }, stored?.snap ?? DEFAULT_SNAP_GRID, storage);
+}
+
 export function saveWorkspaceDefault(
   workspace: WorkplaneWorkspaceSettings,
   snap: GridSize,

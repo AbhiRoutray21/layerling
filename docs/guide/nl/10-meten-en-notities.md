@@ -22,7 +22,7 @@ Het meetlint zit aan de onderkant van de camerabalk aan de linkerrand ({{ui:came
 
 ## De liniaal
 
-De {{ui:shape.ruler}} haal je uit de vormenbibliotheek. Het is puur een meetinstrument: hij komt in geen enkele export terecht en kan niet gegroepeerd of geknipt worden. Voor elk lichaam dat de liniaal raakt of overlapt, toont hij de afmeting als zwevend getal direct in de weergave. Je kunt dat getal daar meteen aanpassen, en het lichaam volgt. Het zwevende plusteken maakt een kopie van de gemeten vorm.
+De {{ui:shape.ruler}} haal je uit de vormenbibliotheek. Het is puur een meetinstrument: hij komt in geen enkele export terecht en kan niet gegroepeerd of geknipt worden. Voor elk lichaam dat de liniaal raakt of overlapt, toont hij de afmeting als zwevend getal direct in de weergave. Je kunt dat getal daar meteen aanpassen, en het lichaam volgt. Het zwevende plusteken maakt een kopie van de gemeten vorm. De opgedrukte schaal is in millimeters; zet je de eenheid om op inches (de schakelaar rechtsonder), dan is hij in inches, met een streepje per zestiende inch en genummerde hele inches.
 
 ## De winkelhaak
 

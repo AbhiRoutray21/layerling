@@ -6,7 +6,8 @@ import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, typ
 import { objectSnapOffset, shiftSnapBox, type ObjectSnapGuide, type SnapBox } from "@/lib/objectSnap";
 import { useMovablePanel, type MovablePanelOptions } from "@/lib/useMovablePanel";
 import { computeSectionPlaneVector, DEFAULT_SECTION_SETTINGS, getSectionBounds, SECTION_AXES_SHOWN, sectionAxisLetter, sectionFineWindow, sectionPlacementWorkplane, type SectionPlaneAxis, type SectionPlaneSettings } from "@/lib/sectionView";
-import { projectSectionPoint, type SectionLoop, type SectionPoint } from "@/lib/sectionSvg";
+import { projectSectionPoint, type SectionBody, type SectionLoop, type SectionPoint } from "@/lib/sectionSvg";
+import { sectionCapMesh } from "@/lib/sectionCaps";
 import { circleOfLoop, sectionMeasurement, sectionPointToWorld, snapSectionPoint, type SectionSnap } from "@/lib/sectionMeasure";
 import * as THREE from "three";
 import { acceleratedRaycast, computeBoundsTree, disposeBoundsTree } from "three-mesh-bvh";
@@ -68,12 +69,12 @@ import { createThreadGeometry } from "@/lib/threadGeometry";
 import { createSpringGeometry } from "@/lib/springGeometry";
 import { textDisplayGeometry } from "@/lib/textFill";
 import { pinchWheelDelta, wheelZoomDelta } from "@/lib/wheelZoom";
-import { manifoldRevision } from "@/lib/manifoldHandle";
-import { customFontRevision } from "@/lib/textFonts";
+import { manifoldRevision, onManifoldReady } from "@/lib/manifoldHandle";
+import { customFontRevision, onCustomFontsChanged } from "@/lib/textFonts";
 import { readDesignView, writeDesignView } from "@/lib/designView";
 import { DIMENSION_FORMULA_FIELDS, formulaMatchesMillimeters, formulaToRemember, withFieldFormula } from "@/lib/fieldFormulas";
 import { displayToMillimeters, formatLengthMm, lengthDisplayUnit, millimetersToDisplay, parseLengthMm, parseMeasurementInput, resolveLengthMm, setLengthUnit } from "@/lib/measurementUnits";
-import { computeCornerRulerRelativeCoordinates, cornerRulerAxisModes, cornerRulerFrameForWorkplane, cornerRulerShiftVector, pointAlongRuler, rotateCornerRulerFrame, rulerDimensionMatch, toggledCornerRulerAxis, toggledCornerRulerMode, type CornerRulerAxis, type CornerRulerMode, type RulerDimensionField } from "@/lib/rulerDimensions";
+import { computeCornerRulerRelativeCoordinates, cornerRulerAxisModes, cornerRulerFrameForWorkplane, cornerRulerShiftVector, pointAlongRuler, rotateCornerRulerFrame, rulerDimensionMatch, rulerTicks, toggledCornerRulerAxis, toggledCornerRulerMode, type CornerRulerAxis, type CornerRulerMode, type RulerDimensionField } from "@/lib/rulerDimensions";
 import { createMoveDimensionOverlay, type MoveDimensionAxis, type MoveDimensionOverlayData } from "@/lib/moveDimensionLines";
 import { computeOriginAxisDistance, createOriginDimensionOverlay, type OriginDimensionOverlayData } from "@/lib/originDimensionLines";
 import {
@@ -103,7 +104,7 @@ import { displayYTurn, insideZ } from "@/lib/displayAxes";
 import { positionsForTwist, twistBandCount } from "@/lib/heightSlices";
 import { toCreasedNormals } from "three/examples/jsm/utils/BufferGeometryUtils.js";
 import { boundsInsideRect, marqueeMode } from "@/lib/marqueeSelection";
-import { canBeginShapeDrag, handleDimensionLimit, POSITION_TYPED_LIMIT, DEFAULT_SNAP_GRID, DEFAULT_WORKPLANE_WORKSPACE, effectiveViewSettings, viewPixelRatio, normalizeSnapGrid, normalizeWorkspaceSettings, orbitControlsZoomSpeed, readWorkspaceDefault, saveWorkspaceDefault, snapGridForUnits, snapGridStep as snapStep, workplaneSettingsFingerprint, workspaceForUnits, workspaceHydrationSyncDecision, zoomDistanceScale } from "@/lib/workplaneSettings";
+import { canBeginShapeDrag, handleDimensionLimit, POSITION_TYPED_LIMIT, DEFAULT_SNAP_GRID, DEFAULT_WORKPLANE_WORKSPACE, effectiveViewSettings, viewPixelRatio, normalizeSnapGrid, normalizeWorkspaceSettings, orbitControlsZoomSpeed, readWorkspaceDefault, saveShapeDefaultsForNewDesigns, saveWorkspaceDefault, snapGridForUnits, snapGridStep as snapStep, workplaneSettingsFingerprint, workspaceForUnits, workspaceHydrationSyncDecision, zoomDistanceScale } from "@/lib/workplaneSettings";
 import { withShapeDefaults } from "@/lib/shapeDefaults";
 import { workplaneGridBandWidths, AXIS_ARROW_COLORS, axisArrowLayout, DEFAULT_EDGE_LINE_COLOR, fillLightPosition, keyLightPosition, sceneLightLevels, shadowBlurRadius, workplaneGridLayout, workplaneGridLines, workplaneGridPalette, workplaneLabelLayout, workplaneThemePalette, WORKPLANE_LABEL_ASPECT, WORKPLANE_LINE_ELEVATION, type WorkplaneGridLayout } from "@/lib/workplaneGrid";
 import { cleanNearZero, deformsAboutOrigin, cleanRotationDegrees, isNonSolidShapeKind, mirroredAxisCount, mirrorSign, preservesEdgeTreatmentSize, proportionalResizeScale, resizedImportedCoordinates, resizedImportedMeshPositions, resizedShapeSize, shapeDepth, shapeExtrudeDeformAt, shapeHasExtrudeDeform, shapeHasShapeDeform, shapeHasTaper, shapeSupportsTaper, shapeTaperDimensions, shapeTaperScaleAt, shapeWidth, shapeWithParametricSource } from "@/lib/workplaneShapes";
@@ -465,6 +466,8 @@ type WorkplaneViewportProps = {
   onExportSectionSvg?: (axis: SectionPlaneAxis, offset: number) => void;
   /** The cut's outlines, from the same bodies as the SVG - what section measuring snaps to. */
   onSectionContours?: (axis: SectionPlaneAxis, offset: number) => Promise<SectionLoop[]>;
+  /** The bodies of the cut with their colours, to fill the cut face of the section view (#516). */
+  onSectionBodies?: (axis: SectionPlaneAxis, offset: number) => Promise<SectionBody[]>;
 };
 
 type WorkspaceSettings = WorkplaneWorkspaceSettings;
@@ -1224,6 +1227,7 @@ function shapeGeometrySignature(shape: WorkplaneShape): string {
 
   return JSON.stringify({
     kind: shape.kind,
+    rulerInch: shape.kind === "ruler" ? rulerInchScale : undefined,
     geometryRevision: shape.kind === "pyramid" ? 2 : undefined,
     width: shapeWidth(shape),
     depth: shapeDepth(shape),
@@ -3156,6 +3160,7 @@ export function WorkplaneViewport({
   onThemePreferenceChange,
   onExportSectionSvg,
   onSectionContours,
+  onSectionBodies,
 }: WorkplaneViewportProps) {
   const [snapOpen, setSnapOpen] = useState(false);
   // The inspector hands the snap grid control back to the workplane while collapsed or floating.
@@ -3406,6 +3411,13 @@ export function WorkplaneViewport({
   } | null) | null>(null);
   const cruisePreviewRef = useRef<{ object: THREE.Group; shape: WorkplaneShape } | null>(null);
   const cruisePointerRef = useRef<{ x: number; y: number } | null>(null);
+  // A text is drawn with what is there when it is built: a font that arrives later - the Japanese
+  // face a Japanese text fetches, after a reload too - would leave it with question marks, and
+  // the 2D kernel arriving later would leave a name tag's wider layers as plain letters (#215).
+  // The shapes on the plate and the ghost of a shape being placed are built again then.
+  const [drawRound, setDrawRound] = useState(0);
+  useEffect(() => onCustomFontsChanged(() => setDrawRound((round) => round + 1)), []);
+  useEffect(() => onManifoldReady(() => setDrawRound((round) => round + 1)), []);
   cruiseAssetRef.current = cruiseAsset;
   const projectNameRef = useRef(projectName);
   const projectIdRef = useRef(projectId);
@@ -3769,6 +3781,16 @@ export function WorkplaneViewport({
     return () => window.removeEventListener("layerling:open-workspace-settings", openWorkspaceSettings);
   }, []);
 
+  // A ruler's scale follows the unit (#500): it is read when the ruler is built, so it is set before the build and
+  // the rulers are built again when the unit changes.
+  const inchScale = workspace.units === "Imperial";
+  rulerInchScale = inchScale;
+  useEffect(() => {
+    if (!threeRef.current) return;
+    rebuildShapes(threeRef.current, shapesRef.current, shapeOutlineIds(), modifierActiveRef.current, placementWorkplaneRef.current);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [inchScale]);
+
   useEffect(() => {
     shapesRef.current = shapes;
     rebuildShapes(
@@ -3808,7 +3830,7 @@ export function WorkplaneViewport({
       );
       threeRef.current.needsRender = true;
     }
-  }, [shapes]);
+  }, [shapes, drawRound]);
 
   useEffect(() => {
     alignReferenceShapesRef.current = alignReferenceShapes;
@@ -4004,6 +4026,30 @@ export function WorkplaneViewport({
       window.clearTimeout(timer);
     };
   }, [sectionMeasureMode, sectionSettings, shapes, onSectionContours]);
+
+  // The cut face (#516): where the plane goes through a solid it is filled, with the colour of the body a
+  // little darker, so a solid and a hole no longer look the same inside. It is made from the same bodies as
+  // the section SVG a moment after the plane or the design stops changing, and gone while they move.
+  useEffect(() => {
+    const state = threeRef.current;
+    if (state) clearSectionCaps(state);
+    if (!sectionSettings.enabled || !onSectionBodies) return;
+    const { axis, offset } = sectionSettings;
+    let cancelled = false;
+    const timer = window.setTimeout(() => {
+      onSectionBodies(axis, offset)
+        .then((bodies) => {
+          const current = threeRef.current;
+          if (cancelled || !current) return;
+          buildSectionCaps(current, bodies, axis, offset);
+        })
+        .catch(() => undefined);
+    }, 250);
+    return () => {
+      cancelled = true;
+      window.clearTimeout(timer);
+    };
+  }, [sectionSettings.enabled, sectionSettings.axis, sectionSettings.offset, shapes, onSectionBodies]);
 
   useEffect(() => {
     notesRef.current = notes;
@@ -4487,6 +4533,7 @@ export function WorkplaneViewport({
         disposeObject(state.sectionPlaneHelper);
         state.sectionPlaneHelper = null;
       }
+      clearSectionCaps(state);
       disposeCutPreviewResources();
       state.renderer.dispose();
       host.replaceChildren();
@@ -4827,13 +4874,13 @@ export function WorkplaneViewport({
       if (cruisePreviewRef.current?.object === object) cruisePreviewRef.current = null;
       if (latest) latest.needsRender = true;
     };
-  }, [cruiseAsset, cruiseAsset ? workspace.shapeCustomizations[cruiseAsset.kind] : undefined]);
+  }, [cruiseAsset, cruiseAsset ? workspace.shapeCustomizations[cruiseAsset.kind] : undefined, drawRound]);
 
   useEffect(() => {
     const pointer = cruisePointerRef.current;
     if (!cruiseAsset || !pointer) return;
     moveCruiseGhost(pointer.x, pointer.y);
-  }, [cruiseAsset, moveCruiseGhost, placementWorkplane]);
+  }, [cruiseAsset, moveCruiseGhost, placementWorkplane, drawRound]);
 
   const storeTapeModel = useCallback((next: TapeModel) => {
     tapeModelRef.current = next;
@@ -8481,6 +8528,7 @@ export function WorkplaneViewport({
       <div
         className={`view-cube ${viewCubeDragging ? "dragging" : ""}`}
         aria-label={t("view.cube")}
+        data-help-section="viewCube"
         onPointerDown={handleViewCubePointerDown}
         onPointerMove={handleViewCubePointerMove}
         onPointerUp={endViewCubeDrag}
@@ -8497,7 +8545,7 @@ export function WorkplaneViewport({
         </div>
       </div>
 
-      <div className={`camera-controls ${cameraControlsCollapsed ? "collapsed" : ""}`} aria-label={t("camera.controls")}>
+      <div className={`camera-controls ${cameraControlsCollapsed ? "collapsed" : ""}`} aria-label={t("camera.controls")} data-help-section="cameraBar">
         {cameraControlsCollapsed ? (
           <button className="camera-controls-toggle" aria-label={t("camera.show")} title={t("camera.showShort")} aria-expanded={false} onClick={() => setCameraControlsCollapsed(false)}>
             <ChevronRight size={24} strokeWidth={2.25} aria-hidden="true" />
@@ -9133,7 +9181,11 @@ export function WorkplaneViewport({
           proportionLock={proportionLock}
           onProportionLockChange={changeProportionLock}
           onBentTubeSegmentChange={changeBentTubeSegment}
-          onShapeDefaultsChange={(kind, entry) => changeWorkspace((current) => ({ ...current, shapeCustomizations: withShapeDefaults(current.shapeCustomizations, kind, entry) }))}
+          onShapeDefaultsChange={(kind, entry) => {
+            changeWorkspace((current) => ({ ...current, shapeCustomizations: withShapeDefaults(current.shapeCustomizations, kind, entry) }));
+            // A new design starts with them too, not only this one (#483).
+            saveShapeDefaultsForNewDesigns(kind, entry);
+          }}
           onSnapChange={chooseSnapGrid}
           onSnapOpenChange={setSnapOpen}
           onObjectSnapChange={changeObjectSnap}
@@ -9378,6 +9430,7 @@ function createThreeScene(host: HTMLDivElement): ThreeState {
     rotationHandleSides: null,
     sectionPlane: null,
     sectionPlaneHelper: null,
+    sectionCapGroup: null,
     lights: { ambient, key, fill },
     disposeInteractionListeners: () => {},
     resize,
@@ -10668,6 +10721,44 @@ function applySectionClipping(state: ThreeState | null, plane: THREE.Plane | nul
   // The faces Delete face lights up are cut like the body under them.
   state.cadFaceLayer?.children.forEach((child) => setPlanes((child as THREE.Mesh).material as THREE.Material));
 
+  state.needsRender = true;
+}
+
+function clearSectionCaps(state: ThreeState) {
+  if (!state.sectionCapGroup) return;
+  state.scene.remove(state.sectionCapGroup);
+  disposeObject(state.sectionCapGroup);
+  state.sectionCapGroup = null;
+  state.needsRender = true;
+}
+
+/** The filled cut face of the section view: one flat mesh per body, on the plane, in its colour a little darker. */
+function buildSectionCaps(state: ThreeState, bodies: readonly SectionBody[], axis: SectionPlaneAxis, offset: number) {
+  clearSectionCaps(state);
+  const group = new THREE.Group();
+  group.name = "SectionCaps";
+  for (const body of bodies) {
+    const cap = sectionCapMesh(body.loops);
+    if (cap.triangles.length === 0) continue;
+    const positions: number[] = [];
+    cap.points.forEach((point) => positions.push(...sectionPointToWorld(point, axis, offset)));
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
+    geometry.setIndex(cap.triangles);
+    const material = new THREE.MeshBasicMaterial({
+      color: new THREE.Color(body.color).multiplyScalar(0.78),
+      side: THREE.DoubleSide,
+      polygonOffset: true,
+      polygonOffsetFactor: -2,
+      polygonOffsetUnits: -2,
+    });
+    const mesh = new THREE.Mesh(geometry, material);
+    mesh.name = "SectionCap";
+    group.add(mesh);
+  }
+  if (group.children.length === 0) return;
+  state.scene.add(group);
+  state.sectionCapGroup = group;
   state.needsRender = true;
 }
 
@@ -12816,13 +12907,16 @@ function createShapeObject(
 
 const RULER_TICK_TEXTURE_WIDTH = 2048;
 
+/** Whether the rulers are scaled in inches: the workspace's unit is Imperial (#500). Read when a ruler is built, and part of its geometry key. */
+let rulerInchScale = false;
+
 /**
  * Zeichnet Teilstriche und Zehner-Zahlen auf einen deckenden Untergrund in der
  * Lineal-Farbe - anders als bei einer Bild-Deckplatte gibt es hier kein Foto,
  * das die Flaeche ohnehin fuellt, also muss die Tinte selbst fuer den
  * Untergrund sorgen, sonst waere die Deckflaeche stellenweise durchsichtig.
  */
-function createRulerTickTexture(length: number, crossWidth: number, baseColor: string) {
+function createRulerTickTexture(length: number, crossWidth: number, baseColor: string, inches = false) {
   const canvas = document.createElement("canvas");
   canvas.width = RULER_TICK_TEXTURE_WIDTH;
   canvas.height = Math.max(1, Math.round((RULER_TICK_TEXTURE_WIDTH * crossWidth) / Math.max(1, length)));
@@ -12835,21 +12929,20 @@ function createRulerTickTexture(length: number, crossWidth: number, baseColor: s
   context.textAlign = "center";
   context.textBaseline = "top";
   const pxPerMm = canvas.width / length;
-  const lastMm = Math.floor(length);
-  for (let value = 0; value <= lastMm; value += 1) {
-    const isTen = value % 10 === 0;
-    const isFive = value % 5 === 0;
-    const x = value * pxPerMm;
-    context.lineWidth = isTen ? 3 : 1.6;
+  // The numbers stand a ten millimetres or an inch apart, so they get that much room.
+  const labelRoom = pxPerMm * (inches ? 24 : 9);
+  rulerTicks(length, inches).forEach((tick) => {
+    const x = tick.offset * pxPerMm;
+    context.lineWidth = tick.label !== undefined ? 3 : 1.6;
     context.beginPath();
     context.moveTo(x, 0);
-    context.lineTo(x, canvas.height * (isTen ? 0.62 : isFive ? 0.42 : 0.26));
+    context.lineTo(x, canvas.height * tick.height);
     context.stroke();
-    if (isTen) {
+    if (tick.label !== undefined) {
       context.font = `600 ${Math.round(canvas.height * 0.24)}px ${WORKPLANE_LABEL_FONT_STACK}`;
-      context.fillText(String(value), x, canvas.height * 0.66, pxPerMm * 9);
+      context.fillText(tick.label, x, canvas.height * 0.66, labelRoom);
     }
-  }
+  });
   const texture = new THREE.CanvasTexture(canvas);
   texture.colorSpace = THREE.SRGBColorSpace;
   texture.anisotropy = 4;
@@ -12860,7 +12953,7 @@ function createRulerTickTexture(length: number, crossWidth: number, baseColor: s
 function createRulerMaterials(shape: WorkplaneShape, sideMaterial: THREE.MeshStandardMaterial) {
   const sideMaterials = Array.from({ length: 5 }, (_, index) => (index === 0 ? sideMaterial : sideMaterial.clone()));
   const topMaterial = new THREE.MeshStandardMaterial({ color: "#ffffff", roughness: 0.55, metalness: 0 });
-  const texture = createRulerTickTexture(shapeWidth(shape), shapeDepth(shape), shape.color);
+  const texture = createRulerTickTexture(shapeWidth(shape), shapeDepth(shape), shape.color, rulerInchScale);
   if (texture) topMaterial.map = texture;
   return [sideMaterials[0], sideMaterials[1], topMaterial, sideMaterials[2], sideMaterials[3], sideMaterials[4]];
 }

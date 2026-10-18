@@ -201,3 +201,49 @@ describe("the index of a language", () => {
     expect(await loadGuideIndex("fr", fixed)).toHaveLength(entries.length);
   });
 });
+
+describe("a tool window answers for what has no name of its own (#424)", () => {
+  const window = (inner: string) =>
+    page(`<aside data-help-panel="Chamfer edges" aria-label="Chamfer edges">${inner}<a class="guide-help-link" href="/guide/edges-and-hollowing.html#breaking-edges"></a></aside>`);
+
+  it("asks about the window's title for Cancel, whatever the language says Cancel with", () => {
+    window('<button id="c">Cancel</button><button id="d" aria-label="Bottom edges">B</button>');
+    expect(resolveHelpTarget(document.getElementById("c"))?.name).toBe("Chamfer edges");
+    // A button with a name of its own keeps it.
+    expect(resolveHelpTarget(document.getElementById("d"))?.name).toBe("Bottom edges");
+  });
+
+  it("asks about the window's title for a field and a slider", () => {
+    window('<label class="range-property"><span class="range-property-name">Distance</span><input id="f" type="text" /><input id="s" type="range" /></label>');
+    expect(resolveHelpTarget(document.getElementById("f"))?.name).toBe("Chamfer edges");
+    expect(resolveHelpTarget(document.getElementById("s"))?.name).toBe("Chamfer edges");
+  });
+
+  it("leaves a window with no title to the names of its parts", () => {
+    page('<aside><button id="c">Cancel</button></aside>');
+    expect(resolveHelpTarget(document.getElementById("c"))?.name).toBe("Cancel");
+  });
+
+  it("leads the question mark of a window to the part of the guide it points at", () => {
+    window('<button>Cancel</button>');
+    const target = resolveHelpTarget(document.querySelector("a.guide-help-link"));
+    expect(target?.name).toBe("");
+    expect(target?.guideHref).toBe("/guide/edges-and-hollowing.html#breaking-edges");
+  });
+});
+
+describe("a part with a section of its own in the guide (#424)", () => {
+  it("answers for everything in it with that section", () => {
+    page('<div data-help-section-all="addShape"><button id="c">Cylinder</button><div id="blank">x</div></div>');
+    const named = resolveHelpTarget(document.getElementById("c"));
+    expect(named?.sectionOnly).toBe(true);
+    expect(named?.guideHref).toContain("adding-a-shape");
+    expect(resolveHelpTarget(document.getElementById("blank"))?.sectionOnly).toBe(true);
+  });
+
+  it("answers for its blank places only, when it is a container with named parts", () => {
+    page('<div data-help-section="cameraBar" aria-label="Camera controls"><button id="home" aria-label="Home">h</button><span id="gap">.</span></div>');
+    expect(resolveHelpTarget(document.getElementById("home"))?.name).toBe("Home");
+    expect(resolveHelpTarget(document.getElementById("gap"))?.sectionOnly).toBe(true);
+  });
+});

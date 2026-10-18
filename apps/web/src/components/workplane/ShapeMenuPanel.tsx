@@ -1,7 +1,7 @@
 "use client";
 
 import { Pin, PinOff } from "lucide-react";
-import { useCallback, useLayoutEffect, useRef, useState, type CSSProperties, type KeyboardEvent, type PointerEvent, type ReactNode } from "react";
+import { useCallback, useRef, useState, type CSSProperties, type KeyboardEvent, type PointerEvent, type ReactNode } from "react";
 import { GuideHelpLink } from "@/components/GuideHelpLink";
 import { t } from "@/lib/i18n";
 import { useLanguage } from "@/lib/useLanguage";
@@ -94,20 +94,22 @@ export function ShapeMenuPanel({
   });
   const PinIcon = pinned ? PinOff : Pin;
 
-  const [size, setSize] = useState<ShapeMenuSize>({ width: null, height: null });
+  // The remembered size, read in the first render, not after it (#505): the panel's remembered position is
+  // clamped to the window in the layout effect of the first paint, with the width the panel has then. With the
+  // size read later, it was clamped with the usual, much wider width and opened shifted to the left each time.
+  // The panel opens on a click, never on the server, so reading the storage here cannot differ from the server's page.
+  const [size, setSize] = useState<ShapeMenuSize>(() => {
+    if (!resizable || typeof window === "undefined") return { width: null, height: null };
+    try {
+      return parseShapeMenuSize(window.localStorage.getItem(SIZE_STORAGE_KEY));
+    } catch {
+      // Blocked storage: the panel opens at its usual size.
+      return { width: null, height: null };
+    }
+  });
   const sizeRef = useRef(size);
   sizeRef.current = size;
   const dragRef = useRef<ResizeDrag | null>(null);
-
-  // The remembered size, read before the first paint so the panel does not open at one size and jump to another.
-  useLayoutEffect(() => {
-    if (!resizable) return;
-    try {
-      setSize(parseShapeMenuSize(window.localStorage.getItem(SIZE_STORAGE_KEY)));
-    } catch {
-      // Blocked storage: the panel opens at its usual size.
-    }
-  }, [resizable]);
 
   const storeSize = useCallback((next: ShapeMenuSize) => {
     try {
@@ -261,6 +263,7 @@ export function ShapeMenuPanel({
       style={style}
       role={role}
       aria-label={ariaLabel}
+      data-help-section-all={resizable ? "addShape" : undefined}
     >
       <div className="shape-menu-title" title={t("shapeMenu.moveHint")} {...movable.handleProps}>
         <span className="shape-menu-title-text">

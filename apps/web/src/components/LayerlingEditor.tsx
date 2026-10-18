@@ -136,7 +136,7 @@ import { sectionMeasurement, sectionPointToWorld, snapSectionPoint } from "@/lib
 import { DEFAULT_INFILL_PERCENT, DEFAULT_PRINT_MATERIAL, DEFAULT_WALLS, INFILL_CHOICES, PRINT_MATERIAL_DENSITY, PRINT_MATERIALS, FILAMENT_DIAMETER_MM, WALL_CHOICES, normalizeInfillPercent, normalizePrintMaterial, normalizeWalls, printEstimate, printEstimateWithInfill, type PrintMaterial } from "@/lib/printEstimate";
 import { CAD_MODIFIER_MAX_SHARP_ANGLE, CAD_MODIFIER_REQUEST_TIMEOUT_MS, CAD_MODIFIER_PREPARE_TRIANGLE_LIMIT, cadModifierPrepareTimeoutMs, cadModifierTimeoutMessage, cadModifierUserErrorMessage, cadModifierWorkerFailureMessage, cadModifierCandidateEdge, defaultCadModifierTangentChain, rescueSharpAngleForEdges, selectableCadModifierEdge, type CadModifierRequestPhase } from "@/lib/cadModifierRuntime";
 import { createCadPreviewQueue } from "@/lib/cadPreviewQueue";
-import { cloneWorkplaneShapeSnapshot, compactEdgeTreatmentHistory, edgeTreatmentAppliedFrame, restoreShapeBeforeEdgeTreatment } from "@/lib/edgeTreatmentHistory";
+import { cloneWorkplaneShapeSnapshot, compactEdgeTreatmentHistory, edgeTreatmentAppliedFrame, groupBeforeEdgeTreatments, restoreShapeBeforeEdgeTreatment, wasGroupBeforeEdgeTreatments } from "@/lib/edgeTreatmentHistory";
 import { appendEditorHistorySnapshot, boundedEditorHistoryState, continuesKeyRun, type KeyRun, editorHistoryBranch, editorHistoryEntry, editorHistoryForExport, historyStateAt, hydrateEditorHistoryState, notesForHistoryIndex, projectSceneFingerprint, projectShapesFingerprint, workplaneForHistoryIndex, type EditorHistoryEntry, type EditorHistoryExportLimit, type EditorHistoryState } from "@/lib/editorHistory";
 import { snapShapeFootprintToVisibleGrid, visibleGridStep } from "@/lib/gridSnap";
 import { composedShapeRotation, geometryRotationDegreesForShortcut, geometryRotationDelta, rotatedGeometryShapePatch } from "@/lib/geometryRotation";
@@ -158,6 +158,7 @@ import { packBackup, unpackBackup } from "@/lib/projectBackup";
 import { MyShapesSection, type CustomShapeEntry, type CustomShapeLocation } from "@/components/workplane/MyShapesSection";
 import { deleteServerCustomShape, listServerCustomShapes, readServerCustomShape, renameServerCustomShape, saveServerCustomShape, type ServerCustomShape } from "@/lib/customShapesServer";
 import { addLineIntersectionPoints, onlyMovesPoints, splitSketchSegment } from "@/lib/sketchPointRefinement";
+import { mirrorSketchSelection, SKETCH_MIRROR_HORIZONTAL, SKETCH_MIRROR_VERTICAL, sketchMirrorAxisThroughSegment } from "@/lib/sketchMirror";
 import { copySketchSelection, freeSketchPasteOffset, pasteSketchClipboard, type SketchClipboard } from "@/lib/sketchClipboard";
 import { sketchSelectedPointIds, sketchSelectionCount, toggleSketchSelection } from "@/lib/sketchSelection";
 import { applySketchCorners } from "@/lib/sketchFilletChamfer";
@@ -3276,6 +3277,17 @@ export function LayerlingEditor({
     () => edgeModifier ? edgeModifier.edges.filter((edge) => selectableCadModifierEdge(edge, edgeModifier.sharpAngle)).map((edge) => edge.id) : [],
     [edgeModifier?.edges, edgeModifier?.sharpAngle],
   );
+  // Which quick button made the edges picked now: the first whose edges are exactly the picked ones (#517).
+  const modifierQuickSelection = useMemo(() => {
+    if (!edgeModifier?.prepared || edgeModifier.selectedEdgeIds.length === 0) return null;
+    const picked = edgeModifier.selectedEdgeIds;
+    const same = (ids: readonly number[]) => ids.length === picked.length && ids.every((id) => picked.includes(id));
+    if (same(modifierAvailableEdgeIds)) return "all" as const;
+    if (same(topCadModifierEdgeIds(edgeModifier.edges, modifierAvailableEdgeIds))) return "top" as const;
+    if (same(bottomCadModifierEdgeIds(edgeModifier.edges, modifierAvailableEdgeIds))) return "bottom" as const;
+    if (same(verticalCadModifierEdgeIds(edgeModifier.edges, modifierAvailableEdgeIds))) return "vertical" as const;
+    return null;
+  }, [edgeModifier?.prepared, edgeModifier?.selectedEdgeIds, edgeModifier?.edges, modifierAvailableEdgeIds]);
   // Alle grundsaetzlich verrundbaren Kanten, unabhaengig von der Schwelle -
   // damit eine feinere Kante im 3D-Bild sicht- und anklickbar bleibt, statt
   // erst nach manuellem Verschieben des Schiebereglers aufzutauchen.
@@ -4194,13 +4206,23 @@ export function LayerlingEditor({
       setNotice(t("status.edgeRemoveChanged"));
       return;
     }
+    // The Fillet or Chamfer tool stays open, so that several features can be taken back one after the other (#514).
+    const openTool = edgeModifier ? { kind: edgeModifier.kind, amount: edgeModifier.amount, chamferAngle: edgeModifier.chamferAngle } : null;
     invalidateCadModifierSession();
     commitShapes(
       shapesRef.current.map((shape) => shape.id === selectedShape.id ? restored.shape : shape),
       restored.shape.id,
     );
+    if (openTool) {
+      edgeEditRequestRef.current = {
+        shapeId: restored.shape.id,
+        historyLength: restored.shape.edgeTreatmentHistory?.length ?? 0,
+        preset: { ...openTool, edgeIds: [] },
+      };
+      setEdgeEditRound((round) => round + 1);
+    }
     setNotice(t("status.removedFeature", { label: restored.label }));
-  }, [commitShapes, invalidateCadModifierSession, selectedEdgeFeatureCount, selectedEdgeHistoryOptions, selectedShape]);
+  }, [commitShapes, edgeModifier, invalidateCadModifierSession, selectedEdgeFeatureCount, selectedEdgeHistoryOptions, selectedShape]);
 
   // "Edit" on a stored treatment (#227): it is taken back as in the list, and the tool opens again with
   // its value and its edges to change. A fillet or chamfer waits for the body to be there again first.
@@ -4711,6 +4733,27 @@ export function LayerlingEditor({
     }
   }, [commitSketchProfile, deleteSketchImage, deleteSketchPoint, deleteSketchSegment, sketchProfile, sketchSelection]);
 
+  /** What a window dragged with the Erase tool takes away: the points and lines inside it, as the Select tool's window would pick them (#519). */
+  const eraseSketchMany = useCallback((pointIds: string[], segmentIds: string[]) => {
+    if (pointIds.length === 0 && segmentIds.length === 0) return;
+    const points = new Set(pointIds);
+    const segments = new Set(segmentIds);
+    commitSketchProfile({
+      ...sketchProfile,
+      points: sketchProfile.points.filter((point) => !points.has(point.id)),
+      segments: sketchProfile.segments.filter((segment) => !segments.has(segment.id) && !points.has(segment.startId) && !points.has(segment.endId)),
+    }, t("status.sketchSelectionRemoved"));
+    setSketchActivePointId(null);
+    setSketchSelection(null);
+  }, [commitSketchProfile, sketchProfile]);
+
+  /** The Erase button with something selected erases it, instead of only dropping the selection (#519). */
+  const chooseSketchTool = useCallback((tool: SketchTool) => {
+    const eraseSelection = tool === "erase" && sketchTool !== "erase" && Boolean(sketchSelection);
+    setActiveSketchTool(tool);
+    if (eraseSelection) deleteSelectedSketchEntity();
+  }, [deleteSelectedSketchEntity, setActiveSketchTool, sketchSelection, sketchTool]);
+
   const copySketchSelectionToClipboard = useCallback(() => {
     const copied = copySketchSelection(sketchProfile, sketchSelection);
     if (!copied) {
@@ -4765,6 +4808,23 @@ export function LayerlingEditor({
     }
     insertSketchCopy(copied, t("status.sketchDuplicated"));
   }, [insertSketchCopy, sketchProfile, sketchSelection]);
+
+  // Mirror (#512): copies the selection to the other side of an axis; the originals stay.
+  const mirrorSketchSelectionAction = useCallback((across: "vertical" | "horizontal" | { segmentId: string }) => {
+    const axis = across === "vertical" ? SKETCH_MIRROR_VERTICAL : across === "horizontal" ? SKETCH_MIRROR_HORIZONTAL : sketchMirrorAxisThroughSegment(sketchProfile, across.segmentId);
+    if (!axis) {
+      setNotice(t("status.sketchMirrorNoAxis"));
+      return;
+    }
+    const mirrored = mirrorSketchSelection(sketchProfile, sketchSelection, axis, createLocalId);
+    if (!mirrored) {
+      setNotice(t("status.sketchMirrorNothing"));
+      return;
+    }
+    commitSketchProfile(mirrored.profile, t("status.sketchMirrored"));
+    setSketchActivePointId(null);
+    setSketchSelection({ kind: "multiple", pointIds: mirrored.pointIds, segmentIds: mirrored.segmentIds });
+  }, [commitSketchProfile, sketchProfile, sketchSelection]);
 
   const moveSketchPoint = useCallback((id: string, position: { x: number; z: number }) => {
     const current = sketchProfile.points.find((point) => point.id === id);
@@ -8054,14 +8114,20 @@ export function LayerlingEditor({
 
   const ungroupSelected = useCallback(() => {
     if (refuseLockedSelection()) return;
-    const groups = selectedShapes.filter((shape) => shape.groupedShapes?.length);
+    const groups = selectedShapes.filter((shape) => shape.groupedShapes?.length || wasGroupBeforeEdgeTreatments(shape));
     if (groups.length === 0) {
       setNotice(t("status.selectGroupFirst"));
       return;
     }
     const groupIds = new Set(groups.map((shape) => shape.id));
-    const restored = groups.flatMap(restoreGroupedChildren);
-    commitShapes([...shapes.filter((shape) => !groupIds.has(shape.id)), ...restored], restored.map((shape) => shape.id), groups.length === 1 ? t("status.ungroupedOne") : t("status.ungroupedMany", { count: groups.length }));
+    // A group with a fillet or chamfer is one mesh with the history of its features: they are taken back first (#514).
+    const tookEdgesBack = groups.some((shape) => !shape.groupedShapes?.length);
+    const restored = groups.flatMap((shape) => restoreGroupedChildren(shape.groupedShapes?.length ? shape : groupBeforeEdgeTreatments(shape)!));
+    commitShapes(
+      [...shapes.filter((shape) => !groupIds.has(shape.id)), ...restored],
+      restored.map((shape) => shape.id),
+      tookEdgesBack ? t("status.ungroupedEdgesTakenBack") : groups.length === 1 ? t("status.ungroupedOne") : t("status.ungroupedMany", { count: groups.length }),
+    );
   }, [refuseLockedSelection, commitShapes, selectedShapes, shapes]);
 
   /** Why a wrap failed, in the units the editor shows. */
@@ -8338,11 +8404,11 @@ export function LayerlingEditor({
    * verschiedene Farben gegeneinander freigestellt. Geschnitten wird der ganze
    * Entwurf, wie ihn die Schnittansicht zeigt - nicht nur die Auswahl.
    */
-  const buildSectionSvg = useCallback(async (axis: SectionPlaneAxis, offset: number) => {
+  const sectionBodiesAt = useCallback(async (axis: SectionPlaneAxis, offset: number) => {
     const { visible, hiddenNote } = visibleExportShapes(shapesRef.current);
     const hiddenCount = shapesRef.current.length - visible.length;
     const { solids, meshes: cut } = await exportBodiesWithLooseHoles(visible);
-    if (solids.length === 0) throw new Error(t("status.sectionSvgNothing"));
+    if (solids.length === 0) return { bodies: [], hiddenNote, hiddenCount, unionFailed: false };
     const { meshes, quellen, gescheitert } = await colorSeparatedExportMeshes(solids, cut);
     const bodies = meshes.map((mesh, index) => {
       const source = solids[quellen[index]];
@@ -8352,10 +8418,19 @@ export function LayerlingEditor({
         loops: sliceMeshContours(mesh, axis, offset),
       };
     });
+    return { bodies, hiddenNote, hiddenCount, unionFailed: gescheitert > 0 };
+  }, []);
+
+  /** The bodies of the cut with their colours, for the filled cut face of the section view (#516). */
+  const sectionBodies = useCallback(async (axis: SectionPlaneAxis, offset: number) => (await sectionBodiesAt(axis, offset)).bodies, [sectionBodiesAt]);
+
+  const buildSectionSvg = useCallback(async (axis: SectionPlaneAxis, offset: number) => {
+    const { bodies, hiddenNote, hiddenCount, unionFailed } = await sectionBodiesAt(axis, offset);
+    if (bodies.length === 0) throw new Error(t("status.sectionSvgNothing"));
     const result = sectionSvgDocument(bodies, axis, offset, `${projectName} - ${sectionAxisLetter(axis)} ${formatSectionOffset(offset)} mm`);
     if (!result) throw new Error(t("status.sectionSvgMissed"));
-    return { result, hiddenNote, hiddenCount, unionFailed: gescheitert > 0 };
-  }, [projectName]);
+    return { result, hiddenNote, hiddenCount, unionFailed };
+  }, [projectName, sectionBodiesAt]);
 
   /** Die Umrisse des Schnitts fuer das Messen - dieselben Koerper wie beim SVG. */
   const sectionContours = useCallback(async (axis: SectionPlaneAxis, offset: number) => {
@@ -9517,10 +9592,11 @@ export function LayerlingEditor({
       if (command.action === "ungroup_objects") {
         const requestedIds = mcpStringArray(params.ids ?? params.id);
         const ids = requestedIds.length ? new Set(requestedIds) : new Set(selectedIdsRef.current);
-        const groups = currentShapes().filter((shape) => ids.has(shape.id) && shape.groupedShapes?.length);
+        const groups = currentShapes().filter((shape) => ids.has(shape.id) && (shape.groupedShapes?.length || wasGroupBeforeEdgeTreatments(shape)));
         if (groups.length === 0) throw new Error("Select at least one group to ungroup");
         const groupIds = new Set(groups.map((shape) => shape.id));
-        const restored = groups.flatMap(restoreGroupedChildren);
+        // A group with a fillet or chamfer is one mesh; its edge features are taken back first (#514).
+        const restored = groups.flatMap((shape) => restoreGroupedChildren(shape.groupedShapes?.length ? shape : groupBeforeEdgeTreatments(shape)!));
         commitShapes([...currentShapes().filter((shape) => !groupIds.has(shape.id)), ...restored], restored.map((shape) => shape.id), groups.length === 1 ? t("status.mcpUngroupedOne") : t("status.mcpUngroupedMany", { count: groups.length }));
         return { objects: restored.map(mcpShapeSummary) };
       }
@@ -10044,7 +10120,7 @@ export function LayerlingEditor({
       if (command.action === "list_fonts") {
         const stored = new Set((await storedCustomFonts().catch(() => [])).map((font) => font.id));
         return {
-          builtIn: ["Multilanguage", "Sans", "Serif", "Script", "Monospace", "Rounded", "Stencil"],
+          builtIn: ["Multilanguage", "Sans", "Serif", "Script", "Monospace", "Rounded", "Stencil", "Japanese"],
           custom: customFontList().map((font) => ({ id: font.id, name: font.name, stored: stored.has(font.id), complete: font.complete })),
         };
       }
@@ -11967,7 +12043,7 @@ export function LayerlingEditor({
         : { key: "hole", label: t("contextMenu.toHole"), shortcut: "H", separated: true, onSelect: () => setSelectionHoleMode(true) });
     }
     if (selectedShapes.length >= 2 && !selectionLocked) items.push({ key: "group", label: t("contextMenu.group"), shortcut: "Ctrl+G", onSelect: () => void groupSelected() });
-    if (single?.groupedShapes?.length && !selectionLocked) items.push({ key: "ungroup", label: t("contextMenu.ungroup"), shortcut: "Ctrl+Shift+G", onSelect: ungroupSelected });
+    if (single && (single.groupedShapes?.length || wasGroupBeforeEdgeTreatments(single)) && !selectionLocked) items.push({ key: "ungroup", label: t("contextMenu.ungroup"), shortcut: "Ctrl+Shift+G", onSelect: ungroupSelected });
     if (canSeparateSelectedParts && !selectionLocked) items.push({ key: "separateParts", label: t("inspector.separateParts"), onSelect: separateSelectedParts });
     if (single && !selectionLocked) {
       items.push(
@@ -12029,7 +12105,7 @@ export function LayerlingEditor({
         onHistoryView={historyViewIndex === null ? openHistoryView : closeHistoryView}
         canGroup={!selectionLocked && selectedShapes.length > 1 && selectedShapes.every((shape) => !isNonSolidShapeKind(shape.kind))}
         canIntersect={!selectionLocked && canIntersectShapes(selectedShapes.filter((shape) => !isNonSolidShapeKind(shape.kind)))}
-        canUngroup={!selectionLocked && selectedShapes.some((shape) => Boolean(shape.groupedShapes?.length))}
+        canUngroup={!selectionLocked && selectedShapes.some((shape) => Boolean(shape.groupedShapes?.length) || wasGroupBeforeEdgeTreatments(shape))}
         canModifySelection={hasSelection && !selectionLocked}
         hasClipboard={clipboard.length > 0 || systemClipboardSupported}
         hasSelection={hasSelection}
@@ -12060,7 +12136,7 @@ export function LayerlingEditor({
         onSketchStroke={() => setSketchStrokePanelOpen((open) => !open)}
         onStartSketch={(operation) => beginSketch(operation)}
         onEditSketch={beginSketchEdit}
-        onSketchTool={setActiveSketchTool}
+        onSketchTool={chooseSketchTool}
         onSketchPrimitive={(primitive) => addSketchPrimitive(primitive, { x: 0, z: 0 })}
         sketchShapeOptions={sketchShapeOptions}
         onSketchShapeOptions={setSketchShapeOptions}
@@ -12222,6 +12298,7 @@ export function LayerlingEditor({
             onPlanePoint={addSketchPlanePoint}
             onAddPrimitive={addSketchPrimitive}
             onPointPress={pressSketchPoint}
+            onFinishLine={() => setSketchActivePointId(null)}
             onSelectSegment={(id) => {
               setSketchSelection({ kind: "segment", id });
               setSketchActivePointId(null);
@@ -12255,11 +12332,13 @@ export function LayerlingEditor({
             onMovePoint={moveSketchPoint}
             onTransformPoints={transformSketchPoints}
             onMoveHandle={moveSketchHandle}
-            onSelectTool={setActiveSketchTool}
+            onSelectTool={chooseSketchTool}
+            onEraseMany={eraseSketchMany}
             onInsertPoint={insertSketchPoint}
             onSetPointMode={setSketchPointMode}
             onCurveSegment={curveSketchSegmentAction}
             onCurveSegments={curveSketchSegmentsAction}
+            onMirror={mirrorSketchSelectionAction}
             onStraightenSegments={straightenSketchSegmentsAction}
             onStraightenSegment={straightenSketchSegmentAction}
             onSetSegmentConstruction={setSketchSegmentConstruction}
@@ -12393,6 +12472,7 @@ export function LayerlingEditor({
           onThemePreferenceChange={onThemePreferenceChange}
           onExportSectionSvg={(axis, offset) => void exportSectionSvg(axis, offset)}
           onSectionContours={sectionContours}
+          onSectionBodies={sectionBodies}
           />
         )}
       </div>
@@ -12687,6 +12767,7 @@ export function LayerlingEditor({
             const verticalIds = verticalCadModifierEdgeIds(current.edges, modifierAvailableEdgeIds);
             return { ...current, selectedEdgeIds: verticalIds, preview: null, busy: verticalIds.length > 0, error: verticalIds.length ? null : t("edge.noVerticalEdges") };
           })}
+          activeQuickSelection={modifierQuickSelection}
           onClear={() => setEdgeModifier((current) => current?.prepared ? { ...current, selectedEdgeIds: [], preview: null, busy: false, error: t("edge.selectAtLeastOne") } : current)}
           onRemoveFeature={removeEdgeTreatment}
           onEditFeature={editEdgeTreatment}
@@ -14492,7 +14573,7 @@ function TopActionPanel({
         </div>
       ) : null}
       {panel === "export" ? (
-        <div className="export-dialog-body">
+        <div className="export-dialog-body" data-help-section-all="exporting">
           <section className="export-setting-section export-file-section">
             <label htmlFor="export-file-name">{t("export.fileName")}</label>
             <div className="export-file-input-wrap">

@@ -46,7 +46,7 @@ Egy terv úgy nyílik meg, ahogy hagytad: a nézet szöge, nagyítása és helyz
 
 ## Belelátni: a metszeti nézet
 
-A {{ui:camera.sectionView}}, a sáv utolsó gombja (a vágás eszköz), egy sík mentén felnyitja a nézetet, hogy ellenőrizhesd a falakat, az üregeket és az egymásba illeszkedő részeket. Valójában semmi sem vágódik el: a terv, a fájljai és minden export egészben marad.
+A {{ui:camera.sectionView}}, a sáv utolsó gombja (a vágás eszköz), egy sík mentén felnyitja a nézetet, hogy ellenőrizhesd a falakat, az üregeket és az egymásba illeszkedő részeket. Valójában semmi sem vágódik el: a terv, a fájljai és minden export egészben marad. Ahol a sík egy testen megy át, a metszet a test kissé sötétebb színével van kitöltve, a benne lévő kivágás pedig üres marad, így megkülönböztethető a tömör a üregestől; a kitöltött felület egy pillanattal azután jelenik meg, hogy a sík megáll.
 
 - Válaszd ki, melyik tengelyre merőlegesen álljon a sík: X (szélesség), Y (mélység) vagy Z (magasság), mint a helyzetmezőkben. A sík a terved közepén indul.
 - A {{ui:camera.sectionCoarse}} az egész terven át mozgatja a síkot, a {{ui:camera.sectionFine}} kicsit előre-hátra a mostani helyzetéhez képest, tized milliméterekhez. A helyzetet be is gépelheted.

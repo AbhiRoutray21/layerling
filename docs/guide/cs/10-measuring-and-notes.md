@@ -22,7 +22,7 @@ Nástroj je ve spodní části levé lišty pohledu, {{ui:camera.tapeTools}}. M�
 
 ## Pravítko
 
-{{ui:shape.ruler}} vložíte z knihovny tvarů. Je to pouze měřicí pomůcka: neexportuje se a nelze ji slučovat ani odečítat. U těles dotýkajících se pravítka nebo zasahujících přes něj zobrazí rozměr přímo v pohledu. Číselný údaj lze upravit a těleso se podle něj změní. Plovoucí tlačítko plus vytvoří kopii měřeného tvaru.
+{{ui:shape.ruler}} vložíte z knihovny tvarů. Je to pouze měřicí pomůcka: neexportuje se a nelze ji slučovat ani odečítat. U těles dotýkajících se pravítka nebo zasahujících přes něj zobrazí rozměr přímo v pohledu. Číselný údaj lze upravit a těleso se podle něj změní. Plovoucí tlačítko plus vytvoří kopii měřeného tvaru. Natištěná stupnice je v milimetrech; po přepnutí jednotky na palce (přepínač vpravo dole) je v palcích, s čárkou na každou šestnáctinu palce a očíslovanými celými palci.
 
 ## Úhelník
 
