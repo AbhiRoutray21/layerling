@@ -52,5 +52,15 @@
       "de": "Die gefüllte Schnittfläche der Schnittansicht hinkte der Ebene hinterher, solange du sie zogst, und kam erst zurück, wenn die Hand ruhte. Jetzt wird sie bei jedem Schritt für die neueste Lage der Ebene geschnitten.",
       "en": "The filled cut face of the section view lagged behind the plane while you dragged it and only came back when your hand rested. Now it is cut for the newest position of the plane at every step."
     }
+  },
+  {
+    "title": {
+      "de": "Ordner für eigene Formen",
+      "en": "Folders for custom shapes"
+    },
+    "body": {
+      "de": "Eigene Formen lassen sich in Ordner sortieren, bis zu drei Ebenen tief, im Browser und auf dem Server. Ein Ordner hat einen Zähler, lässt sich umbenennen und löschen (nach Rückfrage), und eine Form wird beim Speichern oder danach in einen anderen Ordner gelegt.",
+      "en": "Custom shapes can be sorted into folders, up to three levels deep, in the browser and on the server. A folder has a counter and can be renamed and deleted (after asking), and a shape is put into a folder when you save it or moved to another one afterwards."
+    }
   }
 ]
