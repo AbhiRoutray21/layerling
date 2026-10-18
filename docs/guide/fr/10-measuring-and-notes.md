@@ -22,7 +22,7 @@ Le ruban à mesurer se trouve à l'extrémité inférieure de la barre de la cam
 
 ## Le dirigeant
 
-Vous récupérez le {{ui:shape.ruler}} dans la bibliothèque de formes. Il s'agit d'un simple outil de mesure : il n'apparaît dans aucun export et ne peut être ni regroupé ni découpé. Pour chaque corps qui touche ou chevauche la règle, l'étendue est affichée sous forme de nombre flottant directement dans la vue. Vous pouvez modifier ce numéro ici, et le corps suit. Le symbole plus flottant crée une copie de la forme mesurée.
+Vous récupérez le {{ui:shape.ruler}} dans la bibliothèque de formes. Il s'agit d'un simple outil de mesure : il n'apparaît dans aucun export et ne peut être ni regroupé ni découpé. Pour chaque corps qui touche ou chevauche la règle, l'étendue est affichée sous forme de nombre flottant directement dans la vue. Vous pouvez modifier ce numéro ici, et le corps suit. Le symbole plus flottant crée une copie de la forme mesurée. Son échelle imprimée est en millimètres ; si l'on passe l'unité en pouces (le commutateur en bas à droite), elle est en pouces, avec un trait tous les seizièmes de pouce et les pouces entiers numérotés.
 
 ## Le carré de cadrage
 

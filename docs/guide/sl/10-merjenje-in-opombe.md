@@ -22,7 +22,7 @@ S [[Esc]] zapustiš način merjenja.
 
 ## Ravnilo
 
-Iz knjižnice oblik vzameš {{ui:shape.ruler}}. To je čisto merilno orodje: ne pojavi se v nobenem izvozu in ga ni mogoče združiti v skupino ali presekati. Za vsako telo, ki se ravnila dotika ali se z njim prekriva, pokaže razsežnost kot lebdečo številko neposredno v pogledu. To številko lahko spremeniš kar tam in telo se prilagodi. Prek lebdečega simbola plus ustvariš kopijo izmerjene oblike.
+Iz knjižnice oblik vzameš {{ui:shape.ruler}}. To je čisto merilno orodje: ne pojavi se v nobenem izvozu in ga ni mogoče združiti v skupino ali presekati. Za vsako telo, ki se ravnila dotika ali se z njim prekriva, pokaže razsežnost kot lebdečo številko neposredno v pogledu. To številko lahko spremeniš kar tam in telo se prilagodi. Prek lebdečega simbola plus ustvariš kopijo izmerjene oblike. Natisnjena lestvica je v milimetrih; ko enoto preklopiš na palce (stikalo spodaj desno), je v palcih, s črtico na vsak šestnajstinski palec in oštevilčenimi celimi palci.
 
 ## Kotno ravnilo
 

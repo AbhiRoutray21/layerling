@@ -68,5 +68,15 @@
       "de": "Mit mehreren ausgewählten Punkten und Linien löschte der Knopf „Radieren“ sie nicht, er hob nur die Auswahl auf. Jetzt löscht er die Auswahl. Und mit dem Radieren-Werkzeug kannst du ein Fenster über mehrere Punkte und Linien ziehen: Alles darin wird gelöscht.",
       "en": "With several points and lines selected, the Erase button did not erase them, it only dropped the selection. Now it erases the selection. And with the Erase tool you can drag a window over several points and lines: everything inside is erased."
     }
+  },
+  {
+    "title": {
+      "de": "Das Lineal hat eine Skala in Zoll",
+      "en": "The ruler has a scale in inches"
+    },
+    "body": {
+      "de": "Steht die Einheit auf Zoll (Schalter unten rechts), trägt das Lineal eine Skala in Zoll: ein Strich je Sechzehntelzoll, die ganzen Zoll sind nummeriert. In Millimetern bleibt alles wie bisher.",
+      "en": "With the unit set to inches (the switch at the bottom right), the ruler carries a scale in inches: a line every sixteenth of an inch, with the whole inches numbered. In millimetres everything stays as it was."
+    }
   }
 ]

@@ -22,7 +22,7 @@ Az [[Esc]] kilép a mérés módból.
 
 ## A vonalzó
 
-A {{ui:shape.ruler}} alakzatot az alakzattárból veszed elő. Tisztán mérőeszköz: egyik exportban sem jelenik meg, és nem csoportosítható és nem vágható. Minden testnél, amely hozzáér a vonalzóhoz vagy átfed vele, lebegő számként közvetlenül a nézetben mutatja a kiterjedést. Ezt a számot ott helyben megváltoztathatod, és a test követi. A lebegő plusz jel másolatot készít a mért alakzatról.
+A {{ui:shape.ruler}} alakzatot az alakzattárból veszed elő. Tisztán mérőeszköz: egyik exportban sem jelenik meg, és nem csoportosítható és nem vágható. Minden testnél, amely hozzáér a vonalzóhoz vagy átfed vele, lebegő számként közvetlenül a nézetben mutatja a kiterjedést. Ezt a számot ott helyben megváltoztathatod, és a test követi. A lebegő plusz jel másolatot készít a mért alakzatról. A rányomott skála milliméterben van; ha az egységet hüvelykre kapcsolod (a jobb alsó kapcsoló), hüvelykben jelenik meg, minden tizenhatod hüvelykhez egy vonással és megszámozott egész hüvelykekkel.
 
 ## A derékszögvonalzó
 

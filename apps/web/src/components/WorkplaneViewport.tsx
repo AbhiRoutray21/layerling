@@ -74,7 +74,7 @@ import { customFontRevision, onCustomFontsChanged } from "@/lib/textFonts";
 import { readDesignView, writeDesignView } from "@/lib/designView";
 import { DIMENSION_FORMULA_FIELDS, formulaMatchesMillimeters, formulaToRemember, withFieldFormula } from "@/lib/fieldFormulas";
 import { displayToMillimeters, formatLengthMm, lengthDisplayUnit, millimetersToDisplay, parseLengthMm, parseMeasurementInput, resolveLengthMm, setLengthUnit } from "@/lib/measurementUnits";
-import { computeCornerRulerRelativeCoordinates, cornerRulerAxisModes, cornerRulerFrameForWorkplane, cornerRulerShiftVector, pointAlongRuler, rotateCornerRulerFrame, rulerDimensionMatch, toggledCornerRulerAxis, toggledCornerRulerMode, type CornerRulerAxis, type CornerRulerMode, type RulerDimensionField } from "@/lib/rulerDimensions";
+import { computeCornerRulerRelativeCoordinates, cornerRulerAxisModes, cornerRulerFrameForWorkplane, cornerRulerShiftVector, pointAlongRuler, rotateCornerRulerFrame, rulerDimensionMatch, rulerTicks, toggledCornerRulerAxis, toggledCornerRulerMode, type CornerRulerAxis, type CornerRulerMode, type RulerDimensionField } from "@/lib/rulerDimensions";
 import { createMoveDimensionOverlay, type MoveDimensionAxis, type MoveDimensionOverlayData } from "@/lib/moveDimensionLines";
 import { computeOriginAxisDistance, createOriginDimensionOverlay, type OriginDimensionOverlayData } from "@/lib/originDimensionLines";
 import {
@@ -1207,6 +1207,7 @@ function shapeGeometrySignature(shape: WorkplaneShape): string {
 
   return JSON.stringify({
     kind: shape.kind,
+    rulerInch: shape.kind === "ruler" ? rulerInchScale : undefined,
     geometryRevision: shape.kind === "pyramid" ? 2 : undefined,
     width: shapeWidth(shape),
     depth: shapeDepth(shape),
@@ -3739,6 +3740,16 @@ export function WorkplaneViewport({
     window.addEventListener("layerling:open-workspace-settings", openWorkspaceSettings);
     return () => window.removeEventListener("layerling:open-workspace-settings", openWorkspaceSettings);
   }, []);
+
+  // A ruler's scale follows the unit (#500): it is read when the ruler is built, so it is set before the build and
+  // the rulers are built again when the unit changes.
+  const inchScale = workspace.units === "Imperial";
+  rulerInchScale = inchScale;
+  useEffect(() => {
+    if (!threeRef.current) return;
+    rebuildShapes(threeRef.current, shapesRef.current, shapeOutlineIds(), modifierActiveRef.current, placementWorkplaneRef.current);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [inchScale]);
 
   useEffect(() => {
     shapesRef.current = shapes;
@@ -12826,13 +12837,16 @@ function createShapeObject(
 
 const RULER_TICK_TEXTURE_WIDTH = 2048;
 
+/** Whether the rulers are scaled in inches: the workspace's unit is Imperial (#500). Read when a ruler is built, and part of its geometry key. */
+let rulerInchScale = false;
+
 /**
  * Zeichnet Teilstriche und Zehner-Zahlen auf einen deckenden Untergrund in der
  * Lineal-Farbe - anders als bei einer Bild-Deckplatte gibt es hier kein Foto,
  * das die Flaeche ohnehin fuellt, also muss die Tinte selbst fuer den
  * Untergrund sorgen, sonst waere die Deckflaeche stellenweise durchsichtig.
  */
-function createRulerTickTexture(length: number, crossWidth: number, baseColor: string) {
+function createRulerTickTexture(length: number, crossWidth: number, baseColor: string, inches = false) {
   const canvas = document.createElement("canvas");
   canvas.width = RULER_TICK_TEXTURE_WIDTH;
   canvas.height = Math.max(1, Math.round((RULER_TICK_TEXTURE_WIDTH * crossWidth) / Math.max(1, length)));
@@ -12845,21 +12859,20 @@ function createRulerTickTexture(length: number, crossWidth: number, baseColor: s
   context.textAlign = "center";
   context.textBaseline = "top";
   const pxPerMm = canvas.width / length;
-  const lastMm = Math.floor(length);
-  for (let value = 0; value <= lastMm; value += 1) {
-    const isTen = value % 10 === 0;
-    const isFive = value % 5 === 0;
-    const x = value * pxPerMm;
-    context.lineWidth = isTen ? 3 : 1.6;
+  // The numbers stand a ten millimetres or an inch apart, so they get that much room.
+  const labelRoom = pxPerMm * (inches ? 24 : 9);
+  rulerTicks(length, inches).forEach((tick) => {
+    const x = tick.offset * pxPerMm;
+    context.lineWidth = tick.label !== undefined ? 3 : 1.6;
     context.beginPath();
     context.moveTo(x, 0);
-    context.lineTo(x, canvas.height * (isTen ? 0.62 : isFive ? 0.42 : 0.26));
+    context.lineTo(x, canvas.height * tick.height);
     context.stroke();
-    if (isTen) {
+    if (tick.label !== undefined) {
       context.font = `600 ${Math.round(canvas.height * 0.24)}px ${WORKPLANE_LABEL_FONT_STACK}`;
-      context.fillText(String(value), x, canvas.height * 0.66, pxPerMm * 9);
+      context.fillText(tick.label, x, canvas.height * 0.66, labelRoom);
     }
-  }
+  });
   const texture = new THREE.CanvasTexture(canvas);
   texture.colorSpace = THREE.SRGBColorSpace;
   texture.anisotropy = 4;
@@ -12870,7 +12883,7 @@ function createRulerTickTexture(length: number, crossWidth: number, baseColor: s
 function createRulerMaterials(shape: WorkplaneShape, sideMaterial: THREE.MeshStandardMaterial) {
   const sideMaterials = Array.from({ length: 5 }, (_, index) => (index === 0 ? sideMaterial : sideMaterial.clone()));
   const topMaterial = new THREE.MeshStandardMaterial({ color: "#ffffff", roughness: 0.55, metalness: 0 });
-  const texture = createRulerTickTexture(shapeWidth(shape), shapeDepth(shape), shape.color);
+  const texture = createRulerTickTexture(shapeWidth(shape), shapeDepth(shape), shape.color, rulerInchScale);
   if (texture) topMaterial.map = texture;
   return [sideMaterials[0], sideMaterials[1], topMaterial, sideMaterials[2], sideMaterials[3], sideMaterials[4]];
 }
