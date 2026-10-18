@@ -505,6 +505,11 @@ function geometryMeshForShape(shape: WorkplaneShape): MeshData | null {
         gridfinityLabelRightOffset: shape.gridfinityLabelRightOffset,
         gridfinityLabelCorner: shape.gridfinityLabelCorner,
         gridfinityLabelCornerSize: shape.gridfinityLabelCornerSize,
+        gridfinityScoopBack: shape.gridfinityScoopBack,
+        gridfinityScoopFront: shape.gridfinityScoopFront,
+        gridfinityScoopLeft: shape.gridfinityScoopLeft,
+        gridfinityScoopRight: shape.gridfinityScoopRight,
+        gridfinityScoopRadius: shape.gridfinityScoopRadius,
       });
       break;
     case "loft":

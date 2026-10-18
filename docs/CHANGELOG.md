@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **Finger scoops for Gridfinity bins (#455):** Small parts sat in the edge between a bin's floor and its walls and had to be picked out. Any Gridfinity bin of 2 height units or more can now have a finger scoop along any of its four walls, several at once: **Finger scoop at the back**, **Finger scoop at the front**, **Finger scoop on the left** and **Finger scoop on the right**. The floor rises along a quarter circle into the wall, from wall to wall, so parts can be pushed out up the curve, and every floor edge of the bin is rounded by 2.8 mm. **Scoop radius** applies to all of them, at least 3.5 mm; until it is set, it is half the height up to the lip's support (6.7 mm in a bin of 3 units with the lip). The bin stays an exact body for the STEP export. Also through the MCP action `layerling_create_shape` with `gridfinityScoopFront` and the other `gridfinityScoop` settings. Suggested by @9ballrider. Contributed by @mlugo-apx.
+
 ## 1.89.0
 
 - **A narrower shape library holds two columns (#527):** A shape library pulled to its own width needed 206 px for each column, so two columns took about 450 px (360 px at the small toolbar size), a little more than the Properties panel beside it. A column now needs 190 px: two columns fit in about 415 px, 32 px less at the default toolbar size, 26 px at the small one, and the names still fit (checked in German, where they are longest). Asked for by @prmod3d.
