@@ -209,6 +209,7 @@ const SHAPE_LABEL_KEYS: Record<string, MessageKey> = {
   text: "shape.text",
   nameTag: "shape.nameTag",
   iconTag: "shape.iconTag",
+  qrCode: "shape.qrCode",
   "round-roof": "shape.roundRoof",
   "half-sphere": "shape.halfSphere",
   torus: "shape.torus",
@@ -297,8 +298,21 @@ export const iconTagAsset: ToolbarShapeAsset = {
   color: "#ffffff",
 };
 
-/** What the shape library lists: the catalogue, with the name tag and the icon tag after the text. */
-export const libraryShapeAssets: ToolbarShapeAsset[] = toolbarShapeAssets.flatMap((asset) => (asset.id === "text" ? [asset, nameTagAsset, iconTagAsset] : [asset]));
+/**
+ * The QR code (#553): a text or an address as a code to print. Like the icon tag, the library
+ * entry opens a window for the text and the choices; the kind only names its picture.
+ */
+export const qrCodeAsset: ToolbarShapeAsset = {
+  id: "qrCode",
+  name: "QR code",
+  src: "assets/editor/shape-icons-gray/qrCode.png",
+  menuIcon: "assets/editor/shape-icons-gray/qrCode.png",
+  kind: "text",
+  color: "#1f1f1f",
+};
+
+/** What the shape library lists: the catalogue, with the name tag, the icon tag and the QR code after the text. */
+export const libraryShapeAssets: ToolbarShapeAsset[] = toolbarShapeAssets.flatMap((asset) => (asset.id === "text" ? [asset, nameTagAsset, iconTagAsset, qrCodeAsset] : [asset]));
 
 /**
  * Kinds a shape dragged from the library may have. Taken from the library
@@ -979,6 +993,8 @@ const GENERATED_NAME_KEYS: Record<string, MessageKey> = {
   "Sketch revolve": "shape.sketchRevolve",
   Cube: "shape.box",
   "Icon tag": "shape.iconTag",
+  "QR code": "shape.qrCode",
+  "QR plate": "shape.qrPlate",
 };
 
 /**

@@ -10,6 +10,7 @@ import { normalizeSketchStroke, SKETCH_STROKE_JOINS } from "@/lib/sketchStroke";
 import { normalizeTextEdge } from "@/lib/textEdge";
 import { isTextKeyring } from "@/lib/textGeometry";
 import { normalizeNotes } from "@/lib/workplaneNotes";
+import { normalizeQrSettings } from "@/lib/qrCode";
 import { importedShapeFromStl } from "@/lib/stlImport";
 import { importedShapeFromSvg } from "@/lib/svgImport";
 import { importedShapeFrom3mf } from "@/lib/threemfImport";
@@ -1275,6 +1276,10 @@ function validateShapeDefinition(definition: Record<string, unknown>, label: str
   }
   if (definition.layeredIcon !== undefined && typeof definition.layeredIcon !== "boolean") {
     throw new Error(`${label}.layeredIcon must be true or false`);
+  }
+  // A QR code's settings (#553): a text and known choices. Old projects have none.
+  if (definition.qrCode !== undefined && !normalizeQrSettings(definition.qrCode)) {
+    throw new Error(`${label}.qrCode must hold the code's text`);
   }
   // The corners of a text's line (#215): a layer of a name tag can be bevelled or sharp now, so an
   // unknown corner is refused rather than read as sharp.
