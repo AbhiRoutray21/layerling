@@ -1322,6 +1322,7 @@ export const MESSAGES_AR: Partial<Record<MessageKey, string>> = {
   "status.pastedMany": "تم لصق الأشكال: {count}",
   "status.performanceScene": "مشهد اختبار الأداء: {count} كتلة",
   "status.ungroupedOne": "تم فك تجميع مجموعة واحدة",
+  "status.ungroupedEdgesTakenBack": "فُكّت المجموعة بعد التراجع عن معالجات الحواف (Ctrl+Z يعيدها)",
   "status.ungroupedMany": "تم فك تجميع المجموعات: {count}",
   "status.exactSketchCreated": "تم إنشاء رسم تخطيطي دقيق عند ارتفاع 10 مم",
   "status.groupedHoleConsumed": "تم التجميع: الثقب أزال الجسم الصلب بالكامل",

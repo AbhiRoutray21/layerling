@@ -1322,6 +1322,7 @@ export const MESSAGES_EN = {
   "status.pastedMany": "Pasted {count} shapes",
   "status.performanceScene": "Performance scene: {count} blocks",
   "status.ungroupedOne": "Ungrouped 1 group",
+  "status.ungroupedEdgesTakenBack": "Ungrouped after taking back the edge features (Ctrl+Z brings them back)",
   "status.ungroupedMany": "Ungrouped {count} groups",
   "status.exactSketchCreated": "Exact sketch created at 10 mm height",
   "status.groupedHoleConsumed": "Grouped: hole consumed solid",

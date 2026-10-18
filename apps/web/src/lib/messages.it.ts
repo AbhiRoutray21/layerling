@@ -1256,6 +1256,7 @@ export const MESSAGES_IT: Partial<Record<MessageKey, string>> = {
   "status.pastedMany": "Incollate {count} forme",
   "status.performanceScene": "Scena di test delle prestazioni: {count} blocchi",
   "status.ungroupedOne": "Separato 1 gruppo",
+  "status.ungroupedEdgesTakenBack": "Gruppo separato dopo aver annullato le lavorazioni dei bordi (Ctrl+Z le ripristina)",
   "status.ungroupedMany": "Separati {count} gruppi",
   "status.exactSketchCreated": "Schizzo esatto creato con altezza di 10 mm",
   "status.groupedHoleConsumed": "Raggruppamento eseguito: il foro ha assorbito il solido",

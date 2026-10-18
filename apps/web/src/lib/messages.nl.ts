@@ -1321,6 +1321,7 @@ export const MESSAGES_NL: Record<MessageKey, string> = {
   "status.pastedMany": "{count} vormen geplakt",
   "status.performanceScene": "Prestatiescène: {count} blokken",
   "status.ungroupedOne": "1 groep opgeheven",
+  "status.ungroupedEdgesTakenBack": "Opgeheven nadat de randbewerkingen zijn teruggenomen (Ctrl+Z haalt ze terug)",
   "status.ungroupedMany": "{count} groepen opgeheven",
   "status.exactSketchCreated": "Exacte schets gemaakt op 10 mm hoogte",
   "status.groupedHoleConsumed": "Gegroepeerd: gat heeft het massieve lichaam weggesneden",

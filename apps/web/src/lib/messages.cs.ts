@@ -1350,6 +1350,7 @@ export const MESSAGES_CS: Record<MessageKey, string> = {
   "status.pastedMany": "Vložené tvary: {count}",
   "status.performanceScene": "Scéna pro měření výkonu: {count} kvádrů",
   "status.ungroupedOne": "Rozděleno 1 sloučení",
+  "status.ungroupedEdgesTakenBack": "Skupina rozpuštěna po vrácení úprav hran (Ctrl+Z je vrátí)",
   "status.ungroupedMany": "Rozdělená sloučení: {count}",
   "status.exactSketchCreated": "Vytvořeno přesné těleso z náčrtu s výškou 10 mm",
   "status.groupedHoleConsumed": "Sloučeno: výřez odstranil celé plné těleso",

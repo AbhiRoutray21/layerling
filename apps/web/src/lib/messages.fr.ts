@@ -1308,6 +1308,7 @@ export const MESSAGES_FR: Partial<Record<MessageKey, string>> = {
   "status.pastedMany": "{count} formes collées",
   "status.performanceScene": "Scène de performance : {count} blocs",
   "status.ungroupedOne": "1 groupe dégroupé",
+  "status.ungroupedEdgesTakenBack": "Groupe dissocié après avoir annulé les arrondis et chanfreins (Ctrl+Z les rétablit)",
   "status.ungroupedMany": "{count} groupes dégroupés",
   "status.exactSketchCreated": "Croquis exact créé à 10 mm de hauteur",
   "status.groupedHoleConsumed": "Groupé : trou consommé solide",

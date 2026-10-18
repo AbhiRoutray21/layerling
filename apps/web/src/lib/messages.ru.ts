@@ -1315,6 +1315,7 @@ export const MESSAGES_RU: Partial<Record<MessageKey, string>> = {
   "status.pastedMany": "Вставлено фигур: {count}",
   "status.performanceScene": "Сцена для проверки производительности: блоков — {count}",
   "status.ungroupedOne": "Разгруппирована 1 группа",
+  "status.ungroupedEdgesTakenBack": "Группа разгруппирована после отмены обработки рёбер (Ctrl+Z вернёт её)",
   "status.ungroupedMany": "Разгруппировано групп: {count}",
   "status.exactSketchCreated": "Точный эскиз создан на высоте 10 мм",
   "status.groupedHoleConsumed": "Сгруппировано: отверстие поглотило тело",

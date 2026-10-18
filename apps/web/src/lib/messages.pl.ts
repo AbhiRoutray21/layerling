@@ -1327,6 +1327,7 @@ export const MESSAGES_PL: Partial<Record<MessageKey, string>> = {
   "status.pastedMany": "Wklejono kształty: {count}",
   "status.performanceScene": "Scena wydajnościowa, bloki: {count}",
   "status.ungroupedOne": "Rozgrupowano 1 grupę",
+  "status.ungroupedEdgesTakenBack": "Grupa rozdzielona po cofnięciu obróbki krawędzi (Ctrl+Z ją przywraca)",
   "status.ungroupedMany": "Rozgrupowano grupy: {count}",
   "status.exactSketchCreated": "Utworzono dokładny szkic o wysokości 10 mm",
   "status.groupedHoleConsumed": "Zgrupowano: otwór pochłonął bryłę",

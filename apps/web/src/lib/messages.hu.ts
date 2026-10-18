@@ -1286,6 +1286,7 @@ export const MESSAGES_HU: Partial<Record<MessageKey, string>> = {
   "status.pastedMany": "{count} alakzat beillesztve",
   "status.performanceScene": "Teljesítményteszt-jelenet: {count} blokk",
   "status.ungroupedOne": "1 csoport felbontva",
+  "status.ungroupedEdgesTakenBack": "A csoport feloldva, miután az élmunkákat visszavontuk (a Ctrl+Z visszahozza őket)",
   "status.ungroupedMany": "{count} csoport felbontva",
   "status.exactSketchCreated": "Pontos vázlat létrehozva 10 mm magasságban",
   "status.groupedHoleConsumed": "Csoportosítva: a lyuk elfogyasztotta a tömör testet",

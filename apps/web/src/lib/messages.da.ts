@@ -1242,6 +1242,7 @@ export const MESSAGES_DA: Partial<Record<MessageKey, string>> = {
   "status.pastedMany": "Indsatte {count} former",
   "status.performanceScene": "Performance-scene: {count} blokke",
   "status.ungroupedOne": "Opdelte 1 gruppe",
+  "status.ungroupedEdgesTakenBack": "Gruppen er opløst efter at kantbehandlingerne er taget tilbage (Ctrl+Z henter dem igen)",
   "status.ungroupedMany": "Opdelte {count} grupper",
   "status.exactSketchCreated": "Eksakt skitse oprettet ved 10 mm højde",
   "status.groupedHoleConsumed": "Grupperet: hul forbrugt solid",

@@ -1321,6 +1321,7 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "status.pastedMany": "{count} Formen eingefügt",
   "status.performanceScene": "Leistungsszene: {count} Blöcke",
   "status.ungroupedOne": "1 Gruppe aufgelöst",
+  "status.ungroupedEdgesTakenBack": "Aufgelöst, nachdem die Kantenmerkmale zurückgenommen wurden (Strg+Z holt sie zurück)",
   "status.ungroupedMany": "{count} Gruppen aufgelöst",
   "status.exactSketchCreated": "Exakte Skizze in 10 mm Höhe erzeugt",
   "status.groupedHoleConsumed": "Gruppiert: Die Aussparung hat den Körper aufgezehrt",

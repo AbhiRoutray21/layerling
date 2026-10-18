@@ -1031,6 +1031,7 @@ export const MESSAGES_SL: Partial<Record<MessageKey, string>> = {
   "status.pastedMany": "Prilepljenih oblik: {count}",
   "status.performanceScene": "Preizkus zmogljivosti: blokov: {count}",
   "status.ungroupedOne": "Razdružena 1 skupina",
+  "status.ungroupedEdgesTakenBack": "Skupina razdružena, potem ko so bile obdelave robov razveljavljene (Ctrl+Z jih vrne)",
   "status.ungroupedMany": "Razdruženih skupin: {count}",
   "status.exactSketchCreated": "Natančna skica ustvarjena na višini 10 mm",
   "status.groupedHoleConsumed": "Združeno: luknja je odstranila trdno telo",

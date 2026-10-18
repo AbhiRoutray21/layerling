@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "title": {
+      "de": "Eine Gruppe mit Fase oder Rundung lässt sich wieder auflösen",
+      "en": "A group with a fillet or chamfer can be ungrouped again"
+    },
+    "body": {
+      "de": "„Gruppe auflösen“ blieb grau, sobald eine Gruppe eine Fase oder Rundung bekommen hatte. Jetzt nimmt der Knopf die Kantenmerkmale zuerst zurück und löst die Gruppe dann auf, in einem Schritt, den Strg+Z rückgängig macht. Außerdem bleibt das Fase- oder Rundungs-Werkzeug offen, wenn du ein Merkmal zurücknimmst.",
+      "en": "Ungroup stayed grey as soon as a group had got a fillet or chamfer. Now the button takes the edge features back first and then dissolves the group, in one step that Ctrl+Z undoes. And the Fillet or Chamfer tool stays open when you take a feature back."
+    }
+  }
+]
