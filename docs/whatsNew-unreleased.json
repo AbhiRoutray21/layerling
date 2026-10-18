@@ -48,5 +48,15 @@
       "de": "Auf dem iPad konnte ein langes Drücken die Textauswahl des Systems starten, etwa auf einem Wort im Menü oder in der Leiste. Danach gingen die Berührungen an die Auswahl und nicht mehr an layerling, es sah aus, als bliebe ein Körper im Bearbeiten stehen. Der Editor lässt sich jetzt nicht mehr markieren, Eingabefelder schon.",
       "en": "On an iPad a long press could start the system's text selection, for example on a word in the menu or in the toolbar. After that the touches went to the selection and no longer to layerling, and it looked as if an object stayed in edit mode. The editor can no longer be selected, but input fields can."
     }
+  },
+  {
+    "title": {
+      "de": "Das Formenmenü öffnet wieder dort, wo du es abgelegt hast",
+      "en": "The shape library opens where you left it"
+    },
+    "body": {
+      "de": "Ein schmal gezogenes Formenmenü, das am rechten Rand stand, öffnete sich beim nächsten Mal weit links, als hielte eine unsichtbare Kante es zurück. Es öffnet jetzt an der gemerkten Stelle, auch mit einer eigenen Größe.",
+      "en": "A shape library that had been pulled narrow and placed at the right edge opened far to the left the next time, as if an invisible edge held it back. It now opens at the remembered spot, also at a size of its own."
+    }
   }
 ]
