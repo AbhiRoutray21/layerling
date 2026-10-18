@@ -35,7 +35,7 @@ export const MCP_SHAPE_SETTING_KEYS = [
   "heartTipFillet", "heartQuality",
   "crescentThickness", "crescentTipFillet", "crescentQuality",
   "hingeKnuckles", "hingePinDiameter", "hingeLeafThickness", "hingeClearance", "hingePinless",
-  "gridfinityType", "gridfinityLip", "gridfinityMagnets",
+  "gridfinityType", "gridfinityLip", "gridfinityMagnets", "gridfinityHalfGrid",
   "gridfinityLabelBack", "gridfinityLabelFront", "gridfinityLabelLeft", "gridfinityLabelRight", "gridfinityLabelBackWidth", "gridfinityLabelBackLength", "gridfinityLabelBackOffset", "gridfinityLabelFrontWidth", "gridfinityLabelFrontLength", "gridfinityLabelFrontOffset", "gridfinityLabelLeftWidth", "gridfinityLabelLeftLength", "gridfinityLabelLeftOffset", "gridfinityLabelRightWidth", "gridfinityLabelRightLength", "gridfinityLabelRightOffset", "gridfinityLabelCorner", "gridfinityLabelCornerSize",
   "gridfinityScoopBack", "gridfinityScoopFront", "gridfinityScoopLeft", "gridfinityScoopRight", "gridfinityScoopRadius",
   "knurlPattern", "knurlCount", "knurlDepth", "knurlAngle", "knurlChamfer",

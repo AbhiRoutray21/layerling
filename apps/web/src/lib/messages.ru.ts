@@ -1854,6 +1854,8 @@ export const MESSAGES_RU: Partial<Record<MessageKey, string>> = {
   "prop.gridfinityUnitsY": "Единиц высоты",
   "prop.gridfinityLip": "Штабельный бортик",
   "prop.gridfinityMagnets": "Отверстия под магниты",
+  "prop.gridfinityHalfGrid": "Половинная сетка (21 мм)",
+  "gridfinity.halfGridHint": "Ширина и глубина считаются в клетках по 21 мм, у каждой своя ножка; четыре встают в одно гнездо базовой плиты.",
   "prop.gridfinityLabelBack": "Полка для этикетки сзади",
   "prop.gridfinityLabelFront": "Полка для этикетки спереди",
   "prop.gridfinityLabelLeft": "Полка для этикетки слева",

@@ -186,6 +186,24 @@ describe("exact Gridfinity bodies", () => {
     expect(material(solid, 0, 18.3, 8.7, 12)).toBe(0);
   });
 
+  it("builds half-size bins as one valid solid with the mesh's volume, and four of their feet stand in one socket", () => {
+    for (const part of [
+      bin({ gridfinityHalfGrid: true, width: 20.5, depth: 20.5 }),
+      bin({ gridfinityHalfGrid: true, width: 62.5, depth: 41.5, gridfinityMagnets: true }),
+      bin({ gridfinityHalfGrid: true, width: 41.5, depth: 20.5, gridfinityLip: false, gridfinityMagnets: true, gridfinityScoopFront: true }),
+    ]) {
+      const solid = gridfinityPartSolid(cad, part);
+      expect(cad.isValid(solid)).toBe(true);
+      const exact = Math.abs(cad.getVolume(solid));
+      expect(Math.abs(exact - meshVolume(part)) / exact).toBeLessThan(0.002);
+    }
+    // A bin of 2 x 2 half units in a baseplate of one unit: seated 0.25 mm up it touches nothing; 0.3 mm sideways it would.
+    const quarters = cad.translate(gridfinityPartSolid(cad, bin({ gridfinityHalfGrid: true, width: 41.5, depth: 41.5 })), 0, 0.25, 0);
+    const socket = gridfinityPartSolid(cad, plate({ width: 42, depth: 42 }));
+    expect(overlap(quarters, socket)).toBeLessThan(0.01);
+    expect(overlap(cad.translate(quarters, 0.3, 0, 0), socket)).toBeGreaterThan(1);
+  });
+
   it("keeps a label shelf 0.5 mm under the feet of a bin stacked on it", () => {
     const plain = gridfinityPartSolid(cad, bin({ width: 41.5, depth: 41.5 }));
     const shelved = gridfinityPartSolid(cad, bin({ width: 41.5, depth: 41.5, gridfinityLabelBack: true, gridfinityLabelLeft: true }));

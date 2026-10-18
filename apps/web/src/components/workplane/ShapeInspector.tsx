@@ -180,20 +180,20 @@ import { loftMeasures, loftShapePatch, loftTiltLimit, maxLoftWall, MAX_LOFT_SIDE
 import { MAX_KNURL_ANGLE, MIN_KNURL_ANGLE, MIN_KNURL_COUNT, MIN_KNURL_DEPTH, knurlSettings, maxKnurlChamfer, maxKnurlCount, maxKnurlDepth, maxRoundKnurlDepth, normalizeKnurlAngle, normalizeKnurlChamfer, normalizeKnurlCount, normalizeKnurlDepth, normalizeKnurlPattern } from "@/lib/knurlGeometry";
 import {
   DEFAULT_GRIDFINITY_LABEL_CORNER,
-  DEFAULT_GRIDFINITY_LABEL_CORNER_SIZE,
   GRIDFINITY_LABEL_WALL_KEYS,
   GRIDFINITY_SCOOP_WALL_KEYS,
   MAX_GRIDFINITY_HEIGHT_UNITS,
-  MAX_GRIDFINITY_LABEL_CORNER_SIZE,
-  MAX_GRIDFINITY_UNITS,
   MIN_GRIDFINITY_LABEL_HEIGHT_UNITS,
   MIN_GRIDFINITY_LABEL_WIDTH,
   MIN_GRIDFINITY_SCOOP_RADIUS,
   MIN_GRIDFINITY_UNITS,
+  gridfinityLabelCornerSize,
   gridfinityLabelLength,
   gridfinityLabelLimits,
+  gridfinityLabelMaxCornerSize,
   gridfinityLabelMaxWidth,
   gridfinityLabelWidth,
+  gridfinityMaxUnits,
   gridfinityPlan,
   gridfinityScoopFits,
   gridfinityScoopMaxRadius,
@@ -942,9 +942,15 @@ function getShapePropertiesWithAppLimits(shape: WorkplaneShape, onUpdate: ShapeI
         hint: t(plan.type === "bin" ? "gridfinity.binHint" : "gridfinity.baseplateHint"),
         onChange: (value) => apply({ type: normalizeGridfinityType(value) }),
       },
-      { id: "gridfinityUnitsX", label: t("prop.gridfinityUnitsX"), value: plan.count.x, min: MIN_GRIDFINITY_UNITS, max: MAX_GRIDFINITY_UNITS, step: 1, onChange: (value) => apply({ x: Math.round(value) }) },
-      { id: "gridfinityUnitsZ", label: t("prop.gridfinityUnitsZ"), value: plan.count.z, min: MIN_GRIDFINITY_UNITS, max: MAX_GRIDFINITY_UNITS, step: 1, onChange: (value) => apply({ z: Math.round(value) }) },
     ];
+    if (plan.type === "bin") {
+      properties.push({ type: "toggle", id: "gridfinityHalfGrid", label: t("prop.gridfinityHalfGrid"), value: plan.halfGrid, onChange: (value) => apply({ halfGrid: value }) });
+    }
+    const maxUnits = gridfinityMaxUnits(shape);
+    properties.push(
+      { id: "gridfinityUnitsX", label: t("prop.gridfinityUnitsX"), value: plan.count.x, min: MIN_GRIDFINITY_UNITS, max: maxUnits, step: 1, hint: plan.halfGrid ? t("gridfinity.halfGridHint") : undefined, onChange: (value) => apply({ x: Math.round(value) }) },
+      { id: "gridfinityUnitsZ", label: t("prop.gridfinityUnitsZ"), value: plan.count.z, min: MIN_GRIDFINITY_UNITS, max: maxUnits, step: 1, onChange: (value) => apply({ z: Math.round(value) }) },
+    );
     if (plan.type === "bin") {
       properties.push(
         { id: "gridfinityUnitsY", label: t("prop.gridfinityUnitsY"), value: plan.count.y, min: MIN_GRIDFINITY_UNITS, max: MAX_GRIDFINITY_HEIGHT_UNITS, step: 1, onChange: (value) => apply({ y: Math.round(value) }) },
@@ -989,7 +995,7 @@ function getShapePropertiesWithAppLimits(shape: WorkplaneShape, onUpdate: ShapeI
             options: [{ value: "round", label: t("gridfinity.labelRound") }, { value: "chamfer", label: t("gridfinity.labelChamfer") }],
             onChange: (value) => onUpdate({ gridfinityLabelCorner: value === "chamfer" ? "chamfer" : "round" }),
           },
-          { id: "gridfinityLabelCornerSize", label: t("prop.gridfinityLabelCornerSize"), value: clamp(shape.gridfinityLabelCornerSize ?? DEFAULT_GRIDFINITY_LABEL_CORNER_SIZE, 0, MAX_GRIDFINITY_LABEL_CORNER_SIZE), min: 0, max: MAX_GRIDFINITY_LABEL_CORNER_SIZE, step: 0.5, onChange: (value) => onUpdate({ gridfinityLabelCornerSize: value }) },
+          { id: "gridfinityLabelCornerSize", label: t("prop.gridfinityLabelCornerSize"), value: gridfinityLabelCornerSize(fields), min: 0, max: gridfinityLabelMaxCornerSize(plan), step: 0.5, onChange: (value) => onUpdate({ gridfinityLabelCornerSize: value }) },
         );
       }
     }

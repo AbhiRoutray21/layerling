@@ -1861,6 +1861,8 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "prop.gridfinityUnitsY": "Einheiten hoch",
   "prop.gridfinityLip": "Stapelrand",
   "prop.gridfinityMagnets": "Magnetlöcher",
+  "prop.gridfinityHalfGrid": "Halbes Raster (21 mm)",
+  "gridfinity.halfGridHint": "Einheiten breit und tief zählen Zellen von 21 mm, jede mit einem eigenen Fuß; vier stehen in einer Mulde der Bodenplatte.",
   "prop.gridfinityLabelBack": "Etikettenleiste hinten",
   "prop.gridfinityLabelFront": "Etikettenleiste vorne",
   "prop.gridfinityLabelLeft": "Etikettenleiste links",

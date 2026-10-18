@@ -60,5 +60,15 @@
       "de": "Ein Gridfinity-Behälter ab 2 Höheneinheiten kann jetzt an jeder Innenwand eine Griffmulde bekommen, auch an mehreren zugleich: Der Boden steigt in einem Viertelkreis zur Wand an, damit sich kleine Teile herausschieben lassen. Den Radius stellst du im Eigenschaften-Fenster ein.",
       "en": "A Gridfinity bin of 2 height units or more can now have a finger scoop along any of its inner walls, several at once: the floor rises along a quarter circle into the wall, so small parts can be pushed out. You set the radius in the Properties panel."
     }
+  },
+  {
+    "title": {
+      "de": "Halbes Raster für Gridfinity-Behälter",
+      "en": "Half-size grid for Gridfinity bins"
+    },
+    "body": {
+      "de": "Ein Gridfinity-Behälter kann jetzt in Zellen von 21 mm gebaut werden, jede mit einem eigenen Fuß; vier davon stehen in einer Mulde einer gewöhnlichen Bodenplatte. So finden auch Behälter von 1½ oder 2½ Einheiten neben ganzen Platz. Du schaltest „Halbes Raster (21 mm)“ im Eigenschaften-Fenster ein.",
+      "en": "A Gridfinity bin can now be built in cells of 21 mm, each with a foot of its own; four of them stand in one socket of an ordinary baseplate. So bins of 1½ or 2½ units fit beside whole ones. You switch on \"Half-size grid (21 mm)\" in the Properties panel."
+    }
   }
 ]

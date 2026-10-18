@@ -1779,6 +1779,8 @@ export const MESSAGES_IT: Partial<Record<MessageKey, string>> = {
   "prop.gridfinityUnitsY": "Unità di altezza",
   "prop.gridfinityLip": "Bordo di impilamento",
   "prop.gridfinityMagnets": "Fori per magneti",
+  "prop.gridfinityHalfGrid": "Mezza griglia (21 mm)",
+  "gridfinity.halfGridHint": "Le unità in larghezza e in profondità contano celle da 21 mm, ognuna con il proprio piede; quattro stanno in un alloggio della base a griglia.",
   "prop.gridfinityLabelBack": "Ripiano per etichetta dietro",
   "prop.gridfinityLabelFront": "Ripiano per etichetta davanti",
   "prop.gridfinityLabelLeft": "Ripiano per etichetta a sinistra",
