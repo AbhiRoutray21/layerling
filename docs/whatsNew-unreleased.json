@@ -18,5 +18,15 @@
       "de": "In der Schnittansicht war der Schnitt offen, Massives und Aussparungen sahen innen gleich aus. Jetzt ist der Schnitt dort, wo die Ebene durch einen Körper geht, in dessen etwas dunklerer Farbe gefüllt, und eine Aussparung darin bleibt leer. Die gefüllte Fläche erscheint einen Moment, nachdem die Ebene stillsteht.",
       "en": "In the section view the cut was left open, and a solid and a hole looked the same inside. Where the plane goes through a body, the cut is now filled with its colour, a little darker, and a hole inside it stays empty. The filled face appears a moment after the plane stops moving."
     }
+  },
+  {
+    "title": {
+      "de": "Das Kantenfenster zeigt, welcher Schnellknopf die Auswahl gemacht hat",
+      "en": "The edge window shows which quick button made the selection"
+    },
+    "body": {
+      "de": "Im Fenster für Verrundung und Fase waren die Schnellknöpfe zu breit und gaben dem Fenster eine kleine waagerechte Laufleiste; sie brechen jetzt um. Die Knöpfe reagieren beim Darüberfahren, und der Schnellknopf, dessen Kanten gerade gewählt sind (Alle scharfen, Obere, Untere oder Senkrechte Kanten), bleibt hervorgehoben.",
+      "en": "In the Fillet and Chamfer window the quick buttons were too wide and gave the window a small sideways scroll bar; they wrap now. The buttons react when the pointer is over them, and the quick button whose edges are picked now (All sharp, Top, Bottom or Vertical edges) stays highlighted."
+    }
   }
 ]

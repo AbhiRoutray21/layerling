@@ -3276,6 +3276,17 @@ export function LayerlingEditor({
     () => edgeModifier ? edgeModifier.edges.filter((edge) => selectableCadModifierEdge(edge, edgeModifier.sharpAngle)).map((edge) => edge.id) : [],
     [edgeModifier?.edges, edgeModifier?.sharpAngle],
   );
+  // Which quick button made the edges picked now: the first whose edges are exactly the picked ones (#517).
+  const modifierQuickSelection = useMemo(() => {
+    if (!edgeModifier?.prepared || edgeModifier.selectedEdgeIds.length === 0) return null;
+    const picked = edgeModifier.selectedEdgeIds;
+    const same = (ids: readonly number[]) => ids.length === picked.length && ids.every((id) => picked.includes(id));
+    if (same(modifierAvailableEdgeIds)) return "all" as const;
+    if (same(topCadModifierEdgeIds(edgeModifier.edges, modifierAvailableEdgeIds))) return "top" as const;
+    if (same(bottomCadModifierEdgeIds(edgeModifier.edges, modifierAvailableEdgeIds))) return "bottom" as const;
+    if (same(verticalCadModifierEdgeIds(edgeModifier.edges, modifierAvailableEdgeIds))) return "vertical" as const;
+    return null;
+  }, [edgeModifier?.prepared, edgeModifier?.selectedEdgeIds, edgeModifier?.edges, modifierAvailableEdgeIds]);
   // Alle grundsaetzlich verrundbaren Kanten, unabhaengig von der Schwelle -
   // damit eine feinere Kante im 3D-Bild sicht- und anklickbar bleibt, statt
   // erst nach manuellem Verschieben des Schiebereglers aufzutauchen.
@@ -12714,6 +12725,7 @@ export function LayerlingEditor({
             const verticalIds = verticalCadModifierEdgeIds(current.edges, modifierAvailableEdgeIds);
             return { ...current, selectedEdgeIds: verticalIds, preview: null, busy: verticalIds.length > 0, error: verticalIds.length ? null : t("edge.noVerticalEdges") };
           })}
+          activeQuickSelection={modifierQuickSelection}
           onClear={() => setEdgeModifier((current) => current?.prepared ? { ...current, selectedEdgeIds: [], preview: null, busy: false, error: t("edge.selectAtLeastOne") } : current)}
           onRemoveFeature={removeEdgeTreatment}
           onEditFeature={editEdgeTreatment}

@@ -1337,6 +1337,38 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .whats-new-earlier:hove
   background: #f8f8f8;
 }
 
+:where(html[data-theme="dark"][data-palette="graphite"]) .edge-modifier-quick-actions button:hover:not(:disabled),
+:where(html[data-theme="dark"][data-palette="graphite"]) .edge-modifier-footer button:hover:not(:disabled) {
+  background: #e5e5e5;
+  border-color: #aeaeae;
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .edge-modifier-footer .primary:hover:not(:disabled) {
+  background: #b9620c;
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .edge-modifier-quick-actions button.active {
+  color: #9f5508;
+  background: #f0f0f0;
+  border-color: #e08a2c;
+}
+
+html[data-theme="dark"]:where([data-palette="graphite"]) .edge-modifier-quick-actions button:hover:not(:disabled),
+html[data-theme="dark"]:where([data-palette="graphite"]) .edge-modifier-footer button:hover:not(:disabled) {
+  background: #353535;
+  border-color: #595959;
+}
+
+html[data-theme="dark"]:where([data-palette="graphite"]) .edge-modifier-footer .primary:hover:not(:disabled) {
+  background: #d98021;
+}
+
+html[data-theme="dark"]:where([data-palette="graphite"]) .edge-modifier-quick-actions button.active {
+  color: #f3a452;
+  background: #2d2d2d;
+  border-color: #b9741f;
+}
+
 :where(html[data-theme="dark"][data-palette="graphite"]) .shell-opening-options button {
   color: #515151;
   background: #f8f8f8;

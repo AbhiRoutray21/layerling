@@ -3541,6 +3541,7 @@ html[data-theme="dark"] .whats-new-earlier:hover {
 }
 
 .edge-modifier-quick-actions {
+  flex-wrap: wrap;
   gap: 7px;
   margin-bottom: 12px;
 }
@@ -3559,6 +3560,44 @@ html[data-theme="dark"] .whats-new-earlier:hover {
 .edge-modifier-quick-actions button {
   color: #6d5133;
   background: #fbf8f4;
+}
+
+/* The quick buttons answer the pointer and show which one made the edges picked now (#517). */
+.edge-modifier-quick-actions button:hover:not(:disabled),
+.edge-modifier-footer button:hover:not(:disabled) {
+  background: #f3e7d8;
+  border-color: #c9ae92;
+}
+
+.edge-modifier-footer .primary:hover:not(:disabled) {
+  background: #b9620c;
+}
+
+.edge-modifier-quick-actions button.active {
+  color: #9f5508;
+  background: #fff1e0;
+  border-color: #e08a2c;
+}
+
+.edge-modifier-quick-actions button:disabled {
+  cursor: default;
+  opacity: 0.55;
+}
+
+html[data-theme="dark"] .edge-modifier-quick-actions button:hover:not(:disabled),
+html[data-theme="dark"] .edge-modifier-footer button:hover:not(:disabled) {
+  background: #43331f;
+  border-color: #7a6450;
+}
+
+html[data-theme="dark"] .edge-modifier-footer .primary:hover:not(:disabled) {
+  background: #d98021;
+}
+
+html[data-theme="dark"] .edge-modifier-quick-actions button.active {
+  color: #f3a452;
+  background: #3a2c16;
+  border-color: #b9741f;
 }
 
 .shell-opening-options {
@@ -16681,6 +16720,7 @@ html[data-theme="dark"] .history-view-slider .range-control input[type="range"]:
    circle mode on a 1080p screen at 125 %): it scrolls inside, and its buttons stay in view. */
 .edge-modifier-panel {
   max-height: calc(100dvh - var(--editor-toolbar-height) - 28px);
+  overflow-x: hidden;
   overflow-y: auto;
   overscroll-behavior: contain;
 }
