@@ -7,9 +7,9 @@
  */
 export const LAYERLING_VIDEOS = [
   {
-    title: "Ich bin voll und ganz von Layerling überzeugt – das nächste große kostenlose CAD",
+    title: "I'm 100% In on Layerling - The Next Big Free CAD",
     channel: "Printology",
-    lang: "DE",
+    lang: "EN",
     url: "https://youtu.be/IO7S-7bxS5o",
   },
   {
