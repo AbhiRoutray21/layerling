@@ -1,5 +1,140 @@
 [
   {
+    "version": "1.88.0",
+    "items": [
+      {
+        "title": {
+          "de": "Eine Gruppe mit Fase oder Rundung lässt sich wieder auflösen",
+          "en": "A group with a fillet or chamfer can be ungrouped again"
+        },
+        "body": {
+          "de": "„Gruppe auflösen“ blieb grau, sobald eine Gruppe eine Fase oder Rundung bekommen hatte. Jetzt nimmt der Knopf die Kantenmerkmale zuerst zurück und löst die Gruppe dann auf, in einem Schritt, den Strg+Z rückgängig macht. Außerdem bleibt das Fase- oder Rundungs-Werkzeug offen, wenn du ein Merkmal zurücknimmst.",
+          "en": "Ungroup stayed grey as soon as a group had got a fillet or chamfer. Now the button takes the edge features back first and then dissolves the group, in one step that Ctrl+Z undoes. And the Fillet or Chamfer tool stays open when you take a feature back."
+        }
+      },
+      {
+        "title": {
+          "de": "Die Schnittansicht füllt die Schnittfläche",
+          "en": "The section view fills the cut face"
+        },
+        "body": {
+          "de": "In der Schnittansicht war der Schnitt offen, Massives und Aussparungen sahen innen gleich aus. Jetzt ist der Schnitt dort, wo die Ebene durch einen Körper geht, in dessen etwas dunklerer Farbe gefüllt, und eine Aussparung darin bleibt leer. Die gefüllte Fläche erscheint einen Moment, nachdem die Ebene stillsteht.",
+          "en": "In the section view the cut was left open, and a solid and a hole looked the same inside. Where the plane goes through a body, the cut is now filled with its colour, a little darker, and a hole inside it stays empty. The filled face appears a moment after the plane stops moving."
+        }
+      },
+      {
+        "title": {
+          "de": "Das Kantenfenster zeigt, welcher Schnellknopf die Auswahl gemacht hat",
+          "en": "The edge window shows which quick button made the selection"
+        },
+        "body": {
+          "de": "Im Fenster für Verrundung und Fase waren die Schnellknöpfe zu breit und gaben dem Fenster eine kleine waagerechte Laufleiste; sie brechen jetzt um. Die Knöpfe reagieren beim Darüberfahren, und der Schnellknopf, dessen Kanten gerade gewählt sind (Alle scharfen, Obere, Untere oder Senkrechte Kanten), bleibt hervorgehoben.",
+          "en": "In the Fillet and Chamfer window the quick buttons were too wide and gave the window a small sideways scroll bar; they wrap now. The buttons react when the pointer is over them, and the quick button whose edges are picked now (All sharp, Top, Bottom or Vertical edges) stays highlighted."
+        }
+      },
+      {
+        "title": {
+          "de": "Japanische Schrift in Texten und Namensschildern",
+          "en": "Japanese letters in texts and name tags"
+        },
+        "body": {
+          "de": "Ein japanischer Name auf einem Text oder Namensschild kam bisher als Fragezeichen heraus, weil die eingebauten Schriften keine Kana und Kanji haben. Jetzt gibt es eine japanische Schrift, die jeder anderen Schrift und eigenen Schriften ihre Zeichen leiht. Sie wird erst geladen, wenn ein Text japanische Zeichen hat, und ist danach auch offline da.",
+          "en": "A Japanese name on a text or a name tag used to come out as question marks, because the built-in typefaces have no kana and no kanji. There is now a Japanese typeface that lends its characters to every other typeface and to fonts of your own. It is fetched only when a text has Japanese letters, and is there offline afterwards."
+        }
+      },
+      {
+        "title": {
+          "de": "Auf dem iPad startet ein langes Drücken keine Textauswahl mehr",
+          "en": "A long press on an iPad no longer starts a text selection"
+        },
+        "body": {
+          "de": "Auf dem iPad konnte ein langes Drücken die Textauswahl des Systems starten, etwa auf einem Wort im Menü oder in der Leiste. Danach gingen die Berührungen an die Auswahl und nicht mehr an layerling, es sah aus, als bliebe ein Körper im Bearbeiten stehen. Der Editor lässt sich jetzt nicht mehr markieren, Eingabefelder schon.",
+          "en": "On an iPad a long press could start the system's text selection, for example on a word in the menu or in the toolbar. After that the touches went to the selection and no longer to layerling, and it looked as if an object stayed in edit mode. The editor can no longer be selected, but input fields can."
+        }
+      },
+      {
+        "title": {
+          "de": "Das Formenmenü öffnet wieder dort, wo du es abgelegt hast",
+          "en": "The shape library opens where you left it"
+        },
+        "body": {
+          "de": "Ein schmal gezogenes Formenmenü, das am rechten Rand stand, öffnete sich beim nächsten Mal weit links, als hielte eine unsichtbare Kante es zurück. Es öffnet jetzt an der gemerkten Stelle, auch mit einer eigenen Größe.",
+          "en": "A shape library that had been pulled narrow and placed at the right edge opened far to the left the next time, as if an invisible edge held it back. It now opens at the remembered spot, also at a size of its own."
+        }
+      },
+      {
+        "title": {
+          "de": "Radieren in der Skizze: der Knopf löscht die Auswahl, das Werkzeug nimmt ein Fenster",
+          "en": "Erasing in the sketch: the button erases the selection, and the tool takes a window"
+        },
+        "body": {
+          "de": "Mit mehreren ausgewählten Punkten und Linien löschte der Knopf „Radieren“ sie nicht, er hob nur die Auswahl auf. Jetzt löscht er die Auswahl. Und mit dem Radieren-Werkzeug kannst du ein Fenster über mehrere Punkte und Linien ziehen: Alles darin wird gelöscht.",
+          "en": "With several points and lines selected, the Erase button did not erase them, it only dropped the selection. Now it erases the selection. And with the Erase tool you can drag a window over several points and lines: everything inside is erased."
+        }
+      },
+      {
+        "title": {
+          "de": "Das Lineal hat eine Skala in Zoll",
+          "en": "The ruler has a scale in inches"
+        },
+        "body": {
+          "de": "Steht die Einheit auf Zoll (Schalter unten rechts), trägt das Lineal eine Skala in Zoll: ein Strich je Sechzehntelzoll, die ganzen Zoll sind nummeriert. In Millimetern bleibt alles wie bisher.",
+          "en": "With the unit set to inches (the switch at the bottom right), the ruler carries a scale in inches: a line every sixteenth of an inch, with the whole inches numbered. In millimetres everything stays as it was."
+        }
+      },
+      {
+        "title": {
+          "de": "Die Linienkette im Skizzenmodus lässt sich einfacher beenden",
+          "en": "A chain of lines in the sketch is easier to end"
+        },
+        "body": {
+          "de": "Beim Zeichnen mit Linie, Bézier-Kurve oder Weicher Kurve beendet jetzt ein Rechtsklick ohne Bewegung die Kette, und der Doppelklick auf den letzten Punkt ebenso; das Werkzeug bleibt gewählt. Ein Rechtsklick, mit dem du die Ansicht verschiebst, beendet sie nicht. Zum Schließen klickst du weiter den ersten Punkt an.",
+          "en": "When drawing with Line, Bézier curve or Smooth curve, a right click without moving now ends the chain, and so does a double click on the last point; the tool stays selected. A right click that you use to pan the view does not end it. To close the shape you still click the first point."
+        }
+      },
+      {
+        "title": {
+          "de": "Das Mausrad ändert eine Zahl im angeklickten Feld",
+          "en": "The mouse wheel changes a number in a clicked field"
+        },
+        "body": {
+          "de": "Klickst du in ein Zahlenfeld der Eigenschaften, ändert das Mausrad den Wert: eine Einheit je Raststufe, mit Umschalt das Zehnfache, mit Strg ein Zehntel, mit Alt ein Hundertstel. Ein Feld, das du nicht angeklickt hast, lässt die Fenster wie bisher scrollen.",
+          "en": "When you click into a number field of the properties, the mouse wheel changes the value: one unit a notch, ten times as much with Shift, a tenth with Ctrl and a hundredth with Alt. A field that you have not clicked lets the panels scroll as before."
+        }
+      },
+      {
+        "title": {
+          "de": "Etikettenleisten für Gridfinity-Behälter",
+          "en": "Label shelves for Gridfinity bins"
+        },
+        "body": {
+          "de": "Ein Gridfinity-Behälter ab 3 Höheneinheiten kann jetzt an jeder Innenwand eine Leiste für ein Etikett bekommen, auch an mehreren zugleich. Sie liegt knapp unter dem Stapelrand, und du stellst Breite, Länge und die verrundeten oder gefasten Ecken im Eigenschaften-Fenster ein.",
+          "en": "A Gridfinity bin of 3 height units or more can now have a shelf for a label along any of its inner walls, several at once. It sits just under the stacking lip, and you set its width, length and the rounded or chamfered corners in the Properties panel."
+        }
+      },
+      {
+        "title": {
+          "de": "Die Skizze lässt sich spiegeln",
+          "en": "A sketch can be mirrored"
+        },
+        "body": {
+          "de": "Wähle in der Skizze Punkte und Linien aus und klicke in der Leiste auf „Spiegeln“: an der senkrechten Achse (links-rechts), an der waagerechten (oben-unten) oder an einer geraden Linie der Skizze, die du anklickst. Die Kopie kommt auf die andere Seite, nichts ist verknüpft. Punkte auf der Achse werden geteilt, aus einer halben Form wird so ein geschlossener Umriss.",
+          "en": "Select points and lines in the sketch and click Mirror in the bar: across the vertical axis (left-right), the horizontal one (top-bottom) or a straight line of the sketch that you click. The copy lands on the other side and nothing is linked. Points on the axis are shared, so a half shape becomes one closed outline."
+        }
+      },
+      {
+        "title": {
+          "de": "Die Interaktive Hilfe trifft in den Werkzeugfenstern besser",
+          "en": "Interactive Help hits better inside the tool windows"
+        },
+        "body": {
+          "de": "Abbrechen, Anwenden, Felder und Schieber in einem Werkzeugfenster fragen jetzt nach dem Werkzeug selbst, etwa „Kanten fasen“, statt nach einem Wort, das in der Anleitung hundertmal steht. Die Formenbibliothek, die Objektliste und das Exportfenster antworten mit ihrem Abschnitt, ebenso der Würfel und die Kamera-Leiste zwischen ihren Knöpfen.",
+          "en": "Cancel, Apply, fields and sliders in a tool window now ask about the tool itself, for example \"Chamfer edges\", instead of a word that the guide writes a hundred times. The shape library, the object list and the Export window answer with their section, as do the view cube and the camera bar between their buttons."
+        }
+      }
+    ]
+  },
+  {
     "version": "1.87.0",
     "items": [
       {
