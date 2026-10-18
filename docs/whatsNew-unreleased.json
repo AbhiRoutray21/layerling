@@ -42,5 +42,15 @@
       "de": "Ein Gridfinity-Behälter kann jetzt einen angehobenen Boden haben: Bis zur „Bodenhöhe“, die du im Eigenschaften-Fenster einstellst, ist er massiv - ein Rohling, in den du die Formen deiner Werkzeuge schneidest.",
       "en": "A Gridfinity bin can now have a raised floor: set \"Floor height\" in the Properties panel, and the bin is solid up to it, a blank to cut the shapes of your tools into."
     }
+  },
+  {
+    "title": {
+      "de": "Die Schnittfläche folgt der Ebene ohne Verzug",
+      "en": "The cut face follows the plane without lag"
+    },
+    "body": {
+      "de": "Die gefüllte Schnittfläche der Schnittansicht hinkte der Ebene hinterher, solange du sie zogst, und kam erst zurück, wenn die Hand ruhte. Jetzt wird sie bei jedem Schritt für die neueste Lage der Ebene geschnitten.",
+      "en": "The filled cut face of the section view lagged behind the plane while you dragged it and only came back when your hand rested. Now it is cut for the newest position of the plane at every step."
+    }
   }
 ]
