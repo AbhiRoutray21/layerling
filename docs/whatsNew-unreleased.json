@@ -70,5 +70,15 @@
       "de": "Ein Gridfinity-Behälter kann jetzt in Zellen von 21 mm gebaut werden, jede mit einem eigenen Fuß; vier davon stehen in einer Mulde einer gewöhnlichen Bodenplatte. So finden auch Behälter von 1½ oder 2½ Einheiten neben ganzen Platz. Du schaltest „Halbes Raster (21 mm)“ im Eigenschaften-Fenster ein.",
       "en": "A Gridfinity bin can now be built in cells of 21 mm, each with a foot of its own; four of them stand in one socket of an ordinary baseplate. So bins of 1½ or 2½ units fit beside whole ones. You switch on \"Half-size grid (21 mm)\" in the Properties panel."
     }
+  },
+  {
+    "title": {
+      "de": "Die Dreh-Skizze zeigt beim Bearbeiten wieder die Vorderansicht",
+      "en": "The revolve sketch shows the front view when edited again"
+    },
+    "body": {
+      "de": "Öffnest du die Skizze eines gedrehten Körpers noch einmal zum Bearbeiten, zeigt sie die anderen Körper wieder von vorn, in derselben Ansicht wie das Profil, wie beim Zeichnen. Vorher kam dabei die Ansicht von oben zurück, sobald der Körper über der Platte stand.",
+      "en": "When you open the sketch of a revolved body again to edit it, it shows the other bodies from the front, in the same view as the profile, as while you draw it. Before, the view from above came back as soon as the body stood above the plate."
+    }
   }
 ]

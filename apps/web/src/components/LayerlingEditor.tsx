@@ -210,6 +210,7 @@ import {
   translationToWorkplane,
   type PlacementPoint,
   REVOLVE_REFERENCE_WORKPLANE,
+  revolveBodyStandsUpright,
   type PlacementWorkplane,
 } from "@/lib/placementWorkplane";
 import { localizedError } from "@/lib/userErrors";
@@ -3456,7 +3457,10 @@ export function LayerlingEditor({
     return intersectPreviewShape ? [...ghosts, intersectPreviewShape] : ghosts;
   }, [baseViewportShapes, intersectPreviewIds, intersectPreviewShape]);
   // A revolve sketch on the base plate is a side view: the bodies are shown from the front, as the profile is drawn (#525).
-  const revolveSketchFront = sketchActive && sketchOperation === "revolve" && placementWorkplaneIsBase(activeSketchWorkplane);
+  // Opened again to edit a body that stands upright, it is the same side view: that body stands at its height, not on the plate's workplane.
+  const editedRevolveShape = sketchActive && sketchOperation === "revolve" && editingSketchShapeId ? shapes.find((shape) => shape.id === editingSketchShapeId) : undefined;
+  const revolveSketchFront = sketchActive && sketchOperation === "revolve"
+    && (placementWorkplaneIsBase(activeSketchWorkplane) || (editedRevolveShape ? revolveBodyStandsUpright(editedRevolveShape) : false));
   const sketchReferenceShapes = useMemo(() => {
     // Only the sketch view shows them; outside it every body would be projected for nothing.
     if (!sketchActive) return shapes;
