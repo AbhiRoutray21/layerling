@@ -165,7 +165,7 @@ import { MAX_TEARDROP_TIP_ANGLE, MIN_TEARDROP_TIP_ANGLE, normalizeTeardropTipAng
 import { MAX_DOVETAIL_CLEARANCE, normalizeDovetailClearance, normalizeDovetailNeckWidth } from "@/lib/dovetailGeometry";
 import { DEFAULT_SKETCH_STROKE, MAX_SKETCH_STROKE_WIDTH, MIN_SKETCH_STROKE_WIDTH, normalizeSketchStroke, SKETCH_STROKE_JOINS } from "@/lib/sketchStroke";
 import { MAX_TEXT_EDGE, MIN_TEXT_EDGE, normalizeTextEdge } from "@/lib/textEdge";
-import { wheelBaseStep, wheelNextValue } from "@/lib/wheelValueStep";
+import { wheelBaseStep, wheelNextValue, wheelTurn } from "@/lib/wheelValueStep";
 import { textHasFill } from "@/lib/textFill";
 import { TEXT_FILL_CHOICES, textFillChoice, textLineSettingsInView, textStrokeForChoice, textStrokeWider, type TextFillChoice } from "@/lib/textFillChoice";
 import { MAX_TEXT_LAYERS, MAX_TEXT_LAYER_GROW, MIN_TEXT_LAYER_HEIGHT, namesFromList, type NameTagKeyring, type TextLayer } from "@/lib/textLayers";
@@ -3980,12 +3980,13 @@ function RangeProperty({
   const wheelHandlerRef = useRef<((event: WheelEvent) => void) | null>(null);
   wheelHandlerRef.current = (event: WheelEvent) => {
     const input = numberInputRef.current;
-    if (!input || disabled || !editing || document.activeElement !== input || event.deltaY === 0) return;
+    const turn = wheelTurn(event);
+    if (!input || disabled || !editing || document.activeElement !== input || turn === 0) return;
     event.preventDefault();
     const base = wheelBaseStep(controlMin, controlMax, controlStep, unit === "in");
     const parsed = parseMeasurementInput(draft);
     const current = Number.isFinite(parsed) ? parsed : controlValue;
-    const next = wheelNextValue(current, event.deltaY < 0 ? 1 : -1, base, { shift: event.shiftKey, ctrl: event.ctrlKey, alt: event.altKey });
+    const next = wheelNextValue(current, turn < 0 ? 1 : -1, base, { shift: event.shiftKey, ctrl: event.ctrlKey, alt: event.altKey });
     const nextModelValue = toModelValue(next);
     onChange(freePosition ? clamp(nextModelValue, -POSITION_TYPED_LIMIT, POSITION_TYPED_LIMIT) : allowsAboveSliderMax ? Math.max(min, nextModelValue) : clamp(nextModelValue, min, max));
     const shown = formatShown(freePosition || allowsAboveSliderMax ? next : clamp(next, controlMin, controlMax));
