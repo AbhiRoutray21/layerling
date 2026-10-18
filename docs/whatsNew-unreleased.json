@@ -1,6 +1,16 @@
 [
   {
     "title": {
+      "de": "layerling gibt es jetzt auf Japanisch",
+      "en": "layerling now speaks Japanese"
+    },
+    "body": {
+      "de": "Die ganze Oberfläche ist auf Japanisch da, geschrieben für Kinder der oberen Grundschule und ihre Lehrer, mit den japanischen Wörtern von Tinkercad, wo es welche gibt. Die Kapitel der Anleitung sind noch auf Englisch. Du wählst die Sprache im Sprachmenü.",
+      "en": "The whole interface is there in Japanese, written for upper primary school children and their teachers, with Tinkercad's Japanese terms where it has them. The guide chapters are still in English. You choose the language in the language menu."
+    }
+  },
+  {
+    "title": {
       "de": "Ordner für deine Entwürfe",
       "en": "Folders for your designs"
     },

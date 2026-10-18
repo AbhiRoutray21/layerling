@@ -175,7 +175,7 @@ export function renderInline(text, context) {
     if (label === undefined) throw new Error(`Unknown interface text {{ui:${key}}}`);
     // Without a number a count in brackets is left out ("Show earlier versions ({count})" is a button whose
     // number changes); any other {count} needs its number, or the page would print the placeholder.
-    const written = (count === undefined ? label.replace(/\s*\(\{count\}\)/g, "") : label).replace(/\{count\}/g, count ?? "{count}");
+    const written = (count === undefined ? label.replace(/\s*[(（]\{count\}[)）]/g, "") : label).replace(/\{count\}/g, count ?? "{count}");
     if (written.includes("{count}")) throw new Error(`{{ui:${key}}} needs a number: {{ui:${key}|10}}`);
     return `<strong class="ui">${open}${escapeHtml(written)}${close}</strong>`;
   });
