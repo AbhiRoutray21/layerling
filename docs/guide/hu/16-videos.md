@@ -7,6 +7,7 @@ summary: Videók, amelyeket mások készítettek a layerlingről.
 
 Ezek a videók nem ebből a projektből származnak. A linkek új lapon nyitják meg a YouTube-ot; onnan semmi sem töltődik be, amíg nem kattintasz.
 
+- [Ich bin voll und ganz von Layerling überzeugt – das nächste große kostenlose CAD](https://youtu.be/IO7S-7bxS5o) – Printology (német). Videó, amelyben a készítője azt mondja, hogy teljesen meggyőzte a layerling, és a következő nagy ingyenes CAD-nek nevezi.
 - [10 Things Layerling Can Do That Tinkercad Can't!](https://youtu.be/cx0OVHgUsJM) – Print N Repeat (angol). Ennek a csatornának a második videója: tíz dolog, amit a layerling tud, a Tinkercad pedig nem.
 - [Layerling la nueva herramienta gratuita de modelado 3D, más completo que Tinkercad](https://youtu.be/-EEt0RSINoY) – Fulcro 1900 (spanyol). Videó a layerlingről mint új, ingyenes 3D-modellezőeszközről, amely teljesebb, mint a Tinkercad.
 - [Layerling - Tussen Tinkercad en Fusion 360 in, en Helemaal Gratis!](https://youtu.be/X-UuvsfDI-s) – Werkplaats Marc (holland). Első bepillantás a layerlingbe Tinkercad-felhasználóknak: kivájás, lekerekítés, lyukminta, játékkal készült menetek, saját betűtípusok és nyomtatóprofilok, a különbség bemutatására egy játékkal és játék nélkül kinyomtatott csavarral.

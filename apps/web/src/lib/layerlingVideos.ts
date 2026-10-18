@@ -7,6 +7,12 @@
  */
 export const LAYERLING_VIDEOS = [
   {
+    title: "Ich bin voll und ganz von Layerling überzeugt – das nächste große kostenlose CAD",
+    channel: "Printology",
+    lang: "DE",
+    url: "https://youtu.be/IO7S-7bxS5o",
+  },
+  {
     title: "10 Things Layerling Can Do That Tinkercad Can't!",
     channel: "Print N Repeat",
     lang: "EN",

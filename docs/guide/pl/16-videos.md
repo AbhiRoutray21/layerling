@@ -7,6 +7,7 @@ summary: Filmy, które inni ludzie nagrali o layerling.
 
 Te filmy nie pochodzą z tego projektu. Odnośniki otwierają YouTube w nowej karcie. Nic nie jest stamtąd wczytywane, dopóki nie klikniesz.
 
+- [Ich bin voll und ganz von Layerling überzeugt – das nächste große kostenlose CAD](https://youtu.be/IO7S-7bxS5o) - Printology (po niemiecku). Film, w którym autor mówi, że layerling całkowicie go przekonał, i nazywa go kolejnym wielkim darmowym CAD-em.
 - [10 Things Layerling Can Do That Tinkercad Can't!](https://youtu.be/cx0OVHgUsJM) - Print N Repeat (po angielsku). Drugi film z tego kanału: dziesięć rzeczy, które layerling potrafi, a Tinkercad nie.
 - [Layerling la nueva herramienta gratuita de modelado 3D, más completo que Tinkercad](https://youtu.be/-EEt0RSINoY) - Fulcro 1900 (po hiszpańsku). Film o layerling jako nowym darmowym narzędziu do modelowania 3D, pełniejszym niż Tinkercad.
 - [Layerling - Tussen Tinkercad en Fusion 360 in, en Helemaal Gratis!](https://youtu.be/X-UuvsfDI-s) - Werkplaats Marc (po niderlandzku). Pierwsze spojrzenie na layerling dla użytkowników Tinkercada: drążenie, zaokrąglenia, wzór otworów, gwinty z luzem, własne czcionki i profile drukarek, ze śrubą wydrukowaną z luzem i bez, żeby pokazać różnicę.

@@ -7,6 +7,7 @@ summary: Videos that other people have made about layerling.
 
 These videos are not from this project. The links open YouTube in a new tab; nothing is loaded from there until you click.
 
+- [Ich bin voll und ganz von Layerling überzeugt – das nächste große kostenlose CAD](https://youtu.be/IO7S-7bxS5o) – Printology (German). A video in which the author says he is fully convinced of layerling and calls it the next big free CAD.
 - [10 Things Layerling Can Do That Tinkercad Can't!](https://youtu.be/cx0OVHgUsJM) – Print N Repeat (English). A second video by this channel: ten things layerling can do that Tinkercad cannot.
 - [Layerling la nueva herramienta gratuita de modelado 3D, más completo que Tinkercad](https://youtu.be/-EEt0RSINoY) – Fulcro 1900 (Spanish). A video about layerling as a new free 3D modelling tool that is more complete than Tinkercad.
 - [Layerling - Tussen Tinkercad en Fusion 360 in, en Helemaal Gratis!](https://youtu.be/X-UuvsfDI-s) – Werkplaats Marc (Dutch). A first look at layerling for Tinkercad users: hollowing, fillets, the hole pattern, threads with clearance, custom fonts and printer profiles, with a bolt printed with and without clearance to show the difference.
