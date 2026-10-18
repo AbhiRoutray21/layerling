@@ -150,7 +150,8 @@ describe("language detection", () => {
     expect(withBrowser(["de-AT", "de"])).toBe("de");
     expect(withBrowser(["de"])).toBe("de");
     // A language we do not serve falls back to English rather than to nothing.
-    expect(withBrowser(["es-ES", "ja"])).toBe("en");
+    expect(withBrowser(["es-ES", "ko"])).toBe("en");
+    expect(withBrowser(["ja-JP", "ja"])).toBe("ja");
     // The first tag we can serve wins, even behind one we cannot.
     expect(withBrowser(["es-ES", "de-DE"])).toBe("de");
     // A stored choice outranks the browser in both directions.

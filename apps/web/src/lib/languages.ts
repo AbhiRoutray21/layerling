@@ -16,7 +16,7 @@
  * (Čeština, Dansk, Deutsch, Français, ...); then the others, by the name in their own script.
  * A new language goes in at its place, not at the end.
  */
-export const LANGUAGES = ["en", "cs", "da", "de", "fr", "it", "hu", "nl", "pl", "sl", "tr", "ru", "ar"] as const;
+export const LANGUAGES = ["en", "cs", "da", "de", "fr", "it", "hu", "nl", "pl", "sl", "tr", "ru", "ar", "ja"] as const;
 export type Language = (typeof LANGUAGES)[number];
 export const DEFAULT_LANGUAGE: Language = "en";
 
@@ -605,6 +605,45 @@ export const LANGUAGE_INFO: Readonly<Record<Language, LanguageInfo>> = {
       printAllLead: "جميع الفصول متتالية، للطباعة أو للحفظ بصيغة PDF: اضغط Ctrl+P وألغِ خيار \"الرؤوس والتذييلات\" في إعدادات الطباعة. لطباعة جزء فقط، اختر أرقام صفحاته هناك.",
       printContents: "المحتويات",
       printButton: "طباعة",
+    },
+  },
+  // Japanese: written for upper primary school children and their teachers, with Tinkercad's
+  // Japanese terms where Tinkercad has one. The guide is not translated yet.
+  ja: {
+    name: "日本語",
+    htmlLang: "ja",
+    numberLocale: "ja-JP",
+    quotes: ["「", "」"],
+    guideDir: "guide-ja",
+    communityUrl: GITHUB_DISCUSSIONS,
+    readme: "README.md",
+    quickstartAnchor: "windows-quickstart",
+    legal: { imprint: "運営者情報", privacy: "プライバシーポリシー" },
+    keyNames: { Click: "クリック", RightClick: "右クリック", Drag: "ドラッグ" },
+    asciiUmlauts: false,
+    complete: false,
+    guide: {
+      site: "layerling ユーザーガイド",
+      home: "ユーザーガイド",
+      openEditor: "エディターを開く",
+      backToEditor: "エディターに戻る",
+      editorElsewhere: "エディターはもう別のタブで開いています。そのタブに切り替えてください。",
+      chapters: "章",
+      onThisPage: "このページの内容",
+      previous: "前の章",
+      next: "次の章",
+      overviewLead: "layerling でできることを、じゅんばんに説明します。画像は動いているプログラムからとったもので、新しいバージョンが出るたびにとり直しています。",
+      sourceNote: "このガイドはプログラムといっしょに育っていきます。足りないところやまちがいがあったら、ここで教えてください:",
+      forum: "ディスカッション",
+      notTranslated: "この章はまだ日本語になっていません。このあとは英語で書かれています。",
+      languageMenu: "言語",
+      search: "ガイドを検索",
+      searchNothing: "見つかりませんでした。",
+      printAll: "ガイドをまとめて印刷",
+      printAllTitle: "ガイドの全部を1ページに",
+      printAllLead: "すべての章を順番にならべています。印刷するか、PDFとして保存できます。Ctrl+Pを押して、印刷の設定で「ヘッダーとフッター」をオフにしてください。一部だけ印刷したいときは、そこでページの番号を選んでください。",
+      printContents: "目次",
+      printButton: "印刷",
     },
   },
 };
