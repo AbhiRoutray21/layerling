@@ -751,6 +751,8 @@ export const MESSAGES_HU: Partial<Record<MessageKey, string>> = {
   "shortcuts.viewsFocus": "Alapnézet, a kijelölésre nagyítva",
   "shortcuts.orbit": "A nézet forgatása 15°-kal, ha semmi sincs kijelölve",
   "shortcuts.orbitCoarse": "A nézet forgatása 90°-kal, ha semmi sincs kijelölve",
+  "shortcuts.pan": "A nézet eltolása, ha semmi sincs kijelölve",
+  "shortcuts.panCoarse": "A nézet nagyobb eltolása, ha semmi sincs kijelölve",
   "shortcuts.resetView": "Az egész jelenet beillesztése a nézetbe",
   "shortcuts.focusSelection": "Nagyítás a kijelölésre",
   "shortcuts.projection": "Ortografikus vagy perspektivikus",

@@ -787,6 +787,8 @@ export const MESSAGES_NL: Record<MessageKey, string> = {
   "shortcuts.viewsFocus": "Standaardweergave, ingezoomd op de selectie",
   "shortcuts.orbit": "Weergave 15° draaien als er niets geselecteerd is",
   "shortcuts.orbitCoarse": "Weergave 90° draaien als er niets geselecteerd is",
+  "shortcuts.pan": "Weergave verschuiven als er niets geselecteerd is",
+  "shortcuts.panCoarse": "Weergave verder verschuiven als er niets geselecteerd is",
   "shortcuts.resetView": "Hele scène passend in beeld",
   "shortcuts.focusSelection": "Inzoomen op de selectie",
   "shortcuts.projection": "Orthografisch of perspectief",

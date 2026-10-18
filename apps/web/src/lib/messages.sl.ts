@@ -670,6 +670,8 @@ export const MESSAGES_SL: Partial<Record<MessageKey, string>> = {
   "shortcuts.viewsFocus": "Standardni pogled, povečan na izbor",
   "shortcuts.orbit": "Zavrti pogled za 15°, ko ni nič izbrano",
   "shortcuts.orbitCoarse": "Zavrti pogled za 90°, ko ni nič izbrano",
+  "shortcuts.pan": "Premakni pogled, ko ni nič izbrano",
+  "shortcuts.panCoarse": "Premakni pogled dlje, ko ni nič izbrano",
   "shortcuts.resetView": "Prilagodi vso sceno pogledu",
   "shortcuts.focusSelection": "Povečaj izbor",
   "shortcuts.projection": "Ortografska ali perspektivna",

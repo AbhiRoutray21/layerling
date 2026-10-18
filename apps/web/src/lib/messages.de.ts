@@ -787,6 +787,8 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "shortcuts.viewsFocus": "Standardansicht und auf die Auswahl zoomen",
   "shortcuts.orbit": "Ansicht um 15° drehen, wenn nichts ausgewählt ist",
   "shortcuts.orbitCoarse": "Ansicht um 90° drehen, wenn nichts ausgewählt ist",
+  "shortcuts.pan": "Ansicht verschieben, wenn nichts ausgewählt ist",
+  "shortcuts.panCoarse": "Ansicht weiter verschieben, wenn nichts ausgewählt ist",
   "shortcuts.resetView": "Die ganze Szene ins Bild holen",
   "shortcuts.focusSelection": "Auf die Auswahl zoomen",
   "shortcuts.projection": "Orthografisch oder perspektivisch",

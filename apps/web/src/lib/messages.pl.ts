@@ -779,6 +779,8 @@ export const MESSAGES_PL: Partial<Record<MessageKey, string>> = {
   "shortcuts.viewsFocus": "Widok standardowy, przybliżony do zaznaczenia",
   "shortcuts.orbit": "Obróć widok o 15°, gdy nic nie jest zaznaczone",
   "shortcuts.orbitCoarse": "Obróć widok o 90°, gdy nic nie jest zaznaczone",
+  "shortcuts.pan": "Przesuń widok, gdy nic nie jest zaznaczone",
+  "shortcuts.panCoarse": "Przesuń widok dalej, gdy nic nie jest zaznaczone",
   "shortcuts.resetView": "Zmieść całą scenę w widoku",
   "shortcuts.focusSelection": "Przybliż do zaznaczenia",
   "shortcuts.projection": "Ortogonalny lub perspektywiczny",

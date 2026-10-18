@@ -751,6 +751,8 @@ export const MESSAGES_IT: Partial<Record<MessageKey, string>> = {
   "shortcuts.viewsFocus": "Vista standard con zoom sulla selezione",
   "shortcuts.orbit": "Ruota la vista di 15° quando non è selezionato nulla",
   "shortcuts.orbitCoarse": "Ruota la vista di 90° quando non è selezionato nulla",
+  "shortcuts.pan": "Sposta la vista quando non è selezionato nulla",
+  "shortcuts.panCoarse": "Sposta la vista più lontano quando non è selezionato nulla",
   "shortcuts.resetView": "Adatta l'intera scena alla vista",
   "shortcuts.focusSelection": "Ingrandisci la selezione",
   "shortcuts.projection": "Proiezione ortogonale o prospettica",

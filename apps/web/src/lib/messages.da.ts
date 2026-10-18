@@ -744,6 +744,8 @@ export const MESSAGES_DA: Partial<Record<MessageKey, string>> = {
   "shortcuts.viewsFocus": "Standardvisning, zoomet til markeringen",
   "shortcuts.orbit": "Drej visningen 15° når intet er valgt",
   "shortcuts.orbitCoarse": "Drej visningen 90° når intet er valgt",
+  "shortcuts.pan": "Flyt visningen når intet er valgt",
+  "shortcuts.panCoarse": "Flyt visningen længere når intet er valgt",
   "shortcuts.resetView": "Tilpas hele scenen til visningen",
   "shortcuts.focusSelection": "Zoom til markeringen",
   "shortcuts.projection": "Ortofrafisk eller perspektiv",

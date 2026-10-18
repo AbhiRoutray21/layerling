@@ -782,6 +782,8 @@ export const MESSAGES_AR: Partial<Record<MessageKey, string>> = {
   "shortcuts.viewsFocus": "عرض قياسي، مع التكبير على التحديد",
   "shortcuts.orbit": "تدوير العرض 15° عند عدم تحديد أي شيء",
   "shortcuts.orbitCoarse": "تدوير العرض 90° عند عدم تحديد أي شيء",
+  "shortcuts.pan": "تحريك العرض عند عدم تحديد أي شيء",
+  "shortcuts.panCoarse": "تحريك العرض مسافة أكبر عند عدم تحديد أي شيء",
   "shortcuts.resetView": "إظهار المشهد كله في العرض",
   "shortcuts.focusSelection": "التكبير على التحديد",
   "shortcuts.projection": "إسقاط متعامد أو منظور",
