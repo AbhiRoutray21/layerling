@@ -863,6 +863,8 @@ export const MESSAGES_CS: Record<MessageKey, string> = {
   "shortcuts.viewsFocus": "Standardní pohled přiblížený na výběr",
   "shortcuts.orbit": "Otočit pohled o 15°, když nic není vybráno",
   "shortcuts.orbitCoarse": "Otočit pohled o 90°, když nic není vybráno",
+  "shortcuts.pan": "Posunout pohled, když nic není vybráno",
+  "shortcuts.panCoarse": "Posunout pohled dál, když nic není vybráno",
   "shortcuts.resetView": "Zobrazit celou scénu",
   "shortcuts.focusSelection": "Přiblížit na výběr",
   "shortcuts.projection": "Ortografický nebo perspektivní pohled",

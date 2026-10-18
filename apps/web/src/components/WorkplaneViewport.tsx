@@ -59,7 +59,6 @@ import { carriedOntoFace } from "@/lib/carryOntoFace";
 import { createHingeGeometry } from "@/lib/hingeGeometry";
 import { createGridfinityGeometry, gridfinityFootprintPatch } from "@/lib/gridfinityGeometry";
 import { createKnurlGeometry } from "@/lib/knurlGeometry";
-import { visibleWorkArea } from "@/lib/visibleWorkArea";
 import { createTeardropGeometry } from "@/lib/teardropGeometry";
 import { createScrewHoleGeometry } from "@/lib/screwHoleGeometry";
 import { createHoneycombGeometry } from "@/lib/honeycombGeometry";
@@ -157,6 +156,8 @@ import { cadFaceHighlightPositions, type CadFacePick } from "@/lib/cadFacePick";
 import { cadFacePickMesh, disposeCadFacePickMesh } from "@/lib/cadFacePickMesh";
 import { circleOfEdgePoints, pointAcrossCircle, pointOnCircle } from "@/lib/tapeCircle";
 import { syncHistoryPickHighlight } from "@/components/workplane/historyPickHighlight";
+import { orbitViewBy, panViewBy } from "@/lib/viewArrowKeys";
+import { useViewportKeyboardHooks } from "@/components/workplane/viewportKeyboard";
 import { aimPickRay, firstShapeHit, pickLayFlatFace, pickRotationPivot, pickShapeAt, pickShapeIdAt, pointerRayFor, rayPointOnRotationPlane, RENDER_LAYER_SHAPES, splitAxisParameter, usePickOnlyPointer, type LayFlatPick, type PickOnlySelection } from "@/components/workplane/viewportPicking";
 export type { LayFlatPick } from "@/components/workplane/viewportPicking";
 import { RENDER_LAYER_HELPERS, sharedShapeGeometryCache, sharedEdgesGeometryCache, sharedShapeMaterialCache, type PointCardOffset, type ShapeRenderRecord, type ThreeState, type MoveDimensionSession, type NoteOverlayState, type TapePoint, type TapeAttachment, type TapeEdgeAttachment, type TapeModel, type TapeOverlayState, type TapeCandidate, type RotationHandleSide, type RotationHandleSides, type DragItem, quaternionForShape, projectToScreen, syncMoveDimensionWorldLines, syncTransformGuideWorldLines, tapeShapeDimensions, tapePointWorld, tapeEdgeWorldPoints, tapeSegmentWorldPoints, syncTapeOverlay, syncNoteOverlay, NoteOverlay, TapeOverlay, type RulerDimensionOverlayItem, type RulerDimensionOverlayState, syncRulerDimensionOverlay, RulerDimensionOverlay, type CornerRulerInstance, type CornerRulerOverlayState, syncCornerRulerToolOverlay, CornerRulerToolOverlay, syncOriginDimensionWorldLines, shapeCenter, shapeLocalExtents, projectShapeExtent, projectShapesExtent, type OriginDimensionFrame, setObjectRenderLayer, freezeStaticObjectMatrices, formatMeasure, findShapeObject, trimSharedShapeGeometryCache, releaseSharedShapeGeometry, trimSharedShapeMaterialCache, releaseSharedShapeMaterials, disposeMaterialResource, disposeChildren, disposeObject } from "@/components/workplane/ViewportOverlays";
@@ -614,17 +615,11 @@ declare global {
     layerlingCaptureCanvas?: () => string;
     layerlingCaptureCanvasAsync?: () => Promise<string>;
     layerlingCaptureView?: (face?: LayerlingMcpViewFace) => Promise<string> | string;
-    /** Turns the view about its centre: azimuth around the vertical, polar towards or away from straight down. */
-    layerlingOrbitView?: (azimuthDegrees: number, polarDegrees: number) => void;
     layerlingCaptureImage?: (options?: { plate?: boolean; transparent?: boolean; scale?: number }) => string;
     /** The section view for MCP: applies what is given, returns the settings it ends on and the plane's range. */
     layerlingSectionView?: (patch: Partial<SectionPlaneSettings> & { center?: boolean }) => { settings: SectionPlaneSettings; bounds: { min: number; max: number; center: number } };
     /** "Hide workplane" in the camera bar for MCP: sets it when given, returns whether the plate is shown. */
     layerlingWorkplaneDisplay?: (visible?: boolean) => { visible: boolean };
-    /** Which way the screen points in the world: right, and away from the viewer (up on a view from above). */
-    layerlingScreenDirections?: () => { right: { x: number; y: number; z: number }; away: { x: number; y: number; z: number } };
-    /** Moves the view along when bodies moved by keyboard would leave it. */
-    layerlingFollowMove?: (ids: string[], translation: { x: number; y: number; z: number }) => void;
   }
 }
 
@@ -4262,58 +4257,6 @@ export function WorkplaneViewport({
       delete window.layerlingWorkplaneDisplay;
     };
   }, []);
-
-  // The arrow keys move along what the screen shows, and the view follows
-  // what they push past its edge (both in LayerlingEditor's nudge).
-  useEffect(() => {
-    window.layerlingScreenDirections = () => {
-      const camera = threeRef.current?.camera;
-      if (!camera) return { right: { x: 1, y: 0, z: 0 }, away: { x: 0, y: 0, z: -1 } };
-      camera.updateMatrixWorld();
-      const right = new THREE.Vector3().setFromMatrixColumn(camera.matrixWorld, 0);
-      const up = new THREE.Vector3().setFromMatrixColumn(camera.matrixWorld, 1);
-      const forward = camera.getWorldDirection(new THREE.Vector3());
-      // Seen from above "away" is up on the screen, seen from the side it is
-      // into the screen; the sum points the right way for both and between.
-      const away = forward.add(up);
-      return { right: { x: right.x, y: right.y, z: right.z }, away: { x: away.x, y: away.y, z: away.z } };
-    };
-    window.layerlingFollowMove = (ids, translation) => {
-      const state = threeRef.current;
-      if (!state || !ids.length) return;
-      const bounds = new THREE.Box3();
-      ids.forEach((id) => {
-        const object = findShapeObject(state, id);
-        if (object) bounds.expandByObject(object);
-      });
-      if (bounds.isEmpty()) return;
-      const center = bounds.getCenter(new THREE.Vector3());
-      const moved = center.clone().add(new THREE.Vector3(translation.x, translation.y, translation.z));
-      // Past the part of the picture really seen - not under the camera bar or the settings -, the view
-      // takes the same step, so the bodies stay where they are on screen. Only for a body that was in
-      // the picture and would leave it: one that already lies outside simply moves.
-      // Following that too made the body stand still and everything else slide past (#486).
-      const canvas = state.renderer.domElement;
-      const area = visibleWorkArea(canvas, canvas.clientWidth, canvas.clientHeight);
-      const isInPicture = (point: THREE.Vector3) => {
-        const projected = point.clone().project(state.camera);
-        const px = (projected.x + 1) / 2 * canvas.clientWidth;
-        const py = (1 - projected.y) / 2 * canvas.clientHeight;
-        return projected.z < 1 && px >= area.left && px <= area.right && py >= area.top && py <= area.bottom;
-      };
-      if (!isInPicture(center) || isInPicture(moved)) return;
-      const step = new THREE.Vector3(translation.x, translation.y, translation.z);
-      state.camera.position.add(step);
-      state.controls.target.add(step);
-      state.controls.update();
-      state.needsRender = true;
-    };
-    return () => {
-      delete window.layerlingScreenDirections;
-      delete window.layerlingFollowMove;
-    };
-  }, []);
-
   useEffect(() => {
     setSelectionHelpersVisible(threeRef.current, !splitActive && !workplaneMode && activeTransformKind !== "rotate");
   }, [activeTransformKind, splitActive, workplaneMode]);
@@ -4339,23 +4282,8 @@ export function WorkplaneViewport({
       renderFrame(state);
       return thumbnailPngDataUrl(state.renderer.domElement);
     };
-    window.layerlingOrbitView = (azimuthDegrees, polarDegrees) => {
-      const target = state.controls.target;
-      const offset = state.camera.position.clone().sub(target);
-      const spherical = new THREE.Spherical().setFromVector3(offset);
-      spherical.theta += THREE.MathUtils.degToRad(azimuthDegrees);
-      // Stops short of straight down or up, where the turn would flip over.
-      const minPolar = Math.max(state.controls.minPolarAngle, 1e-3);
-      const maxPolar = Math.min(state.controls.maxPolarAngle, Math.PI - 1e-3);
-      spherical.phi = clamp(spherical.phi + THREE.MathUtils.degToRad(polarDegrees), minPolar, maxPolar);
-      offset.setFromSpherical(spherical);
-      state.camera.up.set(0, 1, 0);
-      state.camera.position.copy(target).add(offset);
-      state.camera.lookAt(target);
-      state.camera.updateProjectionMatrix();
-      state.controls.update();
-      state.needsRender = true;
-    };
+    window.layerlingOrbitView = (azimuthDegrees, polarDegrees) => { orbitViewBy(state, azimuthDegrees, polarDegrees); state.needsRender = true; };
+    window.layerlingPanView = (rightFraction, upFraction) => { panViewBy(state, rightFraction, upFraction); state.needsRender = true; };
     window.layerlingCaptureView = (face = "current") => {
       if (face === "home") {
         resetCamera(state);
@@ -4585,9 +4513,8 @@ export function WorkplaneViewport({
       if (window.layerlingCaptureView) {
         delete window.layerlingCaptureView;
       }
-      if (window.layerlingOrbitView) {
-        delete window.layerlingOrbitView;
-      }
+      delete window.layerlingOrbitView;
+      delete window.layerlingPanView;
       threeRef.current = null;
     };
   }, []);
@@ -6390,6 +6317,7 @@ export function WorkplaneViewport({
     return state ? pickShapeAt(state, shapesRef.current, clientX, clientY, pointerType, selectedIdsRef.current) : null;
   }, []);
   const pickOnlyPointer = usePickOnlyPointer(pickOnly, pickShape);
+  useViewportKeyboardHooks(threeRef);
   const pickOnlyKey = pickOnly ? pickOnly.ids.join("\0") : null;
   useEffect(() => {
     const state = threeRef.current;

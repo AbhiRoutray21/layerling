@@ -778,6 +778,8 @@ export const MESSAGES_FR: Partial<Record<MessageKey, string>> = {
   "shortcuts.viewsFocus": "Vue standard, zoomée sur la sélection",
   "shortcuts.orbit": "Tournez la vue de 15° alors que rien n'est sélectionné",
   "shortcuts.orbitCoarse": "Tournez la vue de 90° alors que rien n'est sélectionné",
+  "shortcuts.pan": "Faites glisser la vue alors que rien n'est sélectionné",
+  "shortcuts.panCoarse": "Faites glisser la vue plus loin alors que rien n'est sélectionné",
   "shortcuts.resetView": "Ajuster toute la scène dans la vue",
   "shortcuts.focusSelection": "Zoom sur la sélection",
   "shortcuts.projection": "Orthographique ou perspective",

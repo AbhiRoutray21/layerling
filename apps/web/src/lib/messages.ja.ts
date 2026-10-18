@@ -778,6 +778,8 @@ export const MESSAGES_JA: Partial<Record<MessageKey, string>> = {
   "shortcuts.viewsFocus": "標準ビューで選択にズーム",
   "shortcuts.orbit": "何も選択していないときビューを15°回転",
   "shortcuts.orbitCoarse": "何も選択していないときビューを90°回転",
+  "shortcuts.pan": "何も選択していないときにビューをスライド",
+  "shortcuts.panCoarse": "何も選択していないときにビューを大きくスライド",
   "shortcuts.resetView": "シーン全体を画面に収める",
   "shortcuts.focusSelection": "選択にズーム",
   "shortcuts.projection": "平行投影または透視投影",

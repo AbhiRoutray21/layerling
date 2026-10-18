@@ -785,6 +785,8 @@ export const MESSAGES_RU: Partial<Record<MessageKey, string>> = {
   "shortcuts.viewsFocus": "Стандартный вид с приближением к выделению",
   "shortcuts.orbit": "Повернуть вид на 15°, если ничего не выделено",
   "shortcuts.orbitCoarse": "Повернуть вид на 90°, если ничего не выделено",
+  "shortcuts.pan": "Сдвинуть вид, если ничего не выделено",
+  "shortcuts.panCoarse": "Сдвинуть вид дальше, если ничего не выделено",
   "shortcuts.resetView": "Вписать всю сцену в вид",
   "shortcuts.focusSelection": "Приблизить к выделению",
   "shortcuts.projection": "Ортогональная проекция или перспектива",

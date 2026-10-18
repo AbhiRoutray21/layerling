@@ -760,6 +760,8 @@ export const MESSAGES_TR: Partial<Record<MessageKey, string>> = {
   "shortcuts.viewsFocus": "Seçime yakınlaştırılmış standart görünüm",
   "shortcuts.orbit": "Hiçbir şey seçili değilken görünümü 15° döndür",
   "shortcuts.orbitCoarse": "Hiçbir şey seçili değilken görünümü 90° döndür",
+  "shortcuts.pan": "Hiçbir şey seçili değilken görünümü kaydır",
+  "shortcuts.panCoarse": "Hiçbir şey seçili değilken görünümü daha fazla kaydır",
   "shortcuts.resetView": "Tüm sahneyi görünüme sığdır",
   "shortcuts.focusSelection": "Seçime yakınlaştır",
   "shortcuts.projection": "Ortografik veya perspektif",
