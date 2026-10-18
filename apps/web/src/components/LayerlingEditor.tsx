@@ -8416,12 +8416,30 @@ export function LayerlingEditor({
    * verschiedene Farben gegeneinander freigestellt. Geschnitten wird der ganze
    * Entwurf, wie ihn die Schnittansicht zeigt - nicht nur die Auswahl.
    */
-  const sectionBodiesAt = useCallback(async (axis: SectionPlaneAxis, offset: number) => {
-    const { visible, hiddenNote } = visibleExportShapes(shapesRef.current);
-    const hiddenCount = shapesRef.current.length - visible.length;
+  // The slow part of the section - the bodies of the design, joined and separated by colour - does not depend
+  // on the plane, so it is made once per state of the design; only the slicing is made again when the plane
+  // moves. That lets the filled cut face follow the plane while it is dragged (#516, rondlh).
+  const makeSectionMeshes = useCallback(async (shapesNow: WorkplaneShape[]) => {
+    const { visible, hiddenNote } = visibleExportShapes(shapesNow);
+    const hiddenCount = shapesNow.length - visible.length;
     const { solids, meshes: cut } = await exportBodiesWithLooseHoles(visible);
-    if (solids.length === 0) return { bodies: [], hiddenNote, hiddenCount, unionFailed: false };
+    if (solids.length === 0) return { solids, meshes: [], quellen: [] as number[], gescheitert: 0, hiddenNote, hiddenCount };
     const { meshes, quellen, gescheitert } = await colorSeparatedExportMeshes(solids, cut);
+    return { solids, meshes, quellen, gescheitert, hiddenNote, hiddenCount };
+  }, []);
+  const sectionMeshCacheRef = useRef<{ shapes: WorkplaneShape[]; made: ReturnType<typeof makeSectionMeshes> } | null>(null);
+  const sectionBodiesAt = useCallback(async (axis: SectionPlaneAxis, offset: number) => {
+    const shapesNow = shapesRef.current;
+    let cache = sectionMeshCacheRef.current;
+    if (!cache || cache.shapes !== shapesNow) {
+      cache = { shapes: shapesNow, made: makeSectionMeshes(shapesNow) };
+      sectionMeshCacheRef.current = cache;
+      cache.made.catch(() => {
+        if (sectionMeshCacheRef.current === cache) sectionMeshCacheRef.current = null;
+      });
+    }
+    const { solids, meshes, quellen, gescheitert, hiddenNote, hiddenCount } = await cache.made;
+    if (solids.length === 0) return { bodies: [], hiddenNote, hiddenCount, unionFailed: false };
     const bodies = meshes.map((mesh, index) => {
       const source = solids[quellen[index]];
       return {
@@ -8431,7 +8449,7 @@ export function LayerlingEditor({
       };
     });
     return { bodies, hiddenNote, hiddenCount, unionFailed: gescheitert > 0 };
-  }, []);
+  }, [makeSectionMeshes]);
 
   /** The bodies of the cut with their colours, for the filled cut face of the section view (#516). */
   const sectionBodies = useCallback(async (axis: SectionPlaneAxis, offset: number) => (await sectionBodiesAt(axis, offset)).bodies, [sectionBodiesAt]);

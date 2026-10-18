@@ -4045,11 +4045,17 @@ export function WorkplaneViewport({
 
   // The cut face (#516): where the plane goes through a solid it is filled, with the colour of the body a
   // little darker, so a solid and a hole no longer look the same inside. It is made from the same bodies as
-  // the section SVG a moment after the plane or the design stops changing, and gone while they move.
+  // the section SVG; the slow part is made once per state of the design, so the face follows the plane while it moves.
+  // A changed design leaves the old face wrong at once; a moved plane keeps it until the new one is cut, a moment later.
   useEffect(() => {
-    const state = threeRef.current;
-    if (state) clearSectionCaps(state);
-    if (!sectionSettings.enabled || !onSectionBodies) return;
+    if (threeRef.current) clearSectionCaps(threeRef.current);
+  }, [shapes]);
+
+  useEffect(() => {
+    if (!sectionSettings.enabled || !onSectionBodies) {
+      if (threeRef.current) clearSectionCaps(threeRef.current);
+      return;
+    }
     const { axis, offset } = sectionSettings;
     let cancelled = false;
     const timer = window.setTimeout(() => {
@@ -4060,7 +4066,7 @@ export function WorkplaneViewport({
           buildSectionCaps(current, bodies, axis, offset);
         })
         .catch(() => undefined);
-    }, 250);
+    }, 30);
     return () => {
       cancelled = true;
       window.clearTimeout(timer);
