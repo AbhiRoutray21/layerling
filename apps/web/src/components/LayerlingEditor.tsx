@@ -13288,7 +13288,10 @@ function SecondaryToolbar({
   shapesPinnedRef.current = shapesPinned;
   useEffect(() => {
     try {
-      setShapesPinned(window.localStorage.getItem("layerling.editor.shapeMenuPinned") === "true");
+      const pinned = window.localStorage.getItem("layerling.editor.shapeMenuPinned") === "true";
+      setShapesPinned(pinned);
+      // A pinned panel is there again at the next start, not only its pin (forum, prmod3d).
+      if (pinned) setShapesOpen(true);
     } catch {
       // Blocked storage: the panel closes after each shape, as it always did.
     }
@@ -13404,8 +13407,11 @@ function SecondaryToolbar({
     window.addEventListener("keydown", openOnShortcut);
     return () => window.removeEventListener("keydown", openOnShortcut);
   }, []);
+  // Leaving the sketch closes the sketch's shape palette; at the start there is nothing to close (a pinned panel opens then).
+  const sketchWasActiveRef = useRef(sketchActive);
   useEffect(() => {
-    if (!sketchActive) setShapesOpen(false);
+    if (sketchWasActiveRef.current && !sketchActive) setShapesOpen(false);
+    sketchWasActiveRef.current = sketchActive;
   }, [sketchActive]);
   useEffect(() => {
     if (!shapesOpen) return;

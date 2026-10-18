@@ -58,5 +58,15 @@
       "de": "Auf einem schmalen Bildschirm lagen die gespeicherten Entwürfe der Startseite mehr als einen Bildschirm weit unten, hinter drei großen Kacheln und dem Sicherungshinweis. Sobald es Entwürfe gibt, sind die drei Kacheln jetzt eine kurze Zeile, und der Hinweis zur Sicherung steht hinter den Entwürfen. Auf dem Rechner und ohne Entwürfe bleibt alles wie bisher.",
       "en": "On a narrow screen the saved designs of the start page lay more than a screen down, behind three big tiles and the backup note. Once there are designs, the three tiles are now one short row and the backup note stands behind the designs. On a computer, and with no designs yet, everything stays as it was."
     }
+  },
+  {
+    "title": {
+      "de": "Eine angeheftete Formenbibliothek ist beim nächsten Start wieder da",
+      "en": "A pinned shape library is there again at the next start"
+    },
+    "body": {
+      "de": "Wer die Formenbibliothek angeheftet hatte, fand beim nächsten Start nur noch die Nadel vor: Sie war noch gesetzt, die Bibliothek selbst aber zu. Jetzt öffnet sich eine angeheftete Bibliothek beim Start des Editors von selbst, an der Stelle, an der du sie abgelegt hast.",
+      "en": "Anyone who had pinned the shape library found only the pin again at the next start: it was still set, but the library itself was closed. Now a pinned library opens by itself when the editor starts, where you left it."
+    }
   }
 ]
