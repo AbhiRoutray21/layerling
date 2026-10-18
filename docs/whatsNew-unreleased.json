@@ -62,5 +62,15 @@
       "de": "Eigene Formen lassen sich in Ordner sortieren, bis zu drei Ebenen tief, im Browser und auf dem Server. Ein Ordner hat einen Zähler, lässt sich umbenennen und löschen (nach Rückfrage), und eine Form wird beim Speichern oder danach in einen anderen Ordner gelegt.",
       "en": "Custom shapes can be sorted into folders, up to three levels deep, in the browser and on the server. A folder has a counter and can be renamed and deleted (after asking), and a shape is put into a folder when you save it or moved to another one afterwards."
     }
+  },
+  {
+    "title": {
+      "de": "Ein loses Loch geht beim Export nicht mehr verloren",
+      "en": "A loose hole is no longer lost in the export"
+    },
+    "body": {
+      "de": "Ein Loch, das du nicht gruppiert hast, fehlte in der STL-, 3MF- oder OBJ-Datei, wenn der Körper, aus dem es schneidet, einen anderen Körper derselben Farbe berührte oder überlappte. Auch die Materialschätzung zählte ihn dann als massiv. Jetzt bleibt das Loch erhalten.",
+      "en": "A hole you had not grouped was missing from the STL, 3MF or OBJ file when the body it cuts from touched or overlapped another body of the same colour. The material estimate then counted it as solid too. The hole now stays."
+    }
   }
 ]

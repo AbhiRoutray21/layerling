@@ -10040,8 +10040,8 @@ export function LayerlingEditor({
         if (!visible.some((shape) => !shape.hole && !isNonSolidShapeKind(shape.kind))) throw new Error(t(hiddenNote ? "status.exportOnlyHidden" : "status.addSolidBeforeExport"));
         const invalidSvg = visible.map(invalidSvgMeshReason).find((reason): reason is string => Boolean(reason));
         if (invalidSvg) throw new Error(t("status.svgInvalid", { reason: invalidSvg }));
-        const { solids: cutSolids, meshes, holeCutsFailed } = await exportBodiesWithLooseHoles(visible);
-        const joined = await (format === "stl" ? unionOverlappingExportMeshes(cutSolids, meshes) : colorSeparatedExportMeshes(cutSolids, meshes));
+        const { solids: cutSolids, meshes, cut: wasCut, holeCutsFailed } = await exportBodiesWithLooseHoles(visible);
+        const joined = await (format === "stl" ? unionOverlappingExportMeshes(cutSolids, meshes, wasCut) : colorSeparatedExportMeshes(cutSolids, meshes, wasCut));
         // A group showing its parts in their own colours keeps them in 3MF and OBJ (#153).
         const partFaceColors = (mesh: MeshData, sourceIndex: number) => {
           const source = cutSolids[sourceIndex];
@@ -10605,9 +10605,9 @@ export function LayerlingEditor({
     }
     const savedFile = target === "download" ? null : target;
     void exportBodiesWithLooseHoles(sourceShapes)
-      .then(async ({ solids: cutSolids, meshes, holeCutsFailed }) => {
+      .then(async ({ solids: cutSolids, meshes, cut: wasCut, holeCutsFailed }) => {
         bodiesWritten = cutSolids;
-        const joined = await (format === "stl" ? unionOverlappingExportMeshes(cutSolids, meshes) : colorSeparatedExportMeshes(cutSolids, meshes));
+        const joined = await (format === "stl" ? unionOverlappingExportMeshes(cutSolids, meshes, wasCut) : colorSeparatedExportMeshes(cutSolids, meshes, wasCut));
         return { ...joined, gescheitert: joined.gescheitert + holeCutsFailed };
       })
       .then(async ({ meshes: fertig, quellen, verschmolzen, gescheitert, splinters }) => {
