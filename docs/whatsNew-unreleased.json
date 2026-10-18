@@ -1,6 +1,16 @@
 [
   {
     "title": {
+      "de": "iPad: ein verlorener Finger sperrt den Editor nicht mehr",
+      "en": "iPad: a lost finger no longer locks the editor"
+    },
+    "body": {
+      "de": "Auf dem iPad konnte es passieren, dass nach dem Antippen zweier Objekte hintereinander nichts mehr reagierte, bis die Seite neu geladen wurde: Der Editor hielt einen Finger für noch aufliegend, dessen Ende er nie erfahren hatte, und nahm jede weitere Berührung für einen zweiten Finger. Jetzt beginnt mit jedem neuen ersten Finger die Zählung von vorn, und beim Verlassen der App wird sie ebenfalls zurückgesetzt.",
+      "en": "On an iPad it could happen that after tapping two objects one after the other nothing answered until the page was reloaded: the editor believed a finger was still down whose end it had never heard of, and took every further touch for a second finger. Now every new first finger starts the count afresh, and leaving the app resets it, too."
+    }
+  },
+  {
+    "title": {
       "de": "Fase + Rundung: der druckbare Fuß",
       "en": "Chamfillet: the printable foot"
     },
@@ -27,6 +37,16 @@
     "body": {
       "de": "Eine Gruppe, die schon verrundete oder gefaste Teile enthält, musste bei jedem Start des Fase- oder Rundungs-Werkzeugs wieder aus ihrem Netz in einen exakten Körper zurückgerechnet werden, bei einer Tasche in einem verrundeten Körper rund zehn Sekunden. Jetzt merkt sich layerling das Ergebnis, solange das Netz gleich bleibt: Abbrechen und neu starten, oder Rückgängig und wieder vor, geht in einem Drittel der Zeit. Das erste Mal dauert so lange wie bisher.",
       "en": "A group that already holds filleted or chamfered parts had to be turned from its mesh back into an exact body every time the Chamfer or Fillet tool started, about ten seconds for a pocket in a filleted body. Now layerling keeps the result as long as the mesh stays the same: cancelling and starting again, or Undo and Redo, takes a third of the time. The first time takes as long as before."
+    }
+  },
+  {
+    "title": {
+      "de": "Die Höhe eines gedrehten Körpers lässt ihn nicht mehr wandern",
+      "en": "Changing the height of a turned body no longer makes it wander"
+    },
+    "body": {
+      "de": "Ein Körper, der gedreht ist, etwa eine Aussparung auf einer schrägen Arbeitsebene, rutschte beim Ändern der Höhe im Eigenschaften-Fenster an der Ebene entlang, weil sich seine Mitte nur senkrecht nach oben verschob. Jetzt bleibt die Mitte seiner Grundfläche, wo sie war, und der Körper wächst oder schrumpft nur in seine eigene Richtung. Das gilt auch für den Befehl der KI-Anbindung.",
+      "en": "A turned body, a pocket on a sloped workplane for instance, slid along the plane when its height was changed in the Properties panel, because its centre only moved straight up. Now the middle of its base stays where it was and the body grows or shrinks only in its own direction. The AI connection's command does the same."
     }
   }
 ]
