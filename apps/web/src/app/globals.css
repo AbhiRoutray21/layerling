@@ -3316,6 +3316,20 @@ html[data-theme="dark"] .whats-new-earlier:hover {
   background: var(--background);
 }
 
+/* The working surface answers the finger, it is not a page of text (#524): on an iPad a long press that meets a word
+   - in the menu it opens, in the toolbar, in the foot of the page - starts the system's text selection, and the
+   touches that follow go to the selection and not to the program. Fields keep their text selectable. */
+.layerling-editor {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.layerling-editor :is(input, textarea, [contenteditable="true"], [contenteditable=""]) {
+  -webkit-user-select: text;
+  user-select: text;
+}
+
 .top-nav {
   position: fixed;
   inset: 0 0 auto 0;
