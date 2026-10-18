@@ -61,6 +61,10 @@ Several corners at once work too: select them with [[Shift]] and a click each, o
 
 ![The corner at the top left is rounded with a 12 mm radius.](shot:sketch-fillet)
 
+## Mirroring
+
+Select points and lines (click, [[Shift]] and click, or pull a frame round them) and click {{ui:sketch.mirror}} in the bar. Then choose the axis: {{ui:sketch.mirrorLeftRight}} mirrors across the vertical axis through the middle of the plate, {{ui:sketch.mirrorTopBottom}} across the horizontal one, and {{ui:sketch.mirrorAcrossLine}} across a straight line of the sketch that you click next. The copy is added on the other side and the original stays; nothing is linked, so you can change either on its own. Points that lie on the axis are shared, so a half outline whose ends sit on the axis becomes one closed outline: draw half of a bracket, select it, mirror it and make the body. A construction line makes a good axis. [[Esc]] cancels.
+
 ## Construction lines
 
 A construction line helps you place points without becoming part of the body. It is drawn dashed and never counts as outline: you can pull it as far beyond the shape as you like and the body does not grow.

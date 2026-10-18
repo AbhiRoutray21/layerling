@@ -58,6 +58,10 @@ Flere hjørner på én gang virker også: vælg dem med [[Shift]] og et klik hve
 
 ![Hjørnet øverst til venstre er rundet med 12 mm radius.](shot:sketch-fillet)
 
+## Spejling
+
+Markér punkter og linjer (klik, [[Skift]] og klik, eller træk en ramme om dem), og klik på {{ui:sketch.mirror}} i bjælken. Vælg så aksen: {{ui:sketch.mirrorLeftRight}} spejler om den lodrette akse gennem midten af pladen, {{ui:sketch.mirrorTopBottom}} om den vandrette, og {{ui:sketch.mirrorAcrossLine}} om en ret linje i skitsen, som du klikker på bagefter. Kopien lander på den anden side, og originalen bliver; intet er knyttet sammen, så du kan ændre hver for sig. Punkter på aksen deles, så et halvt omrids, hvis ender ligger på aksen, bliver til ét lukket omrids: tegn halvdelen af en vinkelbeslag, markér den, spejl den og lav legemet. En hjælpelinje er en god akse. [[Esc]] annullerer.
+
 ## Konstruktionslinjer
 
 En konstruktionslinje hjælper dig med at placere punkter uden at blive del af formen. Den tegnes stiplet og tæller aldrig med i omridset: du kan trække den så langt ud over formen du vil, og formen vokser ikke.

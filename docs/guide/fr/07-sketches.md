@@ -61,6 +61,10 @@ Plusieurs coins fonctionnent également : sélectionnez-les avec [[Shift]] et c
 
 ![Le coin en haut à gauche est arrondi avec un rayon de 12 mm.](shot:sketch-fillet)
 
+## Symétrie
+
+Sélectionnez des points et des lignes (clic, [[Maj]] et clic, ou un cadre tiré autour) et cliquez sur {{ui:sketch.mirror}} dans la barre. Choisissez ensuite l'axe : {{ui:sketch.mirrorLeftRight}} fait la symétrie par rapport à l'axe vertical passant par le milieu de la plaque, {{ui:sketch.mirrorTopBottom}} par rapport à l'horizontal, et {{ui:sketch.mirrorAcrossLine}} par rapport à une ligne droite de l'esquisse sur laquelle vous cliquez ensuite. La copie se place de l'autre côté et l'original reste ; rien n'est lié, vous pouvez modifier chacun séparément. Les points sur l'axe sont partagés : un demi-contour dont les extrémités sont sur l'axe devient un contour fermé. Dessinez la moitié d'une équerre, sélectionnez-la, faites la symétrie et créez le corps. Une ligne de construction fait un bon axe. [[Échap]] annule.
+
 ## Lignes de construction
 
 Une ligne de construction vous aide à placer des points sans faire partie du corps. Il est dessiné en pointillés et ne compte jamais comme contour : vous pouvez le tirer aussi loin que vous le souhaitez au-delà de la forme et le corps ne grandit pas.

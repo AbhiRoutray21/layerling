@@ -61,6 +61,10 @@ Tudi več oglišč naenkrat deluje: izberi jih s [[Shift]] in klikom na vsako al
 
 ![Vogal zgoraj levo se zaobli s polmerom 12 mm.](shot:sketch-fillet)
 
+## Zrcaljenje
+
+Izberi točke in črte (s klikom, [[Shift]] in klikom ali z okvirjem okoli njih) in v vrstici klikni {{ui:sketch.mirror}}. Nato izberi os: {{ui:sketch.mirrorLeftRight}} zrcali čez navpično os skozi sredino plošče, {{ui:sketch.mirrorTopBottom}} čez vodoravno, {{ui:sketch.mirrorAcrossLine}} pa čez ravno črto skice, ki jo nato klikneš. Kopija se pojavi na drugi strani, izvirnik ostane; nič ni povezano, zato lahko vsakega spreminjaš posebej. Točke na osi so skupne, tako da polovični obris s konci na osi postane sklenjen obris: nariši polovico nosilca, jo izberi, zrcali in naredi telo. Dobra os je pomožna črta. [[Esc]] prekliče.
+
 ## Pomožne črte
 
 Pomožna črta ti pomaga pri postavljanju točk, ne da bi spadala k telesu. Narisana je črtkano in nikoli ne šteje k obrisu: lahko jo povlečeš poljubno daleč čez obliko, ne da bi telo postalo večje.

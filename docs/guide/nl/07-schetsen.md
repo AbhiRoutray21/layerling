@@ -61,6 +61,10 @@ Meerdere hoeken tegelijk kan ook: selecteer ze met [[Shift]] en telkens een klik
 
 ![De hoek linksboven is afgerond met een straal van 12 mm.](shot:sketch-fillet)
 
+## Spiegelen
+
+Selecteer punten en lijnen (klikken, [[Shift]] en klikken, of er een kader omheen trekken) en klik in de balk op {{ui:sketch.mirror}}. Kies dan de as: {{ui:sketch.mirrorLeftRight}} spiegelt in de verticale as door het midden van de plaat, {{ui:sketch.mirrorTopBottom}} in de horizontale, en {{ui:sketch.mirrorAcrossLine}} in een rechte lijn van de schets die je daarna aanklikt. De kopie komt aan de andere kant, het origineel blijft; niets is gekoppeld, dus je kunt beide apart aanpassen. Punten op de as worden gedeeld, zodat een halve omtrek waarvan de uiteinden op de as liggen één gesloten omtrek wordt: teken de helft van een beugel, selecteer die, spiegel hem en maak het lichaam. Een hulplijn is een goede as. [[Esc]] breekt af.
+
 ## Hulplijnen
 
 Een hulplijn helpt je punten te plaatsen zonder deel van het lichaam te worden. Hij wordt gestreept getekend en telt nooit als omtrek: je kunt hem zo ver voorbij de vorm trekken als je wilt, en het lichaam groeit niet mee.

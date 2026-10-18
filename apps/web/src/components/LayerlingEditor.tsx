@@ -158,6 +158,7 @@ import { packBackup, unpackBackup } from "@/lib/projectBackup";
 import { MyShapesSection, type CustomShapeEntry, type CustomShapeLocation } from "@/components/workplane/MyShapesSection";
 import { deleteServerCustomShape, listServerCustomShapes, readServerCustomShape, renameServerCustomShape, saveServerCustomShape, type ServerCustomShape } from "@/lib/customShapesServer";
 import { addLineIntersectionPoints, onlyMovesPoints, splitSketchSegment } from "@/lib/sketchPointRefinement";
+import { mirrorSketchSelection, SKETCH_MIRROR_HORIZONTAL, SKETCH_MIRROR_VERTICAL, sketchMirrorAxisThroughSegment } from "@/lib/sketchMirror";
 import { copySketchSelection, freeSketchPasteOffset, pasteSketchClipboard, type SketchClipboard } from "@/lib/sketchClipboard";
 import { sketchSelectedPointIds, sketchSelectionCount, toggleSketchSelection } from "@/lib/sketchSelection";
 import { applySketchCorners } from "@/lib/sketchFilletChamfer";
@@ -4807,6 +4808,23 @@ export function LayerlingEditor({
     }
     insertSketchCopy(copied, t("status.sketchDuplicated"));
   }, [insertSketchCopy, sketchProfile, sketchSelection]);
+
+  // Mirror (#512): copies the selection to the other side of an axis; the originals stay.
+  const mirrorSketchSelectionAction = useCallback((across: "vertical" | "horizontal" | { segmentId: string }) => {
+    const axis = across === "vertical" ? SKETCH_MIRROR_VERTICAL : across === "horizontal" ? SKETCH_MIRROR_HORIZONTAL : sketchMirrorAxisThroughSegment(sketchProfile, across.segmentId);
+    if (!axis) {
+      setNotice(t("status.sketchMirrorNoAxis"));
+      return;
+    }
+    const mirrored = mirrorSketchSelection(sketchProfile, sketchSelection, axis, createLocalId);
+    if (!mirrored) {
+      setNotice(t("status.sketchMirrorNothing"));
+      return;
+    }
+    commitSketchProfile(mirrored.profile, t("status.sketchMirrored"));
+    setSketchActivePointId(null);
+    setSketchSelection({ kind: "multiple", pointIds: mirrored.pointIds, segmentIds: mirrored.segmentIds });
+  }, [commitSketchProfile, sketchProfile, sketchSelection]);
 
   const moveSketchPoint = useCallback((id: string, position: { x: number; z: number }) => {
     const current = sketchProfile.points.find((point) => point.id === id);
@@ -12320,6 +12338,7 @@ export function LayerlingEditor({
             onSetPointMode={setSketchPointMode}
             onCurveSegment={curveSketchSegmentAction}
             onCurveSegments={curveSketchSegmentsAction}
+            onMirror={mirrorSketchSelectionAction}
             onStraightenSegments={straightenSketchSegmentsAction}
             onStraightenSegment={straightenSketchSegmentAction}
             onSetSegmentConstruction={setSketchSegmentConstruction}

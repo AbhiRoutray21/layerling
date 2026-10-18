@@ -61,6 +61,10 @@ Auch mehrere Ecken auf einmal gehen: Wähle sie mit [[Umschalt]] und je einem Kl
 
 ![Die Ecke oben links wird mit 12 mm Radius verrundet.](shot:sketch-fillet)
 
+## Spiegeln
+
+Wähle Punkte und Linien aus (anklicken, [[Umschalt]] und Klick, oder einen Rahmen darum ziehen) und klicke in der Leiste auf {{ui:sketch.mirror}}. Dann wählst du die Achse: {{ui:sketch.mirrorLeftRight}} spiegelt an der senkrechten Achse durch die Mitte der Platte, {{ui:sketch.mirrorTopBottom}} an der waagerechten, und {{ui:sketch.mirrorAcrossLine}} an einer geraden Linie der Skizze, die du danach anklickst. Die Kopie kommt auf die andere Seite, das Original bleibt; nichts ist verknüpft, du kannst beide einzeln ändern. Punkte, die auf der Achse liegen, werden geteilt, so wird aus einem halben Umriss, dessen Enden auf der Achse sitzen, ein geschlossener Umriss: Zeichne die Hälfte eines Winkels, wähle sie aus, spiegle sie und mache den Körper daraus. Eine Hilfslinie eignet sich gut als Achse. [[Esc]] bricht ab.
+
 ## Hilfslinien
 
 Eine Hilfslinie hilft dir beim Setzen von Punkten, ohne zum Körper zu gehören. Sie wird gestrichelt gezeichnet und zählt nie zum Umriss: Du kannst sie beliebig weit über die Form hinausziehen, ohne dass der Körper größer wird.

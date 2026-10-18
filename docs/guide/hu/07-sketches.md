@@ -58,6 +58,10 @@ Egyszerre több sarok is megy: jelöld ki őket [[Shift]] billentyűvel és egy-
 
 ![A bal felső sarok 12 mm-es sugárral lekerekítve.](shot:sketch-fillet)
 
+## Tükrözés
+
+Jelölj ki pontokat és vonalakat (kattintással, [[Shift]]+kattintással vagy keret húzásával), és kattints a sávban a {{ui:sketch.mirror}} gombra. Ezután válassz tengelyt: a {{ui:sketch.mirrorLeftRight}} a lap közepén átmenő függőleges tengelyre tükröz, a {{ui:sketch.mirrorTopBottom}} a vízszintesre, a {{ui:sketch.mirrorAcrossLine}} pedig a vázlat egy egyenes vonalára, amelyre utána kattintasz. A másolat a másik oldalra kerül, az eredeti marad; semmi sincs összekötve, így mindkettőt külön módosíthatod. A tengelyen lévő pontok közösek, ezért a félkörvonal, amelynek végei a tengelyen vannak, zárt körvonallá válik: rajzold meg egy konzol felét, jelöld ki, tükrözd, és készítsd el a testet. Jó tengely a segédvonal. Az [[Esc]] megszakítja.
+
 ## Segédvonalak
 
 A segédvonal segít a pontok elhelyezésében anélkül, hogy a test része lenne. Szaggatottan rajzolódik, és sosem számít körvonalnak: akármilyen messzire túlhúzhatod az alakzaton, a test nem nő.

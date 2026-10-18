@@ -1,6 +1,6 @@
 "use client";
 
-import { AlignCenterHorizontal, AlignCenterVertical, Check, ChevronUp, CornerDownRight, Crop, Crosshair, Home, Layers, Link, Link2Off, LockKeyhole, LockKeyholeOpen, Minus, Plus, Ruler, RulerDimensionLine, Slash, Spline, Split, Trash2, Waves, X } from "lucide-react";
+import { AlignCenterHorizontal, AlignCenterVertical, Check, ChevronUp, CornerDownRight, Crop, Crosshair, FlipHorizontal2, FlipVertical2, Home, Layers, Link, Link2Off, LockKeyhole, LockKeyholeOpen, Minus, Plus, Ruler, RulerDimensionLine, Slash, Spline, Split, Trash2, Waves, X } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties, type Dispatch, type SetStateAction, type FocusEvent as ReactFocusEvent, type KeyboardEvent as ReactKeyboardEvent, type MouseEvent as ReactMouseEvent, type PointerEvent as ReactPointerEvent, type WheelEvent as ReactWheelEvent } from "react";
 import { SnapGridControl } from "@/components/workplane/ShapeInspector";
 import { SketchRevolvePreview } from "@/components/SketchRevolvePreview";
@@ -87,6 +87,8 @@ type SketchWorkspaceProps = {
   onCurveSegment?: (id: string) => void;
   /** Curve or straighten all the selected lines at once (#283). */
   onCurveSegments?: (ids: string[]) => void;
+  /** Copies the selection to the other side of the vertical or the horizontal axis through the middle of the plate, or of a straight line (#512). */
+  onMirror?: (across: "vertical" | "horizontal" | { segmentId: string }) => void;
   onStraightenSegments?: (ids: string[]) => void;
   onStraightenSegment?: (id: string) => void;
   /** Makes a line a construction line (#229), or a normal line again. */
@@ -543,6 +545,7 @@ export function SketchWorkspace({
   onSetPointMode,
   onCurveSegment,
   onCurveSegments,
+  onMirror,
   onStraightenSegment,
   onStraightenSegments,
   onSetSegmentConstruction,
@@ -765,6 +768,34 @@ export function SketchWorkspace({
     onCornerDialogChange?.(dialog);
   }, [onCornerDialogChange]);
   const [cornerValue, setCornerValue] = useState("2");
+  // Mirror (#512): the bar with the choice of axis, and the step where a line is picked as the axis.
+  const [mirrorOpen, setMirrorOpen] = useState(false);
+  const [mirrorPicking, setMirrorPicking] = useState(false);
+  useEffect(() => {
+    if (selected) return;
+    setMirrorOpen(false);
+    setMirrorPicking(false);
+  }, [selected]);
+  useEffect(() => {
+    if (!mirrorOpen) return;
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key !== "Escape") return;
+      if (mirrorPicking) setMirrorPicking(false);
+      else setMirrorOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [mirrorOpen, mirrorPicking]);
+  const closeMirror = () => {
+    setMirrorOpen(false);
+    setMirrorPicking(false);
+  };
+  const mirrorButton = onMirror ? (
+    <>
+      <span className="sketch-point-divider" />
+      <button type="button" title={t("sketch.mirrorHint")} onClick={() => setMirrorOpen(true)}><FlipHorizontal2 /><span>{t("sketch.mirror")}</span></button>
+    </>
+  ) : null;
 
   useEffect(() => {
     setCornerDialog(null);
@@ -1667,7 +1698,7 @@ export function SketchWorkspace({
     <main className="sketch-workspace-stage" style={sketchColorStyle}>
       <div className="sketch-mode-badge">{operation === "revolve" ? t("sketch.modeBadgeRevolve") : operation === "sweep" ? t("sketch.modeBadgeSweep") : t("sketch.modeBadge")}</div>
       {operation === "revolve" ? <SketchRevolvePreview positions={revolvePreviewPositions} /> : null}
-      <div className="camera-controls sketch-camera-controls" aria-label={t("sketch.viewControls")}>
+      <div className="camera-controls sketch-camera-controls" aria-label={t("sketch.viewControls")} data-help-section="cameraBar">
         <button aria-label={t("sketch.resetView")} aria-keyshortcuts="Home" title={t("camera.shortcut", { label: t("sketch.resetView"), keys: "Home" })} onClick={resetView}><Home size={28} /></button>
         <button
           aria-label={t("camera.focusSelection")}
@@ -1897,6 +1928,10 @@ export function SketchWorkspace({
                   event.preventDefault();
                   event.stopPropagation();
                   if (event.button === 1) beginPan(event);
+                  else if (mirrorPicking && event.button === 0 && onMirror) {
+                    onMirror({ segmentId: segment.id });
+                    closeMirror();
+                  }
                   else if (tool === "erase") onDeleteSegment(segment.id);
                   else if (event.button === 0 && tool === "refine" && point) {
                     const start = pointById.get(segment.startId);
@@ -2024,7 +2059,8 @@ export function SketchWorkspace({
             const widthPill = dimensionPillSize(widthLabel, screenUnit, 18);
             const depthPill = dimensionPillSize(depthLabel, screenUnit, 18);
             return (
-              <g className="sketch-geometry-selection">
+              // While a line is picked as the mirror axis (#512) the frame lets the click through to the lines.
+              <g className="sketch-geometry-selection" pointerEvents={mirrorPicking ? "none" : undefined}>
                 <rect
                   data-sketch-entity="selection-box"
                   className="sketch-geometry-selection-box"
@@ -2223,7 +2259,7 @@ export function SketchWorkspace({
               </g>
             );
           })() : null}
-          {selectedPoint && tool === "select" ? (
+          {selectedPoint && tool === "select" && !mirrorOpen ? (
             <g className="sketch-curve-handles">
               {selectedPoint.handleIn ? <><line x1={selectedPoint.x} y1={selectedPoint.z} x2={selectedPoint.handleIn.x} y2={selectedPoint.handleIn.z} /><circle data-sketch-entity="handle" cx={selectedPoint.handleIn.x} cy={selectedPoint.handleIn.z} r={controlPointRadius} className={selectedHandle?.pointId === selectedPoint.id && selectedHandle.handle === "in" ? "sketch-handle-selected" : undefined} onPointerDown={(event) => pressHandle(event, selectedPoint.id, "in", selectedPoint.handleIn!)} /></> : null}
               {selectedPoint.handleOut ? <><line x1={selectedPoint.x} y1={selectedPoint.z} x2={selectedPoint.handleOut.x} y2={selectedPoint.handleOut.z} /><circle data-sketch-entity="handle" cx={selectedPoint.handleOut.x} cy={selectedPoint.handleOut.z} r={controlPointRadius} className={selectedHandle?.pointId === selectedPoint.id && selectedHandle.handle === "out" ? "sketch-handle-selected" : undefined} onPointerDown={(event) => pressHandle(event, selectedPoint.id, "out", selectedPoint.handleOut!)} /></> : null}
@@ -2607,12 +2643,13 @@ export function SketchWorkspace({
                   </button>
                 </>
               ) : null}
+              {mirrorButton}
               <GuideHelpLink section="sketchCurve" className="sketch-corner-help" iconSize={17} />
             </>
           )}
         </div>
       ) : null}
-      {(manyCorners || manyLines) && tool === "select" ? (
+      {(manyCorners || manyLines || (selected?.kind === "multiple" && onMirror)) && tool === "select" && !mirrorOpen ? (
         <div className="sketch-point-actions" aria-label={t("sketch.pointActions")}>
           {activeCornerDialog && manyCorners ? (
             cornerDialogContent
@@ -2651,12 +2688,13 @@ export function SketchWorkspace({
                   <button type="button" title={t("sketch.straightenLineHint")} disabled={!canStraightenLines} onClick={() => onStraightenSegments?.(selectedLines.map((segment) => segment.id))}><Minus /><span>{t("sketch.straightenLine")}</span></button>
                 </>
               ) : null}
+              {mirrorButton}
               <GuideHelpLink section={manyCorners ? "sketchCorners" : "sketchCurve"} className="sketch-corner-help" iconSize={17} />
             </>
           )}
         </div>
       ) : null}
-      {selectedSegment && tool === "select" && onCurveSegment && onStraightenSegment ? (
+      {selectedSegment && tool === "select" && onCurveSegment && onStraightenSegment && !mirrorOpen ? (
         <div className="sketch-point-actions" aria-label={t("sketch.segmentActions")}>
           <button type="button" title={t("sketch.curveLineHint")} disabled={selectedSegmentCurved} onClick={() => onCurveSegment(selectedSegment.id)}><Spline /><span>{t("sketch.curveLine")}</span></button>
           <button type="button" title={t("sketch.straightenLineHint")} disabled={!selectedSegmentCurved && (selectedSegment.kind ?? "line") === "line"} onClick={() => onStraightenSegment(selectedSegment.id)}><Minus /><span>{t("sketch.straightenLine")}</span></button>
@@ -2672,7 +2710,23 @@ export function SketchWorkspace({
               <span>{t(selectedSegment.construction ? "sketch.makeSolid" : "sketch.makeConstruction")}</span>
             </button>
           ) : null}
+          {mirrorButton}
           <GuideHelpLink section="sketchCurve" className="sketch-corner-help" iconSize={17} />
+        </div>
+      ) : null}
+      {mirrorOpen && selected && tool === "select" && onMirror ? (
+        <div className="sketch-point-actions" aria-label={t("sketch.mirror")}>
+          {mirrorPicking ? (
+            <span className="sketch-corner-label">{t("sketch.mirrorPickLine")}</span>
+          ) : (
+            <>
+              <button type="button" title={t("sketch.mirrorLeftRightHint")} onClick={() => { onMirror("vertical"); closeMirror(); }}><FlipHorizontal2 /><span>{t("sketch.mirrorLeftRight")}</span></button>
+              <button type="button" title={t("sketch.mirrorTopBottomHint")} onClick={() => { onMirror("horizontal"); closeMirror(); }}><FlipVertical2 /><span>{t("sketch.mirrorTopBottom")}</span></button>
+              <button type="button" title={t("sketch.mirrorAcrossLineHint")} onClick={() => setMirrorPicking(true)}><Slash /><span>{t("sketch.mirrorAcrossLine")}</span></button>
+            </>
+          )}
+          <button type="button" className="sketch-corner-cancel" title={t("common.cancel")} aria-label={t("common.cancel")} onClick={closeMirror}><X /></button>
+          <GuideHelpLink section="sketchMirror" className="sketch-corner-help" iconSize={17} />
         </div>
       ) : null}
       <div className="grid-settings">

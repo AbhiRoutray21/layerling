@@ -61,6 +61,10 @@ Kilka narożników naraz też działa: zaznacz je przez [[Shift]] i kliknięcie 
 
 ![Narożnik w lewym górnym rogu zaokrąglony promieniem 12 mm.](shot:sketch-fillet)
 
+## Odbicie lustrzane
+
+Zaznacz punkty i linie (kliknięciem, [[Shift]] i kliknięciem albo ramką wokół nich) i kliknij {{ui:sketch.mirror}} na pasku. Potem wybierz oś: {{ui:sketch.mirrorLeftRight}} odbija względem pionowej osi przez środek płyty, {{ui:sketch.mirrorTopBottom}} względem poziomej, a {{ui:sketch.mirrorAcrossLine}} względem prostej linii szkicu, którą potem klikniesz. Kopia ląduje po drugiej stronie, a oryginał zostaje; nic nie jest powiązane, więc możesz zmieniać każdy osobno. Punkty leżące na osi są wspólne, więc połowa konturu, której końce leżą na osi, staje się konturem zamkniętym: narysuj połowę wspornika, zaznacz ją, odbij i zrób bryłę. Dobrą osią jest linia pomocnicza. [[Esc]] anuluje.
+
 ## Linie konstrukcyjne
 
 Linia konstrukcyjna pomaga stawiać punkty, nie stając się częścią bryły. Jest rysowana przerywaną kreską i nigdy nie liczy się jako kontur: możesz ją wyciągnąć dowolnie daleko poza kształt, a bryła nie urośnie.

@@ -61,6 +61,10 @@ Více rohů vyberte pomocí [[Shift]]+klik nebo rámečkem a zvolte {{ui:sketch.
 
 ![Levý horní roh zaoblený poloměrem 12 mm.](shot:sketch-fillet)
 
+## Zrcadlení
+
+Vyberte body a čáry (kliknutím, [[Shift]] a kliknutím nebo rámečkem kolem nich) a v liště klikněte na {{ui:sketch.mirror}}. Pak zvolte osu: {{ui:sketch.mirrorLeftRight}} zrcadlí podle svislé osy středem desky, {{ui:sketch.mirrorTopBottom}} podle vodorovné a {{ui:sketch.mirrorAcrossLine}} podle přímé čáry skici, na kterou poté kliknete. Kopie se objeví na druhé straně a originál zůstane; nic není propojené, takže každý můžete měnit zvlášť. Body na ose jsou společné, takže poloviční obrys s konci na ose se stane uzavřeným obrysem: nakreslete polovinu držáku, vyberte ji, zrcadlete a vytvořte těleso. Dobrou osou je pomocná čára. [[Esc]] zruší.
+
 ## Pomocné konstrukční čáry
 
 Konstrukční čára pomáhá umísťovat body, ale netvoří těleso. Kreslí se čárkovaně a není částí obrysu, takže může přesahovat libovolně daleko.

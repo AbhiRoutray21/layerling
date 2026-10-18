@@ -108,5 +108,15 @@
       "de": "Ein Gridfinity-Behälter ab 3 Höheneinheiten kann jetzt an jeder Innenwand eine Leiste für ein Etikett bekommen, auch an mehreren zugleich. Sie liegt knapp unter dem Stapelrand, und du stellst Breite, Länge und die verrundeten oder gefasten Ecken im Eigenschaften-Fenster ein.",
       "en": "A Gridfinity bin of 3 height units or more can now have a shelf for a label along any of its inner walls, several at once. It sits just under the stacking lip, and you set its width, length and the rounded or chamfered corners in the Properties panel."
     }
+  },
+  {
+    "title": {
+      "de": "Die Skizze lässt sich spiegeln",
+      "en": "A sketch can be mirrored"
+    },
+    "body": {
+      "de": "Wähle in der Skizze Punkte und Linien aus und klicke in der Leiste auf „Spiegeln“: an der senkrechten Achse (links-rechts), an der waagerechten (oben-unten) oder an einer geraden Linie der Skizze, die du anklickst. Die Kopie kommt auf die andere Seite, nichts ist verknüpft. Punkte auf der Achse werden geteilt, aus einer halben Form wird so ein geschlossener Umriss.",
+      "en": "Select points and lines in the sketch and click Mirror in the bar: across the vertical axis (left-right), the horizontal one (top-bottom) or a straight line of the sketch that you click. The copy lands on the other side and nothing is linked. Points on the axis are shared, so a half shape becomes one closed outline."
+    }
   }
 ]
