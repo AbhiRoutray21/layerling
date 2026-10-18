@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+## 1.90.0
+
 - **Custom shapes keep their pinned notes (#109):** A custom shape saved from bodies that had notes pinned to them takes the notes along. When the shape is put into a design they come in closed, pinned to the new bodies and with new numbers: if the design already has the notes 1 to 3, the shape's two notes become 4 and 5. Free notes and reference points belong to the design and stay behind; a design that has no room for more notes takes as many as fit and says so. The guide's chapter on custom shapes says so too. Contributed by @gogades.
 - **Arabic release notes:** The "What's new" card has its title and text in Arabic for the 139 release notes from 1.72.3 to 1.88.0; later notes show in English until their Arabic follows. Contributed by @sevagjb.
 - **A pocket of a whole depth can be chamfered (forum, DrJones):** A pocket whose hole ended exactly on a face of the body - a hole 5.000 mm high pulled through a workplane on a slope, where the snap grid gives whole values - made the exact body for the edge tool with a skin as thin as a rounding error: the edge tool listed two edges on one line and more edges than there are, and a chamfer on the pocket's rim failed with "cannot be chamfered together at this size", while 4.99 or 5.001 worked. The cut of a hole from a body now counts faces and edges within a thousandth of a millimetre as one, so a pocket of exactly 5 mm gives the same faces as one of 5.001. Reported by DrJones in the forum, with his bug report.
