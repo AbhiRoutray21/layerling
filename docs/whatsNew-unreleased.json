@@ -28,5 +28,15 @@
       "de": "Im Fenster für Verrundung und Fase waren die Schnellknöpfe zu breit und gaben dem Fenster eine kleine waagerechte Laufleiste; sie brechen jetzt um. Die Knöpfe reagieren beim Darüberfahren, und der Schnellknopf, dessen Kanten gerade gewählt sind (Alle scharfen, Obere, Untere oder Senkrechte Kanten), bleibt hervorgehoben.",
       "en": "In the Fillet and Chamfer window the quick buttons were too wide and gave the window a small sideways scroll bar; they wrap now. The buttons react when the pointer is over them, and the quick button whose edges are picked now (All sharp, Top, Bottom or Vertical edges) stays highlighted."
     }
+  },
+  {
+    "title": {
+      "de": "Japanische Schrift in Texten und Namensschildern",
+      "en": "Japanese letters in texts and name tags"
+    },
+    "body": {
+      "de": "Ein japanischer Name auf einem Text oder Namensschild kam bisher als Fragezeichen heraus, weil die eingebauten Schriften keine Kana und Kanji haben. Jetzt gibt es eine japanische Schrift, die jeder anderen Schrift und eigenen Schriften ihre Zeichen leiht. Sie wird erst geladen, wenn ein Text japanische Zeichen hat, und ist danach auch offline da.",
+      "en": "A Japanese name on a text or a name tag used to come out as question marks, because the built-in typefaces have no kana and no kanji. There is now a Japanese typeface that lends its characters to every other typeface and to fonts of your own. It is fetched only when a text has Japanese letters, and is there offline afterwards."
+    }
   }
 ]
