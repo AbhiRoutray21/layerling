@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **Italian interface completed:** 112 texts that were still English in Italian are translated - the folders of the dashboard, the interactive help, the Face and Sweep tools, bringing objects back from the history, the edge window and more - so the Italian interface now covers all 2,623 texts. Contributed by @maxciava in PR #543.
+
 ## 1.89.0
 
 - **A narrower shape library holds two columns (#527):** A shape library pulled to its own width needed 206 px for each column, so two columns took about 450 px (360 px at the small toolbar size), a little more than the Properties panel beside it. A column now needs 190 px: two columns fit in about 415 px, 32 px less at the default toolbar size, 26 px at the small one, and the names still fit (checked in German, where they are longest). Asked for by @prmod3d.
