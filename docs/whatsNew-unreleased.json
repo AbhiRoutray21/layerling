@@ -8,5 +8,15 @@
       "de": "Im Fasen-Fenster wählst du oben jetzt zwischen „Chamfer“ und „Fase + Rundung“. Die zweite Art macht an den unteren Kanten eine Fase an der Platte, die tangential in eine Rundung zur Wand übergeht: Die ersten Schichten brauchen keine Stützen, und die Kante endet trotzdem weich. Mit „Untere Kanten“ wählst du den ganzen Fuß in einem Klick; auch per KI-Verbindung möglich (kind „chamfillet“).",
       "en": "In the chamfer window you now choose at the top between Chamfer and Chamfillet. The second kind puts a chamfer at the plate on the bottom edges that blends tangentially into a fillet toward the wall: the first layers need no support, and the edge still ends soft. Bottom edges picks the whole foot in one click; the AI connection can do it too (kind chamfillet)."
     }
+  },
+  {
+    "title": {
+      "de": "Zwei-Finger-Zoom auf dem Touchpad geht jetzt auch in der Skizze",
+      "en": "The two-finger zoom on the trackpad now works in the sketch too"
+    },
+    "body": {
+      "de": "Auf einem Mac mit Safari zoomte das Spreizen und Zusammenziehen auf dem Touchpad in der Skizze die ganze Seite statt der Zeichenfläche. Jetzt zoomt es die Skizze, zu den Fingern hin, in der Geschwindigkeit der Einstellungen, wie im 3D-Fenster. Danach die App einmal neu starten.",
+      "en": "On a Mac with Safari, spreading and pinching on the trackpad in the sketch zoomed the whole page instead of the drawing plate. Now it zooms the sketch, towards the fingers, at the speed of the settings, as in the 3D window. Restart the app once afterwards."
+    }
   }
 ]
