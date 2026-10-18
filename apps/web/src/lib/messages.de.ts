@@ -1599,6 +1599,7 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "myShapes.deleteFolder": "Ordner löschen",
   "myShapes.deleteFolderConfirm": "Mit Inhalt ({count}) löschen?",
   "myShapes.folderEmpty": "Dieser Ordner ist leer",
+  "myShapes.newSubfolder": "Neuer Ordner darin",
   "status.myShapeSaved": "„{name}“ bei den eigenen Formen in diesem Browser abgelegt",
   "status.myShapeSavedServer": "„{name}“ bei den eigenen Formen auf dem Server abgelegt",
   "status.myShapeMovedToServer": "„{name}“ liegt jetzt auf dem Server",

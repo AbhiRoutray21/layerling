@@ -121,9 +121,9 @@ The {{ui:myShapes.title}} live in this browser, apart from the designs, and are 
 
 ### Folders
 
-Many custom shapes sort better into folders. {{ui:myShapes.newFolder}} (the folder with the plus, next to {{ui:myShapes.saveSelection}}) asks for a name and makes an empty folder; folders sit above the shapes that are in none, in the order of their names, and open and close with their arrow. When saving, choose the folder in the list next to the name; {{ui:myShapes.noFolder}} keeps the shape at the top.
+Many custom shapes sort better into folders. {{ui:myShapes.newFolder}} (the folder with the plus, next to {{ui:myShapes.saveSelection}}) asks for a name and makes a folder at the top; the folder with the plus on a folder, {{ui:myShapes.newSubfolder}}, makes one inside it. Folders go three levels deep: a folder on the third level holds shapes but no further folders. Folders sit above the shapes that are in none, in the order of their names, and open and close with their arrow; the number on a folder counts the shapes in it and in the folders inside it. When saving, choose the folder in the list next to the name; {{ui:myShapes.noFolder}} keeps the shape at the top.
 
-The folder with the arrow on a tile moves that shape into another folder, or back out with {{ui:myShapes.noFolder}}. The pencil on a folder renames it, the bin deletes it after asking, together with the shapes in it. Folders are one level deep: there is no folder in a folder. A backup keeps the folders, and loading it puts the shapes back into folders of the same name.
+The folder with the arrow on a tile moves that shape into another folder, or back out with {{ui:myShapes.noFolder}}. The pencil on a folder renames it, the bin deletes it after asking, together with the folders and shapes in it. A folder itself cannot be moved: make the new one where it belongs and move the shapes over. A backup keeps the folders, and loading it puts the shapes back in the same place.
 
 ### Custom shapes on the server
 

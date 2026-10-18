@@ -9,6 +9,17 @@ import {
   serverCustomShapeId,
 } from "@/lib/customShapesServer";
 import { sortMyShapeFolders } from "@/lib/myShapes";
+import {
+  canHoldSubfolder,
+  folderChildren,
+  folderDepth,
+  folderDescendantIds,
+  folderLabel,
+  foldersInTreeOrder,
+  folderPathName,
+  joinFolderPath,
+  parentFolderPath,
+} from "@/lib/customShapeFolders";
 
 type Call = { url: URL; method: string; headers: Record<string, string> };
 
@@ -34,13 +45,58 @@ afterEach(() => {
 
 describe("custom shape folders", () => {
   it("sorts folders by name", () => {
-    const folders = [{ id: "b", name: "Brackets", createdAt: 2 }, { id: "a", name: "Adapters", createdAt: 3 }, { id: "c", name: "Clips", createdAt: 1 }];
+    const folders = [{ id: "b", name: "Brackets", createdAt: 2, parentId: null }, { id: "a", name: "Adapters", createdAt: 3, parentId: null }, { id: "c", name: "Clips", createdAt: 1, parentId: null }];
     expect(sortMyShapeFolders(folders).map((folder) => folder.id)).toEqual(["a", "b", "c"]);
   });
 
   it("keeps the old id for a server shape at the top and puts the folder into the others", () => {
     expect(serverCustomShapeId({ fileName: "Halter.lyl", folder: null })).toBe("server:Halter.lyl");
     expect(serverCustomShapeId({ fileName: "Halter.lyl", folder: "Brackets" })).toBe("server:Brackets/Halter.lyl");
+  });
+
+  it("walks the tree of folders three levels deep", () => {
+    const tree = [
+      { id: "m3", name: "M3", parentId: "brackets" },
+      { id: "brackets", name: "Brackets", parentId: null },
+      { id: "short", name: "Short", parentId: "m3" },
+      { id: "adapters", name: "Adapters", parentId: null },
+      { id: "m2", name: "M2", parentId: "brackets" },
+    ];
+    expect(folderChildren(tree, null).map((folder) => folder.id)).toEqual(["adapters", "brackets"]);
+    expect(foldersInTreeOrder(tree).map((folder) => folder.id)).toEqual(["adapters", "brackets", "m2", "m3", "short"]);
+    expect([folderDepth(tree, null), folderDepth(tree, "brackets"), folderDepth(tree, "short")]).toEqual([0, 1, 3]);
+    expect(folderLabel(tree, "short")).toBe("Brackets / M3 / Short");
+    expect(folderDescendantIds(tree, "brackets").sort()).toEqual(["brackets", "m2", "m3", "short"]);
+    // The third level takes shapes, not folders.
+    expect([canHoldSubfolder(tree, null), canHoldSubfolder(tree, "m3"), canHoldSubfolder(tree, "short")]).toEqual([true, true, false]);
+  });
+
+  it("survives a loop in broken folder data", () => {
+    const loop = [{ id: "a", name: "A", parentId: "b" }, { id: "b", name: "B", parentId: "a" }];
+    expect(folderLabel(loop, "a")).toBe("B / A");
+    expect(folderDescendantIds(loop, "a").sort()).toEqual(["a", "b"]);
+  });
+
+  it("splits and joins server folder paths", () => {
+    expect(joinFolderPath(null, "Brackets")).toBe("Brackets");
+    expect(joinFolderPath("Brackets", "M3")).toBe("Brackets/M3");
+    expect([parentFolderPath("Brackets/M3"), parentFolderPath("Brackets")]).toEqual(["Brackets", null]);
+    expect(folderPathName("Brackets/M3")).toBe("M3");
+  });
+
+  it("lists nested server folders as paths, and stops below the third level", async () => {
+    stubStore({
+      "": { folders: ["Custom shapes"] },
+      "Custom shapes": { folders: ["Brackets"] },
+      "Custom shapes/Brackets": { folders: ["M3"], projects: [shape("Halter.lyl", 1)] },
+      "Custom shapes/Brackets/M3": { folders: ["Short"] },
+      "Custom shapes/Brackets/M3/Short": { folders: ["Too deep"], projects: [shape("Bolt.lyl", 2)] },
+      "Custom shapes/Brackets/M3/Short/Too deep": { projects: [shape("Lost.lyl", 3)] },
+    });
+    const listed = await listServerCustomShapes();
+    expect(listed?.folders).toEqual(["Brackets", "Brackets/M3", "Brackets/M3/Short"]);
+    expect(listed?.shapes.map((entry) => [entry.fileName, entry.folder])).toEqual([["Halter.lyl", "Brackets"], ["Bolt.lyl", "Brackets/M3/Short"]]);
+    expect(serverCustomShapeId(listed!.shapes[1])).toBe("server:Brackets/M3/Short/Bolt.lyl");
   });
 
   it("lists the shapes at the top and in each folder, oldest first", async () => {
@@ -87,6 +143,8 @@ describe("custom shape folders", () => {
   it("creates, renames and deletes folders inside the custom shapes folder", async () => {
     const calls = stubStore({});
     await createServerCustomShapeFolder(" Brackets ", "taken");
+    await createServerCustomShapeFolder("M3", "taken", "Brackets");
+    await renameServerCustomShapeFolder("Brackets/M3", "M4", "taken");
     await renameServerCustomShapeFolder("Brackets", "Holders", "taken");
     await deleteServerCustomShapeFolder("Holders");
     const writes = calls.filter((call) => call.method !== "GET").map((call) => [call.method, Object.fromEntries(call.url.searchParams)]);
@@ -94,6 +152,9 @@ describe("custom shape folders", () => {
       // The custom shapes folder first, in case it is not there yet.
       ["POST", { folder: "Custom shapes" }],
       ["POST", { path: "Custom shapes", folder: "Brackets" }],
+      ["POST", { folder: "Custom shapes" }],
+      ["POST", { path: "Custom shapes/Brackets", folder: "M3" }],
+      ["POST", { path: "Custom shapes/Brackets/M3", renameTo: "M4" }],
       ["POST", { path: "Custom shapes/Brackets", renameTo: "Holders" }],
       ["DELETE", { path: "Custom shapes/Holders", deleteFolder: "1", recursive: "1" }],
     ]);

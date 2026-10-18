@@ -122,9 +122,9 @@ Die {{ui:myShapes.title}} liegen in diesem Browser, getrennt von den Entwürfen,
 
 ### Ordner
 
-Viele eigene Formen lassen sich in Ordnern sortieren. {{ui:myShapes.newFolder}} (der Ordner mit dem Plus, neben {{ui:myShapes.saveSelection}}) fragt nach einem Namen und legt einen leeren Ordner an; Ordner stehen über den Formen, die in keinem liegen, nach Namen geordnet, und klappen mit ihrem Pfeil auf und zu. Beim Speichern wählst du den Ordner in der Liste neben dem Namen; mit {{ui:myShapes.noFolder}} bleibt die Form oben.
+Viele eigene Formen lassen sich in Ordnern sortieren. {{ui:myShapes.newFolder}} (der Ordner mit dem Plus, neben {{ui:myShapes.saveSelection}}) fragt nach einem Namen und legt einen Ordner oben an; der Ordner mit dem Plus an einem Ordner, {{ui:myShapes.newSubfolder}}, legt einen darin an. Ordner gehen drei Ebenen tief: Ein Ordner auf der dritten Ebene nimmt Formen auf, aber keine weiteren Ordner. Ordner stehen über den Formen, die in keinem liegen, nach Namen geordnet, und klappen mit ihrem Pfeil auf und zu; die Zahl an einem Ordner zählt die Formen darin und in den Ordnern darunter. Beim Speichern wählst du den Ordner in der Liste neben dem Namen; mit {{ui:myShapes.noFolder}} bleibt die Form oben.
 
-Der Ordner mit dem Pfeil auf einer Kachel verschiebt die Form in einen anderen Ordner, oder mit {{ui:myShapes.noFolder}} wieder heraus. Der Stift an einem Ordner benennt ihn um, der Papierkorb löscht ihn nach einer Rückfrage, samt den Formen darin. Ordner haben nur eine Ebene: Es gibt keinen Ordner im Ordner. Eine Sicherung behält die Ordner, und beim Laden kommen die Formen wieder in Ordner gleichen Namens.
+Der Ordner mit dem Pfeil auf einer Kachel verschiebt die Form in einen anderen Ordner, oder mit {{ui:myShapes.noFolder}} wieder heraus. Der Stift an einem Ordner benennt ihn um, der Papierkorb löscht ihn nach einer Rückfrage, samt den Ordnern und Formen darin. Einen Ordner selbst kannst du nicht verschieben: Lege den neuen dort an, wo er hingehört, und verschiebe die Formen hinüber. Eine Sicherung behält die Ordner, und beim Laden kommen die Formen wieder an dieselbe Stelle.
 
 ### Eigene Formen auf dem Server
 

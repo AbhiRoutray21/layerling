@@ -1592,6 +1592,7 @@ export const MESSAGES_RU: Partial<Record<MessageKey, string>> = {
   "myShapes.deleteFolder": "Удалить папку",
   "myShapes.deleteFolderConfirm": "Удалить вместе с фигурами ({count})?",
   "myShapes.folderEmpty": "Эта папка пуста",
+  "myShapes.newSubfolder": "Новая папка внутри",
   "status.myShapeSaved": "«{name}» сохранена в собственных фигурах в этом браузере",
   "status.myShapeSavedServer": "«{name}» сохранена в собственных фигурах на сервере",
   "status.myShapeMovedToServer": "«{name}» теперь на сервере",

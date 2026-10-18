@@ -39,17 +39,25 @@ import {
   type MyShapeMeta,
 } from "@/lib/myShapes";
 import type { PlacementPoint, PlacementWorkplane } from "@/lib/placementWorkplane";
+import { mcpShapeSummary } from "@/lib/editorMcpSummary";
 import { dedupeProjectAssets } from "@/lib/projectAssets";
+import { displayShapeName } from "@/lib/shapeCatalog";
 import { packBackup, unpackBackup } from "@/lib/projectBackup";
+import { CUSTOM_SHAPE_FOLDER_DEPTH, FOLDER_PATH_SEPARATOR, folderAncestry, folderPathName, joinFolderPath, parentFolderPath } from "@/lib/customShapeFolders";
 import { storeFolderNameProblem } from "@/lib/storeFolderName";
 import { NOTE_COUNT_LIMIT } from "@/lib/workplaneNotes";
 import type { ProjectAsset, WorkplaneNote, WorkplaneShape } from "@/types/layerling";
 
 type LylExport = Parameters<typeof exportLylProject>[0];
 
-/** Server folders go by "server-folder:<name>"; their names are unique there, like a browser folder's id. */
+/**
+ * Server folders go by "server-folder:<path>" ("server-folder:Brackets/M3");
+ * a path is unique there, like a browser folder's id. Renaming a folder
+ * changes the ids of every folder below it.
+ */
 const SERVER_FOLDER_PREFIX = "server-folder:";
-const serverFolderId = (name: string) => `${SERVER_FOLDER_PREFIX}${name}`;
+const serverFolderId = (path: string) => `${SERVER_FOLDER_PREFIX}${path}`;
+const DEPTH_MESSAGE = `Folders go ${CUSTOM_SHAPE_FOLDER_DEPTH} levels deep; this one cannot hold another folder`;
 
 export interface CustomShapesOptions {
   sharedProjectsEnabled: boolean;
@@ -72,7 +80,7 @@ export interface CustomShapesOptions {
 /**
  * Custom shapes (#109): kept in this browser (IndexedDB) and, where the
  * shared store is on, in its "Custom shapes" folder - each side with folders
- * of its own, one level deep. Shown on top of the shape library; server
+ * of its own, up to three levels deep. Shown on top of the shape library; server
  * entries carry the id "server:<folder>/<file name>" ("server:<file name>"
  * at the top).
  */
@@ -127,17 +135,34 @@ export function useCustomShapes(options: CustomShapesOptions) {
     ...(serverShapes?.shapes ?? []).map((shape) => ({ id: serverCustomShapeId(shape), name: shape.name, thumbnail: shape.thumbnailUrl ?? "", location: "server" as const, folderId: shape.folder ? serverFolderId(shape.folder) : null })),
   ], [myShapes, myFolders, serverShapes]);
   const customShapeFolders = useMemo<CustomShapeFolder[]>(() => [
-    ...myFolders.map((folder) => ({ id: folder.id, name: folder.name, location: "browser" as const })),
-    ...(serverShapes?.folders ?? []).map((name) => ({ id: serverFolderId(name), name, location: "server" as const })),
+    ...myFolders.map((folder) => ({ id: folder.id, name: folder.name, location: "browser" as const, parentId: folder.parentId })),
+    ...(serverShapes?.folders ?? []).map((path) => {
+      const parent = parentFolderPath(path);
+      return { id: serverFolderId(path), name: folderPathName(path), location: "server" as const, parentId: parent ? serverFolderId(parent) : null };
+    }),
   ], [myFolders, serverShapes]);
 
   const serverShapeFor = (id: string) => (id.startsWith("server:")
     ? serverShapesRef.current?.shapes.find((shape) => serverCustomShapeId(shape) === id) ?? null
     : null);
   const customShapeName = (id: string) => serverShapeFor(id)?.name ?? myShapesRef.current.find((shape) => shape.id === id)?.name ?? id;
-  /** The server folder's name behind an id, null for none. */
-  const serverFolderName = (folderId: string | null) => (folderId?.startsWith(SERVER_FOLDER_PREFIX) ? folderId.slice(SERVER_FOLDER_PREFIX.length) : null);
-  const folderName = (folderId: string | null) => serverFolderName(folderId) ?? myFoldersRef.current.find((folder) => folder.id === folderId)?.name ?? "";
+  /** The server folder's path behind an id, null for none. */
+  const serverFolderPath = (folderId: string | null) => (folderId?.startsWith(SERVER_FOLDER_PREFIX) ? folderId.slice(SERVER_FOLDER_PREFIX.length) : null);
+  /** A browser folder's path of names, as the MCP tools and backups write it. */
+  const browserFolderPath = (folderId: string | null | undefined) => (folderId
+    ? folderAncestry(myFoldersRef.current, folderId).map((folder) => folder.name).join(FOLDER_PATH_SEPARATOR) || null
+    : null);
+  /** How many folders deep `folderId` sits; 0 for none. */
+  const folderDepthOf = (folderId: string | null) => {
+    const server = serverFolderPath(folderId);
+    if (server !== null) return server.split(FOLDER_PATH_SEPARATOR).length;
+    return folderAncestry(myFoldersRef.current, folderId).length;
+  };
+  /** A folder's own name, for the messages. */
+  const folderName = (folderId: string | null) => {
+    const server = serverFolderPath(folderId);
+    return server !== null ? folderPathName(server) : myFoldersRef.current.find((folder) => folder.id === folderId)?.name ?? "";
+  };
 
   const packCurrentCustomShape = (parts: WorkplaneShape[], name: string, assets: ProjectAsset[], notes: WorkplaneNote[]) => packCustomShape(
     parts, name, assets, notes, { workspace: workspaceSettingsRef.current, snapGrid: snapGridRef.current },
@@ -168,14 +193,14 @@ export function useCustomShapes(options: CustomShapesOptions) {
     const packed = await packCurrentCustomShape(parts, name, projectAssetsRef.current, notesRef.current);
     let entry: { id: string; name: string; location: CustomShapeLocation; folder: string | null; bodyCount: number; byteLength: number };
     if (location === "server") {
-      const folder = serverFolderName(folderId);
+      const folder = serverFolderPath(folderId);
       const saved = await saveServerCustomShape(name, packed.bytes, packed.thumbnail, t("status.myShapeNameTaken", { name }), folder);
       await refreshServerShapes();
       entry = { id: serverCustomShapeId(saved), name: saved.name, location, folder, bodyCount: packed.bodyCount, byteLength: packed.bytes.byteLength };
     } else {
       const meta = await keepInBrowser(packed, name, folderId);
       await refreshMyShapes();
-      entry = { id: meta.id, name, location, folder: folderId ? folderName(folderId) : null, bodyCount: meta.bodyCount, byteLength: meta.byteLength };
+      entry = { id: meta.id, name, location, folder: browserFolderPath(folderId), bodyCount: meta.bodyCount, byteLength: meta.byteLength };
     }
     setNotice(t(location === "server" ? "status.myShapeSavedServer" : "status.myShapeSaved", { name: entry.name }));
     return entry;
@@ -250,7 +275,7 @@ export function useCustomShapes(options: CustomShapesOptions) {
     const server = serverShapeFor(id);
     const target = folderId ? folderName(folderId) : null;
     if (server) {
-      await moveServerCustomShape(server, serverFolderName(folderId), t("status.myShapeNameTakenInFolder", { name, folder: target ?? t("myShapes.title") }));
+      await moveServerCustomShape(server, serverFolderPath(folderId), t("status.myShapeNameTakenInFolder", { name, folder: target ?? t("myShapes.title") }));
       await refreshServerShapes();
     } else {
       await moveMyShape(id, folderId);
@@ -259,39 +284,45 @@ export function useCustomShapes(options: CustomShapesOptions) {
     setNotice(target ? t("status.myShapeMovedToFolder", { name, folder: target }) : t("status.myShapeMovedOutOfFolder", { name }));
   }, [refreshMyShapes, refreshServerShapes]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  /** A new folder; returns its id. The caller has checked the name against the folders on that side. */
-  const createShapeFolder = useCallback(async (name: string, location: CustomShapeLocation) => {
+  /**
+   * A new folder at the top or inside `parentId`, on the parent's side;
+   * returns its id. The caller has checked the name against the folders
+   * beside it.
+   */
+  const createShapeFolder = useCallback(async (name: string, location: CustomShapeLocation, parentId: string | null = null) => {
+    if (folderDepthOf(parentId) >= CUSTOM_SHAPE_FOLDER_DEPTH) throw new Error(DEPTH_MESSAGE);
     const taken = t("shared.folderNameTaken");
     let id: string;
     if (location === "server") {
-      await createServerCustomShapeFolder(name, taken);
+      const parent = serverFolderPath(parentId);
+      await createServerCustomShapeFolder(name, taken, parent);
       await refreshServerShapes();
-      id = serverFolderId(name.trim());
+      id = serverFolderId(joinFolderPath(parent, name.trim()));
     } else {
-      id = (await createMyShapeFolder(name)).id;
+      id = (await createMyShapeFolder(name, parentId)).id;
       await refreshMyShapes();
     }
     setNotice(t("status.myShapeFolderCreated", { name: name.trim() }));
     return id;
   }, [refreshMyShapes, refreshServerShapes]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  /** Returns the folder's id afterwards: on the server it is its name, so it changes. */
+  /** Returns the folder's id afterwards: on the server it is its path, so it changes. */
   const renameShapeFolder = useCallback(async (folderId: string, name: string) => {
-    const server = serverFolderName(folderId);
+    const server = serverFolderPath(folderId);
     if (server !== null) {
       await renameServerCustomShapeFolder(server, name, t("shared.folderNameTaken"));
       await refreshServerShapes();
-      return serverFolderId(name.trim());
+      return serverFolderId(joinFolderPath(parentFolderPath(server), name.trim()));
     }
     await renameMyShapeFolder(folderId, name);
     await refreshMyShapes();
     return folderId;
   }, [refreshMyShapes, refreshServerShapes]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  /** The folder and every shape in it. */
+  /** The folder with every folder and shape in it. */
   const deleteShapeFolder = useCallback(async (folderId: string) => {
     const name = folderName(folderId);
-    const server = serverFolderName(folderId);
+    const server = serverFolderPath(folderId);
     if (server !== null) {
       await deleteServerCustomShapeFolder(server);
       await refreshServerShapes();
@@ -375,34 +406,82 @@ export function useCustomShapes(options: CustomShapesOptions) {
   /** Every custom shape as the MCP tools report it, after asking both sides again. */
   const listCustomShapesForMcp = useCallback(async () => {
     const [browser, server] = await Promise.all([refreshMyShapes(), refreshServerShapes()]);
-    const browserFolder = (id?: string) => myFoldersRef.current.find((folder) => folder.id === id)?.name ?? null;
     return {
       serverAvailable: server !== null,
       folders: [
-        ...(server?.folders ?? []).map((name) => ({ name, location: "server" })),
-        ...myFoldersRef.current.map((folder) => ({ name: folder.name, location: "browser" })),
+        ...(server?.folders ?? []).map((path) => ({ path, location: "server" })),
+        ...myFoldersRef.current.map((folder) => ({ path: browserFolderPath(folder.id), location: "browser" })),
       ],
       customShapes: [
         ...(server?.shapes ?? []).map((shape) => ({ id: serverCustomShapeId(shape), name: shape.name, location: "server", folder: shape.folder, byteLength: shape.size, savedAt: new Date(shape.updatedAt).toISOString() })),
-        ...browser.map((shape) => ({ id: shape.id, name: shape.name, location: "browser", folder: browserFolder(shape.folderId), bodyCount: shape.bodyCount, byteLength: shape.byteLength, savedAt: new Date(shape.createdAt).toISOString() })),
+        ...browser.map((shape) => ({ id: shape.id, name: shape.name, location: "browser", folder: browserFolderPath(shape.folderId), bodyCount: shape.bodyCount, byteLength: shape.byteLength, savedAt: new Date(shape.createdAt).toISOString() })),
       ],
     };
   }, [refreshMyShapes, refreshServerShapes]);
 
   /**
-   * The folder id for an MCP save: the folder of that name on that side,
-   * made when it is missing. No name, no folder.
+   * The folder id for an MCP save: the folder at that path ("Brackets/M3") on
+   * that side, with each missing folder on the way made. No path, no folder.
    */
-  const folderIdForMcp = useCallback(async (name: string | undefined, location: CustomShapeLocation) => {
-    const wanted = name?.trim();
-    if (!wanted) return null;
-    const existing = location === "server"
-      ? (serverShapesRef.current?.folders ?? []).find((folder) => folder.toLowerCase() === wanted.toLowerCase())
-      : myFoldersRef.current.find((folder) => folder.name.toLowerCase() === wanted.toLowerCase())?.id;
-    if (existing) return location === "server" ? serverFolderId(existing) : existing;
-    if (storeFolderNameProblem(wanted, []) !== null) throw new Error(`"${wanted}" cannot be a folder name: no leading dot, no slashes, quotation marks or < > : | ? *, at most 80 characters`);
-    return createShapeFolder(wanted, location);
+  const folderIdForMcp = useCallback(async (path: string | undefined, location: CustomShapeLocation) => {
+    const names = (path ?? "").split(FOLDER_PATH_SEPARATOR).map((name) => name.trim()).filter(Boolean);
+    if (names.length > CUSTOM_SHAPE_FOLDER_DEPTH) throw new Error(`"${path}" is ${names.length} folders deep; folders go ${CUSTOM_SHAPE_FOLDER_DEPTH} levels deep`);
+    let parentId: string | null = null;
+    for (const name of names) {
+      const existing = location === "server"
+        ? (serverShapesRef.current?.folders ?? []).find((folder) => folder.toLowerCase() === joinFolderPath(serverFolderPath(parentId), name).toLowerCase())
+        : myFoldersRef.current.find((folder) => folder.parentId === parentId && folder.name.toLowerCase() === name.toLowerCase())?.id;
+      if (existing) {
+        parentId = location === "server" ? serverFolderId(existing) : existing;
+        continue;
+      }
+      if (storeFolderNameProblem(name, []) !== null) throw new Error(`"${name}" cannot be a folder name: no leading dot, no slashes, quotation marks or < > : | ? *, at most 80 characters`);
+      parentId = await createShapeFolder(name, location, parentId);
+    }
+    return parentId;
   }, [createShapeFolder]);
+
+  /**
+   * The MCP actions on custom shapes (save, list, insert, delete); undefined
+   * for any other action, which the editor then handles itself.
+   */
+  const runCustomShapeMcp = useCallback(async (action: string, params: Record<string, unknown>): Promise<unknown> => {
+    const text = (value: unknown) => (typeof value === "string" ? value : "");
+    const number = (value: unknown, fallback: number) => (typeof value === "number" && Number.isFinite(value) ? value : fallback);
+    if (action === "save_custom_shape") {
+      const listed = params.ids ?? params.id;
+      const requested = (Array.isArray(listed) ? listed : [listed]).filter((entry): entry is string => typeof entry === "string" && entry.length > 0);
+      const ids = requested.length ? requested : selectedIdsRef.current;
+      const parts = shapesRef.current.filter((shape) => ids.includes(shape.id));
+      if (parts.length === 0) throw new Error("Pass the ids of the bodies to keep, or select them first");
+      if (params.location !== undefined && params.location !== "browser" && params.location !== "server") throw new Error("location must be \"browser\" or \"server\"");
+      const servers = await refreshServerShapes();
+      if (params.location === "server" && !servers) throw new Error("This installation keeps nothing on the server; save to the browser instead");
+      const location: CustomShapeLocation = params.location === "browser" || params.location === "server" ? params.location : servers ? "server" : "browser";
+      const fallback = parts.length === 1 ? displayShapeName(parts[0]) : t("myShapes.defaultName");
+      const name = myShapeNameFromFile(text(params.name), fallback);
+      const folderId = await folderIdForMcp(text(params.folder) || undefined, location);
+      return { customShape: await saveSelectionAsMyShape(name, parts.map((shape) => shape.id), location, folderId) };
+    }
+    if (action === "list_custom_shapes") return listCustomShapesForMcp();
+    if (action !== "insert_custom_shape" && action !== "delete_custom_shape") return undefined;
+    const all = (await listCustomShapesForMcp()).customShapes;
+    const wanted = text(params.id) || text(params.name);
+    const byId = all.filter((shape) => shape.id === wanted);
+    const found = byId.length ? byId : all.filter((shape) => shape.name.toLowerCase() === wanted.toLowerCase());
+    if (found.length === 0) throw new Error(`No custom shape "${wanted}"; layerling_list_custom_shapes lists them`);
+    if (found.length > 1) throw new Error(`Several custom shapes are called "${wanted}"; pass the id instead`);
+    const entry = found[0];
+    if (action === "delete_custom_shape") {
+      await deleteMyShapeEntry(entry.id);
+      return { deleted: entry.id };
+    }
+    const point = params.x !== undefined || params.z !== undefined
+      ? { x: number(params.x, 0), y: placementWorkplaneRef.current.origin.y, z: number(params.z, 0) }
+      : undefined;
+    const inserted = await insertMyShape(entry.id, point);
+    return { objects: inserted.map(mcpShapeSummary) };
+  }, [deleteMyShapeEntry, folderIdForMcp, insertMyShape, listCustomShapesForMcp, refreshServerShapes, saveSelectionAsMyShape]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return {
     customShapeEntries,
@@ -422,7 +501,6 @@ export function useCustomShapes(options: CustomShapesOptions) {
     deleteShapeFolder,
     backUpMyShapes,
     loadMyShapeFiles,
-    listCustomShapesForMcp,
-    folderIdForMcp,
+    runCustomShapeMcp,
   };
 }

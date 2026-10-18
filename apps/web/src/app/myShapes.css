@@ -218,6 +218,10 @@
   .my-shapes-folder-actions {
     opacity: 1;
   }
+
+  .my-shapes-folder-toggle {
+    padding-right: 90px;
+  }
 }
 
 .my-shape-tile-action {
@@ -374,8 +378,9 @@
   color: #604529;
 }
 
-.my-shapes-folder-list {
-  margin: 2px 0 6px 22px;
+/* Each level moves in a little; three levels still leave room for the names. */
+.my-shapes-folder-body {
+  margin: 2px 0 6px 14px;
 }
 
 .my-shapes-folder-select,

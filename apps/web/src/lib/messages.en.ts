@@ -1600,6 +1600,7 @@ export const MESSAGES_EN = {
   "myShapes.deleteFolder": "Delete folder",
   "myShapes.deleteFolderConfirm": "Delete with contents ({count})?",
   "myShapes.folderEmpty": "This folder is empty",
+  "myShapes.newSubfolder": "New folder inside",
   "status.myShapeSaved": "\"{name}\" kept in the custom shapes in this browser",
   "status.myShapeSavedServer": "\"{name}\" kept in the custom shapes on the server",
   "status.myShapeMovedToServer": "\"{name}\" is on the server now",

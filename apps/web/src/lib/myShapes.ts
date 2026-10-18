@@ -1,4 +1,5 @@
 import { createLocalId } from "@/lib/localIds";
+import { CUSTOM_SHAPE_FOLDER_DEPTH, FOLDER_PATH_SEPARATOR, folderAncestry, folderDescendantIds } from "@/lib/customShapeFolders";
 import { storeFolderNameProblem } from "@/lib/storeFolderName";
 import { backupEntryNames, CUSTOM_SHAPES_BACKUP_FOLDER, CUSTOM_SHAPES_MANIFEST, unpackCustomShapes, type BackupEntry } from "@/lib/projectBackup";
 import type { WorkplaneShape } from "@/types/layerling";
@@ -12,7 +13,8 @@ import type { WorkplaneShape } from "@/types/layerling";
  *
  * Three stores: the light "meta" records (name, preview, folder) are read
  * whenever the library opens, the packages only when a shape is inserted, and
- * the folders - one level, no folder in a folder - hold nothing but a name, so
+ * the folders - up to three levels, each naming its parent - hold nothing but
+ * a name, so
  * renaming one touches no shape.
  */
 
@@ -30,7 +32,8 @@ export type MyShapeMeta = {
   folderId?: string;
 };
 
-export type MyShapeFolder = { id: string; name: string; createdAt: number };
+/** `parentId` is null for a folder at the top; records from before nesting have none. */
+export type MyShapeFolder = { id: string; name: string; createdAt: number; parentId: string | null };
 
 export type MyShapeBox = { minX: number; maxX: number; minY: number; maxY: number; minZ: number; maxZ: number };
 
@@ -166,7 +169,8 @@ function isMeta(value: unknown): value is MyShapeMeta {
 
 function isFolder(value: unknown): value is MyShapeFolder {
   const folder = value as Partial<MyShapeFolder> | null;
-  return Boolean(folder) && typeof folder?.id === "string" && typeof folder.name === "string" && typeof folder.createdAt === "number";
+  return Boolean(folder) && typeof folder?.id === "string" && typeof folder.name === "string" && typeof folder.createdAt === "number"
+    && (folder.parentId === undefined || folder.parentId === null || typeof folder.parentId === "string");
 }
 
 /** Folders in the order of their names, as a file browser shows them. */
@@ -181,12 +185,19 @@ export async function listMyShapes(): Promise<MyShapeMeta[]> {
 
 export async function listMyShapeFolders(): Promise<MyShapeFolder[]> {
   const records = await withStores<unknown[]>("readonly", (_meta, _packages, folders) => folders.getAll());
-  return sortMyShapeFolders((records ?? []).filter(isFolder));
+  const folders = (records ?? []).filter(isFolder);
+  // A parent another tab deleted half-way leaves its child at the top rather than lost.
+  const ids = new Set(folders.map((folder) => folder.id));
+  return sortMyShapeFolders(folders.map((folder) => ({ ...folder, parentId: folder.parentId && ids.has(folder.parentId) ? folder.parentId : null })));
 }
 
-/** A new folder; the caller has checked the name (`storeFolderNameProblem`), the same rules as on the server. */
-export async function createMyShapeFolder(name: string): Promise<MyShapeFolder> {
-  const folder: MyShapeFolder = { id: createLocalId("my-shape-folder"), name: name.trim(), createdAt: Date.now() };
+/**
+ * A new folder, at the top or inside `parentId`; the caller has checked the
+ * name (`storeFolderNameProblem`, the same rules as on the server) and that
+ * the parent may hold another level.
+ */
+export async function createMyShapeFolder(name: string, parentId: string | null = null): Promise<MyShapeFolder> {
+  const folder: MyShapeFolder = { id: createLocalId("my-shape-folder"), name: name.trim(), createdAt: Date.now(), parentId };
   await withStores("readwrite", (_meta, _packages, folders) => {
     folders.put(folder);
   });
@@ -203,15 +214,16 @@ export async function renameMyShapeFolder(id: string, name: string) {
   announceChange();
 }
 
-/** The folder and the shapes in it, in one go: half a deletion never stays behind. */
+/** The folder with the folders and shapes in it, in one go: half a deletion never stays behind. */
 export async function deleteMyShapeFolder(id: string) {
-  const shapes = (await listMyShapes()).filter((shape) => shape.folderId === id);
+  const doomed = folderDescendantIds(await listMyShapeFolders(), id);
+  const shapes = (await listMyShapes()).filter((shape) => shape.folderId !== undefined && doomed.includes(shape.folderId));
   await withStores("readwrite", (meta, packages, folders) => {
     for (const shape of shapes) {
       meta.delete(shape.id);
       packages.delete(shape.id);
     }
-    folders.delete(id);
+    for (const folderId of doomed) folders.delete(folderId);
   });
   announceChange();
   return shapes.length;
@@ -264,23 +276,23 @@ type ManifestEntry = { file: string; name: string; createdAt: number; thumbnail:
 /**
  * The custom shapes of this browser as entries for a backup ZIP: one .lyl
  * each in the custom shapes folder, and a list with their names and
- * pictures, so a restore needs no editor to draw them again. Folders go in by
- * name, the empty ones too.
+ * pictures, so a restore needs no editor to draw them again. Folders go in as
+ * paths ("Brackets/M3"), the empty ones too.
  */
 export async function customShapesBackupEntries(): Promise<BackupEntry[]> {
   const list = await listMyShapes();
   if (list.length === 0) return [];
   const folders = await listMyShapeFolders();
-  const folderName = (id?: string) => folders.find((folder) => folder.id === id)?.name;
+  const folderPath = (id?: string) => (id ? folderAncestry(folders, id).map((folder) => folder.name).join(FOLDER_PATH_SEPARATOR) || undefined : undefined);
   const files = backupEntryNames(list.map((shape) => shape.name), "shape");
   const entries: BackupEntry[] = [];
   const manifest: ManifestEntry[] = [];
   for (let index = 0; index < list.length; index += 1) {
     const shape = list[index];
     entries.push({ name: `${CUSTOM_SHAPES_BACKUP_FOLDER}/${files[index]}`, bytes: await readMyShapePackage(shape.id) });
-    manifest.push({ file: files[index], name: shape.name, createdAt: shape.createdAt, thumbnail: shape.thumbnail, bodyCount: shape.bodyCount, fingerprint: shape.fingerprint, folder: folderName(shape.folderId) });
+    manifest.push({ file: files[index], name: shape.name, createdAt: shape.createdAt, thumbnail: shape.thumbnail, bodyCount: shape.bodyCount, fingerprint: shape.fingerprint, folder: folderPath(shape.folderId) });
   }
-  entries.push({ name: `${CUSTOM_SHAPES_BACKUP_FOLDER}/${CUSTOM_SHAPES_MANIFEST}`, bytes: new TextEncoder().encode(JSON.stringify({ format: "com.layerling.custom-shapes", version: 1, folders: folders.map((folder) => folder.name), shapes: manifest })) });
+  entries.push({ name: `${CUSTOM_SHAPES_BACKUP_FOLDER}/${CUSTOM_SHAPES_MANIFEST}`, bytes: new TextEncoder().encode(JSON.stringify({ format: "com.layerling.custom-shapes", version: 1, folders: folders.map((folder) => folderPath(folder.id)), shapes: manifest })) });
   return entries;
 }
 
@@ -305,8 +317,8 @@ function manifestFolders(manifest: unknown) {
 /**
  * Puts the custom shapes of a backup into this browser. A shape listed with
  * its picture goes straight in; one with the same name and bodies is already
- * there and is skipped. A folder goes into the one of the same name here,
- * made when there is none. Packages without a list entry come back to the
+ * there and is skipped. A folder goes into the one at the same path here,
+ * made when there is none; below the third level the shapes stay in the third. Packages without a list entry come back to the
  * caller, which can draw a picture for them.
  */
 export async function restoreCustomShapesFromBackup(bytes: Uint8Array): Promise<{ added: number; skipped: number; unlisted: BackupEntry[] }> {
@@ -315,14 +327,17 @@ export async function restoreCustomShapesFromBackup(bytes: Uint8Array): Promise<
   const listed = new Map(manifestEntries(manifest).map((entry) => [entry.file, entry]));
   const existing = await listMyShapes();
   const folders = await listMyShapeFolders();
-  const folderFor = async (name: string | undefined) => {
-    const wanted = name?.trim();
-    if (!wanted || storeFolderNameProblem(wanted, []) !== null) return undefined;
-    const found = folders.find((folder) => folder.name.toLowerCase() === wanted.toLowerCase());
-    if (found) return found.id;
-    const created = await createMyShapeFolder(wanted);
-    folders.push(created);
-    return created.id;
+  const folderFor = async (path: string | undefined) => {
+    let parentId: string | null = null;
+    const names = (path ?? "").split(FOLDER_PATH_SEPARATOR).map((name) => name.trim()).slice(0, CUSTOM_SHAPE_FOLDER_DEPTH);
+    for (const name of names) {
+      if (!name || storeFolderNameProblem(name, []) !== null) break;
+      const found = folders.find((folder) => folder.parentId === parentId && folder.name.toLowerCase() === name.toLowerCase());
+      const folder: MyShapeFolder = found ?? await createMyShapeFolder(name, parentId);
+      if (!found) folders.push(folder);
+      parentId = folder.id;
+    }
+    return parentId ?? undefined;
   };
   for (const name of manifestFolders(manifest)) await folderFor(name);
   let added = 0;

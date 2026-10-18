@@ -1599,6 +1599,7 @@ export const MESSAGES_NL: Record<MessageKey, string> = {
   "myShapes.deleteFolder": "Map verwijderen",
   "myShapes.deleteFolderConfirm": "Met inhoud ({count}) verwijderen?",
   "myShapes.folderEmpty": "Deze map is leeg",
+  "myShapes.newSubfolder": "Nieuwe map hierin",
   "status.myShapeSaved": "“{name}” bewaard bij de eigen vormen in deze browser",
   "status.myShapeSavedServer": "“{name}” bewaard bij de eigen vormen op de server",
   "status.myShapeMovedToServer": "“{name}” staat nu op de server",

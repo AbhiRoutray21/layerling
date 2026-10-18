@@ -1,3 +1,4 @@
+import { CUSTOM_SHAPE_FOLDER_DEPTH, joinFolderPath } from "@/lib/customShapeFolders";
 import { SHARED_PROJECTS_ENDPOINT } from "@/lib/sharedProjectsEndpoint";
 
 /*
@@ -7,8 +8,9 @@ import { SHARED_PROJECTS_ENDPOINT } from "@/lib/sharedProjectsEndpoint";
  * page too, where a shape can be opened and changed like a design. Its name is
  * English on purpose: it is one folder for every language.
  *
- * Folders of custom shapes are folders inside it, one level deep, as in the
- * browser. Deeper ones made on the start page are left alone.
+ * Folders of custom shapes are folders inside it, up to three levels deep, as
+ * in the browser; each goes by its path inside it ("Brackets/M3"). Deeper
+ * ones made on the start page are left alone.
  */
 
 export const CUSTOM_SHAPES_FOLDER = "Custom shapes";
@@ -16,7 +18,7 @@ const LYL_MEDIA_TYPE = "application/vnd.layerling.project+zip";
 
 export type ServerCustomShape = {
   fileName: string;
-  /** The folder inside "Custom shapes" it sits in; null at the top. */
+  /** The path of the folder inside "Custom shapes" it sits in ("Brackets/M3"); null at the top. */
   folder: string | null;
   name: string;
   updatedAt: number;
@@ -25,6 +27,7 @@ export type ServerCustomShape = {
   thumbnailUrl?: string;
 };
 
+/** `folders` are paths, each folder after the one it sits in. */
 export type ServerCustomShapes = { shapes: ServerCustomShape[]; folders: string[] };
 
 /** The store path of a folder of custom shapes, or of the custom shapes folder itself. */
@@ -74,11 +77,17 @@ export async function listServerCustomShapes(): Promise<ServerCustomShapes | nul
   const root = await rootResponse.json().catch(() => ({})) as { enabled?: boolean; folders?: Array<{ name: string }> };
   if (!root.enabled) return null;
   if (!root.folders?.some((folder) => folder.name === CUSTOM_SHAPES_FOLDER)) return { shapes: [], folders: [] };
-  const top = await listFolder(null);
-  const folders = [...top.folders].sort((a, b) => a.localeCompare(b));
-  const inFolders = await Promise.all(folders.map((folder) => listFolder(folder)));
-  const shapes = [...top.shapes, ...inFolders.flatMap((entry) => entry.shapes)]
-    .sort((a, b) => a.updatedAt - b.updatedAt || a.name.localeCompare(b.name));
+  const folders: string[] = [];
+  // One level at a time, each level's folders asked for together.
+  const walk = async (folder: string | null, depth: number): Promise<ServerCustomShape[]> => {
+    const listed = await listFolder(folder);
+    if (depth >= CUSTOM_SHAPE_FOLDER_DEPTH) return listed.shapes;
+    const inside = [...listed.folders].sort((a, b) => a.localeCompare(b)).map((name) => joinFolderPath(folder, name));
+    folders.push(...inside);
+    const deeper = await Promise.all(inside.map((path) => walk(path, depth + 1)));
+    return [...listed.shapes, ...deeper.flat()];
+  };
+  const shapes = (await walk(null, 0)).sort((a, b) => a.updatedAt - b.updatedAt || a.name.localeCompare(b.name));
   return { shapes, folders };
 }
 
@@ -138,9 +147,10 @@ export async function moveServerCustomShape(shape: ServerShapeRef, folder: strin
   if (!response.ok) throw await failure(response, "Could not move the shape on the server");
 }
 
-export async function createServerCustomShapeFolder(name: string, takenMessage: string) {
+/** A new folder at the top, or inside the folder at `parent`. */
+export async function createServerCustomShapeFolder(name: string, takenMessage: string, parent: string | null = null) {
   await ensureFolder();
-  const response = await fetch(query(null, undefined, { folder: name.trim() }), { method: "POST" });
+  const response = await fetch(query(parent, undefined, { folder: name.trim() }), { method: "POST" });
   if (response.status === 409) throw new Error(takenMessage);
   if (!response.ok) throw await failure(response, "Could not create the folder on the server");
 }

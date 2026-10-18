@@ -1585,6 +1585,7 @@ export const MESSAGES_FR: Partial<Record<MessageKey, string>> = {
   "myShapes.deleteFolder": "Supprimer le dossier",
   "myShapes.deleteFolderConfirm": "Supprimer avec le contenu ({count}) ?",
   "myShapes.folderEmpty": "Ce dossier est vide",
+  "myShapes.newSubfolder": "Nouveau dossier dedans",
   "status.myShapeSaved": "\"{name}\" conservé dans les formes personnalisées de ce navigateur",
   "status.myShapeSavedServer": "\"{name}\" conservé dans les formes personnalisées sur le serveur",
   "status.myShapeMovedToServer": "\"{name}\" est maintenant sur le serveur",

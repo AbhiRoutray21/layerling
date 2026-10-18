@@ -1277,6 +1277,7 @@ export const MESSAGES_SL: Partial<Record<MessageKey, string>> = {
   "myShapes.deleteFolder": "Izbriši mapo",
   "myShapes.deleteFolderConfirm": "Izbrišem skupaj z oblikami ({count})?",
   "myShapes.folderEmpty": "Ta mapa je prazna",
+  "myShapes.newSubfolder": "Nova mapa v tej mapi",
   "status.myShapeSaved": "»{name}« shranjena med oblike po meri v tem programu",
   "status.myShapeSavedServer": "»{name}« shranjena med oblike po meri na strežniku",
   "status.myShapeMovedToServer": "»{name}« je zdaj na strežniku",

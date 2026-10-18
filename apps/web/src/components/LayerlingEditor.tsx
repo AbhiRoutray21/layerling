@@ -156,10 +156,9 @@ import { importedShapeFromObj } from "@/lib/objImport";
 import { readImportSvgWidth, readKeepSvgPage, setImportSvgWidth, storeKeepSvgPage, takeImportSvgWidth } from "@/lib/importPreferences";
 import { importFailureSummary, importModelFiles } from "@/lib/modelImport";
 import { dedupeProjectAssets } from "@/lib/projectAssets";
-import { myShapeNameFromFile } from "@/lib/myShapes";
 import { useCustomShapes } from "@/lib/useCustomShapes";
 import { packBackup, unpackBackup } from "@/lib/projectBackup";
-import { MyShapesSection, type CustomShapeEntry, type CustomShapeLocation } from "@/components/workplane/MyShapesSection";
+import { MyShapesSection } from "@/components/workplane/MyShapesSection";
 import { addLineIntersectionPoints, onlyMovesPoints, splitSketchSegment } from "@/lib/sketchPointRefinement";
 import { mirrorSketchSelection, SKETCH_MIRROR_HORIZONTAL, SKETCH_MIRROR_VERTICAL, sketchMirrorAxisThroughSegment } from "@/lib/sketchMirror";
 import { copySketchSelection, freeSketchPasteOffset, pasteSketchClipboard, type SketchClipboard } from "@/lib/sketchClipboard";
@@ -8523,9 +8522,9 @@ export function LayerlingEditor({
 
   const {
     customShapeEntries, customShapeFolders, serverAvailable: customShapesServerAvailable, myShapesFileInputRef,
-    refreshServerShapes, saveSelectionAsMyShape, insertMyShape, renameMyShapeEntry, deleteMyShapeEntry,
+    refreshServerShapes, saveSelectionAsMyShape, insertMyShape, renameMyShapeEntry, deleteMyShapeEntry, runCustomShapeMcp,
     moveMyShapeToServer, moveMyShapeToFolder, createShapeFolder, renameShapeFolder, deleteShapeFolder,
-    backUpMyShapes, loadMyShapeFiles, listCustomShapesForMcp, folderIdForMcp,
+    backUpMyShapes, loadMyShapeFiles,
   } = useCustomShapes({
     sharedProjectsEnabled, setNotice, commitShapes, setProjectAssets, downloadBlob: downloadBlobFile,
     shapesRef, selectedIdsRef, notesRef, historyViewStateRef, projectAssetsRef, workspaceSettingsRef, snapGridRef, projectInfoRef, placementWorkplaneRef,
@@ -9549,43 +9548,8 @@ export function LayerlingEditor({
         return { object: mcpShapeSummary(simplified), trianglesBefore: source.triangleCount, trianglesAfter: result.triangleCount };
       }
 
-      if (command.action === "save_custom_shape") {
-        const requested = mcpStringArray(params.ids ?? params.id);
-        const ids = requested.length ? requested : selectedIdsRef.current;
-        const parts = currentShapes().filter((shape) => ids.includes(shape.id));
-        if (parts.length === 0) throw new Error("Pass the ids of the bodies to keep, or select them first");
-        if (params.location !== undefined && params.location !== "browser" && params.location !== "server") throw new Error("location must be \"browser\" or \"server\"");
-        const servers = await refreshServerShapes();
-        if (params.location === "server" && !servers) throw new Error("This installation keeps nothing on the server; save to the browser instead");
-        const location: CustomShapeLocation = params.location === "browser" || params.location === "server" ? params.location : servers ? "server" : "browser";
-        const fallback = parts.length === 1 ? displayShapeName(parts[0]) : t("myShapes.defaultName");
-        const name = myShapeNameFromFile(typeof params.name === "string" ? params.name : "", fallback);
-        const folderId = await folderIdForMcp(typeof params.folder === "string" ? params.folder : undefined, location);
-        return { customShape: await saveSelectionAsMyShape(name, parts.map((shape) => shape.id), location, folderId) };
-      }
-
-      if (command.action === "list_custom_shapes") {
-        return await listCustomShapesForMcp();
-      }
-
-      if (command.action === "insert_custom_shape" || command.action === "delete_custom_shape") {
-        const all = (await listCustomShapesForMcp()).customShapes;
-        const wanted = typeof params.id === "string" ? params.id : typeof params.name === "string" ? params.name : "";
-        const byId = all.filter((shape) => shape.id === wanted);
-        const found = byId.length ? byId : all.filter((shape) => shape.name.toLowerCase() === wanted.toLowerCase());
-        if (found.length === 0) throw new Error(`No custom shape "${wanted}"; layerling_list_custom_shapes lists them`);
-        if (found.length > 1) throw new Error(`Several custom shapes are called "${wanted}"; pass the id instead`);
-        const entry = found[0];
-        if (command.action === "delete_custom_shape") {
-          await deleteMyShapeEntry(entry.id);
-          return { deleted: entry.id };
-        }
-        const point = params.x !== undefined || params.z !== undefined
-          ? { x: mcpNumber(params.x, 0), y: placementWorkplaneRef.current.origin.y, z: mcpNumber(params.z, 0) }
-          : undefined;
-        const inserted = await insertMyShape(entry.id, point);
-        return { objects: inserted.map(mcpShapeSummary) };
-      }
+      const customShapeResult = await runCustomShapeMcp(command.action, params);
+      if (customShapeResult !== undefined) return customShapeResult;
 
       if (command.action === "separate_parts") {
         const target = findShape(params.id) ?? (selectedIdsRef.current.length === 1 ? findShape(selectedIdsRef.current[0]) : null);
@@ -10251,12 +10215,7 @@ export function LayerlingEditor({
     sectionContours,
     closeHistoryView,
     openHistoryView,
-    deleteMyShapeEntry,
-    insertMyShape,
-    refreshServerShapes,
-    saveSelectionAsMyShape,
-    listCustomShapesForMcp,
-    folderIdForMcp,
+    runCustomShapeMcp,
   ]);
 
   useEffect(() => {
@@ -12112,7 +12071,7 @@ export function LayerlingEditor({
             onBackup={() => void backUpMyShapes().catch(noticeError)}
             onMoveToServer={(id) => void moveMyShapeToServer(id).catch(noticeError)}
             onMoveToFolder={(id, folderId) => void moveMyShapeToFolder(id, folderId).catch(noticeError)}
-            onCreateFolder={(name, location) => createShapeFolder(name, location).catch((error) => {
+            onCreateFolder={(name, location, parentId) => createShapeFolder(name, location, parentId).catch((error) => {
               noticeError(error);
               return null;
             })}

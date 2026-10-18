@@ -1623,6 +1623,7 @@ export const MESSAGES_CS: Record<MessageKey, string> = {
   "myShapes.deleteFolder": "Smazat složku",
   "myShapes.deleteFolderConfirm": "Smazat i s tvary ({count})?",
   "myShapes.folderEmpty": "Tato složka je prázdná",
+  "myShapes.newSubfolder": "Nová složka uvnitř",
   "status.myShapeSaved": "„{name}“ uloženo mezi vlastní tvary v tomto prohlížeči",
   "status.myShapeSavedServer": "„{name}“ uloženo mezi vlastní tvary na serveru",
   "status.myShapeMovedToServer": "„{name}“ je nyní na serveru",
