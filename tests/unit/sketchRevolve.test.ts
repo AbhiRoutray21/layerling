@@ -33,8 +33,33 @@ function signedVolume(positions: number[]) {
   return volume;
 }
 
+/** Edges that are not shared by exactly two triangles once the corners are welded by position, as a slicer counts them. */
+function unpairedEdges(positions: number[]) {
+  const corner = (index: number) => positions.slice(index, index + 3).map((value) => value.toFixed(4)).join(",");
+  const edges = new Map<string, number>();
+  for (let index = 0; index + 8 < positions.length; index += 9) {
+    const corners = [corner(index), corner(index + 3), corner(index + 6)];
+    corners.forEach((from, side) => {
+      const to = corners[(side + 1) % 3];
+      const key = from < to ? `${from}|${to}` : `${to}|${from}`;
+      edges.set(key, (edges.get(key) ?? 0) + 1);
+    });
+  }
+  return [...edges.values()].filter((count) => count !== 2).length;
+}
+
 describe("sketch revolve", () => {
   let runtime: ManifoldToplevel;
+
+  const manifoldFromPositions = (positions: number[]) => {
+    const mesh = new runtime.Mesh({ numProp: 3, vertProperties: Float32Array.from(positions), triVerts: Uint32Array.from({ length: positions.length / 3 }, (_value, index) => index) });
+    mesh.merge();
+    return new runtime.Manifold(mesh);
+  };
+  const manifoldPositions = (solid: InstanceType<ManifoldToplevel["Manifold"]>) => {
+    const mesh = solid.getMesh();
+    return Array.from(mesh.triVerts).flatMap((vertex) => Array.from(mesh.vertProperties.slice(vertex * mesh.numProp, vertex * mesh.numProp + 3)));
+  };
 
   beforeAll(async () => {
     runtime = await manifoldModule();
@@ -108,6 +133,20 @@ describe("sketch revolve", () => {
     });
     // Three turns take more slices than one ring.
     expect(right.triangleCount).toBeGreaterThan(rings.triangleCount);
+  });
+
+  it("winds turns that overlap into one body a later cut keeps closed", () => {
+    // A 2 mm wall 10 mm high climbing 2 mm a turn: every turn overlaps the four around it.
+    const helix = buildSketchRevolveMesh(runtime, rectangleProfile(9, 11, 10), { sides: 64, sweepAngle: 5.5 * 360, pitch: 2 });
+    // At each angle the wall stands 10 mm plus a pitch per further turn passing there: six turns
+    // for the first half turn, five for the rest. The radial part is (11² - 9²) / 2 = 20.
+    expect(signedVolume(helix.positions)).toBeCloseTo(20 * (Math.PI * 20 + Math.PI * 18), -1);
+    expect(helix.height).toBeCloseTo(10 + 5.5 * 2, 4);
+    const body = manifoldFromPositions(helix.positions);
+    const bored = body.subtract(runtime.Manifold.cylinder(40, 10, 10, 96).translate([0, 0, -5]));
+    expect(unpairedEdges(manifoldPositions(bored))).toBe(0);
+    bored.delete();
+    body.delete();
   });
 
   it("normalizes unsafe revolve settings", () => {

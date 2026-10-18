@@ -215,24 +215,66 @@ function dispose(value: unknown) {
  * extruded straight, one slice per side of each turn, and the slices are bent round the axis and
  * lifted by the pitch as they go. The extrusion runs down from z = 0 for a positive sweep, up for
  * a negative one, and the angle is minus z: that bend keeps the faces pointing out (a bend the
- * other way would turn the body inside out). Turns closer than the section is high run into each
- * other; that is the drawing's to avoid, as with a spring's wire.
+ * other way would turn the body inside out).
+ *
+ * **Turns closer than the section is high** (a solid spool core with a 2 mm pitch) run into each
+ * other, and one bent extrusion would pass through itself: it looks right, but a boolean takes
+ * such a body for garbage and the next cut leaves open edges. So the overlap is taken out in the
+ * plane first. Seen at one angle round the axis, the body is the section stacked once per turn
+ * that passes there, a pitch apart, and that stack is the same at every angle; only where the
+ * winding starts and ends does one more copy pass. Those stacks are united as cross-sections,
+ * exactly, and wound no more than half a turn at a time - half a turn can never meet itself. The
+ * pieces only touch at their ends, so uniting them is cheap.
  */
-function helicalRevolve(section: InstanceType<ManifoldToplevel["CrossSection"]>, settings: SketchRevolveSettings, disposable: unknown[]) {
-  const turns = Math.abs(settings.sweepAngle) / 360;
-  const length = 2 * Math.PI * turns;
+function helicalRevolve(runtime: ManifoldToplevel, section: InstanceType<ManifoldToplevel["CrossSection"]>, settings: SketchRevolveSettings, disposable: unknown[]) {
+  const turn = 2 * Math.PI;
+  const total = (turn * Math.abs(settings.sweepAngle)) / 360;
   const pitch = settings.pitch ?? 0;
-  const straight = section.extrude(length, Math.max(1, Math.ceil(settings.sides * turns)));
-  disposable.push(straight);
-  const oriented = settings.sweepAngle > 0 ? straight.mirror([0, 0, 1]) : straight;
-  if (oriented !== straight) disposable.push(oriented);
-  return oriented.warp((vertex) => {
-    const angle = -vertex[2];
-    const [radius, height] = vertex;
-    vertex[0] = radius * Math.cos(angle);
-    vertex[1] = radius * Math.sin(angle);
-    vertex[2] = height + (pitch * Math.abs(angle)) / (2 * Math.PI);
+  const direction = settings.sweepAngle > 0 ? 1 : -1;
+  // Whole turns, and the part of a turn left: up to that angle one more copy passes.
+  const wholeTurns = Math.floor(total / turn + 1e-9);
+  const rest = Math.max(0, total - wholeTurns * turn);
+  const spans: Array<{ from: number; to: number; copies: number }> = [];
+  if (rest > 1e-9) spans.push({ from: 0, to: rest, copies: wholeTurns + 1 });
+  if (wholeTurns > 0) spans.push({ from: rest > 1e-9 ? rest : 0, to: turn, copies: wholeTurns });
+  const stacks = new Map<number, InstanceType<ManifoldToplevel["CrossSection"]>>();
+  const stack = (copies: number) => {
+    let stacked = stacks.get(copies);
+    if (!stacked) {
+      const layers = Array.from({ length: copies }, (_value, index) => section.translate([0, index * pitch]));
+      disposable.push(...layers);
+      stacked = layers.length === 1 ? layers[0] : runtime.CrossSection.union(layers);
+      disposable.push(stacked);
+      stacks.set(copies, stacked);
+    }
+    return stacked;
+  };
+  const pieces: Array<InstanceType<ManifoldToplevel["Manifold"]>> = [];
+  spans.forEach((span) => {
+    const count = Math.ceil((span.to - span.from) / Math.PI - 1e-9);
+    for (let index = 0; index < count; index += 1) {
+      const from = span.from + ((span.to - span.from) * index) / count;
+      const to = index === count - 1 ? span.to : span.from + ((span.to - span.from) * (index + 1)) / count;
+      const length = to - from;
+      const straight = stack(span.copies).extrude(length, Math.max(1, Math.ceil((settings.sides * length) / turn)));
+      disposable.push(straight);
+      const oriented = direction > 0 ? straight.mirror([0, 0, 1]) : straight;
+      if (oriented !== straight) disposable.push(oriented);
+      pieces.push(oriented.warp((vertex) => {
+        // The ends land exactly where the neighbouring piece starts, a whole turn on the axis.
+        const along = -vertex[2] * direction;
+        const angle = along >= length - 1e-12 ? to : from + along;
+        const [radius, height] = vertex;
+        const onAxis = Math.abs(angle - turn) < 1e-12 ? 0 : angle;
+        vertex[0] = radius * Math.cos(onAxis);
+        vertex[1] = direction * radius * Math.sin(onAxis);
+        vertex[2] = height + (pitch * angle) / turn;
+      }));
+    }
   });
+  if (pieces.length === 1) return pieces[0];
+  disposable.push(...pieces);
+  return runtime.Manifold.union(pieces);
 }
 
 export function buildSketchRevolveMesh(runtime: ManifoldToplevel, profile: SketchProfile, requestedSettings?: Partial<SketchRevolveSettings>): SketchRevolveMesh {
@@ -248,7 +290,7 @@ export function buildSketchRevolveMesh(runtime: ManifoldToplevel, profile: Sketc
     disposable.push(simplified);
     if (simplified.toPolygons().length === 0) throw new Error("The revolve profile has no filled area");
     const sweep = Math.abs(settings.sweepAngle);
-    const solid = settings.pitch ? helicalRevolve(simplified, settings, disposable) : simplified.revolve(settings.sides, sweep);
+    const solid = settings.pitch ? helicalRevolve(runtime, simplified, settings, disposable) : simplified.revolve(settings.sides, sweep);
     disposable.push(solid);
     // A helix starts at the start angle and winds either way from there; rings are turned to
     // cover the same span.
