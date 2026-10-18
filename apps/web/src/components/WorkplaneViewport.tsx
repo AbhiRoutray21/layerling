@@ -147,8 +147,7 @@ import { referencePoints } from "@/lib/workplaneNotes";
 import { pivotKeptAhead, ZOOM_PIVOT_REACH_MM, pivotHeightRange, pivotPlateReach } from "@/lib/zoomPivot";
 import { pointerReach } from "@/lib/pointerReach";
 import { measurementMiddle, nearestReferenceOnScreen, type ReferencePosition } from "@/lib/referencePoints";
-import { planarFaceCentroid, planarFaceTriangles, type PivotPoint } from "@/lib/rotationPivot";
-import { outwardFaceNormal } from "@/lib/layFlat";
+import { planarFaceTriangles, type PivotPoint } from "@/lib/rotationPivot";
 import { OVERHANG_PLATE_TOLERANCE, overhangDownwardLimit } from "@/lib/overhangLimits";
 import { directionIsOwnShapeAxis, rotatedGeometryShapePatch, rotationPatchFromQuaternion as sharedRotationPatchFromQuaternion, signedDegrees } from "@/lib/geometryRotation";
 import type { CadModifierEdge } from "@/lib/cadModifierTypes";
@@ -156,7 +155,8 @@ import { cadFaceHighlightPositions, type CadFacePick } from "@/lib/cadFacePick";
 import { cadFacePickMesh, disposeCadFacePickMesh } from "@/lib/cadFacePickMesh";
 import { circleOfEdgePoints, pointAcrossCircle, pointOnCircle } from "@/lib/tapeCircle";
 import { syncHistoryPickHighlight } from "@/components/workplane/historyPickHighlight";
-import { aimPickRay, pickShapeAt, pickShapeIdAt, pointerRayFor, RENDER_LAYER_SHAPES, usePickOnlyPointer, type PickOnlySelection } from "@/components/workplane/viewportPicking";
+import { aimPickRay, firstShapeHit, pickLayFlatFace, pickRotationPivot, pickShapeAt, pickShapeIdAt, pointerRayFor, rayPointOnRotationPlane, RENDER_LAYER_SHAPES, splitAxisParameter, usePickOnlyPointer, type LayFlatPick, type PickOnlySelection } from "@/components/workplane/viewportPicking";
+export type { LayFlatPick } from "@/components/workplane/viewportPicking";
 import { RENDER_LAYER_HELPERS, sharedShapeGeometryCache, sharedEdgesGeometryCache, sharedShapeMaterialCache, type PointCardOffset, type ShapeRenderRecord, type ThreeState, type MoveDimensionSession, type NoteOverlayState, type TapePoint, type TapeAttachment, type TapeEdgeAttachment, type TapeModel, type TapeOverlayState, type TapeCandidate, type RotationHandleSide, type RotationHandleSides, type DragItem, quaternionForShape, projectToScreen, syncMoveDimensionWorldLines, syncTransformGuideWorldLines, tapeShapeDimensions, tapePointWorld, tapeEdgeWorldPoints, tapeSegmentWorldPoints, syncTapeOverlay, syncNoteOverlay, NoteOverlay, TapeOverlay, type RulerDimensionOverlayItem, type RulerDimensionOverlayState, syncRulerDimensionOverlay, RulerDimensionOverlay, type CornerRulerInstance, type CornerRulerOverlayState, syncCornerRulerToolOverlay, CornerRulerToolOverlay, syncOriginDimensionWorldLines, shapeCenter, shapeLocalExtents, projectShapeExtent, projectShapesExtent, type OriginDimensionFrame, setObjectRenderLayer, freezeStaticObjectMatrices, formatMeasure, findShapeObject, trimSharedShapeGeometryCache, releaseSharedShapeGeometry, trimSharedShapeMaterialCache, releaseSharedShapeMaterials, disposeMaterialResource, disposeChildren, disposeObject } from "@/components/workplane/ViewportOverlays";
 
 const WORKPLANE_WIDTH = 200;
@@ -2401,12 +2401,6 @@ function rotationAxisVectorForFrame(handleKey: string, frame: SelectionFrame) {
     return frame.zAxis.clone().normalize();
   }
   return frame.yAxis.clone().normalize();
-}
-
-function rayPointOnRotationPlane(state: ThreeState, clientX: number, clientY: number, pivot: THREE.Vector3, axis: THREE.Vector3) {
-  aimPickRay(state, clientX, clientY);
-  const plane = new THREE.Plane().setFromNormalAndCoplanarPoint(axis.clone().normalize(), pivot);
-  return state.raycaster.ray.intersectPlane(plane, new THREE.Vector3());
 }
 
 function axisDragPlaneForCamera(state: ThreeState, axis: THREE.Vector3, point: THREE.Vector3) {
@@ -6368,13 +6362,7 @@ export function WorkplaneViewport({
     if (!state) return null;
     const rect = aimPickRay(state, clientX, clientY, RENDER_LAYER_SHAPES);
 
-    const hit = state.raycaster
-      .intersectObjects(state.shapeLayer.children, true)
-      .find((entry) => {
-        if (state.sectionPlane && state.sectionPlane.distanceToPoint(entry.point) < -0.001) return false;
-        return entry.object instanceof THREE.Mesh && entry.face && typeof entry.object.userData.shapeId === "string"
-          && !skip?.has(entry.object.userData.shapeId as string);
-      });
+    const hit = firstShapeHit(state, { needsFace: true, skip });
     if (!hit?.face) return null;
 
     const surface = hit.object as THREE.Mesh<THREE.BufferGeometry>;
@@ -11926,32 +11914,6 @@ function pivotVector(point: PivotPoint | null | undefined) {
  * on the part the selection is meant to line up with.
  */
 /** The id of the body under the pointer, the nearest one the section view leaves visible. */
-function pickRotationPivot(state: ThreeState, clientX: number, clientY: number): PivotPoint | null {
-  aimPickRay(state, clientX, clientY, RENDER_LAYER_SHAPES);
-  const hit = state.raycaster
-    .intersectObjects(state.shapeLayer.children, true)
-    .find((entry) => {
-      if (state.sectionPlane && state.sectionPlane.distanceToPoint(entry.point) < -0.001) return false;
-      return entry.object instanceof THREE.Mesh && entry.faceIndex !== undefined && entry.faceIndex !== null && typeof entry.object.userData.shapeId === "string";
-    });
-  if (!hit || hit.faceIndex === undefined || hit.faceIndex === null) return null;
-
-  const mesh = hit.object as THREE.Mesh<THREE.BufferGeometry>;
-  mesh.updateWorldMatrix(true, false);
-  const position = mesh.geometry.getAttribute("position");
-  const index = mesh.geometry.getIndex();
-  const cornerCount = index ? index.count : position.count;
-  const positions = new Float64Array(cornerCount * 3);
-  const corner = new THREE.Vector3();
-  for (let offset = 0; offset < cornerCount; offset += 1) {
-    corner.fromBufferAttribute(position, index ? index.getX(offset) : offset).applyMatrix4(mesh.matrixWorld);
-    positions[offset * 3] = corner.x;
-    positions[offset * 3 + 1] = corner.y;
-    positions[offset * 3 + 2] = corner.z;
-  }
-  return planarFaceCentroid(positions, hit.faceIndex) ?? { x: hit.point.x, y: hit.point.y, z: hit.point.z };
-}
-
 /**
  * Where a dragged pivot marker lands (#140): on the body under the pointer - a corner or the
  * middle of an edge when the pointer is near one, a point along the edge, or else the point of
@@ -11959,12 +11921,7 @@ function pickRotationPivot(state: ThreeState, clientX: number, clientY: number):
  */
 function resolvePivotDragPoint(state: ThreeState, clientX: number, clientY: number, depth: THREE.Vector3): THREE.Vector3 | null {
   const rect = aimPickRay(state, clientX, clientY, RENDER_LAYER_SHAPES);
-  const hit = state.raycaster
-    .intersectObjects(state.shapeLayer.children, true)
-    .find((entry) => {
-      if (state.sectionPlane && state.sectionPlane.distanceToPoint(entry.point) < -0.001) return false;
-      return entry.object instanceof THREE.Mesh && entry.face && typeof entry.object.userData.shapeId === "string";
-    });
+  const hit = firstShapeHit(state, { needsFace: true });
   if (hit?.face) {
     const mesh = hit.object as THREE.Mesh<THREE.BufferGeometry>;
     mesh.updateWorldMatrix(true, false);
@@ -11986,26 +11943,8 @@ function resolvePivotDragPoint(state: ThreeState, clientX: number, clientY: numb
   return state.raycaster.ray.intersectPlane(plane, new THREE.Vector3());
 }
 
-export type LayFlatPick = { shapeId: string; normal: { x: number; y: number; z: number }; point: { x: number; y: number; z: number } };
 
 /** The clicked face of any body, as the body's id and the face's outward normal in world space. */
-function pickLayFlatFace(state: ThreeState, clientX: number, clientY: number): LayFlatPick | null {
-  aimPickRay(state, clientX, clientY, RENDER_LAYER_SHAPES);
-  const hit = state.raycaster
-    .intersectObjects(state.shapeLayer.children, true)
-    .find((entry) => {
-      if (state.sectionPlane && state.sectionPlane.distanceToPoint(entry.point) < -0.001) return false;
-      return entry.object instanceof THREE.Mesh && entry.face && typeof entry.object.userData.shapeId === "string";
-    });
-  if (!hit || !hit.face) return null;
-  const mesh = hit.object as THREE.Mesh<THREE.BufferGeometry>;
-  mesh.updateWorldMatrix(true, false);
-  const position = mesh.geometry.getAttribute("position");
-  const corner = (index: number) => new THREE.Vector3().fromBufferAttribute(position, index).applyMatrix4(mesh.matrixWorld);
-  const normal = outwardFaceNormal(corner(hit.face.a), corner(hit.face.b), corner(hit.face.c), state.raycaster.ray.direction);
-  return normal ? { shapeId: mesh.userData.shapeId as string, normal, point: { x: hit.point.x, y: hit.point.y, z: hit.point.z } } : null;
-}
-
 /**
  * While "Lay flat" waits for a click, shows the face the click would turn
  * down: the flat face under the pointer, if it belongs to the selection. The
@@ -12041,12 +11980,7 @@ function syncLayFlatHover(
   }
 
   aimPickRay(state, clientX, clientY, RENDER_LAYER_SHAPES);
-  const hit = state.raycaster
-    .intersectObjects(state.shapeLayer.children, true)
-    .find((entry) => {
-      if (state.sectionPlane && state.sectionPlane.distanceToPoint(entry.point) < -0.001) return false;
-      return entry.object instanceof THREE.Mesh && entry.faceIndex !== undefined && entry.faceIndex !== null && typeof entry.object.userData.shapeId === "string";
-    });
+  const hit = firstShapeHit(state, { needsFace: true });
   const mesh = hit?.object as THREE.Mesh<THREE.BufferGeometry> | undefined;
   if (!hit || !mesh || hit.faceIndex === undefined || hit.faceIndex === null || !selectedIds.includes(mesh.userData.shapeId as string)) {
     clear();
@@ -13741,16 +13675,6 @@ function pickSplitPlaneHandle(state: ThreeState, clientX: number, clientY: numbe
 }
 
 /** Where along the plane's normal line the pointer ray passes closest, or null when the view looks along that line. */
-function splitAxisParameter(state: ThreeState, clientX: number, clientY: number, axisOrigin: THREE.Vector3, axisNormal: THREE.Vector3) {
-  const ray = pointerRayFor(state, clientX, clientY);
-  const between = new THREE.Vector3().subVectors(axisOrigin, ray.origin);
-  const alignment = axisNormal.dot(ray.direction);
-  const denominator = 1 - alignment * alignment;
-  if (denominator < 1e-4) return null;
-  return (alignment * between.dot(ray.direction) - between.dot(axisNormal)) / denominator;
-}
-
-
 function prepareCruiseGhost(object: THREE.Object3D) {
   object.traverse((child) => {
     if (!(child instanceof THREE.Mesh)) return;

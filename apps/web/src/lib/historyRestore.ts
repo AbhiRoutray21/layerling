@@ -80,3 +80,33 @@ export function historyStateClockLabel(at: number | undefined, language: string,
     return sameDay ? when.toLocaleTimeString() : when.toLocaleString();
   }
 }
+
+/** What the History view shows with groups opened in it: the shapes, and the groups that are open. */
+export type HistoryViewLevels = {
+  shapes: WorkplaneShape[];
+  /** The open groups, outermost first, as far as the state still has them. */
+  open: WorkplaneShape[];
+};
+
+/**
+ * The shapes of a state with groups opened in it, level by level, the way
+ * Edit group lays out their parts - but only to look at. The parts keep the
+ * ids they have inside the group, so a part picked here is found again in
+ * the state when it is brought back. Each level must be a group among the
+ * shapes of the level before; the first one that is not ends the opening,
+ * so moving to a state without that group backs out of it.
+ */
+export function historyViewLevels(shapes: WorkplaneShape[], levelIds: readonly string[]): HistoryViewLevels {
+  let shown = shapes;
+  const open: HistoryViewLevels["open"] = [];
+  for (const id of levelIds) {
+    const group = shown.find((shape) => shape.id === id);
+    const parts = group?.groupedShapes;
+    if (!group || !parts?.length) break;
+    const placed = restoreGroupedChildren(group).map((part, index) => ({ ...part, id: parts[index].id }));
+    const at = shown.indexOf(group);
+    shown = [...shown.slice(0, at), ...placed, ...shown.slice(at + 1)];
+    open.push(group);
+  }
+  return { shapes: shown, open };
+}
