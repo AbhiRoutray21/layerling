@@ -3872,6 +3872,7 @@ function Dashboard({
           >
             <header>
               <strong id="local-folder-title">{localFolderDialog.mode === "create" ? t("shared.newFolderTitle") : t("shared.renameFolderTitle")}</strong>
+              <GuideHelpLink chapter="files" section="designFolders" iconSize={16} />
               <button type="button" aria-label={localFolderDialog.mode === "create" ? t("shared.newFolderCancel") : t("shared.renameFolderCancel")} onClick={closeLocalFolderDialog}>
                 <X size={18} />
               </button>

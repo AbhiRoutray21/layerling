@@ -72,6 +72,7 @@ export const GUIDE_SECTIONS = {
   screwHoles: { chapter: "threads", de: "stufen-und-senkbohrung", en: "counterbore-and-countersink", nl: "verzinkboring-en-verzinking", ru: "tsekovka-i-zenkovka", cs: "valcove-a-kuzelove-zahloubeni", sl: "stopnicasta-in-udirna-izvrtina", hu: "hengeres-es-kupos-suellyesztes" },
   ruler: { chapter: "measuring", de: "das-lineal", en: "the-ruler", nl: "de-liniaal", ru: "lineyka", cs: "pravitko", sl: "ravnilo", hu: "a-vonalzo" },
   printer: { chapter: "printing", de: "den-drucker-waehlen", en: "choosing-your-printer", nl: "je-printer-kiezen", ru: "vybor-printera", cs: "vyber-tiskarny", sl: "izbira-tiskalnika", hu: "a-nyomtatod-kivalasztasa" },
+  designFolders: { chapter: "files", de: "ordner-fuer-deine-entwuerfe", en: "folders-for-your-designs", nl: "mappen-voor-je-ontwerpen", fr: "des-dossiers-pour-vos-dessins", ru: "papki-dlya-proektov", cs: "slozky-pro-projekty", sl: "mape-za-tvoje-projekte" },
   backingUp: { chapter: "files", de: "sichern-und-weitergeben", en: "backing-up-and-passing-on", nl: "back-up-maken-en-doorgeven", ru: "rezervnye-kopii-i-peredacha", cs: "zalohovani-a-predavani", sl: "varnostno-kopiranje-in-deljenje", hu: "biztonsagi-mentes-es-tovabbadas" },
   exporting: { chapter: "files", de: "exportieren", en: "exporting", nl: "exporteren", ru: "eksport", cs: "export", sl: "izvoz", hu: "exportalas" },
   importing: { chapter: "files", de: "importieren", en: "importing", nl: "importeren", ru: "import", cs: "import", sl: "uvoz", hu: "importalas" },

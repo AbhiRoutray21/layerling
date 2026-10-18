@@ -11,6 +11,17 @@ If you go back to the start page from a design with nothing in it, layerling ask
 
 That has a downside: whoever clears the browser storage or switches to another computer loses the designs. **So back up important work into a file.**
 
+## Folders for your designs
+
+With dozens of designs a single list is not enough. On the start page, {{ui:shared.newFolder}} makes a folder for the designs of this browser; a click on the folder opens it. Folders can hold folders.
+
+- **Into a folder:** drag a design onto the folder, or choose {{ui:shared.moveTo}} in the design's menu, which lists every folder. A new design, and a file you open or import, made while a folder is open lands in that folder.
+- **Out again:** the first tile in a folder, `..`, and the line under {{ui:dashboard.projects}} lead back; you can drop a design on them too. A folder dragged onto another folder goes inside it.
+- **Rename and delete** are in the folder's menu. Deleting a folder deletes no design: what was in it moves one level up.
+- **Search** looks through every folder; a design that is found shows its folder, and a click on it opens the folder.
+
+{{ui:dashboard.backupAll}} keeps the folders: the designs sit in the backup file in their folders, and restoring the backup puts them back there. The folders of this browser are separate from the folders on a server.
+
 ## Backing up and passing on
 
 On the start page every design has a menu with the options to rename, duplicate and delete. With {{ui:dashboard.backupAll}} you pack all designs into one single file. {{ui:dashboard.restoreBackup}}, next to it in the notice about designs kept in the browser (it is there on a new computer with no designs, too), brings them back, also in another browser or on another computer; {{ui:dashboard.importGeometry}} takes the same file. The {{ui:myShapes.title}} of this browser travel in the same file, in the folder `Custom shapes`, see [Shapes](chapter:shapes). If you restore a backup into a browser that already has some of these designs, those are not added a second time; the notice says how many were already there.

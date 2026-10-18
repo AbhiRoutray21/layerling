@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **Folders for your designs (#496):** With dozens of designs the start page had only one list. **New folder** now makes a folder for the designs of this browser, and folders can hold folders. A design goes into a folder by dragging it onto the folder or with **Move to …** in its menu, which lists every folder; a new design, and a file opened or imported, made while a folder is open lands in that folder. Inside a folder the first tile, `..`, and a path under the heading lead back, and take a dropped design or folder as well; a folder dragged onto another goes inside it. A folder's menu renames and deletes it, and deleting a folder deletes no design: what was in it moves one level up, and the dialog says where. The search looks through every folder and shows the folder of each design it finds, as a button that opens it. **Back up all** writes the designs into their folders in the ZIP (under `Folders/`, empty folders included), and restoring brings the folders back; designs in older backups land at the top level as before. The folders are kept in this browser beside the list of designs and follow in another open tab. The names follow the rules of the folders on the server. Asked for by @uowmag in #496.
+
 ## 1.88.0
 
 - **The Arabic guide reads from the right (#530):** The pages of the guide in Arabic get the right-to-left direction, so text, lists, tables and the chapter list read from the right; key combinations such as Ctrl+S and code blocks keep their left-to-right order. The other languages look as before. Contributed by @sevagjb.
