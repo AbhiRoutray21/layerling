@@ -100,5 +100,15 @@
       "de": "Der Schieber für Abstand oder Radius bei Fase und Verrundung springt jetzt in Zehntelmillimetern bis 10 mm, statt krumme Werte wie 2,347 zu liefern. Größere oder genauere Werte tippst du ins Feld.",
       "en": "The slider for the distance or radius of a chamfer or fillet now moves in tenths of a millimetre up to 10 mm instead of giving odd values like 2.347. Larger or more exact values you type into the field."
     }
+  },
+  {
+    "title": {
+      "de": "Taschen mit glatter Tiefe lassen sich fasen",
+      "en": "Pockets of a whole depth can be chamfered"
+    },
+    "body": {
+      "de": "Endet eine Aussparung genau auf einer Fläche des Körpers, etwa mit der Höhe 5,000 durch eine Arbeitsebene auf einer Schräge gezogen, scheiterte die Fase am Rand der Tasche. Jetzt wird die Tasche beim Gruppieren sauber geschnitten, und die Fase geht.",
+      "en": "When a hole ends exactly on a face of the body, for example with a height of 5.000 pulled through a workplane on a slope, a chamfer on the rim of the pocket failed. The pocket is now cut cleanly when grouped, and the chamfer works."
+    }
   }
 ]
