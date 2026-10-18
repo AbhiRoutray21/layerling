@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **Notes stay with their bodies through grouping, ungrouping and editing a group:** A note pinned to a body was cut loose whenever the body got a new id - when it was grouped, when its group was ungrouped, even when its group was opened with Edit group - and then fell back to the spot where it had first been placed, which after a move could be far away or inside another body. Now Group takes the note into the group, and Ungroup hands it to the visible part under it, a group inside included; hidden parts are passed over. While a group is open for editing, its notes go with the part under them, so they move when that part moves, and Done pins them to the group again where they stand; Cancel puts them back as they were. Other steps that replace a body, such as a cut or Separate parts, hand its notes to the new body under them in the same way. A note whose body is deleted, or that has no visible body under it any more, stays where its body last had it, free on the workplane. Grouping used to let go of notes on purpose; it now keeps them, as closing an edited group does.
+
 ## 1.89.0
 
 - **A narrower shape library holds two columns (#527):** A shape library pulled to its own width needed 206 px for each column, so two columns took about 450 px (360 px at the small toolbar size), a little more than the Properties panel beside it. A column now needs 190 px: two columns fit in about 415 px, 32 px less at the default toolbar size, 26 px at the small one, and the names still fit (checked in German, where they are longest). Asked for by @prmod3d.
