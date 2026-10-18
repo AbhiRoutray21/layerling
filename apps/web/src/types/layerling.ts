@@ -211,6 +211,16 @@ export type ShapeCustomization = {
   gridfinityLabelCorner?: GridfinityLabelCorner;
   /** Gridfinity bin: the size of that rounding or chamfer in mm; 0 leaves the corner sharp. */
   gridfinityLabelCornerSize?: number;
+  /** Gridfinity bin: a finger scoop along the back wall, the floor rising along a quarter circle into it. */
+  gridfinityScoopBack?: boolean;
+  /** Gridfinity bin: a finger scoop along the front wall. */
+  gridfinityScoopFront?: boolean;
+  /** Gridfinity bin: a finger scoop along the left wall. */
+  gridfinityScoopLeft?: boolean;
+  /** Gridfinity bin: a finger scoop along the right wall. */
+  gridfinityScoopRight?: boolean;
+  /** Gridfinity bin: the finger scoops' radius in mm; missing is half the height from the floor up to the lip's support, or to the top without the lip. */
+  gridfinityScoopRadius?: number;
   /** Knurling: grooves straight along the axis, or crossed into diamonds. */
   knurlPattern?: "straight" | "diamond" | "round";
   /** Knurling: number of grooves around the grip. */
@@ -735,6 +745,16 @@ export type WorkplaneShape = {
   gridfinityLabelCorner?: GridfinityLabelCorner;
   /** Gridfinity bin: the size of that rounding or chamfer in mm; 0 leaves the corner sharp. */
   gridfinityLabelCornerSize?: number;
+  /** Gridfinity bin: a finger scoop along the back wall, the floor rising along a quarter circle into it. */
+  gridfinityScoopBack?: boolean;
+  /** Gridfinity bin: a finger scoop along the front wall. */
+  gridfinityScoopFront?: boolean;
+  /** Gridfinity bin: a finger scoop along the left wall. */
+  gridfinityScoopLeft?: boolean;
+  /** Gridfinity bin: a finger scoop along the right wall. */
+  gridfinityScoopRight?: boolean;
+  /** Gridfinity bin: the finger scoops' radius in mm; missing is half the height from the floor up to the lip's support, or to the top without the lip. */
+  gridfinityScoopRadius?: number;
   /** Knurling: grooves straight along the axis, or crossed into diamonds. */
   knurlPattern?: "straight" | "diamond" | "round";
   /** Knurling: number of grooves around the grip. */

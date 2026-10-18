@@ -296,6 +296,11 @@ export type CadModifierGridfinityPart = {
   gridfinityLabelRightOffset?: number;
   gridfinityLabelCorner?: GridfinityLabelCorner;
   gridfinityLabelCornerSize?: number;
+  gridfinityScoopBack?: boolean;
+  gridfinityScoopFront?: boolean;
+  gridfinityScoopLeft?: boolean;
+  gridfinityScoopRight?: boolean;
+  gridfinityScoopRadius?: number;
   transform?: number[];
   expected?: { bounds: number[]; volume: number };
 };

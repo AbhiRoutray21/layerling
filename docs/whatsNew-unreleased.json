@@ -50,5 +50,15 @@
       "ru": "«Сгруппировать» забирает прикреплённую заметку в группу, «Разгруппировать» передаёт её видимой части под ней, а пока группа открыта для правки, её заметки движутся вместе с частью, на которой стоят. Заметка, тело которой удалено, остаётся там, где стояла.",
       "ar": "التجميع يأخذ الملاحظة المرتبطة إلى داخل المجموعة، وفك التجميع يسلّمها إلى الجزء المرئي الموجود تحتها، وما دامت المجموعة مفتوحة للتعديل تتحرك ملاحظاتها مع الجزء الذي تقع عليه. أما الملاحظة التي يُحذف جسمها فتبقى حيث كانت."
     }
+  },
+  {
+    "title": {
+      "de": "Griffmulden für Gridfinity-Behälter",
+      "en": "Finger scoops for Gridfinity bins"
+    },
+    "body": {
+      "de": "Ein Gridfinity-Behälter ab 2 Höheneinheiten kann jetzt an jeder Innenwand eine Griffmulde bekommen, auch an mehreren zugleich: Der Boden steigt in einem Viertelkreis zur Wand an, damit sich kleine Teile herausschieben lassen. Den Radius stellst du im Eigenschaften-Fenster ein.",
+      "en": "A Gridfinity bin of 2 height units or more can now have a finger scoop along any of its inner walls, several at once: the floor rises along a quarter circle into the wall, so small parts can be pushed out. You set the radius in the Properties panel."
+    }
   }
 ]

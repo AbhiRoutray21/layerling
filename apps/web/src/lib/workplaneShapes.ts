@@ -606,6 +606,11 @@ export function workplaneShapesEqual(a: WorkplaneShape, b: WorkplaneShape) {
     a.gridfinityLabelRightOffset === b.gridfinityLabelRightOffset &&
     a.gridfinityLabelCorner === b.gridfinityLabelCorner &&
     a.gridfinityLabelCornerSize === b.gridfinityLabelCornerSize &&
+    a.gridfinityScoopBack === b.gridfinityScoopBack &&
+    a.gridfinityScoopFront === b.gridfinityScoopFront &&
+    a.gridfinityScoopLeft === b.gridfinityScoopLeft &&
+    a.gridfinityScoopRight === b.gridfinityScoopRight &&
+    a.gridfinityScoopRadius === b.gridfinityScoopRadius &&
     a.dovetailNeckWidth === b.dovetailNeckWidth &&
     a.dovetailClearance === b.dovetailClearance &&
     a.loftBottomOutline === b.loftBottomOutline &&

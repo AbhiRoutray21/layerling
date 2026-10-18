@@ -52,6 +52,17 @@ import type { GridfinityLabelCorner, GridfinityType, WorkplaneShape } from "@/ty
  * prisms with a round cut out, joined to the bin and cut to its inside: the
  * display mesh by Manifold's booleans (gridfinityLabelledTriangles), the
  * exact body by the kernel's, from the same pieces (gridfinityLabelPieces).
+ *
+ * A bin can also have a finger scoop along any of its inner walls (#455),
+ * which the specification does not have either: the floor rises along a
+ * quarter circle into the wall, from wall to wall, so small parts can be
+ * pushed out. Unless it is set, the radius is half the height from the floor
+ * up to where the lip's support leaves the wall, or to the top without the
+ * lip. A bin with a scoop has every inner floor edge rounded by 2.8 mm,
+ * the inner corners' radius (the wall profile's last step, filleted in the
+ * exact body), and the scoop is that rounding made large on its wall.
+ * The scoops come from the same pieces in both kernels (gridfinityScoopPieces):
+ * joined like the shelves in the mesh, cut out of the inside in the exact body.
  */
 
 export const GRIDFINITY_GRID = 42;
@@ -90,6 +101,8 @@ export const DEFAULT_GRIDFINITY_LABEL_WIDTH = 14;
 export const DEFAULT_GRIDFINITY_LABEL_CORNER: GridfinityLabelCorner = "round";
 export const DEFAULT_GRIDFINITY_LABEL_CORNER_SIZE = 2;
 export const MAX_GRIDFINITY_LABEL_CORNER_SIZE = 10;
+/** The smallest scoop radius: below about 3.2 mm the floor's 2.8 mm rounding (SCOOP_FLOOR_ROUNDING) still shows through the sunk scoop. */
+export const MIN_GRIDFINITY_SCOOP_RADIUS = 3.5;
 
 /** Section of a foot, a socket or the wall: inset from the outline, at a height. */
 export type GridfinityStep = [inset: number, y: number];
@@ -127,6 +140,11 @@ export type GridfinityShapeFields = Pick<WorkplaneShape, "width" | "height"> & {
   gridfinityLabelRightOffset?: number;
   gridfinityLabelCorner?: GridfinityLabelCorner;
   gridfinityLabelCornerSize?: number;
+  gridfinityScoopBack?: boolean;
+  gridfinityScoopFront?: boolean;
+  gridfinityScoopLeft?: boolean;
+  gridfinityScoopRight?: boolean;
+  gridfinityScoopRadius?: number;
 };
 
 function clamp(value: number, min: number, max: number) {
@@ -212,7 +230,10 @@ export function gridfinityPlan(shape: GridfinityShapeFields) {
     ? cells.flatMap((cell) => [-1, 1].flatMap((sx) => [-1, 1].map((sz) => ({ x: cell.x + sx * GRIDFINITY_MAGNET_OFFSET, z: cell.z + sz * GRIDFINITY_MAGNET_OFFSET }))))
     : [];
   const top = count.y * GRIDFINITY_HEIGHT_UNIT;
-  return { type, count, lip, magnets, size, cells, magnetHoles, top };
+  // A bin with a finger scoop has every inner floor edge rounded, and the scoop is the rounding made large on its wall.
+  const scooped = scoopFits({ type, top, lip }) && LABEL_WALLS.some((wall) => shape[GRIDFINITY_SCOOP_WALL_KEYS[wall]] === true);
+  const floorRounding = scooped ? SCOOP_FLOOR_ROUNDING : 0;
+  return { type, count, lip, magnets, size, cells, magnetHoles, top, floorRounding };
 }
 
 export type GridfinityPlan = ReturnType<typeof gridfinityPlan>;
@@ -259,6 +280,14 @@ export type GridfinityLabelProfile = { wall: GridfinityWall; width: number; from
  */
 export type GridfinityLabelCornerShape = { at: FlatPoint; a: FlatPoint; b: FlatPoint; size: number; round: boolean; reachA: number; reachB: number };
 
+/** A closed outline without the points that fall on the next one, which would be edges of no length. */
+function distinctPoints<T extends { x: number; z: number }>(outline: T[]) {
+  return outline.filter((p, i) => {
+    const q = outline[(i + 1) % outline.length];
+    return Math.hypot(p.x - q.x, p.z - q.z) > 1e-9;
+  });
+}
+
 /** The corner piece's outline over the plan, and for a round one the circle taken out of it. */
 export function gridfinityLabelCornerOutline(c: GridfinityLabelCornerShape) {
   const point = (u: number, v: number) => ({ x: c.at.x + c.a.x * u + c.b.x * v, z: c.at.z + c.a.z * u + c.b.z * v });
@@ -268,7 +297,7 @@ export function gridfinityLabelCornerOutline(c: GridfinityLabelCornerShape) {
   // point twice, which the kernel would take for an edge of no length.
   if (!c.round) {
     const outline = [point(-ra, -rb), point(c.size, -rb), point(c.size, 0), point(0, c.size), point(-ra, c.size)];
-    return { outline: outline.filter((p, i) => { const q = outline[(i + 1) % outline.length]; return Math.hypot(p.x - q.x, p.z - q.z) > 1e-9; }), circle: null };
+    return { outline: distinctPoints(outline), circle: null };
   }
   return { outline: [point(-ra, -rb), point(c.size, -rb), point(c.size, c.size), point(-ra, c.size)], circle: { centre: point(c.size, c.size), radius: c.size } };
 }
@@ -509,21 +538,147 @@ export function gridfinityLabelProfileEnds(pieces: GridfinityLabelPieces, profil
   return { start: at(profile.from), end: at(profile.to) };
 }
 
+/** Each wall's finger scoop switch. */
+export const GRIDFINITY_SCOOP_WALL_KEYS = { back: "gridfinityScoopBack", front: "gridfinityScoopFront", left: "gridfinityScoopLeft", right: "gridfinityScoopRight" } as const;
+/**
+ * A scoop's circle is moved this far towards the floor and the wall, so that it crosses them at a
+ * slight angle rather than touching them along a line.
+ */
+const SCOOP_SINK = 0.02;
+/** Segments in a scoop's quarter circle in the mesh: four times the segments of the bin's corners, as a scoop is a much larger curve. */
+const SCOOP_STEPS = 4 * CORNER_STEPS;
+/** The straight wall kept above the largest scoop, so it does not run out in a sliver at the top of a bin without the lip. */
+const SCOOP_WALL_ABOVE = 0.5;
+/** The rounding of every inner floor edge of a bin with a scoop: the inner corners' radius. */
+const SCOOP_FLOOR_ROUNDING = GRIDFINITY_BIN_RADIUS - GRIDFINITY_WALL;
+/**
+ * The radius whose sunk circle runs, on the end walls, through the point where the inner corner's rounding meets the
+ * floor's, SCOOP_FLOOR_ROUNDING out from the scoop's wall and up from the floor (9.63 mm). A radius within
+ * SCOOP_CORNER_CLEAR of it leaves edges shorter than 0.01 mm in the exact body, and very close the kernel's cut leaves the
+ * scoop out, so it is drawn that far below.
+ */
+const SCOOP_CORNER_RADIUS = (SCOOP_FLOOR_ROUNDING + SCOOP_SINK) / (1 - Math.SQRT1_2);
+const SCOOP_CORNER_CLEAR = 0.03;
+
+/** How high a scoop can rise: from the floor to where the lip's support leaves the wall, or to the top without the lip. */
+function scoopDepth({ top, lip }: { top: number; lip: boolean }) {
+  return top - GRIDFINITY_FOOT_HEIGHT - GRIDFINITY_FLOOR - (lip ? LIP[0][0] - GRIDFINITY_WALL : 0);
+}
+
+/** Whether a scoop of the smallest radius fits under the lip's support, or under the top without the lip. */
+function scoopFits(plan: { type: GridfinityType; top: number; lip: boolean }) {
+  return plan.type === "bin" && scoopDepth(plan) - SCOOP_WALL_ABOVE >= MIN_GRIDFINITY_SCOOP_RADIUS;
+}
+
+/**
+ * The largest radius the bin's scoops take: that depth less SCOOP_WALL_ABOVE, and across the bin at
+ * least 2 mm of floor left, between two scoops facing each other or between a scoop and the wall
+ * opposite it, as for the shelves.
+ */
+export function gridfinityScoopMaxRadius(shape: GridfinityShapeFields) {
+  const plan = gridfinityPlan(shape);
+  const { hx, hz } = labelInside(plan);
+  const on = (wall: GridfinityWall) => shape[GRIDFINITY_SCOOP_WALL_KEYS[wall]] === true;
+  const room = (wall: GridfinityWall) => {
+    const [half, facing] = wall === "back" || wall === "front" ? [hz, on(wall === "back" ? "front" : "back")] : [hx, on(wall === "left" ? "right" : "left")];
+    return facing ? half - 1 : 2 * half - 2;
+  };
+  return Math.min(scoopDepth(plan) - SCOOP_WALL_ABOVE, ...LABEL_WALLS.filter(on).map(room));
+}
+
+/** Whether a bin of this size can have a scoop at all. */
+export function gridfinityScoopFits(shape: GridfinityShapeFields) {
+  return scoopFits(gridfinityPlan(shape));
+}
+
+/** The scoops' radius as it is built: its own, else half the height a scoop can rise, within what the bin takes. */
+export function gridfinityScoopRadius(shape: GridfinityShapeFields) {
+  const max = gridfinityScoopMaxRadius(shape);
+  const plan = gridfinityPlan(shape);
+  return clampLabel(shape.gridfinityScoopRadius, clamp(scoopDepth(plan) / 2, MIN_GRIDFINITY_SCOOP_RADIUS, max), MIN_GRIDFINITY_SCOOP_RADIUS, Math.max(MIN_GRIDFINITY_SCOOP_RADIUS, max));
+}
+
+/** A scoop along a wall, from u = from to u = to. */
+export type GridfinityScoop = { wall: GridfinityWall; from: number; to: number };
+
+export type GridfinityScoopPieces = {
+  floor: number;
+  radius: number;
+  /** The scoops' circle centre in a wall's own section (v out from the wall, y up). */
+  centre: [v: number, y: number];
+  /** The bin's inside the scoops are cut to, as for the shelves. */
+  inside: { hx: number; hz: number; radius: number };
+  scoops: GridfinityScoop[];
+};
+
+/** The bin's finger scoops as pieces for the mesh and the exact body, or null when it has none. */
+export function gridfinityScoopPieces(shape: GridfinityShapeFields): GridfinityScoopPieces | null {
+  if (!gridfinityScoopFits(shape)) return null;
+  const walls = LABEL_WALLS.filter((wall) => shape[GRIDFINITY_SCOOP_WALL_KEYS[wall]] === true);
+  if (walls.length === 0) return null;
+  const plan = gridfinityPlan(shape);
+  const { hx, hz } = labelInside(plan);
+  const floor = GRIDFINITY_FOOT_HEIGHT + GRIDFINITY_FLOOR;
+  const chosen = gridfinityScoopRadius(shape);
+  const radius = Math.abs(chosen - SCOOP_CORNER_RADIUS) < SCOOP_CORNER_CLEAR ? SCOOP_CORNER_RADIUS - SCOOP_CORNER_CLEAR : chosen;
+  const scoops = walls.map((wall): GridfinityScoop => {
+    const along = wall === "back" || wall === "front" ? hx : hz;
+    return { wall, from: -along - LABEL_PAST, to: along + LABEL_PAST };
+  });
+  return { floor, radius, centre: [radius - SCOOP_SINK, floor + radius - SCOOP_SINK], inside: { hx, hz, radius: GRIDFINITY_BIN_RADIUS - GRIDFINITY_WALL }, scoops };
+}
+
+/**
+ * The scoops' cross-section in a wall's own (v, y), counter-clockwise: from inside the wall and the
+ * floor out to under the circle's lowest point, round the quarter circle in SCOOP_STEPS to its point
+ * nearest the wall, and back into the wall; `arc` gives the arc's three points for an exact edge.
+ */
+export function gridfinityScoopSection(pieces: GridfinityScoopPieces) {
+  const [cv, cy] = pieces.centre;
+  const r = pieces.radius;
+  const at = (angle: number): [number, number] => [cv + r * Math.cos(angle), cy + r * Math.sin(angle)];
+  const low = pieces.floor - LABEL_PAST;
+  const outline: Array<[number, number]> = [[-LABEL_PAST, low], [cv, low]];
+  for (let k = 0; k <= SCOOP_STEPS; k += 1) outline.push(at(-Math.PI / 2 - (k / SCOOP_STEPS) * (Math.PI / 2)));
+  outline.push([-LABEL_PAST, cy]);
+  return { outline, arc: [at(-Math.PI / 2), at((-3 * Math.PI) / 4), at(Math.PI)] as Array<[number, number]> };
+}
+
+/** A point of a scoop's wall section in the shape's frame (x, y, z), at u along the wall. */
+export function gridfinityScoopPoint(pieces: GridfinityScoopPieces, scoop: GridfinityScoop, u: number, [v, y]: [number, number]): Vec3 {
+  const p = labelPoint(scoop.wall, pieces.inside.hx, pieces.inside.hz, u, v);
+  return [p.x, y, p.z];
+}
+
+/** Whether the bin has pieces joined to it, label shelves or finger scoops, which need Manifold for the display mesh. */
+export function gridfinityHasPieces(shape: GridfinityShapeFields) {
+  return Boolean(gridfinityLabelPieces(shape) || gridfinityScoopPieces(shape));
+}
+
 /**
  * The bin's wall from the outside over the top to the floor inside, as insets
  * from the outline: up the outer wall, over the lip (or the flat top of a bin
  * without one), down the inside to the floor. The lip rests on a 45 degree
  * support that grows out of the wall below it.
  */
-export function gridfinityWallProfile(plan: GridfinityPlan): GridfinityStep[] {
+export function gridfinityWallProfile(plan: GridfinityPlan, floorRounding = plan.floorRounding): GridfinityStep[] {
   const floor = GRIDFINITY_FOOT_HEIGHT + GRIDFINITY_FLOOR;
   const top = plan.top;
-  if (!plan.lip) return [[0, GRIDFINITY_FOOT_HEIGHT], [0, top], [GRIDFINITY_WALL, top], [GRIDFINITY_WALL, floor]];
+  // The wall down to the floor, with the floor's edge rounded along a quarter circle when there is a rounding.
+  const toFloor = (): GridfinityStep[] => {
+    if (floorRounding <= 0) return [[GRIDFINITY_WALL, floor]];
+    const r = floorRounding;
+    return Array.from({ length: CORNER_STEPS + 1 }, (_, k): GridfinityStep => {
+      const angle = (k / CORNER_STEPS) * (Math.PI / 2);
+      return [GRIDFINITY_WALL + r - r * Math.cos(angle), floor + r - r * Math.sin(angle)];
+    });
+  };
+  if (!plan.lip) return [[0, GRIDFINITY_FOOT_HEIGHT], [0, top], [GRIDFINITY_WALL, top], ...toFloor()];
   const profile: GridfinityStep[] = [[0, GRIDFINITY_FOOT_HEIGHT]];
   [...LIP].reverse().forEach(([inset, y]) => profile.push([inset, top + y]));
   const support = LIP[0][0] - GRIDFINITY_WALL;
   // A low bin has no straight wall inside: the support runs down to the floor.
-  if (top - support > floor) profile.push([GRIDFINITY_WALL, top - support], [GRIDFINITY_WALL, floor]);
+  if (top - support > floor) profile.push([GRIDFINITY_WALL, top - support], ...toFloor());
   else profile.push([LIP[0][0] - (top - floor), floor]);
   return profile;
 }
@@ -701,7 +856,8 @@ export function gridfinityTriangles(shape: GridfinityShapeFields) {
     const wall = gridfinityWallProfile(plan);
     sweep(outline, wall, 1);
     const [floorInset, floorY] = wall[wall.length - 1];
-    cap(outline(floorInset), [], floorY, 1);
+    // A floor rounded as far as the inner corners' radius has corners of no radius, whose points coincide.
+    cap(distinctPoints(outline(floorInset)), [], floorY, 1);
     cells.forEach((cell) => {
       sweep((inset) => cellOf(cell, inset), GRIDFINITY_FOOT, 1);
       ring(cellOf(cell, 0), cellBox(cell), GRIDFINITY_FOOT_HEIGHT, -1);
@@ -730,30 +886,31 @@ export function gridfinityTriangles(shape: GridfinityShapeFields) {
   return triangles;
 }
 
-/** Segments round a full circle in the shelves' corners and in the bin's inside they are cut to. */
+/** Segments round a full circle in the shelves' corners and in the bin's inside the pieces are cut to. */
 const LABEL_CIRCLE_SEGMENTS = 32;
-/** The inside the shelves are cut to reaches this far into the wall, below the floor and above the top, so no sliver is left between the two polygons of a round corner. */
+/** The inside the pieces are cut to reaches this far into the wall, below the floor and above the top, so no sliver is left between the two polygons of a round corner. */
 const LABEL_INSIDE_OVERLAP = 0.05;
 /**
- * In the display mesh the shelf pieces are moved together by this much, differently along each axis
+ * In the display mesh the shelf and scoop pieces are moved together by this much, differently along each axis
  * (down, so the stacking gap only grows): whole-millimetre settings put a piece's edge exactly on an
  * edge or vertex of the bin's polygon (where the wall starts to curve, the top of the lip's support,
- * or a crease on the corner's 45 degree line), which Manifold resolves into a pinch. Far below
- * anything printed; the exact body has true arcs and is not moved.
+ * or a crease on the corner's 45 degree line, where two scoops meet), which Manifold resolves into a
+ * pinch. Far below anything printed; the exact body has true arcs and is not moved.
  */
-const LABEL_MESH_NUDGE: Vec3 = [1.3e-3, -0.9e-3, 0.7e-3];
+const LABEL_MESH_NUDGE: Vec3 = [1.1e-3, -1.7e-3, 0.5e-3];
 /** Slivers thinner than this, left where pieces meet exactly on the bin's own vertices, are removed. */
 const LABEL_SLIVER = 1e-4;
 
 /**
- * The bin with its label shelves as closed triangles: the bin's own mesh, and the shelves' convex
- * pieces joined to it by Manifold, which keeps the result closed. Without shelves it is
- * gridfinityTriangles.
+ * The bin with its label shelves and finger scoops as closed triangles: the bin's own mesh, and the
+ * shelves' convex pieces and the scoops' prisms joined to it by Manifold, which keeps the result
+ * closed. Without either it is gridfinityTriangles.
  */
 export function gridfinityLabelledTriangles(runtime: ManifoldToplevel, shape: GridfinityShapeFields): Vec3[][] {
   const base = gridfinityTriangles(shape);
   const pieces = gridfinityLabelPieces(shape);
-  if (!pieces) return base;
+  const scoopPieces = gridfinityScoopPieces(shape);
+  if (!pieces && !scoopPieces) return base;
   const { Manifold } = runtime;
   const made: Array<{ delete: () => void }> = [];
   const keep = <T extends { delete: () => void }>(value: T) => {
@@ -776,19 +933,20 @@ export function gridfinityLabelledTriangles(runtime: ManifoldToplevel, shape: Gr
     const mesh = new runtime.Mesh({ numProp: 3, vertProperties: new Float32Array(vertices), triVerts: new Uint32Array(triVerts) });
     mesh.merge();
     const bin = keep(new Manifold(mesh));
-    const y0 = pieces.floor - LABEL_INSIDE_OVERLAP;
-    const height = pieces.top - y0 + LABEL_INSIDE_OVERLAP;
+    // The shelves and the scoops are cut to the same inside, from the floor up past the highest of them.
+    const { floor, inside: { hx, hz, radius } } = pieces ?? scoopPieces!;
+    const y0 = floor - LABEL_INSIDE_OVERLAP;
+    const height = Math.max(pieces?.top ?? 0, scoopPieces?.centre[1] ?? 0) - y0 + LABEL_INSIDE_OVERLAP;
     // A cylinder standing on y = y0 at (x, z).
     const post = (x: number, z: number, radius: number) => {
       const lying = keep(Manifold.cylinder(height, radius, radius, LABEL_CIRCLE_SEGMENTS));
       const standing = keep(lying.rotate([-90, 0, 0]));
       return keep(standing.translate([x, y0, z]));
     };
-    const { hx, hz, radius } = pieces.inside;
     const r = radius + LABEL_INSIDE_OVERLAP;
     const inside = keep(Manifold.hull([post(-hx + radius, -hz + radius, r), post(hx - radius, -hz + radius, r), post(hx - radius, hz - radius, r), post(-hx + radius, hz - radius, r)]));
     const profile = (p: GridfinityLabelProfile) => {
-      const { start, end } = gridfinityLabelProfileEnds(pieces, p);
+      const { start, end } = gridfinityLabelProfileEnds(pieces!, p);
       return keep(Manifold.hull([...start, ...end]));
     };
     const cornerShape = (c: GridfinityLabelCornerShape) => {
@@ -796,9 +954,18 @@ export function gridfinityLabelledTriangles(runtime: ManifoldToplevel, shape: Gr
       const block = keep(Manifold.hull(outline.flatMap((p): Vec3[] => [[p.x, y0, p.z], [p.x, y0 + height, p.z]])));
       return circle ? keep(block.subtract(post(circle.centre.x, circle.centre.z, circle.radius))) : block;
     };
+    const scoopPrism = (scoop: GridfinityScoop) => {
+      // The section is extruded along z and turned into the wall's frame: x out from the wall, z along it.
+      const origin = gridfinityScoopPoint(scoopPieces!, scoop, scoop.from, [0, 0]);
+      const outward = gridfinityScoopPoint(scoopPieces!, scoop, scoop.from, [1, 0]);
+      const along = gridfinityScoopPoint(scoopPieces!, scoop, scoop.from + 1, [0, 0]);
+      const prism = keep(Manifold.extrude(gridfinityScoopSection(scoopPieces!).outline, scoop.to - scoop.from));
+      return keep(prism.transform([outward[0] - origin[0], 0, outward[2] - origin[2], 0, 0, 1, 0, 0, along[0] - origin[0], 0, along[2] - origin[2], 0, origin[0], 0, origin[2], 1]));
+    };
     const parts = [
-      ...pieces.shelves.map(({ profile: p, notches }) => notches.reduce((solid, notch) => keep(solid.subtract(cornerShape(notch))), profile(p))),
-      ...pieces.corners.map((c) => keep(cornerShape(c).intersect(c.under.length === 1 ? profile(c.under[0]) : keep(Manifold.union(c.under.map(profile)))))),
+      ...(pieces?.shelves ?? []).map(({ profile: p, notches }) => notches.reduce((solid, notch) => keep(solid.subtract(cornerShape(notch))), profile(p))),
+      ...(pieces?.corners ?? []).map((c) => keep(cornerShape(c).intersect(c.under.length === 1 ? profile(c.under[0]) : keep(Manifold.union(c.under.map(profile)))))),
+      ...(scoopPieces?.scoops ?? []).map(scoopPrism),
     ].map((part) => keep(keep(part.intersect(inside)).translate(LABEL_MESH_NUDGE)));
     const result = keep(keep(Manifold.union([bin, ...parts])).simplify(LABEL_SLIVER));
     if (result.status() !== "NoError") return base;
@@ -812,7 +979,7 @@ export function gridfinityLabelledTriangles(runtime: ManifoldToplevel, shape: Gr
     }
     return triangles;
   } catch {
-    // The bin is drawn without its shelves rather than not at all.
+    // The bin is drawn without its shelves and scoops rather than not at all.
     return base;
   } finally {
     new Set(made).forEach((value) => value.delete());
@@ -820,12 +987,12 @@ export function gridfinityLabelledTriangles(runtime: ManifoldToplevel, shape: Gr
 }
 
 /**
- * The bin's triangles with its label shelves. They need Manifold: until it has loaded the bin is
- * drawn without them and asks for it, and the viewport draws it again once it is there
- * (manifoldRevision in its cache key).
+ * The bin's triangles with its label shelves and finger scoops. They need Manifold: until it has
+ * loaded the bin is drawn without them and asks for it, and the viewport draws it again once it is
+ * there (manifoldRevision in its cache key).
  */
 function gridfinityDisplayTriangles(shape: GridfinityShapeFields) {
-  if (!gridfinityLabelPieces(shape)) return gridfinityTriangles(shape);
+  if (!gridfinityHasPieces(shape)) return gridfinityTriangles(shape);
   const runtime = loadedManifoldRuntime();
   if (!runtime) {
     requestManifoldRuntime();
