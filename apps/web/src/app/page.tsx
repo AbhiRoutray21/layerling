@@ -65,7 +65,7 @@ import { writeDesignView } from "@/lib/designView";
 import { useFileAccept } from "@/lib/fileAccept";
 import { lylFileAccessSupported, pickFilesToImport, rememberLylFile, type LylFileHandle } from "@/lib/lylFileAccess";
 import { exportLylProject, importLylProject, LYL_CREATED_WITH_VERSION, LYL_MEDIA_TYPE } from "@/lib/lylProject";
-import { backupDesignAlreadyThere, backupEntryPaths, backupFileName, isBackupFileName, packBackup, unpackBackup, zipHoldsDesigns } from "@/lib/projectBackup";
+import { backupDesignAlreadyThere, backupEntryPaths, backupFileName, backupFolderPaths, unpackBackupFolders, isBackupFileName, packBackup, unpackBackup, zipHoldsDesigns } from "@/lib/projectBackup";
 import { customShapesBackupEntries, restoreCustomShapesFromBackup } from "@/lib/myShapes";
 import { SHARED_PROJECTS_ENDPOINT } from "@/lib/sharedProjectsEndpoint";
 import { PICTURE_FILE_ACCEPT } from "@/lib/pictureIcon";
@@ -1920,6 +1920,10 @@ export default function Home() {
         entries.push({ name: names[index], bytes: await projectPackageBytes(projects[index]) });
       }
       entries.push(...shapeEntries);
+      // Folders with no design anywhere inside them go along as empty folders.
+      const holding = new Set(projects.flatMap((project) => folderTrail(designFolders, folderOfDesign(designFolders, project.folderId)).map((folder) => folder.id)));
+      const emptyFolders = designFolders.filter((folder) => !holding.has(folder.id) && !designFolders.some((other) => other.parentId === folder.id));
+      backupFolderPaths(emptyFolders.map((folder) => folderPathNames(designFolders, folder.id))).forEach((name) => entries.push({ name, bytes: new Uint8Array() }));
       const fileName = backupFileName(new Date());
       const url = URL.createObjectURL(new Blob([packBackup(entries) as BlobPart], { type: "application/zip" }));
       const link = document.createElement("a");
@@ -1940,10 +1944,12 @@ export default function Home() {
   const restoreBackup = useCallback(async (file: File) => {
     setDashboardNotice(t("notice.validatingFile", { name: file.name }));
     let entries;
+    let emptyFolderPaths: string[][] = [];
     let shapes = { added: 0, skipped: 0 };
     try {
       const bytes = new Uint8Array(await file.arrayBuffer());
       entries = unpackBackup(bytes);
+      emptyFolderPaths = unpackBackupFolders(bytes);
       const restoredShapes = await restoreCustomShapesFromBackup(bytes).catch(() => null);
       if (restoredShapes) shapes = { added: restoredShapes.added, skipped: restoredShapes.skipped };
     } catch {
@@ -1999,8 +2005,14 @@ export default function Home() {
     }
     setProjectShapesById((current) => ({ ...current, ...restoredEntries }));
     setProjects((current) => [...restoredProjects, ...current]);
-    // Only the folders a restored design is in are made; a folder of designs that were already here is not.
+    // Only the folders a restored design is in are made, and the empty folders the backup holds;
+    // a folder of designs that were already here is not.
     const usedFolders = new Set(restoredProjects.map((project) => project.folderId).filter(Boolean) as string[]);
+    for (const path of emptyFolderPaths) {
+      const placed = ensureFolderPath(restoredFolders, path, () => createLocalId("folder"), Date.now());
+      restoredFolders = placed.folders;
+      if (placed.folderId) usedFolders.add(placed.folderId);
+    }
     const keptFolders = restoredFolders.filter((folder) => designFolders.some((existing) => existing.id === folder.id)
       || [...usedFolders].some((used) => folderTrail(restoredFolders, used).some((onTheWay) => onTheWay.id === folder.id)));
     if (keptFolders.length !== designFolders.length) setDesignFolders(keptFolders);

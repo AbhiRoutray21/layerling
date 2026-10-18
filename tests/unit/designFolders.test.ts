@@ -17,7 +17,7 @@ import {
   suggestDesignFolderName,
   type DesignFolder,
 } from "@/lib/designFolders";
-import { backupEntryPaths, packBackup, unpackBackup } from "@/lib/projectBackup";
+import { backupEntryPaths, backupFolderPaths, packBackup, unpackBackup, unpackBackupFolders } from "@/lib/projectBackup";
 
 /* Folders for the designs of this browser (#496). */
 
@@ -190,6 +190,17 @@ describe("folders in a backup", () => {
     const bytes = new Uint8Array([1]);
     const back = unpackBackup(packBackup([{ name: "Old.lyl", bytes }, { name: "Somewhere/Else.lyl", bytes }]));
     expect(back.map((entry) => entry.folder)).toEqual([[], []]);
+  });
+
+  it("keeps an empty folder as an empty folder of the ZIP", () => {
+    const bytes = new Uint8Array([1]);
+    const zip = packBackup([
+      { name: "Cup.lyl", bytes },
+      ...backupFolderPaths([["Brackets", "Shelf"], ["Garden"]]).map((name) => ({ name, bytes: new Uint8Array() })),
+    ]);
+    expect(unpackBackupFolders(zip)).toEqual([["Brackets", "Shelf"], ["Garden"]]);
+    // They are no designs.
+    expect(unpackBackup(zip).map((entry) => entry.name)).toEqual(["Cup.lyl"]);
   });
 
   it("makes a path safe however a folder is called", () => {

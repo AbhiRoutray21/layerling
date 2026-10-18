@@ -75,6 +75,33 @@ export function backupEntryPaths(designs: ReadonlyArray<{ name: string; folder: 
   });
 }
 
+/**
+ * A folder of one's own with no design anywhere inside it still goes into the ZIP, as an empty
+ * folder under `Folders/`, so a restore brings it back too.
+ */
+export function backupFolderPaths(folders: ReadonlyArray<readonly string[]>, folderFallback = "folder") {
+  return folders.map((folder) => `${[DESIGN_FOLDERS_BACKUP_ROOT, ...folder.map((part) => safeSegment(part, folderFallback))].join("/")}/`);
+}
+
+/** The empty folders a backup holds, as paths of names below `Folders/`. */
+export function unpackBackupFolders(bytes: Uint8Array): string[][] {
+  const found: string[][] = [];
+  try {
+    unzipSync(bytes, {
+      filter: (file) => {
+        if (file.name.endsWith("/") && file.name.startsWith(`${DESIGN_FOLDERS_BACKUP_ROOT}/`)) {
+          const parts = file.name.split("/").filter(Boolean).slice(1);
+          if (parts.length) found.push(parts);
+        }
+        return false;
+      },
+    });
+  } catch {
+    return [];
+  }
+  return found;
+}
+
 export function packBackup(entries: BackupEntry[], modified = new Date()): Uint8Array {
   const files: Record<string, [Uint8Array, { level: 0; mtime: Date }]> = {};
   for (const entry of entries) files[entry.name] = [entry.bytes, { level: 0, mtime: modified }];
