@@ -5629,6 +5629,8 @@ html[data-toolbar-size="large"] .shape-menu-dropdown:not(.sketch-shape-menu-drop
 
 .export-dialog-body {
   display: grid;
+  /* One column that never grows past the window: a long file name in the footer made it as wide as the name (#563). */
+  grid-template-columns: minmax(0, 1fr);
   max-height: calc(100vh - var(--editor-toolbar-height) - var(--editor-footer-height) - 96px);
   overflow-y: auto;
   background: #fcfaf6;
@@ -6051,6 +6053,7 @@ html[data-toolbar-size="large"] .shape-menu-dropdown:not(.sketch-shape-menu-drop
 
 .export-dialog-footer {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: flex-end;
   gap: 10px;
@@ -6060,14 +6063,13 @@ html[data-toolbar-size="large"] .shape-menu-dropdown:not(.sketch-shape-menu-drop
 }
 
 .export-dialog-footer .export-linked-file {
+  /* The file name has the row to itself, however long, and the buttons stand under it (#563). */
+  flex: 1 1 100%;
   min-width: 0;
-  margin-right: auto;
-  overflow: hidden;
   color: #897662;
   font-size: 11px;
   font-weight: 700;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  overflow-wrap: anywhere;
 }
 
 .export-dialog-footer > div {
