@@ -72,7 +72,13 @@ export function translateShapes(shapes: WorkplaneShape[], dx: number, dy: number
  * only has to add the spot where they should go.
  */
 export function shapesForLibrary(shapes: WorkplaneShape[], box: MyShapeBox) {
-  return translateShapes(shapes, -(box.minX + box.maxX) / 2, -box.minY, -(box.minZ + box.maxZ) / 2);
+  const { dx, dy, dz } = libraryOffset(box);
+  return translateShapes(shapes, dx, dy, dz);
+}
+
+/** How far `shapesForLibrary` moves the bodies - their notes move just as far. */
+export function libraryOffset(box: MyShapeBox) {
+  return { dx: -(box.minX + box.maxX) / 2, dy: -box.minY, dz: -(box.minZ + box.maxZ) / 2 };
 }
 
 /** Kept bodies put down with the middle of their footprint on `point` and their bottom at its height. */
