@@ -16739,6 +16739,12 @@ html[data-theme="dark"] .top-action-body .icon-tag-ok {
   color: #b02f17;
 }
 
+/* The window is taller than a small screen: its body scrolls, so OK stays within reach. */
+.qr-code-panel .top-action-body {
+  max-height: calc(100vh - var(--editor-toolbar-height) - var(--editor-footer-height) - 96px);
+  overflow-y: auto;
+}
+
 .qr-code-panel .qr-code-preview {
   height: 172px;
   background: #fff;
