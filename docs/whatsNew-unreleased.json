@@ -48,5 +48,15 @@
       "de": "Ein Körper, der gedreht ist, etwa eine Aussparung auf einer schrägen Arbeitsebene, rutschte beim Ändern der Höhe im Eigenschaften-Fenster an der Ebene entlang, weil sich seine Mitte nur senkrecht nach oben verschob. Jetzt bleibt die Mitte seiner Grundfläche, wo sie war, und der Körper wächst oder schrumpft nur in seine eigene Richtung. Das gilt auch für den Befehl der KI-Anbindung.",
       "en": "A turned body, a pocket on a sloped workplane for instance, slid along the plane when its height was changed in the Properties panel, because its centre only moved straight up. Now the middle of its base stays where it was and the body grows or shrinks only in its own direction. The AI connection's command does the same."
     }
+  },
+  {
+    "title": {
+      "de": "Auf dem Handy stehen deine Entwürfe gleich oben",
+      "en": "On a phone your designs are right at the top"
+    },
+    "body": {
+      "de": "Auf einem schmalen Bildschirm lagen die gespeicherten Entwürfe der Startseite mehr als einen Bildschirm weit unten, hinter drei großen Kacheln und dem Sicherungshinweis. Sobald es Entwürfe gibt, sind die drei Kacheln jetzt eine kurze Zeile, und der Hinweis zur Sicherung steht hinter den Entwürfen. Auf dem Rechner und ohne Entwürfe bleibt alles wie bisher.",
+      "en": "On a narrow screen the saved designs of the start page lay more than a screen down, behind three big tiles and the backup note. Once there are designs, the three tiles are now one short row and the backup note stands behind the designs. On a computer, and with no designs yet, everything stays as it was."
+    }
   }
 ]

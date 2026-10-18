@@ -2690,7 +2690,7 @@ function Dashboard({
       </header>
 
       <div className="dashboard-layout">
-        <section className="dashboard-main" aria-label={dashboardSection === "shared" ? t("shared.title") : t("dashboard.projects")}>
+        <section className={`dashboard-main${hasProjects ? " has-projects" : ""}`} aria-label={dashboardSection === "shared" ? t("shared.title") : t("dashboard.projects")}>
           {update && !isDismissed ? (
             <aside
               className="dashboard-update-notice"

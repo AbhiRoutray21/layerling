@@ -2255,6 +2255,52 @@ html[data-theme="dark"] .whats-new-earlier:hover {
   font-weight: 800;
 }
 
+/*
+ * On a phone the start page used to put the designs more than a screen down, behind three big tiles and the backup
+ * note. Once there are designs, the tiles become one short row and the note moves behind the designs, so the designs
+ * start in the first screen (a donor's wish by mail). Without designs nothing changes: the note and the tiles come first.
+ */
+@media (max-width: 560px) {
+  .dashboard-main.has-projects {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .dashboard-main.has-projects .storage-notice {
+    order: 1;
+    margin: 22px 0;
+  }
+
+  .dashboard-main.has-projects .dashboard-welcome {
+    order: 2;
+  }
+
+  .dashboard-main.has-projects .dashboard-actions-band {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  .dashboard-main.has-projects .dashboard-action-tile {
+    min-height: 0;
+    flex-direction: column;
+    justify-content: center;
+    gap: 6px;
+    padding: 10px 6px;
+    text-align: center;
+  }
+
+  .dashboard-main.has-projects .dashboard-action-tile span:last-child {
+    font-size: 12.5px;
+    line-height: 1.2;
+  }
+
+  .dashboard-main.has-projects .dashboard-action-icon {
+    width: 36px;
+    height: 36px;
+  }
+}
+
 .dashboard-section-header {
   display: flex;
   min-width: 0;
