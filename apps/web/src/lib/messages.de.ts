@@ -1247,7 +1247,7 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "status.exportOnlyHidden": "Alle Teile für den Export sind ausgeblendet. Blende sie ein, um sie zu exportieren.",
   "status.exportFailed": "{label} konnte nicht exportiert werden",
   "status.exportFileFailed": "In {name} konnte nicht geschrieben werden. Vielleicht ist die Datei in einem anderen Programm geöffnet; der nächste STL-Export fragt wieder nach einer Datei.",
-  "status.stlSavedToFile": "STL in {name} gespeichert. Weitere STL-Exporte dieses Entwurfs gehen ebenfalls in diese Datei; „Speichern unter“ im Export-Fenster wählt eine andere.",
+  "status.stlSavedToFile": "STL in {name} gespeichert. Weitere STL-Exporte dieses Entwurfs überschreiben diese Datei, außer du wählst im Export-Fenster „Speichern unter“.",
   "status.exportUnioned": "Als {label} gespeichert - {count} überlappende Körper wurden dabei verschmolzen",
   "status.exportUnionFailed": "Überlappende Körper ließen sich nicht verschmelzen - sie stehen einzeln in der Datei",
   "status.exportSplinters": "Nicht in die Datei geschrieben: {count} winzige lose Stücke, die ein Schnitt hinterlassen hatte.",

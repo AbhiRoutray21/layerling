@@ -1,6 +1,16 @@
 [
   {
     "title": {
+      "de": "Ein exportiertes OBJ steht im Slicer aufrecht",
+      "en": "An exported OBJ stands upright in the slicer"
+    },
+    "body": {
+      "de": "STL und 3MF wurden schon mit Z nach oben geschrieben, das OBJ aber mit Y nach oben, und Slicer wie Cura zeigten ein solches Teil auf der Seite liegend. Jetzt schreibt auch das OBJ Z nach oben. layerlings eigener Import stellt solche Dateien wieder richtig hin.",
+      "en": "STL and 3MF were already written with Z up, but the OBJ with Y up, and slicers such as Cura showed such a part lying on its side. Now the OBJ is written with Z up, too. layerling's own import still stands such files upright."
+    }
+  },
+  {
+    "title": {
       "de": "layerling gibt es jetzt auf Japanisch",
       "en": "layerling now speaks Japanese"
     },

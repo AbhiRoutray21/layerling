@@ -1248,7 +1248,7 @@ export const MESSAGES_EN = {
   "status.exportOnlyHidden": "All parts for the export are hidden. Show them to export them.",
   "status.exportFailed": "Could not export {label}",
   "status.exportFileFailed": "Could not write to {name}. It may be open in another program; the next STL export asks for a file again.",
-  "status.stlSavedToFile": "Saved STL to {name}. Later STL exports of this design go into this file too; Save as in the export window picks another.",
+  "status.stlSavedToFile": "Saved STL to {name}. Later STL exports of this design overwrite this file unless you use Save as in the export window.",
   "status.exportUnioned": "Saved as {label} - {count} overlapping bodies were merged",
   "status.exportUnionFailed": "Overlapping bodies could not be merged - they are in the file separately",
   "status.exportSplinters": "Left out of the file: {count} tiny loose pieces that a cut had left behind.",
