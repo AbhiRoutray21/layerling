@@ -5,31 +5,37 @@
       {
         "title": {
           "de": "QR-Codes in der Formenbibliothek",
-          "en": "QR codes in the shape library"
+          "en": "QR codes in the shape library",
+          "ar": "رموز QR في مكتبة الأشكال"
         },
         "body": {
           "de": "Der neue Eintrag QR-Code macht aus einem Text oder einer Webadresse einen druckbaren Code: allein, erhaben auf einer Platte in zwei Farben oder in die Platte graviert. Fehlerkorrektur, Breite und Ruhezone sind wählbar, die Vorschau zeigt den Code vorab, und eine Warnung erscheint, wenn die Module zu klein für einen lesbaren Druck werden. Den Text kannst du später in den Eigenschaften ändern und den Code neu erzeugen.",
-          "en": "The new QR code entry turns a text or a web address into a code to print: alone, raised on a plate in two colours, or engraved into the plate. Error correction, width and quiet zone can be chosen, the preview shows the code first, and a warning appears when the modules get too small for a readable print. You can change the text later in the properties and make the code again."
+          "en": "The new QR code entry turns a text or a web address into a code to print: alone, raised on a plate in two colours, or engraved into the plate. Error correction, width and quiet zone can be chosen, the preview shows the code first, and a warning appears when the modules get too small for a readable print. You can change the text later in the properties and make the code again.",
+          "ar": "العنصر الجديد «رمز QR» يحوّل نصًا أو عنوان ويب إلى رمز للطباعة: وحده، أو بارزًا على لوح بلونين، أو محفورًا في اللوح. يمكن اختيار «تصحيح الأخطاء» و«العرض» و«المنطقة الهادئة»، وتعرض «معاينة» الرمز أولًا، ويظهر تحذير عندما تصبح الوحدات أصغر من أن تُطبع بشكل مقروء. ويمكنك تغيير النص لاحقًا في «الخصائص» وإنشاء الرمز من جديد."
         }
       },
       {
         "title": {
           "de": "Das Mausrad ändert Zahlen auch in den Fenstern der Werkzeuge",
-          "en": "The mouse wheel changes numbers in the tool panels too"
+          "en": "The mouse wheel changes numbers in the tool panels too",
+          "ar": "عجلة الفأرة تغيّر الأرقام في نوافذ الأدوات أيضًا"
         },
         "body": {
           "de": "Was in den Eigenschaften einer Form schon ging, geht jetzt auch in Fase, Verrundung, Aushöhlen, Muster, Lochmuster, Fläche, Flächen aneinanderlegen, Teilen und im Schnittansicht-Menü: Klick in das Zahlenfeld, dann ändert das Mausrad den Wert. Mit Umschalt das Zehnfache, mit Strg ein Zehntel, mit Alt ein Hundertstel.",
-          "en": "What already worked in the properties of a shape works now in Chamfer, Fillet, Hollow, Pattern, Hole pattern, Face, Mate faces, Split and the Section view menu: click into the number field, then the mouse wheel changes the value. Ten times as much with Shift, a tenth with Ctrl, a hundredth with Alt."
+          "en": "What already worked in the properties of a shape works now in Chamfer, Fillet, Hollow, Pattern, Hole pattern, Face, Mate faces, Split and the Section view menu: click into the number field, then the mouse wheel changes the value. Ten times as much with Shift, a tenth with Ctrl, a hundredth with Alt.",
+          "ar": "ما كان يعمل من قبل في خصائص الشكل يعمل الآن أيضًا في «شطف» و«تنعيم» و«تفريغ» و«نمط» و«نمط الثقوب» و«الوجه» و«محاذاة الأوجه» و«تقسيم» وفي قائمة «عرض المقطع»: انقر داخل حقل الرقم، فتغيّر عجلة الفأرة القيمة. ومع Shift عشرة أضعاف، ومع Ctrl العُشر، ومع Alt الجزء من مئة."
         }
       },
       {
         "title": {
           "de": "Die Schnittfläche folgt der Ebene",
-          "en": "The cut face follows the plane"
+          "en": "The cut face follows the plane",
+          "ar": "وجه القطع يتبع المستوى"
         },
         "body": {
           "de": "Die gefüllte Schnittfläche der Schnittansicht erscheint nicht mehr erst, wenn die Ebene stillsteht: Sie läuft beim Verschieben der Ebene mit, sodass der Körper nicht mehr kurz hohl aussieht.",
-          "en": "The filled cut face of the section view no longer waits until the plane stands still: it follows the plane while you move it, so the body no longer looks hollow for a moment."
+          "en": "The filled cut face of the section view no longer waits until the plane stands still: it follows the plane while you move it, so the body no longer looks hollow for a moment.",
+          "ar": "لم يعد وجه القطع المملوء في «عرض المقطع» ينتظر حتى يتوقف المستوى: بل يتبع المستوى أثناء تحريكه، فلا يبدو الجسم مفرّغًا للحظة بعد الآن."
         }
       },
       {
@@ -67,71 +73,85 @@
       {
         "title": {
           "de": "Griffmulden für Gridfinity-Behälter",
-          "en": "Finger scoops for Gridfinity bins"
+          "en": "Finger scoops for Gridfinity bins",
+          "ar": "مجرى الأصابع لعلب Gridfinity"
         },
         "body": {
           "de": "Ein Gridfinity-Behälter ab 2 Höheneinheiten kann jetzt an jeder Innenwand eine Griffmulde bekommen, auch an mehreren zugleich: Der Boden steigt in einem Viertelkreis zur Wand an, damit sich kleine Teile herausschieben lassen. Den Radius stellst du im Eigenschaften-Fenster ein.",
-          "en": "A Gridfinity bin of 2 height units or more can now have a finger scoop along any of its inner walls, several at once: the floor rises along a quarter circle into the wall, so small parts can be pushed out. You set the radius in the Properties panel."
+          "en": "A Gridfinity bin of 2 height units or more can now have a finger scoop along any of its inner walls, several at once: the floor rises along a quarter circle into the wall, so small parts can be pushed out. You set the radius in the Properties panel.",
+          "ar": "يمكن الآن لعلبة Gridfinity بارتفاع وحدتين أو أكثر أن يكون لها مجرى للأصابع على امتداد أي من جدرانها الداخلية، وعدة مجارٍ معًا: ترتفع الأرضية على شكل ربع دائرة نحو الجدار، فيمكن دفع القطع الصغيرة إلى الخارج. وتضبط «نصف قطر المجرى» في لوحة «الخصائص»."
         }
       },
       {
         "title": {
           "de": "Halbes Raster für Gridfinity-Behälter",
-          "en": "Half-size grid for Gridfinity bins"
+          "en": "Half-size grid for Gridfinity bins",
+          "ar": "نصف شبكة لعلب Gridfinity"
         },
         "body": {
           "de": "Ein Gridfinity-Behälter kann jetzt in Zellen von 21 mm gebaut werden, jede mit einem eigenen Fuß; vier davon stehen in einer Mulde einer gewöhnlichen Bodenplatte. So finden auch Behälter von 1½ oder 2½ Einheiten neben ganzen Platz. Du schaltest „Halbes Raster (21 mm)“ im Eigenschaften-Fenster ein.",
-          "en": "A Gridfinity bin can now be built in cells of 21 mm, each with a foot of its own; four of them stand in one socket of an ordinary baseplate. So bins of 1½ or 2½ units fit beside whole ones. You switch on \"Half-size grid (21 mm)\" in the Properties panel."
+          "en": "A Gridfinity bin can now be built in cells of 21 mm, each with a foot of its own; four of them stand in one socket of an ordinary baseplate. So bins of 1½ or 2½ units fit beside whole ones. You switch on \"Half-size grid (21 mm)\" in the Properties panel.",
+          "ar": "يمكن الآن بناء علبة Gridfinity من خلايا بقياس 21 مم، لكل منها قاعدتها الخاصة؛ أربع منها تقف في مقبس واحد من لوح شبكة عادي. وهكذا تتسع العلب بقياس 1½ أو 2½ وحدة إلى جانب العلب الكاملة. وتفعّل «نصف شبكة (21 مم)» في لوحة «الخصائص»."
         }
       },
       {
         "title": {
           "de": "Die Dreh-Skizze zeigt beim Bearbeiten wieder die Vorderansicht",
-          "en": "The revolve sketch shows the front view when edited again"
+          "en": "The revolve sketch shows the front view when edited again",
+          "ar": "رسم الجسم الدوراني يعرض المنظر الأمامي عند تعديله من جديد"
         },
         "body": {
           "de": "Öffnest du die Skizze eines gedrehten Körpers noch einmal zum Bearbeiten, zeigt sie die anderen Körper wieder von vorn, in derselben Ansicht wie das Profil, wie beim Zeichnen. Vorher kam dabei die Ansicht von oben zurück, sobald der Körper über der Platte stand.",
-          "en": "When you open the sketch of a revolved body again to edit it, it shows the other bodies from the front, in the same view as the profile, as while you draw it. Before, the view from above came back as soon as the body stood above the plate."
+          "en": "When you open the sketch of a revolved body again to edit it, it shows the other bodies from the front, in the same view as the profile, as while you draw it. Before, the view from above came back as soon as the body stood above the plate.",
+          "ar": "عندما تفتح الرسم التخطيطي لجسم دوراني من جديد لتعديله، فإنه يعرض الأجسام الأخرى من الأمام، في المنظر نفسه الذي فيه المقطع، كما يحدث أثناء الرسم. ومن قبل كان المنظر من الأعلى يعود بمجرد أن يقف الجسم فوق اللوحة."
         }
       },
       {
         "title": {
           "de": "Winkel mit zwei Nachkommastellen",
-          "en": "Angles with two decimals"
+          "en": "Angles with two decimals",
+          "ar": "زوايا بمنزلتين عشريتين"
         },
         "body": {
           "de": "Eine Drehung wird jetzt mit zwei Nachkommastellen gespeichert und im Zahlenfeld gezeigt: 11,25° bleibt 11,25°, auch wenn du mit Umschalt am Drehkreis drehst. Vorher wurde daraus 11,3°, und das Feld zeigte ganze Grad.",
-          "en": "A rotation is now kept with two decimals and shown in the number field: 11.25° stays 11.25°, also when you turn with Shift on the rotation circle. Before, it became 11.3°, and the field showed whole degrees."
+          "en": "A rotation is now kept with two decimals and shown in the number field: 11.25° stays 11.25°, also when you turn with Shift on the rotation circle. Before, it became 11.3°, and the field showed whole degrees.",
+          "ar": "يُحفظ الدوران الآن بمنزلتين عشريتين ويظهر كذلك في حقل الرقم: تبقى 11.25° هي 11.25°، حتى عندما تدير مع Shift على دائرة الدوران. ومن قبل كانت تصبح 11.3°، وكان الحقل يعرض درجات كاملة."
         }
       },
       {
         "title": {
           "de": "Der Fasen-Schieber geht in Zehntelmillimetern",
-          "en": "The chamfer slider moves in tenths of a millimetre"
+          "en": "The chamfer slider moves in tenths of a millimetre",
+          "ar": "شريط التمرير للشطف يتحرك بأعشار المليمتر"
         },
         "body": {
           "de": "Der Schieber für Abstand oder Radius bei Fase und Verrundung springt jetzt in Zehntelmillimetern bis 10 mm, statt krumme Werte wie 2,347 zu liefern. Größere oder genauere Werte tippst du ins Feld.",
-          "en": "The slider for the distance or radius of a chamfer or fillet now moves in tenths of a millimetre up to 10 mm instead of giving odd values like 2.347. Larger or more exact values you type into the field."
+          "en": "The slider for the distance or radius of a chamfer or fillet now moves in tenths of a millimetre up to 10 mm instead of giving odd values like 2.347. Larger or more exact values you type into the field.",
+          "ar": "شريط التمرير الخاص بالمسافة أو نصف القطر في الشطف أو التنعيم يتحرك الآن بأعشار المليمتر حتى 10 مم، بدلًا من إعطاء قيم غريبة مثل 2.347. أما القيم الأكبر أو الأدق فتكتبها في الحقل."
         }
       },
       {
         "title": {
           "de": "Taschen mit glatter Tiefe lassen sich fasen",
-          "en": "Pockets of a whole depth can be chamfered"
+          "en": "Pockets of a whole depth can be chamfered",
+          "ar": "يمكن شطف الجيوب ذات العمق الكامل"
         },
         "body": {
           "de": "Endet eine Aussparung genau auf einer Fläche des Körpers, etwa mit der Höhe 5,000 durch eine Arbeitsebene auf einer Schräge gezogen, scheiterte die Fase am Rand der Tasche. Jetzt wird die Tasche beim Gruppieren sauber geschnitten, und die Fase geht.",
-          "en": "When a hole ends exactly on a face of the body, for example with a height of 5.000 pulled through a workplane on a slope, a chamfer on the rim of the pocket failed. The pocket is now cut cleanly when grouped, and the chamfer works."
+          "en": "When a hole ends exactly on a face of the body, for example with a height of 5.000 pulled through a workplane on a slope, a chamfer on the rim of the pocket failed. The pocket is now cut cleanly when grouped, and the chamfer works.",
+          "ar": "عندما ينتهي ثقب تمامًا على وجه من أوجه الجسم، مثلًا بارتفاع 5.000 مسحوبًا عبر سطح عمل مائل، كان الشطف على حافة الجيب يفشل. أما الآن فيُقطع الجيب بشكل نظيف عند التجميع، ويعمل الشطف."
         }
       },
       {
         "title": {
           "de": "Eigene Formen nehmen ihre Notizen mit",
-          "en": "Custom shapes take their notes along"
+          "en": "Custom shapes take their notes along",
+          "ar": "الأشكال المخصصة تأخذ ملاحظاتها معها"
         },
         "body": {
           "de": "Speicherst du Körper mit angehefteten Notizen als eigene Form, kommen die Notizen mit, wenn du die Form in einen Entwurf setzt. Sie erscheinen geschlossen, an den neuen Körpern, mit neuen Nummern.",
-          "en": "If you save bodies with pinned notes as a custom shape, the notes come along when you put the shape into a design. They appear closed, pinned to the new bodies, with new numbers."
+          "en": "If you save bodies with pinned notes as a custom shape, the notes come along when you put the shape into a design. They appear closed, pinned to the new bodies, with new numbers.",
+          "ar": "إذا حفظت أجسامًا عليها ملاحظات مثبتة كشكل مخصص، فإن الملاحظات تأتي معها عندما تضع الشكل في تصميم. وتظهر مغلقة، مثبتة على الأجسام الجديدة، بأرقام جديدة."
         }
       }
     ]
