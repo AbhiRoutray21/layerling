@@ -1149,7 +1149,7 @@ export const MESSAGES_AR: Partial<Record<MessageKey, string>> = {
   "historyView.bringBack": "إعادة إلى التصميم",
   "historyView.bringBackMany": "إعادة أجسام إلى التصميم: {count}",
   "historyView.bringBackHint": "إضافة نسخة من الأجسام المحددة إلى التصميم، كما كانت في هذه الحالة",
-  "historyView.bringBackNothing": "انقر على جسم في هذه الحالة لإعادته إلى التصميم (Shift+نقرة لأكثر من جسم)",
+  "historyView.bringBackNothing": "انقر على جسم في هذه الحالة لإعادته إلى التصميم (اضغط على Shift + انقر للمزيد)",
   "status.broughtBackOne": "أُعيد {name} من {time}",
   "status.broughtBackOneNoTime": "أُعيد {name} من الحالة {index}",
   "status.broughtBackMany": "أُعيدت أجسام من {time}: {count}",
