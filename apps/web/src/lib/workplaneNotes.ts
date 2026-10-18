@@ -73,24 +73,18 @@ export function normalizeNotes(value: unknown): WorkplaneNote[] {
   return notes;
 }
 
-/**
- * Eine Notiz, deren Koerper verschwunden ist, **bleibt stehen** - sie loest sich
- * nur von ihm und behaelt die Stelle, an der sie zuletzt stand. Das ist die
- * verzeihende Seite: Beim Gruppieren zweier Teile wandert die Notiz nicht mit in
- * den neuen Koerper, aber sie geht auch nicht verloren. Verschwaende sie mit dem
- * Koerper, waere jedes Gruppieren ein stiller Verlust.
- */
-export function detachNotesFromMissingShapes(notes: WorkplaneNote[], shapes: WorkplaneShape[]): WorkplaneNote[] {
-  if (notes.every((note) => !note.anchor)) return notes;
-  const ids = new Set(shapes.map((shape) => shape.id));
-  let changed = false;
-  const next = notes.map((note) => {
-    if (!note.anchor || ids.has(note.anchor.shapeId)) return note;
-    changed = true;
-    const { anchor: _anchor, ...free } = note;
-    return free;
+/** The notes with one of them changed, or null when there is no such note. */
+export function patchNote(notes: WorkplaneNote[], id: string, patch: Partial<WorkplaneNote>): WorkplaneNote[] | null {
+  if (!notes.some((note) => note.id === id)) return null;
+  return notes.map((note) => {
+    if (note.id !== id) return note;
+    const merged: WorkplaneNote = { ...note, ...patch, id: note.id };
+    if (typeof patch.text === "string") merged.text = patch.text.slice(0, NOTE_TEXT_LIMIT);
+    // `anchor: undefined` heisst „loese dich" und muss das Feld wirklich los
+    // werden, sonst traegt die Notiz es nach dem Sichern wieder.
+    if ("anchor" in patch && !patch.anchor) delete merged.anchor;
+    return merged;
   });
-  return changed ? next : notes;
 }
 
 /**

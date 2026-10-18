@@ -195,7 +195,8 @@ import { importedShapeFromSvg, invalidSvgMeshReason } from "@/lib/svgImport";
 import { toSvgProjection, type SvgProjectionLayer } from "@/lib/svgExport";
 import { DEFAULT_TAPER_DIMENSION_MAX, keyboardNudgeCoarseFactor, keyboardNudgeStep, normalizeShapeCustomizations, normalizeSnapGrid, normalizeWorkspaceSettings, shapeDimensionLimit, workplaneSettingsFingerprint } from "@/lib/workplaneSettings";
 import { mcpThreadSizeParams } from "@/lib/mcpShapeSettings";
-import { createNoteId, detachNotesFromMissingShapes, normalizeNotes, NOTE_COUNT_LIMIT, NOTE_TEXT_LIMIT, referencePoints } from "@/lib/workplaneNotes";
+import { createNoteId, normalizeNotes, NOTE_COUNT_LIMIT, patchNote, referencePoints } from "@/lib/workplaneNotes";
+import { notesAfterShapeChange } from "@/lib/noteAnchoring";
 import { newReferencePositions, referencePointsForBox, unionReferenceBoxes, type ReferencePointSpot, type ReferencePosition } from "@/lib/referencePoints";
 import {
   normalizePlacementWorkplane,
@@ -4009,10 +4010,9 @@ export function LayerlingEditor({
       const canonicalNext = next.map(canonicalizeShape);
       const requestedSelection = Array.isArray(nextSelection) ? nextSelection : nextSelection ? [nextSelection] : [];
       const validSelection = requestedSelection.filter((id, index) => requestedSelection.indexOf(id) === index && canonicalNext.some((shape) => shape.id === id));
-      // Eine Notiz, deren Koerper nicht mehr da ist, bleibt stehen und loest
-      // sich nur von ihm - sonst waere jedes Gruppieren ein stiller Verlust.
-      const nextNotes = detachNotesFromMissingShapes(notesRef.current, canonicalNext);
+      // A note whose body goes away moves to the new body under it, or stays where it stands.
       const levels = openGroupsRef.current;
+      const nextNotes = notesAfterShapeChange(notesRef.current, shapesRef.current, canonicalNext, new Set(levels.map((level) => level.original.id)), openGroupTransitionRef.current);
       if (levels.length && !openGroupTransitionRef.current) {
         const levelPartIds = levels.map((level) => level.childIds);
         const tracked = trackOpenGroupLevels(levelPartIds, shapesRef.current, canonicalNext);
@@ -4136,17 +4136,8 @@ export function LayerlingEditor({
    */
   const updateNote = useCallback(
     (id: string, patch: Partial<WorkplaneNote>, transient = false) => {
-      const current = notesRef.current;
-      if (!current.some((note) => note.id === id)) return;
-      const next = current.map((note) => {
-        if (note.id !== id) return note;
-        const merged: WorkplaneNote = { ...note, ...patch, id: note.id };
-        if (typeof patch.text === "string") merged.text = patch.text.slice(0, NOTE_TEXT_LIMIT);
-        // `anchor: undefined` heisst „loese dich" und muss das Feld wirklich los
-        // werden, sonst traegt die Notiz es nach dem Sichern wieder.
-        if ("anchor" in patch && !patch.anchor) delete merged.anchor;
-        return merged;
-      });
+      const next = patchNote(notesRef.current, id, patch);
+      if (!next) return;
       if (noteCommitTimerRef.current !== null) {
         window.clearTimeout(noteCommitTimerRef.current);
         noteCommitTimerRef.current = null;
@@ -8042,6 +8033,9 @@ export function LayerlingEditor({
         outer[outer.length - 1] = { ...parent, childIds: [...parent.childIds.slice(0, at), parts[0].id, ...parent.childIds.slice(at)] };
       }
       endOpenGroupLevelsWithoutStep(outer);
+      // The group is not coming back: its notes go to the part left, or stay where they stand.
+      const notesLeft = notesAfterShapeChange(notesRef.current, shapesRef.current.filter((shape) => shape.id !== parts[0]?.id), shapesRef.current, new Set(outer.map((level) => level.original.id)));
+      if (notesLeft !== notesRef.current) commitNotes(notesLeft);
       const message = parts.length ? t("status.groupOnePartLeft") : t("status.groupNoPartsLeft");
       setNotice(message);
       return { ok: true, message, partIds: parts.map((shape) => shape.id) };
@@ -8095,7 +8089,7 @@ export function LayerlingEditor({
       openGroupBusyRef.current = false;
       setOpenGroupBusy(false);
     }
-  }, [commitOpenGroupTransition, endOpenGroupLevelsWithoutStep, refuseOpenGroupStep]);
+  }, [commitNotes, commitOpenGroupTransition, endOpenGroupLevelsWithoutStep, refuseOpenGroupStep]);
 
   // Undo past an opening brings that group back, and deleting every part leaves
   // nothing to close: in both cases that level is over, with every level inside it.
