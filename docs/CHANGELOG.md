@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **Fillet and Chamfer in the sketch follow the order of the editor (#533):** The symbols were the same, but the sketch put the Fillet button before the Chamfer one while the editor puts the Chamfer before the Fillet, so a hand that switched between the two reached for the wrong one. The sketch has the editor's order now, in the toolbar and in the command search. Reported by @AkiraNorthstar.
+- **Chamfillet in the Chamfer tool (#513, #531):** The chamfer window has a choice at the top, Chamfer or Chamfillet. A chamfillet puts a chamfer at the plate on the chosen edges that blends tangentially into a fillet toward the wall, so the first layers need no support and the edge still ends soft; with Bottom edges it takes the whole foot of a part in one click. It is built in the CAD kernel, so the STEP export keeps it exact. The edge tool of the AI connection takes the kind `chamfillet`, too. The kernel's smooth surface normals now also stay in use for every edge treatment, which makes fillets render smoother. Contributed by @corefile.
 - **Arabic: the guide pictures from the Arabic interface (#534):** The 35 pictures of the Arabic guide are now screenshots of the Arabic interface, the same set as in the other languages. Contributed by @sevagjb.
 
 ## 1.88.0

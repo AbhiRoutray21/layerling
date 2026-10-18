@@ -13626,8 +13626,8 @@ function SecondaryToolbar({
         plain("sketch-select", t("sketch.select"), selectGroup, true, () => onSketchTool("select"), { icon: SKETCH_PALETTE_ICONS.select, active: sketchTool === "select" }),
         plain("sketch-image", t("sketch.addImage"), selectGroup, sketchTool === "select", onSketchImage, { icon: SKETCH_PALETTE_ICONS.image }),
         plain("sketch-refine", t("sketch.refine"), selectGroup, true, () => onSketchTool("refine"), { icon: SKETCH_PALETTE_ICONS.refine, active: sketchTool === "refine" }),
-        plain("sketch-fillet", t("sketch.filletCorner"), selectGroup, Boolean(canFilletSketchPoint), () => onSketchCornerDialog?.(sketchCornerDialog === "fillet" ? null : "fillet"), { icon: ToolbarFilletIcon, active: sketchCornerDialog === "fillet" }),
         plain("sketch-chamfer", t("sketch.chamferCorner"), selectGroup, Boolean(canFilletSketchPoint), () => onSketchCornerDialog?.(sketchCornerDialog === "chamfer" ? null : "chamfer"), { icon: ToolbarChamferIcon, active: sketchCornerDialog === "chamfer" }),
+        plain("sketch-fillet", t("sketch.filletCorner"), selectGroup, Boolean(canFilletSketchPoint), () => onSketchCornerDialog?.(sketchCornerDialog === "fillet" ? null : "fillet"), { icon: ToolbarFilletIcon, active: sketchCornerDialog === "fillet" }),
         plain("sketch-erase", t("sketch.erase"), selectGroup, true, () => onSketchTool("erase"), { icon: SKETCH_PALETTE_ICONS.erase, active: sketchTool === "erase" }),
         ...sketchClipboardTools.map((tool) => fromTool(tool, t("editor.group.clipboard"))),
         plain("sketch-undo", t("editor.tool.undo"), t("editor.group.history"), sketchCanUndo, onSketchUndo, { icon: ToolbarUndoIcon }),
@@ -14083,19 +14083,6 @@ function SecondaryToolbar({
                       <SketchReferenceIcon name="refine" />
                     </button>
                     <button
-                      className={`toolbar-icon sketch-tool-icon ${canFilletSketchPoint ? "" : "disabled"} ${sketchCornerDialog === "fillet" ? "active" : ""}`}
-                      type="button"
-                      aria-label={t("sketch.filletCorner")}
-                      title={canFilletSketchPoint ? t("sketch.filletCorner") : t("sketch.filletCornerDisabled")}
-                      onClick={() => {
-                        if (!canFilletSketchPoint) return;
-                        onSketchCornerDialog?.(sketchCornerDialog === "fillet" ? null : "fillet");
-                      }}
-                      disabled={!canFilletSketchPoint}
-                    >
-                      <ToolbarFilletIcon />
-                    </button>
-                    <button
                       className={`toolbar-icon sketch-tool-icon ${canFilletSketchPoint ? "" : "disabled"} ${sketchCornerDialog === "chamfer" ? "active" : ""}`}
                       type="button"
                       aria-label={t("sketch.chamferCorner")}
@@ -14107,6 +14094,19 @@ function SecondaryToolbar({
                       disabled={!canFilletSketchPoint}
                     >
                       <ToolbarChamferIcon />
+                    </button>
+                    <button
+                      className={`toolbar-icon sketch-tool-icon ${canFilletSketchPoint ? "" : "disabled"} ${sketchCornerDialog === "fillet" ? "active" : ""}`}
+                      type="button"
+                      aria-label={t("sketch.filletCorner")}
+                      title={canFilletSketchPoint ? t("sketch.filletCorner") : t("sketch.filletCornerDisabled")}
+                      onClick={() => {
+                        if (!canFilletSketchPoint) return;
+                        onSketchCornerDialog?.(sketchCornerDialog === "fillet" ? null : "fillet");
+                      }}
+                      disabled={!canFilletSketchPoint}
+                    >
+                      <ToolbarFilletIcon />
                     </button>
                     <button className={`toolbar-icon sketch-tool-icon ${sketchTool === "erase" ? "active" : ""}`} type="button" aria-label={t("sketch.erase")} title={t("sketch.erase")} onClick={() => onSketchTool("erase")}>
                       <SketchReferenceIcon name="erase" />
