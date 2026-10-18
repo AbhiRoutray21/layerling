@@ -18,5 +18,37 @@
       "de": "Die gefüllte Schnittfläche der Schnittansicht erscheint nicht mehr erst, wenn die Ebene stillsteht: Sie läuft beim Verschieben der Ebene mit, sodass der Körper nicht mehr kurz hohl aussieht.",
       "en": "The filled cut face of the section view no longer waits until the plane stands still: it follows the plane while you move it, so the body no longer looks hollow for a moment."
     }
+  },
+  {
+    "title": {
+      "en": "Notes stay with their bodies in groups",
+      "de": "Notizen bleiben in Gruppen an ihren Körpern",
+      "cs": "Poznámky zůstávají ve skupinách u svých těles",
+      "da": "Noter bliver ved deres former i grupper",
+      "fr": "Les notes restent sur leurs corps dans les groupes",
+      "it": "Le note restano sui loro corpi nei gruppi",
+      "hu": "A jegyzetek csoportokban is a testükön maradnak",
+      "nl": "Notities blijven in groepen bij hun lichaam",
+      "pl": "Notatki zostają przy swoich bryłach w grupach",
+      "sl": "Opombe v skupinah ostanejo na svojih telesih",
+      "tr": "Notlar gruplarda gövdelerine bağlı kalır",
+      "ru": "Заметки остаются на своих телах в группах",
+      "ar": "تبقى الملاحظات على أجسامها داخل المجموعات"
+    },
+    "body": {
+      "en": "Group takes a pinned note into the group, Ungroup hands it to the visible part under it, and while a group is open for editing its notes move with the part they sit on. A note whose body is deleted stays where it stood.",
+      "de": "Gruppieren nimmt eine angeheftete Notiz mit in die Gruppe, Gruppierung aufheben gibt sie an das sichtbare Teil darunter weiter, und solange eine Gruppe zum Bearbeiten offen ist, wandern ihre Notizen mit dem Teil, auf dem sie sitzen. Eine Notiz, deren Körper gelöscht wird, bleibt stehen, wo sie war.",
+      "cs": "Sloučit vezme připojenou poznámku do skupiny, Rozdělit sloučení ji předá viditelné části pod ní a dokud je skupina otevřená k úpravám, její poznámky se pohybují s částí, na které leží. Poznámka, jejíž těleso je smazáno, zůstane, kde byla.",
+      "da": "Gruppér tager en vedhæftet note med ind i gruppen, Opdel gruppe giver den videre til den synlige del under den, og mens en gruppe er åben til redigering, følger dens noter med den del, de sidder på. En note, hvis form slettes, bliver stående, hvor den var.",
+      "fr": "« Groupe » emporte une note jointe dans le groupe, « Dissocier » la confie à la partie visible située dessous, et tant qu'un groupe est ouvert pour l'édition, ses notes suivent la partie sur laquelle elles se trouvent. Une note dont le corps est supprimé reste là où elle était.",
+      "it": "Raggruppa porta una nota fissata dentro il gruppo, Separa gruppo la affida alla parte visibile sotto di essa e, finché un gruppo è aperto per la modifica, le sue note si muovono con la parte su cui si trovano. Una nota il cui corpo viene eliminato resta dove si trovava.",
+      "hu": "A Csoportosítás a csatolt jegyzetet is beviszi a csoportba, a Csoportbontás az alatta lévő látható részhez adja tovább, és amíg egy csoport szerkesztésre nyitva van, a jegyzetei azzal a résszel mozognak, amelyen ülnek. Ha egy jegyzet testét törlöd, a jegyzet ott marad, ahol volt.",
+      "nl": "Groeperen neemt een vastgemaakte notitie mee in de groep, Groep opheffen geeft haar door aan het zichtbare onderdeel eronder, en zolang een groep open is om te bewerken, bewegen de notities mee met het onderdeel waarop ze zitten. Een notitie waarvan het lichaam wordt verwijderd, blijft staan waar ze stond.",
+      "pl": "Grupuj zabiera przypiętą notatkę do grupy, Rozgrupuj przekazuje ją widocznej części pod nią, a dopóki grupa jest otwarta do edycji, jej notatki poruszają się z częścią, na której leżą. Notatka, której bryła zostanie usunięta, zostaje tam, gdzie stała.",
+      "sl": "Združi v skupino prikovano opombo vzame v skupino, Razdruži jo preda vidnemu delu pod njo, in dokler je skupina odprta za urejanje, se njene opombe premikajo z delom, na katerem so. Opomba, katere telo izbrišeš, ostane, kjer je stala.",
+      "tr": "Grupla iliştirilmiş bir notu gruba alır, Grubu çöz onu altındaki görünür parçaya verir ve bir grup düzenleme için açıkken notları üzerinde durdukları parçayla birlikte hareket eder. Gövdesi silinen bir not olduğu yerde kalır.",
+      "ru": "«Сгруппировать» забирает прикреплённую заметку в группу, «Разгруппировать» передаёт её видимой части под ней, а пока группа открыта для правки, её заметки движутся вместе с частью, на которой стоят. Заметка, тело которой удалено, остаётся там, где стояла.",
+      "ar": "التجميع يأخذ الملاحظة المرتبطة إلى داخل المجموعة، وفك التجميع يسلّمها إلى الجزء المرئي الموجود تحتها، وما دامت المجموعة مفتوحة للتعديل تتحرك ملاحظاتها مع الجزء الذي تقع عليه. أما الملاحظة التي يُحذف جسمها فتبقى حيث كانت."
+    }
   }
 ]
