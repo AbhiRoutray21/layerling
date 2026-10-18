@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **Arabic: the guide pictures from the Arabic interface (#534):** The 35 pictures of the Arabic guide are now screenshots of the Arabic interface, the same set as in the other languages. Contributed by @sevagjb.
+
 ## 1.88.0
 
 - **The Arabic guide reads from the right (#530):** The pages of the guide in Arabic get the right-to-left direction, so text, lists, tables and the chapter list read from the right; key combinations such as Ctrl+S and code blocks keep their left-to-right order. The other languages look as before. Contributed by @sevagjb.
