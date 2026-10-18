@@ -80,5 +80,15 @@
       "de": "Öffnest du die Skizze eines gedrehten Körpers noch einmal zum Bearbeiten, zeigt sie die anderen Körper wieder von vorn, in derselben Ansicht wie das Profil, wie beim Zeichnen. Vorher kam dabei die Ansicht von oben zurück, sobald der Körper über der Platte stand.",
       "en": "When you open the sketch of a revolved body again to edit it, it shows the other bodies from the front, in the same view as the profile, as while you draw it. Before, the view from above came back as soon as the body stood above the plate."
     }
+  },
+  {
+    "title": {
+      "de": "Winkel mit zwei Nachkommastellen",
+      "en": "Angles with two decimals"
+    },
+    "body": {
+      "de": "Eine Drehung wird jetzt mit zwei Nachkommastellen gespeichert und im Zahlenfeld gezeigt: 11,25° bleibt 11,25°, auch wenn du mit Umschalt am Drehkreis drehst. Vorher wurde daraus 11,3°, und das Feld zeigte ganze Grad.",
+      "en": "A rotation is now kept with two decimals and shown in the number field: 11.25° stays 11.25°, also when you turn with Shift on the rotation circle. Before, it became 11.3°, and the field showed whole degrees."
+    }
   }
 ]

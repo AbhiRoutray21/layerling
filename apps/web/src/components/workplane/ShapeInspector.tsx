@@ -3971,10 +3971,13 @@ function RangeProperty({
   const sliderValue = clamp(controlValue, controlMin, controlMax);
   const position = ((sliderValue - controlMin) / Math.max(Number.EPSILON, controlMax - controlMin)) * 100;
   const [editing, setEditing] = useState(false);
-  const [draft, setDraft] = useState(formatPropertyNumber(controlValue, accuracy, controlStep));
+  const [draft, setDraft] = useState(ROTATION_PROPERTY_IDS.has(id) ? String(Number(controlValue.toFixed(2))) : formatPropertyNumber(controlValue, accuracy, controlStep));
   const unit = isLength ? lengthDisplayUnit(workspace).label : ROTATION_PROPERTY_IDS.has(id) ? "°" : null;
   // Inches read as fractions (1⅝), like similar tools; the slider and typed decimals stay exact.
-  const formatShown = (shown: number) => (unit === "in" && showsInchFractions(workspace) ? formatFractionalInches(shown) : formatPropertyNumber(shown, accuracy, controlStep));
+  // An angle keeps two decimals (11.25 stays 11.25, #552); the other whole-step fields show whole numbers.
+  const formatShown = (shown: number) => (unit === "in" && showsInchFractions(workspace)
+    ? formatFractionalInches(shown)
+    : ROTATION_PROPERTY_IDS.has(id) ? String(Number(shown.toFixed(2))) : formatPropertyNumber(shown, accuracy, controlStep));
   const toModelValue = (nextValue: number) => isLength ? displayToMillimeters(nextValue, workspace) : nextValue;
   // The calculation the field was last set from comes back when it is entered (#180), as long as
   // the value still equals it; a value changed by a handle or the slider shows the number again.

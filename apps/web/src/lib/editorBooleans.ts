@@ -1941,13 +1941,13 @@ export function cleanShapePatch(patch: ShapeUpdatePatch): Partial<WorkplaneShape
   const { bakeTransform: _bakeTransform, ...rest } = patch;
   const next = { ...rest };
   if (typeof next.rotation === "number") {
-    next.rotation = cleanRotationDegrees(next.rotation, 1);
+    next.rotation = cleanRotationDegrees(next.rotation, 2);
   }
   if (typeof next.rotationX === "number") {
-    next.rotationX = cleanRotationDegrees(next.rotationX, 1);
+    next.rotationX = cleanRotationDegrees(next.rotationX, 2);
   }
   if (typeof next.rotationZ === "number") {
-    next.rotationZ = cleanRotationDegrees(next.rotationZ, 1);
+    next.rotationZ = cleanRotationDegrees(next.rotationZ, 2);
   }
   return next;
 }

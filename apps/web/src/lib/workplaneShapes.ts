@@ -26,13 +26,13 @@ export function normalizeDegrees(value: number) {
   return ((value % 360) + 360) % 360;
 }
 
-export function cleanRotationDegrees(value: number, precision = 1) {
+export function cleanRotationDegrees(value: number, precision = 2) {
   if (!Number.isFinite(value)) {
     return 0;
   }
   const normalized = normalizeDegrees(value);
   const rounded = Number(normalized.toFixed(precision));
-  const zeroThreshold = precision <= 1 ? 0.5 : 0.05;
+  const zeroThreshold = precision <= 2 ? 0.5 : 0.05;
   if (rounded < zeroThreshold || rounded >= 360 - zeroThreshold || Object.is(rounded, -0)) {
     return 0;
   }
