@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "title": {
+      "de": "Fase + Rundung: der druckbare Fuß",
+      "en": "Chamfillet: the printable foot"
+    },
+    "body": {
+      "de": "Im Fasen-Fenster wählst du oben jetzt zwischen „Chamfer“ und „Fase + Rundung“. Die zweite Art macht an den unteren Kanten eine Fase an der Platte, die tangential in eine Rundung zur Wand übergeht: Die ersten Schichten brauchen keine Stützen, und die Kante endet trotzdem weich. Mit „Untere Kanten“ wählst du den ganzen Fuß in einem Klick; auch per KI-Verbindung möglich (kind „chamfillet“).",
+      "en": "In the chamfer window you now choose at the top between Chamfer and Chamfillet. The second kind puts a chamfer at the plate on the bottom edges that blends tangentially into a fillet toward the wall: the first layers need no support, and the edge still ends soft. Bottom edges picks the whole foot in one click; the AI connection can do it too (kind chamfillet)."
+    }
+  }
+]

@@ -6412,10 +6412,10 @@ export function LayerlingEditor({
     invalidateCadModifierSession();
     const sourceFingerprint = projectShapesFingerprint([shape]);
     const sourceProjectId = projectInfoRef.current.projectId;
-    const kind: CadModifierKind = params.kind === "fillet" ? "fillet" : "chamfer";
+    const kind: CadModifierKind = params.kind === "fillet" ? "fillet" : params.kind === "chamfillet" ? "chamfillet" : "chamfer";
     const sharpAngle = Math.max(1, Math.min(CAD_MODIFIER_MAX_SHARP_ANGLE, mcpNumber(params.sharpAngle, 25)));
     const amount = Math.max(MIN_EDGE_MODIFIER_AMOUNT, mcpNumber(params.amount, 1));
-    const chamferAngle = Math.max(5, Math.min(85, mcpNumber(params.chamferAngle, 45)));
+    const chamferAngle = Math.max(kind === "chamfillet" ? 15 : 5, Math.min(kind === "chamfillet" ? 75 : 85, mcpNumber(params.chamferAngle, 45)));
     const quality: CadModifierQuality = params.quality === "draft" || params.quality === "fine" ? params.quality : "standard";
     const preserveEdgeSize = typeof params.preserveEdgeSize === "boolean" ? params.preserveEdgeSize : shape.edgeResizeMode === "preserve";
     const { response, sourceParts } = await prepareCadModifierForMcp(shape, sharpAngle);
@@ -6466,7 +6466,7 @@ export function LayerlingEditor({
       amount,
       edgeCount: selectedEdgeIds.length,
       edgeIds: [...selectedEdgeIds],
-      ...(kind === "chamfer" ? { chamferAngle } : {}),
+      ...(kind === "chamfer" || kind === "chamfillet" ? { chamferAngle } : {}),
     } satisfies NonNullable<WorkplaneShape["edgeTreatments"]>[number];
     const session: EdgeModifierSession = {
       kind,
