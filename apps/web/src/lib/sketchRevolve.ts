@@ -9,6 +9,11 @@ export const DEFAULT_SKETCH_REVOLVE_SETTINGS: SketchRevolveSettings = {
   quality: 6,
 };
 
+/** The most turns a helical revolve (one with a pitch) may wind. */
+export const MAX_SKETCH_REVOLVE_TURNS = 200;
+/** The highest pitch a helical revolve takes, in mm per turn. */
+export const MAX_SKETCH_REVOLVE_PITCH = 1000;
+
 type OrderedStep = { segment: SketchSegment; from: SketchPoint; to: SketchPoint };
 type OrderedPath = { steps: OrderedStep[]; closed: boolean };
 type Point2 = [number, number];
@@ -33,14 +38,24 @@ function finiteOr(value: number | undefined, fallback: number) {
 }
 
 export function normalizeSketchRevolveSettings(settings?: Partial<SketchRevolveSettings>): SketchRevolveSettings {
-  const rawSweep = clamp(finiteOr(settings?.sweepAngle, DEFAULT_SKETCH_REVOLVE_SETTINGS.sweepAngle), -360, 360);
+  const pitch = clamp(finiteOr(settings?.pitch, 0), 0, MAX_SKETCH_REVOLVE_PITCH);
+  // Rings close after one turn; a helix may wind on.
+  const maxSweep = pitch > 0 ? 360 * MAX_SKETCH_REVOLVE_TURNS : 360;
+  const rawSweep = clamp(finiteOr(settings?.sweepAngle, DEFAULT_SKETCH_REVOLVE_SETTINGS.sweepAngle), -maxSweep, maxSweep);
   const sweepAngle = Math.abs(rawSweep) < 1 ? (rawSweep < 0 ? -1 : 1) : rawSweep;
   return {
     startAngle: ((finiteOr(settings?.startAngle, DEFAULT_SKETCH_REVOLVE_SETTINGS.startAngle) % 360) + 360) % 360,
     sweepAngle,
     sides: Math.round(clamp(finiteOr(settings?.sides, DEFAULT_SKETCH_REVOLVE_SETTINGS.sides), 3, MAX_HIGH_RESOLUTION_SIDES)),
     quality: Math.round(clamp(finiteOr(settings?.quality, DEFAULT_SKETCH_REVOLVE_SETTINGS.quality), 1, 10)),
+    // Only a helix carries a pitch, so rings keep the settings they always had.
+    ...(pitch > 0 ? { pitch } : {}),
   };
+}
+
+/** Whether these settings wind the profile up as a helix rather than turning it into rings. */
+export function sketchRevolveIsHelical(settings?: Partial<SketchRevolveSettings>) {
+  return (normalizeSketchRevolveSettings(settings).pitch ?? 0) > 0;
 }
 
 function orderedPaths(profile: SketchProfile): OrderedPath[] {
@@ -195,6 +210,31 @@ function dispose(value: unknown) {
   (value as { delete?: () => void } | null)?.delete?.();
 }
 
+/**
+ * The section wound up along a helix about z, as `revolve` turns it about z: the section is
+ * extruded straight, one slice per side of each turn, and the slices are bent round the axis and
+ * lifted by the pitch as they go. The extrusion runs down from z = 0 for a positive sweep, up for
+ * a negative one, and the angle is minus z: that bend keeps the faces pointing out (a bend the
+ * other way would turn the body inside out). Turns closer than the section is high run into each
+ * other; that is the drawing's to avoid, as with a spring's wire.
+ */
+function helicalRevolve(section: InstanceType<ManifoldToplevel["CrossSection"]>, settings: SketchRevolveSettings, disposable: unknown[]) {
+  const turns = Math.abs(settings.sweepAngle) / 360;
+  const length = 2 * Math.PI * turns;
+  const pitch = settings.pitch ?? 0;
+  const straight = section.extrude(length, Math.max(1, Math.ceil(settings.sides * turns)));
+  disposable.push(straight);
+  const oriented = settings.sweepAngle > 0 ? straight.mirror([0, 0, 1]) : straight;
+  if (oriented !== straight) disposable.push(oriented);
+  return oriented.warp((vertex) => {
+    const angle = -vertex[2];
+    const [radius, height] = vertex;
+    vertex[0] = radius * Math.cos(angle);
+    vertex[1] = radius * Math.sin(angle);
+    vertex[2] = height + (pitch * Math.abs(angle)) / (2 * Math.PI);
+  });
+}
+
 export function buildSketchRevolveMesh(runtime: ManifoldToplevel, profile: SketchProfile, requestedSettings?: Partial<SketchRevolveSettings>): SketchRevolveMesh {
   const settings = normalizeSketchRevolveSettings(requestedSettings);
   const polygons = sketchProfileToRevolvePolygons(profile, settings);
@@ -208,9 +248,11 @@ export function buildSketchRevolveMesh(runtime: ManifoldToplevel, profile: Sketc
     disposable.push(simplified);
     if (simplified.toPolygons().length === 0) throw new Error("The revolve profile has no filled area");
     const sweep = Math.abs(settings.sweepAngle);
-    const solid = simplified.revolve(settings.sides, sweep);
+    const solid = settings.pitch ? helicalRevolve(simplified, settings, disposable) : simplified.revolve(settings.sides, sweep);
     disposable.push(solid);
-    const rotation = settings.sweepAngle < 0 ? settings.startAngle + settings.sweepAngle : settings.startAngle;
+    // A helix starts at the start angle and winds either way from there; rings are turned to
+    // cover the same span.
+    const rotation = settings.sweepAngle < 0 && !settings.pitch ? settings.startAngle + settings.sweepAngle : settings.startAngle;
     const revolved = Math.abs(rotation) > 1e-8 ? solid.rotate([0, 0, rotation]) : solid;
     if (revolved !== solid) disposable.push(revolved);
     if (revolved.status() !== "NoError" || revolved.numTri() < 1) throw new Error("The profile could not be revolved into a valid solid");

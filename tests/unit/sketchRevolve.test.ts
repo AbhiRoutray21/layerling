@@ -24,6 +24,15 @@ function rectangleProfile(innerRadius = 5, outerRadius = 10, height = 20): Sketc
   };
 }
 
+function signedVolume(positions: number[]) {
+  let volume = 0;
+  for (let index = 0; index + 8 < positions.length; index += 9) {
+    const [ax, ay, az, bx, by, bz, cx, cy, cz] = positions.slice(index, index + 9);
+    volume += (ax * (by * cz - bz * cy) - ay * (bx * cz - bz * cx) + az * (bx * cy - by * cx)) / 6;
+  }
+  return volume;
+}
+
 describe("sketch revolve", () => {
   let runtime: ManifoldToplevel;
 
@@ -82,6 +91,23 @@ describe("sketch revolve", () => {
     expect(reverse.triangleCount).toBeGreaterThan(0);
     expect(quarter.width).toBeLessThanOrEqual(20.001);
     expect(quarter.depth).toBeLessThanOrEqual(20.001);
+  });
+
+  it("winds a profile up as one helical strand when it has a pitch", () => {
+    // A 2 mm square wire on a 10 mm radius, three turns, 2.5 mm a turn.
+    const wire = rectangleProfile(9, 11, 2);
+    const rings = buildSketchRevolveMesh(runtime, wire, { sides: 48 });
+    const right = buildSketchRevolveMesh(runtime, wire, { sides: 48, sweepAngle: 3 * 360, pitch: 2.5 });
+    const left = buildSketchRevolveMesh(runtime, wire, { sides: 48, sweepAngle: -3 * 360, pitch: 2.5 });
+    expect(rings.height).toBeCloseTo(2, 4);
+    [right, left].forEach((helix) => {
+      expect(helix.height).toBeCloseTo(2 + 3 * 2.5, 4);
+      expect(helix.width).toBeCloseTo(22, 1);
+      // Outward faces: the signed volume is positive, the wire's section times its length along the helix.
+      expect(signedVolume(helix.positions)).toBeCloseTo(4 * 3 * Math.hypot(2 * Math.PI * 10, 2.5) * Math.cos(Math.atan2(2.5, 2 * Math.PI * 10)), -1);
+    });
+    // Three turns take more slices than one ring.
+    expect(right.triangleCount).toBeGreaterThan(rings.triangleCount);
   });
 
   it("normalizes unsafe revolve settings", () => {

@@ -8,5 +8,15 @@
       "de": "Ein Gridfinity-Behälter ab 3 Höheneinheiten kann jetzt an jeder Innenwand eine Leiste für ein Etikett bekommen, auch an mehreren zugleich. Sie liegt knapp unter dem Stapelrand, und du stellst Breite, Länge und die verrundeten oder gefasten Ecken im Eigenschaften-Fenster ein.",
       "en": "A Gridfinity bin of 3 height units or more can now have a shelf for a label along any of its inner walls, several at once. It sits just under the stacking lip, and you set its width, length and the rounded or chamfered corners in the Properties panel."
     }
+  },
+  {
+    "title": {
+      "de": "Eine Drehung windet sich zu einem durchgehenden Strang",
+      "en": "A revolve can wind up as one continuous strand"
+    },
+    "body": {
+      "de": "Ein gedrehter Körper hat jetzt eine Steigung im Eigenschaften-Fenster. Über 0 windet sich der Umriss als Schraubenlinie statt zu Ringen, wie Filament auf einer Spule, und du stellst die Windungen ein.",
+      "en": "A revolved body now has a Pitch in the Properties panel. Above 0 the outline winds up as a helix instead of rings, like filament on a spool, and you set the number of turns."
+    }
   }
 ]
