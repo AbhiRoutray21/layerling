@@ -16701,6 +16701,72 @@ html[data-theme="dark"] .top-action-body .icon-tag-ok {
   letter-spacing: 0.08em;
 }
 
+/* The QR code window and card (#553): the text, the notes under it, the quiet zone switch. The
+   preview stays black on white in every theme - it shows the code as a scanner sees it. */
+.qr-code-text {
+  display: grid;
+  gap: 4px;
+  color: var(--foreground);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.qr-code-text textarea {
+  min-height: 64px;
+  padding: 6px 10px;
+  color: var(--foreground);
+  font: inherit;
+  font-weight: 600;
+  resize: vertical;
+  background: var(--tile-hover);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+
+.qr-code-text textarea[aria-invalid="true"] {
+  border-color: #c4361d;
+}
+
+.qr-code-text small,
+.qr-code-note {
+  color: var(--muted-strong);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.qr-code-text small.qr-code-warning,
+.qr-code-panel small.qr-code-warning {
+  color: #b02f17;
+}
+
+.qr-code-panel .qr-code-preview {
+  height: 172px;
+  background: #fff;
+}
+
+.qr-code-panel .qr-code-preview img {
+  max-height: 150px;
+  image-rendering: pixelated;
+}
+
+.qr-code-check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--foreground);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.qr-code-check input {
+  accent-color: var(--primary);
+}
+
+html[data-theme="dark"] .qr-code-text small.qr-code-warning,
+html[data-theme="dark"] .qr-code-panel small.qr-code-warning {
+  color: #ff8a70;
+}
+
 /* An update arrived while this page was open: offer to reload (lib/newVersionWatch.ts). */
 .new-version-notice {
   position: fixed;

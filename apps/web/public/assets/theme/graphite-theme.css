@@ -7892,6 +7892,47 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .top-action-body .icon-
   color: #b02f17;
 }
 
+:where(html[data-theme="dark"][data-palette="graphite"]) .qr-code-text {
+  color: var(--foreground);
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .qr-code-text textarea {
+  color: var(--foreground);
+  background: var(--tile-hover);
+  border: 1px solid var(--border);
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .qr-code-text textarea[aria-invalid="true"] {
+  border-color: #c4361d;
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .qr-code-text small,
+:where(html[data-theme="dark"][data-palette="graphite"]) .qr-code-note {
+  color: var(--muted-strong);
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .qr-code-text small.qr-code-warning,
+:where(html[data-theme="dark"][data-palette="graphite"]) .qr-code-panel small.qr-code-warning {
+  color: #b02f17;
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .qr-code-panel .qr-code-preview {
+  background: #fff;
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .qr-code-check {
+  color: var(--foreground);
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .qr-code-check input {
+  accent-color: var(--primary);
+}
+
+html[data-theme="dark"]:where([data-palette="graphite"]) .qr-code-text small.qr-code-warning,
+html[data-theme="dark"]:where([data-palette="graphite"]) .qr-code-panel small.qr-code-warning {
+  color: #ff8a70;
+}
+
 :where(html[data-theme="dark"][data-palette="graphite"]) .new-version-notice {
   color: #343434;
   background: #f9f9f9;

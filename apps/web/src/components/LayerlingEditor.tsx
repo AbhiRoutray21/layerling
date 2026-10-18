@@ -22,6 +22,9 @@ import { NAME_TAG_LAYERS, NAME_TAG_LETTER_SIZE, textShrinkPatch } from "@/lib/na
 import { DEFAULT_ICON_TAG_WIDTH, ICON_TAG_LAYERS, MAX_ICON_TAG_WIDTH, MIN_ICON_TAG_WIDTH, normalizeIconTagCount } from "@/lib/iconTag";
 import type { IconLayerPatch, IconTagControls, TextLayerPatch } from "@/components/workplane/ShapeInspector";
 import { IconTagPanel } from "@/components/workplane/IconTagPanel";
+import { QrCodePanel } from "@/components/workplane/QrCodePanel";
+import { qrCodeOf, qrCodeShape, regeneratedQrCodeShape } from "@/lib/editorQrCode";
+import { DEFAULT_QR_WIDTH, MAX_QR_HEIGHT, MAX_QR_WIDTH, MIN_QR_HEIGHT, MIN_QR_WIDTH, QR_BYTE_CAPACITY, QR_ERROR_CORRECTIONS, QR_STYLES, normalizeQrSettings, qrByteLength, qrMatrix, qrModuleSize, qrModuleTooSmall, qrTextFits, type QrCodeSettings, type QrErrorCorrection, type QrStyle } from "@/lib/qrCode";
 import { iconSourceFromFile, PICTURE_FILE_ACCEPT, type IconSource } from "@/lib/pictureIcon";
 import { loadedManifoldRuntime, onManifoldReady } from "@/lib/manifoldHandle";
 import { canApplySketchCornerTreatment } from "@/lib/sketchFilletChamfer";
@@ -187,7 +190,7 @@ import {
   type LylFileHandle,
 } from "@/lib/lylFileAccess";
 import { simplifyTrianglePositions } from "@/lib/meshSimplify";
-import { displayShapeName, iconTagAsset, libraryShapeAssets, makeShapeFromAsset, nameTagAsset, sceneShape, shapeAssetLabel, shapeAssetMenuLabel, toolbarShapeAssets } from "@/lib/shapeCatalog";
+import { displayShapeName, iconTagAsset, qrCodeAsset, libraryShapeAssets, makeShapeFromAsset, nameTagAsset, sceneShape, shapeAssetLabel, shapeAssetMenuLabel, toolbarShapeAssets } from "@/lib/shapeCatalog";
 import { importedShapeFromStl } from "@/lib/stlImport";
 import { exportMeshesToStl } from "@/lib/stlExport";
 import { exportMeshesTo3mf, THREE_MF_MEDIA_TYPE } from "@/lib/threemfExport";
@@ -2519,6 +2522,7 @@ export function LayerlingEditor({
   const [topPanel, setTopPanel] = useState<TopPanel>(null);
   /** The icon tag window: an SVG file, its width and OK (the library's Icon tag). */
   const [iconTagPanelOpen, setIconTagPanelOpen] = useState(false);
+  const [qrCodePanelOpen, setQrCodePanelOpen] = useState(false);
   const [shortcutsOpen, setShortcutsOpen] = useState(false);
   // Interactive Help: while on, a click asks the guide about the element instead of using it.
   const [interactiveHelp, setInteractiveHelp] = useState(false);
@@ -3259,7 +3263,14 @@ export function LayerlingEditor({
   const startCruise = useCallback((asset: ShapeAsset) => {
     // The icon tag has no shape to carry: it starts from an SVG file, in its own window.
     if (asset.id === iconTagAsset.id) {
+      setQrCodePanelOpen(false);
       setIconTagPanelOpen(true);
+      return;
+    }
+    // The QR code (#553) starts from a text, in its own window too.
+    if (asset.id === qrCodeAsset.id) {
+      setIconTagPanelOpen(false);
+      setQrCodePanelOpen(true);
       return;
     }
     closeSplit();
@@ -5228,7 +5239,13 @@ export function LayerlingEditor({
     (asset: ShapeAsset, point?: PlacementPoint, onFace?: PlacementWorkplane) => {
       setCruiseAsset(null);
       if (asset.id === iconTagAsset.id) {
+        setQrCodePanelOpen(false);
         setIconTagPanelOpen(true);
+        return;
+      }
+      if (asset.id === qrCodeAsset.id) {
+        setIconTagPanelOpen(false);
+        setQrCodePanelOpen(true);
         return;
       }
       const shape = makeShapeFromAsset(asset, undefined, workspaceSettingsRef.current.shapeCustomizations[asset.kind]);
@@ -8290,7 +8307,8 @@ export function LayerlingEditor({
 
   /** The icon tag card's wiring for the selected sketch body or icon tag; null for anything else. */
   const iconTagControls = useMemo<IconTagControls | null>(() => {
-    if (!selectedIconStack || !selectedShape) return null;
+    // A QR code (#553) is made again from its text, not split into layers.
+    if (!selectedIconStack || !selectedShape || selectedShape.qrCode) return null;
     const footprint = shapeBedFootprint(selectedShape);
     return {
       stack: selectedIconStack,
@@ -8309,6 +8327,28 @@ export function LayerlingEditor({
     commitShapes([...shapesRef.current, tag], [tag.id], t("status.iconTagAdded", { name: tag.name }));
     setIconTagPanelOpen(false);
   }, [commitShapes]);
+
+  /** The QR code window's OK (#553): the code as a new body on the plate's middle, selected. */
+  const createQrCode = useCallback(async (settings: QrCodeSettings, width: number) => {
+    const shape = await qrCodeShape(settings, width, workspaceSettingsRef.current.booleanTriangleLimit);
+    commitShapes([...shapesRef.current, shape], [shape.id], t("status.qrCodeAdded"));
+    setQrCodePanelOpen(false);
+  }, [commitShapes]);
+
+  /** The QR code card's "Make again": the selected code with a new text, where it stood and as wide as it is. */
+  const regenerateSelectedQrCode = useCallback(async (text: string) => {
+    const current = selectedShapes.length === 1 ? selectedShape : null;
+    const settings = qrCodeOf(current);
+    if (!current || !settings) return;
+    const next = await regeneratedQrCodeShape(current, { ...settings, text }, workspaceSettingsRef.current.booleanTriangleLimit);
+    if (!shapesRef.current.some((shape) => shape.id === current.id)) return;
+    commitShapes(shapesRef.current.map((shape) => (shape.id === current.id ? next : shape)), [next.id], t("status.qrCodeRegenerated"));
+  }, [commitShapes, selectedShape, selectedShapes.length]);
+
+  const qrCodeControls = useMemo(() => {
+    const settings = selectedShapes.length === 1 && !selectedShape?.locked ? qrCodeOf(selectedShape) : null;
+    return settings ? { settings, onRegenerate: regenerateSelectedQrCode } : null;
+  }, [regenerateSelectedQrCode, selectedShape, selectedShapes.length]);
 
   const simplifyToolShape = simplifyToolId && selectedShapes.length === 1 && selectedShape?.id === simplifyToolId && offersMeshSimplify(selectedShape)
     ? selectedShape
@@ -9543,6 +9583,47 @@ export function LayerlingEditor({
         const placed = placeSketchShape(named, placementWorkplaneRef.current, null);
         commitShapes([...currentShapes(), placed], placed.id, t("status.sweepCreated"));
         return { object: mcpShapeSummary(placed) };
+      }
+
+      if (command.action === "create_qr_code") {
+        const text = typeof params.text === "string" ? params.text : "";
+        if (!text) throw new Error("create_qr_code needs a text");
+        const errorCorrection = params.errorCorrection ?? "M";
+        if (!QR_ERROR_CORRECTIONS.includes(errorCorrection as QrErrorCorrection)) throw new Error("errorCorrection must be L, M, Q or H");
+        const style = params.style ?? "code";
+        if (!QR_STYLES.includes(style as QrStyle)) throw new Error("style must be code, raised or engraved");
+        if (!qrTextFits(text, errorCorrection as QrErrorCorrection)) {
+          throw new Error(`The text takes ${qrByteLength(text)} bytes; error correction ${errorCorrection} holds at most ${QR_BYTE_CAPACITY[errorCorrection as QrErrorCorrection]}`);
+        }
+        const inRange = (value: unknown, min: number, max: number) => typeof value === "number" && Number.isFinite(value) && value >= min && value <= max;
+        if (params.width !== undefined && !inRange(params.width, MIN_QR_WIDTH, MAX_QR_WIDTH)) throw new Error(`width must be ${MIN_QR_WIDTH} to ${MAX_QR_WIDTH} mm`);
+        if (params.height !== undefined && !inRange(params.height, MIN_QR_HEIGHT, MAX_QR_HEIGHT)) throw new Error(`height must be ${MIN_QR_HEIGHT} to ${MAX_QR_HEIGHT} mm`);
+        if (params.plateThickness !== undefined && !inRange(params.plateThickness, MIN_QR_HEIGHT, MAX_QR_HEIGHT)) throw new Error(`plateThickness must be ${MIN_QR_HEIGHT} to ${MAX_QR_HEIGHT} mm`);
+        const settings = normalizeQrSettings({
+          text,
+          errorCorrection,
+          style,
+          quietZone: params.quietZone !== false,
+          ...(params.height !== undefined ? { codeHeight: params.height } : {}),
+          ...(params.plateThickness !== undefined ? { plateThickness: params.plateThickness } : {}),
+        })!;
+        if (settings.style === "engraved" && settings.codeHeight > settings.plateThickness - 0.2) throw new Error("The engraving must be at least 0.2 mm shallower than the plate");
+        const width = typeof params.width === "number" ? params.width : DEFAULT_QR_WIDTH;
+        const built = await qrCodeShape(settings, width, workspaceSettingsRef.current.booleanTriangleLimit);
+        const shape = canonicalizeShape({
+          ...built,
+          ...(params.asHole === true ? { hole: true } : {}),
+          ...(typeof params.name === "string" && params.name.trim() ? { name: params.name.trim().slice(0, 60) } : {}),
+        });
+        commitShapes([...currentShapes(), shape], shape.id, t("status.qrCodeAdded"));
+        const modules = qrMatrix(settings.text, settings.errorCorrection).length;
+        const moduleSize = qrModuleSize(modules, width, settings.style, settings.quietZone);
+        return {
+          object: mcpShapeSummary(shape),
+          modules,
+          moduleSize: Math.round(moduleSize * 1000) / 1000,
+          ...(qrModuleTooSmall(moduleSize) ? { warning: `A module is ${Math.round(moduleSize * 100) / 100} mm, under the 0.8 mm rule of thumb for a readable print: make the code wider, the text shorter or the error correction lower` } : {}),
+        };
       }
 
       if (command.action === "layer_icon") {
@@ -12453,6 +12534,7 @@ export function LayerlingEditor({
           onTextTags={selectedShapes.length === 1 && offersTextLayers(selectedShape) ? makeTextTags : undefined}
           textLayerStack={selectedNameTag}
           iconTag={historyViewState ? null : iconTagControls}
+          qrCode={historyViewState ? null : qrCodeControls}
           toolMemory={viewportToolMemoryRef}
           prepareNewShape={prepareNewShape}
           onUpdateShape={updateShape}
@@ -12801,6 +12883,9 @@ export function LayerlingEditor({
       ) : null}
       {iconTagPanelOpen && !historyViewState ? (
         <IconTagPanel onClose={() => setIconTagPanelOpen(false)} onCreate={createIconTag} />
+      ) : null}
+      {qrCodePanelOpen && !historyViewState ? (
+        <QrCodePanel onClose={() => setQrCodePanelOpen(false)} onCreate={createQrCode} />
       ) : null}
       {topPanel ? (
         <TopActionPanel

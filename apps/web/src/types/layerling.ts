@@ -863,6 +863,11 @@ export type WorkplaneShape = {
    */
   layeredIcon?: boolean;
   /**
+   * A QR code (#553): the text and the choices it was made with, so the properties panel can make
+   * it again. On the code body itself, or on the plate group or bundle that holds it.
+   */
+  qrCode?: QrCodeSettings;
+  /**
    * Set on a body made by wrapping around a cylinder (#106): its box is
    * centred on the cylinder's axis, and aligning, snapping and centring use
    * that box rather than the arc the mesh actually covers.
@@ -978,4 +983,20 @@ export type WorkplaneNote = {
    * a note, and travels with the design exactly like one (history, file, server).
    */
   kind?: "point";
+};
+
+export type QrErrorCorrection = "L" | "M" | "Q" | "H";
+/** What is built: the code alone, a plate with the code raised on it, or a plate with the code engraved. */
+export type QrStyle = "code" | "raised" | "engraved";
+/** What a QR body keeps so it can be made again from the inspector (#553). */
+export type QrCodeSettings = {
+  text: string;
+  errorCorrection: QrErrorCorrection;
+  /** Four modules of empty margin round the code - on a plate, the plate's rim. */
+  quietZone: boolean;
+  style: QrStyle;
+  /** The code's height (raised, or alone) or the engraving's depth, in mm. */
+  codeHeight: number;
+  /** The plate's thickness, in mm, for a plate. */
+  plateThickness: number;
 };

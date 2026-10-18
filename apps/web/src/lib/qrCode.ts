@@ -1,5 +1,7 @@
 import qrcode from "qrcode-generator";
-import type { SketchPoint, SketchProfile, SketchSegment } from "@/types/layerling";
+import type { QrCodeSettings, QrErrorCorrection, QrStyle, SketchPoint, SketchProfile, SketchSegment } from "@/types/layerling";
+
+export type { QrCodeSettings, QrErrorCorrection, QrStyle };
 
 /**
  * QR codes (#553): a text or an address as a code to print. The encoding (Reed-Solomon, masks,
@@ -8,25 +10,9 @@ import type { SketchPoint, SketchProfile, SketchSegment } from "@/types/layerlin
  * sketch body - and holds the numbers the window and the inspector check.
  */
 
-export type QrErrorCorrection = "L" | "M" | "Q" | "H";
 export const QR_ERROR_CORRECTIONS: readonly QrErrorCorrection[] = ["L", "M", "Q", "H"];
 
-/** What is built: the code alone, a plate with the code raised on it, or a plate with the code engraved. */
-export type QrStyle = "code" | "raised" | "engraved";
 export const QR_STYLES: readonly QrStyle[] = ["code", "raised", "engraved"];
-
-/** What a QR body keeps so it can be made again from the inspector. */
-export type QrCodeSettings = {
-  text: string;
-  errorCorrection: QrErrorCorrection;
-  /** Four modules of empty margin round the code - on a plate, the plate's rim. */
-  quietZone: boolean;
-  style: QrStyle;
-  /** The code's height (raised, or alone) or the engraving's depth, in mm. */
-  codeHeight: number;
-  /** The plate's thickness, in mm, for a plate. */
-  plateThickness: number;
-};
 
 export const DEFAULT_QR_WIDTH = 40;
 export const MIN_QR_WIDTH = 5;

@@ -3,7 +3,7 @@
 import { displayY, displayYTurn, insideZ, insideZTurn } from "@/lib/displayAxes";
 import { GuideHelpLink } from "@/components/GuideHelpLink";
 import { guideChapterForShape, guideSectionForShape } from "@/lib/guideLinks";
-import { ChevronDown, ChevronUp, Cylinder, Eye, EyeOff, FolderOpen, Grid3x3, Layers, Lock, Minus, Pencil, Plus, RotateCcw, Split, Tags, Unlock } from "lucide-react";
+import { ChevronDown, ChevronUp, Cylinder, Eye, EyeOff, FolderOpen, Grid3x3, Layers, Lock, Minus, Pencil, Plus, RefreshCw, RotateCcw, Split, Tags, Unlock } from "lucide-react";
 import { Fragment, createContext, useCallback, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type Dispatch, type ReactNode, type SetStateAction } from "react";
 import {
   DEFAULT_GEAR_HELIX_ANGLE,
@@ -172,6 +172,7 @@ import { MAX_TEXT_LAYERS, MAX_TEXT_LAYER_GROW, MIN_TEXT_LAYER_HEIGHT, namesFromL
 import { DEFAULT_KEYRING_DIAMETER, MIN_KEYRING_DIAMETER, TEXT_KEYRING_SIDES } from "@/lib/textGeometry";
 import { addTextLayer, MIN_LETTER_SIZE, MIN_NAME_TAG_LAYERS, NAME_TAG_GAP, NAME_TAG_LAYERS, NAME_TAG_LETTER_SIZE, removeTextLayer, textLetterSize, textLetterSizePatch, type NameTagStack } from "@/lib/nameTag";
 import { FONT_MANAGER_OPTION, requestFontManager } from "@/lib/fontManagerEvents";
+import { QR_BYTE_CAPACITY, qrByteLength, qrTextFits, type QrCodeSettings } from "@/lib/qrCode";
 import { ICON_TAG_LAYERS, iconTagFitCount, MAX_ICON_TAG_WIDTH, MAX_ICON_TAGS, MIN_ICON_TAG_WIDTH, normalizeIconTagCount, type IconLayerStack } from "@/lib/iconTag";
 import { PICTURE_FILE_ACCEPT } from "@/lib/pictureIcon";
 import { customFontList, textFontLabel } from "@/lib/textFonts";
@@ -2279,6 +2280,7 @@ export function ShapeInspector({
   onTextTags,
   textLayerStack: nameTagStack,
   iconTag,
+  qrCode,
   onInteractionActiveChange,
   onSnapGridAwayChange,
   proportionLock = false,
@@ -2310,6 +2312,8 @@ export function ShapeInspector({
   textLayerStack?: NameTagStack | null;
   /** The icon tag card's wiring, for a sketch body or an icon tag; null for anything else. */
   iconTag?: IconTagControls | null;
+  /** The QR code card's wiring (#553), for a QR code; null for anything else. */
+  qrCode?: QrCodeControls | null;
   onInteractionActiveChange?: (active: boolean) => void;
   /** The snap control lives in the expanded panel; collapsed, the workplane shows its own. */
   /** Called with true while the inspector does not carry the snap grid control (collapsed, or floating), so the workplane shows it. */
@@ -2613,6 +2617,7 @@ export function ShapeInspector({
         />
       ) : null}
       {shape.kind === "text" && onLayerText ? <MakeLayersButton disabled={locked} onLayerText={onLayerText} /> : null}
+      {qrCode ? <QrCodeCard key={`qr-code-${shape.id}`} shapeId={shape.id} controls={qrCode} disabled={locked} /> : null}
       {iconTag?.isTag ? (
         <IconTagCard key={`icon-tag-${shape.id}`} shapeId={shape.id} controls={iconTag} workspace={workspace} disabled={locked} onInteractionActiveChange={onInteractionActiveChange} />
       ) : iconTag ? (
@@ -3389,6 +3394,78 @@ export type IconTagControls = {
   /** Puts another SVG's icon on the tag, keeping its layers and width. */
   onReplaceSvg: (file: File) => Promise<void>;
 };
+
+/** The QR code card's wiring (#553): the settings the code was made with, and making it again with a new text. */
+export type QrCodeControls = {
+  settings: QrCodeSettings;
+  onRegenerate: (text: string) => Promise<void>;
+};
+
+/**
+ * The QR code card, open and first: the code's text, and "Make again" to build the code anew with
+ * it - where it stands, as wide as it is now. The other choices stay as they were made.
+ */
+function QrCodeCard({ shapeId, controls, disabled }: { shapeId: string; controls: QrCodeControls; disabled: boolean }) {
+  const [open, setOpen] = useState(true);
+  const [text, setText] = useState(controls.settings.text);
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState("");
+  useEffect(() => setText(controls.settings.text), [controls.settings.text]);
+  const fits = qrTextFits(text, controls.settings.errorCorrection);
+  const capacity = QR_BYTE_CAPACITY[controls.settings.errorCorrection];
+  const ready = Boolean(text) && fits && text !== controls.settings.text && !busy && !disabled;
+  const regenerate = () => {
+    if (!ready) return;
+    setBusy(true);
+    setError("");
+    controls.onRegenerate(text)
+      .catch((reason) => setError(reason instanceof Error ? localizedError(reason.message) : String(reason)))
+      .finally(() => setBusy(false));
+  };
+  return (
+    <div className={`property-card name-tag-card qr-code-card ${open ? "" : "collapsed"}`}>
+      <button className="property-card-header" type="button" aria-expanded={open} aria-controls={`qr-code-${shapeId}`} onClick={() => setOpen((current) => !current)}>
+        <span>{t("qrCode.title")}</span>
+        <ChevronUp className={open ? "" : "collapsed"} size={25} strokeWidth={2.8} />
+      </button>
+      {open ? (
+        <p className="name-tag-hint">
+          {t("qrCode.cardHint")}
+          <GuideHelpLink chapter="text" section="qrCode" className="inspector-help-link" />
+        </p>
+      ) : null}
+      {open ? (
+        <div className="property-list name-tag-body" id={`qr-code-${shapeId}`}>
+          <label className="qr-code-text">
+            <span>{t("qrCode.text")}</span>
+            <textarea
+              rows={3}
+              value={text}
+              disabled={disabled || busy}
+              aria-invalid={!fits}
+              data-testid="qr-code-card-text"
+              onChange={(event) => setText(event.currentTarget.value)}
+              onKeyDown={(event) => {
+                if (event.key === "Enter" && !event.shiftKey && !event.nativeEvent.isComposing) {
+                  event.preventDefault();
+                  regenerate();
+                }
+              }}
+            />
+            <small className={fits ? "" : "qr-code-warning"}>
+              {fits ? t("qrCode.count", { used: qrByteLength(text), max: capacity }) : t("qrCode.tooLong", { used: qrByteLength(text), max: capacity })}
+            </small>
+          </label>
+          <button className="inspector-action-button" type="button" disabled={!ready} onClick={regenerate}>
+            <RefreshCw size={17} strokeWidth={2.5} />
+            <span>{busy ? t("qrCode.building") : t("qrCode.regenerate")}</span>
+          </button>
+          {error ? <p className="name-tag-hint icon-tag-card-error" role="alert">{error}</p> : null}
+        </div>
+      ) : null}
+    </div>
+  );
+}
 
 /** A sketch body's way to an icon tag, first in its settings: one click splits it into the start layers. */
 function MakeIconLayersButton({ disabled, onLayer }: { disabled: boolean; onLayer: (patch: IconLayerPatch) => void }) {

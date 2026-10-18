@@ -958,6 +958,26 @@ export const tools = [
     },
   },
   {
+    name: "layerling_create_qr_code",
+    description: "A QR code as a body to print, like the editor's QR code (the shape library): `text` (a text or a web address, written as UTF-8) becomes the code's modules, merged into one outline without gaps between modules, and stands on the middle of the plate. `errorCorrection` L, M (default), Q or H: a higher level survives dirt and damage but needs more modules; the text must fit the level (L 2953, M 2331, Q 1663, H 1273 bytes). `width` is the whole code's width in mm (5 to 500, default 40), the quiet zone included on a plate. `style` \"code\" (default) builds the code alone as one sketch body, `height` mm high (default 4); \"raised\" a bundle of a white plate (`plateThickness`, default 3) and the dark code `height` mm on it (default 1) - two colours for a multicolour print; \"engraved\" the plate with the code cut `height` mm deep (default 1) as a group. `quietZone` (default true) gives a plate the four-module rim scanners need; the code alone has no rim of its own. `asHole` makes the result a hole, to group into another body and engrave the code there. The settings stay on the body (summary `qrCode`); layerling_update_object can move, turn and scale it like any body. A module under 0.8 mm is reported in `warning` - a rule of thumb for a 0.4 mm nozzle, not a guarantee. One undo step.",
+    inputSchema: {
+      ...editorTargetSchema,
+      properties: {
+        ...editorTargetSchema.properties,
+        text: { type: "string", description: "The text or web address the code holds." },
+        errorCorrection: { type: "string", enum: ["L", "M", "Q", "H"], description: "Error correction level (default M)." },
+        width: { type: "number", minimum: 5, maximum: 500, description: "The code's width in mm (default 40)." },
+        height: { type: "number", minimum: 0.2, maximum: 50, description: "The code's height, or on a plate its relief or engraving depth, in mm." },
+        quietZone: { type: "boolean", description: "A rim of four empty modules round the code on a plate (default true)." },
+        asHole: { type: "boolean", description: "Make the result a hole (default false)." },
+        style: { type: "string", enum: ["code", "raised", "engraved"], description: "The code alone (default), raised on a plate, or engraved into a plate." },
+        plateThickness: { type: "number", minimum: 0.2, maximum: 50, description: "The plate's thickness in mm for raised and engraved (default 3)." },
+        name: { type: "string", description: "The object's name (default \"QR code\")." },
+      },
+      required: ["text"],
+    },
+  },
+  {
     name: "layerling_measure_section",
     description: "Measure on a cut through the design, like \"Measure\" in the editor's section view: wall thickness, a gap, a clearance. Both points snap to the outline of the cut (within snapRadius mm, default 1): first to the nearest wall, then the second one preferably square to its wall as seen from the first - give it a point near the opposite wall and it returns the true thickness. Points are in the editor's coordinates (x, z, elevation); the one along the axis is set to the plane. axis and offset work like layerling_export_section_svg and default to the section view or the middle of the design. Round outlines (a hole, a cylinder) also snap: the centre of the circle; a second point near the spot across the centre from a first one on the circle lands exactly across, so the distance is the diameter; and with the centre as the first point the second lands on the circle, so the distance is the radius. Returns the snapped points with their snap kind (perpendicular, corner, outline, center, opposite or free), distance, circle (\"diameter\", \"radius\" or null) and deltaX, deltaZ, deltaElevation. The section view itself is left as it is.",
     inputSchema: {
