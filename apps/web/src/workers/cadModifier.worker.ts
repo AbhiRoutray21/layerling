@@ -4,6 +4,7 @@ import { cadHasSolidBody } from "@/lib/cadSolidBody";
 import { OcctKernel, type ShapeHandle } from "occt-wasm";
 import { assertCadKernelRunnable } from "@/lib/wasmSupport";
 import { orientedFaceNormal, shellSolid } from "@/lib/cadShell";
+import { chamfilletSolid } from "@/lib/cadChamfillet";
 import { cadFaceList, cadFaceTessellation, DELETE_FACES_UNCHANGED_MESSAGE, deleteFacesSolid } from "@/lib/cadDeleteFaces";
 import type { CadModifierComponentMesh, CadModifierDeflection, CadModifierDisplayEdge, CadModifierEdge, CadModifierFaces, CadModifierMeshPart, CadModifierPrimitivePart, CadModifierProfilePart, CadModifierWorkerRequest, CadModifierWorkerResponse } from "@/lib/cadModifierTypes";
 import { cadProfileSolidMismatch, profileExtrusionSolid } from "@/lib/cadProfileSolid";
@@ -744,11 +745,11 @@ class EdgeTreatmentError extends Error {
 }
 
 function treatEdges(cad: OcctKernel, solid: ShapeHandle, edges: ShapeHandle[], request: Extract<CadModifierWorkerRequest, { type: "preview" }>) {
-  return request.kind === "fillet"
-    ? cad.fillet(solid, edges, request.amount)
-    : Math.abs(request.chamferAngle - 45) < 0.001
-      ? cad.chamfer(solid, edges, request.amount)
-      : cad.chamferDistAngle(solid, edges, request.amount, request.chamferAngle);
+  if (request.kind === "fillet") return cad.fillet(solid, edges, request.amount);
+  if (request.kind === "chamfillet") return chamfilletSolid(cad, solid, edges, request.amount, request.chamferAngle);
+  return Math.abs(request.chamferAngle - 45) < 0.001
+    ? cad.chamfer(solid, edges, request.amount)
+    : cad.chamferDistAngle(solid, edges, request.amount, request.chamferAngle);
 }
 
 // The kernel only says that the set failed. The edges that fail on their own
@@ -875,8 +876,13 @@ async function bearbeiteAnfrage(request: CadModifierWorkerRequest, halter: { cad
     }
     result = componentResults.length === 1 ? componentResults[0] : activeCad.makeCompound(componentResults);
     if (!cadShapeIsValid(activeCad, result)) throw new Error(request.kind === "deleteFace" ? DELETE_FACES_UNCHANGED_MESSAGE : "The chosen size creates invalid or overlapping edge geometry");
-    const loose = cadModifierTessellationDeflection(request.quality, request.amount, request.minDeflection);
-    const meshed = meshTreatedBody(activeCad, [...componentResults], result, loose, cadModifierCappedDeflection(request.quality, loose));
+    const baseLoose = cadModifierTessellationDeflection(request.quality, request.amount, request.minDeflection);
+    const baseCapped = cadModifierCappedDeflection(request.quality, baseLoose);
+    const loose = request.kind === "chamfillet"
+      ? { linear: Math.min(baseLoose.linear * 0.25, 0.0025), angular: Math.min(baseCapped.angular * 0.2, 0.028) }
+      : baseLoose;
+    const capped = request.kind === "chamfillet" ? loose : baseCapped;
+    const meshed = meshTreatedBody(activeCad, [...componentResults], result, loose, capped);
     // The body may have been replaced by fresh copies, meshed with the old angle.
     componentResults.splice(0, componentResults.length, ...meshed.components);
     result = meshed.result;

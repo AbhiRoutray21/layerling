@@ -46,9 +46,9 @@ function edgeHistoryLabel(option: EdgeHistoryOption) {
     return option.faceCount === 1 ? t("edge.revertDeleteFaceOne") : t("edge.revertDeleteFaceMany", { count: option.faceCount ?? 0 });
   }
   if (option.edgeCount === 1) {
-    return t(option.kind === "fillet" ? "edge.revertFilletOne" : "edge.revertChamferOne", { size });
+    return t(option.kind === "fillet" ? "edge.revertFilletOne" : option.kind === "chamfillet" ? "edge.revertChamfilletOne" : "edge.revertChamferOne", { size });
   }
-  return t(option.kind === "fillet" ? "edge.revertFilletMany" : "edge.revertChamferMany", { size, count: option.edgeCount });
+  return t(option.kind === "fillet" ? "edge.revertFilletMany" : option.kind === "chamfillet" ? "edge.revertChamfilletMany" : "edge.revertChamferMany", { size, count: option.edgeCount });
 }
 
 /**
@@ -245,6 +245,7 @@ export function EdgeModifierPanel({
   error,
   onAmountChange,
   onChamferAngleChange,
+  onKindChange,
   onQualityChange,
   onSharpAngleChange,
   onTangentChainChange,
@@ -286,6 +287,7 @@ export function EdgeModifierPanel({
   error: string | null;
   onAmountChange: (value: number) => void;
   onChamferAngleChange: (value: number) => void;
+  onKindChange?: (kind: "chamfer" | "chamfillet") => void;
   onQualityChange: (value: CadModifierQuality) => void;
   onSharpAngleChange: (value: number) => void;
   onTangentChainChange: (value: boolean) => void;
@@ -306,7 +308,7 @@ export function EdgeModifierPanel({
   onCancel: () => void;
 }) {
   useLanguage();
-  const title = kind === "fillet" ? t("edge.filletTitle") : t("edge.chamferTitle");
+  const title = kind === "fillet" ? t("edge.filletTitle") : kind === "chamfillet" ? t("edge.chamfilletTitle") : t("edge.chamferTitle");
   const amountMin = Math.min(MIN_EDGE_MODIFIER_AMOUNT, Math.max(Number.EPSILON, maxAmount));
   const amountMax = Math.max(amountMin, maxAmount);
   // On a short screen the panel scrolls, and the error sits at its foot under
@@ -362,6 +364,35 @@ export function EdgeModifierPanel({
         onEditFeature={onEditFeature}
       />
 
+      {(kind === "chamfer" || kind === "chamfillet") && onKindChange ? (
+        <div className="edge-modifier-field shell-openings" role="radiogroup" aria-label={t("edge.chamferTitle")}>
+          <div className="shell-opening-options">
+            <button
+              type="button"
+              role="radio"
+              aria-checked={kind === "chamfer"}
+              className={kind === "chamfer" ? "active" : ""}
+              disabled={!prepared}
+              onClick={() => onKindChange("chamfer")}
+            >
+              {t("editor.tool.chamfer")}
+            </button>
+            <button
+              type="button"
+              role="radio"
+              aria-checked={kind === "chamfillet"}
+              className={kind === "chamfillet" ? "active" : ""}
+              disabled={!prepared}
+              title={t("edge.chamfilletHint")}
+              onClick={() => onKindChange("chamfillet")}
+            >
+              {t("edge.chamfillet")}
+            </button>
+          </div>
+          {kind === "chamfillet" ? <span className="shell-openings-summary">{t("edge.chamfilletHint")}</span> : null}
+        </div>
+      ) : null}
+
       <EdgeModifierSlider
         label={kind === "fillet" ? t("edge.radius") : t("edge.distance")}
         value={amount}
@@ -374,7 +405,7 @@ export function EdgeModifierPanel({
         onChange={onAmountChange}
       />
 
-      {kind === "chamfer" ? <EdgeModifierSlider label={t("edge.angle")} value={chamferAngle} min={5} max={85} step={1} unit="°" workspace={workspace} disabled={!prepared} onChange={onChamferAngleChange} /> : null}
+      {kind === "chamfer" || kind === "chamfillet" ? <EdgeModifierSlider label={t("edge.angle")} value={chamferAngle} min={kind === "chamfillet" ? 15 : 5} max={kind === "chamfillet" ? 75 : 85} step={1} unit="°" workspace={workspace} disabled={!prepared} onChange={onChamferAngleChange} /> : null}
 
       <EdgeModifierSlider label={t("edge.sharpThreshold")} value={sharpAngle} min={1} max={CAD_MODIFIER_MAX_SHARP_ANGLE} step={1} unit="°" workspace={workspace} disabled={!prepared} onChange={onSharpAngleChange} />
 

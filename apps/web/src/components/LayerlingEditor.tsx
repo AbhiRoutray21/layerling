@@ -759,7 +759,7 @@ function edgeTreatmentLabel(feature: NonNullable<WorkplaneShape["edgeTreatments"
   const size = `${Number(feature.amount.toFixed(2))} mm`;
   if (feature.kind === "shell") return `hollow (${size} walls, open ${shellOpenSides(feature.openings).join(" + ") || "none"})`;
   if (feature.kind === "deleteFace") return `face deletion (${feature.faceCount ?? 0} face${feature.faceCount === 1 ? "" : "s"})`;
-  return `${feature.kind === "fillet" ? "fillet" : "chamfer"} (${size}, ${feature.edgeCount} edge${feature.edgeCount === 1 ? "" : "s"})`;
+  return `${feature.kind === "fillet" ? "fillet" : feature.kind === "chamfillet" ? "chamfillet" : "chamfer"} (${size}, ${feature.edgeCount} edge${feature.edgeCount === 1 ? "" : "s"})`;
 }
 
 function shapeWithEdgeTreatmentRecord(
@@ -6160,8 +6160,9 @@ export function LayerlingEditor({
   const startEdgeModifier = useCallback((kind: CadModifierKind) => {
     setShellTool(null);
     if (refuseLockedSelection()) return;
+    const kindLabel = t(kind === "fillet" ? "editor.tool.fillet" : kind === "chamfillet" ? "edge.chamfillet" : "editor.tool.chamfer");
     if (selectedShapes.length !== 1 || !selectedShape || selectedShape.locked || selectedShape.hole || isNonSolidShapeKind(selectedShape.kind)) {
-      setNotice(t("status.selectOneSolid", { kind: t(kind === "chamfer" ? "editor.tool.chamfer" : "editor.tool.fillet") }));
+      setNotice(t("status.selectOneSolid", { kind: kindLabel }));
       return;
     }
     if (selectedShape.groupOperation === "bundle") {
@@ -6262,7 +6263,7 @@ export function LayerlingEditor({
       preview: null,
       componentPreviews: [],
     });
-    setNotice(t("status.preparingEdges", { kind: t(kind === "chamfer" ? "editor.tool.chamfer" : "editor.tool.fillet") }), true);
+    setNotice(t("status.preparingEdges", { kind: kindLabel }), true);
     const parts: CadModifierMeshPart[] = partInputs.map((part) => {
       if (part.brep) return { brep: part.brep, brepTransform: part.brepTransform, hole: Boolean(part.shape.hole) };
       if (part.thread) return cadModifierThreadMeshPart(part.thread, part.profileMesh, sendStepMeshes, Boolean(part.shape.hole));
@@ -6857,7 +6858,7 @@ export function LayerlingEditor({
       amount: edgeModifier.amount,
       edgeCount: edgeModifier.selectedEdgeIds.length,
       edgeIds: [...edgeModifier.selectedEdgeIds],
-      ...(edgeModifier.kind === "chamfer" ? { chamferAngle: edgeModifier.chamferAngle } : {}),
+      ...(edgeModifier.kind === "chamfer" || edgeModifier.kind === "chamfillet" ? { chamferAngle: edgeModifier.chamferAngle } : {}),
     } satisfies NonNullable<WorkplaneShape["edgeTreatments"]>[number];
     const createdAt = Date.now();
     const previewShape = canonicalizeShape({
@@ -6886,8 +6887,8 @@ export function LayerlingEditor({
       shapes.map((shape) => shape.id === base.id ? modifiedShape : shape),
       base.id,
       edgeModifier.selectedEdgeIds.length === 1
-        ? t(edgeModifier.kind === "fillet" ? "status.filletedOne" : "status.chamferedOne")
-        : t(edgeModifier.kind === "fillet" ? "status.filletedMany" : "status.chamferedMany", {
+        ? t(edgeModifier.kind === "fillet" ? "status.filletedOne" : edgeModifier.kind === "chamfillet" ? "status.chamfilletedOne" : "status.chamferedOne")
+        : t(edgeModifier.kind === "fillet" ? "status.filletedMany" : edgeModifier.kind === "chamfillet" ? "status.chamfilletedMany" : "status.chamferedMany", {
             count: edgeModifier.selectedEdgeIds.length,
           }),
     );
@@ -12157,7 +12158,7 @@ export function LayerlingEditor({
         onSketchCancel={cancelSketch}
         onHome={onHome ? leaveToDashboard : undefined}
         onAlign={toggleAlignMode}
-        onChamfer={() => edgeModifier?.kind === "chamfer" ? cancelEdgeModifier() : startEdgeModifier("chamfer")}
+        onChamfer={() => edgeModifier?.kind === "chamfer" || edgeModifier?.kind === "chamfillet" ? cancelEdgeModifier() : startEdgeModifier("chamfer")}
         onCopy={copySelected}
         onDelete={deleteSelected}
         onDuplicate={duplicateSelected}
@@ -12728,8 +12729,13 @@ export function LayerlingEditor({
           })}
           onChamferAngleChange={(value) => setEdgeModifier((current) => {
             if (!current?.prepared) return current;
-            const chamferAngle = Math.max(5, Math.min(85, value));
+            const chamferAngle = Math.max(current.kind === "chamfillet" ? 15 : 5, Math.min(current.kind === "chamfillet" ? 75 : 85, value));
             return chamferAngle === current.chamferAngle ? current : { ...current, chamferAngle, preview: null, busy: current.selectedEdgeIds.length > 0, error: null };
+          })}
+          onKindChange={(kind) => setEdgeModifier((current) => {
+            if (!current?.prepared || current.kind === kind) return current;
+            const chamferAngle = kind === "chamfillet" ? Math.max(15, Math.min(75, current.chamferAngle)) : current.chamferAngle;
+            return { ...current, kind, chamferAngle, preview: null, busy: current.selectedEdgeIds.length > 0, error: null };
           })}
           onQualityChange={(quality) => setEdgeModifier((current) => !current?.prepared || quality === current.quality ? current : { ...current, quality, preview: null, busy: current.selectedEdgeIds.length > 0, error: null })}
           onSharpAngleChange={(sharpAngle) => setEdgeModifier((current) => {
@@ -13510,7 +13516,7 @@ function SecondaryToolbar({
     { id: "holePattern", label: t("holePattern.title"), icon: ToolbarHolePatternIcon, action: onHolePattern, enabled: canHolePattern, active: holePatternActive },
     { id: "faceTool", label: t("faceTool.title"), icon: ToolbarFaceToolIcon, action: onFaceTool, enabled: canFaceTool, active: faceToolActive },
     { id: "split", label: t("editor.tool.split"), icon: ToolbarSplitIcon, action: onSplit, enabled: splitMode || canSplit, active: splitMode },
-    { id: "chamfer", label: t("editor.tool.chamfer"), icon: ToolbarChamferIcon, action: onChamfer, enabled: canEdgeModify, active: edgeModifierKind === "chamfer" },
+    { id: "chamfer", label: t("editor.tool.chamfer"), icon: ToolbarChamferIcon, action: onChamfer, enabled: canEdgeModify, active: edgeModifierKind === "chamfer" || edgeModifierKind === "chamfillet" },
     { id: "fillet", label: t("editor.tool.fillet"), icon: ToolbarFilletIcon, action: onFillet, enabled: canEdgeModify, active: edgeModifierKind === "fillet" },
     { id: "hollow", label: t("editor.tool.hollow"), icon: ToolbarHollowIcon, action: onHollow, enabled: canEdgeModify, active: hollowActive },
     { id: "deleteFace", label: t("editor.tool.deleteFace"), icon: ToolbarDeleteFaceIcon, action: onDeleteFace, enabled: canEdgeModify, active: deleteFaceActive },
