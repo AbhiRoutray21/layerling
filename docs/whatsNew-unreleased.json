@@ -1,6 +1,16 @@
 [
   {
     "title": {
+      "de": "Ordner für deine Entwürfe",
+      "en": "Folders for your designs"
+    },
+    "body": {
+      "de": "Auf der Startseite legt „Neuer Ordner“ Ordner an, auch Ordner in Ordnern. Zieh Entwürfe hinein oder nimm „Verschieben nach …“ im Menü eines Entwurfs. Das Löschen eines Ordners löscht keinen Entwurf, und „Alle sichern“ nimmt die Ordner mit.",
+      "en": "On the start page, “New folder” makes folders, folders in folders too. Drag designs into them or use “Move to …” in a design's menu. Deleting a folder deletes no design, and “Back up all” keeps the folders."
+    }
+  },
+  {
+    "title": {
       "de": "Verlaufsansicht: Gruppe öffnen und Teile zurückholen",
       "en": "History view: open a group and bring back its parts"
     },

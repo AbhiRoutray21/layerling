@@ -11,6 +11,17 @@ Si vous revenez à la page de démarrage à partir d'un dessin ne contenant rien
 
 Cela a un inconvénient : quiconque efface l'espace de stockage du navigateur ou passe à un autre ordinateur perd les dessins. **Alors sauvegardez le travail important dans un fichier.**
 
+## Des dossiers pour vos dessins
+
+Avec des dizaines de dessins, une seule liste ne suffit plus. Sur la page d'accueil, {{ui:shared.newFolder}} crée un dossier pour les dessins de ce navigateur ; un clic sur le dossier l'ouvre. Un dossier peut contenir des dossiers.
+
+- **Dans un dossier :** faites glisser un dessin sur le dossier, ou choisissez {{ui:shared.moveTo}} dans le menu du dessin, qui propose tous les dossiers. Un nouveau dessin, et un fichier que vous ouvrez ou importez, va dans le dossier ouvert à ce moment.
+- **En ressortir :** la première tuile d'un dossier, `..`, et la ligne sous {{ui:dashboard.projects}} ramènent en arrière ; on peut aussi y déposer un dessin. Un dossier glissé sur un autre dossier va dedans.
+- **Renommer et supprimer** se trouvent dans le menu du dossier. Supprimer un dossier ne supprime aucun dessin : son contenu remonte d'un niveau.
+- **La recherche** regarde dans tous les dossiers ; un dessin trouvé indique son dossier, et un clic dessus l'ouvre.
+
+{{ui:dashboard.backupAll}} garde les dossiers : les dessins sont rangés dans leurs dossiers dans le fichier de sauvegarde, et la restauration les remet à leur place. Les dossiers de ce navigateur sont distincts des dossiers d'un serveur.
+
 ## Sauvegarde et transmission
 
 Sur la page de démarrage, chaque design dispose d'un menu avec les options pour renommer, dupliquer et supprimer. Avec {{ui:dashboard.backupAll}}, vous regroupez toutes les conceptions dans un seul fichier. Grâce à {{ui:dashboard.importGeometry}}, ils reviennent, également dans un autre navigateur ou sur un autre ordinateur. Les {{ui:myShapes.title}} de ce navigateur voyagent dans le même fichier, dans le dossier `Custom shapes`, voir [Formes](chapter:shapes). Si vous restaurez une sauvegarde dans un navigateur qui a déjà certaines de ces conceptions, elles ne sont pas ajoutées une seconde fois ; le message indique combien étaient déjà là.

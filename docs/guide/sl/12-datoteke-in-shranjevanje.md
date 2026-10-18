@@ -11,6 +11,17 @@ layerling vse shranjuje v brskalniku na tvojem računalniku. Računa ni in nič 
 
 To ima svojo slabo stran: kdor izbriše pomnilnik brskalnika ali preide na drug računalnik, izgubi načrte. **Zato pomembna dela shrani v datoteko.**
 
+## Mape za tvoje projekte
+
+Pri desetinah projektov en seznam ni dovolj. Na začetni strani {{ui:shared.newFolder}} ustvari mapo za projekte tega brskalnika; klik na mapo jo odpre. Mape lahko vsebujejo mape.
+
+- **V mapo:** povleci projekt na mapo ali v meniju projekta izberi {{ui:shared.moveTo}}, ki ponudi vse mape. Nov projekt in datoteka, ki jo odpreš ali uvoziš, gre v mapo, ki je takrat odprta.
+- **Spet ven:** prva ploščica v mapi, `..`, in vrstica pod {{ui:dashboard.projects}} vodita nazaj; nanju lahko povlečeš tudi projekt. Mapa, ki jo povlečeš na drugo mapo, gre vanjo.
+- **Preimenovanje in brisanje** sta v meniju mape. Brisanje mape ne izbriše nobenega projekta: njena vsebina se pomakne za raven višje.
+- **Iskanje** pregleda vse mape; najden projekt pokaže svojo mapo, klik nanjo pa jo odpre.
+
+{{ui:dashboard.backupAll}} ohrani mape: projekti so v datoteki varnostne kopije v svojih mapah, obnovitev pa jih vrne tja. Mape tega brskalnika so ločene od map na strežniku.
+
 ## Varnostno kopiranje in deljenje
 
 Na začetni strani ima vsak načrt meni z možnostmi za preimenovanje, podvajanje in brisanje. Z {{ui:dashboard.backupAll}} vse načrte naenkrat spakiraš v eno samo datoteko. Prek {{ui:dashboard.importGeometry}} se vrnejo nazaj, tudi v drugem brskalniku ali na drugem računalniku. {{ui:myShapes.title}} tega brskalnika potujejo v isti datoteki, v mapi `Custom shapes`, glej [Oblike](chapter:oblike). Če obnoviš varnostno kopijo v brskalniku, ki nekatere od teh projektov že ima, se ti ne dodajo drugič; obvestilo pove, koliko jih je že bilo.

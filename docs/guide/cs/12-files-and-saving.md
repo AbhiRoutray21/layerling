@@ -11,6 +11,17 @@ Při návratu z prázdného projektu se program zeptá, zda jej ponechat. {{ui:c
 
 Nevýhodou je ztráta projektů při vymazání úložiště prohlížeče nebo přechodu na jiný počítač. **Důležitou práci proto zálohujte do souboru.**
 
+## Složky pro projekty
+
+Při desítkách projektů jeden seznam nestačí. Na úvodní stránce vytvoří {{ui:shared.newFolder}} složku pro projekty tohoto prohlížeče; kliknutím na složku ji otevřete. Složky mohou obsahovat další složky.
+
+- **Do složky:** přetáhněte projekt na složku nebo v nabídce projektu zvolte {{ui:shared.moveTo}}, kde jsou všechny složky. Nový projekt i soubor, který otevřete nebo importujete, se uloží do právě otevřené složky.
+- **Zase ven:** první dlaždice ve složce, `..`, a řádek pod {{ui:dashboard.projects}} vedou zpět; i na ně lze projekt přetáhnout. Složka přetažená na jinou složku se do ní vloží.
+- **Přejmenovat a smazat** najdete v nabídce složky. Smazáním složky se nesmaže žádný projekt: její obsah se posune o úroveň výš.
+- **Vyhledávání** prochází všechny složky; nalezený projekt ukazuje svou složku a kliknutím na ni ji otevřete.
+
+{{ui:dashboard.backupAll}} zachová složky: projekty jsou v záložním souboru ve svých složkách a obnovení je vrátí na místo. Složky tohoto prohlížeče jsou oddělené od složek na serveru.
+
 ## Zálohování a předávání
 
 Každý projekt na úvodní stránce má nabídku přejmenování, duplikování a smazání. {{ui:dashboard.backupAll}} zabalí všechny projekty do jediného souboru. Přes {{ui:dashboard.importGeometry}} je obnovíte i v jiném prohlížeči nebo počítači. Součástí zálohy jsou také {{ui:myShapes.title}} z tohoto prohlížeče ve složce `Custom shapes`, viz [Tvary](chapter:shapes). Pokud obnovíte zálohu v prohlížeči, který některé z těchto projektů už má, nepřidají se znovu; zpráva uvede, kolik jich tu už bylo.

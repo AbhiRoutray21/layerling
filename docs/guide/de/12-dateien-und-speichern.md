@@ -11,6 +11,17 @@ Gehst du von einem Entwurf, in dem nichts liegt, zurück zur Startseite, fragt l
 
 Das hat eine Kehrseite: Wer den Browserspeicher löscht oder auf einen anderen Rechner wechselt, verliert die Entwürfe. **Sichere deshalb wichtige Arbeiten in eine Datei.**
 
+## Ordner für deine Entwürfe
+
+Bei Dutzenden Entwürfen reicht eine Liste nicht mehr. Auf der Startseite legt {{ui:shared.newFolder}} einen Ordner für die Entwürfe dieses Browsers an; ein Klick auf den Ordner öffnet ihn. Ordner können Ordner enthalten.
+
+- **In einen Ordner:** Zieh einen Entwurf auf den Ordner, oder wähle im Menü des Entwurfs {{ui:shared.moveTo}}, das jeden Ordner anbietet. Ein neuer Entwurf, und eine Datei, die du öffnest oder importierst, landet in dem Ordner, der gerade offen ist.
+- **Wieder hinaus:** Die erste Kachel in einem Ordner, `..`, und die Zeile unter {{ui:dashboard.projects}} führen zurück; auch auf sie kannst du einen Entwurf ziehen. Ein Ordner, den du auf einen anderen ziehst, kommt in diesen hinein.
+- **Umbenennen und Löschen** stehen im Menü des Ordners. Das Löschen eines Ordners löscht keinen Entwurf: Was darin lag, rückt eine Ebene nach oben.
+- **Die Suche** schaut in jeden Ordner; ein gefundener Entwurf zeigt seinen Ordner, und ein Klick darauf öffnet ihn.
+
+{{ui:dashboard.backupAll}} nimmt die Ordner mit: Die Entwürfe liegen in der Sicherungsdatei in ihren Ordnern, und das Wiederherstellen legt sie dorthin zurück. Die Ordner dieses Browsers sind andere als die Ordner auf einem Server.
+
 ## Sichern und Weitergeben
 
 Auf der Startseite hat jeder Entwurf ein Menü mit den Optionen zum Umbenennen, Duplizieren und Löschen. Mit {{ui:dashboard.backupAll}} packst du alle Entwürfe auf einmal in eine einzige Datei. {{ui:dashboard.restoreBackup}} daneben, im Hinweis zu den im Browser gespeicherten Entwürfen (er steht auch auf einem neuen Rechner ohne Entwürfe da), holt sie zurück, auch in einem anderen Browser oder auf einem anderen Rechner; {{ui:dashboard.importGeometry}} nimmt dieselbe Datei. Die {{ui:myShapes.title}} dieses Browsers reisen in derselben Datei mit, im Ordner `Custom shapes`, siehe [Formen](chapter:formen). Spielst du ein Backup in einen Browser ein, der schon einige dieser Entwürfe hat, werden diese nicht noch einmal angelegt; die Meldung nennt, wie viele schon da waren.

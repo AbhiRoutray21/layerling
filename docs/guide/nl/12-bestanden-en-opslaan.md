@@ -11,6 +11,17 @@ Ga je terug naar de startpagina vanuit een ontwerp waar niets in staat, dan vraa
 
 Dat heeft een keerzijde: wie de browseropslag wist of op een andere computer verdergaat, is de ontwerpen kwijt. **Maak van belangrijk werk dus een back-up in een bestand.**
 
+## Mappen voor je ontwerpen
+
+Met tientallen ontwerpen is één lijst niet genoeg. Op de startpagina maakt {{ui:shared.newFolder}} een map voor de ontwerpen in deze browser; een klik op de map opent haar. Mappen kunnen mappen bevatten.
+
+- **In een map:** sleep een ontwerp op de map, of kies {{ui:shared.moveTo}} in het menu van het ontwerp, dat elke map aanbiedt. Een nieuw ontwerp, en een bestand dat je opent of importeert, komt in de map die op dat moment open is.
+- **Er weer uit:** de eerste tegel in een map, `..`, en de regel onder {{ui:dashboard.projects}} leiden terug; je kunt er ook een ontwerp op slepen. Een map die je op een andere map sleept, gaat daarin.
+- **Hernoemen en verwijderen** staan in het menu van de map. Een map verwijderen verwijdert geen ontwerp: wat erin zat, gaat een niveau omhoog.
+- **Zoeken** kijkt in elke map; een gevonden ontwerp toont zijn map, en een klik erop opent die.
+
+{{ui:dashboard.backupAll}} neemt de mappen mee: de ontwerpen staan in het back-upbestand in hun mappen, en bij het terugzetten komen ze daar weer. De mappen van deze browser staan los van de mappen op een server.
+
 ## Back-up maken en doorgeven
 
 Op de startpagina heeft elk ontwerp een menu met de opties hernoemen, dupliceren en verwijderen. Met {{ui:dashboard.backupAll}} pak je alle ontwerpen in één enkel bestand in. Via {{ui:dashboard.importGeometry}} komen ze terug, ook in een andere browser of op een andere computer. De {{ui:myShapes.title}} van deze browser reizen mee in hetzelfde bestand, in de map `Custom shapes`, zie [Vormen](chapter:vormen). Zet je een back-up terug in een browser die een deel van deze ontwerpen al heeft, dan worden die niet nog eens toegevoegd; de melding noemt hoeveel er al waren.
