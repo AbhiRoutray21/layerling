@@ -88,5 +88,15 @@
       "de": "Beim Zeichnen mit Linie, Bézier-Kurve oder Weicher Kurve beendet jetzt ein Rechtsklick ohne Bewegung die Kette, und der Doppelklick auf den letzten Punkt ebenso; das Werkzeug bleibt gewählt. Ein Rechtsklick, mit dem du die Ansicht verschiebst, beendet sie nicht. Zum Schließen klickst du weiter den ersten Punkt an.",
       "en": "When drawing with Line, Bézier curve or Smooth curve, a right click without moving now ends the chain, and so does a double click on the last point; the tool stays selected. A right click that you use to pan the view does not end it. To close the shape you still click the first point."
     }
+  },
+  {
+    "title": {
+      "de": "Das Mausrad ändert eine Zahl im angeklickten Feld",
+      "en": "The mouse wheel changes a number in a clicked field"
+    },
+    "body": {
+      "de": "Klickst du in ein Zahlenfeld der Eigenschaften, ändert das Mausrad den Wert: eine Einheit je Raststufe, mit Umschalt das Zehnfache, mit Strg ein Zehntel, mit Alt ein Hundertstel. Ein Feld, das du nicht angeklickt hast, lässt die Fenster wie bisher scrollen.",
+      "en": "When you click into a number field of the properties, the mouse wheel changes the value: one unit a notch, ten times as much with Shift, a tenth with Ctrl and a hundredth with Alt. A field that you have not clicked lets the panels scroll as before."
+    }
   }
 ]

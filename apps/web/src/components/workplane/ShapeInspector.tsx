@@ -165,6 +165,7 @@ import { MAX_TEARDROP_TIP_ANGLE, MIN_TEARDROP_TIP_ANGLE, normalizeTeardropTipAng
 import { MAX_DOVETAIL_CLEARANCE, normalizeDovetailClearance, normalizeDovetailNeckWidth } from "@/lib/dovetailGeometry";
 import { DEFAULT_SKETCH_STROKE, MAX_SKETCH_STROKE_WIDTH, MIN_SKETCH_STROKE_WIDTH, normalizeSketchStroke, SKETCH_STROKE_JOINS } from "@/lib/sketchStroke";
 import { MAX_TEXT_EDGE, MIN_TEXT_EDGE, normalizeTextEdge } from "@/lib/textEdge";
+import { wheelBaseStep, wheelNextValue } from "@/lib/wheelValueStep";
 import { textHasFill } from "@/lib/textFill";
 import { TEXT_FILL_CHOICES, textFillChoice, textLineSettingsInView, textStrokeForChoice, textStrokeWider, type TextFillChoice } from "@/lib/textFillChoice";
 import { MAX_TEXT_LAYERS, MAX_TEXT_LAYER_GROW, MIN_TEXT_LAYER_HEIGHT, namesFromList, type NameTagKeyring, type TextLayer } from "@/lib/textLayers";
@@ -3913,6 +3914,33 @@ function RangeProperty({
     setEditing(false);
     holdInteraction(false);
   };
+  // The mouse wheel in a field that has the focus changes its value (#226). Only a field that was clicked, so the
+  // panel still scrolls under a pointer that merely passes over one. A listener of its own, as the browser treats a wheel
+  // listener of React as one that may not stop the scroll.
+  const numberInputRef = useRef<HTMLInputElement>(null);
+  const wheelHandlerRef = useRef<((event: WheelEvent) => void) | null>(null);
+  wheelHandlerRef.current = (event: WheelEvent) => {
+    const input = numberInputRef.current;
+    if (!input || disabled || !editing || document.activeElement !== input || event.deltaY === 0) return;
+    event.preventDefault();
+    const base = wheelBaseStep(controlMin, controlMax, controlStep, unit === "in");
+    const parsed = parseMeasurementInput(draft);
+    const current = Number.isFinite(parsed) ? parsed : controlValue;
+    const next = wheelNextValue(current, event.deltaY < 0 ? 1 : -1, base, { shift: event.shiftKey, ctrl: event.ctrlKey, alt: event.altKey });
+    const nextModelValue = toModelValue(next);
+    onChange(freePosition ? clamp(nextModelValue, -POSITION_TYPED_LIMIT, POSITION_TYPED_LIMIT) : allowsAboveSliderMax ? Math.max(min, nextModelValue) : clamp(nextModelValue, min, max));
+    const shown = formatShown(freePosition || allowsAboveSliderMax ? next : clamp(next, controlMin, controlMax));
+    // What is shown is the new starting point, so leaving the field keeps the exact value and does not read it again.
+    openedWithRef.current = shown;
+    setDraft(shown);
+  };
+  useEffect(() => {
+    const input = numberInputRef.current;
+    if (!input) return;
+    const onWheel = (event: WheelEvent) => wheelHandlerRef.current?.(event);
+    input.addEventListener("wheel", onWheel, { passive: false });
+    return () => input.removeEventListener("wheel", onWheel);
+  }, []);
   const handleSliderChange = (nextValue: number) => {
     let next = clamp(Number.isFinite(nextValue) ? nextValue : controlMin, controlMin, controlMax);
     // Dragged with the mouse on a long slider: onto the snap grid (not for a short one, which the grid would only make coarse).
@@ -3929,6 +3957,7 @@ function RangeProperty({
         <span className="range-property-name">{label}{onReset ? <PropertyResetButton onClick={onReset} /> : null}</span>
         <span className="range-value-control">
           <input
+            ref={numberInputRef}
             type="text"
             value={editing ? draft : formatShown(controlValue)}
             disabled={disabled}
