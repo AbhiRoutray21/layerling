@@ -11,6 +11,8 @@ import { t } from "@/lib/i18n";
 import { useLanguage } from "@/lib/useLanguage";
 import type { WorkplaneWorkspaceSettings } from "@/types/layerling";
 import { selectWholeValue } from "@/lib/numberField";
+import { useWheelField } from "@/lib/useWheelField";
+import { wheelBaseStep, wheelNextValue } from "@/lib/wheelValueStep";
 
 const MIN_EDGE_MODIFIER_AMOUNT = 0.001;
 const EDGE_MODIFIER_AMOUNT_STEP = 0.001;
@@ -170,7 +172,27 @@ export function EdgeModifierSlider({
 
   const toModelValue = (nextValue: number) => length ? displayToMillimeters(nextValue, workspace) : nextValue;
 
+  // The mouse wheel in the clicked field (#536). What the wheel wrote stays as it is when the field is left, so
+  // the rounded reading does not replace the exact value.
+  const numberInputRef = useRef<HTMLInputElement>(null);
+  const wheelShownRef = useRef<string | null>(null);
+  useWheelField(numberInputRef, editing && !disabled, ({ direction, keys }) => {
+    const parsed = parseMeasurementInput(draft);
+    const current = Number.isFinite(parsed) ? parsed : controlValue;
+    const next = clamp(wheelNextValue(current, direction, wheelBaseStep(controlMin, controlMax, controlStep, length && unitLabel === "in"), keys), controlMin, controlMax);
+    const shown = formatSliderValue(next, workspace.accuracy, controlStep);
+    wheelShownRef.current = shown;
+    setDraft(shown);
+    onChange(clamp(toModelValue(next), safeMin, safeMax));
+  });
+
   const commitDraft = () => {
+    if (wheelShownRef.current !== null && draft === wheelShownRef.current) {
+      wheelShownRef.current = null;
+      setEditing(false);
+      return;
+    }
+    wheelShownRef.current = null;
     const next = parseMeasurementInput(draft);
     const finiteNext = Number.isFinite(next) ? next : controlValue;
     const committed = clamp(toModelValue(finiteNext), safeMin, safeMax);
@@ -192,16 +214,21 @@ export function EdgeModifierSlider({
         <span className="range-property-name">{label}</span>
         <span className="range-value-control">
           <input
+            ref={numberInputRef}
             type="text"
             value={editing ? draft : formatSliderValue(controlValue, workspace.accuracy, controlStep)}
             inputMode="decimal"
             disabled={disabled}
             onFocus={(event) => {
+              wheelShownRef.current = null;
               setDraft(formatSliderValue(controlValue, workspace.accuracy, controlStep));
               setEditing(true);
               selectWholeValue(event.currentTarget);
             }}
-            onChange={(event) => setDraft(event.currentTarget.value)}
+            onChange={(event) => {
+              wheelShownRef.current = null;
+              setDraft(event.currentTarget.value);
+            }}
             onBlur={commitDraft}
             onKeyDown={(event) => {
               if (event.key === "Enter") {

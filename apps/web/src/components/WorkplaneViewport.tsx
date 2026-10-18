@@ -69,6 +69,8 @@ import { createThreadGeometry } from "@/lib/threadGeometry";
 import { createSpringGeometry } from "@/lib/springGeometry";
 import { textDisplayGeometry } from "@/lib/textFill";
 import { pinchWheelDelta, wheelZoomDelta } from "@/lib/wheelZoom";
+import { useWheelField } from "@/lib/useWheelField";
+import { wheelBaseStep, wheelNextValue } from "@/lib/wheelValueStep";
 import { manifoldRevision, onManifoldReady } from "@/lib/manifoldHandle";
 import { customFontRevision, onCustomFontsChanged } from "@/lib/textFonts";
 import { readDesignView, writeDesignView } from "@/lib/designView";
@@ -3245,6 +3247,26 @@ export function WorkplaneViewport({
   // The section position as typed, until Enter or leaving the field takes it (#210); Escape drops it.
   const [sectionOffsetDraft, setSectionOffsetDraft] = useState<string | null>(null);
   const sectionOffsetCancelRef = useRef(false);
+  // The mouse wheel in the clicked field (#536): a step a notch, as in the number fields of the properties.
+  const sectionOffsetInputRef = useRef<HTMLInputElement>(null);
+  const sectionOffsetDraftRef = useRef<string | null>(null);
+  sectionOffsetDraftRef.current = sectionOffsetDraft;
+  const sectionWheelShownRef = useRef<string | null>(null);
+  useWheelField(sectionOffsetInputRef, sectionOffsetDraft !== null, ({ direction, keys }) => {
+    const settings = sectionSettingsRef.current;
+    const bounds = getSectionBounds(shapesRef.current, settings.axis, workspaceRef.current.width, workspaceRef.current.depth);
+    const sign = settings.axis === "z" ? -1 : 1;
+    const display = workspaceRef.current;
+    const parsed = parseMeasurementInput(sectionOffsetDraftRef.current ?? "");
+    const current = Number.isFinite(parsed) ? parsed : millimetersToDisplay(sign * settings.offset, display);
+    const base = wheelBaseStep(millimetersToDisplay(bounds.min, display), millimetersToDisplay(bounds.max, display), 0, lengthDisplayUnit(display).label === "in");
+    const next = wheelNextValue(current, direction, base, keys);
+    const shown = String(Math.round(next * 1000) / 1000 || 0);
+    sectionOffsetDraftRef.current = shown;
+    setSectionOffsetDraft(shown);
+    sectionWheelShownRef.current = shown;
+    handleSectionOffsetChange(sign * displayToMillimeters(next, display));
+  });
   const sectionFineDraggingRef = useRef(false);
   const hostRef = useRef<HTMLDivElement | null>(null);
   const threeRef = useRef<ThreeState | null>(null);
@@ -8796,18 +8818,25 @@ export function WorkplaneViewport({
                                 {/* Text, not a number input: such a field reads the decimal mark by the
                                     browser's language, and a German one refused "12.5" (#210). */}
                                 <input
+                                  ref={sectionOffsetInputRef}
                                   type="text"
                                   inputMode="decimal"
                                   className="section-number-input"
                                   value={sectionOffsetDraft ?? String(shown)}
                                   onFocus={(e) => {
+                                    sectionWheelShownRef.current = null;
                                     setSectionOffsetDraft(String(shown));
                                     e.currentTarget.select();
                                   }}
-                                  onChange={(e) => setSectionOffsetDraft(e.target.value)}
+                                  onChange={(e) => {
+                                    sectionWheelShownRef.current = null;
+                                    setSectionOffsetDraft(e.target.value);
+                                  }}
                                   onBlur={() => {
                                     const val = parseMeasurementInput(sectionOffsetDraft ?? "");
-                                    if (!sectionOffsetCancelRef.current && Number.isFinite(val)) handleSectionOffsetChange(sign * displayToMillimeters(val, workspace));
+                                    const fromWheel = sectionWheelShownRef.current !== null && sectionOffsetDraft === sectionWheelShownRef.current;
+                                    if (!fromWheel && !sectionOffsetCancelRef.current && Number.isFinite(val)) handleSectionOffsetChange(sign * displayToMillimeters(val, workspace));
+                                    sectionWheelShownRef.current = null;
                                     sectionOffsetCancelRef.current = false;
                                     setSectionOffsetDraft(null);
                                   }}

@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "title": {
+      "de": "Das Mausrad ändert Zahlen auch in den Fenstern der Werkzeuge",
+      "en": "The mouse wheel changes numbers in the tool panels too"
+    },
+    "body": {
+      "de": "Was in den Eigenschaften einer Form schon ging, geht jetzt auch in Fase, Verrundung, Aushöhlen, Muster, Lochmuster, Fläche, Flächen aneinanderlegen, Teilen und im Schnittansicht-Menü: Klick in das Zahlenfeld, dann ändert das Mausrad den Wert. Mit Umschalt das Zehnfache, mit Strg ein Zehntel, mit Alt ein Hundertstel.",
+      "en": "What already worked in the properties of a shape works now in Chamfer, Fillet, Hollow, Pattern, Hole pattern, Face, Mate faces, Split and the Section view menu: click into the number field, then the mouse wheel changes the value. Ten times as much with Shift, a tenth with Ctrl, a hundredth with Alt."
+    }
+  }
+]

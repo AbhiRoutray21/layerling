@@ -6,6 +6,7 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **The mouse wheel changes numbers in the tool panels too (#536):** The wheel in a clicked number field (#226) only worked in the properties of a shape. It now works in the fields of Chamfer, Fillet, Hollow, Pattern, Hole pattern, Face, Mate faces, Scale in percent, Split (position and tilt) and the Section view, with the same keys: a step a notch, ten times as much with Shift, a tenth with Ctrl, a hundredth with Alt. One shared helper (`useWheelField`) does it for all of them. Asked for by @prmod3d. Tried in the browser with a synthetic wheel turn in the Section view, Split and Hollow; not tried with a real wheel or a Mac.
 - **Italian interface completed:** 112 texts that were still English in Italian are translated - the folders of the dashboard, the interactive help, the Face and Sweep tools, bringing objects back from the history, the edge window and more - so the Italian interface now covers all 2,623 texts. Contributed by @maxciava in PR #543.
 
 ## 1.89.0
