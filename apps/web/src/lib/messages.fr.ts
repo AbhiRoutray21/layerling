@@ -1847,6 +1847,8 @@ export const MESSAGES_FR: Partial<Record<MessageKey, string>> = {
   "prop.gridfinityUnitsY": "Unités de hauteur",
   "prop.gridfinityLip": "Rebord d'empilage",
   "prop.gridfinityMagnets": "Trous pour aimants",
+  "prop.gridfinityHalfGrid": "Demi-grille (21 mm)",
+  "gridfinity.halfGridHint": "Les unités en largeur et en profondeur comptent des cellules de 21 mm, chacune avec son propre pied ; quatre se posent dans un logement du socle.",
   "prop.gridfinityLabelBack": "Tablette d'étiquette à l'arrière",
   "prop.gridfinityLabelFront": "Tablette d'étiquette à l'avant",
   "prop.gridfinityLabelLeft": "Tablette d'étiquette à gauche",

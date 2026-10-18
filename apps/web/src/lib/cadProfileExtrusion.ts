@@ -1377,7 +1377,7 @@ export function cadModifierGridfinityForShape(shape: WorkplaneShape): CadModifie
   const width = shapeWidth(shape);
   const depth = shapeDepth(shape);
   if (![width, depth, shape.height].every((value) => Number.isFinite(value) && value > 0)) return null;
-  const plan = gridfinityPlan({ width, depth, height: shape.height, gridfinityType: shape.gridfinityType, gridfinityLip: shape.gridfinityLip, gridfinityMagnets: shape.gridfinityMagnets });
+  const plan = gridfinityPlan({ width, depth, height: shape.height, gridfinityType: shape.gridfinityType, gridfinityLip: shape.gridfinityLip, gridfinityMagnets: shape.gridfinityMagnets, gridfinityHalfGrid: shape.gridfinityHalfGrid });
   // Label shelves and finger scoops are in the display mesh only once Manifold has loaded; until then the body would not match it (#455).
   if (!loadedManifoldRuntime() && gridfinityHasPieces({ ...shape, width, depth })) return null;
   return {
@@ -1387,6 +1387,7 @@ export function cadModifierGridfinityForShape(shape: WorkplaneShape): CadModifie
     gridfinityType: plan.type,
     gridfinityLip: plan.lip,
     gridfinityMagnets: plan.magnets,
+    gridfinityHalfGrid: plan.halfGrid,
     gridfinityLabelBack: shape.gridfinityLabelBack,
     gridfinityLabelFront: shape.gridfinityLabelFront,
     gridfinityLabelLeft: shape.gridfinityLabelLeft,

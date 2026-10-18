@@ -1871,6 +1871,8 @@ export const MESSAGES_CS: Record<MessageKey, string> = {
   "prop.gridfinityUnitsY": "Výškových jednotek",
   "prop.gridfinityLip": "Stohovací okraj",
   "prop.gridfinityMagnets": "Otvory pro magnety",
+  "prop.gridfinityHalfGrid": "Poloviční mřížka (21 mm)",
+  "gridfinity.halfGridHint": "Jednotky do šířky a do hloubky počítají buňky po 21 mm, každou s vlastní nožkou; čtyři stojí v jednom lůžku nosné desky.",
   "prop.gridfinityLabelBack": "Polička na štítek vzadu",
   "prop.gridfinityLabelFront": "Polička na štítek vpředu",
   "prop.gridfinityLabelLeft": "Polička na štítek vlevo",

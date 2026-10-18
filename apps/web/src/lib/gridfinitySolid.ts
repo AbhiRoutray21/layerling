@@ -91,7 +91,7 @@ function prism(cad: OcctKernel, hx: number, hz: number, radius: number, from: nu
 function binSolid(cad: OcctKernel, plan: GridfinityPlan, scoops: GridfinityScoopPieces | null) {
   const hx = plan.size.width / 2;
   const hz = plan.size.depth / 2;
-  const cellHalf = GRIDFINITY_GRID / 2 - GRIDFINITY_CLEARANCE;
+  const cellHalf = plan.pitch / 2 - GRIDFINITY_CLEARANCE;
   // The inside is built with a sharp floor edge; a rounding is filleted on it afterwards, with true arcs.
   const wall = gridfinityWallProfile(plan, 0);
   const wallTop = wall[1][1];

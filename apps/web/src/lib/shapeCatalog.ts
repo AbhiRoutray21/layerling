@@ -638,6 +638,7 @@ export function sceneShape(shape: Partial<WorkplaneShape> & Pick<WorkplaneShape,
     gridfinityType: shape.gridfinityType,
     gridfinityLip: shape.gridfinityLip,
     gridfinityMagnets: shape.gridfinityMagnets,
+    gridfinityHalfGrid: shape.gridfinityHalfGrid,
     gridfinityLabelBack: shape.gridfinityLabelBack,
     gridfinityLabelFront: shape.gridfinityLabelFront,
     gridfinityLabelLeft: shape.gridfinityLabelLeft,
@@ -791,6 +792,7 @@ export function makeShapeFromAsset(
     height: customization.height ?? defaults.height,
     gridfinityType: customization.gridfinityType,
     gridfinityLip: customization.gridfinityLip,
+    gridfinityHalfGrid: customization.gridfinityHalfGrid,
   }) : null;
   // New gears get involute teeth (#201); their size follows the module, so other teeth keep module 2.
   const gearType = asset.kind === "gear" ? normalizeGearType(customization.gearType ?? DEFAULT_GEAR_TYPE) : undefined;
@@ -902,6 +904,7 @@ export function makeShapeFromAsset(
     gridfinityType: asset.kind === "gridfinity" ? normalizeGridfinityType(customization.gridfinityType) : undefined,
     gridfinityLip: asset.kind === "gridfinity" ? customization.gridfinityLip ?? DEFAULT_GRIDFINITY_LIP : undefined,
     gridfinityMagnets: asset.kind === "gridfinity" ? customization.gridfinityMagnets ?? DEFAULT_GRIDFINITY_MAGNETS : undefined,
+    gridfinityHalfGrid: asset.kind === "gridfinity" ? customization.gridfinityHalfGrid : undefined,
     gridfinityLabelBack: asset.kind === "gridfinity" ? customization.gridfinityLabelBack : undefined,
     gridfinityLabelFront: asset.kind === "gridfinity" ? customization.gridfinityLabelFront : undefined,
     gridfinityLabelLeft: asset.kind === "gridfinity" ? customization.gridfinityLabelLeft : undefined,

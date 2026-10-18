@@ -16,6 +16,7 @@ import {
   GRIDFINITY_SCOOP_WALL_KEYS,
   createGridfinityGeometry,
   gridfinityFootprintPatch,
+  gridfinityLabelCornerSize,
   gridfinityLabelLength,
   gridfinityLabelLimits,
   gridfinityLabelledTriangles,
@@ -886,5 +887,124 @@ describe("gridfinity finger scoop", () => {
     expect(shapeDefaultsFromShape(scooped)).toMatchObject(settings);
     const asset = toolbarShapeAssets.find((entry) => entry.kind === "gridfinity")!;
     expect(makeShapeFromAsset(asset, { x: 0, z: 0 }, settings)).toMatchObject(settings);
+  });
+});
+
+describe("gridfinity half-size grid", () => {
+  let runtime: ManifoldToplevel;
+
+  beforeAll(async () => {
+    runtime = await manifoldModule();
+    runtime.setup();
+  });
+
+  const half = (fields: Record<string, unknown> = {}) => bin({ gridfinityHalfGrid: true, ...fields });
+
+  it("leaves a bin with the setting off, and every baseplate, exactly as it was", () => {
+    expect(gridfinityTriangles(bin({ gridfinityHalfGrid: false }))).toEqual(gridfinityTriangles(bin()));
+    expect(gridfinityTriangles(plate({ gridfinityHalfGrid: true }))).toEqual(gridfinityTriangles(plate()));
+    expect(gridfinityPlan(plate({ gridfinityHalfGrid: true })).size).toEqual({ width: 84, depth: 42, height: 5 });
+  });
+
+  it("counts cells of 21 mm, a bin 0.5 mm smaller, up to 12 of them: the 251.5 mm of 6 whole units", () => {
+    expect(gridfinityPlan(half({ width: 20.5, depth: 62.5 })).size).toEqual({ width: 20.5, depth: 62.5, height: 25.4 });
+    expect(gridfinityUnits(half({ width: 20.5, depth: 62.5 }))).toEqual({ x: 1, z: 3, y: 3 });
+    expect(gridfinityUnits(half({ width: 1000, depth: 1 }))).toMatchObject({ x: 12, z: 1 });
+    expect(gridfinityFootprintPatch(half({ width: 1000, depth: 1 }))).toMatchObject({ width: 251.5, depth: 20.5 });
+    // A drag snaps to 21 mm cells: 30 mm is 1.45 cells, 33 mm 1.6.
+    expect(gridfinityFootprintPatch(half({ width: 30, depth: 33 }))).toMatchObject({ width: 20.5, depth: 41.5 });
+  });
+
+  it("keeps the outline when switched on, and rounds to whole units when switched off", () => {
+    // 2 x 1 whole units are 4 x 2 half units of the same 83.5 x 41.5; 6 x 6 are 12 x 12, and 12 is as many as there can be.
+    expect(gridfinityShapePatch(bin(), { halfGrid: true })).toMatchObject({ gridfinityHalfGrid: true, width: 83.5, depth: 41.5 });
+    expect(gridfinityShapePatch(bin({ width: 251.5, depth: 251.5 }), { halfGrid: true })).toMatchObject({ width: 251.5, depth: 251.5 });
+    expect(gridfinityShapePatch(half(), { x: 12, z: 13 })).toMatchObject({ width: 251.5, depth: 251.5 });
+    // 3 half units (62.5) round to 2 whole ones, 1 half unit to 1.
+    expect(gridfinityShapePatch(half({ width: 62.5, depth: 20.5 }), { halfGrid: false })).toMatchObject({ gridfinityHalfGrid: false, width: 83.5, depth: 41.5 });
+    // A half bin turned into a baseplate keeps its outline in whole units, and back again; an odd count is read as the
+    // baseplate reads a size given to it, without the bin's 0.5 mm: 62.5 mm is 1 unit, as canonicalizeShape makes it.
+    expect(gridfinityShapePatch(half(), { type: "baseplate" })).toMatchObject({ width: 84, depth: 42, height: 5 });
+    expect(gridfinityShapePatch(half({ width: 62.5 }), { type: "baseplate" })).toMatchObject({ width: 42 });
+    expect(gridfinityFootprintPatch({ ...half({ width: 62.5 }), gridfinityType: "baseplate" })).toMatchObject({ width: 42 });
+    expect(gridfinityShapePatch(plate({ gridfinityHalfGrid: true }), { type: "bin" })).toMatchObject({ width: 83.5, depth: 41.5 });
+    // Other changes leave the setting as it is.
+    expect(gridfinityShapePatch(bin(), { lip: false })).not.toHaveProperty("gridfinityHalfGrid");
+  });
+
+  it("puts a foot under every 21 mm cell: 20.5 mm at the top, the specification's steps, 14.6 mm at the bottom", () => {
+    // 2 x 1 half units: cells at x = -10.5 and 10.5. On the straight step (y 2) a foot is 10.25 - 2.15 = 8.1 from its middle;
+    // at the bottom 10.25 - 2.95 = 7.3, widening at 45 degrees to 7.7 at y 0.4.
+    const triangles = gridfinityTriangles(half({ width: 41.5, depth: 20.5 }));
+    crossings(triangles, 2).forEach((x, i) => expect(x).toBeCloseTo([-18.6, -2.4, 2.4, 18.6][i], 9));
+    crossings(triangles, 0.4).forEach((x, i) => expect(x).toBeCloseTo([-10.5 - 7.7, -10.5 + 7.7, 10.5 - 7.7, 10.5 + 7.7][i], 9));
+    expect(crossings(triangles, 2)).toHaveLength(4);
+  });
+
+  it("is closed, wound outwards and one piece, with the lip, magnets, label shelves and scoops", () => {
+    for (const fields of [
+      { width: 20.5, depth: 20.5 },
+      { width: 20.5, depth: 20.5, gridfinityLip: false, gridfinityMagnets: true },
+      { width: 62.5, depth: 41.5, gridfinityMagnets: true },
+      { width: 251.5, depth: 251.5, height: 7 + GRIDFINITY_LIP_HEIGHT, gridfinityMagnets: true },
+      { width: 20.5, depth: 20.5, gridfinityLabelBack: true, gridfinityLabelFront: true, gridfinityLabelLeft: true, gridfinityLabelRight: true, gridfinityLabelCornerSize: 10 },
+      { width: 62.5, depth: 20.5, gridfinityLabelBack: true, gridfinityScoopFront: true, gridfinityScoopLeft: true },
+    ]) {
+      const triangles = gridfinityLabelledTriangles(runtime, half(fields));
+      expect(edgeProblems(triangles)).toBe(0);
+      expect(signedVolume(triangles)).toBeGreaterThan(0);
+      expect(components(triangles)).toBe(1);
+    }
+  });
+
+  it("drills the magnet holes where a baseplate has them: one a foot, 2.5 mm towards its cell's corner on the 42 mm grid", () => {
+    const holes = (fields: Record<string, unknown>) => gridfinityPlan(half({ gridfinityMagnets: true, ...fields })).magnetHoles.map(({ x, z }) => [x, z].map((n) => Number(n.toFixed(9))));
+    // 2 x 2 half units: where a bin of one whole unit has them.
+    expect(holes({ width: 41.5, depth: 41.5 }).sort()).toEqual([[-13, -13], [-13, 13], [13, -13], [13, 13]].sort());
+    expect(holes({ width: 20.5, depth: 20.5 })).toEqual([[-2.5, -2.5]]);
+    // 3 x 1: cells at x = -21, 0 and 21; the middle one's grid corner is on its right.
+    expect(holes({ width: 62.5, depth: 20.5 })).toEqual([[-23.5, -2.5], [2.5, -2.5], [18.5, -2.5]]);
+  });
+
+  it("keeps the shelves' corners small enough in a bin of one half unit to leave 2 mm open between facing shelves", () => {
+    // 18.6 mm inside: shelves of 4 mm on both sides and corner pieces of at most 9.3 - 1 - 4 = 4.3 mm.
+    const pieces = gridfinityLabelPieces(half({ width: 20.5, depth: 20.5, gridfinityLabelBack: true, gridfinityLabelFront: true, gridfinityLabelCornerSize: 10 }))!;
+    expect(pieces.shelves.map(({ profile }) => profile.width)).toEqual([4, 4]);
+    pieces.corners.forEach(({ size }) => expect(size).toBeLessThanOrEqual(4.3 + 1e-9));
+    // The Corner size field shows what is built.
+    expect(gridfinityLabelCornerSize(half({ width: 20.5, depth: 20.5, gridfinityLabelCornerSize: 10 }))).toBeCloseTo(4.3, 9);
+    // A bin of whole units keeps its 10 mm corners.
+    expect(Math.max(...gridfinityLabelPieces(bin({ gridfinityLabelBack: true, gridfinityLabelCornerSize: 10 }))!.corners.map(({ size }) => size))).toBe(10);
+  });
+
+  it("keeps a half bin's size through a saved project, a new shape and the exact body", async () => {
+    const shape = canonicalizeShape(binShape({ gridfinityHalfGrid: true, width: 20.5, depth: 62.5, size: 62.5 }));
+    expect(shape).toMatchObject({ width: 20.5, depth: 62.5 });
+    expect(workplaneShapesEqual(shape, { ...shape, gridfinityHalfGrid: false })).toBe(false);
+    const exported = await exportLylProject({
+      projectId: "half",
+      projectName: "Half",
+      createdAt: 1_700_000_000_000,
+      modifiedAt: 1_700_000_100_000,
+      shapes: [shape],
+      history: [editorHistoryEntry([shape], [])],
+      historyIndex: 0,
+      assets: [],
+      workspace: DEFAULT_WORKPLANE_WORKSPACE,
+      snapGrid: DEFAULT_SNAP_GRID,
+      placementElevation: 0,
+    });
+    const [loaded] = (await importLylProject(exported)).shapes;
+    expect(loaded).toMatchObject({ gridfinityHalfGrid: true, width: 20.5, depth: 62.5 });
+    expect(sceneShape(shape)).toMatchObject({ gridfinityHalfGrid: true });
+    const asset = toolbarShapeAssets.find((entry) => entry.kind === "gridfinity")!;
+    expect(canonicalizeShape(makeShapeFromAsset(asset, { x: 0, z: 0 }, { gridfinityHalfGrid: true, width: 20.5, depth: 20.5 }))).toMatchObject({ width: 20.5, depth: 20.5, gridfinityHalfGrid: true });
+    expect(cadModifierGridfinityForShape(shape)).toMatchObject({ gridfinityHalfGrid: true, width: 20.5, depth: 62.5 });
+    // The mesh that booleans and the exact body's check use has a foot under every cell: three under this bin, one under a whole one.
+    const lowest = (s: WorkplaneShape) => meshForShape(s).vertices.filter(([, y]) => Math.abs(y) < 1e-6).length;
+    expect(lowest(shape)).toBe(3 * lowest(canonicalizeShape(binShape({ width: 41.5, depth: 41.5, size: 41.5 }))));
+    // The settings an MCP action passes on keep it, and so does a half bin kept as the default for new ones.
+    expect(normalizeShapeCustomizations({ gridfinity: { gridfinityHalfGrid: true } }, {})).toMatchObject({ gridfinity: { gridfinityHalfGrid: true } });
+    expect(shapeDefaultsFromShape(shape)).toMatchObject({ gridfinityHalfGrid: true, width: 20.5, depth: 62.5 });
   });
 });

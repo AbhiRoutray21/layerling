@@ -1758,6 +1758,8 @@ export const MESSAGES_DA: Partial<Record<MessageKey, string>> = {
   "prop.gridfinityUnitsY": "Højdeenheder",
   "prop.gridfinityLip": "Stabelkrave",
   "prop.gridfinityMagnets": "Magnethuller",
+  "prop.gridfinityHalfGrid": "Halvt gitter (21 mm)",
+  "gridfinity.halfGridHint": "Enheder i bredden og dybden tæller celler på 21 mm, hver med sin egen fod; fire står i én fordybning i bundpladen.",
   "prop.gridfinityLabelBack": "Etiketliste bagtil",
   "prop.gridfinityLabelFront": "Etiketliste fortil",
   "prop.gridfinityLabelLeft": "Etiketliste til venstre",

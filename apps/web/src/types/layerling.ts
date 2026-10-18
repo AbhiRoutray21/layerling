@@ -175,6 +175,8 @@ export type ShapeCustomization = {
   gridfinityLip?: boolean;
   /** Gridfinity bin: holes for 6 x 2 mm magnets under each foot. */
   gridfinityMagnets?: boolean;
+  /** Gridfinity bin: the size counts cells of 21 mm, each with a foot, four to a baseplate's socket; missing means the 42 mm grid. */
+  gridfinityHalfGrid?: boolean;
   /** Gridfinity bin: a label shelf along the back wall. */
   gridfinityLabelBack?: boolean;
   /** Gridfinity bin: a label shelf along the front wall. */
@@ -709,6 +711,8 @@ export type WorkplaneShape = {
   gridfinityLip?: boolean;
   /** Gridfinity bin: holes for 6 x 2 mm magnets under each foot. */
   gridfinityMagnets?: boolean;
+  /** Gridfinity bin: the size counts cells of 21 mm, each with a foot, four to a baseplate's socket; missing means the 42 mm grid. */
+  gridfinityHalfGrid?: boolean;
   /** Gridfinity bin: a label shelf along the back wall. */
   gridfinityLabelBack?: boolean;
   /** Gridfinity bin: a label shelf along the front wall. */
