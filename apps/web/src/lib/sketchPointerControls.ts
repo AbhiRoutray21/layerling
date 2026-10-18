@@ -65,3 +65,20 @@ export function zoomSketchViewAt(
     },
   };
 }
+
+/** The tools that draw a chain of points: a line, a curve, a smooth line. */
+export function isChainDrawingTool(tool: string) {
+  return tool === "line" || tool === "bezier" || tool === "smooth";
+}
+
+/** How far the pointer may wander between pressing and releasing the right button and still count as a click, in screen pixels. */
+const RIGHT_CLICK_REACH = 5;
+
+/**
+ * Whether a right click on the plane ends the chain being drawn (#520): one that did not move. A right button
+ * that was dragged is a pan of the view and leaves the chain alone.
+ */
+export function rightClickEndsChain(press: { x: number; y: number } | null, release: { x: number; y: number }) {
+  if (!press) return false;
+  return Math.hypot(release.x - press.x, release.y - press.y) <= RIGHT_CLICK_REACH;
+}

@@ -12280,6 +12280,7 @@ export function LayerlingEditor({
             onPlanePoint={addSketchPlanePoint}
             onAddPrimitive={addSketchPrimitive}
             onPointPress={pressSketchPoint}
+            onFinishLine={() => setSketchActivePointId(null)}
             onSelectSegment={(id) => {
               setSketchSelection({ kind: "segment", id });
               setSketchActivePointId(null);

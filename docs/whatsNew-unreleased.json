@@ -78,5 +78,15 @@
       "de": "Steht die Einheit auf Zoll (Schalter unten rechts), trägt das Lineal eine Skala in Zoll: ein Strich je Sechzehntelzoll, die ganzen Zoll sind nummeriert. In Millimetern bleibt alles wie bisher.",
       "en": "With the unit set to inches (the switch at the bottom right), the ruler carries a scale in inches: a line every sixteenth of an inch, with the whole inches numbered. In millimetres everything stays as it was."
     }
+  },
+  {
+    "title": {
+      "de": "Die Linienkette im Skizzenmodus lässt sich einfacher beenden",
+      "en": "A chain of lines in the sketch is easier to end"
+    },
+    "body": {
+      "de": "Beim Zeichnen mit Linie, Bézier-Kurve oder Weicher Kurve beendet jetzt ein Rechtsklick ohne Bewegung die Kette, und der Doppelklick auf den letzten Punkt ebenso; das Werkzeug bleibt gewählt. Ein Rechtsklick, mit dem du die Ansicht verschiebst, beendet sie nicht. Zum Schließen klickst du weiter den ersten Punkt an.",
+      "en": "When drawing with Line, Bézier curve or Smooth curve, a right click without moving now ends the chain, and so does a double click on the last point; the tool stays selected. A right click that you use to pan the view does not end it. To close the shape you still click the first point."
+    }
   }
 ]

@@ -16,7 +16,7 @@ import { applyCornerAngle, sketchCornerAt, type CornerTurn, type SketchCorner } 
 import { isSegmentCurved } from "@/lib/sketchSegmentCurve";
 import { DEFAULT_SKETCH_BACKGROUND, DEFAULT_SKETCH_GRID_COLOR, DEFAULT_SKETCH_PLATE_COLOR, workplaneGridLayout } from "@/lib/workplaneGrid";
 import { closestPointOnSketchSegment, type SketchSegmentPlacement } from "@/lib/sketchPointRefinement";
-import { isSketchPanGesture, SKETCH_MANUAL_MAX_ZOOM, SKETCH_MAX_ZOOM, SKETCH_WHEEL_ZOOM_BOOST, SKETCH_MIN_ZOOM, sketchWheelZoomFactor, zoomSketchViewAt, type SketchView } from "@/lib/sketchPointerControls";
+import { isChainDrawingTool, isSketchPanGesture, rightClickEndsChain, SKETCH_MANUAL_MAX_ZOOM, SKETCH_MAX_ZOOM, SKETCH_WHEEL_ZOOM_BOOST, SKETCH_MIN_ZOOM, sketchWheelZoomFactor, zoomSketchViewAt, type SketchView } from "@/lib/sketchPointerControls";
 import { pickTouchTarget, type TouchCandidate } from "@/lib/sketchTouch";
 import { isSketchPrimitive, type SketchPrimitive } from "@/lib/sketchPrimitives";
 import { mirrorSign, resizedImportedMeshPositions } from "@/lib/workplaneShapes";
@@ -63,6 +63,8 @@ type SketchWorkspaceProps = {
   onPlanePoint: (point: { x: number; z: number }, handles?: { handleIn: { x: number; z: number }; handleOut: { x: number; z: number } }) => void;
   onAddPrimitive: (primitive: SketchPrimitive, center: { x: number; z: number }) => void;
   onPointPress: (id: string) => void;
+  /** Ends the chain of points being drawn, keeping the tool: a right click on the plane or a double click on the last point (#520). */
+  onFinishLine?: () => void;
   onSelectSegment: (id: string) => void;
   onSelectMany: (pointIds: string[], segmentIds: string[], imageIds: string[]) => void;
   /** A window dragged with the Erase tool: takes away the points and lines inside it (#519). */
@@ -523,6 +525,7 @@ export function SketchWorkspace({
   onPlanePoint,
   onAddPrimitive,
   onPointPress,
+  onFinishLine,
   onSelectSegment,
   onSelectMany,
   onEraseMany,
@@ -1080,7 +1083,11 @@ export function SketchWorkspace({
     }
   };
 
+  // Where the right button went down: a right click that did not move ends the chain, one that did is a pan.
+  const rightPressRef = useRef<{ x: number; y: number } | null>(null);
+
   const handlePanPointerDownCapture = (event: ReactPointerEvent<SVGSVGElement>) => {
+    if (event.button === 2) rightPressRef.current = { x: event.clientX, y: event.clientY };
     if (isSketchPanGesture(event)) beginPan(event);
     else retargetTouchPress(event);
   };
@@ -1720,7 +1727,11 @@ export function SketchWorkspace({
             setRefinePreview(null);
           }}
           onWheel={handleWheel}
-          onContextMenu={(event) => event.preventDefault()}
+          onContextMenu={(event) => {
+            event.preventDefault();
+            if (onFinishLine && activePointId && isChainDrawingTool(tool) && rightClickEndsChain(rightPressRef.current, { x: event.clientX, y: event.clientY })) onFinishLine();
+            rightPressRef.current = null;
+          }}
           onDragOver={(event) => {
             if (!event.dataTransfer.types.includes("application/x-layerling-sketch-primitive")) return;
             event.preventDefault();
@@ -2227,6 +2238,10 @@ export function SketchWorkspace({
                 cx={point.x}
                 cy={point.z}
                 r={pointRadius}
+                onDoubleClick={() => {
+                  // A double click on the last point ends the chain (#520).
+                  if (onFinishLine && activePointId === point.id && isChainDrawingTool(tool)) onFinishLine();
+                }}
                 onPointerDown={(event) => {
                   event.preventDefault();
                   event.stopPropagation();
