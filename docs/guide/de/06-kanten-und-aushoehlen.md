@@ -10,7 +10,7 @@ Scharfe Kanten sehen an einem gedruckten Teil selten gut aus, und sie sind auch 
 1. Wähle den Körper aus (oder die Gruppe).
 2. Klicke im Menüband auf {{ui:editor.tool.fillet}} oder {{ui:editor.tool.chamfer}}, drücke [[B]] für die Verrundung oder [[Shift+B]] für die Fase, oder klicke mit der rechten Maustaste auf den Körper und wähle es im Menü.
 3. Die Kanten des Körpers werden hervorgehoben. Klicke die an, die betroffen sein sollen. Ein weiterer Klick nimmt sie wieder heraus. Mit [[Umschalt]] fügst du eine einzelne Kante hinzu oder nimmst sie weg.
-4. Stelle das Maß ein und bestätige mit {{ui:edge.apply}} oder [[Enter]].
+4. Stelle das Maß ein und bestätige mit {{ui:edge.apply}} oder [[Enter]]. Danach bleibt das Fenster mit derselben Größe auf dem neuen Körper offen, damit gleich die nächste Verrundung oder Fase folgen kann; {{ui:edge.done}}, [[Esc]] oder das Kreuz schließt es. Mit [[Umschalt]] oder [[Strg]] fügt ein Klick auf {{ui:edge.topEdges}}, {{ui:edge.bottomEdges}}, {{ui:edge.verticalEdges}} oder {{ui:edge.horizontalEdges}} diese Kanten zu den gewählten hinzu, statt sie zu ersetzen.
 
 ![Das Werkzeug „Kanten verrunden“: alle scharfen Kanten sind ausgewählt, im Bild siehst du die Vorschau mit 4 mm Radius.](shot:fillet-preview)
 

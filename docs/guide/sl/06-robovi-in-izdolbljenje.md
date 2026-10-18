@@ -10,7 +10,7 @@ Ostri robovi na natisnjenem delu redko dobro izgledajo in tudi niso posebno stab
 1. Izberi telo (ali skupino).
 2. V orodni vrstici klikni {{ui:editor.tool.fillet}} ali {{ui:editor.tool.chamfer}}, pritisni [[B]] za zaokrožitev ali [[Shift]]+[[B]] za posnetje, ali klikni z desnim gumbom na telo in izberi v meniju.
 3. Robovi telesa se poudarijo. Klikni tiste, ki naj bodo prizadeti. Še en klik jih spet odvzame. S [[Shift]] dodaš posamezen rob ali ga odvzameš.
-4. Nastavi mero in potrdi z {{ui:edge.apply}} ali [[Enter]].
+4. Nastavi mero in potrdi z {{ui:edge.apply}} ali [[Enter]]. Nato okno ostane odprto na novem telesu z isto velikostjo, tako da lahko takoj sledi naslednje zaobljenje ali posnetje; zapre ga {{ui:edge.done}}, [[Esc]] ali križec. S [[Shift]] ali [[Ctrl]] klik na {{ui:edge.topEdges}}, {{ui:edge.bottomEdges}}, {{ui:edge.verticalEdges}} ali {{ui:edge.horizontalEdges}} doda te robove izbranim, namesto da bi jih zamenjal.
 
 ![Orodje »Zaokroži robove«: vsi ostri robovi so izbrani, na sliki je predogled s polmerom 4 mm.](shot:fillet-preview)
 

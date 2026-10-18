@@ -268,7 +268,8 @@ export function EdgeModifierPanel({
   onSelectTop,
   onSelectBottom,
   onSelectVertical,
-  activeQuickSelection = null,
+  onSelectHorizontal,
+  activeQuickSelection = [],
   onClear,
   onRemoveFeature,
   onEditFeature,
@@ -308,11 +309,13 @@ export function EdgeModifierPanel({
   onPreserveEdgeSizeChange: (value: boolean) => void;
   onSelectAll: () => void;
   /** Picks only the edges along the very top, e.g. the rim of a cookie cutter (#154). */
-  onSelectTop?: () => void;
-  onSelectBottom?: () => void;
-  onSelectVertical?: () => void;
+  /** The quick buttons: a click picks their edges, Shift, Ctrl or Cmd with the click adds them to the ones picked (#538). */
+  onSelectTop?: (add: boolean) => void;
+  onSelectBottom?: (add: boolean) => void;
+  onSelectVertical?: (add: boolean) => void;
+  onSelectHorizontal?: (add: boolean) => void;
   /** Which of the quick buttons made the edges picked now, to light it up (#517). */
-  activeQuickSelection?: "all" | "top" | "bottom" | "vertical" | null;
+  activeQuickSelection?: ReadonlyArray<"all" | "top" | "bottom" | "vertical" | "horizontal">;
   onClear: () => void;
   onRemoveFeature: (id: string) => void;
   /** Takes a treatment back and opens the tool again with its value and edges (#227). */
@@ -361,11 +364,12 @@ export function EdgeModifierPanel({
         {!prepared ? t("edge.loading") : busy ? t("edge.previewBusy") : t("edge.selectionHelp")}
       </div>
 
-      <div className="edge-modifier-quick-actions">
-        <button type="button" className={activeQuickSelection === "all" ? "active" : ""} aria-pressed={activeQuickSelection === "all"} disabled={!prepared} onClick={onSelectAll}>{t("edge.allSharpEdges")}</button>
-        {onSelectTop ? <button type="button" className={activeQuickSelection === "top" ? "active" : ""} aria-pressed={activeQuickSelection === "top"} disabled={!prepared} title={t("edge.topEdgesHint")} onClick={onSelectTop}>{t("edge.topEdges")}</button> : null}
-        {onSelectBottom ? <button type="button" className={activeQuickSelection === "bottom" ? "active" : ""} aria-pressed={activeQuickSelection === "bottom"} disabled={!prepared} title={t("edge.bottomEdgesHint")} onClick={onSelectBottom}>{t("edge.bottomEdges")}</button> : null}
-        {onSelectVertical ? <button type="button" className={activeQuickSelection === "vertical" ? "active" : ""} aria-pressed={activeQuickSelection === "vertical"} disabled={!prepared} title={t("edge.verticalEdgesHint")} onClick={onSelectVertical}>{t("edge.verticalEdges")}</button> : null}
+      <div className="edge-modifier-quick-actions" title={t("edge.quickAddHint")}>
+        <button type="button" className={activeQuickSelection.includes("all") ? "active" : ""} aria-pressed={activeQuickSelection.includes("all")} disabled={!prepared} onClick={onSelectAll}>{t("edge.allSharpEdges")}</button>
+        {onSelectTop ? <button type="button" className={activeQuickSelection.includes("top") ? "active" : ""} aria-pressed={activeQuickSelection.includes("top")} disabled={!prepared} title={t("edge.topEdgesHint")} onClick={(event) => onSelectTop(event.shiftKey || event.ctrlKey || event.metaKey)}>{t("edge.topEdges")}</button> : null}
+        {onSelectBottom ? <button type="button" className={activeQuickSelection.includes("bottom") ? "active" : ""} aria-pressed={activeQuickSelection.includes("bottom")} disabled={!prepared} title={t("edge.bottomEdgesHint")} onClick={(event) => onSelectBottom(event.shiftKey || event.ctrlKey || event.metaKey)}>{t("edge.bottomEdges")}</button> : null}
+        {onSelectVertical ? <button type="button" className={activeQuickSelection.includes("vertical") ? "active" : ""} aria-pressed={activeQuickSelection.includes("vertical")} disabled={!prepared} title={t("edge.verticalEdgesHint")} onClick={(event) => onSelectVertical(event.shiftKey || event.ctrlKey || event.metaKey)}>{t("edge.verticalEdges")}</button> : null}
+        {onSelectHorizontal ? <button type="button" className={activeQuickSelection.includes("horizontal") ? "active" : ""} aria-pressed={activeQuickSelection.includes("horizontal")} disabled={!prepared} title={t("edge.horizontalEdgesHint")} onClick={(event) => onSelectHorizontal(event.shiftKey || event.ctrlKey || event.metaKey)}>{t("edge.horizontalEdges")}</button> : null}
         <button type="button" disabled={!prepared} onClick={onClear}>{t("edge.clear")}</button>
       </div>
 
@@ -455,7 +459,7 @@ export function EdgeModifierPanel({
 
       {error ? <div ref={errorRef} className="edge-modifier-error" role="alert">{cadModifierUserErrorMessage(error)}</div> : null}
       <div className="edge-modifier-footer">
-        <button type="button" className="secondary" onClick={onCancel}>{t("common.cancel")}</button>
+        <button type="button" className="secondary" onClick={onCancel}>{t(selectedCount === 0 && !busy ? "edge.done" : "common.cancel")}</button>
         <button type="button" className="primary" disabled={!prepared || busy || selectedCount === 0 || Boolean(error)} onClick={onApply}>
           {busy ? <LoaderCircle className="edge-modifier-spinner" size={17} /> : <Check size={17} />}
           {t("edge.apply")}

@@ -10,7 +10,7 @@ Sharp edges rarely look good on a printed part, and they are not particularly st
 1. Select the body (or the group).
 2. Click {{ui:editor.tool.fillet}} or {{ui:editor.tool.chamfer}} in the ribbon, press [[B]] for the fillet or [[Shift+B]] for the chamfer, or right-click the body and pick it from the menu.
 3. The body's edges light up. Click those that should be affected. Another click takes an edge out again. With [[Shift]] you add or remove a single edge.
-4. Set the size and confirm with {{ui:edge.apply}} or [[Enter]].
+4. Set the size and confirm with {{ui:edge.apply}} or [[Enter]]. Afterwards the window stays open on the new body with the same size, so the next fillet or chamfer can follow at once; {{ui:edge.done}}, [[Esc]] or the cross closes it. With [[Shift]] or [[Ctrl]] a click on {{ui:edge.topEdges}}, {{ui:edge.bottomEdges}}, {{ui:edge.verticalEdges}} or {{ui:edge.horizontalEdges}} adds those edges to the ones picked instead of replacing them.
 
 ![The "Fillet edges" tool: all sharp edges are selected, the picture shows the preview with a 4 mm radius.](shot:fillet-preview)
 

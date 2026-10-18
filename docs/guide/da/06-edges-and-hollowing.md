@@ -10,7 +10,7 @@ Skarpe kanter ser sjældent godt ud på en printet del, og de er heller ikke spe
 1. Vælg formen (eller gruppen).
 2. Klik på {{ui:editor.tool.fillet}} eller {{ui:editor.tool.chamfer}} i båndet, tryk [[B]] for rund eller [[Shift+B]] for fas, eller højreklik formen og vælg det fra menuen.
 3. Formens kanter lyser op. Klik dem der skal berøres. Endnu et klik tager en kant ud igen. Med [[Shift]] tilføjer eller fjerner du en enkelt kant.
-4. Sæt størrelsen og bekræft med {{ui:edge.apply}} eller [[Enter]].
+4. Sæt størrelsen og bekræft med {{ui:edge.apply}} eller [[Enter]]. Bagefter forbliver vinduet åbent på det nye legeme med samme størrelse, så den næste afrunding eller affasning kan følge med det samme; {{ui:edge.done}}, [[Esc]] eller krydset lukker det. Med [[Skift]] eller [[Ctrl]] føjer et klik på {{ui:edge.topEdges}}, {{ui:edge.bottomEdges}}, {{ui:edge.verticalEdges}} eller {{ui:edge.horizontalEdges}} disse kanter til de valgte i stedet for at erstatte dem.
 
 !["Rund kanter"-værktøjet: alle skarpe kanter er valgt, billedet viser forhåndsvisningen med 4 mm radius.](shot:fillet-preview)
 

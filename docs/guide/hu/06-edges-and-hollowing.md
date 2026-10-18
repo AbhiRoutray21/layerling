@@ -10,7 +10,7 @@ Az éles élek ritkán mutatnak jól egy nyomtatott alkatrészen, és különös
 1. Jelöld ki a testet (vagy a csoportot).
 2. Kattints a szalagon a {{ui:editor.tool.fillet}} vagy az {{ui:editor.tool.chamfer}} gombra, nyomd meg a [[B]] billentyűt a lekerekítéshez vagy a [[Shift+B]] billentyűt az élletöréshez, vagy kattints jobb gombbal a testre, és válaszd ki a menüből.
 3. A test élei kivilágosodnak. Kattints azokra, amelyeket érinteni kell. Egy újabb kattintás kiveszi az élt. A [[Shift]] billentyűvel egyetlen élt adsz hozzá vagy veszel el.
-4. Állítsd be a méretet, és erősítsd meg az {{ui:edge.apply}} gombbal vagy az [[Enter]] billentyűvel.
+4. Állítsd be a méretet, és erősítsd meg az {{ui:edge.apply}} gombbal vagy az [[Enter]] billentyűvel. Ezután az ablak ugyanazzal a mérettel nyitva marad az új testen, így rögtön jöhet a következő lekerekítés vagy letörés; a {{ui:edge.done}}, az [[Esc]] vagy a keresztecske zárja be. A [[Shift]] vagy a [[Ctrl]] mellett a {{ui:edge.topEdges}}, {{ui:edge.bottomEdges}}, {{ui:edge.verticalEdges}} vagy {{ui:edge.horizontalEdges}} gombra kattintva ezek az élek hozzáadódnak a kijelöltekhez, nem váltják le őket.
 
 ![Az „Élek lekerekítése” eszköz: minden éles él ki van jelölve, a kép a 4 mm sugarú előnézetet mutatja.](shot:fillet-preview)
 

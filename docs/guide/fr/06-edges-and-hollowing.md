@@ -10,7 +10,7 @@ Les arêtes vives sont rarement belles sur une pièce imprimée, et elles ne son
 1. Sélectionnez le corps (ou le groupe).
 2. Cliquez sur {{ui:editor.tool.fillet}} ou {{ui:editor.tool.chamfer}} dans le ruban, appuyez sur [[B]] pour le congé ou sur [[Shift+B]] pour le chanfrein, ou cliquez avec le bouton droit sur le corps et sélectionnez-le dans le menu.
 3. Les bords du corps s'illuminent. Cliquez sur ceux qui devraient être concernés. Un autre clic retire à nouveau un avantage. Avec [[Shift]], vous ajoutez ou supprimez une seule arête.
-4. Définissez la taille et confirmez avec {{ui:edge.apply}} ou [[Enter]].
+4. Définissez la taille et confirmez avec {{ui:edge.apply}} ou [[Enter]]. Ensuite la fenêtre reste ouverte sur le nouveau corps avec la même taille, de sorte que l'arrondi ou le chanfrein suivant peut suivre aussitôt ; {{ui:edge.done}}, [[Échap]] ou la croix la ferme. Avec [[Maj]] ou [[Ctrl]], un clic sur {{ui:edge.topEdges}}, {{ui:edge.bottomEdges}}, {{ui:edge.verticalEdges}} ou {{ui:edge.horizontalEdges}} ajoute ces arêtes à celles choisies au lieu de les remplacer.
 
 ![L'outil "Congé arêtes" : toutes les arêtes vives sont sélectionnées, l'image montre l'aperçu avec un rayon de 4 mm.](shot:fillet-preview)
 

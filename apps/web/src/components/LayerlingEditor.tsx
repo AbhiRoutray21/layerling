@@ -217,7 +217,7 @@ import { sketchBodyStretch, stretchedSketchProfile } from "@/lib/sketchResize";
 import { silhouetteSketchProfile } from "@/lib/sketchCadProfile";
 import { svgSketchMatchesMesh } from "@/lib/svgSketch";
 import { DEFAULT_SKETCH_STROKE, normalizeSketchStroke, strokedSketchProfile } from "@/lib/sketchStroke";
-import { bottomCadModifierEdgeIds, topCadModifierEdgeIds, verticalCadModifierEdgeIds } from "@/lib/topEdges";
+import { bottomCadModifierEdgeIds, horizontalCadModifierEdgeIds, topCadModifierEdgeIds, verticalCadModifierEdgeIds } from "@/lib/topEdges";
 import { movedWithEditedOutline, placeSketchShape, sketchBodyAnchor, type SketchAnchor } from "@/lib/sketchPlacement";
 import { meshSlicePath, planeCutsMesh } from "@/lib/sketchSlice";
 import { projectedEdgesPath } from "@/lib/sketchEdges";
@@ -321,6 +321,9 @@ type EdgeModifierSession = {
   busy: boolean;
   prepared: boolean;
   error: string | null;
+  // The quick buttons that were clicked for the edges picked now, so that top and bottom clicked together light as those two and not as
+  // "horizontal", which holds the same edges on a box (#538). Only counts while their edges are still exactly the picked ones.
+  quickKeys?: Array<"top" | "bottom" | "vertical" | "horizontal">;
   // The selection of the last preview that worked.
   workingEdgeIds?: number[];
   // The edge(s) whose selection broke a working treatment; drawn red while that error stands.
@@ -3278,17 +3281,40 @@ export function LayerlingEditor({
     () => edgeModifier ? edgeModifier.edges.filter((edge) => selectableCadModifierEdge(edge, edgeModifier.sharpAngle)).map((edge) => edge.id) : [],
     [edgeModifier?.edges, edgeModifier?.sharpAngle],
   );
-  // Which quick button made the edges picked now: the first whose edges are exactly the picked ones (#517).
+  // Which quick buttons made the edges picked now: all of them if they are the edges the tool offers, else the buttons whose
+  // edges together are exactly the picked ones - several can be on at once (#538, #517).
   const modifierQuickSelection = useMemo(() => {
-    if (!edgeModifier?.prepared || edgeModifier.selectedEdgeIds.length === 0) return null;
-    const picked = edgeModifier.selectedEdgeIds;
-    const same = (ids: readonly number[]) => ids.length === picked.length && ids.every((id) => picked.includes(id));
-    if (same(modifierAvailableEdgeIds)) return "all" as const;
-    if (same(topCadModifierEdgeIds(edgeModifier.edges, modifierAvailableEdgeIds))) return "top" as const;
-    if (same(bottomCadModifierEdgeIds(edgeModifier.edges, modifierAvailableEdgeIds))) return "bottom" as const;
-    if (same(verticalCadModifierEdgeIds(edgeModifier.edges, modifierAvailableEdgeIds))) return "vertical" as const;
-    return null;
-  }, [edgeModifier?.prepared, edgeModifier?.selectedEdgeIds, edgeModifier?.edges, modifierAvailableEdgeIds]);
+    if (!edgeModifier?.prepared || edgeModifier.selectedEdgeIds.length === 0) return [] as Array<"all" | "top" | "bottom" | "vertical" | "horizontal">;
+    const picked = new Set(edgeModifier.selectedEdgeIds);
+    if (picked.size === modifierAvailableEdgeIds.length && modifierAvailableEdgeIds.every((id) => picked.has(id))) return ["all" as const];
+    const groups = [
+      { key: "top" as const, ids: topCadModifierEdgeIds(edgeModifier.edges, modifierAvailableEdgeIds) },
+      { key: "bottom" as const, ids: bottomCadModifierEdgeIds(edgeModifier.edges, modifierAvailableEdgeIds) },
+      { key: "vertical" as const, ids: verticalCadModifierEdgeIds(edgeModifier.edges, modifierAvailableEdgeIds) },
+      { key: "horizontal" as const, ids: horizontalCadModifierEdgeIds(edgeModifier.edges, modifierAvailableEdgeIds) },
+    ].filter((group) => group.ids.length > 0);
+    const clicked = edgeModifier.quickKeys;
+    if (clicked?.length) {
+      const union = new Set(groups.filter((group) => clicked.includes(group.key)).flatMap((group) => group.ids));
+      if (union.size === picked.size && [...picked].every((id) => union.has(id))) return clicked.filter((key) => groups.some((group) => group.key === key));
+    }
+    // The buttons that count are those whose edges are all picked; they must cover the picked edges, no more and no less.
+    const lit = groups.filter((group) => group.ids.every((id) => picked.has(id)));
+    const covered = new Set(lit.flatMap((group) => group.ids));
+    // "Horizontal" holds the top and the bottom: it is shown alone when it is the button that made the picking.
+    const keys = lit.some((group) => group.key === "horizontal") && lit.every((group) => group.key === "horizontal" || group.key === "top" || group.key === "bottom")
+      ? lit.filter((group) => group.key === "horizontal")
+      : lit;
+    return covered.size === picked.size && [...picked].every((id) => covered.has(id)) ? keys.map((group) => group.key) : [];
+  }, [edgeModifier?.prepared, edgeModifier?.selectedEdgeIds, edgeModifier?.edges, edgeModifier?.quickKeys, modifierAvailableEdgeIds]);
+  /** A quick button of the Fillet and Chamfer window: its edges replace the ones picked, or with Shift or Ctrl are added to them (#538). */
+  const selectQuickEdges = (key: "top" | "bottom" | "vertical" | "horizontal", pick: (edges: CadModifierEdge[], candidateIds: readonly number[]) => number[], noneKey: MessageKey, add: boolean) => setEdgeModifier((current) => {
+    if (!current?.prepared) return current;
+    const ids = pick(current.edges, modifierAvailableEdgeIds);
+    const selectedEdgeIds = add ? [...new Set([...current.selectedEdgeIds, ...ids])] : ids;
+    const quickKeys = add ? [...new Set([...(current.quickKeys ?? []), key])] : [key];
+    return { ...current, selectedEdgeIds, quickKeys, preview: null, busy: selectedEdgeIds.length > 0, error: selectedEdgeIds.length ? null : t(noneKey) };
+  });
   // Alle grundsaetzlich verrundbaren Kanten, unabhaengig von der Schwelle -
   // damit eine feinere Kante im 3D-Bild sicht- und anklickbar bleibt, statt
   // erst nach manuellem Verschieben des Schiebereglers aufzutauchen.
@@ -6854,6 +6880,14 @@ export function LayerlingEditor({
           }),
     );
     invalidateCadModifierSession();
+    // The tool stays open for the next feature (#538): again on the new body, with the same kind and size and no edge
+    // picked, as if it had been closed and opened anew. "Done", Esc or the cross closes it.
+    edgeEditRequestRef.current = {
+      shapeId: base.id,
+      historyLength: modifiedShape.edgeTreatmentHistory?.length ?? 0,
+      preset: { kind: edgeModifier.kind, amount: edgeModifier.amount, chamferAngle: edgeModifier.chamferAngle, edgeIds: [] },
+    };
+    setEdgeEditRound((round) => round + 1);
   }, [commitShapes, edgeModifier, invalidateCadModifierSession, shapes]);
 
   useEffect(() => {
@@ -12726,21 +12760,10 @@ export function LayerlingEditor({
           onOnlyVisibleEdgesChange={(onlyVisibleEdges) => setEdgeModifier((current) => current?.prepared ? { ...current, onlyVisibleEdges } : current)}
           onPreserveEdgeSizeChange={(preserveEdgeSize) => setEdgeModifier((current) => current?.prepared ? { ...current, preserveEdgeSize } : current)}
           onSelectAll={() => setEdgeModifier((current) => current?.prepared ? { ...current, selectedEdgeIds: modifierAvailableEdgeIds, preview: null, busy: modifierAvailableEdgeIds.length > 0, error: modifierAvailableEdgeIds.length ? null : current.error } : current)}
-          onSelectTop={() => setEdgeModifier((current) => {
-            if (!current?.prepared) return current;
-            const topIds = topCadModifierEdgeIds(current.edges, modifierAvailableEdgeIds);
-            return { ...current, selectedEdgeIds: topIds, preview: null, busy: topIds.length > 0, error: topIds.length ? null : t("edge.noTopEdges") };
-          })}
-          onSelectBottom={() => setEdgeModifier((current) => {
-            if (!current?.prepared) return current;
-            const bottomIds = bottomCadModifierEdgeIds(current.edges, modifierAvailableEdgeIds);
-            return { ...current, selectedEdgeIds: bottomIds, preview: null, busy: bottomIds.length > 0, error: bottomIds.length ? null : t("edge.noBottomEdges") };
-          })}
-          onSelectVertical={() => setEdgeModifier((current) => {
-            if (!current?.prepared) return current;
-            const verticalIds = verticalCadModifierEdgeIds(current.edges, modifierAvailableEdgeIds);
-            return { ...current, selectedEdgeIds: verticalIds, preview: null, busy: verticalIds.length > 0, error: verticalIds.length ? null : t("edge.noVerticalEdges") };
-          })}
+          onSelectTop={(add) => selectQuickEdges("top", topCadModifierEdgeIds, "edge.noTopEdges", add)}
+          onSelectBottom={(add) => selectQuickEdges("bottom", bottomCadModifierEdgeIds, "edge.noBottomEdges", add)}
+          onSelectVertical={(add) => selectQuickEdges("vertical", verticalCadModifierEdgeIds, "edge.noVerticalEdges", add)}
+          onSelectHorizontal={(add) => selectQuickEdges("horizontal", horizontalCadModifierEdgeIds, "edge.noHorizontalEdges", add)}
           activeQuickSelection={modifierQuickSelection}
           onClear={() => setEdgeModifier((current) => current?.prepared ? { ...current, selectedEdgeIds: [], preview: null, busy: false, error: t("edge.selectAtLeastOne") } : current)}
           onRemoveFeature={removeEdgeTreatment}

@@ -10,7 +10,7 @@ Ostré hrany na výtisku často nevypadají dobře a nejsou ani příliš odoln�
 1. Vyberte těleso nebo sloučený celek.
 2. Zvolte {{ui:editor.tool.fillet}} nebo {{ui:editor.tool.chamfer}} v pásu nástrojů. Zaoblení otevřete také klávesou [[B]], zkosení pomocí [[Shift+B]]. Obě volby jsou i v nabídce pravého tlačítka na tělese.
 3. Hrany se zvýrazní. Kliknutím je přidáváte do výběru nebo z něj odebíráte. Se [[Shift]] změníte výběr jediné hrany.
-4. Nastavte velikost a potvrďte pomocí {{ui:edge.apply}} nebo [[Enter]].
+4. Nastavte velikost a potvrďte pomocí {{ui:edge.apply}} nebo [[Enter]]. Potom zůstane okno otevřené na novém tělese se stejnou velikostí, takže může hned následovat další zaoblení nebo zkosení; zavře ho {{ui:edge.done}}, [[Esc]] nebo křížek. S [[Shift]] nebo [[Ctrl]] kliknutí na {{ui:edge.topEdges}}, {{ui:edge.bottomEdges}}, {{ui:edge.verticalEdges}} nebo {{ui:edge.horizontalEdges}} tyto hrany přidá k vybraným místo jejich nahrazení.
 
 ![Nástroj pro zaoblení hran: vybrané všechny ostré hrany a náhled poloměru 4 mm.](shot:fillet-preview)
 

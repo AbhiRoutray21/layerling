@@ -10,7 +10,7 @@ Scherpe randen zien er op een geprint onderdeel zelden goed uit, en sterk zijn z
 1. Selecteer het lichaam (of de groep).
 2. Klik in het lint op {{ui:editor.tool.fillet}} of {{ui:editor.tool.chamfer}}, druk op [[B]] voor de afronding of [[Shift+B]] voor de afschuining, of klik met de rechtermuisknop op het lichaam en kies het in het menu.
 3. De randen van het lichaam lichten op. Klik op de randen die bewerkt moeten worden. Nog een klik haalt een rand er weer uit. Met [[Shift]] voeg je één rand toe of haal je hem weg.
-4. Stel de maat in en bevestig met {{ui:edge.apply}} of [[Enter]].
+4. Stel de maat in en bevestig met {{ui:edge.apply}} of [[Enter]]. Daarna blijft het venster met dezelfde maat open op het nieuwe lichaam, zodat meteen de volgende afronding of afschuining kan volgen; {{ui:edge.done}}, [[Esc]] of het kruisje sluit het. Met [[Shift]] of [[Ctrl]] voegt een klik op {{ui:edge.topEdges}}, {{ui:edge.bottomEdges}}, {{ui:edge.verticalEdges}} of {{ui:edge.horizontalEdges}} die randen toe aan de gekozen randen in plaats van ze te vervangen.
 
 ![Het gereedschap "Randen afronden": alle scherpe randen zijn geselecteerd, het beeld toont het voorbeeld met een straal van 4 mm.](shot:fillet-preview)
 

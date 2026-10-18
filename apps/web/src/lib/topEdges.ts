@@ -33,6 +33,31 @@ export function verticalCadModifierEdgeIds(edges: readonly CadModifierEdge[], ca
 }
 
 /**
+ * The edges that lie flat: every point of the edge at the same height, so the rims of the top and the bottom of a box,
+ * a round rim, and any ledge in between (#538). Picked from `candidateIds`; the points are in the world, y up.
+ */
+export function horizontalCadModifierEdgeIds(edges: readonly CadModifierEdge[], candidateIds: readonly number[]): number[] {
+  const candidates = new Set(candidateIds);
+  return edges
+    .filter((edge) => candidates.has(edge.id) && edge.points.length >= 6)
+    .filter((edge) => {
+      let minY = Number.POSITIVE_INFINITY;
+      let maxY = Number.NEGATIVE_INFINITY;
+      let reach = 0;
+      for (let index = 1; index < edge.points.length; index += 3) {
+        minY = Math.min(minY, edge.points[index]);
+        maxY = Math.max(maxY, edge.points[index]);
+      }
+      for (let index = 3; index + 2 < edge.points.length; index += 3) {
+        reach = Math.max(reach, Math.hypot(edge.points[index] - edge.points[0], edge.points[index + 2] - edge.points[2]));
+      }
+      // A line with no length along the floor is no flat edge (a point or a vertical one).
+      return reach > 0.01 && maxY - minY <= Math.max(0.001, reach * 1e-3);
+    })
+    .map((edge) => edge.id);
+}
+
+/**
  * The edges along the very bottom of a body (#473), the mirror of the top edges: every point of the
  * edge at the body's lowest level, such as the foot of a part. Picked from `candidateIds`.
  */

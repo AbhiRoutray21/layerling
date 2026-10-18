@@ -98,5 +98,15 @@
       "de": "Wer die Formenbibliothek angeheftet hatte, fand beim nächsten Start nur noch die Nadel vor: Sie war noch gesetzt, die Bibliothek selbst aber zu. Jetzt öffnet sich eine angeheftete Bibliothek beim Start des Editors von selbst, an der Stelle, an der du sie abgelegt hast.",
       "en": "Anyone who had pinned the shape library found only the pin again at the next start: it was still set, but the library itself was closed. Now a pinned library opens by itself when the editor starts, where you left it."
     }
+  },
+  {
+    "title": {
+      "de": "Fase und Rundung: mehrere Schnellknöpfe, Waagerechte Kanten, und das Fenster bleibt offen",
+      "en": "Fillet and Chamfer: several quick buttons, Horizontal edges, and the window stays open"
+    },
+    "body": {
+      "de": "Im Fenster für Verrundung und Fase gibt es einen neuen Knopf „Waagerechte Kanten“. Mit Umschalt oder Strg und einem Klick fügst du die Kanten eines Schnellknopfs zur Auswahl hinzu, etwa Obere und Untere Kanten zusammen. Und nach „Anwenden“ bleibt das Fenster auf dem neuen Körper offen, mit derselben Größe und ohne gewählte Kanten, so dass du gleich die nächste Rundung mit einem anderen Maß setzen kannst. „Fertig“, Esc oder das Kreuz schließt es.",
+      "en": "The Fillet and Chamfer window has a new Horizontal edges button. With Shift or Ctrl and a click you add the edges of a quick button to the selection, Top and Bottom edges together for example. And after Apply the window stays open on the new body, with the same size and no edge picked, so you can set the next fillet with another size at once. Done, Esc or the cross closes it."
+    }
   }
 ]
