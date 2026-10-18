@@ -16,6 +16,9 @@ import { wheelBaseStep, wheelNextValue } from "@/lib/wheelValueStep";
 
 const MIN_EDGE_MODIFIER_AMOUNT = 0.001;
 const EDGE_MODIFIER_AMOUNT_STEP = 0.001;
+/** The slider of the distance or radius moves in tenths of a millimetre and goes to 10 mm; larger values are typed. */
+const EDGE_MODIFIER_SLIDER_STEP = 0.1;
+const EDGE_MODIFIER_SLIDER_MAX = 10;
 
 function clamp(value: number, min: number, max: number) {
   return Math.min(max, Math.max(min, value));
@@ -138,6 +141,7 @@ export function EdgeModifierSlider({
   workspace,
   length = false,
   disabled = false,
+  coarse,
   onChange,
 }: {
   label: string;
@@ -149,6 +153,11 @@ export function EdgeModifierSlider({
   workspace: WorkplaneWorkspaceSettings;
   length?: boolean;
   disabled?: boolean;
+  /**
+   * The slider moves in these larger steps and goes only as far as `max`, in millimetres for a length, while the field
+   * still takes the exact value and anything up to the full range: a slider of 3,000 steps gives crooked values (forum, DrJones).
+   */
+  coarse?: { step: number; max: number };
   onChange: (value: number) => void;
 }) {
   const safeMin = Number.isFinite(min) ? min : 0;
@@ -158,8 +167,12 @@ export function EdgeModifierSlider({
   const controlMin = length ? millimetersToDisplay(safeMin, workspace) : safeMin;
   const controlMax = length ? millimetersToDisplay(safeMax, workspace) : safeMax;
   const controlStep = length ? displayStepFromMillimeters(step, workspace) : step;
-  const sliderValue = clamp(controlValue, controlMin, controlMax);
-  const position = ((sliderValue - controlMin) / Math.max(Number.EPSILON, controlMax - controlMin)) * 100;
+  // The slider's own range: counted from 0 in coarse steps, so its values are whole steps (0.1, 0.2 ...), not 0.001 + n * 0.1.
+  const rangeMin = coarse ? 0 : controlMin;
+  const rangeMax = coarse ? Math.max(controlMin, Math.min(controlMax, length ? millimetersToDisplay(coarse.max, workspace) : coarse.max)) : controlMax;
+  const rangeStep = coarse ? (length ? displayStepFromMillimeters(coarse.step, workspace) : coarse.step) : controlStep;
+  const sliderValue = clamp(controlValue, rangeMin, rangeMax);
+  const position = ((sliderValue - rangeMin) / Math.max(Number.EPSILON, rangeMax - rangeMin)) * 100;
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState(formatSliderValue(controlValue, workspace.accuracy, controlStep));
   const unitLabel = length ? lengthDisplayUnit(workspace).label : unit;
@@ -249,9 +262,9 @@ export function EdgeModifierSlider({
       <div className="range-control">
         <input
           type="range"
-          min={controlMin}
-          max={controlMax}
-          step={controlStep}
+          min={rangeMin}
+          max={rangeMax}
+          step={rangeStep}
           value={sliderValue}
           disabled={disabled}
           onChange={(event) => handleSliderChange(Number(event.currentTarget.value))}
@@ -443,6 +456,7 @@ export function EdgeModifierPanel({
         min={amountMin}
         max={amountMax}
         step={EDGE_MODIFIER_AMOUNT_STEP}
+        coarse={{ step: lengthDisplayUnit(workspace).label === "in" ? 25.4 / 64 : EDGE_MODIFIER_SLIDER_STEP, max: EDGE_MODIFIER_SLIDER_MAX }}
         workspace={workspace}
         length
         disabled={!prepared}
