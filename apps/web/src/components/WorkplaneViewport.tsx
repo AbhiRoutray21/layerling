@@ -6834,6 +6834,28 @@ export function WorkplaneViewport({
 
   useEffect(() => cancelLongPress, [cancelLongPress]);
 
+  // A finger that lifts on an element that has gone from the page (a handle or a number that
+  // vanished when the selection changed) never reports its end to the viewport. Without this the
+  // list of fingers keeps it, every later touch counts as a second finger, and the camera takes
+  // them all (#524). When the app leaves the foreground nothing is down any more.
+  useEffect(() => {
+    const clearTouches = () => {
+      touchPointersRef.current.clear();
+      cameraTouchRef.current = false;
+    };
+    const onVisibility = () => {
+      if (document.visibilityState !== "visible") clearTouches();
+    };
+    window.addEventListener("blur", clearTouches);
+    window.addEventListener("pagehide", clearTouches);
+    document.addEventListener("visibilitychange", onVisibility);
+    return () => {
+      window.removeEventListener("blur", clearTouches);
+      window.removeEventListener("pagehide", clearTouches);
+      document.removeEventListener("visibilitychange", onVisibility);
+    };
+  }, []);
+
   const handlePointerDown = useCallback(
     (event: ReactPointerEvent<HTMLDivElement>) => {
       // Wer auf die Arbeitsflaeche klickt, ist mit dem Schreiben fertig. Von
@@ -6853,6 +6875,12 @@ export function WorkplaneViewport({
       // ausgewaehlt, auch nicht vom nachgereichten Zeigerdruck, der hier
       // wieder ankommt.
       if (event.pointerType === "touch") {
+        // The first finger of a touch sequence is the primary pointer: no other finger is down
+        // then, so whatever the list still holds is a finger whose end never arrived.
+        if (event.isPrimary) {
+          touchPointersRef.current.clear();
+          cameraTouchRef.current = false;
+        }
         touchPointersRef.current.set(event.pointerId, { x: event.clientX, y: event.clientY });
         if (touchPointersRef.current.size >= 2) {
           touchEmptyTapRef.current = null;
