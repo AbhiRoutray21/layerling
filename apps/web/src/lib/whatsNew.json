@@ -1,5 +1,84 @@
 [
   {
+    "version": "1.91.0",
+    "items": [
+      {
+        "title": {
+          "en": "Ctrl and the arrow keys pan the view",
+          "de": "Strg und die Pfeiltasten verschieben die Ansicht",
+          "ar": "Ctrl ومفاتيح الأسهم تُزيح العرض",
+          "cs": "Ctrl a šipky posouvají pohled",
+          "da": "Ctrl og piletasterne flytter visningen",
+          "fr": "Ctrl et les flèches font glisser la vue",
+          "it": "Ctrl e le frecce spostano la vista",
+          "hu": "A Ctrl és a nyílbillentyűk eltolják a nézetet",
+          "nl": "Ctrl en de pijltjestoetsen schuiven de weergave",
+          "pl": "Ctrl i strzałki przesuwają widok",
+          "sl": "Ctrl in puščice premikajo pogled",
+          "tr": "Ctrl ve ok tuşları görünümü kaydırır",
+          "ru": "Ctrl и стрелки сдвигают вид",
+          "ja": "Ctrl と矢印キーでビューを動かす"
+        },
+        "body": {
+          "en": "With nothing selected, hold Ctrl (Cmd on a Mac) and press the arrow keys to slide the view across the screen: a tenth of the picture a press, half of it with Shift as well. The plain arrow keys still turn the view.",
+          "de": "Ist nichts ausgewählt, halte Strg (Cmd auf dem Mac) und drücke die Pfeiltasten, um die Ansicht über den Bildschirm zu schieben: ein Zehntel des Bildes pro Druck, mit Umschalt dazu die Hälfte. Die Pfeiltasten allein drehen die Ansicht weiter.",
+          "ar": "عندما لا يكون أي شيء محددًا، اضغط مع الاستمرار على Ctrl (أو Cmd على Mac) واضغط مفاتيح الأسهم لإزاحة العرض عبر الشاشة: عُشر الصورة لكل ضغطة، ونصفها مع Shift أيضًا. وتبقى الأسهم وحدها تدير العرض.",
+          "cs": "Když není nic vybráno, podržte Ctrl (na Macu Cmd) a šipkami posouvejte pohled po obrazovce: o desetinu obrazu na stisknutí, se Shift navíc o polovinu. Samotné šipky pohledem dál otáčejí.",
+          "da": "Når intet er valgt, så hold Ctrl (Cmd på en Mac) nede og tryk på piletasterne for at flytte visningen hen over skærmen: en tiendedel af billedet pr. tryk, halvdelen med Shift oveni. Piletasterne alene drejer stadig visningen.",
+          "fr": "Quand rien n'est sélectionné, maintenez Ctrl (Cmd sur Mac) et appuyez sur les flèches pour faire glisser la vue à travers l'écran : un dixième de l'image par appui, la moitié avec Shift en plus. Les flèches seules font toujours tourner la vue.",
+          "it": "Quando non è selezionato nulla, tieni premuto Ctrl (Cmd su Mac) e premi le frecce per spostare la vista sullo schermo: un decimo dell'immagine per pressione, la metà con anche Shift. Le frecce da sole continuano a ruotare la vista.",
+          "hu": "Ha semmi sincs kijelölve, tartsd lenyomva a Ctrl-t (Macen a Cmd-t), és a nyílbillentyűkkel told el a nézetet a képernyőn: lenyomásonként a kép tizedével, a Shifttel együtt a felével. A nyilak magukban továbbra is forgatják a nézetet.",
+          "nl": "Als er niets geselecteerd is, houd je Ctrl (Cmd op een Mac) ingedrukt en druk je op de pijltjestoetsen om de weergave over het scherm te schuiven: een tiende van het beeld per druk, de helft met Shift erbij. De pijltjes alleen draaien de weergave nog steeds.",
+          "pl": "Gdy nic nie jest zaznaczone, przytrzymaj Ctrl (Cmd na Macu) i naciskaj strzałki, aby przesuwać widok po ekranie: o jedną dziesiątą obrazu na naciśnięcie, o połowę z dodatkowym Shift. Same strzałki nadal obracają widok.",
+          "sl": "Ko ni nič izbrano, pridrži Ctrl (na Macu Cmd) in pritiskaj puščice, da premikaš pogled po zaslonu: za desetino slike na pritisk, s Shift povrhu za polovico. Same puščice pogled še vedno vrtijo.",
+          "tr": "Hiçbir şey seçili değilken Ctrl'yi (Mac'te Cmd) basılı tutup ok tuşlarına basarak görünümü ekranda kaydırabilirsin: her basışta resmin onda biri, Shift ile birlikte yarısı kadar. Ok tuşları tek başına görünümü döndürmeye devam eder.",
+          "ru": "Если ничего не выделено, удерживайте Ctrl (Cmd на Mac) и нажимайте стрелки, чтобы сдвигать вид по экрану: на десятую часть изображения за нажатие, на половину — если зажат ещё и Shift. Стрелки без Ctrl по-прежнему поворачивают вид.",
+          "ja": "何も選択していないとき、Ctrl（Mac では Cmd）を押しながら矢印キーを押すと、ビューが画面の上をスライドします。1回で画面の10分の1、Shift もいっしょに押すと半分動きます。矢印キーだけのときは、今までどおりビューが回ります。"
+        }
+      },
+      {
+        "title": {
+          "de": "Angehobener Boden für Gridfinity-Behälter",
+          "en": "Raised floor for Gridfinity bins"
+        },
+        "body": {
+          "de": "Ein Gridfinity-Behälter kann jetzt einen angehobenen Boden haben: Bis zur „Bodenhöhe“, die du im Eigenschaften-Fenster einstellst, ist er massiv - ein Rohling, in den du die Formen deiner Werkzeuge schneidest.",
+          "en": "A Gridfinity bin can now have a raised floor: set \"Floor height\" in the Properties panel, and the bin is solid up to it, a blank to cut the shapes of your tools into."
+        }
+      },
+      {
+        "title": {
+          "de": "Die Schnittfläche folgt der Ebene ohne Verzug",
+          "en": "The cut face follows the plane without lag"
+        },
+        "body": {
+          "de": "Die gefüllte Schnittfläche der Schnittansicht hinkte der Ebene hinterher, solange du sie zogst, und kam erst zurück, wenn die Hand ruhte. Jetzt wird sie bei jedem Schritt für die neueste Lage der Ebene geschnitten.",
+          "en": "The filled cut face of the section view lagged behind the plane while you dragged it and only came back when your hand rested. Now it is cut for the newest position of the plane at every step."
+        }
+      },
+      {
+        "title": {
+          "de": "Ordner für eigene Formen",
+          "en": "Folders for custom shapes"
+        },
+        "body": {
+          "de": "Eigene Formen lassen sich in Ordner sortieren, bis zu drei Ebenen tief, im Browser und auf dem Server. Ein Ordner hat einen Zähler, lässt sich umbenennen und löschen (nach Rückfrage), und eine Form wird beim Speichern oder danach in einen anderen Ordner gelegt.",
+          "en": "Custom shapes can be sorted into folders, up to three levels deep, in the browser and on the server. A folder has a counter and can be renamed and deleted (after asking), and a shape is put into a folder when you save it or moved to another one afterwards."
+        }
+      },
+      {
+        "title": {
+          "de": "Ein loses Loch geht beim Export nicht mehr verloren",
+          "en": "A loose hole is no longer lost in the export"
+        },
+        "body": {
+          "de": "Ein Loch, das du nicht gruppiert hast, fehlte in der STL-, 3MF- oder OBJ-Datei, wenn der Körper, aus dem es schneidet, einen anderen Körper derselben Farbe berührte oder überlappte. Auch die Materialschätzung zählte ihn dann als massiv. Jetzt bleibt das Loch erhalten.",
+          "en": "A hole you had not grouped was missing from the STL, 3MF or OBJ file when the body it cuts from touched or overlapped another body of the same colour. The material estimate then counted it as solid too. The hole now stays."
+        }
+      }
+    ]
+  },
+  {
     "version": "1.90.0",
     "items": [
       {
