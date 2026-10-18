@@ -1,6 +1,16 @@
 [
   {
     "title": {
+      "de": "Verlaufsansicht: Gruppe öffnen und Teile zurückholen",
+      "en": "History view: open a group and bring back its parts"
+    },
+    "body": {
+      "de": "In der Verlaufsansicht kannst du jetzt eine Gruppe öffnen (Knopf „Gruppe öffnen“ oder Taste E): Ihre Teile liegen dann einzeln da, und du holst eines oder mehrere zurück, ohne die ganze Gruppe zu nehmen. Gruppen in Gruppen gehen genauso, „Zurück“ schließt eine Ebene.",
+      "en": "In the History view you can now open a group (the Open group button or the E key): its parts then lie there one by one, and you bring back one or more of them without taking the whole group. Groups inside groups work the same way, and Back out closes one level."
+    }
+  },
+  {
+    "title": {
       "de": "iPad: ein verlorener Finger sperrt den Editor nicht mehr",
       "en": "iPad: a lost finger no longer locks the editor"
     },
