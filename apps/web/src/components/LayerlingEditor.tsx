@@ -143,7 +143,7 @@ import { snapShapeFootprintToVisibleGrid, visibleGridStep } from "@/lib/gridSnap
 import { composedShapeRotation, geometryRotationDegreesForShortcut, geometryRotationDelta, rotatedGeometryShapePatch } from "@/lib/geometryRotation";
 import { carryShapePivot, heightPatchKeepingBase, shapePivotFromWorld, shapePivotWorld, type PivotPoint } from "@/lib/rotationPivot";
 import { createLocalId } from "@/lib/localIds";
-import { canEditGroupAtLevel, openGroupLevelsStillOpen, trackOpenGroupLevels } from "@/lib/openGroupParts";
+import { canEditGroupAtLevel, mcpOpenGroupSummary, openGroupLevelsStillOpen, trackOpenGroupLevels, type OpenGroupLevel } from "@/lib/openGroupParts";
 import { projectExportFileName, stlNameAsksForNewFile } from "@/lib/exportNames";
 import { exportMeshesToObj } from "@/lib/objExport";
 import { NOTICE_AFTER_HOVER_MS, noticeDurationMs } from "@/lib/noticeTiming";
@@ -196,7 +196,7 @@ import { toSvgProjection, type SvgProjectionLayer } from "@/lib/svgExport";
 import { DEFAULT_TAPER_DIMENSION_MAX, keyboardNudgeCoarseFactor, keyboardNudgeStep, normalizeShapeCustomizations, normalizeSnapGrid, normalizeWorkspaceSettings, shapeDimensionLimit, workplaneSettingsFingerprint } from "@/lib/workplaneSettings";
 import { mcpThreadSizeParams } from "@/lib/mcpShapeSettings";
 import { createNoteId, normalizeNotes, NOTE_COUNT_LIMIT, patchNote, referencePoints } from "@/lib/workplaneNotes";
-import { notesAfterShapeChange } from "@/lib/noteAnchoring";
+import { notesAfterShapeChange, notesPinnedTo, notesPutBack } from "@/lib/noteAnchoring";
 import { newReferencePositions, referencePointsForBox, unionReferenceBoxes, type ReferencePointSpot, type ReferencePosition } from "@/lib/referencePoints";
 import {
   normalizePlacementWorkplane,
@@ -300,12 +300,6 @@ type LylHistoryLimit = EditorHistoryExportLimit;
 type LylExportTarget = "download" | "shared" | "file" | "fileAs";
 type ToolbarMode = "geometry" | "sketch";
 type OpenGroupOutcome = { ok: boolean; message: string; partIds?: string[]; groupId?: string };
-/** One group being edited: the group as it was, and the ids of its loose parts. */
-type OpenGroupLevel = { original: WorkplaneShape; childIds: string[] };
-
-function mcpOpenGroupSummary(level: OpenGroupLevel) {
-  return { groupId: level.original.id, name: displayShapeName(level.original), partIds: level.childIds };
-}
 type WithoutRequestId<T> = T extends unknown ? Omit<T, "requestId"> : never;
 type CadModifierWorkerPayload = WithoutRequestId<CadModifierWorkerRequest>;
 type CadPreviewPayload = Extract<CadModifierWorkerPayload, { type: "preview" }>;
@@ -7987,7 +7981,7 @@ export function LayerlingEditor({
     const childIds = parts.map((shape) => shape.id);
     const message = t("status.groupOpened", { name: displayShapeName(group) });
     commitOpenGroupTransition(
-      [...levels, { original: group, childIds }],
+      [...levels, { original: group, childIds, notes: notesPinnedTo(notesRef.current, group) }],
       [...shapesRef.current.filter((shape) => shape.id !== group.id), ...parts],
       childIds,
       message,
@@ -8002,7 +7996,8 @@ export function LayerlingEditor({
     if (openGroupBusyRef.current) return refuseOpenGroupStep(t("group.busy"));
     const parts = new Set(session.childIds);
     const message = t("status.groupOpenCancelled", { name: displayShapeName(session.original) });
-    // The group comes back under its own id, which the level around it still lists.
+    // The group comes back under its own id, which the level around it still lists - and its notes as they were.
+    if (!historyViewStateRef.current) notesRef.current = notesPutBack(notesRef.current, session.notes);
     commitOpenGroupTransition(
       levels.slice(0, -1),
       [...shapesRef.current.filter((shape) => !parts.has(shape.id)), session.original],

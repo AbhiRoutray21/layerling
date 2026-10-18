@@ -92,10 +92,11 @@ export function visibleShapeUnderPoint(candidates: readonly WorkplaneShape[], po
  * group that was taken apart, the group its body went into - or, with none,
  * stays where it stood, free on the workplane.
  *
- * `held` are the groups open for editing: off the workplane for now, but their
- * notes stay theirs and keep their place until the group comes back -
- * `regrouping`, the step that opens, closes or cancels one - when they are
- * pinned to it again where they stand. Outside that step a note pinned to a
+ * `held` are the groups open for editing. Opening one hands its notes to the
+ * parts under them, so they move with those parts; a note with no part under
+ * it stays the group's and keeps its place until the group comes back -
+ * `regrouping`, the step that opens, closes or cancels one - when it is
+ * pinned to it again where it stands. Outside that step a note pinned to a
  * body that is new (one inserted with it) is left as it is.
  */
 export function notesAfterShapeChange(
@@ -121,10 +122,22 @@ export function notesAfterShapeChange(
     changed = true;
     // Back from editing: pinned to it again where the note stands.
     if (now) return { ...note, anchor: { shapeId: now.id, normalized: noteAnchorFromWorld(now, world) } };
-    if (held.has(anchor.shapeId)) return { ...note, ...world };
     const { anchor: _anchor, ...free } = note;
     const home = visibleShapeUnderPoint(added, world);
-    return home ? { ...free, ...world, anchor: { shapeId: home.id, normalized: noteAnchorFromWorld(home, world) } } : { ...free, ...world };
+    if (home) return { ...free, ...world, anchor: { shapeId: home.id, normalized: noteAnchorFromWorld(home, world) } };
+    return held.has(anchor.shapeId) ? { ...note, ...world } : { ...free, ...world };
   });
   return changed ? result : notes;
+}
+
+/** The notes pinned to `group`, at the spot it gives them - kept when it is opened, for cancelling. */
+export function notesPinnedTo(notes: readonly WorkplaneNote[], group: WorkplaneShape): WorkplaneNote[] {
+  return notes.flatMap((note) => (note.anchor?.shapeId === group.id ? [{ ...note, ...noteAnchorWorld(group, note.anchor.normalized) }] : []));
+}
+
+/** The notes with those kept by `notesPinnedTo` put back as they were, where they still exist. */
+export function notesPutBack(notes: WorkplaneNote[], kept: readonly WorkplaneNote[]): WorkplaneNote[] {
+  if (!kept.length) return notes;
+  const byId = new Map(kept.map((note) => [note.id, note]));
+  return notes.map((note) => byId.get(note.id) ?? note);
 }

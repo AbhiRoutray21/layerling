@@ -61,6 +61,8 @@ A note records what the geometry does not say: "This screw is 0.3 mm too tight",
 - If you place the note **on a body**, it travels with it.
 - If you place it **beside**, it stays on the workplane ({{ui:note.free}}).
 - {{ui:note.detach}} releases an attached note from the body.
+- Grouping takes an attached note into the group; ungrouping hands it to the visible part under it, a group inside included. While a group is open for editing, its notes move with the part under them and go back to the group when you close it.
+- If its body is deleted, or no visible body is under it any more, the note stays where it stood, on the workplane.
 - Dragging moves the note, a click opens it for editing.
 - While you write, [[Enter]] keeps the text and [[Esc]] puts it back to how it was before you started; [[Shift]]+[[Enter]] starts a new line.
 
