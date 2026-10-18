@@ -3976,6 +3976,7 @@ function RangeProperty({
   // panel still scrolls under a pointer that merely passes over one. A listener of its own, as the browser treats a wheel
   // listener of React as one that may not stop the scroll.
   const numberInputRef = useRef<HTMLInputElement>(null);
+  const keepSelectedRef = useRef(false);
   const wheelHandlerRef = useRef<((event: WheelEvent) => void) | null>(null);
   wheelHandlerRef.current = (event: WheelEvent) => {
     const input = numberInputRef.current;
@@ -3991,7 +3992,14 @@ function RangeProperty({
     // What is shown is the new starting point, so leaving the field keeps the exact value and does not read it again.
     openedWithRef.current = shown;
     setDraft(shown);
+    // The whole value stays selected, so that typing after the wheel replaces it, as after the click (#226).
+    // Every render until a key is typed puts the selection back, as the field's value is written again.
+    keepSelectedRef.current = true;
   };
+  useLayoutEffect(() => {
+    const input = numberInputRef.current;
+    if (keepSelectedRef.current && input && document.activeElement === input) selectWholeValue(input);
+  });
   useEffect(() => {
     const input = numberInputRef.current;
     if (!input) return;
@@ -4030,8 +4038,14 @@ function RangeProperty({
               setEditing(true);
               selectWholeValue(event.currentTarget);
             }}
-            onChange={(event) => setDraft(event.currentTarget.value)}
-            onBlur={commitDraft}
+            onChange={(event) => {
+              keepSelectedRef.current = false;
+              setDraft(event.currentTarget.value);
+            }}
+            onBlur={() => {
+              keepSelectedRef.current = false;
+              commitDraft();
+            }}
             onKeyDown={(event) => {
               if (event.key === "Enter") {
                 event.currentTarget.blur();

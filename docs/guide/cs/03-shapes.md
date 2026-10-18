@@ -50,7 +50,7 @@ Zúžení a zkroucení podporuje většina tvarů. Výjimkami jsou ozubené kolo
 
 ![Změněný poloměr vrcholu a výška kuželu. Šipka obnoví jednotlivou hodnotu; spodní tlačítka ukládají a obnovují výchozí nastavení.](shot:property-reset)
 
-{{ui:inspector.saveDefaults}} si zapamatuje, co jste na tomto tvaru změnili, jako začátek každého nového tvaru tohoto druhu: rozměry, nastavení tvaru a jeho barvu. Obarvěte válec zeleně a stiskněte tlačítko, každý válec, který potom přidáte, bude zelený; ostatní druhy si ponechají své barvy. {{ui:inspector.resetDefaults}} vrátí druh k tomu, s čím ho program začíná. Které druhy mají vlastní výchozí hodnoty, je označeno v nastavení pod {{ui:workspace.shapeDefaults}}.
+{{ui:inspector.saveDefaults}} si zapamatuje, co jste na tomto tvaru změnili, jako začátek každého nového tvaru tohoto druhu: rozměry, nastavení tvaru a jeho barvu. Obarvěte válec zeleně a stiskněte tlačítko, každý válec, který potom přidáte, bude zelený; ostatní druhy si ponechají své barvy. {{ui:inspector.resetDefaults}} vrátí druh k tomu, s čím ho program začíná. Které druhy mají vlastní výchozí hodnoty, je označeno v nastavení pod {{ui:workspace.shapeDefaults}}. Také nový návrh, který založíte z úvodní stránky, jimi začíná; hodnoty si pamatuje tento prohlížeč.
 
 Zúžený či nakloněný kvádr, válec, elipsa, mnohoúhelník, trubka a prstenec zachovávají přesné těleso. Platí to i pro kapsli, hvězdu, srdce, srpek, rybinu a zaoblený kvádr bez zaoblení horní a spodní hrany. Lze upravovat jejich hrany a exportovat je do STEP. Stejně funguje zkroucení: průřez se po výšce přesně natáčí a boky přecházejí rovnoměrně odspodu nahoru.
 

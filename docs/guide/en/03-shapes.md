@@ -50,7 +50,7 @@ Taper and twist work on almost every shape. Only the gear, thread, spring, Gridf
 
 ![A cone whose top radius and height were changed: a small arrow next to each takes the value back, and the two buttons at the bottom save or reset the defaults of the shape.](shot:property-reset)
 
-{{ui:inspector.saveDefaults}} keeps what you changed on this shape as the start of every new shape of its kind: the sizes, the settings of the shape and its colour. Colour a cylinder green, press the button, and every cylinder you add from then on is green; the other kinds keep their own colours. {{ui:inspector.resetDefaults}} takes the kind back to what the app starts it with. The kinds that have defaults of their own are marked in the settings under {{ui:workspace.shapeDefaults}}.
+{{ui:inspector.saveDefaults}} keeps what you changed on this shape as the start of every new shape of its kind: the sizes, the settings of the shape and its colour. Colour a cylinder green, press the button, and every cylinder you add from then on is green; the other kinds keep their own colours. {{ui:inspector.resetDefaults}} takes the kind back to what the app starts it with. The kinds that have defaults of their own are marked in the settings under {{ui:workspace.shapeDefaults}}. A new design that you start from the start page begins with them too; the values are kept in this browser.
 
 A tapered or leaning box, cylinder, ellipse, polygon, tube or ring keeps its exact shape, and so do the capsule, star, heart, crescent, dovetail and a rounded box without rounded top and bottom edges: chamfers and fillets work on it as on the plain shape, and the STEP export writes it. The same holds for a twisted shape: its section turns exactly as it rises, and the sides wind evenly from bottom to top.
 

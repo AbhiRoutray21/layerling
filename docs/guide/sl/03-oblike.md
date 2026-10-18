@@ -51,7 +51,7 @@ Zožanje in zasuk imajo skoraj vse oblike. Samo zobnik, navoj, vzmet, Gridfinity
 
 ![Stožec, pri katerem sta bila spremenjena polmer zgoraj in višina: majhna puščica ob vsaki vrednosti jo vrne nazaj, spodnja gumba pa shranita ali ponastavita privzete vrednosti oblike.](shot:property-reset)
 
-{{ui:inspector.saveDefaults}} si zapomni, kar ste spremenili na tej obliki, kot začetek vsake nove oblike te vrste: mere, nastavitve oblike in njeno barvo. Valj pobarvajte zeleno in pritisnite gumb, vsak valj, ki ga dodate potem, bo zelen; druge vrste obdržijo svoje barve. {{ui:inspector.resetDefaults}} vrne vrsto na to, s čimer jo začne program. Katere vrste imajo lastne privzete vrednosti, je označeno v nastavitvah pod {{ui:workspace.shapeDefaults}}.
+{{ui:inspector.saveDefaults}} si zapomni, kar ste spremenili na tej obliki, kot začetek vsake nove oblike te vrste: mere, nastavitve oblike in njeno barvo. Valj pobarvajte zeleno in pritisnite gumb, vsak valj, ki ga dodate potem, bo zelen; druge vrste obdržijo svoje barve. {{ui:inspector.resetDefaults}} vrne vrsto na to, s čimer jo začne program. Katere vrste imajo lastne privzete vrednosti, je označeno v nastavitvah pod {{ui:workspace.shapeDefaults}}. Z njimi se začne tudi nov načrt, ki ga začneš na začetni strani; vrednosti si zapomni ta brskalnik.
 
 Zožan ali nagnjen kvader, valj, elipsa, večkotnik, cev ali obroč obdrži svojo natančno obliko, prav tako kapsula, zvezda, srce, polmesec, lastovičji rep in zaobljen kvader brez zaobljenega zgornjega in spodnjega roba: posnetja in zaokrožitve gredo nanje kot na nespremenjeno obliko, izvoz STEP pa jih zapiše. To velja tudi za zasukano obliko: njen presek se natančno vrti z njo, stranice pa se enakomerno vijejo od spodaj navzgor.
 

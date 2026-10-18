@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { makeShapeFromAsset } from "@/lib/shapeCatalog";
 import { shapeDefaultsAsset, shapeDefaultsFromShape, withShapeDefaults } from "@/lib/shapeDefaults";
-import { normalizeWorkspaceSettings } from "@/lib/workplaneSettings";
+import { normalizeWorkspaceSettings, readWorkspaceDefault, saveShapeDefaultsForNewDesigns } from "@/lib/workplaneSettings";
 
 function shapeOf(kind: Parameters<typeof shapeDefaultsAsset>[0], patch: Record<string, unknown> = {}) {
   const asset = shapeDefaultsAsset(kind);
@@ -86,5 +86,34 @@ describe("the colour is part of a shape's defaults (#483)", () => {
     const settings = normalizeWorkspaceSettings({ shapeCustomizations: { cylinder: { ...map.cylinder, height: 50 } } });
     expect(settings.shapeCustomizations.cylinder).toEqual({ color: "#2f9e44", height: 50 });
     expect(withShapeDefaults(map, "cylinder", null)).toEqual({});
+  });
+});
+
+describe("Save as default reaches new designs (#483)", () => {
+  const memoryStorage = () => {
+    const data = new Map<string, string>();
+    return { getItem: (key: string) => data.get(key) ?? null, setItem: (key: string, value: string) => void data.set(key, value), removeItem: (key: string) => void data.delete(key), clear: () => data.clear(), key: () => null, length: 0 } as unknown as Storage;
+  };
+
+  it("writes the kind's values into the default of the browser, with no other default there before", () => {
+    const storage = memoryStorage();
+    expect(saveShapeDefaultsForNewDesigns("box", { color: "#2e9d3f" }, storage)).toBe(true);
+    expect(readWorkspaceDefault(storage)?.workspace.shapeCustomizations.box?.color).toBe("#2e9d3f");
+  });
+
+  it("changes only that kind and leaves the rest of the saved default alone", () => {
+    const storage = memoryStorage();
+    saveShapeDefaultsForNewDesigns("box", { color: "#2e9d3f" }, storage);
+    saveShapeDefaultsForNewDesigns("cylinder", { color: "#aa2200" }, storage);
+    const saved = readWorkspaceDefault(storage)!.workspace;
+    expect(saved.shapeCustomizations.box?.color).toBe("#2e9d3f");
+    expect(saved.shapeCustomizations.cylinder?.color).toBe("#aa2200");
+  });
+
+  it("takes the kind back with no entry", () => {
+    const storage = memoryStorage();
+    saveShapeDefaultsForNewDesigns("box", { color: "#2e9d3f" }, storage);
+    saveShapeDefaultsForNewDesigns("box", null, storage);
+    expect(readWorkspaceDefault(storage)?.workspace.shapeCustomizations.box).toBeUndefined();
   });
 });
