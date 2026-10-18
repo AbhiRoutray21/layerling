@@ -14573,7 +14573,7 @@ function TopActionPanel({
         </div>
       ) : null}
       {panel === "export" ? (
-        <div className="export-dialog-body">
+        <div className="export-dialog-body" data-help-section-all="exporting">
           <section className="export-setting-section export-file-section">
             <label htmlFor="export-file-name">{t("export.fileName")}</label>
             <div className="export-file-input-wrap">

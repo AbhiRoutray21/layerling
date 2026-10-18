@@ -36,6 +36,8 @@ export type GuideChapter = keyof typeof GUIDE_CHAPTERS;
  */
 export const GUIDE_SECTIONS = {
   sectionView: { chapter: "view", de: "ins-innere-schauen-die-schnittansicht", en: "looking-inside-the-section-view", nl: "naar-binnen-kijken-de-doorsnede", ru: "zaglyanut-vnutr-vid-v-razreze", cs: "pohled-dovnitr-rez", sl: "pogled-v-notranjost-prerezni-pogled", hu: "belelatni-a-metszeti-nezet" },
+  viewCube: { chapter: "view", de: "der-ansichtswuerfel", en: "the-view-cube", nl: "de-weergavekubus", ru: "kub-orientatsii", cs: "orientacni-krychle", sl: "orientacijska-kocka", hu: "a-nezetkocka" },
+  cameraBar: { chapter: "view", de: "die-kameraleiste", en: "the-camera-bar", nl: "de-camerabalk", ru: "panel-kamery", cs: "lista-pohledu", sl: "vrstica-kamere", hu: "a-kamerasav" },
   gridAndSnapping: { chapter: "view", de: "gitter-und-raster", en: "grid-and-snapping", nl: "raster-en-vastklikken", ru: "setka-i-privyazka", cs: "mrizka-a-prichytavani", sl: "mreza-in-pripenjanje", hu: "racs-es-illesztes" },
   shapeSettings: { chapter: "shapes", de: "die-einstellungen-der-form", en: "the-shape-s-settings", nl: "de-instellingen-van-de-vorm", ru: "nastroyki-figury", cs: "nastaveni-tvaru", sl: "nastavitve-oblike", hu: "az-alakzat-beallitasai" },
   wrapCylinder: { chapter: "shapes", de: "um-einen-zylinder-wickeln", en: "wrapping-around-a-cylinder", nl: "om-een-cilinder-wikkelen", ru: "oborachivanie-vokrug-tsilindra", cs: "obtoceni-kolem-valce", sl: "ovijanje-okoli-valja", hu: "hengerre-tekeres" },
@@ -89,9 +91,9 @@ export const GUIDE_SECTIONS = {
   layFlat: { chapter: "select", de: "auf-eine-flaeche-legen", en: "laying-flat-on-a-face", nl: "plat-op-een-vlak-leggen", ru: "ukladka-na-gran", cs: "polozeni-na-plochu", sl: "polaganje-na-ploskev", hu: "lapra-fektetes" },
   referencePoints: { chapter: "measuring", de: "bezugspunkte", en: "reference-points", nl: "referentiepunten", ru: "opornye-tochki", cs: "referencni-body", sl: "referencne-tocke", hu: "referenciapontok" },
   addingText: { chapter: "text", de: "text-hinzufuegen", en: "adding-text", nl: "tekst-toevoegen", ru: "dobavlenie-teksta", cs: "vlozeni-textu", sl: "dodajanje-besedila", hu: "szoeveg-hozzaadasa" },
+  sketchMirror: { chapter: "sketches", de: "spiegeln", en: "mirroring", nl: "spiegelen", fr: "symetrie", ru: "zerkalnoe-otrazhenie", cs: "zrcadleni", sl: "zrcaljenje", hu: "tuekroezes", pl: "odbicie-lustrzane", da: "spejling" },
   sketchCurve: { chapter: "sketches", de: "eine-gerade-seite-kruemmen", en: "curving-a-straight-side", nl: "een-rechte-zijde-buigen", ru: "izgib-pryamoy-storony", cs: "prohnuti-prime-strany", sl: "ukrivljanje-ravne-stranice", hu: "egyenes-oldal-goerbitese" },
   commandSearch: { chapter: "shortcuts", de: "befehlssuche", en: "command-search", nl: "opdrachten-zoeken", ru: "poisk-komand", cs: "vyhledavani-prikazu", sl: "iskanje-ukazov", hu: "parancskereso" },
-  sketchMirror: { chapter: "sketches", de: "spiegeln", en: "mirroring", nl: "spiegelen", fr: "symetrie", ru: "zerkalnoe-otrazhenie", cs: "zrcadleni", sl: "zrcaljenje", hu: "tuekroezes", pl: "odbicie-lustrzane", da: "spejling" },
   interactiveHelp: { chapter: "shortcuts", de: "interaktive-hilfe", en: "interactive-help", nl: "interactieve-hulp", fr: "aide-interactive", ru: "interaktivnaya-spravka", cs: "interaktivni-napoveda", sl: "interaktivna-pomoc" },
   whatsNew: { chapter: "start", de: "neu-seit-deinem-letzten-besuch", en: "new-since-your-last-visit", nl: "nieuw-sinds-je-laatste-bezoek", ru: "novoe-s-vashego-poslednego-vizita", cs: "novinky-od-posledni-navstevy", sl: "novo-od-tvojega-zadnjega-obiska", hu: "ujdonsagok-a-legutobbi-latogatasod-ota" },
 } as const satisfies Record<string, { chapter: GuideChapter; en: string } & Partial<Record<Language, string>>>;

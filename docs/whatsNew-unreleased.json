@@ -118,5 +118,15 @@
       "de": "Wähle in der Skizze Punkte und Linien aus und klicke in der Leiste auf „Spiegeln“: an der senkrechten Achse (links-rechts), an der waagerechten (oben-unten) oder an einer geraden Linie der Skizze, die du anklickst. Die Kopie kommt auf die andere Seite, nichts ist verknüpft. Punkte auf der Achse werden geteilt, aus einer halben Form wird so ein geschlossener Umriss.",
       "en": "Select points and lines in the sketch and click Mirror in the bar: across the vertical axis (left-right), the horizontal one (top-bottom) or a straight line of the sketch that you click. The copy lands on the other side and nothing is linked. Points on the axis are shared, so a half shape becomes one closed outline."
     }
+  },
+  {
+    "title": {
+      "de": "Die Interaktive Hilfe trifft in den Werkzeugfenstern besser",
+      "en": "Interactive Help hits better inside the tool windows"
+    },
+    "body": {
+      "de": "Abbrechen, Anwenden, Felder und Schieber in einem Werkzeugfenster fragen jetzt nach dem Werkzeug selbst, etwa „Kanten fasen“, statt nach einem Wort, das in der Anleitung hundertmal steht. Die Formenbibliothek, die Objektliste und das Exportfenster antworten mit ihrem Abschnitt, ebenso der Würfel und die Kamera-Leiste zwischen ihren Knöpfen.",
+      "en": "Cancel, Apply, fields and sliders in a tool window now ask about the tool itself, for example \"Chamfer edges\", instead of a word that the guide writes a hundred times. The shape library, the object list and the Export window answer with their section, as do the view cube and the camera bar between their buttons."
+    }
   }
 ]

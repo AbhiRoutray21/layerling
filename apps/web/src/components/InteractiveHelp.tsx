@@ -102,8 +102,8 @@ export function InteractiveHelp({ onExit }: { onExit: () => void }) {
         setAsked({ state: "nothing" });
         return;
       }
-      if (!target.name) {
-        setAsked(target.guideHref ? { state: "panel", name: "", href: target.guideHref } : { state: "nothing" });
+      if (!target.name || target.sectionOnly) {
+        setAsked(target.guideHref ? { state: "panel", name: target.name, href: target.guideHref } : { state: "nothing" });
         return;
       }
       setAsked({ state: "loading", name: target.name });
@@ -199,7 +199,7 @@ export function InteractiveHelp({ onExit }: { onExit: () => void }) {
       {asked.state !== "nothing" && asked.name ? <div className="edge-modifier-target"><strong>{quoted(asked.name)}</strong></div> : null}
       {asked.state === "loading" ? <p className="interactive-help-note">{t("interactiveHelp.loading")}</p> : null}
       {asked.state === "noIndex" ? <p className="interactive-help-note">{t("interactiveHelp.noIndex")}</p> : null}
-      {asked.state === "panel" ? <p className="interactive-help-note">{t("interactiveHelp.panelOnly")}</p> : null}
+      {asked.state === "panel" ? <p className="interactive-help-note">{t(asked.name ? "interactiveHelp.sectionOnly" : "interactiveHelp.panelOnly")}</p> : null}
       {asked.state === "done" && !best ? <p className="interactive-help-note">{t("interactiveHelp.noMatch", { name: asked.name })}</p> : null}
 
       {best ? (

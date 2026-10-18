@@ -263,6 +263,7 @@ export function ShapeMenuPanel({
       style={style}
       role={role}
       aria-label={ariaLabel}
+      data-help-section-all={resizable ? "addShape" : undefined}
     >
       <div className="shape-menu-title" title={t("shapeMenu.moveHint")} {...movable.handleProps}>
         <span className="shape-menu-title-text">

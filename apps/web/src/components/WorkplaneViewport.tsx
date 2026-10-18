@@ -8528,6 +8528,7 @@ export function WorkplaneViewport({
       <div
         className={`view-cube ${viewCubeDragging ? "dragging" : ""}`}
         aria-label={t("view.cube")}
+        data-help-section="viewCube"
         onPointerDown={handleViewCubePointerDown}
         onPointerMove={handleViewCubePointerMove}
         onPointerUp={endViewCubeDrag}
@@ -8544,7 +8545,7 @@ export function WorkplaneViewport({
         </div>
       </div>
 
-      <div className={`camera-controls ${cameraControlsCollapsed ? "collapsed" : ""}`} aria-label={t("camera.controls")}>
+      <div className={`camera-controls ${cameraControlsCollapsed ? "collapsed" : ""}`} aria-label={t("camera.controls")} data-help-section="cameraBar">
         {cameraControlsCollapsed ? (
           <button className="camera-controls-toggle" aria-label={t("camera.show")} title={t("camera.showShort")} aria-expanded={false} onClick={() => setCameraControlsCollapsed(false)}>
             <ChevronRight size={24} strokeWidth={2.25} aria-hidden="true" />
