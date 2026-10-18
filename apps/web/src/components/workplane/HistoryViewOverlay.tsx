@@ -60,8 +60,8 @@ export function HistoryViewOverlay({
   pickedCount,
   onBringBack,
   openGroups,
-  canEditGroup,
-  onEditGroup,
+  canOpenGroup,
+  onOpenGroup,
   onBackOut,
   onIndexChange,
   onExport,
@@ -84,10 +84,10 @@ export function HistoryViewOverlay({
   onBringBack: () => void;
   /** The names of the groups opened to look inside, outermost first. */
   openGroups: string[];
-  /** Whether exactly one group is picked, which Edit group opens. */
-  canEditGroup: boolean;
+  /** Whether exactly one group is picked, which Open group opens. */
+  canOpenGroup: boolean;
   /** Lays out the parts of the picked group to pick from; nothing changes. */
-  onEditGroup: () => void;
+  onOpenGroup: () => void;
   /** Closes the innermost open group again. */
   onBackOut: () => void;
   onIndexChange: (index: number) => void;
@@ -129,11 +129,11 @@ export function HistoryViewOverlay({
           event.preventDefault();
           event.stopPropagation();
           onClose();
-        } else if (event.key.toLowerCase() === "e" && !event.ctrlKey && !event.metaKey && !event.altKey && canEditGroup) {
+        } else if (event.key.toLowerCase() === "e" && !event.ctrlKey && !event.metaKey && !event.altKey && canOpenGroup) {
           // E opens the selected group, as in the design.
           event.preventDefault();
           event.stopPropagation();
-          onEditGroup();
+          onOpenGroup();
         }
       }}
     >
@@ -211,9 +211,9 @@ export function HistoryViewOverlay({
           <Trash2 size={16} aria-hidden="true" />
           {t("historyView.delete")}
         </button>
-        <button type="button" className="secondary" disabled={!canEditGroup} title={canEditGroup ? t("historyView.editGroupHint") : t("historyView.editGroupNothing")} data-testid="history-view-edit-group" onClick={onEditGroup}>
+        <button type="button" className="secondary" disabled={!canOpenGroup} title={canOpenGroup ? t("historyView.openGroupHint") : t("historyView.openGroupNothing")} data-testid="history-view-open-group" onClick={onOpenGroup}>
           <FolderOpen size={16} aria-hidden="true" />
-          {t("group.edit")} (E)
+          {t("historyView.openGroup")} (E)
         </button>
         <button type="button" className="secondary" disabled={pickedCount === 0} title={pickedCount === 0 ? t("historyView.bringBackNothing") : t("historyView.bringBackHint")} data-testid="history-view-bring-back" onClick={onBringBack}>
           <ArchiveRestore size={16} aria-hidden="true" />

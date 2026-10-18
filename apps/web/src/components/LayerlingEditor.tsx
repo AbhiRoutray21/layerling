@@ -12462,8 +12462,8 @@ export function LayerlingEditor({
           pickedCount={historyView.picked.length}
           onBringBack={() => historyView.bringBack(historyViewState.index, historyView.picked)}
           openGroups={historyView.open.map(displayShapeName)}
-          canEditGroup={Boolean(historyView.pickedGroup)}
-          onEditGroup={historyView.openPickedGroup}
+          canOpenGroup={Boolean(historyView.pickedGroup)}
+          onOpenGroup={historyView.openPickedGroup}
           onBackOut={historyView.backOut}
           onIndexChange={(index) => setHistoryViewIndex(Math.min(Math.max(0, index), Math.max(0, history.length - 1)))}
           onExport={() => setTopPanel((current) => (current === "export" ? null : "export"))}
