@@ -42,7 +42,7 @@ Et design åbner som du forlod det: visningens vinkel, zoom og position gemmes m
 
 ## Kigge indeni: snitvisningen
 
-{{ui:camera.sectionView}}, den sidste knap i bjælken (skæreværktøjet), skærer visningen op langs et plan så du kan tjekke vægge, hulrum og dele der passer ind i hinanden. Intet skæres for alvor: designet, dets filer og hver eksport forbliver hele.
+{{ui:camera.sectionView}}, den sidste knap i bjælken (skæreværktøjet), skærer visningen op langs et plan så du kan tjekke vægge, hulrum og dele der passer ind i hinanden. Intet skæres for alvor: designet, dets filer og hver eksport forbliver hele. Hvor planet går gennem et legeme, er snittet fyldt med legemets farve, lidt mørkere, og et hul i det forbliver tomt, så du kan se fast fra hult; den fyldte flade dukker op et øjeblik efter, at planet står stille.
 
 - Vælg den akse planet står på tværs af: X (bredde), Y (dybde) eller Z (højde), som i positionsfelterne. Planet starter i midten af dit design.
 - {{ui:camera.sectionCoarse}} flytter planet hen over hele designet, {{ui:camera.sectionFine}} flytter det lidt til hver side fra hvor det står, for tiendedele millimeter. Du kan også taste positionen.

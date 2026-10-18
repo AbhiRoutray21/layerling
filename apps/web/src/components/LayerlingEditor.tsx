@@ -8354,11 +8354,11 @@ export function LayerlingEditor({
    * verschiedene Farben gegeneinander freigestellt. Geschnitten wird der ganze
    * Entwurf, wie ihn die Schnittansicht zeigt - nicht nur die Auswahl.
    */
-  const buildSectionSvg = useCallback(async (axis: SectionPlaneAxis, offset: number) => {
+  const sectionBodiesAt = useCallback(async (axis: SectionPlaneAxis, offset: number) => {
     const { visible, hiddenNote } = visibleExportShapes(shapesRef.current);
     const hiddenCount = shapesRef.current.length - visible.length;
     const { solids, meshes: cut } = await exportBodiesWithLooseHoles(visible);
-    if (solids.length === 0) throw new Error(t("status.sectionSvgNothing"));
+    if (solids.length === 0) return { bodies: [], hiddenNote, hiddenCount, unionFailed: false };
     const { meshes, quellen, gescheitert } = await colorSeparatedExportMeshes(solids, cut);
     const bodies = meshes.map((mesh, index) => {
       const source = solids[quellen[index]];
@@ -8368,10 +8368,19 @@ export function LayerlingEditor({
         loops: sliceMeshContours(mesh, axis, offset),
       };
     });
+    return { bodies, hiddenNote, hiddenCount, unionFailed: gescheitert > 0 };
+  }, []);
+
+  /** The bodies of the cut with their colours, for the filled cut face of the section view (#516). */
+  const sectionBodies = useCallback(async (axis: SectionPlaneAxis, offset: number) => (await sectionBodiesAt(axis, offset)).bodies, [sectionBodiesAt]);
+
+  const buildSectionSvg = useCallback(async (axis: SectionPlaneAxis, offset: number) => {
+    const { bodies, hiddenNote, hiddenCount, unionFailed } = await sectionBodiesAt(axis, offset);
+    if (bodies.length === 0) throw new Error(t("status.sectionSvgNothing"));
     const result = sectionSvgDocument(bodies, axis, offset, `${projectName} - ${sectionAxisLetter(axis)} ${formatSectionOffset(offset)} mm`);
     if (!result) throw new Error(t("status.sectionSvgMissed"));
-    return { result, hiddenNote, hiddenCount, unionFailed: gescheitert > 0 };
-  }, [projectName]);
+    return { result, hiddenNote, hiddenCount, unionFailed };
+  }, [projectName, sectionBodiesAt]);
 
   /** Die Umrisse des Schnitts fuer das Messen - dieselben Koerper wie beim SVG. */
   const sectionContours = useCallback(async (axis: SectionPlaneAxis, offset: number) => {
@@ -12410,6 +12419,7 @@ export function LayerlingEditor({
           onThemePreferenceChange={onThemePreferenceChange}
           onExportSectionSvg={(axis, offset) => void exportSectionSvg(axis, offset)}
           onSectionContours={sectionContours}
+          onSectionBodies={sectionBodies}
           />
         )}
       </div>

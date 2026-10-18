@@ -102,6 +102,8 @@ export type ThreeState = {
   rotationHandleSides: RotationHandleSides | null;
   sectionPlane: THREE.Plane | null;
   sectionPlaneHelper: THREE.Group | null;
+  /** The filled cut face of the section view (#516). */
+  sectionCapGroup: THREE.Group | null;
   /** The scene's lights, so the settings can change how punchy the shading is. */
   lights: { ambient: THREE.HemisphereLight; key: THREE.DirectionalLight; fill: THREE.DirectionalLight };
   disposeInteractionListeners: () => void;

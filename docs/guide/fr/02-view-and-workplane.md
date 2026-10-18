@@ -44,7 +44,7 @@ Un design s'ouvre comme vous l'avez laissé : l'angle, le zoom et la position de
 
 ## Regarder à l'intérieur : la vue en coupe
 
-{{ui:camera.sectionView}}, le dernier bouton de la barre (l'outil de coupe), coupe la vue ouverte le long d'un plan afin que vous puissiez vérifier les murs, les cavités et les pièces qui s'emboîtent les unes dans les autres. Rien n'est coupé pour vrai : le design, ses fichiers et chaque export restent entiers.
+{{ui:camera.sectionView}}, le dernier bouton de la barre (l'outil de coupe), coupe la vue ouverte le long d'un plan afin que vous puissiez vérifier les murs, les cavités et les pièces qui s'emboîtent les unes dans les autres. Rien n'est coupé pour vrai : le design, ses fichiers et chaque export restent entiers. Là où le plan traverse un corps plein, la coupe est remplie de la couleur du corps, un peu plus foncée, et un évidement à l'intérieur reste vide, de sorte qu'on distingue le plein du creux ; la face remplie apparaît un instant après que le plan s'est arrêté.
 
 - Choisissez l'axe sur lequel se situe le plan : X (largeur), Y (profondeur) ou Z (hauteur), comme dans les champs de position. L'avion commence au milieu de votre dessin.
 - {{ui:camera.sectionCoarse}} déplace le plan sur tout le dessin, {{ui:camera.sectionFine}} le déplace un peu de chaque côté de son emplacement, sur des dixièmes de millimètre. Vous pouvez également saisir le poste.

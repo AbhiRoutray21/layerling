@@ -8,5 +8,15 @@
       "de": "„Gruppe auflösen“ blieb grau, sobald eine Gruppe eine Fase oder Rundung bekommen hatte. Jetzt nimmt der Knopf die Kantenmerkmale zuerst zurück und löst die Gruppe dann auf, in einem Schritt, den Strg+Z rückgängig macht. Außerdem bleibt das Fase- oder Rundungs-Werkzeug offen, wenn du ein Merkmal zurücknimmst.",
       "en": "Ungroup stayed grey as soon as a group had got a fillet or chamfer. Now the button takes the edge features back first and then dissolves the group, in one step that Ctrl+Z undoes. And the Fillet or Chamfer tool stays open when you take a feature back."
     }
+  },
+  {
+    "title": {
+      "de": "Die Schnittansicht füllt die Schnittfläche",
+      "en": "The section view fills the cut face"
+    },
+    "body": {
+      "de": "In der Schnittansicht war der Schnitt offen, Massives und Aussparungen sahen innen gleich aus. Jetzt ist der Schnitt dort, wo die Ebene durch einen Körper geht, in dessen etwas dunklerer Farbe gefüllt, und eine Aussparung darin bleibt leer. Die gefüllte Fläche erscheint einen Moment, nachdem die Ebene stillsteht.",
+      "en": "In the section view the cut was left open, and a solid and a hole looked the same inside. Where the plane goes through a body, the cut is now filled with its colour, a little darker, and a hole inside it stays empty. The filled face appears a moment after the plane stops moving."
+    }
   }
 ]

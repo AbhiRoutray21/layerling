@@ -46,7 +46,7 @@ Een ontwerp opent zoals je het hebt achtergelaten: de hoek, de zoom en de positi
 
 ## Naar binnen kijken: de doorsnede
 
-{{ui:camera.sectionView}}, de laatste knop in de balk (het snijgereedschap), knipt de weergave open langs een vlak, zodat je wanden, holtes en in elkaar passende onderdelen kunt controleren. Er wordt niets echt doorgesneden: het ontwerp, de bestanden en elke export blijven heel.
+{{ui:camera.sectionView}}, de laatste knop in de balk (het snijgereedschap), knipt de weergave open langs een vlak, zodat je wanden, holtes en in elkaar passende onderdelen kunt controleren. Er wordt niets echt doorgesneden: het ontwerp, de bestanden en elke export blijven heel. Waar het vlak door een lichaam gaat, is de snede gevuld met de iets donkerdere kleur van het lichaam, en een uitsparing erin blijft leeg, zo zie je massief en hol; het gevulde vlak verschijnt een moment nadat het vlak stilstaat.
 
 - Kies de as waar het vlak dwars op staat: X (breedte), Y (diepte) of Z (hoogte), zoals in de positievelden. Het vlak begint in het midden van je ontwerp.
 - {{ui:camera.sectionCoarse}} verschuift het vlak over het hele ontwerp, {{ui:camera.sectionFine}} verschuift het een klein stukje naar weerszijden van waar het staat, voor tienden van een millimeter. Je kunt de positie ook typen.

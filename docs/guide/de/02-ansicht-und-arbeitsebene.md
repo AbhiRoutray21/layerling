@@ -48,7 +48,7 @@ Ein Entwurf öffnet sich so, wie du ihn verlassen hast: Blickwinkel, Zoom und Au
 
 ## Ins Innere schauen: die Schnittansicht
 
-{{ui:camera.sectionView}}, der letzte Knopf der Leiste (das Schnittwerkzeug), schneidet die Ansicht entlang einer Ebene auf. So prüfst du Wände, Hohlräume und Teile, die ineinandergreifen. Geschnitten wird nur die Ansicht: Entwurf, Dateien und jeder Export bleiben vollständig.
+{{ui:camera.sectionView}}, der letzte Knopf der Leiste (das Schnittwerkzeug), schneidet die Ansicht entlang einer Ebene auf. So prüfst du Wände, Hohlräume und Teile, die ineinandergreifen. Geschnitten wird nur die Ansicht: Entwurf, Dateien und jeder Export bleiben vollständig. Wo die Ebene durch einen Körper geht, ist der Schnitt in der etwas dunkleren Farbe des Körpers gefüllt, und eine Aussparung darin bleibt leer, so erkennst du Massives und Hohles; die gefüllte Fläche erscheint einen Moment, nachdem die Ebene stillsteht.
 
 - Wähle die Achse, quer zu der die Ebene steht: X (Breite), Y (Tiefe) oder Z (Höhe), wie bei den Positionsfeldern. Sie beginnt in der Mitte deines Entwurfs.
 - {{ui:camera.sectionCoarse}} schiebt die Ebene über den ganzen Entwurf, {{ui:camera.sectionFine}} nur ein Stück um ihre aktuelle Stelle, für Zehntelmillimeter. Die Position kannst du auch eintippen.

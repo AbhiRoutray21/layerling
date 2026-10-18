@@ -6,7 +6,8 @@ import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, typ
 import { objectSnapOffset, shiftSnapBox, type ObjectSnapGuide, type SnapBox } from "@/lib/objectSnap";
 import { useMovablePanel, type MovablePanelOptions } from "@/lib/useMovablePanel";
 import { computeSectionPlaneVector, DEFAULT_SECTION_SETTINGS, getSectionBounds, SECTION_AXES_SHOWN, sectionAxisLetter, sectionFineWindow, sectionPlacementWorkplane, type SectionPlaneAxis, type SectionPlaneSettings } from "@/lib/sectionView";
-import { projectSectionPoint, type SectionLoop, type SectionPoint } from "@/lib/sectionSvg";
+import { projectSectionPoint, type SectionBody, type SectionLoop, type SectionPoint } from "@/lib/sectionSvg";
+import { sectionCapMesh } from "@/lib/sectionCaps";
 import { circleOfLoop, sectionMeasurement, sectionPointToWorld, snapSectionPoint, type SectionSnap } from "@/lib/sectionMeasure";
 import * as THREE from "three";
 import { acceleratedRaycast, computeBoundsTree, disposeBoundsTree } from "three-mesh-bvh";
@@ -465,6 +466,8 @@ type WorkplaneViewportProps = {
   onExportSectionSvg?: (axis: SectionPlaneAxis, offset: number) => void;
   /** The cut's outlines, from the same bodies as the SVG - what section measuring snaps to. */
   onSectionContours?: (axis: SectionPlaneAxis, offset: number) => Promise<SectionLoop[]>;
+  /** The bodies of the cut with their colours, to fill the cut face of the section view (#516). */
+  onSectionBodies?: (axis: SectionPlaneAxis, offset: number) => Promise<SectionBody[]>;
 };
 
 type WorkspaceSettings = WorkplaneWorkspaceSettings;
@@ -3116,6 +3119,7 @@ export function WorkplaneViewport({
   onThemePreferenceChange,
   onExportSectionSvg,
   onSectionContours,
+  onSectionBodies,
 }: WorkplaneViewportProps) {
   const [snapOpen, setSnapOpen] = useState(false);
   // The inspector hands the snap grid control back to the workplane while collapsed or floating.
@@ -3965,6 +3969,30 @@ export function WorkplaneViewport({
     };
   }, [sectionMeasureMode, sectionSettings, shapes, onSectionContours]);
 
+  // The cut face (#516): where the plane goes through a solid it is filled, with the colour of the body a
+  // little darker, so a solid and a hole no longer look the same inside. It is made from the same bodies as
+  // the section SVG a moment after the plane or the design stops changing, and gone while they move.
+  useEffect(() => {
+    const state = threeRef.current;
+    if (state) clearSectionCaps(state);
+    if (!sectionSettings.enabled || !onSectionBodies) return;
+    const { axis, offset } = sectionSettings;
+    let cancelled = false;
+    const timer = window.setTimeout(() => {
+      onSectionBodies(axis, offset)
+        .then((bodies) => {
+          const current = threeRef.current;
+          if (cancelled || !current) return;
+          buildSectionCaps(current, bodies, axis, offset);
+        })
+        .catch(() => undefined);
+    }, 250);
+    return () => {
+      cancelled = true;
+      window.clearTimeout(timer);
+    };
+  }, [sectionSettings.enabled, sectionSettings.axis, sectionSettings.offset, shapes, onSectionBodies]);
+
   useEffect(() => {
     notesRef.current = notes;
     notesVisibleRef.current = notesVisible;
@@ -4447,6 +4475,7 @@ export function WorkplaneViewport({
         disposeObject(state.sectionPlaneHelper);
         state.sectionPlaneHelper = null;
       }
+      clearSectionCaps(state);
       disposeCutPreviewResources();
       state.renderer.dispose();
       host.replaceChildren();
@@ -9338,6 +9367,7 @@ function createThreeScene(host: HTMLDivElement): ThreeState {
     rotationHandleSides: null,
     sectionPlane: null,
     sectionPlaneHelper: null,
+    sectionCapGroup: null,
     lights: { ambient, key, fill },
     disposeInteractionListeners: () => {},
     resize,
@@ -10628,6 +10658,44 @@ function applySectionClipping(state: ThreeState | null, plane: THREE.Plane | nul
   // The faces Delete face lights up are cut like the body under them.
   state.cadFaceLayer?.children.forEach((child) => setPlanes((child as THREE.Mesh).material as THREE.Material));
 
+  state.needsRender = true;
+}
+
+function clearSectionCaps(state: ThreeState) {
+  if (!state.sectionCapGroup) return;
+  state.scene.remove(state.sectionCapGroup);
+  disposeObject(state.sectionCapGroup);
+  state.sectionCapGroup = null;
+  state.needsRender = true;
+}
+
+/** The filled cut face of the section view: one flat mesh per body, on the plane, in its colour a little darker. */
+function buildSectionCaps(state: ThreeState, bodies: readonly SectionBody[], axis: SectionPlaneAxis, offset: number) {
+  clearSectionCaps(state);
+  const group = new THREE.Group();
+  group.name = "SectionCaps";
+  for (const body of bodies) {
+    const cap = sectionCapMesh(body.loops);
+    if (cap.triangles.length === 0) continue;
+    const positions: number[] = [];
+    cap.points.forEach((point) => positions.push(...sectionPointToWorld(point, axis, offset)));
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
+    geometry.setIndex(cap.triangles);
+    const material = new THREE.MeshBasicMaterial({
+      color: new THREE.Color(body.color).multiplyScalar(0.78),
+      side: THREE.DoubleSide,
+      polygonOffset: true,
+      polygonOffsetFactor: -2,
+      polygonOffsetUnits: -2,
+    });
+    const mesh = new THREE.Mesh(geometry, material);
+    mesh.name = "SectionCap";
+    group.add(mesh);
+  }
+  if (group.children.length === 0) return;
+  state.scene.add(group);
+  state.sectionCapGroup = group;
   state.needsRender = true;
 }
 
