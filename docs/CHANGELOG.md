@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **Japanese:** The interface speaks Japanese, all of its sentences, and the guide pages have their Japanese words; the chapters are not translated yet and show in English. It is written for upper primary school children and their teachers, many of whom know Tinkercad: short sentences, plain words instead of hard compounds, and Tinkercad's Japanese terms where Tinkercad has one (デザイン for a design, シェイプ for a shape, エクスポート, ビュー). Words that are English in katakana stay as they are, such as ボディ, ミラー and フィレット, and a sentence names a button or a shape exactly as its label does. The Bricks units read ブロック and 1:1（ポッチ）, words children know.
+
 ## 1.88.0
 
 - **The Arabic guide reads from the right (#530):** The pages of the guide in Arabic get the right-to-left direction, so text, lists, tables and the chapter list read from the right; key combinations such as Ctrl+S and code blocks keep their left-to-right order. The other languages look as before. Contributed by @sevagjb.
