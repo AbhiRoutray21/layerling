@@ -15,8 +15,12 @@ import {
   GRIDFINITY_LIP_HEIGHT,
   GRIDFINITY_SCOOP_WALL_KEYS,
   createGridfinityGeometry,
+  gridfinityFloorFits,
+  gridfinityFloorHeight,
+  gridfinityFloorMaxHeight,
   gridfinityFootprintPatch,
   gridfinityLabelCornerSize,
+  gridfinityLabelFits,
   gridfinityLabelLength,
   gridfinityLabelLimits,
   gridfinityLabelledTriangles,
@@ -1006,5 +1010,136 @@ describe("gridfinity half-size grid", () => {
     // The settings an MCP action passes on keep it, and so does a half bin kept as the default for new ones.
     expect(normalizeShapeCustomizations({ gridfinity: { gridfinityHalfGrid: true } }, {})).toMatchObject({ gridfinity: { gridfinityHalfGrid: true } });
     expect(shapeDefaultsFromShape(shape)).toMatchObject({ gridfinityHalfGrid: true, width: 20.5, depth: 62.5 });
+  });
+});
+
+describe("gridfinity floor height", () => {
+  let runtime: ManifoldToplevel;
+
+  beforeAll(async () => {
+    runtime = await manifoldModule();
+    runtime.setup();
+  });
+
+  /** The inside of a 2 x 1 bin: 81.6 x 39.6 mm with corners of 2.8 mm. */
+  const insideArea = 81.6 * 39.6 - (4 - Math.PI) * 2.8 * 2.8;
+
+  it("leaves a bin with the floor unset or at 5.95 mm, a bin of 1 height unit with the lip and a baseplate exactly as they were", () => {
+    expect(gridfinityTriangles(bin({ gridfinityFloorHeight: 5.95 }))).toEqual(gridfinityTriangles(bin()));
+    expect(gridfinityTriangles(bin({ gridfinityFloorHeight: 2 }))).toEqual(gridfinityTriangles(bin()));
+    // 1 unit with the lip: its support reaches the wall at 7 - 1.65 = 5.35, under the floor, so there is nothing to raise.
+    const low = { height: 7 + GRIDFINITY_LIP_HEIGHT };
+    expect(gridfinityFloorFits(bin(low))).toBe(false);
+    expect(gridfinityTriangles(bin({ ...low, gridfinityFloorHeight: 20 }))).toEqual(gridfinityTriangles(bin(low)));
+    expect(gridfinityTriangles(plate({ gridfinityFloorHeight: 4 }))).toEqual(gridfinityTriangles(plate()));
+  });
+
+  it("rises to where the lip's support leaves the wall, 1.65 mm under the top, or to the top of a bin without the lip", () => {
+    expect(gridfinityFloorHeight(bin())).toBeCloseTo(5.95, 9);
+    expect(gridfinityFloorMaxHeight(bin())).toBeCloseTo(19.35, 9);
+    expect(gridfinityFloorHeight(bin({ gridfinityFloorHeight: 30 }))).toBeCloseTo(19.35, 9);
+    expect(gridfinityFloorHeight(bin({ gridfinityFloorHeight: 12 }))).toBe(12);
+    expect(gridfinityFloorMaxHeight(bin({ gridfinityLip: false, height: 21 }))).toBe(21);
+    expect(gridfinityFloorFits(bin({ gridfinityLip: false, height: 7 }))).toBe(true);
+    expect(gridfinityFloorMaxHeight(bin({ gridfinityLip: false, height: 7 }))).toBe(7);
+    // The feet of a bin stacked on the lip reach 0.35 mm into it: the highest floor stays 1.3 mm under them.
+    expect(gridfinityFloorMaxHeight(bin())).toBeLessThanOrEqual(21 - 0.35 - 1.3 + 1e-9);
+    // Within 0.05 mm of the highest it is raised onto it, so no sliver of wall is left.
+    expect(gridfinityFloorHeight(bin({ gridfinityFloorHeight: 19.32 }))).toBeCloseTo(19.35, 9);
+    expect(gridfinityFloorHeight(bin({ gridfinityFloorHeight: 19.2 }))).toBe(19.2);
+    expect(gridfinityFloorHeight(bin({ gridfinityLip: false, height: 21, gridfinityFloorHeight: 20.99 }))).toBe(21);
+    // 0.05 under the highest, where the field's 0.05 mm steps end, is raised onto it too.
+    expect(gridfinityFloorHeight(bin({ gridfinityLip: false, height: 21, gridfinityFloorHeight: 20.95 }))).toBe(21);
+    expect(gridfinityFloorHeight(bin({ gridfinityLip: false, height: 21, gridfinityFloorHeight: 20.9 }))).toBe(20.9);
+  });
+
+  it("fills the bin up to the floor: the inside's area times the rise", () => {
+    // Within 0.1 %: the mesh draws the 2.8 mm corners as polygons.
+    const plain = signedVolume(gridfinityTriangles(bin()));
+    const raised = (gridfinityFloorHeight: number) => signedVolume(gridfinityTriangles(bin({ gridfinityFloorHeight }))) - plain;
+    expect(raised(10) / (insideArea * (10 - 5.95))).toBeCloseTo(1, 3);
+    expect(raised(30) / (insideArea * (19.35 - 5.95))).toBeCloseTo(1, 3);
+  });
+
+  it("leaves a bin without the lip raised to the top as one solid block", () => {
+    const triangles = gridfinityTriangles(bin({ gridfinityLip: false, height: 21, gridfinityFloorHeight: 21 }));
+    // At 15 mm up the only walls a line crosses are the outer ones.
+    expect(crossings(triangles, 15)).toHaveLength(2);
+    crossings(triangles, 15).forEach((x, i) => expect(x).toBeCloseTo([-41.75, 41.75][i], 9));
+    expect(bounds(triangles).max[1]).toBe(21);
+  });
+
+  it("is closed, wound outwards and one piece at any height, with the lip or without, shelves, scoops, magnets and the half-size grid", () => {
+    for (const fields of [
+      { gridfinityFloorHeight: 10 },
+      { gridfinityFloorHeight: 19.35 },
+      { gridfinityFloorHeight: 19.345 },
+      { gridfinityFloorHeight: 19.34 },
+      { gridfinityFloorHeight: 30, gridfinityMagnets: true },
+      { gridfinityLip: false, height: 21, gridfinityFloorHeight: 21 },
+      { gridfinityLip: false, height: 21, gridfinityFloorHeight: 20.99 },
+      { gridfinityLip: false, height: 21, gridfinityFloorHeight: 20.999 },
+      { gridfinityLip: false, height: 7, gridfinityFloorHeight: 7 },
+      { gridfinityFloorHeight: 9, gridfinityScoopFront: true, gridfinityScoopLeft: true, gridfinityLabelBack: true },
+      { height: 42 + GRIDFINITY_LIP_HEIGHT, gridfinityFloorHeight: 20, gridfinityScoopBack: true, gridfinityLabelFront: true, gridfinityLabelLeft: true },
+      { gridfinityFloorHeight: 15.5, gridfinityLabelBack: true, gridfinityLabelFront: true },
+      { gridfinityHalfGrid: true, width: 20.5, depth: 41.5, gridfinityFloorHeight: 12, gridfinityMagnets: true },
+    ]) {
+      const triangles = gridfinityLabelledTriangles(runtime, bin(fields));
+      expect(edgeProblems(triangles)).toBe(0);
+      expect(signedVolume(triangles)).toBeGreaterThan(0);
+      expect(components(triangles)).toBe(1);
+    }
+  });
+
+  it("starts the scoops on the raised floor, narrows the shelves above it, and leaves both out once it leaves them no room", () => {
+    // A scoop rises from the floor to the lip's support: 21 - 10 - 1.65 = 9.35 mm, half of it by default.
+    expect(gridfinityScoopRadius(bin({ gridfinityScoopFront: true, gridfinityFloorHeight: 10 }))).toBeCloseTo(4.675, 9);
+    expect(gridfinityScoopPieces(bin({ gridfinityScoopFront: true, gridfinityFloorHeight: 10 }))!.floor).toBe(10);
+    // It needs 3.5 + 0.5 mm: up to a floor of 21 - 1.65 - 4 = 15.35.
+    expect(gridfinityScoopFits(bin({ gridfinityFloorHeight: 15.35 }))).toBe(true);
+    expect(gridfinityScoopFits(bin({ gridfinityFloorHeight: 15.4 }))).toBe(false);
+    expect(gridfinityScoopPieces(bin({ gridfinityScoopFront: true, gridfinityFloorHeight: 15.4 }))).toBeNull();
+    // A shelf's underside ends 0.5 mm above the floor and the narrowest shelf is 4 mm: up to a floor of
+    // 21 - 0.85 - 1.2 - 0.5 - 4 tan 36 = 15.54.
+    expect(gridfinityLabelPieces(bin({ gridfinityLabelBack: true, gridfinityFloorHeight: 15.5 }))!.floor).toBe(15.5);
+    // With the floor at 10 the widest shelf is (21 - 0.85 - 1.2 - 10 - 0.5) / tan 36 = 11.70 mm, under the 14 mm it has by default.
+    const [shelf] = gridfinityLabelPieces(bin({ gridfinityLabelBack: true, gridfinityFloorHeight: 10 }))!.shelves;
+    expect(shelf.profile.width).toBeCloseTo((21 - 0.85 - 1.2 - 10 - 0.5) / Math.tan((36 * Math.PI) / 180), 9);
+    expect(gridfinityLabelFits(bin({ gridfinityFloorHeight: 15.5 }))).toBe(true);
+    expect(gridfinityLabelFits(bin({ gridfinityFloorHeight: 15.6 }))).toBe(false);
+    expect(gridfinityLabelPieces(bin({ gridfinityLabelBack: true, gridfinityFloorHeight: 15.6 }))).toBeNull();
+    expect(gridfinityLabelledTriangles(runtime, bin({ gridfinityLabelBack: true, gridfinityScoopFront: true, gridfinityFloorHeight: 16 }))).toEqual(gridfinityTriangles(bin({ gridfinityFloorHeight: 16 })));
+  });
+
+  it("keeps the floor height through a saved project, the settings and the exact body", async () => {
+    const settings = { gridfinityFloorHeight: 12.5 };
+    const shape = canonicalizeShape(binShape(settings));
+    expect(workplaneShapesEqual(shape, { ...shape, gridfinityFloorHeight: 13 })).toBe(false);
+    const exported = await exportLylProject({
+      projectId: "floor",
+      projectName: "Floor",
+      createdAt: 1_700_000_000_000,
+      modifiedAt: 1_700_000_100_000,
+      shapes: [shape],
+      history: [editorHistoryEntry([shape], [])],
+      historyIndex: 0,
+      assets: [],
+      workspace: DEFAULT_WORKPLANE_WORKSPACE,
+      snapGrid: DEFAULT_SNAP_GRID,
+      placementElevation: 0,
+    });
+    const [loaded] = (await importLylProject(exported)).shapes;
+    expect(workplaneShapesEqual(loaded, shape)).toBe(true);
+    expect(loaded).toMatchObject(settings);
+    expect(sceneShape(shape)).toMatchObject(settings);
+    expect(cadModifierGridfinityForShape(shape)).toMatchObject(settings);
+    expect(normalizeShapeCustomizations({ gridfinity: settings }, {})).toMatchObject({ gridfinity: settings });
+    expect(shapeDefaultsFromShape(shape)).toMatchObject(settings);
+    const asset = toolbarShapeAssets.find((entry) => entry.kind === "gridfinity")!;
+    expect(makeShapeFromAsset(asset, { x: 0, z: 0 }, settings)).toMatchObject(settings);
+    // The mesh that booleans and the exact body's check use has the raised floor.
+    const meshVolume = (s: WorkplaneShape) => { const { vertices, faces } = meshForShape(s); return signedVolume(faces.map((face) => face.map((i) => vertices[i]) as V[])); };
+    expect((meshVolume(shape) - meshVolume(canonicalizeShape(binShape({})))) / (insideArea * (12.5 - 5.95))).toBeCloseTo(1, 3);
   });
 });

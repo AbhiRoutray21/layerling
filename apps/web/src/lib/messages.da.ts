@@ -1802,6 +1802,8 @@ export const MESSAGES_DA: Partial<Record<MessageKey, string>> = {
   "prop.gridfinityMagnets": "Magnethuller",
   "prop.gridfinityHalfGrid": "Halvt gitter (21 mm)",
   "gridfinity.halfGridHint": "Enheder i bredden og dybden tæller celler på 21 mm, hver med sin egen fod; fire står i én fordybning i bundpladen.",
+  "prop.gridfinityFloorHeight": "Bundens højde",
+  "gridfinity.floorHeightHint": "Op til denne højde, målt fra undersiden, er bakken massiv: et emne, du kan skære former ud i.",
   "prop.gridfinityLabelBack": "Etiketliste bagtil",
   "prop.gridfinityLabelFront": "Etiketliste fortil",
   "prop.gridfinityLabelLeft": "Etiketliste til venstre",

@@ -1852,6 +1852,8 @@ export const MESSAGES_HU: Partial<Record<MessageKey, string>> = {
   "prop.gridfinityMagnets": "Mágneslyukak",
   "prop.gridfinityHalfGrid": "Fél rács (21 mm)",
   "gridfinity.halfGridHint": "A szélességi és mélységi egységek 21 mm-es cellákat számolnak, mindegyiknek saját lába van; négy áll az alapkeret egy fészkében.",
+  "prop.gridfinityFloorHeight": "Fenékmagasság",
+  "gridfinity.floorHeightHint": "Eddig a magasságig, az aljától mérve, a rekesz tömör: nyersdarab, amelybe formákat vághatsz.",
   "prop.gridfinityLabelBack": "Címkepolc hátul",
   "prop.gridfinityLabelFront": "Címkepolc elöl",
   "prop.gridfinityLabelLeft": "Címkepolc a bal oldalon",

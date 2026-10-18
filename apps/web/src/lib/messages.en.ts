@@ -1906,6 +1906,8 @@ export const MESSAGES_EN = {
   "prop.gridfinityMagnets": "Magnet holes",
   "prop.gridfinityHalfGrid": "Half-size grid (21 mm)",
   "gridfinity.halfGridHint": "Units across and deep count cells of 21 mm, each with a foot of its own; four stand in one socket of a baseplate.",
+  "prop.gridfinityFloorHeight": "Floor height",
+  "gridfinity.floorHeightHint": "The bin is solid from its underside up to this height, a blank to cut shapes into.",
   "prop.gridfinityLabelBack": "Label shelf at the back",
   "prop.gridfinityLabelFront": "Label shelf at the front",
   "prop.gridfinityLabelLeft": "Label shelf on the left",

@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "title": {
+      "de": "Angehobener Boden für Gridfinity-Behälter",
+      "en": "Raised floor for Gridfinity bins"
+    },
+    "body": {
+      "de": "Ein Gridfinity-Behälter kann jetzt einen angehobenen Boden haben: Bis zur „Bodenhöhe“, die du im Eigenschaften-Fenster einstellst, ist er massiv - ein Rohling, in den du die Formen deiner Werkzeuge schneidest.",
+      "en": "A Gridfinity bin can now have a raised floor: set \"Floor height\" in the Properties panel, and the bin is solid up to it, a blank to cut the shapes of your tools into."
+    }
+  }
+]

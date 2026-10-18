@@ -1905,6 +1905,8 @@ export const MESSAGES_NL: Record<MessageKey, string> = {
   "prop.gridfinityMagnets": "Magneetgaten",
   "prop.gridfinityHalfGrid": "Half raster (21 mm)",
   "gridfinity.halfGridHint": "Eenheden breed en diep tellen cellen van 21 mm, elk met een eigen voet; vier staan in één vak van een draagplaat.",
+  "prop.gridfinityFloorHeight": "Bodemhoogte",
+  "gridfinity.floorHeightHint": "Tot deze hoogte, gemeten vanaf de onderkant, is de bak massief: een blok om vormen in uit te snijden.",
   "prop.gridfinityLabelBack": "Labelplank achter",
   "prop.gridfinityLabelFront": "Labelplank voor",
   "prop.gridfinityLabelLeft": "Labelplank links",

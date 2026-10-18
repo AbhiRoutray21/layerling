@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **Raised floor for Gridfinity bins (#455):** A bin with a raised inner floor, a blank to cut the shapes of tools into, had to be made by grouping a box into it. A Gridfinity bin now has **Floor height**, measured from the underside of the bin (5.95 mm until it is set), and the bin is solid up to it. At the highest, where the lip's support leaves the wall (19.35 mm in a bin of 3 units), the lip stays whole and the feet of a stacked bin stay 1.3 mm clear; without the lip the floor goes up to the top, and the bin is a solid block. A bin of 1 height unit with the lip has no room for it. Finger scoops start on the raised floor and label shelves can reach less far out above it; once the floor leaves them no room, their switches go until it is lowered again. The bin stays an exact body for the STEP export. Also through the MCP action `layerling_create_shape` with `gridfinityFloorHeight`. Suggested by @tskmstr. Contributed by @mlugo-apx.
+
 ## 1.90.0
 
 - **Custom shapes keep their pinned notes (#109):** A custom shape saved from bodies that had notes pinned to them takes the notes along. When the shape is put into a design they come in closed, pinned to the new bodies and with new numbers: if the design already has the notes 1 to 3, the shape's two notes become 4 and 5. Free notes and reference points belong to the design and stay behind; a design that has no room for more notes takes as many as fit and says so. The guide's chapter on custom shapes says so too. Contributed by @gogades.

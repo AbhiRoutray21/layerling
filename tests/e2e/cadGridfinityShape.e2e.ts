@@ -204,6 +204,42 @@ describe("exact Gridfinity bodies", () => {
     expect(overlap(cad.translate(quarters, 0.3, 0, 0), socket)).toBeGreaterThan(1);
   });
 
+  it("raises the floor as one valid solid with the mesh's volume and box, up to a solid block", () => {
+    for (const part of [
+      bin({ gridfinityFloorHeight: 10 }),
+      // The highest with the lip, 21 - 1.65, and just under it, which is raised onto it.
+      bin({ gridfinityFloorHeight: 19.35, gridfinityMagnets: true }),
+      bin({ gridfinityFloorHeight: 19.33 }),
+      // Without the lip up to the top: no inside at all.
+      bin({ gridfinityLip: false, height: 21, gridfinityFloorHeight: 21 }),
+      bin({ gridfinityLip: false, height: 21, gridfinityFloorHeight: 20.99 }),
+      bin({ height: 42 + GRIDFINITY_LIP_HEIGHT, gridfinityFloorHeight: 20, gridfinityScoopFront: true, gridfinityScoopRight: true, gridfinityLabelBack: true }),
+      bin({ gridfinityHalfGrid: true, width: 20.5, depth: 41.5, gridfinityFloorHeight: 12 }),
+    ]) {
+      const solid = gridfinityPartSolid(cad, part);
+      expect(cad.isValid(solid)).toBe(true);
+      const exact = Math.abs(cad.getVolume(solid));
+      expect(Math.abs(exact - meshVolume(part)) / exact).toBeLessThan(0.002);
+      const box = cad.getBoundingBox(solid);
+      const { min, max } = meshBounds(part);
+      [box.xmin - min[0], box.ymin - min[1], box.zmin - min[2], box.xmax - max[0], box.ymax - max[1], box.zmax - max[2]].forEach((d) => expect(Math.abs(d)).toBeLessThan(0.01));
+      expect(cad.getSubShapes(solid, "edge").filter((edge) => cad.getLength(edge) > 1e-9 && cad.getLength(edge) < 0.01)).toHaveLength(0);
+    }
+    // The solid block has one flat top, with no seam where an inside would have been cut.
+    const block = gridfinityPartSolid(cad, bin({ gridfinityLip: false, height: 21, gridfinityFloorHeight: 21 }));
+    const tops = cad.getSubShapes(block, "face").filter((face) => { const b = cad.getBoundingBox(face); return Math.abs(b.ymin - 21) < 1e-6 && Math.abs(b.ymax - 21) < 1e-6; });
+    expect(tops).toHaveLength(1);
+    // A bin stacked on one raised to the highest sits as on a plain one, its feet 1.3 mm above the floor: pushed 1.25 mm
+    // further down they cut into the lip only, as much as on a plain bin; 1.35 mm down they reach the floor.
+    const plain = gridfinityPartSolid(cad, bin({ width: 41.5, depth: 41.5 }));
+    const raised = gridfinityPartSolid(cad, bin({ width: 41.5, depth: 41.5, gridfinityFloorHeight: 19.35 }));
+    expect(overlap(raised, cad.translate(plain, 0, 21 - 0.34, 0))).toBeLessThan(0.01);
+    const clear = cad.translate(plain, 0, 21 - 0.35 - 1.25, 0);
+    expect(overlap(raised, clear)).toBeCloseTo(overlap(plain, clear), 2);
+    const sunk = cad.translate(plain, 0, 21 - 0.35 - 1.35, 0);
+    expect(overlap(raised, sunk)).toBeGreaterThan(overlap(plain, sunk) + 1);
+  });
+
   it("keeps a label shelf 0.5 mm under the feet of a bin stacked on it", () => {
     const plain = gridfinityPartSolid(cad, bin({ width: 41.5, depth: 41.5 }));
     const shelved = gridfinityPartSolid(cad, bin({ width: 41.5, depth: 41.5, gridfinityLabelBack: true, gridfinityLabelLeft: true }));

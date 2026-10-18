@@ -1046,6 +1046,7 @@ function tapeShapeTopologyKey(shape: WorkplaneShape): string {
     gridfinityScoopLeft: shape.gridfinityScoopLeft,
     gridfinityScoopRight: shape.gridfinityScoopRight,
     gridfinityScoopRadius: shape.gridfinityScoopRadius,
+    gridfinityFloorHeight: shape.gridfinityFloorHeight,
     // Label shelves and finger scoops are joined by Manifold; until it has loaded the bin is drawn without them (#455).
     labelKernel: shape.gridfinityLabelBack || shape.gridfinityLabelFront || shape.gridfinityLabelLeft || shape.gridfinityLabelRight || shape.gridfinityScoopBack || shape.gridfinityScoopFront || shape.gridfinityScoopLeft || shape.gridfinityScoopRight ? manifoldRevision() : undefined,
     knurlPattern: shape.knurlPattern,
@@ -1335,6 +1336,7 @@ function shapeGeometrySignature(shape: WorkplaneShape): string {
     gridfinityScoopLeft: shape.gridfinityScoopLeft,
     gridfinityScoopRight: shape.gridfinityScoopRight,
     gridfinityScoopRadius: shape.gridfinityScoopRadius,
+    gridfinityFloorHeight: shape.gridfinityFloorHeight,
     // Label shelves and finger scoops are joined by Manifold; until it has loaded the bin is drawn without them (#455).
     labelKernel: shape.gridfinityLabelBack || shape.gridfinityLabelFront || shape.gridfinityLabelLeft || shape.gridfinityLabelRight || shape.gridfinityScoopBack || shape.gridfinityScoopFront || shape.gridfinityScoopLeft || shape.gridfinityScoopRight ? manifoldRevision() : undefined,
     knurlPattern: shape.knurlPattern,
@@ -12700,6 +12702,7 @@ function createShapeObject(
         gridfinityScoopLeft: shape.gridfinityScoopLeft,
         gridfinityScoopRight: shape.gridfinityScoopRight,
         gridfinityScoopRadius: shape.gridfinityScoopRadius,
+        gridfinityFloorHeight: shape.gridfinityFloorHeight,
       })), material, shape);
       break;
     case "loft":

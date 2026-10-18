@@ -511,6 +511,7 @@ function geometryMeshForShape(shape: WorkplaneShape): MeshData | null {
         gridfinityScoopLeft: shape.gridfinityScoopLeft,
         gridfinityScoopRight: shape.gridfinityScoopRight,
         gridfinityScoopRadius: shape.gridfinityScoopRadius,
+        gridfinityFloorHeight: shape.gridfinityFloorHeight,
       });
       break;
     case "loft":

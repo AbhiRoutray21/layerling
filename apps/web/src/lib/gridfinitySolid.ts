@@ -111,7 +111,8 @@ function binSolid(cad: OcctKernel, plan: GridfinityPlan, scoops: GridfinityScoop
     cutter = cad.fillet(cutter, floorEdges, plan.floorRounding);
   }
   if (scoops) cutter = scoopedCutter(cad, cutter, scoops);
-  body = oneSolid(cad, cad.cut(body, cutter), "bin");
+  // A bin without the lip whose floor is raised to the top is one solid block, with no inside to cut.
+  if (plan.floor < wallTop) body = oneSolid(cad, cad.cut(body, cutter), "bin");
   if (plan.magnetHoles.length > 0) {
     const holes = plan.magnetHoles.map((hole) => cad.translate(cad.makeCylinder(GRIDFINITY_MAGNET_DIAMETER / 2, GRIDFINITY_MAGNET_DEPTH + PAST), hole.x, -hole.z, -PAST));
     body = oneSolid(cad, cad.cutAll(body, holes), "bin");
