@@ -32,7 +32,7 @@ export const COMMAND_KEYWORDS: Readonly<Record<string, readonly string[]>> = {
   array: ["array", "pattern", "repeat", "muster", "reihe", "kreis", "wiederholen", "vervielfachen"],
   split: ["split", "cut", "slice", "teilen", "schneiden", "trennen", "saegen", "sägen", "ebene"],
   snap: ["snap", "grid", "raster", "einrasten", "gitter"],
-  chamfer: ["chamfer", "bevel", "fase", "abschraegen", "abschrägen", "kante", "afschuinen", "rand"],
+  chamfer: ["chamfer", "chamfillet", "bevel", "fase", "abschraegen", "abschrägen", "kante", "afschuinen", "rand"],
   fillet: ["fillet", "round", "radius", "verrunden", "abrunden", "runden", "kante", "afronden", "rand"],
   simplify: ["simplify", "decimate", "reduce", "fewer triangles", "optimize", "vereinfachen", "reduzieren", "dezimieren", "weniger dreiecke", "netz", "mesh", "optimieren"],
   hollow: ["hollow", "shell", "aushoehlen", "aushöhlen", "wand", "wandstaerke", "wandstärke", "hohl"],

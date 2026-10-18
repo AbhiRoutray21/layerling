@@ -13138,12 +13138,13 @@ function getImportedMeshCache(mesh: NonNullable<WorkplaneShape["importedMesh"]>)
 
   const geometry = new THREE.BufferGeometry();
   geometry.setAttribute("position", new THREE.Float32BufferAttribute(mesh.positions, 3));
-  if (mesh.normals && mesh.normals.length === mesh.positions.length) {
+  const hasNormals = Boolean(mesh.normals && mesh.normals.length === mesh.positions.length);
+  if (hasNormals && mesh.normals) {
     geometry.setAttribute("normal", new THREE.Float32BufferAttribute(mesh.normals, 3));
   } else {
     geometry.computeVertexNormals();
   }
-  putGeometryOnBase(geometry);
+  putGeometryOnBase(geometry, hasNormals);
   geometry.userData.cached = true;
   const next = { geometry, edges: new Map<number, THREE.EdgesGeometry>() };
   importedGeometryCache.set(mesh, next);
@@ -13158,9 +13159,16 @@ function getPreservedImportedMeshGeometry(shape: WorkplaneShape) {
   const cached = preservedImportedGeometryCache.get(shape);
   if (cached) return cached;
   const geometry = new THREE.BufferGeometry();
-  geometry.setAttribute("position", new THREE.Float32BufferAttribute(resizedImportedMeshPositions(shape), 3));
-  geometry.computeVertexNormals();
-  putGeometryOnBase(geometry);
+  const positions = resizedImportedMeshPositions(shape);
+  geometry.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
+  const normals = shape.importedMesh?.normals;
+  const hasNormals = Boolean(normals && normals.length === positions.length);
+  if (hasNormals && normals) {
+    geometry.setAttribute("normal", new THREE.Float32BufferAttribute(normals, 3));
+  } else {
+    geometry.computeVertexNormals();
+  }
+  putGeometryOnBase(geometry, hasNormals);
   geometry.userData.cached = true;
   preservedImportedGeometryCache.set(shape, geometry);
   return geometry;
@@ -13349,8 +13357,10 @@ function addTextShape(group: THREE.Group, material: THREE.MeshStandardMaterial, 
   addMesh(group, geometry, material, shape);
 }
 
-function putGeometryOnBase(geometry: THREE.BufferGeometry) {
-  geometry.computeVertexNormals();
+function putGeometryOnBase(geometry: THREE.BufferGeometry, preserveNormals = false) {
+  if (!preserveNormals || !geometry.getAttribute("normal")) {
+    geometry.computeVertexNormals();
+  }
   geometry.computeBoundingBox();
   const minY = geometry.boundingBox?.min.y ?? 0;
   geometry.translate(0, -minY, 0);

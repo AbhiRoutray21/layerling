@@ -1,6 +1,6 @@
 import type { GridfinityLabelCorner, GridfinityType, ShellEdges, ShellOpenings } from "@/types/layerling";
 
-export type CadModifierKind = "chamfer" | "fillet" | "shell" | "deleteFace";
+export type CadModifierKind = "chamfer" | "chamfillet" | "fillet" | "shell" | "deleteFace";
 
 export type CadModifierEdge = {
   id: number;

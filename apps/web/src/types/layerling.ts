@@ -497,7 +497,7 @@ export type ShellEdges = "round" | "sharp";
 
 export type EdgeTreatmentFeature = {
   /** "shell" hollows the body: `amount` is then the wall thickness. "deleteFace" deletes faces and closes the gap (#451). */
-  kind: "fillet" | "chamfer" | "shell" | "deleteFace";
+  kind: "fillet" | "chamfer" | "chamfillet" | "shell" | "deleteFace";
   amount: number;
   edgeCount: number;
   /** The edges picked, as the tool numbered them on the body before this treatment: "Edit" picks them again (#227). */
