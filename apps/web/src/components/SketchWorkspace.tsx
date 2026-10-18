@@ -65,6 +65,8 @@ type SketchWorkspaceProps = {
   onPointPress: (id: string) => void;
   onSelectSegment: (id: string) => void;
   onSelectMany: (pointIds: string[], segmentIds: string[], imageIds: string[]) => void;
+  /** A window dragged with the Erase tool: takes away the points and lines inside it (#519). */
+  onEraseMany?: (pointIds: string[], segmentIds: string[]) => void;
   /** Shift+click with Select: adds the point or line to the selection, or takes it out. */
   onToggleSelect: (entity: SketchSelectableEntity) => void;
   onSelectImage: (id: string) => void;
@@ -523,6 +525,7 @@ export function SketchWorkspace({
   onPointPress,
   onSelectSegment,
   onSelectMany,
+  onEraseMany,
   onToggleSelect,
   onSelectImage,
   onUpdateImage,
@@ -1095,7 +1098,7 @@ export function SketchWorkspace({
       capturePointer(event.currentTarget, event.pointerId);
       const startPoint = event.shiftKey && activePoint ? constrainDrawing(activePoint, point) : point;
       setPointerAction({ kind: "bezier", pointerId: event.pointerId, origin: startPoint, current: startPoint });
-    } else if (tool === "select") {
+    } else if (tool === "select" || (tool === "erase" && onEraseMany)) {
       capturePointer(event.currentTarget, event.pointerId);
       setPointerAction({ kind: "marquee", pointerId: event.pointerId, origin: point, current: point, clientX: event.clientX, clientY: event.clientY });
     } else if (tool === "line" || tool === "smooth" || tool === "measure") {
@@ -1167,6 +1170,21 @@ export function SketchWorkspace({
     if (action.kind === "marquee") {
       // A click without dragging inside a closed shape selects the whole shape.
       const clicked = Math.hypot(event.clientX - action.clientX, event.clientY - action.clientY) < 4;
+      if (tool === "erase") {
+        // The Erase tool takes away what its window holds; a click on the empty plane does nothing.
+        setPointerAction(null);
+        if (clicked || !onEraseMany) return;
+        const eraseContains = (point: { x: number; z: number }) => point.x >= Math.min(action.origin.x, action.current.x) && point.x <= Math.max(action.origin.x, action.current.x) && point.z >= Math.min(action.origin.z, action.current.z) && point.z <= Math.max(action.origin.z, action.current.z);
+        onEraseMany(
+          profile.points.filter(eraseContains).map((point) => point.id),
+          profile.segments.filter((segment) => {
+            const start = pointById.get(segment.startId);
+            const end = pointById.get(segment.endId);
+            return Boolean(start && end && (eraseContains(start) || eraseContains(end) || eraseContains({ x: (start.x + end.x) / 2, z: (start.z + end.z) / 2 })));
+          }).map((segment) => segment.id),
+        );
+        return;
+      }
       const clickPoint = clicked ? unsnappedPointFromEvent(event) : null;
       const shape = clickPoint ? closedPathAt(clickPoint, paths) : null;
       if (shape) {

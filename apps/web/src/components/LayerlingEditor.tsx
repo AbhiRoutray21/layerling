@@ -4732,6 +4732,27 @@ export function LayerlingEditor({
     }
   }, [commitSketchProfile, deleteSketchImage, deleteSketchPoint, deleteSketchSegment, sketchProfile, sketchSelection]);
 
+  /** What a window dragged with the Erase tool takes away: the points and lines inside it, as the Select tool's window would pick them (#519). */
+  const eraseSketchMany = useCallback((pointIds: string[], segmentIds: string[]) => {
+    if (pointIds.length === 0 && segmentIds.length === 0) return;
+    const points = new Set(pointIds);
+    const segments = new Set(segmentIds);
+    commitSketchProfile({
+      ...sketchProfile,
+      points: sketchProfile.points.filter((point) => !points.has(point.id)),
+      segments: sketchProfile.segments.filter((segment) => !segments.has(segment.id) && !points.has(segment.startId) && !points.has(segment.endId)),
+    }, t("status.sketchSelectionRemoved"));
+    setSketchActivePointId(null);
+    setSketchSelection(null);
+  }, [commitSketchProfile, sketchProfile]);
+
+  /** The Erase button with something selected erases it, instead of only dropping the selection (#519). */
+  const chooseSketchTool = useCallback((tool: SketchTool) => {
+    const eraseSelection = tool === "erase" && sketchTool !== "erase" && Boolean(sketchSelection);
+    setActiveSketchTool(tool);
+    if (eraseSelection) deleteSelectedSketchEntity();
+  }, [deleteSelectedSketchEntity, setActiveSketchTool, sketchSelection, sketchTool]);
+
   const copySketchSelectionToClipboard = useCallback(() => {
     const copied = copySketchSelection(sketchProfile, sketchSelection);
     if (!copied) {
@@ -12097,7 +12118,7 @@ export function LayerlingEditor({
         onSketchStroke={() => setSketchStrokePanelOpen((open) => !open)}
         onStartSketch={(operation) => beginSketch(operation)}
         onEditSketch={beginSketchEdit}
-        onSketchTool={setActiveSketchTool}
+        onSketchTool={chooseSketchTool}
         onSketchPrimitive={(primitive) => addSketchPrimitive(primitive, { x: 0, z: 0 })}
         sketchShapeOptions={sketchShapeOptions}
         onSketchShapeOptions={setSketchShapeOptions}
@@ -12292,7 +12313,8 @@ export function LayerlingEditor({
             onMovePoint={moveSketchPoint}
             onTransformPoints={transformSketchPoints}
             onMoveHandle={moveSketchHandle}
-            onSelectTool={setActiveSketchTool}
+            onSelectTool={chooseSketchTool}
+            onEraseMany={eraseSketchMany}
             onInsertPoint={insertSketchPoint}
             onSetPointMode={setSketchPointMode}
             onCurveSegment={curveSketchSegmentAction}

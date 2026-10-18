@@ -58,5 +58,15 @@
       "de": "Ein schmal gezogenes Formenmenü, das am rechten Rand stand, öffnete sich beim nächsten Mal weit links, als hielte eine unsichtbare Kante es zurück. Es öffnet jetzt an der gemerkten Stelle, auch mit einer eigenen Größe.",
       "en": "A shape library that had been pulled narrow and placed at the right edge opened far to the left the next time, as if an invisible edge held it back. It now opens at the remembered spot, also at a size of its own."
     }
+  },
+  {
+    "title": {
+      "de": "Radieren in der Skizze: der Knopf löscht die Auswahl, das Werkzeug nimmt ein Fenster",
+      "en": "Erasing in the sketch: the button erases the selection, and the tool takes a window"
+    },
+    "body": {
+      "de": "Mit mehreren ausgewählten Punkten und Linien löschte der Knopf „Radieren“ sie nicht, er hob nur die Auswahl auf. Jetzt löscht er die Auswahl. Und mit dem Radieren-Werkzeug kannst du ein Fenster über mehrere Punkte und Linien ziehen: Alles darin wird gelöscht.",
+      "en": "With several points and lines selected, the Erase button did not erase them, it only dropped the selection. Now it erases the selection. And with the Erase tool you can drag a window over several points and lines: everything inside is erased."
+    }
   }
 ]
