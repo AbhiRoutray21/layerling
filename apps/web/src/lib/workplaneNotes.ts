@@ -115,3 +115,74 @@ export function isReferencePoint(note: WorkplaneNote) {
 export function referencePoints(notes: readonly WorkplaneNote[]) {
   return notes.filter(isReferencePoint);
 }
+
+function collectShapeIds(shapes: readonly WorkplaneShape[], into = new Set<string>()) {
+  for (const shape of shapes) {
+    into.add(shape.id);
+    if (shape.groupedShapes) collectShapeIds(shape.groupedShapes, into);
+  }
+  return into;
+}
+
+/**
+ * The notes pinned to one of these bodies - what a custom shape takes along
+ * (#109). Free notes and reference points belong to the design, not to a body,
+ * and stay behind.
+ */
+export function notesAttachedToShapes(notes: readonly WorkplaneNote[], shapes: readonly WorkplaneShape[]): WorkplaneNote[] {
+  const ids = collectShapeIds(shapes);
+  return notes.filter((note) => !isReferencePoint(note) && note.anchor && ids.has(note.anchor.shapeId));
+}
+
+/** Moves the notes' last known spot; a pinned note follows its body anyway. */
+export function translateNotes(notes: readonly WorkplaneNote[], dx: number, dy: number, dz: number): WorkplaneNote[] {
+  const clean = (value: number) => (Math.abs(value) < 1e-9 ? 0 : Math.round(value * 1e6) / 1e6);
+  return notes.map((note) => ({ ...note, x: clean(note.x + dx), y: clean(note.y + dy), z: clean(note.z + dz) }));
+}
+
+/**
+ * Old body id to new, for bodies copied with fresh ids: the trees are walked
+ * side by side, the parts inside groups included.
+ */
+export function shapeIdMapping(before: readonly WorkplaneShape[], after: readonly WorkplaneShape[], into = new Map<string, string>()) {
+  before.forEach((shape, index) => {
+    const copy = after[index];
+    if (!copy) return;
+    into.set(shape.id, copy.id);
+    if (shape.groupedShapes && copy.groupedShapes) shapeIdMapping(shape.groupedShapes, copy.groupedShapes, into);
+  });
+  return into;
+}
+
+/**
+ * Notes that come into a design with bodies from somewhere else (a custom
+ * shape), made to fit it: each gets a fresh id - the package was saved from
+ * some design and its note ids may well be ones this design already uses - and
+ * its pin moves over to its body's new id. A note whose body did not come
+ * along is let go, as `detachNotesFromMissingShapes` would. Each comes in
+ * closed. Only as many as the design still has room for; `dropped` says how
+ * many did not fit.
+ */
+export function notesForInsertedShapes(
+  incoming: readonly WorkplaneNote[],
+  shapeIds: ReadonlyMap<string, string>,
+  existing: readonly WorkplaneNote[],
+): { notes: WorkplaneNote[]; dropped: number } {
+  const room = Math.max(0, NOTE_COUNT_LIMIT - existing.length);
+  const taken = new Set(existing.map((note) => note.id));
+  const candidates = normalizeNotes(incoming);
+  const notes: WorkplaneNote[] = [];
+  for (const source of candidates.slice(0, room)) {
+    let id = createNoteId();
+    while (taken.has(id)) id = createNoteId();
+    taken.add(id);
+    const { anchor, ...rest } = source;
+    const shapeId = anchor ? shapeIds.get(anchor.shapeId) : undefined;
+    // Closed: an open note would sit under the pointer while the shape is
+    // still being put down, and take the click that should place it.
+    const note: WorkplaneNote = { ...rest, id, collapsed: true };
+    if (anchor && shapeId) note.anchor = { shapeId, normalized: [...anchor.normalized] };
+    notes.push(note);
+  }
+  return { notes, dropped: candidates.length - notes.length };
+}

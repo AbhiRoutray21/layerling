@@ -153,8 +153,8 @@ import { importedShapeFromObj } from "@/lib/objImport";
 import { readImportSvgWidth, readKeepSvgPage, setImportSvgWidth, storeKeepSvgPage, takeImportSvgWidth } from "@/lib/importPreferences";
 import { importFailureSummary, importModelFiles } from "@/lib/modelImport";
 import { dedupeProjectAssets } from "@/lib/projectAssets";
-import { customShapesBackupEntries, deleteMyShape, listMyShapes, myShapeNameFromFile, restoreCustomShapesFromBackup, myShapesBackupFileName, onMyShapesChanged, readMyShapePackage, renameMyShape, saveMyShape, shapesForLibrary, shapesFromLibrary, type MyShapeMeta } from "@/lib/myShapes";
-import { renderMyShapeThumbnail } from "@/lib/myShapeThumbnail";
+import { customShapesBackupEntries, deleteMyShape, listMyShapes, myShapeNameFromFile, restoreCustomShapesFromBackup, myShapesBackupFileName, onMyShapesChanged, readMyShapePackage, renameMyShape, saveMyShape, type MyShapeMeta } from "@/lib/myShapes";
+import { customShapeFingerprint, packCustomShape, placeCustomShape, type PackedCustomShape } from "@/lib/customShapePackage";
 import { packBackup, unpackBackup } from "@/lib/projectBackup";
 import { MyShapesSection, type CustomShapeEntry, type CustomShapeLocation } from "@/components/workplane/MyShapesSection";
 import { deleteServerCustomShape, listServerCustomShapes, readServerCustomShape, renameServerCustomShape, saveServerCustomShape, type ServerCustomShape } from "@/lib/customShapesServer";
@@ -8533,31 +8533,11 @@ export function LayerlingEditor({
     : null);
   const customShapeName = (id: string) => serverShapeFor(id)?.name ?? myShapesRef.current.find((shape) => shape.id === id)?.name ?? id;
 
-  /** Bodies packed as a custom shape: centred on the origin, standing on the plate, with a preview. */
-  const packCustomShape = useCallback(async (parts: WorkplaneShape[], name: string, assets: ProjectAsset[]) => {
-    const kept = shapesForLibrary(parts, boundsForShapes(parts));
-    const now = Date.now();
-    const bytes = await exportLylProject({
-      projectName: name,
-      createdAt: now,
-      modifiedAt: now,
-      shapes: kept,
-      notes: [],
-      history: [],
-      historyIndex: 0,
-      assets,
-      workspace: workspaceSettingsRef.current,
-      snapGrid: snapGridRef.current,
-      placementElevation: 0,
-    });
-    const thumbnail = renderMyShapeThumbnail(kept.map((shape) => {
-      const mesh = meshForShape(shape);
-      return { vertices: mesh.vertices, faces: mesh.faces, color: shape.color, hole: shape.hole };
-    }), 256);
-    return { bytes, thumbnail, bodyCount: kept.length, fingerprint: projectShapesFingerprint(kept), createdAt: now };
-  }, []);
+  const packCurrentCustomShape = (parts: WorkplaneShape[], name: string, assets: ProjectAsset[], notes: WorkplaneNote[]) => packCustomShape(
+    parts, name, assets, notes, { workspace: workspaceSettingsRef.current, snapGrid: snapGridRef.current },
+  );
 
-  const keepInBrowser = useCallback(async (packed: Awaited<ReturnType<typeof packCustomShape>>, name: string) => {
+  const keepInBrowser = useCallback(async (packed: PackedCustomShape, name: string) => {
     const meta: MyShapeMeta = {
       id: createLocalId("my-shape"),
       name,
@@ -8578,7 +8558,7 @@ export function LayerlingEditor({
     const wanted = new Set(ids ?? selectedIdsRef.current);
     const parts = shapesRef.current.filter((shape) => wanted.has(shape.id));
     if (parts.length === 0) throw new Error(t("myShapes.selectFirst"));
-    const packed = await packCustomShape(parts, name, projectAssetsRef.current);
+    const packed = await packCurrentCustomShape(parts, name, projectAssetsRef.current, notesRef.current);
     let entry: { id: string; name: string; location: CustomShapeLocation; bodyCount: number; byteLength: number };
     if (location === "server") {
       const saved = await saveServerCustomShape(name, packed.bytes, packed.thumbnail, t("status.myShapeNameTaken", { name }));
@@ -8591,7 +8571,7 @@ export function LayerlingEditor({
     }
     setNotice(t(location === "server" ? "status.myShapeSavedServer" : "status.myShapeSaved", { name: entry.name }));
     return entry;
-  }, [keepInBrowser, packCustomShape, refreshMyShapes, refreshServerShapes]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [keepInBrowser, refreshMyShapes, refreshServerShapes]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const readCustomShapePackage = (id: string) => {
     const server = serverShapeFor(id);
@@ -8608,18 +8588,16 @@ export function LayerlingEditor({
     const restored = await importLylProject(await readCustomShapePackage(id));
     if (projectInfoRef.current.projectId !== sourceProjectId) throw new Error(t("status.pasteCancelled"));
     if (restored.shapes.length === 0) throw new Error(t("status.insertDesignEmpty", { name }));
-    const target = point ?? placementWorkplaneRef.current.origin;
-    // Centred again on the way in: a shape on the server may have been opened
-    // and changed like a design, and moved off the middle doing so.
-    const centred = shapesForLibrary(restored.shapes, boundsForShapes(restored.shapes));
-    const inserted = shapesFromLibrary(centred, target)
-      .map((shape) => canonicalizeShape(cloneWorkplaneShapeTreeWithFreshIds(shape, "insert")));
+    const { shapes: inserted, notes: insertedNotes, dropped } = placeCustomShape(restored, point ?? placementWorkplaneRef.current.origin, notesRef.current);
     if (restored.assets.length > 0) {
       const nextAssets = dedupeProjectAssets([...projectAssetsRef.current, ...restored.assets]);
       projectAssetsRef.current = nextAssets;
       setProjectAssets(nextAssets);
     }
+    // Its notes go in with the bodies, in the same undo step.
+    if (insertedNotes.length > 0 && !historyViewStateRef.current) notesRef.current = [...notesRef.current, ...insertedNotes];
     commitShapes([...shapesRef.current, ...inserted], inserted.map((shape) => shape.id), t("status.myShapeInserted", { name }));
+    if (dropped > 0 && !historyViewStateRef.current) setNotice(t("status.noteLimitReached", { count: NOTE_COUNT_LIMIT }));
     return inserted;
   }, [commitShapes]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -8687,12 +8665,12 @@ export function LayerlingEditor({
         return;
       }
       const name = myShapeNameFromFile(entry.name, t("myShapes.defaultName"));
-      const fingerprint = projectShapesFingerprint(shapesForLibrary(restored.shapes, boundsForShapes(restored.shapes)));
+      const fingerprint = customShapeFingerprint(restored.shapes);
       if (myShapesRef.current.some((shape) => shape.name === name && shape.fingerprint === fingerprint)) {
         skipped += 1;
         return;
       }
-      const meta = await keepInBrowser(await packCustomShape(restored.shapes, name, restored.assets), name);
+      const meta = await keepInBrowser(await packCurrentCustomShape(restored.shapes, name, restored.assets, restored.notes ?? []), name);
       myShapesRef.current = [...myShapesRef.current, meta];
       added += 1;
     };
