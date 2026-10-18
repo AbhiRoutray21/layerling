@@ -118,5 +118,15 @@
       "de": "Im Fenster für Verrundung und Fase gibt es einen neuen Knopf „Waagerechte Kanten“. Mit Umschalt oder Strg und einem Klick fügst du die Kanten eines Schnellknopfs zur Auswahl hinzu, etwa Obere und Untere Kanten zusammen. Und nach „Anwenden“ bleibt das Fenster auf dem neuen Körper offen, mit derselben Größe und ohne gewählte Kanten, so dass du gleich die nächste Rundung mit einem anderen Maß setzen kannst. „Fertig“, Esc oder das Kreuz schließt es.",
       "en": "The Fillet and Chamfer window has a new Horizontal edges button. With Shift or Ctrl and a click you add the edges of a quick button to the selection, Top and Bottom edges together for example. And after Apply the window stays open on the new body, with the same size and no edge picked, so you can set the next fillet with another size at once. Done, Esc or the cross closes it."
     }
+  },
+  {
+    "title": {
+      "de": "Die Rotationsskizze zeigt die anderen Körper von vorn und stellt den Körper dorthin, wo du das Profil gezeichnet hast",
+      "en": "The revolve sketch shows the other bodies from the front and puts the body where you drew the profile"
+    },
+    "body": {
+      "de": "In der Rotationsskizze erschienen die anderen Körper bisher von oben, als flache Umrisse, während das Profil eine Seitenansicht ist, so dass sich beides nicht ausrichten ließ. Jetzt sieht man sie von vorn, in derselben Ansicht wie das Profil, mit der Achse in der Mitte. Und der Körper entsteht dort, wo du das Profil gezeichnet hast: Die waagerechte Linie durch die Mitte ist der Boden, und ein Profil über einer Platte ergibt einen Körper, der auf ihr steht. Das gilt auf der Grundplatte.",
+      "en": "In the revolve sketch the other bodies used to show from above, as flat outlines, while the profile is a side view, so the two could not be lined up. Now you see them from the front, in the same view as the profile, with the axis in the middle. And the body is made where you drew the profile: the horizontal line through the middle is the ground, and a profile above a plate gives a body that stands on it. This holds on the base plate."
+    }
   }
 ]

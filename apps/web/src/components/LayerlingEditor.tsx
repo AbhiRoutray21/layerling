@@ -208,6 +208,7 @@ import {
   horizontalPlacementWorkplane,
   translationToWorkplane,
   type PlacementPoint,
+  REVOLVE_REFERENCE_WORKPLANE,
   type PlacementWorkplane,
 } from "@/lib/placementWorkplane";
 import { localizedError } from "@/lib/userErrors";
@@ -219,6 +220,7 @@ import { svgSketchMatchesMesh } from "@/lib/svgSketch";
 import { DEFAULT_SKETCH_STROKE, normalizeSketchStroke, strokedSketchProfile } from "@/lib/sketchStroke";
 import { bottomCadModifierEdgeIds, horizontalCadModifierEdgeIds, topCadModifierEdgeIds, verticalCadModifierEdgeIds } from "@/lib/topEdges";
 import { movedWithEditedOutline, placeSketchShape, sketchBodyAnchor, type SketchAnchor } from "@/lib/sketchPlacement";
+import { sketchOutlineBounds } from "@/lib/sketchKeyring";
 import { meshSlicePath, planeCutsMesh } from "@/lib/sketchSlice";
 import { projectedEdgesPath } from "@/lib/sketchEdges";
 import { useRememberedFlag } from "@/lib/useRememberedFlag";
@@ -3458,9 +3460,16 @@ export function LayerlingEditor({
     const ghosts = baseViewportShapes.map((shape) => (operands.has(shape.id) && !shape.hole ? { ...shape, transparent: true } : shape));
     return intersectPreviewShape ? [...ghosts, intersectPreviewShape] : ghosts;
   }, [baseViewportShapes, intersectPreviewIds, intersectPreviewShape]);
+  // A revolve sketch on the base plate is a side view: the bodies are shown from the front, as the profile is drawn (#525).
+  const revolveSketchFront = sketchActive && sketchOperation === "revolve" && placementWorkplaneIsBase(activeSketchWorkplane);
   const sketchReferenceShapes = useMemo(() => {
     // Only the sketch view shows them; outside it every body would be projected for nothing.
     if (!sketchActive) return shapes;
+    if (revolveSketchFront) {
+      return shapes.map((shape) => shape.hidden || shape.id === editingSketchShapeId || isNonSolidShapeKind(shape.kind)
+        ? shape
+        : sketchReferenceShapeOnWorkplane(shape, REVOLVE_REFERENCE_WORKPLANE));
+    }
     // On the base plate a body that only stands turned about the vertical keeps its plain outline;
     // one that lies tilted (laid flat, stood on an edge) shows as it sits there, not as it was made (#231).
     const onBase = placementWorkplaneIsBase(activeSketchWorkplane);
@@ -3469,7 +3478,7 @@ export function LayerlingEditor({
     return shapes.map((shape) => shape.hidden || shape.id === editingSketchShapeId || (onBase && !tilted(shape))
       ? shape
       : sketchReferenceShapeOnWorkplane(shape, activeSketchWorkplane));
-  }, [activeSketchWorkplane, editingSketchShapeId, shapes, sketchActive]);
+  }, [activeSketchWorkplane, editingSketchShapeId, revolveSketchFront, shapes, sketchActive]);
   // A workplane inside a body cuts it: the sketch view shows the outline of the cut (a hollow body
   // gives a ring), where a workplane on a face shows that face. Per body, as an SVG path in the
   // workplane's own coordinates.
@@ -3498,13 +3507,13 @@ export function LayerlingEditor({
       .map((shape) => {
         const mesh = meshForShape(shape);
         const vertices = mesh.vertices.map(([x, y, z]) => {
-          const local = placementWorkplaneCoordinates(activeSketchWorkplane, { x, y, z });
+          const local = placementWorkplaneCoordinates(revolveSketchFront ? REVOLVE_REFERENCE_WORKPLANE : activeSketchWorkplane, { x, y, z });
           return { x: local.x, h: local.y, z: local.z };
         });
         return projectedEdgesPath(vertices, mesh.faces);
       })
       .join("");
-  }, [activeSketchWorkplane, editingSketchShapeId, shapes, sketchActive, sketchShowPartEdges]);
+  }, [activeSketchWorkplane, editingSketchShapeId, revolveSketchFront, shapes, sketchActive, sketchShowPartEdges]);
   const debugState = useMemo(
     () =>
       JSON.stringify({
@@ -5039,6 +5048,13 @@ export function LayerlingEditor({
         setNotice(t("status.buildingSketch"), true);
         const revolved = await shapeFromRevolvedSketchProfile(sketchProfile, sketchRevolveSettings, existing);
         resolved = placeSketchShape(revolved, activeSketchWorkplane, existing);
+        if (!existing && resolved && placementWorkplaneIsBase(activeSketchWorkplane)) {
+          // The body stands where the profile was drawn (#525): its foot at the height of the lowest point of the profile,
+          // the line through the origin being the ground. A profile above it makes a body that stands on whatever is there.
+          const runtime = await getManifoldRuntime();
+          const outline = sketchOutlineBounds(revolveBuildProfile(runtime, sketchProfile));
+          if (outline) resolved = canonicalizeShape({ ...resolved, elevation: (resolved.elevation ?? 0) - outline.maxZ });
+        }
         if (existing?.sketchProfile && resolved) {
           // The rebuilt body is centred on its outline again: keep its axis where it was.
           const base = existing.importedMesh;

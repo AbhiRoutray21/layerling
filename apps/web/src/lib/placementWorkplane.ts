@@ -10,6 +10,16 @@ export type PlacementWorkplane = {
   zAxis: PlacementPoint;
 };
 
+/**
+ * The plane a revolve sketch is drawn on, seen from the front (#525): x across, the height up, through the origin, where the axis stands.
+ * The other bodies are shown projected onto it - their side view, in the same view as the profile - instead of their outline from above.
+ */
+export const REVOLVE_REFERENCE_WORKPLANE: PlacementWorkplane = {
+  origin: { x: 0, y: 0, z: 0 },
+  normal: { x: 0, y: 0, z: -1 },
+  xAxis: { x: 1, y: 0, z: 0 },
+  zAxis: { x: 0, y: -1, z: 0 },
+};
 const EPSILON = 1e-8;
 
 function vector(point: PlacementPoint) {

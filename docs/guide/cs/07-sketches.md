@@ -86,7 +86,7 @@ Je-li pracovní rovina na boční ploše, kreslíte při pohledu na ni a horní 
 
 ### Rotace profilu
 
-Nakreslete polovinu průřezu **nalevo od zobrazené osy**. Vedle náčrtu uvidíte průběžný 3D náhled. Obrys musí být uzavřený, nebo můžete použít otevřenou čáru rozšířenou na pás, viz níže. Dokončíte jej přes {{ui:sketch.finishRevolve}}.
+Nakreslete polovinu průřezu **nalevo od zobrazené osy**. Vedle náčrtu uvidíte průběžný 3D náhled. Obrys musí být uzavřený, nebo můžete použít otevřenou čáru rozšířenou na pás, viz níže. Dokončíte jej přes {{ui:sketch.finishRevolve}}. Ostatní tělesa návrhu jsou zobrazena zepředu, ve stejném pohledu jako profil, s osou uprostřed: kreslete profil vedle nich nebo nad nimi. Těleso stojí tam, kde jste ho nakreslili, a vodorovná čára uprostřed skici je podlaha: profil nad ní dá těleso, které stojí výš, a jeho nejnižší bod je pata tělesa.
 
 Rotační těleso má přesnou geometrii stejně jako vysunuté. Podporuje zaoblení, zkosení a dutiny pro nádoby či vázy. Starší verze vytvářely síť; otevřením {{ui:inspector.editSketch}} a opětovným dokončením získáte přesné těleso. Profil přesahující přes osu zůstává sítí, protože jej nelze přesně sestavit.
 

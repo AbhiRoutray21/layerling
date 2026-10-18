@@ -86,7 +86,7 @@ With {{ui:inspector.editSketch}} you can return to the sketch at any time to cha
 
 ### Revolving
 
-When revolving, you draw half the cross-section **to the left of the axis** shown in the sketch. Next to it you see a 3D preview of the revolve. It shows at once what the body will look like. The outline must be closed, or you build an open line as a stroke, see below. At the end click {{ui:sketch.finishRevolve}}.
+When revolving, you draw half the cross-section **to the left of the axis** shown in the sketch. Next to it you see a 3D preview of the revolve. It shows at once what the body will look like. The outline must be closed, or you build an open line as a stroke, see below. At the end click {{ui:sketch.finishRevolve}}. The other bodies of the design are shown from the front, in the same view as the profile, with the axis standing at the middle: draw the profile next to them or above them. The body stands where you drew it, and the horizontal line through the middle of the sketch is the ground: a profile drawn above it gives a body that stands higher, and its lowest point is the foot of the body.
 
 A revolved body is an exact body, like an extruded one: it takes chamfers and fillets, and you can hollow it, for a cup or a vase. A body revolved with an older layerling is a mesh; open {{ui:inspector.editSketch}} and finish it again to make it exact. A profile that reaches across the axis cannot be built exactly and becomes a mesh, as before.
 
