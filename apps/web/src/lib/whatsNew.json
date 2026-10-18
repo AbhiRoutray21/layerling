@@ -5,131 +5,157 @@
       {
         "title": {
           "de": "Ein exportiertes OBJ steht im Slicer aufrecht",
-          "en": "An exported OBJ stands upright in the slicer"
+          "en": "An exported OBJ stands upright in the slicer",
+          "ar": "ملف OBJ المصدَّر يقف منتصبًا في برنامج التقطيع"
         },
         "body": {
           "de": "STL und 3MF wurden schon mit Z nach oben geschrieben, das OBJ aber mit Y nach oben, und Slicer wie Cura zeigten ein solches Teil auf der Seite liegend. Jetzt schreibt auch das OBJ Z nach oben. layerlings eigener Import stellt solche Dateien wieder richtig hin.",
-          "en": "STL and 3MF were already written with Z up, but the OBJ with Y up, and slicers such as Cura showed such a part lying on its side. Now the OBJ is written with Z up, too. layerling's own import still stands such files upright."
+          "en": "STL and 3MF were already written with Z up, but the OBJ with Y up, and slicers such as Cura showed such a part lying on its side. Now the OBJ is written with Z up, too. layerling's own import still stands such files upright.",
+          "ar": "كانت ملفات STL و3MF تُكتب أصلًا والمحور Z إلى الأعلى، أما ملف OBJ فكان يُكتب والمحور Y إلى الأعلى، فكانت برامج التقطيع مثل Cura تعرض القطعة ملقاة على جانبها. أما الآن فيُكتب ملف OBJ أيضًا والمحور Z إلى الأعلى. ويبقى استيراد layerling نفسه يوقف هذه الملفات منتصبة."
         }
       },
       {
         "title": {
           "de": "layerling gibt es jetzt auf Japanisch",
-          "en": "layerling now speaks Japanese"
+          "en": "layerling now speaks Japanese",
+          "ar": "أصبح layerling يتحدث اليابانية"
         },
         "body": {
           "de": "Die ganze Oberfläche ist auf Japanisch da, geschrieben für Kinder der oberen Grundschule und ihre Lehrer, mit den japanischen Wörtern von Tinkercad, wo es welche gibt. Die Kapitel der Anleitung sind noch auf Englisch. Du wählst die Sprache im Sprachmenü.",
-          "en": "The whole interface is there in Japanese, written for upper primary school children and their teachers, with Tinkercad's Japanese terms where it has them. The guide chapters are still in English. You choose the language in the language menu."
+          "en": "The whole interface is there in Japanese, written for upper primary school children and their teachers, with Tinkercad's Japanese terms where it has them. The guide chapters are still in English. You choose the language in the language menu.",
+          "ar": "الواجهة كلها متوفرة الآن باليابانية، مكتوبة لتلاميذ الصفوف العليا من المرحلة الابتدائية ومعلميهم، مع مصطلحات Tinkercad اليابانية حيثما وُجدت. أما فصول الدليل فما زالت بالإنجليزية. وتختار اللغة من قائمة اللغات."
         }
       },
       {
         "title": {
           "de": "Ordner für deine Entwürfe",
-          "en": "Folders for your designs"
+          "en": "Folders for your designs",
+          "ar": "مجلدات لتصاميمك"
         },
         "body": {
           "de": "Auf der Startseite legt „Neuer Ordner“ Ordner an, auch Ordner in Ordnern. Zieh Entwürfe hinein oder nimm „Verschieben nach …“ im Menü eines Entwurfs. Das Löschen eines Ordners löscht keinen Entwurf, und „Alle sichern“ nimmt die Ordner mit.",
-          "en": "On the start page, “New folder” makes folders, folders in folders too. Drag designs into them or use “Move to …” in a design's menu. Deleting a folder deletes no design, and “Back up all” keeps the folders."
+          "en": "On the start page, “New folder” makes folders, folders in folders too. Drag designs into them or use “Move to …” in a design's menu. Deleting a folder deletes no design, and “Back up all” keeps the folders.",
+          "ar": "في صفحة البداية يُنشئ «مجلد جديد» مجلدات، ومجلدات داخل مجلدات أيضًا. اسحب التصاميم إليها أو استخدم «نقل إلى …» في قائمة التصميم. وحذف مجلد لا يحذف أي تصميم، و«نسخ احتياطي للكل» يحتفظ بالمجلدات."
         }
       },
       {
         "title": {
           "de": "Verlaufsansicht: Gruppe öffnen und Teile zurückholen",
-          "en": "History view: open a group and bring back its parts"
+          "en": "History view: open a group and bring back its parts",
+          "ar": "عرض السجل: افتح مجموعة وأعد أجزاءها"
         },
         "body": {
           "de": "In der Verlaufsansicht kannst du jetzt eine Gruppe öffnen (Knopf „Gruppe öffnen“ oder Taste E): Ihre Teile liegen dann einzeln da, und du holst eines oder mehrere zurück, ohne die ganze Gruppe zu nehmen. Gruppen in Gruppen gehen genauso, „Zurück“ schließt eine Ebene.",
-          "en": "In the History view you can now open a group (the Open group button or the E key): its parts then lie there one by one, and you bring back one or more of them without taking the whole group. Groups inside groups work the same way, and Back out closes one level."
+          "en": "In the History view you can now open a group (the Open group button or the E key): its parts then lie there one by one, and you bring back one or more of them without taking the whole group. Groups inside groups work the same way, and Back out closes one level.",
+          "ar": "في عرض «السجل» يمكنك الآن فتح مجموعة (زر «فتح المجموعة» أو المفتاح E): فتظهر أجزاؤها هناك واحدًا واحدًا، وتعيد جزءًا منها أو أكثر دون أن تأخذ المجموعة كلها. والمجموعات داخل المجموعات تعمل بالطريقة نفسها، و«رجوع» يغلق مستوى واحدًا."
         }
       },
       {
         "title": {
           "de": "iPad: ein verlorener Finger sperrt den Editor nicht mehr",
-          "en": "iPad: a lost finger no longer locks the editor"
+          "en": "iPad: a lost finger no longer locks the editor",
+          "ar": "iPad: الإصبع الضائع لم يعد يقفل المحرر"
         },
         "body": {
           "de": "Auf dem iPad konnte es passieren, dass nach dem Antippen zweier Objekte hintereinander nichts mehr reagierte, bis die Seite neu geladen wurde: Der Editor hielt einen Finger für noch aufliegend, dessen Ende er nie erfahren hatte, und nahm jede weitere Berührung für einen zweiten Finger. Jetzt beginnt mit jedem neuen ersten Finger die Zählung von vorn, und beim Verlassen der App wird sie ebenfalls zurückgesetzt.",
-          "en": "On an iPad it could happen that after tapping two objects one after the other nothing answered until the page was reloaded: the editor believed a finger was still down whose end it had never heard of, and took every further touch for a second finger. Now every new first finger starts the count afresh, and leaving the app resets it, too."
+          "en": "On an iPad it could happen that after tapping two objects one after the other nothing answered until the page was reloaded: the editor believed a finger was still down whose end it had never heard of, and took every further touch for a second finger. Now every new first finger starts the count afresh, and leaving the app resets it, too.",
+          "ar": "على جهاز iPad كان يحدث أحيانًا، بعد النقر على جسمين واحدًا تلو الآخر، ألا يستجيب شيء حتى يُعاد تحميل الصفحة: فقد كان المحرر يظن أن إصبعًا ما زال على الشاشة لم يبلغه رفعه قط، فيعدّ كل لمسة تالية إصبعًا ثانيًا. أما الآن فكل إصبع أول جديد يبدأ العدّ من جديد، والخروج من التطبيق يعيد ضبطه أيضًا."
         }
       },
       {
         "title": {
           "de": "Fase + Rundung: der druckbare Fuß",
-          "en": "Chamfillet: the printable foot"
+          "en": "Chamfillet: the printable foot",
+          "ar": "الشطف المستدير: قاعدة قابلة للطباعة"
         },
         "body": {
           "de": "Im Fasen-Fenster wählst du oben jetzt zwischen „Chamfer“ und „Fase + Rundung“. Die zweite Art macht an den unteren Kanten eine Fase an der Platte, die tangential in eine Rundung zur Wand übergeht: Die ersten Schichten brauchen keine Stützen, und die Kante endet trotzdem weich. Mit „Untere Kanten“ wählst du den ganzen Fuß in einem Klick; auch per KI-Verbindung möglich (kind „chamfillet“).",
-          "en": "In the chamfer window you now choose at the top between Chamfer and Chamfillet. The second kind puts a chamfer at the plate on the bottom edges that blends tangentially into a fillet toward the wall: the first layers need no support, and the edge still ends soft. Bottom edges picks the whole foot in one click; the AI connection can do it too (kind chamfillet)."
+          "en": "In the chamfer window you now choose at the top between Chamfer and Chamfillet. The second kind puts a chamfer at the plate on the bottom edges that blends tangentially into a fillet toward the wall: the first layers need no support, and the edge still ends soft. Bottom edges picks the whole foot in one click; the AI connection can do it too (kind chamfillet).",
+          "ar": "في نافذة «شطف» تختار الآن في الأعلى بين «شطف» و«شطف مستدير». والنوع الثاني يضع على الحواف السفلى شطفًا عند اللوحة ينتقل بانسيابية إلى تنعيم نحو الجدار: فلا تحتاج الطبقات الأولى إلى دعامات، وتنتهي الحافة ناعمة مع ذلك. و«الحواف السفلى» تحدد القاعدة كلها بنقرة واحدة؛ ويستطيع الاتصال بالذكاء الاصطناعي ذلك أيضًا (النوع chamfillet)."
         }
       },
       {
         "title": {
           "de": "Zwei-Finger-Zoom auf dem Touchpad geht jetzt auch in der Skizze",
-          "en": "The two-finger zoom on the trackpad now works in the sketch too"
+          "en": "The two-finger zoom on the trackpad now works in the sketch too",
+          "ar": "التكبير بإصبعين على لوحة اللمس يعمل الآن في الرسم التخطيطي أيضًا"
         },
         "body": {
           "de": "Auf einem Mac mit Safari zoomte das Spreizen und Zusammenziehen auf dem Touchpad in der Skizze die ganze Seite statt der Zeichenfläche. Jetzt zoomt es die Skizze, zu den Fingern hin, in der Geschwindigkeit der Einstellungen, wie im 3D-Fenster. Danach die App einmal neu starten.",
-          "en": "On a Mac with Safari, spreading and pinching on the trackpad in the sketch zoomed the whole page instead of the drawing plate. Now it zooms the sketch, towards the fingers, at the speed of the settings, as in the 3D window. Restart the app once afterwards."
+          "en": "On a Mac with Safari, spreading and pinching on the trackpad in the sketch zoomed the whole page instead of the drawing plate. Now it zooms the sketch, towards the fingers, at the speed of the settings, as in the 3D window. Restart the app once afterwards.",
+          "ar": "على Mac مع Safari، كان تباعد الإصبعين وتقريبهما على لوحة اللمس في الرسم التخطيطي يكبّر الصفحة كلها بدلًا من لوحة الرسم. أما الآن فيكبّر الرسم التخطيطي ويصغّره، نحو الإصبعين، بالسرعة المضبوطة في الإعدادات، كما في النافذة ثلاثية الأبعاد. أعد تشغيل التطبيق مرة واحدة بعد ذلك."
         }
       },
       {
         "title": {
           "de": "Fase und Rundung an einer Gruppe starten beim zweiten Mal schneller",
-          "en": "Chamfer and Fillet on a group start faster the second time"
+          "en": "Chamfer and Fillet on a group start faster the second time",
+          "ar": "الشطف والتنعيم على مجموعة يبدآن أسرع في المرة الثانية"
         },
         "body": {
           "de": "Eine Gruppe, die schon verrundete oder gefaste Teile enthält, musste bei jedem Start des Fase- oder Rundungs-Werkzeugs wieder aus ihrem Netz in einen exakten Körper zurückgerechnet werden, bei einer Tasche in einem verrundeten Körper rund zehn Sekunden. Jetzt merkt sich layerling das Ergebnis, solange das Netz gleich bleibt: Abbrechen und neu starten, oder Rückgängig und wieder vor, geht in einem Drittel der Zeit. Das erste Mal dauert so lange wie bisher.",
-          "en": "A group that already holds filleted or chamfered parts had to be turned from its mesh back into an exact body every time the Chamfer or Fillet tool started, about ten seconds for a pocket in a filleted body. Now layerling keeps the result as long as the mesh stays the same: cancelling and starting again, or Undo and Redo, takes a third of the time. The first time takes as long as before."
+          "en": "A group that already holds filleted or chamfered parts had to be turned from its mesh back into an exact body every time the Chamfer or Fillet tool started, about ten seconds for a pocket in a filleted body. Now layerling keeps the result as long as the mesh stays the same: cancelling and starting again, or Undo and Redo, takes a third of the time. The first time takes as long as before.",
+          "ar": "المجموعة التي تحتوي أصلًا على أجزاء منعّمة أو مشطوفة كان يجب تحويلها من شبكة المثلثات إلى جسم دقيق من جديد في كل مرة تبدأ فيها أداة «شطف» أو «تنعيم»، نحو عشر ثوانٍ لجيب في جسم منعّم. أما الآن فيحتفظ layerling بالنتيجة ما دامت شبكة المثلثات كما هي: فالإلغاء والبدء من جديد، أو «تراجع» و«إعادة»، يستغرق ثلث الوقت. والمرة الأولى تستغرق الوقت نفسه كما كانت."
         }
       },
       {
         "title": {
           "de": "Die Höhe eines gedrehten Körpers lässt ihn nicht mehr wandern",
-          "en": "Changing the height of a turned body no longer makes it wander"
+          "en": "Changing the height of a turned body no longer makes it wander",
+          "ar": "تغيير ارتفاع جسم مدوّر لم يعد يجعله يتحرك من مكانه"
         },
         "body": {
           "de": "Ein Körper, der gedreht ist, etwa eine Aussparung auf einer schrägen Arbeitsebene, rutschte beim Ändern der Höhe im Eigenschaften-Fenster an der Ebene entlang, weil sich seine Mitte nur senkrecht nach oben verschob. Jetzt bleibt die Mitte seiner Grundfläche, wo sie war, und der Körper wächst oder schrumpft nur in seine eigene Richtung. Das gilt auch für den Befehl der KI-Anbindung.",
-          "en": "A turned body, a pocket on a sloped workplane for instance, slid along the plane when its height was changed in the Properties panel, because its centre only moved straight up. Now the middle of its base stays where it was and the body grows or shrinks only in its own direction. The AI connection's command does the same."
+          "en": "A turned body, a pocket on a sloped workplane for instance, slid along the plane when its height was changed in the Properties panel, because its centre only moved straight up. Now the middle of its base stays where it was and the body grows or shrinks only in its own direction. The AI connection's command does the same.",
+          "ar": "الجسم المدوّر، جيب على سطح عمل مائل مثلًا، كان ينزلق على امتداد المستوى عند تغيير ارتفاعه في لوحة «الخصائص»، لأن مركزه كان يتحرك إلى الأعلى مباشرة فقط. أما الآن فيبقى وسط قاعدته حيث كان، ويكبر الجسم أو يصغر في اتجاهه هو فقط. ويفعل أمر الاتصال بالذكاء الاصطناعي الشيء نفسه."
         }
       },
       {
         "title": {
           "de": "Auf dem Handy stehen deine Entwürfe gleich oben",
-          "en": "On a phone your designs are right at the top"
+          "en": "On a phone your designs are right at the top",
+          "ar": "على الهاتف تظهر تصاميمك في الأعلى مباشرة"
         },
         "body": {
           "de": "Auf einem schmalen Bildschirm lagen die gespeicherten Entwürfe der Startseite mehr als einen Bildschirm weit unten, hinter drei großen Kacheln und dem Sicherungshinweis. Sobald es Entwürfe gibt, sind die drei Kacheln jetzt eine kurze Zeile, und der Hinweis zur Sicherung steht hinter den Entwürfen. Auf dem Rechner und ohne Entwürfe bleibt alles wie bisher.",
-          "en": "On a narrow screen the saved designs of the start page lay more than a screen down, behind three big tiles and the backup note. Once there are designs, the three tiles are now one short row and the backup note stands behind the designs. On a computer, and with no designs yet, everything stays as it was."
+          "en": "On a narrow screen the saved designs of the start page lay more than a screen down, behind three big tiles and the backup note. Once there are designs, the three tiles are now one short row and the backup note stands behind the designs. On a computer, and with no designs yet, everything stays as it was.",
+          "ar": "على الشاشة الضيقة كانت التصاميم المحفوظة في صفحة البداية تقع على بعد أكثر من شاشة إلى الأسفل، خلف ثلاث بطاقات كبيرة وملاحظة النسخ الاحتياطي. أما الآن، فما إن توجد تصاميم، تصبح البطاقات الثلاث صفًا قصيرًا واحدًا، وتأتي ملاحظة النسخ الاحتياطي بعد التصاميم. وعلى الكمبيوتر، ومن دون تصاميم بعد، يبقى كل شيء كما كان."
         }
       },
       {
         "title": {
           "de": "Eine angeheftete Formenbibliothek ist beim nächsten Start wieder da",
-          "en": "A pinned shape library is there again at the next start"
+          "en": "A pinned shape library is there again at the next start",
+          "ar": "مكتبة الأشكال المثبّتة تظهر مجددًا عند البدء التالي"
         },
         "body": {
           "de": "Wer die Formenbibliothek angeheftet hatte, fand beim nächsten Start nur noch die Nadel vor: Sie war noch gesetzt, die Bibliothek selbst aber zu. Jetzt öffnet sich eine angeheftete Bibliothek beim Start des Editors von selbst, an der Stelle, an der du sie abgelegt hast.",
-          "en": "Anyone who had pinned the shape library found only the pin again at the next start: it was still set, but the library itself was closed. Now a pinned library opens by itself when the editor starts, where you left it."
+          "en": "Anyone who had pinned the shape library found only the pin again at the next start: it was still set, but the library itself was closed. Now a pinned library opens by itself when the editor starts, where you left it.",
+          "ar": "من كان قد ثبّت مكتبة الأشكال بالدبوس كان يجد عند البدء التالي الدبوس فقط: فقد بقي مفعّلًا، لكن المكتبة نفسها كانت مغلقة. أما الآن فتُفتح المكتبة المثبّتة تلقائيًا عند بدء المحرر، حيث تركتها."
         }
       },
       {
         "title": {
           "de": "Fase und Rundung: mehrere Schnellknöpfe, Waagerechte Kanten, und das Fenster bleibt offen",
-          "en": "Fillet and Chamfer: several quick buttons, Horizontal edges, and the window stays open"
+          "en": "Fillet and Chamfer: several quick buttons, Horizontal edges, and the window stays open",
+          "ar": "تنعيم وشطف: عدة أزرار سريعة، و«الحواف الأفقية»، والنافذة تبقى مفتوحة"
         },
         "body": {
           "de": "Im Fenster für Verrundung und Fase gibt es einen neuen Knopf „Waagerechte Kanten“. Mit Umschalt oder Strg und einem Klick fügst du die Kanten eines Schnellknopfs zur Auswahl hinzu, etwa Obere und Untere Kanten zusammen. Und nach „Anwenden“ bleibt das Fenster auf dem neuen Körper offen, mit derselben Größe und ohne gewählte Kanten, so dass du gleich die nächste Rundung mit einem anderen Maß setzen kannst. „Fertig“, Esc oder das Kreuz schließt es.",
-          "en": "The Fillet and Chamfer window has a new Horizontal edges button. With Shift or Ctrl and a click you add the edges of a quick button to the selection, Top and Bottom edges together for example. And after Apply the window stays open on the new body, with the same size and no edge picked, so you can set the next fillet with another size at once. Done, Esc or the cross closes it."
+          "en": "The Fillet and Chamfer window has a new Horizontal edges button. With Shift or Ctrl and a click you add the edges of a quick button to the selection, Top and Bottom edges together for example. And after Apply the window stays open on the new body, with the same size and no edge picked, so you can set the next fillet with another size at once. Done, Esc or the cross closes it.",
+          "ar": "في نافذة «تنعيم» و«شطف» زر جديد «الحواف الأفقية». ومع Shift أو Ctrl والنقر تضيف حواف زر سريع إلى التحديد، «الحواف العليا» و«الحواف السفلى» معًا مثلًا. وبعد «تطبيق» تبقى النافذة مفتوحة على الجسم الجديد، بالحجم نفسه ودون حواف محددة، فتضبط التنعيم التالي بحجم آخر فورًا. و«تم» أو Esc أو علامة × تغلقها."
         }
       },
       {
         "title": {
           "de": "Die Rotationsskizze zeigt die anderen Körper von vorn und stellt den Körper dorthin, wo du das Profil gezeichnet hast",
-          "en": "The revolve sketch shows the other bodies from the front and puts the body where you drew the profile"
+          "en": "The revolve sketch shows the other bodies from the front and puts the body where you drew the profile",
+          "ar": "رسم الدوران يعرض الأجسام الأخرى من الأمام ويضع الجسم حيث رسمت المقطع"
         },
         "body": {
           "de": "In der Rotationsskizze erschienen die anderen Körper bisher von oben, als flache Umrisse, während das Profil eine Seitenansicht ist, so dass sich beides nicht ausrichten ließ. Jetzt sieht man sie von vorn, in derselben Ansicht wie das Profil, mit der Achse in der Mitte. Und der Körper entsteht dort, wo du das Profil gezeichnet hast: Die waagerechte Linie durch die Mitte ist der Boden, und ein Profil über einer Platte ergibt einen Körper, der auf ihr steht. Das gilt auf der Grundplatte.",
-          "en": "In the revolve sketch the other bodies used to show from above, as flat outlines, while the profile is a side view, so the two could not be lined up. Now you see them from the front, in the same view as the profile, with the axis in the middle. And the body is made where you drew the profile: the horizontal line through the middle is the ground, and a profile above a plate gives a body that stands on it. This holds on the base plate."
+          "en": "In the revolve sketch the other bodies used to show from above, as flat outlines, while the profile is a side view, so the two could not be lined up. Now you see them from the front, in the same view as the profile, with the axis in the middle. And the body is made where you drew the profile: the horizontal line through the middle is the ground, and a profile above a plate gives a body that stands on it. This holds on the base plate.",
+          "ar": "في رسم الدوران كانت الأجسام الأخرى تظهر من الأعلى، كحدود خارجية مسطحة، بينما المقطع منظر جانبي، فلم يكن ممكنًا مطابقتهما. أما الآن فتراها من الأمام، في العرض نفسه الذي فيه المقطع، والمحور في الوسط. ويُصنع الجسم حيث رسمت المقطع: الخط الأفقي المار بالوسط هو الأرض، والمقطع المرسوم فوق لوحة يعطي جسمًا يقف عليها. وهذا ينطبق على اللوحة الأساسية."
         }
       }
     ]
