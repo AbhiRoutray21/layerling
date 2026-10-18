@@ -120,5 +120,15 @@
       "de": "Endet eine Aussparung genau auf einer Fläche des Körpers, etwa mit der Höhe 5,000 durch eine Arbeitsebene auf einer Schräge gezogen, scheiterte die Fase am Rand der Tasche. Jetzt wird die Tasche beim Gruppieren sauber geschnitten, und die Fase geht.",
       "en": "When a hole ends exactly on a face of the body, for example with a height of 5.000 pulled through a workplane on a slope, a chamfer on the rim of the pocket failed. The pocket is now cut cleanly when grouped, and the chamfer works."
     }
+  },
+  {
+    "title": {
+      "de": "Eigene Formen nehmen ihre Notizen mit",
+      "en": "Custom shapes take their notes along"
+    },
+    "body": {
+      "de": "Speicherst du Körper mit angehefteten Notizen als eigene Form, kommen die Notizen mit, wenn du die Form in einen Entwurf setzt. Sie erscheinen geschlossen, an den neuen Körpern, mit neuen Nummern.",
+      "en": "If you save bodies with pinned notes as a custom shape, the notes come along when you put the shape into a design. They appear closed, pinned to the new bodies, with new numbers."
+    }
   }
 ]
