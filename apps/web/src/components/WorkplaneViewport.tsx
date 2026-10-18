@@ -70,6 +70,7 @@ import { textDisplayGeometry } from "@/lib/textFill";
 import { pinchWheelDelta, wheelZoomDelta } from "@/lib/wheelZoom";
 import { useWheelField } from "@/lib/useWheelField";
 import { wheelBaseStep, wheelNextValue } from "@/lib/wheelValueStep";
+import { createLatestRunner, type LatestRunner } from "@/lib/latestRunner";
 import { manifoldRevision, onManifoldReady } from "@/lib/manifoldHandle";
 import { customFontRevision, onCustomFontsChanged } from "@/lib/textFonts";
 import { readDesignView, writeDesignView } from "@/lib/designView";
@@ -4062,27 +4063,41 @@ export function WorkplaneViewport({
     if (threeRef.current) clearSectionCaps(threeRef.current);
   }, [shapes]);
 
+  // The face is cut for the newest plane, one round at a time, and a round is never thrown away because the plane
+  // moved on: with a delay that every move restarts, a plane that moves faster than the delay never let the face
+  // be cut, and it only came back when the hand rested (#516, rondlh: "lags behind, sometimes a second").
+  type SectionCapWish = { axis: SectionPlaneAxis; offset: number; shapes: typeof shapes };
+  const sectionBodiesRef = useRef(onSectionBodies);
+  sectionBodiesRef.current = onSectionBodies;
+  const sectionCapRunnerRef = useRef<LatestRunner<SectionCapWish> | null>(null);
+  if (sectionCapRunnerRef.current === null) {
+    const runner: LatestRunner<SectionCapWish> = createLatestRunner<SectionCapWish>(
+      async (wish) => {
+        const makeBodies = sectionBodiesRef.current;
+        if (!makeBodies) return;
+        const bodies = await makeBodies(wish.axis, wish.offset);
+        const current = threeRef.current;
+        const now = runner.wanted();
+        // The face of a design that has changed since, or of a section that is off, is not shown.
+        if (current && now && now.shapes === wish.shapes) buildSectionCaps(current, bodies, wish.axis, wish.offset);
+      },
+      (a, b) => a.axis === b.axis && a.offset === b.offset && a.shapes === b.shapes,
+    );
+    sectionCapRunnerRef.current = runner;
+  }
+
   useEffect(() => {
+    const runner = sectionCapRunnerRef.current;
+    if (!runner) return;
     if (!sectionSettings.enabled || !onSectionBodies) {
+      runner.clear();
       if (threeRef.current) clearSectionCaps(threeRef.current);
       return;
     }
-    const { axis, offset } = sectionSettings;
-    let cancelled = false;
-    const timer = window.setTimeout(() => {
-      onSectionBodies(axis, offset)
-        .then((bodies) => {
-          const current = threeRef.current;
-          if (cancelled || !current) return;
-          buildSectionCaps(current, bodies, axis, offset);
-        })
-        .catch(() => undefined);
-    }, 30);
-    return () => {
-      cancelled = true;
-      window.clearTimeout(timer);
-    };
+    runner.request({ axis: sectionSettings.axis, offset: sectionSettings.offset, shapes });
   }, [sectionSettings.enabled, sectionSettings.axis, sectionSettings.offset, shapes, onSectionBodies]);
+
+  useEffect(() => () => sectionCapRunnerRef.current?.clear(), []);
 
   useEffect(() => {
     notesRef.current = notes;
