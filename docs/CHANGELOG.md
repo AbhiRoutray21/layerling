@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **The video lists of the READMEs follow the shared list:** The video list in README.md, README.de.md and README.nl.md was written by hand and had fallen behind (four of nine videos, one of them replaced since). `npm run videos:sync` now fills all three from the video chapter of the guide in their language, and `npm run videos:sync -- --discussion` does the same for the first post of Discussion #296 (with `--apply` it writes it). A test checks that the READMEs equal the chapter and list the videos of `layerlingVideos.ts` in the same order. No change in the app.
+
 ## 1.91.0
 
 - **A loose hole is no longer lost in the export when its body touches another (#566):** A hole left ungrouped is cut out of the body it reaches when you export. But when that body touched or overlapped another body of the same colour, the export joined the two again from their uncut shapes, and the hole was gone from the STL, 3MF or OBJ file and from the material estimate, which counted the part as solid. A body that a hole was cut from is now joined as its cut mesh. The cut is checked in the export by volume: two boxes of 20 x 20 x 10 mm side by side with a hole of 8 mm through the first one export 7,497.5 mm³ instead of 8,000. Found, with a test and a patch, by @aktrftm on GitHub.
