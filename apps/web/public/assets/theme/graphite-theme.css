@@ -6832,14 +6832,13 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .shortcuts-or {
     background: #fff;
   }
 
-  html:where([data-theme="dark"][data-palette="graphite"])[data-print-shortcuts] .shortcuts-print-sheet h1 {
-    border-bottom: 0.6mm solid #000;
-    color: #000;
-  }
-
   html:where([data-theme="dark"][data-palette="graphite"])[data-print-shortcuts] .shortcuts-print-sheet .shortcuts-group h3 {
     color: #000;
-    border-bottom: 0.4mm solid #000;
+    border-bottom: 0.3mm solid #000;
+  }
+
+  html:where([data-theme="dark"][data-palette="graphite"])[data-print-shortcuts] .shortcuts-print-sheet .shortcuts-row {
+    border-bottom: 0.1mm solid #bbb;
   }
 
   html:where([data-theme="dark"][data-palette="graphite"])[data-print-shortcuts] .shortcuts-print-sheet .shortcuts-row dt {
@@ -6849,7 +6848,7 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .shortcuts-or {
   html:where([data-theme="dark"][data-palette="graphite"])[data-print-shortcuts] .shortcuts-print-sheet .shortcuts-row kbd {
     color: #000;
     background: #fff;
-    border: 0.3mm solid #000;
+    border: 0.25mm solid #000;
   }
 
   html:where([data-theme="dark"][data-palette="graphite"])[data-print-shortcuts] .shortcuts-print-sheet .shortcuts-plus,

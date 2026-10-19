@@ -1,6 +1,16 @@
 [
   {
     "title": {
+      "de": "Tastenkürzel auf einer Seite drucken",
+      "en": "The shortcuts print on one sheet"
+    },
+    "body": {
+      "de": "Der Druckerknopf im Fenster mit den Tastenkürzeln setzt die ganze Liste, im Editor wie in der Skizze, auf eine Seite (A4 oder Letter): schwarz auf weiß, in drei Spalten, als Kurzübersicht zum Hinlegen.",
+      "en": "The printer button in the shortcuts window now puts the whole list, in the editor and in sketch mode, on one sheet (A4 or Letter): black on white, in three columns, as a quick reference to keep at hand."
+    }
+  },
+  {
+    "title": {
       "en": "Right-angle snapping and quick delete in the tape measure",
       "de": "Rechtwinkliges Einrasten und schnelles Löschen beim Maßband"
     },
@@ -10,4 +20,3 @@
     }
   }
 ]
-

@@ -14445,6 +14445,11 @@ html[data-theme="dark"] .shortcuts-or {
 }
 
 @media print {
+  /* The whole list on one side of a sheet, as a reference to keep at hand (#490): three columns in smaller, still sharp type. */
+  @page {
+    margin: 10mm;
+  }
+
   html[data-print-shortcuts],
   html[data-print-shortcuts] body {
     height: auto !important;
@@ -14461,50 +14466,83 @@ html[data-theme="dark"] .shortcuts-or {
     display: block;
     color: #000;
     background: #fff;
-    font-size: 12pt;
+    font-size: 9pt;
     /* The arrows must not turn into coloured emoji on a black-and-white sheet. */
     font-variant-emoji: text;
   }
 
+  /* No heading: the room is for the list. */
   html[data-print-shortcuts] .shortcuts-print-sheet h1 {
-    margin: 0 0 8mm;
-    padding-bottom: 3mm;
-    border-bottom: 0.6mm solid #000;
-    color: #000;
-    font-size: 20pt;
+    display: none;
   }
 
   html[data-print-shortcuts] .shortcuts-print-sheet .shortcuts-groups {
-    columns: 2;
-    column-gap: 12mm;
+    columns: 3;
+    column-gap: 6mm;
   }
 
+  /* A long group may run over into the next column; a heading never stays alone at the foot of one. */
   html[data-print-shortcuts] .shortcuts-print-sheet .shortcuts-group {
-    margin-bottom: 6mm;
-    break-inside: avoid;
+    margin-bottom: 3mm;
+    break-inside: auto;
   }
 
   html[data-print-shortcuts] .shortcuts-print-sheet .shortcuts-group h3 {
+    break-after: avoid;
+    margin: 0 0 1mm;
     color: #000;
-    border-bottom: 0.4mm solid #000;
-    font-size: 11pt;
+    border-bottom: 0.3mm solid #000;
+    font-size: 9.5pt;
   }
 
+  /* Plain blocks, not grids: a block fragments across the columns, a grid does not (the sketch's list is one long group). */
+  html[data-print-shortcuts] .shortcuts-print-sheet .shortcuts-group {
+    display: contents;
+  }
+
+  html[data-print-shortcuts] .shortcuts-print-sheet .shortcuts-group dl {
+    display: block;
+    margin: 0;
+  }
+
+  /* The name on the left, the keys on the right on one line where they fit, else the keys below the name. */
   html[data-print-shortcuts] .shortcuts-print-sheet .shortcuts-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0 2mm;
+    padding-bottom: 0.7mm;
+    margin-bottom: 0.7mm;
+    border-bottom: 0.1mm solid #bbb;
     break-inside: avoid;
+  }
+
+  html[data-print-shortcuts] .shortcuts-print-sheet .shortcuts-row dd {
+    flex: 0 1 auto;
+    flex-wrap: wrap;
+    gap: 0.8mm;
+  }
+
+  html[data-print-shortcuts] .shortcuts-print-sheet .shortcuts-row dt {
+    line-height: 1.25;
   }
 
   html[data-print-shortcuts] .shortcuts-print-sheet .shortcuts-row dt {
     color: #000;
-    font-size: 12pt;
+    font-size: 9pt;
     font-weight: 600;
   }
 
   html[data-print-shortcuts] .shortcuts-print-sheet .shortcuts-row kbd {
     color: #000;
     background: #fff;
-    border: 0.3mm solid #000;
-    font-size: 11pt;
+    padding: 0 1.2mm;
+    border: 0.25mm solid #000;
+    border-bottom-width: 0.25mm;
+    border-radius: 0.8mm;
+    font-size: 8pt;
+    line-height: 1.3;
     /* Fonts whose arrows are plain strokes, not coloured emoji. */
     font-family: "Segoe UI Symbol", "Apple Symbols", "DejaVu Sans", Arial, sans-serif;
   }
@@ -14512,7 +14550,7 @@ html[data-theme="dark"] .shortcuts-or {
   html[data-print-shortcuts] .shortcuts-print-sheet .shortcuts-plus,
   html[data-print-shortcuts] .shortcuts-print-sheet .shortcuts-or {
     color: #000;
-    font-size: 11pt;
+    font-size: 8.5pt;
   }
 }
 
