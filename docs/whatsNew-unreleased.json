@@ -58,5 +58,25 @@
       "de": "Beim Winkellineal trugen die grünen Zahlen die Hinweise „X-Position“ und „Y-Position zum Lineal“ vertauscht: Rückte ein Körper nach hinten, änderte sich die Zahl mit dem Hinweis X. Jetzt heißt jede Zahl nach der Richtung ihres Arms: X nach rechts, Y nach hinten, Z nach oben, auch nach einer Vierteldrehung des Lineals.",
       "en": "On the corner ruler the green numbers had the tooltips \"X position\" and \"Y position to ruler\" the wrong way round: when a body moved to the back, the number with the X tooltip changed. Now each number is named by the direction of its arm: X to the right, Y to the back, Z up, also after the ruler is turned by a quarter."
     }
+  },
+  {
+    "title": {
+      "de": "Raster auch bei mehreren markierten Teilen erreichbar",
+      "en": "Snap grid reachable with several parts selected"
+    },
+    "body": {
+      "de": "Sind mehrere Teile markiert, reichte das Fenster rechts bis ganz nach unten und verdeckte die Rasterwahl in der Ecke. Jetzt sitzt die Rasterwahl, samt dem Schalter zum Fangen an Formen, am Fuß dieses Fensters, wie bei einem einzelnen Teil. Schiebst du das Fenster weg, ist sie wieder in der Ecke.",
+      "en": "With several parts selected, the panel on the right reached down to the bottom and covered the snap grid choice in the corner. The snap grid, with the switch for snapping to shapes, now sits at the foot of that panel, as it does for a single part. Move the panel away and it is back in the corner."
+    }
+  },
+  {
+    "title": {
+      "de": "Auswahlrahmen: Grün für „berühren“",
+      "en": "Selection frame: green for \"touching\""
+    },
+    "body": {
+      "de": "Ziehst du den Rahmen von rechts nach links (oder mit Alt andersherum), nimmt er alles mit, was er berührt. Jetzt ist er dann grün und gestrichelt, sodass du sofort siehst, in welcher Art er auswählt. Der Rahmen, der Teile ganz umschließen muss, bleibt orange.",
+      "en": "Drag the frame from right to left (or the other way round with Alt) and it takes everything it touches. It is now green and dashed then, so you see at once how it selects. The frame that must enclose parts completely stays orange."
+    }
   }
 ]
