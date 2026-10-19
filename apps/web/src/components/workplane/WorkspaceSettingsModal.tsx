@@ -10,6 +10,8 @@ import { HexColorInput, HexColorPicker } from "react-colorful";
 import { APP_THEME_OPTIONS, type AppThemePreference } from "@/lib/appTheme";
 import { setToolbarSize, TOOLBAR_SIZE_OPTIONS, type ToolbarSize } from "@/lib/toolbarSize";
 import { useToolbarSize } from "@/lib/useToolbarSize";
+import { useViewCubePosition } from "@/lib/useViewCubePosition";
+import { setViewCubePosition, VIEW_CUBE_POSITION_OPTIONS, type ViewCubePosition } from "@/lib/viewCubePosition";
 import { gearCenterHoleLimits, gearToothPitch, gearTypeHasHelix } from "@/lib/gearGeometry";
 import { automaticSideCount } from "@/lib/roundSideCount";
 import { torusTessellation } from "@/lib/torusTessellation";
@@ -111,6 +113,13 @@ const TOOLBAR_SIZE_LABEL_KEYS: Record<ToolbarSize, MessageKey> = {
   small: "workspace.toolbarSizeSmall",
   medium: "workspace.toolbarSizeMedium",
   large: "workspace.toolbarSizeLarge",
+};
+
+const VIEW_CUBE_POSITION_LABEL_KEYS: Record<ViewCubePosition, MessageKey> = {
+  "top-left": "workspace.viewCubePositionTopLeft",
+  "top-right": "workspace.viewCubePositionTopRight",
+  "bottom-left": "workspace.viewCubePositionBottomLeft",
+  "bottom-right": "workspace.viewCubePositionBottomRight",
 };
 
 function gridBlockPresetLabel(preset: string) {
@@ -453,6 +462,7 @@ export function WorkspaceSettingsModal({
   useLanguage();
   const [activeSection, setActiveSection] = useState<WorkspaceSettingsSection>("appearance");
   const toolbarSize = useToolbarSize();
+  const viewCubePosition = useViewCubePosition();
   const [selectedShapeKind, setSelectedShapeKind] = useState<ShapeKind>(toolbarShapeAssets[0].kind);
   const [dimensionDrafts, setDimensionDrafts] = useState(() => ({
     width: workspace.width.toFixed(workspace.accuracy),
@@ -738,6 +748,19 @@ export function WorkspaceSettingsModal({
                       {TOOLBAR_SIZE_OPTIONS.map((size) => (
                         <option key={size} value={size}>
                           {t(TOOLBAR_SIZE_LABEL_KEYS[size])}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  <label className="workspace-select view-cube-position-setting">
+                    <span>{t("workspace.viewCubePosition")}</span>
+                    <select
+                      value={viewCubePosition}
+                      onChange={(event) => setViewCubePosition(event.currentTarget.value as ViewCubePosition)}
+                    >
+                      {VIEW_CUBE_POSITION_OPTIONS.map((position) => (
+                        <option key={position} value={position}>
+                          {t(VIEW_CUBE_POSITION_LABEL_KEYS[position])}
                         </option>
                       ))}
                     </select>
