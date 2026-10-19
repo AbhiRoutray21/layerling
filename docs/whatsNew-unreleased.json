@@ -112,5 +112,15 @@
       "de": "Bei einem gezeichneten oder nachgezeichneten Bild treffen sich zwei Formen oft in nur einem Punkt. Der Import hat dann einzelne Formen weggelassen, das Bild kam kleiner und lückenhaft an. Solche Formen werden jetzt zusammen aufgebaut, und das Bild bleibt vollständig.",
       "en": "In a drawn or traced picture two shapes often meet in just one point. The import then left some shapes out, and the picture came in smaller and with gaps. Such shapes are now built together, and the picture stays whole."
     }
+  },
+  {
+    "title": {
+      "de": "Chamfillet am Zylinder sitzt wieder am Fuß",
+      "en": "The chamfillet on a cylinder sits at the foot again"
+    },
+    "body": {
+      "de": "Ein Chamfillet an der unteren Kante eines Zylinders kam verkehrt herum heraus: unten die Verrundung, darüber die Fase, und auch der obere Rand wurde gerundet. Jetzt liegt unten die Fase auf der Platte, die in die Wand übergeht, und der obere Rand bleibt unberührt.",
+      "en": "A chamfillet on the bottom edge of a cylinder came out the wrong way round: the fillet at the foot, the chamfer above it, and the top rim rounded as well. Now the chamfer sits on the plate and blends into the wall, and the top rim stays untouched."
+    }
   }
 ]
