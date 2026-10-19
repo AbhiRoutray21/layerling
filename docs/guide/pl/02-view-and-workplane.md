@@ -100,6 +100,8 @@ Dwa suwaki w sekcji {{ui:workspace.appearance}} ustawiają oświetlenie brył. {
 
 {{ui:workspace.toolbarSize}} w sekcji {{ui:workspace.appearance}} zmniejsza lub powiększa przyciski wstążki na górze, jej menu kształtów i sterowanie kamerą po lewej: {{ui:workspace.toolbarSizeSmall}}, {{ui:workspace.toolbarSizeMedium}} (jak zawsze) albo {{ui:workspace.toolbarSizeLarge}}. Mały zostawia na laptopie więcej miejsca na płaszczyznę roboczą, duży łatwiej trafić na dużym ekranie albo palcem. Przy dużych przyciskach grupy wstążki przechodzą do drugiego rzędu, gdy okno jest dla nich za wąskie. Rozmiar zapamiętuje ta przeglądarka i obowiązuje on w każdym projekcie.
 
+{{ui:workspace.viewCubePosition}} w sekcji {{ui:workspace.appearance}} przenosi kostkę orientacji w inny róg obszaru roboczego: {{ui:workspace.viewCubePositionTopLeft}} (jak zawsze), {{ui:workspace.viewCubePositionTopRight}}, {{ui:workspace.viewCubePositionBottomLeft}} albo {{ui:workspace.viewCubePositionBottomRight}}. W każdym rogu poza lewym górnym sterowanie kamerą przesuwa się w górę, na miejsce zwolnione przez kostkę. W prawym dolnym rogu kostka stoi tuż nad przełącznikiem {{ui:inspector.snapGrid}}. Dopóki po prawej są otwarte właściwości kształtu, kostka po prawej stronie odsuwa się na lewo od nich. Róg zapamiętuje ta przeglądarka i obowiązuje on w każdym projekcie.
+
 > **Wskazówka:** Gdy dokładnie dopasowujesz części, przestań obracać widok. Klawiszami cyfr przejdź do widoku na wprost z góry albo z przodu i naciśnij [[O]], aby włączyć płaski widok. Wtedy od razu widać, czy dwie krawędzie naprawdę są na równo.
 
 ## Gdy layerling działa wolno
