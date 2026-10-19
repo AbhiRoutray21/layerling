@@ -27,7 +27,7 @@ Grafična tablica s pisalom se obnaša kot miška: konica je levi gumb, stranska
 
 Kocka zgoraj levo kaže, kam trenutno gledaš. Klik na eno od njenih stranic skoči v ravni pogled od zgoraj, spodaj, spredaj, zadaj, z leve ali z desne. Klik na oglišče kocke pogleda poševno od tega oglišča na model, klik blizu roba od tega roba, torej med dvema stranicama; mesto se obarva, ko kazalec stoji nad njim. Ravni pogledi gredo tudi s številskimi tipkami [[1]] do [[6]]. Če pri tem držiš [[Shift]], se pogled hkrati približa izboru, kot pri [[Shift]]+[[F]].
 
-Če kocko vlečeš, vrtiš pogled, popolnoma enako kot pri vlečenju z desnim gumbom. Če ni nič izbrano, pogled vrtijo tudi smerne tipke: 15° na pritisk, 90° s [[Shift]]. Model zavrtijo v svojo smer – [[→]] zavrti njegovo sprednjo stran v desno, [[↑]] nagne njegovo sprednjo stran navzgor. Če je nekaj izbrano, najprej klikni v prazno; sicer puščice premaknejo izbor. Na zaslonu na dotik to gre z enim prstom, tudi brez vklopa {{ui:camera.touchRotate}}.
+Če kocko vlečeš, vrtiš pogled, popolnoma enako kot pri vlečenju z desnim gumbom. Če ni nič izbrano, pogled vrtijo tudi smerne tipke: 15° na pritisk, 90° s [[Shift]]. Model zavrtijo v svojo smer – [[→]] zavrti njegovo sprednjo stran v desno, [[↑]] nagne njegovo sprednjo stran navzgor. Ob pridržani tipki [[Ctrl]] puščice namesto tega premikajo pogled po zaslonu: za desetino slike na pritisk, s [[Shift]] povrhu za polovico. Model se premakne v smer puščice. Če je nekaj izbrano, najprej klikni v prazno; sicer puščice premaknejo izbor. Na zaslonu na dotik to gre z enim prstom, tudi brez vklopa {{ui:camera.touchRotate}}.
 
 ### Vrstica kamere
 
@@ -97,6 +97,8 @@ Dva drsnika pod {{ui:workspace.appearance}} določata, kako so telesa osvetljena
 ![Urejevalnik v temni barvni shemi. Barvno shemo nastaviš zgoraj desno: Sistem, Svetla, Temna ali Grafit.](shot:editor-dark)
 
 {{ui:workspace.toolbarSize}} pod {{ui:workspace.appearance}} naredi gumbe vrstice zgoraj, njen meni oblik in upravljanje kamere levo manjše ali večje: {{ui:workspace.toolbarSizeSmall}}, {{ui:workspace.toolbarSizeMedium}} (kot doslej) ali {{ui:workspace.toolbarSizeLarge}}. Majhna pusti na prenosniku več prostora za delovno ravnino, velika je lažje zadeti na velikem zaslonu ali s prstom. Z velikimi gumbi gredo skupine vrstice v drugo vrstico, če je okno zanje preozko. Velikost si zapomni ta brskalnik in velja za vsak načrt.
+
+{{ui:workspace.viewCubePosition}} pod {{ui:workspace.appearance}} postavi kocko za usmerjanje pogleda v drug kot delovne površine: {{ui:workspace.viewCubePositionTopLeft}} (kot doslej), {{ui:workspace.viewCubePositionTopRight}}, {{ui:workspace.viewCubePositionBottomLeft}} ali {{ui:workspace.viewCubePositionBottomRight}}. V vsakem kotu razen zgoraj levo se upravljanje kamere pomakne navzgor na mesto, ki ga je kocka izpraznila. Spodaj desno stoji kocka tik nad gumbom {{ui:inspector.snapGrid}}. Dokler so desno odprte lastnosti oblike, se kocka na desni strani umakne levo od njih. Kot si zapomni ta brskalnik in velja za vsak načrt. V ozkem oknu, na primer na telefonu, je nastavitev skrita in kocka ostane zgoraj levo.
 
 > **Namig:** Ne vrti več pogleda, ko deleže natančno postavljaš drug ob drugega. S številskimi tipkami preklopi na raven pogled od zgoraj ali od spredaj in s [[O]] preklopi na ploski prikaz. Tako takoj vidiš, ali sta dva roba res poravnana.
 

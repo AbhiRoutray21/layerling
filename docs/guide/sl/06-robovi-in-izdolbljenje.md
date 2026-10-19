@@ -10,7 +10,7 @@ Ostri robovi na natisnjenem delu redko dobro izgledajo in tudi niso posebno stab
 1. Izberi telo (ali skupino).
 2. V orodni vrstici klikni {{ui:editor.tool.fillet}} ali {{ui:editor.tool.chamfer}}, pritisni [[B]] za zaokrožitev ali [[Shift]]+[[B]] za posnetje, ali klikni z desnim gumbom na telo in izberi v meniju.
 3. Robovi telesa se poudarijo. Klikni tiste, ki naj bodo prizadeti. Še en klik jih spet odvzame. S [[Shift]] dodaš posamezen rob ali ga odvzameš.
-4. Nastavi mero in potrdi z {{ui:edge.apply}} ali [[Enter]].
+4. Nastavi mero in potrdi z {{ui:edge.apply}} ali [[Enter]]. Nato okno ostane odprto na novem telesu z isto velikostjo, tako da lahko takoj sledi naslednje zaobljenje ali posnetje; zapre ga {{ui:edge.done}}, [[Esc]] ali križec. S [[Shift]] ali [[Ctrl]] klik na {{ui:edge.topEdges}}, {{ui:edge.bottomEdges}}, {{ui:edge.verticalEdges}} ali {{ui:edge.horizontalEdges}} doda te robove izbranim, namesto da bi jih zamenjal.
 
 ![Orodje »Zaokroži robove«: vsi ostri robovi so izbrani, na sliki je predogled s polmerom 4 mm.](shot:fillet-preview)
 
@@ -25,6 +25,7 @@ V oknu najdeš:
 - {{ui:edge.sharpThreshold}} določa, kateri robovi sploh veljajo za ostre. Vrednost 25° obravnava kot rob samo izrazite pregibe in pusti ploske prehode pri miru.
 - {{ui:edge.topEdges}} izbere samo robove čisto na vrhu telesa. To je hitra pot za modelček za piškote: obris v skici zgradiš kot konturo, nato posneš zgornje robove. Kako strmo je posnetje, nastaviš z {{ui:edge.angle}}; daljše kot je stena debela, ne more postati.
 - {{ui:edge.bottomEdges}} izbere samo robove čisto na dnu telesa, nasprotje gumba {{ui:edge.topEdges}}. Tako hitro zaobliš ali posnameš samo vznožje dela.
+- {{ui:edge.chamfillet}}, izbran na vrhu okna posnetja ob {{ui:editor.tool.chamfer}}, naredi natisljivo stopo dela: posnetje pri plošči, ki se tangentno steče v zaokrožitev proti steni, tako da prve plasti ne potrebujejo podpor, rob pa vseeno konča mehko. {{ui:edge.distance}} je višina, ki jo stopa zavzame, {{ui:edge.angle}} (15° do 75°) strmina posnetja pri plošči. Robove izberete z {{ui:edge.bottomEdges}}.
 - {{ui:edge.onlyVisibleEdges}} skrije robove, ki ležijo za telesom, gledano od tam, kjer gledaš. Privzeto se vsak rob vidi skozi telo, kar je pri zahtevnem delu zmedeno; ko je stikalo vklopljeno, vidiš in lahko klikneš samo robove, obrnjene proti tebi. Za druge zasukaj pogled. Rob, narisan rdeče (glej spodaj), se vedno pokaže.
 - {{ui:edge.tangentChains}}: Klik potem izbere tudi robove, ki mehko prehajajo drug v drugega, na primer vse robove okoli ploskve z zaobljenimi vogali. Stikalo določa samo, kaj klik izbere: jedro CAD posnetje ali zaokrožitev vedno nadaljuje na takih gladko povezanih robovih. Tabla ti potem pove, na koliko dodatnih robovih se to zgodi.
 - {{ui:edge.keepSize}} ohrani posnetje ali zaokrožitev tako veliko, kot sta, tudi če telo pozneje povečaš.

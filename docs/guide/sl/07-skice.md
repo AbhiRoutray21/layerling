@@ -86,7 +86,7 @@ Z {{ui:inspector.editSketch}} se kadarkoli vrneš v skico, da jo spremeniš. Dvo
 
 ### Vrtenje
 
-Pri vrtenju narišeš pol preseka **levo od osi**, ki je vrisana v skici. Poleg vidiš 3D-predogled vrtenja. Takoj pokaže, kako telo izgleda. Obris mora biti sklenjen, ali pa odprto črto zgradiš kot potezo, glej spodaj. Na koncu klikneš {{ui:sketch.finishRevolve}}.
+Pri vrtenju narišeš pol preseka **levo od osi**, ki je vrisana v skici. Poleg vidiš 3D-predogled vrtenja. Takoj pokaže, kako telo izgleda. Obris mora biti sklenjen, ali pa odprto črto zgradiš kot potezo, glej spodaj. Na koncu klikneš {{ui:sketch.finishRevolve}}. Druga telesa načrta so prikazana od spredaj, v istem pogledu kot profil, z osjo na sredini: profil nariši ob njih ali nad njimi. Telo stoji tam, kjer si ga narisal, vodoravna črta na sredini skice pa je tla: profil nad njo da telo, ki stoji više, njegova najnižja točka pa je noga telesa.
 
 Zavrteno telo je natančno telo kot izvlečeno: sprejme posnetja in zaokrožitve ter ga lahko izdolbeš, za kozarec ali vazo. Telo, ki je bilo zavrteno s starejšo različico programa layerling, je mreža; odpri {{ui:inspector.editSketch}} in ga znova zaključi, pa bo natančno. Obris, ki sega čez os, ni mogoče zgraditi natančno in postane kot doslej mreža.
 

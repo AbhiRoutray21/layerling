@@ -43,6 +43,16 @@ export function sketchWheelZoomFactor(event: SketchWheelInput, orbitZoomSpeed: n
 }
 
 /**
+ * Zoom multiplier for one change of a trackpad pinch that Safari on a Mac reports as a gesture (#439 forum): it sends
+ * no Ctrl wheel steps, only a scale that has grown since the last event. At the default zoom speed the plate follows
+ * the fingers one to one; a faster or slower setting speeds up or slows down the pinch the way it does the wheel.
+ */
+export function sketchPinchZoomFactor(ratio: number, orbitZoomSpeed: number, defaultOrbitZoomSpeed: number) {
+  if (!Number.isFinite(ratio) || ratio <= 0 || !(orbitZoomSpeed > 0) || !(defaultOrbitZoomSpeed > 0)) return 1;
+  return ratio ** (orbitZoomSpeed / defaultOrbitZoomSpeed);
+}
+
+/**
  * Scales the view zoom by `factor` while keeping the plate point under
  * `offset` (screen pixels from the view center) fixed on screen.
  * `pixelsPerUnit` is the fitted screen scale at zoom 1.

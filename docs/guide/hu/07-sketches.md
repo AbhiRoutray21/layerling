@@ -83,7 +83,7 @@ A {{ui:inspector.editSketch}} gombbal bármikor visszatérhetsz a vázlathoz, ho
 
 ### Forgatás
 
-Forgatásnál a keresztmetszet felét **a vázlatban látható tengelytől balra** rajzolod. Mellette a forgatás 3D előnézetét látod. Azonnal mutatja, hogyan fog kinézni a test. A körvonalnak zártnak kell lennie, vagy egy nyitott vonalat vonalként építesz meg, lásd lent. A végén kattints a {{ui:sketch.finishRevolve}} gombra.
+Forgatásnál a keresztmetszet felét **a vázlatban látható tengelytől balra** rajzolod. Mellette a forgatás 3D előnézetét látod. Azonnal mutatja, hogyan fog kinézni a test. A körvonalnak zártnak kell lennie, vagy egy nyitott vonalat vonalként építesz meg, lásd lent. A végén kattints a {{ui:sketch.finishRevolve}} gombra. A terv többi teste elölnézetben látszik, ugyanabban a nézetben, mint a profil, a tengellyel középen: rajzold a profilt melléjük vagy föléjük. A test ott áll, ahová rajzoltad, és a vázlat közepén átmenő vízszintes vonal a talaj: a fölötte rajzolt profil magasabban álló testet ad, a legalsó pontja pedig a test talpa.
 
 A forgatott test pontos test, mint a kihúzott: fogadja az élletörést és a lekerekítést, és kiüregelheted, egy pohárhoz vagy vázához. Egy régebbi layerlinggel forgatott test háló; nyisd meg a {{ui:inspector.editSketch}} gombbal, és fejezd be újra, hogy pontos legyen. Egy tengelyen átnyúló profil nem építhető fel pontosan, és háló lesz belőle, mint korábban.
 

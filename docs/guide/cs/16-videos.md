@@ -7,6 +7,7 @@ summary: Videa, která o Layerlingu vytvořili další autoři.
 
 Tato videa nepocházejí od autorů projektu. Odkazy otevřou YouTube v nové kartě. Dokud na odkaz nekliknete, nic se z YouTube nenačítá.
 
+- [I'm 100% In on Layerling - The Next Big Free CAD](https://youtu.be/IO7S-7bxS5o) – Printology, anglicky. První test od uživatele Tinkercadu: co umí layerling lépe než Tinkercad, co ještě chybí a jestli má cenu přejít hned.
 - [10 Things Layerling Can Do That Tinkercad Can't!](https://youtu.be/cx0OVHgUsJM) – Print N Repeat, anglicky. Druhé video tohoto kanálu: deset věcí, které Layerling umí a Tinkercad ne.
 - [Layerling la nueva herramienta gratuita de modelado 3D, más completo que Tinkercad](https://youtu.be/-EEt0RSINoY) – Fulcro 1900, španělsky. Video o Layerlingu jako o novém bezplatném nástroji pro 3D modelování, který je úplnější než Tinkercad.
 - [Layerling - Tussen Tinkercad en Fusion 360 in, en Helemaal Gratis!](https://youtu.be/X-UuvsfDI-s) – Werkplaats Marc, nizozemsky. První seznámení s Layerlingem pro uživatele Tinkercadu: vytváření dutin, zaoblení, vzor děr, závity s vůlí, vlastní písma a profily tiskáren; pro srovnání je vytištěný šroub s vůlí i bez ní.

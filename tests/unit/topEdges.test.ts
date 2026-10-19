@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { bottomCadModifierEdgeIds, topCadModifierEdgeIds, verticalCadModifierEdgeIds } from "@/lib/topEdges";
+import { bottomCadModifierEdgeIds, horizontalCadModifierEdgeIds, topCadModifierEdgeIds, verticalCadModifierEdgeIds } from "@/lib/topEdges";
 import type { CadModifierEdge } from "@/lib/cadModifierTypes";
 
 const edge = (id: number, points: number[]): CadModifierEdge => ({ id, points, display: true, selectable: true, angle: 90, boundary: false, manifold: true });
@@ -77,5 +77,30 @@ describe("bottom edges (#473)", () => {
   it("only offers edges the tool can treat, and finds nothing in an empty body", () => {
     expect(bottomCadModifierEdgeIds(edges, [3, 1])).toEqual([3]);
     expect(bottomCadModifierEdgeIds([], [])).toEqual([]);
+  });
+});
+
+describe("horizontal edges (#538)", () => {
+  // A box 20 x 20 x 10: the rim above, the foot below, an upright corner, a ledge half way up, a slanted edge, a flat circle
+  const circle = [10, 4, 0, 7, 4, 7, 0, 4, 10, -7, 4, 7, -10, 4, 0];
+  const edges = [
+    edge(1, [0, 10, 0, 20, 10, 0]),
+    edge(2, [0, 0, 20, 20, 0, 20]),
+    edge(3, [0, 0, 0, 0, 10, 0]),
+    edge(4, [0, 5, 0, 20, 5, 0]),
+    edge(5, [0, 0, 0, 20, 10, 0]),
+    edge(6, circle),
+    edge(7, [3, 2, 3, 3, 2, 3]),
+  ];
+
+  it("picks the edges whose every point lies at one height, the rims, the ledge and a flat circle", () => {
+    expect(horizontalCadModifierEdgeIds(edges, [1, 2, 3, 4, 5, 6, 7])).toEqual([1, 2, 4, 6]);
+  });
+
+  it("holds the top and the bottom edges, and only offers edges the tool can treat", () => {
+    const flat = horizontalCadModifierEdgeIds(edges, [1, 2, 3, 4, 5, 6]);
+    [...topCadModifierEdgeIds(edges, [1, 2, 3, 4, 5, 6]), ...bottomCadModifierEdgeIds(edges, [1, 2, 3, 4, 5, 6])].forEach((id) => expect(flat).toContain(id));
+    expect(horizontalCadModifierEdgeIds(edges, [3, 5])).toEqual([]);
+    expect(horizontalCadModifierEdgeIds([], [])).toEqual([]);
   });
 });

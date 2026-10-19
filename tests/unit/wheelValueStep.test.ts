@@ -1,7 +1,15 @@
 import { describe, expect, it } from "vitest";
-import { wheelBaseStep, wheelNextValue, wheelValueFactor } from "@/lib/wheelValueStep";
+import { wheelBaseStep, wheelNextValue, wheelTurn, wheelValueFactor } from "@/lib/wheelValueStep";
 
 describe("the mouse wheel in a number field (#226)", () => {
+  it("reads the turn from deltaX when Shift makes a Mac report it sideways", () => {
+    expect(wheelTurn({ deltaX: 0, deltaY: -100 })).toBe(-100);
+    expect(wheelTurn({ deltaX: 0, deltaY: 100, shiftKey: true })).toBe(100);
+    expect(wheelTurn({ deltaX: -60, deltaY: 0, shiftKey: true })).toBe(-60);
+    // A sideways turn without Shift (a trackpad) is not a notch of this field.
+    expect(wheelTurn({ deltaX: -60, deltaY: 0 })).toBe(0);
+  });
+
   it("takes a coarse step with no key and finer or coarser ones with the keys", () => {
     expect(wheelValueFactor({})).toBe(1);
     expect(wheelValueFactor({ shift: true })).toBe(10);

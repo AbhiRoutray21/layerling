@@ -86,7 +86,7 @@ Avec {{ui:inspector.editSketch}} vous pouvez revenir à l'esquisse à tout momen
 
 ### Tournant
 
-Lors d'une révolution, vous dessinez la moitié de la section **à gauche de l'axe** indiqué dans l'esquisse. À côté, vous voyez un aperçu 3D de la révolution. Cela montre immédiatement à quoi ressemblera le corps. Le contour doit être fermé. À la fin, cliquez sur {{ui:sketch.finishRevolve}}.
+Lors d'une révolution, vous dessinez la moitié de la section **à gauche de l'axe** indiqué dans l'esquisse. À côté, vous voyez un aperçu 3D de la révolution. Cela montre immédiatement à quoi ressemblera le corps. Le contour doit être fermé. À la fin, cliquez sur {{ui:sketch.finishRevolve}}. Les autres corps du dessin sont montrés de face, dans la même vue que le profil, avec l'axe au milieu : dessinez le profil à côté ou au-dessus d'eux. Le corps se tient là où vous l'avez dessiné, et la ligne horizontale au milieu de l'esquisse est le sol : un profil au-dessus donne un corps plus haut, et son point le plus bas est le pied du corps.
 
 Un corps de révolution est un corps exact, comme un corps extrudé : il prend des chanfreins et des congés, et on peut le creuser, pour une tasse ou un vase. Un corps tourné avec une version plus ancienne de layerling est un maillage ; ouvrez {{ui:inspector.editSketch}} et terminez-le à nouveau pour le rendre exact. Un profil qui traverse l'axe ne peut pas être construit exactement et devient un maillage, comme auparavant.
 

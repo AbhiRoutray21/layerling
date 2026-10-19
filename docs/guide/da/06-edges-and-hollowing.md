@@ -10,7 +10,7 @@ Skarpe kanter ser sjældent godt ud på en printet del, og de er heller ikke spe
 1. Vælg formen (eller gruppen).
 2. Klik på {{ui:editor.tool.fillet}} eller {{ui:editor.tool.chamfer}} i båndet, tryk [[B]] for rund eller [[Shift+B]] for fas, eller højreklik formen og vælg det fra menuen.
 3. Formens kanter lyser op. Klik dem der skal berøres. Endnu et klik tager en kant ud igen. Med [[Shift]] tilføjer eller fjerner du en enkelt kant.
-4. Sæt størrelsen og bekræft med {{ui:edge.apply}} eller [[Enter]].
+4. Sæt størrelsen og bekræft med {{ui:edge.apply}} eller [[Enter]]. Bagefter forbliver vinduet åbent på det nye legeme med samme størrelse, så den næste afrunding eller affasning kan følge med det samme; {{ui:edge.done}}, [[Esc]] eller krydset lukker det. Med [[Skift]] eller [[Ctrl]] føjer et klik på {{ui:edge.topEdges}}, {{ui:edge.bottomEdges}}, {{ui:edge.verticalEdges}} eller {{ui:edge.horizontalEdges}} disse kanter til de valgte i stedet for at erstatte dem.
 
 !["Rund kanter"-værktøjet: alle skarpe kanter er valgt, billedet viser forhåndsvisningen med 4 mm radius.](shot:fillet-preview)
 
@@ -25,6 +25,7 @@ I panelet finder du:
 - {{ui:edge.sharpThreshold}} bestemmer hvilke kanter der overhovedet tæller som skarpe. En værdi på 25° behandler kun klare knæk som kanter og lader flade overgange være.
 - {{ui:edge.topEdges}} vælger kun kanterne langs den allerøverste top af formen. Det er den hurtige vej til en småkageudstikker: byg omridset i en skitse som en streg, fas så topkanterne. {{ui:edge.angle}} sætter hvor stejl faser er; den kan ikke nå længere end væggen er tyk.
 - {{ui:edge.bottomEdges}} vælger kun kanterne langs den allernederste bund af formen, modstykket til {{ui:edge.topEdges}}. Det er den hurtige vej til kun at afrunde eller affase foden på en del.
+- {{ui:edge.chamfillet}}, valgt øverst i affasningsvinduet ved siden af {{ui:editor.tool.chamfer}}, laver den printbare fod på en del: en affasning ved pladen, der går tangentielt over i en afrunding mod væggen, så de første lag ikke behøver støtte, og kanten alligevel ender blødt. {{ui:edge.distance}} er den højde, foden fylder, {{ui:edge.angle}} (15° til 75°) hvor stejl affasningen er ved pladen. Kanterne vælger du med {{ui:edge.bottomEdges}}.
 - {{ui:edge.onlyVisibleEdges}} skjuler kanterne der ligger bag formen fra hvor du kigger. Som standard vises hver kant igennem formen, hvilket bliver forvirrende på en travl del; med kontakten til ser du, og kan klikke, kun de kanter der vender mod dig. Drej visningen for at nå de andre. En kant tegnet i rødt (se nedenfor) vises altid.
 - {{ui:edge.tangentChains}}: et klik vælger så også kanter der glat flyder ind i hinanden, for eksempel alle kanter rundt om en flade med rundede hjørner. Kontakten bestemmer kun hvad et klik vælger: CAD-kernen fører altid en fas eller rund med videre langs sådanne glat fortsættende kanter. Panelet fortæller dig langs hvor mange flere kanter det sker.
 - {{ui:edge.keepSize}} bevarer fasen eller runding som den er, selvom du skalerer formen senere.

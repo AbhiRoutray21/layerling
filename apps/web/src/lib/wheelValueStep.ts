@@ -11,6 +11,16 @@ export function wheelValueFactor(keys: { shift?: boolean; ctrl?: boolean; alt?: 
 }
 
 /**
+ * How far the wheel turned, as the browser reports it. With Shift held, macOS turns a vertical wheel into a
+ * sideways one and reports the turn as deltaX with deltaY at 0, so the notch has to be read from deltaX then
+ * (#226: Shift did nothing on a Mac while Ctrl and Alt worked).
+ */
+export function wheelTurn(event: { deltaX: number; deltaY: number; shiftKey?: boolean }): number {
+  if (event.deltaY !== 0) return event.deltaY;
+  return event.shiftKey ? event.deltaX : 0;
+}
+
+/**
  * The step of one wheel notch for a field whose slider runs from `min` to `max` in steps of `sliderStep`, in the
  * units the field shows: a whole unit on a long range (millimetres, degrees), a tenth on a short one, never finer
  * than the field's own step. An inch field steps in sixteenths.

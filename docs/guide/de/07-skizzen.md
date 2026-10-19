@@ -86,7 +86,7 @@ Mit {{ui:inspector.editSketch}} kehrst du jederzeit in die Skizze zurück, um si
 
 ### Rotieren
 
-Beim Rotieren zeichnest du den halben Querschnitt **links von der Achse**, die in der Skizze eingezeichnet ist. Daneben siehst du eine 3D-Vorschau der Drehung. Sie zeigt sofort, wie der Körper aussieht. Der Umriss muss geschlossen sein, oder du baust eine offene Linie als Kontur, siehe unten. Zum Schluss klickst du auf {{ui:sketch.finishRevolve}}.
+Beim Rotieren zeichnest du den halben Querschnitt **links von der Achse**, die in der Skizze eingezeichnet ist. Daneben siehst du eine 3D-Vorschau der Drehung. Sie zeigt sofort, wie der Körper aussieht. Der Umriss muss geschlossen sein, oder du baust eine offene Linie als Kontur, siehe unten. Zum Schluss klickst du auf {{ui:sketch.finishRevolve}}. Die anderen Körper des Entwurfs erscheinen von vorn, in derselben Ansicht wie das Profil, mit der Achse in der Mitte: Zeichne das Profil neben oder über sie. Der Körper steht dort, wo du ihn gezeichnet hast, und die waagerechte Linie durch die Mitte der Skizze ist der Boden: Ein Profil über ihr ergibt einen Körper, der höher steht, und sein tiefster Punkt ist der Fuß des Körpers.
 
 Ein gedrehter Körper ist ein exakter Körper wie ein ausgezogener: Er nimmt Fasen und Verrundungen an, und du kannst ihn aushöhlen, für einen Becher oder eine Vase. Ein Körper, der mit einer älteren layerling-Fassung gedreht wurde, ist ein Netz; öffne {{ui:inspector.editSketch}} und schließe ihn neu ab, dann ist er exakt. Ein Umriss, der über die Achse hinausreicht, lässt sich nicht exakt bauen und wird wie bisher ein Netz.
 

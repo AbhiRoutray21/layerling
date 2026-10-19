@@ -86,7 +86,7 @@ Met {{ui:inspector.editSketch}} kun je op elk moment terug naar de schets om hem
 
 ### Omwentelen
 
-Bij draaien teken je de halve doorsnede **links van de as** die in de schets getoond wordt. Daarnaast zie je een 3D-voorbeeld van het draaien. Dat laat meteen zien hoe het lichaam eruit gaat zien. De omtrek moet gesloten zijn, of je bouwt een open lijn als lijn met dikte, zie hieronder. Klik aan het eind op {{ui:sketch.finishRevolve}}.
+Bij draaien teken je de halve doorsnede **links van de as** die in de schets getoond wordt. Daarnaast zie je een 3D-voorbeeld van het draaien. Dat laat meteen zien hoe het lichaam eruit gaat zien. De omtrek moet gesloten zijn, of je bouwt een open lijn als lijn met dikte, zie hieronder. Klik aan het eind op {{ui:sketch.finishRevolve}}. De andere lichamen van het ontwerp worden van voren getoond, in dezelfde weergave als het profiel, met de as in het midden: teken het profiel naast of boven ze. Het lichaam staat waar je het getekend hebt, en de horizontale lijn door het midden van de schets is de grond: een profiel erboven geeft een lichaam dat hoger staat, en het laagste punt is de voet van het lichaam.
 
 Een gedraaid lichaam is een exact lichaam, net als een geëxtrudeerd: het neemt afschuiningen en afrondingen aan, en je kunt het uithollen, voor een beker of een vaas. Een lichaam dat met een oudere layerling gedraaid is, is een mesh; open {{ui:inspector.editSketch}} en voltooi het opnieuw om het exact te maken. Een profiel dat over de as heen reikt, kan niet exact gebouwd worden en wordt, zoals voorheen, een mesh.
 

@@ -4,6 +4,7 @@ import { Download, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { t, type MessageKey } from "@/lib/i18n";
 import { installHintKey, installHintSnoozed } from "@/lib/installHint";
+import { offlineAvailable } from "@/lib/offlineSupport";
 import { useLanguage } from "@/lib/useLanguage";
 
 const DISMISSED_KEY = "layerling.installHintDismissed";
@@ -42,7 +43,8 @@ export function InstallAppHint({ variant = "dashboard" }: { variant?: "dashboard
   const [fallbackKey, setFallbackKey] = useState<MessageKey>("installHint.chromium");
 
   useEffect(() => {
-    if (!window.isSecureContext || !("serviceWorker" in navigator)) return;
+    // Only where layerling really keeps itself for offline use: not in a build without a service worker, such as the Docker image.
+    if (!offlineAvailable()) return;
     if (runsAsInstalledApp()) {
       // Chromium and Safari keep the storage of the app and of the browser's tabs together, so the app leaves a note for them.
       try {

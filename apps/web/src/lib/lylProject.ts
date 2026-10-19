@@ -10,6 +10,7 @@ import { normalizeSketchStroke, SKETCH_STROKE_JOINS } from "@/lib/sketchStroke";
 import { normalizeTextEdge } from "@/lib/textEdge";
 import { isTextKeyring } from "@/lib/textGeometry";
 import { normalizeNotes } from "@/lib/workplaneNotes";
+import { normalizeQrSettings } from "@/lib/qrCode";
 import { importedShapeFromStl } from "@/lib/stlImport";
 import { importedShapeFromSvg } from "@/lib/svgImport";
 import { importedShapeFrom3mf } from "@/lib/threemfImport";
@@ -32,7 +33,7 @@ function knownSchema(schema: unknown) {
 export const LYL_FORMAT_VERSION = 2;
 export const LYL_MINIMUM_READER_VERSION = 2;
 export const LYL_OLDEST_READABLE_FORMAT_VERSION = 1;
-export const LYL_CREATED_WITH_VERSION = "1.88.0";
+export const LYL_CREATED_WITH_VERSION = "1.91.0";
 export const LYL_MEDIA_TYPE = "application/vnd.layerling.project+zip";
 
 export const LYL_LIMITS = {
@@ -54,7 +55,7 @@ const SHAPE_KINDS = new Set([
 ]);
 
 const FEATURE_TYPES = new Set([
-  "group", "boolean-subtraction", "boolean-intersection", "mirror", "sketch-extrusion", "sketch-revolve", "sketch-sweep", "fillet", "chamfer", "shell", "delete-face",
+  "group", "boolean-subtraction", "boolean-intersection", "mirror", "sketch-extrusion", "sketch-revolve", "sketch-sweep", "fillet", "chamfer", "chamfillet", "shell", "delete-face",
 ]);
 
 type LylAssetKind = "source" | "derived-mesh" | "brep" | "image" | "display-edges";
@@ -907,7 +908,7 @@ function activeProjectIndexes(state: LylStateV1) {
     }
     const treatments = Array.isArray(node.definition.edgeTreatments) ? node.definition.edgeTreatments as Array<Record<string, unknown>> : [];
     treatments.forEach((treatment, index) => {
-      const type = treatment.kind === "fillet" || treatment.kind === "shell" ? treatment.kind : treatment.kind === "deleteFace" ? "delete-face" : "chamfer";
+      const type = treatment.kind === "fillet" || treatment.kind === "chamfillet" || treatment.kind === "shell" ? treatment.kind : treatment.kind === "deleteFace" ? "delete-face" : "chamfer";
       const featureId = `feature/${safeNodeToken(node.nodeId)}/${type}/${index}`;
       features.push({
         id: featureId,
@@ -1276,6 +1277,10 @@ function validateShapeDefinition(definition: Record<string, unknown>, label: str
   if (definition.layeredIcon !== undefined && typeof definition.layeredIcon !== "boolean") {
     throw new Error(`${label}.layeredIcon must be true or false`);
   }
+  // A QR code's settings (#553): a text and known choices. Old projects have none.
+  if (definition.qrCode !== undefined && !normalizeQrSettings(definition.qrCode)) {
+    throw new Error(`${label}.qrCode must hold the code's text`);
+  }
   // The corners of a text's line (#215): a layer of a name tag can be bevelled or sharp now, so an
   // unknown corner is refused rather than read as sharp.
   const textJoin = (definition.textStroke as { join?: unknown } | undefined)?.join;
@@ -1518,14 +1523,14 @@ function validateShapeDefinition(definition: Record<string, unknown>, label: str
     }
   }
   if (kind === "gridfinity") {
-    // The size is rounded to whole grid units on loading, and the geometry clamps the label shelf's values; only nonsense is refused.
+    // The size is rounded to whole grid units on loading, and the geometry clamps the label shelf's, the finger scoop's and the floor's values; only nonsense is refused.
     if (definition.gridfinityType !== undefined && definition.gridfinityType !== "bin" && definition.gridfinityType !== "baseplate") {
       throw new Error(`${label}.gridfinityType is invalid`);
     }
-    for (const key of ["gridfinityLip", "gridfinityMagnets", "gridfinityLabelBack", "gridfinityLabelFront", "gridfinityLabelLeft", "gridfinityLabelRight", "hingePinless"] as const) {
+    for (const key of ["gridfinityLip", "gridfinityMagnets", "gridfinityHalfGrid", "gridfinityLabelBack", "gridfinityLabelFront", "gridfinityLabelLeft", "gridfinityLabelRight", "gridfinityScoopBack", "gridfinityScoopFront", "gridfinityScoopLeft", "gridfinityScoopRight", "hingePinless"] as const) {
       if (definition[key] !== undefined && typeof definition[key] !== "boolean") throw new Error(`${label}.${key} must be true or false`);
     }
-    for (const key of ["gridfinityLabelBackWidth", "gridfinityLabelBackLength", "gridfinityLabelBackOffset", "gridfinityLabelFrontWidth", "gridfinityLabelFrontLength", "gridfinityLabelFrontOffset", "gridfinityLabelLeftWidth", "gridfinityLabelLeftLength", "gridfinityLabelLeftOffset", "gridfinityLabelRightWidth", "gridfinityLabelRightLength", "gridfinityLabelRightOffset", "gridfinityLabelCornerSize"] as const) {
+    for (const key of ["gridfinityLabelBackWidth", "gridfinityLabelBackLength", "gridfinityLabelBackOffset", "gridfinityLabelFrontWidth", "gridfinityLabelFrontLength", "gridfinityLabelFrontOffset", "gridfinityLabelLeftWidth", "gridfinityLabelLeftLength", "gridfinityLabelLeftOffset", "gridfinityLabelRightWidth", "gridfinityLabelRightLength", "gridfinityLabelRightOffset", "gridfinityLabelCornerSize", "gridfinityScoopRadius", "gridfinityFloorHeight"] as const) {
       if (definition[key] === undefined) continue;
       const value = finiteNumber(definition[key], `${label}.${key}`);
       // Only an offset runs both ways along a wall.

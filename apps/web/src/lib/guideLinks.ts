@@ -44,6 +44,7 @@ export const GUIDE_SECTIONS = {
   textFill: { chapter: "text", de: "kontur-silhouette-und-breiter", en: "outline-silhouette-and-wider", nl: "contour-silhouet-en-breder", ru: "kontur-siluet-i-shire", cs: "obrys-silueta-a-rozsireni", sl: "kontura-silhueta-in-sirse", hu: "koervonal-sziluett-es-szelesebb" },
   textLayers: { chapter: "text", de: "schichten-und-namensschilder", en: "layers-and-name-tags", nl: "lagen-en-naambordjes", ru: "sloi-i-birki-s-imenem", cs: "vrstvy-a-jmenovky", sl: "plasti-in-napisi-z-imenom", hu: "retegek-es-nevcimkek" },
   iconTag: { chapter: "text", de: "symbolschilder", en: "icon-tags", nl: "icoonbordjes", ru: "birki-so-znachkom", cs: "stitky-se-symbolem", sl: "simbolne-oznake", hu: "ikoncimkek" },
+  qrCode: { chapter: "text", de: "qr-codes", en: "qr-codes", nl: "qr-codes", fr: "codes-qr", ru: "qr-kody", cs: "qr-kody", sl: "kode-qr", hu: "qr-kodok" },
   myShapes: { chapter: "shapes", de: "eigene-formen", en: "custom-shapes", nl: "eigen-vormen", ru: "sobstvennye-figury", cs: "vlastni-tvary", sl: "oblike-po-meri", hu: "sajat-alakzatok" },
   objectList: { chapter: "select", de: "die-objektliste", en: "the-object-list", nl: "de-objectlijst", ru: "spisok-obektov", cs: "seznam-objektu", sl: "seznam-objektov", hu: "az-objektumlista" },
   pattern: { chapter: "select", de: "muster-reihe-und-kreis", en: "patterns-row-and-circle", nl: "patronen-rij-en-cirkel", ru: "massivy-ryad-i-krug", cs: "opakovani-v-rade-a-po-kruznici", sl: "polja-vrsta-in-krog", hu: "ismetles-sor-es-koer" },
@@ -72,6 +73,7 @@ export const GUIDE_SECTIONS = {
   screwHoles: { chapter: "threads", de: "stufen-und-senkbohrung", en: "counterbore-and-countersink", nl: "verzinkboring-en-verzinking", ru: "tsekovka-i-zenkovka", cs: "valcove-a-kuzelove-zahloubeni", sl: "stopnicasta-in-udirna-izvrtina", hu: "hengeres-es-kupos-suellyesztes" },
   ruler: { chapter: "measuring", de: "das-lineal", en: "the-ruler", nl: "de-liniaal", ru: "lineyka", cs: "pravitko", sl: "ravnilo", hu: "a-vonalzo" },
   printer: { chapter: "printing", de: "den-drucker-waehlen", en: "choosing-your-printer", nl: "je-printer-kiezen", ru: "vybor-printera", cs: "vyber-tiskarny", sl: "izbira-tiskalnika", hu: "a-nyomtatod-kivalasztasa" },
+  designFolders: { chapter: "files", de: "ordner-fuer-deine-entwuerfe", en: "folders-for-your-designs", nl: "mappen-voor-je-ontwerpen", fr: "des-dossiers-pour-vos-dessins", ru: "papki-dlya-proektov", cs: "slozky-pro-projekty", sl: "mape-za-tvoje-projekte" },
   backingUp: { chapter: "files", de: "sichern-und-weitergeben", en: "backing-up-and-passing-on", nl: "back-up-maken-en-doorgeven", ru: "rezervnye-kopii-i-peredacha", cs: "zalohovani-a-predavani", sl: "varnostno-kopiranje-in-deljenje", hu: "biztonsagi-mentes-es-tovabbadas" },
   exporting: { chapter: "files", de: "exportieren", en: "exporting", nl: "exporteren", ru: "eksport", cs: "export", sl: "izvoz", hu: "exportalas" },
   importing: { chapter: "files", de: "importieren", en: "importing", nl: "importeren", ru: "import", cs: "import", sl: "uvoz", hu: "importalas" },
@@ -126,6 +128,7 @@ type GuideShape = {
   importedMesh?: { sourceFormat?: string };
   layeredText?: boolean;
   layeredIcon?: boolean;
+  qrCode?: unknown;
 };
 
 export function guideSectionForShape(shape: GuideShape): GuideSection | undefined {
@@ -133,6 +136,8 @@ export function guideSectionForShape(shape: GuideShape): GuideSection | undefine
   if (shape.layeredText && shape.groupedShapes?.length) return "textLayers";
   // An icon tag is a bundle too; its card is explained next to the name tag.
   if (shape.layeredIcon && shape.groupedShapes?.length) return "iconTag";
+  // A QR code (#553), alone or on its plate, is explained with the texts and tags.
+  if (shape.qrCode) return "qrCode";
   if (shape.groupedShapes?.length) {
     if (shape.groupOperation === "bundle") return "bundling";
     if (shape.groupOperation === "intersection") return "intersection";
