@@ -8250,13 +8250,15 @@ html[data-theme="dark"] .inspector-bundle-note {
   filter: drop-shadow(0 0 4px rgba(129, 67, 0, 0.4));
 }
 
-.tape-overlay.delete-mode .tape-segment-group:hover .tape-segment {
+.tape-overlay.delete-mode .tape-segment-group:hover .tape-segment,
+.tape-overlay.quick-delete .tape-segment-group:hover .tape-segment {
   stroke: var(--hover-accent-color);
   stroke-width: 3;
   filter: drop-shadow(0 0 2px rgba(220, 63, 54, 0.3));
 }
 
-.tape-overlay.delete-mode .tape-point:hover {
+.tape-overlay.delete-mode .tape-point:hover,
+.tape-overlay.quick-delete .tape-point:hover {
   fill: #fff0ee;
   stroke: var(--hover-accent-color);
   filter: drop-shadow(0 0 3px rgba(220, 63, 54, 0.36));

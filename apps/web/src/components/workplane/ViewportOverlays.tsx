@@ -183,6 +183,8 @@ export type TapeModel = {
   startPointId: string | null;
   /** The edge the first point lies on, while a measurement is under way: the diameter of a circle snaps from it (#308). */
   startEdge?: TapeEdgeAttachment | null;
+  /** Unit normal of the surface the first point was placed on, while a measurement is under way (#589). */
+  startNormal?: [number, number, number] | null;
   hover: TapeCandidate | null;
 };
 
@@ -202,6 +204,8 @@ export type TapeCandidate = {
   edge?: TapeEdgeAttachment;
   /** The edge the point lies on, whether or not a click measures all of it. */
   circleEdge?: TapeEdgeAttachment;
+  /** Unit normal of the surface face under the point, so the second point can snap perpendicular to it (#589). */
+  surfaceNormal?: [number, number, number];
 };
 
 export type RotationHandleSide = "near" | "right" | "far" | "left";
@@ -948,6 +952,7 @@ export function TapeOverlay({
   startPointId,
   active,
   deleteMode,
+  quickDelete = false,
   moveMode,
   onPointPointerDown,
   onPointPointerMove,
@@ -959,6 +964,7 @@ export function TapeOverlay({
   startPointId: string | null;
   active: boolean;
   deleteMode: boolean;
+  quickDelete?: boolean;
   moveMode: boolean;
   onPointPointerDown: (event: ReactPointerEvent<SVGCircleElement>, pointId: string) => void;
   onPointPointerMove: (event: ReactPointerEvent<SVGCircleElement>, pointId: string) => void;
@@ -968,7 +974,7 @@ export function TapeOverlay({
   onMarkMiddle?: (segmentId: string) => void;
 }) {
   return (
-    <div className={`tape-overlay ${active ? "active" : ""} ${deleteMode ? "delete-mode" : ""} ${moveMode ? "move-mode" : ""}`} aria-label={t("aria.tapeMeasurements")}>
+    <div className={`tape-overlay ${active ? "active" : ""} ${deleteMode ? "delete-mode" : ""} ${quickDelete ? "quick-delete" : ""} ${moveMode ? "move-mode" : ""}`} aria-label={t("aria.tapeMeasurements")}>
       <svg className="tape-guides" width="100%" height="100%" aria-hidden="true">
         {overlay.segments.map((segment) => (
           <g key={segment.id} className="tape-segment-group">

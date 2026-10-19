@@ -155,7 +155,8 @@ import { directionIsOwnShapeAxis, rotatedGeometryShapePatch, rotationPatchFromQu
 import type { CadModifierEdge } from "@/lib/cadModifierTypes";
 import { cadFaceHighlightPositions, type CadFacePick } from "@/lib/cadFacePick";
 import { cadFacePickMesh, disposeCadFacePickMesh } from "@/lib/cadFacePickMesh";
-import { circleOfEdgePoints, pointAcrossCircle, pointOnCircle } from "@/lib/tapeCircle";
+import { outwardFaceNormal } from "@/lib/layFlat";
+import { axisLockedPoint, circleOfEdgePoints, perpendicularFootOnPlane, perpendicularFootOnSegment, perpendicularPointsOnCircle, pointAcrossCircle, pointOnCircle } from "@/lib/tapeCircle";
 import { syncHistoryPickHighlight } from "@/components/workplane/historyPickHighlight";
 import { orbitViewBy, panViewBy } from "@/lib/viewArrowKeys";
 import { useViewportKeyboardHooks } from "@/components/workplane/viewportKeyboard";
@@ -1610,13 +1611,109 @@ function tapeWorldPaths(child: THREE.Line, position: THREE.BufferAttribute | THR
   return paths;
 }
 
-function pickModelTapeCandidate(state: ThreeState, shapeIds: string[], clientX: number, clientY: number): TapeCandidate | null {
+/** How close, in pixels, the pointer has to come to a perpendicular foot for it to catch (#589). */
+const TAPE_PERPENDICULAR_SNAP_PIXELS = 16;
+
+function surfaceHitWorldNormal(state: ThreeState, hit: THREE.Intersection): THREE.Vector3 | null {
+  if (!hit.face || !(hit.object instanceof THREE.Mesh)) return null;
+  const mesh = hit.object as THREE.Mesh<THREE.BufferGeometry>;
+  mesh.updateWorldMatrix(true, false);
+  const position = mesh.geometry.getAttribute("position");
+  if (!position) return null;
+  const corner = (index: number) => new THREE.Vector3().fromBufferAttribute(position, index).applyMatrix4(mesh.matrixWorld);
+  const normal = outwardFaceNormal(corner(hit.face.a), corner(hit.face.b), corner(hit.face.c), state.raycaster.ray.direction);
+  return normal ? new THREE.Vector3(normal.x, normal.y, normal.z).normalize() : null;
+}
+
+/**
+ * When the first point of a measurement has been placed, the foot of the perpendicular onto the
+ * hovered face (or along the first face's normal across a bore) catches the pointer when it comes
+ * near, or anywhere on the face while Shift is held (#589).
+ */
+function snapSurfacePerpendicularPoint(
+  state: ThreeState,
+  surfaceHit: THREE.Intersection,
+  hitNormal: THREE.Vector3 | null,
+  startWorld: THREE.Vector3,
+  startNormal: THREE.Vector3 | null,
+  pointerX: number,
+  pointerY: number,
+  rect: DOMRect,
+  shiftKey: boolean,
+): THREE.Vector3 | null {
+  const raycaster = new THREE.Raycaster();
+  raycaster.layers.set(RENDER_LAYER_SHAPES);
+  const notClipped = (point: THREE.Vector3) => !state.sectionPlane || state.sectionPlane.distanceToPoint(point) >= -0.001;
+  const pointLiesOnMesh = (point: THREE.Vector3, normal: THREE.Vector3) => {
+    const unit = normal.clone().normalize();
+    for (const sign of [1, -1]) {
+      raycaster.set(point.clone().addScaledVector(unit, 0.05 * sign), unit.clone().multiplyScalar(-sign));
+      const hit = raycaster.intersectObject(surfaceHit.object, false).find((entry) => entry.distance <= 0.1 && notClipped(entry.point));
+      if (hit) return true;
+    }
+    return false;
+  };
+
+  const candidates: THREE.Vector3[] = [];
+  if (startNormal && startNormal.lengthSq() > 1e-12) {
+    const direction = startNormal.clone().normalize();
+    if (surfaceHit.point.clone().sub(startWorld).dot(direction) < 0) direction.negate();
+    raycaster.set(startWorld.clone().addScaledVector(direction, 1e-3), direction);
+    const hits = raycaster.intersectObject(surfaceHit.object, false).filter((entry) => notClipped(entry.point));
+    if (hits.length > 0) {
+      hits.sort((a, b) => a.point.distanceToSquared(surfaceHit.point) - b.point.distanceToSquared(surfaceHit.point));
+      candidates.push(hits[0].point.clone());
+    }
+  }
+  if (hitNormal) {
+    const foot = perpendicularFootOnPlane(startWorld, surfaceHit.point, hitNormal);
+    if (foot && pointLiesOnMesh(foot, hitNormal)) {
+      candidates.push(foot);
+    }
+  }
+
+  const projected = new THREE.Vector3();
+  const snapReach = pointerReach(TAPE_PERPENDICULAR_SNAP_PIXELS);
+  let best: { point: THREE.Vector3; screenDistance: number } | null = null;
+  for (const candidate of candidates) {
+    projected.copy(candidate).project(state.camera);
+    const sx = ((projected.x + 1) / 2) * rect.width;
+    const sy = ((1 - projected.y) / 2) * rect.height;
+    const screenDistance = Math.hypot(pointerX - sx, pointerY - sy);
+    if (screenDistance <= snapReach || shiftKey) {
+      if (!best || screenDistance < best.screenDistance) {
+        best = { point: candidate, screenDistance };
+      }
+    }
+  }
+  if (best) return best.point;
+
+  if (shiftKey && hitNormal) {
+    const baseInPlane = perpendicularFootOnPlane(startWorld, surfaceHit.point, hitNormal) ?? startWorld;
+    const locked = axisLockedPoint(baseInPlane, surfaceHit.point, hitNormal);
+    if (locked.distanceToSquared(startWorld) > 1e-12 && pointLiesOnMesh(locked, hitNormal)) {
+      return locked;
+    }
+  }
+  return null;
+}
+
+function pickModelTapeCandidate(
+  state: ThreeState,
+  shapeIds: string[],
+  clientX: number,
+  clientY: number,
+  startWorld?: THREE.Vector3 | null,
+  startNormal?: THREE.Vector3 | null,
+  shiftKey = false,
+): TapeCandidate | null {
   const rect = state.renderer.domElement.getBoundingClientRect();
   const pointerX = clientX - rect.left;
   const pointerY = clientY - rect.top;
   // A finger reaches further than a mouse pointer (#337).
   const vertexReach = pointerReach(9);
   const edgeReach = pointerReach(12);
+  const perpReach = pointerReach(TAPE_PERPENDICULAR_SNAP_PIXELS);
   const targets = shapeIds.flatMap((id) => {
     const object = findShapeObject(state, id);
     return object ? [object] : [];
@@ -1626,7 +1723,7 @@ function pickModelTapeCandidate(state: ThreeState, shapeIds: string[], clientX: 
   state.camera.updateMatrixWorld();
   targets.forEach((target) => target.updateWorldMatrix(true, true));
   const vertexCandidates: Array<{ distance: number; candidate: TapeCandidate }> = [];
-  const edgeCandidates: Array<{ distance: number; candidate: TapeCandidate }> = [];
+  const edgeCandidates: Array<{ distance: number; perpendicular?: boolean; candidate: TapeCandidate }> = [];
   const projected = new THREE.Vector3();
 
   targets.forEach((target) => {
@@ -1679,6 +1776,92 @@ function pickModelTapeCandidate(state: ThreeState, shapeIds: string[], clientX: 
           }
         });
 
+        let snappedPerpendicular = false;
+        if (startWorld) {
+          let bestPerp: {
+            screenDistance: number;
+            edgeDistance: number;
+            world: THREE.Vector3;
+            normalized: [number, number, number];
+          } | null = null;
+
+          const circle = circleOfEdgePoints(worldPoints);
+          if (circle) {
+            const across = pointAcrossCircle(circle, startWorld);
+            const radialPoints = [
+              ...perpendicularPointsOnCircle(circle, startWorld),
+              ...(across ? [across] : []),
+            ];
+            for (const radial of radialPoints) {
+              projected.copy(radial).project(state.camera);
+              const sx = ((projected.x + 1) / 2) * rect.width;
+              const sy = ((1 - projected.y) / 2) * rect.height;
+              const screenDistance = Math.hypot(pointerX - sx, pointerY - sy);
+              if (screenDistance <= perpReach || shiftKey) {
+                const attachment = tapeAttachmentFromWorld(state, shapeId, radial, "edge");
+                if (attachment && (!bestPerp || screenDistance < bestPerp.screenDistance)) {
+                  bestPerp = {
+                    screenDistance,
+                    edgeDistance: screenDistance <= perpReach ? 0 : Math.min(edgeReach, screenDistance),
+                    world: radial,
+                    normalized: attachment.normalized,
+                  };
+                }
+              }
+            }
+          }
+
+          for (let index = 0; index + 1 < worldPoints.length; index += 1) {
+            const foot = perpendicularFootOnSegment(startWorld, worldPoints[index], worldPoints[index + 1]);
+            if (!foot) continue;
+            projected.copy(foot.point).project(state.camera);
+            const sx = ((projected.x + 1) / 2) * rect.width;
+            const sy = ((1 - projected.y) / 2) * rect.height;
+            const screenDistance = Math.hypot(pointerX - sx, pointerY - sy);
+            if (screenDistance <= perpReach || shiftKey) {
+              const normalizedA = normalizedPoints[index];
+              const normalizedB = normalizedPoints[index + 1];
+              const normalized: [number, number, number] = [
+                normalizedA[0] + (normalizedB[0] - normalizedA[0]) * foot.amount,
+                normalizedA[1] + (normalizedB[1] - normalizedA[1]) * foot.amount,
+                normalizedA[2] + (normalizedB[2] - normalizedA[2]) * foot.amount,
+              ];
+              if (!bestPerp || screenDistance < bestPerp.screenDistance) {
+                bestPerp = {
+                  screenDistance,
+                  edgeDistance: screenDistance <= perpReach
+                    ? 0
+                    : distanceToScreenSegment(pointerX, pointerY, screens[index].x, screens[index].y, screens[index + 1].x, screens[index + 1].y),
+                  world: foot.point,
+                  normalized,
+                };
+              }
+            }
+          }
+
+          if (bestPerp) {
+            snappedPerpendicular = true;
+            edgeCandidates.push({
+              distance: bestPerp.edgeDistance,
+              perpendicular: true,
+              candidate: {
+                x: bestPerp.world.x,
+                y: bestPerp.world.y,
+                z: bestPerp.world.z,
+                attachment: {
+                  shapeId,
+                  kind: "edge",
+                  topologyKey: target.userData.tapeTopologyKey as string | undefined,
+                  normalized: bestPerp.normalized,
+                },
+                edge,
+              },
+            });
+          }
+        }
+
+        if (snappedPerpendicular) return;
+
         for (let index = 0; index + 1 < worldPoints.length; index += 1) {
           const aScreen = screens[index];
           const bScreen = screens[index + 1];
@@ -1717,15 +1900,39 @@ function pickModelTapeCandidate(state: ThreeState, shapeIds: string[], clientX: 
 
   vertexCandidates.sort((a, b) => a.distance - b.distance);
   edgeCandidates.sort((a, b) => a.distance - b.distance);
+  if (shiftKey && edgeCandidates[0]?.perpendicular) return edgeCandidates[0].candidate;
   if (vertexCandidates[0]) return vertexCandidates[0].candidate;
   if (edgeCandidates[0]) return edgeCandidates[0].candidate;
 
   aimPickRay(state, clientX, clientY, RENDER_LAYER_SHAPES);
-  const surfaceHit = state.raycaster.intersectObjects(targets, true).find((entry) => entry.object instanceof THREE.Mesh);
+  const surfaceHit = state.raycaster.intersectObjects(targets, true).find(
+    (entry) => entry.object instanceof THREE.Mesh && (!state.sectionPlane || state.sectionPlane.distanceToPoint(entry.point) >= -0.001),
+  );
   if (!surfaceHit) return null;
   const shapeId = surfaceHit.object.userData.shapeId as string;
+  const hitNormal = surfaceHitWorldNormal(state, surfaceHit);
+  const surfaceNormal: [number, number, number] | undefined = hitNormal ? [hitNormal.x, hitNormal.y, hitNormal.z] : undefined;
+  if (startWorld) {
+    const snappedPoint = snapSurfacePerpendicularPoint(
+      state,
+      surfaceHit,
+      hitNormal,
+      startWorld,
+      startNormal ?? null,
+      pointerX,
+      pointerY,
+      rect,
+      shiftKey,
+    );
+    if (snappedPoint) {
+      const snappedAttachment = tapeAttachmentFromWorld(state, shapeId, snappedPoint);
+      if (snappedAttachment) {
+        return { x: snappedPoint.x, y: snappedPoint.y, z: snappedPoint.z, attachment: snappedAttachment, surfaceNormal };
+      }
+    }
+  }
   const attachment = tapeAttachmentFromWorld(state, shapeId, surfaceHit.point);
-  return attachment ? { x: surfaceHit.point.x, y: surfaceHit.point.y, z: surfaceHit.point.z, attachment } : null;
+  return attachment ? { x: surfaceHit.point.x, y: surfaceHit.point.y, z: surfaceHit.point.z, attachment, surfaceNormal } : null;
 }
 
 function distanceToScreenSegment(x: number, y: number, ax: number, ay: number, bx: number, by: number) {
@@ -3215,6 +3422,8 @@ export function WorkplaneViewport({
   // A click on an edge measures the whole edge (the length of a circle, say); off, it sets a point on the edge (#308).
   const [tapeWholeEdges, setTapeWholeEdges] = useState(true);
   const [tapeDeleteMode, setTapeDeleteMode] = useState(false);
+  const [tapeQuickDelete, setTapeQuickDelete] = useState(false);
+  const lastTapePointerRef = useRef<{ clientX: number; clientY: number } | null>(null);
   const [tapeMoveMode, setTapeMoveMode] = useState(false);
   const [tapeToolsOpen, setTapeToolsOpen] = useState(false);
   const [tapeClearPending, setTapeClearPending] = useState(false);
@@ -4937,8 +5146,10 @@ export function WorkplaneViewport({
     tapeModeRef.current = active;
     setTapeMode(active);
     if (!active) {
+      setTapeQuickDelete(false);
+      lastTapePointerRef.current = null;
       const current = tapeModelRef.current;
-      storeTapeModel({ ...current, startPointId: null, hover: null });
+      storeTapeModel({ ...current, startPointId: null, startEdge: null, startNormal: null, hover: null });
     }
   }, [storeTapeModel]);
 
@@ -4958,7 +5169,14 @@ export function WorkplaneViewport({
   }, [cruiseAsset, setTapeActive]);
 
   const resolveTapeCandidate = useCallback(
-    (clientX: number, clientY: number, ignoredPointId?: string, wholeEdges: boolean = tapeWholeEdgesRef.current): TapeCandidate | null => {
+    (
+      clientX: number,
+      clientY: number,
+      ignoredPointId?: string,
+      wholeEdges: boolean = tapeWholeEdgesRef.current,
+      shiftKey = false,
+      quickDeleteModifier = false,
+    ): TapeCandidate | null => {
       const state = threeRef.current;
       if (!state) return null;
 
@@ -4970,10 +5188,29 @@ export function WorkplaneViewport({
       const pointReach = pointerReach(12);
       const lineReach = pointerReach(10);
       const referenceReach = pointerReach(14);
+      const perpReach = pointerReach(TAPE_PERPENDICULAR_SNAP_PIXELS);
+      const activeStartPoint = model.startPointId && model.startPointId !== ignoredPointId
+        ? model.points.find((point) => point.id === model.startPointId) ?? null
+        : null;
+      const moveStartPoint = !activeStartPoint && ignoredPointId
+        ? (() => {
+            const attachedSegments = model.segments.filter(
+              (segment) => !segment.edge && (segment.startId === ignoredPointId || segment.endId === ignoredPointId),
+            );
+            if (attachedSegments.length !== 1) return null;
+            const otherId = attachedSegments[0].startId === ignoredPointId ? attachedSegments[0].endId : attachedSegments[0].startId;
+            return model.points.find((point) => point.id === otherId) ?? null;
+          })()
+        : null;
+      const referenceStartPoint = activeStartPoint ?? moveStartPoint;
+      const startWorld = referenceStartPoint ? tapePointWorld(state, referenceStartPoint) : null;
+      const startNormal = activeStartPoint && model.startNormal
+        ? new THREE.Vector3(model.startNormal[0], model.startNormal[1], model.startNormal[2])
+        : null;
+
       // The first point is on a circle: the point across it, which makes the diameter, catches the pointer first.
-      if (model.startPointId && model.startEdge && model.startPointId !== ignoredPointId) {
-        const start = model.points.find((point) => point.id === model.startPointId);
-        const across = start ? diameterSnapCandidate(state, start, model.startEdge, localX, localY) : null;
+      if (activeStartPoint && model.startEdge) {
+        const across = diameterSnapCandidate(state, activeStartPoint, model.startEdge, localX, localY);
         if (across) return across;
       }
       const closestPoint = model.points.reduce<{ point: TapePoint; distance: number } | null>((closest, point) => {
@@ -4986,6 +5223,7 @@ export function WorkplaneViewport({
         return closest;
       }, null);
       if (closestPoint) {
+        if (quickDeleteModifier) return null;
         const world = tapePointWorld(state, closestPoint.point);
         return { x: world.x, y: world.y, z: world.z, pointId: closestPoint.point.id, attachment: closestPoint.point.attachment };
       }
@@ -5006,7 +5244,7 @@ export function WorkplaneViewport({
         }
       }
 
-      const closestSegment =model.segments.reduce<{ world: THREE.Vector3; distance: number } | null>((closest, segment) => {
+      const closestSegment = model.segments.reduce<{ world: THREE.Vector3; distance: number } | null>((closest, segment) => {
         if (segment.startId === ignoredPointId || segment.endId === ignoredPointId) return closest;
         const start = model.points.find((point) => point.id === segment.startId);
         const end = model.points.find((point) => point.id === segment.endId);
@@ -5021,26 +5259,39 @@ export function WorkplaneViewport({
           const amount = dx * dx + dy * dy > 0.001 ? clamp(((localX - a.x) * dx + (localY - a.y) * dy) / (dx * dx + dy * dy), 0, 1) : 0;
           const distance = Math.hypot(localX - (a.x + dx * amount), localY - (a.y + dy * amount));
           if (distance <= lineReach && (!closest || distance < closest.distance)) {
-            closest = { world: worldPoints[index].clone().lerp(worldPoints[index + 1], amount), distance };
+            let world = worldPoints[index].clone().lerp(worldPoints[index + 1], amount);
+            if (startWorld) {
+              const foot = perpendicularFootOnSegment(startWorld, worldPoints[index], worldPoints[index + 1]);
+              if (foot) {
+                const footScreen = projectToScreen(foot.point, state);
+                if (Math.hypot(localX - footScreen.x, localY - footScreen.y) <= perpReach || shiftKey) {
+                  world = foot.point;
+                }
+              }
+            }
+            closest = { world, distance };
           }
         }
         return closest;
       }, null);
 
       if (closestSegment) {
+        if (quickDeleteModifier) return null;
         const existing = model.points.find((point) => tapePointWorld(state, point).distanceTo(closestSegment.world) < 0.001);
         return { x: closestSegment.world.x, y: closestSegment.world.y, z: closestSegment.world.z, pointId: existing?.id };
       }
 
       const selectedShapeIds = selectedIdsRef.current.filter((id) => shapesRef.current.some((shape) => shape.id === id && !shape.hidden));
       const targetShapeIds = selectedShapeIds.length > 0 ? selectedShapeIds : shapesRef.current.filter((shape) => !shape.hidden).map((shape) => shape.id);
-      const modelCandidate = pickModelTapeCandidate(state, targetShapeIds, clientX, clientY);
+      const modelCandidate = pickModelTapeCandidate(state, targetShapeIds, clientX, clientY, startWorld, startNormal, shiftKey);
       if (modelCandidate) {
         if (!modelCandidate.edge) return modelCandidate;
-        const onEdge = { ...modelCandidate, circleEdge: modelCandidate.edge, edge: wholeEdges ? modelCandidate.edge : undefined };
-        // With whole edges off the edge is only where a point goes. On a circle it goes on the true circle,
-        // not on a side of the polygon the edge is drawn as, so that a diameter measures exactly.
-        if (!wholeEdges && modelCandidate.attachment?.kind === "edge") {
+        const measuresWholeEdge = wholeEdges && !activeStartPoint && !ignoredPointId;
+        const onEdge = { ...modelCandidate, circleEdge: modelCandidate.edge, edge: measuresWholeEdge ? modelCandidate.edge : undefined };
+        // With whole edges off (or when placing the second point of a measurement) the edge is only where a
+        // point goes. On a circle it goes on the true circle, not on a side of the polygon the edge is drawn
+        // as, so that a diameter or radial distance measures exactly.
+        if (!measuresWholeEdge && modelCandidate.attachment?.kind === "edge") {
           const circle = circleOfEdgePoints(tapeEdgeWorldPoints(state, modelCandidate.edge));
           if (circle) {
             const placed = pointOnCircle(circle, new THREE.Vector3(modelCandidate.x, modelCandidate.y, modelCandidate.z));
@@ -5055,11 +5306,19 @@ export function WorkplaneViewport({
       if (!raw) return null;
       const step = snapStep(snapRef.current);
       const bounds = workspaceRef.current;
-      const snapped = {
+      let snapped = {
         x: clamp(snapValue(raw.x, step), -bounds.width / 2, bounds.width / 2),
         y: 0,
         z: clamp(snapValue(raw.z, step), -bounds.depth / 2, bounds.depth / 2),
       };
+      if (shiftKey && startWorld) {
+        const locked = axisLockedPoint(startWorld, new THREE.Vector3(snapped.x, 0, snapped.z), new THREE.Vector3(0, 1, 0));
+        snapped = {
+          x: clamp(locked.x, -bounds.width / 2, bounds.width / 2),
+          y: 0,
+          z: clamp(locked.z, -bounds.depth / 2, bounds.depth / 2),
+        };
+      }
       const existing = model.points.find((point) => Math.hypot(point.x - snapped.x, point.y, point.z - snapped.z) < 0.001 && !point.attachment);
       return { ...snapped, pointId: existing?.id };
     },
@@ -5118,7 +5377,7 @@ export function WorkplaneViewport({
             endId: end.id,
             edge: candidate.edge,
           }];
-          storeTapeModel({ points, segments, startPointId: null, hover: null });
+          storeTapeModel({ points, segments, startPointId: null, startEdge: null, startNormal: null, hover: null });
           return;
         }
       }
@@ -5127,7 +5386,14 @@ export function WorkplaneViewport({
       const point = existing ?? makePoint(candidate);
       const points = existing ? current.points : [...current.points, point];
       if (!current.startPointId) {
-        storeTapeModel({ ...current, points, startPointId: point.id, startEdge: candidate.circleEdge ?? null, hover: { x: point.x, y: point.y, z: point.z, attachment: point.attachment } });
+        storeTapeModel({
+          ...current,
+          points,
+          startPointId: point.id,
+          startEdge: candidate.circleEdge ?? null,
+          startNormal: candidate.surfaceNormal ?? null,
+          hover: { x: point.x, y: point.y, z: point.z, attachment: point.attachment },
+        });
         return;
       }
       if (current.startPointId === point.id) {
@@ -5142,17 +5408,24 @@ export function WorkplaneViewport({
       const segments = duplicate
         ? current.segments
         : [...current.segments, { id: `tape-segment-${++tapeIdRef.current}`, startId: current.startPointId, endId: point.id }];
-      storeTapeModel({ points, segments, startPointId: null, hover: null });
+      storeTapeModel({ points, segments, startPointId: null, startEdge: null, startNormal: null, hover: null });
     },
     [storeTapeModel],
   );
 
   const updateTapeHover = useCallback(
-    (clientX: number, clientY: number, altKey = false) => {
+    (clientX: number, clientY: number, altKey = false, shiftKey = false, quickDeleteModifier = false) => {
       if (!tapeModeRef.current) {
         return;
       }
-      const candidate = resolveTapeCandidate(clientX, clientY, undefined, tapeWholeEdgesRef.current !== altKey);
+      const candidate = resolveTapeCandidate(
+        clientX,
+        clientY,
+        undefined,
+        tapeWholeEdgesRef.current !== altKey,
+        shiftKey,
+        quickDeleteModifier,
+      );
       const current = tapeModelRef.current;
       const hover = candidate;
       if ((!current.hover && !hover) || (current.hover && hover
@@ -5164,6 +5437,28 @@ export function WorkplaneViewport({
     },
     [resolveTapeCandidate, storeTapeModel],
   );
+
+  useEffect(() => {
+    if (!tapeMode) return;
+    const syncModifier = (event: KeyboardEvent) => {
+      if (event.key !== "Shift" && event.key !== "Control" && event.key !== "Meta" && event.key !== "Alt") return;
+      const quickDelete = event.shiftKey || event.ctrlKey || event.metaKey;
+      setTapeQuickDelete((current) => (current === quickDelete ? current : quickDelete));
+      const last = lastTapePointerRef.current;
+      if (last) {
+        updateTapeHover(last.clientX, last.clientY, event.altKey, event.shiftKey, quickDelete);
+      }
+    };
+    const clearModifier = () => setTapeQuickDelete(false);
+    window.addEventListener("keydown", syncModifier);
+    window.addEventListener("keyup", syncModifier);
+    window.addEventListener("blur", clearModifier);
+    return () => {
+      window.removeEventListener("keydown", syncModifier);
+      window.removeEventListener("keyup", syncModifier);
+      window.removeEventListener("blur", clearModifier);
+    };
+  }, [tapeMode, updateTapeHover]);
 
   const removeTapeSegment = useCallback(
     (segmentId: string) => {
@@ -5181,11 +5476,14 @@ export function WorkplaneViewport({
       const current = tapeModelRef.current;
       const segments = current.segments.filter((segment) => segment.startId !== pointId && segment.endId !== pointId);
       const points = current.points.filter((point) => point.id !== pointId);
+      const removedStart = current.startPointId === pointId;
       storeTapeModel({
         ...current,
         points,
         segments,
-        startPointId: current.startPointId === pointId ? null : current.startPointId,
+        startPointId: removedStart ? null : current.startPointId,
+        startEdge: removedStart ? null : current.startEdge,
+        startNormal: removedStart ? null : current.startNormal,
       });
     },
     [storeTapeModel],
@@ -6939,8 +7237,14 @@ export function WorkplaneViewport({
 
       if (tapeModeRef.current) {
         event.preventDefault();
-        // Alt turns whole edges the other way round for this click.
-        const candidate = resolveTapeCandidate(event.clientX, event.clientY, undefined, tapeWholeEdgesRef.current !== event.altKey);
+        // Alt turns whole edges the other way round for this click; Shift locks to the perpendicular or axis (#589).
+        const candidate = resolveTapeCandidate(
+          event.clientX,
+          event.clientY,
+          undefined,
+          tapeWholeEdgesRef.current !== event.altKey,
+          event.shiftKey,
+        );
         if (candidate) {
           selectTapeCandidate(candidate);
         }
@@ -7459,7 +7763,10 @@ export function WorkplaneViewport({
         return;
       }
       if (tapeModeRef.current) {
-        updateTapeHover(event.clientX, event.clientY, event.altKey);
+        lastTapePointerRef.current = { clientX: event.clientX, clientY: event.clientY };
+        const quickDelete = event.shiftKey || event.ctrlKey || event.metaKey;
+        setTapeQuickDelete((current) => (current === quickDelete ? current : quickDelete));
+        updateTapeHover(event.clientX, event.clientY, event.altKey, event.shiftKey, quickDelete);
         return;
       }
       if (tapeMoveModeRef.current) return;
@@ -8337,7 +8644,8 @@ export function WorkplaneViewport({
       if (event.button !== 0) {
         return;
       }
-      if (tapeDeleteModeRef.current) {
+      // In Add measurement mode, holding Shift or Ctrl/Cmd deletes the clicked point right away (#589).
+      if (tapeDeleteModeRef.current || (tapeModeRef.current && (event.shiftKey || event.ctrlKey || event.metaKey))) {
         event.preventDefault();
         event.stopPropagation();
         removeTapePoint(pointId);
@@ -8372,7 +8680,7 @@ export function WorkplaneViewport({
       if (!tapeMoveModeRef.current || !drag || drag.pointId !== pointId || drag.pointerId !== event.pointerId) return;
       event.preventDefault();
       event.stopPropagation();
-      const candidate = resolveTapeCandidate(event.clientX, event.clientY, pointId);
+      const candidate = resolveTapeCandidate(event.clientX, event.clientY, pointId, undefined, event.shiftKey);
       if (!candidate) return;
       const current = tapeModelRef.current;
       storeTapeModel({
@@ -8425,7 +8733,8 @@ export function WorkplaneViewport({
       if (event.button !== 0) {
         return;
       }
-      if (tapeDeleteModeRef.current) {
+      // In Add measurement mode, holding Shift or Ctrl/Cmd deletes the clicked measurement right away (#589).
+      if (tapeDeleteModeRef.current || (tapeModeRef.current && (event.shiftKey || event.ctrlKey || event.metaKey))) {
         event.preventDefault();
         event.stopPropagation();
         removeTapeSegment(segmentId);
@@ -8436,7 +8745,13 @@ export function WorkplaneViewport({
       }
       event.preventDefault();
       event.stopPropagation();
-      const candidate = resolveTapeCandidate(event.clientX, event.clientY, undefined, tapeWholeEdgesRef.current !== event.altKey);
+      const candidate = resolveTapeCandidate(
+        event.clientX,
+        event.clientY,
+        undefined,
+        tapeWholeEdgesRef.current !== event.altKey,
+        event.shiftKey,
+      );
       if (candidate) {
         selectTapeCandidate(candidate);
       }
@@ -9090,6 +9405,7 @@ export function WorkplaneViewport({
               startPointId={tapeModel.startPointId}
               active={tapeMode || tapeMoveMode}
               deleteMode={tapeDeleteMode}
+              quickDelete={tapeMode && tapeQuickDelete}
               moveMode={tapeMoveMode}
               onPointPointerDown={handleTapePointPointerDown}
               onPointPointerMove={handleTapePointPointerMove}

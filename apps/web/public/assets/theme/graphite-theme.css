@@ -3381,12 +3381,14 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .inspector-bundle-note 
   filter: drop-shadow(0 0 4px rgba(129, 67, 0, 0.4));
 }
 
-:where(html[data-theme="dark"][data-palette="graphite"]) .tape-overlay.delete-mode .tape-segment-group:hover .tape-segment {
+:where(html[data-theme="dark"][data-palette="graphite"]) .tape-overlay.delete-mode .tape-segment-group:hover .tape-segment,
+:where(html[data-theme="dark"][data-palette="graphite"]) .tape-overlay.quick-delete .tape-segment-group:hover .tape-segment {
   stroke: var(--hover-accent-color);
   filter: drop-shadow(0 0 2px rgba(220, 63, 54, 0.3));
 }
 
-:where(html[data-theme="dark"][data-palette="graphite"]) .tape-overlay.delete-mode .tape-point:hover {
+:where(html[data-theme="dark"][data-palette="graphite"]) .tape-overlay.delete-mode .tape-point:hover,
+:where(html[data-theme="dark"][data-palette="graphite"]) .tape-overlay.quick-delete .tape-point:hover {
   fill: #fff0ee;
   stroke: var(--hover-accent-color);
   filter: drop-shadow(0 0 3px rgba(220, 63, 54, 0.36));

@@ -1,1 +1,13 @@
-[]
+[
+  {
+    "title": {
+      "en": "Right-angle snapping and quick delete in the tape measure",
+      "de": "Rechtwinkliges Einrasten und schnelles Löschen beim Maßband"
+    },
+    "body": {
+      "en": "When placing the second point of a measurement, the tape measure now snaps at a right angle to an opposing edge or face - or anywhere on it while you hold Shift, which makes measuring the clear width of a hole or the gap between two parts exact. And while adding measurements, a click with Shift or Ctrl (Cmd on a Mac) deletes a point or a line right away without switching modes.",
+      "de": "Beim Setzen des zweiten Messpunkts rastet das Maßband jetzt im rechten Winkel an einer gegenüberliegenden Kante oder Fläche ein – oder überall darauf, solange du Umschalt hältst; so misst du die lichte Weite einer Öffnung oder den Abstand zwischen zwei Teilen genau. Und während du Maße hinzufügst, löscht ein Klick mit Umschalt oder Strg (Cmd auf dem Mac) einen Punkt oder eine Linie sofort, ohne den Modus zu wechseln."
+    }
+  }
+]
+
