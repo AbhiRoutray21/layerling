@@ -1,6 +1,16 @@
 [
   {
     "title": {
+      "de": "Gravur um den Zylinder schneidet sauber durch",
+      "en": "An engraving around a cylinder cuts all the way through"
+    },
+    "body": {
+      "de": "Ein nach innen gewickeltes Logo, als Loch von einem Zylinder abgezogen, ließ an manchen Stellen eine hauchdünne Haut stehen. Der gewickelte Körper ragt jetzt 0,05 mm über die Wand hinaus, sodass das Loch sicher durchschneidet.",
+      "en": "A logo wrapped inward and cut out of a cylinder as a hole left a hair-thin skin standing in places. The wrapped body now reaches 0.05 mm beyond the wall, so the hole cuts all the way through."
+    }
+  },
+  {
+    "title": {
       "de": "Mausrad in Größenfeldern stoppt am unteren Grenzwert",
       "en": "The wheel in a size field stops at the lower limit"
     },
