@@ -1,6 +1,16 @@
 [
   {
     "title": {
+      "de": "Mausrad in Größenfeldern stoppt am unteren Grenzwert",
+      "en": "The wheel in a size field stops at the lower limit"
+    },
+    "body": {
+      "de": "Das Mausrad in einem Größenfeld der Eigenschaften läuft nicht mehr unter den kleinsten Wert (0,01 mm) in negative Zahlen: Das Feld bleibt am Grenzwert stehen.",
+      "en": "The mouse wheel in a size field of the properties no longer runs below the smallest value (0.01 mm) into negative numbers: the field stops at the limit."
+    }
+  },
+  {
+    "title": {
       "de": "Winzige Körper lassen sich auf dem Tablet wieder verschieben",
       "en": "Tiny bodies can be moved on a tablet again"
     },
