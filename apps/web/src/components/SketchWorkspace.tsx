@@ -19,6 +19,7 @@ import { closestPointOnSketchSegment, type SketchSegmentPlacement } from "@/lib/
 import { isChainDrawingTool, isSketchPanGesture, rightClickEndsChain, SKETCH_MANUAL_MAX_ZOOM, SKETCH_MAX_ZOOM, SKETCH_WHEEL_ZOOM_BOOST, SKETCH_MIN_ZOOM, sketchPinchZoomFactor, sketchWheelZoomFactor, zoomSketchViewAt, type SketchView } from "@/lib/sketchPointerControls";
 import { pickTouchTarget, type TouchCandidate } from "@/lib/sketchTouch";
 import { isSketchPrimitive, type SketchPrimitive } from "@/lib/sketchPrimitives";
+import { meshForShape } from "@/lib/editorMeshCore";
 import { mirrorSign, resizedImportedMeshPositions } from "@/lib/workplaneShapes";
 import { DEFAULT_SNAP_GRID, DEFAULT_WORKPLANE_WORKSPACE, keyboardNudgeCoarseFactor, keyboardNudgeStep, normalizeSnapGrid, normalizeWorkspaceSettings, snapGridStep as snapStep, orbitControlsZoomSpeed, zoomDistanceScale } from "@/lib/workplaneSettings";
 import type { GridSize, SketchImage, SketchOperation, SketchPoint, SketchProfile, SketchSegment, SketchStroke, SketchStrokeAlign, SketchStrokeCap, SketchStrokeJoin, WorkplaneShape, WorkplaneWorkspaceSettings } from "@/types/layerling";
@@ -108,7 +109,12 @@ type SketchWorkspaceProps = {
   strokePreview?: string | null;
 };
 
-type SketchReferenceFootprint = { fillD: string | null; outlineD: string | null };
+type SketchReferenceFootprint = {
+  fillD: string | null;
+  outlineD: string | null;
+  /** The outline is in the plate's own coordinates already: not to be turned about the body's middle (#596). */
+  world?: boolean;
+};
 type PointerAction =
   | { kind: "bezier"; pointerId: number; origin: { x: number; z: number }; current: { x: number; z: number } }
   | { kind: "move-point"; pointerId: number; pointId: string; origin: { x: number; z: number }; current: { x: number; z: number } }
@@ -464,7 +470,38 @@ function boundaryPath(points: Array<{ x: number; z: number }>, triangles: number
 
 function importedMeshFootprint(shape: WorkplaneShape): SketchReferenceFootprint | null {
   if (!shape.importedMesh) return null;
-  const positions = resizedImportedMeshPositions(shape);
+  return footprintOfPositions(resizedImportedMeshPositions(shape), (x, z) => sketchReferencePoint(shape, x, z), Math.max(shape.width, shape.depth, shape.height), shape.height);
+}
+
+/** More triangles than this and a body is shown by its box, not by an outline made of its triangles. */
+const REFERENCE_OUTLINE_TRIANGLE_LIMIT = 20000;
+
+/**
+ * The outline of a body that is neither an imported mesh nor a round or box shape, from its own mesh (#596): a polygon, a star,
+ * a heart or a wedge was drawn as the rectangle of its width and depth, the same square for all of them.
+ */
+export function shapeMeshFootprint(shape: WorkplaneShape): SketchReferenceFootprint | null {
+  if (shape.importedMesh || shape.groupedShapes?.length || shape.kind === "box" || isRoundReference(shape)) return null;
+  let mesh: ReturnType<typeof meshForShape>;
+  try {
+    mesh = meshForShape(shape);
+  } catch {
+    return null;
+  }
+  if (!mesh.faces.length || mesh.faces.length > REFERENCE_OUTLINE_TRIANGLE_LIMIT) return null;
+  const positions: number[] = [];
+  mesh.faces.forEach((face) => face.forEach((index) => positions.push(...mesh.vertices[index])));
+  const footprint = footprintOfPositions(positions, (x, z) => ({ x, z }), Math.max(shape.width, shape.depth, shape.height), shape.height);
+  return footprint ? { ...footprint, world: true } : null;
+}
+
+/** The outline of a mesh seen from above: its bottom triangles, as a fill and as the boundary round them; the hull when it has no flat bottom. */
+function footprintOfPositions(
+  positions: ArrayLike<number>,
+  project: (x: number, z: number) => { x: number; z: number },
+  size: number,
+  height: number,
+): SketchReferenceFootprint | null {
   if (positions.length < 9) return null;
   let minY = Number.POSITIVE_INFINITY;
   for (let index = 1; index < positions.length; index += 3) {
@@ -472,8 +509,8 @@ function importedMeshFootprint(shape: WorkplaneShape): SketchReferenceFootprint 
   }
   if (!Number.isFinite(minY)) return null;
 
-  const tolerance = Math.max(0.001, Math.max(shape.width, shape.depth, shape.height) / 100000);
-  const bottomTolerance = Math.max(0.025, shape.height * 0.003);
+  const tolerance = Math.max(0.001, size / 100000);
+  const bottomTolerance = Math.max(0.025, height * 0.003);
   const points: Array<{ x: number; z: number }> = [];
   const triangles: number[][] = [];
   const allProjected: Array<{ x: number; z: number }> = [];
@@ -481,9 +518,9 @@ function importedMeshFootprint(shape: WorkplaneShape): SketchReferenceFootprint 
   for (let index = 0; index + 8 < positions.length; index += 9) {
     const ys = [positions[index + 1], positions[index + 4], positions[index + 7]];
     const projected = [
-      sketchReferencePoint(shape, positions[index], positions[index + 2]),
-      sketchReferencePoint(shape, positions[index + 3], positions[index + 5]),
-      sketchReferencePoint(shape, positions[index + 6], positions[index + 8]),
+      project(positions[index], positions[index + 2]),
+      project(positions[index + 3], positions[index + 5]),
+      project(positions[index + 6], positions[index + 8]),
     ];
     allProjected.push(...projected);
     if (!ys.every((value) => value <= minY + bottomTolerance) || triangleArea2d(projected[0], projected[1], projected[2]) <= tolerance) {
@@ -1676,7 +1713,7 @@ export function SketchWorkspace({
   // The corner whose angle is being typed, for the line that will turn.
   const editingCorner = editingAngle ? sketchCornerAt(displayProfile, editingAngle.pointId) : null;
   const referenceFootprints = useMemo(
-    () => new Map(referenceShapes.map((shape) => [shape.id, importedMeshFootprint(shape)])),
+    () => new Map(referenceShapes.map((shape) => [shape.id, importedMeshFootprint(shape) ?? shapeMeshFootprint(shape)])),
     [referenceShapes],
   );
   // The corners of the bodies shown underneath, in sketch coordinates: where a point snaps to them.
@@ -1688,8 +1725,9 @@ export function SketchWorkspace({
         points.push(...svgPathPoints(slice));
         return;
       }
-      const turn = (point: { x: number; z: number }) => rotateAround(point, shape.rotation ?? 0, shape.x, shape.z);
       const footprint = referenceFootprints.get(shape.id);
+      // An outline made from the body's own mesh stands in the plate's coordinates already.
+      const turn = (point: { x: number; z: number }) => (footprint?.world ? point : rotateAround(point, shape.rotation ?? 0, shape.x, shape.z));
       const halfWidth = shape.width / 2;
       const halfDepth = shape.depth / 2;
       const local = footprint?.outlineD
@@ -1898,7 +1936,7 @@ export function SketchWorkspace({
                 );
               }
               return (
-                <g key={shape.id} transform={`rotate(${shape.rotation ?? 0} ${shape.x} ${shape.z})`}>
+                <g key={shape.id} transform={footprint?.world ? undefined : `rotate(${shape.rotation ?? 0} ${shape.x} ${shape.z})`}>
                   {footprint?.fillD || footprint?.outlineD ? (
                     <>
                       {footprint.fillD ? <path className="sketch-reference-mesh-face" d={footprint.fillD} /> : null}

@@ -1,6 +1,16 @@
 [
   {
     "title": {
+      "de": "Formen unter der Skizze mit ihrem echten Umriss",
+      "en": "Bodies under a sketch show their real outline"
+    },
+    "body": {
+      "de": "Im Skizzenmodus erscheinen die Körper auf der Arbeitsebene im Hintergrund jetzt mit ihrem wirklichen Umriss: Vieleck, Stern, Herz, Keil und die anderen Formen waren dort bisher alle ein Quadrat. Auch die Fangpunkte der Skizze rasten an diesem Umriss ein.",
+      "en": "In sketch mode the bodies on the workplane now show in the background with their real outline: a polygon, a star, a heart, a wedge and the other shapes were all drawn as a square there. The sketch's snap points follow that outline as well."
+    }
+  },
+  {
+    "title": {
       "de": "Tastenkürzel auf einer Seite drucken",
       "en": "The shortcuts print on one sheet"
     },
