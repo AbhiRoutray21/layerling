@@ -102,5 +102,15 @@
       "de": "Ein kleiner, flacher Text verlor beim Export als STL, 3MF oder OBJ einzelne Buchstaben, bei dünnem Text die meisten: das Pünktchen des i, den Apostroph, kleine Buchstaben. Der Export hielt sie für Splitter, die ein Schnitt zurückgelassen hat. Das gilt jetzt nur noch für Körper, die ein Schnitt, ein Verschmelzen mehrerer Körper oder die Farbtrennung verändert hat.",
       "en": "A small, flat text lost single letters in the export as STL, 3MF or OBJ, with a thin text most of them: the dot of the i, the apostrophe, small letters. The export took them for splinters that a cut had left behind. That now applies only to bodies that a cut, a merge of several bodies or the colour separation has changed."
     }
+  },
+  {
+    "title": {
+      "de": "Ein SVG mit sich berührenden Formen kommt vollständig an",
+      "en": "An SVG with touching shapes comes in whole"
+    },
+    "body": {
+      "de": "Bei einem gezeichneten oder nachgezeichneten Bild treffen sich zwei Formen oft in nur einem Punkt. Der Import hat dann einzelne Formen weggelassen, das Bild kam kleiner und lückenhaft an. Solche Formen werden jetzt zusammen aufgebaut, und das Bild bleibt vollständig.",
+      "en": "In a drawn or traced picture two shapes often meet in just one point. The import then left some shapes out, and the picture came in smaller and with gaps. Such shapes are now built together, and the picture stays whole."
+    }
   }
 ]
