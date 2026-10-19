@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "title": {
+      "de": "Keine Offline-Versprechen, wo es nicht geht",
+      "en": "No offline promise where it cannot work"
+    },
+    "body": {
+      "de": "Die Karte \"layerling als App installieren\" und die Kachel \"Ohne Internet\" auf der Startseite erscheinen nur noch, wo layerling sich wirklich für den Offline-Betrieb ablegen kann. Im Docker-Image, das als Node-Server läuft, und unter einer Adresse mit http fallen sie weg.",
+      "en": "The card \"Install layerling as an app\" and the \"Works offline\" tile on the start page now appear only where layerling can really keep itself for offline use. In the Docker image, which runs as a Node server, and at a plain-http address they are gone."
+    }
+  }
+]

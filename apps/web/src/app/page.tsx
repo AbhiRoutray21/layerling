@@ -39,6 +39,7 @@ import { localizedError } from "@/lib/userErrors";
 import { historyTrimSteps, isProjectTooLargeError, isStorageFullError, trimHistoryWindow } from "@/lib/historyTrim";
 import { GuideHelpLink } from "@/components/GuideHelpLink";
 import { WelcomeGuideBody } from "@/components/WelcomeGuide";
+import { useOfflineAvailable } from "@/lib/offlineSupport";
 import { InstallAppHint } from "@/components/InstallAppHint";
 import { TabletHint } from "@/components/TabletHint";
 import { WhatsNewCard } from "@/components/WhatsNewCard";
@@ -2694,6 +2695,7 @@ function Dashboard({
   onWorkspace: () => void;
 }) {
   const language = useLanguage();
+  const offlineOk = useOfflineAvailable();
   const { update, isDismissed, dismiss: dismissUpdate } = useAppUpdate(LYL_CREATED_WITH_VERSION);
   const whatsNew = useWhatsNew(LYL_CREATED_WITH_VERSION);
   const [openProjectMenuId, setOpenProjectMenuId] = useState<string | null>(null);
@@ -3678,7 +3680,7 @@ function Dashboard({
                   <span className="dashboard-welcome-summary-hint">{t("welcome.teaserHint")}</span>
                 </summary>
                 <div className="dashboard-welcome-body">
-                  <WelcomeGuideBody tr={t} />
+                  <WelcomeGuideBody tr={t} offline={offlineOk} />
                 </div>
               </details>
             </>

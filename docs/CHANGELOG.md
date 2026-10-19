@@ -6,6 +6,7 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **No offline promise where there is no service worker (#571):** The card "Install layerling as an app" ("works without internet") and the "Works offline" tile of the start page appeared wherever the browser could in principle run a service worker, that is on any https address, but the service worker is written and registered only in the static export. The Docker image, a Node server, never has one, so behind https it promised offline use that did not work. Both now ask one place (`lib/offlineSupport.ts`) first: static export, a secure address and a browser with service workers. Tried in a browser: the static export on localhost shows card and tile as before, the development server (not an export) shows neither. Reported by @foofoodog.
 - **The video lists of the READMEs follow the shared list:** The video list in README.md, README.de.md and README.nl.md was written by hand and had fallen behind (four of nine videos, one of them replaced since). `npm run videos:sync` now fills all three from the video chapter of the guide in their language, and `npm run videos:sync -- --discussion` does the same for the first post of Discussion #296 (with `--apply` it writes it). A test checks that the READMEs equal the chapter and list the videos of `layerlingVideos.ts` in the same order. No change in the app.
 
 ## 1.91.0
