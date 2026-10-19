@@ -56,6 +56,16 @@ A tapered or leaning box, cylinder, ellipse, polygon, tube or ring keeps its exa
 
 Typing is more exact than dragging. All number fields take millimetres, but also percentages: type "50 %" into a width of 40 mm and you get 20 mm. They calculate too: "15*3", "120-2*4" or "(40+2)/2" give 45, 112 and 21; x works instead of *. The field remembers the calculation, in the Properties panel as well as in the dimension boxes around the selected body: click into it again later and the formula stands there instead of the number, as long as the value still matches it, and you change it in place, "(140+2)/2" becoming "(40+6)/2". Drag the body by a handle or scale it and the formula no longer fits, so the field shows just the number again.
 
+### Choosing colours
+
+A click on {{ui:inspector.solid}} in the properties of a body opens the colour card, headed {{ui:inspector.shapeColor}}. On top it shows the hex value of the colour the body has now. Under it are the ready colours of the palette; a click on one colours the body and closes the card.
+
+{{ui:inspector.custom}} opens the colour picker of your browser, for a colour of your own. What it offers depends on the browser: in Chrome and Edge it has a colour field, a slider for the hue, an eyedropper that takes a colour from anywhere on the screen, and the value as HEX, RGB or HSL, which you switch with the arrows beside it. The colour counts when you close the picker or click outside it.
+
+A colour of your own that you mix there waits under {{ui:inspector.recentColors}} afterwards, the last eight. The pin in the row {{ui:inspector.keptColors}} keeps the colour you have chosen for good: it stands in a row of its own, newer colours never push it out, and the same pin lets go of it again; up to 21 colours are kept in this browser. The pin is for colours of your own, the ones of the palette are always there. With several colours selected, or with a hole, there is no single colour to keep.
+
+The colours of the work area in the settings have a simpler picker of their own, with a colour field, a row of ready colours and a field for the hex value; see [The settings](chapter:view-and-workplane).
+
 ## How round is round? The side count
 
 Round shapes such as cylinder, cone, tube, ellipse or the bores have the switch {{ui:prop.sidesFollowSize}} and the slider {{ui:prop.sides}} in their properties. The {{ui:shape.torus}} has two sliders: {{ui:prop.torusSides}} around the ring and {{ui:prop.torusSteps}} around the tube. They follow the size there too until you hold them, so a large torus shows no facets. The reason: for the view and for STL, 3MF and OBJ, layerling draws a circle as a polygon of many small sides. The more sides, the smoother it is, and the more triangles it takes.

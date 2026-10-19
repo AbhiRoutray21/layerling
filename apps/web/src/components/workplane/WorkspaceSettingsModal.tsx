@@ -706,7 +706,7 @@ export function WorkspaceSettingsModal({
               <BoxIcon size={18} />
               <span>{t("workspace.shapeDefaults")}</span>
             </button>
-            <button className={activeSection === "history" ? "active" : ""} aria-current={activeSection === "history" ? "page" : undefined} onClick={() => setActiveSection("history")}>
+            <button className={activeSection === "history" ? "active" : ""} data-help={t("workspace.savedHistory")} aria-current={activeSection === "history" ? "page" : undefined} onClick={() => setActiveSection("history")}>
               <History size={18} />
               <span>{t("workspace.history")}</span>
             </button>
@@ -726,7 +726,7 @@ export function WorkspaceSettingsModal({
                     checked={workspace.fastMode}
                     onChange={(fastMode) => patchWorkspace({ fastMode })}
                   />
-                  <label className="workspace-select">
+                  <label className="workspace-select" data-help={t("workspace.theme")}>
                     <span>{t("workspace.theme")}</span>
                     <select
                       value={themePreference}
@@ -739,7 +739,7 @@ export function WorkspaceSettingsModal({
                       ))}
                     </select>
                   </label>
-                  <label className="workspace-select">
+                  <label className="workspace-select" data-help={t("workspace.toolbarSize")}>
                     <span>{t("workspace.toolbarSize")}</span>
                     <select
                       value={toolbarSize}
@@ -752,7 +752,7 @@ export function WorkspaceSettingsModal({
                       ))}
                     </select>
                   </label>
-                  <label className="workspace-select view-cube-position-setting">
+                  <label className="workspace-select view-cube-position-setting" data-help={t("workspace.viewCubePosition")}>
                     <span>{t("workspace.viewCubePosition")}</span>
                     <select
                       value={viewCubePosition}
@@ -890,7 +890,7 @@ export function WorkspaceSettingsModal({
                     disabled={workspace.fastMode}
                     onChange={(showShadows) => patchWorkspace({ showShadows })}
                   />
-                  <label className="workspace-range">
+                  <label className="workspace-range" data-help={t("workspace.shadowStrength")}>
                     <span>{t("workspace.shadowStrength")}: {workspace.shadowStrength} %</span>
                     <input
                       type="range"
@@ -903,7 +903,7 @@ export function WorkspaceSettingsModal({
                       onDoubleClick={() => patchWorkspace({ shadowStrength: DEFAULT_WORKPLANE_WORKSPACE.shadowStrength })}
                     />
                   </label>
-                  <label className="workspace-range">
+                  <label className="workspace-range" data-help={t("workspace.shadowSoftness")}>
                     <span>{t("workspace.shadowSoftness")}: {workspace.shadowSoftness} %</span>
                     <input
                       type="range"
@@ -920,7 +920,7 @@ export function WorkspaceSettingsModal({
                       <span>{t("workspace.shadowSoft")}</span>
                     </small>
                   </label>
-                  <label className="workspace-range">
+                  <label className="workspace-range" data-help={t("workspace.lightAzimuth")}>
                     <span>{t("workspace.lightAzimuth")}: {workspace.lightAzimuth}°</span>
                     <input
                       type="range"
@@ -937,7 +937,7 @@ export function WorkspaceSettingsModal({
                       <span>{t("workspace.lightFromRight")}</span>
                     </small>
                   </label>
-                  <label className="workspace-range">
+                  <label className="workspace-range" data-help={t("workspace.lightElevation")}>
                     <span>{t("workspace.lightElevation")}: {workspace.lightElevation}°</span>
                     <input
                       type="range"
@@ -953,7 +953,7 @@ export function WorkspaceSettingsModal({
                       <span>{t("workspace.lightAbove")}</span>
                     </small>
                   </label>
-                  <label className="workspace-range">
+                  <label className="workspace-range" data-help={t("workspace.shadeContrast")}>
                     <span>{t("workspace.shadeContrast")}: {workspace.shadeContrast}</span>
                     <input
                       type="range"
@@ -991,7 +991,7 @@ export function WorkspaceSettingsModal({
                       {t("workspace.classicLook")}
                     </button>
                   </div>
-                  <label className="workspace-range">
+                  <label className="workspace-range" data-help={t("workspace.overhangAngle", { angle: "{angle}" })}>
                     <span>{t("workspace.overhangAngle", { angle: workspace.overhangAngle })}</span>
                     <input
                       type="range"
@@ -1012,7 +1012,7 @@ export function WorkspaceSettingsModal({
                     checked={workspace.clickToPlaceShapes}
                     onChange={(clickToPlaceShapes) => patchWorkspace({ clickToPlaceShapes })}
                   />
-                  <label className="workspace-range">
+                  <label className="workspace-range" data-help={t("workspace.zoomSpeed")}>
                     <span>{t("workspace.zoomSpeed")}</span>
                     <input
                       type="range"
@@ -1034,7 +1034,7 @@ export function WorkspaceSettingsModal({
                     disabled={workspace.fastMode}
                     onChange={(cameraInertia) => patchWorkspace({ cameraInertia })}
                   />
-                  <label className="workspace-select">
+                  <label className="workspace-select" data-help={t("workspace.booleanTriangleLimit")}>
                     <span>{t("workspace.booleanTriangleLimit")}</span>
                     <select
                       value={booleanLimitMode}
@@ -1141,7 +1141,7 @@ export function WorkspaceSettingsModal({
                     <strong>{t("workspace.workplane")}</strong>
                     <span>{t("workspace.workplaneHint")}</span>
                   </div>
-                  <label className="workspace-select">
+                  <label className="workspace-select" data-help={t("workspace.printer")}>
                     <span>{t("workspace.printer")}</span>
                     <select value={chosenPrinter?.id ?? ""} onChange={(event) => setPrinter(event.currentTarget.value)}>
                       <option value="">{t("workspace.printerNone")}</option>
@@ -1179,7 +1179,7 @@ export function WorkspaceSettingsModal({
                     onChange={setWorkspaceSizePreset}
                   />
                   <div className="workspace-dimensions">
-                    <label>
+                    <label data-help={t("workspace.size")}>
                       <span>{t("workspace.width")}</span>
                       <input
                         type="text"
@@ -1196,7 +1196,7 @@ export function WorkspaceSettingsModal({
                         }}
                       />
                     </label>
-                    <label>
+                    <label data-help={t("workspace.size")}>
                       <span>{t("workspace.length")}</span>
                       <input
                         type="text"
@@ -1304,7 +1304,7 @@ export function WorkspaceSettingsModal({
                     </div>
                     <div className="workspace-shape-dimensions">
                       {selectedShapeDimensionKeys.map((key) => (
-                        <label key={`${selectedShapeKind}-${key}`}>
+                        <label data-help={t("workspace.shapeDefaults")} key={`${selectedShapeKind}-${key}`}>
                           <span>{t(key === "depth" ? "prop.length" : key === "width" ? (selectedShapeKind === "cylinder" ? "prop.diameter" : "prop.width") : "prop.height")}</span>
                           <input
                             key={`${selectedShapeKind}-${key}-${selectedShapeCustomization[key] ?? "app"}`}
@@ -1333,7 +1333,7 @@ export function WorkspaceSettingsModal({
                             const effectiveValue = customizedValue ?? field.defaultValue;
                             if (field.type === "select") {
                               return (
-                                <label key={`${selectedShapeKind}-${field.key}`}>
+                                <label data-help={t("workspace.shapeDefaults")} key={`${selectedShapeKind}-${field.key}`}>
                                   <span>{field.label}</span>
                                   <select
                                     value={String(effectiveValue)}
@@ -1349,7 +1349,7 @@ export function WorkspaceSettingsModal({
                             }
                             if (field.type === "text") {
                               return (
-                                <label key={`${selectedShapeKind}-${field.key}`}>
+                                <label data-help={t("workspace.shapeDefaults")} key={`${selectedShapeKind}-${field.key}`}>
                                   <span>{field.label}</span>
                                   <input
                                     key={`${selectedShapeKind}-${field.key}-${String(customizedValue ?? "app")}`}
@@ -1367,7 +1367,7 @@ export function WorkspaceSettingsModal({
                             }
                             const numericValue = Number(effectiveValue);
                             return (
-                              <label key={`${selectedShapeKind}-${field.key}`}>
+                              <label data-help={t("workspace.shapeDefaults")} key={`${selectedShapeKind}-${field.key}`}>
                                 <span>{field.label}</span>
                                 <input
                                   key={`${selectedShapeKind}-${field.key}-${String(customizedValue ?? "app")}-${field.defaultValue}`}
@@ -1389,7 +1389,7 @@ export function WorkspaceSettingsModal({
                         </div>
                       </div>
                     ) : null}
-                    <label className="workspace-shape-limit">
+                    <label className="workspace-shape-limit" data-help={t("workspace.customLimit")}>
                       <span>
                         <strong>{t("workspace.customLimit")}</strong>
                         <small>{t("workspace.customLimitHint")}</small>
@@ -1430,6 +1430,7 @@ export function WorkspaceSettingsModal({
                         step={1}
                         value={historyLimitIndex}
                         aria-label={t("workspace.historyActions")}
+                        data-help={t("workspace.savedHistory")}
                         aria-valuetext={historyLimitMode === "unlimited"
                           ? t("workspace.unlimited")
                           : t("export.actionCount", { count: historyLimitMode === "custom" ? String(workspace.historyLimit) : historyLimitMode })}
@@ -1710,7 +1711,7 @@ function ColorSettingControl({
           }
         }}
       >
-        <div onPointerDownCapture={armPickerCommit}>
+        <div onPointerDownCapture={armPickerCommit} data-help-all={label}>
           <HexColorPicker
             className="workspace-hex-color-picker"
             color={draftColor}
@@ -1726,6 +1727,7 @@ function ColorSettingControl({
             <button
               key={preset}
               className={preset.toLowerCase() === draftColor.toLowerCase() ? "selected" : ""}
+              data-help={label}
               type="button"
               aria-label={t("aria.useColor", { name: label, color: preset })}
               aria-pressed={preset.toLowerCase() === draftColor.toLowerCase()}
@@ -1738,7 +1740,7 @@ function ColorSettingControl({
           ))}
         </div>
         <div className="workspace-color-popover-footer">
-          <label>
+          <label data-help={label}>
             <span>HEX</span>
             <HexColorInput
               color={draftColor}
@@ -1756,6 +1758,7 @@ function ColorSettingControl({
           </label>
           <button
             className="workspace-color-reset"
+            data-help={label}
             type="button"
             title={t("aria.resetColor", { name: label })}
             aria-label={t("aria.resetColor", { name: label })}
@@ -1785,6 +1788,7 @@ function ColorSettingControl({
         <button
           ref={triggerRef}
           className="workspace-color-trigger"
+          data-help={label}
           type="button"
           aria-label={t("aria.colorValue", { name: label, color })}
           disabled={disabled}
@@ -1823,7 +1827,7 @@ function WorkspaceToggle({
   onChange: (checked: boolean) => void;
 }) {
   return (
-    <label className={disabled ? "workspace-toggle is-disabled" : "workspace-toggle"}>
+    <label className={disabled ? "workspace-toggle is-disabled" : "workspace-toggle"} data-help={label}>
       <span className="workspace-toggle-copy">
         <span>{label}</span>
         {description ? <small>{description}</small> : null}
@@ -1932,7 +1936,7 @@ function CustomSnapGridList({
         </div>
       ))}
       {grids.length < MAX_CUSTOM_SNAP_GRIDS ? (
-        <button type="button" className="workspace-custom-snap-add" onClick={() => onChange([...grids, { name: "", size: 10 }])}>
+        <button type="button" className="workspace-custom-snap-add" data-help={t("workspace.customSnapGrids")} onClick={() => onChange([...grids, { name: "", size: 10 }])}>
           <Plus size={15} />
           <span>{t("workspace.customSnapGridAdd")}</span>
         </button>
@@ -1956,7 +1960,7 @@ function WorkspaceSelect({
   onChange: (value: string) => void;
 }) {
   return (
-    <label className="workspace-select">
+    <label className="workspace-select" data-help={label}>
       <span>{label}</span>
       <select value={value} onChange={(event) => onChange(event.currentTarget.value)}>
         {options.map((option) => (

@@ -247,3 +247,18 @@ describe("a part with a section of its own in the guide (#424)", () => {
     expect(resolveHelpTarget(document.getElementById("gap"))?.sectionOnly).toBe(true);
   });
 });
+
+describe("fields in a label that names them for the help (#424)", () => {
+  it("names a field by the label's data-help, not by the label's words with their hint, value and options", () => {
+    page('<label id="t" data-help="Fast mode"><span><span>Fast mode</span><small>For slower computers: turns off shadows, edge lines on all bodies and the camera inertia</small></span><input id="c" type="checkbox"></label><label data-help="Theme"><span>Theme</span><select id="s"><option>System</option><option>Light</option></select></label>');
+    expect(helpNameOf(document.getElementById("c")!)).toBe("Fast mode");
+    expect(helpNameOf(document.getElementById("s")!)).toBe("Theme");
+    expect(resolveHelpTarget(document.getElementById("c"))?.name).toBe("Fast mode");
+  });
+
+  it("names every piece of a part by data-help-all, also those that bring a name of their own", () => {
+    page('<div data-help-all="Window background"><div aria-label="Color" id="spectrum"></div><div aria-label="Hue" id="hue"></div></div>');
+    expect(resolveHelpTarget(document.getElementById("spectrum"))?.name).toBe("Window background");
+    expect(resolveHelpTarget(document.getElementById("hue"))?.name).toBe("Window background");
+  });
+});

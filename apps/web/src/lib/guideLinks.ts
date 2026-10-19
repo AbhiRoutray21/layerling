@@ -39,6 +39,7 @@ export const GUIDE_SECTIONS = {
   viewCube: { chapter: "view", de: "der-ansichtswuerfel", en: "the-view-cube", nl: "de-weergavekubus", ru: "kub-orientatsii", cs: "orientacni-krychle", sl: "orientacijska-kocka", hu: "a-nezetkocka" },
   cameraBar: { chapter: "view", de: "die-kameraleiste", en: "the-camera-bar", nl: "de-camerabalk", ru: "panel-kamery", cs: "lista-pohledu", sl: "vrstica-kamere", hu: "a-kamerasav" },
   gridAndSnapping: { chapter: "view", de: "gitter-und-raster", en: "grid-and-snapping", nl: "raster-en-vastklikken", ru: "setka-i-privyazka", cs: "mrizka-a-prichytavani", sl: "mreza-in-pripenjanje", hu: "racs-es-illesztes" },
+  colorCard: { chapter: "shapes", de: "farben-waehlen", en: "choosing-colours", nl: "kleuren-kiezen", ru: "vybor-tsveta", cs: "vyber-barev" },
   shapeSettings: { chapter: "shapes", de: "die-einstellungen-der-form", en: "the-shape-s-settings", nl: "de-instellingen-van-de-vorm", ru: "nastroyki-figury", cs: "nastaveni-tvaru", sl: "nastavitve-oblike", hu: "az-alakzat-beallitasai" },
   wrapCylinder: { chapter: "shapes", de: "um-einen-zylinder-wickeln", en: "wrapping-around-a-cylinder", nl: "om-een-cilinder-wikkelen", ru: "oborachivanie-vokrug-tsilindra", cs: "obtoceni-kolem-valce", sl: "ovijanje-okoli-valja", hu: "hengerre-tekeres" },
   textFill: { chapter: "text", de: "kontur-silhouette-und-breiter", en: "outline-silhouette-and-wider", nl: "contour-silhouet-en-breder", ru: "kontur-siluet-i-shire", cs: "obrys-silueta-a-rozsireni", sl: "kontura-silhueta-in-sirse", hu: "koervonal-sziluett-es-szelesebb" },

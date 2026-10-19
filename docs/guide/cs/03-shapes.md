@@ -56,6 +56,16 @@ Zúžený či nakloněný kvádr, válec, elipsa, mnohoúhelník, trubka a prste
 
 Číselné zadání je přesnější než tažení. Pole kromě milimetrů přijímají procenta: „50 %“ ze šířky 40 mm vytvoří 20 mm. Umějí i výpočty: „15*3“, „120-2*4“ a „(40+2)/2“ dávají 45, 112 a 21. Místo * lze psát x. Pole si výpočet pamatují v nastavení i v kótách u tělesa. Při dalším kliknutí uvidíte původní výraz a můžete jej upravit, dokud odpovídá současné hodnotě. Změna úchytem či škálováním vazbu přeruší a pole opět ukáže jen číslo.
 
+### Výběr barev
+
+Kliknutí na {{ui:inspector.solid}} ve vlastnostech tělesa otevře kartu barev s nadpisem {{ui:inspector.shapeColor}}. Nahoře ukazuje hexadecimální hodnotu barvy, kterou těleso právě má. Pod ní jsou hotové barvy palety; kliknutí na jednu z nich těleso obarví a kartu zavře.
+
+{{ui:inspector.custom}} otevře výběr barev vašeho prohlížeče pro vlastní barvu. Co nabízí, závisí na prohlížeči: v Chrome a Edge má barevné pole, posuvník odstínu, pipetu, která převezme barvu odkudkoli na obrazovce, a hodnotu jako HEX, RGB nebo HSL, mezi nimiž přepínáte šipkami vedle. Barva platí, jakmile výběr zavřete nebo kliknete mimo něj.
+
+Vlastní barva, kterou tam namícháte, pak čeká pod {{ui:inspector.recentColors}}, posledních osm. Špendlík v řádku {{ui:inspector.keptColors}} nechá zvolenou barvu navždy: stojí ve vlastním řádku, novější barvy ji nikdy nevytlačí a týmž špendlíkem ji zase pustíte; v tomto prohlížeči se uchová až 21 barev. Špendlík je pro vlastní barvy, barvy palety tu jsou vždy. Při více barvách ve výběru nebo u otvoru není žádná jedna barva k uchování.
+
+Barvy pracovní plochy v nastavení mají vlastní, jednodušší výběr barev s barevným polem, řadou hotových barev a polem pro hexadecimální hodnotu.
+
 ## Jemnost oblých tvarů: počet stran
 
 Válec, kužel, trubka, elipsa a otvory mají {{ui:prop.sidesFollowSize}} a {{ui:prop.sides}}. {{ui:shape.torus}} má {{ui:prop.torusSides}} kolem prstence a {{ui:prop.torusSteps}} kolem průřezu trubice. Obě hodnoty automaticky sledují velikost, dokud je nenastavíte ručně. Pro zobrazení a STL, 3MF a OBJ se totiž kružnice nahrazuje mnoha úsečkami. Vyšší počet znamená hladší tvar i více trojúhelníků.

@@ -57,6 +57,16 @@ Ein verjüngter oder geneigter Quader, Zylinder, eine Ellipse, ein Vieleck, Rohr
 
 Tippen ist genauer als Ziehen. Alle Zahlenfelder nehmen Millimeter, aber auch Prozent: Wer bei einer Breite von 40 mm „50 %“ eintippt, bekommt 20 mm. Sie rechnen auch: „15*3“, „120-2*4“ oder „(40+2)/2“ ergeben 45, 112 und 21; statt * geht auch x. Die Rechnung merkt sich das Feld, in den Eigenschaften wie in den Maßfeldern um den markierten Körper: Klickst du später wieder hinein, steht statt der Zahl die Formel da, solange der Wert noch zu ihr passt, und du änderst sie an Ort und Stelle, aus „(140+2)/2“ wird „(40+6)/2“. Ziehst du den Körper am Griff oder skalierst ihn, passt die Formel nicht mehr und das Feld zeigt wieder nur die Zahl.
 
+### Farben wählen
+
+Ein Klick auf {{ui:inspector.solid}} in den Eigenschaften eines Körpers öffnet die Farbkarte mit der Überschrift {{ui:inspector.shapeColor}}. Oben zeigt sie den Hex-Wert der Farbe, die der Körper jetzt hat. Darunter liegen die fertigen Farben der Palette; ein Klick auf eine färbt den Körper und schließt die Karte.
+
+{{ui:inspector.custom}} öffnet den Farbwähler deines Browsers, für eine Farbe nach eigenem Geschmack. Was er bietet, hängt vom Browser ab: In Chrome und Edge hat er ein Farbfeld, einen Regler für den Farbton, eine Pipette, die eine Farbe von irgendwo auf dem Bildschirm aufnimmt, und den Wert als HEX, RGB oder HSL, zwischen denen du mit den Pfeilen daneben wechselst. Die Farbe gilt, wenn du den Farbwähler schließt oder außerhalb klickst.
+
+Eine eigene Farbe, die du dort mischst, wartet danach unter {{ui:inspector.recentColors}}, die letzten acht. Die Nadel in der Zeile {{ui:inspector.keptColors}} behält die gewählte Farbe für immer: Sie steht in einer eigenen Reihe, neuere Farben verdrängen sie nie, und dieselbe Nadel gibt sie wieder frei; bis zu 21 Farben bleiben in diesem Browser erhalten. Die Nadel ist für eigene Farben, die der Palette sind immer da. Bei mehreren Farben in der Auswahl oder bei einer Aussparung gibt es keine einzelne Farbe zu behalten.
+
+Die Farben des Arbeitsbereichs in den Einstellungen haben einen eigenen, einfacheren Farbwähler mit Farbfeld, einer Reihe fertiger Farben und einem Feld für den Hex-Wert; siehe [Die Einstellungen](chapter:ansicht-und-arbeitsebene).
+
 ## Wie rund ist rund? Die Seitenzahl
 
 Runde Formen wie Zylinder, Kegel, Rohr, Ellipse oder die Bohrungen haben in den Eigenschaften den Schalter {{ui:prop.sidesFollowSize}} und den Regler {{ui:prop.sides}}. Der {{ui:shape.torus}} hat zwei Regler: {{ui:prop.torusSides}} rund um den Ring und {{ui:prop.torusSteps}} rund um den Wulst. Auch bei ihm folgen beide der Größe, solange du sie nicht festhältst, und ein großer Torus zeigt so keine Facetten. Der Hintergrund: Für die Anzeige und für STL, 3MF und OBJ zeichnet layerling einen Kreis als Vieleck aus vielen kleinen Seiten. Je mehr Seiten, desto glatter, aber desto mehr Dreiecke.

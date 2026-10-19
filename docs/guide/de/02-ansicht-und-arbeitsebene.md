@@ -82,27 +82,101 @@ Solange die Arbeitsebene auf einer Fläche liegt, erscheint neben {{ui:camera.pl
 
 Das Gitter zeigt die Größe der Platte. Unten rechts steht das **Raster**: Verschieben und Skalieren rasten in Schritten dieser Größe ein, zum Beispiel 1 mm. Für Feinarbeit stellst du es kleiner, für grobes Anordnen größer. {{ui:editor.tool.snapToGrid}} im Menüband rückt die ausgewählten Formen nachträglich auf das nächste Rasterkreuz. Beim Verschieben rasten Formen außerdem an anderen Formen ein, siehe [Auswählen und Anordnen](chapter:auswaehlen-und-anordnen).
 
+> **Tipp:** Dreh die Ansicht nicht mehr, wenn du Teile genau aneinander setzt. Wechsle mit den Zifferntasten in die gerade Ansicht von oben oder von vorn und schalte mit [[O]] auf die flache Darstellung um. So erkennst du sofort, ob zwei Kanten wirklich bündig sind.
+
+### Das Einstellungsfenster
+
+Das Zahnrad im Menüband ({{ui:editor.workspaceSettings}}) öffnet die Einstellungen. Links liegen fünf Bereiche: {{ui:workspace.appearance}}, {{ui:workspace.measurement}}, {{ui:workspace.workplane}}, {{ui:workspace.shapeDefaults}} und {{ui:workspace.history}}. Eine Änderung gilt sofort. {{ui:workspace.makeDefault}} unten sichert die aktuellen Einstellungen als Vorgabe, sodass ein neues Design mit ihnen beginnt, und {{ui:workspace.close}} oben rechts schließt das Fenster. Dieser Teil geht die Einstellungen eine nach der anderen durch.
+
+### Darstellung: Thema, Leiste und Ansichtswürfel
+
+{{ui:workspace.theme}} legt das Farbschema des ganzen Programms fest: {{ui:workspace.themeSystem}} folgt deinem Rechner, dazu kommen {{ui:workspace.themeLight}}, {{ui:workspace.themeDark}} und {{ui:workspace.themeGraphite}}. Du kannst es auch oben rechts im Editor ändern.
+
+{{ui:workspace.toolbarSize}} macht die Knöpfe der Leiste oben, ihr Formenmenü und die Kamerasteuerung links kleiner oder größer: {{ui:workspace.toolbarSizeSmall}}, {{ui:workspace.toolbarSizeMedium}} (wie bisher) oder {{ui:workspace.toolbarSizeLarge}}. Klein lässt auf einem Laptop mehr Platz für die Arbeitsebene, groß trifft sich leichter auf einem großen Bildschirm oder mit dem Finger. Mit großen Knöpfen gehen die Gruppen der Leiste in eine zweite Zeile, wenn das Fenster für sie zu schmal ist. Die Größe merkt sich dieser Browser, sie gilt für jedes Design.
+
+{{ui:workspace.viewCubePosition}} stellt den Ansichtswürfel in eine andere Ecke der Arbeitsfläche: {{ui:workspace.viewCubePositionTopLeft}} (wie bisher), {{ui:workspace.viewCubePositionTopRight}}, {{ui:workspace.viewCubePositionBottomLeft}} oder {{ui:workspace.viewCubePositionBottomRight}}. In jeder Ecke außer oben links rückt die Kamerasteuerung nach oben an den Platz, den der Würfel frei gemacht hat. Unten rechts steht der Würfel knapp über der Auswahl {{ui:inspector.snapGrid}}. Solange rechts die Eigenschaften einer Form offen sind, weicht ein Würfel auf der rechten Seite links daneben aus. Die Ecke merkt sich dieser Browser, sie gilt für jedes Design. In einem schmalen Fenster, etwa auf dem Handy, ist die Einstellung ausgeblendet und der Würfel bleibt oben links.
+
+### Darstellung: Schnellmodus
+
+{{ui:workspace.fastMode}} ist für langsamere Rechner. Er schaltet Schatten, Kantenlinien an allen Körpern und das Nachlaufen der Kamera aus und zeichnet die Ansicht nur in Bildschirmauflösung. Deine eigenen Einstellungen bleiben für später erhalten, und die Schalter, die er überstimmt, zeigen {{ui:workspace.offInFastMode}}, solange er an ist. Was sonst auf einem langsamen Rechner hilft, steht unten unter „Wenn sich layerling langsam anfühlt“.
+
+### Darstellung: Farben des Arbeitsbereichs und der Skizze
+
+Die Farben des Arbeitsbereichs stellst du unter {{ui:workspace.appearance}} ein: {{ui:workspace.backgroundColor}} und {{ui:workspace.surfaceColor}} für das helle Thema (die dunklen Themen behalten ihre eigenen), die Rasterfarbe liegt unter {{ui:workspace.workplane}}. Jede Farbe ist ein Knopf, der die Farbe zeigt. Ein Klick öffnet ein kleines Fenster mit dem Farbfeld, einer Reihe fertiger Farben, einem Feld für den Hex-Wert und einem Pfeil, der die Farbe auf den Start von layerling zurückstellt. [[Enter]] übernimmt einen eingetippten Hex-Wert, ein Klick außerhalb des Fensters ebenso.
+
+Die Skizzenansicht hat eigene Farben: {{ui:workspace.sketchBackground}} für das Fenster rund um die Fläche, {{ui:workspace.sketchPlateColor}} für die Fläche unter dem Raster und {{ui:workspace.sketchGridColor}}, alle für das helle Thema. {{ui:workspace.sketchMatch}} übernimmt die drei Farben des Arbeitsbereichs mit einem Klick.
+
+{{ui:workspace.classicLook}} stellt den Arbeitsbereich so ein, wie Tinkercad ihn zeigt: weißer Hintergrund, hellblaues Raster im Millimeterabstand mit einer kräftigen Linie jeden Zentimeter, schwarze Kantenlinien, Licht von oben mit weichen Schatten. Danach lässt sich jeder Wert weiter einzeln ändern. Alle starten so, wie layerling immer aussah, und was passt, hängt auch von deinem Monitor ab.
+
+![Die Einstellungen unter Darstellung: Hintergrund- und Arbeitsebenenfarbe für das helle Thema und der Schalter für Kantenlinien an allen Körpern.](shot:settings-appearance)
+
+![Der Editor im dunklen Farbschema. Das Farbschema stellst du oben rechts ein: System, Hell, Dunkel oder Graphit.](shot:editor-dark)
+
+### Darstellung: Achsenpfeile und Kantenlinien
+
+{{ui:workspace.showAxes}} (zunächst an) zeichnet am hinteren linken Eck der Platte drei Pfeile: **X** in Rot nach rechts, **Y** in Grün nach hinten und **Z** in Blau nach oben, so wie die Positionsfelder zählen. Das ist die Rechte-Hand-Regel, die auch Tinkercad, CAD-Programme und die Slicer nutzen. Liegt die Arbeitsebene auf einer Fläche, wandern sie mit. Hier schaltest du sie aus, wenn sie stören.
+
+{{ui:workspace.edgeLines}} zeichnet an jedem Körper eine Umrisslinie in der Farbe von {{ui:workspace.edgeColor}} (zunächst Schwarz, wie bei Tinkercad): Das hilft, wenn dunkle Farben ineinander verschwimmen. Es ist zunächst aus, und sehr große importierte Netze bleiben ausgenommen.
+
+![Drei dunkle Körper mit eingeschalteten Kantenlinien: Die Umrisse halten sie auseinander.](shot:edge-lines)
+
+### Darstellung: Licht und Schatten
+
+{{ui:workspace.showShadows}} schaltet die Schlagschatten ein und aus. Zwei Regler bestimmen, wie die Körper beleuchtet sind. {{ui:workspace.shadowStrength}} sagt, wie dunkel die Schlagschatten sind, und {{ui:workspace.shadeContrast}} schiebt Licht vom gleichmäßigen Umgebungslicht zum Hauptlicht: Richtung „kräftig“ werden die Schattenseiten dunkler und die Schatten besser sichtbar, Richtung „weich“ wird alles flacher. Am oberen Ende wird der Kontrast sehr kräftig, sodass Schattenseiten und Schatten richtig dunkel werden. {{ui:workspace.shadowSoftness}} macht die Ränder der Schatten weich statt scharf. {{ui:workspace.lightAzimuth}} dreht das Hauptlicht um die Platte (0° von vorn, 90° von rechts), und {{ui:workspace.lightElevation}} hebt es an, bei 90° steht es wie bei Tinkercad senkrecht über der Platte, und die Schatten fallen genau unter die Körper. {{ui:workspace.lightReset}} stellt alles zurück.
+
+### Darstellung: Maße auf der Arbeitsebene
+
+{{ui:workspace.showMoveDimensions}} zeigt beim Verschieben, um wie viel du dich bewegst, {{ui:workspace.showOriginDimensions}} die Abstände der Auswahl zum Nullpunkt der Platte, auch bei mehreren markierten Körpern. Mit {{ui:workspace.dimensionsAlwaysVisible}} bleiben diese Maße dauerhaft sichtbar und nicht nur, solange du ziehst. Ist ein gedrehter Körper ausgewählt, stehen seine Winkel unter ihm auf der Arbeitsebene; {{ui:workspace.showRotationAngles}} schaltet das aus. Mehr unter [Messen und Notizen](chapter:messen-und-notizen).
+
+### Darstellung: Auswählen und Verschieben
+
+{{ui:workspace.selectBeforeMoving}}: Ein Körper muss dann zuerst ausgewählt werden, und erst das nächste Ziehen verschiebt ihn. Das hilft, wenn Kinder oder hastige Hände Körper anfassen, und auf einem Touchscreen.
+
+{{ui:workspace.frameByDirection}}: Ein nach rechts gezogener Rahmen nimmt nur, was ganz in ihm liegt, ein nach links gezogener alles, was er berührt (gestrichelt gezeichnet), wie in SketchUp.
+
+{{ui:workspace.doubleClickOpensSketch}} bestimmt, ob ein Doppelklick auf eine extrudierte Skizze die Skizze wieder öffnet, wie in Tinkercad, und {{ui:workspace.doubleClickOpensGroup}}, ob ein Doppelklick auf eine Gruppe oder ein Bündel sie zum Bearbeiten öffnet.
+
+{{ui:workspace.objectSnap}} lässt die Kanten und die Mitte einer Form beim Ziehen an anderen Formen einrasten; das Rastermenü unten rechts hat denselben Schalter. {{ui:workspace.cruise}} lässt eine neue Form am Mauszeiger hängen und auf der Fläche darunter landen, wie Cruise in Tinkercad; ausgeschaltet erscheint eine neue Form in der Mitte der Platte. Mehr unter [Auswählen und Anordnen](chapter:auswaehlen-und-anordnen).
+
+### Darstellung: die Ansicht
+
+{{ui:workspace.startInPerspective}}: Der Editor öffnet dann in der perspektivischen Ansicht, nicht in der flachen.
+
+{{ui:workspace.zoomSpeed}} ist ein Regler von langsam bis schnell: wie schnell das Rad zoomt; oberhalb von 10 wird nur das Rad schneller. {{ui:workspace.cameraInertia}}: Lässt du die Maus nach dem Drehen los, dreht die Ansicht noch kurz weiter und bremst sanft ab. Ausgeschaltet bleibt sie sofort stehen, wie in Tinkercad und Fusion 360.
+
+{{ui:workspace.overhangAngle}} ist der Winkel, ab dem eine Fläche als Überhang gilt, wenn du im Sichtbarkeitsmenü Überhänge zeigen einschaltest: Diese Flächen sind rot und weiß schraffiert. 30° ist vorsichtig, 70° rechnet mit guter Kühlung des Drucks; 45° ist der übliche Start.
+
+{{ui:workspace.booleanTriangleLimit}} begrenzt, wie viele Dreiecke ein importiertes Netz haben darf, wenn du es schneidest, verschmilzt oder zu einer Schnittmenge machst, denn das wird in deinem Browser gerechnet. Ein Netz über dem Limit wird nicht verarbeitet; vereinfache es zuerst oder hebe das Limit an, wenn dein Rechner es verträgt. Ein höheres Limit kann den Editor für einige Sekunden einfrieren.
+
+### Maße: Einheiten, Maßstab und Rasterschritte
+
+Unter {{ui:workspace.measurement}} stellst du die {{ui:workspace.units}} ein, die Einheit, in der Maße erscheinen ({{ui:workspace.scale}}: Millimeter, Zentimeter oder Meter im metrischen System, Zoll oder Fuß im imperialen), wie viele Nachkommastellen eine Zahl zeigt ({{ui:workspace.accuracy}}), das {{ui:workspace.snapGrid}}, in dem Verschieben und Skalieren einrasten, und eigene Rasterschritte unter {{ui:workspace.customSnapGrids}}.
+
 Unter {{ui:workspace.measurement}} in den Einstellungen stellst du die {{ui:workspace.units}} ein. Mit {{ui:units.imperial}} zeigt layerling alle Maße in Zoll, an der Form, im Eigenschaftenfeld, bei Maßband und Lineal. Das Raster bietet dann Schritte von 1/64 bis 1 Zoll, und das Gitter auf der Platte wird in Zoll gezeichnet (1/8 bis 1 Zoll, Vorgabe 1/4 Zoll), mit einer kräftigeren Linie bei jedem vollen Zoll. Bei {{ui:workspace.inchFormat}} wählst du, ob Zoll als Bruch wie in Tinkercad erscheinen (1 5/8, auf 1/64 Zoll gerundet) oder als Dezimalzahl (1.625) mit so vielen Nachkommastellen, wie unter {{ui:workspace.accuracy}} eingestellt ist. Eintippen kannst du beides, auch „1 5/8“. Schneller geht der Wechsel zwischen Millimeter und Zoll mit dem kleinen Schalter **mm | in** neben dem {{ui:inspector.snapGrid}} unten im Eigenschaftenfenster: Er ändert die Einheit, das Raster der Platte und die Fangstufe wie die Einstellungen, für diesen Entwurf.
 
 Unter {{ui:workspace.customSnapGrids}} an derselben Stelle legst du eigene Rasterschritte an: einen Namen und eine Größe in Millimetern, zum Beispiel „Rastermaß 2,54 mm" für den Abstand von DIP-Chips, Stiftleisten und Lochrasterplatinen oder „MX Key Unit" mit 19,05 mm für den Abstand von Tastaturtasten. Das Rastermenü bietet dieses Maß dann ganz, halbiert und geviertelt an (1 ×, ½ × und ¼ ×), sodass sich Formen um ein ganzes, ein halbes oder ein viertel Rastermaß verschieben lassen. Willst du nur das Maß selbst, nimm den Haken bei {{ui:workspace.customSnapGridParts}} daneben weg; das Menü hat dann nur diesen einen Schritt. Eigene Schritte bleiben beim Entwurf und gehen mit {{ui:workspace.makeDefault}} mit.
 
-Größe, Gitterweite und Farbe der Platte änderst du in den Einstellungen (das Zahnrad im Menüband): Dort liegen die Bereiche {{ui:workspace.appearance}}, {{ui:workspace.measurement}}, {{ui:workspace.workplane}}, {{ui:workspace.shapeDefaults}} und {{ui:workspace.history}}. Unter {{ui:workspace.appearance}} gibt es zum Beispiel die Schalter {{ui:workspace.startInPerspective}} und {{ui:workspace.showShadows}}, unter {{ui:workspace.workplane}} {{ui:workspace.showGrid}}. Die Farben des Arbeitsbereichs stellst du ebenfalls unter {{ui:workspace.appearance}} ein: {{ui:workspace.backgroundColor}} und {{ui:workspace.surfaceColor}} für das helle Thema (die dunklen Themen behalten ihre eigenen), die Rasterfarbe liegt unter {{ui:workspace.workplane}}. Dort wählst du auch, ob die kräftige Rasterlinie alle 5 oder alle 10 Rasterschritte kommt ({{ui:workspace.gridMajorEvery}}), und gibst ihr mit {{ui:workspace.gridMajorColor}} eine eigene Farbe; Mittelkreuz und Plattenrand nehmen sie dann mit. Alle Linien des Rasters werden beim Hineinzoomen breiter, wie in Tinkercad, und bleiben beim Herauszoomen sichtbar; wem das zu viel ist, schaltet {{ui:workspace.gridLinesGrow}} aus, dann bleiben die Linien bei jedem Zoom einen Pixel breit, wie in der Skizze. Im Farbfeld übernimmt [[Enter]] einen eingetippten Hex-Wert. {{ui:workspace.edgeLines}} zeichnet an jedem Körper eine Umrisslinie in der Farbe von {{ui:workspace.edgeColor}} (zunächst Schwarz, wie bei Tinkercad): Das hilft, wenn dunkle Farben ineinander verschwimmen. Es ist zunächst aus, und sehr große importierte Netze bleiben ausgenommen. Das Gitter läuft immer durch den Nullpunkt, sodass die kräftigen Linien auf den Achsen liegen, wie groß die Platte auch ist. Ist das Raster verschwunden, etwa weil eine Farbe auf die der Platte gestellt wurde, bringt {{ui:workspace.resetGrid}} am Ende des Bereichs {{ui:workspace.workplane}} Sichtbarkeit, Farben, Abstand und Linienstärke auf den Standard zurück, hier und in der mit {{ui:workspace.makeDefault}} gesicherten Vorgabe.
+### Arbeitsebene: Platte und Drucker
 
-{{ui:workspace.showAxes}} (zunächst an) zeichnet am hinteren linken Eck der Platte drei Pfeile: **X** in Rot nach rechts, **Y** in Grün nach hinten und **Z** in Blau nach oben, so wie die Positionsfelder zählen. Das ist die Rechte-Hand-Regel, die auch Tinkercad, CAD-Programme und die Slicer nutzen. Liegt die Arbeitsebene auf einer Fläche, wandern sie mit. Hier schaltest du sie aus, wenn sie stören.
+{{ui:workspace.printer}} stellt die Arbeitsebene auf die Druckplatte deines Druckers ein und markiert Körper, die darüber hinausragen, siehe [Drucken](chapter:drucken). {{ui:workspace.showPlateLabels}} schreibt den Namen des Designs auf die Platte und, wenn ein Drucker gewählt ist, seinen Namen und sein Bauvolumen.
 
-Zwei Regler unter {{ui:workspace.appearance}} bestimmen, wie die Körper beleuchtet sind. {{ui:workspace.shadowStrength}} sagt, wie dunkel die Schlagschatten sind, und {{ui:workspace.shadeContrast}} schiebt Licht vom gleichmäßigen Umgebungslicht zum Hauptlicht: Richtung „kräftig“ werden die Schattenseiten dunkler und die Schatten besser sichtbar, Richtung „weich“ wird alles flacher. Am oberen Ende wird der Kontrast sehr kräftig, so dass Schattenseiten und Schatten richtig dunkel werden. {{ui:workspace.shadowSoftness}} macht die Ränder der Schatten weich statt scharf. {{ui:workspace.lightAzimuth}} dreht das Hauptlicht um die Platte (0° von vorn, 90° von rechts), und {{ui:workspace.lightElevation}} hebt es an, bei 90° steht es wie bei Tinkercad senkrecht über der Platte, und die Schatten fallen genau unter die Körper. {{ui:workspace.lightReset}} stellt alles zurück. {{ui:workspace.classicLook}} stellt den Arbeitsbereich so ein, wie Tinkercad ihn zeigt: weißer Hintergrund, hellblaues Raster im Millimeterabstand mit einer kräftigen Linie jeden Zentimeter, schwarze Kantenlinien, Licht von oben mit weichen Schatten. Danach lässt sich jeder Wert weiter einzeln ändern. Alle starten so, wie layerling immer aussah, und was passt, hängt auch von deinem Monitor ab. Die Skizzenansicht hat eigene Farben: {{ui:workspace.sketchBackground}} für das Fenster rund um die Fläche, {{ui:workspace.sketchPlateColor}} für die Fläche unter dem Raster und {{ui:workspace.sketchGridColor}}, alle für das helle Thema. {{ui:workspace.sketchMatch}} übernimmt die drei Farben des Arbeitsbereichs mit einem Klick.
+{{ui:workspace.size}} gibt der Platte eine eigene Größe, mit {{ui:workspace.width}} und {{ui:workspace.length}} in Millimetern oder der gewählten Einheit. Das Gitter läuft immer durch den Nullpunkt, sodass die kräftigen Linien auf den Achsen liegen, wie groß die Platte auch ist.
 
-![Die Einstellungen unter Darstellung: Hintergrund- und Arbeitsebenenfarbe für das helle Thema und der Schalter für Kantenlinien an allen Körpern.](shot:settings-appearance)
+### Arbeitsebene: Gitter
 
-![Drei dunkle Körper mit eingeschalteten Kantenlinien: Die Umrisse halten sie auseinander.](shot:edge-lines)
+{{ui:workspace.showGrid}} zeigt oder verbirgt das Gitter auf der Platte. {{ui:workspace.gridBlockSize}} legt den Abstand seiner Linien fest, {{ui:workspace.gridMajorEvery}}, ob die kräftige Linie alle 5 oder alle 10 Rasterschritte kommt; {{ui:workspace.gridMajorColor}} gibt ihr eine eigene Farbe, und Mittelkreuz und Plattenrand nehmen sie dann mit. {{ui:workspace.gridColor}} ist die Farbe der gewöhnlichen Linien.
 
-![Der Editor im dunklen Farbschema. Das Farbschema stellst du oben rechts ein: System, Hell, Dunkel oder Graphit.](shot:editor-dark)
+Alle Linien des Rasters werden beim Hineinzoomen breiter, wie in Tinkercad, und bleiben beim Herauszoomen sichtbar. Wem das zu viel ist, schaltet {{ui:workspace.gridLinesGrow}} aus, dann bleiben die Linien bei jedem Zoom einen Pixel breit, wie in der Skizze.
 
-{{ui:workspace.toolbarSize}} unter {{ui:workspace.appearance}} macht die Knöpfe der Leiste oben, ihr Formenmenü und die Kamerasteuerung links kleiner oder größer: {{ui:workspace.toolbarSizeSmall}}, {{ui:workspace.toolbarSizeMedium}} (wie bisher) oder {{ui:workspace.toolbarSizeLarge}}. Klein lässt auf einem Laptop mehr Platz für die Arbeitsebene, groß trifft sich leichter auf einem großen Bildschirm oder mit dem Finger. Mit großen Knöpfen gehen die Gruppen der Leiste in eine zweite Zeile, wenn das Fenster für sie zu schmal ist. Die Größe merkt sich dieser Browser, sie gilt für jedes Design.
+Ist das Raster verschwunden, etwa weil eine Farbe auf die der Platte gestellt wurde, bringt {{ui:workspace.resetGrid}} am Ende des Bereichs {{ui:workspace.workplane}} Sichtbarkeit, Farben, Abstand und Linienstärke auf den Standard zurück, hier und in der mit {{ui:workspace.makeDefault}} gesicherten Vorgabe.
 
-{{ui:workspace.viewCubePosition}} unter {{ui:workspace.appearance}} stellt den Ansichtswürfel in eine andere Ecke der Arbeitsfläche: {{ui:workspace.viewCubePositionTopLeft}} (wie bisher), {{ui:workspace.viewCubePositionTopRight}}, {{ui:workspace.viewCubePositionBottomLeft}} oder {{ui:workspace.viewCubePositionBottomRight}}. In jeder Ecke außer oben links rückt die Kamerasteuerung nach oben an den Platz, den der Würfel frei gemacht hat. Unten rechts steht der Würfel knapp über der Auswahl {{ui:inspector.snapGrid}}. Solange rechts die Eigenschaften einer Form offen sind, weicht ein Würfel auf der rechten Seite links daneben aus. Die Ecke merkt sich dieser Browser, sie gilt für jedes Design. In einem schmalen Fenster, etwa auf dem Handy, ist die Einstellung ausgeblendet und der Würfel bleibt oben links.
+### Formvorgaben
 
-> **Tipp:** Dreh die Ansicht nicht mehr, wenn du Teile genau aneinander setzt. Wechsle mit den Zifferntasten in die gerade Ansicht von oben oder von vorn und schalte mit [[O]] auf die flache Darstellung um. So erkennst du sofort, ob zwei Kanten wirklich bündig sind.
+Unter {{ui:workspace.shapeDefaults}} wählst du mit {{ui:workspace.shape}} eine Form und legst fest, wie sie beim Hinzufügen beginnt: ihre Breite, Länge und Höhe. {{ui:workspace.useAppDefaults}} stellt die Form auf das zurück, womit die App sie startet. Formen mit eigenen Einstellungen zeigen sie unter {{ui:workspace.shapeDetails}}. Die Werte gelten für neue Formen, nicht für die schon auf der Platte. {{ui:workspace.customLimit}} setzt eine eigene Obergrenze dafür, wie groß die Anfasser und die Eigenschaften diese Form machen dürfen; leer gelassen bleiben die üblichen Grenzen.
+
+### Gespeicherter Verlauf
+
+Unter {{ui:workspace.history}} legt der Regler {{ui:workspace.savedHistory}} fest, wie viele abgeschlossene Aktionen nach dem Speichern oder Wiederöffnen eines Designs für Rückgängig erhalten bleiben. Standard sind 100 Aktionen im Design. Ein niedrigeres Limit verwirft die älteren Rückgängig-Schritte des Designs dauerhaft.
 
 ## Wenn sich layerling langsam anfühlt
 

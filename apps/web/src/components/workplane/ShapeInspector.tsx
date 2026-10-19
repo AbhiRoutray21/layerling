@@ -2686,7 +2686,7 @@ export function ShapeInspector({
       ) : null}
 
       {colorOpen ? (
-        <div className="color-card" aria-label={t("inspector.shapeColor")}>
+        <div className="color-card" aria-label={t("inspector.shapeColor")} data-help-section-all="colorCard">
           <div className="color-card-header">
             <span>{t("inspector.color")}</span>
             <span className="color-value">{solidColor.toUpperCase()}</span>
@@ -4562,7 +4562,7 @@ export function SelectionInspector({
         </div>
       ) : null}
       {colorOpen ? (
-        <div className="color-card" aria-label={t("inspector.shapeColor")}>
+        <div className="color-card" aria-label={t("inspector.shapeColor")} data-help-section-all="colorCard">
           <div className="color-card-header">
             <span>{t("inspector.color")}</span>
             <span className="color-value">{sharedColor ? sharedColor.toUpperCase() : t("inspector.selectionMixedColors")}</span>

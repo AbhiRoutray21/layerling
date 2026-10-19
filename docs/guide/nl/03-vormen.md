@@ -56,6 +56,16 @@ Een taps toelopend of schuin blok, cilinder, ellips, veelhoek, buis of ring houd
 
 Typen is nauwkeuriger dan slepen. Alle getalvelden nemen millimeters, maar ook percentages: typ "50 %" in een breedte van 40 mm en je krijgt 20 mm. Ze rekenen ook: "15*3", "120-2*4" of "(40+2)/2" geven 45, 112 en 21; x werkt in plaats van *. Het veld onthoudt de berekening, zowel in het eigenschappenpaneel als in de maatvakjes rond het geselecteerde lichaam: klik je er later weer in, dan staat de formule er in plaats van het getal, zolang de waarde er nog bij past, en je past hem ter plekke aan, waarbij "(140+2)/2" bijvoorbeeld "(40+6)/2" wordt. Sleep je het lichaam aan een greep of schaal je het, dan past de formule niet meer en toont het veld weer alleen het getal.
 
+### Kleuren kiezen
+
+Een klik op {{ui:inspector.solid}} in de eigenschappen van een lichaam opent de kleurenkaart met de kop {{ui:inspector.shapeColor}}. Bovenaan staat de hexwaarde van de kleur die het lichaam nu heeft. Eronder staan de kant-en-klare kleuren van het palet; een klik op een kleur kleurt het lichaam en sluit de kaart.
+
+{{ui:inspector.custom}} opent de kleurkiezer van je browser, voor een eigen kleur. Wat die biedt, hangt van de browser af: in Chrome en Edge heeft hij een kleurvlak, een schuifregelaar voor de tint, een pipet die een kleur van ergens op het scherm overneemt en de waarde als HEX, RGB of HSL, waartussen je met de pijltjes ernaast wisselt. De kleur telt zodra je de kiezer sluit of ernaast klikt.
+
+Een eigen kleur die je daar mengt, staat daarna onder {{ui:inspector.recentColors}}, de laatste acht. De punaise in de rij {{ui:inspector.keptColors}} bewaart de gekozen kleur voorgoed: ze staat in een eigen rij, nieuwere kleuren verdringen haar nooit, en dezelfde punaise laat haar weer los; tot 21 kleuren blijven in deze browser bewaard. De punaise is voor eigen kleuren, die van het palet zijn er altijd. Bij meerdere kleuren in de selectie of bij een gat is er geen enkele kleur om te bewaren.
+
+De kleuren van de werkruimte in de instellingen hebben een eigen, eenvoudiger kleurkiezer met een kleurvlak, een rij kant-en-klare kleuren en een veld voor de hexwaarde.
+
 ## Hoe rond is rond? Het aantal zijden
 
 Ronde vormen zoals cilinder, kegel, buis, ellips of de boringen hebben in hun eigenschappen de schakelaar {{ui:prop.sidesFollowSize}} en de schuifregelaar {{ui:prop.sides}}. De {{ui:shape.torus}} heeft er twee: {{ui:prop.torusSides}} rond de ring en {{ui:prop.torusSteps}} rond de buis. Ook daar volgen ze de grootte tot je ze vastzet, zodat een grote torus geen facetten toont. De reden: voor de weergave en voor STL, 3MF en OBJ tekent layerling een cirkel als een veelhoek met veel kleine zijden. Hoe meer zijden, hoe gladder, en hoe meer driehoeken het kost.
