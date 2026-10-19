@@ -4489,6 +4489,14 @@ export function SelectionInspector({
   onToggleLocked,
   onToggleHidden,
   onInteractionActiveChange,
+  workspace,
+  snap,
+  snapOpen,
+  onSnapChange,
+  onSnapOpenChange,
+  onUnitsChange,
+  onObjectSnapChange,
+  onSnapDockedChange,
 }: {
   shapes: readonly WorkplaneShape[];
   onSetHole: (hole: boolean) => void;
@@ -4497,9 +4505,23 @@ export function SelectionInspector({
   /** Hides the selected parts, or shows them again when all of them are hidden (#491); the button of a single part's panel. */
   onToggleHidden?: () => void;
   onInteractionActiveChange?: (active: boolean) => void;
+  /** The snap grid sits at the foot of this panel too, so it stays reachable with several parts selected (#601). */
+  workspace: WorkplaneWorkspaceSettings;
+  snap: GridSize;
+  snapOpen: boolean;
+  onSnapChange: Dispatch<SetStateAction<GridSize>>;
+  onSnapOpenChange: Dispatch<SetStateAction<boolean>>;
+  onUnitsChange?: (units: string) => void;
+  onObjectSnapChange?: (enabled: boolean) => void;
+  /** True while the snap grid is shown in this panel, so the free-standing control steps aside. */
+  onSnapDockedChange?: (docked: boolean) => void;
 }) {
   useLanguage();
   const movable = useMovablePanel<HTMLElement>("layerling.editor.inspectorPosition", INSPECTOR_PANEL);
+  useEffect(() => {
+    onSnapDockedChange?.(!movable.moved);
+    return () => onSnapDockedChange?.(false);
+  }, [movable.moved, onSnapDockedChange]);
   const allHidden = shapes.length > 0 && shapes.every((shape) => shape.hidden);
   const [colorOpen, setColorOpen] = useState(false);
   const { colors: recentColors, remember: rememberColor } = useRecentColors(SOLID_COLORS);
@@ -4617,6 +4639,11 @@ export function SelectionInspector({
         </p>
       ) : null}
       <p className="selection-inspector-hint">{t("inspector.selectionHint")}</p>
+      {!movable.moved ? (
+        <div className="inspector-snap-dock">
+          <SnapGridControl units={workspace.units} onUnitsChange={onUnitsChange} customGrids={workspace.customSnapGrids} snap={snap} snapOpen={snapOpen} onSnapChange={onSnapChange} onSnapOpenChange={onSnapOpenChange} objectSnap={workspace.objectSnap} onObjectSnapChange={onObjectSnapChange} />
+        </div>
+      ) : null}
     </aside>
   );
 }
