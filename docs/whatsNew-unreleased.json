@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "title": {
+      "de": "OBJ aus Tinkercad liegt richtig herum",
+      "en": "An OBJ from Tinkercad comes in the right way up"
+    },
+    "body": {
+      "de": "Tinkercad schreibt seine OBJ-Dateien mit Z nach oben. layerling las sie bisher mit Y nach oben, sodass ein Teil auf der Kante stand. Jetzt erkennt layerling die Tinkercad-Datei und stellt sie richtig hin: ein flaches Teil liegt flach.",
+      "en": "Tinkercad writes its OBJ files with Z up. layerling used to read them with Y up, so a part stood on its edge. layerling now recognises a Tinkercad file and sets it down the right way: a flat part lies flat."
+    }
+  }
+]
