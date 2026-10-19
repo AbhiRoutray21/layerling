@@ -1,6 +1,16 @@
 [
   {
     "title": {
+      "de": "Alt dreht den Auswahlrahmen um",
+      "en": "Alt turns the selection frame around"
+    },
+    "body": {
+      "de": "Halte beim Ziehen eines Auswahlrahmens Alt: Der Rahmen arbeitet für dieses eine Ziehen andersherum. Mit der Einstellung \"Die Richtung des Rahmens entscheidet\" nimmt ein Rahmen nach rechts dann alles, was er berührt, und einer nach links nur das ganz Eingeschlossene. Ist die Einstellung aus, nimmt Alt nur das ganz Eingeschlossene.",
+      "en": "Hold Alt while you drag a selection frame: it works the other way round for that one drag. With the setting \"The direction of the frame decides\" on, a frame dragged to the right then takes everything it touches and one dragged to the left only what lies completely inside. With the setting off, Alt takes only what lies completely inside."
+    }
+  },
+  {
+    "title": {
       "de": "Gravur um den Zylinder schneidet sauber durch",
       "en": "An engraving around a cylinder cuts all the way through"
     },
