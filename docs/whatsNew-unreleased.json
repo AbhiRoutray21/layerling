@@ -38,5 +38,15 @@
       "en": "When placing the second point of a measurement, the tape measure now snaps at a right angle to an opposing edge or face - or anywhere on it while you hold Shift, which makes measuring the clear width of a hole or the gap between two parts exact. And while adding measurements, a click with Shift or Ctrl (Cmd on a Mac) deletes a point or a line right away without switching modes.",
       "de": "Beim Setzen des zweiten Messpunkts rastet das Maßband jetzt im rechten Winkel an einer gegenüberliegenden Kante oder Fläche ein – oder überall darauf, solange du Umschalt hältst; so misst du die lichte Weite einer Öffnung oder den Abstand zwischen zwei Teilen genau. Und während du Maße hinzufügst, löscht ein Klick mit Umschalt oder Strg (Cmd auf dem Mac) einen Punkt oder eine Linie sofort, ohne den Modus zu wechseln."
     }
+  },
+  {
+    "title": {
+      "de": "Winkellineal: X und Y stimmen wieder",
+      "en": "Corner ruler: X and Y are the right way round"
+    },
+    "body": {
+      "de": "Beim Winkellineal trugen die grünen Zahlen die Hinweise „X-Position“ und „Y-Position zum Lineal“ vertauscht: Rückte ein Körper nach hinten, änderte sich die Zahl mit dem Hinweis X. Jetzt heißt jede Zahl nach der Richtung ihres Arms: X nach rechts, Y nach hinten, Z nach oben, auch nach einer Vierteldrehung des Lineals.",
+      "en": "On the corner ruler the green numbers had the tooltips \"X position\" and \"Y position to ruler\" the wrong way round: when a body moved to the back, the number with the X tooltip changed. Now each number is named by the direction of its arm: X to the right, Y to the back, Z up, also after the ruler is turned by a quarter."
+    }
   }
 ]

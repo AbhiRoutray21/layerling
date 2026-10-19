@@ -108,6 +108,18 @@ export type CornerRulerPose = {
  * Nullpunkt der Skala. Die Ecke ist ein abgeleiteter Punkt, eine halbe
  * Armlaenge je Achse von der Mitte entfernt, in Richtung der eigenen Drehung.
  */
+/**
+ * The name the position fields give to the axis a ruler arm runs along: X to the right, Y to the back, Z up.
+ * The arms of a placed corner ruler do not stand along fixed axes (the one that is called x here runs to the
+ * back at first, and the corner turns by quarter turns), so the numbers on them are named by where the arm
+ * points and not by which arm it is (#597).
+ */
+export function worldAxisNameOfDirection(direction: { x: number; y: number; z: number }): "X" | "Y" | "Z" {
+  const along = { x: Math.abs(direction.x), y: Math.abs(direction.y), z: Math.abs(direction.z) };
+  if (along.y >= along.x && along.y >= along.z) return "Z";
+  return along.x >= along.z ? "X" : "Y";
+}
+
 export function cornerRulerCorner(pose: CornerRulerPose): { x: number; z: number } {
   const quaternion = quaternionForShape({ rotation: pose.rotation });
   const local = new THREE.Vector3(-pose.armLengthX / 2, 0, -pose.armLengthZ / 2).applyQuaternion(quaternion);

@@ -11,6 +11,7 @@ import {
   cornerRulerDimensionMatches,
   cornerRulerDimensionMatchesFromCorner,
   cornerRulerTicks,
+  worldAxisNameOfDirection,
   rulerTicks,
   pointAlongRuler,
   rulerDimensionMatch,
@@ -391,5 +392,26 @@ describe("the printed scale of a ruler (#500)", () => {
     expect(ticks).toHaveLength(Math.floor((30 / 25.4) * 16) + 1);
     expect(rulerTicks(0)).toEqual([]);
     expect(rulerTicks(Number.NaN, true)).toEqual([]);
+  });
+});
+
+describe("the name of the axis a ruler arm runs along (#597)", () => {
+  it("calls an arm along the plate's x axis X, along its z axis Y (to the back) and an upright one Z", () => {
+    expect(worldAxisNameOfDirection({ x: 1, y: 0, z: 0 })).toBe("X");
+    expect(worldAxisNameOfDirection({ x: -1, y: 0, z: 0 })).toBe("X");
+    expect(worldAxisNameOfDirection({ x: 0, y: 0, z: 1 })).toBe("Y");
+    expect(worldAxisNameOfDirection({ x: 0, y: 0, z: -1 })).toBe("Y");
+    expect(worldAxisNameOfDirection({ x: 0, y: 1, z: 0 })).toBe("Z");
+  });
+
+  it("names the arms of a corner ruler on the plate by where they point: the first arm runs to the back, so it is Y, the other X", () => {
+    const frame = cornerRulerFrameForWorkplane({ xAxis: { x: 1, y: 0, z: 0 }, zAxis: { x: 0, y: 0, z: 1 }, normal: { x: 0, y: 1, z: 0 } });
+    expect(worldAxisNameOfDirection(frame.xAxis)).toBe("Y");
+    expect(worldAxisNameOfDirection(frame.zAxis)).toBe("X");
+    expect(worldAxisNameOfDirection(frame.normal)).toBe("Z");
+    // One more quarter turn and the arms trade places.
+    const turned = rotateCornerRulerFrame(frame);
+    expect(worldAxisNameOfDirection(turned.xAxis)).toBe("X");
+    expect(worldAxisNameOfDirection(turned.zAxis)).toBe("Y");
   });
 });

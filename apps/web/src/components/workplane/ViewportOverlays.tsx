@@ -10,7 +10,7 @@ import { LineSegmentsGeometry } from "three/examples/jsm/lines/LineSegmentsGeome
 import { type AppThemePalette, type ResolvedAppTheme } from "@/lib/appTheme";
 import { t } from "@/lib/i18n";
 import { displayToMillimeters, formatLengthMm, formatMeasurementNumber, lengthDisplayUnit, millimetersToDisplay, parseMeasurementInput } from "@/lib/measurementUnits";
-import { computeCornerRulerRelativeCoordinates, cornerRulerAxisModes, cornerRulerDimensionMatchesFromCorner, cornerRulerFlatRotation, cornerRulerTicks, pointAlongRuler, rulerDimensionMatch, type CornerRulerAxis, type CornerRulerAxisModes, type CornerRulerFrame, type CornerRulerMode, type RulerDimensionField, type RulerDimensionMatch } from "@/lib/rulerDimensions";
+import { computeCornerRulerRelativeCoordinates, cornerRulerAxisModes, cornerRulerDimensionMatchesFromCorner, cornerRulerFlatRotation, cornerRulerTicks, pointAlongRuler, rulerDimensionMatch, worldAxisNameOfDirection, type CornerRulerAxis, type CornerRulerAxisModes, type CornerRulerFrame, type CornerRulerMode, type RulerDimensionField, type RulerDimensionMatch } from "@/lib/rulerDimensions";
 import { type PlacementPoint, type PlacementWorkplane } from "@/lib/placementWorkplane";
 import { capturePointer } from "@/lib/pointerCapture";
 import { GuideHelpLink } from "@/components/GuideHelpLink";
@@ -1202,6 +1202,8 @@ type CornerRulerOverlayItem = {
   modes: Record<CornerRulerAxis, CornerRulerMode>;
   handleX: number;
   handleY: number;
+  /** The axis of the position fields (X, Y, Z) that each green number counts along: by where its arm points (#597). */
+  axisNames: Record<CornerRulerAxis, "X" | "Y" | "Z">;
   /** True when a body in front hides the ruler's lines; false when they stay in view. */
   occlude: boolean;
   labels: CornerRulerLabelScreen[];
@@ -1418,6 +1420,7 @@ export function syncCornerRulerToolOverlay(
         modes,
         handleX: handleScreen.x,
         handleY: handleScreen.y,
+        axisNames: { x: worldAxisNameOfDirection(xAxis), z: worldAxisNameOfDirection(zAxis), elevation: worldAxisNameOfDirection(yAxis) },
         occlude,
         labels,
         neighborLabels,
@@ -1593,7 +1596,7 @@ export function CornerRulerToolOverlay({
                 const label = axis === "x" ? selected.xLabel : axis === "z" ? selected.zLabel : selected.elevationLabel;
                 const value = axis === "x" ? selected.xValue : axis === "z" ? selected.zValue : selected.elevationValue;
                 const middle = item.modes[axis] === "midpoint";
-                const axisName = axis === "x" ? "X" : axis === "z" ? "Y" : "Z";
+                const axisName = item.axisNames[axis];
                 return (
                   <span key={axis} className="ruler-coordinate-field" style={{ left: label.x, top: label.y }}>
                     <button
@@ -1609,8 +1612,8 @@ export function CornerRulerToolOverlay({
                     <button
                       type="button"
                       className="ruler-coordinate-badge"
-                      aria-label={t(axis === "x" ? "aria.rulerCoordinateX" : axis === "z" ? "aria.rulerCoordinateZ" : "aria.rulerCoordinateElevation")}
-                      title={t(axis === "x" ? "ruler.coordinate.x" : axis === "z" ? "ruler.coordinate.z" : "ruler.coordinate.elevation")}
+                      aria-label={t(axisName === "X" ? "aria.rulerCoordinateX" : axisName === "Y" ? "aria.rulerCoordinateZ" : "aria.rulerCoordinateElevation")}
+                      title={t(axisName === "X" ? "ruler.coordinate.x" : axisName === "Y" ? "ruler.coordinate.z" : "ruler.coordinate.elevation")}
                       onPointerDown={(event) => event.stopPropagation()}
                       onClick={() => onCoordinateClick(item.id, selected.shapeIds, axis, value, label.x, label.y)}
                     >
