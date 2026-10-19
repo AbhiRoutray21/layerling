@@ -13110,13 +13110,17 @@ function SecondaryToolbar({
 }) {
   const [shapesOpen, setShapesOpen] = useState(false);
   // The Shapes panel kept open while shapes are placed one after the other (#433); remembered in this browser.
-  const [shapesPinned, setShapesPinned] = useState(false);
+  const [geometryShapesPinned, setGeometryShapesPinned] = useState(false);
+  // The sketch's panel has its own pin, its own place and its own size (#577).
+  const [sketchShapesPinned, setSketchShapesPinned] = useState(false);
+  const shapesPinned = toolbarMode === "sketch" ? sketchShapesPinned : geometryShapesPinned;
   const shapesPinnedRef = useRef(false);
   shapesPinnedRef.current = shapesPinned;
   useEffect(() => {
     try {
       const pinned = window.localStorage.getItem("layerling.editor.shapeMenuPinned") === "true";
-      setShapesPinned(pinned);
+      setGeometryShapesPinned(pinned);
+      setSketchShapesPinned(window.localStorage.getItem("layerling.sketch.shapeMenuPinned") === "true");
       // A pinned panel is there again at the next start, not only its pin (forum, prmod3d).
       if (pinned) setShapesOpen(true);
     } catch {
@@ -13125,9 +13129,10 @@ function SecondaryToolbar({
   }, []);
   const toggleShapesPinned = () => {
     const next = !shapesPinnedRef.current;
-    setShapesPinned(next);
+    const sketch = toolbarMode === "sketch";
+    (sketch ? setSketchShapesPinned : setGeometryShapesPinned)(next);
     try {
-      window.localStorage.setItem("layerling.editor.shapeMenuPinned", String(next));
+      window.localStorage.setItem(sketch ? "layerling.sketch.shapeMenuPinned" : "layerling.editor.shapeMenuPinned", String(next));
     } catch {
       // The pin still works for this visit.
     }
@@ -13852,6 +13857,8 @@ function SecondaryToolbar({
                       helpSection="sketchDrawing"
                       pinned={shapesPinned}
                       onTogglePinned={toggleShapesPinned}
+                      scope="sketch"
+                      resizable
                     >
                       <div className="shape-menu-list">
                         {sketchShapeMenuItems.map(({ primitive, label, icon: Icon }) => (

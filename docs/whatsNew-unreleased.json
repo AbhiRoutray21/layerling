@@ -1,6 +1,16 @@
 [
   {
     "title": {
+      "de": "Formenfenster der Skizze: eigener Platz, eigene Größe",
+      "en": "The sketch's shape panel: its own place and size"
+    },
+    "body": {
+      "de": "Das Formenfenster der Skizze merkt sich Platz, Anheften und Größe jetzt für sich und teilt sie nicht mehr mit dem 3D-Editor. Es lässt sich an Rändern und Ecken auf die gewünschte Größe ziehen, wie das des 3D-Editors.",
+      "en": "The sketch's shape panel now remembers its place, its pin and its size on its own and no longer shares them with the 3D editor. Its edges and corners can be pulled to the size you want, like the 3D editor's panel."
+    }
+  },
+  {
+    "title": {
       "de": "Keine Offline-Versprechen, wo es nicht geht",
       "en": "No offline promise where it cannot work"
     },
