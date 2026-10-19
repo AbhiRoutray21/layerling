@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "title": {
+      "de": "Fase an einer verjüngten Rounded Box bleibt gerade",
+      "en": "A chamfer on a tapered rounded box stays straight"
+    },
+    "body": {
+      "de": "Eine Rounded Box, die nach oben schmaler wird, hatte nach einer Fase an den unteren Kanten sichtbar gekrümmte Linien an den geraden Seiten. Die geraden Seiten sind jetzt echte Ebenen, die Ecken bleiben gerundet, und die Fase läuft gerade an ihnen entlang.",
+      "en": "A rounded box that gets narrower towards the top showed visibly curved lines along its straight sides after a chamfer on the bottom edges. The straight sides are now true planes, the corners stay rounded, and the chamfer runs straight along them."
+    }
+  }
+]

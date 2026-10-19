@@ -505,6 +505,87 @@ function twistedLoftSolid(cad: OcctKernel, profile: CadModifierProfilePart, tole
   return solids[0];
 }
 
+/** Whether four corners a, b, c, d (in this order round a side) lie in one plane. */
+function pieceIsFlat([a, b, c, d]: P3[], tolerance: number) {
+  const u = { x: b.x - a.x, y: b.y - a.y, z: b.z - a.z };
+  const v = { x: c.x - a.x, y: c.y - a.y, z: c.z - a.z };
+  const n = { x: u.y * v.z - u.z * v.y, y: u.z * v.x - u.x * v.z, z: u.x * v.y - u.y * v.x };
+  const length = Math.hypot(n.x, n.y, n.z);
+  return length > 0 && Math.abs((d.x - a.x) * n.x + (d.y - a.y) * n.y + (d.z - a.z) * n.z) / length <= tolerance;
+}
+
+/**
+ * Whether a tapered outline of straight sides and arcs (a rounded box, a slot) can be built piece by piece: the
+ * top is the bottom's partner in kind, and every straight side stays flat - its four corners in one plane.
+ */
+function piecewiseLoftPossible(profile: CadModifierProfilePart, tolerance: number) {
+  const top = profile.topLoops ?? [];
+  return profile.loops.every((loop, index) => {
+    const upper = top[index];
+    if (!upper || loop.segments.length < 3 || loop.segments.length !== upper.segments.length) return false;
+    let a: Point = loop;
+    let c: Point = upper;
+    return loop.segments.every((segment, piece) => {
+      const partner = upper.segments[piece];
+      const ok = segment.kind === partner.kind && (segment.kind === "line" || (segment.kind === "arc" && !isWholeEllipse(segment)))
+        && (segment.kind !== "line" || pieceIsFlat([{ x: a.x, y: 0, z: a.z }, { x: segment.x, y: 0, z: segment.z }, { x: partner.x, y: profile.height, z: partner.z }, { x: c.x, y: profile.height, z: c.z }], tolerance));
+      a = segment;
+      c = partner;
+      return ok;
+    });
+  });
+}
+
+/**
+ * A tapered or leaning prism whose outline has straight sides and arcs, built piece by piece: every straight side
+ * a plane, every arc corner the ruled surface between its two arcs. A loft through the whole wire gives a B-spline
+ * for the flat sides too, and a chamfer or fillet along such a side then comes out curved (#612).
+ */
+function piecewiseLoftSolid(cad: OcctKernel, profile: CadModifierProfilePart, tolerance: number) {
+  const top = profile.topLoops ?? [];
+  const lift = [1, 0, 0, 0, 0, 1, 0, profile.height, 0, 0, 1, 0];
+  const faces: ShapeHandle[] = [];
+  const cap = (loops: CadModifierProfileLoop[], raised: boolean) => {
+    const wires = loops.map((loop) => {
+      const wire = loopWire(cad, loop, tolerance);
+      return raised ? cad.transform(wire, lift) : wire;
+    });
+    let face = cad.makeFace(wires[0]);
+    if (wires.length > 1) face = cad.addHolesInFace(face, wires.slice(1));
+    faces.push(face);
+  };
+  cap(profile.loops, false);
+  cap(top, true);
+  profile.loops.forEach((loop, index) => {
+    const upper = top[index];
+    let from: Point = loop;
+    let fromTop: Point = upper;
+    loop.segments.forEach((segment, piece) => {
+      const partner = upper.segments[piece];
+      if (segment.kind === "line") {
+        const a = { x: from.x, y: 0, z: from.z };
+        const b = { x: segment.x, y: 0, z: segment.z };
+        const c = { x: partner.x, y: profile.height, z: partner.z };
+        const d = { x: fromTop.x, y: profile.height, z: fromTop.z };
+        faces.push(cad.makeFace(cad.makeWire([cad.makeLineEdge(a, b), cad.makeLineEdge(b, c), cad.makeLineEdge(c, d), cad.makeLineEdge(d, a)])));
+      } else {
+        const lower = cad.makeWire([segmentEdge(cad, from, segment, tolerance)]);
+        const raised = cad.transform(cad.makeWire([segmentEdge(cad, fromTop, partner, tolerance)]), lift);
+        faces.push(cad.loft([lower, raised], false, true));
+      }
+      from = segment;
+      fromTop = partner;
+    });
+  });
+  const sewn = cad.sew(faces, tolerance * 100);
+  const shells = cad.isShell(sewn) ? [sewn] : cad.getSubShapes(sewn, "shell");
+  if (shells.length !== 1) throw new Error(`The tapered pieces did not close into one shell (${shells.length})`);
+  const solid = [shells[0], cad.reverseShape(shells[0])].map((shell) => cad.makeSolid(shell))
+    .find((candidate) => cad.isValid(candidate) && cad.getVolume(candidate) > 0);
+  if (!solid) throw new Error("The tapered pieces did not make a valid solid");
+  return solid;
+}
+
 function loftSolid(cad: OcctKernel, profile: CadModifierProfilePart, tolerance: number) {
   const top = profile.topLoops ?? [];
   if (Math.abs(profile.twist ?? 0) > 1e-9 || Math.abs(profile.tilt?.x ?? 0) > 1e-9 || Math.abs(profile.tilt?.z ?? 0) > 1e-9 || (profile.smooth ?? 0) > 1e-9) {
@@ -512,6 +593,13 @@ function loftSolid(cad: OcctKernel, profile: CadModifierProfilePart, tolerance: 
   }
   if ([...profile.loops, ...top].every((loop) => loop.segments.every((segment) => segment.kind === "line")) && sidesAreFlat(profile, tolerance)) {
     return flatLoftSolid(cad, profile, tolerance);
+  }
+  if (piecewiseLoftPossible(profile, tolerance)) {
+    try {
+      return piecewiseLoftSolid(cad, profile, tolerance);
+    } catch {
+      // Whatever the pieces do not close into: the loft through the whole wire below builds it.
+    }
   }
   const lift = [1, 0, 0, 0, 0, 1, 0, profile.height, 0, 0, 1, 0];
   /*

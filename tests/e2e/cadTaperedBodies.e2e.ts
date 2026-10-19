@@ -277,6 +277,20 @@ describe("tapered and leaning shapes: exact lofts", () => {
     expect(cad.getVolume(shelled)).toBeLessThan(cad.getVolume(solid) * 0.6);
   });
 
+  it("builds a tapered rounded box with plane sides, so a chamfer along them stays flat (#612)", () => {
+    const { solid, expected } = body(shape("roundedBox", { width: 100, depth: 100, height: 20, topBottomFillet: 0, cornerFillet: 5, taperTopWidth: 80, taperTopDepth: 80 }));
+    expect(cadProfileSolidMismatch(cad, solid, expected)).toBeNull();
+    const faces = cad.getSubShapes(solid, "face");
+    expect(faces.filter((face) => cad.surfaceType(face) === "plane")).toHaveLength(2 + 4); // two caps and four sides
+    const low = Math.min(...cad.getSubShapes(solid, "vertex").map((vertex) => cad.vertexPosition(vertex).y));
+    const bottom = cad.getSubShapes(solid, "edge").filter((edge) => cad.getSubShapes(edge, "vertex").every((vertex) => Math.abs(cad.vertexPosition(vertex).y - low) < 1e-3));
+    expect(bottom).toHaveLength(8);
+    const chamfered = cad.chamfer(solid, bottom, 2.1);
+    expect(cad.isValid(chamfered)).toBe(true);
+    // The chamfer along a straight side is one flat strip: the planes the sides stand in give planes again.
+    expect(cad.getSubShapes(chamfered, "face").filter((face) => cad.surfaceType(face) === "plane").length).toBeGreaterThanOrEqual(2 + 4 + 4);
+  });
+
   it("leaves a tapered sphere on the display mesh", () => {
     expect(cadModifierProfileForShape(shape("sphere", { height: 20, taperTopWidth: 10 }))).toBeNull();
     expect(cadModifierProfileForShape(shape("box", { radius: 2, taperTopWidth: 10 }))).toBeNull();
