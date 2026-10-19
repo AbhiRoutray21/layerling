@@ -132,5 +132,15 @@
       "de": "Ein Chamfillet an der unteren Kante eines Zylinders kam verkehrt herum heraus: unten die Verrundung, darüber die Fase, und auch der obere Rand wurde gerundet. Jetzt liegt unten die Fase auf der Platte, die in die Wand übergeht, und der obere Rand bleibt unberührt.",
       "en": "A chamfillet on the bottom edge of a cylinder came out the wrong way round: the fillet at the foot, the chamfer above it, and the top rim rounded as well. Now the chamfer sits on the plate and blends into the wall, and the top rim stays untouched."
     }
+  },
+  {
+    "title": {
+      "de": "Japanisch und Chinesisch ins Textfeld tippen",
+      "en": "Typing Japanese and Chinese into the Text field"
+    },
+    "body": {
+      "de": "Mit einer Eingabemethode (IME) ließ sich in das Textfeld eines Textes oder Namensschilds nichts Sinnvolles tippen: \"ishi\" wurde zu \"いｓｈい\" und ließ sich nicht in Kanji umwandeln. Das Feld behält jetzt, was getippt wird, und übernimmt ein Wort erst, wenn es fertig ist. Das gilt für Japanisch, Chinesisch und Koreanisch.",
+      "en": "With an input method (IME) nothing sensible could be typed into the Text field of a text or a name tag: \"ishi\" came out as \"いｓｈい\" and could not be converted to kanji. The field now keeps what is typed and takes a word over once it is done. This holds for Japanese, Chinese and Korean."
+    }
   }
 ]
