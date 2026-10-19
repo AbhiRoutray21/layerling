@@ -9003,6 +9003,13 @@ html[data-theme="dark"] .inspector-bundle-note {
   }
 }
 
+/* A small body: the wide zones of its handles would cover all of it and every touch would grab one (#574). */
+@media (pointer: coarse) {
+  .transform-overlay.small-body .transform-handle::before {
+    inset: 0;
+  }
+}
+
 .transform-handle {
   z-index: 5;
   background: #f2eee8;
