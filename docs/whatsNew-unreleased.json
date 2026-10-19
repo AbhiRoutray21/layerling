@@ -28,5 +28,15 @@
       "de": "Im fertigen Docker-Image blieben die Karten der Startseite bei \"Noch kein Vorschaubild\", weil der Server keinen Ordner für die Bilder anlegen durfte. Der Ordner gehört jetzt dem Server-Benutzer, die Bilder werden wieder gespeichert. Bei einem bestehenden Container das Image neu laden; die Bilder entstehen beim nächsten Öffnen eines Entwurfs.",
       "en": "In the ready-made Docker image the cards on the start page stayed on \"No preview yet\", because the server was not allowed to create a folder for the pictures. The folder now belongs to the server's user, so the pictures are saved again. For an existing container, pull the image again; the pictures appear the next time a design is opened."
     }
+  },
+  {
+    "title": {
+      "de": "Docker hinter einem Proxy: Speichern auf dem Server klappt",
+      "en": "Docker behind a proxy: saving to the server works"
+    },
+    "body": {
+      "de": "Wer layerling hinter einem Reverse-Proxy mit Domain und HTTPS betreibt, bekam beim Speichern auf dem Server die Meldung \"Der Serverspeicher nimmt nur Anfragen von dieser Seite an\". Jetzt erkennt layerling den Fall, dass der Proxy HTTPS beendet, ohne es weiterzugeben. Verändert der Proxy den Host, trägt man die Domain in LAYERLING_ALLOWED_ORIGINS ein.",
+      "en": "If you run layerling behind a reverse proxy with a domain and HTTPS, saving to the server failed with \"Shared projects only accept requests from this site\". layerling now copes with a proxy that ends HTTPS without passing that on. If the proxy changes the host, list the domain in LAYERLING_ALLOWED_ORIGINS."
+    }
   }
 ]

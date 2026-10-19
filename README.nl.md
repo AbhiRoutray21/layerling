@@ -235,6 +235,8 @@ Om het kleurenthema te kiezen dat mensen bij hun eerste bezoek krijgen, zet je `
 
 Als de gedeelde map aan staat, laat `LAYERLING_NEW_DESIGNS_ON_SERVER` nieuwe ontwerpen op de server beginnen: `true` is de beginwaarde voor wie nog niet heeft gekozen (zij kunnen **Nieuwe ontwerpen op de server** op de startpagina uitzetten), `always` geldt voor iedereen en zet het vinkje vast. Het wordt op dezelfde manier ingesteld, en een kopie die als losse bestanden wordt geserveerd heeft geen server die het kan lezen.
 
+Achter een reverse proxy met een domein moet de proxy de oorspronkelijke `Host` en `X-Forwarded-Proto` doorgeven (nginx: `proxy_set_header Host $host;` en `proxy_set_header X-Forwarded-Proto $scheme;`), anders weigert de server het opslaan met "Gedeelde projecten accepteren alleen verzoeken van deze site.". Herschrijft de proxy de host en kun je dat niet veranderen, zet dan het adres waarmee mensen layerling openen in `LAYERLING_ALLOWED_ORIGINS` (kommagescheiden, bijvoorbeeld `https://layerling.example.com`).
+
 ### Statische hosting: gewone bestanden op een webserver
 
 Elke webserver kan layerling als gewone bestanden aanbieden; er draait geen Node.js op. Bouw de bestanden één keer op een computer met Node.js (zie [Wat je nodig hebt](#wat-je-nodig-hebt)):

@@ -20,6 +20,9 @@ services:
       # LAYERLING_NEW_DESIGNS_ON_SERVER: "always"
       # Let an AI client (MCP) drive the open editors over the network. Off by default; whoever has the
       # token can read and change the open designs, so use a long random one on a trusted network. See the README.
+      # Behind a reverse proxy that rewrites the host, so saving to the server is refused ("only accept requests from
+      # this site"): list the address people use. Normally the proxy just has to pass Host and X-Forwarded-Proto.
+      # LAYERLING_ALLOWED_ORIGINS: "https://layerling.example.com"
       # LAYERLING_MCP_REMOTE: "true"
       # LAYERLING_MCP_TOKEN: "a-long-random-secret-of-at-least-16-characters"
       # LAYERLING_MCP_ALLOWED_HOSTS: "layerling.example.com"   # only for a real domain, e.g. behind a reverse proxy

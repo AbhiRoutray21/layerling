@@ -245,6 +245,8 @@ Das Farbschema, das Leute beim ersten Besuch bekommen, legst du mit `LAYERLING_D
 
 Ist der gemeinsame Ordner eingerichtet, lässt `LAYERLING_NEW_DESIGNS_ON_SERVER` neue Entwürfe auf dem Server beginnen: `true` ist der Anfangswert für alle, die noch nicht gewählt haben (sie können **Neue Entwürfe auf dem Server** auf der Startseite abwählen), `always` gilt für alle und sperrt den Haken. Es wird auf demselben Weg gesetzt, und eine als reine Dateien ausgelieferte Kopie hat keinen Server, der es lesen könnte.
 
+Hinter einem Reverse-Proxy mit Domain muss der Proxy den ursprünglichen `Host` und `X-Forwarded-Proto` weitergeben (nginx: `proxy_set_header Host $host;` und `proxy_set_header X-Forwarded-Proto $scheme;`), sonst lehnt der Server das Speichern mit "Der Serverspeicher nimmt nur Anfragen von dieser Seite an." ab. Schreibt der Proxy den Host um und lässt sich das nicht ändern, trägst du die Adresse, unter der die Leute layerling öffnen, in `LAYERLING_ALLOWED_ORIGINS` ein (kommagetrennt, zum Beispiel `https://layerling.example.com`).
+
 ### Statisches Hosting: reine Dateien auf einem Webserver
 
 Jeder Webserver kann layerling als reine Dateien ausliefern; auf ihm läuft kein Node.js. Du baust die Dateien einmal auf einem Rechner mit Node.js (siehe [Was du brauchst](#was-du-brauchst)):
