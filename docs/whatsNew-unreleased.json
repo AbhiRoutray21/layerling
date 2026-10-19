@@ -1,6 +1,16 @@
 [
   {
     "title": {
+      "de": "Schnittfläche eines durchsichtigen Körpers ist durchsichtig",
+      "en": "A see-through body has a see-through cut face"
+    },
+    "body": {
+      "de": "Schneidest du einen durchsichtigen Körper in der Schnittansicht, ist die gefüllte Schnittfläche jetzt ebenso durchsichtig wie der Körper, nicht mehr undurchsichtig.",
+      "en": "When you cut a see-through body in the section view, the filled cut face is now as see-through as the body, no longer solid."
+    }
+  },
+  {
+    "title": {
       "de": "Formenfenster der Skizze: eigener Platz, eigene Größe",
       "en": "The sketch's shape panel: its own place and size"
     },

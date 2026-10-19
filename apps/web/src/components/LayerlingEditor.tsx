@@ -8480,6 +8480,7 @@ export function LayerlingEditor({
       return {
         name: source ? displayShapeName(source) : mesh.name,
         color: source?.color ?? "#000000",
+        seeThrough: Boolean(source?.transparent) && !source?.hole,
         loops: sliceMeshContours(mesh, axis, offset),
       };
     });

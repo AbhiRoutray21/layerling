@@ -10758,6 +10758,10 @@ function buildSectionCaps(state: ThreeState, bodies: readonly SectionBody[], axi
     geometry.setIndex(cap.triangles);
     const material = new THREE.MeshBasicMaterial({
       color: new THREE.Color(body.color).multiplyScalar(0.78),
+      // A see-through body keeps a see-through cut face (#575), as dim as the body itself.
+      transparent: Boolean(body.seeThrough),
+      opacity: body.seeThrough ? TRANSPARENT_SOLID_OPACITY : 1,
+      depthWrite: !body.seeThrough,
       side: THREE.DoubleSide,
       polygonOffset: true,
       polygonOffsetFactor: -2,
