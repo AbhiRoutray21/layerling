@@ -38,5 +38,25 @@
       "de": "Wer layerling hinter einem Reverse-Proxy mit Domain und HTTPS betreibt, bekam beim Speichern auf dem Server die Meldung \"Der Serverspeicher nimmt nur Anfragen von dieser Seite an\". Jetzt erkennt layerling den Fall, dass der Proxy HTTPS beendet, ohne es weiterzugeben. Verändert der Proxy den Host, trägt man die Domain in LAYERLING_ALLOWED_ORIGINS ein.",
       "en": "If you run layerling behind a reverse proxy with a domain and HTTPS, saving to the server failed with \"Shared projects only accept requests from this site\". layerling now copes with a proxy that ends HTTPS without passing that on. If the proxy changes the host, list the domain in LAYERLING_ALLOWED_ORIGINS."
     }
+  },
+  {
+    "title": {
+      "de": "Alle Bezugspunkte löschen auch im Menü der leeren Fläche",
+      "en": "Delete all reference points in the menu of an empty spot too"
+    },
+    "body": {
+      "de": "Wer mit dem Maßband einen Bezugspunkt gesetzt hatte und daneben rechtsklickte, fand nur Einfügen, Alles auswählen und Mehrfachauswahl. „Alle Bezugspunkte löschen“ steht jetzt auch im Menü einer leeren Stelle der 3D-Ansicht, sobald der Entwurf einen Bezugspunkt enthält.",
+      "en": "If you had set a reference point with the tape measure and right-clicked next to it, you found only Paste, Select all and Select multiple. \"Delete all reference points\" is now in the menu of an empty spot of the 3D view too, whenever the design holds a reference point."
+    }
+  },
+  {
+    "title": {
+      "de": "Das Zahlenfeld des Winkellineals schließt sich bei Abwahl",
+      "en": "The number field of the corner ruler closes on deselect"
+    },
+    "body": {
+      "de": "Ein Klick auf eine grüne Zahl des Winkellineals öffnet ein Feld zum Eintippen. Es blieb stehen, auch wenn der Körper nicht mehr ausgewählt war. Jetzt schließt es sich (ohne zu übernehmen), sobald die Körper, für die es geöffnet wurde, nicht mehr alle ausgewählt sind.",
+      "en": "A click on a green number of the corner ruler opens a field to type into. It stayed in the view even when the body was no longer selected. It now closes (without applying) as soon as the bodies it was opened for are no longer all selected."
+    }
   }
 ]
