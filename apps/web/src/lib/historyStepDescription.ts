@@ -1,6 +1,7 @@
 import type { MessageKey } from "@/lib/messages.en";
 import type { EditorHistoryEntry } from "@/lib/editorHistory";
-import type { WorkplaneShape } from "@/types/layerling";
+import { localIdBase } from "@/lib/localIds";
+import type { EdgeTreatmentFeature, WorkplaneShape } from "@/types/layerling";
 
 /**
  * What one step of the history did, as a sentence key and its values, so the
@@ -14,7 +15,16 @@ export type HistoryStepDescription = {
   values?: Record<string, string | number>;
 };
 
-type ChangeKind = "moved" | "rotated" | "resized" | "color" | "hole" | "solid" | "renamed" | "mirrored" | "edges" | "hidden" | "shown" | "locked" | "unlocked" | "edited";
+type ChangeKind = "moved" | "rotated" | "resized" | "color" | "hole" | "solid" | "renamed" | "mirrored" | "edges" | "rounded" | "chamfered" | "hollowed" | "facesDeleted" | "hidden" | "shown" | "locked" | "unlocked" | "edited";
+
+/** What a treatment the step added did, by the tool that made it. */
+const FEATURE_KINDS: Record<EdgeTreatmentFeature["kind"], ChangeKind> = {
+  fillet: "rounded",
+  chamfer: "chamfered",
+  chamfillet: "edges",
+  shell: "hollowed",
+  deleteFace: "facesDeleted",
+};
 
 const POSITION_FIELDS = new Set(["x", "z", "elevation"]);
 const ROTATION_FIELDS = new Set(["rotation", "rotationX", "rotationZ", "rotationPivot"]);
@@ -44,9 +54,12 @@ function changedFields(before: WorkplaneShape, after: WorkplaneShape) {
   return fields;
 }
 
-function changeKind(after: WorkplaneShape, fields: Set<string>): ChangeKind | null {
+function changeKind(before: WorkplaneShape, after: WorkplaneShape, fields: Set<string>): ChangeKind | null {
   const meaningful = [...fields].filter((field) => !DERIVED_FIELDS.has(field));
   if (meaningful.length === 0) return null;
+  // One more treatment is that treatment, whatever else it rebuilt - a group treated becomes a body of its own.
+  const treatments = after.edgeTreatments ?? [];
+  if (treatments.length === (before.edgeTreatments?.length ?? 0) + 1) return FEATURE_KINDS[treatments[treatments.length - 1].kind] ?? "edges";
   const only = (group: Set<string>) => meaningful.every((field) => group.has(field));
   if (only(new Set(["name"]))) return "renamed";
   if (only(new Set(["color"]))) return "color";
@@ -72,6 +85,10 @@ const ONE_KEYS: Record<ChangeKind, MessageKey> = {
   renamed: "historyStep.renamedOne",
   mirrored: "historyStep.mirroredOne",
   edges: "historyStep.edgesOne",
+  rounded: "historyStep.roundedOne",
+  chamfered: "historyStep.chamferedOne",
+  hollowed: "historyStep.hollowedOne",
+  facesDeleted: "historyStep.facesDeletedOne",
   hidden: "historyStep.hiddenOne",
   shown: "historyStep.shownOne",
   locked: "historyStep.lockedOne",
@@ -89,6 +106,10 @@ const MANY_KEYS: Record<ChangeKind, MessageKey> = {
   renamed: "historyStep.editedMany",
   mirrored: "historyStep.mirroredMany",
   edges: "historyStep.edgesMany",
+  rounded: "historyStep.roundedMany",
+  chamfered: "historyStep.chamferedMany",
+  hollowed: "historyStep.hollowedMany",
+  facesDeleted: "historyStep.facesDeletedMany",
   hidden: "historyStep.hiddenMany",
   shown: "historyStep.shownMany",
   locked: "historyStep.lockedMany",
@@ -96,32 +117,89 @@ const MANY_KEYS: Record<ChangeKind, MessageKey> = {
   edited: "historyStep.editedMany",
 };
 
-function groupedIds(shape: WorkplaneShape) {
-  return new Set((shape.groupedShapes ?? []).map((part) => part.id));
+/**
+ * The ids of a group's parts as they were before grouping gave them ids of
+ * their own, so a part matches the object it was on the plate - and again
+ * after ungrouping, which gives it yet another.
+ */
+function groupedBaseIds(shape: WorkplaneShape) {
+  return new Set((shape.groupedShapes ?? []).map((part) => localIdBase(part.id)));
 }
 
-function describeShapes(before: WorkplaneShape[], after: WorkplaneShape[]): HistoryStepDescription | null {
+/** A shape's content apart from its id and where it stands: the same for a copy and its source. */
+function contentSignature(shape: WorkplaneShape): string {
+  const { id: _id, x: _x, z: _z, elevation: _elevation, groupedShapes, ...rest } = shape;
+  return JSON.stringify({ ...rest, groupedShapes: groupedShapes?.map(contentSignature) });
+}
+
+/**
+ * The objects that came in as copies of objects that were there before -
+ * Duplicate, paste, an Alt-drag or a pattern - as the source each copies, or
+ * null when one of them is no copy. Only shapes of the same kind and size are
+ * compared in full, so a step with large meshes stays quick.
+ */
+function copySources(before: WorkplaneShape[], added: WorkplaneShape[]): WorkplaneShape[] | null {
+  const signatures = new Map<WorkplaneShape, string>();
+  const signature = (shape: WorkplaneShape) => {
+    let known = signatures.get(shape);
+    if (known === undefined) {
+      known = contentSignature(shape);
+      signatures.set(shape, known);
+    }
+    return known;
+  };
+  const sources: WorkplaneShape[] = [];
+  for (const copy of added) {
+    const source = before.find((candidate) => candidate.kind === copy.kind
+      && candidate.width === copy.width && candidate.depth === copy.depth && candidate.height === copy.height
+      && signature(candidate) === signature(copy));
+    if (!source) return null;
+    sources.push(source);
+  }
+  return sources;
+}
+
+/** How many groups are open for editing in a state, when the editor still knows; see describeHistoryStep. */
+export type OpenGroupCount = (entry: EditorHistoryEntry) => number;
+
+function describeShapes(before: WorkplaneShape[], after: WorkplaneShape[], openGroupsChange = 0): HistoryStepDescription | null {
   const beforeById = new Map(before.map((shape) => [shape.id, shape]));
   const afterById = new Map(after.map((shape) => [shape.id, shape]));
   const added = after.filter((shape) => !beforeById.has(shape.id));
   const removed = before.filter((shape) => !afterById.has(shape.id));
 
   if (added.length > 0 || removed.length > 0) {
-    // Grouping takes the parts off the plate and puts one group in their place.
+    // Grouping takes the parts off the plate and puts one group in their place;
+    // Done on a group open for editing does the same.
     if (added.length === 1 && removed.length > 0 && added[0].groupedShapes?.length) {
-      const parts = groupedIds(added[0]);
-      if (removed.every((shape) => parts.has(shape.id))) {
-        return { key: "historyStep.grouped", values: { count: removed.length, name: added[0].name } };
+      const parts = groupedBaseIds(added[0]);
+      if (removed.every((shape) => parts.has(localIdBase(shape.id)))) {
+        return openGroupsChange < 0
+          ? { key: "historyStep.groupClosed", values: { name: added[0].name } }
+          : { key: "historyStep.grouped", values: { count: removed.length, name: added[0].name } };
       }
     }
-    // Ungrouping takes a group away and puts its parts back.
+    // Ungrouping takes a group away and puts its parts back; Edit group lays them out the same way.
     if (removed.length === 1 && added.length > 0 && removed[0].groupedShapes?.length) {
-      const parts = groupedIds(removed[0]);
-      if (added.every((shape) => parts.has(shape.id))) {
-        return { key: "historyStep.ungrouped", values: { name: removed[0].name } };
+      const parts = groupedBaseIds(removed[0]);
+      if (added.every((shape) => parts.has(localIdBase(shape.id)))) {
+        return openGroupsChange > 0
+          ? { key: "historyStep.groupOpened", values: { name: removed[0].name } }
+          : { key: "historyStep.ungrouped", values: { name: removed[0].name } };
       }
+    }
+    // Cancel on a group open for editing puts the group back as it was.
+    if (openGroupsChange < 0 && added.length === 1 && added[0].groupedShapes?.length) {
+      return { key: "historyStep.groupClosed", values: { name: added[0].name } };
     }
     if (removed.length === 0) {
+      const sources = copySources(before, added);
+      if (sources) {
+        if (sources.length === 1) return { key: "historyStep.duplicatedOne", values: { name: sources[0].name } };
+        return sources.every((source) => source === sources[0])
+          ? { key: "historyStep.copiesOf", values: { count: sources.length, name: sources[0].name } }
+          : { key: "historyStep.duplicatedMany", values: { count: sources.length } };
+      }
       return added.length === 1
         ? { key: "historyStep.addedOne", values: { name: added[0].name } }
         : { key: "historyStep.addedMany", values: { count: added.length } };
@@ -141,7 +219,7 @@ function describeShapes(before: WorkplaneShape[], after: WorkplaneShape[]): Hist
   for (const shape of after) {
     const previous = beforeById.get(shape.id);
     if (!previous) continue;
-    const kind = changeKind(shape, changedFields(previous, shape));
+    const kind = changeKind(previous, shape, changedFields(previous, shape));
     if (kind) changes.push({ before: previous, after: shape, kind });
   }
   if (changes.length === 0) {
@@ -180,14 +258,26 @@ function describeNotes(before: EditorHistoryEntry, after: EditorHistoryEntry): H
 
 /**
  * What the step from `before` to `after` did. Without a state before it, the
- * entry is where the history begins.
+ * entry is where the history begins. `openGroups` tells opening and closing a
+ * group for editing apart from ungrouping and grouping, which change the
+ * shapes the same way; without it (or for a history loaded from a file, which
+ * does not keep which groups were open) they read as the latter.
  */
-export function describeHistoryStep(before: EditorHistoryEntry | undefined, after: EditorHistoryEntry): HistoryStepDescription {
+export function describeHistoryStep(before: EditorHistoryEntry | undefined, after: EditorHistoryEntry, openGroups?: OpenGroupCount): HistoryStepDescription {
   if (!before) return { key: "historyStep.start" };
-  const shapes = describeShapes(before.shapes, after.shapes);
+  const openGroupsChange = openGroups ? Math.sign(openGroups(after) - openGroups(before)) : 0;
+  const shapes = describeShapes(before.shapes, after.shapes, openGroupsChange);
   if (shapes) return shapes;
   const notes = describeNotes(before, after);
   if (notes) return notes;
   if (!sameValue(before.placementWorkplane, after.placementWorkplane)) return { key: "historyStep.workplane" };
   return { key: "historyStep.changed" };
+}
+
+/** The steps the arrows of the History view would undo and redo from the state at `index`. */
+export function historyStepsAround(entries: EditorHistoryEntry[], index: number, openGroups?: OpenGroupCount) {
+  return {
+    last: index > 0 ? describeHistoryStep(entries[index - 1], entries[index], openGroups) : null,
+    next: index < entries.length - 1 ? describeHistoryStep(entries[index], entries[index + 1], openGroups) : null,
+  };
 }
