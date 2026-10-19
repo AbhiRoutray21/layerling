@@ -172,5 +172,15 @@
       "de": "In den Arbeitsbereich-Einstellungen führte ein Klick bei eingeschalteter Interaktiver Hilfe oft nur auf einen langen Abschnitt oder zu gar nichts. Jetzt hat die Anleitung zu jeder Gruppe von Einstellungen einen eigenen Abschnitt (Deutsch und Englisch), dazu „Farben wählen“ für die Farbkarte, und die Felder, Regler, Farbknöpfe und Listen finden ihren Abschnitt, auch der Schnellmodus-Schalter.",
       "en": "In the Workspace settings, a click with Interactive Help on often led only to a long section, or to nothing. Now the guide has a section of its own for each group of settings (English and German), plus \"Choosing colours\" for the colour card, and the fields, sliders, colour buttons and lists find their section, the Fast mode switch too."
     }
+  },
+  {
+    "title": {
+      "de": "Die Verlaufsansicht nennt den Schritt hinter den Pfeilen",
+      "en": "The History view says what the arrows undo and redo"
+    },
+    "body": {
+      "de": "Unter dem Regler der Verlaufsansicht steht jetzt, welchen Schritt der linke Pfeil zurücknehmen würde („Letzter Schritt: Box verschoben“) und welchen der rechte wiederholen würde („Nächster Schritt: 2 Objekte zu Gruppe gruppiert“). Am ältesten und am neuesten Stand steht „keiner“. Das klappt auch bei Entwürfen, die schon früher gespeichert wurden.",
+      "en": "Under the slider of the History view, a row now names the step the left arrow would undo (\"Last step: Moved Box\") and the one the right arrow would redo (\"Next step: Grouped 2 objects into Group\"), with \"none\" at the oldest and the newest state. It also works for designs saved before."
+    }
   }
 ]
