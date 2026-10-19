@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+## 1.92.1
+
 - **The selection frame that takes what it touches is green (#572):** Dragging a frame over the workplane from right to left (or the other way round with Alt) takes every part the frame touches, but the frame only differed from the enclosing one by its dashed edge. It now has its own colour, green and dashed, the way CAD programs mark it; the frame that must enclose the parts stays orange.
 - **The snap grid stays reachable with several parts selected (#601):** The panel for a selection of several parts reached down to the bottom of the screen and covered the snap grid control in the lower right corner, so on a laptop the grid could not be changed without first deselecting. The panel now carries the snap grid (and the snap-to-shapes switch) at its foot, the way the panel of a single part does; once the panel is dragged away, the control is back in the corner.
 - **Narrower: an outline moved in by a width (#558):** The fill of a sketch body could keep its area and widen it ("Wider"), or build a wall inside, outside or centred, but not move the edge of a filled area inwards. A new choice, **Narrower**, under Fill in the properties of a sketch body and under Align in the sketch's line panel, keeps the area filled and takes the line width off all round; the holes grow by the same. One sketch then gives the fit hole and the part that passes through it 0.5 mm smaller, or a wall inside a shape. It is built by the exact kernel where it can (an arc stays a cylinder), a width the outline cannot give leaves nothing, and the MCP bridge takes `shrink` for `align` too. Asked for by @jbeardon (#558), with @RobbieKnobbie.
