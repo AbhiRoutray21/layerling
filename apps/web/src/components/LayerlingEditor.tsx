@@ -5,6 +5,8 @@ import { ShapeMenuPanel } from "@/components/workplane/ShapeMenuPanel";
 import { AlertTriangle, ArrowUpFromLine, Blend, Check, CircleHelp, Percent, Circle as CircleIcon, CloudUpload, Download, Eye, EyeOff, FilePlus2, FolderOpen, Hexagon as HexagonIcon, Info, ListTree, Pencil, Pentagon as PentagonIcon, Rotate3d, Route as RouteIcon, Search, Square as SquareIcon, Star as StarIcon, Triangle as TriangleIcon, X } from "lucide-react";
 import { ObjectListPanel } from "@/components/workplane/ObjectListPanel";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties } from "react";
+import { useWheelField } from "@/lib/useWheelField";
+import { wheelNextValue } from "@/lib/wheelValueStep";
 import * as THREE from "three";
 import type { AppThemePreference, ResolvedAppTheme } from "@/lib/appTheme";
 import type { ComponentType, ReactNode, SVGProps } from "react";
@@ -12770,18 +12772,28 @@ function SketchShapeNumberField({ label, value, min, max, suffix, normalize, onC
     setDraft(String(next));
     onChange(next);
   };
+  // The mouse wheel in the clicked field (#536): whole numbers, so one notch is one, Shift ten.
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [focused, setFocused] = useState(false);
+  useWheelField(inputRef, focused, ({ direction, keys }) => {
+    const typed = Number(draft.replace(",", "."));
+    const next = normalize(wheelNextValue(Number.isFinite(typed) ? typed : value, direction, 1, { shift: keys.shift }));
+    setDraft(String(next));
+    onChange(next);
+  });
   return (
     <label>
       <span>{label}</span>
       <input
+        ref={inputRef}
         type="text"
         inputMode="decimal"
         aria-label={label}
         title={`${min} - ${max}`}
         value={draft}
-        onFocus={(event) => event.currentTarget.select()}
+        onFocus={(event) => { setFocused(true); event.currentTarget.select(); }}
         onChange={(event) => setDraft(event.currentTarget.value)}
-        onBlur={commit}
+        onBlur={() => { setFocused(false); commit(); }}
         onKeyDown={(event) => { if (event.key === "Enter") event.currentTarget.blur(); }}
       />
       {suffix ? <span className="unit">{suffix}</span> : null}
