@@ -7,6 +7,7 @@ code still carries it - so a lower number further down is older, not newer.
 ## Unreleased
 
 - **An OBJ from Tinkercad comes in lying flat, not on its side (#599):** Tinkercad writes the OBJ with Z up and says so in the first line ("Object Export From Tinkercad"), but layerling read every foreign OBJ with Y up, so such a file stood on its edge: a part that is 435 mm wide and 120 mm high came in 244 mm high. The Tinkercad header is now recognised and the file is turned upright, like layerling's own Z-up files. Such a body carries its mesh itself, so a saved project never rebuilds it with the old axes; an OBJ without that header is read as before. Reported by @kwjaarsveld-star.
+- **A .lyl file opens with a double click (#605):** The web app manifest now declares `file_handlers` for `.lyl`, and the start page reads `window.launchQueue`, so an installed layerling (Chrome or Edge) registers as a program for .lyl files and opens the design through the usual import, with the file handle kept so Ctrl+S saves back into it. Guide text (EN/DE) and a What's new card added.
 ## 1.92.1
 
 - **The selection frame that takes what it touches is green (#572):** Dragging a frame over the workplane from right to left (or the other way round with Alt) takes every part the frame touches, but the frame only differed from the enclosing one by its dashed edge. It now has its own colour, green and dashed, the way CAD programs mark it; the frame that must enclose the parts stays orange.

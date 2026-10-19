@@ -64,7 +64,7 @@ import { hydrateProjectShapeState, reconcileLoadedProjectShapeCacheEntry, type I
 import { ToolbarImportIcon } from "@/components/toolbarIcons";
 import { writeDesignView } from "@/lib/designView";
 import { useFileAccept } from "@/lib/fileAccept";
-import { lylFileAccessSupported, pickFilesToImport, rememberLylFile, type LylFileHandle } from "@/lib/lylFileAccess";
+import { lylFileAccessSupported, onLylFilesLaunched, pickFilesToImport, rememberLylFile, type LylFileHandle } from "@/lib/lylFileAccess";
 import { exportLylProject, importLylProject, LYL_CREATED_WITH_VERSION, LYL_MEDIA_TYPE } from "@/lib/lylProject";
 import { backupDesignAlreadyThere, backupEntryPaths, backupFileName, backupFolderPaths, unpackBackupFolders, isBackupFileName, packBackup, unpackBackup, zipHoldsDesigns } from "@/lib/projectBackup";
 import { customShapesBackupEntries, restoreCustomShapesFromBackup } from "@/lib/myShapes";
@@ -1519,6 +1519,20 @@ export default function Home() {
       return { ok: false, message };
     }
   }, [openFolderId, projects]);
+
+  // A .lyl opened from the file manager with the installed app (#605). Only the first file: a design
+  // opens the editor, so a second one could not be shown anyway.
+  const openLaunchedFileRef = useRef(openLylProjectFromFile);
+  openLaunchedFileRef.current = openLylProjectFromFile;
+  useEffect(() => {
+    if (!mounted) return;
+    let taken = false;
+    onLylFilesLaunched((file, handle) => {
+      if (taken) return;
+      taken = true;
+      void openLaunchedFileRef.current(file, undefined, handle).finally(() => { taken = false; });
+    });
+  }, [mounted]);
 
   const openSharedProject = useCallback(async (sharedProject: SharedProject) => {
     setDashboardNotice(t("notice.openingShared", { name: sharedProject.name }));
