@@ -1,4 +1,4 @@
-import { curvedTextPatch, DEFAULT_TEXT_SIZE, displayTextOf, textBoxAroundLetters, textFitScale, textLetterBox } from "@/lib/textGeometry";
+import { curvedTextPatch, DEFAULT_TEXT_SIZE, displayTextOf, MAX_TEXT_SPACING, MIN_TEXT_SPACING, textBoxAroundLetters, textFitScale, textLayoutFont, textLetterBox, textSpacingOf } from "@/lib/textGeometry";
 import { customFontRevision, ensureJapaneseGlyphs, textFont } from "@/lib/textFonts";
 import { DEFAULT_TEXT_LAYERS, MAX_TEXT_LAYERS, MAX_TEXT_LAYER_GROW, type TextLayer, type textLayersOf } from "@/lib/textLayers";
 import type { WorkplaneShape } from "@/types/layerling";
@@ -66,10 +66,11 @@ const measuresCache = new Map<string, { width: number; depth: number; cap: numbe
  */
 function layoutMeasures(shape: WorkplaneShape) {
   const fontName = shape.font ?? "Multilanguage";
-  const key = JSON.stringify([wordsOf(shape), fontName, customFontRevision(shape.font)]);
+  const key = JSON.stringify([wordsOf(shape), fontName, customFontRevision(shape.font), textSpacingOf(shape)]);
   const cached = measuresCache.get(key);
   if (cached) return cached;
-  const font = textFont(fontName);
+  // The spacing between the letters (#594) is part of the line, so it is part of its measure.
+  const font = textLayoutFont(shape);
   const extent = (words: string) => {
     const box = { minX: Infinity, maxX: -Infinity, minY: Infinity, maxY: -Infinity };
     font.generateShapes(words, LAYOUT_SIZE).forEach((glyph) => {
@@ -85,7 +86,20 @@ function layoutMeasures(shape: WorkplaneShape) {
   };
   // Arabic is measured as it is drawn: shaped and turned round (#294).
   const line = extent(displayTextOf(shape));
-  const capital = extent("H");
+  // A capital is measured without spacing: it is one letter.
+  const capital = ((words: string) => {
+    const box = { minX: Infinity, maxX: -Infinity, minY: Infinity, maxY: -Infinity };
+    textFont(fontName).generateShapes(words, LAYOUT_SIZE).forEach((glyph) => {
+      const sampled = glyph.extractPoints(curveSegmentsOf(fontName));
+      [sampled.shape, ...sampled.holes].forEach((points) => points.forEach((point) => {
+        box.minX = Math.min(box.minX, point.x);
+        box.maxX = Math.max(box.maxX, point.x);
+        box.minY = Math.min(box.minY, point.y);
+        box.maxY = Math.max(box.maxY, point.y);
+      }));
+    });
+    return box;
+  })("H");
   const measures = {
     // The same floor of 1 the fit into the box uses, so a size set here is the size drawn.
     width: Math.max(1, line.maxX - line.minX),
@@ -124,6 +138,20 @@ export function textShrinkPatch(shape: WorkplaneShape, patch: Partial<WorkplaneS
   const after = textFitScale(next, textLetterBox(next), measures).x;
   if (!(after < before - 1e-6)) return patch;
   return { ...patch, ...textBoxAroundLetters(next, { width: measures.width * after, depth: measures.depth * after }) };
+}
+
+/**
+ * The change that sets a text's spacing between the letters (#594) and keeps the letters as tall as they were: the line
+ * gets longer or shorter, so a straight text's box follows it (its letter size is what is kept), and curved text re-measures its box.
+ */
+export function textSpacingPatch(shape: WorkplaneShape, percent: number): Partial<WorkplaneShape> {
+  const spacing = Math.min(MAX_TEXT_SPACING, Math.max(MIN_TEXT_SPACING, Number.isFinite(percent) ? Math.round(percent * 10) / 10 : 0));
+  const patch: Partial<WorkplaneShape> = { textSpacing: spacing === 0 ? undefined : spacing };
+  if (shape.textCurved) return curvedTextPatch(shape, patch);
+  // A stretched text fills its box whatever the spacing is, and a text with no letters to measure keeps its box.
+  if (shape.textStretch) return patch;
+  const size = textLetterSize(shape);
+  return { ...patch, ...textLetterSizePatch({ ...shape, ...patch } as WorkplaneShape, size) };
 }
 
 /**

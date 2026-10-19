@@ -1909,6 +1909,8 @@ export const MESSAGES_NL: Record<MessageKey, string> = {
   "prop.font": "Lettertype",
   "prop.text": "Tekst",
   "prop.textCurved": "Op boog",
+  "prop.textSpacing": "Letterafstand (%)",
+  "prop.textSpacingHint": "Ruimte tussen de letters bovenop die van het lettertype, in procent van de lettergrootte; onder 0 smaller. De letters behouden hun grootte, het kader volgt.",
   "prop.textStretch": "Letters uitrekken tot het kader",
   "prop.textRadius": "Boogstraal",
   "prop.textInward": "Langs de onderkant",

@@ -1895,6 +1895,8 @@ export const MESSAGES_FR: Partial<Record<MessageKey, string>> = {
   "prop.font": "Police",
   "prop.text": "Texte",
   "prop.textCurved": "Sur l'arc",
+  "prop.textSpacing": "Espacement des lettres (%)",
+  "prop.textSpacingHint": "Espace entre les lettres en plus de celui de la police, en pour cent de la taille des lettres ; au-dessous de 0, plus serré. Les lettres gardent leur taille, le cadre suit.",
   "prop.textStretch": "Étirer les lettres sur le cadre",
   "prop.textRadius": "Rayon de l'arc",
   "prop.textInward": "En bas",

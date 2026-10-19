@@ -1,6 +1,16 @@
 [
   {
     "title": {
+      "de": "Abstand zwischen den Buchstaben einstellen",
+      "en": "Set the space between the letters"
+    },
+    "body": {
+      "de": "Texte haben jetzt einen Zeichenabstand in Prozent der Buchstabengröße, auch negativ und bei gebogenem Text. Das hilft vor allem bei eigenen Schriften, die zu eng oder zu weit stehen. Die Buchstaben behalten ihre Größe, der Rahmen folgt der Zeile.",
+      "en": "Texts now have a letter spacing in per cent of the letter size, also negative and on curved text. That helps most with fonts of your own that stand too tight or too wide. The letters keep their size and the box follows the line."
+    }
+  },
+  {
+    "title": {
       "de": "Formen unter der Skizze mit ihrem echten Umriss",
       "en": "Bodies under a sketch show their real outline"
     },

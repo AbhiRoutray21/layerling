@@ -1902,6 +1902,8 @@ export const MESSAGES_RU: Partial<Record<MessageKey, string>> = {
   "prop.font": "Шрифт",
   "prop.text": "Текст",
   "prop.textCurved": "По дуге",
+  "prop.textSpacing": "Интервал между буквами (%)",
+  "prop.textSpacingHint": "Расстояние между буквами сверх заданного шрифтом, в процентах от размера букв; ниже 0 — теснее. Буквы сохраняют размер, рамка подстраивается.",
   "prop.textStretch": "Растянуть буквы по рамке",
   "prop.textRadius": "Радиус дуги",
   "prop.textInward": "По нижнему краю",

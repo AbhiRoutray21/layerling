@@ -853,6 +853,11 @@ export type WorkplaneShape = {
    */
   textStretch?: boolean;
   /**
+   * Text only (#594): the space between the letters, in per cent of the letter size on top of the typeface's own
+   * advance - 0 or left out as the font has it, above it wider, below it (down to -50) tighter. Straight and curved text.
+   */
+  textSpacing?: number;
+  /**
    * Text only (#225): the top edge of the letters rounded or chamfered by `size` mm, as a name
    * tag's letters on top are finished. Built from the outline stepped inwards, so it works for
    * every font and word; the edge tool takes such a text as a mesh.
