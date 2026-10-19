@@ -1,6 +1,16 @@
 [
   {
     "title": {
+      "de": "Eine Drehung windet sich zu einem durchgehenden Strang",
+      "en": "A revolve can wind up as one continuous strand"
+    },
+    "body": {
+      "de": "Ein gedrehter Körper hat jetzt eine Steigung im Eigenschaften-Fenster. Über 0 windet sich der Umriss als Schraubenlinie statt zu Ringen, wie Filament auf einer Spule, und du stellst die Windungen ein.",
+      "en": "A revolved body now has a Pitch in the Properties panel. Above 0 the outline winds up as a helix instead of rings, like filament on a spool, and you set the number of turns."
+    }
+  },
+  {
+    "title": {
       "de": "Alt dreht den Auswahlrahmen um",
       "en": "Alt turns the selection frame around"
     },
