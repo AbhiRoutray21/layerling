@@ -752,7 +752,7 @@ export function WorkspaceSettingsModal({
                       ))}
                     </select>
                   </label>
-                  <label className="workspace-select">
+                  <label className="workspace-select view-cube-position-setting">
                     <span>{t("workspace.viewCubePosition")}</span>
                     <select
                       value={viewCubePosition}

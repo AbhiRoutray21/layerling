@@ -28,4 +28,11 @@ describe("view cube position", () => {
     }
     expect(css).toMatch(/html\[data-view-cube-position\] \.camera-controls \{\s*top: 22px;/);
   });
+
+  it("keeps the cube in the top left and hides the setting on a phone-wide window", () => {
+    const wide = css.indexOf("@media (min-width: 641px) {");
+    expect(wide).toBeGreaterThan(-1);
+    expect(css.indexOf("html[data-view-cube-position]")).toBeGreaterThan(wide);
+    expect(css).toMatch(/@media \(max-width: 640px\) \{\s*\.view-cube-position-setting \{\s*display: none;/);
+  });
 });

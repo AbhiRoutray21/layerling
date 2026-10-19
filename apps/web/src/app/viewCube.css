@@ -197,70 +197,80 @@ html[data-theme="dark"] .cube-zone:hover {
    The cube's corner (Settings > View cube position, lib/viewCubePosition.ts).
    Top left is the plain stylesheet and carries no attribute. In any other
    corner the camera controls move up into the spot the cube left.
+   A phone-wide window has no room for it: the setting is hidden there and the
+   cube stays in the top left.
    ------------------------------------------------------------------------- */
-html[data-view-cube-position] .camera-controls {
-  top: 22px;
+@media (min-width: 641px) {
+  html[data-view-cube-position] .camera-controls {
+    top: 22px;
+  }
+
+  html[data-view-cube-position="top-right"] .view-cube,
+  html[data-view-cube-position="bottom-right"] .view-cube {
+    right: 10px;
+    left: auto;
+  }
+
+  html[data-view-cube-position="bottom-left"] .view-cube,
+  html[data-view-cube-position="bottom-right"] .view-cube {
+    top: auto;
+    bottom: 12px;
+  }
+
+  /* Bottom right stands on the snap grid control (bottom 11px, 22px tall). */
+  html[data-view-cube-position="bottom-right"] .view-cube {
+    bottom: 36px;
+  }
+
+  /* The smaller cube of a narrow or flat window shrinks toward its own corner. */
+  html[data-view-cube-position="top-right"] .view-cube {
+    transform-origin: top right;
+  }
+
+  html[data-view-cube-position="bottom-left"] .view-cube {
+    transform-origin: bottom left;
+  }
+
+  html[data-view-cube-position="bottom-right"] .view-cube {
+    transform-origin: bottom right;
+  }
+
+  /* The snap menu opens upward, over the cube rather than under it. */
+  html[data-view-cube-position="bottom-right"] .grid-settings {
+    z-index: 12;
+  }
+
+  /* The docked inspector covers the right edge, so a cube there steps left of
+     it. A minimized inspector covers only the top. */
+  html[data-view-cube-position="top-right"] .workplane-stage:has(.shape-inspector:not(.floating)) .view-cube,
+  html[data-view-cube-position="bottom-right"] .workplane-stage:has(.shape-inspector:not(.floating):not(.minimized)) .view-cube {
+    right: 330px;
+  }
+
+  /* The loading screen shows the cube and the controls where they will be. */
+  html[data-view-cube-position] .editor-loading-viewport-controls {
+    top: 75px;
+  }
+
+  html[data-view-cube-position="top-right"] .editor-loading-view-cube,
+  html[data-view-cube-position="bottom-right"] .editor-loading-view-cube {
+    right: 28px;
+    left: auto;
+  }
+
+  html[data-view-cube-position="bottom-left"] .editor-loading-view-cube {
+    top: auto;
+    bottom: 12px;
+  }
+
+  html[data-view-cube-position="bottom-right"] .editor-loading-view-cube {
+    top: auto;
+    bottom: 36px;
+  }
 }
 
-html[data-view-cube-position="top-right"] .view-cube,
-html[data-view-cube-position="bottom-right"] .view-cube {
-  right: 10px;
-  left: auto;
-}
-
-html[data-view-cube-position="bottom-left"] .view-cube,
-html[data-view-cube-position="bottom-right"] .view-cube {
-  top: auto;
-  bottom: 12px;
-}
-
-/* Bottom right stands on the snap grid control (bottom 11px, 22px tall). */
-html[data-view-cube-position="bottom-right"] .view-cube {
-  bottom: 36px;
-}
-
-/* The smaller cube of a narrow or flat window shrinks toward its own corner. */
-html[data-view-cube-position="top-right"] .view-cube {
-  transform-origin: top right;
-}
-
-html[data-view-cube-position="bottom-left"] .view-cube {
-  transform-origin: bottom left;
-}
-
-html[data-view-cube-position="bottom-right"] .view-cube {
-  transform-origin: bottom right;
-}
-
-/* The snap menu opens upward, over the cube rather than under it. */
-html[data-view-cube-position="bottom-right"] .grid-settings {
-  z-index: 12;
-}
-
-/* The docked inspector covers the right edge, so a cube there steps left of
-   it. A minimized inspector covers only the top. */
-html[data-view-cube-position="top-right"] .workplane-stage:has(.shape-inspector:not(.floating)) .view-cube,
-html[data-view-cube-position="bottom-right"] .workplane-stage:has(.shape-inspector:not(.floating):not(.minimized)) .view-cube {
-  right: 330px;
-}
-
-/* The loading screen shows the cube and the controls where they will be. */
-html[data-view-cube-position] .editor-loading-viewport-controls {
-  top: 75px;
-}
-
-html[data-view-cube-position="top-right"] .editor-loading-view-cube,
-html[data-view-cube-position="bottom-right"] .editor-loading-view-cube {
-  right: 28px;
-  left: auto;
-}
-
-html[data-view-cube-position="bottom-left"] .editor-loading-view-cube {
-  top: auto;
-  bottom: 12px;
-}
-
-html[data-view-cube-position="bottom-right"] .editor-loading-view-cube {
-  top: auto;
-  bottom: 36px;
+@media (max-width: 640px) {
+  .view-cube-position-setting {
+    display: none;
+  }
 }
