@@ -6981,6 +6981,14 @@ export function WorkplaneViewport({
     setRulerCoordinateEditing(null);
   }, []);
 
+  // The number belongs to the selected bodies: when they are no longer all selected (a click on empty space that
+  // leaves the field its focus), the open field goes with them instead of staying in the view (#614).
+  useEffect(() => {
+    if (!rulerCoordinateEditing) return;
+    const selected = new Set(selectedIds);
+    if (!rulerCoordinateEditing.shapeIds.every((id) => selected.has(id))) setRulerCoordinateEditing(null);
+  }, [rulerCoordinateEditing, selectedIds]);
+
   const removeCornerRuler = useCallback((id: string) => {
     storeCornerRulerModel(cornerRulerModelRef.current.filter((ruler) => ruler.id !== id));
   }, [storeCornerRulerModel]);
