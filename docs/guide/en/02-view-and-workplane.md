@@ -29,7 +29,7 @@ There is no right mouse button on a tablet: hold a finger still on a shape or on
 
 The cube in the top left shows where you are looking. A click on one of its sides jumps to the straight view from top, bottom, front, back, left or right. A click on a corner of the cube looks at the model diagonally from that corner, and a click near an edge looks from that edge, between two sides; the spot lights up while the pointer is on it. The number keys [[1]] to [[6]] give the straight views too. Hold [[Shift]] with them and the view also zooms to the selection, as [[Shift]]+[[F]] does.
 
-Drag the cube to turn the view around, just like dragging with the right mouse button. With nothing selected, the arrow keys turn the view as well: 15° a press, 90° with [[Shift]]. They turn the model the way they point - [[→]] turns its front to the right, [[↑]] tilts its front upwards. If something is selected, the arrows move it; click on empty space first to turn the view. On a touch screen this works with one finger, without switching on {{ui:camera.touchRotate}}.
+Drag the cube to turn the view around, just like dragging with the right mouse button. With nothing selected, the arrow keys turn the view as well: 15° a press, 90° with [[Shift]]. They turn the model the way they point - [[→]] turns its front to the right, [[↑]] tilts its front upwards. With [[Ctrl]] held, the arrows slide the view across the screen instead: a tenth of the picture a press, half of it with [[Shift]] as well. The model moves the way they point. If something is selected, the arrows move it; click on empty space first to turn the view. On a touch screen this works with one finger, without switching on {{ui:camera.touchRotate}}.
 
 ### The camera bar
 
@@ -99,6 +99,8 @@ Two sliders under {{ui:workspace.appearance}} set how the bodies are lit. {{ui:w
 ![The editor in the dark colour scheme. You set the colour scheme at the top right: System, Light, Dark or Graphite.](shot:editor-dark)
 
 {{ui:workspace.toolbarSize}} under {{ui:workspace.appearance}} makes the buttons of the ribbon on top, its shape menu and the camera controls on the left smaller or larger: {{ui:workspace.toolbarSizeSmall}}, {{ui:workspace.toolbarSizeMedium}} (as it always was) or {{ui:workspace.toolbarSizeLarge}}. Small leaves more room for the workplane on a laptop; large is easier to hit on a big screen or with a finger. With large buttons the groups of the ribbon go onto a second row when the window is too narrow for them. The size is kept in this browser and holds for every design.
+
+{{ui:workspace.viewCubePosition}} under {{ui:workspace.appearance}} puts the view cube in another corner of the workplane: {{ui:workspace.viewCubePositionTopLeft}} (as it always was), {{ui:workspace.viewCubePositionTopRight}}, {{ui:workspace.viewCubePositionBottomLeft}} or {{ui:workspace.viewCubePositionBottomRight}}. In any corner but the top left, the camera controls move up into the spot the cube left. In the bottom right the cube stands just above the {{ui:inspector.snapGrid}} control. While the properties of a shape are open on the right, a cube on the right steps to the left of them. The corner is kept in this browser and holds for every design. On a narrow window, such as a phone, the setting is hidden and the cube stays in the top left.
 
 > **Tip:** Stop rotating the view when you fit parts together exactly. Use the number keys to go to the straight view from top or front and press [[O]] for the flat display. Then you see at once whether two edges are really flush.
 

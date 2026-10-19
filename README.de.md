@@ -105,6 +105,7 @@ Ein vollständiges CAD-Paket ist es nicht: Es gibt keine parametrische Zeitleist
 - **Exportieren, was dein Slicer will** – STL, 3MF mit Namen und Farben oder OBJ mit Farben, für die Auswahl oder die ganze Szene (Ausgeblendetes bleibt draußen), dazu STEP, wenn der Entwurf in ein vollwertiges CAD weiterreisen soll. PNG speichert ein sauberes Bild der Ansicht, in doppelter Auflösung und auf Wunsch mit durchsichtigem Hintergrund.
 - **Zeichnung exportieren** – ein Teil auswählen oder die Auswahl für den ganzen sichtbaren Entwurf aufheben, dann **Exportieren → Zeichnung → PDF oder SVG** wählen. Erstellt Vorder-, Drauf- und rechte Seitenansicht in Erstwinkelprojektion auf einem gerahmten Zeichnungsblatt mit Zonennummern und Schriftfeld unten rechts, mit Gesamtmaßen, verdeckten Kanten und Tabellen für Durchmesser und Positionen achsparalleler runder Bohrungen. Maßstab 1:1 in Millimetern; das Blatt wächst mit dem Entwurf. Bei **100 % / tatsächlicher Größe** drucken. Bohrungspositionen beziehen sich auf die linke untere Ecke der Gesamtmaße jeder Ansicht. Schräge oder unrunde Bohrungen, Gewinde, Tiefen und Toleranzen werden nicht automatisch bemaßt. Die Projektion basiert auf der Zeichnungsarbeit aus [Cadverix-3D](https://github.com/WC3D/Cadverix-3D).
 - **Hinweis auf Updates** – im veröffentlichten Programm bemerkt eine offene Seite eine neue Version selbst und bietet an, zu speichern und neu zu laden, samt Liste des Neuen.
+- **Ordner für Entwürfe** – die Entwürfe auf der Startseite in Ordner sortieren (auch Ordner in Ordnern), per Ziehen oder mit „Verschieben nach …“; die Suche schaut in alle, und „Alle sichern“ nimmt sie mit.
 - **Projekte als Datei** – ein ganzes Projekt samt Verlauf, Skizzen und Gruppen als `.lyl` sichern und anderswo weiterbauen. In Chrome und Edge wählst du den Ordner selbst, und Strg+S speichert wieder in genau diese Datei; andere Browser laden sie herunter. Ältere `.skf`-Dateien aus früheren Fassungen öffnen sich weiterhin; gespeichert wird dann als `.lyl` daneben.
 - **Fehlerbericht** – ein Link in der Fußzeile speichert ein ZIP mit dem Entwurf als `.lyl` und einem Text mit Version, Browser und den letzten Meldungen, fertig zum Anhängen im Forum oder bei GitHub, die eine bloße `.lyl` ablehnen.
 - **Entwürfe, die du wiedererkennst** – alles liegt in deinem eigenen Browser, jeder Entwurf mit Vorschaubild.
@@ -113,6 +114,7 @@ Ein vollständiges CAD-Paket ist es nicht: Es gibt keine parametrische Zeitleist
 
 - **Perspektivisch oder gerade von vorn** – zwischen normaler und orthografischer Ansicht wechseln, über den Würfelknopf neben den Zoomtasten oder mit **O**. Blickrichtung und Ausschnitt bleiben erhalten.
 - **Ansicht am Würfel drehen** – Ziehen am Ansichtswürfel dreht die Ansicht wie die rechte Maustaste, auf dem Tablet mit einem Finger; ein Klick springt weiter auf die gerade Seite, ein Klick auf eine Ecke oder Kante schaut von dort. Die Tasten **1**–**6** springen ebenfalls, **Umschalt+1**–**6** zoomen dabei auf die Auswahl.
+- **Der Ansichtswürfel in jeder Ecke** – Einstellungen > Darstellung > **Position des Ansichtswürfels** stellt den Würfel oben links, oben rechts, unten links oder unten rechts hin; in jeder Ecke außer oben links rückt die Kamerasteuerung an seinen Platz nach oben.
 - **Von unten schauen** – das Auge über dem Gitter in der Kameraleiste blendet die Platte aus, damit die Unterseite eines Entwurfs frei zu sehen ist.
 - **Fenster nach Wunsch** – Objektliste, Einstellungen, Schnittansicht, Maßband und die Werkzeugfenster für Kanten, Aushöhlen und Muster lassen sich an ihrer Titelleiste frei verschieben und öffnen sich dort wieder; ein Doppelklick dockt sie an.
 - **Rechtsklick-Menü** – ein kurzer Rechtsklick auf einen Körper bringt die häufigsten Befehle: duplizieren, Aussparung oder Körper, gruppieren, Fase, Rundung und Aushöhlen für einen Körper, spiegeln und um Prozent skalieren, ausblenden, sperren, auf die Arbeitsebene setzen, löschen. Ziehen mit der rechten Taste dreht weiter die Ansicht.
@@ -124,10 +126,17 @@ Ein vollständiges CAD-Paket ist es nicht: Es gibt keine parametrische Zeitleist
 
 Von anderen gemacht, nicht von diesem Projekt:
 
+<!-- videos:start -->
+- [I'm 100% In on Layerling - The Next Big Free CAD](https://youtu.be/IO7S-7bxS5o) – Printology (Englisch). Ein erster Test von einem Tinkercad-Nutzer: was layerling besser kann als Tinkercad, was noch fehlt und ob sich der Wechsel jetzt lohnt.
+- [10 Things Layerling Can Do That Tinkercad Can't!](https://youtu.be/cx0OVHgUsJM) – Print N Repeat (Englisch). Ein zweites Video dieses Kanals: zehn Dinge, die layerling kann und Tinkercad nicht.
+- [Layerling la nueva herramienta gratuita de modelado 3D, más completo que Tinkercad](https://youtu.be/-EEt0RSINoY) – Fulcro 1900 (Spanisch). Ein Video über layerling als neues, kostenloses 3D-Modellierwerkzeug, das vollständiger ist als Tinkercad.
+- [Layerling - Tussen Tinkercad en Fusion 360 in, en Helemaal Gratis!](https://youtu.be/X-UuvsfDI-s) – Werkplaats Marc (Niederländisch). Ein erster Blick auf layerling für Tinkercad-Umsteiger: Aushöhlen, Verrundungen, Lochmuster, Gewinde mit Spiel, eigene Schriften und Druckerprofile, dazu eine Schraube mit und ohne Spiel gedruckt, um den Unterschied zu zeigen.
+- [Layerling](https://www.youtube.com/playlist?list=PLYqVFeqYBrPE) – TECHNOBENTO (Englisch). Eine Playlist über layerling, bisher mit „A new way to sketch in Layerling“.
 - [The PERFECT FREE CAD Program Between Tinkercad and Fusion 360!](https://youtu.be/GIoG-IHPXyg) – Print N Repeat (Englisch). Ein Video über layerling als kostenloses CAD-Programm zwischen Tinkercad und Fusion 360.
-- [Meet Layerling Free Browser Based CAD that EXTENDS Tinkercad!](https://youtu.be/979_Ohy9ESM) – HL ModTech (Englisch). Ein Blick auf layerling von einem Tinkercad-Nutzer.
-- [Layerling – Playlist](https://www.youtube.com/playlist?list=PLCsBmX2kOGWs) – Making Layers (Englisch). Eine Reihe zu layerling: eine Einführung für Tinkercad-Umsteiger und die Skizzenwerkzeuge.
-- [Tinkercad Too Basic? Fusion 360 Too Much? Meet Layerling for 3D Printing](https://youtu.be/kzV7fQ3rXhw) – 3D Jesus | 3D Printing & Design (Englisch). Ein erster Test von layerling ganz ohne Anleitung.
+- [Layerling Tutorials](https://www.youtube.com/playlist?list=PLZ-ZWS0D1JIk) – HL ModTech (Englisch). Eine Playlist von einem Tinkercad-Nutzer, bisher mit einem Blick auf layerling von etwa 23 Minuten (kostenloses CAD im Browser, das Tinkercad erweitert), einem tieferen Einstieg in die Funktionen und einem kurzen Update zu gedruckten Gewinden.
+- [Layerling – Playlist](https://www.youtube.com/playlist?list=PLCsBmX2kOGWs) – Making Layers (Englisch). Eine Reihe zu layerling, bisher mit „Tinkercad alternative / upgrade? Introducing Layerling!“, einem Überblick für Tinkercad-Umsteiger, und „Layerling Sketch Tools!“ zu den Skizzenwerkzeugen.
+- [Tinkercad Too Basic? Fusion 360 Too Much? Meet Layerling for 3D Printing](https://youtu.be/kzV7fQ3rXhw) – 3D Jesus | 3D Printing & Design (Englisch). Ein erster Test von layerling ganz ohne Anleitung: Verrunden und Fasen, Aushöhlen, Gewinde, Skizzen, Drehkörper, Muster, Import und Druckerprofile.
+<!-- videos:end -->
 
 ## Loslegen
 

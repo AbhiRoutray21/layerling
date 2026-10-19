@@ -7,6 +7,7 @@ summary: Videoposnetki, ki so jih o programu layerling naredili drugi.
 
 Ti videoposnetki ne izvirajo iz tega projekta. Povezave odprejo YouTube v novem zavihku; od tam se karkoli naloži šele, ko klikneš.
 
+- [I'm 100% In on Layerling - The Next Big Free CAD](https://youtu.be/IO7S-7bxS5o) – Printology (angleščina). Prvi preizkus uporabnika Tinkercada: kaj layerling zna bolje kot Tinkercad, kaj še manjka in ali se splača preiti zdaj.
 - [10 Things Layerling Can Do That Tinkercad Can't!](https://youtu.be/cx0OVHgUsJM) – Print N Repeat (angleščina). Drugi video tega kanala: deset stvari, ki jih layerling zna, Tinkercad pa ne.
 - [Layerling la nueva herramienta gratuita de modelado 3D, más completo que Tinkercad](https://youtu.be/-EEt0RSINoY) – Fulcro 1900 (španščina). Video o programu layerling kot novem brezplačnem orodju za 3D-modeliranje, ki je popolnejše od Tinkercada.
 - [Layerling - Tussen Tinkercad en Fusion 360 in, en Helemaal Gratis!](https://youtu.be/X-UuvsfDI-s) – Werkplaats Marc (nizozemščina). Prvi pogled na layerling za uporabnike Tinkercada: izdolbljenje, zaokrožitve, vzorec lukenj, navoji z zračnostjo, lastne pisave in profili tiskalnikov, z vijakom, natisnjenim z zračnostjo in brez nje, da se pokaže razlika.

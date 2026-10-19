@@ -10,7 +10,7 @@ Ostre krawędzie rzadko dobrze wyglądają na wydrukowanej części i nie są sz
 1. Zaznacz bryłę (albo grupę).
 2. Kliknij na wstążce {{ui:editor.tool.fillet}} albo {{ui:editor.tool.chamfer}}, naciśnij [[B]] dla zaokrąglenia albo [[Shift+B]] dla fazowania, albo kliknij bryłę prawym przyciskiem i wybierz polecenie z menu.
 3. Krawędzie bryły się podświetlą. Kliknij te, które mają być obrobione. Kolejne kliknięcie usuwa krawędź z wyboru. Z [[Shift]] dodajesz albo usuwasz pojedynczą krawędź.
-4. Ustaw rozmiar i potwierdź przyciskiem {{ui:edge.apply}} albo [[Enter]].
+4. Ustaw rozmiar i potwierdź przyciskiem {{ui:edge.apply}} albo [[Enter]]. Potem okno zostaje otwarte na nowej bryle z tym samym rozmiarem, więc od razu może nastąpić kolejne zaokrąglenie lub ścięcie; zamyka je {{ui:edge.done}}, [[Esc]] albo krzyżyk. Z [[Shift]] lub [[Ctrl]] kliknięcie {{ui:edge.topEdges}}, {{ui:edge.bottomEdges}}, {{ui:edge.verticalEdges}} lub {{ui:edge.horizontalEdges}} dodaje te krawędzie do wybranych zamiast je zastępować.
 
 ![Narzędzie „Zaokrąglenie krawędzi”: wybrane są wszystkie ostre krawędzie, a obraz pokazuje podgląd z promieniem 4 mm.](shot:fillet-preview)
 
@@ -26,6 +26,7 @@ W panelu znajdziesz:
 - {{ui:edge.verticalEdges}} wybiera krawędzie stojące pionowo, takie jak narożniki prostopadłościanu: jedno zaokrąglenie zaokrągla wtedy naraz wszystkie pionowe narożniki.
 - {{ui:edge.topEdges}} wybiera tylko krawędzie wzdłuż samej góry bryły. To szybka droga do foremki do ciastek: zbuduj kontur w szkicu jako obrys, potem sfazuj górne krawędzie. {{ui:edge.angle}} ustawia, jak stroma jest fazka. Nie może sięgać dalej, niż ścianka jest gruba.
 - {{ui:edge.bottomEdges}} wybiera tylko krawędzie wzdłuż samego dołu bryły, lustrzane do {{ui:edge.topEdges}}. To szybka droga, żeby zaokrąglić lub sfazować tylko stopę elementu.
+- {{ui:edge.chamfillet}}, wybrane u góry okna fazowania obok {{ui:editor.tool.chamfer}}, tworzy drukowalną stopę elementu: fazę przy płycie, która stycznie przechodzi w zaokrąglenie ku ścianie, dzięki czemu pierwsze warstwy nie potrzebują podpór, a krawędź i tak kończy się miękko. {{ui:edge.distance}} to wysokość, jaką zajmuje stopa, {{ui:edge.angle}} (od 15° do 75°) to stromość fazy przy płycie. Krawędzie wybierasz przyciskiem {{ui:edge.bottomEdges}}.
 - {{ui:edge.onlyVisibleEdges}} ukrywa krawędzie, które z Twojego punktu widzenia leżą za bryłą. Domyślnie każda krawędź prześwituje przez bryłę, co na skomplikowanej części robi się nieczytelne. Po włączeniu widzisz i możesz kliknąć tylko krawędzie zwrócone do Ciebie. Obróć widok, żeby dosięgnąć pozostałych. Krawędź narysowana na czerwono (zobacz niżej) jest widoczna zawsze.
 - {{ui:edge.tangentChains}}: kliknięcie wybiera wtedy także krawędzie, które płynnie w siebie przechodzą, na przykład wszystkie krawędzie wokół ściany z zaokrąglonymi narożnikami. Ten przełącznik decyduje tylko o tym, co wybiera kliknięcie: jądro CAD i tak zawsze przeciąga fazkę albo zaokrąglenie wzdłuż takich płynnie przedłużających się krawędzi. Panel mówi, na ile kolejnych krawędzi tak się dzieje.
 - {{ui:edge.keepSize}} zachowuje fazkę albo zaokrąglenie w obecnym rozmiarze, nawet jeśli później przeskalujesz bryłę.

@@ -23,7 +23,7 @@ En tegneplade med en pen opfører sig som en mus: spidsen er venstre knap, sidek
 
 Kuben øverst til venstre viser hvor du kigger. Et klik på en af dens sider springer til den lige visning fra top, bund, for, bag, venstre eller højre. Et klik på et hjørne af kuben kigger på modellen diagonalt fra det hjørne, og et klik nær en kant kigger fra den kant, mellem to sider; stedet lyser op mens markøren er på det. Taltasterne [[1]] til [[6]] giver også de lige visninger. Hold [[Shift]] med dem og visningen zoomer også til markeringen, ligesom [[Shift]]+[[F]].
 
-Træk i kuben for at dreje visningen rundt, ligesom at trække med højre museknap. Med intet valgt drejer piletasterne også visningen: 15° pr. tryk, 90° med [[Shift]]. De drejer modellen den vej de peger - [[→]] drejer dens forside til højre, [[↑]] vipper dens forside opad. Hvis noget er valgt, flytter pilene det; klik på tom plads først for at dreje visningen. På en berøringsskærm virker dette med én finger, uden at slå {{ui:camera.touchRotate}} til.
+Træk i kuben for at dreje visningen rundt, ligesom at trække med højre museknap. Med intet valgt drejer piletasterne også visningen: 15° pr. tryk, 90° med [[Shift]]. De drejer modellen den vej de peger - [[→]] drejer dens forside til højre, [[↑]] vipper dens forside opad. Med [[Ctrl]] holdt nede flytter pilene i stedet visningen hen over skærmen: en tiendedel af billedet pr. tryk, halvdelen med [[Shift]] oveni. Modellen flytter sig den vej, de peger. Hvis noget er valgt, flytter pilene det; klik på tom plads først for at dreje visningen. På en berøringsskærm virker dette med én finger, uden at slå {{ui:camera.touchRotate}} til.
 
 ### Kamerabjælken
 
@@ -93,6 +93,8 @@ To skyder under {{ui:workspace.appearance}} sætter hvordan formerne belyses. {{
 ![Editoren i det mørke farveskema. Du sætter farveskemaet øverst til højre: System, Lys, Mørk eller Grafit.](shot:editor-dark)
 
 {{ui:workspace.toolbarSize}} under {{ui:workspace.appearance}} gør knapperne i båndet øverst, dets formmenu og kamerakontrollerne til venstre mindre eller større: {{ui:workspace.toolbarSizeSmall}}, {{ui:workspace.toolbarSizeMedium}} (som det altid var) eller {{ui:workspace.toolbarSizeLarge}}. Små efterlader mere plads til arbejdsplanet på en bærbar; store er lettere at ramme på en stor skærm eller med en finger. Med store knapper går båndets grupper på en anden række når vinduet er for smalt til dem. Størrelsen gemmes i denne browser og holder for hvert design.
+
+{{ui:workspace.viewCubePosition}} under {{ui:workspace.appearance}} sætter orienteringskuben i et andet hjørne af arbejdsfladen: {{ui:workspace.viewCubePositionTopLeft}} (som det altid var), {{ui:workspace.viewCubePositionTopRight}}, {{ui:workspace.viewCubePositionBottomLeft}} eller {{ui:workspace.viewCubePositionBottomRight}}. I alle hjørner undtagen øverst til venstre rykker kamerakontrollerne op på den plads, kuben forlod. Nederst til højre står kuben lige over {{ui:inspector.snapGrid}}-kontrollen. Mens en forms egenskaber er åbne til højre, viger en kube i højre side til venstre for dem. Hjørnet gemmes i denne browser og holder for hvert design. I et smalt vindue, som på en telefon, er indstillingen skjult, og kuben bliver øverst til venstre.
 
 > **Tip:** Stop med at dreje visningen når du sætter dele helt præcist sammen. Brug taltasterne til at gå til den lige visning fra top eller for og tryk [[O]] for den flade visning. Så ser du straks om to kanter virkelig flugter.
 

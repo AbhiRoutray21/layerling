@@ -10,7 +10,7 @@ Scherpe randen zien er op een geprint onderdeel zelden goed uit, en sterk zijn z
 1. Selecteer het lichaam (of de groep).
 2. Klik in het lint op {{ui:editor.tool.fillet}} of {{ui:editor.tool.chamfer}}, druk op [[B]] voor de afronding of [[Shift+B]] voor de afschuining, of klik met de rechtermuisknop op het lichaam en kies het in het menu.
 3. De randen van het lichaam lichten op. Klik op de randen die bewerkt moeten worden. Nog een klik haalt een rand er weer uit. Met [[Shift]] voeg je één rand toe of haal je hem weg.
-4. Stel de maat in en bevestig met {{ui:edge.apply}} of [[Enter]].
+4. Stel de maat in en bevestig met {{ui:edge.apply}} of [[Enter]]. Daarna blijft het venster met dezelfde maat open op het nieuwe lichaam, zodat meteen de volgende afronding of afschuining kan volgen; {{ui:edge.done}}, [[Esc]] of het kruisje sluit het. Met [[Shift]] of [[Ctrl]] voegt een klik op {{ui:edge.topEdges}}, {{ui:edge.bottomEdges}}, {{ui:edge.verticalEdges}} of {{ui:edge.horizontalEdges}} die randen toe aan de gekozen randen in plaats van ze te vervangen.
 
 ![Het gereedschap "Randen afronden": alle scherpe randen zijn geselecteerd, het beeld toont het voorbeeld met een straal van 4 mm.](shot:fillet-preview)
 
@@ -25,6 +25,7 @@ In het paneel vind je:
 - {{ui:edge.sharpThreshold}} bepaalt welke randen überhaupt als scherp gelden. Een waarde van 25° behandelt alleen duidelijke knikken als rand en laat vloeiende overgangen met rust.
 - {{ui:edge.topEdges}} kiest alleen de randen langs de bovenkant van het lichaam. Dat is de snelle manier voor een koekjesvorm: bouw de omtrek in een schets als lijn, en schuin dan de bovenranden af. {{ui:edge.angle}} bepaalt hoe steil de afschuining is; die kan niet verder reiken dan de wand dik is.
 - {{ui:edge.bottomEdges}} kiest alleen de randen helemaal onderaan het lichaam, het tegenstuk van {{ui:edge.topEdges}}. Zo rond je snel alleen de voet van een onderdeel af of geef je die een afschuining.
+- {{ui:edge.chamfillet}}, bovenaan het afschuinvenster naast {{ui:editor.tool.chamfer}} gekozen, maakt de printbare voet van een onderdeel: een afschuining bij de plaat die tangentieel overgaat in een afronding naar de wand, zodat de eerste lagen geen steun nodig hebben en de rand toch zacht eindigt. {{ui:edge.distance}} is de hoogte die de voet inneemt, {{ui:edge.angle}} (15° tot 75°) de steilte van de afschuining bij de plaat. De randen kies je met {{ui:edge.bottomEdges}}.
 - {{ui:edge.onlyVisibleEdges}} verbergt de randen die vanuit jouw kijkrichting achter het lichaam liggen. Standaard schijnt elke rand door het lichaam heen, wat bij een druk onderdeel verwarrend wordt; met de schakelaar aan zie je, en klik je, alleen de randen die naar je toe wijzen. Draai het beeld om bij de andere te komen. Een rand die rood getekend is (zie hieronder) is altijd zichtbaar.
 - {{ui:edge.tangentChains}}: een klik kiest dan ook randen die vloeiend in elkaar overlopen, bijvoorbeeld alle randen rond een vlak met afgeronde hoeken. De schakelaar bepaalt alleen wat een klik kiest: de CAD-kernel zet een afschuining of afronding altijd door langs zulke vloeiend doorlopende randen. Het paneel meldt langs hoeveel randen extra dat gebeurt.
 - {{ui:edge.keepSize}} houdt de afschuining of afronding even groot, ook als je het lichaam later schaalt.

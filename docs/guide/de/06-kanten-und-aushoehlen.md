@@ -10,7 +10,7 @@ Scharfe Kanten sehen an einem gedruckten Teil selten gut aus, und sie sind auch 
 1. Wähle den Körper aus (oder die Gruppe).
 2. Klicke im Menüband auf {{ui:editor.tool.fillet}} oder {{ui:editor.tool.chamfer}}, drücke [[B]] für die Verrundung oder [[Shift+B]] für die Fase, oder klicke mit der rechten Maustaste auf den Körper und wähle es im Menü.
 3. Die Kanten des Körpers werden hervorgehoben. Klicke die an, die betroffen sein sollen. Ein weiterer Klick nimmt sie wieder heraus. Mit [[Umschalt]] fügst du eine einzelne Kante hinzu oder nimmst sie weg.
-4. Stelle das Maß ein und bestätige mit {{ui:edge.apply}} oder [[Enter]].
+4. Stelle das Maß ein und bestätige mit {{ui:edge.apply}} oder [[Enter]]. Danach bleibt das Fenster mit derselben Größe auf dem neuen Körper offen, damit gleich die nächste Verrundung oder Fase folgen kann; {{ui:edge.done}}, [[Esc]] oder das Kreuz schließt es. Mit [[Umschalt]] oder [[Strg]] fügt ein Klick auf {{ui:edge.topEdges}}, {{ui:edge.bottomEdges}}, {{ui:edge.verticalEdges}} oder {{ui:edge.horizontalEdges}} diese Kanten zu den gewählten hinzu, statt sie zu ersetzen.
 
 ![Das Werkzeug „Kanten verrunden“: alle scharfen Kanten sind ausgewählt, im Bild siehst du die Vorschau mit 4 mm Radius.](shot:fillet-preview)
 
@@ -26,6 +26,7 @@ Im Fenster findest du:
 - {{ui:edge.verticalEdges}} wählt die Kanten, die senkrecht stehen, etwa die Ecken eines Quaders: Eine Verrundung rundet dann alle senkrechten Ecken auf einmal.
 - {{ui:edge.topEdges}} wählt nur die Kanten ganz oben am Körper. Das ist der schnelle Weg für eine Ausstechform: Umriss in der Skizze als Kontur bauen, dann die oberen Kanten fasen. Wie steil die Fase wird, stellst du mit {{ui:edge.angle}} ein; länger als die Wand dick ist, kann sie nicht werden.
 - {{ui:edge.bottomEdges}} wählt nur die Kanten ganz unten am Körper, das Gegenstück zu {{ui:edge.topEdges}}. So rundest oder fasst du schnell nur den Fuß eines Teils.
+- {{ui:edge.chamfillet}}, oben im Fasen-Fenster neben {{ui:editor.tool.chamfer}} gewählt, macht den druckbaren Fuß eines Teils: eine Fase an der Platte, die tangential in eine Rundung zur Wand übergeht, sodass die ersten Schichten keine Stützen brauchen und die Kante trotzdem weich endet. {{ui:edge.distance}} ist die Höhe, die der Fuß einnimmt, {{ui:edge.angle}} (15° bis 75°) die Steilheit der Fase an der Platte. Die Kanten wählst du mit {{ui:edge.bottomEdges}}.
 - {{ui:edge.onlyVisibleEdges}} blendet die Kanten aus, die von deinem Blickwinkel aus hinter dem Körper liegen. Ohne den Schalter scheinen alle Kanten durch den Körper hindurch, was bei einem vielteiligen Körper verwirrt; mit ihm siehst du nur die dir zugewandten Kanten und kannst nur diese anklicken. Für die anderen drehst du die Ansicht. Eine rot gezeichnete Kante (siehe unten) bleibt immer sichtbar.
 - {{ui:edge.tangentChains}}: Ein Klick wählt dann auch die Kanten, die sanft ineinander übergehen, zum Beispiel alle Kanten rund um eine Fläche mit gerundeten Ecken. Der Schalter bestimmt nur, was ein Klick auswählt: Der CAD-Kern führt eine Fase oder Rundung immer an solchen glatt anschließenden Kanten weiter. Die Tafel sagt dir dann, an wie vielen weiteren Kanten das geschieht.
 - {{ui:edge.keepSize}} hält Fase oder Rundung so groß, wie sie sind, auch wenn du den Körper später skalierst.

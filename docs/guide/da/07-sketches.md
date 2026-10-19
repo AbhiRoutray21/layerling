@@ -83,7 +83,7 @@ Med {{ui:inspector.editSketch}} kan du vende tilbage til skitsen når som helst 
 
 ### Revolvering
 
-Ved revolvering tegner du den halve tværsnit **til venstre for aksen** der vises i skitsen. Ved siden af ser du en 3D-forhåndsvisning af revolveringen. Den viser straks hvordan formen vil se ud. Omridset skal være lukket. Til sidst klik på {{ui:sketch.finishRevolve}}.
+Ved revolvering tegner du den halve tværsnit **til venstre for aksen** der vises i skitsen. Ved siden af ser du en 3D-forhåndsvisning af revolveringen. Den viser straks hvordan formen vil se ud. Omridset skal være lukket. Til sidst klik på {{ui:sketch.finishRevolve}}. De andre legemer i designet vises forfra, i samme visning som profilen, med aksen i midten: tegn profilen ved siden af dem eller over dem. Legemet står, hvor du har tegnet det, og den vandrette linje gennem midten af skitsen er jorden: en profil over den giver et legeme, der står højere, og dens laveste punkt er legemets fod.
 
 En revolvet form er en eksakt form, ligesom en ekstruderet: den tager fas og rund, og du kan hule den ud, til et krus eller en vase. En form revolveret med en ældre layerling er et mesh; åbn {{ui:inspector.editSketch}} og afslut den igen for at gøre den eksakt. En profil der når hen over aksen kan ikke bygges eksakt og bliver til et mesh, som før.
 

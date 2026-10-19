@@ -10,7 +10,7 @@ Ostré hrany na výtisku často nevypadají dobře a nejsou ani příliš odoln�
 1. Vyberte těleso nebo sloučený celek.
 2. Zvolte {{ui:editor.tool.fillet}} nebo {{ui:editor.tool.chamfer}} v pásu nástrojů. Zaoblení otevřete také klávesou [[B]], zkosení pomocí [[Shift+B]]. Obě volby jsou i v nabídce pravého tlačítka na tělese.
 3. Hrany se zvýrazní. Kliknutím je přidáváte do výběru nebo z něj odebíráte. Se [[Shift]] změníte výběr jediné hrany.
-4. Nastavte velikost a potvrďte pomocí {{ui:edge.apply}} nebo [[Enter]].
+4. Nastavte velikost a potvrďte pomocí {{ui:edge.apply}} nebo [[Enter]]. Potom zůstane okno otevřené na novém tělese se stejnou velikostí, takže může hned následovat další zaoblení nebo zkosení; zavře ho {{ui:edge.done}}, [[Esc]] nebo křížek. S [[Shift]] nebo [[Ctrl]] kliknutí na {{ui:edge.topEdges}}, {{ui:edge.bottomEdges}}, {{ui:edge.verticalEdges}} nebo {{ui:edge.horizontalEdges}} tyto hrany přidá k vybraným místo jejich nahrazení.
 
 ![Nástroj pro zaoblení hran: vybrané všechny ostré hrany a náhled poloměru 4 mm.](shot:fillet-preview)
 
@@ -25,6 +25,7 @@ Panel nabízí:
 - {{ui:edge.sharpThreshold}} rozhoduje, které hrany se považují za ostré. Hodnota 25° zachytí zřetelné zlomy a vynechá téměř rovinné přechody.
 - {{ui:edge.topEdges}} vybere pouze hrany na horním obvodu tělesa. Hodí se pro vykrajovátko: vytvořte obrys náčrtem jako rozšířenou čáru a pak zkoste jeho horní hrany. {{ui:edge.angle}} určuje sklon zkosení; to nesmí zasahovat dále než do tloušťky stěny.
 - {{ui:edge.bottomEdges}} vybere pouze hrany úplně dole na tělese, protějšek tlačítka {{ui:edge.topEdges}}. Je to rychlý způsob, jak zaoblit nebo zkosit jen patu součásti.
+- {{ui:edge.chamfillet}}, zvolené nahoře v okně zkosení vedle {{ui:editor.tool.chamfer}}, vytvoří tisknutelnou patu dílu: zkosení u podložky, které tečně přechází v zaoblení ke stěně, takže první vrstvy nepotřebují podpěry a hrana přesto končí měkce. {{ui:edge.distance}} je výška, kterou pata zabírá, {{ui:edge.angle}} (15° až 75°) strmost zkosení u podložky. Hrany vyberete tlačítkem {{ui:edge.bottomEdges}}.
 - {{ui:edge.onlyVisibleEdges}} skryje hrany za tělesem. Ve výchozím stavu prosvítají všechny, což může být u složitého dílu nepřehledné. Po zapnutí vybíráte pouze hrany obrácené k vám; pro ostatní otočte pohled. Chybová červená hrana se zobrazuje vždy.
 - {{ui:edge.tangentChains}} přidává po kliknutí i plynule navazující hrany, například celý obvod plochy se zaoblenými rohy. Volba ovlivňuje jen výběr kliknutím. CAD jádro vždy pokračuje v úpravě podél tečně navazujících hran. Panel uvádí, kolik dalších hran se tím upraví.
 - {{ui:edge.keepSize}} zachová velikost zkosení či zaoblení i při pozdější změně velikosti tělesa.

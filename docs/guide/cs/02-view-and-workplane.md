@@ -27,7 +27,7 @@ Grafický tablet s perem se chová jako myš: hrot zastupuje levé tlačítko, b
 
 Krychle vlevo nahoře ukazuje směr pohledu. Kliknutí na její stranu přepne na pohled shora, zdola, zepředu, zezadu, zleva nebo zprava. Kliknutí na roh zobrazí šikmý pohled z tohoto rohu, kliknutí u hrany pohled mezi dvěma stranami. Místo pod ukazatelem se zvýrazňuje. Kolmé pohledy mají také klávesy [[1]] až [[6]]. Se [[Shift]] se navíc přiblíží výběr, stejně jako při [[Shift]]+[[F]].
 
-Tažením krychle otáčíte pohledem jako pravým tlačítkem myši. Není-li nic vybráno, otáčejí pohledem i šipky: o 15° na stisknutí, se [[Shift]] o 90°. Model se otáčí ve směru šipky, tedy [[→]] obrací přední stranu doprava a [[↑]] ji naklání vzhůru. Při aktivním výběru šipky přesouvají objekty; pro otáčení nejprve klikněte na prázdné místo. Dotykem lze krychli otáčet jedním prstem i bez {{ui:camera.touchRotate}}.
+Tažením krychle otáčíte pohledem jako pravým tlačítkem myši. Není-li nic vybráno, otáčejí pohledem i šipky: o 15° na stisknutí, se [[Shift]] o 90°. Model se otáčí ve směru šipky, tedy [[→]] obrací přední stranu doprava a [[↑]] ji naklání vzhůru. S podrženou klávesou [[Ctrl]] šipky místo toho posouvají pohled po obrazovce: o desetinu obrazu na stisknutí, se [[Shift]] navíc o polovinu. Model se posouvá ve směru šipky. Při aktivním výběru šipky přesouvají objekty; pro otáčení nejprve klikněte na prázdné místo. Dotykem lze krychli otáčet jedním prstem i bez {{ui:camera.touchRotate}}.
 
 ### Lišta pohledu
 
@@ -97,6 +97,8 @@ V {{ui:workspace.appearance}} upravujete i osvětlení. {{ui:workspace.shadowStr
 ![Editor v tmavém motivu. Vpravo nahoře lze vybrat systémový, světlý, tmavý nebo grafitový motiv.](shot:editor-dark)
 
 {{ui:workspace.toolbarSize}} v {{ui:workspace.appearance}} mění velikost pásu nástrojů, nabídky tvarů a levého ovládání pohledu: {{ui:workspace.toolbarSizeSmall}}, {{ui:workspace.toolbarSizeMedium}} nebo {{ui:workspace.toolbarSizeLarge}}. Malé ovládání nechá více místa na notebooku, velké usnadňuje dotyk i použití na velké obrazovce. Nevejdou-li se velká tlačítka, skupiny pásu se zalomí do dalšího řádku. Nastavení se uchovává v tomto prohlížeči pro všechny projekty.
+
+{{ui:workspace.viewCubePosition}} v {{ui:workspace.appearance}} přesune orientační krychli do jiného rohu pracovní plochy: {{ui:workspace.viewCubePositionTopLeft}} (jako dosud), {{ui:workspace.viewCubePositionTopRight}}, {{ui:workspace.viewCubePositionBottomLeft}} nebo {{ui:workspace.viewCubePositionBottomRight}}. V každém rohu kromě levého horního se ovládání pohledu posune nahoru na místo, které krychle uvolnila. Vpravo dole stojí krychle těsně nad ovládáním {{ui:inspector.snapGrid}}. Dokud jsou vpravo otevřené vlastnosti tvaru, krychle na pravé straně uhne vlevo od nich. Roh se uchovává v tomto prohlížeči pro všechny projekty. V úzkém okně, třeba na telefonu, je nastavení skryté a krychle zůstává vlevo nahoře.
 
 > **Tip:** Při přesném lícování dílů přestaňte pohledem otáčet. Číselnou klávesou zvolte pohled shora nebo zepředu a [[O]] přepněte na rovnoběžné promítání. Snadněji pak poznáte, zda jsou hrany skutečně v jedné rovině.
 

@@ -86,7 +86,7 @@ Przez {{ui:inspector.editSketch}} możesz w każdej chwili wrócić do szkicu, �
 
 ### Obracanie szkicu
 
-Przy obracaniu rysujesz połowę przekroju **po lewej stronie osi** pokazanej w szkicu. Obok widzisz podgląd 3D obrotu. Od razu pokazuje, jak będzie wyglądać bryła. Kontur musi być zamknięty, albo budujesz otwartą linię jako obrys, zobacz niżej. Na koniec kliknij {{ui:sketch.finishRevolve}}.
+Przy obracaniu rysujesz połowę przekroju **po lewej stronie osi** pokazanej w szkicu. Obok widzisz podgląd 3D obrotu. Od razu pokazuje, jak będzie wyglądać bryła. Kontur musi być zamknięty, albo budujesz otwartą linię jako obrys, zobacz niżej. Na koniec kliknij {{ui:sketch.finishRevolve}}. Pozostałe bryły projektu są pokazane od przodu, w tym samym widoku co profil, z osią pośrodku: rysuj profil obok nich lub nad nimi. Bryła stoi tam, gdzie ją narysowałeś, a pozioma linia przez środek szkicu to podłoże: profil nad nią daje bryłę stojącą wyżej, a jego najniższy punkt to stopa bryły.
 
 Bryła obrotowa jest dokładną bryłą, tak jak wyciągnięta: przyjmuje fazki i zaokrąglenia i można ją wydrążyć, na kubek albo wazon. Bryła obrócona starszą wersją layerling jest siatką. Otwórz {{ui:inspector.editSketch}} i zakończ szkic ponownie, aby stała się dokładna. Profil, który sięga za oś, nie da się zbudować dokładnie i staje się siatką, jak dawniej.
 

@@ -10,7 +10,7 @@ Sharp edges rarely look good on a printed part, and they are not particularly st
 1. Select the body (or the group).
 2. Click {{ui:editor.tool.fillet}} or {{ui:editor.tool.chamfer}} in the ribbon, press [[B]] for the fillet or [[Shift+B]] for the chamfer, or right-click the body and pick it from the menu.
 3. The body's edges light up. Click those that should be affected. Another click takes an edge out again. With [[Shift]] you add or remove a single edge.
-4. Set the size and confirm with {{ui:edge.apply}} or [[Enter]].
+4. Set the size and confirm with {{ui:edge.apply}} or [[Enter]]. Afterwards the window stays open on the new body with the same size, so the next fillet or chamfer can follow at once; {{ui:edge.done}}, [[Esc]] or the cross closes it. With [[Shift]] or [[Ctrl]] a click on {{ui:edge.topEdges}}, {{ui:edge.bottomEdges}}, {{ui:edge.verticalEdges}} or {{ui:edge.horizontalEdges}} adds those edges to the ones picked instead of replacing them.
 
 ![The "Fillet edges" tool: all sharp edges are selected, the picture shows the preview with a 4 mm radius.](shot:fillet-preview)
 
@@ -26,6 +26,7 @@ In the panel you find:
 - {{ui:edge.verticalEdges}} picks the edges that stand straight up, such as the corners of a box: one fillet then rounds all the vertical corners at once.
 - {{ui:edge.topEdges}} picks only the edges along the very top of the body. It is the quick way for a cookie cutter: build the outline in a sketch as a stroke, then chamfer the top edges. {{ui:edge.angle}} sets how steep the chamfer is; it cannot reach further than the wall is thick.
 - {{ui:edge.bottomEdges}} picks only the edges along the very bottom of the body, the mirror of {{ui:edge.topEdges}}. It is the quick way to round or chamfer only the foot of a part.
+- {{ui:edge.chamfillet}}, chosen at the top of the chamfer window next to {{ui:editor.tool.chamfer}}, makes the printable foot of a part: a chamfer at the plate that blends tangentially into a fillet toward the wall, so the first layers need no support and the edge still ends soft. {{ui:edge.distance}} is the height the foot takes up, {{ui:edge.angle}} (15° to 75°) the steepness of the chamfer at the plate. Pick the edges with {{ui:edge.bottomEdges}}.
 - {{ui:edge.onlyVisibleEdges}} hides the edges that lie behind the body from where you look. By default every edge shows through the body, which gets confusing on a busy part; with the switch on you see, and can click, only the edges facing you. Turn the view to reach the others. An edge drawn in red (see below) always shows.
 - {{ui:edge.tangentChains}}: a click then also picks edges that flow smoothly into each other, for example all edges around a face with rounded corners. The switch only decides what a click picks: the CAD kernel always carries a chamfer or fillet on along such smoothly continuing edges. The panel tells you along how many more edges that happens.
 - {{ui:edge.keepSize}} keeps the chamfer or fillet as large as it is, even if you scale the body later.

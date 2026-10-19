@@ -16,7 +16,7 @@ import { applyCornerAngle, sketchCornerAt, type CornerTurn, type SketchCorner } 
 import { isSegmentCurved } from "@/lib/sketchSegmentCurve";
 import { DEFAULT_SKETCH_BACKGROUND, DEFAULT_SKETCH_GRID_COLOR, DEFAULT_SKETCH_PLATE_COLOR, workplaneGridLayout } from "@/lib/workplaneGrid";
 import { closestPointOnSketchSegment, type SketchSegmentPlacement } from "@/lib/sketchPointRefinement";
-import { isChainDrawingTool, isSketchPanGesture, rightClickEndsChain, SKETCH_MANUAL_MAX_ZOOM, SKETCH_MAX_ZOOM, SKETCH_WHEEL_ZOOM_BOOST, SKETCH_MIN_ZOOM, sketchWheelZoomFactor, zoomSketchViewAt, type SketchView } from "@/lib/sketchPointerControls";
+import { isChainDrawingTool, isSketchPanGesture, rightClickEndsChain, SKETCH_MANUAL_MAX_ZOOM, SKETCH_MAX_ZOOM, SKETCH_WHEEL_ZOOM_BOOST, SKETCH_MIN_ZOOM, sketchPinchZoomFactor, sketchWheelZoomFactor, zoomSketchViewAt, type SketchView } from "@/lib/sketchPointerControls";
 import { pickTouchTarget, type TouchCandidate } from "@/lib/sketchTouch";
 import { isSketchPrimitive, type SketchPrimitive } from "@/lib/sketchPrimitives";
 import { mirrorSign, resizedImportedMeshPositions } from "@/lib/workplaneShapes";
@@ -1294,6 +1294,37 @@ export function SketchWorkspace({
     const factor = sketchWheelZoomFactor(event, orbitControlsZoomSpeed(workspace.zoomSpeed) * SKETCH_WHEEL_ZOOM_BOOST);
     setView((current) => zoomSketchViewAt(current, factor, offset, pixelsPerUnit, workspace));
   };
+
+  // Safari on a Mac sends no wheel steps for a pinch on the trackpad, only gestures with a scale, and zooms the whole
+  // page if they are not refused (#439 forum). Each change of the scale zooms the plate under the fingers.
+  useEffect(() => {
+    const wrap = wrapRef.current;
+    if (!wrap) return;
+    let gestureScale = 1;
+    const onGesture = (event: Event) => {
+      if (event.cancelable) event.preventDefault();
+      if (event.type === "gesturestart") {
+        gestureScale = 1;
+        return;
+      }
+      if (event.type !== "gesturechange") return;
+      const gesture = event as Event & { scale?: number; clientX?: number; clientY?: number };
+      if (typeof gesture.scale !== "number" || !(gesture.scale > 0)) return;
+      const ratio = gesture.scale / gestureScale;
+      gestureScale = gesture.scale;
+      const bounds = wrap.getBoundingClientRect();
+      const offset = {
+        x: (gesture.clientX ?? bounds.left + bounds.width / 2) - (bounds.left + bounds.width / 2),
+        y: (gesture.clientY ?? bounds.top + bounds.height / 2) - (bounds.top + bounds.height / 2),
+      };
+      const pixelsPerUnit = Math.min(bounds.width / workspace.width, bounds.height / workspace.depth);
+      const factor = sketchPinchZoomFactor(ratio, orbitControlsZoomSpeed(workspace.zoomSpeed), orbitControlsZoomSpeed(DEFAULT_WORKPLANE_WORKSPACE.zoomSpeed));
+      setView((current) => zoomSketchViewAt(current, factor, offset, pixelsPerUnit, workspace));
+    };
+    const names = ["gesturestart", "gesturechange", "gestureend"] as const;
+    names.forEach((name) => wrap.addEventListener(name, onGesture, { passive: false }));
+    return () => names.forEach((name) => wrap.removeEventListener(name, onGesture));
+  }, [workspace]);
 
   // Matches the 3D editor's buttons: a fixed step raised by the configured zoom speed.
   const zoomByButton = (distanceStep: number) => {

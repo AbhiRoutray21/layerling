@@ -4,6 +4,7 @@ import { cadHasSolidBody } from "@/lib/cadSolidBody";
 import { OcctKernel, type ShapeHandle } from "occt-wasm";
 import { assertCadKernelRunnable } from "@/lib/wasmSupport";
 import { orientedFaceNormal, shellSolid } from "@/lib/cadShell";
+import { chamfilletSolid } from "@/lib/cadChamfillet";
 import { cadFaceList, cadFaceTessellation, DELETE_FACES_UNCHANGED_MESSAGE, deleteFacesSolid } from "@/lib/cadDeleteFaces";
 import type { CadModifierComponentMesh, CadModifierDeflection, CadModifierDisplayEdge, CadModifierEdge, CadModifierFaces, CadModifierMeshPart, CadModifierPrimitivePart, CadModifierProfilePart, CadModifierWorkerRequest, CadModifierWorkerResponse } from "@/lib/cadModifierTypes";
 import { cadProfileSolidMismatch, profileExtrusionSolid } from "@/lib/cadProfileSolid";
@@ -11,6 +12,7 @@ import { importedStepBody } from "@/lib/cadImportedStep";
 import { threadPartSolid } from "@/lib/threadSolid";
 import { springPartSolid } from "@/lib/springSolid";
 import { gridfinityPartSolid } from "@/lib/gridfinitySolid";
+import { fuzzyCut } from "@/lib/cadFuzzyCut";
 import { helicalGearPartSolid } from "@/lib/gearSolid";
 import { meshTreatedBody } from "@/lib/cadMeshAccuracy";
 import { planarMeshFaces } from "@/lib/cadPlanarMesh";
@@ -432,6 +434,55 @@ const PLANAR_FACE_TRIANGLE_LIMIT = 6000;
  * and sewn instead; whatever goes wrong there leaves the plain result.
  */
 function reconstructMeshSolid(cad: OcctKernel, part: CadModifierMeshPart) {
+  const key = meshSolidKey(part);
+  const kept = key === null ? undefined : meshSolids.get(key);
+  if (key !== null && kept !== undefined) {
+    try {
+      const restored = cad.fromBREP(kept);
+      if (cad.isSolid(restored) && cadShapeIsValid(cad, restored)) return restored;
+    } catch (error) {
+      if (isFatalKernelFault(error)) throw error;
+    }
+    meshSolids.delete(key);
+  }
+  const solid = rebuiltMeshSolid(cad, part);
+  if (key !== null) {
+    try {
+      meshSolids.set(key, storedBrep(cad, solid));
+      while (meshSolids.size > MESH_SOLID_KEPT) meshSolids.delete(meshSolids.keys().next().value as string);
+    } catch (error) {
+      if (isFatalKernelFault(error)) throw error;
+    }
+  }
+  return solid;
+}
+
+/**
+ * A mesh that was turned into a solid once is turned into one again when the same group is prepared again (the tool
+ * cancelled and started anew, Undo and back): sewing a few thousand triangles takes seconds, so the solid is kept as
+ * its BREP for the next time (forum: a pocket in a filleted body took 21 seconds each time).
+ */
+const MESH_SOLID_KEPT = 4;
+const meshSolids = new Map<string, string>();
+
+/** What identifies a mesh part: its own triangles, however they got there. Null when the part carries no mesh. */
+function meshSolidKey(part: CadModifierMeshPart) {
+  if (!part.positions || !part.indices) return null;
+  const bits = new Uint32Array(new Float32Array(part.positions).buffer);
+  let first = 0x811c9dc5;
+  let second = 0x9747b28c;
+  for (let index = 0; index < bits.length; index += 1) {
+    first = Math.imul(first ^ bits[index], 0x01000193);
+    second = Math.imul(second ^ bits[index], 0x85ebca6b);
+  }
+  for (let index = 0; index < part.indices.length; index += 1) {
+    first = Math.imul(first ^ part.indices[index], 0x01000193);
+    second = Math.imul(second ^ part.indices[index], 0x85ebca6b);
+  }
+  return `${part.positions.length}:${part.indices.length}:${(first >>> 0).toString(36)}${(second >>> 0).toString(36)}`;
+}
+
+function rebuiltMeshSolid(cad: OcctKernel, part: CadModifierMeshPart) {
   let plain: ShapeHandle | null = null;
   let plainError: unknown = null;
   try {
@@ -535,7 +586,7 @@ function reconstructParts(cad: OcctKernel, parts: CadModifierMeshPart[]) {
     result = cad.unifySameDomain(result);
   }
   for (const hole of holes) {
-    result = cad.cut(result, hole);
+    result = fuzzyCut(cad, result, hole);
     result = cad.simplify(result);
     result = cad.unifySameDomain(result);
   }
@@ -744,11 +795,11 @@ class EdgeTreatmentError extends Error {
 }
 
 function treatEdges(cad: OcctKernel, solid: ShapeHandle, edges: ShapeHandle[], request: Extract<CadModifierWorkerRequest, { type: "preview" }>) {
-  return request.kind === "fillet"
-    ? cad.fillet(solid, edges, request.amount)
-    : Math.abs(request.chamferAngle - 45) < 0.001
-      ? cad.chamfer(solid, edges, request.amount)
-      : cad.chamferDistAngle(solid, edges, request.amount, request.chamferAngle);
+  if (request.kind === "fillet") return cad.fillet(solid, edges, request.amount);
+  if (request.kind === "chamfillet") return chamfilletSolid(cad, solid, edges, request.amount, request.chamferAngle);
+  return Math.abs(request.chamferAngle - 45) < 0.001
+    ? cad.chamfer(solid, edges, request.amount)
+    : cad.chamferDistAngle(solid, edges, request.amount, request.chamferAngle);
 }
 
 // The kernel only says that the set failed. The edges that fail on their own
@@ -875,8 +926,13 @@ async function bearbeiteAnfrage(request: CadModifierWorkerRequest, halter: { cad
     }
     result = componentResults.length === 1 ? componentResults[0] : activeCad.makeCompound(componentResults);
     if (!cadShapeIsValid(activeCad, result)) throw new Error(request.kind === "deleteFace" ? DELETE_FACES_UNCHANGED_MESSAGE : "The chosen size creates invalid or overlapping edge geometry");
-    const loose = cadModifierTessellationDeflection(request.quality, request.amount, request.minDeflection);
-    const meshed = meshTreatedBody(activeCad, [...componentResults], result, loose, cadModifierCappedDeflection(request.quality, loose));
+    const baseLoose = cadModifierTessellationDeflection(request.quality, request.amount, request.minDeflection);
+    const baseCapped = cadModifierCappedDeflection(request.quality, baseLoose);
+    const loose = request.kind === "chamfillet"
+      ? { linear: Math.min(baseLoose.linear * 0.25, 0.0025), angular: Math.min(baseCapped.angular * 0.2, 0.028) }
+      : baseLoose;
+    const capped = request.kind === "chamfillet" ? loose : baseCapped;
+    const meshed = meshTreatedBody(activeCad, [...componentResults], result, loose, capped);
     // The body may have been replaced by fresh copies, meshed with the old angle.
     componentResults.splice(0, componentResults.length, ...meshed.components);
     result = meshed.result;

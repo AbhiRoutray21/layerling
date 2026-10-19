@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { groupedShape } from "@/lib/editorBooleans";
-import { broughtBackShapes, findShapeInHistoryState, historyStateClockLabel, historyStatePartsTree } from "@/lib/historyRestore";
+import { broughtBackShapes, findShapeInHistoryState, historyStateClockLabel, historyStatePartsTree, historyViewLevels } from "@/lib/historyRestore";
 import type { WorkplaneShape } from "@/types/layerling";
 
 function shape(overrides: Partial<WorkplaneShape> = {}): WorkplaneShape {
@@ -129,5 +129,37 @@ describe("the time a brought-back object is named after", () => {
 
   it("is missing for a state from before times were recorded", () => {
     expect(historyStateClockLabel(undefined, "en", now)).toBeNull();
+  });
+});
+
+describe("looking inside groups in the History view", () => {
+  it("lays out the parts of an opened group where Edit group puts them, under their own ids", () => {
+    const { g3 } = nestedScene();
+    const box = shape({ id: "box", name: "Box", x: 80 });
+    const turned = { ...g3, x: g3.x + 50, rotation: 90 };
+    const view = historyViewLevels([turned, box], ["g3", idOf([g3], "G1")]);
+    expect(view.open.map((group) => group.name)).toEqual(["G3", "G1"]);
+    expect(view.shapes.map((part) => part.name)).toEqual(["B", "C", "G2", "Box"]);
+    const b = view.shapes[0];
+    expect(b.id).toBe(idOf([g3], "B"));
+    const expected = findShapeInHistoryState([turned], b.id);
+    expect(b.x).toBeCloseTo(expected?.x ?? Number.NaN, 6);
+    expect(b.z).toBeCloseTo(expected?.z ?? Number.NaN, 6);
+  });
+
+  it("brings back a part picked inside the opened groups", () => {
+    const { g3 } = nestedScene();
+    const view = historyViewLevels([g3], ["g3", idOf([g3], "G1")]);
+    const [copy] = broughtBackShapes([g3], [view.shapes[0].id]);
+    expect(copy.name).toBe("B");
+    expect(copy.x).toBeCloseTo(view.shapes[0].x, 6);
+  });
+
+  it("stops opening at the first group the state does not have", () => {
+    const { g3 } = nestedScene();
+    const view = historyViewLevels([g3], ["g3", "gone", idOf([g3], "G1")]);
+    expect(view.open.map((group) => group.name)).toEqual(["G3"]);
+    expect(view.shapes.map((part) => part.name)).toEqual(["G1", "G2"]);
+    expect(historyViewLevels([g3], ["box"]).shapes).toEqual([g3]);
   });
 });
