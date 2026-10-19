@@ -124,7 +124,6 @@ import { SplitPanel } from "./workplane/SplitPanel";
 import { NO_SPLIT_ROTATION, modelSplitPlane, snapSplitPositionToVertices, splitOrientationForNormal, splitAxisFromLabel, splitAxisLabel, splitRotationAxes, type SplitRotation } from "@/lib/modelSplit";
 import { GuideModal } from "./workplane/GuideModal";
 import { HistoryViewOverlay, historyStateNameSuffix } from "./workplane/HistoryViewOverlay";
-import { historyStatePartsTree } from "@/lib/historyRestore";
 import { useHistoryViewPicking } from "./workplane/useHistoryViewPicking";
 import { ShortcutsModal } from "./workplane/ShortcutsModal";
 import { InteractiveHelp } from "./InteractiveHelp";
@@ -143,6 +142,8 @@ import { DEFAULT_INFILL_PERCENT, DEFAULT_PRINT_MATERIAL, DEFAULT_WALLS, INFILL_C
 import { CAD_MODIFIER_MAX_SHARP_ANGLE, CAD_MODIFIER_REQUEST_TIMEOUT_MS, CAD_MODIFIER_PREPARE_TRIANGLE_LIMIT, cadModifierPrepareTimeoutMs, cadModifierTimeoutMessage, cadModifierUserErrorMessage, cadModifierWorkerFailureMessage, cadModifierCandidateEdge, defaultCadModifierTangentChain, rescueSharpAngleForEdges, selectableCadModifierEdge, type CadModifierRequestPhase } from "@/lib/cadModifierRuntime";
 import { createCadPreviewQueue } from "@/lib/cadPreviewQueue";
 import { cloneWorkplaneShapeSnapshot, compactEdgeTreatmentHistory, edgeTreatmentAppliedFrame, groupBeforeEdgeTreatments, restoreShapeBeforeEdgeTreatment, wasGroupBeforeEdgeTreatments } from "@/lib/edgeTreatmentHistory";
+import { historyStepsAround } from "@/lib/historyStepDescription";
+import { historyViewMcpCommand } from "./workplane/historyViewMcp";
 import { appendEditorHistorySnapshot, boundedEditorHistoryState, continuesKeyRun, type KeyRun, editorHistoryBranch, editorHistoryEntry, editorHistoryForExport, historyStateAt, hydrateEditorHistoryState, notesForHistoryIndex, projectSceneFingerprint, projectShapesFingerprint, workplaneForHistoryIndex, type EditorHistoryEntry, type EditorHistoryExportLimit, type EditorHistoryState } from "@/lib/editorHistory";
 import { snapShapeFootprintToVisibleGrid, visibleGridStep } from "@/lib/gridSnap";
 import { composedShapeRotation, geometryRotationDegreesForShortcut, geometryRotationDelta, rotatedGeometryShapePatch } from "@/lib/geometryRotation";
@@ -2563,6 +2564,12 @@ export function LayerlingEditor({
   const openGroup = openGroups.at(-1) ?? null;
   /** The levels open at each history step, by the step's fingerprint. */
   const openGroupHistoryRef = useRef(new Map<string, OpenGroupLevel[]>());
+  const openGroupCount = useCallback((entry: EditorHistoryEntry) => openGroupHistoryRef.current.get(entry.fingerprint)?.length ?? 0, []);
+  // What the arrows of the history view would undo and redo from the state it shows.
+  const historyViewSteps = useMemo(
+    () => (historyViewState ? historyStepsAround(history, historyViewState.index, openGroupCount) : null),
+    [history, historyViewState, openGroupCount],
+  );
   const setOpenGroupLevels = useCallback((levels: OpenGroupLevel[]) => {
     openGroupsRef.current = levels;
     setOpenGroups(levels);
@@ -8566,56 +8573,20 @@ export function LayerlingEditor({
         return mcpSceneSnapshot(params.includeRawShapes === true);
       }
 
-      if (command.action === "clear_history") {
-        if (params.confirm !== true) throw new Error("clear_history deletes every undo step for good; pass confirm: true to do it");
-        const removed = clearHistory();
-        return { cleared: true, removedSteps: removed, states: historyRef.current.length };
-      }
-
-      if (command.action === "set_history_view") {
-        const entries = historyRef.current;
-        const showing = historyViewStateRef.current;
-        if (params.open === false) {
-          if (showing) closeHistoryView();
-          return { open: false, states: entries.length, current: historyIndexRef.current };
-        }
-        if (params.open === undefined && params.index === undefined) {
-          return showing
-            ? { open: true, index: showing.index, states: entries.length, current: historyIndexRef.current, recordedAt: showing.entry.at ?? null, shapeCount: showing.shapes.length }
-            : { open: false, states: entries.length, current: historyIndexRef.current };
-        }
-        if (entries.length <= 1) throw new Error("There is no earlier state to look at yet");
-        if (!showing) {
-          if (projectInteractionActiveRef.current) throw new Error("Finish the current action before opening the history view");
-          openHistoryView();
-        }
-        const requested = params.index === undefined ? historyIndexRef.current : Math.round(mcpNumber(params.index, historyIndexRef.current));
-        const state = historyStateAt(entries, requested);
-        if (!state) throw new Error("There is no earlier state to look at yet");
-        setHistoryViewIndex(state.index);
-        return {
-          open: true,
-          index: state.index,
-          states: entries.length,
-          current: historyIndexRef.current,
-          recordedAt: state.entry.at ?? null,
-          shapeCount: state.shapes.length,
-          objects: state.shapes.map((shape) => ({ id: shape.id, name: shape.name, kind: shape.kind, x: shape.x, z: shape.z, width: shape.width, depth: shape.depth, height: shape.height, hidden: Boolean(shape.hidden), ...historyStatePartsTree(shape) })),
-        };
-      }
-
-      if (command.action === "restore_from_history") {
-        const entries = historyRef.current;
-        if (params.index === undefined) throw new Error("Give the index of the state to bring objects back from (layerling_set_history_view lists the states)");
-        const index = Math.round(mcpNumber(params.index, -1));
-        if (index < 0 || index >= entries.length) throw new Error(`There is no state ${index}; the history has states 0 to ${entries.length - 1}`);
-        const ids = Array.isArray(params.ids) ? params.ids.filter((id): id is string => typeof id === "string") : [];
-        if (ids.length === 0) throw new Error("Give the ids of the objects to bring back, as layerling_set_history_view lists them for that state");
-        if (projectInteractionActiveRef.current) throw new Error("Finish the current action before bringing objects back");
-        const copies = historyView.bringBack(index, ids);
-        if (copies.length === 0) throw new Error(`State ${index} holds none of these objects: ${ids.join(", ")}`);
-        return { broughtBack: copies.map(mcpShapeSummary), states: historyRef.current.length, current: historyIndexRef.current };
-      }
+      const historyResult = historyViewMcpCommand(command.action, params, {
+        entries: () => historyRef.current,
+        current: () => historyIndexRef.current,
+        showing: () => historyViewStateRef.current,
+        openView: openHistoryView,
+        closeView: closeHistoryView,
+        showState: setHistoryViewIndex,
+        busy: () => projectInteractionActiveRef.current,
+        clearHistory,
+        bringBack: historyView.bringBack,
+        openGroups: openGroupCount,
+        summary: mcpShapeSummary,
+      });
+      if (historyResult !== undefined) return historyResult;
 
       if (command.action === "list_objects") {
         return { objects: currentShapes().map(mcpShapeSummary) };
@@ -12315,6 +12286,8 @@ export function LayerlingEditor({
           liveIndex={historyIndex}
           recordedAt={historyViewState.entry.at}
           objectCount={historyViewState.shapes.length}
+          lastStep={historyViewSteps?.last ?? null}
+          nextStep={historyViewSteps?.next ?? null}
           creating={historyProjectCreating}
           canCreateProject={Boolean(onCreateProjectFromState)}
           pickedCount={historyView.picked.length}
