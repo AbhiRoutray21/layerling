@@ -7922,6 +7922,8 @@ html[data-theme="dark"] .inspector-bundle-note {
 
 /* A frame that takes whatever it touches, where the direction of the drag decides (#430). */
 .selection-marquee.touching {
+  background: rgba(34, 139, 84, 0.12);
+  border-color: rgba(26, 118, 70, 0.86);
   border-style: dashed;
 }
 
