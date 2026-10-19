@@ -18,5 +18,15 @@
       "de": "Ist layerling als App installiert (Chrome oder Edge), meldet es sich beim System als Programm für .lyl-Dateien an. Ein Doppelklick auf einen Entwurf im Dateimanager öffnet ihn gleich in layerling; Strg+S speichert wieder in diese Datei. Das System fragt beim ersten Mal, welches Programm es nehmen soll.",
       "en": "When layerling is installed as an app (Chrome or Edge), it registers itself with the system as a program for .lyl files. A double click on a design in the file manager opens it in layerling right away, and Ctrl+S saves back into that file. The system asks once which program to use."
     }
+  },
+  {
+    "title": {
+      "de": "Docker: die Vorschaubilder erscheinen",
+      "en": "Docker: the preview pictures appear"
+    },
+    "body": {
+      "de": "Im fertigen Docker-Image blieben die Karten der Startseite bei \"Noch kein Vorschaubild\", weil der Server keinen Ordner für die Bilder anlegen durfte. Der Ordner gehört jetzt dem Server-Benutzer, die Bilder werden wieder gespeichert. Bei einem bestehenden Container das Image neu laden; die Bilder entstehen beim nächsten Öffnen eines Entwurfs.",
+      "en": "In the ready-made Docker image the cards on the start page stayed on \"No preview yet\", because the server was not allowed to create a folder for the pictures. The folder now belongs to the server's user, so the pictures are saved again. For an existing container, pull the image again; the pictures appear the next time a design is opened."
+    }
   }
 ]
