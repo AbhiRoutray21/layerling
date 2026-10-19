@@ -1,6 +1,16 @@
 [
   {
     "title": {
+      "de": "Skizze schmaler machen: Umriss nach innen versetzen",
+      "en": "Narrower: move a sketch outline inwards"
+    },
+    "body": {
+      "de": "Neben „Breiter“ gibt es bei der Füllung eines Skizzenkörpers jetzt „Schmaler“: Die Fläche bleibt gefüllt und ihr Rand rückt rundum um die Linienbreite nach innen, Löcher werden größer. So entstehen aus einer Skizze das Passloch und das Teil, das 0,5 mm schmaler hindurchgeht, oder eine Innenwand.",
+      "en": "Next to \"Wider\", the fill of a sketch body now has \"Narrower\": the area stays filled and its edge moves in by the line width all round, holes grow. One sketch gives the fit hole and the part that passes through it 0.5 mm smaller, or an inner wall."
+    }
+  },
+  {
+    "title": {
       "de": "Abstand zwischen den Buchstaben einstellen",
       "en": "Set the space between the letters"
     },

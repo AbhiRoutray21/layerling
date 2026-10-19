@@ -285,7 +285,7 @@ export const tools = [
           description: "For kind sketch and kind text: build the outline as a frame of this width instead of the filled area, as the editor's fill modes do. align says where the wall lies against the outline (center, inside or outside), or grow keeps the area and widens it by the width all round (a base layer under a text or logo for a multicolour print); join how corners are filled (miter, round or bevel), cap the ends of an open line (flat, square or round). On a text the box grows with an outside, centred or grow stroke; the letters keep their size.",
           properties: {
             width: { type: "number" },
-            align: { type: "string", enum: ["center", "inside", "outside", "grow"] },
+            align: { type: "string", enum: ["center", "inside", "outside", "grow", "shrink"] },
             join: { type: "string", enum: ["miter", "round", "bevel"] },
             cap: { type: "string", enum: ["flat", "square", "round"] },
           },
@@ -388,7 +388,7 @@ export const tools = [
               type: "object",
               properties: {
                 width: { type: "number" },
-                align: { type: "string", enum: ["center", "inside", "outside", "grow"] },
+                align: { type: "string", enum: ["center", "inside", "outside", "grow", "shrink"] },
                 join: { type: "string", enum: ["miter", "round", "bevel"] },
                 cap: { type: "string", enum: ["flat", "square", "round"] },
               },

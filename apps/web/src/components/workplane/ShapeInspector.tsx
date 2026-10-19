@@ -2200,8 +2200,9 @@ function sketchFillProperties(profile: SketchProfile, onUpdate: ShapeInspectorUp
       { value: "inside", label: t("prop.sketchFill.inside") },
       { value: "center", label: t("prop.sketchFill.center") },
       { value: "grow", label: t("prop.sketchFill.grow") },
+      { value: "shrink", label: t("prop.sketchFill.shrink") },
     ],
-    hint: stroke?.align === "grow" ? t("prop.sketchFill.growHint") : undefined,
+    hint: stroke?.align === "grow" ? t("prop.sketchFill.growHint") : stroke?.align === "shrink" ? t("prop.sketchFill.shrinkHint") : undefined,
     onChange: (value) => update({
       stroke: value === "area" ? undefined : { ...(stroke ?? DEFAULT_SKETCH_STROKE), align: value as SketchStrokeAlign },
     }),

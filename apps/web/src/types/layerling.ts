@@ -426,8 +426,8 @@ export type SketchImage = {
   crop?: { left: number; top: number; right: number; bottom: number };
 };
 
-/** Where the wall of a stroked closed outline lies against the drawn line; "grow" keeps the area and widens it by the width (#215). */
-export type SketchStrokeAlign = "center" | "inside" | "outside" | "grow";
+/** Where the wall of a stroked closed outline lies against the drawn line; "grow" keeps the area and widens it by the width (#215), "shrink" keeps it and moves its edge in by the width (#558). */
+export type SketchStrokeAlign = "center" | "inside" | "outside" | "grow" | "shrink";
 export type SketchStrokeJoin = "miter" | "round" | "bevel";
 export type SketchStrokeCap = "flat" | "square" | "round";
 /** A sketch drawn as a line of this width instead of a filled area (#154). */
