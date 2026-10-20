@@ -42,6 +42,8 @@ La petite flèche tout en haut de la barre la cache si elle gêne.
 
 Un design s'ouvre comme vous l'avez laissé : l'angle, le zoom et la position de la vue sont conservés avec lui dans ce navigateur, de sorte que vous continuez là où vous vous êtes arrêté, même après être retourné à Home ou avoir fermé la page. Un fichier enregistré (.lyl) emporte la vue, elle s'y ouvre donc également ailleurs. La vue ne fait pas partie de l'historique d'annulation.
 
+Vous pouvez aussi garder quatre vues à vous dans chaque design. [[Shift]]+[[7]], [[Shift]]+[[8]], [[Shift]]+[[9]] ou [[Shift]]+[[0]] enregistre la vue exactement telle qu'elle est - angle, position, zoom, et vue plate ou en perspective - sous cette touche, et la touche seule ([[7]], [[8]], [[9]] ou [[0]]) la ramène. Un message en bas confirme l'enregistrement ; enregistrer à nouveau sous la même touche remplace la vue. Comme la vue ci-dessus, les vues enregistrées restent avec le design dans ce navigateur et voyagent dans un fichier enregistré (.lyl) ; elles ne font pas partie de l'historique d'annulation.
+
 ## Regarder à l'intérieur : la vue en coupe
 
 {{ui:camera.sectionView}}, le dernier bouton de la barre (l'outil de coupe), coupe la vue ouverte le long d'un plan afin que vous puissiez vérifier les murs, les cavités et les pièces qui s'emboîtent les unes dans les autres. Rien n'est coupé pour vrai : le design, ses fichiers et chaque export restent entiers. Là où le plan traverse un corps plein, la coupe est remplie de la couleur du corps, un peu plus foncée, et un évidement à l'intérieur reste vide, de sorte qu'on distingue le plein du creux ; la face remplie apparaît un instant après que le plan s'est arrêté.

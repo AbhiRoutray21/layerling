@@ -44,6 +44,8 @@ Z majhno puščico čisto na vrhu vrstice jo lahko skriješ, če te moti.
 
 Načrt se odpre tako, kot si ga zapustil: zorni kot, povečava in izrez pogleda ostanejo z njim v tem brskalniku, zato nadaljuješ tam, kjer si nehal, tudi po »Domov« ali po zaprtju strani. Shranjena datoteka (.lyl) vzame pogled s seboj, zato se odpre tako tudi drugje. Pogled ne spada v zgodovino razveljavitev.
 
+V vsakem načrtu lahko shraniš tudi štiri lastne poglede. [[Shift]]+[[7]], [[Shift]]+[[8]], [[Shift]]+[[9]] ali [[Shift]]+[[0]] shrani pogled natanko takšen, kot je - zorni kot, izrez, povečavo ter raven ali perspektivni pogled - pod to tipko, sama tipka ([[7]], [[8]], [[9]] ali [[0]]) pa ga vrne. Sporočilo spodaj potrdi shranjevanje; ponovno shranjevanje pod isto tipko pogled zamenja. Tako kot zgornji pogled ostanejo shranjeni pogledi z načrtom v tem brskalniku in gredo s seboj v shranjeni datoteki (.lyl); ne spadajo v zgodovino razveljavitev.
+
 ## Pogled v notranjost: prerezni pogled
 
 {{ui:camera.sectionView}}, zadnji gumb vrstice (orodje za prerez), prereže pogled vzdolž ravnine. Tako preveriš stene, votline in dele, ki segajo drug v drugega. Prereže se samo pogled: načrt, datoteke in vsak izvoz ostanejo popolni. Kjer ravnina poteka skozi telo, je rez zapolnjen z nekoliko temnejšo barvo telesa, izdolbina v njem pa ostane prazna, tako da ločiš polno od votlega; zapolnjena ploskev se pokaže trenutek, potem ko se ravnina ustavi.

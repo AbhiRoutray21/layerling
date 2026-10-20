@@ -46,6 +46,8 @@ Mała strzałka na samej górze paska ukrywa go, jeśli przeszkadza.
 
 Projekt otwiera się tak, jak go zostawiłeś: kąt, przybliżenie i położenie widoku zapamiętuje ta przeglądarka, więc kontynuujesz tam, gdzie skończyłeś, także po powrocie do strony startowej albo zamknięciu strony. Zapisany plik (.lyl) zabiera widok ze sobą, więc także gdzie indziej otworzy się w tym widoku. Widok nie należy do historii cofania.
 
+W każdym projekcie możesz też zachować cztery własne widoki. [[Shift]]+[[7]], [[Shift]]+[[8]], [[Shift]]+[[9]] lub [[Shift]]+[[0]] zapisuje widok dokładnie taki, jaki jest - kąt, położenie, przybliżenie oraz widok płaski albo perspektywiczny - pod tym klawiszem, a sam klawisz ([[7]], [[8]], [[9]] lub [[0]]) przywraca go. Komunikat na dole potwierdza zapis; ponowny zapis pod tym samym klawiszem zastępuje widok. Tak jak widok opisany wyżej, zapisane widoki zostają z projektem w tej przeglądarce i są zabierane w zapisanym pliku (.lyl). Nie należą do historii cofania.
+
 ## Zajrzyj do środka: widok przekroju
 
 {{ui:camera.sectionView}}, ostatni przycisk na pasku (narzędzie cięcia), rozcina widok wzdłuż płaszczyzny, żeby sprawdzić ścianki, wnęki i części, które w siebie wchodzą. Nic nie jest naprawdę cięte: projekt, jego pliki i każdy eksport zostają całe. Tam, gdzie płaszczyzna przechodzi przez bryłę, przekrój jest wypełniony nieco ciemniejszym kolorem bryły, a otwór w niej zostaje pusty, dzięki czemu widać, co jest pełne, a co puste; wypełniona powierzchnia pojawia się chwilę po zatrzymaniu płaszczyzny.

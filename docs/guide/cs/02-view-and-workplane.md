@@ -44,6 +44,8 @@ Malá šipka úplně nahoře lištu skryje, pokud překáží.
 
 Projekt se otevírá s naposledy použitým úhlem, přiblížením a polohou pohledu. Pokračujete tak na stejném místě i po návratu na přehled projektů či zavření stránky. Pohled se přenáší také v souboru `.lyl`. Není součástí historie kroků zpět.
 
+V každém projektu si také můžete uložit čtyři vlastní pohledy. [[Shift]]+[[7]], [[Shift]]+[[8]], [[Shift]]+[[9]] nebo [[Shift]]+[[0]] uloží pohled přesně tak, jak je - úhel, polohu, přiblížení a kolmé či perspektivní zobrazení - pod tuto klávesu, a samotná klávesa ([[7]], [[8]], [[9]] nebo [[0]]) ho vrátí. Uložení potvrdí zpráva dole; nové uložení pod stejnou klávesu pohled nahradí. Stejně jako pohled výše zůstávají uložené pohledy s projektem v tomto prohlížeči a přenášejí se v uloženém souboru `.lyl`. Nejsou součástí historie kroků zpět.
+
 ## Pohled dovnitř: řez
 
 {{ui:camera.sectionView}}, poslední tlačítko lišty, zobrazí model proříznutý rovinou. Můžete kontrolovat stěny, dutiny i vzájemné uložení dílů. Skutečnou geometrii nemění: projekt, soubory i exporty zůstávají celé. Tam, kde rovina prochází tělesem, je řez vyplněn o něco tmavší barvou tělesa a otvor v něm zůstane prázdný, takže poznáš plné od dutého; vyplněná plocha se objeví chvíli poté, co se rovina zastaví.
