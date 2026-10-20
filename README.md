@@ -194,10 +194,10 @@ To run layerling on a computer, NAS (Synology, Unraid, etc.) or home server with
 The quickest way is a single command:
 
 ```bash
-docker run -d --name layerling -p 3000:3000 --restart unless-stopped ghcr.io/henmedia/layerling:latest
+docker run -d --name layerling -p 3000:3000 -v layerling-thumbnails:/app/.codex/project-thumbnails --restart unless-stopped ghcr.io/henmedia/layerling:latest
 ```
 
-On a NAS with a container manager (Synology Container Manager, Unraid, Portainer), search for `henmedia/layerling` in its registry (Docker Hub) or enter `henmedia/layerling:latest`, and map port 3000. To update, pull the image again and recreate the container (or let Watchtower do it).
+The `-v` option keeps the preview pictures of the start page in a Docker volume named `layerling-thumbnails`, so they survive an update; without it they are inside the container and gone each time it is created again (the designs themselves live in the browser and are not affected). On a NAS with a container manager (Synology Container Manager, Unraid, Portainer), search for `henmedia/layerling` in its registry (Docker Hub) or enter `henmedia/layerling:latest`, map port 3000, and add a volume for `/app/.codex/project-thumbnails`. To update, pull the image again and recreate the container (or let Watchtower do it).
 
 The image tags are plain version numbers **without a "v"**: `ghcr.io/henmedia/layerling:1.42.0`, while the GitHub release is called `v1.42.0`. A pull only fetches the new image; a container that already exists keeps running the old one until it is removed and created again:
 
@@ -205,7 +205,7 @@ The image tags are plain version numbers **without a "v"**: `ghcr.io/henmedia/la
 docker pull ghcr.io/henmedia/layerling:latest
 docker stop layerling
 docker rm layerling
-docker run -d --name layerling -p 3000:3000 --restart unless-stopped ghcr.io/henmedia/layerling:latest
+docker run -d --name layerling -p 3000:3000 -v layerling-thumbnails:/app/.codex/project-thumbnails --restart unless-stopped ghcr.io/henmedia/layerling:latest
 ```
 
 `docker inspect layerling | grep image.version` shows which version the container really runs. If you mounted a folder for the server storage, add the same `-v` option again.

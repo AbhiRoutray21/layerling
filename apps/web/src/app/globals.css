@@ -7232,6 +7232,13 @@ html[data-theme="dark"] .panel-grip:hover {
   transition: all 100ms ease;
 }
 
+/* Axes, workplane, view (#644): words, not letters, so they may not squeeze to nothing. */
+.camera-controls .section-tool-popover .section-orientation-btn {
+  flex: 1 1 auto;
+  padding: 0 6px;
+  white-space: nowrap;
+}
+
 .camera-controls .section-tool-popover .section-axis-btn:hover {
   background: rgba(255, 255, 255, 0.5);
   color: #2b1f14;
@@ -10996,12 +11003,13 @@ html[data-theme="dark"] .shape-inspector .name-tag-start .name-tag-start-button:
   position: fixed;
   bottom: 44px;
   left: 50%;
-  z-index: 40;
+  /* Below the windows (.workspace-modal is 30): it lay over the settings (#640). */
+  z-index: 29;
   display: flex;
   align-items: center;
   gap: 8px;
   max-width: min(640px, calc(100vw - 32px));
-  padding: 8px 14px;
+  padding: 8px 6px 8px 14px;
   color: #8a3b00;
   font-size: 13px;
   font-weight: 700;
@@ -11016,6 +11024,30 @@ html[data-theme="dark"] .shape-inspector .name-tag-start .name-tag-start-button:
 .bed-overhang-warning svg {
   flex: none;
   color: #d86a00;
+}
+
+.bed-overhang-dismiss {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.bed-overhang-dismiss:hover,
+.bed-overhang-dismiss:focus-visible {
+  background: rgba(216, 106, 0, 0.14);
+}
+
+.bed-overhang-dismiss svg {
+  color: inherit;
 }
 
 .workspace-select {
@@ -15234,6 +15266,17 @@ html[data-theme="dark"] .color-recent {
   font-size: 12px;
   font-weight: 700;
   line-height: 1.45;
+}
+
+/* The module in the line can be selected and copied (#645); the editor is otherwise not text to select. */
+.layerling-editor .selection-gear-pair {
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+.shape-inspector .inspector-action-button.selection-gear-fit {
+  margin-top: 8px;
+  margin-bottom: 0;
 }
 
 .selection-inspector-hint {

@@ -5,6 +5,7 @@ import { GuideHelpLink } from "@/components/GuideHelpLink";
 import { guideChapterForShape, guideSectionForShape } from "@/lib/guideLinks";
 import { useInspectorCard } from "@/lib/inspectorCards";
 import { ChevronDown, ChevronUp, Cylinder, Eye, EyeOff, FolderOpen, Grid3x3, Layers, Lock, Minus, Pencil, Plus, RefreshCw, RotateCcw, Split, Tags, Unlock } from "lucide-react";
+import { createPortal } from "react-dom";
 import { Fragment, createContext, useCallback, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type Dispatch, type ReactNode, type SetStateAction } from "react";
 import {
   DEFAULT_GEAR_HELIX_ANGLE,
@@ -27,6 +28,7 @@ import {
   DEFAULT_GEAR_BACKLASH,
   involuteGearModule,
   involuteGearPair,
+  gearPairFitPatches,
   MAX_GEAR_BACKLASH,
   MAX_GEAR_PRESSURE_ANGLE,
   MIN_GEAR_PRESSURE_ANGLE,
@@ -3938,10 +3940,34 @@ export function SnapGridControl({
   onObjectSnapChange?: (enabled: boolean) => void;
 }) {
   const label = (size: GridSize) => customSnapGridLabel(size, customGrids) ?? measurementOptionLabel(size);
+  // The menu goes onto the page itself: the corner of the 3D view lies under the toolbar and its pinned Shapes
+  // panel, so no z-index within it could bring the menu over them (#616, still behind it after 1.93.0).
+  const selectRef = useRef<HTMLButtonElement>(null);
+  const [menuPlace, setMenuPlace] = useState<CSSProperties | null>(null);
+  useLayoutEffect(() => {
+    if (!snapOpen) {
+      setMenuPlace(null);
+      return;
+    }
+    const place = () => {
+      const row = selectRef.current?.parentElement?.getBoundingClientRect();
+      if (!row) return;
+      setMenuPlace({
+        position: "fixed",
+        right: Math.max(4, window.innerWidth - row.right),
+        bottom: window.innerHeight - row.top + 4,
+        maxHeight: Math.max(120, row.top - 12),
+        zIndex: 75,
+      });
+    };
+    place();
+    window.addEventListener("resize", place);
+    return () => window.removeEventListener("resize", place);
+  }, [snapOpen]);
   return (
     <div className="snap-row">
       <span>{t("inspector.snapGrid")}</span>
-      <button className="snap-select" data-help={t("inspector.snapGrid")} onClick={() => onSnapOpenChange((value) => !value)}>
+      <button ref={selectRef} className="snap-select" data-help={t("inspector.snapGrid")} onClick={() => onSnapOpenChange((value) => !value)}>
         <span className="snap-select-label">{label(snap)}</span>
         <ChevronDown size={12} fill="currentColor" />
       </button>
@@ -3951,8 +3977,8 @@ export function SnapGridControl({
           <button type="button" data-help={t("inspector.unitsSwitch")} aria-pressed={units === "Imperial"} onClick={() => onUnitsChange("Imperial")}>in</button>
         </span>
       ) : null}
-      {snapOpen ? (
-        <div className="snap-menu">
+      {snapOpen && menuPlace ? createPortal(
+        <div className="snap-menu" style={menuPlace}>
           {snapGridOptions(units, customGrids).map((size) => (
             <button
               key={size}
@@ -3971,7 +3997,8 @@ export function SnapGridControl({
               <span>{t("inspector.objectSnap")}</span>
             </label>
           ) : null}
-        </div>
+        </div>,
+        document.body,
       ) : null}
     </div>
   );
@@ -4490,6 +4517,7 @@ export function SelectionInspector({
   shapes,
   onSetHole,
   onSetColor,
+  onUpdateShapes,
   onToggleLocked,
   onToggleHidden,
   onInteractionActiveChange,
@@ -4505,6 +4533,8 @@ export function SelectionInspector({
   shapes: readonly WorkplaneShape[];
   onSetHole: (hole: boolean) => void;
   onSetColor: (color: string) => void;
+  /** Changes to several of the selected parts in one step: "Fit module" for two gears (#645). */
+  onUpdateShapes?: (changes: readonly { id: string; patch: Partial<WorkplaneShape> }[], message?: string) => void;
   onToggleLocked: () => void;
   /** Hides the selected parts, or shows them again when all of them are hidden (#491); the button of a single part's panel. */
   onToggleHidden?: () => void;
@@ -4540,6 +4570,12 @@ export function SelectionInspector({
   const swatch = sharedColor ?? solids[0]?.color ?? SOLID_COLORS[0];
   // Two involute gears: where they mesh (#201).
   const gearPair = shapes.length === 2 ? involuteGearPair(shapes[0], shapes[1]) : null;
+  // The module that would let them mesh where they stand (#645), unless they mesh there already.
+  const fitModule = gearPair?.fitModule && (gearPair.distance === null || Math.abs(gearPair.distance - gearPair.current) > 0.005) ? gearPair.fitModule : null;
+  const fitGearPair = () => {
+    if (!fitModule || !onUpdateShapes) return;
+    onUpdateShapes(gearPairFitPatches(shapes[0], shapes[1], fitModule), t("status.gearPairFitted", { module: plainNumber(fitModule) }));
+  };
   const pick = (color: string) => {
     onSetColor(color);
     rememberColor(color);
@@ -4640,7 +4676,13 @@ export function SelectionInspector({
           {gearPair.distance === null
             ? t("inspector.gearPairMismatch", { a: plainNumber(gearPair.modules[0]), b: plainNumber(gearPair.modules[1]) })
             : t(gearPair.internal ? "inspector.gearPairInternal" : "inspector.gearPair", { distance: plainNumber(gearPair.distance), current: plainNumber(gearPair.current) })}
+          {fitModule ? <> {t("inspector.gearPairFit", { module: plainNumber(fitModule) })}</> : null}
         </p>
+      ) : null}
+      {fitModule && onUpdateShapes ? (
+        <button type="button" className="inspector-action-button selection-gear-fit" disabled={anyLocked} title={t("inspector.gearPairFitHint")} onClick={fitGearPair}>
+          {t("inspector.gearPairFitApply")}
+        </button>
       ) : null}
       <p className="selection-inspector-hint">{t("inspector.selectionHint")}</p>
       {!movable.moved ? (

@@ -1317,6 +1317,25 @@ export default function Home() {
     }
   }, []);
 
+  /**
+   * Whether the card of a design has no picture to show. A design that never had one, or one whose
+   * picture is gone from the server - a Docker container created again, or designs brought back
+   * from a backup - stayed blank until something in it changed; the editor now takes a picture
+   * as soon as such a design is open.
+   */
+  const isProjectThumbnailMissing = useCallback(async (projectId: string) => {
+    const project = projectsRef.current.find((candidate) => candidate.id === projectId);
+    if (!project) return false;
+    if (!project.thumbnailUrl) return true;
+    if (project.thumbnailUrl.startsWith("data:")) return false;
+    try {
+      const response = await fetch(project.thumbnailUrl, { cache: "no-store" });
+      return response.status === 404;
+    } catch {
+      return false;
+    }
+  }, []);
+
   const updateProjectShapes = useCallback((snapshot: {
     projectId: string;
     shapes: WorkplaneShape[];
@@ -2499,6 +2518,7 @@ export default function Home() {
               serverFileName={activeProject?.sharedProject?.fileName ?? null}
               onProjectShapesChange={updateProjectShapes}
               onProjectSnapshot={updateProjectSnapshot}
+              isProjectThumbnailMissing={isProjectThumbnailMissing}
               projectSaveFailure={projectSaveFailure}
               onProjectWorkspaceChange={updateProjectWorkspace}
               onProjectNameChange={(name) => {

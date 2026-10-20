@@ -15,7 +15,7 @@ With the mouse:
 | mouse wheel | zoom in and out |
 | hold [[Ctrl]] and drag with the left button | also moves the view |
 
-How fast the wheel zooms is set with {{ui:workspace.zoomSpeed}} in the settings, under {{ui:workspace.appearance}}: a slider from 1 to 14, 5 to begin with; above 10 only the wheel gets faster. One notch of a mouse wheel zooms alike in every browser, a trackpad zooms with how far you stroke.
+How fast the wheel zooms is set with {{ui:workspace.zoomSpeed}} in the settings, under {{ui:workspace.appearance}}: a slider from 1 to 14, 5 to begin with. It sets the wheel and the trackpad only: the buttons and the keys [[+]] and [[−]] always zoom in the same small steps. One notch of a mouse wheel zooms alike in every browser, a trackpad zooms with how far you stroke.
 
 On a tablet or phone, two fingers zoom (spread and pinch) and move the view (slide together). One finger on empty space turns the view, and a tap there clears the selection; on a shape or a handle it works on the design, just like the left mouse button. To turn the view with a finger that starts on a shape too, switch on {{ui:camera.touchRotate}} in the camera bar. That switch shows on devices with a touch screen.
 
@@ -51,6 +51,7 @@ A design opens the way you left it: the angle, zoom and position of the view are
 {{ui:camera.sectionView}}, the last button in the bar (the cut tool), cuts the view open along a plane so you can check walls, cavities and parts that fit into each other. Nothing is cut for real: the design, its files and every export stay whole. Where the plane goes through a solid, the cut is filled with the colour of the body a little darker, and a hole inside it stays empty, so you can tell solid from hollow; the filled face appears a moment after the plane stops moving.
 
 - Choose the axis the plane stands across: X (width), Y (depth) or Z (height), as in the position fields. The plane starts in the middle of your design.
+- {{ui:camera.sectionOrientation}} sets what these axes follow. {{ui:camera.sectionOrientationWorld}} takes the design's axes. {{ui:camera.sectionOrientationWorkplane}} takes the workplane's: Z then cuts parallel to it, X and Y square to it, and the position counts from its origin. With the workplane on a sloped face you cut parallel to that face, and the cut moves along when you move the workplane. {{ui:camera.sectionOrientationView}} turns the plane to face the screen: it takes away what lies in front, and the slider pushes it deeper into the design along your line of sight, for example to reach a buried part and click it. After turning the view, click it again and the cut follows the new view.
 - {{ui:camera.sectionCoarse}} moves the plane across the whole design, {{ui:camera.sectionFine}} moves it a little either side of where it stands, for tenths of a millimetre. You can also type the position.
 - The button beside the axes shows the other side of the cut, {{ui:camera.sectionReset}} puts the plane back in the middle, and {{ui:camera.sectionShowPlane}} hides the blue plane.
 - You can click and select what the cut lays open, inner walls included.
@@ -142,7 +143,7 @@ The sketch view has its own colours: {{ui:workspace.sketchBackground}} for the w
 
 {{ui:workspace.startInPerspective}}: the editor then opens in the perspective view, not in the flat one.
 
-{{ui:workspace.zoomSpeed}} is a slider from slow to fast: how fast the wheel zooms; above 10 only the wheel gets faster. {{ui:workspace.cameraInertia}}: after you let go of the mouse the view turns on for a moment and slows down gently. Switched off, it stops at once, as in Tinkercad and Fusion 360.
+{{ui:workspace.zoomSpeed}} is a slider from slow to fast: how fast the wheel and the trackpad zoom; the zoom buttons and keys keep their own small steps. {{ui:workspace.cameraInertia}}: after you let go of the mouse the view turns on for a moment and slows down gently. Switched off, it stops at once, as in Tinkercad and Fusion 360.
 
 {{ui:workspace.overhangAngle}} is the angle from which a face counts as an overhang when you switch on Show overhangs in the visibility menu: those faces are hatched red and white. 30° is careful, 70° counts on good cooling of the print; 45° is the usual start.
 

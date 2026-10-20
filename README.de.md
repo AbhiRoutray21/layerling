@@ -197,10 +197,10 @@ Um layerling auf einem Rechner, NAS (Synology, Unraid usw.) oder Heimserver ohne
 Am schnellsten geht es mit einem einzigen Befehl:
 
 ```bash
-docker run -d --name layerling -p 3000:3000 --restart unless-stopped ghcr.io/henmedia/layerling:latest
+docker run -d --name layerling -p 3000:3000 -v layerling-thumbnails:/app/.codex/project-thumbnails --restart unless-stopped ghcr.io/henmedia/layerling:latest
 ```
 
-Auf einem NAS mit Container-Verwaltung (Synology Container Manager, Unraid, Portainer) suchst du in der Registrierung (Docker Hub) nach `henmedia/layerling` oder trägst `henmedia/layerling:latest` ein und gibst Port 3000 frei. Zum Aktualisieren das Image neu holen und den Container neu anlegen (oder Watchtower das erledigen lassen).
+Die Option `-v` legt die Vorschaubilder der Startseite in ein Docker-Volume namens `layerling-thumbnails`, damit sie ein Update überstehen; ohne sie liegen sie im Container und sind bei jedem Neuanlegen weg (die Entwürfe selbst liegen im Browser und sind nicht betroffen). Auf einem NAS mit Container-Verwaltung (Synology Container Manager, Unraid, Portainer) suchst du in der Registrierung (Docker Hub) nach `henmedia/layerling` oder trägst `henmedia/layerling:latest` ein, gibst Port 3000 frei und legst ein Volume für `/app/.codex/project-thumbnails` an. Zum Aktualisieren das Image neu holen und den Container neu anlegen (oder Watchtower das erledigen lassen).
 
 Die Image-Tags sind reine Versionsnummern **ohne „v“**: `ghcr.io/henmedia/layerling:1.42.0`, das GitHub-Release heißt dagegen `v1.42.0`. Ein Pull holt nur das neue Image; ein vorhandener Container läuft mit dem alten weiter, bis er entfernt und neu angelegt wird:
 
@@ -208,7 +208,7 @@ Die Image-Tags sind reine Versionsnummern **ohne „v“**: `ghcr.io/henmedia/la
 docker pull ghcr.io/henmedia/layerling:latest
 docker stop layerling
 docker rm layerling
-docker run -d --name layerling -p 3000:3000 --restart unless-stopped ghcr.io/henmedia/layerling:latest
+docker run -d --name layerling -p 3000:3000 -v layerling-thumbnails:/app/.codex/project-thumbnails --restart unless-stopped ghcr.io/henmedia/layerling:latest
 ```
 
 Mit `docker inspect layerling | grep image.version` siehst du, welche Version der Container wirklich ausführt. Hast du für den Serverspeicher einen Ordner eingebunden, gib dieselbe `-v`-Option wieder mit an.

@@ -15,7 +15,7 @@ Mit der Maus:
 | Mausrad | hinein- und herauszoomen |
 | [[Strg]] halten und mit links ziehen | ebenfalls verschieben |
 
-Wie schnell das Mausrad zoomt, stellst du in den Einstellungen unter {{ui:workspace.appearance}} mit {{ui:workspace.zoomSpeed}} ein: ein Regler von 1 bis 14, zu Beginn 5; über 10 wird nur das Mausrad schneller. Eine Raste des Mausrads zoomt in jedem Browser gleich stark, ein Trackpad zoomt danach, wie weit du streichst.
+Wie schnell das Mausrad zoomt, stellst du in den Einstellungen unter {{ui:workspace.appearance}} mit {{ui:workspace.zoomSpeed}} ein: ein Regler von 1 bis 14, zu Beginn 5. Er gilt nur für Mausrad und Trackpad: die Knöpfe und die Tasten [[+]] und [[−]] zoomen immer in denselben kleinen Schritten. Eine Raste des Mausrads zoomt in jedem Browser gleich stark, ein Trackpad zoomt danach, wie weit du streichst.
 
 Auf einem Tablet oder Handy zoomen zwei Finger (spreizen und zusammenziehen) und verschieben die Ansicht (gemeinsam schieben). Ein Finger auf leerer Fläche dreht die Ansicht, und ein Antippen dort hebt die Auswahl auf; auf einer Form oder einem Griff arbeitet er am Entwurf, so wie die linke Maustaste. Wer auch mit einem Finger drehen möchte, der auf einer Form beginnt, schaltet in der Kameraleiste {{ui:camera.touchRotate}} ein. Der Schalter erscheint auf Geräten mit Touchscreen.
 
@@ -51,6 +51,7 @@ Ein Entwurf öffnet sich so, wie du ihn verlassen hast: Blickwinkel, Zoom und Au
 {{ui:camera.sectionView}}, der letzte Knopf der Leiste (das Schnittwerkzeug), schneidet die Ansicht entlang einer Ebene auf. So prüfst du Wände, Hohlräume und Teile, die ineinandergreifen. Geschnitten wird nur die Ansicht: Entwurf, Dateien und jeder Export bleiben vollständig. Wo die Ebene durch einen Körper geht, ist der Schnitt in der etwas dunkleren Farbe des Körpers gefüllt, und eine Aussparung darin bleibt leer, so erkennst du Massives und Hohles; die gefüllte Fläche erscheint einen Moment, nachdem die Ebene stillsteht.
 
 - Wähle die Achse, quer zu der die Ebene steht: X (Breite), Y (Tiefe) oder Z (Höhe), wie bei den Positionsfeldern. Sie beginnt in der Mitte deines Entwurfs.
+- {{ui:camera.sectionOrientation}} legt fest, wonach sich diese Achsen richten. {{ui:camera.sectionOrientationWorld}} nimmt die Achsen des Entwurfs. {{ui:camera.sectionOrientationWorkplane}} nimmt die der Arbeitsebene: Z schneidet dann parallel zu ihr, X und Y quer dazu, und die Lage zählt ab ihrem Ursprung. Liegt die Arbeitsebene auf einer schrägen Fläche, schneidest du so parallel zu dieser Fläche, und der Schnitt wandert mit, wenn du die Arbeitsebene umsetzt. {{ui:camera.sectionOrientationView}} stellt die Ebene zum Bildschirm: Sie nimmt weg, was vor ihr liegt, und mit dem Regler schiebst du sie in Blickrichtung tiefer in den Entwurf, etwa um an ein verdecktes Teil zu kommen und es anzuklicken. Drehst du danach die Ansicht, klickst du noch einmal darauf, und der Schnitt richtet sich nach dem neuen Blick.
 - {{ui:camera.sectionCoarse}} schiebt die Ebene über den ganzen Entwurf, {{ui:camera.sectionFine}} nur ein Stück um ihre aktuelle Stelle, für Zehntelmillimeter. Die Position kannst du auch eintippen.
 - Der Knopf neben den Achsen zeigt die andere Seite des Schnitts, {{ui:camera.sectionReset}} setzt die Ebene zurück in die Mitte, {{ui:camera.sectionShowPlane}} blendet die blaue Ebene aus.
 - Was der Schnitt freilegt, kannst du anklicken und auswählen, auch innere Wände.
@@ -142,7 +143,7 @@ Die Skizzenansicht hat eigene Farben: {{ui:workspace.sketchBackground}} für das
 
 {{ui:workspace.startInPerspective}}: Der Editor öffnet dann in der perspektivischen Ansicht, nicht in der flachen.
 
-{{ui:workspace.zoomSpeed}} ist ein Regler von langsam bis schnell: wie schnell das Rad zoomt; oberhalb von 10 wird nur das Rad schneller. {{ui:workspace.cameraInertia}}: Lässt du die Maus nach dem Drehen los, dreht die Ansicht noch kurz weiter und bremst sanft ab. Ausgeschaltet bleibt sie sofort stehen, wie in Tinkercad und Fusion 360.
+{{ui:workspace.zoomSpeed}} ist ein Regler von langsam bis schnell: wie schnell Rad und Trackpad zoomen; die Zoomknöpfe und -tasten behalten ihre eigenen kleinen Schritte. {{ui:workspace.cameraInertia}}: Lässt du die Maus nach dem Drehen los, dreht die Ansicht noch kurz weiter und bremst sanft ab. Ausgeschaltet bleibt sie sofort stehen, wie in Tinkercad und Fusion 360.
 
 {{ui:workspace.overhangAngle}} ist der Winkel, ab dem eine Fläche als Überhang gilt, wenn du im Sichtbarkeitsmenü Überhänge zeigen einschaltest: Diese Flächen sind rot und weiß schraffiert. 30° ist vorsichtig, 70° rechnet mit guter Kühlung des Drucks; 45° ist der übliche Start.
 

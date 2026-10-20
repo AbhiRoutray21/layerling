@@ -736,6 +736,7 @@ export const tools = [
         rotationX: { type: "number", description: "Tilt about the left-right axis in degrees, -180 to 180, default 0. Not for an x cut." },
         rotationY: { type: "number", description: "Tilt about the front-back axis in degrees, -180 to 180, default 0. Not for a y cut." },
         rotationZ: { type: "number", description: "Tilt about the vertical axis in degrees, -180 to 180, default 0. Not for a z cut." },
+        alongWorkplane: { type: "string", enum: ["parallel", "acrossX", "acrossY"], description: "Lay the plane on the current workplane (parallel) or square to it across its X or Y direction, like the panel's \"Align to workplane\"; sets axis and tilt itself, so leave those out. Without position the plane goes through the workplane's origin when that crosses the objects, otherwise through their middle." },
       },
     },
   },
@@ -854,7 +855,7 @@ export const tools = [
   },
   {
     name: "layerling_bundle_objects",
-    description: "Bundle objects like Tinkercad's Ctrl+B: they move, turn and scale together as one object, but nothing is merged - every part keeps its colour and its solid or hole setting, holes cut nothing, and in an STL, 3MF or OBJ export every part is a body of its own (so a two-colour logo on a plate stays two coloured parts). A bundle is not one body: the edge tools and hollowing refuse it. layerling_ungroup_objects takes it apart again, layerling_open_group opens it for editing. Use layerling_group_objects instead when holes should cut or the parts should become one body.",
+    description: "Bundle objects like Tinkercad's Ctrl+B: they move, turn and scale together as one object, but nothing is merged - every part keeps its colour and its solid or hole setting, holes cut nothing, and in an STL, 3MF or OBJ export every part is a body of its own (so a two-colour logo on a plate stays two coloured parts). A bundle is not one body: the edge tools and hollowing refuse it. layerling_ungroup_objects takes it apart again, layerling_open_group opens it for editing. Grouped with other objects later (layerling_group_objects), a bundle's holes cut those objects but never the bundle's own solids, as in Tinkercad; to let a hole cut its own bundle, ungroup it and group its parts. Use layerling_group_objects instead when the parts should become one body.",
     inputSchema: {
       ...editorTargetSchema,
       properties: {
@@ -982,7 +983,7 @@ export const tools = [
   },
   {
     name: "layerling_measure_section",
-    description: "Measure on a cut through the design, like \"Measure\" in the editor's section view: wall thickness, a gap, a clearance. Both points snap to the outline of the cut (within snapRadius mm, default 1): first to the nearest wall, then the second one preferably square to its wall as seen from the first - give it a point near the opposite wall and it returns the true thickness. Points are in the editor's coordinates (x, z, elevation); the one along the axis is set to the plane. axis and offset work like layerling_export_section_svg and default to the section view or the middle of the design. Round outlines (a hole, a cylinder) also snap: the centre of the circle; a second point near the spot across the centre from a first one on the circle lands exactly across, so the distance is the diameter; and with the centre as the first point the second lands on the circle, so the distance is the radius. Returns the snapped points with their snap kind (perpendicular, corner, outline, center, opposite or free), distance, circle (\"diameter\", \"radius\" or null) and deltaX, deltaZ, deltaElevation. The section view itself is left as it is.",
+    description: "Measure on a cut through the design, like \"Measure\" in the editor's section view: wall thickness, a gap, a clearance. Without axis and offset it measures on the section view as it is set, also when it is turned to the workplane or the view; the points are then given and returned in world coordinates and land on that plane. Both points snap to the outline of the cut (within snapRadius mm, default 1): first to the nearest wall, then the second one preferably square to its wall as seen from the first - give it a point near the opposite wall and it returns the true thickness. Points are in the editor's coordinates (x, z, elevation); the one along the axis is set to the plane. axis and offset work like layerling_export_section_svg and default to the section view or the middle of the design. Round outlines (a hole, a cylinder) also snap: the centre of the circle; a second point near the spot across the centre from a first one on the circle lands exactly across, so the distance is the diameter; and with the centre as the first point the second lands on the circle, so the distance is the radius. Returns the snapped points with their snap kind (perpendicular, corner, outline, center, opposite or free), distance, circle (\"diameter\", \"radius\" or null) and deltaX, deltaZ, deltaElevation. The section view itself is left as it is.",
     inputSchema: {
       ...editorTargetSchema,
       properties: {
@@ -1088,6 +1089,7 @@ export const tools = [
         center: { type: "boolean", description: "Move the plane to the middle of the design." },
         flipped: { type: "boolean", description: "Show the other side of the plane." },
         showPlane: { type: "boolean", description: "Draw the blue plane (false hides it, the cut stays)." },
+        orientation: { type: "string", enum: ["world", "workplane", "view"], description: "What axis and offset are measured along, like the panel's \"Axes from\": world = the design's axes (default); workplane = the workplane's own axes, offset counted from its origin, \"y\" cuts parallel to it and the cut moves with the workplane; view = the current view, \"y\" faces the screen and takes away what lies in front - the view is taken when this is given, so give it again after turning the view. Choosing workplane or view starts on \"y\" in the middle of the design." },
       },
     },
   },
@@ -1130,7 +1132,7 @@ export const tools = [
   },
   {
     name: "layerling_export_section_svg",
-    description: "Cut the design with a plane and return the outlines as an SVG at 1:1 in millimetres - the editor's \"Section as SVG\". Same bodies as the export: visible solids only, holes already taken off, groups combined, bodies of one colour joined; one unfilled path per body in its colour. An x cut is seen from the right, y from above, z from the front (seenFrom). axis and offset (an x position, a height or a z position, like layerling_set_section_view) default to the current section view, or the middle of the design on that axis; the section view itself is left as it is. Returns svg, loops, openLoops (should be 0), widthMm, heightMm and hiddenSkipped. Fails with a message when the plane misses every visible solid.",
+    description: "Cut the design with a plane and return the outlines as an SVG at 1:1 in millimetres - the editor's \"Section as SVG\". Same bodies as the export: visible solids only, holes already taken off, groups combined, bodies of one colour joined; one unfilled path per body in its colour. An x cut is seen from the right, y from above, z from the front (seenFrom). axis and offset (an x position, a height or a z position, like layerling_set_section_view) default to the current section view, or the middle of the design on that axis; the section view itself is left as it is. Without axis and offset it follows a section view turned to the workplane or the view (orientation in layerling_set_section_view). Returns svg, loops, openLoops (should be 0), widthMm, heightMm and hiddenSkipped. Fails with a message when the plane misses every visible solid.",
     inputSchema: {
       ...editorTargetSchema,
       properties: {

@@ -740,6 +740,21 @@ export function sceneShape(shape: Partial<WorkplaneShape> & Pick<WorkplaneShape,
   });
 }
 
+/**
+ * A shape read back from a clipboard. `sceneShape` fills the defaults, but it names only the fields
+ * it knows, so on its own it dropped everything else a copy carries: see-through, edge treatments,
+ * mirroring, a text's stroke and spacing, the exact CAD body. Within one design the tab kept the
+ * copy and nothing showed; pasted into another design all of it was gone (#642). The fields of
+ * the copy now go on top of the defaults. Anything without a name, kind and colour is not a shape.
+ */
+export function clipboardShape(entry: unknown): WorkplaneShape | null {
+  if (!entry || typeof entry !== "object") return null;
+  const shape = entry as Partial<WorkplaneShape>;
+  const { name, kind, color } = shape;
+  if (typeof name !== "string" || typeof kind !== "string" || typeof color !== "string") return null;
+  return canonicalizeShape({ ...sceneShape({ ...shape, name, kind, color }), ...shape, name, kind, color });
+}
+
 export function makeShapeFromAsset(
   asset: ShapeAsset,
   point?: { x: number; z: number; elevation?: number },

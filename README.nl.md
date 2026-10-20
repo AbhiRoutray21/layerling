@@ -192,7 +192,7 @@ Om layerling op een computer, NAS (Synology, Unraid, enz.) of thuisserver te dra
 De snelste manier is één enkel commando:
 
 ```bash
-docker run -d --name layerling -p 3000:3000 --restart unless-stopped ghcr.io/henmedia/layerling:latest
+docker run -d --name layerling -p 3000:3000 -v layerling-thumbnails:/app/.codex/project-thumbnails --restart unless-stopped ghcr.io/henmedia/layerling:latest
 ```
 
 Op een NAS met een containerbeheerder (Synology Container Manager, Unraid, Portainer) zoek je `henmedia/layerling` op in het register (Docker Hub) of vul je `henmedia/layerling:latest` in, en koppel je poort 3000. Om bij te werken haal je de image opnieuw op en maak je de container opnieuw aan (of laat je Watchtower dat doen).
@@ -203,7 +203,7 @@ De image-tags zijn kale versienummers **zonder "v"**: `ghcr.io/henmedia/layerlin
 docker pull ghcr.io/henmedia/layerling:latest
 docker stop layerling
 docker rm layerling
-docker run -d --name layerling -p 3000:3000 --restart unless-stopped ghcr.io/henmedia/layerling:latest
+docker run -d --name layerling -p 3000:3000 -v layerling-thumbnails:/app/.codex/project-thumbnails --restart unless-stopped ghcr.io/henmedia/layerling:latest
 ```
 
 `docker inspect layerling | grep image.version` laat zien welke versie de container echt draait. Heb je een map gekoppeld voor de serveropslag, geef dan dezelfde `-v`-optie opnieuw mee.

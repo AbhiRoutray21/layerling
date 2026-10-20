@@ -148,8 +148,8 @@
           "en": "A .lyl file opens with a double click"
         },
         "body": {
-          "de": "Ist layerling als App installiert (Chrome oder Edge), meldet es sich beim System als Programm für .lyl-Dateien an. Ein Doppelklick auf einen Entwurf im Dateimanager öffnet ihn gleich in layerling; Strg+S speichert wieder in diese Datei. Das System fragt beim ersten Mal, welches Programm es nehmen soll.",
-          "en": "When layerling is installed as an app (Chrome or Edge), it registers itself with the system as a program for .lyl files. A double click on a design in the file manager opens it in layerling right away, and Ctrl+S saves back into that file. The system asks once which program to use."
+          "de": "Ist layerling als App auf einem Computer installiert (Chrome oder Edge), meldet es sich beim System als Programm für .lyl-Dateien an. Ein Doppelklick auf einen Entwurf im Dateimanager öffnet ihn gleich in layerling; Strg+S speichert wieder in diese Datei. Das System fragt beim ersten Mal, welches Programm es nehmen soll. Auf Android geht das nicht: dort öffnest du einen Entwurf mit \"Entwurf öffnen oder Geometrie importieren\".",
+          "en": "When layerling is installed as an app on a computer (Chrome or Edge), it registers itself with the system as a program for .lyl files. A double click on a design in the file manager opens it in layerling right away, and Ctrl+S saves back into that file. The system asks once which program to use. On Android this does not work: there, open a design with \"Open a design or import geometry\"."
         }
       },
       {

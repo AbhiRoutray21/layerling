@@ -5,7 +5,7 @@ import { ArrowDownToLine, Check, ChevronLeft, ChevronRight, Crosshair, Cuboid, D
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type Dispatch, type DragEvent, type MouseEvent as ReactMouseEvent, type MutableRefObject, type PointerEvent as ReactPointerEvent, type ReactNode, type SetStateAction, type WheelEvent as ReactWheelEvent } from "react";
 import { objectSnapOffset, shiftSnapBox, type ObjectSnapGuide, type SnapBox } from "@/lib/objectSnap";
 import { useMovablePanel, type MovablePanelOptions } from "@/lib/useMovablePanel";
-import { computeSectionPlaneVector, DEFAULT_SECTION_SETTINGS, getSectionBounds, SECTION_AXES_SHOWN, sectionAxisLetter, sectionFineWindow, sectionPlacementWorkplane, type SectionPlaneAxis, type SectionPlaneSettings } from "@/lib/sectionView";
+import { computeSectionPlaneVector, DEFAULT_SECTION_SETTINGS, getSectionBounds, SECTION_AXES_SHOWN, sectionAxisLetter, sectionAxisVector, sectionFineWindow, sectionFrameFromView, sectionFrameFromWorkplane, sectionPlacementWorkplane, sectionPointFromFrame, sectionPointToFrame, type SectionFrame, type SectionOrientation, type SectionPlaneAxis, type SectionPlaneSettings } from "@/lib/sectionView";
 import { projectSectionPoint, type SectionBody, type SectionLoop, type SectionPoint } from "@/lib/sectionSvg";
 import { sectionCapMesh } from "@/lib/sectionCaps";
 import { circleOfLoop, sectionMeasurement, sectionPointToWorld, snapSectionPoint, type SectionSnap } from "@/lib/sectionMeasure";
@@ -107,7 +107,7 @@ import { displayYTurn, insideZ } from "@/lib/displayAxes";
 import { positionsForTwist, twistBandCount } from "@/lib/heightSlices";
 import { toCreasedNormals } from "three/examples/jsm/utils/BufferGeometryUtils.js";
 import { boundsInsideRect, marqueeMode } from "@/lib/marqueeSelection";
-import { canBeginShapeDrag, handleDimensionLimit, POSITION_TYPED_LIMIT, DEFAULT_SNAP_GRID, DEFAULT_WORKPLANE_WORKSPACE, effectiveViewSettings, viewPixelRatio, normalizeSnapGrid, normalizeWorkspaceSettings, orbitControlsZoomSpeed, readWorkspaceDefault, saveShapeDefaultsForNewDesigns, saveWorkspaceDefault, snapGridForUnits, snapGridStep as snapStep, workplaneSettingsFingerprint, workspaceForUnits, workspaceHydrationSyncDecision, zoomDistanceScale } from "@/lib/workplaneSettings";
+import { canBeginShapeDrag, handleDimensionLimit, POSITION_TYPED_LIMIT, DEFAULT_SNAP_GRID, DEFAULT_WORKPLANE_WORKSPACE, effectiveViewSettings, viewPixelRatio, normalizeSnapGrid, normalizeWorkspaceSettings, orbitControlsZoomSpeed, readWorkspaceDefault, saveShapeDefaultsForNewDesigns, saveWorkspaceDefault, snapGridForUnits, snapGridStep as snapStep, workplaneSettingsFingerprint, workspaceForUnits, workspaceHydrationSyncDecision, zoomDistanceScale, ZOOM_STEP_IN, ZOOM_STEP_OUT } from "@/lib/workplaneSettings";
 import { withShapeDefaults } from "@/lib/shapeDefaults";
 import { workplaneGridBandWidths, AXIS_ARROW_COLORS, axisArrowLayout, DEFAULT_EDGE_LINE_COLOR, fillLightPosition, keyLightPosition, sceneLightLevels, shadowBlurRadius, workplaneGridLayout, workplaneGridLines, workplaneGridPalette, workplaneLabelLayout, workplaneThemePalette, WORKPLANE_LABEL_ASPECT, WORKPLANE_LINE_ELEVATION, type WorkplaneGridLayout } from "@/lib/workplaneGrid";
 import { cleanNearZero, deformsAboutOrigin, cleanRotationDegrees, isNonSolidShapeKind, mirroredAxisCount, mirrorSign, preservesEdgeTreatmentSize, proportionalResizeScale, resizedImportedCoordinates, resizedImportedMeshPositions, resizedShapeSize, shapeDepth, shapeExtrudeDeformAt, shapeHasExtrudeDeform, shapeHasShapeDeform, shapeHasTaper, shapeSupportsTaper, shapeTaperDimensions, shapeTaperScaleAt, shapeWidth, shapeWithParametricSource } from "@/lib/workplaneShapes";
@@ -401,6 +401,8 @@ type WorkplaneViewportProps = {
   /** Several parts selected (#183): solid or hole, a colour and locking for all of them. */
   onSelectionHole?: (hole: boolean) => void;
   onSelectionColor?: (color: string) => void;
+  /** Changes to several selected shapes in one step - "Fit module" for two gears (#645). */
+  onSelectionUpdateShapes?: (changes: readonly { id: string; patch: Partial<WorkplaneShape> }[], message?: string) => void;
   onSelectionLock?: () => void;
   onSelectionHide?: () => void;
   /** Wraps the selected body around a cylinder of this diameter (#106). */
@@ -470,11 +472,11 @@ type WorkplaneViewportProps = {
   resolvedTheme?: ResolvedAppTheme;
   onThemePreferenceChange?: (preference: AppThemePreference) => void;
   /** Der aktuelle Schnitt als SVG: rechnet der Editor, aus denselben Koerpern wie der Export. */
-  onExportSectionSvg?: (axis: SectionPlaneAxis, offset: number) => void;
+  onExportSectionSvg?: (axis: SectionPlaneAxis, offset: number, frame: SectionFrame | null) => void;
   /** The cut's outlines, from the same bodies as the SVG - what section measuring snaps to. */
-  onSectionContours?: (axis: SectionPlaneAxis, offset: number) => Promise<SectionLoop[]>;
+  onSectionContours?: (axis: SectionPlaneAxis, offset: number, frame: SectionFrame | null) => Promise<SectionLoop[]>;
   /** The bodies of the cut with their colours, to fill the cut face of the section view (#516). */
-  onSectionBodies?: (axis: SectionPlaneAxis, offset: number) => Promise<SectionBody[]>;
+  onSectionBodies?: (axis: SectionPlaneAxis, offset: number, frame: SectionFrame | null) => Promise<SectionBody[]>;
 };
 
 type WorkspaceSettings = WorkplaneWorkspaceSettings;
@@ -2023,13 +2025,15 @@ function pickModifierEdgeFromScreen(state: ThreeState, edges: CadModifierEdge[],
 type SectionMeasureModel = {
   axis: SectionPlaneAxis;
   offset: number;
+  /** The frame of a turned plane (#644); the points are in its terms. */
+  frame: SectionFrame | null;
   loops: SectionLoop[];
   a: SectionPoint | null;
   b: SectionPoint | null;
   hover: SectionSnap | null;
 };
 
-const EMPTY_SECTION_MEASURE: SectionMeasureModel = { axis: "x", offset: 0, loops: [], a: null, b: null, hover: null };
+const EMPTY_SECTION_MEASURE: SectionMeasureModel = { axis: "x", offset: 0, frame: null, loops: [], a: null, b: null, hover: null };
 
 type SectionMeasureOverlayState = {
   signature: string;
@@ -2075,7 +2079,7 @@ function syncSectionMeasureOverlay(
     return;
   }
   const toScreen = (point: SectionPoint) => {
-    const [x, y, z] = sectionPointToWorld(point, model.axis, model.offset);
+    const [x, y, z] = sectionPointFromFrame(sectionPointToWorld(point, model.axis, model.offset), model.frame);
     return projectToScreen(new THREE.Vector3(x, y, z), state);
   };
   const outlines = model.loops.map((loop) => {
@@ -3331,6 +3335,7 @@ export function WorkplaneViewport({
   onSeparateParts,
   onSelectionHole,
   onSelectionColor,
+  onSelectionUpdateShapes,
   onSelectionLock,
   onSelectionHide,
   onWrapAroundCylinder,
@@ -3482,7 +3487,7 @@ export function WorkplaneViewport({
   const sectionWheelShownRef = useRef<string | null>(null);
   useWheelField(sectionOffsetInputRef, sectionOffsetDraft !== null, ({ direction, keys }) => {
     const settings = sectionSettingsRef.current;
-    const bounds = getSectionBounds(shapesRef.current, settings.axis, workspaceRef.current.width, workspaceRef.current.depth);
+    const bounds = getSectionBounds(shapesRef.current, settings.axis, workspaceRef.current.width, workspaceRef.current.depth, settings.frame ?? null);
     const sign = settings.axis === "z" ? -1 : 1;
     const display = workspaceRef.current;
     const parsed = parseMeasurementInput(sectionOffsetDraftRef.current ?? "");
@@ -4243,10 +4248,11 @@ export function WorkplaneViewport({
 
   useEffect(() => {
     const { axis, offset } = sectionSettings;
+    const frame = sectionSettings.frame ?? null;
     const current = sectionMeasureRef.current;
-    if (current.axis !== axis || current.offset !== offset) {
+    if (current.axis !== axis || current.offset !== offset || current.frame !== frame) {
       // A measurement belongs to its plane.
-      sectionMeasureRef.current = { ...EMPTY_SECTION_MEASURE, axis, offset, loops: [] };
+      sectionMeasureRef.current = { ...EMPTY_SECTION_MEASURE, axis, offset, frame, loops: [] };
       setSectionMeasureResult(null);
     }
     if (!sectionMeasureMode || !sectionSettings.enabled || !onSectionContours) {
@@ -4255,11 +4261,11 @@ export function WorkplaneViewport({
     }
     let cancelled = false;
     const timer = window.setTimeout(() => {
-      onSectionContours(axis, offset)
+      onSectionContours(axis, offset, frame)
         .then((loops) => {
           if (cancelled) return;
           const model = sectionMeasureRef.current;
-          if (model.axis !== axis || model.offset !== offset) return;
+          if (model.axis !== axis || model.offset !== offset || model.frame !== frame) return;
           sectionMeasureRef.current = { ...model, loops };
           if (threeRef.current) threeRef.current.needsRender = true;
         })
@@ -4282,7 +4288,7 @@ export function WorkplaneViewport({
   // The face is cut for the newest plane, one round at a time, and a round is never thrown away because the plane
   // moved on: with a delay that every move restarts, a plane that moves faster than the delay never let the face
   // be cut, and it only came back when the hand rested (#516, rondlh: "lags behind, sometimes a second").
-  type SectionCapWish = { axis: SectionPlaneAxis; offset: number; shapes: typeof shapes };
+  type SectionCapWish = { axis: SectionPlaneAxis; offset: number; frame: SectionFrame | null; shapes: typeof shapes };
   const sectionBodiesRef = useRef(onSectionBodies);
   sectionBodiesRef.current = onSectionBodies;
   const sectionCapRunnerRef = useRef<LatestRunner<SectionCapWish> | null>(null);
@@ -4291,13 +4297,13 @@ export function WorkplaneViewport({
       async (wish) => {
         const makeBodies = sectionBodiesRef.current;
         if (!makeBodies) return;
-        const bodies = await makeBodies(wish.axis, wish.offset);
+        const bodies = await makeBodies(wish.axis, wish.offset, wish.frame);
         const current = threeRef.current;
         const now = runner.wanted();
         // The face of a design that has changed since, or of a section that is off, is not shown.
-        if (current && now && now.shapes === wish.shapes) buildSectionCaps(current, bodies, wish.axis, wish.offset);
+        if (current && now && now.shapes === wish.shapes) buildSectionCaps(current, bodies, wish.axis, wish.offset, wish.frame);
       },
-      (a, b) => a.axis === b.axis && a.offset === b.offset && a.shapes === b.shapes,
+      (a, b) => a.axis === b.axis && a.offset === b.offset && a.frame === b.frame && a.shapes === b.shapes,
     );
     sectionCapRunnerRef.current = runner;
   }
@@ -4310,8 +4316,8 @@ export function WorkplaneViewport({
       if (threeRef.current) clearSectionCaps(threeRef.current);
       return;
     }
-    runner.request({ axis: sectionSettings.axis, offset: sectionSettings.offset, shapes });
-  }, [sectionSettings.enabled, sectionSettings.axis, sectionSettings.offset, shapes, onSectionBodies]);
+    runner.request({ axis: sectionSettings.axis, offset: sectionSettings.offset, frame: sectionSettings.frame ?? null, shapes });
+  }, [sectionSettings.enabled, sectionSettings.axis, sectionSettings.offset, sectionSettings.frame, shapes, onSectionBodies]);
 
   useEffect(() => () => sectionCapRunnerRef.current?.clear(), []);
 
@@ -4910,11 +4916,14 @@ export function WorkplaneViewport({
     const state = threeRef.current;
     const settings = sectionSettingsRef.current;
     if (!state || !settings.enabled) return null;
-    const normal = settings.axis === "x" ? new THREE.Vector3(1, 0, 0) : settings.axis === "y" ? new THREE.Vector3(0, 1, 0) : new THREE.Vector3(0, 0, 1);
-    const hit = toRawPlanePoint(clientX, clientY, new THREE.Plane(normal, -settings.offset));
+    const frame = settings.frame ?? null;
+    const direction = sectionAxisVector(settings.axis, frame);
+    const normal = new THREE.Vector3(direction.x, direction.y, direction.z);
+    const base = frame ? normal.dot(new THREE.Vector3(frame.origin.x, frame.origin.y, frame.origin.z)) : 0;
+    const hit = toRawPlanePoint(clientX, clientY, new THREE.Plane(normal, -(base + settings.offset)));
     if (!hit) return null;
-    const target = projectSectionPoint([hit.x, hit.y, hit.z], settings.axis);
-    const [nx, ny, nz] = sectionPointToWorld({ u: target.u + 1, v: target.v }, settings.axis, settings.offset);
+    const target = projectSectionPoint(sectionPointToFrame([hit.x, hit.y, hit.z], frame), settings.axis);
+    const [nx, ny, nz] = sectionPointFromFrame(sectionPointToWorld({ u: target.u + 1, v: target.v }, settings.axis, settings.offset), frame);
     const here = projectToScreen(hit, state);
     const there = projectToScreen(new THREE.Vector3(nx, ny, nz), state);
     const pixelsPerMm = Math.max(1e-6, Math.hypot(there.x - here.x, there.y - here.y));
@@ -8387,7 +8396,7 @@ export function WorkplaneViewport({
       return;
     }
 
-    const scaled = zoomDistanceScale(scale, workspaceRef.current.zoomSpeed);
+    const scaled = zoomDistanceScale(scale);
     if (scaled < 1) movePivotToDepthUnder(state, 0, 0);
     if (state.camera instanceof THREE.OrthographicCamera) {
       const range = orthographicZoomRange(state.camera);
@@ -8552,7 +8561,7 @@ export function WorkplaneViewport({
       if (next) {
         setTapeToolsOpen(false);
         if (!sectionSettingsRef.current.enabled) {
-          const bounds = getSectionBounds(shapesRef.current, sectionSettingsRef.current.axis, workspaceRef.current.width, workspaceRef.current.depth);
+          const bounds = getSectionBounds(shapesRef.current, sectionSettingsRef.current.axis, workspaceRef.current.width, workspaceRef.current.depth, sectionSettingsRef.current.frame ?? null);
           setSectionSettings((prev) => ({
             ...prev,
             enabled: true,
@@ -8568,7 +8577,7 @@ export function WorkplaneViewport({
     setSectionSettings((prev) => {
       const next = { ...prev, enabled };
       if (enabled && prev.offset === 0) {
-        const bounds = getSectionBounds(shapesRef.current, prev.axis, workspaceRef.current.width, workspaceRef.current.depth);
+        const bounds = getSectionBounds(shapesRef.current, prev.axis, workspaceRef.current.width, workspaceRef.current.depth, prev.frame ?? null);
         next.offset = bounds.center;
       }
       return next;
@@ -8576,7 +8585,7 @@ export function WorkplaneViewport({
   }, []);
 
   const handleSelectSectionAxis = useCallback((axis: SectionPlaneAxis) => {
-    const bounds = getSectionBounds(shapesRef.current, axis, workspaceRef.current.width, workspaceRef.current.depth);
+    const bounds = getSectionBounds(shapesRef.current, axis, workspaceRef.current.width, workspaceRef.current.depth, sectionSettingsRef.current.frame ?? null);
     setSectionSettings((prev) => ({
       ...prev,
       axis,
@@ -8599,7 +8608,7 @@ export function WorkplaneViewport({
   }, []);
 
   const handleResetSectionToCenter = useCallback(() => {
-    const bounds = getSectionBounds(shapesRef.current, sectionSettingsRef.current.axis, workspaceRef.current.width, workspaceRef.current.depth);
+    const bounds = getSectionBounds(shapesRef.current, sectionSettingsRef.current.axis, workspaceRef.current.width, workspaceRef.current.depth, sectionSettingsRef.current.frame ?? null);
     setSectionSettings((prev) => ({
       ...prev,
       offset: bounds.center,
@@ -8613,22 +8622,69 @@ export function WorkplaneViewport({
     }));
   }, []);
 
+  // What the axes are measured along (#644): the workplane's frame as it is now, or the view at this moment;
+  // null for the design's own axes, or when the view is not there yet.
+  const sectionFrameForOrientation = (orientation: SectionOrientation): SectionFrame | null => {
+    if (orientation === "workplane") return sectionFrameFromWorkplane(placementWorkplaneRef.current);
+    if (orientation !== "view") return null;
+    const state = threeRef.current;
+    if (!state) return null;
+    const forward = state.camera.getWorldDirection(new THREE.Vector3());
+    const right = new THREE.Vector3(1, 0, 0).applyQuaternion(state.camera.quaternion);
+    const { x, y, z } = state.controls.target;
+    return sectionFrameFromView({ x, y, z }, { x: forward.x, y: forward.y, z: forward.z }, { x: right.x, y: right.y, z: right.z });
+  };
+  const sectionFrameForOrientationRef = useRef(sectionFrameForOrientation);
+  sectionFrameForOrientationRef.current = sectionFrameForOrientation;
+
+  // Choosing the workplane or the view starts across its height - parallel to the workplane, or facing the
+  // screen - in the middle of the design; choosing the view again takes the view as it is now.
+  const handleSelectSectionOrientation = useCallback((wanted: SectionOrientation) => {
+    const frame = sectionFrameForOrientationRef.current(wanted);
+    const orientation: SectionOrientation = wanted !== "world" && !frame ? "world" : wanted;
+    const prev = sectionSettingsRef.current;
+    const axis: SectionPlaneAxis = orientation === "world" ? (prev.orientation ?? "world") === "world" ? prev.axis : "x" : "y";
+    const bounds = getSectionBounds(shapesRef.current, axis, workspaceRef.current.width, workspaceRef.current.depth, frame);
+    const next: SectionPlaneSettings = { ...prev, enabled: true, orientation, frame, axis, offset: bounds.center };
+    sectionSettingsRef.current = next;
+    setSectionSettings(next);
+  }, []);
+
+  // On the workplane the plane moves with it: the offset still counts from the workplane.
+  useEffect(() => {
+    const prev = sectionSettingsRef.current;
+    if (prev.orientation !== "workplane") return;
+    const frame = sectionFrameFromWorkplane(placementWorkplane);
+    if (!frame) return;
+    const next = { ...prev, frame };
+    sectionSettingsRef.current = next;
+    setSectionSettings(next);
+  }, [placementWorkplane]);
+
   // MCP: the same rules as the buttons - a new axis, switching on from the
   // start position or `center` put the plane in the middle of the design,
   // unless an offset is given.
   useEffect(() => {
     window.layerlingSectionView = (patch) => {
       const current = sectionSettingsRef.current;
-      const axis = patch.axis ?? current.axis;
-      const bounds = getSectionBounds(shapesRef.current, axis, workspaceRef.current.width, workspaceRef.current.depth);
+      const currentOrientation = current.orientation ?? "world";
+      const orientation = patch.orientation ?? currentOrientation;
+      // A new orientation takes its frame now; the view's is the view at this moment, as the button takes it.
+      const frame = orientation === currentOrientation && orientation !== "view" || orientation === "view" && patch.orientation === undefined
+        ? current.frame ?? null
+        : sectionFrameForOrientationRef.current(orientation);
+      const axis = patch.axis ?? (orientation !== currentOrientation && orientation !== "world" ? "y" : current.axis);
+      const bounds = getSectionBounds(shapesRef.current, axis, workspaceRef.current.width, workspaceRef.current.depth, frame);
       const switchingOn = patch.enabled === true && !current.enabled && current.offset === 0;
-      const recenter = patch.center === true || axis !== current.axis || switchingOn;
+      const recenter = patch.center === true || axis !== current.axis || orientation !== currentOrientation || patch.orientation === "view" || switchingOn;
       const next: SectionPlaneSettings = {
         enabled: patch.enabled ?? current.enabled,
         axis,
         offset: typeof patch.offset === "number" && Number.isFinite(patch.offset) ? patch.offset : recenter ? bounds.center : current.offset,
         flipped: patch.flipped ?? current.flipped,
         showPlane: patch.showPlane ?? current.showPlane,
+        orientation,
+        frame,
       };
       sectionSettingsRef.current = next;
       setSectionSettings(next);
@@ -8849,10 +8905,10 @@ export function WorkplaneViewport({
       } else if ((event.key === "+" || event.key === "=") && !event.ctrlKey && !event.metaKey && !event.altKey) {
         // With Ctrl or Cmd these are the browser's own page zoom, which the page must not swallow.
         event.preventDefault();
-        zoomCamera(0.72);
+        zoomCamera(ZOOM_STEP_IN);
       } else if ((event.key === "-" || event.key === "_") && !event.ctrlKey && !event.metaKey && !event.altKey) {
         event.preventDefault();
-        zoomCamera(1.28);
+        zoomCamera(ZOOM_STEP_OUT);
       }
     };
 
@@ -8904,10 +8960,10 @@ export function WorkplaneViewport({
             >
               <Crosshair size={24} strokeWidth={2.25} />
             </button>
-            <button className="camera-zoom-button" aria-label={t("camera.zoomIn")} aria-keyshortcuts="+" title={t("camera.shortcut", { label: t("camera.zoomIn"), keys: "+" })} onClick={() => zoomCamera(0.7)}>
+            <button className="camera-zoom-button" aria-label={t("camera.zoomIn")} aria-keyshortcuts="+" title={t("camera.shortcut", { label: t("camera.zoomIn"), keys: "+" })} onClick={() => zoomCamera(ZOOM_STEP_IN)}>
               <Plus size={28} strokeWidth={2.15} />
             </button>
-            <button className="camera-zoom-button" aria-label={t("camera.zoomOut")} aria-keyshortcuts="-" title={t("camera.shortcut", { label: t("camera.zoomOut"), keys: "−" })} onClick={() => zoomCamera(1.35)}>
+            <button className="camera-zoom-button" aria-label={t("camera.zoomOut")} aria-keyshortcuts="-" title={t("camera.shortcut", { label: t("camera.zoomOut"), keys: "−" })} onClick={() => zoomCamera(ZOOM_STEP_OUT)}>
               <Minus size={28} strokeWidth={2.15} />
             </button>
             {/* Zwei Finger zoomen und schieben von selbst. Zum Drehen fehlt die
@@ -9069,6 +9125,28 @@ export function WorkplaneViewport({
 
                   {sectionSettings.enabled ? (
                     <>
+                      {/* What X, Y and Z mean (#644): the design's axes, the workplane's, or the view's - then Z runs into the screen. */}
+                      <div className="section-popover-axis-row">
+                        <div className="section-axis-buttons section-orientation-buttons" role="radiogroup" aria-label={t("camera.sectionOrientation")}>
+                          {(["world", "workplane", "view"] as const).map((orientation) => {
+                            const active = (sectionSettings.orientation ?? "world") === orientation;
+                            const name = orientation === "world" ? "World" : orientation === "workplane" ? "Workplane" : "View";
+                            return (
+                              <button
+                                key={orientation}
+                                type="button"
+                                role="radio"
+                                aria-checked={active}
+                                className={`section-axis-btn section-orientation-btn ${active ? "active" : ""}`}
+                                onClick={() => handleSelectSectionOrientation(orientation)}
+                                title={t(`camera.sectionOrientation${name}Hint`)}
+                              >
+                                {t(`camera.sectionOrientation${name}`)}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
                       <div className="section-popover-axis-row">
                         <span className="section-label">{t("camera.sectionAxis")}</span>
                         <div className="section-axis-buttons" role="radiogroup" aria-label={t("camera.sectionAxis")}>
@@ -9100,7 +9178,7 @@ export function WorkplaneViewport({
                       </div>
 
                       {(() => {
-                        const bounds = getSectionBounds(shapes, sectionSettings.axis, workspace.width, workspace.depth);
+                        const bounds = getSectionBounds(shapes, sectionSettings.axis, workspace.width, workspace.depth, sectionSettings.frame ?? null);
                         const fine = sectionFineWindow(bounds);
                         // The Y cut counts towards the back like the position fields (#182); inside it is z.
                         const sign = sectionSettings.axis === "z" ? -1 : 1;
@@ -9249,7 +9327,7 @@ export function WorkplaneViewport({
                           <button
                             type="button"
                             className="section-action-btn"
-                            onClick={() => onExportSectionSvg?.(sectionSettings.axis, sectionSettings.offset)}
+                            onClick={() => onExportSectionSvg?.(sectionSettings.axis, sectionSettings.offset, sectionSettings.frame ?? null)}
                             title={t("camera.sectionExportSvgHint")}
                             aria-label={t("camera.sectionExportSvg")}
                           >
@@ -9554,6 +9632,7 @@ export function WorkplaneViewport({
           shapes={shapes.filter((shape) => selectedIds.includes(shape.id))}
           onSetHole={onSelectionHole}
           onSetColor={onSelectionColor}
+          onUpdateShapes={onSelectionUpdateShapes}
           onToggleLocked={onSelectionLock}
           onToggleHidden={onSelectionHide}
           onInteractionActiveChange={onInteractionActiveChange}
@@ -11087,7 +11166,7 @@ function clearSectionCaps(state: ThreeState) {
 }
 
 /** The filled cut face of the section view: one flat mesh per body, on the plane, in its colour a little darker. */
-function buildSectionCaps(state: ThreeState, bodies: readonly SectionBody[], axis: SectionPlaneAxis, offset: number) {
+function buildSectionCaps(state: ThreeState, bodies: readonly SectionBody[], axis: SectionPlaneAxis, offset: number, frame: SectionFrame | null = null) {
   clearSectionCaps(state);
   const group = new THREE.Group();
   group.name = "SectionCaps";
@@ -11095,7 +11174,7 @@ function buildSectionCaps(state: ThreeState, bodies: readonly SectionBody[], axi
     const cap = sectionCapMesh(body.loops);
     if (cap.triangles.length === 0) continue;
     const positions: number[] = [];
-    cap.points.forEach((point) => positions.push(...sectionPointToWorld(point, axis, offset)));
+    cap.points.forEach((point) => positions.push(...sectionPointFromFrame(sectionPointToWorld(point, axis, offset), frame)));
     const geometry = new THREE.BufferGeometry();
     geometry.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
     geometry.setIndex(cap.triangles);
@@ -11196,7 +11275,25 @@ function updateSectionPlaneHelper(
   const quad = helper.getObjectByName("SectionPlaneQuad") as THREE.Mesh;
   const border = helper.getObjectByName("SectionPlaneBorder") as THREE.LineLoop;
 
-  if (settings.axis === "x") {
+  const frame = settings.frame ?? null;
+  if (frame) {
+    // A turned plane (#644): laid out in the frame as below, then turned into it. The design's box does not
+    // say how far it reaches across a turned plane, so the square spans its diagonal.
+    const [cx, cy, cz] = sectionPointToFrame([center.x, center.y, center.z], frame);
+    const span = Math.max(size.length() * 1.15, 80);
+    const local = settings.axis === "x" ? [settings.offset, cy, cz] : settings.axis === "y" ? [cx, settings.offset, cz] : [cx, cy, settings.offset];
+    const [px, py, pz] = sectionPointFromFrame(local as [number, number, number], frame);
+    helper.position.set(px, py, pz);
+    const basis = new THREE.Matrix4().makeBasis(
+      new THREE.Vector3(frame.xAxis.x, frame.xAxis.y, frame.xAxis.z),
+      new THREE.Vector3(frame.yAxis.x, frame.yAxis.y, frame.yAxis.z),
+      new THREE.Vector3(frame.zAxis.x, frame.zAxis.y, frame.zAxis.z),
+    );
+    const turn = new THREE.Euler(...(settings.axis === "x" ? [0, Math.PI / 2, 0] : settings.axis === "y" ? [-Math.PI / 2, 0, 0] : [0, 0, 0]) as [number, number, number]);
+    helper.quaternion.setFromRotationMatrix(basis).multiply(new THREE.Quaternion().setFromEuler(turn));
+    quad.scale.set(span, span, 1);
+    border.scale.set(span, span, 1);
+  } else if (settings.axis === "x") {
     helper.position.set(settings.offset, center.y, center.z);
     helper.rotation.set(0, Math.PI / 2, 0);
     quad.scale.set(spanZ, spanY, 1);

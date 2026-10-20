@@ -25,6 +25,8 @@ A body that sticks out over the edge of the print plate is marked. A message tel
 
 The warning does not stop you from working on. It is a hint so you do not find out only in the slicer that the part is too big. A part that is too big can often be split: cut it in two with {{ui:editor.tool.split}} and print both halves separately.
 
+If you park parts beside the plate on purpose, click the small cross in the message. The warning is then gone for exactly these bodies. Once one of them fits again and you move it out later, or another body sticks out, the message comes back. Hidden bodies never count, so hiding the parked parts works as well.
+
 ## Laying the part right
 
 How a part lies on the plate decides its strength and looks. Two tools in the {{ui:editor.group.arrange}} area help:

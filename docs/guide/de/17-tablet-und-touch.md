@@ -24,6 +24,8 @@ layerling läuft im Browser eines Tablets und als App vom Startbildschirm. Ein F
 
 Ohne Umschalttaste tut {{ui:contextMenu.selectMultiple}} im Menü des langen Drucks, was am Rechner Umschalt+Klick tut. Solange es an ist, sagt eine Meldung es, und jedes Tippen auf einen Körper nimmt ihn zur Auswahl dazu oder wieder heraus. Ein Tipp auf die leere Fläche, an einer Tastatur [[Esc]], beendet es und lässt die Auswahl, wie sie ist. Ein Finger auf der leeren Fläche dreht währenddessen weiter die Ansicht. Dann wirken {{ui:editor.tool.group}}, {{ui:editor.tool.align}} oder ein Verschieben auf alle gewählten Körper.
 
+Im selben Menü steht {{ui:contextMenu.carry}}, die Taste [[C]] für den Touchscreen. Die Auswahl folgt dann dem Finger über die Flächen anderer Körper; ein Tipp setzt sie auf die Fläche ab, die du antippst, auch auf eine schräge, und schon der erste Tipp genügt. Den Eintrag findest du auch in der Befehlssuche mit „absetzen“ oder „cruise“ ([[Strg]]+[[K]] an einer Tastatur).
+
 ## Ansicht drehen und zoomen
 
 Ein Finger auf der leeren Fläche dreht die Ansicht, zwei Finger zoomen und verschieben sie. Ein Finger, der auf einem Körper beginnt, arbeitet am Körper, nicht an der Ansicht. Soll er lieber die Ansicht drehen, schalte {{ui:camera.touchRotate}} in der Kameraleiste ein: Ein Finger dreht dann die Ansicht statt zu wählen, wo er auch beginnt. Der Schalter erscheint nur auf einem Gerät mit Touchscreen.

@@ -1,6 +1,7 @@
 "use client";
 
 import { AlignCenterHorizontal, AlignCenterVertical, Check, ChevronUp, CornerDownRight, Crop, Crosshair, FlipHorizontal2, FlipVertical2, Home, Layers, Link, Link2Off, LockKeyhole, LockKeyholeOpen, Minus, Plus, Ruler, RulerDimensionLine, Slash, Spline, Split, Trash2, Waves, X } from "lucide-react";
+import { displayedHandle } from "@/lib/sketchBezierHandles";
 import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties, type Dispatch, type SetStateAction, type FocusEvent as ReactFocusEvent, type KeyboardEvent as ReactKeyboardEvent, type MouseEvent as ReactMouseEvent, type PointerEvent as ReactPointerEvent, type WheelEvent as ReactWheelEvent } from "react";
 import { SnapGridControl } from "@/components/workplane/ShapeInspector";
 import { SketchRevolvePreview } from "@/components/SketchRevolvePreview";
@@ -22,7 +23,7 @@ import { pickTouchTarget, type TouchCandidate } from "@/lib/sketchTouch";
 import { isSketchPrimitive, type SketchPrimitive } from "@/lib/sketchPrimitives";
 import { meshForShape } from "@/lib/editorMeshCore";
 import { mirrorSign, resizedImportedMeshPositions } from "@/lib/workplaneShapes";
-import { DEFAULT_SNAP_GRID, DEFAULT_WORKPLANE_WORKSPACE, keyboardNudgeCoarseFactor, keyboardNudgeStep, normalizeSnapGrid, normalizeWorkspaceSettings, snapGridStep as snapStep, orbitControlsZoomSpeed, zoomDistanceScale } from "@/lib/workplaneSettings";
+import { DEFAULT_SNAP_GRID, DEFAULT_WORKPLANE_WORKSPACE, keyboardNudgeCoarseFactor, keyboardNudgeStep, normalizeSnapGrid, normalizeWorkspaceSettings, snapGridStep as snapStep, orbitControlsZoomSpeed, zoomDistanceScale, ZOOM_STEP_IN, ZOOM_STEP_OUT } from "@/lib/workplaneSettings";
 import type { GridSize, SketchImage, SketchOperation, SketchPoint, SketchProfile, SketchSegment, SketchStroke, SketchStrokeAlign, SketchStrokeCap, SketchStrokeJoin, WorkplaneShape, WorkplaneWorkspaceSettings } from "@/types/layerling";
 import { resizePointerOnGrid } from "@/lib/sketchFrameResize";
 import { dragRotationDegrees, rotateSketchPointsAbout, sketchPointsPivot } from "@/lib/sketchRotation";
@@ -33,10 +34,11 @@ import { GuideHelpLink } from "@/components/GuideHelpLink";
 import { clampNudge, constrainToAxis, sketchSegmentDragPointIds, sketchSelectedPointIds, sketchSelectedSegmentIds, sketchSelectionMovePointIds, type SketchSelectableEntity, type SketchSelection } from "@/lib/sketchSelection";
 import { closedPathAt, closedPathRegions, cubicPoint, curveControls, isInsideEdges, orderedPaths, pathEdges, type DisplayPath, type PlaneEdge } from "@/lib/sketchPaths";
 import { capturePointer } from "@/lib/pointerCapture";
+import { arcPreviewPoints, arcThroughThreePoints, type SketchArcEnd } from "@/lib/sketchArc";
 import { constrainToAngle, sketchLineAngle, sketchPolarPoint, splitTypedLine } from "@/lib/sketchPolar";
 
 export type { SketchPrimitive } from "@/lib/sketchPrimitives";
-export type SketchTool = "line" | "bezier" | "smooth" | SketchPrimitive | "select" | "refine" | "erase" | "measure";
+export type SketchTool = "line" | "arc" | "bezier" | "smooth" | SketchPrimitive | "select" | "refine" | "erase" | "measure";
 /** The keys 1 to 4 and the drawing tool each picks, in the order of the tools on the left (#347). */
 export const SKETCH_TOOL_KEYS: Readonly<Record<string, SketchTool>> = { "1": "line", "2": "bezier", "3": "smooth", "4": "refine" };
 export type { SketchSelection } from "@/lib/sketchSelection";
@@ -66,6 +68,8 @@ type SketchWorkspaceProps = {
   fromMiddle?: boolean;
   onPlanePoint: (point: { x: number; z: number }, handles?: { handleIn: { x: number; z: number }; handleOut: { x: number; z: number } }) => void;
   onAddPrimitive: (primitive: SketchPrimitive, center: { x: number; z: number }) => void;
+  /** The three-point arc (#643): first the two ends, then a point the arc runs through. */
+  onAddArc?: (start: SketchArcEnd, through: { x: number; z: number }, end: SketchArcEnd) => void;
   onPointPress: (id: string) => void;
   /** Ends the chain of points being drawn, keeping the tool: a right click on the plane or a double click on the last point (#520). */
   onFinishLine?: () => void;
@@ -578,6 +582,7 @@ export function SketchWorkspace({
   onPlanePoint,
   fromMiddle,
   onAddPrimitive,
+  onAddArc,
   onPointPress,
   onFinishLine,
   onSelectSegment,
@@ -631,6 +636,29 @@ export function SketchWorkspace({
   const [view, setView] = useState<SketchView>({ zoom: 1, pan: { x: 0, z: 0 } });
   const { zoom, pan } = view;
   const [hover, setHover] = useState<{ x: number; z: number } | null>(null);
+  // The three-point arc (#643): the two ends clicked so far; the third click sets the bend.
+  const [arcPicks, setArcPicks] = useState<SketchArcEnd[]>([]);
+  useEffect(() => {
+    setArcPicks([]);
+  }, [tool]);
+  useEffect(() => {
+    if (arcPicks.length === 0) return;
+    const cancel = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setArcPicks([]);
+    };
+    window.addEventListener("keydown", cancel);
+    return () => window.removeEventListener("keydown", cancel);
+  }, [arcPicks.length]);
+  const pickArcPoint = (spot: SketchArcEnd) => {
+    if (arcPicks.length < 2) {
+      const previous = arcPicks[0];
+      if (previous && Math.hypot(previous.x - spot.x, previous.z - spot.z) < 1e-6) return;
+      setArcPicks([...arcPicks, spot]);
+      return;
+    }
+    onAddArc?.(arcPicks[0], { x: spot.x, z: spot.z }, arcPicks[1]);
+    setArcPicks([]);
+  };
   // A handle that was clicked (#347): the arrow keys then move it by one grid step, for a precise shape.
   const [selectedHandle, setSelectedHandle] = useState<{ pointId: string; handle: "in" | "out" } | null>(null);
   useEffect(() => {
@@ -1195,6 +1223,8 @@ export function SketchWorkspace({
     } else if (tool === "select" || (tool === "erase" && onEraseMany)) {
       capturePointer(event.currentTarget, event.pointerId);
       setPointerAction({ kind: "marquee", pointerId: event.pointerId, origin: point, current: point, clientX: event.clientX, clientY: event.clientY });
+    } else if (tool === "arc") {
+      pickArcPoint(point);
     } else if (tool === "line" || tool === "smooth" || tool === "measure") {
       const clickPoint = event.shiftKey && activePoint && ["line", "smooth"].includes(tool)
         ? constrainDrawing(activePoint, point)
@@ -1382,9 +1412,9 @@ export function SketchWorkspace({
     return () => names.forEach((name) => wrap.removeEventListener(name, onGesture));
   }, [workspace]);
 
-  // Matches the 3D editor's buttons: a fixed step raised by the configured zoom speed.
+  // Matches the 3D editor's buttons: a fixed step at the slowest zoom speed, whatever the slider says.
   const zoomByButton = (distanceStep: number) => {
-    const scaled = zoomDistanceScale(distanceStep, workspace.zoomSpeed);
+    const scaled = zoomDistanceScale(distanceStep);
     setView((current) => ({ ...current, zoom: clamp(current.zoom / scaled, SKETCH_MIN_ZOOM, SKETCH_MANUAL_MAX_ZOOM) }));
   };
 
@@ -1470,10 +1500,10 @@ export function SketchWorkspace({
       } else if (event.key === "+" || event.key === "=") {
         // The 3D view's key steps; with Ctrl or Cmd (returned above) they stay the browser's page zoom.
         event.preventDefault();
-        zoomByButton(0.72);
+        zoomByButton(ZOOM_STEP_IN);
       } else if (event.key === "-" || event.key === "_") {
         event.preventDefault();
-        zoomByButton(1.28);
+        zoomByButton(ZOOM_STEP_OUT);
       } else if (onSelectTool && !activePoint && !pointerAction && SKETCH_TOOL_KEYS[event.key]) {
         // 1 to 4 pick the drawing tools, as in Tinkercad (#347). While a line is being drawn the digits
         // are its length (above), so they only come here when no line is in progress.
@@ -1527,7 +1557,7 @@ export function SketchWorkspace({
       window.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("keyup", handleKeyUp);
     };
-  }, [activePoint, focusSelection, onMoveHandle, onSelectTool, onTransformPoints, onUpdateImage, pendingMeasurementStart, pointerAction, profile, resetView, selected, selectedHandle, snap, tool, workspace.depth, workspace.width, workspace.zoomSpeed]);
+  }, [activePoint, focusSelection, onMoveHandle, onSelectTool, onTransformPoints, onUpdateImage, pendingMeasurementStart, pointerAction, profile, resetView, selected, selectedHandle, snap, tool, workspace.depth, workspace.width]);
 
   const beginEntityDrag = (event: ReactPointerEvent<SVGElement>, action: PointerAction) => {
     if (event.button !== 0) return;
@@ -1799,8 +1829,8 @@ export function SketchWorkspace({
         >
           <Crosshair size={28} />
         </button>
-        <button aria-label={t("sketch.zoomIn")} aria-keyshortcuts="+" title={t("camera.shortcut", { label: t("sketch.zoomIn"), keys: "+" })} onClick={() => zoomByButton(0.8)}><Plus size={33} /></button>
-        <button aria-label={t("sketch.zoomOut")} aria-keyshortcuts="-" title={t("camera.shortcut", { label: t("sketch.zoomOut"), keys: "−" })} onClick={() => zoomByButton(1.25)}><Minus size={33} /></button>
+        <button aria-label={t("sketch.zoomIn")} aria-keyshortcuts="+" title={t("camera.shortcut", { label: t("sketch.zoomIn"), keys: "+" })} onClick={() => zoomByButton(ZOOM_STEP_IN)}><Plus size={33} /></button>
+        <button aria-label={t("sketch.zoomOut")} aria-keyshortcuts="-" title={t("camera.shortcut", { label: t("sketch.zoomOut"), keys: "−" })} onClick={() => zoomByButton(ZOOM_STEP_OUT)}><Minus size={33} /></button>
         <button
           className={tool === "measure" ? "active" : ""}
           aria-label={t("camera.tapeTools")}
@@ -2277,7 +2307,18 @@ export function SketchWorkspace({
           })() : null}
           {hover && hoverOnReference ? <circle className="sketch-reference-snap" cx={hover.x} cy={hover.z} r={7 * screenUnit} pointerEvents="none" /> : null}
           {activePoint && previewEnd && pointerAction?.kind !== "bezier" && ["line", "bezier", "smooth"].includes(tool) ? <line className="sketch-preview-line" x1={activePoint.x} y1={activePoint.z} x2={previewEnd.x} y2={previewEnd.z} pointerEvents="none" /> : null}
-          {fromMiddle && tool === "line" && activePoint && previewEnd && pointerAction?.kind !== "bezier" ? <line className="sketch-preview-line" x1={activePoint.x} y1={activePoint.z} x2={2 * activePoint.x - previewEnd.x} y2={2 * activePoint.z - previewEnd.z} pointerEvents="none" /> : null}
+          {tool === "arc" && arcPicks.length === 1 && hover ? (
+            <line className="sketch-preview-line" x1={arcPicks[0].x} y1={arcPicks[0].z} x2={hover.x} y2={hover.z} pointerEvents="none" />
+          ) : null}
+          {tool === "arc" && arcPicks.length === 2 && hover ? (() => {
+            const arc = arcThroughThreePoints(arcPicks[0], hover, arcPicks[1]);
+            if (!arc) return <line className="sketch-preview-line" x1={arcPicks[0].x} y1={arcPicks[0].z} x2={arcPicks[1].x} y2={arcPicks[1].z} pointerEvents="none" />;
+            return <polyline className="sketch-preview-line" fill="none" points={arcPreviewPoints(arc).map((spot) => `${spot.x},${spot.z}`).join(" ")} pointerEvents="none" />;
+          })() : null}
+          {tool === "arc" ? arcPicks.map((pick, index) => (
+            <circle key={`arc-pick-${index}`} className="sketch-cursor-point" cx={pick.x} cy={pick.z} r={hoverPointRadius} pointerEvents="none" />
+          )) : null}
+          {fromMiddle && tool === "line" && activePoint && previewEnd && pointerAction?.kind !== "bezier" ?<line className="sketch-preview-line" x1={activePoint.x} y1={activePoint.z} x2={2 * activePoint.x - previewEnd.x} y2={2 * activePoint.z - previewEnd.z} pointerEvents="none" /> : null}
           {activePoint && pointerAction?.kind === "bezier" ? (() => {
             // While a Bézier point is dragged out, the stretch to it bends live, exactly as it will
             // once let go: its handle on this side mirrors the drag (#196). Before, a straight line
@@ -2341,21 +2382,27 @@ export function SketchWorkspace({
             const start = pointById.get(selectedSegment.startId);
             const end = pointById.get(selectedSegment.endId);
             if (!start?.handleOut || !end?.handleIn) return null;
+            const outHandle = displayedHandle(displayProfile, start, "out") ?? start.handleOut;
+            const inHandle = displayedHandle(displayProfile, end, "in") ?? end.handleIn;
             return (
               <g className="sketch-curve-handles">
-                <line x1={start.x} y1={start.z} x2={start.handleOut.x} y2={start.handleOut.z} />
-                <circle data-sketch-entity="handle" cx={start.handleOut.x} cy={start.handleOut.z} r={controlPointRadius} className={selectedHandle?.pointId === start.id && selectedHandle.handle === "out" ? "sketch-handle-selected" : undefined} onPointerDown={(event) => pressHandle(event, start.id, "out", start.handleOut!)} />
-                <line x1={end.x} y1={end.z} x2={end.handleIn.x} y2={end.handleIn.z} />
-                <circle data-sketch-entity="handle" cx={end.handleIn.x} cy={end.handleIn.z} r={controlPointRadius} className={selectedHandle?.pointId === end.id && selectedHandle.handle === "in" ? "sketch-handle-selected" : undefined} onPointerDown={(event) => pressHandle(event, end.id, "in", end.handleIn!)} />
+                <line x1={start.x} y1={start.z} x2={outHandle.x} y2={outHandle.z} />
+                <circle data-sketch-entity="handle" cx={outHandle.x} cy={outHandle.z} r={controlPointRadius} className={selectedHandle?.pointId === start.id && selectedHandle.handle === "out" ? "sketch-handle-selected" : undefined} onPointerDown={(event) => pressHandle(event, start.id, "out", outHandle)} />
+                <line x1={end.x} y1={end.z} x2={inHandle.x} y2={inHandle.z} />
+                <circle data-sketch-entity="handle" cx={inHandle.x} cy={inHandle.z} r={controlPointRadius} className={selectedHandle?.pointId === end.id && selectedHandle.handle === "in" ? "sketch-handle-selected" : undefined} onPointerDown={(event) => pressHandle(event, end.id, "in", inHandle)} />
               </g>
             );
           })() : null}
-          {selectedPoint && tool === "select" && !mirrorOpen ? (
-            <g className="sketch-curve-handles">
-              {selectedPoint.handleIn ? <><line x1={selectedPoint.x} y1={selectedPoint.z} x2={selectedPoint.handleIn.x} y2={selectedPoint.handleIn.z} /><circle data-sketch-entity="handle" cx={selectedPoint.handleIn.x} cy={selectedPoint.handleIn.z} r={controlPointRadius} className={selectedHandle?.pointId === selectedPoint.id && selectedHandle.handle === "in" ? "sketch-handle-selected" : undefined} onPointerDown={(event) => pressHandle(event, selectedPoint.id, "in", selectedPoint.handleIn!)} /></> : null}
-              {selectedPoint.handleOut ? <><line x1={selectedPoint.x} y1={selectedPoint.z} x2={selectedPoint.handleOut.x} y2={selectedPoint.handleOut.z} /><circle data-sketch-entity="handle" cx={selectedPoint.handleOut.x} cy={selectedPoint.handleOut.z} r={controlPointRadius} className={selectedHandle?.pointId === selectedPoint.id && selectedHandle.handle === "out" ? "sketch-handle-selected" : undefined} onPointerDown={(event) => pressHandle(event, selectedPoint.id, "out", selectedPoint.handleOut!)} /></> : null}
-            </g>
-          ) : null}
+          {selectedPoint && tool === "select" && !mirrorOpen ? (() => {
+            const inHandle = selectedPoint.handleIn ? displayedHandle(displayProfile, selectedPoint, "in") ?? selectedPoint.handleIn : null;
+            const outHandle = selectedPoint.handleOut ? displayedHandle(displayProfile, selectedPoint, "out") ?? selectedPoint.handleOut : null;
+            return (
+              <g className="sketch-curve-handles">
+                {inHandle ? <><line x1={selectedPoint.x} y1={selectedPoint.z} x2={inHandle.x} y2={inHandle.z} /><circle data-sketch-entity="handle" cx={inHandle.x} cy={inHandle.z} r={controlPointRadius} className={selectedHandle?.pointId === selectedPoint.id && selectedHandle.handle === "in" ? "sketch-handle-selected" : undefined} onPointerDown={(event) => pressHandle(event, selectedPoint.id, "in", inHandle)} /></> : null}
+                {outHandle ? <><line x1={selectedPoint.x} y1={selectedPoint.z} x2={outHandle.x} y2={outHandle.z} /><circle data-sketch-entity="handle" cx={outHandle.x} cy={outHandle.z} r={controlPointRadius} className={selectedHandle?.pointId === selectedPoint.id && selectedHandle.handle === "out" ? "sketch-handle-selected" : undefined} onPointerDown={(event) => pressHandle(event, selectedPoint.id, "out", outHandle)} /></> : null}
+              </g>
+            );
+          })() : null}
           <g className="sketch-points">
             {displayProfile.points.map((point) => (
               <circle
@@ -2374,6 +2421,9 @@ export function SketchWorkspace({
                   event.stopPropagation();
                   if (event.button === 1) {
                     beginPan(event);
+                  } else if (event.button === 0 && tool === "arc") {
+                    // An end on an existing point joins it; as the third click it only gives the bend.
+                    pickArcPoint({ x: point.x, z: point.z, pointId: point.id });
                   } else if (tool === "erase" || tool === "refine") {
                     onDeletePoint(point.id);
                   } else if (event.button === 0 && tool === "select" && event.shiftKey) {
@@ -2382,6 +2432,9 @@ export function SketchWorkspace({
                   } else if (event.button === 0 && tool === "select") {
                     onPointPress(point.id);
                     beginEntityDrag(event, { kind: "move-point", pointerId: event.pointerId, pointId: point.id, origin: { x: point.x, z: point.z }, current: { x: point.x, z: point.z } });
+                  } else if (event.button === 0 && tool === "bezier" && activePointId !== point.id) {
+                    // A Bezier side may start or end on a point that is already there, and pulling handles out of it works as on empty plane (#635).
+                    beginEntityDrag(event, { kind: "bezier", pointerId: event.pointerId, origin: { x: point.x, z: point.z }, current: { x: point.x, z: point.z } });
                   } else if (event.button === 0) {
                     onPointPress(point.id);
                   }
@@ -2497,7 +2550,7 @@ export function SketchWorkspace({
               ) : null}
             </g>
           ) : null}
-          {hover && ["line", "bezier", "smooth", "measure"].includes(tool) ? <circle className="sketch-cursor-point" cx={hover.x} cy={hover.z} r={hoverPointRadius} pointerEvents="none" /> : null}
+          {hover && ["line", "arc", "bezier", "smooth", "measure"].includes(tool) ? <circle className="sketch-cursor-point" cx={hover.x} cy={hover.z} r={hoverPointRadius} pointerEvents="none" /> : null}
         </svg>
         {typedLine && activePoint ? (() => {
           const overlayPos = getOverlayPos(typedLine.sketchPos);

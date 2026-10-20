@@ -4571,6 +4571,21 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .shape-inspector .name-
   color: #d86a00;
 }
 
+:where(html[data-theme="dark"][data-palette="graphite"]) .bed-overhang-dismiss {
+  color: inherit;
+  background: transparent;
+  border: 0;
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .bed-overhang-dismiss:hover,
+:where(html[data-theme="dark"][data-palette="graphite"]) .bed-overhang-dismiss:focus-visible {
+  background: rgba(216, 106, 0, 0.14);
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .bed-overhang-dismiss svg {
+  color: inherit;
+}
+
 :where(html[data-theme="dark"][data-palette="graphite"]) .workspace-toggle {
   border-bottom: 1px solid #e8e8e8;
 }

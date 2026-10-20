@@ -25,6 +25,8 @@ Ein Körper, der über den Rand der Druckplatte hinausragt, wird markiert. Dazu 
 
 Die Warnung hindert dich nicht am Weiterarbeiten. Sie ist ein Hinweis, damit du nicht erst im Slicer feststellst, dass das Teil zu groß ist. Ein zu großes Teil lässt sich oft aufteilen: schneide es mit {{ui:editor.tool.split}} in zwei Hälften und drucke beide getrennt.
 
+Legst du Teile absichtlich neben der Platte ab, klick auf das kleine Kreuz in der Meldung. Dann ist die Warnung für genau diese Körper weg. Passt einer davon wieder und du schiebst ihn später erneut hinaus, oder ragt ein anderer Körper über, erscheint die Meldung wieder. Ausgeblendete Körper zählen nie mit, das Ausblenden der abgelegten Teile hilft also auch.
+
 ## Das Teil richtig hinlegen
 
 Wie ein Teil auf der Platte liegt, entscheidet über Festigkeit und Aussehen. Dabei helfen zwei Werkzeuge im Bereich {{ui:editor.group.arrange}}:

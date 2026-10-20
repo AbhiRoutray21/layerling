@@ -24,6 +24,8 @@ layerling runs in the browser of a tablet, and as an app from its home screen. A
 
 Without a Shift key, {{ui:contextMenu.selectMultiple}} in the menu of a long press does what Shift+click does on a computer. While it is on, a message says so, and each tap on a body adds it to the selection or takes it out again. A tap on empty space, or [[Esc]] on a keyboard, ends it and leaves the selection as it is. A finger on empty space still turns the view meanwhile. Then {{ui:editor.tool.group}}, {{ui:editor.tool.align}} or a move work on all the bodies you picked.
 
+The same menu has {{ui:contextMenu.carry}}, the key [[C]] for a touch screen. The selection then follows the finger over the faces of other bodies; a tap sets it down on the face you tap, even a sloped one, and the first tap is enough. The menu entry is also found by searching for "set down" or "cruise" (the command search, [[Ctrl]]+[[K]] on a keyboard).
+
 ## Turning and zooming the view
 
 One finger on empty space turns the view, two fingers zoom and move it. A finger that starts on a body works on the body, not on the view. If you would rather have it turn the view, switch on {{ui:camera.touchRotate}} in the camera bar: one finger then turns the view instead of selecting, wherever it starts. That switch only shows on a device with a touch screen.
