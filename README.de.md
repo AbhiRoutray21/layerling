@@ -328,7 +328,7 @@ Diesen Weg nimmst du, wenn du den Quelltext ändern willst.
 
 ### Was du brauchst
 
-- Node.js 20 oder neuer
+- Node.js 22.18 oder neuer (die Skripte für Anleitung und Schriften laden TypeScript-Dateien direkt, das können ältere Versionen nicht); 24 geht auch, das Docker-Image nutzt es
 - npm, in Node.js enthalten
 
 Die Versionen prüfst du mit `node -v` und `npm -v`. Funktionieren die Befehle nicht, installiere Node.js von der

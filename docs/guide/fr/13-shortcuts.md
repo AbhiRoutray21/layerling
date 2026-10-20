@@ -35,4 +35,4 @@ Vous ne trouvez pas où lire quelque chose sur un bouton ou un champ ? Laissez l
 
 La fenêtre se déplace par sa barre de titre comme les autres. Le programme trouve la section grâce au nom de l'élément - l'intitulé d'un bouton, le nom d'un champ - parce que ce guide écrit chaque bouton comme il s'appelle dans le programme. Il le cherche avec la même recherche que la zone en haut de chaque page du guide, dans la langue que vous utilisez, et tout se passe dans votre navigateur.
 
-{{raccourcis}}
+{{shortcuts}}

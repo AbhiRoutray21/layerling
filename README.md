@@ -318,7 +318,7 @@ Take this path if you want to change the code.
 
 ### What You Need
 
-- Node.js 20 or newer
+- Node.js 22.18 or newer (the guide and font scripts load TypeScript files directly, which older versions cannot); 24 works too, the Docker image uses it
 - npm, included with Node.js
 
 Check your versions with `node -v` and `npm -v`. If those commands do not work, install Node.js from the official

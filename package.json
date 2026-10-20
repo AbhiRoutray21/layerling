@@ -8,13 +8,16 @@
   },
   "homepage": "https://github.com/henmedia/layerling",
   "license": "AGPL-3.0-only",
+  "engines": {
+    "node": ">=22.18"
+  },
   "scripts": {
     "copy:occt": "node scripts/copy-occt-wasm.mjs",
     "fonts:japanese": "node scripts/build-japanese-typeface.mjs",
     "clean:cache": "node scripts/clean-next-cache.mjs",
-    "predev": "npm run copy:occt && npm run fonts:japanese && npm run guide",
+    "predev": "node scripts/check-node-version.mjs && npm run copy:occt && npm run fonts:japanese && npm run guide",
     "dev": "next dev apps/web",
-    "prebuild": "npm run copy:occt && npm run fonts:japanese && npm run guide",
+    "prebuild": "node scripts/check-node-version.mjs && npm run copy:occt && npm run fonts:japanese && npm run guide",
     "build": "next build apps/web",
     "export": "node scripts/build-static-export.mjs",
     "verify:static-worker-assets": "node scripts/verify-static-worker-assets.mjs",

@@ -7,7 +7,7 @@ summary: Lettrage en relief ou gravé en sept caractères ou un de votre choix, 
 
 Choisissez {{ui:shape.text}} dans la bibliothèque de formes et placez-le. Dans le champ {{ui:prop.text}} à droite, saisissez ce qu'il doit dire. Les paramètres ci-dessous :
 
-- **{{ui:prop.font}} :** Sept polices de caractères sont disponibles : Multilingue, Sans, Serif, Script, Monospace, Rounded et Pochoir (lettres constituées de lignes droites). Le nouveau texte commence en Sans. Des lettres accentuées telles que ä, ö, ü, é et le signe € figurent dans chaque police. Vos propres polices viennent en tête, voir [Vos propres polices](#your-own-fonts) ci-dessous.
+- **{{ui:prop.font}} :** Sept polices de caractères sont disponibles : Multilingue, Sans, Serif, Script, Monospace, Rounded et Pochoir (lettres constituées de lignes droites). Le nouveau texte commence en Sans. Des lettres accentuées telles que ä, ö, ü, é et le signe € figurent dans chaque police. Vos propres polices viennent en tête, voir [Vos propres polices](#vos-propres-polices) ci-dessous.
 - **{{ui:nameTag.letterSize}} :** Quelle est la taille des lettres, vues d'en haut ; {{ui:prop.height}} définit leur épaisseur.
 - **{{ui:prop.height}} :** Dans quelle mesure le lettrage se détache de la surface.
 - **{{ui:prop.bevel}} :** Arrondit les bords des lettres pour qu'ils paraissent plus doux. Avec {{ui:prop.segments}}, vous décidez du nombre d'étapes.

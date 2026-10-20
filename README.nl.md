@@ -313,7 +313,7 @@ Kies deze route als je de code wilt aanpassen.
 
 ### Wat je nodig hebt
 
-- Node.js 20 of nieuwer
+- Node.js 22.18 of nieuwer (de scripts voor de handleiding en de lettertypen laden TypeScript-bestanden rechtstreeks, en dat kunnen oudere versies niet); 24 werkt ook, de Docker-image gebruikt die
 - npm, meegeleverd met Node.js
 
 Controleer je versies met `node -v` en `npm -v`. Werken die commando's niet, installeer dan Node.js vanaf de officiële
