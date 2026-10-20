@@ -4,7 +4,6 @@ import { normalizeSketchStroke, SKETCH_STROKE_JOINS } from "@/lib/sketchStroke";
 import { normalizeTextEdge } from "@/lib/textEdge";
 import { textOutlineClearance, textOutlineReach } from "@/lib/textFill";
 import { DEFAULT_KEYRING_DIAMETER, KEYRING_HOLE_EDGE_DISTANCE, keyringEarRadius, MAX_KEYRING_DIAMETER, MIN_KEYRING_DIAMETER, TEXT_KEYRING_SIDES, textFillExtent, textKeyringOf, textKeyringReach, textLetterBox, textLetterOffset } from "@/lib/textGeometry";
-import { shapeDepth, shapeWidth } from "@/lib/workplaneShapes";
 import type { SketchStroke, SketchStrokeJoin, TextEdge, TextKeyring, TextKeyringSide, WorkplaneShape } from "@/types/layerling";
 
 /**
@@ -72,16 +71,6 @@ export function normalizeTextLayers(layers: unknown): TextLayer[] | null {
 
 /** A name tag's key ring hole as the card sets it: the side and the hole's diameter. */
 export type NameTagKeyring = { side: TextKeyringSide; diameter: number };
-
-export function normalizeNameTagKeyring(value: unknown): NameTagKeyring | null {
-  if (!value || typeof value !== "object") return null;
-  const candidate = value as Partial<NameTagKeyring>;
-  const diameter = Number(candidate.diameter ?? DEFAULT_KEYRING_DIAMETER);
-  return {
-    side: TEXT_KEYRING_SIDES.includes(candidate.side as TextKeyringSide) ? candidate.side as TextKeyringSide : "left",
-    diameter: Number.isFinite(diameter) ? Math.min(MAX_KEYRING_DIAMETER, Math.max(MIN_KEYRING_DIAMETER, diameter)) : DEFAULT_KEYRING_DIAMETER,
-  };
-}
 
 /**
  * layerling_layer_text's `keyring` (#215): left out it stays as it is (undefined); false or null
@@ -281,7 +270,3 @@ export function nameTagOffsets(count: number, width: number, depth: number, gap 
   }));
 }
 
-/** A text shape's box as it stands - what a tag of it needs on the plate. */
-export function textFootprint(shape: WorkplaneShape) {
-  return { width: shapeWidth(shape), depth: shapeDepth(shape) };
-}

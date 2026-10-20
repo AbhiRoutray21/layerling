@@ -7,7 +7,7 @@ import { loftedTextEdge } from "@/lib/textEdgeLoft";
 import { loadedManifoldRuntime, requestManifoldRuntime } from "@/lib/manifoldHandle";
 import { normalizeSketchStroke, strokeRegion, type Keep } from "@/lib/sketchStroke";
 import { createTextGeometry, keyringEarRadius, textGlyphShapes, textKeyringCenter, textKeyringOf, textLetterOffset } from "@/lib/textGeometry";
-import type { TextEdge, TextKeyringSide, WorkplaneShape } from "@/types/layerling";
+import type { TextKeyringSide, WorkplaneShape } from "@/types/layerling";
 
 /**
  * Fill modes for the Text shape (#215, as similar tools's): instead of the filled letters, a line
@@ -92,7 +92,7 @@ function textRegion(runtime: ManifoldToplevel, keep: Keep, shape: WorkplaneShape
   }).filter((letter): letter is CrossSection => Boolean(letter));
   if (!letters.length) return null;
   const region = keep(runtime.CrossSection.union(letters));
-  return stroke ? strokeRegion(runtime, keep, region, stroke) : region;
+  return stroke ? strokeRegion(keep, region, stroke) : region;
 }
 
 /**
