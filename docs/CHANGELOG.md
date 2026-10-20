@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+## 1.93.0
+
 - **A traced picture with many touching outlines comes in whole (#584):** A black-and-white drawing traced from a picture (the guitarist of a second file) came in as a handful of pieces, about a fifth of its area. The kernel built the body well, but at a few corners where outlines meet it was left with an edge of four triangles, so the check threw the body away and the plain build, which leaves out any outline it cannot close, put in only fragments. When the first closing (0.05) leaves such an edge, the kernel now tries 0.1, 0.2 and 0.35 and takes the first body that is clean; the drawing keeps its 345 x 277 mm and all its outlines. Reported by @stefaanl on GitHub.
 
 - **Chamfer + Round on a cone with a pointed tip rounds the right edge (forum, DrJones):** On a cone that ends in a point, the foot came out as a round that ran straight down with a kink where it met the wall, and no chamfer on the plate. The tip of the wall is an edge of no length, and the check that tells the old wall from a new face failed on it, so the wall was taken for a new face and the edge between the plate and the chamfer was rounded instead of the one between the chamfer and the wall. That edge is now left out of the check; a cone with a tip gets the chamfer on the plate and the round into the wall, like a cylinder or a truncated cone. A very flat cone (a wall flatter than the 45 degree chamfer) still cannot take a chamfer + round, as the chamfer would stand steeper than the wall.
