@@ -65,11 +65,13 @@ import { ToolbarImportIcon } from "@/components/toolbarIcons";
 import { writeDesignView } from "@/lib/designView";
 import { useFileAccept } from "@/lib/fileAccept";
 import { lylFileAccessSupported, onLylFilesLaunched, pickFilesToImport, rememberLylFile, type LylFileHandle } from "@/lib/lylFileAccess";
-import { exportLylProject, importLylProject, LYL_CREATED_WITH_VERSION, LYL_MEDIA_TYPE } from "@/lib/lylProject";
-import { backupDesignAlreadyThere, backupEntryPaths, backupFileName, backupFolderPaths, unpackBackupFolders, isBackupFileName, packBackup, unpackBackup, zipHoldsDesigns } from "@/lib/projectBackup";
+import { exportLylProject, importLylProject, inspectLylProjectPackage, LYL_CREATED_WITH_VERSION, LYL_MEDIA_TYPE } from "@/lib/lylProject";
+import { backupDesignAlreadyThere, backupEntryPaths, backupFileName, backupFolderPaths, backupThumbnailPath, unpackBackupFolders, isBackupFileName, packBackup, unpackBackup, zipHoldsDesigns } from "@/lib/projectBackup";
 import { customShapesBackupEntries, restoreCustomShapesFromBackup } from "@/lib/myShapes";
 import { SHARED_PROJECTS_ENDPOINT } from "@/lib/sharedProjectsEndpoint";
 import { PICTURE_FILE_ACCEPT } from "@/lib/pictureIcon";
+import { designsToRecover, isInlineThumbnail, orphanedProjectIds, projectListForLocalStorage, withStoredThumbnails, writeProjectList } from "@/lib/designListStorage";
+import { deleteDesignThumbnail, loadDesignThumbnails, saveDesignThumbnail } from "@/lib/designThumbnailStore";
 import { DEFAULT_SNAP_GRID, DEFAULT_WORKPLANE_WORKSPACE, normalizeSnapGrid, normalizeWorkspaceSettings, readWorkspaceDefault, workplaneSettingsFingerprint } from "@/lib/workplaneSettings";
 import type { GridSize, ProjectAsset, WorkplaneShape, WorkplaneWorkspaceSettings } from "@/types/layerling";
 
@@ -484,6 +486,35 @@ async function projectThumbnailBlob(thumbnailUrl: string | null | undefined): Pr
 }
 
 /**
+ * The card picture as PNG bytes for a backup, or nothing. A picture kept as a data address is
+ * read without fetching it.
+ */
+async function projectThumbnailPngBytes(thumbnailUrl: string | null | undefined): Promise<Uint8Array | null> {
+  if (!thumbnailUrl) return null;
+  const inline = /^data:image\/png;base64,(.+)$/.exec(thumbnailUrl);
+  if (inline) {
+    try {
+      const text = atob(inline[1]);
+      const bytes = new Uint8Array(text.length);
+      for (let index = 0; index < text.length; index += 1) bytes[index] = text.charCodeAt(index);
+      return bytes;
+    } catch {
+      return null;
+    }
+  }
+  if (thumbnailUrl.startsWith("data:")) return null;
+  const blob = await projectThumbnailBlob(thumbnailUrl);
+  return blob ? new Uint8Array(await blob.arrayBuffer()) : null;
+}
+
+/** PNG bytes from a backup as the data address a card picture is handed over with. */
+function pngDataUrl(bytes: Uint8Array) {
+  let text = "";
+  for (let index = 0; index < bytes.length; index += 0x8000) text += String.fromCharCode(...bytes.subarray(index, index + 0x8000));
+  return `data:image/png;base64,${btoa(text)}`;
+}
+
+/**
  * Das Kartenbild als Datenadresse, egal wie es abgelegt ist: im statischen
  * Export steht es schon so da, sonst liegt es hinter einer Adresse und wird
  * dafuer einmal geholt. So bekommt eine Kopie ihr eigenes Bild, statt auf das
@@ -652,6 +683,86 @@ async function deleteProjectShapes(projectId: string) {
   });
 }
 
+/** The ids of every design whose shapes are kept in this browser. */
+async function storedProjectShapeIds(): Promise<string[]> {
+  const database = await openProjectShapesDb();
+  try {
+    return await new Promise<string[]>((resolve, reject) => {
+      const transaction = database.transaction(PROJECT_SHAPES_STORE_NAME, "readonly");
+      const request = transaction.objectStore(PROJECT_SHAPES_STORE_NAME).getAllKeys();
+      request.onsuccess = () => resolve(request.result.filter((key): key is string => typeof key === "string"));
+      request.onerror = () => reject(request.error ?? new Error("Could not list project shapes"));
+    });
+  } finally {
+    database.close();
+  }
+}
+
+async function loadProjectShapeRecord(projectId: string): Promise<ProjectShapeRecord | null> {
+  const database = await openProjectShapesDb();
+  try {
+    return await new Promise<ProjectShapeRecord | null>((resolve, reject) => {
+      const transaction = database.transaction(PROJECT_SHAPES_STORE_NAME, "readonly");
+      const request = transaction.objectStore(PROJECT_SHAPES_STORE_NAME).get(projectId);
+      request.onsuccess = () => resolve((request.result as ProjectShapeRecord | undefined) ?? null);
+      request.onerror = () => reject(request.error ?? new Error("Could not load project shapes"));
+    });
+  } finally {
+    database.close();
+  }
+}
+
+/**
+ * Cards for the designs whose shapes are still here although the list lost them - a full storage could wipe the
+ * list before 1.95.0 (#656). Name, dates and settings come from the stored package; one that cannot be read is
+ * left where it is, and so is a second copy of a design that is already back.
+ */
+async function recoverOrphanedProjects(listed: DashboardProject[]): Promise<DashboardProject[]> {
+  const orphans = orphanedProjectIds(listed.map((project) => project.id), await storedProjectShapeIds());
+  const candidates: Array<{ id: string; name: string; createdAt: number; revision: number; record: ProjectShapeRecord; bytes: Uint8Array }> = [];
+  for (const projectId of orphans) {
+    try {
+      const record = await loadProjectShapeRecord(projectId);
+      const stored = record?.lylPackage ?? record?.skfPackage;
+      if (!record || !stored) continue;
+      const bytes = new Uint8Array(stored);
+      const summary = await inspectLylProjectPackage(bytes);
+      candidates.push({ id: projectId, name: summary.projectName, createdAt: summary.createdAt, revision: record.revision, record, bytes });
+    } catch {
+      // Unreadable: it stays in the database untouched, nothing is lost by leaving it.
+    }
+  }
+  const recovered: DashboardProject[] = [];
+  for (const { id: projectId, record, bytes } of designsToRecover(listed, candidates)) {
+    try {
+      const restored = await importLylProject(bytes);
+      const updatedAt = Number.isFinite(restored.modifiedAt) ? restored.modifiedAt : (record.updatedAt ?? Date.now());
+      recovered.push({
+        id: projectId,
+        name: restored.projectName,
+        createdAt: Number.isFinite(restored.createdAt) ? restored.createdAt : updatedAt,
+        updatedAt,
+        shapes: restored.shapes.length,
+        accent: PROJECT_ACCENTS[(listed.length + recovered.length) % PROJECT_ACCENTS.length],
+        thumbnailUrl: null,
+        revision: record.revision,
+        workspace: restored.workspace,
+        snapGrid: restored.snapGrid,
+        placementElevation: restored.placementElevation,
+        placementWorkplane: restored.placementWorkplane,
+        sketchPlacementWorkplane: restored.sketchPlacementWorkplane,
+        folderId: null,
+      });
+    } catch {
+      // Unreadable: it stays in the database untouched, nothing is lost by leaving it.
+    }
+  }
+  return recovered;
+}
+
+/** The card pictures read from their own database, so a list read again from localStorage gets them back. */
+const knownDesignThumbnails = new Map<string, string>();
+
 function readStoredProjects() {
   const legacyShapes: Record<string, ProjectShapeCacheEntry> = {};
   if (typeof window === "undefined") return { projects: [] as DashboardProject[], legacyShapes };
@@ -674,7 +785,7 @@ function readStoredProjects() {
           updatedAt,
           shapes: typeof project.shapes === "number" ? project.shapes : (designShapes?.length ?? 0),
           accent: PROJECT_ACCENTS.includes(project.accent as DashboardProject["accent"]) ? (project.accent as DashboardProject["accent"]) : PROJECT_ACCENTS[index % PROJECT_ACCENTS.length],
-          thumbnailUrl: typeof project.thumbnailUrl === "string" ? project.thumbnailUrl : null,
+          thumbnailUrl: typeof project.thumbnailUrl === "string" && project.thumbnailUrl ? project.thumbnailUrl : (knownDesignThumbnails.get(id) ?? null),
           thumbnailVersion: typeof project.thumbnailVersion === "number" ? project.thumbnailVersion : undefined,
           revision,
           workspace: normalizeWorkspaceSettings(project.workspace),
@@ -975,6 +1086,19 @@ export default function Home() {
     setResolvedTheme(resolveAppTheme(storedTheme, systemPrefersDark));
     const { projects: storedProjects, legacyShapes } = readStoredProjects();
     setProjects(storedProjects);
+    void (async () => {
+      const thumbnails = await loadDesignThumbnails();
+      thumbnails.forEach((dataUrl, projectId) => {
+        if (!knownDesignThumbnails.has(projectId)) knownDesignThumbnails.set(projectId, dataUrl);
+      });
+      // Designs whose card the list lost come back from their stored shapes (#656).
+      const recovered = await recoverOrphanedProjects(storedProjects).catch(() => []);
+      setProjects((current) => {
+        const listed = new Set(current.map((project) => project.id));
+        const added = recovered.filter((project) => !listed.has(project.id));
+        return withStoredThumbnails(added.length ? [...current, ...added] : current, knownDesignThumbnails);
+      });
+    })();
     const storedFolders = readDesignFolders();
     designFoldersJsonRef.current = JSON.stringify(storedFolders);
     setDesignFolders(storedFolders);
@@ -1036,23 +1160,22 @@ export default function Home() {
     if (!mounted) return;
     const localSerialized = JSON.stringify(projects);
     const storageProjects = mergeProjectsForStorage(projects);
-    const serialized = JSON.stringify(storageProjects);
+    // The card pictures go to their own database; the list in localStorage stays small (#656).
+    storageProjects.forEach((project) => {
+      if (!isInlineThumbnail(project.thumbnailUrl) || knownDesignThumbnails.get(project.id) === project.thumbnailUrl) return;
+      knownDesignThumbnails.set(project.id, project.thumbnailUrl);
+      void saveDesignThumbnail(project.id, project.thumbnailUrl).catch(() => undefined);
+    });
+    const serialized = JSON.stringify(projectListForLocalStorage(storageProjects));
     if (projectsJsonRef.current === serialized) return;
-    try {
-      window.localStorage.setItem(PROJECTS_STORAGE_KEY, serialized);
-    } catch (error) {
-      try {
-        window.localStorage.removeItem(PROJECTS_STORAGE_KEY);
-        window.localStorage.setItem(PROJECTS_STORAGE_KEY, serialized);
-      } catch {
-        // The browser's own text ("QuotaExceededError ... exceeded the quota") helps nobody.
-        void error;
-        setDashboardNotice(t("notice.projectListSaveFailed"));
-        return;
-      }
+    // A list that does not fit leaves the one before it in place (#656). The browser's own text
+    // ("QuotaExceededError ... exceeded the quota") helps nobody.
+    if (!writeProjectList(window.localStorage, PROJECTS_STORAGE_KEY, serialized)) {
+      setDashboardNotice(t("notice.projectListSaveFailed"));
+      return;
     }
     projectsJsonRef.current = serialized;
-    if (serialized !== localSerialized) {
+    if (JSON.stringify(storageProjects) !== localSerialized) {
       setProjects(storageProjects);
     }
   }, [mounted, projects]);
@@ -1458,7 +1581,7 @@ export default function Home() {
       if (!changed) return current;
       try {
         const storageProjects = mergeProjectsForStorage(next);
-        const serialized = JSON.stringify(storageProjects);
+        const serialized = JSON.stringify(projectListForLocalStorage(storageProjects));
         window.localStorage.setItem(PROJECTS_STORAGE_KEY, serialized);
         projectsJsonRef.current = serialized;
         return next;
@@ -1582,6 +1705,8 @@ export default function Home() {
     });
     projectIds.forEach((projectId) => {
       if (!STATIC_EXPORT_BUILD) void fetch(`/api/project-thumbnail?projectId=${encodeURIComponent(projectId)}`, { method: "DELETE" });
+      knownDesignThumbnails.delete(projectId);
+      void deleteDesignThumbnail(projectId);
       void deleteProjectShapes(projectId).catch(() => setDashboardNotice(t("notice.projectShapesDeleteFailed")));
     });
   }, []);
@@ -1952,6 +2077,9 @@ export default function Home() {
       for (let index = 0; index < projects.length; index += 1) {
         setDashboardNotice(t("notice.backingUp", { index: index + 1, total: projects.length }));
         entries.push({ name: names[index], bytes: await projectPackageBytes(projects[index]) });
+        // The card picture goes along, so a restore shows it at once.
+        const thumbnail = await projectThumbnailPngBytes(projects[index].thumbnailUrl);
+        if (thumbnail) entries.push({ name: backupThumbnailPath(names[index]), bytes: thumbnail });
       }
       entries.push(...shapeEntries);
       // Folders with no design anywhere inside them go along as empty folders.
@@ -2004,6 +2132,7 @@ export default function Home() {
     let restoredFolders = designFolders;
     let failed = 0;
     let alreadyThere = 0;
+    const restoredThumbnails: { projectId: string; image: string; shapes: number }[] = [];
     for (let index = 0; index < entries.length; index += 1) {
       setDashboardNotice(t("notice.restoringBackup", { index: index + 1, total: entries.length }));
       try {
@@ -2033,12 +2162,16 @@ export default function Home() {
         if (restored.view) writeDesignView(project.id, restored.view);
         restoredProjects.push(project);
         restoredEntries[project.id] = entry;
+        const thumbnail = entries[index].thumbnail;
+        if (thumbnail) restoredThumbnails.push({ projectId: project.id, image: pngDataUrl(thumbnail), shapes: restored.shapes.length });
       } catch {
         failed += 1;
       }
     }
     setProjectShapesById((current) => ({ ...current, ...restoredEntries }));
     setProjects((current) => [...restoredProjects, ...current]);
+    // The pictures the backup holds go back on their cards; a design without one gets it when opened.
+    for (const snapshot of restoredThumbnails) await updateProjectSnapshot(snapshot).catch(() => undefined);
     // Only the folders a restored design is in are made, and the empty folders the backup holds;
     // a folder of designs that were already here is not.
     const usedFolders = new Set(restoredProjects.map((project) => project.folderId).filter(Boolean) as string[]);
@@ -2058,7 +2191,7 @@ export default function Home() {
     setDashboardNotice((failed
       ? t("notice.backupRestoredPartly", { count: restoredProjects.length, failed, name: file.name })
       : t("notice.backupRestored", { count: restoredProjects.length, name: file.name })) + skippedNote + shapesNote);
-  }, [designFolders, projects]);
+  }, [designFolders, projects, updateProjectSnapshot]);
 
   const importFilesFromDashboard = useCallback(
     async (files: File[], fileHandle?: LylFileHandle) => {
@@ -2178,6 +2311,8 @@ export default function Home() {
     if (!STATIC_EXPORT_BUILD) {
       void fetch(`/api/project-thumbnail?projectId=${encodeURIComponent(projectId)}`, { method: "DELETE" });
     }
+    knownDesignThumbnails.delete(projectId);
+    void deleteDesignThumbnail(projectId);
     void deleteProjectShapes(projectId).catch(() => {
       setDashboardNotice(t("notice.projectShapesDeleteFailed"));
     });

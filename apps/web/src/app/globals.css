@@ -495,6 +495,9 @@ body {
   color: var(--foreground);
   font-family: var(--font-ui);
   letter-spacing: 0;
+  /* On a Mac the default smoothing makes the heavy weights look thick and soft on Retina screens. */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 button,
@@ -6439,6 +6442,11 @@ html[data-theme="dark"] .sketch-image-hint {
 .sketch-segments path.construction.selected {
   stroke: #ff8a00;
   stroke-width: 3;
+}
+
+/* A locked outline (#653): paler, in any theme, so it reads as fixed. */
+.sketch-segments path.locked {
+  stroke-opacity: 0.5;
 }
 
 .sketch-preview-line {

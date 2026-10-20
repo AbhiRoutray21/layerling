@@ -13,7 +13,7 @@ Z miško:
 | kratek klik z desnim gumbom | na telesu meni z najpogostejšimi ukazi: podvoji, luknja ali telo, združi v skupino, skrij, zakleni, izbriši in več; na prazni površini Prilepi in Izberi vse |
 | vlečenje s srednjim gumbom | premikanje pogleda |
 | kolesce miške | približevanje in oddaljevanje |
-| drži [[Ctrl]] in vleci z levim gumbom | prav tako premikanje |
+| drži [[Ctrl]] / [[Cmd]] in vleci z levim gumbom | prav tako premikanje |
 
 Hitrost zumiranja s kolescem nastaviš z {{ui:workspace.zoomSpeed}} v nastavitvah, pod {{ui:workspace.appearance}}: drsnik od 1 do 14, na začetku 5; nad 10 se pospeši le kolešček.
 

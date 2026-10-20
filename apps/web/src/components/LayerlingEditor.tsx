@@ -43,6 +43,7 @@ import {
   sketchPrimitiveGeometry,
 } from "@/lib/sketchPrimitives";
 import { cloneSketchProfile, orderedSketchPaths, withSegmentHandles, withSmoothSketchHandles } from "@/lib/sketchSmoothHandles";
+import { changesLockedOutline, setSketchPointsLocked, sketchLockState } from "@/lib/sketchLock";
 import { curveSketchSegment, isSegmentCurved, straightenSketchSegment } from "@/lib/sketchSegmentCurve";
 import { chordHandles, withBezierHandles, withBezierStartHandle } from "@/lib/sketchBezierHandles";
 import { sketchProfileWithoutPoint } from "@/lib/sketchPointRemoval";
@@ -4386,6 +4387,11 @@ export function LayerlingEditor({
       const carried = "stroke" in next || !latest?.stroke ? next : { ...next, stroke: latest.stroke };
       // Moving shapes over each other makes no shared points where their lines cross (#239); drawing does.
       const snapshot = cloneSketchProfile(latest && onlyMovesPoints(latest, carried) ? carried : addLineIntersectionPoints(carried, createLocalId));
+      // A locked outline (#653) stays as it is, whatever tool tried to change it.
+      if (latest && changesLockedOutline(latest, snapshot)) {
+        setNotice(t("status.sketchOutlineLocked"));
+        return;
+      }
       setSketchProfile(snapshot);
       if (latest && JSON.stringify(latest) === JSON.stringify(snapshot)) {
         return;
@@ -4839,6 +4845,17 @@ export function LayerlingEditor({
       image.locked ? "Sketch image unlocked" : "Sketch image locked",
     );
   }, [sketchProfile.images, sketchSelection, updateSketchImage]);
+
+  /** Locks the selected outline (#653), or unlocks it when all of it is locked. */
+  const toggleSketchOutlineLock = useCallback(() => {
+    const pointIds = sketchSelectedPointIds(sketchSelection);
+    if (!pointIds.length) {
+      setNotice(t("status.selectSketchOutlineLock"));
+      return;
+    }
+    const locked = sketchLockState(sketchProfile, pointIds) !== "all";
+    commitSketchProfile(setSketchPointsLocked(sketchProfile, pointIds, locked), t(locked ? "status.sketchOutlineLockedOn" : "status.sketchOutlineUnlocked"));
+  }, [commitSketchProfile, sketchProfile, sketchSelection]);
 
   const deleteSelectedSketchEntity = useCallback(() => {
     if (!sketchSelection) {
@@ -11596,7 +11613,9 @@ export function LayerlingEditor({
           rotateSelectedClosedSketch45();
         } else if (!shortcut && !event.altKey && (event.code === "KeyL" || key === "l")) {
           event.preventDefault();
-          toggleSelectedSketchImageLock();
+          // L locks what is selected: the template image, or an outline (#653).
+          if (sketchSelection && sketchSelection.kind !== "image") toggleSketchOutlineLock();
+          else toggleSelectedSketchImageLock();
         }
         return;
       }
@@ -11921,6 +11940,7 @@ export function LayerlingEditor({
     startEdgeModifier,
     toggleLocked,
     toggleSelectedSketchImageLock,
+    toggleSketchOutlineLock,
     toolbarMode,
     undo,
     ungroupSelected,
@@ -12337,6 +12357,7 @@ export function LayerlingEditor({
             onDeletePoint={deleteSketchPoint}
             onDeleteSegment={deleteSketchSegment}
             onMovePoint={moveSketchPoint}
+            onToggleOutlineLock={toggleSketchOutlineLock}
             onTransformPoints={transformSketchPoints}
             onMoveHandle={moveSketchHandle}
             onSelectTool={chooseSketchTool}

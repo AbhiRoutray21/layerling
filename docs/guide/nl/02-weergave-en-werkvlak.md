@@ -13,7 +13,7 @@ Met de muis:
 | klikken met de rechterknop | op een lichaam een menu met de meestgebruikte opdrachten: dupliceren, gat of lichaam, groeperen, verbergen, vergrendelen, verwijderen en meer; op een lege plek Plakken en Alles selecteren |
 | slepen met de middelste knop | de weergave verschuiven |
 | scrollwiel | in- en uitzoomen |
-| [[Ctrl]] ingedrukt houden en slepen met de linkerknop | verschuift ook de weergave |
+| [[Ctrl]] / [[Cmd]] ingedrukt houden en slepen met de linkerknop | verschuift ook de weergave |
 
 Hoe snel het muiswiel zoomt, stel je in bij de instellingen onder {{ui:workspace.appearance}} met {{ui:workspace.zoomSpeed}}: een schuifregelaar van 1 tot 14, eerst 5; boven 10 wordt alleen het wiel sneller.
 

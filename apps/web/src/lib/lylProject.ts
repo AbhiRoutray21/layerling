@@ -1168,6 +1168,7 @@ function validateSketchProfile(value: unknown, label: string) {
     pointIds.add(id);
     finiteNumber(point.x, `${label}.points[${index}].x`);
     finiteNumber(point.z, `${label}.points[${index}].z`);
+    if (point.locked !== undefined && typeof point.locked !== "boolean") throw new Error(`${label}.points[${index}].locked must be true or false`);
   });
   const segmentIds = new Set<string>();
   profile.segments.forEach((rawSegment, index) => {

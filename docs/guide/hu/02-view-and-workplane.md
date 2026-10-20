@@ -13,7 +13,7 @@ Egérrel:
 | kattintás jobb gombbal | egy testen menü a leggyakoribb parancsokkal: másolat készítése, lyuk vagy tömör, csoportosítás, elrejtés, zárolás, törlés és még több; üres helyen Beillesztés és Az összes kijelölése |
 | húzás középső gombbal | a nézet mozgatása |
 | egérgörgő | nagyítás és kicsinyítés |
-| [[Ctrl]] nyomva tartása és húzás bal gombbal | szintén a nézetet mozgatja |
+| [[Ctrl]] / [[Cmd]] nyomva tartása és húzás bal gombbal | szintén a nézetet mozgatja |
 
 Hogy a görgő milyen gyorsan nagyít, azt a beállításokban a {{ui:workspace.appearance}} alatt a {{ui:workspace.zoomSpeed}} adja meg: egy csúszka 1-től 14-ig, kezdetben 5-ön; 10 fölött csak a görgő gyorsul.
 

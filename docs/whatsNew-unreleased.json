@@ -1,12 +1,62 @@
 [
   {
     "title": {
+      "de": "Verschwundene Entwürfe kommen zurück",
+      "en": "Vanished designs come back"
+    },
+    "body": {
+      "de": "Bei vielen Entwürfen konnte der Speicher des Browsers volllaufen, und die Startseite zeigte danach nur noch leere Ordner. Die Entwürfe selbst waren nicht weg: Die Startseite holt sie jetzt von selbst zurück, und die Vorschaubilder brauchen keinen Platz mehr in der Liste.",
+      "en": "With many designs the browser's storage could fill up, and the start page then showed only empty folders. The designs themselves were not gone: the start page now brings them back by itself, and the card pictures no longer take room in the list."
+    }
+  },
+  {
+    "title": {
+      "de": "Sicherungen mit Vorschaubildern",
+      "en": "Backups with card pictures"
+    },
+    "body": {
+      "de": "„Alle sichern“ nimmt jetzt die Vorschaubilder der Karten mit. Nach dem Einspielen einer Sicherung sind die Bilder gleich wieder da, ohne dass du jeden Entwurf öffnen musst.",
+      "en": "\"Back up all\" now takes the card pictures along. After restoring a backup the pictures are back at once, without opening every design."
+    }
+  },
+  {
+    "title": {
       "de": "Fächer in Gridfinity-Behältern",
       "en": "Compartments in Gridfinity bins"
     },
     "body": {
       "de": "Einen Gridfinity-Behälter kannst du jetzt in Fächer teilen: Stell unter „Fächer“ die „Spalten“ und „Reihen“ ein und schieb jede Trennwand dorthin, wo du sie brauchst. Griffmulden wiederholen sich in jedem Fach, und jedes Fach kann eine eigene Etikettenleiste bekommen.",
       "en": "A Gridfinity bin can now be divided into compartments: set \"Columns\" and \"Rows\" under \"Compartments\", and move each divider to where you need it. Finger scoops repeat in every compartment, and each compartment can have a label shelf of its own."
+    }
+  },
+  {
+    "title": {
+      "de": "Strg oder Cmd + Ziehen verschiebt die Ansicht",
+      "en": "Ctrl or Cmd + drag moves the view"
+    },
+    "body": {
+      "de": "Mit gedrückter Strg-Taste (am Mac Cmd) und linker Maustaste verschiebst du die Ansicht, statt sie zu drehen. Auf dem Trackpad eines MacBooks: Cmd halten, drücken und ziehen.",
+      "en": "Holding Ctrl (Cmd on a Mac) and dragging with the left button moves the view instead of turning it. On a MacBook trackpad: hold Cmd, press and drag."
+    }
+  },
+  {
+    "title": {
+      "de": "Verrundungen lassen keine Lücken mehr",
+      "en": "Fillets no longer leave gaps"
+    },
+    "body": {
+      "de": "Eine Verrundung konnte an einer Ecke ein Netz mit feinen Lücken hinterlassen. Der Körper sah im Schnitt hohl aus, und der nächste Schnitt oder das Teilen brach mit „Not manifold“ ab. Solche Netze werden jetzt gleich geschlossen.",
+      "en": "A fillet could leave a mesh with fine gaps at a corner. The body looked hollow in the section view, and the next cut or split stopped with \"Not manifold\". Such meshes are now closed right away."
+    }
+  },
+  {
+    "title": {
+      "de": "Umrisse in der Skizze sperren",
+      "en": "Lock outlines in the sketch"
+    },
+    "body": {
+      "de": "Wählst du in der Skizze einen Umriss aus, sperrt ihn „Sperren“ in der Leiste oder die Taste L: Er lässt sich dann nicht mehr verschieben, skalieren oder bearbeiten, bis du ihn wieder entsperrst. Daneben hält „Proportionen beibehalten“ das Seitenverhältnis beim Ziehen an den Griffen und beim Eintippen eines Maßes, auch ohne Umschalt.",
+      "en": "Select an outline in the sketch, and \"Lock\" in the bar or the key L locks it: it can then no longer be moved, resized or changed until you unlock it. Next to it, \"Keep proportions\" holds the aspect ratio when you drag the handles or type a size, without Shift."
     }
   }
 ]

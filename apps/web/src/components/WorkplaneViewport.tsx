@@ -14,6 +14,7 @@ import { acceleratedRaycast, computeBoundsTree, disposeBoundsTree } from "three-
 import { groupShowsPartColors } from "@/lib/groupColors";
 import { triangleTouchesRect, type ScreenRect } from "@/lib/screenRectHit";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+import { leftButtonCameraAction } from "@/lib/cameraMouseButtons";
 import { RoundedBoxGeometry } from "three/examples/jsm/geometries/RoundedBoxGeometry.js";
 import { LineMaterial } from "three/examples/jsm/lines/LineMaterial.js";
 import { LineSegments2 } from "three/examples/jsm/lines/LineSegments2.js";
@@ -9923,7 +9924,8 @@ function createThreeScene(host: HTMLDivElement): ThreeState {
     if (event.pointerType !== "touch" && (event.button === 1 || event.button === 2 || (event.button === 0 && (event.ctrlKey || event.metaKey)))) {
       cameraPointers.set(event.pointerId, event);
     }
-    controls.mouseButtons.LEFT = event.button === 0 && (event.ctrlKey || event.metaKey) ? THREE.MOUSE.PAN : null;
+    // Ctrl or Cmd with the left button moves the view (#654), see leftButtonCameraAction.
+    controls.mouseButtons.LEFT = leftButtonCameraAction(event);
     controls.mouseButtons.MIDDLE = THREE.MOUSE.PAN;
     controls.mouseButtons.RIGHT = THREE.MOUSE.ROTATE;
   };

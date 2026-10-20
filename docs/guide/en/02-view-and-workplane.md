@@ -13,7 +13,7 @@ With the mouse:
 | click the right button | on a body, a menu with the most used commands: duplicate, hole or solid, group, hide, lock, delete and more; on empty space Paste and Select all |
 | drag with the middle button | move the view |
 | mouse wheel | zoom in and out |
-| hold [[Ctrl]] and drag with the left button | also moves the view |
+| hold [[Ctrl]] / [[Cmd]] and drag with the left button | also moves the view (on a MacBook trackpad: hold [[Cmd]], press and drag) |
 
 How fast the wheel zooms is set with {{ui:workspace.zoomSpeed}} in the settings, under {{ui:workspace.appearance}}: a slider from 1 to 14, 5 to begin with. It sets the wheel and the trackpad only: the buttons and the keys [[+]] and [[−]] always zoom in the same small steps. One notch of a mouse wheel zooms alike in every browser, a trackpad zooms with how far you stroke.
 

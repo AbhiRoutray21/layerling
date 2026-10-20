@@ -26,6 +26,8 @@ import { mirrorSign, resizedImportedMeshPositions } from "@/lib/workplaneShapes"
 import { DEFAULT_SNAP_GRID, DEFAULT_WORKPLANE_WORKSPACE, keyboardNudgeCoarseFactor, keyboardNudgeStep, normalizeSnapGrid, normalizeWorkspaceSettings, snapGridStep as snapStep, orbitControlsZoomSpeed, zoomDistanceScale, ZOOM_STEP_IN, ZOOM_STEP_OUT } from "@/lib/workplaneSettings";
 import type { GridSize, SketchImage, SketchOperation, SketchPoint, SketchProfile, SketchSegment, SketchStroke, SketchStrokeAlign, SketchStrokeCap, SketchStrokeJoin, WorkplaneShape, WorkplaneWorkspaceSettings } from "@/types/layerling";
 import { resizePointerOnGrid } from "@/lib/sketchFrameResize";
+import { resizeSketchPoints, resizeSketchPointsToSize, type ResizeHandle, type SelectionBounds } from "@/lib/sketchSelectionResize";
+import { changesLockedOutline, sketchLockState } from "@/lib/sketchLock";
 import { dragRotationDegrees, rotateSketchPointsAbout, sketchPointsPivot } from "@/lib/sketchRotation";
 import { calibrateImage, centreImage, cropImage, imageAngleTo, imageCorners, imageCropViewBox, imageHandlePositions, imageRotateHandle, imageToWorld, normalizeImageRotation, resizeImage, rotateImage, uncropImage } from "@/lib/sketchImageTransform";
 import { DEFAULT_SKETCH_STROKE, SKETCH_STROKE_ALIGNS, SKETCH_STROKE_CAPS, SKETCH_STROKE_JOINS } from "@/lib/sketchStroke";
@@ -85,6 +87,8 @@ type SketchWorkspaceProps = {
   onDeletePoint: (id: string) => void;
   onDeleteSegment: (id: string) => void;
   onMovePoint: (id: string, point: { x: number; z: number }) => void;
+  /** Locks the selected outline, or unlocks it when all of it is locked (#653). */
+  onToggleOutlineLock?: () => void;
   onTransformPoints: (points: SketchPoint[], message?: string, keyRunKey?: string) => void;
   onMoveHandle: (id: string, handle: "in" | "out", point: { x: number; z: number }, keyRunKey?: string) => void;
   /** The keys 1 to 4 pick Line, Bezier, Smooth Curve and Add or Remove Points, as in Tinkercad (#347). */
@@ -136,10 +140,9 @@ type PointerAction =
   | { kind: "rotate-image"; pointerId: number; imageId: string; startAngle: number; current: { x: number; z: number }; start: SketchImage; snap: boolean }
   | { kind: "crop-image"; pointerId: number; imageId: string; handle: ResizeHandle; current: { x: number; z: number }; start: SketchImage };
 
-type ResizeHandle = "nw" | "n" | "ne" | "e" | "se" | "s" | "sw" | "w";
-type SelectionBounds = { minX: number; maxX: number; minZ: number; maxZ: number; width: number; depth: number; cx: number; cz: number };
 
 const SKETCH_MEASUREMENTS_STORAGE_KEY = "layerling.sketch.measurements";
+const SKETCH_KEEP_PROPORTIONS_STORAGE_KEY = "layerling.sketch.keepProportions";
 
 function snapValue(value: number, step: number) {
   return step > 0 ? Math.round(value / step) * step : value;
@@ -182,42 +185,6 @@ function translateSketchPoints(points: SketchPoint[], dx: number, dz: number) {
 // The edge follows the pointer minus the gap the handle stands off it.
 function resizeTarget(action: { current: { x: number; z: number }; grab?: { x: number; z: number } }) {
   return action.grab ? { x: action.current.x - action.grab.x, z: action.current.z - action.grab.z } : action.current;
-}
-
-function resizeSketchPoints(points: SketchPoint[], bounds: SelectionBounds, handle: ResizeHandle, current: { x: number; z: number }, proportional = false) {
-  const minimum = 0.5;
-  let minX = bounds.minX;
-  let maxX = bounds.maxX;
-  let minZ = bounds.minZ;
-  let maxZ = bounds.maxZ;
-  if (handle.includes("w")) minX = Math.min(current.x, bounds.maxX - minimum);
-  if (handle.includes("e")) maxX = Math.max(current.x, bounds.minX + minimum);
-  if (handle.includes("n")) minZ = Math.min(current.z, bounds.maxZ - minimum);
-  if (handle.includes("s")) maxZ = Math.max(current.z, bounds.minZ + minimum);
-  const width = Math.max(minimum, bounds.width);
-  const depth = Math.max(minimum, bounds.depth);
-  let scaleX = (maxX - minX) / width;
-  let scaleZ = (maxZ - minZ) / depth;
-  // Shift on a corner keeps the proportions (#168): both sides take the larger stretch, from the opposite corner.
-  if (proportional && handle.length === 2) {
-    const scale = Math.max(scaleX, scaleZ);
-    scaleX = scale;
-    scaleZ = scale;
-    if (handle.includes("w")) minX = bounds.maxX - width * scale;
-    else maxX = bounds.minX + width * scale;
-    if (handle.includes("n")) minZ = bounds.maxZ - depth * scale;
-    else maxZ = bounds.minZ + depth * scale;
-  }
-  const map = (value: { x: number; z: number }) => ({
-    x: minX + (value.x - bounds.minX) * scaleX,
-    z: minZ + (value.z - bounds.minZ) * scaleZ,
-  });
-  return points.map((point) => ({
-    ...point,
-    ...map(point),
-    handleIn: point.handleIn ? map(point.handleIn) : undefined,
-    handleOut: point.handleOut ? map(point.handleOut) : undefined,
-  }));
 }
 
 function sketchSelectionBounds(selected: SketchSelection, profile: SketchProfile, images: SketchImage[], pointById: Map<string, SketchPoint>) {
@@ -595,6 +562,7 @@ export function SketchWorkspace({
   onDeletePoint,
   onDeleteSegment,
   onMovePoint,
+  onToggleOutlineLock,
   onTransformPoints,
   onMoveHandle,
   onSelectTool,
@@ -727,7 +695,28 @@ export function SketchWorkspace({
     );
     return fittedScale > 0 ? 1 / fittedScale : Math.max(width, depth) / 720;
   }, [depth, svgSize.height, svgSize.width, width]);
-  const displayProfile = useMemo(() => {
+  // "Keep proportions" (#653): the frame's handles and typed sizes stretch both ways alike, as Shift does on a corner.
+  const [keepProportions, setKeepProportions] = useState(false);
+  const keepProportionsRef = useRef(false);
+  keepProportionsRef.current = keepProportions;
+  useEffect(() => {
+    try {
+      if (window.localStorage.getItem(SKETCH_KEEP_PROPORTIONS_STORAGE_KEY) === "true") setKeepProportions(true);
+    } catch {
+      // Without storage the switch simply starts off.
+    }
+  }, []);
+  const toggleKeepProportions = () => {
+    const next = !keepProportionsRef.current;
+    keepProportionsRef.current = next;
+    setKeepProportions(next);
+    try {
+      window.localStorage.setItem(SKETCH_KEEP_PROPORTIONS_STORAGE_KEY, String(next));
+    } catch {
+      // The switch still holds for this session.
+    }
+  };
+  const previewProfile = useMemo(() => {
     if (pointerAction?.kind === "move-selection") {
       const moved = translateSketchPoints(
         pointerAction.startPoints,
@@ -738,7 +727,7 @@ export function SketchWorkspace({
       return { ...profile, points: profile.points.map((point) => movedById.get(point.id) ?? point) };
     }
     if (pointerAction?.kind === "resize-selection") {
-      const resized = resizeSketchPoints(pointerAction.startPoints, pointerAction.bounds, pointerAction.handle, resizeTarget(pointerAction), pointerAction.proportional);
+      const resized = resizeSketchPoints(pointerAction.startPoints, pointerAction.bounds, pointerAction.handle, resizeTarget(pointerAction), pointerAction.proportional || keepProportions);
       const resizedById = new Map(resized.map((point) => [point.id, point]));
       return { ...profile, points: profile.points.map((point) => resizedById.get(point.id) ?? point) };
     }
@@ -781,6 +770,8 @@ export function SketchWorkspace({
     }
     return profile;
   }, [pointerAction, profile]);
+  // A drag that would move a locked outline (#653) shows nothing moving: the editor refuses it on release.
+  const displayProfile = useMemo(() => previewProfile !== profile && changesLockedOutline(profile, previewProfile) ? profile : previewProfile, [previewProfile, profile]);
   const displayImages = useMemo(() => {
     const images = profile.images ?? [];
     if (pointerAction?.kind === "move-image") {
@@ -839,6 +830,9 @@ export function SketchWorkspace({
     ? selected.pointIds.map((id) => pointById.get(id)).filter((point): point is SketchPoint => Boolean(point))
     : [];
   const selectedGeometryBounds = boundsForSketchPoints(selectedGeometryPoints);
+  // A selection with a locked outline in it (#653) has no handles to stretch or turn it.
+  const selectionLock = selected?.kind === "multiple" ? sketchLockState(profile, selected.pointIds) : "none";
+  const selectionLocked = selectionLock !== "none";
   const isPointSelected = (id: string) => selected?.kind === "point" ? selected.id === id : selected?.kind === "multiple" ? selected.pointIds.includes(id) : false;
   const isSegmentSelected = (id: string) => selected?.kind === "segment" ? selected.id === id : selected?.kind === "multiple" ? selected.segmentIds.includes(id) : false;
   const [localCornerDialog, setLocalCornerDialog] = useState<"fillet" | "chamfer" | null>(null);
@@ -993,8 +987,7 @@ export function SketchWorkspace({
         const current = editingBoxSize.axis === "x" ? bounds.width : bounds.depth;
         const size = resolveMeasurementInput(editingBoxSize.value, current);
         if (Number.isFinite(size) && size > 0) {
-          const target = editingBoxSize.axis === "x" ? { x: bounds.minX + size, z: bounds.maxZ } : { x: bounds.maxX, z: bounds.minZ + size };
-          onTransformPoints(resizeSketchPoints(startPoints, bounds, editingBoxSize.axis === "x" ? "e" : "s", target), t("sketch.shapeResized"));
+          onTransformPoints(resizeSketchPointsToSize(startPoints, bounds, editingBoxSize.axis, size, keepProportionsRef.current), t("sketch.shapeResized"));
         }
       }
     }
@@ -1349,7 +1342,7 @@ export function SketchWorkspace({
         t("sketch.shapeMoved"),
       );
     } else if (action.kind === "resize-selection") {
-      onTransformPoints(resizeSketchPoints(action.startPoints, action.bounds, action.handle, resizeTarget(action), action.proportional), t("sketch.shapeResized"));
+      onTransformPoints(resizeSketchPoints(action.startPoints, action.bounds, action.handle, resizeTarget(action), action.proportional || keepProportionsRef.current), t("sketch.shapeResized"));
     } else if (action.kind === "move-point") {
       onMovePoint(action.pointId, action.current);
     } else if (action.kind === "move-handle") {
@@ -1624,7 +1617,7 @@ export function SketchWorkspace({
     minZ: selectedGeometryBounds.minZ - selectionFrameGap,
     maxZ: selectedGeometryBounds.maxZ + selectionFrameGap,
   } : null;
-  const selectionResizeHandles: Array<{ id: ResizeHandle; x: number; z: number; grab: { x: number; z: number } }> = selectedGeometryBounds && selectionFrame ? ([
+  const selectionResizeHandles: Array<{ id: ResizeHandle; x: number; z: number; grab: { x: number; z: number } }> = selectedGeometryBounds && selectionFrame && !selectionLocked ? ([
     // Corners stretch both ways (Shift keeps the proportions), the sides one way only (#168).
     { id: "nw", x: selectionFrame.minX, z: selectionFrame.minZ },
     { id: "n", x: selectedGeometryBounds.cx, z: selectionFrame.minZ },
@@ -2029,7 +2022,7 @@ export function SketchWorkspace({
               <path
                 data-sketch-entity="segment"
                 data-segment-id={segment.id}
-                className={[isSegmentSelected(segment.id) ? "selected" : "", segment.construction ? "construction" : ""].filter(Boolean).join(" ")}
+                className={[isSegmentSelected(segment.id) ? "selected" : "", segment.construction ? "construction" : "", pointById.get(segment.startId)?.locked && pointById.get(segment.endId)?.locked ? "locked" : ""].filter(Boolean).join(" ")}
                 key={segment.id}
                 d={segmentData(segment, pointById)}
                 onPointerMove={(event) => {
@@ -2215,7 +2208,7 @@ export function SketchWorkspace({
                   { axis: "x" as const, label: widthLabel, pill: widthPill, at: { x: selectedGeometryBounds.cx, z: selectedGeometryBounds.minZ - selectionFrameGap - labelOffset } },
                   { axis: "z" as const, label: depthLabel, pill: depthPill, at: { x: selectedGeometryBounds.maxX + selectionFrameGap + 34 * screenUnit, z: selectedGeometryBounds.cz } },
                 ]).map(({ axis, label, pill, at }) => {
-                  const editable = selected?.kind === "multiple";
+                  const editable = selected?.kind === "multiple" && !selectionLocked;
                   return (
                     <g
                       key={`box-size-${axis}`}
@@ -2262,7 +2255,7 @@ export function SketchWorkspace({
                     }}
                   />
                 ))}
-                {selectionFrame && selected?.kind === "multiple" && !selected.imageIds?.length ? (() => {
+                {selectionFrame && selected?.kind === "multiple" && !selected.imageIds?.length && !selectionLocked ? (() => {
                   // A round handle above the frame turns the selection about its middle (#330).
                   const centreX = (selectionFrame.minX + selectionFrame.maxX) / 2;
                   // Above the width figure that stands over the frame, so the two do not cover each other.
@@ -2833,6 +2826,34 @@ export function SketchWorkspace({
                 </>
               ) : null}
               {mirrorButton}
+              {selected?.kind === "multiple" && selected.pointIds.length > 1 ? (
+                <>
+                  <span className="sketch-point-divider" />
+                  <button
+                    type="button"
+                    className={keepProportions ? "active" : ""}
+                    aria-pressed={keepProportions}
+                    title={t("sketch.keepProportionsHint")}
+                    onClick={toggleKeepProportions}
+                  >
+                    {keepProportions ? <Link /> : <Link2Off />}
+                    <span>{t("sketch.keepProportions")}</span>
+                  </button>
+                  {onToggleOutlineLock ? (
+                    <button
+                      type="button"
+                      className={selectionLock === "all" ? "active" : ""}
+                      aria-pressed={selectionLock === "all"}
+                      aria-keyshortcuts="L"
+                      title={t(selectionLock === "all" ? "sketch.unlockOutlineHint" : "sketch.lockOutlineHint")}
+                      onClick={onToggleOutlineLock}
+                    >
+                      {selectionLock === "all" ? <LockKeyhole /> : <LockKeyholeOpen />}
+                      <span>{t(selectionLock === "all" ? "sketch.unlockOutline" : "sketch.lockOutline")}</span>
+                    </button>
+                  ) : null}
+                </>
+              ) : null}
               <GuideHelpLink section={manyCorners ? "sketchCorners" : "sketchCurve"} className="sketch-corner-help" iconSize={17} />
             </>
           )}

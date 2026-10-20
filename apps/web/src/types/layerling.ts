@@ -401,6 +401,8 @@ export type SketchPoint = {
   handleIn?: { x: number; z: number };
   handleOut?: { x: number; z: number };
   mode?: "corner" | "smooth" | "split";
+  /** Part of a locked outline (#653): the point keeps its place, and the sides between locked points stay as they are. */
+  locked?: boolean;
 };
 
 export type SketchSegment = {

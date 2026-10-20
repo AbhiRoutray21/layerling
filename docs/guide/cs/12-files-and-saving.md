@@ -20,7 +20,7 @@ Při desítkách projektů jeden seznam nestačí. Na úvodní stránce vytvoř�
 - **Přejmenovat a smazat** najdete v nabídce složky. Smazáním složky se nesmaže žádný projekt: její obsah se posune o úroveň výš.
 - **Vyhledávání** prochází všechny složky; nalezený projekt ukazuje svou složku a kliknutím na ni ji otevřete.
 
-{{ui:dashboard.backupAll}} zachová složky: projekty jsou v záložním souboru ve svých složkách a obnovení je vrátí na místo. Složky tohoto prohlížeče jsou oddělené od složek na serveru.
+{{ui:dashboard.backupAll}} zachová složky: projekty jsou v záložním souboru ve svých složkách a obnovení je vrátí na místo. Složky tohoto prohlížeče jsou oddělené od složek na serveru. Náhledové obrázky karet jsou v souboru také, takže po obnovení jsou hned zpět.
 
 ## Zálohování a předávání
 

@@ -13,7 +13,7 @@ Med musen:
 | klik med højre knap | på en form, en menu med de mest brugte kommandoer: duplikér, hul eller solid, gruppér, skjul, lås, slet og mere; på tom plads Indsæt og Vælg alle |
 | træk med midterste knap | flyt visningen |
 | musehjul | zoom ind og ud |
-| hold [[Ctrl]] og træk med venstre knap | flytter også visningen |
+| hold [[Ctrl]] / [[Cmd]] og træk med venstre knap | flytter også visningen |
 
 På en tablet eller telefon zoomer to fingre (spred og knib) og flytter visningen (glid sammen). Én finger arbejder på designet, ligesom venstre museknap. For at dreje med én finger, slå {{ui:camera.touchRotate}} til i kamerabjælken. Den kontakt vises kun på enheder med en berøringsskærm.
 

@@ -20,7 +20,7 @@ Bei Dutzenden Entwürfen reicht eine Liste nicht mehr. Auf der Startseite legt {
 - **Umbenennen und Löschen** stehen im Menü des Ordners. Das Löschen eines Ordners löscht keinen Entwurf: Was darin lag, rückt eine Ebene nach oben.
 - **Die Suche** schaut in jeden Ordner; ein gefundener Entwurf zeigt seinen Ordner, und ein Klick darauf öffnet ihn.
 
-{{ui:dashboard.backupAll}} nimmt die Ordner mit: Die Entwürfe liegen in der Sicherungsdatei in ihren Ordnern, und das Wiederherstellen legt sie dorthin zurück. Die Ordner dieses Browsers sind andere als die Ordner auf einem Server.
+{{ui:dashboard.backupAll}} nimmt die Ordner mit: Die Entwürfe liegen in der Sicherungsdatei in ihren Ordnern, und das Wiederherstellen legt sie dorthin zurück. Die Ordner dieses Browsers sind andere als die Ordner auf einem Server. Die Vorschaubilder der Karten kommen mit in die Datei und sind nach dem Wiederherstellen gleich wieder da.
 
 ## Sichern und Weitergeben
 

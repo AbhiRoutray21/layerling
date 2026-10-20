@@ -13,7 +13,7 @@ Ovládání myší:
 | kliknutí pravým tlačítkem | na tělese nabídka nejčastějších příkazů: duplikování, plné těleso/výřez, sloučení, skrytí, zamknutí, smazání a další; na prázdném místě vložení a výběr všeho |
 | tažení prostředním tlačítkem | posun pohledu |
 | kolečko | přiblížení a oddálení |
-| [[Ctrl]] a tažení levým tlačítkem | také posun pohledu |
+| [[Ctrl]] / [[Cmd]] a tažení levým tlačítkem | také posun pohledu |
 
 Rychlost přiblížení nastavuje {{ui:workspace.zoomSpeed}} v části {{ui:workspace.appearance}}. Posuvník má rozsah 1 až 14, výchozí je 5; nad 10 se zrychluje jen kolečko.
 

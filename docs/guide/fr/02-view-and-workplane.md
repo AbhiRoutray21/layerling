@@ -13,7 +13,7 @@ Avec la souris :
 | cliquez sur le bouton droit | sur un corps, un menu avec les commandes les plus utilisées : dupliquer, percer ou solide, grouper, masquer, verrouiller, supprimer et plus encore ; sur un espace vide Coller et tout sélectionner |
 | faites glisser avec le bouton du milieu | déplacer la vue |
 | molette de la souris | zoomer et dézoomer |
-| maintenez [[Ctrl]] et faites glisser avec le bouton gauche | déplace également la vue |
+| maintenez [[Ctrl]] / [[Cmd]] et faites glisser avec le bouton gauche | déplace également la vue |
 
 La vitesse de zoom de la molette se règle avec {{ui:workspace.zoomSpeed}} dans les paramètres, sous {{ui:workspace.appearance}} : un curseur de 1 à 14, réglé sur 5 au départ ; au-dessus de 10, seule la molette devient plus rapide.
 

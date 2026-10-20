@@ -13,7 +13,7 @@ Myszą:
 | klikasz prawym przyciskiem | na bryle menu z najczęstszymi poleceniami: duplikuj, otwór lub bryła, grupuj, ukryj, zablokuj, usuń i inne; na pustym miejscu Wklej i Zaznacz wszystko |
 | przeciągasz środkowym przyciskiem | przesuwasz widok |
 | kręcisz kółkiem myszy | przybliżasz i oddalasz |
-| trzymasz [[Ctrl]] i przeciągasz lewym przyciskiem | też przesuwasz widok |
+| trzymasz [[Ctrl]] / [[Cmd]] i przeciągasz lewym przyciskiem | też przesuwasz widok |
 
 Szybkość przybliżania kółkiem ustawia {{ui:workspace.zoomSpeed}} w ustawieniach, w sekcji {{ui:workspace.appearance}}: suwak od 1 do 14, na początek 5. Powyżej 10 przyspiesza już tylko kółko. Jeden ząbek kółka myszy przybliża tak samo w każdej przeglądarce, a touchpad przybliża zależnie od tego, jak daleko przesuniesz palce.
 
