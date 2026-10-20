@@ -6,6 +6,10 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **A design with an emptied object name opens again:** Clearing an object's name in the object list or the properties shows its default name, and the design saves it as an empty name - but loading refused that name, so the design, even the copy kept in the browser, opened empty. Loading now takes an empty name, and designs that were saved that way open again with all their objects.
+- **The AI bridge refuses what would break a design:** `layerling_create_shape` and `layerling_update_object` refused nothing below a size of 0, and a design holding a body of width 0 or a negative height could not be opened again; they now answer with an error, and the tool list says sizes must be above 0. An empty colour is refused too. `layerling_delete_objects`, `layerling_ungroup_objects` and `layerling_apply_edge_treatment` now leave locked objects alone, as the editor does.
+- **Placing on a large import no longer fails:** `layerling_place_on_face`, `layerling_perforate_face` and `layerling_push_face` stopped with a "Maximum call stack size exceeded" error when the target was a large imported mesh (from some tens of thousands of triangles, depending on the browser); they now work on meshes of any size.
+
 ## 1.93.0
 
 - **A traced picture with many touching outlines comes in whole (#584):** A black-and-white drawing traced from a picture (the guitarist of a second file) came in as a handful of pieces, about a fifth of its area. The kernel built the body well, but at a few corners where outlines meet it was left with an edge of four triangles, so the check threw the body away and the plain build, which leaves out any outline it cannot close, put in only fragments. When the first closing (0.05) leaves such an edge, the kernel now tries 0.1, 0.2 and 0.35 and takes the first body that is clean; the drawing keeps its 345 x 277 mm and all its outlines. Reported by @stefaanl on GitHub.
