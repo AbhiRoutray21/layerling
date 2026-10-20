@@ -38,19 +38,19 @@ describe("an SVG made by the kernel stays a clean solid (#420)", () => {
     const result = await buildGroupedShapeFromSelection([plate, hole as WorkplaneShape], 250_000);
     expect(result.group).not.toBeNull();
   });
-  it("brings in a traced picture whole, where its outlines meet in many corners (#584)", async () => {
-    await getManifoldRuntime();
-    const source = readFileSync(resolve("tests/fixtures/traced-picture-584.svg"), "utf8");
-    const imported = importedShapeFromSvgWithReport("picture.svg", source);
-    // The kernel's body had edges of four triangles at a few corners and was thrown away; the plain build then
-    // left out whole outlines and the picture came in as a handful of pieces (a fifth of its area).
-    expect(imported.skippedShapes).toBe(0);
-    const runtime = await getManifoldRuntime();
-    const solid = shapeToManifoldSolid(runtime, imported.shape, []);
-    expect(solid?.status()).toBe("NoError");
-    // The area of the drawing filled even-odd is 42,860 square units; the body is 4 mm thick.
-    expect(solid?.volume()).toBeGreaterThan(4 * 42_000);
-    expect(solid?.volume()).toBeLessThan(4 * 43_500);
-    solid?.delete();
-  });
+  // The picture lost whole outlines because the rounded body had points a hair apart, which the check merged into edges of four triangles.
+  for (const [file, area] of [["traced-picture-584.svg", 42_860], ["traced-picture-584b.svg", 39_350]] as const) {
+    it(`brings in a traced picture whole, where its outlines meet in many corners (#584, ${file})`, async () => {
+      const runtime = await getManifoldRuntime();
+      const source = readFileSync(resolve("tests/fixtures", file), "utf8");
+      const imported = importedShapeFromSvgWithReport("picture.svg", source);
+      expect(imported.skippedShapes).toBe(0);
+      const solid = shapeToManifoldSolid(runtime, imported.shape, []);
+      expect(solid?.status()).toBe("NoError");
+      // The area of the drawing filled even-odd, with a little for the rounding at the corners; the body is 4 mm thick.
+      expect(solid?.volume()).toBeGreaterThan(4 * area * 0.98);
+      expect(solid?.volume()).toBeLessThan(4 * area * 1.06);
+      solid?.delete();
+    });
+  }
 });

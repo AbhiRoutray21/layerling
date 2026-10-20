@@ -6,6 +6,10 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **More traced pictures come in whole (#584):** Three more pictures of the same kind (a drumming dance, children with a football, a homestead) still came in as a fifth of their area after 1.93.0, and the larger closing it tried did not help. The cause was in the check: the rounded outline had points a few millionths of a unit apart, the check merges points that close and then saw edges of four triangles, and a body that the kernel had built right was thrown away for the plain build, which leaves out any outline it cannot close. The closed outline is now cleaned of such points (0.002) before it is extruded, and all four pictures of the report come in whole with every outline. Reported by @stefaanl on GitHub.
+
+- **The cards of the shape settings stay open or shut (#632):** Properties, Position, Rotation, Taper and Twist (and the cards of the thread and the gear) folded back to their start each time the settings were closed and opened again, so a card you use all the time, Rotation or Taper, had to be opened again for every shape. Layerling now remembers in this browser which cards you left open or shut, for the next shape and the next visit. What nobody has touched starts as before. Guide (EN/DE) updated. Reported by @prmod3d on GitHub.
+
 ## 1.93.0
 
 - **A traced picture with many touching outlines comes in whole (#584):** A black-and-white drawing traced from a picture (the guitarist of a second file) came in as a handful of pieces, about a fifth of its area. The kernel built the body well, but at a few corners where outlines meet it was left with an edge of four triangles, so the check threw the body away and the plain build, which leaves out any outline it cannot close, put in only fragments. When the first closing (0.05) leaves such an edge, the kernel now tries 0.1, 0.2 and 0.35 and takes the first body that is clean; the drawing keeps its 345 x 277 mm and all its outlines. Reported by @stefaanl on GitHub.

@@ -3,6 +3,7 @@
 import { displayY, displayYTurn, insideZ, insideZTurn } from "@/lib/displayAxes";
 import { GuideHelpLink } from "@/components/GuideHelpLink";
 import { guideChapterForShape, guideSectionForShape } from "@/lib/guideLinks";
+import { useInspectorCard } from "@/lib/inspectorCards";
 import { ChevronDown, ChevronUp, Cylinder, Eye, EyeOff, FolderOpen, Grid3x3, Layers, Lock, Minus, Pencil, Plus, RefreshCw, RotateCcw, Split, Tags, Unlock } from "lucide-react";
 import { Fragment, createContext, useCallback, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type Dispatch, type ReactNode, type SetStateAction } from "react";
 import {
@@ -2535,15 +2536,15 @@ export function ShapeInspector({
   // Docked at the right edge until its title bar is dragged; then it floats where it was dropped.
   const movable = useMovablePanel<HTMLElement>("layerling.editor.inspectorPosition", INSPECTOR_PANEL);
   const inspectorRef = movable.panelRef;
-  const [propertiesOpen, setPropertiesOpen] = useState(true);
+  const [propertiesOpen, setPropertiesOpen] = useInspectorCard("properties", true);
   const [textFillMoreOpen, setTextFillMoreOpen] = useState(false);
-  const [positionOpen, setPositionOpen] = useState(false);
-  const [rotationOpen, setRotationOpen] = useState(false);
-  const [taperOpen, setTaperOpen] = useState(false);
-  const [twistOpen, setTwistOpen] = useState(false);
-  const [gearTeethOpen, setGearTeethOpen] = useState(true);
-  const [threadOpen, setThreadOpen] = useState(true);
-  const [gearHelixOpen, setGearHelixOpen] = useState(true);
+  const [positionOpen, setPositionOpen] = useInspectorCard("position", false);
+  const [rotationOpen, setRotationOpen] = useInspectorCard("rotation", false);
+  const [taperOpen, setTaperOpen] = useInspectorCard("taper", false);
+  const [twistOpen, setTwistOpen] = useInspectorCard("twist", false);
+  const [gearTeethOpen, setGearTeethOpen] = useInspectorCard("gearTeeth", true);
+  const [threadOpen, setThreadOpen] = useInspectorCard("thread", true);
+  const [gearHelixOpen, setGearHelixOpen] = useInspectorCard("gearHelix", true);
   const [colorOpen, setColorOpen] = useState(false);
   const { colors: recentColors, remember: rememberColor } = useRecentColors(SOLID_COLORS);
   const { colors: keptColors, toggle: toggleKeptColor } = useKeptColors();

@@ -638,6 +638,7 @@ export async function prepareSvgImport(timeoutMs = 10_000) {
  * leave a body that no cut can use (#420). Null when the kernel cannot make it; the plain build then goes on.
  */
 const SVG_TOUCH_CLOSING = 0.05;
+const SVG_TOUCH_SIMPLIFY = 0.002;
 const SVG_TOUCH_CLOSING_LARGER = [0.1, 0.2, 0.35];
 
 function extrudeShapesWithKernel(runtime: ManifoldToplevel, shapes: readonly THREE.Shape[]): { positions: number[]; skippedShapes: number } | null {
@@ -672,7 +673,10 @@ function extrudeShapesWithKernel(runtime: ManifoldToplevel, shapes: readonly THR
     const closeBy = (closing: number) => {
       const grown = joined.offset(-closing, "Miter", 2, 0);
       made.push(grown);
-      const closed = grown.offset(closing, "Round", 2, 8);
+      const rounded = grown.offset(closing, "Round", 2, 8);
+      made.push(rounded);
+      // The rounding leaves points a hair apart; the checks below merge those and see edges of four triangles.
+      const closed = rounded.simplify(SVG_TOUCH_SIMPLIFY);
       made.push(closed);
       return closed;
     };
