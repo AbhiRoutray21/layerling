@@ -1529,14 +1529,14 @@ function validateShapeDefinition(definition: Record<string, unknown>, label: str
     }
   }
   if (kind === "gridfinity") {
-    // The size is rounded to whole grid units on loading, and the geometry clamps the label shelf's, the finger scoop's and the floor's values; only nonsense is refused.
+    // The size is rounded to whole grid units on loading, and the geometry clamps the label shelf's, the finger scoop's, the floor's and the dividers' values; only nonsense is refused.
     if (definition.gridfinityType !== undefined && definition.gridfinityType !== "bin" && definition.gridfinityType !== "baseplate") {
       throw new Error(`${label}.gridfinityType is invalid`);
     }
     for (const key of ["gridfinityLip", "gridfinityMagnets", "gridfinityHalfGrid", "gridfinityLabelBack", "gridfinityLabelFront", "gridfinityLabelLeft", "gridfinityLabelRight", "gridfinityScoopBack", "gridfinityScoopFront", "gridfinityScoopLeft", "gridfinityScoopRight", "hingePinless"] as const) {
       if (definition[key] !== undefined && typeof definition[key] !== "boolean") throw new Error(`${label}.${key} must be true or false`);
     }
-    for (const key of ["gridfinityLabelBackWidth", "gridfinityLabelBackLength", "gridfinityLabelBackOffset", "gridfinityLabelFrontWidth", "gridfinityLabelFrontLength", "gridfinityLabelFrontOffset", "gridfinityLabelLeftWidth", "gridfinityLabelLeftLength", "gridfinityLabelLeftOffset", "gridfinityLabelRightWidth", "gridfinityLabelRightLength", "gridfinityLabelRightOffset", "gridfinityLabelCornerSize", "gridfinityScoopRadius", "gridfinityFloorHeight"] as const) {
+    for (const key of ["gridfinityLabelBackWidth", "gridfinityLabelBackLength", "gridfinityLabelBackOffset", "gridfinityLabelFrontWidth", "gridfinityLabelFrontLength", "gridfinityLabelFrontOffset", "gridfinityLabelLeftWidth", "gridfinityLabelLeftLength", "gridfinityLabelLeftOffset", "gridfinityLabelRightWidth", "gridfinityLabelRightLength", "gridfinityLabelRightOffset", "gridfinityLabelCornerSize", "gridfinityScoopRadius", "gridfinityFloorHeight", "gridfinityCompartmentsX", "gridfinityCompartmentsZ", "gridfinityDividerThickness"] as const) {
       if (definition[key] === undefined) continue;
       const value = finiteNumber(definition[key], `${label}.${key}`);
       // Only an offset runs both ways along a wall.
@@ -1544,6 +1544,16 @@ function validateShapeDefinition(definition: Record<string, unknown>, label: str
     }
     if (definition.gridfinityLabelCorner !== undefined && definition.gridfinityLabelCorner !== "round" && definition.gridfinityLabelCorner !== "chamfer") {
       throw new Error(`${label}.gridfinityLabelCorner is invalid`);
+    }
+    for (const key of ["gridfinityDividerPositionsX", "gridfinityDividerPositionsZ"] as const) {
+      if (definition[key] === undefined) continue;
+      if (!Array.isArray(definition[key])) throw new Error(`${label}.${key} must be an array`);
+      const positions = definition[key] as unknown[];
+      if (positions.length > 64) throw new Error(`${label}.${key} has an unsupported number of dividers`);
+      positions.forEach((raw, index) => {
+        const position = finiteNumber(raw, `${label}.${key}[${index}]`);
+        if (position < 0 || position > 1e6) throw new Error(`${label}.${key}[${index}] is outside the supported range`);
+      });
     }
   }
   if (kind === "hinge") {

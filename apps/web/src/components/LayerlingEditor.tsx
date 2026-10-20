@@ -16,6 +16,7 @@ import { loftShapePatch, type LoftMeasures } from "@/lib/loftGeometry";
 import { hingeWorldParts } from "@/lib/hingeParts";
 import { copyViaSelectionField, decodeClipboardPayload, encodeClipboardPayload, LOCAL_CLIPBOARD_LIMIT, newestClipboard, type ClipboardPayload } from "@/lib/clipboardPayload";
 import { bentTubeNaturalDimensions, normalizedBentTubeFields } from "@/lib/bentTubeGeometry";
+import { gridfinityListPatch } from "@/lib/gridfinityGeometry";
 import { DEFAULT_THREAD_PROFILE, defaultThreadHeadHeight, normalizeThreadHeadHeight, threadNaturalFootprint, threadSettings } from "@/lib/threadGeometry";
 import { curvedTextPatch, MAX_TEXT_SPACING, MIN_TEXT_SPACING } from "@/lib/textGeometry";
 import { normalizeTextEdge } from "@/lib/textEdge";
@@ -202,7 +203,7 @@ import { exportMeshesTo3mf, THREE_MF_MEDIA_TYPE } from "@/lib/threemfExport";
 import { importedShapeFromSvg, invalidSvgMeshReason } from "@/lib/svgImport";
 import { toSvgProjection, type SvgProjectionLayer } from "@/lib/svgExport";
 import { DEFAULT_TAPER_DIMENSION_MAX, keyboardNudgeCoarseFactor, keyboardNudgeStep, normalizeShapeCustomizations, normalizeSnapGrid, normalizeWorkspaceSettings, shapeDimensionLimit, workplaneSettingsFingerprint } from "@/lib/workplaneSettings";
-import { mcpThreadSizeParams } from "@/lib/mcpShapeSettings";
+import { MCP_GRIDFINITY_LIST_KEYS, mcpGridfinityListParams, mcpThreadSizeParams } from "@/lib/mcpShapeSettings";
 import { createNoteId, normalizeNotes, NOTE_COUNT_LIMIT, patchNote, referencePoints } from "@/lib/workplaneNotes";
 import { notesAfterShapeChange, notesPinnedTo, notesPutBack } from "@/lib/noteAnchoring";
 import { newReferencePositions, referencePointsForBox, unionReferenceBoxes, type ReferencePointSpot, type ReferencePosition } from "@/lib/referencePoints";
@@ -8827,6 +8828,9 @@ export function LayerlingEditor({
           if (shape.kind === "bentTube") {
             shape = { ...shape, ...mcpBentTubePatch(shape, params) };
           }
+          if (shape.kind === "gridfinity") {
+            shape = { ...shape, ...gridfinityListPatch(mcpGridfinityListParams(params)) };
+          }
           if (shape.kind === "text" && shape.textCurved) {
             shape = { ...shape, ...curvedTextPatch({ ...shape, textCurved: false }, { textCurved: true, textRadius: shape.textRadius, textSize: shape.textSize }) };
           }
@@ -8964,6 +8968,9 @@ export function LayerlingEditor({
           // The stored ends were set above as they came; the frame and the place follow from them here.
           const change = mcpLoftChange(params);
           if (Object.keys(change).length) Object.assign(patch, loftShapePatch(target, change));
+        }
+        if (target.kind === "gridfinity" && MCP_GRIDFINITY_LIST_KEYS.some((key) => params[key] !== undefined)) {
+          Object.assign(patch, gridfinityListPatch(mcpGridfinityListParams(params)));
         }
         if (target.kind === "bentTube" && MCP_BENT_TUBE_KEYS.some((key) => params[key] !== undefined)) {
           const withSettings = { ...target, ...patch };

@@ -225,6 +225,12 @@ export type ShapeCustomization = {
   gridfinityScoopRadius?: number;
   /** Gridfinity bin: the floor's height inside in mm, measured from the underside; missing is 5.95, and at the highest the bin is solid up to the lip's support, or to the top without the lip. */
   gridfinityFloorHeight?: number;
+  /** Gridfinity bin: compartments across, a whole number; missing is 1, a bin without dividers (#554). */
+  gridfinityCompartmentsX?: number;
+  /** Gridfinity bin: compartments deep, a whole number; missing is 1. */
+  gridfinityCompartmentsZ?: number;
+  /** Gridfinity bin: the dividers' thickness in mm, 0.8 to 3; missing is 1.2. */
+  gridfinityDividerThickness?: number;
   /** Knurling: grooves straight along the axis, or crossed into diamonds. */
   knurlPattern?: "straight" | "diamond" | "round";
   /** Knurling: number of grooves around the grip. */
@@ -769,6 +775,16 @@ export type WorkplaneShape = {
   gridfinityScoopRadius?: number;
   /** Gridfinity bin: the floor's height inside in mm, measured from the underside; missing is 5.95, and at the highest the bin is solid up to the lip's support, or to the top without the lip. */
   gridfinityFloorHeight?: number;
+  /** Gridfinity bin: compartments across, a whole number; missing is 1, a bin without dividers (#554). */
+  gridfinityCompartmentsX?: number;
+  /** Gridfinity bin: compartments deep, a whole number; missing is 1. */
+  gridfinityCompartmentsZ?: number;
+  /** Gridfinity bin: the dividers' thickness in mm, 0.8 to 3; missing is 1.2. */
+  gridfinityDividerThickness?: number;
+  /** Gridfinity bin: each divider across, in mm from the inside of the left wall to its middle, left to right; missing spaces them evenly. */
+  gridfinityDividerPositionsX?: number[];
+  /** Gridfinity bin: each divider deep, in mm from the inside of the back wall to its middle, back to front; missing spaces them evenly. */
+  gridfinityDividerPositionsZ?: number[];
   /** Knurling: grooves straight along the axis, or crossed into diamonds. */
   knurlPattern?: "straight" | "diamond" | "round";
   /** Knurling: number of grooves around the grip. */

@@ -308,6 +308,11 @@ export type CadModifierGridfinityPart = {
   gridfinityScoopRight?: boolean;
   gridfinityScoopRadius?: number;
   gridfinityFloorHeight?: number;
+  gridfinityCompartmentsX?: number;
+  gridfinityCompartmentsZ?: number;
+  gridfinityDividerThickness?: number;
+  gridfinityDividerPositionsX?: number[];
+  gridfinityDividerPositionsZ?: number[];
   transform?: number[];
   expected?: { bounds: number[]; volume: number };
 };

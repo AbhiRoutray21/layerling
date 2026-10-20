@@ -184,11 +184,23 @@ import {
   DEFAULT_GRIDFINITY_LABEL_CORNER,
   GRIDFINITY_LABEL_WALL_KEYS,
   GRIDFINITY_SCOOP_WALL_KEYS,
+  MAX_GRIDFINITY_DIVIDER_THICKNESS,
   MAX_GRIDFINITY_HEIGHT_UNITS,
+  MIN_GRIDFINITY_DIVIDER_THICKNESS,
   MIN_GRIDFINITY_FLOOR_HEIGHT,
   MIN_GRIDFINITY_LABEL_WIDTH,
   MIN_GRIDFINITY_SCOOP_RADIUS,
   MIN_GRIDFINITY_UNITS,
+  type GridfinityAxis,
+  gridfinityCompartmentCount,
+  gridfinityCompartmentCountPatch,
+  gridfinityCompartmentMax,
+  gridfinityCompartments,
+  gridfinityDividerFits,
+  gridfinityDividerLimits,
+  gridfinityDividerPositionPatch,
+  gridfinityDividerPositions,
+  gridfinityDividerThickness,
   gridfinityFloorFits,
   gridfinityFloorHeight,
   gridfinityFloorMaxHeight,
@@ -204,6 +216,7 @@ import {
   gridfinityScoopFits,
   gridfinityScoopMaxRadius,
   gridfinityScoopRadius,
+  gridfinityScoopsLeftOut,
   gridfinityShapePatch,
   normalizeGridfinityType,
 } from "@/lib/gridfinityGeometry";
@@ -387,7 +400,7 @@ const RELATIVE_SIZE_PROPERTY_IDS = new Set(["width", "height", "length", "diamet
 const ROTATION_PROPERTY_IDS = new Set(["rotateX", "rotateY", "rotateZ"]);
 
 function propertyUsesLengthUnit(key: string) {
-  return ["textLineWidth", "textEdgeSize", "letterSize", "iconWidth", "keyringDiameter", "positionX", "positionY", "positionZ", "pivotX", "pivotY", "pivotZ", "radius", "length", "width", "height", "bevel", "topRadius", "baseRadius", "thickness", "outerDiameter", "innerDiameter", "textRadius", "extrudeTopOffsetX", "extrudeTopOffsetZ", "toothSize", "toothWidth", "gearBacklash", "centerHole", "slotSmallEnd", "slotCentreDistance", "sketchLineWidth", "topLength", "topWidth", "bottomLength", "bottomWidth", "diameter", "pitch", "clearance", "axialClearance", "boltClearance", "threadDepth", "threadCoreDiameter", "threadLength", "headHeight", "chamfer", "chamferBottom", "headChamfer", "wire", "starOuterSize", "starInnerSize", "starOuterFillet", "starInnerFillet", "heartTipFillet", "crescentThickness", "crescentTipFillet", "honeycombCellSize", "honeycombWallThickness", "honeycombFrameWidth", "cornerFillet", "topBottomFillet", "bentTubeSize", "bentTubeWall", "bentTubeSegmentLength", "bentTubeBendRadius", "dovetailNeckWidth", "dovetailClearance", "hingePinDiameter", "hingeLeafThickness", "hingeClearance", "screwHoleShaft", "screwHoleHeadDepth", "knurlDepth", "knurlChamfer", "loftBottomWidth", "loftBottomDepth", "loftTopWidth", "loftTopDepth", "loftBottomCorner", "loftTopCorner", "loftOffsetX", "loftOffsetZ", "loftWall", "gridfinityLabelBackLength", "gridfinityLabelBackOffset", "gridfinityLabelBackWidth", "gridfinityLabelCornerSize", "gridfinityLabelFrontLength", "gridfinityLabelFrontOffset", "gridfinityLabelFrontWidth", "gridfinityLabelLeftLength", "gridfinityLabelLeftOffset", "gridfinityLabelLeftWidth", "gridfinityLabelRightLength", "gridfinityLabelRightOffset", "gridfinityLabelRightWidth", "gridfinityScoopRadius", "gridfinityFloorHeight"].includes(key);
+  return ["textLineWidth", "textEdgeSize", "letterSize", "iconWidth", "keyringDiameter", "positionX", "positionY", "positionZ", "pivotX", "pivotY", "pivotZ", "radius", "length", "width", "height", "bevel", "topRadius", "baseRadius", "thickness", "outerDiameter", "innerDiameter", "textRadius", "extrudeTopOffsetX", "extrudeTopOffsetZ", "toothSize", "toothWidth", "gearBacklash", "centerHole", "slotSmallEnd", "slotCentreDistance", "sketchLineWidth", "topLength", "topWidth", "bottomLength", "bottomWidth", "diameter", "pitch", "clearance", "axialClearance", "boltClearance", "threadDepth", "threadCoreDiameter", "threadLength", "headHeight", "chamfer", "chamferBottom", "headChamfer", "wire", "starOuterSize", "starInnerSize", "starOuterFillet", "starInnerFillet", "heartTipFillet", "crescentThickness", "crescentTipFillet", "honeycombCellSize", "honeycombWallThickness", "honeycombFrameWidth", "cornerFillet", "topBottomFillet", "bentTubeSize", "bentTubeWall", "bentTubeSegmentLength", "bentTubeBendRadius", "dovetailNeckWidth", "dovetailClearance", "hingePinDiameter", "hingeLeafThickness", "hingeClearance", "screwHoleShaft", "screwHoleHeadDepth", "knurlDepth", "knurlChamfer", "loftBottomWidth", "loftBottomDepth", "loftTopWidth", "loftTopDepth", "loftBottomCorner", "loftTopCorner", "loftOffsetX", "loftOffsetZ", "loftWall", "gridfinityLabelBackLength", "gridfinityLabelBackOffset", "gridfinityLabelBackWidth", "gridfinityLabelCornerSize", "gridfinityLabelFrontLength", "gridfinityLabelFrontOffset", "gridfinityLabelFrontWidth", "gridfinityLabelLeftLength", "gridfinityLabelLeftOffset", "gridfinityLabelLeftWidth", "gridfinityLabelRightLength", "gridfinityLabelRightOffset", "gridfinityLabelRightWidth", "gridfinityScoopRadius", "gridfinityFloorHeight", "gridfinityDividerThickness", "gridfinityDividerPositionX", "gridfinityDividerPositionZ"].includes(key);
 }
 
 /**
@@ -979,7 +992,8 @@ function getShapePropertiesWithAppLimits(shape: WorkplaneShape, onUpdate: ShapeI
       const maxFloor = gridfinityFloorMaxHeight(fields);
       properties.push({ id: "gridfinityFloorHeight", label: t("prop.gridfinityFloorHeight"), value: gridfinityFloorHeight(fields), min: MIN_GRIDFINITY_FLOOR_HEIGHT, max: maxFloor, step: 0.05, hint: t("gridfinity.floorHeightHint"), onChange: (value) => onUpdate({ gridfinityFloorHeight: clamp(value, MIN_GRIDFINITY_FLOOR_HEIGHT, maxFloor) }) });
     }
-    if (gridfinityLabelFits(fields)) {
+    // A bin with dividers has no label shelves yet (#554), so their settings are left out.
+    if (gridfinityLabelFits(fields) && !gridfinityCompartments(fields)) {
       // Label shelves (#455): each wall's switch with its own width, length and position under it, then the corners they share.
       const walls = [
         { wall: "back", label: "prop.gridfinityLabelBack" },
@@ -1033,7 +1047,7 @@ function getShapePropertiesWithAppLimits(shape: WorkplaneShape, onUpdate: ShapeI
       });
       if (walls.some(({ wall }) => shape[GRIDFINITY_SCOOP_WALL_KEYS[wall]] === true)) {
         const max = Math.max(MIN_GRIDFINITY_SCOOP_RADIUS, gridfinityScoopMaxRadius(fields));
-        properties.push({ id: "gridfinityScoopRadius", label: t("prop.gridfinityScoopRadius"), value: gridfinityScoopRadius(fields), min: MIN_GRIDFINITY_SCOOP_RADIUS, max, step: 0.5, onChange: (value) => onUpdate({ gridfinityScoopRadius: clamp(value, MIN_GRIDFINITY_SCOOP_RADIUS, max) }) });
+        properties.push({ id: "gridfinityScoopRadius", label: t("prop.gridfinityScoopRadius"), value: gridfinityScoopRadius(fields), min: MIN_GRIDFINITY_SCOOP_RADIUS, max, step: 0.5, hint: gridfinityScoopsLeftOut(fields) ? t("gridfinity.scoopsLeftOutHint") : undefined, onChange: (value) => onUpdate({ gridfinityScoopRadius: clamp(value, MIN_GRIDFINITY_SCOOP_RADIUS, max) }) });
       }
     }
     return properties;
@@ -2910,6 +2924,9 @@ export function ShapeInspector({
           </div>
         ) : null}
       </div>
+      {shape.kind === "gridfinity" ? (
+        <GridfinityCompartmentsCard shape={shape} workspace={workspace} locked={locked} defaults={propertyDefaults?.compartments} onUpdate={onUpdate} onInteractionActiveChange={onInteractionActiveChange} />
+      ) : null}
       <div className={`property-card ${positionOpen ? "" : "collapsed"}`}>
         <button
           className="property-card-header"
@@ -3818,13 +3835,107 @@ function BentTubeSegmentsCard({
   );
 }
 
+/**
+ * A Gridfinity bin's compartments (#554): how many each way and how thick the dividers are, then a menu that picks one
+ * divider each way and its slider that moves it. Shown on every bin with room for dividers, so a bin of one compartment
+ * can be divided here.
+ */
+function GridfinityCompartmentsCard({
+  shape,
+  workspace,
+  locked,
+  defaults,
+  onUpdate,
+  onInteractionActiveChange,
+}: {
+  shape: WorkplaneShape;
+  workspace: WorkplaneWorkspaceSettings;
+  locked: boolean;
+  /** What the counts and the thickness are on a bin made new, for the reset arrows beside them. */
+  defaults?: PropertyDefaultValues | null;
+  onUpdate: ShapeInspectorUpdate;
+  onInteractionActiveChange?: (active: boolean) => void;
+}) {
+  const [open, setOpen] = useInspectorCard("gridfinityCompartments", true);
+  const [chosen, setChosen] = useState({ x: 0, z: 0 });
+
+  useEffect(() => setChosen({ x: 0, z: 0 }), [shape.id]);
+
+  const fields = { ...shape, depth: shapeOverallFootprintDimensions(shape).depth };
+  if (!gridfinityDividerFits(fields)) return null;
+  const compartments = gridfinityCompartments(fields);
+  const choose = (changes: Partial<typeof chosen>) => setChosen((current) => ({ ...current, ...changes }));
+  const counts = { x: gridfinityCompartmentCount(fields, "x"), z: gridfinityCompartmentCount(fields, "z") };
+  const countRow = (axis: GridfinityAxis, id: string, label: MessageKey, hint?: string): ShapePropertyConfig => {
+    const max = gridfinityCompartmentMax(fields, axis);
+    return { id, label: t(label), value: counts[axis], min: 1, max, step: 1, hint, onChange: (value) => onUpdate(gridfinityCompartmentCountPatch(axis, clamp(Math.round(value), 1, max))) };
+  };
+  const properties: ShapePropertyConfig[] = [
+    countRow("x", "gridfinityCompartmentsX", "prop.gridfinityCompartmentsX"),
+    countRow("z", "gridfinityCompartmentsZ", "prop.gridfinityCompartmentsZ", t("gridfinity.compartmentsHint")),
+  ];
+  if (compartments) {
+    properties.push({ id: "gridfinityDividerThickness", label: t("prop.gridfinityDividerThickness"), value: gridfinityDividerThickness(fields), min: MIN_GRIDFINITY_DIVIDER_THICKNESS, max: MAX_GRIDFINITY_DIVIDER_THICKNESS, step: 0.1, onChange: (value) => onUpdate({ gridfinityDividerThickness: clamp(value, MIN_GRIDFINITY_DIVIDER_THICKNESS, MAX_GRIDFINITY_DIVIDER_THICKNESS) }) });
+  }
+
+  // One menu and one slider each way, whichever divider the menu picks; moving it writes that way's whole list.
+  ([["x", "gridfinityDividerX", "prop.gridfinityDividerAcross", "gridfinity.fromLeft"], ["z", "gridfinityDividerZ", "prop.gridfinityDividerDeep", "gridfinity.fromBack"]] as const).forEach(([axis, id, label, numbered]) => {
+    const positions = gridfinityDividerPositions(fields, axis);
+    if (positions.length === 0) return;
+    const index = Math.min(chosen[axis], positions.length - 1);
+    const limits = gridfinityDividerLimits(fields, axis, index);
+    if (!limits) return;
+    properties.push(
+      {
+        type: "select",
+        id,
+        label: t(label),
+        value: String(index),
+        options: positions.map((_position, position) => ({ value: String(position), label: t(numbered, { number: position + 1 }) })),
+        onChange: (value) => choose({ [axis]: Number(value) }),
+      },
+      {
+        id: axis === "x" ? "gridfinityDividerPositionX" : "gridfinityDividerPositionZ",
+        label: t("prop.gridfinityDividerPosition"),
+        value: clamp(positions[index], limits.min, limits.max),
+        min: limits.min,
+        max: limits.max,
+        step: 0.1,
+        hint: t("gridfinity.dividerPositionHint"),
+        onChange: (value) => onUpdate(gridfinityDividerPositionPatch(fields, axis, index, value)),
+      },
+    );
+  });
+
+  return (
+    <div className={`property-card ${open ? "" : "collapsed"}`}>
+      <button
+        className="property-card-header"
+        type="button"
+        aria-expanded={open}
+        aria-controls={`gridfinity-compartments-${shape.id}`}
+        onClick={() => setOpen((current) => !current)}
+      >
+        <span>{t("inspector.gridfinityCompartments")}</span>
+        <ChevronUp className={open ? "" : "collapsed"} size={25} strokeWidth={2.8} />
+      </button>
+      {open ? (
+        <div className="property-list" id={`gridfinity-compartments-${shape.id}`}>
+          <ShapePropertyRows properties={properties} defaults={defaults} workspace={workspace} disabled={locked} onInteractionActiveChange={onInteractionActiveChange} />
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
 type PropertyDefaultValues = ReadonlyMap<string, number | string | boolean>;
 
 /**
  * The values a shape of this kind has when it is made new, with the defaults saved in the
- * settings, by property id. The main list, the taper card and the twist card each have
- * their own, as some ids (a pyramid's top width) mean different things in them. Null for
- * a shape that is not made from the toolbar: a sketch, a mesh, a group.
+ * settings, by property id. The main list, the taper card, the twist card and a Gridfinity
+ * bin's compartments card each have their own, as some ids (a pyramid's top width) mean
+ * different things in them. Null for a shape that is not made from the toolbar: a sketch,
+ * a mesh, a group.
  */
 function shapePropertyDefaults(kind: WorkplaneShape["kind"], workspace: WorkplaneWorkspaceSettings) {
   const asset = shapeDefaultsAsset(kind);
@@ -3843,7 +3954,13 @@ function shapePropertyDefaults(kind: WorkplaneShape["kind"], workspace: Workplan
       ["bottomWidth", taperSize.bottomWidth],
     ]);
     const twist = new Map<string, number | string | boolean>([["extrudeTwist", 0], ["extrudeTopOffsetX", 0], ["extrudeTopOffsetZ", 0]]);
-    return { main, taper, twist };
+    // A Gridfinity bin's compartments card (#554): the counts and the dividers' thickness.
+    let compartments: Map<string, number | string | boolean> | null = null;
+    if (fresh.kind === "gridfinity") {
+      const fields = { ...fresh, depth: shapeOverallFootprintDimensions(fresh).depth };
+      compartments = new Map<string, number | string | boolean>([["gridfinityCompartmentsX", gridfinityCompartmentCount(fields, "x")], ["gridfinityCompartmentsZ", gridfinityCompartmentCount(fields, "z")], ["gridfinityDividerThickness", gridfinityDividerThickness(fields)]]);
+    }
+    return { main, taper, twist, compartments };
   } catch {
     return null;
   }
