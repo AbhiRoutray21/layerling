@@ -44,6 +44,8 @@ Het pijltje helemaal bovenaan de balk verbergt hem als hij in de weg zit.
 
 Een ontwerp opent zoals je het hebt achtergelaten: de hoek, de zoom en de positie van de weergave worden er in deze browser bij bewaard, zodat je verdergaat waar je gebleven was, ook nadat je naar de startpagina bent gegaan of de pagina hebt gesloten. Een opgeslagen bestand (.lyl) neemt de weergave mee, zodat het ook elders zo opent. De weergave hoort niet bij de geschiedenis van ongedaan maken.
 
+Je kunt in elk ontwerp ook vier eigen weergaven bewaren. [[Shift]]+[[7]], [[Shift]]+[[8]], [[Shift]]+[[9]] of [[Shift]]+[[0]] slaat de weergave precies op zoals ze is - hoek, positie, zoom, en vlak of in perspectief - onder die toets, en de toets alleen ([[7]], [[8]], [[9]] of [[0]]) brengt haar terug. Een melding onderaan bevestigt het opslaan; opnieuw opslaan onder dezelfde toets vervangt de weergave. Net als de weergave hierboven blijven de opgeslagen weergaven in deze browser bij het ontwerp en gaan ze mee in een opgeslagen bestand (.lyl); ze horen niet bij de geschiedenis van ongedaan maken.
+
 ## Naar binnen kijken: de doorsnede
 
 {{ui:camera.sectionView}}, de laatste knop in de balk (het snijgereedschap), knipt de weergave open langs een vlak, zodat je wanden, holtes en in elkaar passende onderdelen kunt controleren. Er wordt niets echt doorgesneden: het ontwerp, de bestanden en elke export blijven heel. Waar het vlak door een lichaam gaat, is de snede gevuld met de iets donkerdere kleur van het lichaam, en een uitsparing erin blijft leeg, zo zie je massief en hol; het gevulde vlak verschijnt een moment nadat het vlak stilstaat.

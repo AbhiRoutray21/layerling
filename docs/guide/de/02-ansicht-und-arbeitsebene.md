@@ -46,6 +46,8 @@ Am linken Rand liegt eine schmale Leiste. Von oben nach unten:
 
 Ein Entwurf öffnet sich so, wie du ihn verlassen hast: Blickwinkel, Zoom und Ausschnitt der Ansicht bleiben mit ihm in diesem Browser erhalten, du machst also dort weiter, wo du aufgehört hast, auch nach „Home“ oder dem Schließen der Seite. Eine gespeicherte Datei (.lyl) nimmt die Ansicht mit, sie öffnet sich also auch anderswo darin. Die Ansicht gehört nicht zum Rückgängig-Verlauf.
 
+Du kannst in jedem Entwurf außerdem vier eigene Ansichten festhalten. [[Umschalt]]+[[7]], [[Umschalt]]+[[8]], [[Umschalt]]+[[9]] oder [[Umschalt]]+[[0]] speichert die Ansicht genau so, wie sie ist - Blickwinkel, Ausschnitt, Zoom und flach oder perspektivisch - unter dieser Taste, und die Taste allein ([[7]], [[8]], [[9]] oder [[0]]) holt sie zurück. Eine Meldung unten bestätigt das Speichern; speicherst du erneut unter derselben Taste, ersetzt das die Ansicht. Wie die Ansicht oben bleiben die gespeicherten Ansichten mit dem Entwurf in diesem Browser und reisen in einer gespeicherten Datei (.lyl) mit; zum Rückgängig-Verlauf gehören sie nicht.
+
 ## Ins Innere schauen: die Schnittansicht
 
 {{ui:camera.sectionView}}, der letzte Knopf der Leiste (das Schnittwerkzeug), schneidet die Ansicht entlang einer Ebene auf. So prüfst du Wände, Hohlräume und Teile, die ineinandergreifen. Geschnitten wird nur die Ansicht: Entwurf, Dateien und jeder Export bleiben vollständig. Wo die Ebene durch einen Körper geht, ist der Schnitt in der etwas dunkleren Farbe des Körpers gefüllt, und eine Aussparung darin bleibt leer, so erkennst du Massives und Hohles; die gefüllte Fläche erscheint einen Moment, nachdem die Ebene stillsteht.

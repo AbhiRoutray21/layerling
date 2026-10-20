@@ -44,6 +44,8 @@ A sáv legtetején lévő kis nyíl elrejti a sávot, ha útban van.
 
 Egy terv úgy nyílik meg, ahogy hagytad: a nézet szöge, nagyítása és helyzete ebben a böngészőben vele együtt megmarad, így ott folytatod, ahol abbahagytad, akkor is, ha közben a kezdőlapra mentél vagy bezártad az oldalt. Egy mentett fájl (.lyl) is magával viszi a nézetet, így máshol is abban nyílik meg. A nézet nem része a visszavonási előzményeknek.
 
+Minden tervben négy saját nézetet is megőrizhetsz. A [[Shift]]+[[7]], [[Shift]]+[[8]], [[Shift]]+[[9]] vagy [[Shift]]+[[0]] pontosan úgy menti a nézetet, ahogy van - szög, helyzet, nagyítás, valamint sík vagy perspektivikus nézet - az adott billentyűre, a billentyű magában ([[7]], [[8]], [[9]] vagy [[0]]) pedig visszahozza. Egy üzenet alul megerősíti a mentést; ha ugyanarra a billentyűre újra mentesz, az lecseréli a nézetet. A fenti nézethez hasonlóan a mentett nézetek is a tervvel maradnak ebben a böngészőben, és egy mentett fájl (.lyl) is magával viszi őket; nem részei a visszavonási előzményeknek.
+
 ## Belelátni: a metszeti nézet
 
 A {{ui:camera.sectionView}}, a sáv utolsó gombja (a vágás eszköz), egy sík mentén felnyitja a nézetet, hogy ellenőrizhesd a falakat, az üregeket és az egymásba illeszkedő részeket. Valójában semmi sem vágódik el: a terv, a fájljai és minden export egészben marad. Ahol a sík egy testen megy át, a metszet a test kissé sötétebb színével van kitöltve, a benne lévő kivágás pedig üres marad, így megkülönböztethető a tömör a üregestől; a kitöltött felület egy pillanattal azután jelenik meg, hogy a sík megáll.

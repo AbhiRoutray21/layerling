@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **Four saved views per design:** Shift+7, Shift+8, Shift+9 or Shift+0 saves the view exactly as it is (angle, pan, zoom, and flat or perspective) under that key, and 7, 8, 9 or 0 alone brings it back. A message confirms the save, and a key with nothing saved under it says how to fill it. The key's position counts too, so it works where Shift turns the digit into another sign (and on AZERTY, where the digit itself needs Shift); the number pad works as well. The views belong to the design: they are kept in this browser beside the view the design was left in (#220) and travel in a `.lyl` file as `editor.savedViews`, which older readers pass over. They are not part of the undo history. The shortcuts list and the guide (all guide languages) name the keys. Unit tests for the keys, the four slots and the `.lyl` round trip; not yet tried on screen. Along the way the camera-view code moved out of `WorkplaneViewport.tsx` into `components/workplane/cameraViews.ts`, and the status line's timers out of `LayerlingEditor.tsx` into `components/workplane/useEditorNotice.ts`.
+
 ## 1.95.0
 
 - **A backup brings the card pictures back with the designs:** "Back up all" put only the .lyl files into the ZIP, so after a restore every card showed "No preview yet" until its design was opened, in the browser as in Docker. Each card picture now lies next to its design in the ZIP, under the same name as a `.png`, and a restore puts it back on the card at once (through the same path a duplicate takes, so on the server it is saved there again). A backup made before has no pictures; such a design still gets one when it is opened. Reported by a user by mail.

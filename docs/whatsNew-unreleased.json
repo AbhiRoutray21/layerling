@@ -1,1 +1,36 @@
-[]
+[
+  {
+    "title": {
+      "de": "Vier eigene Ansichten speichern",
+      "en": "Save four views of your own",
+      "ar": "احفظ أربعة عروض خاصة بك",
+      "cs": "Uložte si čtyři vlastní pohledy",
+      "da": "Gem fire af dine egne visninger",
+      "fr": "Enregistrer quatre vues à vous",
+      "hu": "Négy saját nézet mentése",
+      "it": "Salva quattro viste tue",
+      "ja": "自分のビューを4つ保存",
+      "nl": "Vier eigen weergaven opslaan",
+      "pl": "Zapisz cztery własne widoki",
+      "ru": "Сохраните четыре своих вида",
+      "sl": "Shrani štiri lastne poglede",
+      "tr": "Kendi dört görünümünü kaydet"
+    },
+    "body": {
+      "de": "Umschalt+7, 8, 9 oder 0 speichert die Ansicht genau so, wie sie ist - Blickwinkel, Ausschnitt und Zoom -, und die Taste allein holt sie zurück. Jeder Entwurf hat seine eigenen vier Ansichten, und eine gespeicherte .lyl-Datei nimmt sie mit.",
+      "en": "Shift+7, 8, 9 or 0 saves the view exactly as it is - angle, position and zoom - and the key alone brings it back. Each design keeps its own four views, and a saved .lyl file carries them along.",
+      "ar": "يحفظ Shift+7 أو 8 أو 9 أو 0 العرض كما هو تمامًا - الزاوية والموضع والتكبير - ويعيده المفتاح وحده. لكل تصميم عروضه الأربعة الخاصة، ويحملها ملف .lyl المحفوظ معه.",
+      "cs": "Shift+7, 8, 9 nebo 0 uloží pohled přesně tak, jak je - úhel, polohu a přiblížení - a samotná klávesa ho vrátí. Každý projekt má své vlastní čtyři pohledy a uložený soubor .lyl je přenáší s sebou.",
+      "da": "Shift+7, 8, 9 eller 0 gemmer visningen præcis som den er - vinkel, position og zoom - og tasten alene henter den tilbage. Hvert design har sine egne fire visninger, og en gemt .lyl-fil tager dem med.",
+      "fr": "Maj+7, 8, 9 ou 0 enregistre la vue exactement telle qu'elle est - angle, position et zoom - et la touche seule la ramène. Chaque design garde ses propres quatre vues, et un fichier .lyl enregistré les emporte.",
+      "hu": "A Shift+7, 8, 9 vagy 0 pontosan úgy menti a nézetet, ahogy van - szög, helyzet és nagyítás -, a billentyű magában pedig visszahozza. Minden tervnek saját négy nézete van, és a mentett .lyl fájl is magával viszi őket.",
+      "it": "Maiusc+7, 8, 9 o 0 salva la vista esattamente com'è - angolo, posizione e zoom - e il tasto da solo la richiama. Ogni progetto ha le sue quattro viste, e un file .lyl salvato le porta con sé.",
+      "ja": "Shift+7、8、9、0 で現在のビュー(角度・位置・ズーム)をそのまま保存し、キーだけを押すとそのビューに戻ります。デザインごとに4つのビューを持ち、保存した .lyl ファイルにも含まれます。",
+      "nl": "Shift+7, 8, 9 of 0 slaat de weergave precies op zoals ze is - hoek, positie en zoom - en de toets alleen brengt haar terug. Elk ontwerp heeft zijn eigen vier weergaven, en een opgeslagen .lyl-bestand neemt ze mee.",
+      "pl": "Shift+7, 8, 9 lub 0 zapisuje widok dokładnie taki, jaki jest - kąt, położenie i przybliżenie - a sam klawisz go przywraca. Każdy projekt ma własne cztery widoki, a zapisany plik .lyl zabiera je ze sobą.",
+      "ru": "Shift+7, 8, 9 или 0 сохраняет вид точно таким, какой он есть, — угол, положение и масштаб, — а сама клавиша возвращает его. У каждого проекта свои четыре вида, и сохранённый файл .lyl переносит их с собой.",
+      "sl": "Shift+7, 8, 9 ali 0 shrani pogled natanko takšen, kot je - zorni kot, izrez in povečavo -, sama tipka pa ga vrne. Vsak načrt ima svoje štiri poglede, shranjena datoteka .lyl pa jih vzame s seboj.",
+      "tr": "Shift+7, 8, 9 veya 0 görünümü tam olduğu gibi - açı, konum ve yakınlaştırma - kaydeder, tuşun kendisi onu geri getirir. Her tasarımın kendi dört görünümü vardır ve kaydedilmiş bir .lyl dosyası onları da taşır."
+    }
+  }
+]

@@ -62,7 +62,7 @@ import {
 import { dedupeProjectAssets } from "@/lib/projectAssets";
 import { hydrateProjectShapeState, reconcileLoadedProjectShapeCacheEntry, type ImportedMeshResource } from "@/lib/projectShapePersistence";
 import { ToolbarImportIcon } from "@/components/toolbarIcons";
-import { writeDesignView } from "@/lib/designView";
+import { writeDesignView, writeSavedViews } from "@/lib/designView";
 import { useFileAccept } from "@/lib/fileAccept";
 import { lylFileAccessSupported, onLylFilesLaunched, pickFilesToImport, rememberLylFile, type LylFileHandle } from "@/lib/lylFileAccess";
 import { exportLylProject, importLylProject, inspectLylProjectPackage, LYL_CREATED_WITH_VERSION, LYL_MEDIA_TYPE } from "@/lib/lylProject";
@@ -1639,6 +1639,7 @@ export default function Home() {
       await saveProjectShapes(project.id, entry, projectShapeSaveContext(project));
       // A file saved with a view opens in it; the working copy of a server design keeps its own.
       if (restored.view && !existing) writeDesignView(project.id, restored.view);
+      if (restored.savedViews && !existing) writeSavedViews(project.id, restored.savedViews);
       setProjectShapesById((current) => ({ ...current, [project.id]: entry }));
       // Saving later writes into the file it came from (#251).
       if (fileHandle) rememberLylFile(project.id, fileHandle);
@@ -2160,6 +2161,7 @@ export default function Home() {
         const entry = projectShapeCacheEntry(now, restored.shapes, restored.history, restored.historyIndex, restored.assets);
         await saveProjectShapes(project.id, entry, projectShapeSaveContext(project));
         if (restored.view) writeDesignView(project.id, restored.view);
+        if (restored.savedViews) writeSavedViews(project.id, restored.savedViews);
         restoredProjects.push(project);
         restoredEntries[project.id] = entry;
         const thumbnail = entries[index].thumbnail;

@@ -40,6 +40,8 @@ Den lille pil helt øverst på bjælken skjuler den hvis den er i vejen.
 
 Et design åbner som du forlod det: visningens vinkel, zoom og position gemmes med det i denne browser, så du fortsætter hvor du stoppede, også efter at have trykket Hjem eller lukket siden. En gemt fil (.lyl) tager visningen med sig, så den åbner i den andre steder også. Visningen er ikke del af fortryd-historikken.
 
+Du kan også gemme fire af dine egne visninger i hvert design. [[Shift]]+[[7]], [[Shift]]+[[8]], [[Shift]]+[[9]] eller [[Shift]]+[[0]] gemmer visningen præcis som den er - vinkel, position, zoom, og flad eller perspektiv - under den tast, og tasten alene ([[7]], [[8]], [[9]] eller [[0]]) henter den tilbage. En besked forneden bekræfter at den er gemt; gemmer du igen under samme tast, erstattes visningen. Ligesom visningen ovenfor bliver de gemte visninger hos designet i denne browser og følger med i en gemt fil (.lyl); de er ikke del af fortryd-historikken.
+
 ## Kigge indeni: snitvisningen
 
 {{ui:camera.sectionView}}, den sidste knap i bjælken (skæreværktøjet), skærer visningen op langs et plan så du kan tjekke vægge, hulrum og dele der passer ind i hinanden. Intet skæres for alvor: designet, dets filer og hver eksport forbliver hele. Hvor planet går gennem et legeme, er snittet fyldt med legemets farve, lidt mørkere, og et hul i det forbliver tomt, så du kan se fast fra hult; den fyldte flade dukker op et øjeblik efter, at planet står stille.
