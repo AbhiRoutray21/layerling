@@ -240,7 +240,7 @@ import type { CadFaceInfo, CadModifierComponentMesh, CadModifierDeflection, CadM
 import { getSectionBounds, sectionAxisLetter, sectionPlacementWorkplane, type SectionPlaneAxis, type SectionPlaneSettings } from "@/lib/sectionView";
 import { projectSectionPoint, SECTION_VIEW_FACE, sectionSvgDocument, sliceMeshContours } from "@/lib/sectionSvg";
 import type { AlignAxis, AlignHandleStatus, AlignTarget, GridSize, ParametricSource, ProjectAsset, ShapeAsset, ShapeCustomization, ShapeKind, SketchImage, SketchOperation, SketchPoint, SketchProfile, SketchRevolveSettings, SketchSegment, ShellEdges, ShellOpenings, ShellSide, WorkplaneNote, WorkplaneShape, WorkplaneWorkspaceSettings } from "@/types/layerling";
-import { type Vec3, type MeshData, type Cuboid, type ShapeUpdatePatch, type ManifoldSolid, MIN_SHAPE_DIMENSION, resetManifoldRuntime, cleanModelDimension, getManifoldRuntime, meshForShape, appendMeshData, formatTriangleCount, shapeAabb, boundsForShapes, boundsForCuboids, meshAabb, boundsForPositions, quantizedPointKey } from "@/lib/editorMeshCore";
+import { type Vec3, type MeshData, type Cuboid, type ShapeUpdatePatch, type ManifoldSolid, MIN_SHAPE_DIMENSION, resetManifoldRuntime, cleanModelDimension, getManifoldRuntime, meshForShape, meshReachAlong, appendMeshData, formatTriangleCount, shapeAabb, boundsForShapes, boundsForCuboids, meshAabb, boundsForPositions, quantizedPointKey } from "@/lib/editorMeshCore";
 import { cloneAsGroupChild, meshDataToManifoldMesh, shapeToManifoldSolid, splitShapesByPlane, unionOverlappingExportMeshes, exportBodiesWithLooseHoles, exportSolidVolume, type ExportSolidVolume, PRINT_MATERIAL_STORAGE_KEY, PRINT_INFILL_STORAGE_KEY, PRINT_WALLS_STORAGE_KEY, formatEstimateNumber, formatSectionOffset, SECTION_SEEN_FROM_KEYS, expandBundles, visibleExportShapes, multicolorExportSolids, exportFaceColors, colorSeparatedExportMeshes, disposeManifold, canIntersectShapes, buildIntersectionShapeFromSelection, groupedShape, quaternionForShape, rotationFromQuaternion, cleanShapePatch, restoreGroupedChildren, restoreGroupedChildrenForEdges, buildGroupedShapeFromSelection } from "@/lib/editorBooleans";
 import { handleViewArrowKey } from "@/lib/viewArrowKeys";
 import { escapeWasHandled } from "@/lib/escapeHandled";
@@ -8642,6 +8642,8 @@ export function LayerlingEditor({
         const ids = requestedIds.length ? new Set(requestedIds) : new Set(selectedIdsRef.current);
         const deleted = currentShapes().filter((shape) => ids.has(shape.id));
         if (deleted.length === 0) throw new Error("No matching objects to delete");
+        // A locked object stays, as the editor's Delete leaves it.
+        if (deleted.some((shape) => shape.locked)) throw new Error("Unlock the objects before deleting them");
         commitShapes(currentShapes().filter((shape) => !ids.has(shape.id)), [], deleted.length === 1 ? t("status.mcpDeletedOne") : t("status.mcpDeletedMany", { count: deleted.length }));
         selectedIdsRef.current = [];
         return { deletedIds: deleted.map((shape) => shape.id), deletedCount: deleted.length };
@@ -8667,6 +8669,10 @@ export function LayerlingEditor({
         const requestedWidth = mcpOptionalNumber(params.width ?? params.size);
         const requestedDepth = mcpOptionalNumber(params.depth ?? params.size) ?? (rawKind === "cube" ? requestedWidth : undefined);
         const requestedHeight = mcpOptionalNumber(params.height ?? params.size) ?? (rawKind === "cube" ? requestedWidth : undefined);
+        // A body of no size cannot be built, and a design holding one would not open again.
+        ([["width", requestedWidth], ["depth", requestedDepth], ["height", requestedHeight]] as const).forEach(([key, value]) => {
+          if (value !== undefined && value <= 0) throw new Error(`${key} must be greater than 0`);
+        });
         let shape: WorkplaneShape;
         if (kind === "sketch") {
           // A stroke builds the outline as a frame, as the editor's Stroke does (#154).
@@ -8821,6 +8827,11 @@ export function LayerlingEditor({
             patch[key] = params[key];
           }
         });
+        // A body of no size cannot be built, and a design holding one would not open again.
+        (["width", "depth", "height", "size"] as const).forEach((key) => {
+          if (typeof patch[key] === "number" && patch[key] <= 0) throw new Error(`${key} must be greater than 0`);
+        });
+        if (typeof params.color === "string" && !params.color.trim()) throw new Error("color must not be empty");
         if (typeof params.color === "string") patch.color = params.color;
         if (typeof params.name === "string") patch.name = params.name;
         if (typeof params.hole === "boolean") patch.hole = params.hole;
@@ -9076,7 +9087,7 @@ export function LayerlingEditor({
           normal = faceNormal.clone().normalize();
           // The middle of the target, moved out along the normal onto the plane of that face.
           const center = new THREE.Vector3(target.x, (target.elevation ?? 0) + target.height / 2, target.z);
-          const reach = Math.max(...meshForShape(target).vertices.map(([vx, vy, vz]) => new THREE.Vector3(vx, vy, vz).dot(normal as THREE.Vector3)));
+          const reach = meshReachAlong(meshForShape(target), normal as THREE.Vector3);
           point = center.clone().addScaledVector(normal, reach - center.dot(normal));
         }
         const patches = carriedOntoFace(all, [...ids], { point, normal }, movable[0].id);
@@ -9116,7 +9127,7 @@ export function LayerlingEditor({
           normal = faceNormal.clone().normalize();
           // The middle of the target, moved out along the normal onto the plane of that face.
           const center = new THREE.Vector3(target.x, (target.elevation ?? 0) + target.height / 2, target.z);
-          const reach = Math.max(...meshForShape(target).vertices.map(([vx, vy, vz]) => new THREE.Vector3(vx, vy, vz).dot(normal as THREE.Vector3)));
+          const reach = meshReachAlong(meshForShape(target), normal as THREE.Vector3);
           point = center.clone().addScaledVector(normal, reach - center.dot(normal));
         }
         const form = params.form === undefined ? DEFAULT_HOLE_PATTERN.form : params.form;
@@ -9182,7 +9193,7 @@ export function LayerlingEditor({
           normal = faceNormal.clone().normalize();
           // The middle of the target, moved out along the normal onto the plane of that face.
           const center = new THREE.Vector3(target.x, (target.elevation ?? 0) + target.height / 2, target.z);
-          const reach = Math.max(...meshForShape(target).vertices.map(([vx, vy, vz]) => new THREE.Vector3(vx, vy, vz).dot(normal as THREE.Vector3)));
+          const reach = meshReachAlong(meshForShape(target), normal as THREE.Vector3);
           point = center.clone().addScaledVector(normal, reach - center.dot(normal));
         }
         if (params.direction !== undefined && params.direction !== "out" && params.direction !== "in") throw new Error("push_face direction must be out or in");
@@ -9469,6 +9480,7 @@ export function LayerlingEditor({
         const ids = requestedIds.length ? new Set(requestedIds) : new Set(selectedIdsRef.current);
         const groups = currentShapes().filter((shape) => ids.has(shape.id) && (shape.groupedShapes?.length || wasGroupBeforeEdgeTreatments(shape)));
         if (groups.length === 0) throw new Error("Select at least one group to ungroup");
+        if (groups.some((shape) => shape.locked)) throw new Error("Unlock the groups before ungrouping them");
         const groupIds = new Set(groups.map((shape) => shape.id));
         // A group with a fillet or chamfer is one mesh; its edge features are taken back first (#514).
         const restored = groups.flatMap((shape) => restoreGroupedChildren(shape.groupedShapes?.length ? shape : groupBeforeEdgeTreatments(shape)!));
@@ -9720,6 +9732,7 @@ export function LayerlingEditor({
         const target = findShape(params.id);
         if (!target) throw new Error("Object not found");
         if (isNonSolidShapeKind(target.kind)) throw new Error("A ruler isn't a solid and has no edges to treat");
+        if (target.locked) throw new Error("Unlock the object before treating its edges");
         return applyCadModifierForMcp(target, params);
       }
 

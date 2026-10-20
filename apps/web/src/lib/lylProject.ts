@@ -1236,7 +1236,9 @@ function validateBentTubeDefinition(definition: Record<string, unknown>, label: 
 
 function validateShapeDefinition(definition: Record<string, unknown>, label: string) {
   const id = stringValue(definition.id, `${label}.id`);
-  stringValue(definition.name, `${label}.name`);
+  // An emptied name is a name too: the editor shows the shape's default name for it, so a design
+  // renamed to nothing must still open (it is what the object list stores when its field is cleared).
+  if (typeof definition.name !== "string") throw new Error(`${label}.name must be a string`);
   const kind = stringValue(definition.kind, `${label}.kind`);
   if (!SHAPE_KINDS.has(kind)) throw new Error(`${label} has unknown shape type '${kind}'`);
   stringValue(definition.color, `${label}.color`);

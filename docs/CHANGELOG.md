@@ -6,6 +6,10 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **A design with an emptied object name opens again:** Clearing an object's name in the object list or the properties shows its default name, and the design saves it as an empty name - but loading refused that name, so the design, even the copy kept in the browser, opened empty. Loading now takes an empty name, and designs that were saved that way open again with all their objects.
+- **The AI bridge refuses what would break a design:** `layerling_create_shape` and `layerling_update_object` refused nothing below a size of 0, and a design holding a body of width 0 or a negative height could not be opened again; they now answer with an error, and the tool list says sizes must be above 0. An empty colour is refused too. `layerling_delete_objects`, `layerling_ungroup_objects` and `layerling_apply_edge_treatment` now leave locked objects alone, as the editor does.
+- **Placing on a large import no longer fails:** `layerling_place_on_face`, `layerling_perforate_face` and `layerling_push_face` stopped with a "Maximum call stack size exceeded" error when the target was a large imported mesh (from some tens of thousands of triangles, depending on the browser); they now work on meshes of any size.
+
 ## 1.93.1
 
 - **More traced pictures come in whole (#584):** Three more pictures of the same kind (a drumming dance, children with a football, a homestead) still came in as a fifth of their area after 1.93.0, and the larger closing it tried did not help. The cause was in the check: the rounded outline had points a few millionths of a unit apart, the check merges points that close and then saw edges of four triangles, and a body that the kernel had built right was thrown away for the plain build, which leaves out any outline it cannot close. The closed outline is now cleaned of such points (0.002) before it is extruded, and all four pictures of the report come in whole with every outline. Reported by @stefaanl on GitHub.
