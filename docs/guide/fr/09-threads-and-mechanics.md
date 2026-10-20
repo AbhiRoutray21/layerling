@@ -1,11 +1,11 @@
 ---
-title: Fils, engrenages et autres pièces
+title: Filetages, engrenages et autres pièces
 summary: Vis, écrous et trous taraudés qui s'emboîtent, plus engrenage, ressort, tube cintré, queue d'aronde, trou en forme de goutte, trou lamé et trou fraisé.
 ---
 
 Outre les formes de base, la bibliothèque contient certaines pièces qui seraient fastidieuses à assembler soi-même. Tous peuvent être modifiés ultérieurement dans leurs paramètres.
 
-## Sujets
+## Filetages
 
 Choisissez {{ui:shape.thread}} dans la bibliothèque de formes. Sous {{ui:inspector.threadRole}}, vous décidez ce que cela doit être :
 
@@ -40,13 +40,13 @@ Plus de paramètres :
 - **{{ui:prop.threadChamferTop}}, {{ui:prop.threadChamferBottom}}, {{ui:prop.headChamfer}} et {{ui:prop.rimChamfer}} :** Chanfreins aux extrémités pour que le filetage démarre proprement et que la tête n'ait pas d'arête vive. Chaque extrémité d'une tige, d'un écrou ou d'un trou taraudé possède son propre chanfrein, de sorte que le haut peut être long et le bas court ou nul. Une vis n'en a qu'une à son extrémité, étiquetée {{ui:prop.chamfer}}. Sur un écrou ou un trou taraudé, le chanfrein est la pièce dans laquelle la bouche s'ouvre au-delà du diamètre extérieur ; le cône s'étend à 45 degrés jusqu'au noyau du filetage, de sorte qu'aucun rebord n'est laissé au niveau du diamètre extérieur.
 
 La commutation d'un thread entre {{ui:thread.rod}} et {{ui:thread.bore}} conserve sa longueur. Un écrou et une vis partent de leurs mesures standards.
-- **{{ui:prop.quality}} :** Avec quelle précision le fil est calculé. Plus haut, c'est plus précis, mais plus lent.
+- **{{ui:prop.quality}} :** Avec quelle précision le filetage est calculé. Plus haut, c'est plus précis, mais plus lent.
 
-Les fils imprimés sont un sujet à part entière. Faites d'abord la paire vis et écrou à titre de test avant d'imprimer une grande pièce et ajustez le jeu à votre imprimante.
+Les filetages imprimés sont un sujet à part entière. Faites d'abord la paire vis et écrou à titre de test avant d'imprimer une grande pièce et ajustez le jeu à votre imprimante.
 
-## Fils pour l'impression 3D
+## Filetages pour l'impression 3D
 
-Un fil imprimé a besoin d'air à deux endroits, et ils agissent différemment :
+Un filetage imprimé a besoin d'air à deux endroits, et ils agissent différemment :
 
 - **Le jeu dans le diamètre ({{ui:prop.clearance}}) :** rend l'écrou plus large. La vis a alors la moitié de la valeur de l'air de chaque côté, 0,2 mm à 0,4 mm. Le filetage tourne facilement, mais la vis peut vaciller latéralement.
 - **Jouer le long de l'axe ({{ui:prop.axialClearance}}) :** rend les dents de l'écrou plus fines. La vis peut alors se déplacer d'avant en arrière le long de l'axe de cette valeur lorsqu'elle n'est pas serrée. Il n’y a pas d’air supplémentaire sur le côté.
@@ -56,8 +56,8 @@ Ensemble, ils réalisent l'écart entre les flancs : environ 0,58 fois le jeu da
 **Conséquences à connaître**
 
 - **La vis a du jeu le long de l'axe.** Sans charge, elle peut se déplacer d'avant en arrière de cette valeur. Pour les fixations, les couvercles et les boîtiers, cela n'a pas d'importance ; pour une vis mère qui doit être positionnée exactement comme elle le fait, alors gardez-la petite ou à 0 là-bas.
-- **Les dents de l'écrou deviennent plus fines.** Avec 0,3 mm au pas de 1,75 mm, chaque dent est presque un tiers plus fine en son milieu et donc nettement moins solide. Pour les pièces fortement chargées, utilisez plutôt un fil plus grossier.
-- **Plus à calculer.** La forme de la dent obtient des points supplémentaires, donc le fil a plus de triangles et prend un peu plus de temps à calculer.
+- **Les dents de l'écrou deviennent plus fines.** Avec 0,3 mm au pas de 1,75 mm, chaque dent est presque un tiers plus fine en son milieu et donc nettement moins solide. Pour les pièces fortement chargées, utilisez plutôt un filetage plus grossier.
+- **Plus à calculer.** La forme de la dent obtient des points supplémentaires, donc le filetage a plus de triangles et prend un peu plus de temps à calculer.
 - **Pas d'arc réel dans l'export STEP pour le profil Whitworth.** Un filetage {{ui:thread.profileWhitworth}} avec du jeu le long de l'axe va vers l'outil de bord et l'export STEP sous forme de forme de dent composée de pièces droites, pas avec les vrais arcs de cercle. A 0, tout reste comme avant.
 
 **Conseils**
@@ -71,7 +71,7 @@ Ensemble, ils réalisent l'écart entre les flancs : environ 0,58 fois le jeu da
 7. **Ébavurez et rodez.** Les premiers tours sont souvent raides car de petits restes de l'empreinte se trouvent sur les flancs. Tournez-le d'avant en arrière plusieurs fois et il fonctionne plus facilement. Le chanfrein au début facilite l'enfilage.
 8. **Une autre imprimante ou un autre filament.** Le jeu dépend de l'imprimante, du matériau et de la buse. Imprimez à nouveau la paire de test lorsque vous modifiez l'un ou l'autre.
 
-L'outil de bord prend un fil comme corps exact. Vous pouvez chanfreiner ou arrondir la pièce qui la porte avec le filetage déjà en place, ou les rebords d'une tête de vis, voir [Casser les bords et creuser les corps](chapter:edges-and-hollowing). Travailler les bords d'un filetage prend un certain temps : quelques secondes pour un filetage M6, environ une demi-minute pour un filetage de tuyau G1/2. Le moyen le plus rapide de casser le bord d'une tête de vis reste le chanfrein de la tête dans les propriétés.
+L'outil de bord prend un filetage comme corps exact. Vous pouvez chanfreiner ou arrondir la pièce qui la porte avec le filetage déjà en place, ou les rebords d'une tête de vis, voir [Casser les bords et creuser les corps](chapter:edges-and-hollowing). Travailler les bords d'un filetage prend un certain temps : quelques secondes pour un filetage M6, environ une demi-minute pour un filetage de tuyau G1/2. Le moyen le plus rapide de casser le bord d'une tête de vis reste le chanfrein de la tête dans les propriétés.
 
 ## Engrenages
 
@@ -158,7 +158,7 @@ Faites un trou dans la larme et regroupez-la avec la pièce. Sa longueur s'éten
 
 Un **trou taraudé** situé sur le côté s'affaisse également au sommet de la même manière. Donnez-lui sa propre larme : ajoutez un trou {{ui:shape.teardrop}} dont le {{ui:prop.teardropDiameter}} correspond au noyau du filetage, le diamètre que ses dents laissent libre (environ 8,4 mm pour du M10), de même longueur que le trou taraudé, et sélectionnez les deux. Cliquez sur {{ui:editor.tool.align}} et alignez-les au milieu — le milieu de la larme est le milieu de sa partie ronde, et non de sa boîte avec la pointe, de sorte que les deux cercles se superposent parfaitement — puis regroupez les deux avec la pièce. Le filetage est découpé comme d'habitude et la pointe ouvre le haut du trou, ce qui permet de l'imprimer sans supports.
 
-## Lamage et fraisage
+## Lamage et fraisage
 
 Une tête de vis ne devrait souvent pas être fière. Le {{ui:shape.counterbore}} découpe une poche ronde pour une vis à tête creuse (DIN 912), le {{ui:shape.countersink}} un cône pour une vis à tête fraisée (DIN 7991). Les deux se tiennent avec la tête vers le haut : le {{ui:prop.screwHoleHead}} est le diamètre de la poche ou du cône, le {{ui:prop.screwHoleShaft}} l'alésage en dessous, le {{ui:prop.screwHoleLength}} toute la longueur. Sur le lamage, vous placez le {{ui:prop.screwHoleHeadDepth}}, sur le fraisage le {{ui:prop.screwHoleAngle}} (90° convient aux vis à tête fraisée). Les valeurs par défaut correspondent à une vis M3.
 

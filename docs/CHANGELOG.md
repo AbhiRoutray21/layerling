@@ -6,6 +6,9 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **Guide fixes in several languages:** The French shortcuts page showed the word "{{raccourcis}}" instead of the table of shortcuts, two French headings showed as plain text with "##" in front, two French links into a chapter went nowhere, and the French chapter on threads called them "fils" and "sujets" instead of "filetages". Arabic headings got no anchor, so the table of contents and links into a chapter of the Arabic guide went nowhere; they now take the anchor of the English heading in their place. The Danish AI chapter lacked two tools, the skill named a section-view tool that does not exist, and the printing chapter in every language spoke of fifty printers where there are over 220. A new test checks every language folder for these mistakes.
+- **Node.js 22.18 or newer, said and checked:** The README asked for Node.js 20, but the guide and font scripts load TypeScript files directly, which needs 22.18; with an older Node.js the build stopped with a puzzling error. `package.json` now names the version, `npm run dev` and `npm run build` check it first with a clear message, and the Windows quickstart checks an already installed Node.js too.
+
 ## 1.93.0
 
 - **A traced picture with many touching outlines comes in whole (#584):** A black-and-white drawing traced from a picture (the guitarist of a second file) came in as a handful of pieces, about a fifth of its area. The kernel built the body well, but at a few corners where outlines meet it was left with an edge of four triangles, so the check threw the body away and the plain build, which leaves out any outline it cannot close, put in only fragments. When the first closing (0.05) leaves such an edge, the kernel now tries 0.1, 0.2 and 0.35 and takes the first body that is clean; the drawing keeps its 345 x 277 mm and all its outlines. Reported by @stefaanl on GitHub.

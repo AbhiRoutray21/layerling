@@ -16,7 +16,7 @@ Sur la page de démarrage, un indice {{ui:installHint.install}} apparaît si vot
 
 Vous pouvez fermer l'indice sur la page de démarrage avec {{ui:installHint.dismiss}}. Le fait de démarrer une deuxième fois l'application installée dans Chrome ou Edge amène la fenêtre ouverte au premier plan au lieu d'en ouvrir une autre.
 
-## Mises à jour
+## Mises à jour
 
 Lorsqu'une version plus récente existe, layerling l'affiche sur la page de démarrage. Grâce à {{ui:dashboard.updateBannerLink}}, vous lisez ce qui a changé. Le numéro de version est en bas à droite. Après avoir rechargé la page, vous disposez de la nouvelle version.
 
