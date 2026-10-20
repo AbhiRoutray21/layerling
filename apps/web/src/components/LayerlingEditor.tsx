@@ -2102,31 +2102,27 @@ function cadModifierSourceParts(shape: WorkplaneShape) {
 
 /**
  * Counting the loose pieces of an imported mesh walks every triangle, and the
- * toolbar asks again each time the selected shape changes - also when it was
- * only moved. Where the shape stands does not change how many pieces it has,
- * so the count is kept per mesh and per everything-but-the-position.
+ * toolbar asks again each time the selected shape changes - with every step of
+ * a move, a turn or a resize. None of these changes which triangles hang
+ * together: they only move the points. So the count is kept per mesh; a changed
+ * mesh (a cut, an edge treatment, a simplification) is a new object and is
+ * counted anew. Keyed by the shape's settings as well, a turn of a large import
+ * counted it again at every step and stalled the drag.
  */
-const importedPartCounts = new WeakMap<object, { key: string; count: number }>();
+const importedPartCounts = new WeakMap<object, number>();
+
+/** Stand-ins for "no edges", the same arrays at every render, so the workplane does not draw the edge lines again for nothing. */
+const NO_MODIFIER_EDGES: CadModifierEdge[] = [];
+const NO_EDGE_IDS: number[] = [];
 
 function separablePartCount(shape: WorkplaneShape) {
   if (shape.locked || shape.hole) return 0;
   if (shape.groupedShapes?.length && !shape.importedMesh) return shape.groupedShapes.length;
   if (!shape.importedMesh) return meshFaceComponents(meshForShape(shape)).length;
-  const key = JSON.stringify({
-    ...shape,
-    x: 0,
-    z: 0,
-    elevation: 0,
-    importedMesh: undefined,
-    groupedShapes: undefined,
-    edgeTreatmentHistory: undefined,
-    cadBrep: undefined,
-    cadDisplayEdges: undefined,
-  });
   const cached = importedPartCounts.get(shape.importedMesh);
-  if (cached?.key === key) return cached.count;
+  if (cached !== undefined) return cached;
   const count = meshFaceComponents(meshForShape(shape)).length;
-  importedPartCounts.set(shape.importedMesh, { key, count });
+  importedPartCounts.set(shape.importedMesh, count);
   return count;
 }
 
@@ -3339,6 +3335,13 @@ export function LayerlingEditor({
     () => edgeModifier ? edgeModifier.edges.filter(cadModifierCandidateEdge).map((edge) => edge.id) : [],
     [edgeModifier?.edges],
   );
+  // The edges drawn on the body: a new array at every render of the editor made the workplane
+  // throw its edge lines away and build them all again, also while nothing about them changed.
+  const modifierDisplayEdges = useMemo(() => {
+    if (!edgeModifier) return NO_MODIFIER_EDGES;
+    const candidates = new Set(modifierCandidateEdgeIds);
+    return edgeModifier.edges.filter((edge) => candidates.has(edge.id));
+  }, [edgeModifier?.edges, modifierCandidateEdgeIds]);
   const edgeModifierMaxAmount = useMemo(() => {
     const source = cadModifierBaseShapeRef.current ?? selectedShape;
     if (!source) return 10;
@@ -12311,10 +12314,10 @@ export function LayerlingEditor({
           onWorkplaneModeChange={closeViewportWorkplaneMode}
           modifierActive={Boolean(edgeModifier)}
           modifierPreviewActive={Boolean(edgeModifier?.preview)}
-          modifierEdges={edgeModifier?.edges.filter((edge) => modifierCandidateEdgeIds.includes(edge.id)) ?? []}
+          modifierEdges={modifierDisplayEdges}
           modifierHighlightedEdgeIds={modifierAvailableEdgeIds}
-          selectedModifierEdgeIds={edgeModifier?.selectedEdgeIds ?? []}
-          failedModifierEdgeIds={edgeModifier?.error ? edgeModifier.failedEdgeIds ?? [] : []}
+          selectedModifierEdgeIds={edgeModifier?.selectedEdgeIds ?? NO_EDGE_IDS}
+          failedModifierEdgeIds={edgeModifier?.error ? edgeModifier.failedEdgeIds ?? NO_EDGE_IDS : NO_EDGE_IDS}
           modifierOnlyVisibleEdges={edgeModifier?.onlyVisibleEdges ?? false}
           onModifierEdgeToggle={toggleModifierEdge}
           themePreference={themePreference}

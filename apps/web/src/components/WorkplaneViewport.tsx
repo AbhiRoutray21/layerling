@@ -163,7 +163,7 @@ import { orbitViewBy, panViewBy } from "@/lib/viewArrowKeys";
 import { useViewportKeyboardHooks } from "@/components/workplane/viewportKeyboard";
 import { aimPickRay, firstShapeHit, pickLayFlatFace, pickRotationPivot, pickShapeAt, pickShapeIdAt, pointerRayFor, rayPointOnRotationPlane, RENDER_LAYER_SHAPES, splitAxisParameter, usePickOnlyPointer, type LayFlatPick, type PickOnlySelection } from "@/components/workplane/viewportPicking";
 export type { LayFlatPick } from "@/components/workplane/viewportPicking";
-import { RENDER_LAYER_HELPERS, sharedShapeGeometryCache, sharedEdgesGeometryCache, sharedShapeMaterialCache, type PointCardOffset, type ShapeRenderRecord, type ThreeState, type MoveDimensionSession, type NoteOverlayState, type TapePoint, type TapeAttachment, type TapeEdgeAttachment, type TapeModel, type TapeOverlayState, type TapeCandidate, type RotationHandleSide, type RotationHandleSides, type DragItem, quaternionForShape, projectToScreen, syncMoveDimensionWorldLines, syncTransformGuideWorldLines, tapeShapeDimensions, tapePointWorld, tapeEdgeWorldPoints, tapeSegmentWorldPoints, syncTapeOverlay, syncNoteOverlay, NoteOverlay, TapeOverlay, type RulerDimensionOverlayItem, type RulerDimensionOverlayState, syncRulerDimensionOverlay, RulerDimensionOverlay, type CornerRulerInstance, type CornerRulerOverlayState, syncCornerRulerToolOverlay, CornerRulerToolOverlay, syncOriginDimensionWorldLines, shapeCenter, shapeLocalExtents, projectShapeExtent, projectShapesExtent, type OriginDimensionFrame, setObjectRenderLayer, freezeStaticObjectMatrices, formatMeasure, findShapeObject, trimSharedShapeGeometryCache, releaseSharedShapeGeometry, trimSharedShapeMaterialCache, releaseSharedShapeMaterials, disposeMaterialResource, disposeChildren, disposeObject } from "@/components/workplane/ViewportOverlays";
+import { RENDER_LAYER_HELPERS, sharedOverlayLineMaterial, sharedShapeGeometryCache, sharedEdgesGeometryCache, sharedShapeMaterialCache, type PointCardOffset, type ShapeRenderRecord, type ThreeState, type MoveDimensionSession, type NoteOverlayState, type TapePoint, type TapeAttachment, type TapeEdgeAttachment, type TapeModel, type TapeOverlayState, type TapeCandidate, type RotationHandleSide, type RotationHandleSides, type DragItem, quaternionForShape, projectToScreen, syncMoveDimensionWorldLines, syncTransformGuideWorldLines, tapeShapeDimensions, tapePointWorld, tapeEdgeWorldPoints, tapeSegmentWorldPoints, syncTapeOverlay, syncNoteOverlay, NoteOverlay, TapeOverlay, type RulerDimensionOverlayItem, type RulerDimensionOverlayState, syncRulerDimensionOverlay, RulerDimensionOverlay, type CornerRulerInstance, type CornerRulerOverlayState, syncCornerRulerToolOverlay, CornerRulerToolOverlay, syncOriginDimensionWorldLines, shapeCenter, shapeLocalExtents, projectShapeExtent, projectShapesExtent, type OriginDimensionFrame, setObjectRenderLayer, freezeStaticObjectMatrices, formatMeasure, findShapeObject, trimSharedShapeGeometryCache, releaseSharedShapeGeometry, trimSharedShapeMaterialCache, releaseSharedShapeMaterials, disposeMaterialResource, disposeChildren, disposeObject } from "@/components/workplane/ViewportOverlays";
 
 const WORKPLANE_WIDTH = 200;
 const WORKPLANE_DEPTH = 140;
@@ -11330,6 +11330,32 @@ function modifierEdgeMaterialStyle(active: boolean, hovered: boolean, previewAct
 // Scaling a view-space point about the camera keeps it on the same pixel; in
 // an orthographic view only its depth may change, towards the viewer also for
 // a point behind the camera, which that view draws too.
+/**
+ * The thin edge lines' materials, one per look and shared (marked cached, so taking the lines
+ * down leaves them): the lines are built again whenever the pointer moves onto another edge, and
+ * a material per edge and per rebuild made three.js compile their shaders again each time.
+ */
+const modifierEdgeMaterials = new Map<string, THREE.LineBasicMaterial>();
+
+function modifierEdgeMaterial(style: { color: string; opacity: number; linewidth: number }, onlyVisible: boolean) {
+  const key = `${style.color}:${style.opacity}:${style.linewidth}:${onlyVisible}`;
+  let material = modifierEdgeMaterials.get(key);
+  if (!material) {
+    material = new THREE.LineBasicMaterial({
+      color: style.color,
+      depthTest: onlyVisible,
+      depthWrite: false,
+      transparent: true,
+      opacity: style.opacity,
+      linewidth: style.linewidth,
+    });
+    if (onlyVisible) pullModifierEdgeTowardCamera(material);
+    material.userData.cached = true;
+    modifierEdgeMaterials.set(key, material);
+  }
+  return material;
+}
+
 function pullModifierEdgeTowardCamera(material: THREE.LineBasicMaterial) {
   const pull = MODIFIER_EDGE_DEPTH_PULL.toFixed(4);
   material.onBeforeCompile = (shader) => {
@@ -11360,20 +11386,7 @@ function wideModifierEdgeLine(state: ThreeState, points: number[], color: string
   }
   const geometry = new LineSegmentsGeometry();
   geometry.setPositions(segments);
-  const material = new LineMaterial({
-    color,
-    linewidth,
-    worldUnits: false,
-    transparent: true,
-    opacity,
-    depthTest: false,
-    depthWrite: false,
-    alphaToCoverage: false,
-  });
-  material.toneMapped = false;
-  const rect = state.renderer.domElement.getBoundingClientRect();
-  material.resolution.set(Math.max(1, rect.width), Math.max(1, rect.height));
-  const line = new LineSegments2(geometry, material);
+  const line = new LineSegments2(geometry, sharedOverlayLineMaterial(state, { color, linewidth, opacity, depthTest: false }));
   line.renderOrder = renderOrder;
   line.frustumCulled = false;
   setObjectRenderLayer(line, RENDER_LAYER_MODIFIERS);
@@ -11410,16 +11423,7 @@ function rebuildModifierEdges(
     }
     const geometry = new THREE.BufferGeometry();
     geometry.setAttribute("position", new THREE.Float32BufferAttribute(edge.points, 3));
-    const material = new THREE.LineBasicMaterial({
-      color: style.color,
-      depthTest: onlyVisible,
-      depthWrite: false,
-      transparent: true,
-      opacity: style.opacity,
-      linewidth: style.linewidth,
-    });
-    if (onlyVisible) pullModifierEdgeTowardCamera(material);
-    const line = new THREE.Line(geometry, material);
+    const line = new THREE.Line(geometry, modifierEdgeMaterial(style, onlyVisible));
     line.userData.modifierEdgeId = edge.id;
     line.renderOrder = hovered ? 1003 : active ? 1002 : 1001;
     setObjectRenderLayer(line, RENDER_LAYER_MODIFIERS);
@@ -12632,6 +12636,31 @@ function updateSelectedGroundFootprintPreviews(state: ThreeState, drag: DragStat
   });
 }
 
+/**
+ * The footprint's two materials are the same for every selection, so they are made once and
+ * shared (marked cached, so taking a footprint down leaves them). A new pair for each footprint
+ * was thrown away with it at every change of the selected body, and with it three.js threw away
+ * their compiled shaders and compiled them again for the next footprint.
+ */
+let selectedFootprintMaterials: { fill: THREE.MeshBasicMaterial; outline: THREE.LineBasicMaterial } | null = null;
+
+function sharedSelectedFootprintMaterials() {
+  if (!selectedFootprintMaterials) {
+    const fill = new THREE.MeshBasicMaterial({
+      color: "#7f8f95",
+      transparent: true,
+      opacity: 0.22,
+      depthWrite: false,
+      side: THREE.DoubleSide,
+    });
+    const outline = new THREE.LineBasicMaterial({ color: "#00aeea", transparent: true, opacity: 0.92 });
+    fill.userData.cached = true;
+    outline.userData.cached = true;
+    selectedFootprintMaterials = { fill, outline };
+  }
+  return selectedFootprintMaterials;
+}
+
 function createSelectedGroundFootprint(shape: WorkplaneShape, workplane: PlacementWorkplane) {
   const frame = selectionFrameForShapes([shape], [shape.id], workplane);
   if (!frame) {
@@ -12655,23 +12684,12 @@ function createSelectedGroundFootprint(shape: WorkplaneShape, workplane: Placeme
   const fillGeometry = new THREE.BufferGeometry();
   fillGeometry.setAttribute("position", new THREE.BufferAttribute(new Float32Array(fillPositions), 3));
   fillGeometry.computeVertexNormals();
-  const fill = new THREE.Mesh(
-    fillGeometry,
-    new THREE.MeshBasicMaterial({
-      color: "#7f8f95",
-      transparent: true,
-      opacity: 0.22,
-      depthWrite: false,
-      side: THREE.DoubleSide,
-    }),
-  );
+  const materials = sharedSelectedFootprintMaterials();
+  const fill = new THREE.Mesh(fillGeometry, materials.fill);
   group.add(fill);
 
   const points = [...footprint, footprint[0].clone()];
-  const outline = new THREE.Line(
-    new THREE.BufferGeometry().setFromPoints(points),
-    new THREE.LineBasicMaterial({ color: "#00aeea", transparent: true, opacity: 0.92 }),
-  );
+  const outline = new THREE.Line(new THREE.BufferGeometry().setFromPoints(points), materials.outline);
   outline.userData.shapeId = shape.id;
   group.add(outline);
 
