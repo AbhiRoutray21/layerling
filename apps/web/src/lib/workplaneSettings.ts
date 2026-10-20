@@ -397,6 +397,9 @@ export function normalizeShapeCustomizations(value: unknown, fallback: ShapeCust
       entry.gridfinityScoopRight = typeof source.gridfinityScoopRight === "boolean" ? source.gridfinityScoopRight : fallbackEntry?.gridfinityScoopRight;
       entry.gridfinityScoopRadius = optionalShapeNumber(source.gridfinityScoopRadius, fallbackEntry?.gridfinityScoopRadius, 0, MAX_CUSTOM_SHAPE_DIMENSION);
       entry.gridfinityFloorHeight = optionalShapeNumber(source.gridfinityFloorHeight, fallbackEntry?.gridfinityFloorHeight, 0, MAX_CUSTOM_SHAPE_DIMENSION);
+      entry.gridfinityCompartmentsX = optionalShapeNumber(source.gridfinityCompartmentsX, fallbackEntry?.gridfinityCompartmentsX, 1, MAX_CUSTOM_SHAPE_DIMENSION, true);
+      entry.gridfinityCompartmentsZ = optionalShapeNumber(source.gridfinityCompartmentsZ, fallbackEntry?.gridfinityCompartmentsZ, 1, MAX_CUSTOM_SHAPE_DIMENSION, true);
+      entry.gridfinityDividerThickness = optionalShapeNumber(source.gridfinityDividerThickness, fallbackEntry?.gridfinityDividerThickness, 0, MAX_CUSTOM_SHAPE_DIMENSION);
     }
     if (kind === "knurl") {
       entry.knurlPattern = source.knurlPattern === "straight" || source.knurlPattern === "diamond" || source.knurlPattern === "round" ? source.knurlPattern : fallbackEntry?.knurlPattern;
