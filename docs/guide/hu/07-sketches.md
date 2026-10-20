@@ -81,6 +81,8 @@ Ha a munkasík egy test oldalán fekszik, úgy rajzolsz, ahogy arra az oldalra n
 
 A {{ui:inspector.editSketch}} gombbal bármikor visszatérhetsz a vázlathoz, hogy módosítsd. A testre dupla kattintás ugyanezt teszi, mint a Tinkercadben (egy zárolt test zárva marad); a beállításokban a {{ui:workspace.doubleClickOpensSketch}} ezt kikapcsolja. A testen már elvégzett élműveletek viszont elvesznek, mert az élek újonnan jönnek létre.
 
+**Másfajta test ugyanabból a vázlatból:** a vázlat tetején lévő címke mutatja, mi lesz belőle: {{ui:sketch.modeBadgeExtrude}}, {{ui:sketch.modeBadgeRevolve}} vagy {{ui:sketch.modeBadgeSweep}}. Kattints rá és válassz másikat, akkor is, ha egy meglévő testet szerkesztesz: egy importált SVG, amely kihúzva érkezik, vázává vagy gombbá válik, ha {{ui:sketch.modeBadgeRevolve}} lesz belőle. A tengelyen átnyúló körvonal balra csúszik, amíg a jobb széle a tengelyre nem kerül; a [[Ctrl]]+[[Z]] visszavonja az eltolást. Befejezéskor az új test a régi helyére kerül, annak nevével és színével, a talpa ugyanazon a magasságon. Az élkezelések elvesznek, mint a vázlat minden módosításánál.
+
 ### Forgatás
 
 Forgatásnál a keresztmetszet felét **a vázlatban látható tengelytől balra** rajzolod. Mellette a forgatás 3D előnézetét látod. Azonnal mutatja, hogyan fog kinézni a test. A körvonalnak zártnak kell lennie, vagy egy nyitott vonalat vonalként építesz meg, lásd lent. A végén kattints a {{ui:sketch.finishRevolve}} gombra. A terv többi teste elölnézetben látszik, ugyanabban a nézetben, mint a profil, a tengellyel középen: rajzold a profilt melléjük vagy föléjük. A test ott áll, ahová rajzoltad, és a vázlat közepén átmenő vízszintes vonal a talaj: a fölötte rajzolt profil magasabban álló testet ad, a legalsó pontja pedig a test talpa.

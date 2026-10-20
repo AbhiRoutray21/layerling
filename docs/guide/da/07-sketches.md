@@ -81,6 +81,8 @@ Ligger arbejdsplanet på siden af en form, tegner du den måde du ser på den si
 
 Med {{ui:inspector.editSketch}} kan du vende tilbage til skitsen når som helst for at ændre den. Et dobbeltklik på formen gør det samme, som i Tinkercad (en låst form forbliver lukket); {{ui:workspace.doubleClickOpensSketch}} i indstillingerne slår det fra. Kantbehandlinger du allerede har lavet på formen går dog tabt, fordi kanterne skabes på ny.
 
+**En anden slags legeme fra samme skitse:** mærket øverst i skitsen siger, hvad den bliver til: {{ui:sketch.modeBadgeExtrude}}, {{ui:sketch.modeBadgeRevolve}} eller {{ui:sketch.modeBadgeSweep}}. Klik på det og vælg en anden, også mens du redigerer et eksisterende legeme: en importeret SVG, der kommer ind ekstruderet, bliver til en vase eller en knop, når du skifter den til {{ui:sketch.modeBadgeRevolve}}. En kontur, der går over aksen, flyttes til venstre, til dens højre kant ligger på aksen; [[Ctrl]]+[[Z]] fortryder flytningen. Når du afslutter, træder det nye legeme i det gamles sted med samme navn og farve og foden i samme højde. Kantbehandlinger forsvinder, som ved enhver ændring af en skitse.
+
 ### Revolvering
 
 Ved revolvering tegner du den halve tværsnit **til venstre for aksen** der vises i skitsen. Ved siden af ser du en 3D-forhåndsvisning af revolveringen. Den viser straks hvordan formen vil se ud. Omridset skal være lukket. Til sidst klik på {{ui:sketch.finishRevolve}}. De andre legemer i designet vises forfra, i samme visning som profilen, med aksen i midten: tegn profilen ved siden af dem eller over dem. Legemet står, hvor du har tegnet det, og den vandrette linje gennem midten af skitsen er jorden: en profil over den giver et legeme, der står højere, og dens laveste punkt er legemets fod.

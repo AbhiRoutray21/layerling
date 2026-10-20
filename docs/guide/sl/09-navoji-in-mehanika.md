@@ -16,7 +16,7 @@ V knjižnici oblik izberi {{ui:shape.thread}}. Pod {{ui:inspector.threadRole}} s
 
 ![Vijak z valjasto glavo. Desno sta vrsta in oblika glave, nižje velikost, korak in profil.](shot:thread-screw)
 
-Velikost izbereš pri {{ui:prop.threadSize}} s seznama: metrični od M2 do M12, palčni UNC in UNF od št. 4 do 1 palca in cevni navoji G1/16 do G4. Če izbereš {{ui:thread.customSize}}, {{ui:prop.diameter}} in {{ui:prop.pitch}} določiš sam. Pri palčni velikosti ali velikosti G polje namesto koraka v milimetrih vpraša po {{ui:prop.threadsPerInch}}.
+Velikost izbereš pri {{ui:prop.threadSize}} s seznama: metrični od M2 do M24, palčni UNC in UNF od št. 4 do 1 palca in cevni navoji G1/16 do G4. Če izbereš {{ui:thread.customSize}}, {{ui:prop.diameter}} in {{ui:prop.pitch}} določiš sam. Pri palčni velikosti ali velikosti G polje namesto koraka v milimetrih vpraša po {{ui:prop.threadsPerInch}}.
 
 Seznam razvršča velikosti po vrstah, vrstica pod poljem pa navede vrsto izbrane velikosti, s primeri iz vsakdana:
 

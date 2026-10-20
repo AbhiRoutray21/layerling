@@ -16,7 +16,7 @@ Choisissez {{ui:shape.thread}} dans la bibliothèque de formes. Sous {{ui:inspec
 
 ![Une vis avec une culasse. À droite : type et forme de la tête, plus bas taille, pas et profil.](shot:thread-screw)
 
-Vous choisissez la taille sous {{ui:prop.threadSize}} dans une liste : métrique de M2 ​​à M12, les tailles en pouces UNC et UNF du n° 4 à 1 pouce et les filetages de tuyau G1/16 à G4. Si vous choisissez {{ui:thread.customSize}}, vous définissez vous-même {{ui:prop.diameter}} et {{ui:prop.pitch}}. Pour une taille en pouces ou une taille G, le champ demande {{ui:prop.threadsPerInch}} au lieu du pas en millimètres.
+Vous choisissez la taille sous {{ui:prop.threadSize}} dans une liste : métrique de M2 ​​à M24, les tailles en pouces UNC et UNF du n° 4 à 1 pouce et les filetages de tuyau G1/16 à G4. Si vous choisissez {{ui:thread.customSize}}, vous définissez vous-même {{ui:prop.diameter}} et {{ui:prop.pitch}}. Pour une taille en pouces ou une taille G, le champ demande {{ui:prop.threadsPerInch}} au lieu du pas en millimètres.
 
 La liste regroupe les tailles par série, et une ligne sous le champ nomme la série de la taille que vous avez choisie, avec des exemples que vous connaissez de la vie quotidienne :
 

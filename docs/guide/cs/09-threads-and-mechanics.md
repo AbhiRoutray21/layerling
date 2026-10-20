@@ -16,7 +16,7 @@ Vložte {{ui:shape.thread}} a v {{ui:inspector.threadRole}} zvolte:
 
 ![Šroub s válcovou hlavou. Vpravo jsou typ dílu, hlava, velikost, stoupání a profil.](shot:thread-screw)
 
-{{ui:prop.threadSize}} nabízí metrické M2 až M12, palcové UNC a UNF od No. 4 po 1 palec a trubkové G1/16 až G4. Při {{ui:thread.customSize}} zadáváte {{ui:prop.diameter}} a {{ui:prop.pitch}}. U palcových a G rozměrů se místo stoupání v mm zadává {{ui:prop.threadsPerInch}}.
+{{ui:prop.threadSize}} nabízí metrické M2 až M24, palcové UNC a UNF od No. 4 po 1 palec a trubkové G1/16 až G4. Při {{ui:thread.customSize}} zadáváte {{ui:prop.diameter}} a {{ui:prop.pitch}}. U palcových a G rozměrů se místo stoupání v mm zadává {{ui:prop.threadsPerInch}}.
 
 Seznam je rozdělen podle řad a pod ním je vysvětlení vybrané řady:
 

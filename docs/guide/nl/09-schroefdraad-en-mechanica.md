@@ -16,7 +16,7 @@ Kies {{ui:shape.thread}} in de vormenbibliotheek. Onder {{ui:inspector.threadRol
 
 ![Een schroef met een cilinderkop. Rechts: soort en kopvorm, verder omlaag maat, spoed en profiel.](shot:thread-screw)
 
-De maat kies je onder {{ui:prop.threadSize}} uit een lijst: metrisch van M2 tot M12, de inchmaten UNC en UNF van No. 4 tot 1 inch, en de pijpdraden G1/16 tot G4. Kies je {{ui:thread.customSize}}, dan stel je {{ui:prop.diameter}} en {{ui:prop.pitch}} zelf in. Bij een inchmaat of een G-maat vraagt het veld om {{ui:prop.threadsPerInch}} in plaats van de spoed in millimeters.
+De maat kies je onder {{ui:prop.threadSize}} uit een lijst: metrisch van M2 tot M24, de inchmaten UNC en UNF van No. 4 tot 1 inch, en de pijpdraden G1/16 tot G4. Kies je {{ui:thread.customSize}}, dan stel je {{ui:prop.diameter}} en {{ui:prop.pitch}} zelf in. Bij een inchmaat of een G-maat vraagt het veld om {{ui:prop.threadsPerInch}} in plaats van de spoed in millimeters.
 
 De lijst groepeert de maten per serie, en een regel onder het veld noemt de serie van de maat die je koos, met voorbeelden die je uit het dagelijks leven kent:
 

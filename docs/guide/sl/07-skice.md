@@ -84,6 +84,8 @@ Klikni {{ui:sketch.finishSketch}}. Obris stoji kot telo na delovni ravnini in no
 
 Z {{ui:inspector.editSketch}} se kadarkoli vrneš v skico, da jo spremeniš. Dvoklik na telo naredi isto, kot v Tinkercadu (zaklenjeno telo ostane zaprto); v nastavitvah to izklopiš z {{ui:workspace.doubleClickOpensSketch}}. Obdelave robov, ki si jih na telesu že naredil, se pri tem izgubijo, ker robovi nastanejo znova.
 
+**Druga vrsta telesa iz iste skice:** oznaka na vrhu skice pove, kaj bo iz nje: {{ui:sketch.modeBadgeExtrude}}, {{ui:sketch.modeBadgeRevolve}} ali {{ui:sketch.modeBadgeSweep}}. Klikni nanjo in izberi drugo, tudi med urejanjem obstoječega telesa: uvoženi SVG, ki pride izvlečen, postane vaza ali gumb, ko ga preklopiš na {{ui:sketch.modeBadgeRevolve}}. Obris, ki sega čez os, se premakne levo, dokler njegov desni rob ne leži na osi; [[Ctrl]]+[[Z]] premik razveljavi. Ob zaključku novo telo stopi na mesto starega, z njegovim imenom in barvo ter vznožjem na isti višini. Obdelave robov se izgubijo, kot pri vsaki spremembi skice.
+
 ### Vrtenje
 
 Pri vrtenju narišeš pol preseka **levo od osi**, ki je vrisana v skici. Poleg vidiš 3D-predogled vrtenja. Takoj pokaže, kako telo izgleda. Obris mora biti sklenjen, ali pa odprto črto zgradiš kot potezo, glej spodaj. Na koncu klikneš {{ui:sketch.finishRevolve}}. Druga telesa načrta so prikazana od spredaj, v istem pogledu kot profil, z osjo na sredini: profil nariši ob njih ali nad njimi. Telo stoji tam, kjer si ga narisal, vodoravna črta na sredini skice pa je tla: profil nad njo da telo, ki stoji više, njegova najnižja točka pa je noga telesa.

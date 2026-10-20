@@ -16,7 +16,7 @@ Wähle {{ui:shape.thread}} in der Formenbibliothek. Unter {{ui:inspector.threadR
 
 ![Eine Schraube mit Zylinderkopf. Rechts stehen Art und Kopfform, weiter unten Größe, Steigung und Profil.](shot:thread-screw)
 
-Die Größe suchst du bei {{ui:prop.threadSize}} aus einer Liste: metrisch von M2 bis M12, die Zollgrößen UNC und UNF von Nr. 4 bis 1 Zoll und die Rohrgewinde G1/16 bis G4. Wählst du {{ui:thread.customSize}}, bestimmst du {{ui:prop.diameter}} und {{ui:prop.pitch}} selbst. Bei einer Zoll- oder G-Größe fragt das Feld nach {{ui:prop.threadsPerInch}} statt nach der Steigung in Millimetern.
+Die Größe suchst du bei {{ui:prop.threadSize}} aus einer Liste: metrisch von M2 bis M24, die Zollgrößen UNC und UNF von Nr. 4 bis 1 Zoll und die Rohrgewinde G1/16 bis G4. Wählst du {{ui:thread.customSize}}, bestimmst du {{ui:prop.diameter}} und {{ui:prop.pitch}} selbst. Bei einer Zoll- oder G-Größe fragt das Feld nach {{ui:prop.threadsPerInch}} statt nach der Steigung in Millimetern.
 
 Die Liste ordnet die Größen nach Reihen, und eine Zeile unter dem Feld nennt die Reihe der gewählten Größe, mit Beispielen aus dem Alltag:
 

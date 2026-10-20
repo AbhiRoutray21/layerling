@@ -16,7 +16,7 @@ Válaszd az alakzattárban a {{ui:shape.thread}} alakzatot. A {{ui:inspector.thr
 
 ![Egy hengeres fejű csavar. Jobbra: fajta és fejforma, lejjebb méret, menetemelkedés és profil.](shot:thread-screw)
 
-A méretet a {{ui:prop.threadSize}} alatt egy listából választod: metrikusat M2-től M12-ig, az UNC és UNF colos méreteket No. 4-től 1 colig, és a G1/16–G4 csőmeneteket. Ha az {{ui:thread.customSize}} lehetőséget választod, az {{ui:prop.diameter}} és a {{ui:prop.pitch}} értékét magad adod meg. Colos vagy G méretnél a mező a milliméterben megadott menetemelkedés helyett a {{ui:prop.threadsPerInch}} értéket kéri.
+A méretet a {{ui:prop.threadSize}} alatt egy listából választod: metrikusat M2-től M24-ig, az UNC és UNF colos méreteket No. 4-től 1 colig, és a G1/16–G4 csőmeneteket. Ha az {{ui:thread.customSize}} lehetőséget választod, az {{ui:prop.diameter}} és a {{ui:prop.pitch}} értékét magad adod meg. Colos vagy G méretnél a mező a milliméterben megadott menetemelkedés helyett a {{ui:prop.threadsPerInch}} értéket kéri.
 
 A lista sorozatonként csoportosítja a méreteket, a mező alatti sor pedig megnevezi a kiválasztott méret sorozatát, a hétköznapokból ismert példákkal:
 

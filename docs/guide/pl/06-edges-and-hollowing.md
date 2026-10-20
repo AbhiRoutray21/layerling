@@ -58,7 +58,7 @@ Pudełka, kubki, obudowy i pokrywy mają jedną cechę wspólną: w środku są 
 
 1. Zaznacz bryłę i kliknij {{ui:editor.tool.hollow}} albo kliknij bryłę prawym przyciskiem i wybierz polecenie z menu.
 2. Ustaw {{ui:shell.wall}}.
-3. W {{ui:shell.openings}} włącz strony, które zostają otwarte: {{ui:shell.side.top}}, {{ui:shell.side.bottom}}, {{ui:shell.side.front}}, {{ui:shell.side.back}}, {{ui:shell.side.left}} albo {{ui:shell.side.right}}, ile tylko chcesz. Sam {{ui:shell.side.front}} daje wnękę na szufladę, a {{ui:shell.side.left}} i {{ui:shell.side.right}} tunel. Gdy żadna strona nie jest włączona, bryła zostaje zamknięta ze wszystkich stron, z wnęką w środku.
+3. W {{ui:shell.openings}} włącz strony, które zostają otwarte: {{ui:shell.side.top}}, {{ui:shell.side.bottom}}, {{ui:shell.side.front}}, {{ui:shell.side.back}}, {{ui:shell.side.left}} albo {{ui:shell.side.right}}, ile tylko chcesz. Sam {{ui:shell.side.front}} daje wnękę na szufladę, a {{ui:shell.side.left}} i {{ui:shell.side.right}} tunel. Gdy żadna strona nie jest włączona, bryła zostaje zamknięta ze wszystkich stron, z wnęką w środku. {{ui:shell.side.top}} jest już włączone po otwarciu panelu; kliknięcie go znów zamyka górę. Bryła zamknięta ze wszystkich stron wygląda z zewnątrz bez zmian: wnękę pokazuje widok przekroju.
 4. Zdecyduj, czy {{ui:shell.edges}} mają być {{ui:shell.edges.round}}, czy {{ui:shell.edges.sharp}}.
 5. Kliknij {{ui:shell.apply}}.
 

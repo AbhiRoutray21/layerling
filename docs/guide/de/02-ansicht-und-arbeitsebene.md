@@ -121,6 +121,8 @@ Die Skizzenansicht hat eigene Farben: {{ui:workspace.sketchBackground}} für das
 
 ![Drei dunkle Körper mit eingeschalteten Kantenlinien: Die Umrisse halten sie auseinander.](shot:edge-lines)
 
+{{ui:workspace.strongHoles}} zeichnet Löcher in dunklerem Grau, weniger durchsichtig und mit einer dunklen Linie drumherum. Das hilft, wenn ein Loch zwischen durchsichtigen Körpern schwer zu finden ist. Anders als die Kantenlinien bleibt es auch im Schnellmodus an.
+
 ### Darstellung: Licht und Schatten
 
 {{ui:workspace.showShadows}} schaltet die Schlagschatten ein und aus. Zwei Regler bestimmen, wie die Körper beleuchtet sind. {{ui:workspace.shadowStrength}} sagt, wie dunkel die Schlagschatten sind, und {{ui:workspace.shadeContrast}} schiebt Licht vom gleichmäßigen Umgebungslicht zum Hauptlicht: Richtung „kräftig“ werden die Schattenseiten dunkler und die Schatten besser sichtbar, Richtung „weich“ wird alles flacher. Am oberen Ende wird der Kontrast sehr kräftig, sodass Schattenseiten und Schatten richtig dunkel werden. {{ui:workspace.shadowSoftness}} macht die Ränder der Schatten weich statt scharf. {{ui:workspace.lightAzimuth}} dreht das Hauptlicht um die Platte (0° von vorn, 90° von rechts), und {{ui:workspace.lightElevation}} hebt es an, bei 90° steht es wie bei Tinkercad senkrecht über der Platte, und die Schatten fallen genau unter die Körper. {{ui:workspace.lightReset}} stellt alles zurück.

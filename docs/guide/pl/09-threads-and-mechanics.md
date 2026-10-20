@@ -16,7 +16,7 @@ Wybierz {{ui:shape.thread}} w bibliotece kształtów. W {{ui:inspector.threadRol
 
 ![Śruba z łbem walcowym. Po prawej: rodzaj i kształt łba, niżej rozmiar, skok i zarys.](shot:thread-screw)
 
-Rozmiar wybierasz w {{ui:prop.threadSize}} z listy: metryczne od M2 do M12, calowe UNC i UNF od No. 4 do 1 cala oraz gwinty rurowe od G1/16 do G4. Jeśli wybierzesz {{ui:thread.customSize}}, sam ustawiasz {{ui:prop.diameter}} i {{ui:prop.pitch}}. Dla rozmiaru calowego albo G pole pyta o {{ui:prop.threadsPerInch}} zamiast skoku w milimetrach.
+Rozmiar wybierasz w {{ui:prop.threadSize}} z listy: metryczne od M2 do M24, calowe UNC i UNF od No. 4 do 1 cala oraz gwinty rurowe od G1/16 do G4. Jeśli wybierzesz {{ui:thread.customSize}}, sam ustawiasz {{ui:prop.diameter}} i {{ui:prop.pitch}}. Dla rozmiaru calowego albo G pole pyta o {{ui:prop.threadsPerInch}} zamiast skoku w milimetrach.
 
 Lista grupuje rozmiary według serii, a wiersz pod polem nazywa serię wybranego rozmiaru, z przykładami znanymi z codziennego życia:
 
