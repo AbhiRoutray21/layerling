@@ -186,14 +186,19 @@ import {
   GRIDFINITY_SCOOP_WALL_KEYS,
   MAX_GRIDFINITY_DIVIDER_THICKNESS,
   MAX_GRIDFINITY_HEIGHT_UNITS,
+  MIN_GRIDFINITY_COMPARTMENT_LABEL_LENGTH,
+  MIN_GRIDFINITY_COMPARTMENT_LABEL_MM,
   MIN_GRIDFINITY_DIVIDER_THICKNESS,
   MIN_GRIDFINITY_FLOOR_HEIGHT,
   MIN_GRIDFINITY_LABEL_WIDTH,
   MIN_GRIDFINITY_SCOOP_RADIUS,
   MIN_GRIDFINITY_UNITS,
   type GridfinityAxis,
+  type GridfinityWall,
   gridfinityCompartmentCount,
   gridfinityCompartmentCountPatch,
+  gridfinityCompartmentLabel,
+  gridfinityCompartmentLabelMaxWidth,
   gridfinityCompartmentMax,
   gridfinityCompartments,
   gridfinityDividerFits,
@@ -242,7 +247,7 @@ import {
 import { regularPolygonAspect } from "@/lib/regularPolygonFootprint";
 import { DEFAULT_TAPER_DIMENSION_MAX, MAX_HIGH_RESOLUTION_SIDES, MAX_HIGH_RESOLUTION_STEPS, POSITION_TYPED_LIMIT, RULER_MAX_LENGTH, customSnapGridLabel, positionReach, shapeDimensionLimit, snapGridOptions, snapGridStep } from "@/lib/workplaneSettings";
 import { printerPresetById } from "@/lib/printBed";
-import type { BentTubeInnerProfile, BentTubeProfile, CustomSnapGrid, GearType, GridSize, MeasurementAccuracy, ShapeCustomization, SketchProfile, SketchStroke, SketchStrokeAlign, SketchStrokeJoin, ThreadHead, ThreadProfile, ThreadRole, WorkplaneShape, WorkplaneWorkspaceSettings } from "@/types/layerling";
+import type { BentTubeInnerProfile, BentTubeProfile, CustomSnapGrid, GearType, GridfinityCompartmentLabel, GridSize, MeasurementAccuracy, ShapeCustomization, SketchProfile, SketchStroke, SketchStrokeAlign, SketchStrokeJoin, ThreadHead, ThreadProfile, ThreadRole, WorkplaneShape, WorkplaneWorkspaceSettings } from "@/types/layerling";
 import { selectWholeValue } from "@/lib/numberField";
 import { formulaMatchesValue, formulaToRemember, withFieldFormula, type FieldFormulas } from "@/lib/fieldFormulas";
 import { useKeptColors, useRecentColors } from "@/lib/recentColors";
@@ -400,7 +405,7 @@ const RELATIVE_SIZE_PROPERTY_IDS = new Set(["width", "height", "length", "diamet
 const ROTATION_PROPERTY_IDS = new Set(["rotateX", "rotateY", "rotateZ"]);
 
 function propertyUsesLengthUnit(key: string) {
-  return ["textLineWidth", "textEdgeSize", "letterSize", "iconWidth", "keyringDiameter", "positionX", "positionY", "positionZ", "pivotX", "pivotY", "pivotZ", "radius", "length", "width", "height", "bevel", "topRadius", "baseRadius", "thickness", "outerDiameter", "innerDiameter", "textRadius", "extrudeTopOffsetX", "extrudeTopOffsetZ", "toothSize", "toothWidth", "gearBacklash", "centerHole", "slotSmallEnd", "slotCentreDistance", "sketchLineWidth", "topLength", "topWidth", "bottomLength", "bottomWidth", "diameter", "pitch", "clearance", "axialClearance", "boltClearance", "threadDepth", "threadCoreDiameter", "threadLength", "headHeight", "chamfer", "chamferBottom", "headChamfer", "wire", "starOuterSize", "starInnerSize", "starOuterFillet", "starInnerFillet", "heartTipFillet", "crescentThickness", "crescentTipFillet", "honeycombCellSize", "honeycombWallThickness", "honeycombFrameWidth", "cornerFillet", "topBottomFillet", "bentTubeSize", "bentTubeWall", "bentTubeSegmentLength", "bentTubeBendRadius", "dovetailNeckWidth", "dovetailClearance", "hingePinDiameter", "hingeLeafThickness", "hingeClearance", "screwHoleShaft", "screwHoleHeadDepth", "knurlDepth", "knurlChamfer", "loftBottomWidth", "loftBottomDepth", "loftTopWidth", "loftTopDepth", "loftBottomCorner", "loftTopCorner", "loftOffsetX", "loftOffsetZ", "loftWall", "gridfinityLabelBackLength", "gridfinityLabelBackOffset", "gridfinityLabelBackWidth", "gridfinityLabelCornerSize", "gridfinityLabelFrontLength", "gridfinityLabelFrontOffset", "gridfinityLabelFrontWidth", "gridfinityLabelLeftLength", "gridfinityLabelLeftOffset", "gridfinityLabelLeftWidth", "gridfinityLabelRightLength", "gridfinityLabelRightOffset", "gridfinityLabelRightWidth", "gridfinityScoopRadius", "gridfinityFloorHeight", "gridfinityDividerThickness", "gridfinityDividerPositionX", "gridfinityDividerPositionZ"].includes(key);
+  return ["textLineWidth", "textEdgeSize", "letterSize", "iconWidth", "keyringDiameter", "positionX", "positionY", "positionZ", "pivotX", "pivotY", "pivotZ", "radius", "length", "width", "height", "bevel", "topRadius", "baseRadius", "thickness", "outerDiameter", "innerDiameter", "textRadius", "extrudeTopOffsetX", "extrudeTopOffsetZ", "toothSize", "toothWidth", "gearBacklash", "centerHole", "slotSmallEnd", "slotCentreDistance", "sketchLineWidth", "topLength", "topWidth", "bottomLength", "bottomWidth", "diameter", "pitch", "clearance", "axialClearance", "boltClearance", "threadDepth", "threadCoreDiameter", "threadLength", "headHeight", "chamfer", "chamferBottom", "headChamfer", "wire", "starOuterSize", "starInnerSize", "starOuterFillet", "starInnerFillet", "heartTipFillet", "crescentThickness", "crescentTipFillet", "honeycombCellSize", "honeycombWallThickness", "honeycombFrameWidth", "cornerFillet", "topBottomFillet", "bentTubeSize", "bentTubeWall", "bentTubeSegmentLength", "bentTubeBendRadius", "dovetailNeckWidth", "dovetailClearance", "hingePinDiameter", "hingeLeafThickness", "hingeClearance", "screwHoleShaft", "screwHoleHeadDepth", "knurlDepth", "knurlChamfer", "loftBottomWidth", "loftBottomDepth", "loftTopWidth", "loftTopDepth", "loftBottomCorner", "loftTopCorner", "loftOffsetX", "loftOffsetZ", "loftWall", "gridfinityLabelBackLength", "gridfinityLabelBackOffset", "gridfinityLabelBackWidth", "gridfinityLabelCornerSize", "gridfinityLabelFrontLength", "gridfinityLabelFrontOffset", "gridfinityLabelFrontWidth", "gridfinityLabelLeftLength", "gridfinityLabelLeftOffset", "gridfinityLabelLeftWidth", "gridfinityLabelRightLength", "gridfinityLabelRightOffset", "gridfinityLabelRightWidth", "gridfinityScoopRadius", "gridfinityFloorHeight", "gridfinityDividerThickness", "gridfinityDividerPositionX", "gridfinityDividerPositionZ", "gridfinityCompartmentLabelWidth"].includes(key);
 }
 
 /**
@@ -992,9 +997,10 @@ function getShapePropertiesWithAppLimits(shape: WorkplaneShape, onUpdate: ShapeI
       const maxFloor = gridfinityFloorMaxHeight(fields);
       properties.push({ id: "gridfinityFloorHeight", label: t("prop.gridfinityFloorHeight"), value: gridfinityFloorHeight(fields), min: MIN_GRIDFINITY_FLOOR_HEIGHT, max: maxFloor, step: 0.05, hint: t("gridfinity.floorHeightHint"), onChange: (value) => onUpdate({ gridfinityFloorHeight: clamp(value, MIN_GRIDFINITY_FLOOR_HEIGHT, maxFloor) }) });
     }
-    // A bin with dividers has no label shelves yet (#554), so their settings are left out.
-    if (gridfinityLabelFits(fields) && !gridfinityCompartments(fields)) {
+    const compartments = gridfinityCompartments(fields);
+    if (gridfinityLabelFits(fields)) {
       // Label shelves (#455): each wall's switch with its own width, length and position under it, then the corners they share.
+      // A bin with dividers has a label in each compartment instead (#554), set in the compartments card; the corners stay here.
       const walls = [
         { wall: "back", label: "prop.gridfinityLabelBack" },
         { wall: "front", label: "prop.gridfinityLabelFront" },
@@ -1002,6 +1008,7 @@ function getShapePropertiesWithAppLimits(shape: WorkplaneShape, onUpdate: ShapeI
         { wall: "right", label: "prop.gridfinityLabelRight" },
       ] as const;
       walls.forEach(({ wall, label }) => {
+        if (compartments) return;
         const keys = GRIDFINITY_LABEL_WALL_KEYS[wall];
         const { on } = keys;
         properties.push({ type: "toggle", id: on, label: t(label), value: shape[on] === true, onChange: (value) => onUpdate({ [on]: value }) });
@@ -1019,7 +1026,10 @@ function getShapePropertiesWithAppLimits(shape: WorkplaneShape, onUpdate: ShapeI
           properties.push({ id: keys.offset, label: t("prop.gridfinityLabelOffset"), value: clamp(shape[keys.offset] ?? 0, -limits.offset, limits.offset), min: -limits.offset, max: limits.offset, step: 1, onChange: (value) => onUpdate({ [keys.offset]: value }) });
         }
       });
-      if (walls.some(({ wall }) => shape[GRIDFINITY_LABEL_WALL_KEYS[wall].on] === true)) {
+      const shelves = compartments
+        ? compartments.cells.some((cell) => gridfinityCompartmentLabel(fields, cell.column, cell.row))
+        : walls.some(({ wall }) => shape[GRIDFINITY_LABEL_WALL_KEYS[wall].on] === true);
+      if (shelves) {
         properties.push(
           {
             type: "select",
@@ -3835,10 +3845,22 @@ function BentTubeSegmentsCard({
   );
 }
 
+/** Where a compartment label sits along its side: towards -x on a back or front side, towards the back on a left or right one. */
+const GRIDFINITY_LABEL_ALIGN_OPTIONS: Record<"across" | "deep", Array<{ value: NonNullable<GridfinityCompartmentLabel["align"]>; label: MessageKey }>> = {
+  across: [{ value: "start", label: "gridfinity.alignLeft" }, { value: "middle", label: "gridfinity.alignMiddle" }, { value: "end", label: "gridfinity.alignRight" }],
+  deep: [{ value: "start", label: "gridfinity.alignBack" }, { value: "middle", label: "gridfinity.alignMiddle" }, { value: "end", label: "gridfinity.alignFront" }],
+};
+const GRIDFINITY_LABEL_SIDE_OPTIONS: Array<{ value: GridfinityWall; label: MessageKey }> = [
+  { value: "back", label: "gridfinity.labelSideBack" },
+  { value: "front", label: "gridfinity.labelSideFront" },
+  { value: "left", label: "gridfinity.labelSideLeft" },
+  { value: "right", label: "gridfinity.labelSideRight" },
+];
+
 /**
  * A Gridfinity bin's compartments (#554): how many each way and how thick the dividers are, then a menu that picks one
- * divider each way and its slider that moves it. Shown on every bin with room for dividers, so a bin of one compartment
- * can be divided here.
+ * divider each way and its slider that moves it, and menus for the row and the column that pick the compartment whose
+ * label the rows under them set. Shown on every bin with room for dividers, so a bin of one compartment can be divided here.
  */
 function GridfinityCompartmentsCard({
   shape,
@@ -3857,9 +3879,9 @@ function GridfinityCompartmentsCard({
   onInteractionActiveChange?: (active: boolean) => void;
 }) {
   const [open, setOpen] = useInspectorCard("gridfinityCompartments", true);
-  const [chosen, setChosen] = useState({ x: 0, z: 0 });
+  const [chosen, setChosen] = useState({ x: 0, z: 0, row: 0, column: 0 });
 
-  useEffect(() => setChosen({ x: 0, z: 0 }), [shape.id]);
+  useEffect(() => setChosen({ x: 0, z: 0, row: 0, column: 0 }), [shape.id]);
 
   const fields = { ...shape, depth: shapeOverallFootprintDimensions(shape).depth };
   if (!gridfinityDividerFits(fields)) return null;
@@ -3906,6 +3928,66 @@ function GridfinityCompartmentsCard({
       },
     );
   });
+
+  if (compartments && gridfinityLabelFits(fields)) {
+    const rows = counts.z;
+    const columns = counts.x;
+    const row = Math.min(chosen.row, rows - 1);
+    const column = Math.min(chosen.column, columns - 1);
+    const cell = compartments.cells.find((entry) => entry.row === row && entry.column === column);
+    const numbered = (count: number, key: MessageKey) => Array.from({ length: count }, (_entry, position) => ({ value: String(position), label: t(key, { number: position + 1 }) }));
+    if (rows > 1) properties.push({ type: "select", id: "gridfinityCompartmentRow", label: t("prop.gridfinityCompartmentRow"), value: String(row), options: numbered(rows, "gridfinity.fromBack"), onChange: (value) => choose({ row: Number(value) }) });
+    if (columns > 1) properties.push({ type: "select", id: "gridfinityCompartmentColumn", label: t("prop.gridfinityCompartmentColumn"), value: String(column), options: numbered(columns, "gridfinity.fromLeft"), onChange: (value) => choose({ column: Number(value) }) });
+    if (cell) {
+      const labels = shape.gridfinityCompartmentLabels ?? [];
+      const stored = labels.find((entry) => entry.column === column && entry.row === row);
+      // Every other compartment's label stays as it is, also those of compartments a smaller count leaves out for now.
+      const writeLabel = (next: GridfinityCompartmentLabel | null) => {
+        const rest = labels.filter((entry) => entry.column !== column || entry.row !== row);
+        const all = (next ? [...rest, next] : rest).sort((a, b) => a.row - b.row || a.column - b.column);
+        onUpdate({ gridfinityCompartmentLabels: all.length > 0 ? all : undefined });
+      };
+      // A side is offered when a label 4 mm wide still leaves 6 mm open, and the side already set always is.
+      const sides = GRIDFINITY_LABEL_SIDE_OPTIONS.filter(({ value }) => value === stored?.side || gridfinityCompartmentLabelMaxWidth(fields, cell, value) >= MIN_GRIDFINITY_LABEL_WIDTH);
+      properties.push({
+        type: "select",
+        id: "gridfinityCompartmentLabel",
+        label: t("prop.gridfinityCompartmentLabel"),
+        value: stored?.side ?? "none",
+        options: [{ value: "none", label: t("gridfinity.labelNone") }, ...sides.map(({ value, label }) => ({ value, label: t(label) }))],
+        onChange: (value) => {
+          const side = GRIDFINITY_LABEL_SIDE_OPTIONS.find((option) => option.value === value)?.value;
+          writeLabel(side ? { ...stored, column, row, side } : null);
+        },
+      });
+      const built = gridfinityCompartmentLabel(fields, column, row);
+      if (stored && built) {
+        const maxWidth = gridfinityCompartmentLabelMaxWidth(fields, cell, built.side);
+        const change = (changes: Partial<GridfinityCompartmentLabel>) => {
+          const next: GridfinityCompartmentLabel = { ...stored, ...changes };
+          // 100 % and the middle are what a label has unset, so they are written as unset.
+          if (next.length === undefined || next.length >= 100) delete next.length;
+          if (next.align === "middle") delete next.align;
+          writeLabel(next);
+        };
+        // A shelf that comes out shorter than 4 mm is left out, which the row says rather than leave it unexplained.
+        const tooShort = built.length < 100 && (built.length / 100) * 2 * (built.side === "back" || built.side === "front" ? cell.hx : cell.hz) < MIN_GRIDFINITY_COMPARTMENT_LABEL_MM;
+        properties.push({ id: "gridfinityCompartmentLabelLength", label: t("prop.gridfinityCompartmentLabelLength"), value: built.length, min: MIN_GRIDFINITY_COMPARTMENT_LABEL_LENGTH, max: 100, step: 1, hint: t(tooShort ? "gridfinity.compartmentLabelTooShortHint" : "gridfinity.compartmentLabelLengthHint"), onChange: (value) => change({ length: clamp(value, MIN_GRIDFINITY_COMPARTMENT_LABEL_LENGTH, 100) }) });
+        if (built.length < 100) {
+          const options = GRIDFINITY_LABEL_ALIGN_OPTIONS[built.side === "back" || built.side === "front" ? "across" : "deep"];
+          properties.push({
+            type: "select",
+            id: "gridfinityCompartmentLabelAlign",
+            label: t("prop.gridfinityLabelOffset"),
+            value: built.align,
+            options: options.map(({ value, label }) => ({ value, label: t(label) })),
+            onChange: (value) => change({ align: options.find((option) => option.value === value)?.value ?? "middle" }),
+          });
+        }
+        properties.push({ id: "gridfinityCompartmentLabelWidth", label: t("prop.gridfinityLabelWidth"), value: built.width, min: MIN_GRIDFINITY_LABEL_WIDTH, max: Math.max(MIN_GRIDFINITY_LABEL_WIDTH, maxWidth), step: 0.5, onChange: (value) => change({ width: clamp(value, MIN_GRIDFINITY_LABEL_WIDTH, maxWidth) }) });
+      }
+    }
+  }
 
   return (
     <div className={`property-card ${open ? "" : "collapsed"}`}>
@@ -3954,7 +4036,7 @@ function shapePropertyDefaults(kind: WorkplaneShape["kind"], workspace: Workplan
       ["bottomWidth", taperSize.bottomWidth],
     ]);
     const twist = new Map<string, number | string | boolean>([["extrudeTwist", 0], ["extrudeTopOffsetX", 0], ["extrudeTopOffsetZ", 0]]);
-    // A Gridfinity bin's compartments card (#554): the counts and the dividers' thickness.
+    // A Gridfinity bin's compartments card (#554): the counts and the dividers' thickness, not the labels of one bin.
     let compartments: Map<string, number | string | boolean> | null = null;
     if (fresh.kind === "gridfinity") {
       const fields = { ...fresh, depth: shapeOverallFootprintDimensions(fresh).depth };

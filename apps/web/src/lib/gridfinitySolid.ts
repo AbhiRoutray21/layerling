@@ -50,7 +50,8 @@ import {
  * cutter before it is cut, each with a true arc, so the cut leaves them standing.
  * A bin with dividers (gridfinityCompartmentPieces) is cut by one cutter for all
  * its compartments, each with a rounded floor and its own scoops, and what stays
- * between them is the dividers.
+ * between them is the dividers. Its labels are the compartments' own, each cut to
+ * its compartment and joined as the shelves are.
  */
 
 /** z up to y up: (x, y, z) -> (x, z, -y). */
@@ -59,7 +60,7 @@ const Z_TO_Y_UP = [1, 0, 0, 0, 0, 0, 1, 0, 0, -1, 0, 0];
 const PAST = 0.01;
 /** Less than this taken from the cutter (mm³) is a scoop the kernel's cut missed; the smallest scoop takes about 29. */
 const SCOOP_MISSED = 1e-3;
-/** Less than a bound on the compartments or the dividers by more than this (mm³) is geometry the kernel lost. */
+/** Less than a bound on the compartments, the dividers or a label by more than this (mm³) is geometry the kernel lost. */
 const PIECE_MISSED = 1;
 
 function oneSolid(cad: OcctKernel, shape: ShapeHandle, what: string) {
@@ -235,6 +236,18 @@ function scoopedCutter(cad: OcctKernel, cutter: ShapeHandle, pieces: GridfinityS
   return cutter;
 }
 
+/** The bin with dividers joined to its compartments' labels, each cut to its compartment and moved into place. */
+function labelledCompartments(cad: OcctKernel, standing: ShapeHandle, pieces: GridfinityCompartmentPieces) {
+  const solids = pieces.cells.flatMap((cell) => (cell.labels ? labelSolids(cad, cell.labels).map((solid, i) => ({ solid: cad.translate(solid, cell.centre.x, 0, cell.centre.z), shelf: i < cell.labels!.shelves.length })) : []));
+  if (solids.length === 0) return standing;
+  // A shelf the kernel's cut to its compartment lost, or a fuse that dropped them all, would leave a label out without a word.
+  if (solids.some(({ solid, shelf }) => shelf && !(cad.getVolume(solid) > PIECE_MISSED))) throw new Error("The Gridfinity bin's labels could not be joined");
+  const labelled = oneSolid(cad, cad.fuseAll([standing, ...solids.map(({ solid }) => solid)]), "bin with labels");
+  if (cad.getVolume(labelled) - cad.getVolume(standing) < PIECE_MISSED) throw new Error("The Gridfinity bin's labels could not be joined");
+  if (!cad.isValid(labelled)) throw new Error("The Gridfinity body is not a valid solid");
+  return labelled;
+}
+
 /** The Gridfinity part's exact solid in the shape's own frame, y up. Throws when the kernel cannot build it. */
 export function gridfinityPartSolid(cad: OcctKernel, part: CadModifierGridfinityPart): ShapeHandle {
   const plan = gridfinityPlan(part);
@@ -244,6 +257,7 @@ export function gridfinityPartSolid(cad: OcctKernel, part: CadModifierGridfinity
   const solid = plan.type === "bin" ? binSolid(cad, plan, compartments ? null : scoopPieces, compartments) : baseplateSolid(cad, plan);
   if (!cad.isValid(solid) || !(cad.getVolume(solid) > 0)) throw new Error("The Gridfinity body is not a valid solid");
   const standing = cad.transform(solid, Z_TO_Y_UP);
+  if (compartments) return labelledCompartments(cad, standing, compartments);
   const pieces = gridfinityLabelPieces(part);
   if (!pieces) return standing;
   const labelled = oneSolid(cad, cad.fuseAll([standing, ...labelSolids(cad, pieces)]), "bin with label shelves");

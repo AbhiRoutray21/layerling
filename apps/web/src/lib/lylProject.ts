@@ -1555,6 +1555,26 @@ function validateShapeDefinition(definition: Record<string, unknown>, label: str
         if (position < 0 || position > 1e6) throw new Error(`${label}.${key}[${index}] is outside the supported range`);
       });
     }
+    if (definition.gridfinityCompartmentLabels !== undefined) {
+      if (!Array.isArray(definition.gridfinityCompartmentLabels)) throw new Error(`${label}.gridfinityCompartmentLabels must be an array`);
+      const labels = definition.gridfinityCompartmentLabels as unknown[];
+      if (labels.length > 576) throw new Error(`${label}.gridfinityCompartmentLabels has an unsupported number of labels`);
+      labels.forEach((raw, index) => {
+        const entryLabel = `${label}.gridfinityCompartmentLabels[${index}]`;
+        const entry = objectRecord(raw, entryLabel);
+        for (const key of ["column", "row"] as const) {
+          const value = finiteNumber(entry[key], `${entryLabel}.${key}`);
+          if (value < 0 || value > 1e6) throw new Error(`${entryLabel}.${key} is outside the supported range`);
+        }
+        if (entry.side !== "back" && entry.side !== "front" && entry.side !== "left" && entry.side !== "right") throw new Error(`${entryLabel}.side is invalid`);
+        for (const key of ["length", "width"] as const) {
+          if (entry[key] === undefined) continue;
+          const value = finiteNumber(entry[key], `${entryLabel}.${key}`);
+          if (value < 0 || value > 1e6) throw new Error(`${entryLabel}.${key} is outside the supported range`);
+        }
+        if (entry.align !== undefined && entry.align !== "start" && entry.align !== "middle" && entry.align !== "end") throw new Error(`${entryLabel}.align is invalid`);
+      });
+    }
   }
   if (kind === "hinge") {
     // Lenient on purpose: the geometry clamps the values itself; only nonsense is refused.
