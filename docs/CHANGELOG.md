@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+## 1.93.1
+
 - **More traced pictures come in whole (#584):** Three more pictures of the same kind (a drumming dance, children with a football, a homestead) still came in as a fifth of their area after 1.93.0, and the larger closing it tried did not help. The cause was in the check: the rounded outline had points a few millionths of a unit apart, the check merges points that close and then saw edges of four triangles, and a body that the kernel had built right was thrown away for the plain build, which leaves out any outline it cannot close. The closed outline is now cleaned of such points (0.002) before it is extruded, and all four pictures of the report come in whole with every outline. Reported by @stefaanl on GitHub.
 
 - **The cards of the shape settings stay open or shut (#632):** Properties, Position, Rotation, Taper and Twist (and the cards of the thread and the gear) folded back to their start each time the settings were closed and opened again, so a card you use all the time, Rotation or Taper, had to be opened again for every shape. Layerling now remembers in this browser which cards you left open or shut, for the next shape and the next visit. What nobody has touched starts as before. Guide (EN/DE) updated. Reported by @prmod3d on GitHub.
