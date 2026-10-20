@@ -31,6 +31,7 @@ import { appThemePalette, type AppThemePalette, type AppThemePreference, type Re
 import { cadModifierPrimitiveForBakedShape, cadTransformFromMatrix, cadTransformToMatrix } from "@/lib/cadBakeMetadata";
 import { t } from "@/lib/i18n";
 import type { ModelSplitPlane } from "@/lib/modelSplit";
+import { planeCrossingSegments } from "@/lib/splitCutLine";
 import { useLanguage } from "@/lib/useLanguage";
 import { orthographicFramingZoom, perspectiveFramingDistance } from "@/lib/cameraFraming";
 import {
@@ -4431,8 +4432,8 @@ export function WorkplaneViewport({
   }, [splitSurfacePick]);
 
   useEffect(() => {
-    syncSplitPlane(threeRef.current, splitPlane, splitHandleState !== null);
-  }, [splitHandleState, splitPlane]);
+    syncSplitPlane(threeRef.current, splitPlane, splitHandleState !== null, selectedIds);
+  }, [splitHandleState, splitPlane, selectedIds]);
 
   useLayoutEffect(() => {
     // The plane label carries the project name, so a rename has to redraw it.
@@ -4613,7 +4614,7 @@ export function WorkplaneViewport({
     perfRef.current.lastSample = performance.now();
     resetCamera(state);
     rebuildShapes(state, shapesRef.current, shapeOutlineIds(), false, placementWorkplaneRef.current);
-    syncSplitPlane(state, splitPlaneRef.current);
+    syncSplitPlane(state, splitPlaneRef.current, false, selectedIdsRef.current);
 
     const animate = () => {
       state.animationId = window.requestAnimationFrame(animate);
@@ -13935,7 +13936,22 @@ function createHalfSphereGeometry(width: number, height: number, depth: number, 
   return geometry;
 }
 
-function syncSplitPlane(state: ThreeState | null, plane: ModelSplitPlane | null, handleActive = false) {
+/**
+ * The line where the plane meets the bodies it will split, as pairs of points in world space (#615): the way a slicer
+ * draws it, so the cut can be seen on the body and not only guessed from a translucent plane.
+ */
+function splitCutOutlinePoints(state: ThreeState, plane: ModelSplitPlane, ids: readonly string[]): number[] {
+  if (!ids.length) return [];
+  const wanted = new Set(ids);
+  const meshes: THREE.Mesh[] = [];
+  state.shapeLayer.traverse((child) => {
+    if (!(child instanceof THREE.Mesh) || !child.visible || child.userData.cutPreview) return;
+    if (typeof child.userData.shapeId === "string" && wanted.has(child.userData.shapeId)) meshes.push(child);
+  });
+  return planeCrossingSegments(meshes, plane.origin, plane.normal);
+}
+
+function syncSplitPlane(state: ThreeState | null, plane: ModelSplitPlane | null, handleActive = false, selectedIds: readonly string[] = []) {
   if (!state) return;
   disposeChildren(state.splitLayer);
   if (!plane) {
@@ -14011,6 +14027,17 @@ function syncSplitPlane(state: ThreeState | null, plane: ModelSplitPlane | null,
 
   root.traverse((child) => child.layers.set(RENDER_LAYER_PREVIEWS));
   state.splitLayer.add(root);
+
+  const outlinePoints = splitCutOutlinePoints(state, plane, selectedIds);
+  if (outlinePoints.length) {
+    const outlineGeometry = new THREE.BufferGeometry();
+    outlineGeometry.setAttribute("position", new THREE.Float32BufferAttribute(outlinePoints, 3));
+    const outline = new THREE.LineSegments(outlineGeometry, new THREE.LineBasicMaterial({ color: "#ffffff", transparent: true, opacity: 1, depthTest: false }));
+    outline.name = "SplitCutLine";
+    outline.renderOrder = 905;
+    outline.layers.set(RENDER_LAYER_PREVIEWS);
+    state.splitLayer.add(outline);
+  }
   state.splitLayer.visible = true;
   state.needsRender = true;
 }

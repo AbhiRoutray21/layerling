@@ -119,8 +119,8 @@ export function shapeTaperDimensions(shape: WorkplaneShape) {
 }
 
 /**
- * Arten, die eine Verjuengung ueberhaupt annehmen. Zahnrad, Gewinde, Feder und
- * Raendel kennen sie gar nicht, die Pyramide hat mit Laenge und Breite oben ihre
+ * Arten, die eine Verjuengung ueberhaupt annehmen. Zahnrad, Gewinde und Feder
+ * kennen sie gar nicht (das Raendel seit #630 doch), die Pyramide hat mit Laenge und Breite oben ihre
  * eigene, die wirklich greift, und Scharnier, Senkungen, gebogenes Rohr und
  * Lineal haben feste Masse, die eine Verjuengung nur verdurbe. Der Tropfen ist
  * der Querschnitt eines waagerechten Lochs; oben und unten gibt es fuer ihn
@@ -128,7 +128,7 @@ export function shapeTaperDimensions(shape: WorkplaneShape) {
  * Wabe und Schwalbenschwanz sie an. Die Liste steht hier, damit das Merkmalsfeld, die
  * Vorschau und die MCP-Bruecke nicht je ihre eigene fuehren.
  */
-const SHAPES_WITHOUT_TAPER = new Set<WorkplaneShape["kind"]>(["gear", "thread", "spring", "pyramid", "ruler", "hinge", "knurl", "counterbore", "countersink", "doubleCountersink", "teardrop", "bentTube", "loft", "gridfinity"]);
+const SHAPES_WITHOUT_TAPER = new Set<WorkplaneShape["kind"]>(["gear", "thread", "spring", "pyramid", "ruler", "hinge", "counterbore", "countersink", "doubleCountersink", "teardrop", "bentTube", "loft", "gridfinity"]);
 
 export function shapeSupportsTaper(kind: WorkplaneShape["kind"]) {
   return !SHAPES_WITHOUT_TAPER.has(kind);

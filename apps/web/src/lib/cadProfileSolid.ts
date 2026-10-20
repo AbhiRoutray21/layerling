@@ -457,7 +457,7 @@ function twistedLoftSolid(cad: OcctKernel, profile: CadModifierProfilePart, tole
   const center = profile.twistCenter ?? { x: 0, z: 0 };
   const lean = profile.twistLean ?? { x: 0, z: 0 };
   const tilt = profile.tilt ?? { x: 0, z: 0 };
-  const turnSections = Math.max(2, Math.ceil(Math.max(Math.abs(twist), Math.abs(tilt.x), Math.abs(tilt.z)) / TWIST_SECTION_STEP) + 1);
+  const turnSections = Math.max(2, Math.ceil(Math.max(Math.abs(twist), Math.abs(tilt.x), Math.abs(tilt.z)) / (profile.twistStep ?? TWIST_SECTION_STEP)) + 1);
   const sections = (profile.smooth ?? 0) > 1e-9 ? Math.max(turnSections, LOFT_SMOOTH_SECTIONS) : turnSections;
   const solidOf = (index: number) => {
     const wires: ShapeHandle[] = [];
@@ -885,7 +885,7 @@ export function profileExtrusionSolid(cad: OcctKernel, profile: CadModifierProfi
     const solid = loftSolid(cad, profile, tolerance);
     if (!cad.isSolid(solid) || !cad.isValid(solid)) throw new Error("The lofted profile solid is not valid");
     if (!(cad.getVolume(solid) > 0)) throw new Error("The lofted profile solid is inside out");
-    return solid;
+    return profile.capChamfer && profile.capChamfer.size > 1e-4 ? chamferedLoft(cad, solid, profile) : solid;
   }
   const [outer, ...holes] = profile.loops;
   let face = cad.makeFace(loopWire(cad, outer, tolerance));
@@ -951,6 +951,35 @@ export function profileExtrusionSolid(cad: OcctKernel, profile: CadModifierProfi
     return solids[0];
   }
   return solid;
+}
+
+/**
+ * A tapered or leaning knurl (#630) with its 45 degree ends: the loft meets a
+ * turned bound whose section is the straight cone the display mesh has,
+ * narrowed by the taper at each height and sheared by the lean. The cone is
+ * followed through three heights per end, so the narrowing does not bend it.
+ */
+function chamferedLoft(cad: OcctKernel, solid: ShapeHandle, profile: CadModifierProfilePart) {
+  const { radius, size, bottomScale = 1, topScale = 1, lean } = profile.capChamfer as NonNullable<CadModifierProfilePart["capChamfer"]>;
+  const h = profile.height;
+  const scaleAt = (y: number) => bottomScale + (topScale - bottomScale) * (y / h);
+  const cone = (y: number) => (radius - size + Math.min(y, h - y)) * scaleAt(y);
+  const wide = (radius + 2 * size) * Math.max(bottomScale, topScale);
+  const reach = Math.min(2 * size, h / 2);
+  const section = [
+    { x: 0, y: 0 }, { x: cone(0), y: 0 }, { x: cone(size), y: size }, { x: cone(reach), y: reach },
+    { x: wide, y: reach }, { x: wide, y: h - reach },
+    { x: cone(h - reach), y: h - reach }, { x: cone(h - size), y: h - size }, { x: cone(h), y: h }, { x: 0, y: h },
+  ].map((point) => ({ x: point.x, y: point.y, z: 0 }));
+  const wire = cad.makeWire(section.map((point, index) => cad.makeLineEdge(point, section[(index + 1) % section.length])));
+  let bound = cad.revolve(cad.makeFace(wire), { point: { x: 0, y: 0, z: 0 }, direction: { x: 0, y: 1, z: 0 } }, Math.PI * 2);
+  if (lean && (Math.abs(lean.x) > 1e-9 || Math.abs(lean.z) > 1e-9)) {
+    bound = cad.generalTransform(bound, [1, lean.x / h, 0, 0, 0, 1, 0, 0, 0, lean.z / h, 1, 0]);
+  }
+  const common = cad.common(solid, bound);
+  const solids = cad.isSolid(common) ? [common] : cad.getSubShapes(common, "solid");
+  if (solids.length !== 1 || !cad.isValid(solids[0]) || !(cad.getVolume(solids[0]) > 0)) throw new Error("The chamfered ends of the lofted profile solid are not valid");
+  return solids[0];
 }
 
 function meshedBounds(cad: OcctKernel, solid: ShapeHandle, deflection: number) {

@@ -8,5 +8,95 @@
       "de": "Eine Rounded Box, die nach oben schmaler wird, hatte nach einer Fase an den unteren Kanten sichtbar gekrümmte Linien an den geraden Seiten. Die geraden Seiten sind jetzt echte Ebenen, die Ecken bleiben gerundet, und die Fase läuft gerade an ihnen entlang.",
       "en": "A rounded box that gets narrower towards the top showed visibly curved lines along its straight sides after a chamfer on the bottom edges. The straight sides are now true planes, the corners stay rounded, and the chamfer runs straight along them."
     }
+  },
+  {
+    "title": {
+      "de": "SVG-Schablone mit vielen feinen Löchern lässt sich importieren",
+      "en": "An SVG stencil with many fine holes imports"
+    },
+    "body": {
+      "de": "Eine SVG, die ein einzelnes Blatt mit vielen feinen Löchern ist (zum Beispiel eine Farbschablone mit Stegen), wurde mit \"SVG has no filled contours\" abgelehnt. Der Import prüft jetzt in diesem Fall einen zweiten Weg und baut das Blatt mit allen Löchern.",
+      "en": "An SVG that is a single sheet with many fine holes (a paint stencil with bridges, for example) was refused with \"SVG has no filled contours\". In that case the import now tries a second way and builds the sheet with all its holes."
+    }
+  },
+  {
+    "title": {
+      "de": "Skizze: Einrasten auf Mitten und Mittelpunkte, Linie von der Mitte",
+      "en": "Sketch: snap to middles and centres, line from the middle"
+    },
+    "body": {
+      "de": "Ein Punkt in der Skizze rastet jetzt in der Mitte einer Linie, im Mittelpunkt eines Kreises und in den Mitten der Seiten eines Körpers darunter ein. Neu in der Gruppe Zeichnen: Linie von der Mitte. Erst die Mitte anklicken, dann das Ende, und die Linie ist zur anderen Seite gleich lang.",
+      "en": "A point in the sketch now snaps to the middle of a line, the centre of a circle and the middles of the sides of a body underneath. New in the Draw group: Line from the middle. Click the middle first, then the end, and the line runs the same length to the other side."
+    }
+  },
+  {
+    "title": {
+      "de": "Senkung und Doppelsenkung in einem Eintrag",
+      "en": "Countersink and double countersink in one entry"
+    },
+    "body": {
+      "de": "Die Formenbibliothek zeigt nur noch die Senkung. In ihren Eigenschaften macht der Schalter \"Beidseitig\" daraus eine Doppelsenkung und zurück, alle Maße bleiben. Körper, die schon eine Doppelsenkung sind, bleiben unverändert.",
+      "en": "The shape library now lists only the countersink. In its properties the switch \"Both sides\" makes it a double countersink and back, with all measures kept. Bodies that already are a double countersink stay as they are."
+    }
+  },
+  {
+    "title": {
+      "de": "Interaktive Hilfe in den Eigenschaften einer Form",
+      "en": "Interactive Help in a shape's properties"
+    },
+    "body": {
+      "de": "Ein Klick auf ein Feld, einen Regler oder einen Knopf in den Karten Eigenschaften, Rotation, Verjüngung und Verdrehung führt jetzt zum passenden Teil der Anleitung: zu \"Die Einstellungen der Form\", die Rotation zu \"Drehen und den Drehpunkt setzen\".",
+      "en": "A click on a field, a slider or a button in the cards Properties, Rotation, Taper and Twist now leads to the fitting part of the guide: \"The shape's settings\", and the rotation to \"Rotating and setting the pivot\"."
+    }
+  },
+  {
+    "title": {
+      "de": "Das Raster-Menü liegt über den Fenstern",
+      "en": "The snap grid menu lies over the panels"
+    },
+    "body": {
+      "de": "Das Menü zur Wahl des Rasters war neben einem angehefteten Formen-Fenster teils verdeckt, die oberen Einträge ließen sich nicht anklicken. Es liegt jetzt über den Fenstern und lässt sich bei niedrigem Fenster scrollen.",
+      "en": "The menu for choosing the snap grid was partly hidden beside a pinned Shapes panel, so the upper entries could not be clicked. It now lies over the panels and scrolls on a low window."
+    }
+  },
+  {
+    "title": {
+      "de": "Teilen zeigt eine Schnittlinie",
+      "en": "Split shows a cut line"
+    },
+    "body": {
+      "de": "Beim Teilen läuft jetzt eine weiße Linie über die Körper, dort wo die Ebene sie trifft. So siehst du den Schnitt auf dem Körper, nicht nur an der durchscheinenden Ebene. Sie folgt der Ebene beim Verschieben und Drehen.",
+      "en": "When you split, a white line now runs over the bodies where the plane meets them. So you see the cut on the body, not only on the translucent plane. It follows the plane while you move or turn it."
+    }
+  },
+  {
+    "title": {
+      "de": "Rändel: Verjüngen, Neigen und Verdrehen",
+      "en": "Knurl: taper, lean and twist"
+    },
+    "body": {
+      "de": "Beim Rändel gibt es jetzt auch Verjüngung und Verdrehen und Neigen, wie bei einem Würfel. Das gerade und das runde Muster bleiben dabei ein exakter Körper, die Fasen an den Enden gehen mit.",
+      "en": "The knurl now has Taper and Twist & Lean like a cube. The straight and the round pattern stay an exact body, and the chamfers at the ends go along."
+    }
+  },
+  {
+    "title": {
+      "de": "Fase + Rundung am Kegel mit Spitze",
+      "en": "Chamfer + Round on a cone with a pointed tip"
+    },
+    "body": {
+      "de": "An einem Kegel, der in einer Spitze endet, wurde bei „Fase + Rundung“ die falsche Kante gerundet: Der Fuß lief mit einem Knick senkrecht herunter, und die Fase auf der Platte fehlte. Jetzt sitzt die Fase auf der Platte und die Rundung geht weich in die Wand über, wie bei einem Zylinder.",
+      "en": "On a cone that ends in a point, Chamfer + Round rounded the wrong edge: the foot ran straight down with a kink, and the chamfer on the plate was missing. Now the chamfer sits on the plate and the round blends smoothly into the wall, as on a cylinder."
+    }
+  },
+  {
+    "title": {
+      "de": "Gezeichnete Bilder mit vielen Berührungsstellen kommen ganz in layerling",
+      "en": "A traced picture with many touching outlines comes in whole"
+    },
+    "body": {
+      "de": "Eine aus einem Bild nachgezeichnete SVG, bei der viele Umrisse an Ecken zusammenstoßen, kam nur als Bruchstücke herein, etwa ein Fünftel der Fläche. Der Import schließt solche Ecken jetzt so weit, dass der Körper sauber wird, und das Bild kommt vollständig mit allen Umrissen.",
+      "en": "An SVG traced from a picture, with many outlines meeting at corners, came in as a handful of pieces, about a fifth of its area. The import now closes such corners far enough for a clean body, and the picture comes in whole with all its outlines."
+    }
   }
 ]

@@ -77,7 +77,7 @@ export const SHAPE_KEYWORDS: Readonly<Record<string, readonly string[]>> = {
   roundRoof: ["toit rond", "dachrund", "halbzylinder"],
   bentTube: ["tube courbé", "tube plié", "gebogenes rohr", "rohrbogen"],
   counterbore: ["lamage", "senkbohrung", "zylindersenkung"],
-  countersink: ["fraisage", "kegelsenkung", "senkkopf"],
+  countersink: ["fraisage", "kegelsenkung", "senkkopf", "double countersink", "both sides", "double fraisage", "doppelsenkung", "beidseitig"],
   doubleCountersink: ["double fraisage", "doppelsenkung"],
   knurl: ["moletage", "moleté", "rändel", "rändelung"],
   teardrop: ["trou de larme", "tropfenbohrung", "larme"],

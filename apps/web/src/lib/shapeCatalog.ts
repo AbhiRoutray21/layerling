@@ -311,8 +311,12 @@ export const qrCodeAsset: ToolbarShapeAsset = {
   color: "#1f1f1f",
 };
 
-/** What the shape library lists: the catalogue, with the name tag, the icon tag and the QR code after the text. */
-export const libraryShapeAssets: ToolbarShapeAsset[] = toolbarShapeAssets.flatMap((asset) => (asset.id === "text" ? [asset, nameTagAsset, iconTagAsset, qrCodeAsset] : [asset]));
+/**
+ * What the shape library lists: the catalogue, with the name tag, the icon tag and the QR code after the text.
+ * The double countersink is not listed on its own: it is the countersink with "Both sides" switched on (#621). The
+ * kind stays in the catalogue, so bodies that already are one, and the MCP, keep working.
+ */
+export const libraryShapeAssets: ToolbarShapeAsset[] = toolbarShapeAssets.flatMap((asset) => (asset.id === "text" ? [asset, nameTagAsset, iconTagAsset, qrCodeAsset] : asset.id === "doubleCountersink" ? [] : [asset]));
 
 /**
  * Kinds a shape dragged from the library may have. Taken from the library

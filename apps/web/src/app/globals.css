@@ -11056,6 +11056,12 @@ html[data-theme="dark"] .shape-inspector .name-tag-start .name-tag-start-button:
   font-size: 13px;
 }
 
+/* The open snap grid menu lies over the floating panels, not behind them (#616): the corner and the properties panel it sits in are stacking contexts of their own. */
+.grid-settings:has(.snap-menu),
+.shape-inspector:has(.snap-menu) {
+  z-index: 40;
+}
+
 .settings-button {
   display: block;
   width: 90px;
@@ -11151,6 +11157,9 @@ html[data-theme="dark"] .shape-inspector .name-tag-start .name-tag-start-button:
   min-width: 92px;
   width: max-content;
   padding: 4px 0;
+  /* On a low window the menu scrolls instead of running off the top (#616). */
+  max-height: calc(100vh - 190px);
+  overflow-y: auto;
   background: white;
   border: 1px solid var(--border);
   box-shadow: var(--shadow);

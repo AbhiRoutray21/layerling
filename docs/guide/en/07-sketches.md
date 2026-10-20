@@ -72,6 +72,8 @@ A construction line helps you place points without becoming part of the body. It
 - Switch on {{ui:sketch.construction}} in the {{ui:sketch.group.draw}} group. New lines, those typed by measure too, are then construction lines. The button switches back to normal lines.
 - A line you have drawn already becomes a construction line when you click it and choose {{ui:sketch.makeConstruction}}. {{ui:sketch.makeSolid}} makes it a normal line again.
 - New points snap to where a construction line crosses another line, a blue ring shows it, and to the ends of the construction line. That is how you put a corner on a middle, at a fixed distance from an edge or on a crossing, without calculating.
+- New points also snap to the middle of every straight line of the sketch, to the centre of every circle and rounded corner, and to the middles of the sides of a body shown underneath (#624). A point that is being dragged ignores the middle of its own lines.
+- {{ui:sketch.fromMiddle}} in the {{ui:sketch.group.draw}} group draws a line from its middle: click the middle first, then the end, and the line runs the same length to the other side. The middle becomes a point of its own. Click the button again to draw normal lines.
 - A construction line does not cut the outline apart where it crosses it. When revolving it may lie to the right of the axis too.
 
 ## Making a body from it

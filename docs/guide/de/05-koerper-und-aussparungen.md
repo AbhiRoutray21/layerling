@@ -67,7 +67,7 @@ Ein Hinweis: Fasen und Verrundungen, die du auf die **ganze** Gruppe gelegt hatt
 
 ## Teilen
 
-{{ui:editor.tool.split}} im Bereich {{ui:editor.group.modify}} schneidet die Auswahl mit einer Ebene in zwei – etwa ein Teil, das zu groß für das Druckbett ist, oder eins, in das du hineinschauen willst. Markiere einen oder mehrere Körper oder Aussparungen und klicke darauf. Eine durchscheinende Ebene zeigt genau, wo der Schnitt liegt; geändert wird erst, wenn du ihn anwendest.
+{{ui:editor.tool.split}} im Bereich {{ui:editor.group.modify}} schneidet die Auswahl mit einer Ebene in zwei – etwa ein Teil, das zu groß für das Druckbett ist, oder eins, in das du hineinschauen willst. Markiere einen oder mehrere Körper oder Aussparungen und klicke darauf. Eine durchscheinende Ebene zeigt genau, wo der Schnitt liegt, und eine weiße Linie markiert ihn auf den Körpern selbst, dort wo die Ebene sie trifft; geändert wird erst, wenn du ihn anwendest.
 
 - {{ui:split.orientation}}: **X** schneidet senkrecht zwischen links und rechts, **Y** zwischen vorne und hinten, **Z** waagerecht zwischen oben und unten. Die Achsen heißen wie in der Positionskarte, Z zeigt nach oben; die Ebene beginnt mit Z.
 - {{ui:split.position}}: wo die Ebene durchgeht, mit dem Schieberegler oder als Zahl. Sie beginnt in der Mitte. Du kannst auch die Pfeilspitze an der Ebene ziehen; die Ebene wandert dann in Schritten von 0,1 mm entlang des Pfeils.

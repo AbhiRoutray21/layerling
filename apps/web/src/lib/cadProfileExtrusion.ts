@@ -2,7 +2,7 @@ import * as THREE from "three";
 import { taperedSlotOutline } from "@/lib/slotGeometry";
 import type { WorkplaneShape } from "@/types/layerling";
 import type { CadModifierProfileLoop, CadModifierProfilePart, CadModifierProfileSegment, CadModifierGridfinityPart, CadModifierHelicalGearPart, CadModifierSpringPart, CadModifierSweepPiece, CadModifierThreadPart } from "@/lib/cadModifierTypes";
-import { profileArcPoint, profileLoopBounds, validateCadProfile } from "@/lib/cadProfileSolid";
+import { profileArcPoint, profileLoopBounds, TWIST_SECTION_STEP, validateCadProfile } from "@/lib/cadProfileSolid";
 import { cadTransformFromMatrix } from "@/lib/cadBakeMetadata";
 import { CAD_MODIFIER_EXACT_SEGMENT_LIMIT } from "@/lib/cadModifierRuntime";
 import { deformsAboutOrigin, meshYawDegrees, mirrorSign, shapeDepth, shapeHasShapeDeform, shapeTaperDimensions, shapeWidth } from "@/lib/workplaneShapes";
@@ -1171,7 +1171,7 @@ export function asDesignedRound(shape: WorkplaneShape): WorkplaneShape {
  * top point stays straight: the body is the ruled loft between the two ends,
  * exactly. Text is left out - it reaches the edge tool glyph by glyph.
  */
-const LOFTABLE_KINDS = new Set<WorkplaneShape["kind"]>(["box", "cylinder", "ellipse", "polygon", "tube", "ring", "slot", "star", "heart", "crescent", "honeycomb", "dovetail", "roundedBox"]);
+const LOFTABLE_KINDS = new Set<WorkplaneShape["kind"]>(["box", "cylinder", "ellipse", "polygon", "tube", "ring", "slot", "star", "heart", "crescent", "honeycomb", "dovetail", "roundedBox", "knurl"]);
 
 /**
  * The tapered, leaning or twisted shape as a loft between its bottom and top
@@ -1183,6 +1183,7 @@ const LOFTABLE_KINDS = new Set<WorkplaneShape["kind"]>(["box", "cylinder", "elli
 function deformedLoftProfile(shape: WorkplaneShape, width: number, depth: number): CadModifierProfilePart | null {
   if (!LOFTABLE_KINDS.has(shape.kind)) return null;
   let loops: CadModifierProfileLoop[];
+  let capChamfer: { radius: number; size: number } | undefined;
   if (shape.kind === "box") {
     // A box with a rounded radius (only older files carry one) is drawn round; its loft would not be.
     if ((shape.radius ?? 0) > 0) return null;
@@ -1191,8 +1192,9 @@ function deformedLoftProfile(shape: WorkplaneShape, width: number, depth: number
     // A round cylinder has no outline of its own (it is an analytic
     // primitive); as an ellipse it gets the same circle, or its drawn polygon.
     const base = cadProfileForShapeKind(shape.kind === "cylinder" ? { ...shape, kind: "ellipse" } : shape);
-    if (!base || base.frame || base.capFillet || base.capChamfer) return null;
+    if (!base || base.frame || base.capFillet) return null;
     loops = base.loops;
+    capChamfer = base.capChamfer;
   }
   const taper = shapeTaperDimensions(shape);
   const offsetX = shape.extrudeTopOffsetX ?? 0;
@@ -1212,12 +1214,22 @@ function deformedLoftProfile(shape: WorkplaneShape, width: number, depth: number
     height: shape.height,
     transform: profileTransformForShape(shape),
   };
+  if (capChamfer) {
+    // The turned bound of the chamfer narrows evenly; one that narrows by
+    // different factors across and along stays on the display mesh.
+    const bottom = taper.bottomWidth / width;
+    const top = taper.topWidth / width;
+    if (Math.abs(bottom - taper.bottomDepth / depth) > 1e-6 || Math.abs(top - taper.topDepth / depth) > 1e-6) return null;
+    part.capChamfer = { ...capChamfer, bottomScale: bottom, topScale: top, lean: { x: offsetX, z: offsetZ } };
+  }
   // A twist turns each section around the middle of the outline as it rises, as the display does.
   const twist = shape.extrudeTwist ?? 0;
   if (Math.abs(twist) > 1e-6) {
     part.twist = twist;
     part.twistCenter = { x: centerX, z: centerZ };
     part.twistLean = { x: offsetX, z: offsetZ };
+    // Fine grooves need sections closer than the standard step, or the smooth loft swings out between them.
+    if (shape.kind === "knurl") part.twistStep = Math.min(TWIST_SECTION_STEP, 90 / Math.max(1, knurlSettings({ ...shape, width }).count));
   }
   validateCadProfile(part);
   return part;

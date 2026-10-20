@@ -46,13 +46,13 @@ The settings sit docked at the right edge. If they cover something you want to s
 
 ![A group of an orange block, a blue peg and a hole, cut into one body. With Multicolor switched on, the peg stays blue, the block orange, and the walls of the hole take the block's colour.](shot:group-multicolor)
 
-Taper and twist work on almost every shape. Only the gear, thread, spring, Gridfinity, knurl, hinge, pyramid, bent tube, teardrop, the screw-head cutters and the ruler leave them out: they have fixed measures of their own or, like the pyramid, a top of their own already.
+Taper and twist work on almost every shape. Only the gear, thread, spring, Gridfinity, hinge, pyramid, bent tube, teardrop, the screw-head cutters and the ruler leave them out: they have fixed measures of their own or, like the pyramid, a top of their own already.
 
 ![A cone whose top radius and height were changed: a small arrow next to each takes the value back, and the two buttons at the bottom save or reset the defaults of the shape.](shot:property-reset)
 
 {{ui:inspector.saveDefaults}} keeps what you changed on this shape as the start of every new shape of its kind: the sizes, the settings of the shape and its colour. Colour a cylinder green, press the button, and every cylinder you add from then on is green; the other kinds keep their own colours. {{ui:inspector.resetDefaults}} takes the kind back to what the app starts it with. The kinds that have defaults of their own are marked in the settings under {{ui:workspace.shapeDefaults}}. A new design that you start from the start page begins with them too; the values are kept in this browser.
 
-A tapered or leaning box, cylinder, ellipse, polygon, tube or ring keeps its exact shape, and so do the capsule, star, heart, crescent, dovetail and a rounded box without rounded top and bottom edges: chamfers and fillets work on it as on the plain shape, and the STEP export writes it. The same holds for a twisted shape: its section turns exactly as it rises, and the sides wind evenly from bottom to top.
+A tapered or leaning box, cylinder, ellipse, polygon, tube or ring keeps its exact shape, and so do the capsule, star, heart, crescent, dovetail a rounded box without rounded top and bottom edges, and a straight or round knurl (its chamfered ends narrow with it): chamfers and fillets work on it as on the plain shape, and the STEP export writes it. The same holds for a twisted shape: its section turns exactly as it rises, and the sides wind evenly from bottom to top.
 
 Typing is more exact than dragging. All number fields take millimetres, but also percentages: type "50 %" into a width of 40 mm and you get 20 mm. They calculate too: "15*3", "120-2*4" or "(40+2)/2" give 45, 112 and 21; x works instead of *. The field remembers the calculation, in the Properties panel as well as in the dimension boxes around the selected body: click into it again later and the formula stands there instead of the number, as long as the value still matches it, and you change it in place, "(140+2)/2" becoming "(40+6)/2". Drag the body by a handle or scale it and the formula no longer fits, so the field shows just the number again.
 

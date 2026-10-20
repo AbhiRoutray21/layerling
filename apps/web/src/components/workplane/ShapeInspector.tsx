@@ -873,6 +873,10 @@ function getShapePropertiesWithAppLimits(shape: WorkplaneShape, onUpdate: ShapeI
             onChange: (value) => onUpdate({ screwHoleAngle: normalizeScrewHoleAngle(value) }),
           },
       { id: "height", label: t("prop.screwHoleLength"), value: shape.height, min: MIN_SHAPE_SIZE, max: 160, onChange: setHeight },
+      // One entry in the library for both: the double countersink is the countersink chamfered on both faces (#621).
+      ...(shape.kind === "counterbore"
+        ? []
+        : [{ type: "toggle" as const, id: "screwHoleBothSides", label: t("prop.screwHoleBothSides"), value: shape.kind === "doubleCountersink", onChange: (value: boolean) => onUpdate({ kind: value ? "doubleCountersink" : "countersink" }) }]),
       ...roundSideProperties(shape, width, depth, onUpdate),
     ];
   }
@@ -2798,7 +2802,8 @@ export function ShapeInspector({
         </button>
       ) : null}
 
-      <div className={`property-card ${propertiesOpen ? "" : "collapsed"}`}>
+      {/* Every part of a plain shape's properties leads to the guide's section about them; the special shapes keep the answers of their own (#424). */}
+      <div className={`property-card ${propertiesOpen ? "" : "collapsed"}`} data-help-section-all={guideSectionForShape(shape) === "shapeSettings" ? "shapeSettings" : undefined}>
         <button
           className="property-card-header"
           type="button"
@@ -2932,7 +2937,7 @@ export function ShapeInspector({
           </div>
         ) : null}
       </div>
-      <div className={`property-card ${rotationOpen ? "" : "collapsed"}`}>
+      <div className={`property-card ${rotationOpen ? "" : "collapsed"}`} data-help-section-all="rotating">
         <button
           className="property-card-header"
           type="button"
@@ -2960,7 +2965,7 @@ export function ShapeInspector({
         />
       ) : null}
       {showTaperCards ? (
-        <div className={`property-card ${taperOpen ? "" : "collapsed"}`}>
+        <div className={`property-card ${taperOpen ? "" : "collapsed"}`} data-help-section-all="shapeSettings">
           <button
             className="property-card-header"
             type="button"
@@ -2979,7 +2984,7 @@ export function ShapeInspector({
         </div>
       ) : null}
       {showTaperCards ? (
-        <div className={`property-card ${twistOpen ? "" : "collapsed"}`}>
+        <div className={`property-card ${twistOpen ? "" : "collapsed"}`} data-help-section-all="shapeSettings">
           <button
             className="property-card-header"
             type="button"

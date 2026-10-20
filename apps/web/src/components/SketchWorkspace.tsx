@@ -6,6 +6,7 @@ import { SnapGridControl } from "@/components/workplane/ShapeInspector";
 import { SketchRevolvePreview } from "@/components/SketchRevolvePreview";
 import { ToolbarConstructionLineIcon } from "@/components/toolbarIcons";
 import { constructionCrossings } from "@/lib/sketchConstruction";
+import { outlineSideMiddles, sketchSnapPoints } from "@/lib/sketchSnapPoints";
 import { canApplySketchCornerTreatment } from "@/lib/sketchFilletChamfer";
 import { t } from "@/lib/i18n";
 import { useLanguage } from "@/lib/useLanguage";
@@ -61,6 +62,8 @@ type SketchWorkspaceProps = {
   /** The snap grid picked in the sketch; the editor keeps one grid for the sketch and the 3D view. */
   onSnapChange?: (snap: GridSize) => void;
   initialWorkspace?: WorkplaneWorkspaceSettings;
+  /** Lines run from their middle (#624): the preview shows the far half too. */
+  fromMiddle?: boolean;
   onPlanePoint: (point: { x: number; z: number }, handles?: { handleIn: { x: number; z: number }; handleOut: { x: number; z: number } }) => void;
   onAddPrimitive: (primitive: SketchPrimitive, center: { x: number; z: number }) => void;
   onPointPress: (id: string) => void;
@@ -367,6 +370,17 @@ function isRoundReference(shape: WorkplaneShape) {
   return ["cylinder", "sphere", "cone", "torus", "tube", "ring", "halfSphere"].includes(shape.kind);
 }
 
+/** The middle, the four corners and the middles of the four sides of a rectangular body shown underneath (#624). */
+function rectangleReferencePoints(x: number, z: number, halfWidth: number, halfDepth: number) {
+  const corners = [
+    { x: x - halfWidth, z: z - halfDepth },
+    { x: x + halfWidth, z: z - halfDepth },
+    { x: x + halfWidth, z: z + halfDepth },
+    { x: x - halfWidth, z: z + halfDepth },
+  ];
+  return [{ x, z }, ...corners, ...outlineSideMiddles(corners)];
+}
+
 function sketchReferencePoint(shape: WorkplaneShape, x: number, z: number) {
   return {
     x: shape.x + x * mirrorSign(shape.mirrorX),
@@ -562,6 +576,7 @@ export function SketchWorkspace({
   onSnapChange,
   initialWorkspace,
   onPlanePoint,
+  fromMiddle,
   onAddPrimitive,
   onPointPress,
   onFinishLine,
@@ -1055,7 +1070,11 @@ export function SketchWorkspace({
       const reach = REFERENCE_SNAP_PX * screenUnit;
       let nearest: { x: number; z: number } | null = null;
       let nearestDistance = reach;
-      snapTargets.forEach((candidate) => {
+      // A dragged point leaves out the middle of its own lines, which would move away under it.
+      const targets = pointerAction?.kind === "move-point"
+        ? [...referenceSnapPoints, ...crossingSnapPoints, ...sketchSnapPoints(displayProfile, pointerAction.pointId)]
+        : snapTargets;
+      targets.forEach((candidate) => {
         const distance = Math.hypot(candidate.x - local.x, candidate.z - local.z);
         if (distance <= nearestDistance) {
           nearest = candidate;
@@ -1734,7 +1753,7 @@ export function SketchWorkspace({
         ? svgPathPoints(footprint.outlineD)
         : isRoundReference(shape)
           ? [{ x: shape.x, z: shape.z }, { x: shape.x - halfWidth, z: shape.z }, { x: shape.x + halfWidth, z: shape.z }, { x: shape.x, z: shape.z - halfDepth }, { x: shape.x, z: shape.z + halfDepth }]
-          : [{ x: shape.x, z: shape.z }, { x: shape.x - halfWidth, z: shape.z - halfDepth }, { x: shape.x + halfWidth, z: shape.z - halfDepth }, { x: shape.x + halfWidth, z: shape.z + halfDepth }, { x: shape.x - halfWidth, z: shape.z + halfDepth }];
+          : rectangleReferencePoints(shape.x, shape.z, halfWidth, halfDepth);
       points.push(...local.map(turn));
     });
     // Rounded, so a corner at 0 is 0 and not 7e-15.
@@ -1745,7 +1764,9 @@ export function SketchWorkspace({
     () => constructionCrossings(displayProfile).map((point) => ({ x: Number(point.x.toFixed(4)) || 0, z: Number(point.z.toFixed(4)) || 0 })),
     [displayProfile],
   );
-  const snapTargets = useMemo(() => [...referenceSnapPoints, ...crossingSnapPoints], [crossingSnapPoints, referenceSnapPoints]);
+  // The middles of the sketch's own lines and the centres of its circles (#624).
+  const ownSnapPoints = useMemo(() => sketchSnapPoints(displayProfile), [displayProfile]);
+  const snapTargets = useMemo(() => [...referenceSnapPoints, ...crossingSnapPoints, ...ownSnapPoints], [crossingSnapPoints, ownSnapPoints, referenceSnapPoints]);
   const hoverOnReference = hover ? snapTargets.some((point) => point.x === hover.x && point.z === hover.z) : false;
 
   // Colours picked in the settings reach the light theme through variables; the stylesheet
@@ -2256,6 +2277,7 @@ export function SketchWorkspace({
           })() : null}
           {hover && hoverOnReference ? <circle className="sketch-reference-snap" cx={hover.x} cy={hover.z} r={7 * screenUnit} pointerEvents="none" /> : null}
           {activePoint && previewEnd && pointerAction?.kind !== "bezier" && ["line", "bezier", "smooth"].includes(tool) ? <line className="sketch-preview-line" x1={activePoint.x} y1={activePoint.z} x2={previewEnd.x} y2={previewEnd.z} pointerEvents="none" /> : null}
+          {fromMiddle && tool === "line" && activePoint && previewEnd && pointerAction?.kind !== "bezier" ? <line className="sketch-preview-line" x1={activePoint.x} y1={activePoint.z} x2={2 * activePoint.x - previewEnd.x} y2={2 * activePoint.z - previewEnd.z} pointerEvents="none" /> : null}
           {activePoint && pointerAction?.kind === "bezier" ? (() => {
             // While a Bézier point is dragged out, the stretch to it bends live, exactly as it will
             // once let go: its handle on this side mirrors the drag (#196). Before, a straight line

@@ -72,6 +72,8 @@ Eine Hilfslinie hilft dir beim Setzen von Punkten, ohne zum Körper zu gehören.
 - Schalte {{ui:sketch.construction}} in der Gruppe {{ui:sketch.group.draw}} ein. Neue Linien, auch die nach Maß, sind dann Hilfslinien. Mit dem Knopf schaltest du wieder auf normale Linien zurück.
 - Eine schon gezeichnete Linie machst du zur Hilfslinie, indem du sie anklickst und {{ui:sketch.makeConstruction}} wählst. {{ui:sketch.makeSolid}} macht sie wieder zu einer normalen Linie.
 - Neue Punkte rasten dort ein, wo eine Hilfslinie eine andere Linie kreuzt, ein blauer Ring zeigt es, und an den Enden der Hilfslinie. So legst du eine Ecke auf eine Mitte, in einen festen Abstand von der Kante oder auf einen Schnittpunkt, ohne zu rechnen.
+- Neue Punkte rasten auch in der Mitte jeder geraden Linie der Skizze ein, im Mittelpunkt jedes Kreises und jeder abgerundeten Ecke und in den Mitten der Seiten eines Körpers, der darunter gezeigt wird (#624). Ein Punkt, den du gerade ziehst, ignoriert die Mitte seiner eigenen Linien.
+- {{ui:sketch.fromMiddle}} in der Gruppe {{ui:sketch.group.draw}} zeichnet eine Linie von ihrer Mitte aus: Klicke erst die Mitte an, dann das Ende, und die Linie ist zur anderen Seite gleich lang. Die Mitte wird ein eigener Punkt. Mit einem weiteren Klick auf den Knopf zeichnest du wieder normale Linien.
 - Eine Hilfslinie schneidet den Umriss dort nicht auseinander, wo sie ihn kreuzt. Beim Rotieren darf sie auch rechts von der Achse liegen.
 
 ## Ein Körper daraus machen

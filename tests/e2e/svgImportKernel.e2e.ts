@@ -1,5 +1,6 @@
 import { pathToFileURL } from "node:url";
 import { resolve } from "node:path";
+import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 // The exact kernel (Manifold) loads its files relative to the page; in node they are the public folder.
 (globalThis as unknown as { window: unknown }).window = { location: { href: pathToFileURL(resolve("apps/web/public") + "/").href } };
@@ -36,5 +37,20 @@ describe("an SVG made by the kernel stays a clean solid (#420)", () => {
     const plate = { id: "plate", name: "plate", kind: "box", color: "#d97813", x: hole.x, z: hole.z, elevation: 0, size: 200, width: 200, depth: 120, height: 4, rotation: 0 } as unknown as WorkplaneShape;
     const result = await buildGroupedShapeFromSelection([plate, hole as WorkplaneShape], 250_000);
     expect(result.group).not.toBeNull();
+  });
+  it("brings in a traced picture whole, where its outlines meet in many corners (#584)", async () => {
+    await getManifoldRuntime();
+    const source = readFileSync(resolve("tests/fixtures/traced-picture-584.svg"), "utf8");
+    const imported = importedShapeFromSvgWithReport("picture.svg", source);
+    // The kernel's body had edges of four triangles at a few corners and was thrown away; the plain build then
+    // left out whole outlines and the picture came in as a handful of pieces (a fifth of its area).
+    expect(imported.skippedShapes).toBe(0);
+    const runtime = await getManifoldRuntime();
+    const solid = shapeToManifoldSolid(runtime, imported.shape, []);
+    expect(solid?.status()).toBe("NoError");
+    // The area of the drawing filled even-odd is 42,860 square units; the body is 4 mm thick.
+    expect(solid?.volume()).toBeGreaterThan(4 * 42_000);
+    expect(solid?.volume()).toBeLessThan(4 * 43_500);
+    solid?.delete();
   });
 });

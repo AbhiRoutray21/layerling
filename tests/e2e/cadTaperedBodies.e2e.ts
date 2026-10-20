@@ -18,6 +18,7 @@ import { createCrescentGeometry } from "@/lib/crescentGeometry";
 import { createHoneycombGeometry } from "@/lib/honeycombGeometry";
 import { createDovetailGeometry } from "@/lib/dovetailGeometry";
 import { createRoundedBoxGeometry } from "@/lib/roundedBoxGeometry";
+import { createKnurlGeometry } from "@/lib/knurlGeometry";
 import { meshForTwist } from "@/lib/heightSlices";
 import { shellSolid } from "@/lib/cadShell";
 import { deformsAboutOrigin, meshYawDegrees, mirrorSign, shapeExtrudeDeformAt, shapeHasExtrudeDeform, shapeHasTaper, shapeTaperDimensions, shapeTaperScaleAt } from "@/lib/workplaneShapes";
@@ -51,6 +52,7 @@ function localGeometry(source: WorkplaneShape) {
     case "honeycomb": return createHoneycombGeometry({ width, depth, height });
     case "dovetail": return createDovetailGeometry({ width, depth, height });
     case "roundedBox": return createRoundedBoxGeometry({ width, depth, height, topBottomFillet: source.topBottomFillet });
+    case "knurl": return createKnurlGeometry({ width, height, knurlPattern: source.knurlPattern, knurlCount: source.knurlCount, knurlDepth: source.knurlDepth, knurlChamfer: source.knurlChamfer });
     default: throw new Error(`no mesh for ${source.kind}`);
   }
 }
@@ -171,6 +173,12 @@ describe("tapered and leaning shapes: exact lofts", () => {
     ["a tapered honeycomb plate", shape("honeycomb", { width: 50, depth: 40, height: 6, taperTopWidth: 44, taperTopDepth: 34 })],
     ["a tapered dovetail", shape("dovetail", { width: 30, depth: 20, height: 10, taperTopWidth: 24, taperTopDepth: 18 })],
     ["a rounded box with round corners only, tapered", shape("roundedBox", { width: 40, depth: 30, height: 20, topBottomFillet: 0, taperTopWidth: 28, taperTopDepth: 20 })],
+    // #630: a knurl takes taper, lean and twist; its 45 degree ends narrow with it.
+    ["a tapered knurl without chamfer", shape("knurl", { width: 30, depth: 30, height: 20, knurlCount: 24, knurlDepth: 1, knurlChamfer: 0, taperTopWidth: 18, taperTopDepth: 18 })],
+    ["a tapered knurl with chamfered ends", shape("knurl", { width: 30, depth: 30, height: 20, knurlCount: 24, knurlDepth: 1, knurlChamfer: 1.5, taperTopWidth: 18, taperTopDepth: 18 })],
+    ["a tapered, leaning round knurl with chamfered ends", shape("knurl", { width: 30, depth: 30, height: 20, knurlPattern: "round", knurlCount: 20, knurlDepth: 1, knurlChamfer: 1, taperBottomWidth: 24, taperBottomDepth: 24, taperTopWidth: 36, taperTopDepth: 36, extrudeTopOffsetX: 4, extrudeTopOffsetZ: -3 })],
+    ["a twisted knurl with chamfered ends", shape("knurl", { width: 30, depth: 30, height: 20, knurlCount: 16, knurlDepth: 1, knurlChamfer: 1, extrudeTwist: 45 })],
+    ["a twisted knurl without chamfer", shape("knurl", { width: 30, depth: 30, height: 20, knurlCount: 16, knurlDepth: 1, knurlChamfer: 0, extrudeTwist: 45 })],
   ];
 
   it.each(outlineCases)("builds %s where the display mesh stands, turned and mirrored too", (_name, source) => {
@@ -195,6 +203,12 @@ describe("tapered and leaning shapes: exact lofts", () => {
       // A polygon is drawn exactly: the display mesh's own volume.
       expect(cad.getVolume(solid) / expected.volume).toBeCloseTo(1, 6);
     }
+  });
+
+  // Fine grooves twisted: the smooth loft must not swing out between its sections.
+  it.each([[16, 45, 1], [30, 180, 1], [60, 90, 0.6]] as const)("keeps a twisted knurl of %i grooves within its own radius (twist %i)", (count, twist, depth) => {
+    const { solid } = body(shape("knurl", { width: 30, depth: 30, height: 20, knurlCount: count, knurlDepth: depth, knurlChamfer: 0, extrudeTwist: twist }));
+    trueBounds(solid).forEach((value, index) => expect(Math.abs(value - [-15, 0, -15, 15, 20, 15][index])).toBeLessThan(0.05));
   });
 
   it("keeps the flat sides of a tapered or leaning box flat: six plane faces", () => {

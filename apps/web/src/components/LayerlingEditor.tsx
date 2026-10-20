@@ -76,6 +76,7 @@ import {
   ToolbarHolePatternIcon,
   ToolbarFaceToolIcon,
   ToolbarConstructionLineIcon,
+  ToolbarMiddleLineIcon,
   ToolbarLayFlatIcon,
   ToolbarMateFacesIcon,
   ToolbarNoteIcon,
@@ -2786,6 +2787,11 @@ export function LayerlingEditor({
   useEffect(() => {
     if (!sketchActive) setSketchConstruction(false);
   }, [sketchActive]);
+  // New lines run from their middle: the first point is the middle, the second the end, and the line goes on the same length to the other side (#624).
+  const [sketchFromMiddle, setSketchFromMiddle] = useState(false);
+  useEffect(() => {
+    if (!sketchActive) setSketchFromMiddle(false);
+  }, [sketchActive]);
   const [sketchProfile, setSketchProfile] = useState<SketchProfile>(() => emptySketchProfile());
   const [sketchHistory, setSketchHistory] = useState<SketchProfile[]>([emptySketchProfile()]);
   const [sketchHistoryIndex, setSketchHistoryIndex] = useState(0);
@@ -4581,6 +4587,25 @@ export function LayerlingEditor({
         ...(handles ?? {}),
         mode: sketchTool === "line" ? "corner" : sketchTool === "smooth" ? "smooth" : handles ? "smooth" : "corner",
       };
+      const middle = sketchFromMiddle && sketchTool === "line" && sketchActivePointId ? sketchProfile.points.find((entry) => entry.id === sketchActivePointId) : null;
+      if (middle) {
+        // From the middle (#624): the first point is the middle, this one the end, and the other end lies the same distance on the far side.
+        const far: SketchPoint = { id: createLocalId("sketch-point"), x: 2 * middle.x - position.x, z: 2 * middle.z - position.z, mode: "corner" };
+        const kind = { kind: "line" as const, ...(sketchConstruction ? { construction: true } : {}) };
+        const through: SketchProfile = {
+          ...sketchProfile,
+          points: [...sketchProfile.points, point, far],
+          segments: [
+            ...sketchProfile.segments,
+            { id: createLocalId("sketch-segment"), startId: middle.id, endId: point.id, ...kind },
+            { id: createLocalId("sketch-segment"), startId: far.id, endId: middle.id, ...kind },
+          ],
+        };
+        commitSketchProfile(through, t("status.sketchSegmentAdded"));
+        setSketchActivePointId(null);
+        setSketchSelection({ kind: "point", id: point.id });
+        return;
+      }
       const next: SketchProfile = { ...sketchProfile, points: [...sketchProfile.points, point] };
       if (sketchActivePointId) {
         next.segments = [...next.segments, { id: createLocalId("sketch-segment"), startId: sketchActivePointId, endId: point.id, kind: curveKind, ...(sketchConstruction ? { construction: true } : {}) }];
@@ -4590,7 +4615,7 @@ export function LayerlingEditor({
       setSketchActivePointId(point.id);
       setSketchSelection({ kind: "point", id: point.id });
     },
-    [commitSketchProfile, connectSketchPoint, measureSketchPoint, sketchActivePointId, sketchConstruction, sketchProfile, sketchTool],
+    [commitSketchProfile, connectSketchPoint, measureSketchPoint, sketchActivePointId, sketchConstruction, sketchFromMiddle, sketchProfile, sketchTool],
   );
 
   const addSketchPrimitive = useCallback(
@@ -4981,6 +5006,14 @@ export function LayerlingEditor({
   const setSketchSegmentConstruction = useCallback((id: string, construction: boolean) => {
     commitSketchProfile(withSegmentsConstruction(sketchProfile, new Set([id]), construction), t(construction ? "status.sketchMadeConstruction" : "status.sketchMadeSolid"));
   }, [commitSketchProfile, sketchProfile]);
+
+  const toggleSketchFromMiddle = useCallback(() => {
+    const next = !sketchFromMiddle;
+    setSketchFromMiddle(next);
+    if (next && sketchTool !== "line") setActiveSketchTool("line");
+    else setSketchActivePointId(null);
+    setNotice(t(next ? "status.sketchFromMiddleOn" : "status.sketchFromMiddleOff"));
+  }, [setActiveSketchTool, sketchFromMiddle, sketchTool]);
 
   const toggleSketchConstruction = useCallback(() => {
     const next = !sketchConstruction;
@@ -11921,6 +11954,8 @@ export function LayerlingEditor({
         onSketchCornerDialog={setSketchCornerDialog}
         sketchConstruction={sketchConstruction}
         onSketchConstruction={toggleSketchConstruction}
+        sketchFromMiddle={sketchFromMiddle}
+        onSketchFromMiddle={toggleSketchFromMiddle}
         sketchStrokeActive={sketchStrokePanelOpen || Boolean(sketchProfile.stroke)}
         onSketchStroke={() => setSketchStrokePanelOpen((open) => !open)}
         onStartSketch={(operation) => beginSketch(operation)}
@@ -12096,6 +12131,7 @@ export function LayerlingEditor({
             onSnapChange={(snap) => updateProjectWorkspaceSettings({ workspace: workspaceSettingsRef.current, snap })}
             initialWorkspace={workspaceSettings}
             onPlanePoint={addSketchPlanePoint}
+            fromMiddle={sketchFromMiddle}
             onAddPrimitive={addSketchPrimitive}
             onPointPress={pressSketchPoint}
             onFinishLine={() => setSketchActivePointId(null)}
@@ -12885,6 +12921,8 @@ function SecondaryToolbar({
   onSketchCornerDialog,
   sketchConstruction,
   onSketchConstruction,
+  sketchFromMiddle,
+  onSketchFromMiddle,
   sketchStrokeActive,
   onSketchStroke,
   onStartSketch,
@@ -13006,6 +13044,8 @@ function SecondaryToolbar({
   onSketchCornerDialog?: (dialog: "fillet" | "chamfer" | null) => void;
   sketchConstruction?: boolean;
   onSketchConstruction?: () => void;
+  sketchFromMiddle?: boolean;
+  onSketchFromMiddle?: () => void;
   sketchStrokeActive?: boolean;
   onSketchStroke?: () => void;
   onStartSketch: (operation: SketchOperation) => void;
@@ -13434,6 +13474,7 @@ function SecondaryToolbar({
         plain("sketch-bezier", t("sketch.bezier"), drawGroup, true, () => onSketchTool("bezier"), { icon: SKETCH_PALETTE_ICONS.bezier, active: sketchTool === "bezier" }),
         plain("sketch-smooth", t("sketch.smooth"), drawGroup, true, () => onSketchTool("smooth"), { icon: SKETCH_PALETTE_ICONS.smooth, active: sketchTool === "smooth" }),
         plain("sketch-construction", t("sketch.construction"), drawGroup, true, () => onSketchConstruction?.(), { icon: ToolbarConstructionLineIcon, active: Boolean(sketchConstruction), keywords: ["construction", "guide", "helper", "hilfslinie", "hilfs", "konstruktion"] }),
+        plain("sketch-from-middle", t("sketch.fromMiddle"), drawGroup, true, () => onSketchFromMiddle?.(), { icon: ToolbarMiddleLineIcon, active: Boolean(sketchFromMiddle), keywords: ["middle", "center", "centre", "mitte", "mittellinie", "symmetric", "symmetrisch"] }),
         ...sketchShapeMenuItems.map(({ primitive, label, icon }) => plain(
           `sketch-shape-${primitive}`,
           t("palette.addShape", { shape: t(label) }),
@@ -13809,6 +13850,9 @@ function SecondaryToolbar({
                     </button>
                     <button className={`toolbar-icon sketch-tool-icon sketch-construction-toggle ${sketchConstruction ? "active" : ""}`} type="button" aria-pressed={Boolean(sketchConstruction)} aria-label={t("sketch.construction")} title={t("sketch.constructionHint")} onClick={onSketchConstruction}>
                       <ToolbarConstructionLineIcon />
+                    </button>
+                    <button className={`toolbar-icon sketch-tool-icon sketch-from-middle-toggle ${sketchFromMiddle ? "active" : ""}`} type="button" aria-pressed={Boolean(sketchFromMiddle)} aria-label={t("sketch.fromMiddle")} title={t("sketch.fromMiddleHint")} onClick={onSketchFromMiddle}>
+                      <ToolbarMiddleLineIcon />
                     </button>
                   </div>
                 </div>
