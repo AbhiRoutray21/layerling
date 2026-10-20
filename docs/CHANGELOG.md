@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **Smoother turning, resizing and edge picking:** Every change to a selected body threw away the materials of its footprint on the plate and of the dashed guides and made new ones, and three.js compiled their shaders again each time; the Fillet and Chamfer tools did the same for every edge line whenever the pointer moved onto another edge, and drew all edge lines again at every render of the editor. These materials are now made once and shared. Turning a large import also counted its loose parts again at every step; the count is now kept per mesh. Measured in the browser: turning a 135,000-triangle import ten times blocked the page for 4.9 s, now 0.6 s; moving the pointer over the 722 edges of a gear with Fillet open blocked it for 11.7 s, now not at all.
+
 ## 1.93.0
 
 - **A traced picture with many touching outlines comes in whole (#584):** A black-and-white drawing traced from a picture (the guitarist of a second file) came in as a handful of pieces, about a fifth of its area. The kernel built the body well, but at a few corners where outlines meet it was left with an edge of four triangles, so the check threw the body away and the plain build, which leaves out any outline it cannot close, put in only fragments. When the first closing (0.05) leaves such an edge, the kernel now tries 0.1, 0.2 and 0.35 and takes the first body that is clean; the drawing keeps its 345 x 277 mm and all its outlines. Reported by @stefaanl on GitHub.

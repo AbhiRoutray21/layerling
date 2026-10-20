@@ -313,19 +313,7 @@ export function syncMoveDimensionWorldLines(
     }
     const geometry = new LineSegmentsGeometry();
     geometry.setPositions(points);
-    const material = new LineMaterial({
-      color,
-      linewidth,
-      worldUnits: false,
-      transparent: true,
-      opacity,
-      depthTest: false,
-      depthWrite: false,
-      alphaToCoverage: false,
-    });
-    material.toneMapped = false;
-    const rect = state.renderer.domElement.getBoundingClientRect();
-    material.resolution.set(Math.max(1, rect.width), Math.max(1, rect.height));
+    const material = sharedOverlayLineMaterial(state, { color, linewidth, opacity, depthTest: false });
     const lines = new LineSegments2(geometry, material);
     lines.renderOrder = renderOrder;
     lines.frustumCulled = false;
@@ -347,16 +335,7 @@ export function syncMoveDimensionWorldLines(
         base.x - perpendicular.x, base.y, base.z - perpendicular.z,
       ], 3),
     );
-    const arrowMaterial = new THREE.MeshBasicMaterial({
-      color: solidColor,
-      side: THREE.DoubleSide,
-      transparent: true,
-      opacity: 1,
-      depthTest: false,
-      depthWrite: false,
-    });
-    arrowMaterial.toneMapped = false;
-    const arrow = new THREE.Mesh(geometry, arrowMaterial);
+    const arrow = new THREE.Mesh(geometry, sharedOverlayArrowMaterial(solidColor));
     arrow.renderOrder = 1002;
     arrow.frustumCulled = false;
     setObjectRenderLayer(arrow, RENDER_LAYER_HELPERS);
@@ -381,6 +360,59 @@ export function syncMoveDimensionWorldLines(
   addWideSegments(solidPoints, solidColor, 1.45, 1, 1001);
   addWideSegments(guidePoints, guideColor, 1.05, 0.72, 1000);
   state.needsRender = true;
+}
+
+/**
+ * Materials of the overlay lines and arrows, shared by everything drawn with the same look (marked
+ * cached, so clearing a layer leaves them). The guides and the measures are drawn anew at every
+ * step of a drag and at every change of the selection; a new material each time made three.js
+ * throw away the compiled shaders with the old one and compile them again for the new one.
+ */
+const sharedOverlayMaterials = new Map<string, THREE.Material>();
+
+type OverlayLineLook = { color: string; linewidth: number; opacity: number; depthTest: boolean; dashSize?: number };
+
+export function sharedOverlayLineMaterial(state: ThreeState, look: OverlayLineLook) {
+  const key = `line:${look.color}:${look.linewidth}:${look.opacity}:${look.depthTest}:${look.dashSize ?? ""}`;
+  let material = sharedOverlayMaterials.get(key) as LineMaterial | undefined;
+  if (!material) {
+    material = new LineMaterial({
+      color: look.color,
+      linewidth: look.linewidth,
+      worldUnits: false,
+      ...(look.dashSize ? { dashed: true, dashSize: look.dashSize, gapSize: look.dashSize } : {}),
+      transparent: true,
+      opacity: look.opacity,
+      depthTest: look.depthTest,
+      depthWrite: false,
+      alphaToCoverage: false,
+    });
+    material.toneMapped = false;
+    material.userData.cached = true;
+    sharedOverlayMaterials.set(key, material);
+  }
+  const rect = state.renderer.domElement.getBoundingClientRect();
+  material.resolution.set(Math.max(1, rect.width), Math.max(1, rect.height));
+  return material;
+}
+
+function sharedOverlayArrowMaterial(color: string) {
+  const key = `arrow:${color}`;
+  let material = sharedOverlayMaterials.get(key) as THREE.MeshBasicMaterial | undefined;
+  if (!material) {
+    material = new THREE.MeshBasicMaterial({
+      color,
+      side: THREE.DoubleSide,
+      transparent: true,
+      opacity: 1,
+      depthTest: false,
+      depthWrite: false,
+    });
+    material.toneMapped = false;
+    material.userData.cached = true;
+    sharedOverlayMaterials.set(key, material);
+  }
+  return material;
 }
 
 export function syncTransformGuideWorldLines(
@@ -409,24 +441,15 @@ export function syncTransformGuideWorldLines(
   const positions = segments.flatMap(([start, end]) => [start.x, start.y, start.z, end.x, end.y, end.z]);
   const geometry = new LineSegmentsGeometry();
   geometry.setPositions(positions);
-  const material = new LineMaterial({
+  const material = sharedOverlayLineMaterial(state, {
     color: theme === "dark" ? "#cfe1ea" : "#1f272e",
     linewidth: 1.15,
-    worldUnits: false,
-    dashed: true,
     dashSize: 0.625,
-    gapSize: 0.625,
-    transparent: true,
     opacity: theme === "dark" ? 0.86 : 0.72,
     // Bodies hide the guides: the footprint lies under the selected body and must not shine
     // through it or through its neighbours (#219).
     depthTest: true,
-    depthWrite: false,
-    alphaToCoverage: false,
   });
-  material.toneMapped = false;
-  const rect = state.renderer.domElement.getBoundingClientRect();
-  material.resolution.set(Math.max(1, rect.width), Math.max(1, rect.height));
   const lines = new LineSegments2(geometry, material);
   lines.computeLineDistances();
   lines.renderOrder = 999;
@@ -1696,19 +1719,7 @@ export function syncOriginDimensionWorldLines(state: ThreeState, frame: OriginDi
     }
     const geometry = new LineSegmentsGeometry();
     geometry.setPositions(points);
-    const material = new LineMaterial({
-      color,
-      linewidth,
-      worldUnits: false,
-      transparent: true,
-      opacity,
-      depthTest: false,
-      depthWrite: false,
-      alphaToCoverage: false,
-    });
-    material.toneMapped = false;
-    const rect = state.renderer.domElement.getBoundingClientRect();
-    material.resolution.set(Math.max(1, rect.width), Math.max(1, rect.height));
+    const material = sharedOverlayLineMaterial(state, { color, linewidth, opacity, depthTest: false });
     const lines = new LineSegments2(geometry, material);
     lines.renderOrder = renderOrder;
     lines.frustumCulled = false;
@@ -1729,16 +1740,7 @@ export function syncOriginDimensionWorldLines(state: ThreeState, frame: OriginDi
         base.x - perpendicular.x, base.y, base.z - perpendicular.z,
       ], 3),
     );
-    const arrowMaterial = new THREE.MeshBasicMaterial({
-      color: solidColor,
-      side: THREE.DoubleSide,
-      transparent: true,
-      opacity: 1,
-      depthTest: false,
-      depthWrite: false,
-    });
-    arrowMaterial.toneMapped = false;
-    const arrow = new THREE.Mesh(geometry, arrowMaterial);
+    const arrow = new THREE.Mesh(geometry, sharedOverlayArrowMaterial(solidColor));
     arrow.renderOrder = 1002;
     arrow.frustumCulled = false;
     setObjectRenderLayer(arrow, RENDER_LAYER_HELPERS);
