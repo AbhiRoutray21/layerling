@@ -480,6 +480,21 @@ export type GearProfile = "involute" | "round" | "simple";
 export type GridfinityType = "bin" | "baseplate";
 /** How a label shelf's corners are finished where it meets a wall or another shelf. */
 export type GridfinityLabelCorner = "round" | "chamfer";
+/**
+ * A label in one compartment of a Gridfinity bin with dividers (#554): column 0 is the left, row 0 the back. It stands
+ * against one side of the compartment, the bin's wall or a divider; `length` is a share of that side in per cent (10 to
+ * 100, missing the full length), `align` where a shorter one sits along it (start towards -x on a back or front side and
+ * towards -z on a left or right one; missing the middle), `width` how far it reaches out in mm (missing 14, within what
+ * the compartment takes).
+ */
+export type GridfinityCompartmentLabel = {
+  column: number;
+  row: number;
+  side: "back" | "front" | "left" | "right";
+  length?: number;
+  align?: "start" | "middle" | "end";
+  width?: number;
+};
 
 /** Was aus dem Gewinde wird: Stange, Schraube, Mutter oder das Loch dafuer. */
 export type ThreadRole = "rod" | "screw" | "nut" | "bore";
@@ -785,6 +800,8 @@ export type WorkplaneShape = {
   gridfinityDividerPositionsX?: number[];
   /** Gridfinity bin: each divider deep, in mm from the inside of the back wall to its middle, back to front; missing spaces them evenly. */
   gridfinityDividerPositionsZ?: number[];
+  /** Gridfinity bin with dividers: the compartments' labels, one for each compartment that has one. */
+  gridfinityCompartmentLabels?: GridfinityCompartmentLabel[];
   /** Knurling: grooves straight along the axis, or crossed into diamonds. */
   knurlPattern?: "straight" | "diamond" | "round";
   /** Knurling: number of grooves around the grip. */

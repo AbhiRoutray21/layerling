@@ -1052,6 +1052,7 @@ function tapeShapeTopologyKey(shape: WorkplaneShape): string {
     gridfinityDividerThickness: shape.gridfinityDividerThickness,
     gridfinityDividerPositionsX: shape.gridfinityDividerPositionsX,
     gridfinityDividerPositionsZ: shape.gridfinityDividerPositionsZ,
+    gridfinityCompartmentLabels: shape.gridfinityCompartmentLabels,
     // Label shelves, finger scoops and dividers are joined by Manifold; until it has loaded the bin is drawn without them (#455, #554).
     labelKernel: shape.gridfinityLabelBack || shape.gridfinityLabelFront || shape.gridfinityLabelLeft || shape.gridfinityLabelRight || shape.gridfinityScoopBack || shape.gridfinityScoopFront || shape.gridfinityScoopLeft || shape.gridfinityScoopRight || (shape.gridfinityCompartmentsX ?? 1) > 1 || (shape.gridfinityCompartmentsZ ?? 1) > 1 ? manifoldRevision() : undefined,
     knurlPattern: shape.knurlPattern,
@@ -1348,6 +1349,7 @@ function shapeGeometrySignature(shape: WorkplaneShape): string {
     gridfinityDividerThickness: shape.gridfinityDividerThickness,
     gridfinityDividerPositionsX: shape.gridfinityDividerPositionsX,
     gridfinityDividerPositionsZ: shape.gridfinityDividerPositionsZ,
+    gridfinityCompartmentLabels: shape.gridfinityCompartmentLabels,
     // Label shelves, finger scoops and dividers are joined by Manifold; until it has loaded the bin is drawn without them (#455, #554).
     labelKernel: shape.gridfinityLabelBack || shape.gridfinityLabelFront || shape.gridfinityLabelLeft || shape.gridfinityLabelRight || shape.gridfinityScoopBack || shape.gridfinityScoopFront || shape.gridfinityScoopLeft || shape.gridfinityScoopRight || (shape.gridfinityCompartmentsX ?? 1) > 1 || (shape.gridfinityCompartmentsZ ?? 1) > 1 ? manifoldRevision() : undefined,
     knurlPattern: shape.knurlPattern,
@@ -13008,6 +13010,7 @@ function createShapeObject(
         gridfinityDividerThickness: shape.gridfinityDividerThickness,
         gridfinityDividerPositionsX: shape.gridfinityDividerPositionsX,
         gridfinityDividerPositionsZ: shape.gridfinityDividerPositionsZ,
+        gridfinityCompartmentLabels: shape.gridfinityCompartmentLabels,
       })), material, shape);
       break;
     case "loft":

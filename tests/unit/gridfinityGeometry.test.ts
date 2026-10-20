@@ -21,8 +21,11 @@ import {
   createGridfinityGeometry,
   gridfinityCompartmentCount,
   gridfinityCompartmentCountPatch,
+  gridfinityCompartmentCornerSize,
   gridfinityCompartmentCutBound,
   gridfinityCompartmentFloorBound,
+  gridfinityCompartmentLabel,
+  gridfinityCompartmentLabelMaxWidth,
   gridfinityCompartmentMax,
   gridfinityCompartmentPieces,
   gridfinityCompartments,
@@ -52,6 +55,7 @@ import {
   gridfinityTriangles,
   gridfinityUnitCompartments,
   gridfinityUnits,
+  normalizeGridfinityCompartmentLabels,
   normalizeGridfinityDividerPositions,
 } from "@/lib/gridfinityGeometry";
 
@@ -1604,7 +1608,7 @@ describe("gridfinity dividers", () => {
       // Narrow rows: a scoop made smaller, and facing scoops left out.
       { gridfinityCompartmentsZ: 2, gridfinityDividerPositionsZ: [8.1], gridfinityScoopFront: true },
       { gridfinityCompartmentsZ: 2, gridfinityDividerPositionsZ: [8.1], gridfinityScoopFront: true, gridfinityScoopBack: true },
-      // Wall shelves are not built in a bin with dividers.
+      // Wall shelves are not built in a bin with dividers: its labels are the compartments' own.
       { gridfinityCompartmentsX: 3, gridfinityCompartmentsZ: 2, gridfinityLabelBack: true },
     ]) expectDivided(fields);
   });
@@ -1639,10 +1643,107 @@ describe("gridfinity dividers", () => {
     expect(Math.abs(signedVolume(mesh) - signedVolume(plain) - 4009.42) / 4009.42).toBeLessThan(0.01);
   });
 
+  /** A bin of 2 x 1 x 3 units with 3 x 2 compartments of 26.4 x 19.2 and labels; the label pieces of one compartment. */
+  const labelled = (labels: Record<string, unknown>[], fields: Record<string, unknown> = {}) => bin({ gridfinityCompartmentsX: 3, gridfinityCompartmentsZ: 2, gridfinityCompartmentLabels: labels, ...fields });
+  const labelOf = (shape: ReturnType<typeof bin>, column: number, row: number) => gridfinityCompartmentPieces(shape)!.cells.find((cell) => cell.column === column && cell.row === row)!.labels;
+
   it("builds the wall shelves of a bin with dividers no more, and keeps them for a bin without", () => {
     const shelves = { gridfinityLabelBack: true, gridfinityLabelLeft: true };
     expect(gridfinityLabelPieces(bin({ ...shelves, gridfinityCompartmentsX: 3 }))).toBeNull();
     expect(gridfinityLabelPieces(bin({ ...shelves, gridfinityCompartmentsX: 1 }))).not.toBeNull();
+  });
+
+  it("caps a compartment's label corner and width so that 6 mm of it stays open, and offers no label where that leaves less than 4 mm", () => {
+    const shape = labelled([{ column: 1, row: 0, side: "back" }], { gridfinityLabelCornerSize: 10 });
+    const cell = gridfinityCompartments(shape)!.cells[1];
+    // min(10, 9.6 - 1 - 4) = 4.6; the width min(17.2048, 19.2 - 6 - 2) = 11.2 with the corner at 2.
+    expect(gridfinityCompartmentCornerSize(shape, cell)).toBeCloseTo(4.6, 9);
+    expect(gridfinityCompartmentCornerSize(labelled([]), cell)).toBe(2);
+    expect(gridfinityCompartmentLabelMaxWidth(labelled([]), cell, "back")).toBeCloseTo(11.2, 9);
+    expect(gridfinityCompartmentLabelMaxWidth(labelled([]), cell, "left")).toBeCloseTo(17.2048, 4);
+    expect(gridfinityCompartmentLabel(labelled([{ column: 1, row: 0, side: "back" }]), 1, 0)).toMatchObject({ side: "back", length: 100, align: "middle" });
+    expect(gridfinityCompartmentLabel(labelled([{ column: 1, row: 0, side: "back" }]), 1, 0)!.width).toBeCloseTo(11.2, 9);
+    expect(gridfinityCompartmentLabel(labelled([{ column: 1, row: 0, side: "back", width: 30 }]), 1, 0)!.width).toBeCloseTo(11.2, 9);
+    expect(gridfinityCompartmentLabel(labelled([{ column: 1, row: 0, side: "back", width: 1 }]), 1, 0)!.width).toBe(4);
+    const back = labelOf(labelled([{ column: 1, row: 0, side: "back" }]), 1, 0)!;
+    expect(back.shelves).toHaveLength(1);
+    expect(back.shelves[0].profile.width).toBeCloseTo(11.2, 9);
+    // A row 6 mm deep: no corner and no room for a back label, but a left one along it.
+    const shallow = { gridfinityDividerPositionsZ: [6.6] };
+    expect(labelOf(labelled([{ column: 0, row: 0, side: "back" }], shallow), 0, 0)).toBeNull();
+    expect(gridfinityCompartmentLabel(labelled([{ column: 0, row: 0, side: "back" }], shallow), 0, 0)).toBeNull();
+    expect(labelOf(labelled([{ column: 0, row: 0, side: "left" }], shallow), 0, 0)).not.toBeNull();
+  });
+
+  it("takes a compartment label's first entry, ignores those outside the compartments, and builds none in a bin under 3 height units", () => {
+    const two = [{ column: 2, row: 1, side: "right" }, { column: 2, row: 1, side: "front" }, { column: 5, row: 0, side: "back" }];
+    expect(gridfinityCompartmentLabel(labelled(two), 2, 1)!.side).toBe("right");
+    expect(gridfinityCompartmentPieces(labelled(two))!.cells.filter((cell) => cell.labels)).toHaveLength(1);
+    expect(gridfinityCompartmentPieces(labelled(two, { height: 14 + GRIDFINITY_LIP_HEIGHT }))!.cells.every((cell) => !cell.labels)).toBe(true);
+  });
+
+  it("builds a compartment label from 10 % to the full length of its side, hides one under 4 mm, and runs one into the corners from the snap", () => {
+    const span = (label: Record<string, unknown>) => {
+      const pieces = labelOf(labelled([{ column: 1, row: 0, side: "back", ...label }]), 1, 0);
+      return pieces ? pieces.shelves[0].profile : null;
+    };
+    // 30 % of 26.4 is 7.92 mm, centred; 150 % is the full length, run 1 mm into the dividers.
+    expect(span({ length: 30 })!.to - span({ length: 30 })!.from).toBeCloseTo(7.92, 9);
+    expect(span({ length: 150 })!.from).toBeCloseTo(-14.2, 9);
+    expect(span({ length: 150 })!.to).toBeCloseTo(14.2, 9);
+    // 10 % at the least, 2.64 mm, and 15 %, 3.96 mm, are under 4 mm and hidden; 16 % is 4.22.
+    expect(span({ length: 5 })).toBeNull();
+    expect(span({ length: 15 })).toBeNull();
+    expect(span({ length: 16 })!.to - span({ length: 16 })!.from).toBeCloseTo(4.224, 9);
+    // Start and end: one end runs into the divider, towards -x and towards +x on a back side.
+    expect(span({ length: 50, align: "start" })!.from).toBeCloseTo(-14.2, 9);
+    expect(span({ length: 50, align: "start" })!.to).toBeCloseTo(0, 9);
+    expect(span({ length: 50, align: "end" })!.from).toBeCloseTo(0, 9);
+    // On a left side start is towards -z, the back: the label's u runs towards the back there.
+    const left = labelOf(labelled([{ column: 1, row: 0, side: "left", length: 50, align: "start" }]), 1, 0)!.shelves[0].profile;
+    expect(left.to).toBeCloseTo(10.6, 9);
+    expect(left.from).toBeCloseTo(0, 9);
+  });
+
+  it("snaps a label's end, or its end piece's outer edge, within 0.05 mm of the compartment's corner rounding onto it", () => {
+    const ends = (length: number, align: string) => {
+      const { from, to } = labelOf(labelled([{ column: 1, row: 0, side: "back", length, align }]), 1, 0)!.shelves[0].profile;
+      return [Number(from.toFixed(9)), Number(to.toFixed(9))];
+    };
+    // The middle compartment's rounding starts 2.8 mm in from its sides, at x -10.4 and 10.4.
+    expect(ends(78.9, "middle")).toEqual([-10.4, 10.4]);
+    expect(ends(79.5, "middle")).toEqual([-10.494, 10.494]);
+    // A 2 mm end piece beside a free end: its outer edge 2 mm further out, onto the rounding, puts the end at 8.4.
+    expect(ends(81.85, "start")).toEqual([-14.2, 8.4]);
+    expect(ends(89.39, "start")).toEqual([-14.2, 10.4]);
+    expect(ends(89.5, "start")).toEqual([-14.2, 10.4]);
+    expect(ends(89.8, "start")[1]).toBeCloseTo(10.5072, 9);
+    expect(ends(81.85, "end")).toEqual([-8.4, 14.2]);
+  });
+
+  it("draws compartment labels on every side, round and chamfered, closed and in one piece, kept to their compartment", () => {
+    for (const side of ["back", "front", "left", "right"]) {
+      for (const corner of [{}, { gridfinityLabelCorner: "chamfer" }, { gridfinityLabelCornerSize: 0 }, { gridfinityLabelCornerSize: 10 }]) {
+        const labels = [0, 1, 2].flatMap((column) => [0, 1].map((row) => ({ column, row, side, length: [100, 50, 30][column], align: ["middle", "start", "end"][(column + row) % 3], width: 8 })));
+        const shape = labelled(labels, { gridfinityScoopFront: true, ...corner });
+        const { mesh } = expectDivided({ gridfinityCompartmentsX: 3, gridfinityCompartmentsZ: 2, gridfinityCompartmentLabels: labels, gridfinityScoopFront: true, ...corner });
+        const plainLabels = gridfinityLabelledTriangles(runtime, labelled([], { gridfinityScoopFront: true, ...corner })) as V[][];
+        expect(signedVolume(mesh), `${side} ${JSON.stringify(corner)}`).toBeGreaterThan(signedVolume(plainLabels) + 6 * 25);
+        // Every piece stays within its compartment and LABEL_PAST behind its side.
+        gridfinityCompartmentPieces(shape)!.cells.forEach((cell) => {
+          const pieces = cell.labels!;
+          const along = side === "back" || side === "front" ? cell.inside.hx : cell.inside.hz;
+          pieces.shelves.forEach(({ profile }) => {
+            expect(profile.from, side).toBeGreaterThanOrEqual(-along - 1 - 1e-9);
+            expect(profile.to, side).toBeLessThanOrEqual(along + 1 + 1e-9);
+          });
+          [...pieces.corners, ...pieces.shelves.flatMap((shelf) => shelf.notches)].forEach((c) => {
+            expect(Math.abs(c.at.x), side).toBeLessThanOrEqual(cell.inside.hx + 1e-9);
+            expect(Math.abs(c.at.z), side).toBeLessThanOrEqual(cell.inside.hz + 1e-9);
+          });
+        });
+      }
+    }
   });
 
   it("writes a count of 1 as unset and puts that axis's dividers back evenly spaced when the count changes", () => {
@@ -1685,7 +1786,7 @@ describe("gridfinity dividers", () => {
     expect(gridfinityDividerPositionPatch(bin(fields), "x", 2, 30)).toEqual({});
   });
 
-  it("takes the lists of dividers as lists, and [] as unset", () => {
+  it("takes the lists of dividers and labels as lists, and [] as unset", () => {
     expect(normalizeGridfinityDividerPositions([20, 40.5])).toEqual([20, 40.5]);
     expect(normalizeGridfinityDividerPositions("[20,40.5]")).toBeUndefined();
     expect(normalizeGridfinityDividerPositions([20, "x", Number.NaN, 30])).toEqual([20, 30]);
@@ -1693,8 +1794,16 @@ describe("gridfinity dividers", () => {
     expect(normalizeGridfinityDividerPositions(Array.from({ length: 30 }, (_, i) => i))).toHaveLength(23);
     expect(normalizeGridfinityDividerPositions("not a list")).toBeUndefined();
     expect(normalizeGridfinityDividerPositions(20)).toBeUndefined();
+    const label = { column: 1, row: 0, side: "back", length: 50, align: "start", width: 8 };
+    expect(normalizeGridfinityCompartmentLabels([label])).toEqual([label]);
+    expect(normalizeGridfinityCompartmentLabels(JSON.stringify([label]))).toBeUndefined();
+    // A label on an unknown side or without its compartment is left out; a value of the wrong kind is left unset.
+    expect(normalizeGridfinityCompartmentLabels([{ column: 0, row: 0, side: "top" }, { row: 0, side: "back" }, "back", { column: 1.2, row: 2, side: "left", align: "up", width: "8" }])).toEqual([{ column: 1, row: 2, side: "left" }]);
+    // One for each compartment any count could give, 24 x 24, so labels outside the current counts survive a change of count.
+    expect(normalizeGridfinityCompartmentLabels(Array.from({ length: 600 }, (_, i) => ({ column: i % 24, row: Math.floor(i / 24), side: "front" })))).toHaveLength(576);
+    expect(normalizeGridfinityCompartmentLabels({ column: 0 })).toBeUndefined();
     // What the MCP writes: only the lists it was given, an empty one as unset.
-    expect(gridfinityListPatch({ gridfinityDividerPositionsX: [30, 54.6] })).toStrictEqual({ gridfinityDividerPositionsX: [30, 54.6] });
+    expect(gridfinityListPatch({ gridfinityDividerPositionsX: [30, 54.6], gridfinityCompartmentLabels: [] })).toStrictEqual({ gridfinityDividerPositionsX: [30, 54.6], gridfinityCompartmentLabels: undefined });
     expect(gridfinityListPatch({ gridfinityDividerPositionsZ: [] })).toStrictEqual({ gridfinityDividerPositionsZ: undefined });
     expect(gridfinityListPatch({ gridfinityDividerPositionsZ: "nonsense", width: 40 })).toEqual({});
     // A count puts that axis's dividers back evenly spaced, as the settings window does, unless the same action places them.
@@ -1703,10 +1812,10 @@ describe("gridfinity dividers", () => {
     expect(gridfinityListPatch({ gridfinityCompartmentsX: 2.6, gridfinityDividerPositionsX: [30, 50] })).toEqual({ gridfinityCompartmentsX: 3, gridfinityDividerPositionsX: [30, 50] });
     expect(gridfinityListPatch({ gridfinityCompartmentsX: "3" })).toEqual({});
     // Through the MCP the lists also come as the JSON text layerling_read_scene reports them in; text that is no list is unset.
-    const params = mcpGridfinityListParams({ gridfinityDividerPositionsX: "[30,54.6]", gridfinityDividerPositionsZ: "not a list", gridfinityCompartmentsX: 3, width: 40 });
-    expect(params).toStrictEqual({ gridfinityDividerPositionsX: [30, 54.6], gridfinityDividerPositionsZ: undefined, gridfinityCompartmentsX: 3, width: 40 });
-    expect(mcpGridfinityListParams({ gridfinityDividerPositionsZ: "{}" })).toStrictEqual({ gridfinityDividerPositionsZ: undefined });
-    expect(gridfinityListPatch(params)).toStrictEqual({ gridfinityCompartmentsX: 3, gridfinityDividerPositionsX: [30, 54.6] });
+    const params = mcpGridfinityListParams({ gridfinityDividerPositionsX: "[30,54.6]", gridfinityDividerPositionsZ: "not a list", gridfinityCompartmentLabels: [label], gridfinityCompartmentsX: 3, width: 40 });
+    expect(params).toStrictEqual({ gridfinityDividerPositionsX: [30, 54.6], gridfinityDividerPositionsZ: undefined, gridfinityCompartmentLabels: [label], gridfinityCompartmentsX: 3, width: 40 });
+    expect(mcpGridfinityListParams({ gridfinityCompartmentLabels: JSON.stringify([label]), gridfinityDividerPositionsZ: "{}" })).toStrictEqual({ gridfinityCompartmentLabels: [label], gridfinityDividerPositionsZ: undefined });
+    expect(gridfinityListPatch(params)).toStrictEqual({ gridfinityCompartmentsX: 3, gridfinityDividerPositionsX: [30, 54.6], gridfinityCompartmentLabels: [label] });
     expect(mcpGridfinityListParams({ width: 40 })).toStrictEqual({ width: 40 });
   });
 
@@ -1715,9 +1824,11 @@ describe("gridfinity dividers", () => {
     const lists = {
       gridfinityDividerPositionsX: [25, 55],
       gridfinityDividerPositionsZ: [18],
+      gridfinityCompartmentLabels: [{ column: 0, row: 0, side: "back" as const, length: 50, align: "start" as const, width: 8 }, { column: 2, row: 1, side: "right" as const }],
     };
     const settings = { ...counts, ...lists };
     const shape = canonicalizeShape(binShape(settings));
+    const [label, other] = lists.gridfinityCompartmentLabels;
     for (const change of [
       { gridfinityCompartmentsX: 4 },
       { gridfinityCompartmentsZ: 1 },
@@ -1725,10 +1836,17 @@ describe("gridfinity dividers", () => {
       { gridfinityDividerPositionsX: [25, 56] },
       { gridfinityDividerPositionsX: [25] },
       { gridfinityDividerPositionsZ: undefined },
+      { gridfinityCompartmentLabels: [label] },
+      { gridfinityCompartmentLabels: [{ ...label, column: 1 }, other] },
+      { gridfinityCompartmentLabels: [{ ...label, row: 1 }, other] },
+      { gridfinityCompartmentLabels: [{ ...label, side: "front" as const }, other] },
+      { gridfinityCompartmentLabels: [{ ...label, length: 60 }, other] },
+      { gridfinityCompartmentLabels: [{ ...label, align: "end" as const }, other] },
+      { gridfinityCompartmentLabels: [{ ...label, width: 9 }, other] },
     ]) {
       expect(workplaneShapesEqual(shape, { ...shape, ...change }), JSON.stringify(change)).toBe(false);
     }
-    expect(workplaneShapesEqual(shape, { ...shape, gridfinityDividerPositionsX: [25, 55] })).toBe(true);
+    expect(workplaneShapesEqual(shape, { ...shape, gridfinityDividerPositionsX: [25, 55], gridfinityCompartmentLabels: [{ ...label }, { ...other }] })).toBe(true);
     const save = (shapes: WorkplaneShape[]) => exportLylProject({
       projectId: "dividers",
       projectName: "Dividers",
@@ -1749,13 +1867,13 @@ describe("gridfinity dividers", () => {
     const [halfCount] = (await importLylProject(await save([canonicalizeShape(binShape({ gridfinityCompartmentsX: 1.5 }))]))).shapes;
     expect(halfCount.gridfinityCompartmentsX).toBe(1.5);
     expect(gridfinityCompartmentCount(halfCount, "x")).toBe(2);
-    for (const wrong of [{ gridfinityDividerPositionsX: ["x"] }, { gridfinityDividerPositionsX: 20 }, { gridfinityDividerPositionsX: [-1] }, { gridfinityDividerPositionsX: [2e6] }, { gridfinityDividerPositionsX: Array(65).fill(10) }]) {
+    for (const wrong of [{ gridfinityCompartmentLabels: [{ column: 0, row: 0, side: "top" }] }, { gridfinityDividerPositionsX: ["x"] }, { gridfinityDividerPositionsX: 20 }, { gridfinityDividerPositionsX: [-1] }, { gridfinityDividerPositionsX: [2e6] }, { gridfinityDividerPositionsX: Array(65).fill(10) }, { gridfinityCompartmentLabels: [{ column: -1, row: 0, side: "back" }] }]) {
       await expect(importLylProject(await save([{ ...shape, ...wrong } as WorkplaneShape])), JSON.stringify(wrong)).rejects.toThrow();
     }
     expect(sceneShape(shape)).toMatchObject(settings);
     expect(cadModifierGridfinityForShape(shape)).toMatchObject(settings);
     // The settings a new shape or an MCP action takes and a bin kept as the default have the counts and the thickness;
-    // the dividers' places belong to one bin's size.
+    // the dividers' places and the labels belong to one bin's size.
     const kept = normalizeShapeCustomizations({ gridfinity: settings }, {}).gridfinity!;
     expect(kept).toMatchObject(counts);
     Object.keys(lists).forEach((key) => expect(kept, key).not.toHaveProperty(key));
@@ -1771,6 +1889,9 @@ describe("gridfinity dividers", () => {
     for (const params of [
       { gridfinityCompartmentsX: 3, gridfinityDividerPositionsX: [-5, 50] },
       { gridfinityCompartmentsX: 3, gridfinityDividerPositionsX: [20, 2e6] },
+      { gridfinityCompartmentsX: 3, gridfinityCompartmentLabels: [{ column: 0, row: 0, side: "back", width: -2 }] },
+      { gridfinityCompartmentsX: 3, gridfinityCompartmentLabels: [{ column: 0, row: 0, side: "back", length: -10 }] },
+      { gridfinityCompartmentsX: 3, gridfinityCompartmentLabels: [{ column: 2e6, row: 0, side: "back" }, { column: 1, row: 0, side: "back", length: 1e7, width: 2e6 }] },
       { gridfinityCompartmentsX: 5e6, gridfinityCompartmentsZ: -4 },
     ] as Array<Record<string, unknown>>) {
       const context = JSON.stringify(params);
@@ -1780,13 +1901,14 @@ describe("gridfinity dividers", () => {
       expect(workplaneShapesEqual(loaded, shape), context).toBe(true);
       // Kept within range only where the bin would clamp it anyway.
       for (const axis of ["x", "z"] as const) expect(gridfinityDividerPositions(loaded, axis), context).toEqual(gridfinityDividerPositions(raw, axis));
+      expect(JSON.stringify(gridfinityCompartmentPieces(loaded)?.cells.map((cell) => cell.labels)), context).toBe(JSON.stringify(gridfinityCompartmentPieces(raw)?.cells.map((cell) => cell.labels)));
     }
   });
 
   it("reports the counts and the thickness to the MCP as numbers and the lists as JSON text", () => {
-    const shape = canonicalizeShape(binShape({ gridfinityCompartmentsX: 3, gridfinityDividerThickness: 1.6, gridfinityDividerPositionsX: [25, 55] }));
+    const shape = canonicalizeShape(binShape({ gridfinityCompartmentsX: 3, gridfinityDividerThickness: 1.6, gridfinityDividerPositionsX: [25, 55], gridfinityCompartmentLabels: [{ column: 0, row: 0, side: "back" }] }));
     const { settings } = mcpShapeSummary(shape);
-    expect(settings).toMatchObject({ gridfinityCompartmentsX: 3, gridfinityDividerThickness: 1.6, gridfinityDividerPositionsX: "[25,55]" });
+    expect(settings).toMatchObject({ gridfinityCompartmentsX: 3, gridfinityDividerThickness: 1.6, gridfinityDividerPositionsX: "[25,55]", gridfinityCompartmentLabels: '[{"column":0,"row":0,"side":"back"}]' });
     expect(normalizeGridfinityDividerPositions(JSON.parse(String(settings!.gridfinityDividerPositionsX)))).toEqual([25, 55]);
   });
 });

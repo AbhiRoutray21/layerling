@@ -38,7 +38,7 @@ export const MCP_SHAPE_SETTING_KEYS = [
   "gridfinityType", "gridfinityLip", "gridfinityMagnets", "gridfinityHalfGrid",
   "gridfinityLabelBack", "gridfinityLabelFront", "gridfinityLabelLeft", "gridfinityLabelRight", "gridfinityLabelBackWidth", "gridfinityLabelBackLength", "gridfinityLabelBackOffset", "gridfinityLabelFrontWidth", "gridfinityLabelFrontLength", "gridfinityLabelFrontOffset", "gridfinityLabelLeftWidth", "gridfinityLabelLeftLength", "gridfinityLabelLeftOffset", "gridfinityLabelRightWidth", "gridfinityLabelRightLength", "gridfinityLabelRightOffset", "gridfinityLabelCorner", "gridfinityLabelCornerSize",
   "gridfinityScoopBack", "gridfinityScoopFront", "gridfinityScoopLeft", "gridfinityScoopRight", "gridfinityScoopRadius", "gridfinityFloorHeight",
-  "gridfinityCompartmentsX", "gridfinityCompartmentsZ", "gridfinityDividerThickness", "gridfinityDividerPositionsX", "gridfinityDividerPositionsZ",
+  "gridfinityCompartmentsX", "gridfinityCompartmentsZ", "gridfinityDividerThickness", "gridfinityDividerPositionsX", "gridfinityDividerPositionsZ", "gridfinityCompartmentLabels",
   "knurlPattern", "knurlCount", "knurlDepth", "knurlAngle", "knurlChamfer",
   "dovetailNeckWidth", "dovetailClearance",
   "loftBottomOutline", "loftTopOutline", "loftBottomWidth", "loftBottomDepth", "loftTopWidth", "loftTopDepth", "loftBottomCorner", "loftTopCorner", "loftBottomSides", "loftTopSides", "loftOffsetX", "loftOffsetZ", "loftWall", "loftTwist", "loftTiltX", "loftTiltZ", "loftSmooth", "slotEndRatio",
@@ -90,7 +90,7 @@ export function mcpThreadSizeName(shape: Pick<WorkplaneShape, "kind" | "threadDi
   return threadSizeFor(settings.diameter, settings.pitch)?.id;
 }
 
-export const MCP_GRIDFINITY_LIST_KEYS = ["gridfinityCompartmentsX", "gridfinityCompartmentsZ", "gridfinityDividerPositionsX", "gridfinityDividerPositionsZ"] as const;
+export const MCP_GRIDFINITY_LIST_KEYS = ["gridfinityCompartmentsX", "gridfinityCompartmentsZ", "gridfinityDividerPositionsX", "gridfinityDividerPositionsZ", "gridfinityCompartmentLabels"] as const;
 
 /**
  * A Gridfinity bin's lists as lists, also when they come as the text layerling_read_scene gives them, read as
