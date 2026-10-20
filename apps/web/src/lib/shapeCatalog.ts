@@ -22,7 +22,6 @@ import {
   normalizeGearHelixAngle,
   normalizeGearHelixQuality,
   normalizeGearPressureAngle,
-  normalizeGearProfile,
   normalizeGearRim,
   normalizeGearTeeth,
   normalizeGearToothSize,
