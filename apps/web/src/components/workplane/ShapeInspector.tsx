@@ -4,7 +4,7 @@ import { displayY, displayYTurn, insideZ, insideZTurn } from "@/lib/displayAxes"
 import { GuideHelpLink } from "@/components/GuideHelpLink";
 import { guideChapterForShape, guideSectionForShape } from "@/lib/guideLinks";
 import { useInspectorCard } from "@/lib/inspectorCards";
-import { ChevronDown, ChevronUp, Cylinder, Eye, EyeOff, FolderOpen, Grid3x3, Layers, Lock, Minus, Pencil, Plus, RefreshCw, RotateCcw, Split, Tags, Unlock } from "lucide-react";
+import { ChevronDown, ChevronUp, Cylinder, Eye, EyeOff, FolderOpen, Grid3x3, Layers, Link2, Lock, Minus, Pencil, Plus, RefreshCw, RotateCcw, Split, Tags, Unlock } from "lucide-react";
 import { createPortal } from "react-dom";
 import { Fragment, createContext, useCallback, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type Dispatch, type ReactNode, type SetStateAction } from "react";
 import {
@@ -2334,6 +2334,7 @@ export function ShapeInspector({
   onWrapAroundCylinder,
   onLayerText,
   onTextTags,
+  onFixKeyringTab,
   textLayerStack: nameTagStack,
   iconTag,
   qrCode,
@@ -2364,6 +2365,8 @@ export function ShapeInspector({
   onLayerText?: (patch: TextLayerPatch) => void;
   /** One tag like this text or stack per name, laid out in rows (#215). */
   onTextTags?: (names: string[], gap: number) => void;
+  /** Fixes a key ring tab of its own to the nearest tag in one click, where it was put (#598). */
+  onFixKeyringTab?: () => void;
   /** The selected name tag's words, font and layers, read from its layers as they stand (#215). */
   textLayerStack?: NameTagStack | null;
   /** The icon tag card's wiring, for a sketch body or an icon tag; null for anything else. */
@@ -2672,6 +2675,7 @@ export function ShapeInspector({
           onInteractionActiveChange={onInteractionActiveChange}
         />
       ) : null}
+      {shape.keyringTab && onFixKeyringTab ? <KeyringTabFixButton disabled={locked} onFix={onFixKeyringTab} /> : null}
       {shape.kind === "text" && onLayerText ? <MakeLayersButton disabled={locked} onLayerText={onLayerText} /> : null}
       {qrCode ? <QrCodeCard key={`qr-code-${shape.id}`} shapeId={shape.id} controls={qrCode} disabled={locked} /> : null}
       {iconTag?.isTag ? (
@@ -3105,7 +3109,23 @@ export function ShapeInspector({
  * sliders are the same range rows as everywhere else, so a drag shows a live
  * preview and ends in a single undo step.
  */
-export type TextLayerPatch = { text?: string; font?: string; letterSize?: number; layers?: TextLayer[]; keyring?: NameTagKeyring | null };
+export type TextLayerPatch = { text?: string; font?: string; letterSize?: number; layers?: TextLayer[]; keyring?: NameTagKeyring | null; /** "Free" (#598): the hole comes off the tag and a key ring tab of its own is put beside it. */ keyringTab?: boolean };
+
+/**
+ * A key ring tab of its own (#598): once it is in place, one click fixes it to the nearest tag
+ * where it is, so the hole goes through the tag's layers and the ear stays with the tag.
+ */
+function KeyringTabFixButton({ disabled, onFix }: { disabled: boolean; onFix: () => void }) {
+  return (
+    <div className="name-tag-start">
+      <button className="inspector-action-button name-tag-start-button" type="button" disabled={disabled} onClick={onFix}>
+        <Link2 size={17} strokeWidth={2.5} />
+        <span>{t("nameTag.keyringTabFix")}</span>
+      </button>
+      <p className="name-tag-hint">{t("nameTag.keyringTabFixHint")}</p>
+    </div>
+  );
+}
 
 /**
  * A plain text's way to a name tag (#215), first in its settings so a beginner finds it: one
@@ -3421,12 +3441,16 @@ function NameTagCard({
               <div className="name-tag-sides" role="radiogroup" aria-label={t("nameTag.keyringSide")}>
                 <span>{t("nameTag.keyringSide")}</span>
                 {TEXT_KEYRING_SIDES.map((side) => (
-                  <button key={side} type="button" role="radio" aria-checked={keyring.side === side} className={keyring.side === side ? "active" : ""} disabled={disabled} onClick={() => onLayerText({ keyring: { side, diameter: keyring.diameter } })}>
+                  <button key={side} type="button" role="radio" aria-checked={!keyring.free && keyring.side === side} className={!keyring.free && keyring.side === side ? "active" : ""} disabled={disabled} onClick={() => onLayerText({ keyring: { side, diameter: keyring.diameter } })}>
                     {t(`nameTag.side.${side}`)}
                   </button>
                 ))}
+                <button type="button" role="radio" aria-checked={Boolean(keyring.free)} className={keyring.free ? "active" : ""} title={t("nameTag.side.freeHint")} disabled={disabled} onClick={() => onLayerText({ keyringTab: true })}>
+                  {t("nameTag.side.free")}
+                </button>
               </div>
-              <KeyringAlongProperty keyring={keyring} limit={nameTagKeyringAlongLimit(source, layers, keyring)} workspace={workspace} disabled={disabled} onChange={(next) => onLayerText({ keyring: next })} onInteractionActiveChange={onInteractionActiveChange} />
+              {/* A hole fixed freely (#598) stands where it was put, not on a side. */}
+              {!keyring.free ? <KeyringAlongProperty keyring={keyring} limit={nameTagKeyringAlongLimit(source, layers, keyring)} workspace={workspace} disabled={disabled} onChange={(next) => onLayerText({ keyring: next })} onInteractionActiveChange={onInteractionActiveChange} /> : null}
             </>
           ) : null}
           <NameListFields disabled={disabled} onTextTags={onTextTags} onInteractionActiveChange={onInteractionActiveChange} />
@@ -3437,7 +3461,7 @@ function NameTagCard({
 }
 
 /** What the icon tag card changes: the icon's width and the layers; the rest stays as it is. */
-export type IconLayerPatch = { width?: number; layers?: TextLayer[]; keyring?: NameTagKeyring | null };
+export type IconLayerPatch = { width?: number; layers?: TextLayer[]; keyring?: NameTagKeyring | null; /** "Free" (#598): the hole comes off the tag and a key ring tab of its own is put beside it. */ keyringTab?: boolean };
 
 /**
  * The icon tag card's wiring: the stack as it stands, the build, the copies on the plate, and
@@ -3661,19 +3685,22 @@ function IconTagCard({ shapeId, controls, workspace, disabled, onInteractionActi
               <div className="name-tag-sides" role="radiogroup" aria-label={t("nameTag.keyringSide")}>
                 <span>{t("nameTag.keyringSide")}</span>
                 {TEXT_KEYRING_SIDES.map((side) => (
-                  <button key={side} type="button" role="radio" aria-checked={stack.keyring!.side === side} className={stack.keyring!.side === side ? "active" : ""} disabled={disabled} onClick={() => onLayer({ keyring: { side, diameter: stack.keyring!.diameter } })}>
+                  <button key={side} type="button" role="radio" aria-checked={!stack.keyring!.free && stack.keyring!.side === side} className={!stack.keyring!.free && stack.keyring!.side === side ? "active" : ""} disabled={disabled} onClick={() => onLayer({ keyring: { side, diameter: stack.keyring!.diameter } })}>
                     {t(`nameTag.side.${side}`)}
                   </button>
                 ))}
+                <button type="button" role="radio" aria-checked={Boolean(stack.keyring!.free)} className={stack.keyring!.free ? "active" : ""} title={t("nameTag.side.freeHint")} disabled={disabled} onClick={() => onLayer({ keyringTab: true })}>
+                  {t("nameTag.side.free")}
+                </button>
               </div>
-              <KeyringAlongProperty
+              {!stack.keyring.free ? <KeyringAlongProperty
                 keyring={stack.keyring}
                 limit={iconKeyringAlongLimit(stack.source, stack.keyring.side, stack.keyring.diameter, stack.layers[stack.layers.length - 1]?.grow ?? 0, stack.width)}
                 workspace={workspace}
                 disabled={disabled}
                 onChange={(next) => onLayer({ keyring: next })}
                 onInteractionActiveChange={onInteractionActiveChange}
-              />
+              /> : null}
             </>
           ) : null}
           <ShapePropertyRows properties={properties.slice(1)} workspace={workspace} disabled={disabled} onInteractionActiveChange={onInteractionActiveChange} />
