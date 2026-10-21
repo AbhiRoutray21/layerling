@@ -1,5 +1,102 @@
 [
   {
+    "version": "1.99.0",
+    "items": [
+      {
+        "title": {
+          "de": "Eckenradius der abgerundeten Box auf 0,01 mm genau",
+          "en": "Rounded box corner radius to 0.01 mm"
+        },
+        "body": {
+          "de": "Bei der abgerundeten Box rundete das Feld Eckenradius auf Zehntel: aus 0,25 mm wurde 0,3 mm. Jetzt bleiben zwei Nachkommastellen erhalten, auch beim Radius oben und unten.",
+          "en": "The corner radius field of the rounded box rounded to tenths, so 0.25 mm came back as 0.3 mm. Now two decimals are kept, for the radius at the top and bottom too."
+        }
+      },
+      {
+        "title": {
+          "de": "Lücke in der Skizze schließen",
+          "en": "Close a gap in a sketch"
+        },
+        "body": {
+          "de": "Hast du in der Skizze eine Seite einer Form gelöscht, ziehst du jetzt einfach das eine offene Ende auf das andere: Es rastet ein, beide werden zu einem Punkt, und der Umriss ist wieder geschlossen. Eine neue Linie dazwischen ist nicht mehr nötig.",
+          "en": "If you erased a side of a shape in the sketch, just drag one open end onto the other: it snaps there, the two become one point, and the outline is closed again. No need to draw a new line in between."
+        }
+      },
+      {
+        "title": {
+          "de": "Schilder auf Seitenflächen",
+          "en": "Tags on side faces",
+          "hu": "Címkék oldallapokon"
+        },
+        "body": {
+          "de": "Ein Namens- oder Symbolschild auf einer stehenden oder schrägen Fläche baut seine Schichten jetzt aus der Fläche heraus auf. Bisher lag die Grundplatte vorn und die Buchstaben verschoben dahinter.",
+          "en": "A name tag or icon tag on a standing or sloped face now builds its layers out of the face. Before, the base plate came out in front with the letters shifted behind it.",
+          "hu": "Egy álló vagy ferde lapon lévő név- vagy ikoncímke most a lapból kifelé építi fel a rétegeit. Korábban az alaplap került előre, a betűk pedig eltolva mögé."
+        }
+      },
+      {
+        "title": {
+          "de": "layerling spricht Spanisch",
+          "en": "layerling speaks Spanish",
+          "hu": "A layerling spanyolul is beszél"
+        },
+        "body": {
+          "de": "Die Oberfläche und die Anleitung gibt es jetzt auf Spanisch (Spanien). Du wählst sie im Sprachmenü; ein spanischer Browser bekommt sie von selbst. Was noch nicht übersetzt ist, erscheint auf Englisch.",
+          "en": "The interface and the guide are now in Spanish (Spain). Choose it in the language menu; a Spanish browser gets it by itself. Whatever is not translated yet shows in English.",
+          "hu": "A felület és az útmutató mostantól spanyolul (Spanyolország) is elérhető. A nyelvmenüben választható, egy spanyol böngésző magától megkapja. Ami még nincs lefordítva, angolul jelenik meg."
+        }
+      },
+      {
+        "title": {
+          "de": "Dünne importierte Teile haben die richtige Größe",
+          "en": "Thin imported parts have the right size",
+          "hu": "A vékony importált alkatrészek mérete helyes"
+        },
+        "body": {
+          "de": "Ein importiertes Teil, das dünner als 1 mm ist, zeigte 1 mm an und wurde bei einer eingegebenen Höhe zu klein. Jetzt stimmen die Maße, auch bei schon gespeicherten Formen.",
+          "en": "An imported part thinner than 1 mm showed 1 mm and came out too small when you typed a height. The sizes are right now, saved shapes included.",
+          "hu": "Az 1 mm-nél vékonyabb importált alkatrész 1 mm-t mutatott, és beírt magasságnál túl kicsi lett. Most a méretek helyesek, a már elmentett formáké is."
+        }
+      },
+      {
+        "title": {
+          "de": "Scharnier aufklappen",
+          "en": "Fold the hinge open or shut",
+          "hu": "A csuklópánt nyitása és csukása"
+        },
+        "body": {
+          "de": "Beim Scharnier gibt es einen neuen Regler, den Öffnungswinkel. Er klappt das zweite Blatt um den Stift hoch, von flach (0°) bis zugeklappt (180°), damit sich das Scharnier so setzen lässt, wie es im Entwurf steht.",
+          "en": "The hinge has a new slider, the opening angle. It folds the second leaf up about the pin, from flat (0°) to closed (180°), so you can set the hinge as it stands in your design.",
+          "hu": "A csuklópántnak új csúszkája van, a nyitási szög. A második szárnyat a csap körül felhajtja, laposról (0°) zárt állásig (180°), így a csuklópánt úgy állítható be, ahogy a tervben áll."
+        }
+      },
+      {
+        "title": {
+          "de": "Einfacher Modus für Kinder",
+          "en": "A simple mode for children",
+          "hu": "Egyszerű mód gyerekeknek"
+        },
+        "body": {
+          "de": "In den Einstellungen schaltest Du einen einfachen Modus ein: weniger Werkzeuge, eine kurze Formenliste, größere Knöpfe und eine Startseite ohne Verweise nach außen. Ausschalten geht nur mit zwei Sekunden Halten. Ein Link mit ?mode=simple schaltet ihn auf dem Gerät ein, ein Server kann ihn vorgeben.",
+          "en": "Switch on a simple mode in the settings: fewer tools, a short list of shapes, larger buttons and a start page without links out of layerling. Leaving it takes a two-second press. A link with ?mode=simple switches it on for that device, and a server can set it.",
+          "hu": "A beállításokban bekapcsolhat egy egyszerű módot: kevesebb eszköz, rövid alakzatlista, nagyobb gombok és kifelé mutató hivatkozások nélküli kezdőoldal. Kikapcsolni csak kétmásodperces nyomva tartással lehet. A ?mode=simple hivatkozás bekapcsolja az eszközön, a szerver pedig előírhatja."
+        }
+      },
+      {
+        "title": {
+          "de": "SVG aus CorelDRAW lässt sich importieren",
+          "en": "SVG files from CorelDRAW import",
+          "hu": "A CorelDRAW-ból származó SVG-fájlok importálhatók"
+        },
+        "body": {
+          "de": "Manche Programme, etwa CorelDRAW, speichern SVG-Dateien als UTF-16. Solche Dateien meldeten bisher \"SVG is not valid XML\". Jetzt werden sie gelesen.",
+          "en": "Some programs, CorelDRAW for one, save SVG files as UTF-16. Such files used to fail with \"SVG is not valid XML\". Now they are read.",
+          "hu": "Egyes programok, például a CorelDRAW, UTF-16 kódolással mentik az SVG-fájlokat. Az ilyen fájlok eddig az „SVG is not valid XML” hibát adták. Most beolvashatók."
+        }
+      }
+    ]
+  },
+  {
     "version": "1.98.0",
     "items": [
       {

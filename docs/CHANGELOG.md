@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+## 1.99.0
+
 - **Rounded box radii to 0.01 mm (#705):** `normalizeCornerFillet` and `normalizeTopBottomFillet` rounded to a tenth of a millimetre, so a corner fillet of 0.25 mm came back as 0.3 mm. They round to a hundredth now, and the fields (the shape's properties and the defaults in the workspace settings) step by 0.05. The CAD solid reads the same functions, so it follows. Unit test in `roundedBoxGeometry.test.ts` (0.25 stays 0.25, 7.336 becomes 7.34). Reported by @Algotz on GitHub.
 - **SVG saved as UTF-16 imports (#317):** CorelDRAW and some Windows tools save an SVG as UTF-16 with a byte order mark. layerling read every SVG as UTF-8, so such a file came out with null characters between the letters and failed with "SVG is not valid XML". `decodeSvgBytes` in `svgImport.ts` now reads a file that starts with the UTF-16 mark in either byte order as UTF-16, and everything else as UTF-8 as before.
 - **Cmd and Option in the shortcut list on Apple keyboards (#704):** The list of keyboard shortcuts shows Cmd and Option instead of Ctrl and Alt on a Mac, an iPhone or an iPad (a browser that says Macintosh, iPhone or iPad), and the footer "On a Mac, use Cmd wherever Ctrl is listed" (`shortcuts.footer`) is gone from every catalogue, as nothing needs it any more. Contributed by @gogades.
