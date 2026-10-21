@@ -84,6 +84,8 @@ Je-li pracovní rovina na boční ploše, kreslíte při pohledu na ni a horní 
 
 {{ui:inspector.editSketch}} vás kdykoliv vrátí k náčrtu. Totéž dělá dvojklik jako v Tinkercadu; zamčené těleso se neotevře. Dvojklik lze vypnout přes {{ui:workspace.doubleClickOpensSketch}}. Úpravy hran hotového tělesa se při změně náčrtu ztratí, protože hrany vznikají znovu.
 
+Náčrt s několika obrysy dává jedno těleso a obrysy, které se překrývají, v něm splynou. Chcete-li mít každý obrys zvlášť, vyberte těleso a klikněte na {{ui:inspector.separateParts}}: každý vnější obrys se stane samostatným tělesem s otvory, které v něm leží, a zachová si výšku, barvu a místo tělesa. Každá část má vlastní náčrt k úpravám, i s pomocnými čarami, takže můžete části zvedat nebo snižovat jednotlivě a potom je spojit nebo odečíst. Úpravy hran tomu brání, stejně jako dodatečně roztažené těleso: to se pak rozdělí jako síť.
+
 **Jiný druh tělesa ze stejného náčrtu:** štítek nahoře v náčrtu říká, čím se stane: {{ui:sketch.modeBadgeExtrude}}, {{ui:sketch.modeBadgeRevolve}} nebo {{ui:sketch.modeBadgeSweep}}. Klikni na něj a vyber jiný, i když upravuješ existující těleso: importované SVG, které přijde vysunuté, se po přepnutí na {{ui:sketch.modeBadgeRevolve}} stane vázou nebo knoflíkem. Obrys, který přesahuje přes osu, se posune doleva, až jeho pravý okraj leží na ose; [[Ctrl]]+[[Z]] posun vrátí. Po dokončení nastoupí nové těleso na místo starého, se stejným jménem a barvou a patou ve stejné výšce. Úpravy hran se ztratí, jako při každé změně náčrtu.
 
 ### Rotace profilu
@@ -152,7 +154,7 @@ Tyto volby mění pouze podklad, nikoli náčrt.
 
 | Klávesa | Význam |
 | --- | --- |
-| [[Esc]] | ukončení kresleného řetězce, zrušení výběru |
+| [[Esc]] | odložení nástroje (zpět na {{ui:sketch.select}}), pak zrušení výběru |
 | [[Delete]] | odstranění vybraného prvku |
 | [[Ctrl]]+[[C]] | kopírování |
 | [[Ctrl]]+[[X]] | vyjmutí |

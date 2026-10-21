@@ -67,7 +67,7 @@ Umetna inteligenca dela z istimi funkcijami kot ti, teče po isti poti kot tvoje
 | `layerling_ungroup_objects` | razpusti skupine |
 | `layerling_boolean_cut` | reže telesa z luknjami |
 | `layerling_intersect_objects` | obdrži samo to, kar imajo objekti skupnega (presek) |
-| `layerling_separate_parts` | razstavi obliko z ločenimi deli |
+| `layerling_separate_parts` | razstavi obliko z ločenimi deli, telo iz skice na eno telo za vsak obris |
 | `layerling_split_objects` | razdeli telesa ali luknje z ravnino na dva dela |
 | `layerling_list_edges` | našteje prave robove CAD objekta |
 | `layerling_apply_edge_treatment` | posname ali zaobli izbrane robove |
@@ -94,6 +94,7 @@ Umetna inteligenca dela z istimi funkcijami kot ti, teče po isti poti kot tvoje
 | `layerling_delete_custom_shape` | odstrani lastno obliko; vstavljena telesa ostanejo |
 | `layerling_show_workplane` | skrije ploščo z njeno mrežo in jo spet prikaže, na primer za sliko spodnje strani (samo pogled) |
 | `layerling_set_section_view` | prereže pogled vzdolž ravnine, da se vidi notranjost (samo pogled, nič se ne razreže) |
+| `layerling_saved_view` | shrani trenutni pogled pod tipko 7, 8, 9 ali 0 in se vrne nanj, kot Shift+tipka in tipka (samo pogled) |
 | `layerling_clear_history` | za vedno izbriše vse korake razveljavitve, kot gumb »Izbriši zgodovino« v pogledu zgodovine; potrebuje `confirm: true` |
 | `layerling_set_history_view` | pogleda nazaj na prejšnje stanje projekta, kot pogled zgodovine (pravi načrt ostane nedotaknjen; orodja, ki spreminjajo, počakajo, da se zapre) |
 | `layerling_restore_from_history` | vrne objekte (tudi dele v skupinah) iz prejšnjega stanja v načrt kot kopije, kot »Vrni v načrt« v pogledu zgodovine - en korak, ki ga razveljavitev vzame nazaj |

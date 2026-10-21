@@ -67,7 +67,7 @@ AI'en arbejder med de samme funktioner som dig, gennem den samme vej som din han
 | `layerling_ungroup_objects` | opløser grupper |
 | `layerling_boolean_cut` | skærer solider med huller |
 | `layerling_intersect_objects` | beholder kun hvad objekterne har til fælles (Fælles) |
-| `layerling_separate_parts` | adskiller en form i dens løse dele |
+| `layerling_separate_parts` | adskiller en form i dens løse dele, et skitselegeme i ét legeme pr. omrids |
 | `layerling_split_objects` | skærer solider eller huller over med et plan |
 | `layerling_list_edges` | lister objektets rigtige CAD-kanter |
 | `layerling_apply_edge_treatment` | faser eller runder valgte kanter |
@@ -94,6 +94,7 @@ AI'en arbejder med de samme funktioner som dig, gennem den samme vej som din han
 | `layerling_delete_custom_shape` | fjerner en egne form; indsatte former bevares |
 | `layerling_show_workplane` | skjuler og viser pladen med sit gitter, for et billede af undersiden for eksempel (kun visningen) |
 | `layerling_set_section_view` | skærer visningen op langs et plan for at kigge indeni (kun visningen, intet skæres fra hinanden) |
+| `layerling_saved_view` | gemmer den aktuelle visning under tasten 7, 8, 9 eller 0 og går tilbage til den, som Shift+tast og tasten (kun visningen) |
 | `layerling_clear_history` | sletter hvert fortryd-trin for evigt, som historikvisningens "Slet historik"-knap; kræver `confirm: true` |
 | `layerling_set_history_view` | ser tilbage på en tidligere tilstand af projektet, som historikvisningen (det rigtige design forbliver urørt; ændringsværktøjer venter indtil den er lukket) |
 | `layerling_restore_from_history` | henter objekter (også dele i grupper) fra en tidligere tilstand tilbage i designet som kopier, som historikvisningens knap til at hente ind i designet - ét trin, som fortryd tager tilbage |

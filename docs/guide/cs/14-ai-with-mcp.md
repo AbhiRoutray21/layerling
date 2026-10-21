@@ -67,7 +67,7 @@ AI používá stejné funkce a stejné zpracování příkazů jako ruční ovl�
 | `layerling_ungroup_objects` | rozloží sloučení |
 | `layerling_boolean_cut` | odečte výřezy od plných těles |
 | `layerling_intersect_objects` | zachová pouze společný průnik objektů |
-| `layerling_separate_parts` | rozdělí tvar na jeho nespojené části |
+| `layerling_separate_parts` | rozdělí tvar na jeho nespojené části, těleso z náčrtu na jedno těleso za každý obrys |
 | `layerling_split_objects` | rozdělí tělesa nebo výřezy rovinou na dvě části |
 | `layerling_list_edges` | vypíše skutečné CAD hrany objektu |
 | `layerling_apply_edge_treatment` | zkosí nebo zaoblí vybrané hrany |
@@ -94,6 +94,7 @@ AI používá stejné funkce a stejné zpracování příkazů jako ruční ovl�
 | `layerling_delete_custom_shape` | odstraní uložený vlastní tvar; vložená tělesa zůstanou |
 | `layerling_show_workplane` | skryje nebo zobrazí podložku s mřížkou, pouze změna pohledu |
 | `layerling_set_section_view` | zapne pohled v řezu, aniž by skutečně rozdělil tělesa |
+| `layerling_saved_view` | uloží aktuální pohled pod klávesu 7, 8, 9 nebo 0 a vrátí se k němu, jako Shift+klávesa a klávesa (jen pohled) |
 | `layerling_clear_history` | trvale vymaže historii kroků zpět, vyžaduje `confirm: true` |
 | `layerling_set_history_view` | zobrazí starší stav projektu bez změny současného; editační nástroje počkají na zavření historie |
 | `layerling_restore_from_history` | vrátí objekty (i díly ve skupinách) ze staršího stavu do návrhu jako kopie, jako tlačítko „Vrátit do návrhu“ v historii - jeden krok, který Zpět vrátí |

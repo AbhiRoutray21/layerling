@@ -84,6 +84,8 @@ Si le plan de travail se trouve sur le côté d'un corps, vous dessinez la faço
 
 Avec {{ui:inspector.editSketch}} vous pouvez revenir à l'esquisse à tout moment pour la modifier. Un double clic sur le corps fait la même chose, comme dans Tinkercad (un corps verrouillé reste fermé) ; {{ui:workspace.doubleClickOpensSketch}} dans les paramètres désactive cela. Les traitements de bord que vous avez déjà effectués sur le corps sont perdus, car les bords sont créés à nouveau.
 
+Une esquisse à plusieurs contours donne un seul corps, et les contours qui se chevauchent y fusionnent. Pour garder chaque contour à part, sélectionnez le corps et cliquez sur {{ui:inspector.separateParts}} : chaque contour extérieur devient un corps à lui, avec les trous qui s'y trouvent, et garde la hauteur, la couleur et la place du corps. Chaque partie a sa propre esquisse à modifier, avec les lignes de construction, de sorte que vous pouvez monter ou descendre les parties une à une, puis les unir ou les soustraire. Les traitements d'arêtes l'empêchent, tout comme un corps étiré après coup : il est alors séparé comme un maillage.
+
 **Un autre type de corps à partir de la même esquisse :** le badge en haut de l'esquisse indique ce qu'elle devient : {{ui:sketch.modeBadgeExtrude}}, {{ui:sketch.modeBadgeRevolve}} ou {{ui:sketch.modeBadgeSweep}}. Cliquez dessus et choisissez-en un autre, aussi pendant que vous modifiez un corps existant : un SVG importé, qui arrive extrudé, devient un vase ou un bouton quand vous le passez en {{ui:sketch.modeBadgeRevolve}}. Un contour qui dépasse l'axe glisse vers la gauche jusqu'à ce que son bord droit soit sur l'axe ; [[Ctrl]]+[[Z]] annule ce déplacement. À la fin, le nouveau corps prend la place de l'ancien, avec son nom et sa couleur, le pied à la même hauteur. Les traitements d'arêtes sont perdus, comme à chaque modification d'une esquisse.
 
 ### Tournant
@@ -152,7 +154,7 @@ Tous les quatre touchent uniquement à la référence, jamais au croquis.
 
 | Clé | Effet |
 | --- | --- |
-| [[Esc]] | terminer la chaîne de lignes, effacer la sélection |
+| [[Esc]] | reposer l'outil (retour à {{ui:sketch.select}}), puis effacer la sélection |
 | [[Delete]] | supprimer l'élément sélectionné |
 | [[Ctrl]]+[[C]] | copier la sélection |
 | [[Ctrl]]+[[X]] | couper la sélection |
