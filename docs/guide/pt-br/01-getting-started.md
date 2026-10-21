@@ -79,7 +79,7 @@ Em {{ui:editor.visibilityOptions}}, na seta ao lado do ícone de olho, você enc
 
 ### Unidade: milímetros ou polegadas
 
-A chave **mm | in** ao lado de {{ui:inspector.snapGrid}} troca a unidade, a grade da mesa e o passo de encaixe, para este projeto.
+A chave **mm | in** ao lado de {{ui:inspector.snapGrid}} troca a unidade, a grade da mesa e o incremento de encaixe, para este projeto.
 
 ### Rodapé
 
