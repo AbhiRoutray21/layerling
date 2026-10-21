@@ -561,6 +561,8 @@ export type EdgeTreatmentFeature = {
   /** The edges picked, as the tool numbered them on the body before this treatment: "Edit" picks them again (#227). */
   edgeIds?: number[];
   chamferAngle?: number;
+  /** Only for a fillet of one edge (#687): the radius at the edge's end, `amount` the one at its start. */
+  endAmount?: number;
   openings?: ShellOpenings;
   /** Only for "shell"; missing means "round". */
   shellEdges?: ShellEdges;

@@ -44,14 +44,15 @@ export type ShapeUpdatePatch = Partial<WorkplaneShape> & { bakeTransform?: boole
 
 export type ManifoldSolid = ReturnType<ManifoldToplevel["Manifold"]["cube"]>;
 
-export const CUTTER_PADDING = 0.05;
+/** What a hole sticks out at its top and bottom: 0.05 took a floor up to that thin away with it (#691). */
+export const CUTTER_PADDING = 0.001;
 
 /** What a hole is wider than typed, on each side: the size stays, an exact touch with a wall does not. */
 export const CUTTER_LATERAL_PADDING = 0.001;
 
 export const POINT_TOLERANCE = 0.0001;
 
-export const CUTTER_RESIDUAL_INSET = CUTTER_PADDING * 0.4;
+export const CUTTER_RESIDUAL_INSET = 0.02;
 
 export const MIN_SHAPE_DIMENSION = 0.01;
 

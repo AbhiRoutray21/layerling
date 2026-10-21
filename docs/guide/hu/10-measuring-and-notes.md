@@ -61,10 +61,10 @@ Egy jegyzet azt rögzíti, amit a geometria nem mond el: „Ez a csavar 0,3 mm-r
 - A {{ui:note.detach}} leválasztja a testről a hozzá csatolt jegyzetet.
 - A {{ui:editor.tool.group}} a csatolt jegyzetet is beviszi a csoportba; a {{ui:editor.tool.ungroup}} az alatta lévő látható részhez adja tovább, akár egy belső csoporthoz is. Amíg egy csoport a {{ui:group.edit}} gombbal nyitva van, a jegyzetei az alattuk lévő résszel együtt mozognak, és a {{ui:group.done}} gombbal visszakerülnek a csoporthoz; a megszakítás visszaállítja őket az eredeti állapotukba.
 - Ha a testét törlöd, vagy már nincs alatta látható test, a jegyzet ott marad, ahol volt, a munkasíkon.
-- Húzással mozgatod a jegyzetet, egy kattintás szerkesztésre nyitja meg.
+- A tűt húzva a jegyzet elmozdul. Egy kattintás a tűre összecsukja a kártyát, csak a kis szám marad; egy újabb kattintás újra kinyitja. A szövegbe kattintva szerkesztheted.
 - Írás közben az [[Enter]] megtartja a szöveget, az [[Esc]] visszaállítja olyanra, amilyen az írás megkezdése előtt volt; a [[Shift]]+[[Enter]] új sort kezd.
 
-A jegyzetek a tervben mentődnek, egyik exportban sem jelennek meg, és a {{ui:visibility.notes}} kapcsolóval megjeleníthetők vagy elrejthetők.
+A jegyzetek a tervben mentődnek, egyik exportban sem jelennek meg, és a {{ui:visibility.notes}} (a {{ui:editor.visibilityOptions}} alatt, a szem ikon melletti nyílnál) kapcsolóval megjeleníthetők vagy elrejthetők.
 
 ## Referenciapontok
 

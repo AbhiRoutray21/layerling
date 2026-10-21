@@ -245,7 +245,7 @@ import { screenAlignedNudge } from "@/lib/keyboardNudge";
 import { LAYERLING_MCP_HEARTBEAT_MS, LAYERLING_MCP_POLL_RETRY_MS, LAYERLING_MCP_ROUTE, type LayerlingMcpCommand, type LayerlingMcpSceneSummary, type LayerlingMcpViewFace } from "@/lib/layerlingMcpProtocol";
 import type { CadFaceInfo, CadModifierComponentMesh, CadModifierDeflection, CadModifierDisplayEdge, CadModifierEdge, CadModifierFaces, CadModifierGridfinityPart, CadModifierHelicalGearPart, CadModifierKind, CadModifierMeshPart, CadModifierPrimitivePart, CadModifierProfilePart, CadModifierQuality, CadModifierSpringPart, CadModifierThreadPart, CadModifierWorkerRequest, CadModifierWorkerResponse } from "@/lib/cadModifierTypes";
 import { getSectionBounds, sectionAxisLetter, sectionMeshInFrame, sectionPlacementWorkplane, sectionPointFromFrame, sectionPointToFrame, type SectionFrame, type SectionOrientation, type SectionPlaneAxis, type SectionPlaneSettings } from "@/lib/sectionView";
-import { projectSectionPoint, SECTION_VIEW_FACE, sectionSvgDocument, sliceMeshContours } from "@/lib/sectionSvg";
+import { footprintCutOffset, projectSectionPoint, SECTION_VIEW_FACE, sectionSvgDocument, sliceMeshContours } from "@/lib/sectionSvg";
 import type { AlignAxis, AlignHandleStatus, AlignTarget, GridSize, ParametricSource, ProjectAsset, ShapeAsset, ShapeCustomization, ShapeKind, SketchImage, SketchOperation, SketchPoint, SketchProfile, SketchRevolveSettings, SketchSegment, ShellEdges, ShellOpenings, ShellSide, WorkplaneNote, WorkplaneShape, WorkplaneWorkspaceSettings } from "@/types/layerling";
 import { type Vec3, type MeshData, type Cuboid, type ShapeUpdatePatch, type ManifoldSolid, MIN_SHAPE_DIMENSION, resetManifoldRuntime, cleanModelDimension, getManifoldRuntime, meshForShape, meshReachAlong, appendMeshData, formatTriangleCount, shapeAabb, boundsForShapes, boundsForCuboids, meshAabb, boundsForPositions, quantizedPointKey } from "@/lib/editorMeshCore";
 import { cloneAsGroupChild, meshDataToManifoldMesh, shapeToManifoldSolid, splitShapesByPlane, unionOverlappingExportMeshes, exportBodiesWithLooseHoles, exportSolidVolume, type ExportSolidVolume, PRINT_MATERIAL_STORAGE_KEY, PRINT_INFILL_STORAGE_KEY, PRINT_WALLS_STORAGE_KEY, formatEstimateNumber, formatSectionOffset, SECTION_SEEN_FROM_KEYS, expandBundles, visibleExportShapes, multicolorExportSolids, exportFaceColors, colorSeparatedExportMeshes, disposeManifold, canIntersectShapes, buildIntersectionShapeFromSelection, groupedShape, quaternionForShape, rotationFromQuaternion, cleanShapePatch, restoreGroupedChildren, restoreGroupedChildrenForEdges, buildGroupedShapeFromSelection } from "@/lib/editorBooleans";
@@ -311,6 +311,7 @@ export type HistoryProjectRequest = {
 };
 type ExportFormat = "stl" | "3mf" | "obj" | "step" | "svg" | "png" | "lyl" | "drawing";
 type DirectExportFormat = Exclude<ExportFormat, "step" | "png" | "lyl" | "drawing">;
+type SvgExportView = "silhouette" | "footprint";
 type ViewImageOptions = { plate: boolean; transparent: boolean };
 type LylHistoryLimit = EditorHistoryExportLimit;
 /** "file" writes into the file the design is tied to (asking for one the first time), "fileAs" always asks (#251). */
@@ -327,6 +328,8 @@ type EdgeModifierSession = {
   amount: number;
   sharpAngle: number;
   chamferAngle: number;
+  // A fillet whose radius changes along its one edge (#687): the radius at the edge's end; null for one radius.
+  endAmount?: number | null;
   quality: CadModifierQuality;
   tangentChain: boolean;
   // Off: every edge shows through the body. On: only the ones facing the camera.
@@ -390,6 +393,7 @@ type EdgeFeatureRevertOption = {
   label: string;
   kind: CadModifierKind;
   amount: number;
+  endAmount?: number;
   edgeCount: number;
   /** Only for a deletion of faces. */
   faceCount?: number;
@@ -771,7 +775,9 @@ function bedOverhangMessage(overhangs: BedOverhang[], printer: string) {
 }
 
 function edgeTreatmentLabel(feature: NonNullable<WorkplaneShape["edgeTreatments"]>[number]) {
-  const size = `${Number(feature.amount.toFixed(2))} mm`;
+  const size = feature.endAmount !== undefined
+    ? `${Number(feature.amount.toFixed(2))}-${Number(feature.endAmount.toFixed(2))} mm`
+    : `${Number(feature.amount.toFixed(2))} mm`;
   if (feature.kind === "shell") return `hollow (${size} walls, open ${shellOpenSides(feature.openings).join(" + ") || "none"})`;
   if (feature.kind === "deleteFace") return `face deletion (${feature.faceCount ?? 0} face${feature.faceCount === 1 ? "" : "s"})`;
   return `${feature.kind === "fillet" ? "fillet" : feature.kind === "chamfillet" ? "chamfillet" : "chamfer"} (${size}, ${feature.edgeCount} edge${feature.edgeCount === 1 ? "" : "s"})`;
@@ -1027,6 +1033,7 @@ function edgeTreatmentHistoryOptions(shape: WorkplaneShape, path: number[] = [],
     label: edgeTreatmentLabel(entry.feature),
     kind: entry.feature.kind,
     amount: entry.feature.amount,
+    ...(entry.feature.endAmount !== undefined ? { endAmount: entry.feature.endAmount } : {}),
     edgeCount: entry.feature.edgeCount,
     faceCount: entry.feature.faceCount,
     targetName,
@@ -1388,6 +1395,23 @@ function imagePlateDimensions(pixelWidth: number, pixelHeight: number) {
     depth: Number(depth.toFixed(2)),
     height: 1.6,
   };
+}
+
+/**
+ * The SVG of only what stands on the workplane (#692): the outlines of the section a hair above the lowest
+ * point, drawn as lines in their colours. `shapes` are the visible ones to export, loose holes among them.
+ */
+async function footprintSvg(shapes: readonly WorkplaneShape[], title: string) {
+  const { solids, meshes: cut } = await exportBodiesWithLooseHoles(shapes);
+  const { meshes, quellen } = await colorSeparatedExportMeshes(solids, cut);
+  const offset = footprintCutOffset(meshes);
+  const bodies = offset === null ? [] : meshes.map((mesh, index) => {
+    const body = solids[quellen[index]];
+    return { name: body ? displayShapeName(body) : mesh.name, color: body?.color ?? "#000000", loops: sliceMeshContours(mesh, "y", offset) };
+  });
+  const result = offset === null ? null : sectionSvgDocument(bodies, "y", offset, title);
+  if (!result) throw new Error(t("status.sectionSvgNothing"));
+  return result;
 }
 
 /** `cutMeshes` holds a body's mesh where loose holes have cut it (#203); the others are built from the shape. */
@@ -2845,8 +2869,8 @@ export function LayerlingEditor({
   useEffect(() => onManifoldReady(() => setCustomFontRound((round) => round + 1)), []);
   const edgeModifierRef = useRef<EdgeModifierSession | null>(null);
   // "Edit" on a stored fillet or chamfer (#227): the body is taken back first, then the tool opens with these.
-  const edgeEditRequestRef = useRef<{ shapeId: string; historyLength: number; preset: { kind: CadModifierKind; amount: number; chamferAngle: number; edgeIds: number[] } } | null>(null);
-  const edgeModifierPresetRef = useRef<{ kind: CadModifierKind; amount: number; chamferAngle: number; edgeIds: number[] } | null>(null);
+  const edgeEditRequestRef = useRef<{ shapeId: string; historyLength: number; preset: { kind: CadModifierKind; amount: number; chamferAngle: number; endAmount?: number | null; edgeIds: number[] } } | null>(null);
+  const edgeModifierPresetRef = useRef<{ kind: CadModifierKind; amount: number; chamferAngle: number; endAmount?: number | null; edgeIds: number[] } | null>(null);
   const [edgeEditRound, setEdgeEditRound] = useState(0);
   const cadModifierWorkerRef = useRef<Worker | null>(null);
   const cadModifierPendingRef = useRef(new Map<number, {
@@ -2981,7 +3005,7 @@ export function LayerlingEditor({
             edges: message.edges,
             sharpAngle: gesenkteSchwelle ?? current.sharpAngle,
             selectedEdgeIds: presetEdgeIds,
-            ...(preset && presetEdgeIds.length ? { amount: preset.amount, chamferAngle: preset.chamferAngle } : {}),
+            ...(preset && presetEdgeIds.length ? { amount: preset.amount, chamferAngle: preset.chamferAngle, endAmount: preset.endAmount ?? null } : {}),
             busy: presetEdgeIds.length > 0,
             prepared: true,
             preview: null,
@@ -4297,7 +4321,7 @@ export function LayerlingEditor({
       return;
     }
     // The Fillet or Chamfer tool stays open, so that several features can be taken back one after the other (#514).
-    const openTool = edgeModifier ? { kind: edgeModifier.kind, amount: edgeModifier.amount, chamferAngle: edgeModifier.chamferAngle } : null;
+    const openTool = edgeModifier ? { kind: edgeModifier.kind, amount: edgeModifier.amount, chamferAngle: edgeModifier.chamferAngle, endAmount: edgeModifier.endAmount ?? null } : null;
     invalidateCadModifierSession();
     commitShapes(
       shapesRef.current.map((shape) => shape.id === selectedShape.id ? restored.shape : shape),
@@ -4354,7 +4378,7 @@ export function LayerlingEditor({
       edgeEditRequestRef.current = {
         shapeId: restored.shape.id,
         historyLength: restored.shape.edgeTreatmentHistory?.length ?? 0,
-        preset: { kind: feature.kind, amount: feature.amount, chamferAngle: feature.chamferAngle ?? 45, edgeIds: feature.edgeIds ?? [] },
+        preset: { kind: feature.kind, amount: feature.amount, chamferAngle: feature.chamferAngle ?? 45, endAmount: feature.endAmount ?? null, edgeIds: feature.edgeIds ?? [] },
       };
       setEdgeEditRound((round) => round + 1);
     }
@@ -6609,6 +6633,8 @@ export function LayerlingEditor({
     const chamferAngle = Math.max(kind === "chamfillet" ? 15 : 5, Math.min(kind === "chamfillet" ? 75 : 85, mcpNumber(params.chamferAngle, 45)));
     const quality: CadModifierQuality = params.quality === "draft" || params.quality === "fine" ? params.quality : "standard";
     const preserveEdgeSize = typeof params.preserveEdgeSize === "boolean" ? params.preserveEdgeSize : shape.edgeResizeMode === "preserve";
+    // A fillet whose radius runs from `amount` at the edge's start to `endAmount` at its end (#687).
+    const endAmount = kind === "fillet" && params.endAmount !== undefined && params.endAmount !== null ? Math.max(MIN_EDGE_MODIFIER_AMOUNT, mcpNumber(params.endAmount, amount)) : undefined;
     const { response, sourceParts } = await prepareCadModifierForMcp(shape, sharpAngle);
     const selectableIds = response.edges.filter((edge) => selectableCadModifierEdge(edge, sharpAngle)).map((edge) => edge.id);
     const requestedIds = mcpNumberArray(params.edgeIds);
@@ -6631,6 +6657,9 @@ export function LayerlingEditor({
     if (missingIds.length > 0) {
       throw new Error(`These edge IDs are not selectable at the current threshold: ${missingIds.join(", ")}`);
     }
+    if (endAmount !== undefined && selectedEdgeIds.length !== 1) {
+      throw new Error("endAmount (a variable radius) works on exactly one edge id");
+    }
     const previewResponse = await postCadModifierRequestAsync({
       type: "preview",
       kind,
@@ -6638,6 +6667,7 @@ export function LayerlingEditor({
       amount,
       quality,
       chamferAngle,
+      ...(endAmount !== undefined ? { endAmount } : {}),
       minDeflection: shape.cadMeshDeflection,
     }, [], 30000);
     if (previewResponse.type !== "preview") {
@@ -6658,6 +6688,7 @@ export function LayerlingEditor({
       edgeCount: selectedEdgeIds.length,
       edgeIds: [...selectedEdgeIds],
       ...(kind === "chamfer" || kind === "chamfillet" ? { chamferAngle } : {}),
+      ...(endAmount !== undefined ? { endAmount } : {}),
     } satisfies NonNullable<WorkplaneShape["edgeTreatments"]>[number];
     const session: EdgeModifierSession = {
       kind,
@@ -6666,6 +6697,7 @@ export function LayerlingEditor({
       amount,
       sharpAngle,
       chamferAngle,
+      endAmount: endAmount ?? null,
       quality,
       tangentChain: false,
       preserveEdgeSize,
@@ -7051,6 +7083,7 @@ export function LayerlingEditor({
       edgeCount: edgeModifier.selectedEdgeIds.length,
       edgeIds: [...edgeModifier.selectedEdgeIds],
       ...(edgeModifier.kind === "chamfer" || edgeModifier.kind === "chamfillet" ? { chamferAngle: edgeModifier.chamferAngle } : {}),
+      ...(edgeModifier.kind === "fillet" && edgeModifier.endAmount != null ? { endAmount: edgeModifier.endAmount } : {}),
     } satisfies NonNullable<WorkplaneShape["edgeTreatments"]>[number];
     const createdAt = Date.now();
     const previewShape = canonicalizeShape({
@@ -7090,7 +7123,7 @@ export function LayerlingEditor({
     edgeEditRequestRef.current = {
       shapeId: base.id,
       historyLength: modifiedShape.edgeTreatmentHistory?.length ?? 0,
-      preset: { kind: edgeModifier.kind, amount: edgeModifier.amount, chamferAngle: edgeModifier.chamferAngle, edgeIds: [] },
+      preset: { kind: edgeModifier.kind, amount: edgeModifier.amount, chamferAngle: edgeModifier.chamferAngle, endAmount: edgeModifier.endAmount ?? null, edgeIds: [] },
     };
     setEdgeEditRound((round) => round + 1);
   }, [commitShapes, edgeModifier, invalidateCadModifierSession, shapes]);
@@ -7168,12 +7201,13 @@ export function LayerlingEditor({
         amount: edgeModifier.amount,
         quality: edgeModifier.quality,
         chamferAngle: edgeModifier.chamferAngle,
+        ...(edgeModifier.kind === "fillet" && edgeModifier.endAmount != null ? { endAmount: edgeModifier.endAmount } : {}),
         minDeflection: cadModifierBaseShapeRef.current?.cadMeshDeflection,
         ...(addedEdgeIds.length ? { addedEdgeIds } : {}),
       });
     }, 120);
     return () => window.clearTimeout(timer);
-  }, [discardPendingCadPreviews, edgeModifier?.amount, edgeModifier?.chamferAngle, edgeModifier?.kind, edgeModifier?.prepared, edgeModifier?.quality, edgeModifier?.selectedEdgeIds]);
+  }, [discardPendingCadPreviews, edgeModifier?.amount, edgeModifier?.chamferAngle, edgeModifier?.endAmount, edgeModifier?.kind, edgeModifier?.prepared, edgeModifier?.quality, edgeModifier?.selectedEdgeIds]);
 
   const snapSelected = useCallback(() => {
     if (!hasSelection) {
@@ -10365,9 +10399,12 @@ export function LayerlingEditor({
       if (command.action === "export_mesh") {
         // The file the export window writes as STL, 3MF or OBJ, from the same bodies: visible solids only, loose
         // holes taken off, overlapping bodies merged (STL) or separated by colour (3MF, OBJ), and the tiny loose
-        // pieces left out. ids limit it to those objects (holes still cut).
+        // pieces left out. ids limit it to those objects (holes still cut). SVG is the top view the window writes:
+        // the silhouette from above, or with view "footprint" only the outlines standing on the workplane (#692).
         const format = params.format === undefined ? "stl" : mcpString(params.format, "stl").toLowerCase();
-        if (format !== "stl" && format !== "3mf" && format !== "obj") throw new Error("format must be stl, 3mf or obj");
+        if (format !== "stl" && format !== "3mf" && format !== "obj" && format !== "svg") throw new Error("format must be stl, 3mf, obj or svg");
+        const svgView = params.view === undefined ? "silhouette" : mcpString(params.view, "silhouette").toLowerCase();
+        if (svgView !== "silhouette" && svgView !== "footprint") throw new Error("view must be silhouette or footprint");
         const ids = Array.isArray(params.ids) ? params.ids.filter((id): id is string => typeof id === "string") : [];
         const all = currentShapes();
         const chosen = ids.length ? all.filter((shape) => ids.includes(shape.id)) : all;
@@ -10377,6 +10414,22 @@ export function LayerlingEditor({
         if (!visible.some((shape) => !shape.hole && !isNonSolidShapeKind(shape.kind))) throw new Error(t(hiddenNote ? "status.exportOnlyHidden" : "status.addSolidBeforeExport"));
         const invalidSvg = visible.map(invalidSvgMeshReason).find((reason): reason is string => Boolean(reason));
         if (invalidSvg) throw new Error(t("status.svgInvalid", { reason: invalidSvg }));
+        if (format === "svg") {
+          let svg: string;
+          let outlines: number | undefined;
+          if (svgView === "footprint") {
+            const result = await footprintSvg(visible, projectName);
+            svg = result.svg;
+            outlines = result.loopCount;
+          } else {
+            const { solids, meshes: cutMeshes, cut } = await exportBodiesWithLooseHoles(visible);
+            svg = await toSvg(solids, projectName, cutMeshes.map((mesh, index) => (cut[index] ? mesh : null)));
+          }
+          const svgBytes = new TextEncoder().encode(svg);
+          let svgBinary = "";
+          for (let index = 0; index < svgBytes.length; index += 8192) svgBinary += String.fromCharCode(...svgBytes.subarray(index, index + 8192));
+          return { format, view: svgView, fileName: projectExportFileName(projectName, "svg"), bytes: svgBytes.length, ...(outlines === undefined ? {} : { outlines }), base64: btoa(svgBinary) };
+        }
         const { solids: cutSolids, meshes, cut: wasCut, holeCutsFailed } = await exportBodiesWithLooseHoles(visible);
         const joined = await (format === "stl" ? unionOverlappingExportMeshes(cutSolids, meshes, wasCut) : colorSeparatedExportMeshes(cutSolids, meshes, wasCut));
         // A group showing its parts in their own colours keeps them in 3MF and OBJ (#153).
@@ -10864,8 +10917,8 @@ export function LayerlingEditor({
     return { shapes: hasSelection ? selectedShapes : shapes, selection: hasSelection };
   }, [hasSelection, selectedShapes, shapes]);
 
-  /** `chooseFile` asks for a new STL even when the design already has one (Save as). */
-  const exportDesign = useCallback(async (format: DirectExportFormat, exportName: string, chooseFile = false) => {
+  /** `chooseFile` asks for a new STL even when the design already has one (Save as). `svgView` picks what an SVG shows (#692). */
+  const exportDesign = useCallback(async (format: DirectExportFormat, exportName: string, chooseFile = false, svgView: SvgExportView = "silhouette") => {
     const source = exportSource();
     const selectionScoped = source.selection;
     // Ausgeblendetes bleibt draussen, wie bei vergleichbaren Programmen: ein beiseitegelegtes
@@ -10893,6 +10946,15 @@ export function LayerlingEditor({
     const failNotice = (label: string, error: unknown) => {
       setNotice(error instanceof Error ? localizedError(error.message) : t("status.exportFailed", { label }));
     };
+    if (format === "svg" && svgView === "footprint") {
+      // Only what stands on the workplane: the section a hair above the lowest point (#692).
+      setNotice(t("status.buildingSvg"), true);
+      void footprintSvg(sourceShapes, exportName.trim() || projectName)
+        .then((result) => downloadTextFile(projectExportFileName(exportName, "svg"), result.svg, "image/svg+xml;charset=utf-8"))
+        .then(() => finishNotice("SVG"))
+        .catch((error: unknown) => failNotice("SVG", error));
+      return;
+    }
     if (format === "svg") {
       setNotice(t("status.buildingSvg"), true);
       void exportBodiesWithLooseHoles(sourceShapes)
@@ -12928,6 +12990,17 @@ export function LayerlingEditor({
             const amount = Math.max(MIN_EDGE_MODIFIER_AMOUNT, Math.min(edgeModifierMaxAmount, value));
             return amount === current.amount ? current : { ...current, amount, preview: null, busy: current.selectedEdgeIds.length > 0, error: null };
           })}
+          endAmount={edgeModifier.endAmount ?? null}
+          // Switching it on starts the end at twice the start, so the change shows at once (#687).
+          onEndAmountChange={(value) => setEdgeModifier((current) => {
+            if (!current?.prepared) return current;
+            const endAmount = value === null ? null : Math.max(MIN_EDGE_MODIFIER_AMOUNT, Math.min(edgeModifierMaxAmount, Number.isNaN(value) ? current.amount * 2 : value));
+            return endAmount === (current.endAmount ?? null) ? current : { ...current, endAmount, preview: null, busy: current.selectedEdgeIds.length > 0, error: null };
+          })}
+          onSwapEnds={() => setEdgeModifier((current) => {
+            if (!current?.prepared || current.endAmount == null || current.endAmount === current.amount) return current;
+            return { ...current, amount: current.endAmount, endAmount: current.amount, preview: null, busy: current.selectedEdgeIds.length > 0, error: null };
+          })}
           onChamferAngleChange={(value) => setEdgeModifier((current) => {
             if (!current?.prepared) return current;
             const chamferAngle = Math.max(current.kind === "chamfillet" ? 15 : 5, Math.min(current.kind === "chamfillet" ? 75 : 85, value));
@@ -12990,7 +13063,7 @@ export function LayerlingEditor({
           estimateShapes={exportTargetShapes}
           onEstimatePrint={exportSolidVolume}
           onClose={() => setTopPanel(null)}
-          onExport={(format, exportName, chooseFile) => void exportDesign(format, exportName, chooseFile)}
+          onExport={(format, exportName, chooseFile, svgView) => void exportDesign(format, exportName, chooseFile, svgView)}
           stlFileName={topPanel === "export" ? linkedStlFile(projectId ?? "")?.name ?? null : null}
           onExportLyl={exportLylDesign}
           onExportStep={exportStepDesign}
@@ -14559,7 +14632,7 @@ function TopActionPanel({
   estimateShapes: readonly WorkplaneShape[];
   onEstimatePrint: (shapes: readonly WorkplaneShape[]) => Promise<ExportSolidVolume>;
   onClose: () => void;
-  onExport: (format: DirectExportFormat, exportName: string, chooseFile?: boolean) => void;
+  onExport: (format: DirectExportFormat, exportName: string, chooseFile?: boolean, svgView?: SvgExportView) => void;
   /** The STL file this design exports into, once one was chosen (Chrome and Edge). */
   stlFileName?: string | null;
   onExportLyl: (exportName: string, historyLimit: LylHistoryLimit, target?: LylExportTarget) => void;
@@ -14582,6 +14655,7 @@ function TopActionPanel({
   const [svgWidthText, setSvgWidthText] = useState(() => { const width = readImportSvgWidth(); return width ? String(width) : ""; });
   const [exportFormat, setExportFormat] = useState<ExportFormat>("stl");
   const [drawingFormat, setDrawingFormat] = useState<"svg" | "pdf">("pdf");
+  const [svgView, setSvgView] = useState<SvgExportView>("silhouette");
   const [exportName, setExportName] = useState(projectName);
   const previousProjectNameRef = useRef(projectName);
   // Starts at the history setting from the workspace settings, so a project
@@ -14708,7 +14782,7 @@ function TopActionPanel({
     svg: {
       label: "SVG",
       description: t("export.svg.description"),
-      note: t("export.svg.note"),
+      note: t(svgView === "footprint" ? "export.svg.noteFootprint" : "export.svg.note"),
     },
     png: {
       label: "PNG",
@@ -14728,7 +14802,7 @@ function TopActionPanel({
     else if (exportFormat === "step") onExportStep(exportName);
     else if (exportFormat === "png") onExportImage(exportName, imageOptions);
     else if (exportFormat === "lyl") onExportLyl(exportName, lylHistoryLimit, lylFileAccessSupported() ? "fileAs" : "download");
-    else onExport(exportFormat, exportName);
+    else onExport(exportFormat, exportName, false, svgView);
   };
 
   return (
@@ -14867,6 +14941,18 @@ function TopActionPanel({
                 <select aria-label={t("export.drawing.fileFormat")} value={drawingFormat} onChange={(event) => setDrawingFormat(event.target.value as "svg" | "pdf")}>
                   <option value="pdf">PDF</option>
                   <option value="svg">SVG</option>
+                </select>
+              </label>
+            </section>
+          ) : null}
+
+          {exportFormat === "svg" ? (
+            <section className="export-setting-section">
+              <label>
+                <strong>{t("export.svg.view")}</strong>{" "}
+                <select aria-label={t("export.svg.view")} value={svgView} onChange={(event) => setSvgView(event.target.value as SvgExportView)}>
+                  <option value="silhouette">{t("export.svg.viewSilhouette")}</option>
+                  <option value="footprint">{t("export.svg.viewFootprint")}</option>
                 </select>
               </label>
             </section>

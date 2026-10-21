@@ -2620,7 +2620,7 @@ export function SketchWorkspace({
                   ref={typedLineAngleRef}
                   value={typedLine.angle}
                   placeholder={String(Math.round(pointerAngle * 10) / 10)}
-                  inputMode="decimal"
+                  inputMode="text"
                   onFocus={(event) => event.currentTarget.select()}
                   onChange={(event) => setTypedLine((prev) => prev ? { ...prev, angle: event.target.value.replace("<", "") } : null)}
                   onKeyDown={fieldKeys}
@@ -3204,7 +3204,7 @@ function SketchImageRange({
         <input
           className="sketch-image-number-input"
           type="text"
-          inputMode="decimal"
+          inputMode={min < 0 ? "text" : "decimal"}
           onFocus={(event) => selectWholeValue(event.currentTarget)}
           value={draft}
           disabled={disabled}
@@ -3247,7 +3247,7 @@ function SketchImagePositionField({
       <span>{label}</span>
       <input
         type="text"
-        inputMode="decimal"
+        inputMode="text"
         onFocus={(event) => selectWholeValue(event.currentTarget)}
         value={draft}
         disabled={disabled}

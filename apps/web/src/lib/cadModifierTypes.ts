@@ -386,6 +386,8 @@ export type CadModifierWorkerRequest =
       amount: number;
       quality: CadModifierQuality;
       chamferAngle: number;
+      // Only for "fillet" of one edge (#687): the radius at the edge's end, `amount` the one at its start.
+      endAmount?: number;
       // Only for "shell": which faces stay open; `amount` is the wall thickness.
       shellOpenings?: ShellOpenings;
       shellEdges?: ShellEdges;

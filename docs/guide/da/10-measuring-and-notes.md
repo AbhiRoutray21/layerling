@@ -61,10 +61,10 @@ En note registrerer hvad geometrien ikke siger: "Denne skrue er 0,3 mm for stram
 - {{ui:note.detach}} frigør en vedhæftet note fra formen.
 - {{ui:editor.tool.group}} tager en vedhæftet note med ind i gruppen; {{ui:editor.tool.ungroup}} giver den videre til den synlige del under den, også en gruppe indeni. Mens en gruppe er åben med {{ui:group.edit}}, følger dens noter med den del, de sidder på, og går tilbage til gruppen med {{ui:group.done}}; annullering sætter dem tilbage, som de var.
 - Hvis dens form slettes, eller der ikke længere er en synlig form under den, bliver noten stående, hvor den var, på arbejdsplanet.
-- Trækning flytter noten, et klik åbner den til redigering.
+- Træk i nålen flytter noten. Et klik på nålen folder kortet sammen, så kun det lille tal bliver stående, og et klik mere åbner det igen. Et klik i teksten redigerer den.
 - Mens du skriver, bevarer [[Enter]] teksten og [[Esc]] sætter den tilbage til hvordan den var før du begyndte; [[Shift]]+[[Enter]] starter en ny linje.
 
-Noter gemmes i designet, optræder i ingen eksport og kan vises eller skjules med {{ui:visibility.notes}}.
+Noter gemmes i designet, optræder i ingen eksport og kan vises eller skjules med {{ui:visibility.notes}} (under {{ui:editor.visibilityOptions}}, pilen ved siden af øje-ikonet).
 
 ## Referencepunkter
 

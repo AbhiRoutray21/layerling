@@ -43,6 +43,8 @@ import {
   gearToothProfile,
   gearTypeIsModular,
   gearUsesModule,
+  MAX_GEAR_TEETH,
+  MIN_GEAR_TEETH,
   normalizeGearRim,
   rackMinDepth,
   rackModule,
@@ -1913,8 +1915,8 @@ function getShapePropertiesWithAppLimits(shape: WorkplaneShape, onUpdate: ShapeI
         id: "teeth",
       label: t("prop.teeth"),
         value: teeth,
-        min: 6,
-        max: 64,
+        min: MIN_GEAR_TEETH,
+        max: MAX_GEAR_TEETH,
         step: 1,
         onChange: (value) => {
           const nextTeeth = Math.round(value);
@@ -4469,7 +4471,8 @@ function RangeProperty({
             type="text"
             value={editing ? draft : formatShown(controlValue)}
             disabled={disabled}
-            inputMode={unit === "in" ? "text" : "decimal"}
+            // The decimal pad of an iPhone or iPad has no minus key (#686): a field that takes negative values asks for the keyboard with signs.
+            inputMode={unit === "in" || freePosition || controlMin < 0 ? "text" : "decimal"}
             title={shownFormula ? `= ${shownFormula}` : undefined}
             data-formula={shownFormula ? "" : undefined}
             onFocus={(event) => {
