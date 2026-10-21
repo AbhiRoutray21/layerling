@@ -44,7 +44,7 @@ At the top is the file name, below it you choose the format. With something sele
 | **3MF** | slicer with colours | Every body stays a part of its own with name and colour. Overlapping bodies are only joined when they share a colour; where a shape sits inside one of another colour, say a logo in a plate, the one built first leaves room for the later one. Suited to PrusaSlicer, Bambu Studio, OrcaSlicer and Cura. Bambu Studio and OrcaSlicer ask on opening how to map the colours onto your filaments, and call the file "not from Bambu" - the message is harmless. |
 | **OBJ** | modelling and exchange | A widely supported mesh format. Colours are stored as vertex colours in the same file, with no extra `.mtl`. Bambu Studio and OrcaSlicer read them and ask, as with 3MF, how to map them onto your filaments; other programs see only the shape. As with 3MF, overlapping bodies are only joined when they share a colour. |
 | **STEP** | a full CAD program | Keeps boxes, cylinders, spheres and cones as exact geometry, and so shapes made from an outline (star, heart, ellipse, tube, half sphere, round roof, rounded box, dovetail, the bores and more), the bent tube, threads, springs and gears, plus fillets and chamfers. The first STEP export in a session loads the CAD kernel (about 22 MB) once. |
-| **SVG** | laser cutter and plotter | A clean top view in millimetres, including holes and curved outlines. Under {{ui:export.svg.view}}, {{ui:export.svg.viewFootprint}} writes only the outlines where the objects stand on the workplane. |
+| **SVG** | laser cutter and plotter | A clean top view in millimetres, including holes and curved outlines. Under {{ui:export.svg.view}}, {{ui:export.svg.viewFootprint}} writes only the outlines where the objects stand on the workplane. {{ui:export.svg.viewEdges}} writes the edges you see from above as lines, each body in its colour; see below. |
 | **PNG** | forum posts, print sites, questions | A picture of the view as it is, at twice the resolution and without handles, selection frames and dimensions. {{ui:export.png.plate}} and {{ui:export.png.transparent}} are chosen in the window. Turn and zoom first until the picture is right; the selection does not matter here. |
 | **LYL** | layerling itself | The editable design with everything that belongs to it. |
 | **2D** | workshop, lathe and mill, documentation | A drawing at 1:1 as PDF or SVG: front, top and right-side views on an ISO sheet. See below. |
@@ -54,6 +54,12 @@ At the top is the file name, below it you choose the format. With something sele
 A hole you have not grouped is taken out of every body it reaches when you export, as the view shows it. So there is no need to group before each export. With a selection, only the selected holes count. A hole cannot be exported on its own; layerling points that out.
 
 STEP only carries exact CAD bodies. What cannot be written exactly, such as a mesh imported as STL, is left out. The message after the export names those bodies and says why. For the printer, use STL or 3MF, which carry everything.
+
+### SVG for a laser or plotter
+
+With {{ui:export.svg.viewEdges}} under {{ui:export.svg.view}}, the SVG shows the design as you see it from above, like the top view of a drawing: every edge you can see is a line, and edges hidden by other parts are left out. Each line has the colour of its body, so a laser or plotter program that sorts by colour puts each colour on a layer of its own. Whether a layer is cut, scored or engraved, you choose there.
+
+Every area a colour shows has a closed outline, and where two bodies meet, both get the line. The areas are filled even-odd, so filling a colour to engrave it leaves its holes and the places of other bodies free. A part reaching through another gets the line where it comes out. The SVG is at 1:1 in millimetres, with the front of the design at the bottom of the page, in the same place as the silhouette. A design with too many edges for this view, such as a plate with hundreds of holes, gets its filled silhouette instead, and the message after the export says so.
 
 ### A drawing for the workshop
 

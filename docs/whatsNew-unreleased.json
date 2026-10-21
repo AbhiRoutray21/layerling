@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "title": {
+      "de": "SVG mit den sichtbaren Kanten von oben",
+      "en": "SVG with the edges seen from above"
+    },
+    "body": {
+      "de": "Im SVG-Export gibt es unter Ansicht neben der Silhouette jetzt „Sichtbare Kanten von oben“: die Kanten, die man von oben sieht, als Linien in der Farbe ihres Körpers, mit Taschen, vertiefter und erhabener Schrift und Teilen auf anderen Teilen. Jede Fläche hat einen geschlossenen Umriss, auch wo zwei Körper aneinanderstoßen, und lässt sich im Laserprogramm gravieren, ohne die Plätze anderer Körper mitzunehmen. Ein Entwurf mit zu vielen Kanten bekommt die Silhouette, und die Meldung sagt das. Die Silhouette bleibt die Voreinstellung.",
+      "en": "The SVG export has a new view next to the silhouette, \"Visible edges from above\": the edges you see from above as lines in the colour of their body, with pockets, engraved and raised text and parts standing on others. Every area has a closed outline, also where two bodies meet, and engraves in a laser program without taking in the places of other bodies. A design with too many edges gets the silhouette, and the message says so. The silhouette stays the default."
+    }
+  }
+]
