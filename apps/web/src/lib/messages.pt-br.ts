@@ -127,7 +127,7 @@ export const MESSAGES_PT_BR: Partial<Record<MessageKey, string>> = {
   "dashboard.viewList": "Lista",
   "dashboard.emptyTitle": "Ainda não há projetos",
   "dashboard.emptyHint": "Crie um projeto 3D e ele aparecerá aqui.",
-  "welcome.teaserTitle": "Boas-vindas ao layerling",
+  "welcome.teaserTitle": "Bem-vindos ao layerling",
   "welcome.teaserHint": "Um guia curto, especialmente para quem está vindo do Tinkercad",
   "welcome.lead": "layerling é um CAD para impressão 3D, direto no navegador - tão fácil quanto o Tinkercad, mas um passo em direção ao Fusion 360. Gratuito, sem conta, sem instalação - e o que você constrói fica neste computador.",
   "welcome.switchTitle": "Conhece o Tinkercad?",
