@@ -3,6 +3,7 @@ import "./globals.css";
 import "./historyView.css";
 import "./myShapes.css";
 import "./viewCube.css";
+import "./secondView.css";
 import { DiagnoseStrip } from "@/components/DiagnoseStrip";
 import { NewVersionNotice } from "@/components/NewVersionNotice";
 import { ServiceWorkerRegistration } from "@/components/ServiceWorkerRegistration";
