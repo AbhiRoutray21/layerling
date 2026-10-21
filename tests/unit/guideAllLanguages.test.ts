@@ -19,8 +19,8 @@ const LANGUAGES = readdirSync(guideRoot).filter((name) => name !== "images" && s
 type Chapter = { file: string; number: string; body: string };
 
 describe("the guide in every language", () => {
-  it("covers the twelve guide languages", () => {
-    expect(LANGUAGES.sort()).toEqual(["ar", "cs", "da", "de", "en", "es", "fr", "hu", "nl", "pl", "ru", "sl"]);
+  it("covers the fourteen guide languages", () => {
+    expect(LANGUAGES.sort()).toEqual(["ar", "cs", "da", "de", "en", "es", "fr", "hu", "nl", "pl", "ru", "sl", "zh-cn", "zh-tw"]);
   });
 
   it("writes headings with a plain space, so they render as headings", async () => {
