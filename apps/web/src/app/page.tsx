@@ -32,6 +32,8 @@ import { importFailureSummary, importModelFiles } from "@/lib/modelImport";
 import { loadTextFonts } from "@/lib/textFonts";
 import { loadStoredCustomFonts } from "@/lib/customFontStore";
 import { fetchServerDefaults, type NewDesignsOnServerSetting } from "@/lib/serverDefaults";
+import { setServerSimpleMode } from "@/lib/simpleMode";
+import { useSimpleMode } from "@/lib/useSimpleMode";
 import { applyAppTheme, getAppThemePreference, hasStoredAppTheme, readStoredAppTheme, resolveAppTheme, setAppTheme, storeAppTheme, subscribeToAppTheme, type AppThemePreference, type ResolvedAppTheme } from "@/lib/appTheme";
 import { hydrateEditorHistoryState, notesForHistoryIndex, type EditorHistoryEntry } from "@/lib/editorHistory";
 import { detectLanguage, setLanguage, t, translate, type Language } from "@/lib/i18n";
@@ -1092,6 +1094,7 @@ export default function Home() {
     if (!STATIC_EXPORT_BUILD) {
       void fetchServerDefaults().then((defaults) => {
         setServerNewDesigns(defaults.newDesignsOnServer);
+        setServerSimpleMode(defaults.simpleMode);
         if (!themeOnRecord && defaults.theme && getAppThemePreference() === "system") setAppTheme(defaults.theme);
       });
     }
@@ -2902,6 +2905,7 @@ function Dashboard({
   const offlineOk = useOfflineAvailable();
   const { update, isDismissed, dismiss: dismissUpdate } = useAppUpdate(LYL_CREATED_WITH_VERSION);
   const whatsNew = useWhatsNew(LYL_CREATED_WITH_VERSION);
+  const simpleMode = useSimpleMode();
   const [openProjectMenuId, setOpenProjectMenuId] = useState<string | null>(null);
   const [openSharedProjectMenuKey, setOpenSharedProjectMenuKey] = useState<string | null>(null);
   const [projectPendingDeleteId, setProjectPendingDeleteId] = useState<string | null>(null);
@@ -3148,7 +3152,7 @@ function Dashboard({
 
       <div className="dashboard-layout">
         <section className={`dashboard-main${hasProjects ? " has-projects" : ""}`} aria-label={dashboardSection === "shared" ? t("shared.title") : t("dashboard.projects")}>
-          {update && !isDismissed ? (
+          {update && !isDismissed && !simpleMode ? (
             <aside
               className="dashboard-update-notice"
               role="status"
@@ -3498,9 +3502,9 @@ function Dashboard({
                   {dashboardNotice}
                 </div>
               ) : null}
-              {whatsNew.view ? <WhatsNewCard view={whatsNew.view} current={LYL_CREATED_WITH_VERSION} onClose={whatsNew.dismiss} /> : null}
-              <InstallAppHint />
-              <TabletHint />
+              {whatsNew.view && !simpleMode ? <WhatsNewCard view={whatsNew.view} current={LYL_CREATED_WITH_VERSION} onClose={whatsNew.dismiss} /> : null}
+              {simpleMode ? null : <InstallAppHint />}
+              {simpleMode ? null : <TabletHint />}
               {/* The designs live in the browser, and a browser can fail or break with an update: said plainly and always (not to be closed). */}
               <aside className="storage-notice" aria-label={t("storageNotice.title")}>
                 <span className="storage-notice-icon" aria-hidden="true">
@@ -3878,7 +3882,7 @@ function Dashboard({
                   there for anyone who wants to read it again. `open` is keyed
                   to the unfiltered count, so a fruitless search neither opens
                   nor closes it behind the reader's back. */}
-              <details className="dashboard-welcome" open={!hasProjects}>
+              {simpleMode ? null : <details className="dashboard-welcome" open={!hasProjects}>
                 <summary className="dashboard-welcome-summary">
                   <span className="dashboard-welcome-summary-title">{t("welcome.teaserTitle")}</span>
                   <span className="dashboard-welcome-summary-hint">{t("welcome.teaserHint")}</span>
@@ -3886,7 +3890,7 @@ function Dashboard({
                 <div className="dashboard-welcome-body">
                   <WelcomeGuideBody tr={t} offline={offlineOk} />
                 </div>
-              </details>
+              </details>}
             </>
           )}
           <AppFooter version={LYL_CREATED_WITH_VERSION} updateInfo={update} />

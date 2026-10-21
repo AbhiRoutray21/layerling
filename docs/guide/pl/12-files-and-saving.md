@@ -11,6 +11,17 @@ Jeśli wracasz na stronę startową z projektu, w którym nic nie ma, layerling 
 
 Ma to swoją wadę: kto wyczyści pamięć przeglądarki albo przesiądzie się na inny komputer, traci projekty. **Dlatego ważną pracę zapisuj w kopii zapasowej do pliku.**
 
+## Foldery na projekty
+
+Przy kilkudziesięciu projektach jedna lista nie wystarcza. Na stronie startowej {{ui:shared.newFolder}} tworzy folder na projekty z tej przeglądarki, a kliknięcie folderu go otwiera. Foldery mogą zawierać foldery.
+
+- **Do folderu:** przeciągnij projekt na folder albo wybierz {{ui:shared.moveTo}} w menu projektu, które pokazuje wszystkie foldery. Nowy projekt, a także plik otwarty albo zaimportowany, gdy folder jest otwarty, trafia do tego folderu.
+- **Z powrotem:** pierwszy kafelek w folderze, `..`, oraz wiersz pod {{ui:dashboard.projects}} prowadzą z powrotem. Na nie też możesz upuścić projekt. Folder przeciągnięty na inny folder trafia do jego wnętrza.
+- **Zmiana nazwy i usuwanie** są w menu folderu. Usunięcie folderu nie usuwa żadnego projektu: jego zawartość przenosi się poziom wyżej.
+- **Wyszukiwanie** przeszukuje wszystkie foldery. Znaleziony projekt pokazuje swój folder, a kliknięcie go otwiera ten folder.
+
+{{ui:dashboard.backupAll}} zachowuje foldery: projekty leżą w pliku kopii w swoich folderach, a przywrócenie kopii umieszcza je tam z powrotem. Foldery tej przeglądarki są niezależne od folderów na serwerze. Do pliku trafiają też obrazki kart, więc wracają od razu po przywróceniu.
+
 ## Kopie zapasowe i przekazywanie
 
 Na stronie startowej każdy projekt ma menu z opcjami zmiany nazwy, duplikowania i usuwania. Przyciskiem {{ui:dashboard.backupAll}} pakujesz wszystkie projekty do jednego pliku. {{ui:dashboard.restoreBackup}}, obok niego w komunikacie o projektach przechowywanych w przeglądarce (jest tam też na nowym komputerze bez projektów), przywraca je, także w innej przeglądarce albo na innym komputerze. {{ui:dashboard.importGeometry}} przyjmuje ten sam plik. {{ui:myShapes.title}} z tej przeglądarki wędrują w tym samym pliku, w folderze `Custom shapes`, zobacz [Kształty](chapter:shapes). Jeśli przywracasz kopię do przeglądarki, która ma już niektóre z tych projektów, nie są one dodawane drugi raz, a komunikat mówi, ile ich już było. Miniatury kart też trafiają do pliku, więc po przywróceniu od razu wracają.

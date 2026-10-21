@@ -13,6 +13,8 @@ import type { AppThemePreference, ResolvedAppTheme } from "@/lib/appTheme";
 import type { ComponentType, ReactNode, SVGProps } from "react";
 import { t, type MessageKey } from "@/lib/i18n";
 import { useLanguage } from "@/lib/useLanguage";
+import { useSimpleMode } from "@/lib/useSimpleMode";
+import { simpleModeKeepsShape, simpleModeKeepsTool } from "@/lib/simpleMode";
 import { loftShapePatch, type LoftMeasures } from "@/lib/loftGeometry";
 import { hingeWorldParts } from "@/lib/hingeParts";
 import { copyViaSelectionField, decodeClipboardPayload, encodeClipboardPayload, LOCAL_CLIPBOARD_LIMIT, newestClipboard, type ClipboardPayload } from "@/lib/clipboardPayload";
@@ -170,6 +172,7 @@ import { useCustomShapes } from "@/lib/useCustomShapes";
 import { packBackup } from "@/lib/projectBackup";
 import { MyShapesSection } from "@/components/workplane/MyShapesSection";
 import { addLineIntersectionPoints, onlyMovesPoints, splitSketchSegment } from "@/lib/sketchPointRefinement";
+import { joinOpenEnds } from "@/lib/sketchPointJoin";
 import { mirrorSketchSelection, SKETCH_MIRROR_HORIZONTAL, SKETCH_MIRROR_VERTICAL, sketchMirrorAxisThroughSegment } from "@/lib/sketchMirror";
 import { copySketchSelection, freeSketchPasteOffset, pasteSketchClipboard, type SketchClipboard } from "@/lib/sketchClipboard";
 import { sketchSelectedPointIds, sketchSelectionCount, toggleSketchSelection } from "@/lib/sketchSelection";
@@ -5033,7 +5036,8 @@ export function LayerlingEditor({
         handleOut: point.handleOut ? { x: point.handleOut.x + deltaX, z: point.handleOut.z + deltaZ } : undefined,
       } : point),
     };
-    commitSketchProfile(next, t("status.sketchPointMoved"));
+    // An open end dropped on another open end becomes one point with it, so a gap closes (#698).
+    commitSketchProfile(joinOpenEnds(next, id) ?? next, t("status.sketchPointMoved"));
   }, [commitSketchProfile, sketchProfile]);
 
   const transformSketchPoints = useCallback((points: SketchPoint[], message = "Sketch geometry transformed", keyRunKey?: string) => {
@@ -13676,8 +13680,11 @@ function SecondaryToolbar({
     setShapesOpen(false);
     setVisibilityOpen(false);
   }, [historyViewActive]);
+  const simpleMode = useSimpleMode();
   const [paletteOpen, setPaletteOpen] = useState(false);
   const openPalette = () => {
+    // The command search lists everything, also what the simple mode keeps away (#695).
+    if (simpleMode) return;
     setShapesOpen(false);
     setVisibilityOpen(false);
     setPaletteOpen(true);
@@ -13765,6 +13772,9 @@ function SecondaryToolbar({
   // Die Leiste haengt an der Sprache: ohne dieses Abonnement bliebe sie stehen,
   // falls sie spaeter einmal memoisiert wird.
   useLanguage();
+  // The simple mode (#695) shows the tools of a workshop only; the others stay in the lists the command search and the keys read.
+  const inSimpleMode = <T extends { id: string }>(tools: T[]) => (simpleMode ? tools.filter((tool) => simpleModeKeepsTool(tool.id)) : tools);
+  const shownShapeAssets = simpleMode ? libraryShapeAssets.filter((shape) => simpleModeKeepsShape(shape.id)) : libraryShapeAssets;
   const leftTools = [
     { id: "copy", label: t("editor.tool.copy"), icon: ToolbarCopyIcon, action: onCopy, enabled: hasSelection },
     { id: "paste", label: t("editor.tool.paste"), icon: ToolbarPasteIcon, action: onPaste, enabled: hasClipboard },
@@ -14008,7 +14018,7 @@ function SecondaryToolbar({
         </div>
         <div className="toolbar-section" data-group="history">
           <div className="toolbar-section-label">{t("editor.group.history")}</div>
-          <div className="toolbar-section-tools">{leftTools.slice(4).map(renderToolButton)}</div>
+          <div className="toolbar-section-tools">{inSimpleMode(leftTools.slice(4)).map(renderToolButton)}</div>
         </div>
         <div className="toolbar-section toolbar-shapes-section" data-group="shapes" ref={shapesMenuRef} inert={historyViewActive}>
           <div className="toolbar-section-label">{t("editor.group.shapes")}</div>
@@ -14034,14 +14044,14 @@ function SecondaryToolbar({
               resizable
             >
               <div className="shape-menu-body">
-              {renderMyShapes ? (
+              {renderMyShapes && !simpleMode ? (
                 <>
                   {renderMyShapes(closeShapesAfterPick)}
                   <div className="shape-menu-subtitle">{t("myShapes.basicShapes")}</div>
                 </>
               ) : null}
               <div className="shape-menu-list">
-                {libraryShapeAssets.map((shape) => (
+                {shownShapeAssets.map((shape) => (
                   <button
                     className="shape-menu-item"
                     key={shape.id}
@@ -14115,6 +14125,7 @@ function SecondaryToolbar({
       </div>
       <div className="toolbar-spacer" />
       <div className="tool-group right" inert={historyViewActive}>
+        {simpleMode ? null : (
         <div className="toolbar-section compact toolbar-visibility-section" data-group="visibility" ref={visibilityMenuRef}>
           <div className="toolbar-section-label">{t("editor.group.visibility")}</div>
           <div className="toolbar-section-tools">
@@ -14215,23 +14226,24 @@ function SecondaryToolbar({
             </div>
           ) : null}
         </div>
+        )}
         <div className="toolbar-section" data-group="combine">
           <div className="toolbar-section-label">{t("editor.group.combine")}</div>
-          <div className="toolbar-section-tools">{combineTools.map(renderToolButton)}</div>
+          <div className="toolbar-section-tools">{inSimpleMode(combineTools).map(renderToolButton)}</div>
         </div>
         <div className="toolbar-section" data-group="modify">
           <div className="toolbar-section-label">{t("editor.group.modify")}</div>
-          <div className="toolbar-section-tools">{modifyTools.map(renderToolButton)}</div>
+          <div className="toolbar-section-tools">{inSimpleMode(modifyTools).map(renderToolButton)}</div>
         </div>
         <div className="toolbar-section" data-group="arrange">
           <div className="toolbar-section-label">{t("editor.group.arrange")}</div>
-          <div className="toolbar-section-tools">{arrangeTools.map(renderToolButton)}</div>
+          <div className="toolbar-section-tools">{inSimpleMode(arrangeTools).map(renderToolButton)}</div>
         </div>
       </div>
       <div className="toolbar-section toolbar-actions-section" data-group="manage">
         <div className="toolbar-section-label">{t("editor.group.manage")}</div>
         <div className="action-buttons">
-          <button
+          {simpleMode ? null : <button
             className={`action-icon-button ${noteMode ? "active" : ""}`}
             aria-label={t("editor.tool.note")}
             aria-pressed={noteMode}
@@ -14240,10 +14252,10 @@ function SecondaryToolbar({
             disabled={historyViewActive}
           >
             <ToolbarNoteIcon />
-          </button>
-          <button className="action-icon-button" aria-label={t("editor.import")} title={`${t("editor.import")} (${COMMAND_SHORTCUTS.import})`} onClick={() => onTopPanel("import")} disabled={historyViewActive}>
+          </button>}
+          {simpleMode ? null : <button className="action-icon-button" aria-label={t("editor.import")} title={`${t("editor.import")} (${COMMAND_SHORTCUTS.import})`} onClick={() => onTopPanel("import")} disabled={historyViewActive}>
             <ToolbarImportIcon />
-          </button>
+          </button>}
           <button className="action-icon-button" aria-label={t("editor.export")} title={`${t("editor.export")} (${COMMAND_SHORTCUTS.export})`} onClick={() => onTopPanel("export")}>
             <ToolbarVectorExportIcon />
           </button>
@@ -14252,7 +14264,7 @@ function SecondaryToolbar({
           </button>
         </div>
       </div>
-      <div className="toolbar-section toolbar-actions-section" data-group="help">
+      {simpleMode ? null : <div className="toolbar-section toolbar-actions-section" data-group="help">
         <div className="toolbar-section-label">{t("editor.group.help")}</div>
         <div className="action-buttons">
           <button className="action-icon-button" aria-label={t("palette.open")} title={t("palette.open")} aria-haspopup="dialog" data-layerling-tool="command-search" onClick={openPalette}>
@@ -14268,7 +14280,7 @@ function SecondaryToolbar({
             <CircleHelp className="toolbar-search-icon" aria-hidden="true" />
           </button>
         </div>
-      </div>
+      </div>}
           </>
         ) : (
           <div className="sketch-toolbar-ribbon" aria-label={t("sketch.toolbar")}>
@@ -14483,7 +14495,7 @@ function SecondaryToolbar({
                     <Rotate3d aria-hidden="true" />
                     <span>{t("sketch.revolve")}</span>
                   </button>
-                  <button
+                  {simpleMode ? null : <button
                     className="sketch-command-button primary"
                     type="button"
                     aria-label={t("sketch.sweep")}
@@ -14492,7 +14504,7 @@ function SecondaryToolbar({
                   >
                     <RouteIcon aria-hidden="true" />
                     <span>{t("sketch.sweep")}</span>
-                  </button>
+                  </button>}
                   <GuideHelpLink section="sketchToBody" />
                   <button className={`sketch-command-button ${canEditSketch ? "" : "disabled"}`} type="button" aria-label={t("sketch.editTo3d")} title={t("sketch.editTo3d")} onClick={onEditSketch} disabled={!canEditSketch}>
                     <SketchReferenceIcon name="editSketchTo3d" />
@@ -14502,7 +14514,7 @@ function SecondaryToolbar({
               </div>
             )}
             {/* Sketch mode has its own keys; the help opens from here too. */}
-            <div className="toolbar-section toolbar-actions-section" data-group="help">
+            {simpleMode ? null : <div className="toolbar-section toolbar-actions-section" data-group="help">
               <div className="toolbar-section-label">{t("editor.group.help")}</div>
               <div className="action-buttons">
                 <button className="action-icon-button" aria-label={t("palette.open")} title={t("palette.open")} aria-haspopup="dialog" data-layerling-tool="command-search" onClick={openPalette}>
@@ -14518,7 +14530,7 @@ function SecondaryToolbar({
                   <CircleHelp className="toolbar-search-icon" aria-hidden="true" />
                 </button>
               </div>
-            </div>
+            </div>}
           </div>
         )}
       </div>

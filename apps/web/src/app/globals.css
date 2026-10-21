@@ -467,7 +467,8 @@ html[data-toolbar-size="small"] {
   --editor-toolbar-height: 109px;
 }
 
-html[data-toolbar-size="large"] {
+html[data-toolbar-size="large"],
+html[data-simple-mode="on"]:not([data-toolbar-size]) {
   --toolbar-scale: 1.25;
   --editor-toolbar-tools-height: 87px;
   --editor-toolbar-height: 131px;
@@ -476,7 +477,9 @@ html[data-toolbar-size="large"] {
 /* Large icons no longer fit the widths measured for the media queries below,
    so the groups wrap onto a further row at any width rather than being cut off. */
 html[data-toolbar-size="large"] .toolbar-mode-content,
-html[data-toolbar-size="large"] .sketch-toolbar-ribbon {
+html[data-toolbar-size="large"] .sketch-toolbar-ribbon,
+html[data-simple-mode="on"]:not([data-toolbar-size]) .toolbar-mode-content,
+html[data-simple-mode="on"]:not([data-toolbar-size]) .sketch-toolbar-ribbon {
   flex-wrap: wrap;
   height: auto;
 }
@@ -4780,7 +4783,8 @@ html[data-toolbar-size="small"] .shape-menu-dropdown:not(.sketch-shape-menu-drop
   --shape-menu-columns: 5;
 }
 
-html[data-toolbar-size="large"] .shape-menu-dropdown:not(.sketch-shape-menu-dropdown) {
+html[data-toolbar-size="large"] .shape-menu-dropdown:not(.sketch-shape-menu-dropdown),
+html[data-simple-mode="on"]:not([data-toolbar-size]) .shape-menu-dropdown:not(.sketch-shape-menu-dropdown) {
   --shape-menu-columns: 3;
 }
 
@@ -15802,4 +15806,33 @@ html[data-theme="dark"] .interactive-help-window a:not(.primary):not(.secondary)
   font-size: 12px;
   font-weight: 700;
   text-decoration: none;
+}
+
+/* Simple mode (#695): leaving it is a press held for two seconds; the bar fills while it is held. */
+.simple-mode-hold {
+  position: relative;
+  overflow: hidden;
+  flex: none;
+  padding: 8px 14px;
+  border: 1px solid var(--workspace-border, rgba(127, 127, 127, 0.5));
+  border-radius: 8px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.simple-mode-hold::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 4px;
+  transform: scaleX(0);
+  transform-origin: left;
+  background: currentColor;
+}
+
+.simple-mode-hold.holding::after {
+  transform: scaleX(1);
+  transition: transform 2s linear;
 }

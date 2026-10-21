@@ -1011,6 +1011,7 @@ function tapeShapeTopologyKey(shape: WorkplaneShape): string {
     hingeLeafThickness: shape.hingeLeafThickness,
     hingeClearance: shape.hingeClearance,
     hingePinless: shape.hingePinless,
+    hingeAngle: shape.hingeAngle,
     gridfinityType: shape.gridfinityType,
     gridfinityLip: shape.gridfinityLip,
     gridfinityMagnets: shape.gridfinityMagnets,
@@ -1308,6 +1309,7 @@ function shapeGeometrySignature(shape: WorkplaneShape): string {
     hingeLeafThickness: shape.hingeLeafThickness,
     hingeClearance: shape.hingeClearance,
     hingePinless: shape.hingePinless,
+    hingeAngle: shape.hingeAngle,
     gridfinityType: shape.gridfinityType,
     gridfinityLip: shape.gridfinityLip,
     gridfinityMagnets: shape.gridfinityMagnets,
@@ -13049,6 +13051,7 @@ function createShapeObject(
         hingeLeafThickness: shape.hingeLeafThickness,
         hingeClearance: shape.hingeClearance,
         hingePinless: shape.hingePinless,
+        hingeAngle: shape.hingeAngle,
         sides: shape.sides,
       })), material, shape);
       break;

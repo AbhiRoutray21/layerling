@@ -24,6 +24,8 @@ layerling działa w przeglądarce tabletu oraz jako aplikacja z jego ekranu pocz
 
 Bez klawisza Shift {{ui:contextMenu.selectMultiple}} w menu długiego przytrzymania robi to, co na komputerze Shift+klik. Dopóki jest włączone, informuje o tym komunikat, a każde stuknięcie bryły dodaje ją do zaznaczenia albo ją z niego usuwa. Stuknięcie pustego miejsca albo [[Esc]] na klawiaturze kończy ten tryb i zostawia zaznaczenie bez zmian. Palec na pustym miejscu w tym czasie nadal obraca widok. Potem {{ui:editor.tool.group}}, {{ui:editor.tool.align}} albo przesunięcie działają na wszystkie wybrane bryły.
 
+To samo menu ma {{ui:contextMenu.carry}}, czyli klawisz [[C]] dla ekranu dotykowego. Zaznaczenie podąża wtedy za palcem po ścianach innych brył, a stuknięcie odkłada je na ścianę, którą stukniesz, także skośną. Wystarczy pierwsze stuknięcie. Tę pozycję menu znajdziesz też, szukając „odłóż” albo „cruise” (wyszukiwanie poleceń, [[Ctrl]]+[[K]] na klawiaturze).
+
 ## Obracanie i przybliżanie widoku
 
 Jeden palec na pustym miejscu obraca widok, dwa palce go przybliżają i przesuwają. Palec, który zaczyna ruch na bryle, działa na bryłę, a nie na widok. Jeśli wolisz, żeby obracał widok, włącz {{ui:camera.touchRotate}} na pasku kamery: jeden palec obraca wtedy widok zamiast zaznaczać, niezależnie od tego, gdzie zaczyna. Ten przełącznik pojawia się tylko na urządzeniu z ekranem dotykowym.

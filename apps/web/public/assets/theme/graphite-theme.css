@@ -120,7 +120,8 @@ html:where([data-theme="dark"][data-palette="graphite"])[data-toolbar-size="smal
   --editor-toolbar-height: 109px;
 }
 
-html:where([data-theme="dark"][data-palette="graphite"])[data-toolbar-size="large"] {
+html:where([data-theme="dark"][data-palette="graphite"])[data-toolbar-size="large"],
+html:where([data-theme="dark"][data-palette="graphite"])[data-simple-mode="on"]:not([data-toolbar-size]) {
   --toolbar-scale: 1.25;
   --editor-toolbar-tools-height: 87px;
   --editor-toolbar-height: 131px;
@@ -1876,7 +1877,8 @@ html:where([data-theme="dark"][data-palette="graphite"])[data-toolbar-size="smal
   --shape-menu-columns: 5;
 }
 
-html:where([data-theme="dark"][data-palette="graphite"])[data-toolbar-size="large"] .shape-menu-dropdown:not(.sketch-shape-menu-dropdown) {
+html:where([data-theme="dark"][data-palette="graphite"])[data-toolbar-size="large"] .shape-menu-dropdown:not(.sketch-shape-menu-dropdown),
+html:where([data-theme="dark"][data-palette="graphite"])[data-simple-mode="on"]:not([data-toolbar-size]) .shape-menu-dropdown:not(.sketch-shape-menu-dropdown) {
   --shape-menu-columns: 3;
 }
 
@@ -7394,6 +7396,16 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .interactive-help-windo
 :where(html[data-theme="dark"][data-palette="graphite"]) .edge-modifier-footer a {
   border: 1px solid #c8c8c8;
   text-decoration: none;
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .simple-mode-hold {
+  border: 1px solid var(--workspace-border, rgba(127, 127, 127, 0.5));
+  background: transparent;
+  color: inherit;
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .simple-mode-hold::after {
+  background: currentColor;
 }
 
 :where(html[data-theme="dark"][data-palette="graphite"]) .history-view-bar {

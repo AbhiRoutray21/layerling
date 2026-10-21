@@ -32,6 +32,7 @@ describe("the ring gear's and the rack's exact bodies (#201)", () => {
     ["round rack", { gearType: "rack", gearProfile: "round", teeth: 10, width: rackLength(2, 10), depth: 7, size: rackLength(2, 10) }],
     ["mirrored round rack", { gearType: "rack", gearProfile: "round", teeth: 10, width: rackLength(2, 10), depth: 7, size: rackLength(2, 10), mirrorX: true }],
     ["ring gear of 150 teeth, module 0.5 (#679)", { gearType: "internal", gearProfile: "involute", teeth: 150, width: 82.25, depth: 82.25, size: 82.25, gearRim: 3 }],
+    ["ring gear of 500 teeth, module 0.5 (#679)", { gearType: "internal", gearProfile: "involute", teeth: 500, width: 257.25, depth: 257.25, size: 257.25, gearRim: 3 }],
   ];
 
   it.each(cases)("matches the drawn %s", (_name, extra) => {

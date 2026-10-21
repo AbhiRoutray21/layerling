@@ -10,6 +10,8 @@ import { HexColorInput, HexColorPicker } from "react-colorful";
 import { APP_THEME_OPTIONS, type AppThemePreference } from "@/lib/appTheme";
 import { setToolbarSize, TOOLBAR_SIZE_OPTIONS, type ToolbarSize } from "@/lib/toolbarSize";
 import { useToolbarSize } from "@/lib/useToolbarSize";
+import { useSimpleMode } from "@/lib/useSimpleMode";
+import { isSimpleModeFixedByServer, setSimpleMode } from "@/lib/simpleMode";
 import { useViewCubePosition } from "@/lib/useViewCubePosition";
 import { setViewCubePosition, VIEW_CUBE_POSITION_OPTIONS, type ViewCubePosition } from "@/lib/viewCubePosition";
 import { gearCenterHoleLimits, gearToothPitch, gearTypeHasHelix, MAX_GEAR_TEETH, MIN_GEAR_TEETH } from "@/lib/gearGeometry";
@@ -419,8 +421,8 @@ function specialFieldsForShape(
   }
   if (kind === "roundedBox") {
     return [
-      { type: "number", key: "cornerFillet", label: t("prop.cornerFillet"), defaultValue: defaults.cornerFillet ?? DEFAULT_ROUNDED_BOX_CORNER_FILLET, min: 0, max: Math.max(1, Math.min(dimensions.width, dimensions.depth) / 2), step: 0.1, unit: "mm" },
-      { type: "number", key: "topBottomFillet", label: t("prop.topBottomFillet"), defaultValue: defaults.topBottomFillet ?? DEFAULT_ROUNDED_BOX_TOP_BOTTOM_FILLET, min: 0, max: Math.max(1, dimensions.height / 2), step: 0.1, unit: "mm" },
+      { type: "number", key: "cornerFillet", label: t("prop.cornerFillet"), defaultValue: defaults.cornerFillet ?? DEFAULT_ROUNDED_BOX_CORNER_FILLET, min: 0, max: Math.max(1, Math.min(dimensions.width, dimensions.depth) / 2), step: 0.05, unit: "mm" },
+      { type: "number", key: "topBottomFillet", label: t("prop.topBottomFillet"), defaultValue: defaults.topBottomFillet ?? DEFAULT_ROUNDED_BOX_TOP_BOTTOM_FILLET, min: 0, max: Math.max(1, dimensions.height / 2), step: 0.05, unit: "mm" },
       { type: "number", key: "roundedBoxQuality", label: t("prop.quality"), defaultValue: defaults.roundedBoxQuality ?? DEFAULT_ROUNDED_BOX_QUALITY, min: MIN_ROUNDED_BOX_QUALITY, max: MAX_ROUNDED_BOX_QUALITY, step: 1 },
     ];
   }
@@ -720,6 +722,7 @@ export function WorkspaceSettingsModal({
                     <strong>{t("workspace.appearance")}</strong>
                     <span>{t("workspace.appearanceHint")}</span>
                   </div>
+                  <SimpleModeSetting />
                   <WorkspaceToggle
                     label={t("workspace.fastMode")}
                     description={t("workspace.fastModeHint")}
@@ -1815,6 +1818,61 @@ function ColorSettingControl({
         </button>
         {popover}
       </div>
+    </div>
+  );
+}
+
+/** How long the button to leave the simple mode is held: a child does not switch it off by a tap, an adult does (#695). */
+const SIMPLE_MODE_HOLD_MS = 2000;
+
+/**
+ * The simple mode switch (#695). Switching it on is a tap; switching it off is a press held for two seconds. A server that
+ * fixes the mode (`LAYERLING_SIMPLE_MODE=always`) takes the switch away.
+ */
+function SimpleModeSetting() {
+  const simple = useSimpleMode();
+  const [holding, setHolding] = useState(false);
+  const timerRef = useRef<number | null>(null);
+  const cancel = () => {
+    if (timerRef.current !== null) window.clearTimeout(timerRef.current);
+    timerRef.current = null;
+    setHolding(false);
+  };
+  const start = () => {
+    if (timerRef.current !== null) return;
+    setHolding(true);
+    timerRef.current = window.setTimeout(() => {
+      timerRef.current = null;
+      setHolding(false);
+      setSimpleMode(false);
+    }, SIMPLE_MODE_HOLD_MS);
+  };
+  useEffect(() => cancel, []);
+  if (isSimpleModeFixedByServer()) return null;
+  if (!simple) {
+    return <WorkspaceToggle label={t("workspace.simpleMode")} description={t("workspace.simpleModeHint")} checked={false} onChange={() => setSimpleMode(true)} />;
+  }
+  return (
+    <div className="workspace-toggle simple-mode-setting" data-help={t("workspace.simpleMode")}>
+      <span className="workspace-toggle-copy">
+        <span>{t("workspace.simpleMode")}</span>
+        <small>{t("workspace.simpleModeHint")}</small>
+      </span>
+      <button
+        type="button"
+        className={holding ? "simple-mode-hold holding" : "simple-mode-hold"}
+        onPointerDown={start}
+        onPointerUp={cancel}
+        onPointerLeave={cancel}
+        onPointerCancel={cancel}
+        onKeyDown={(event) => {
+          if ((event.key === "Enter" || event.key === " ") && !event.repeat) start();
+        }}
+        onKeyUp={cancel}
+        onBlur={cancel}
+      >
+        {t("workspace.simpleModeOff")}
+      </button>
     </div>
   );
 }
