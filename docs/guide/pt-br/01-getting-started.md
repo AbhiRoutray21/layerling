@@ -63,7 +63,7 @@ Em {{ui:editor.visibilityOptions}}, na seta ao lado do ícone de olho, você enc
 
 ### Ocultar selecionados
 
-{{ui:editor.tool.hideSelected}} ([[Ctrl]]+[[H]]) oculta as formas selecionadas. Elas continuam no projeto e na lista de objetos; {{ui:editor.visibilityOptions}} as mostra de novo.
+{{ui:editor.tool.hideSelected}} ([[Ctrl]]+[[H]]) oculta as formas selecionadas. Elas continuam no projeto e na lista de objetos; {{ui:editor.visibilityOptions}} as mostram de novo.
 
 ### Pesquisar comandos
 
