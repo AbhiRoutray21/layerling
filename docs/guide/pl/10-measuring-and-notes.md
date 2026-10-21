@@ -11,9 +11,9 @@ Narzędzie Zmierz jest na dolnym końcu paska kamery przy lewej krawędzi ({{ui:
 
 ![Narzędzie Zmierz z przyciskami: dodaj pomiar, przesuń punkty pomiaru, usuń pomiar, całe krawędzie, usuń wszystkie pomiary.](shot:tape-menu)
 
-1. **{{ui:camera.addMeasurement}}:** kliknij jeden punkt, przeciągnij do następnego i kliknij go. Odległość zostanie opisana.
+1. **{{ui:camera.addMeasurement}}:** kliknij jeden punkt, przeciągnij do następnego i kliknij go. Odległość zostanie opisana. Na przeciwległej krawędzi albo ścianie drugi punkt przyciąga się pod kątem prostym do pierwszego, gdy wskaźnik się zbliży, albo w dowolnym miejscu tej krawędzi lub ściany, gdy trzymasz [[Shift]]. Wzdłuż tej samej ściany albo na płaszczyźnie roboczej [[Shift]] utrzymuje pomiar prosto wzdłuż głównej osi.
 2. **{{ui:camera.moveMeasurement}}:** chwyć punkty i przesuń je, a liczba podąży za nimi.
-3. **{{ui:camera.deleteMeasurement}}:** potem kliknij pomiar, aby go usunąć.
+3. **{{ui:camera.deleteMeasurement}}:** potem kliknij pomiar, aby go usunąć. Gdy aktywne jest **{{ui:camera.addMeasurement}}**, kliknięcie punktu albo linii pomiaru z wciśniętym [[Shift]] albo [[Ctrl]] ([[Cmd]] na Macu) od razu je usuwa, bez przełączania trybu.
 4. **{{ui:camera.tapeWholeEdges}}:** kliknięcie krawędzi mierzy ją w całości, na przykład obwód okręgu. Gdy to jest wyłączone, kliknięcie stawia zamiast tego punkt na krawędzi, a drugi punkt idzie w dowolne miejsce, więc możesz zmierzyć średnicę albo dowolną inną odległość. [[Alt]] odwraca ten przełącznik na jedno kliknięcie. Na okręgu punkt naprzeciwko pierwszego przyciąga się, gdy wskaźnik się do niego zbliży, a punkty leżą na prawdziwym okręgu, więc średnica wychodzi dokładnie.
 5. **{{ui:camera.deleteAllMeasurements}}:** usuwa naraz wszystkie pomiary. Ponieważ tego nie da się cofnąć, layerling najpierw pyta. Gdy nie ma pomiarów, nie ma czego robić.
 6. **{{ui:camera.tapeMarkMiddle}}:** pod liczbą każdego pomiaru jest mały przycisk z celownikiem. Stawia on [punkt odniesienia](#punkty-odniesienia) w środku pomiaru: po kliknięciu okrągłej krawędzi, takiej jak brzeg otworu, w środku tego okręgu (także na zaimportowanej siatce, gdzie nic innego nie oznacza środka otworu), a dla średnicy albo dowolnego prostego pomiaru w połowie jego długości. Przeciągany kształt przyciąga się wtedy do punktu swoim środkiem. Punkt, który już istnieje, nie powstaje drugi raz. Narzędzie Zmierz przyciąga się do punktu odniesienia jak do narożnika, więc możesz mierzyć od środka okręgu albo od środka linii: zaznacz go, a potem kliknij punkt.
@@ -22,7 +22,7 @@ Narzędzie Zmierz jest na dolnym końcu paska kamery przy lewej krawędzi ({{ui:
 
 ## Linijka
 
-{{ui:shape.ruler}} bierzesz z biblioteki kształtów. To wyłącznie narzędzie pomiarowe: nie pojawia się w żadnym eksporcie i nie można jej ani grupować, ani ciąć. Dla każdej bryły, która dotyka linijki albo na nią nachodzi, pokazuje wymiar jako unoszącą się liczbę wprost w widoku. Tę liczbę możesz zmienić na miejscu, a bryła za nią podąży. Unoszący się znak plus tworzy kopię mierzonego kształtu.
+{{ui:shape.ruler}} bierzesz z biblioteki kształtów. To wyłącznie narzędzie pomiarowe: nie pojawia się w żadnym eksporcie i nie można jej ani grupować, ani ciąć. Dla każdej bryły, która dotyka linijki albo na nią nachodzi, pokazuje wymiar jako unoszącą się liczbę wprost w widoku. Tę liczbę możesz zmienić na miejscu, a bryła za nią podąży. Unoszący się znak plus tworzy kopię mierzonego kształtu. Jej podziałka jest w milimetrach. Po przełączeniu jednostki na cale (przełącznik w prawym dolnym rogu) jest w calach, z kreską co jedną szesnastą cala i ponumerowanymi pełnymi calami.
 
 ## Kątownik
 
@@ -72,7 +72,7 @@ Notatki zapisują się w projekcie, nie pojawiają się w żadnym eksporcie i mo
 
 Punkt odniesienia to sam znak w przestrzeni, jak kreska ołówkiem albo punkt trasowania w warsztacie: nie należy do żadnej bryły, nigdy nie jest drukowany, a inne rzeczy się do niego przyciągają. Kliknij bryłę prawym przyciskiem i wybierz {{ui:contextMenu.markCenter}}, {{ui:contextMenu.markCorners}} albo {{ui:contextMenu.markMidpoints}}: punkty pojawią się na górnej ścianie bryły (całego zaznaczenia, jeśli zaznaczyłeś kilka).
 
-- Przeciągnij punkt, aby go przesunąć, albo kliknij go, aby zobaczyć jego współrzędne i wpisać nowe. Są w ustawionej jednostce. Każdą kartę można odsunąć za tytuł, jeśli coś zasłania, osobno: pozostałe zostają na miejscu, a dwukrotne kliknięcie tytułu odkłada ją z powrotem. Karta dotknięta ostatnio stoi przed pozostałymi. **Usuń wszystkie** w karcie albo w menu prawego przycisku usuwa naraz wszystkie punkty. {{ui:common.delete}} usuwa punkt.
+- Przeciągnij punkt, aby go przesunąć, albo kliknij go, aby zobaczyć jego współrzędne i wpisać nowe. Są w ustawionej jednostce. Każdą kartę można odsunąć za tytuł, jeśli coś zasłania, osobno: pozostałe zostają na miejscu, a dwukrotne kliknięcie tytułu odkłada ją z powrotem. Karta dotknięta ostatnio stoi przed pozostałymi. **Usuń wszystkie** w karcie albo **Usuń wszystkie punkty odniesienia** w menu prawego przycisku (na bryle albo na pustym miejscu widoku 3D) usuwa naraz wszystkie punkty. {{ui:common.delete}} usuwa punkt.
 - Narzędzie Zmierz też potrafi postawić punkt: {{ui:camera.tapeMarkMiddle}}, przycisk z celownikiem pod pomiarem, stawia go w jego środku, na przykład w środku okrągłego otworu. Mierzy też od punktu: przyciąga się do punktów odniesienia jak do narożników.
 - Gdy przeciągasz kształt, jego krawędzie i środek przyciągają się do punktu, tak jak do innych kształtów ({{ui:workspace.objectSnap}}). Kątownik też przyciąga się do punktów.
 - Punkty zapisują się w projekcie, nie pojawiają się w żadnym eksporcie i są pokazywane albo ukrywane razem z notatkami przez {{ui:visibility.notes}}.
