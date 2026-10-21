@@ -2,7 +2,7 @@ import { readdirSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 // @ts-expect-error the guide build is a plain .mjs module
-import { headingIds, loadMessages, loadValues, readChapters, renderBlocks } from "../../scripts/build-guide.mjs";
+import { effectiveChapters, headingIds, loadMessages, loadValues, readChapters, renderBlocks } from "../../scripts/build-guide.mjs";
 // @ts-expect-error the tool list is a plain .mjs module
 import { tools } from "../../scripts/layerling-mcp-tools.mjs";
 
@@ -18,9 +18,11 @@ const LANGUAGES = readdirSync(guideRoot).filter((name) => name !== "images" && s
 
 type Chapter = { file: string; number: string; body: string };
 
+const AI_CHAPTER_NUMBER = "14";
+
 describe("the guide in every language", () => {
-  it("covers the twelve guide languages", () => {
-    expect(LANGUAGES.sort()).toEqual(["ar", "cs", "da", "de", "en", "es", "fr", "hu", "nl", "pl", "ru", "sl"]);
+  it("covers the thirteen guide languages", () => {
+    expect(LANGUAGES.sort()).toEqual(["ar", "cs", "da", "de", "en", "es", "fr", "hu", "nl", "pl", "pt-br", "ru", "sl"]);
   });
 
   it("writes headings with a plain space, so they render as headings", async () => {
@@ -50,11 +52,12 @@ describe("the guide in every language", () => {
     }
   });
 
-  it("names every MCP tool in the AI chapter", async () => {
+  it("names every MCP tool in the AI chapter each language builds", async () => {
+    const chaptersByLanguage = Object.fromEntries(await Promise.all(LANGUAGES.map(async (language) => [language, await readChapters(language)])));
     for (const language of LANGUAGES) {
-      const chapter = ((await readChapters(language)) as Chapter[]).find((entry) => entry.number === "14");
-      expect(chapter, language).toBeDefined();
-      for (const tool of tools as { name: string }[]) expect(chapter!.body, `${language}: ${tool.name}`).toContain(`\`${tool.name}\``);
+      const builtAiChapter = (effectiveChapters(language, chaptersByLanguage) as Chapter[]).find((entry) => entry.number === AI_CHAPTER_NUMBER);
+      expect(builtAiChapter, language).toBeDefined();
+      for (const tool of tools as { name: string }[]) expect(builtAiChapter!.body, `${language}: ${tool.name}`).toContain(`\`${tool.name}\``);
     }
   });
 
