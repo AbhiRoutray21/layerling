@@ -29,7 +29,8 @@ describe("the browser's translator and the page language", () => {
     expect(bootLanguage(null, ["de-AT", "en"])).toBe("de");
     expect(bootLanguage(null, ["pt-BR"])).toBe("pt-BR");
     expect(bootLanguage("en", ["de-DE"])).toBe("en");
-    expect(bootLanguage(null, ["es-ES", "es"])).toBe("en");
-    expect(bootLanguage("xx", ["es"])).toBe("en");
+    expect(bootLanguage(null, ["es-MX", "es"])).toBe("es-ES");
+    expect(bootLanguage(null, ["sv-SE", "sv"])).toBe("en");
+    expect(bootLanguage("xx", ["sv"])).toBe("en");
   });
 });
