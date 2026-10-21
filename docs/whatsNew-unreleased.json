@@ -15,7 +15,8 @@
       "pt-br": "Uma segunda vista em sua própria janela",
       "ru": "Второй вид в отдельном окне",
       "sl": "Drugi pogled v lastnem oknu",
-      "tr": "Kendi penceresinde ikinci bir görünüm"
+      "tr": "Kendi penceresinde ikinci bir görünüm",
+      "es": "Una segunda vista en su propia ventana"
     },
     "body": {
       "de": "Der neue Knopf in der Kameraleiste öffnet ein zweites Fenster, das denselben Entwurf durch eine eigene Kamera zeigt. Es folgt jeder Änderung, hat seinen eigenen Ansichtswürfel und seine eigene Kameraleiste und öffnet sich dort, wo du es verlassen hast.",
@@ -32,7 +33,8 @@
       "pt-br": "O novo botão na barra da câmera abre uma segunda janela que mostra o mesmo projeto por uma câmera própria. Ela acompanha cada alteração, tem seu próprio cubo de vista e sua própria barra da câmera, e abre onde você a deixou.",
       "ru": "Новая кнопка на панели камеры открывает второе окно, которое показывает тот же проект через собственную камеру. Оно следит за каждым изменением, у него свой куб вида и своя панель камеры, и оно открывается там, где вы его оставили.",
       "sl": "Novi gumb v vrstici kamere odpre drugo okno, ki kaže isti načrt skozi lastno kamero. Sledi vsaki spremembi, ima svojo kocko pogleda in vrstico kamere ter se odpre tam, kjer ste ga pustili.",
-      "tr": "Kamera çubuğundaki yeni düğme, aynı tasarımı kendi kamerasından gösteren ikinci bir pencere açar. Her değişikliği izler, kendi görünüm küpü ve kamera çubuğu vardır ve onu bıraktığınız yerde açılır."
+      "tr": "Kamera çubuğundaki yeni düğme, aynı tasarımı kendi kamerasından gösteren ikinci bir pencere açar. Her değişikliği izler, kendi görünüm küpü ve kamera çubuğu vardır ve onu bıraktığınız yerde açılır.",
+      "es": "El nuevo botón de la barra de cámara abre una segunda ventana que muestra el mismo diseño a través de una cámara propia. Sigue cada cambio, tiene su propio cubo de vista y su propia barra de cámara, y se abre donde la dejaste."
     }
   }
 ]

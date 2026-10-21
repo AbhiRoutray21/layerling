@@ -51,12 +51,15 @@ export function placementOf(win: Pick<Window, "screenX" | "screenY" | "innerWidt
 }
 
 /**
- * Phones and tablets get no second view: they have no windows side by side. A finger as the main
- * pointer says so, and an iPad that calls itself a Mac gives itself away by its touch points.
- * A laptop with a touch screen keeps it: its main pointer is the mouse or the trackpad.
+ * Phones and tablets get no second view: they have no windows side by side, and a popup opens
+ * there as a tab of its own. A finger as the main pointer says so; so does a browser that calls
+ * itself mobile, or names Android, an iPhone, an iPad or an iPod - a tablet with a mouse or a
+ * trackpad on it reports a fine pointer. An iPad that calls itself a Mac gives itself away by its
+ * touch points. A laptop with a touch screen keeps it: its main pointer is the mouse or the trackpad.
  */
-export function secondViewSupported(env: { coarsePointer: boolean; platform: string; maxTouchPoints: number }) {
-  if (env.coarsePointer) return false;
+export function secondViewSupported(env: { coarsePointer: boolean; platform: string; maxTouchPoints: number; userAgent: string; mobile?: boolean }) {
+  if (env.coarsePointer || env.mobile) return false;
+  if (/Android|iPhone|iPad|iPod/i.test(env.userAgent) || /^(iPhone|iPad|iPod)/i.test(env.platform)) return false;
   if (/^Mac/i.test(env.platform) && env.maxTouchPoints > 1) return false;
   return true;
 }

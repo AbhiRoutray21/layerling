@@ -95,10 +95,14 @@ export function useSecondViewSupported() {
   useEffect(() => {
     if (!window.matchMedia) return;
     const media = window.matchMedia("(pointer: coarse)");
+    // Chrome and Edge say outright whether they run on a phone or a tablet; the others are judged by their name.
+    const userAgentData = (navigator as Navigator & { userAgentData?: { mobile?: boolean } }).userAgentData;
     const apply = () => setSupported(secondViewSupported({
       coarsePointer: media.matches,
       platform: navigator.platform ?? "",
       maxTouchPoints: navigator.maxTouchPoints ?? 0,
+      userAgent: navigator.userAgent ?? "",
+      mobile: userAgentData?.mobile,
     }));
     apply();
     media.addEventListener("change", apply);

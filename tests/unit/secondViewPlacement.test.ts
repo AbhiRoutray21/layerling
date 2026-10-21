@@ -48,15 +48,41 @@ describe("the second view's window placement", () => {
 });
 
 describe("where the second view is offered", () => {
-  it("is offered with a mouse or a trackpad, a touch screen laptop included", () => {
-    expect(secondViewSupported({ coarsePointer: false, platform: "Win32", maxTouchPoints: 0 })).toBe(true);
-    expect(secondViewSupported({ coarsePointer: false, platform: "Win32", maxTouchPoints: 10 })).toBe(true);
-    expect(secondViewSupported({ coarsePointer: false, platform: "MacIntel", maxTouchPoints: 0 })).toBe(true);
+  const UA = {
+    windowsChrome: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+    macSafari: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Safari/605.1.15",
+    linuxFirefox: "Mozilla/5.0 (X11; Linux x86_64; rv:140.0) Gecko/20100101 Firefox/140.0",
+    chromeOs: "Mozilla/5.0 (X11; CrOS x86_64 14541.0.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+    androidPhone: "Mozilla/5.0 (Linux; Android 14; Pixel 8) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Mobile Safari/537.36",
+    androidTablet: "Mozilla/5.0 (Linux; Android 14; SM-X710) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+    iPhone: "Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1",
+    iPadMobileSite: "Mozilla/5.0 (iPad; CPU OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1",
+  };
+  const desktop = { coarsePointer: false, maxTouchPoints: 0 };
+
+  it("is offered with a mouse or a trackpad, a touch screen laptop and a Chromebook included", () => {
+    expect(secondViewSupported({ ...desktop, platform: "Win32", userAgent: UA.windowsChrome, mobile: false })).toBe(true);
+    expect(secondViewSupported({ ...desktop, platform: "Win32", userAgent: UA.windowsChrome, maxTouchPoints: 10, mobile: false })).toBe(true);
+    expect(secondViewSupported({ ...desktop, platform: "MacIntel", userAgent: UA.macSafari })).toBe(true);
+    expect(secondViewSupported({ ...desktop, platform: "Linux x86_64", userAgent: UA.linuxFirefox })).toBe(true);
+    expect(secondViewSupported({ ...desktop, platform: "Linux x86_64", userAgent: UA.chromeOs, maxTouchPoints: 10, mobile: false })).toBe(true);
   });
 
-  it("is not offered on a phone or a tablet, an iPad that calls itself a Mac included", () => {
-    expect(secondViewSupported({ coarsePointer: true, platform: "Linux armv8l", maxTouchPoints: 5 })).toBe(false);
-    expect(secondViewSupported({ coarsePointer: true, platform: "iPhone", maxTouchPoints: 5 })).toBe(false);
-    expect(secondViewSupported({ coarsePointer: false, platform: "MacIntel", maxTouchPoints: 5 })).toBe(false);
+  it("is not offered on a phone", () => {
+    expect(secondViewSupported({ coarsePointer: true, platform: "Linux armv8l", maxTouchPoints: 5, userAgent: UA.androidPhone, mobile: true })).toBe(false);
+    expect(secondViewSupported({ coarsePointer: true, platform: "iPhone", maxTouchPoints: 5, userAgent: UA.iPhone })).toBe(false);
+  });
+
+  it("is not offered on a tablet, not even with a mouse or a trackpad on it", () => {
+    // Android tablet with a mouse: the pointer reports fine, the name still says Android.
+    expect(secondViewSupported({ ...desktop, platform: "Linux aarch64", maxTouchPoints: 10, userAgent: UA.androidTablet, mobile: false })).toBe(false);
+    // An iPad as it presents itself by default: a Mac with touch points.
+    expect(secondViewSupported({ ...desktop, platform: "MacIntel", maxTouchPoints: 5, userAgent: UA.macSafari })).toBe(false);
+    // An iPad asking for mobile sites, with a trackpad.
+    expect(secondViewSupported({ ...desktop, platform: "iPad", maxTouchPoints: 5, userAgent: UA.iPadMobileSite })).toBe(false);
+  });
+
+  it("is not offered where the browser says it runs on a mobile device, whatever its name", () => {
+    expect(secondViewSupported({ ...desktop, platform: "Linux x86_64", userAgent: UA.linuxFirefox, mobile: true })).toBe(false);
   });
 });
