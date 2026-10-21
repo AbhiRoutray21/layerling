@@ -20,7 +20,7 @@ Pri desetinah projektov en seznam ni dovolj. Na začetni strani {{ui:shared.newF
 - **Preimenovanje in brisanje** sta v meniju mape. Brisanje mape ne izbriše nobenega projekta: njena vsebina se pomakne za raven višje.
 - **Iskanje** pregleda vse mape; najden projekt pokaže svojo mapo, klik nanjo pa jo odpre.
 
-{{ui:dashboard.backupAll}} ohrani mape: projekti so v datoteki varnostne kopije v svojih mapah, obnovitev pa jih vrne tja. Mape tega brskalnika so ločene od map na strežniku.
+{{ui:dashboard.backupAll}} ohrani mape: projekti so v datoteki varnostne kopije v svojih mapah, obnovitev pa jih vrne tja. Mape tega brskalnika so ločene od map na strežniku. Predogledne slike kartic gredo tudi v datoteko, zato so po obnovitvi takoj nazaj.
 
 ## Varnostno kopiranje in deljenje
 

@@ -20,7 +20,7 @@ Met tientallen ontwerpen is één lijst niet genoeg. Op de startpagina maakt {{u
 - **Hernoemen en verwijderen** staan in het menu van de map. Een map verwijderen verwijdert geen ontwerp: wat erin zat, gaat een niveau omhoog.
 - **Zoeken** kijkt in elke map; een gevonden ontwerp toont zijn map, en een klik erop opent die.
 
-{{ui:dashboard.backupAll}} neemt de mappen mee: de ontwerpen staan in het back-upbestand in hun mappen, en bij het terugzetten komen ze daar weer. De mappen van deze browser staan los van de mappen op een server.
+{{ui:dashboard.backupAll}} neemt de mappen mee: de ontwerpen staan in het back-upbestand in hun mappen, en bij het terugzetten komen ze daar weer. De mappen van deze browser staan los van de mappen op een server. De voorbeeldafbeeldingen van de kaarten gaan ook mee in het bestand, zodat ze er na het terugzetten meteen weer zijn.
 
 ## Back-up maken en doorgeven
 

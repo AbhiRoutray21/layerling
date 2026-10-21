@@ -111,6 +111,7 @@ Het is geen volledig CAD-pakket: er is geen parametrische tijdlijn en er zijn ge
 
 - **Perspectief of recht van voren** – wissel tussen de normale weergave en een vlakke, orthografische weergave met de kubusknop naast de zoomknoppen, of door op **O** te drukken. Je kijkrichting en uitsnede blijven behouden.
 - **De weergave draaien aan de kubus** – slepen aan de weergavekubus draait de weergave zoals de rechtermuisknop, op een tablet met één vinger; een klik springt nog steeds naar die zijde, en een klik op een hoek of rand kijkt vanaf daar. Toetsen **1**–**6** springen ook, en **Shift+1**–**6** zoomen daarbij in op de selectie.
+- **Vier opgeslagen weergaven per ontwerp** – **Shift+7**, **8**, **9** of **0** slaat de weergave precies op zoals ze is (hoek, positie, zoom), en de toets alleen brengt haar terug. Elk ontwerp heeft zijn eigen, en een opgeslagen `.lyl`-bestand neemt ze mee.
 - **De richtingskubus in elke hoek** – Instellingen > Weergave > **Positie van de richtingskubus** zet de kubus linksboven, rechtsboven, linksonder of rechtsonder; in elke hoek behalve linksboven schuift de camerabediening omhoog naar zijn plek.
 - **Van onderen kijken** – het oog boven een raster in de camerabalk verbergt het printbed, zodat je de onderkant van een ontwerp kunt zien zonder dat het in de weg zit.
 - **Panelen waar jij ze wilt** – de objectenlijst, de instellingen, de doorsnede, het meetlint en de gereedschapspanelen voor randen, uithollen en patronen verplaats je aan hun titelbalk en openen daar weer; dubbelklikken dockt ze.
@@ -192,7 +193,7 @@ Om layerling op een computer, NAS (Synology, Unraid, enz.) of thuisserver te dra
 De snelste manier is één enkel commando:
 
 ```bash
-docker run -d --name layerling -p 3000:3000 --restart unless-stopped ghcr.io/henmedia/layerling:latest
+docker run -d --name layerling -p 3000:3000 -v layerling-thumbnails:/app/.codex/project-thumbnails --restart unless-stopped ghcr.io/henmedia/layerling:latest
 ```
 
 Op een NAS met een containerbeheerder (Synology Container Manager, Unraid, Portainer) zoek je `henmedia/layerling` op in het register (Docker Hub) of vul je `henmedia/layerling:latest` in, en koppel je poort 3000. Om bij te werken haal je de image opnieuw op en maak je de container opnieuw aan (of laat je Watchtower dat doen).
@@ -203,7 +204,7 @@ De image-tags zijn kale versienummers **zonder "v"**: `ghcr.io/henmedia/layerlin
 docker pull ghcr.io/henmedia/layerling:latest
 docker stop layerling
 docker rm layerling
-docker run -d --name layerling -p 3000:3000 --restart unless-stopped ghcr.io/henmedia/layerling:latest
+docker run -d --name layerling -p 3000:3000 -v layerling-thumbnails:/app/.codex/project-thumbnails --restart unless-stopped ghcr.io/henmedia/layerling:latest
 ```
 
 `docker inspect layerling | grep image.version` laat zien welke versie de container echt draait. Heb je een map gekoppeld voor de serveropslag, geef dan dezelfde `-v`-optie opnieuw mee.
@@ -313,7 +314,7 @@ Kies deze route als je de code wilt aanpassen.
 
 ### Wat je nodig hebt
 
-- Node.js 20 of nieuwer
+- Node.js 22.18 of nieuwer (de scripts voor de handleiding en de lettertypen laden TypeScript-bestanden rechtstreeks, en dat kunnen oudere versies niet); 24 werkt ook, de Docker-image gebruikt die
 - npm, meegeleverd met Node.js
 
 Controleer je versies met `node -v` en `npm -v`. Werken die commando's niet, installeer dan Node.js vanaf de officiële

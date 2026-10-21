@@ -72,8 +72,12 @@ function paddedCutterShape(shape: WorkplaneShape): WorkplaneShape {
   // Its width and depth stay as typed but for a thousandth of a millimetre: padding them by 0.05 cut a
   // 7.9 mm hole at 8.0 (#254), none at all left a hole that touches a wall along a line cutting a slab
   // out of it. A thousandth keeps the size and breaks that touch.
-  const width = shapeWidth(shape) + CUTTER_LATERAL_PADDING * 2;
-  const depth = shapeDepth(shape) + CUTTER_LATERAL_PADDING * 2;
+  // It is a scale round the middle, which only widens a simple shape all round. An imported, sketched or grouped
+  // cutter is scaled as a whole, so both walls of a strip far from its middle move the same way: a copy set to hole
+  // then left a thin wall of the part standing (#607). Those keep their width and depth exactly.
+  const lateral = widensEvenlyWhenScaled(shape) ? CUTTER_LATERAL_PADDING : 0;
+  const width = shapeWidth(shape) + lateral * 2;
+  const depth = shapeDepth(shape) + lateral * 2;
   return {
     ...shape,
     width,
@@ -81,8 +85,13 @@ function paddedCutterShape(shape: WorkplaneShape): WorkplaneShape {
     height,
     size: Math.max(width, depth),
     elevation: (shape.elevation ?? 0) - CUTTER_PADDING,
-    baseRadius: shape.baseRadius ? shape.baseRadius + CUTTER_LATERAL_PADDING : shape.baseRadius,
+    baseRadius: shape.baseRadius ? shape.baseRadius + lateral : shape.baseRadius,
   };
+}
+
+/** A shape of its own outline - not an imported mesh, a sketch body, a text or a group of parts. */
+function widensEvenlyWhenScaled(shape: WorkplaneShape) {
+  return !shape.importedMesh && !shape.sketchProfile && !shape.groupedShapes?.length && shape.kind !== "text";
 }
 
 function brushFromShape(shape: WorkplaneShape, cutter = false) {
@@ -1463,6 +1472,73 @@ async function manifoldUnionMeshShape(selection: WorkplaneShape[], triangleLimit
   }
 }
 
+/** All parts of a bundle with the bundles in it opened too, so their holes and solids count as the bundle's own. */
+function bundleParts(bundle: WorkplaneShape): WorkplaneShape[] {
+  return restoreGroupedChildren(bundle).filter((part) => !part.hidden).flatMap((part) => (
+    part.groupOperation === "bundle" && part.groupedShapes?.length ? bundleParts(part) : expandGroupsForBoolean([part])
+  ));
+}
+
+function isBundleWithHole(shape: WorkplaneShape) {
+  return !shape.hole && shape.groupOperation === "bundle" && Boolean(shape.groupedShapes?.length) && bundleParts(shape).some((part) => part.hole);
+}
+
+/**
+ * A bundle with a hole in it, grouped with other parts, cuts them but not its own solids, as in Tinkercad (#646):
+ * a peg in a bundle with the hole beside it used to lose the part of it the hole overlaps. The hole of a bundle
+ * cuts as itself less the bundle's solids; the rest is one cut as before, so the bundle's solids still take the
+ * other holes.
+ */
+async function manifoldBundleCutShape(selected: WorkplaneShape[], triangleLimit: number, groupChildren: WorkplaneShape[]): Promise<WorkplaneShape | null> {
+  const bundles = selected.filter(isBundleWithHole);
+  if (bundles.length === 0) return null;
+  const rest = expandGroupsForBoolean(selected.filter((shape) => !bundles.includes(shape)));
+  const bundleSets = bundles.map((bundle) => {
+    const parts = bundleParts(bundle);
+    return { solids: parts.filter((part) => !part.hole && !part.locked), holes: parts.filter((part) => part.hole) };
+  });
+  const solids = [...rest.filter((shape) => !shape.hole && !shape.locked), ...bundleSets.flatMap((set) => set.solids)];
+  const outerHoles = rest.filter((shape) => shape.hole);
+  if (solids.length === 0) return null;
+  const sourceMesh = mergedSolidMeshData(solids);
+  const cutterTriangleCount = [...outerHoles, ...bundleSets.flatMap((set) => set.holes)]
+    .reduce((total, hole) => total + meshForShape(hole).faces.length, 0);
+  if (sourceMesh.faces.length + cutterTriangleCount > triangleLimit) return null;
+
+  const created: ManifoldSolid[] = [];
+  try {
+    const runtime = await getManifoldRuntime();
+    let result = shapesToManifoldUnion(runtime, solids, created, true);
+    if (!result) return null;
+    if (outerHoles.length) {
+      const cutter = shapesToManifoldUnion(runtime, outerHoles.map(paddedCutterShape), created, true);
+      if (!cutter) return null;
+      result = result.subtract(cutter);
+      created.push(result);
+    }
+    for (const set of bundleSets) {
+      let cutter = shapesToManifoldUnion(runtime, set.holes.map(paddedCutterShape), created, true);
+      if (!cutter) return null;
+      if (set.solids.length) {
+        const own = shapesToManifoldUnion(runtime, set.solids, created, true);
+        if (!own) return null;
+        cutter = cutter.subtract(own);
+        created.push(cutter);
+      }
+      result = result.subtract(cutter);
+      created.push(result);
+    }
+    if (result.status() !== "NoError" || result.numTri() < 1) return null;
+    const positions = manifoldMeshToPositions(result.getMesh());
+    const group = meshPositionsToGroupShape(selected, solids, positions, "grouped-bundle-cut", groupChildren);
+    return isUsableBooleanGroup(group, sourceMesh.faces.length, false) ? group : null;
+  } catch {
+    return null;
+  } finally {
+    Array.from(new Set(created)).forEach(disposeManifold);
+  }
+}
+
 function asIntersectionGroup(group: WorkplaneShape): WorkplaneShape {
   return {
     ...group,
@@ -2135,8 +2211,9 @@ export async function buildGroupedShapeFromSelection(selected: WorkplaneShape[],
   // gruppierte Gewinde) beim Vereinigen verloren, weil sie ab da nur noch
   // als vier einzelne Kinder existiert (Forum: Gruppe verschwindet beim
   // Aufloesen einer Vereinigung, die eine Gewinde-Gruppe enthielt).
-  const cleanBoxGroup = canUseBoxBoolean(boxBooleanSelection) ? boxedBooleanMeshShape(boxBooleanSelection, groupable) : null;
-  const manifoldCutGroup = hasSolid && hasHole ? await manifoldBooleanMeshShape(booleanSelection, triangleLimit, { requireImported: false }, groupable) : null;
+  const bundleCutGroup = hasSolid && hasHole ? await manifoldBundleCutShape(selected, triangleLimit, groupable) : null;
+  const cleanBoxGroup = !bundleCutGroup && canUseBoxBoolean(boxBooleanSelection) ? boxedBooleanMeshShape(boxBooleanSelection, groupable) : null;
+  const manifoldCutGroup = hasSolid && hasHole ? bundleCutGroup ?? await manifoldBooleanMeshShape(booleanSelection, triangleLimit, { requireImported: false }, groupable) : null;
   const manifoldImportedMerge = hasImportedMesh && hasSolid && !hasHole ? await manifoldUnionMeshShape(booleanSelection, triangleLimit, groupable) : null;
   const exactImportedGroup = hasImportedMesh && hasSolid && hasHole ? manifoldCutGroup ?? importedBooleanMeshShape(booleanSelection, groupable) : null;
   const bakedImportedMerge = hasImportedMesh && !(hasSolid && hasHole) ? manifoldImportedMerge ?? mergedMeshShape(booleanSelection, groupable) : null;

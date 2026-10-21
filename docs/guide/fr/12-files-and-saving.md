@@ -20,7 +20,7 @@ Avec des dizaines de dessins, une seule liste ne suffit plus. Sur la page d'accu
 - **Renommer et supprimer** se trouvent dans le menu du dossier. Supprimer un dossier ne supprime aucun dessin : son contenu remonte d'un niveau.
 - **La recherche** regarde dans tous les dossiers ; un dessin trouvé indique son dossier, et un clic dessus l'ouvre.
 
-{{ui:dashboard.backupAll}} garde les dossiers : les dessins sont rangés dans leurs dossiers dans le fichier de sauvegarde, et la restauration les remet à leur place. Les dossiers de ce navigateur sont distincts des dossiers d'un serveur.
+{{ui:dashboard.backupAll}} garde les dossiers : les dessins sont rangés dans leurs dossiers dans le fichier de sauvegarde, et la restauration les remet à leur place. Les dossiers de ce navigateur sont distincts des dossiers d'un serveur. Les aperçus des cartes vont aussi dans le fichier : ils reviennent dès la restauration.
 
 ## Sauvegarde et transmission
 

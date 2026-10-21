@@ -113,6 +113,7 @@ It is not a full CAD package: there is no parametric timeline and no assemblies.
 
 - **Perspective or straight-on** – switch between the normal view and a flat, orthographic one with the cube button beside the zoom controls, or by pressing **O**. Your viewing direction and framing are kept.
 - **Turn the view at the cube** – dragging the view cube turns the view like the right mouse button, with one finger on a tablet; a click still jumps to that side, and a click on a corner or an edge looks from there. Keys **1**–**6** jump too, and **Shift+1**–**6** also zoom to the selection.
+- **Four saved views per design** – **Shift+7**, **8**, **9** or **0** saves the view exactly as it is (angle, pan, zoom), and the key alone brings it back. Each design keeps its own, and a saved `.lyl` file carries them along.
 - **The view cube in any corner** – Settings > Appearance > **View cube position** puts the cube in the top left, top right, bottom left or bottom right; in any corner but the top left, the camera controls move up into its place.
 - **Look from below** – the eye over a grid in the camera bar hides the plate, so the underside of a design can be seen without it in the way.
 - **Panels where you want them** – the object list, the settings, the section view, the tape measure and the tool panels for edges, hollowing and patterns move by their title bar and open there again; a double-click docks them.
@@ -194,10 +195,10 @@ To run layerling on a computer, NAS (Synology, Unraid, etc.) or home server with
 The quickest way is a single command:
 
 ```bash
-docker run -d --name layerling -p 3000:3000 --restart unless-stopped ghcr.io/henmedia/layerling:latest
+docker run -d --name layerling -p 3000:3000 -v layerling-thumbnails:/app/.codex/project-thumbnails --restart unless-stopped ghcr.io/henmedia/layerling:latest
 ```
 
-On a NAS with a container manager (Synology Container Manager, Unraid, Portainer), search for `henmedia/layerling` in its registry (Docker Hub) or enter `henmedia/layerling:latest`, and map port 3000. To update, pull the image again and recreate the container (or let Watchtower do it).
+The `-v` option keeps the preview pictures of the start page in a Docker volume named `layerling-thumbnails`, so they survive an update; without it they are inside the container and gone each time it is created again (the designs themselves live in the browser and are not affected). On a NAS with a container manager (Synology Container Manager, Unraid, Portainer), search for `henmedia/layerling` in its registry (Docker Hub) or enter `henmedia/layerling:latest`, map port 3000, and add a volume for `/app/.codex/project-thumbnails`. To update, pull the image again and recreate the container (or let Watchtower do it).
 
 The image tags are plain version numbers **without a "v"**: `ghcr.io/henmedia/layerling:1.42.0`, while the GitHub release is called `v1.42.0`. A pull only fetches the new image; a container that already exists keeps running the old one until it is removed and created again:
 
@@ -205,7 +206,7 @@ The image tags are plain version numbers **without a "v"**: `ghcr.io/henmedia/la
 docker pull ghcr.io/henmedia/layerling:latest
 docker stop layerling
 docker rm layerling
-docker run -d --name layerling -p 3000:3000 --restart unless-stopped ghcr.io/henmedia/layerling:latest
+docker run -d --name layerling -p 3000:3000 -v layerling-thumbnails:/app/.codex/project-thumbnails --restart unless-stopped ghcr.io/henmedia/layerling:latest
 ```
 
 `docker inspect layerling | grep image.version` shows which version the container really runs. If you mounted a folder for the server storage, add the same `-v` option again.
@@ -318,7 +319,7 @@ Take this path if you want to change the code.
 
 ### What You Need
 
-- Node.js 20 or newer
+- Node.js 22.18 or newer (the guide and font scripts load TypeScript files directly, which older versions cannot); 24 works too, the Docker image uses it
 - npm, included with Node.js
 
 Check your versions with `node -v` and `npm -v`. If those commands do not work, install Node.js from the official

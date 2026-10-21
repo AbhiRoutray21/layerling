@@ -5,18 +5,24 @@ import {
   GRIDFINITY_BASEPLATE_RADIUS,
   GRIDFINITY_BIN_RADIUS,
   GRIDFINITY_CLEARANCE,
+  GRIDFINITY_DIVIDER_CUTTER_OVERLAP,
   GRIDFINITY_FOOT,
   GRIDFINITY_FOOT_HEIGHT,
   GRIDFINITY_GRID,
   GRIDFINITY_MAGNET_DEPTH,
   GRIDFINITY_MAGNET_DIAMETER,
   GRIDFINITY_SOCKET,
+  type GridfinityCompartmentPieces,
   type GridfinityLabelCornerShape,
   type GridfinityLabelPieces,
   type GridfinityLabelProfile,
   type GridfinityPlan,
   type GridfinityScoopPieces,
   type GridfinityStep,
+  gridfinityCompartmentCutBound,
+  gridfinityCompartmentFloorBound,
+  gridfinityCompartmentPieces,
+  gridfinityDividerBound,
   gridfinityLabelCornerOutline,
   gridfinityLabelPieces,
   gridfinityLabelProfileEnds,
@@ -42,6 +48,10 @@ import {
  * bin's inside, the corner pieces trimmed to lie under the shelves they join.
  * The finger scoops (gridfinityScoopPieces) are taken out of the inside's
  * cutter before it is cut, each with a true arc, so the cut leaves them standing.
+ * A bin with dividers (gridfinityCompartmentPieces) is cut by one cutter for all
+ * its compartments, each with a rounded floor and its own scoops, and what stays
+ * between them is the dividers. Its labels are the compartments' own, each cut to
+ * its compartment and joined as the shelves are.
  */
 
 /** z up to y up: (x, y, z) -> (x, z, -y). */
@@ -50,6 +60,8 @@ const Z_TO_Y_UP = [1, 0, 0, 0, 0, 0, 1, 0, 0, -1, 0, 0];
 const PAST = 0.01;
 /** Less than this taken from the cutter (mm³) is a scoop the kernel's cut missed; the smallest scoop takes about 29. */
 const SCOOP_MISSED = 1e-3;
+/** Less than a bound on the compartments, the dividers or a label by more than this (mm³) is geometry the kernel lost. */
+const PIECE_MISSED = 1;
 
 function oneSolid(cad: OcctKernel, shape: ShapeHandle, what: string) {
   const solids = cad.isSolid(shape) ? [shape] : cad.getSubShapes(shape, "solid");
@@ -88,7 +100,7 @@ function prism(cad: OcctKernel, hx: number, hz: number, radius: number, from: nu
   return cad.extrude(cad.makeFace(roundedWire(cad, 0, 0, hx, hz, radius, from)), 0, 0, to - from);
 }
 
-function binSolid(cad: OcctKernel, plan: GridfinityPlan, scoops: GridfinityScoopPieces | null) {
+function binSolid(cad: OcctKernel, plan: GridfinityPlan, scoops: GridfinityScoopPieces | null, compartments: GridfinityCompartmentPieces | null) {
   const hx = plan.size.width / 2;
   const hz = plan.size.depth / 2;
   const cellHalf = plan.pitch / 2 - GRIDFINITY_CLEARANCE;
@@ -102,7 +114,9 @@ function binSolid(cad: OcctKernel, plan: GridfinityPlan, scoops: GridfinityScoop
   if (plan.lip) inside.push([0, wallTop], [0, wallTop + PAST]);
   else inside.push([inside[inside.length - 1][0], wallTop + PAST]);
   let cutter = steppedSolid(cad, 0, 0, hx, hz, GRIDFINITY_BIN_RADIUS, inside);
-  if (plan.floorRounding > 0) {
+  const loft = cutter;
+  if (compartments) cutter = compartmentCutter(cad, loft, compartments, hx, hz, wallTop);
+  else if (plan.floorRounding > 0) {
     const floor = inside[0][1];
     const floorEdges = cad.getSubShapes(cutter, "edge").filter((edge) => {
       const box = cad.getBoundingBox(edge);
@@ -111,13 +125,46 @@ function binSolid(cad: OcctKernel, plan: GridfinityPlan, scoops: GridfinityScoop
     cutter = cad.fillet(cutter, floorEdges, plan.floorRounding);
   }
   if (scoops) cutter = scoopedCutter(cad, cutter, scoops);
+  const block = body;
   // A bin without the lip whose floor is raised to the top is one solid block, with no inside to cut.
   if (plan.floor < wallTop) body = oneSolid(cad, cad.cut(body, cutter), "bin");
+  // Checked before the magnet holes, which take volume the bound does not count; the loft's PAST over the top cuts nothing.
+  if (compartments) {
+    const [inset] = inside[inside.length - 1];
+    const over = (4 * (hx - inset) * (hz - inset) - (4 - Math.PI) * (GRIDFINITY_BIN_RADIUS - inset) ** 2) * PAST;
+    const bound = gridfinityDividerBound(plan, compartments) + gridfinityCompartmentFloorBound(plan, compartments);
+    if (cad.getVolume(body) < cad.getVolume(block) - cad.getVolume(loft) + over + bound - PIECE_MISSED) throw new Error("The Gridfinity bin's dividers could not be cut");
+  }
   if (plan.magnetHoles.length > 0) {
     const holes = plan.magnetHoles.map((hole) => cad.translate(cad.makeCylinder(GRIDFINITY_MAGNET_DIAMETER / 2, GRIDFINITY_MAGNET_DEPTH + PAST), hole.x, -hole.z, -PAST));
     body = oneSolid(cad, cad.cutAll(body, holes), "bin");
   }
   return body;
+}
+
+/**
+ * The cutter for a bin with dividers (#554): the inside above the dividers' top and a rounded prism for each
+ * compartment, its floor edges filleted and its scoops taken out, fused into one and kept to the inside, so the bin
+ * is cut once. Cutting the compartments one by one took 7 to 15 times as long.
+ */
+function compartmentCutter(cad: OcctKernel, loft: ShapeHandle, pieces: GridfinityCompartmentPieces, hx: number, hz: number, wallTop: number) {
+  const above = cad.makeBoxFromCorners({ x: -hx - 1, y: -hz - 1, z: pieces.top }, { x: hx + 1, y: hz + 1, z: wallTop + 1 });
+  const cutters = pieces.cells.map((cell) => {
+    let cutter = prism(cad, cell.inside.hx, cell.inside.hz, cell.inside.radius, pieces.floor, pieces.top + GRIDFINITY_DIVIDER_CUTTER_OVERLAP);
+    const floorEdges = cad.getSubShapes(cutter, "edge").filter((edge) => {
+      const box = cad.getBoundingBox(edge);
+      return Math.abs(box.zmin - pieces.floor) < 1e-6 && Math.abs(box.zmax - pieces.floor) < 1e-6;
+    });
+    cutter = cad.fillet(cutter, floorEdges, pieces.floorRounding);
+    if (cell.scoops) cutter = scoopedCutter(cad, cutter, cell.scoops);
+    return cad.translate(cutter, cell.centre.x, -cell.centre.z, 0);
+  });
+  const fused = cad.fuseAll([above, ...cutters]);
+  // A fuse the kernel gets wrong can leave a compartment out, which would be left solid without a word.
+  if (cad.getVolume(fused) < gridfinityCompartmentCutBound(pieces, { box: cad.getVolume(above), cutters: cutters.map((cutter) => cad.getVolume(cutter)) }) - PIECE_MISSED) {
+    throw new Error("The Gridfinity bin's compartments could not be cut");
+  }
+  return cad.common(fused, loft);
 }
 
 function baseplateSolid(cad: OcctKernel, plan: GridfinityPlan) {
@@ -189,13 +236,28 @@ function scoopedCutter(cad: OcctKernel, cutter: ShapeHandle, pieces: GridfinityS
   return cutter;
 }
 
+/** The bin with dividers joined to its compartments' labels, each cut to its compartment and moved into place. */
+function labelledCompartments(cad: OcctKernel, standing: ShapeHandle, pieces: GridfinityCompartmentPieces) {
+  const solids = pieces.cells.flatMap((cell) => (cell.labels ? labelSolids(cad, cell.labels).map((solid, i) => ({ solid: cad.translate(solid, cell.centre.x, 0, cell.centre.z), shelf: i < cell.labels!.shelves.length })) : []));
+  if (solids.length === 0) return standing;
+  // A shelf the kernel's cut to its compartment lost, or a fuse that dropped them all, would leave a label out without a word.
+  if (solids.some(({ solid, shelf }) => shelf && !(cad.getVolume(solid) > PIECE_MISSED))) throw new Error("The Gridfinity bin's labels could not be joined");
+  const labelled = oneSolid(cad, cad.fuseAll([standing, ...solids.map(({ solid }) => solid)]), "bin with labels");
+  if (cad.getVolume(labelled) - cad.getVolume(standing) < PIECE_MISSED) throw new Error("The Gridfinity bin's labels could not be joined");
+  if (!cad.isValid(labelled)) throw new Error("The Gridfinity body is not a valid solid");
+  return labelled;
+}
+
 /** The Gridfinity part's exact solid in the shape's own frame, y up. Throws when the kernel cannot build it. */
 export function gridfinityPartSolid(cad: OcctKernel, part: CadModifierGridfinityPart): ShapeHandle {
   const plan = gridfinityPlan(part);
   const scoopPieces = gridfinityScoopPieces(part);
-  const solid = plan.type === "bin" ? binSolid(cad, plan, scoopPieces) : baseplateSolid(cad, plan);
+  const compartments = gridfinityCompartmentPieces(part);
+  // A bin with dividers has its scoops in its compartments.
+  const solid = plan.type === "bin" ? binSolid(cad, plan, compartments ? null : scoopPieces, compartments) : baseplateSolid(cad, plan);
   if (!cad.isValid(solid) || !(cad.getVolume(solid) > 0)) throw new Error("The Gridfinity body is not a valid solid");
   const standing = cad.transform(solid, Z_TO_Y_UP);
+  if (compartments) return labelledCompartments(cad, standing, compartments);
   const pieces = gridfinityLabelPieces(part);
   if (!pieces) return standing;
   const labelled = oneSolid(cad, cad.fuseAll([standing, ...labelSolids(cad, pieces)]), "bin with label shelves");

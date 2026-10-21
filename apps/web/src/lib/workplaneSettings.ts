@@ -54,6 +54,7 @@ export const DEFAULT_WORKPLANE_WORKSPACE: WorkplaneWorkspaceSettings = {
   gridLinesGrow: true,
   edgeLines: false,
   edgeColor: DEFAULT_EDGE_LINE_COLOR,
+  strongHoles: false,
   showShadows: true,
   cameraInertia: true,
   fastMode: false,
@@ -93,8 +94,6 @@ const ZOOM_SPEED_STEPS_TO_FAST = 9;
 const ZOOM_SPEED_FAST_TO_SLOW = 20;
 /** Each slider step changes the rate by this factor, in the first ten steps and above them. */
 const ZOOM_SPEED_STEP = ZOOM_SPEED_FAST_TO_SLOW ** (1 / ZOOM_SPEED_STEPS_TO_FAST);
-/** The buttons and keys +/- stop at this slider position: above it only the wheel gets faster. */
-const ZOOM_BUTTON_SLIDER_MAX = 10;
 // OrbitControls.zoomSpeed at the default slider position. The old mapping was
 // 0.28 + slider * 0.09, which left the fast end only about three times the slow end.
 export const DEFAULT_ORBIT_ZOOM_SPEED = 0.73;
@@ -114,10 +113,20 @@ export function orbitControlsZoomSpeed(slider: number): number {
   return slowest * ZOOM_SPEED_STEP ** (position - ZOOM_SPEED_SLIDER_MIN);
 }
 
-/** Raises a fixed distance multiplier by the slider's rate, so buttons match the wheel (up to 10, see ZOOM_BUTTON_SLIDER_MAX). */
-export function zoomDistanceScale(step: number, slider: number): number {
-  const position = Number.isFinite(slider) ? Math.min(slider, ZOOM_BUTTON_SLIDER_MAX) : slider;
-  return step ** (orbitControlsZoomSpeed(position) / DEFAULT_ORBIT_ZOOM_SPEED);
+/**
+ * The slider position the buttons and keys +/- always step at. They do not follow the slider:
+ * a trackpad wants it high, and there a single step jumped too far. At the default position a
+ * step is the button's own multiplier, as it was for anyone who never moved the slider.
+ */
+const ZOOM_BUTTON_SLIDER_POSITION = DEFAULT_WORKPLANE_WORKSPACE.zoomSpeed;
+
+/** The distance multipliers of one zoom step, shared by the toolbar buttons and the keys +/-. */
+export const ZOOM_STEP_IN = 0.72;
+export const ZOOM_STEP_OUT = 1.28;
+
+/** Raises a fixed distance multiplier by the rate at ZOOM_BUTTON_SLIDER_POSITION. */
+export function zoomDistanceScale(step: number): number {
+  return step ** (orbitControlsZoomSpeed(ZOOM_BUTTON_SLIDER_POSITION) / DEFAULT_ORBIT_ZOOM_SPEED);
 }
 
 const METRIC_SNAP_GRIDS: GridSize[] = ["Off", "0.1 mm", "0.25 mm", "0.5 mm", "1.0 mm", "2.0 mm", "5.0 mm", "Brick"];
@@ -397,6 +406,9 @@ export function normalizeShapeCustomizations(value: unknown, fallback: ShapeCust
       entry.gridfinityScoopRight = typeof source.gridfinityScoopRight === "boolean" ? source.gridfinityScoopRight : fallbackEntry?.gridfinityScoopRight;
       entry.gridfinityScoopRadius = optionalShapeNumber(source.gridfinityScoopRadius, fallbackEntry?.gridfinityScoopRadius, 0, MAX_CUSTOM_SHAPE_DIMENSION);
       entry.gridfinityFloorHeight = optionalShapeNumber(source.gridfinityFloorHeight, fallbackEntry?.gridfinityFloorHeight, 0, MAX_CUSTOM_SHAPE_DIMENSION);
+      entry.gridfinityCompartmentsX = optionalShapeNumber(source.gridfinityCompartmentsX, fallbackEntry?.gridfinityCompartmentsX, 1, MAX_CUSTOM_SHAPE_DIMENSION, true);
+      entry.gridfinityCompartmentsZ = optionalShapeNumber(source.gridfinityCompartmentsZ, fallbackEntry?.gridfinityCompartmentsZ, 1, MAX_CUSTOM_SHAPE_DIMENSION, true);
+      entry.gridfinityDividerThickness = optionalShapeNumber(source.gridfinityDividerThickness, fallbackEntry?.gridfinityDividerThickness, 0, MAX_CUSTOM_SHAPE_DIMENSION);
     }
     if (kind === "knurl") {
       entry.knurlPattern = source.knurlPattern === "straight" || source.knurlPattern === "diamond" || source.knurlPattern === "round" ? source.knurlPattern : fallbackEntry?.knurlPattern;
@@ -666,6 +678,7 @@ export function normalizeWorkspaceSettings(value: unknown, fallback: WorkplaneWo
     gridLinesGrow: booleanOrDefault(candidate.gridLinesGrow, fallback.gridLinesGrow),
     edgeLines: booleanOrDefault(candidate.edgeLines, fallback.edgeLines),
     edgeColor: colorOrDefault(candidate.edgeColor, fallback.edgeColor),
+    strongHoles: booleanOrDefault(candidate.strongHoles, fallback.strongHoles),
     showShadows: booleanOrDefault(candidate.showShadows, fallback.showShadows),
     cameraInertia: booleanOrDefault(candidate.cameraInertia, fallback.cameraInertia),
     fastMode: booleanOrDefault(candidate.fastMode, fallback.fastMode),

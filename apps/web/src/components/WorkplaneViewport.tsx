@@ -4,8 +4,9 @@ import { markEscapeHandled } from "@/lib/escapeHandled";
 import { ArrowDownToLine, Check, ChevronLeft, ChevronRight, Crosshair, Cuboid, Download, Eye, EyeOff, FlipHorizontal, GripVertical, Home, Layers, Minus, MousePointer2, PanelsTopLeft, Plus, Rotate3d, RotateCcw, Ruler, RulerDimensionLine, Slice, Spline, Trash2, X } from "lucide-react";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type Dispatch, type DragEvent, type MouseEvent as ReactMouseEvent, type MutableRefObject, type PointerEvent as ReactPointerEvent, type ReactNode, type SetStateAction, type WheelEvent as ReactWheelEvent } from "react";
 import { objectSnapOffset, shiftSnapBox, type ObjectSnapGuide, type SnapBox } from "@/lib/objectSnap";
+import { dragReach } from "@/lib/dragReach";
 import { useMovablePanel, type MovablePanelOptions } from "@/lib/useMovablePanel";
-import { computeSectionPlaneVector, DEFAULT_SECTION_SETTINGS, getSectionBounds, SECTION_AXES_SHOWN, sectionAxisLetter, sectionFineWindow, sectionPlacementWorkplane, type SectionPlaneAxis, type SectionPlaneSettings } from "@/lib/sectionView";
+import { computeSectionPlaneVector, DEFAULT_SECTION_SETTINGS, getSectionBounds, SECTION_AXES_SHOWN, sectionAxisLetter, sectionAxisVector, sectionFineWindow, sectionFrameFromView, sectionFrameFromWorkplane, sectionPlacementWorkplane, sectionPointFromFrame, sectionPointToFrame, type SectionFrame, type SectionOrientation, type SectionPlaneAxis, type SectionPlaneSettings } from "@/lib/sectionView";
 import { projectSectionPoint, type SectionBody, type SectionLoop, type SectionPoint } from "@/lib/sectionSvg";
 import { sectionCapMesh } from "@/lib/sectionCaps";
 import { circleOfLoop, sectionMeasurement, sectionPointToWorld, snapSectionPoint, type SectionSnap } from "@/lib/sectionMeasure";
@@ -14,6 +15,7 @@ import { acceleratedRaycast, computeBoundsTree, disposeBoundsTree } from "three-
 import { groupShowsPartColors } from "@/lib/groupColors";
 import { triangleTouchesRect, type ScreenRect } from "@/lib/screenRectHit";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+import { leftButtonCameraAction } from "@/lib/cameraMouseButtons";
 import { RoundedBoxGeometry } from "three/examples/jsm/geometries/RoundedBoxGeometry.js";
 import { LineMaterial } from "three/examples/jsm/lines/LineMaterial.js";
 import { LineSegments2 } from "three/examples/jsm/lines/LineSegments2.js";
@@ -74,10 +76,11 @@ import { wheelBaseStep, wheelNextValue } from "@/lib/wheelValueStep";
 import { createLatestRunner, type LatestRunner } from "@/lib/latestRunner";
 import { manifoldRevision, onManifoldReady } from "@/lib/manifoldHandle";
 import { customFontRevision, onCustomFontsChanged } from "@/lib/textFonts";
-import { readDesignView, writeDesignView } from "@/lib/designView";
+import { readSavedViews, SAVED_VIEW_KEYS, savedViewForKey } from "@/lib/designView";
+import { CAMERA_MAX_DISTANCE, fitCameraDepthRange, rememberCameraView, useDesignViews } from "@/components/workplane/cameraViews";
 import { DIMENSION_FORMULA_FIELDS, formulaMatchesMillimeters, formulaToRemember, withFieldFormula } from "@/lib/fieldFormulas";
 import { displayToMillimeters, formatLengthMm, lengthDisplayUnit, millimetersToDisplay, parseLengthMm, parseMeasurementInput, resolveLengthMm, setLengthUnit } from "@/lib/measurementUnits";
-import { computeCornerRulerRelativeCoordinates, cornerRulerAxisModes, cornerRulerFrameForWorkplane, cornerRulerShiftVector, pointAlongRuler, rotateCornerRulerFrame, rulerDimensionMatch, rulerTicks, toggledCornerRulerAxis, toggledCornerRulerMode, type CornerRulerAxis, type CornerRulerMode, type RulerDimensionField } from "@/lib/rulerDimensions";
+import { computeCornerRulerRelativeCoordinates, cornerRulerAxisModes, cornerRulerFrameForWorkplane, cornerRulerShiftVector, pointAlongRuler, rotateCornerRulerFrame, rulerDimensionMatch, rulerTicks, toggledCornerRulerAxis, toggledCornerRulerMode, type CornerRulerAxis, type RulerDimensionField } from "@/lib/rulerDimensions";
 import { createMoveDimensionOverlay, type MoveDimensionAxis, type MoveDimensionOverlayData } from "@/lib/moveDimensionLines";
 import { computeOriginAxisDistance, createOriginDimensionOverlay, type OriginDimensionOverlayData } from "@/lib/originDimensionLines";
 import {
@@ -107,7 +110,7 @@ import { displayYTurn, insideZ } from "@/lib/displayAxes";
 import { positionsForTwist, twistBandCount } from "@/lib/heightSlices";
 import { toCreasedNormals } from "three/examples/jsm/utils/BufferGeometryUtils.js";
 import { boundsInsideRect, marqueeMode } from "@/lib/marqueeSelection";
-import { canBeginShapeDrag, handleDimensionLimit, POSITION_TYPED_LIMIT, DEFAULT_SNAP_GRID, DEFAULT_WORKPLANE_WORKSPACE, effectiveViewSettings, viewPixelRatio, normalizeSnapGrid, normalizeWorkspaceSettings, orbitControlsZoomSpeed, readWorkspaceDefault, saveShapeDefaultsForNewDesigns, saveWorkspaceDefault, snapGridForUnits, snapGridStep as snapStep, workplaneSettingsFingerprint, workspaceForUnits, workspaceHydrationSyncDecision, zoomDistanceScale } from "@/lib/workplaneSettings";
+import { canBeginShapeDrag, handleDimensionLimit, POSITION_TYPED_LIMIT, DEFAULT_SNAP_GRID, DEFAULT_WORKPLANE_WORKSPACE, effectiveViewSettings, viewPixelRatio, normalizeSnapGrid, normalizeWorkspaceSettings, orbitControlsZoomSpeed, readWorkspaceDefault, saveShapeDefaultsForNewDesigns, saveWorkspaceDefault, snapGridForUnits, snapGridStep as snapStep, workplaneSettingsFingerprint, workspaceForUnits, workspaceHydrationSyncDecision, zoomDistanceScale, ZOOM_STEP_IN, ZOOM_STEP_OUT } from "@/lib/workplaneSettings";
 import { withShapeDefaults } from "@/lib/shapeDefaults";
 import { workplaneGridBandWidths, AXIS_ARROW_COLORS, axisArrowLayout, DEFAULT_EDGE_LINE_COLOR, fillLightPosition, keyLightPosition, sceneLightLevels, shadowBlurRadius, workplaneGridLayout, workplaneGridLines, workplaneGridPalette, workplaneLabelLayout, workplaneThemePalette, WORKPLANE_LABEL_ASPECT, WORKPLANE_LINE_ELEVATION, type WorkplaneGridLayout } from "@/lib/workplaneGrid";
 import { cleanNearZero, deformsAboutOrigin, cleanRotationDegrees, isNonSolidShapeKind, mirroredAxisCount, mirrorSign, preservesEdgeTreatmentSize, proportionalResizeScale, resizedImportedCoordinates, resizedImportedMeshPositions, resizedShapeSize, shapeDepth, shapeExtrudeDeformAt, shapeHasExtrudeDeform, shapeHasShapeDeform, shapeHasTaper, shapeSupportsTaper, shapeTaperDimensions, shapeTaperScaleAt, shapeWidth, shapeWithParametricSource } from "@/lib/workplaneShapes";
@@ -163,7 +166,7 @@ import { orbitViewBy, panViewBy } from "@/lib/viewArrowKeys";
 import { useViewportKeyboardHooks } from "@/components/workplane/viewportKeyboard";
 import { aimPickRay, firstShapeHit, pickLayFlatFace, pickRotationPivot, pickShapeAt, pickShapeIdAt, pointerRayFor, rayPointOnRotationPlane, RENDER_LAYER_SHAPES, splitAxisParameter, usePickOnlyPointer, type LayFlatPick, type PickOnlySelection } from "@/components/workplane/viewportPicking";
 export type { LayFlatPick } from "@/components/workplane/viewportPicking";
-import { RENDER_LAYER_HELPERS, sharedShapeGeometryCache, sharedEdgesGeometryCache, sharedShapeMaterialCache, type PointCardOffset, type ShapeRenderRecord, type ThreeState, type MoveDimensionSession, type NoteOverlayState, type TapePoint, type TapeAttachment, type TapeEdgeAttachment, type TapeModel, type TapeOverlayState, type TapeCandidate, type RotationHandleSide, type RotationHandleSides, type DragItem, quaternionForShape, projectToScreen, syncMoveDimensionWorldLines, syncTransformGuideWorldLines, tapeShapeDimensions, tapePointWorld, tapeEdgeWorldPoints, tapeSegmentWorldPoints, syncTapeOverlay, syncNoteOverlay, NoteOverlay, TapeOverlay, type RulerDimensionOverlayItem, type RulerDimensionOverlayState, syncRulerDimensionOverlay, RulerDimensionOverlay, type CornerRulerInstance, type CornerRulerOverlayState, syncCornerRulerToolOverlay, CornerRulerToolOverlay, syncOriginDimensionWorldLines, shapeCenter, shapeLocalExtents, projectShapeExtent, projectShapesExtent, type OriginDimensionFrame, setObjectRenderLayer, freezeStaticObjectMatrices, formatMeasure, findShapeObject, trimSharedShapeGeometryCache, releaseSharedShapeGeometry, trimSharedShapeMaterialCache, releaseSharedShapeMaterials, disposeMaterialResource, disposeChildren, disposeObject } from "@/components/workplane/ViewportOverlays";
+import { RENDER_LAYER_HELPERS, sharedOverlayLineMaterial, sharedShapeGeometryCache, sharedEdgesGeometryCache, sharedShapeMaterialCache, type PointCardOffset, type ShapeRenderRecord, type ThreeState, type MoveDimensionSession, type NoteOverlayState, type TapePoint, type TapeAttachment, type TapeEdgeAttachment, type TapeModel, type TapeOverlayState, type TapeCandidate, type RotationHandleSide, type RotationHandleSides, type DragItem, quaternionForShape, projectToScreen, syncMoveDimensionWorldLines, syncTransformGuideWorldLines, tapeShapeDimensions, tapePointWorld, tapeEdgeWorldPoints, tapeSegmentWorldPoints, syncTapeOverlay, syncNoteOverlay, NoteOverlay, TapeOverlay, type RulerDimensionOverlayItem, type RulerDimensionOverlayState, syncRulerDimensionOverlay, RulerDimensionOverlay, type CornerRulerInstance, type CornerRulerOverlayState, syncCornerRulerToolOverlay, CornerRulerToolOverlay, syncOriginDimensionWorldLines, shapeCenter, shapeLocalExtents, projectShapeExtent, projectShapesExtent, type OriginDimensionFrame, setObjectRenderLayer, freezeStaticObjectMatrices, formatMeasure, findShapeObject, trimSharedShapeGeometryCache, releaseSharedShapeGeometry, trimSharedShapeMaterialCache, releaseSharedShapeMaterials, disposeMaterialResource, disposeChildren, disposeObject } from "@/components/workplane/ViewportOverlays";
 
 const WORKPLANE_WIDTH = 200;
 const WORKPLANE_DEPTH = 140;
@@ -178,9 +181,8 @@ const CORNER_RULER_DEFAULT_ARM_X = 100;
 const CORNER_RULER_DEFAULT_ARM_Z = 80;
 const DEFAULT_WORKSPACE = DEFAULT_WORKPLANE_WORKSPACE;
 const CAMERA_FOV = 38;
-/** How close the camera may come to what it looks at, and how far it may back off, in mm. */
+/** How close the camera may come to what it looks at, in mm; how far it may back off is in cameraViews. */
 const CAMERA_MIN_DISTANCE = 3;
-const CAMERA_MAX_DISTANCE = 9000;
 
 /**
  * The normal view zooms towards its pivot and stops at the closest distance
@@ -236,35 +238,6 @@ function orthographicZoomRange(camera: THREE.OrthographicCamera) {
   return { min: frameHalfHeight / (CAMERA_MAX_DISTANCE * tanHalf), max: frameHalfHeight / (CAMERA_MIN_DISTANCE * tanHalf) };
 }
 
-/**
- * Near and far planes that follow the distance: up close a near plane of
- * 0.1 mm would cut into a 3 mm view, far out a fixed one would leave the
- * depth buffer too coarse and faces would flicker into each other.
- *
- * The flat view draws the same picture wherever the camera stands on its line
- * of sight, but the camera stays where the standard view (F) or the switch
- * left it, often closer than the parts in front of the pivot: tilted towards
- * the front, everything nearer than the camera was cut off. Its depth range
- * reaches behind the camera as far as in front, so nothing in the picture is.
- */
-function fitCameraDepthRange(camera: THREE.Camera, target: THREE.Vector3) {
-  if (camera instanceof THREE.OrthographicCamera) {
-    const far = camera.position.distanceTo(target) + CAMERA_MAX_DISTANCE;
-    if (camera.near === -CAMERA_MAX_DISTANCE && Math.abs(camera.far - far) <= camera.far * 0.05) return;
-    camera.near = -CAMERA_MAX_DISTANCE;
-    camera.far = far;
-    camera.updateProjectionMatrix();
-    return;
-  }
-  if (!(camera instanceof THREE.PerspectiveCamera)) return;
-  const distance = camera.position.distanceTo(target);
-  const near = clamp(distance / 2000, 0.01, 5);
-  const far = Math.max(6000, distance * 2 + 3000);
-  if (Math.abs(camera.near - near) <= camera.near * 0.05 && Math.abs(camera.far - far) <= camera.far * 0.05) return;
-  camera.near = near;
-  camera.far = far;
-  camera.updateProjectionMatrix();
-}
 const CAMERA_HOME = new THREE.Vector3(118, 96, 118);
 const CAMERA_TARGET = new THREE.Vector3(0, 0, 0);
 const MIN_SHAPE_SIZE = 0.01;
@@ -325,6 +298,17 @@ let edgeLineStyle = { enabled: false, color: DEFAULT_EDGE_LINE_COLOR };
 function setEdgeLineStyle(enabled: boolean, color: string) {
   const changed = edgeLineStyle.enabled !== enabled || (enabled && edgeLineStyle.color !== color);
   edgeLineStyle = { enabled, color };
+  return changed;
+}
+
+/** "Show holes more clearly" (#662): darker, denser holes with a line round them, handed over like the edge lines. */
+let strongHoles = false;
+const STRONG_HOLE_COLOR = "#5b6670";
+const STRONG_HOLE_EDGE_COLOR = "#1f262c";
+
+function setStrongHoles(enabled: boolean) {
+  const changed = strongHoles !== enabled;
+  strongHoles = enabled;
   return changed;
 }
 const NORMAL_IMPORTED_SELECTION_EDGE_ANGLE = 60;
@@ -401,6 +385,8 @@ type WorkplaneViewportProps = {
   /** Several parts selected (#183): solid or hole, a colour and locking for all of them. */
   onSelectionHole?: (hole: boolean) => void;
   onSelectionColor?: (color: string) => void;
+  /** Changes to several selected shapes in one step - "Fit module" for two gears (#645). */
+  onSelectionUpdateShapes?: (changes: readonly { id: string; patch: Partial<WorkplaneShape> }[], message?: string) => void;
   onSelectionLock?: () => void;
   onSelectionHide?: () => void;
   /** Wraps the selected body around a cylinder of this diameter (#106). */
@@ -458,6 +444,8 @@ type WorkplaneViewportProps = {
   /** The design on screen, null behind the overview. The viewport outlives a design, so its tools reset when this changes. */
   projectId?: string | null;
   onWorkplaneModeChange: (active: boolean) => void;
+  /** A short message for the editor's notice line, such as a view saved under 7. */
+  onNotice?: (message: string) => void;
   modifierActive?: boolean;
   modifierPreviewActive?: boolean;
   modifierEdges?: CadModifierEdge[];
@@ -472,11 +460,11 @@ type WorkplaneViewportProps = {
   resolvedTheme?: ResolvedAppTheme;
   onThemePreferenceChange?: (preference: AppThemePreference) => void;
   /** Der aktuelle Schnitt als SVG: rechnet der Editor, aus denselben Koerpern wie der Export. */
-  onExportSectionSvg?: (axis: SectionPlaneAxis, offset: number) => void;
+  onExportSectionSvg?: (axis: SectionPlaneAxis, offset: number, frame: SectionFrame | null) => void;
   /** The cut's outlines, from the same bodies as the SVG - what section measuring snaps to. */
-  onSectionContours?: (axis: SectionPlaneAxis, offset: number) => Promise<SectionLoop[]>;
+  onSectionContours?: (axis: SectionPlaneAxis, offset: number, frame: SectionFrame | null) => Promise<SectionLoop[]>;
   /** The bodies of the cut with their colours, to fill the cut face of the section view (#516). */
-  onSectionBodies?: (axis: SectionPlaneAxis, offset: number) => Promise<SectionBody[]>;
+  onSectionBodies?: (axis: SectionPlaneAxis, offset: number, frame: SectionFrame | null) => Promise<SectionBody[]>;
 };
 
 type WorkspaceSettings = WorkplaneWorkspaceSettings;
@@ -625,6 +613,8 @@ declare global {
     layerlingSectionView?: (patch: Partial<SectionPlaneSettings> & { center?: boolean }) => { settings: SectionPlaneSettings; bounds: { min: number; max: number; center: number } };
     /** "Hide workplane" in the camera bar for MCP: sets it when given, returns whether the plate is shown. */
     layerlingWorkplaneDisplay?: (visible?: boolean) => { visible: boolean };
+    /** The four saved views (keys 7, 8, 9, 0) for MCP: saves or shows one when asked, returns which keys hold a view. */
+    layerlingSavedViews?: (request?: { save?: number; show?: number }) => { keys: { key: string; saved: boolean }[]; shown?: boolean };
   }
 }
 
@@ -633,7 +623,10 @@ type DragState = {
   offsetX: number;
   offsetZ: number;
   planeY: number;
+  /** The workplane lifted to where the pointer took hold of the body (dragWorkplaneAtGrab). */
   workplane: PlacementWorkplane;
+  /** Height of the workplane itself, where the snap guides are drawn. */
+  guideY: number;
   startPoint: PlacementPoint;
   pointerId: number;
   primaryStartX: number;
@@ -787,9 +780,6 @@ function snapDimension(value: number, step: number, min = MIN_SHAPE_SIZE, max = 
   const effectiveMin = step > 0 ? Math.max(min, Math.min(step, max)) : min;
   return clamp(snapped, effectiveMin, max);
 }
-
-/** Wie weit ein gezogenes Teil ueber den Plattenrand hinaus darf, als Anteil der Plattengroesse je Seite. */
-const PLATE_DRAG_REACH = 1;
 
 function snapPositionValue(value: number, step: number, min: number, max: number) {
   return clamp(step > 0 ? snapValue(value, step) : value, min, max);
@@ -1049,8 +1039,14 @@ function tapeShapeTopologyKey(shape: WorkplaneShape): string {
     gridfinityScoopRight: shape.gridfinityScoopRight,
     gridfinityScoopRadius: shape.gridfinityScoopRadius,
     gridfinityFloorHeight: shape.gridfinityFloorHeight,
-    // Label shelves and finger scoops are joined by Manifold; until it has loaded the bin is drawn without them (#455).
-    labelKernel: shape.gridfinityLabelBack || shape.gridfinityLabelFront || shape.gridfinityLabelLeft || shape.gridfinityLabelRight || shape.gridfinityScoopBack || shape.gridfinityScoopFront || shape.gridfinityScoopLeft || shape.gridfinityScoopRight ? manifoldRevision() : undefined,
+    gridfinityCompartmentsX: shape.gridfinityCompartmentsX,
+    gridfinityCompartmentsZ: shape.gridfinityCompartmentsZ,
+    gridfinityDividerThickness: shape.gridfinityDividerThickness,
+    gridfinityDividerPositionsX: shape.gridfinityDividerPositionsX,
+    gridfinityDividerPositionsZ: shape.gridfinityDividerPositionsZ,
+    gridfinityCompartmentLabels: shape.gridfinityCompartmentLabels,
+    // Label shelves, finger scoops and dividers are joined by Manifold; until it has loaded the bin is drawn without them (#455, #554).
+    labelKernel: shape.gridfinityLabelBack || shape.gridfinityLabelFront || shape.gridfinityLabelLeft || shape.gridfinityLabelRight || shape.gridfinityScoopBack || shape.gridfinityScoopFront || shape.gridfinityScoopLeft || shape.gridfinityScoopRight || (shape.gridfinityCompartmentsX ?? 1) > 1 || (shape.gridfinityCompartmentsZ ?? 1) > 1 ? manifoldRevision() : undefined,
     knurlPattern: shape.knurlPattern,
     knurlCount: shape.knurlCount,
     knurlDepth: shape.knurlDepth,
@@ -1154,7 +1150,7 @@ function shapeMaterialSignature(shape: WorkplaneShape): string {
   return JSON.stringify({
     edgeLines: edgeLineStyle.enabled ? edgeLineStyle.color : "",
     color: shape.color,
-    hole: Boolean(shape.hole),
+    hole: shape.hole ? (strongHoles ? "strong" : true) : false,
     transparent: Boolean(shape.transparent),
     multicolor: shape.groupedShapes?.length ? groupShowsPartColors(shape) : undefined,
     imagePlate: shapeResourceId(shape.imagePlate),
@@ -1340,8 +1336,14 @@ function shapeGeometrySignature(shape: WorkplaneShape): string {
     gridfinityScoopRight: shape.gridfinityScoopRight,
     gridfinityScoopRadius: shape.gridfinityScoopRadius,
     gridfinityFloorHeight: shape.gridfinityFloorHeight,
-    // Label shelves and finger scoops are joined by Manifold; until it has loaded the bin is drawn without them (#455).
-    labelKernel: shape.gridfinityLabelBack || shape.gridfinityLabelFront || shape.gridfinityLabelLeft || shape.gridfinityLabelRight || shape.gridfinityScoopBack || shape.gridfinityScoopFront || shape.gridfinityScoopLeft || shape.gridfinityScoopRight ? manifoldRevision() : undefined,
+    gridfinityCompartmentsX: shape.gridfinityCompartmentsX,
+    gridfinityCompartmentsZ: shape.gridfinityCompartmentsZ,
+    gridfinityDividerThickness: shape.gridfinityDividerThickness,
+    gridfinityDividerPositionsX: shape.gridfinityDividerPositionsX,
+    gridfinityDividerPositionsZ: shape.gridfinityDividerPositionsZ,
+    gridfinityCompartmentLabels: shape.gridfinityCompartmentLabels,
+    // Label shelves, finger scoops and dividers are joined by Manifold; until it has loaded the bin is drawn without them (#455, #554).
+    labelKernel: shape.gridfinityLabelBack || shape.gridfinityLabelFront || shape.gridfinityLabelLeft || shape.gridfinityLabelRight || shape.gridfinityScoopBack || shape.gridfinityScoopFront || shape.gridfinityScoopLeft || shape.gridfinityScoopRight || (shape.gridfinityCompartmentsX ?? 1) > 1 || (shape.gridfinityCompartmentsZ ?? 1) > 1 ? manifoldRevision() : undefined,
     knurlPattern: shape.knurlPattern,
     knurlCount: shape.knurlCount,
     knurlDepth: shape.knurlDepth,
@@ -2025,13 +2027,15 @@ function pickModifierEdgeFromScreen(state: ThreeState, edges: CadModifierEdge[],
 type SectionMeasureModel = {
   axis: SectionPlaneAxis;
   offset: number;
+  /** The frame of a turned plane (#644); the points are in its terms. */
+  frame: SectionFrame | null;
   loops: SectionLoop[];
   a: SectionPoint | null;
   b: SectionPoint | null;
   hover: SectionSnap | null;
 };
 
-const EMPTY_SECTION_MEASURE: SectionMeasureModel = { axis: "x", offset: 0, loops: [], a: null, b: null, hover: null };
+const EMPTY_SECTION_MEASURE: SectionMeasureModel = { axis: "x", offset: 0, frame: null, loops: [], a: null, b: null, hover: null };
 
 type SectionMeasureOverlayState = {
   signature: string;
@@ -2077,7 +2081,7 @@ function syncSectionMeasureOverlay(
     return;
   }
   const toScreen = (point: SectionPoint) => {
-    const [x, y, z] = sectionPointToWorld(point, model.axis, model.offset);
+    const [x, y, z] = sectionPointFromFrame(sectionPointToWorld(point, model.axis, model.offset), model.frame);
     return projectToScreen(new THREE.Vector3(x, y, z), state);
   };
   const outlines = model.loops.map((loop) => {
@@ -2188,6 +2192,24 @@ const OBJECT_SNAP_PIXELS = 8;
 function worldSnapBox(shape: WorkplaneShape): SnapBox {
   const { min, max } = projectShapeExtent(shape, WORLD_X_AXIS, WORLD_Y_AXIS, WORLD_Z_AXIS, new THREE.Vector3());
   return { minX: min.x, maxX: max.x, minZ: min.z, maxZ: max.z };
+}
+
+/**
+ * The plane a body is dragged on: the workplane, lifted along its normal to the
+ * point where the pointer took hold of the body, so that point stays under the
+ * pointer. On the workplane itself, a press high up on a tall or tilted body
+ * met the plate far behind it, and the move ran into the drag limit (#673).
+ */
+function dragWorkplaneAtGrab(state: ThreeState, clientX: number, clientY: number, shapeId: string, workplane: PlacementWorkplane): PlacementWorkplane {
+  aimPickRay(state, clientX, clientY, RENDER_LAYER_SHAPES);
+  const hit = firstShapeHit(state);
+  if (!hit || hit.object.userData.shapeId !== shapeId) return workplane;
+  const normal = new THREE.Vector3(workplane.normal.x, workplane.normal.y, workplane.normal.z);
+  const origin = new THREE.Vector3(workplane.origin.x, workplane.origin.y, workplane.origin.z);
+  const lift = normal.dot(hit.point.clone().sub(origin));
+  if (!(Math.abs(lift) > 1e-6)) return workplane;
+  origin.addScaledVector(normal, lift);
+  return { ...workplane, origin: { x: origin.x, y: origin.y, z: origin.z } };
 }
 
 function unionSnapBox(boxes: SnapBox[]): SnapBox | null {
@@ -3333,6 +3355,7 @@ export function WorkplaneViewport({
   onSeparateParts,
   onSelectionHole,
   onSelectionColor,
+  onSelectionUpdateShapes,
   onSelectionLock,
   onSelectionHide,
   onWrapAroundCylinder,
@@ -3370,6 +3393,7 @@ export function WorkplaneViewport({
   projectName = "",
   projectId = null,
   onWorkplaneModeChange,
+  onNotice,
   modifierActive = false,
   modifierPreviewActive = false,
   modifierEdges = [],
@@ -3485,7 +3509,7 @@ export function WorkplaneViewport({
   const sectionWheelShownRef = useRef<string | null>(null);
   useWheelField(sectionOffsetInputRef, sectionOffsetDraft !== null, ({ direction, keys }) => {
     const settings = sectionSettingsRef.current;
-    const bounds = getSectionBounds(shapesRef.current, settings.axis, workspaceRef.current.width, workspaceRef.current.depth);
+    const bounds = getSectionBounds(shapesRef.current, settings.axis, workspaceRef.current.width, workspaceRef.current.depth, settings.frame ?? null);
     const sign = settings.axis === "z" ? -1 : 1;
     const display = workspaceRef.current;
     const parsed = parseMeasurementInput(sectionOffsetDraftRef.current ?? "");
@@ -3670,7 +3694,6 @@ export function WorkplaneViewport({
   const projectIdRef = useRef(projectId);
   projectIdRef.current = projectId;
   const designViewRestoredRef = useRef(false);
-  const designViewReadyRef = useRef(false);
   const workplaneModeRef = useRef(workplaneMode);
   const splitActiveRef = useRef(splitActive);
   const splitPlaneRef = useRef(splitPlane);
@@ -4246,10 +4269,11 @@ export function WorkplaneViewport({
 
   useEffect(() => {
     const { axis, offset } = sectionSettings;
+    const frame = sectionSettings.frame ?? null;
     const current = sectionMeasureRef.current;
-    if (current.axis !== axis || current.offset !== offset) {
+    if (current.axis !== axis || current.offset !== offset || current.frame !== frame) {
       // A measurement belongs to its plane.
-      sectionMeasureRef.current = { ...EMPTY_SECTION_MEASURE, axis, offset, loops: [] };
+      sectionMeasureRef.current = { ...EMPTY_SECTION_MEASURE, axis, offset, frame, loops: [] };
       setSectionMeasureResult(null);
     }
     if (!sectionMeasureMode || !sectionSettings.enabled || !onSectionContours) {
@@ -4258,11 +4282,11 @@ export function WorkplaneViewport({
     }
     let cancelled = false;
     const timer = window.setTimeout(() => {
-      onSectionContours(axis, offset)
+      onSectionContours(axis, offset, frame)
         .then((loops) => {
           if (cancelled) return;
           const model = sectionMeasureRef.current;
-          if (model.axis !== axis || model.offset !== offset) return;
+          if (model.axis !== axis || model.offset !== offset || model.frame !== frame) return;
           sectionMeasureRef.current = { ...model, loops };
           if (threeRef.current) threeRef.current.needsRender = true;
         })
@@ -4285,7 +4309,7 @@ export function WorkplaneViewport({
   // The face is cut for the newest plane, one round at a time, and a round is never thrown away because the plane
   // moved on: with a delay that every move restarts, a plane that moves faster than the delay never let the face
   // be cut, and it only came back when the hand rested (#516, rondlh: "lags behind, sometimes a second").
-  type SectionCapWish = { axis: SectionPlaneAxis; offset: number; shapes: typeof shapes };
+  type SectionCapWish = { axis: SectionPlaneAxis; offset: number; frame: SectionFrame | null; shapes: typeof shapes };
   const sectionBodiesRef = useRef(onSectionBodies);
   sectionBodiesRef.current = onSectionBodies;
   const sectionCapRunnerRef = useRef<LatestRunner<SectionCapWish> | null>(null);
@@ -4294,13 +4318,13 @@ export function WorkplaneViewport({
       async (wish) => {
         const makeBodies = sectionBodiesRef.current;
         if (!makeBodies) return;
-        const bodies = await makeBodies(wish.axis, wish.offset);
+        const bodies = await makeBodies(wish.axis, wish.offset, wish.frame);
         const current = threeRef.current;
         const now = runner.wanted();
         // The face of a design that has changed since, or of a section that is off, is not shown.
-        if (current && now && now.shapes === wish.shapes) buildSectionCaps(current, bodies, wish.axis, wish.offset);
+        if (current && now && now.shapes === wish.shapes) buildSectionCaps(current, bodies, wish.axis, wish.offset, wish.frame);
       },
-      (a, b) => a.axis === b.axis && a.offset === b.offset && a.shapes === b.shapes,
+      (a, b) => a.axis === b.axis && a.offset === b.offset && a.frame === b.frame && a.shapes === b.shapes,
     );
     sectionCapRunnerRef.current = runner;
   }
@@ -4313,8 +4337,8 @@ export function WorkplaneViewport({
       if (threeRef.current) clearSectionCaps(threeRef.current);
       return;
     }
-    runner.request({ axis: sectionSettings.axis, offset: sectionSettings.offset, shapes });
-  }, [sectionSettings.enabled, sectionSettings.axis, sectionSettings.offset, shapes, onSectionBodies]);
+    runner.request({ axis: sectionSettings.axis, offset: sectionSettings.offset, frame: sectionSettings.frame ?? null, shapes });
+  }, [sectionSettings.enabled, sectionSettings.axis, sectionSettings.offset, sectionSettings.frame, shapes, onSectionBodies]);
 
   useEffect(() => () => sectionCapRunnerRef.current?.clear(), []);
 
@@ -4445,7 +4469,8 @@ export function WorkplaneViewport({
     setMeasureUnit(workspace);
     if (threeRef.current) threeRef.current.palette = appThemePalette(themePreference);
     // Edge lines on all bodies: shapes already built have to take the setting up.
-    if (setEdgeLineStyle(effectiveViewSettings(workspace).edgeLines, workspace.edgeColor)) {
+    const holesChanged = setStrongHoles(workspace.strongHoles);
+    if (setEdgeLineStyle(effectiveViewSettings(workspace).edgeLines, workspace.edgeColor) || holesChanged) {
       rebuildShapes(threeRef.current, shapesRef.current, shapeOutlineIds(), modifierActiveRef.current, placementWorkplaneRef.current);
     }
     rebuildWorkplane(threeRef.current, workspace, resolvedTheme, workplaneHidden ? horizontalPlacementWorkplane() : placementWorkplane, projectName);
@@ -4701,8 +4726,7 @@ export function WorkplaneViewport({
     window.addEventListener("resize", state.resize);
 
     return () => {
-      // The view is taken down while a sketch is open; it comes back looking where it looked (#150).
-      rememberedCameraViews.set(projectIdRef.current ?? "", cameraViewOf(state));
+      rememberCameraView(projectIdRef.current, state);
       window.cancelAnimationFrame(state.animationId);
       window.removeEventListener("resize", state.resize);
       state.disposeInteractionListeners();
@@ -4800,55 +4824,22 @@ export function WorkplaneViewport({
     setOrthographicView(state.camera instanceof THREE.OrthographicCamera);
   }, [workspaceSettingsKey]);
 
-  // Back from the sketch view: the camera looks where it looked before (#150). A design opens the
-  // way it was left, too: its view is kept in the browser and in a saved file (#220).
-  useEffect(() => {
-    const state = threeRef.current;
-    const key = projectIdRef.current ?? "";
-    const view = rememberedCameraViews.get(key) ?? readDesignView(projectIdRef.current);
-    rememberedCameraViews.delete(key);
-    if (state && view) {
-      if ((state.camera instanceof THREE.OrthographicCamera) !== view.orthographic) toggleCameraProjection(state);
-      applyCameraView(state, view);
-      syncViewCube(state, viewCubeRef.current);
-      setOrthographicView(state.camera instanceof THREE.OrthographicCamera);
-      designViewRestoredRef.current = true;
-    }
-    // Only now may the camera's own movements be written down: before, the standard view
-    // the viewport starts in would overwrite the one the design was left in.
-    designViewReadyRef.current = true;
-    if (!state) return;
-    let timer = 0;
-    const save = () => {
-      window.clearTimeout(timer);
-      writeDesignView(projectIdRef.current, cameraViewOf(state));
-    };
-    const saveSoon = () => {
-      window.clearTimeout(timer);
-      timer = window.setTimeout(save, 500);
-    };
-    const saveWhenHidden = () => {
-      if (document.visibilityState === "hidden") save();
-    };
-    state.controls.addEventListener("change", saveSoon);
-    window.addEventListener("pagehide", save);
-    document.addEventListener("visibilitychange", saveWhenHidden);
-    return () => {
-      state.controls.removeEventListener("change", saveSoon);
-      window.removeEventListener("pagehide", save);
-      document.removeEventListener("visibilitychange", saveWhenHidden);
-      window.clearTimeout(timer);
-      // The viewport is taken down when the design is left (or a sketch opens): its view stays.
-      save();
-    };
-  }, []);
+  const { saveView, showSavedView } = useDesignViews({
+    threeRef, projectIdRef, viewCubeRef, designViewRestoredRef, orthographicView, setOrthographicView, toggleCameraProjection, syncViewCube, onNotice,
+  });
 
-  // The projection switch moves no control, so it asks for the view to be kept itself.
+  // The same keys for MCP (layerling_saved_view), through the functions the keys use.
   useEffect(() => {
-    if (!designViewReadyRef.current) return;
-    const state = threeRef.current;
-    if (state) writeDesignView(projectIdRef.current, cameraViewOf(state));
-  }, [orthographicView]);
+    window.layerlingSavedViews = (request = {}) => {
+      if (request.save !== undefined && !saveView(request.save)) throw new Error("The view is not ready yet");
+      const shown = request.show !== undefined ? showSavedView(request.show) : undefined;
+      const views = readSavedViews(projectIdRef.current);
+      return { keys: SAVED_VIEW_KEYS.map((key, slot) => ({ key, saved: Boolean(views[slot]) })), ...(shown !== undefined ? { shown } : {}) };
+    };
+    return () => {
+      delete window.layerlingSavedViews;
+    };
+  }, [saveView, showSavedView]);
 
   useEffect(() => {
     const state = threeRef.current;
@@ -4913,11 +4904,14 @@ export function WorkplaneViewport({
     const state = threeRef.current;
     const settings = sectionSettingsRef.current;
     if (!state || !settings.enabled) return null;
-    const normal = settings.axis === "x" ? new THREE.Vector3(1, 0, 0) : settings.axis === "y" ? new THREE.Vector3(0, 1, 0) : new THREE.Vector3(0, 0, 1);
-    const hit = toRawPlanePoint(clientX, clientY, new THREE.Plane(normal, -settings.offset));
+    const frame = settings.frame ?? null;
+    const direction = sectionAxisVector(settings.axis, frame);
+    const normal = new THREE.Vector3(direction.x, direction.y, direction.z);
+    const base = frame ? normal.dot(new THREE.Vector3(frame.origin.x, frame.origin.y, frame.origin.z)) : 0;
+    const hit = toRawPlanePoint(clientX, clientY, new THREE.Plane(normal, -(base + settings.offset)));
     if (!hit) return null;
-    const target = projectSectionPoint([hit.x, hit.y, hit.z], settings.axis);
-    const [nx, ny, nz] = sectionPointToWorld({ u: target.u + 1, v: target.v }, settings.axis, settings.offset);
+    const target = projectSectionPoint(sectionPointToFrame([hit.x, hit.y, hit.z], frame), settings.axis);
+    const [nx, ny, nz] = sectionPointFromFrame(sectionPointToWorld({ u: target.u + 1, v: target.v }, settings.axis, settings.offset), frame);
     const here = projectToScreen(hit, state);
     const there = projectToScreen(new THREE.Vector3(nx, ny, nz), state);
     const pixelsPerMm = Math.max(1e-6, Math.hypot(there.x - here.x, there.y - here.y));
@@ -4950,6 +4944,7 @@ export function WorkplaneViewport({
   }, [toRawPlanePoint]);
   const toPlanePoint = useCallback((clientX: number, clientY: number) => toPlanePointAtY(clientX, clientY, 0), [toPlanePointAtY]);
 
+  const dragReachCacheRef = useRef<{ shapes: readonly WorkplaneShape[]; width: number; depth: number; x: number; z: number } | null>(null);
   const toPlacementWorkplanePoint = useCallback((clientX: number, clientY: number, workplane = placementWorkplaneRef.current) => {
     const normal = new THREE.Vector3(workplane.normal.x, workplane.normal.y, workplane.normal.z);
     const origin = new THREE.Vector3(workplane.origin.x, workplane.origin.y, workplane.origin.z);
@@ -4960,12 +4955,17 @@ export function WorkplaneViewport({
     const bounds = workspaceRef.current;
     // Wie bei andere Programme darf ein Teil neben der Platte geparkt werden (Discussion #80);
     // die Grenze faengt nur den flachen Blick ab, bei dem der Strahl die Ebene weit draussen trifft.
-    const reachX = bounds.width / 2 + bounds.width * PLATE_DRAG_REACH;
-    const reachZ = bounds.depth / 2 + bounds.depth * PLATE_DRAG_REACH;
+    // Sie reicht auch um einen Entwurf, der groesser ist als die Platte (#673).
+    let cached = dragReachCacheRef.current;
+    if (!cached || cached.shapes !== shapesRef.current || cached.width !== bounds.width || cached.depth !== bounds.depth) {
+      const reach = dragReach(bounds, shapesRef.current.map(worldSnapBox));
+      cached = { shapes: shapesRef.current, width: bounds.width, depth: bounds.depth, x: reach.x, z: reach.z };
+      dragReachCacheRef.current = cached;
+    }
     return placementWorkplanePoint(
       workplane,
-      clamp(snapValue(local.x, step), -reachX, reachX),
-      clamp(snapValue(local.z, step), -reachZ, reachZ),
+      clamp(snapValue(local.x, step), -cached.x, cached.x),
+      clamp(snapValue(local.z, step), -cached.z, cached.z),
     );
   }, [toRawPlanePoint]);
 
@@ -7117,6 +7117,9 @@ export function WorkplaneViewport({
       // A second finger belongs to the camera.
       if (touchPointersRef.current.size !== 1) return;
       longPressFiredRef.current = pointerId;
+      // The press also began moving the body it landed on. The finger lifts on the menu, so that move never
+      // ends here: drop it now, or the next tap ends it and puts the body back where it was (#619).
+      cancelGestureForCameraRef.current();
       const shapeId = pickShape(x, y, "touch");
       if (shapeId && !selectedIdsRef.current.includes(shapeId)) onSelectShape(shapeId);
       onShapeContextMenu({ shapeId, clientX: x, clientY: y });
@@ -7530,7 +7533,8 @@ export function WorkplaneViewport({
       }
       const dragPlaneY = shape ? shape.elevation ?? 0 : 0;
       const activeWorkplane = placementWorkplaneRef.current;
-      const point = toPlacementWorkplanePoint(event.clientX, event.clientY, activeWorkplane);
+      const grabWorkplane = dragWorkplaneAtGrab(state, event.clientX, event.clientY, id, activeWorkplane);
+      const point = toPlacementWorkplanePoint(event.clientX, event.clientY, grabWorkplane);
       if (!shape) {
         return;
       }
@@ -7598,7 +7602,8 @@ export function WorkplaneViewport({
         offsetX: shape.x - point.x,
         offsetZ: shape.z - point.z,
         planeY: dragPlaneY,
-        workplane: activeWorkplane,
+        workplane: grabWorkplane,
+        guideY: activeWorkplane.origin.y,
         startPoint: point,
         pointerId: event.pointerId,
         primaryStartX: shape.x,
@@ -7856,7 +7861,7 @@ export function WorkplaneViewport({
             guides = objectSnapOffset(shiftSnapBox(drag.snapMoving, deltaX, deltaZ), drag.snapTargets, 1e-4).guides;
           }
         }
-        syncObjectSnapGuides(state, guides, drag.workplane.origin.y + 0.06);
+        syncObjectSnapGuides(state, guides, drag.guideY + 0.06);
       }
       const moveDimensionSession = moveDimensionSessionRef.current;
       if (moveDimensionSession) {
@@ -7987,6 +7992,8 @@ export function WorkplaneViewport({
     if (state) state.needsRender = true;
     onInteractionActiveChange?.(false);
   }, [clearMoveDimensions, onInteractionActiveChange, setMarqueeFromState]);
+  const cancelGestureForCameraRef = useRef(cancelGestureForCamera);
+  cancelGestureForCameraRef.current = cancelGestureForCamera;
 
   /**
    * Esc while the mouse button is held (#440): a move drag only previews, so its preview goes back; a handle drag
@@ -8150,6 +8157,12 @@ export function WorkplaneViewport({
       if (!drag) {
         return;
       }
+      // A move begun by another finger that never came back up here is no move of this one: letting it end
+      // would write its start places over whatever happened since, such as a body set down on a face (#619).
+      if (drag.pointerId !== event.pointerId) {
+        cancelGestureForCamera();
+        return;
+      }
 
       if (event.currentTarget.hasPointerCapture(drag.pointerId)) {
         event.currentTarget.releasePointerCapture(drag.pointerId);
@@ -8215,7 +8228,7 @@ export function WorkplaneViewport({
       }
       onInteractionActiveChange?.(false);
     },
-    [clearMoveDimensions, onDuplicateShapesMoved, onInteractionActiveChange, onSelectShape, onUpdateShape, rememberResizeAnchor, setMarqueeFromState, shapesInMarquee, suppressCornerEditAfterDrag, suppressLiftEditAfterDrag, onShapeContextMenu, pickShape],
+    [cancelGestureForCamera, clearMoveDimensions, onDuplicateShapesMoved, onInteractionActiveChange, onSelectShape, onUpdateShape, rememberResizeAnchor, setMarqueeFromState, shapesInMarquee, suppressCornerEditAfterDrag, suppressLiftEditAfterDrag, onShapeContextMenu, pickShape],
   );
 
   const handleDrop = useCallback(
@@ -8390,7 +8403,7 @@ export function WorkplaneViewport({
       return;
     }
 
-    const scaled = zoomDistanceScale(scale, workspaceRef.current.zoomSpeed);
+    const scaled = zoomDistanceScale(scale);
     if (scaled < 1) movePivotToDepthUnder(state, 0, 0);
     if (state.camera instanceof THREE.OrthographicCamera) {
       const range = orthographicZoomRange(state.camera);
@@ -8555,7 +8568,7 @@ export function WorkplaneViewport({
       if (next) {
         setTapeToolsOpen(false);
         if (!sectionSettingsRef.current.enabled) {
-          const bounds = getSectionBounds(shapesRef.current, sectionSettingsRef.current.axis, workspaceRef.current.width, workspaceRef.current.depth);
+          const bounds = getSectionBounds(shapesRef.current, sectionSettingsRef.current.axis, workspaceRef.current.width, workspaceRef.current.depth, sectionSettingsRef.current.frame ?? null);
           setSectionSettings((prev) => ({
             ...prev,
             enabled: true,
@@ -8571,7 +8584,7 @@ export function WorkplaneViewport({
     setSectionSettings((prev) => {
       const next = { ...prev, enabled };
       if (enabled && prev.offset === 0) {
-        const bounds = getSectionBounds(shapesRef.current, prev.axis, workspaceRef.current.width, workspaceRef.current.depth);
+        const bounds = getSectionBounds(shapesRef.current, prev.axis, workspaceRef.current.width, workspaceRef.current.depth, prev.frame ?? null);
         next.offset = bounds.center;
       }
       return next;
@@ -8579,7 +8592,7 @@ export function WorkplaneViewport({
   }, []);
 
   const handleSelectSectionAxis = useCallback((axis: SectionPlaneAxis) => {
-    const bounds = getSectionBounds(shapesRef.current, axis, workspaceRef.current.width, workspaceRef.current.depth);
+    const bounds = getSectionBounds(shapesRef.current, axis, workspaceRef.current.width, workspaceRef.current.depth, sectionSettingsRef.current.frame ?? null);
     setSectionSettings((prev) => ({
       ...prev,
       axis,
@@ -8602,7 +8615,7 @@ export function WorkplaneViewport({
   }, []);
 
   const handleResetSectionToCenter = useCallback(() => {
-    const bounds = getSectionBounds(shapesRef.current, sectionSettingsRef.current.axis, workspaceRef.current.width, workspaceRef.current.depth);
+    const bounds = getSectionBounds(shapesRef.current, sectionSettingsRef.current.axis, workspaceRef.current.width, workspaceRef.current.depth, sectionSettingsRef.current.frame ?? null);
     setSectionSettings((prev) => ({
       ...prev,
       offset: bounds.center,
@@ -8616,22 +8629,69 @@ export function WorkplaneViewport({
     }));
   }, []);
 
+  // What the axes are measured along (#644): the workplane's frame as it is now, or the view at this moment;
+  // null for the design's own axes, or when the view is not there yet.
+  const sectionFrameForOrientation = (orientation: SectionOrientation): SectionFrame | null => {
+    if (orientation === "workplane") return sectionFrameFromWorkplane(placementWorkplaneRef.current);
+    if (orientation !== "view") return null;
+    const state = threeRef.current;
+    if (!state) return null;
+    const forward = state.camera.getWorldDirection(new THREE.Vector3());
+    const right = new THREE.Vector3(1, 0, 0).applyQuaternion(state.camera.quaternion);
+    const { x, y, z } = state.controls.target;
+    return sectionFrameFromView({ x, y, z }, { x: forward.x, y: forward.y, z: forward.z }, { x: right.x, y: right.y, z: right.z });
+  };
+  const sectionFrameForOrientationRef = useRef(sectionFrameForOrientation);
+  sectionFrameForOrientationRef.current = sectionFrameForOrientation;
+
+  // Choosing the workplane or the view starts across its height - parallel to the workplane, or facing the
+  // screen - in the middle of the design; choosing the view again takes the view as it is now.
+  const handleSelectSectionOrientation = useCallback((wanted: SectionOrientation) => {
+    const frame = sectionFrameForOrientationRef.current(wanted);
+    const orientation: SectionOrientation = wanted !== "world" && !frame ? "world" : wanted;
+    const prev = sectionSettingsRef.current;
+    const axis: SectionPlaneAxis = orientation === "world" ? (prev.orientation ?? "world") === "world" ? prev.axis : "x" : "y";
+    const bounds = getSectionBounds(shapesRef.current, axis, workspaceRef.current.width, workspaceRef.current.depth, frame);
+    const next: SectionPlaneSettings = { ...prev, enabled: true, orientation, frame, axis, offset: bounds.center };
+    sectionSettingsRef.current = next;
+    setSectionSettings(next);
+  }, []);
+
+  // On the workplane the plane moves with it: the offset still counts from the workplane.
+  useEffect(() => {
+    const prev = sectionSettingsRef.current;
+    if (prev.orientation !== "workplane") return;
+    const frame = sectionFrameFromWorkplane(placementWorkplane);
+    if (!frame) return;
+    const next = { ...prev, frame };
+    sectionSettingsRef.current = next;
+    setSectionSettings(next);
+  }, [placementWorkplane]);
+
   // MCP: the same rules as the buttons - a new axis, switching on from the
   // start position or `center` put the plane in the middle of the design,
   // unless an offset is given.
   useEffect(() => {
     window.layerlingSectionView = (patch) => {
       const current = sectionSettingsRef.current;
-      const axis = patch.axis ?? current.axis;
-      const bounds = getSectionBounds(shapesRef.current, axis, workspaceRef.current.width, workspaceRef.current.depth);
+      const currentOrientation = current.orientation ?? "world";
+      const orientation = patch.orientation ?? currentOrientation;
+      // A new orientation takes its frame now; the view's is the view at this moment, as the button takes it.
+      const frame = orientation === currentOrientation && orientation !== "view" || orientation === "view" && patch.orientation === undefined
+        ? current.frame ?? null
+        : sectionFrameForOrientationRef.current(orientation);
+      const axis = patch.axis ?? (orientation !== currentOrientation && orientation !== "world" ? "y" : current.axis);
+      const bounds = getSectionBounds(shapesRef.current, axis, workspaceRef.current.width, workspaceRef.current.depth, frame);
       const switchingOn = patch.enabled === true && !current.enabled && current.offset === 0;
-      const recenter = patch.center === true || axis !== current.axis || switchingOn;
+      const recenter = patch.center === true || axis !== current.axis || orientation !== currentOrientation || patch.orientation === "view" || switchingOn;
       const next: SectionPlaneSettings = {
         enabled: patch.enabled ?? current.enabled,
         axis,
         offset: typeof patch.offset === "number" && Number.isFinite(patch.offset) ? patch.offset : recenter ? bounds.center : current.offset,
         flipped: patch.flipped ?? current.flipped,
         showPlane: patch.showPlane ?? current.showPlane,
+        orientation,
+        frame,
       };
       sectionSettingsRef.current = next;
       setSectionSettings(next);
@@ -8789,6 +8849,7 @@ export function WorkplaneViewport({
       const shortcutView = !event.ctrlKey && !event.metaKey && !event.altKey
         ? viewFaceForKey(event.key, event.code, event.shiftKey)
         : undefined;
+      const savedView = !event.ctrlKey && !event.metaKey && !event.altKey ? savedViewForKey(event.key, event.code, event.shiftKey) : undefined;
       // A slider keeps the focus after it was dragged, as in the split panel,
       // but only needs its own keys - the view shortcuts still apply.
       const sliderTarget = event.target instanceof HTMLInputElement && event.target.type === "range";
@@ -8831,6 +8892,10 @@ export function WorkplaneViewport({
         // With Shift, frame the selection from the new side, as Shift+F does;
         // with nothing selected focusSelection does nothing.
         if (event.shiftKey) focusSelection();
+      } else if (savedView) {
+        event.preventDefault();
+        if (savedView.save) saveView(savedView.slot);
+        else showSavedView(savedView.slot);
       } else if (key === "w") {
         event.preventDefault();
         if (!event.shiftKey || !setPlacementWorkplaneAtSelection()) {
@@ -8852,10 +8917,10 @@ export function WorkplaneViewport({
       } else if ((event.key === "+" || event.key === "=") && !event.ctrlKey && !event.metaKey && !event.altKey) {
         // With Ctrl or Cmd these are the browser's own page zoom, which the page must not swallow.
         event.preventDefault();
-        zoomCamera(0.72);
+        zoomCamera(ZOOM_STEP_IN);
       } else if ((event.key === "-" || event.key === "_") && !event.ctrlKey && !event.metaKey && !event.altKey) {
         event.preventDefault();
-        zoomCamera(1.28);
+        zoomCamera(ZOOM_STEP_OUT);
       }
     };
 
@@ -8907,10 +8972,10 @@ export function WorkplaneViewport({
             >
               <Crosshair size={24} strokeWidth={2.25} />
             </button>
-            <button className="camera-zoom-button" aria-label={t("camera.zoomIn")} aria-keyshortcuts="+" title={t("camera.shortcut", { label: t("camera.zoomIn"), keys: "+" })} onClick={() => zoomCamera(0.7)}>
+            <button className="camera-zoom-button" aria-label={t("camera.zoomIn")} aria-keyshortcuts="+" title={t("camera.shortcut", { label: t("camera.zoomIn"), keys: "+" })} onClick={() => zoomCamera(ZOOM_STEP_IN)}>
               <Plus size={28} strokeWidth={2.15} />
             </button>
-            <button className="camera-zoom-button" aria-label={t("camera.zoomOut")} aria-keyshortcuts="-" title={t("camera.shortcut", { label: t("camera.zoomOut"), keys: "−" })} onClick={() => zoomCamera(1.35)}>
+            <button className="camera-zoom-button" aria-label={t("camera.zoomOut")} aria-keyshortcuts="-" title={t("camera.shortcut", { label: t("camera.zoomOut"), keys: "−" })} onClick={() => zoomCamera(ZOOM_STEP_OUT)}>
               <Minus size={28} strokeWidth={2.15} />
             </button>
             {/* Zwei Finger zoomen und schieben von selbst. Zum Drehen fehlt die
@@ -9072,6 +9137,28 @@ export function WorkplaneViewport({
 
                   {sectionSettings.enabled ? (
                     <>
+                      {/* What X, Y and Z mean (#644): the design's axes, the workplane's, or the view's - then Z runs into the screen. */}
+                      <div className="section-popover-axis-row">
+                        <div className="section-axis-buttons section-orientation-buttons" role="radiogroup" aria-label={t("camera.sectionOrientation")}>
+                          {(["world", "workplane", "view"] as const).map((orientation) => {
+                            const active = (sectionSettings.orientation ?? "world") === orientation;
+                            const name = orientation === "world" ? "World" : orientation === "workplane" ? "Workplane" : "View";
+                            return (
+                              <button
+                                key={orientation}
+                                type="button"
+                                role="radio"
+                                aria-checked={active}
+                                className={`section-axis-btn section-orientation-btn ${active ? "active" : ""}`}
+                                onClick={() => handleSelectSectionOrientation(orientation)}
+                                title={t(`camera.sectionOrientation${name}Hint`)}
+                              >
+                                {t(`camera.sectionOrientation${name}`)}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
                       <div className="section-popover-axis-row">
                         <span className="section-label">{t("camera.sectionAxis")}</span>
                         <div className="section-axis-buttons" role="radiogroup" aria-label={t("camera.sectionAxis")}>
@@ -9103,7 +9190,7 @@ export function WorkplaneViewport({
                       </div>
 
                       {(() => {
-                        const bounds = getSectionBounds(shapes, sectionSettings.axis, workspace.width, workspace.depth);
+                        const bounds = getSectionBounds(shapes, sectionSettings.axis, workspace.width, workspace.depth, sectionSettings.frame ?? null);
                         const fine = sectionFineWindow(bounds);
                         // The Y cut counts towards the back like the position fields (#182); inside it is z.
                         const sign = sectionSettings.axis === "z" ? -1 : 1;
@@ -9252,7 +9339,7 @@ export function WorkplaneViewport({
                           <button
                             type="button"
                             className="section-action-btn"
-                            onClick={() => onExportSectionSvg?.(sectionSettings.axis, sectionSettings.offset)}
+                            onClick={() => onExportSectionSvg?.(sectionSettings.axis, sectionSettings.offset, sectionSettings.frame ?? null)}
                             title={t("camera.sectionExportSvgHint")}
                             aria-label={t("camera.sectionExportSvg")}
                           >
@@ -9558,6 +9645,7 @@ export function WorkplaneViewport({
           shapes={shapes.filter((shape) => selectedIds.includes(shape.id))}
           onSetHole={onSelectionHole}
           onSetColor={onSelectionColor}
+          onUpdateShapes={onSelectionUpdateShapes}
           onToggleLocked={onSelectionLock}
           onToggleHidden={onSelectionHide}
           onInteractionActiveChange={onInteractionActiveChange}
@@ -9836,7 +9924,8 @@ function createThreeScene(host: HTMLDivElement): ThreeState {
     if (event.pointerType !== "touch" && (event.button === 1 || event.button === 2 || (event.button === 0 && (event.ctrlKey || event.metaKey)))) {
       cameraPointers.set(event.pointerId, event);
     }
-    controls.mouseButtons.LEFT = event.button === 0 && (event.ctrlKey || event.metaKey) ? THREE.MOUSE.PAN : null;
+    // Ctrl or Cmd with the left button moves the view (#654), see leftButtonCameraAction.
+    controls.mouseButtons.LEFT = leftButtonCameraAction(event);
     controls.mouseButtons.MIDDLE = THREE.MOUSE.PAN;
     controls.mouseButtons.RIGHT = THREE.MOUSE.ROTATE;
   };
@@ -9978,39 +10067,6 @@ function updateOrthographicFrustum(camera: THREE.OrthographicCamera, aspect: num
   camera.top = halfHeight;
   camera.bottom = -halfHeight;
   camera.updateProjectionMatrix();
-}
-
-type CameraView = {
-  orthographic: boolean;
-  position: [number, number, number];
-  target: [number, number, number];
-  up: [number, number, number];
-  zoom: number;
-};
-
-/** Where the camera looked, per design, while the view was taken down for a sketch (#150). */
-const rememberedCameraViews = new Map<string, CameraView>();
-
-function cameraViewOf(state: ThreeState): CameraView {
-  return {
-    orthographic: state.camera instanceof THREE.OrthographicCamera,
-    position: state.camera.position.toArray() as [number, number, number],
-    target: state.controls.target.toArray() as [number, number, number],
-    up: state.camera.up.toArray() as [number, number, number],
-    zoom: state.camera.zoom,
-  };
-}
-
-function applyCameraView(state: ThreeState, view: CameraView) {
-  state.camera.up.fromArray(view.up);
-  state.camera.position.fromArray(view.position);
-  state.controls.target.fromArray(view.target);
-  state.camera.zoom = view.zoom;
-  state.camera.lookAt(state.controls.target);
-  state.camera.updateProjectionMatrix();
-  fitCameraDepthRange(state.camera, state.controls.target);
-  state.controls.update();
-  state.needsRender = true;
 }
 
 function toggleCameraProjection(state: ThreeState) {
@@ -11091,7 +11147,7 @@ function clearSectionCaps(state: ThreeState) {
 }
 
 /** The filled cut face of the section view: one flat mesh per body, on the plane, in its colour a little darker. */
-function buildSectionCaps(state: ThreeState, bodies: readonly SectionBody[], axis: SectionPlaneAxis, offset: number) {
+function buildSectionCaps(state: ThreeState, bodies: readonly SectionBody[], axis: SectionPlaneAxis, offset: number, frame: SectionFrame | null = null) {
   clearSectionCaps(state);
   const group = new THREE.Group();
   group.name = "SectionCaps";
@@ -11099,7 +11155,7 @@ function buildSectionCaps(state: ThreeState, bodies: readonly SectionBody[], axi
     const cap = sectionCapMesh(body.loops);
     if (cap.triangles.length === 0) continue;
     const positions: number[] = [];
-    cap.points.forEach((point) => positions.push(...sectionPointToWorld(point, axis, offset)));
+    cap.points.forEach((point) => positions.push(...sectionPointFromFrame(sectionPointToWorld(point, axis, offset), frame)));
     const geometry = new THREE.BufferGeometry();
     geometry.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
     geometry.setIndex(cap.triangles);
@@ -11200,7 +11256,25 @@ function updateSectionPlaneHelper(
   const quad = helper.getObjectByName("SectionPlaneQuad") as THREE.Mesh;
   const border = helper.getObjectByName("SectionPlaneBorder") as THREE.LineLoop;
 
-  if (settings.axis === "x") {
+  const frame = settings.frame ?? null;
+  if (frame) {
+    // A turned plane (#644): laid out in the frame as below, then turned into it. The design's box does not
+    // say how far it reaches across a turned plane, so the square spans its diagonal.
+    const [cx, cy, cz] = sectionPointToFrame([center.x, center.y, center.z], frame);
+    const span = Math.max(size.length() * 1.15, 80);
+    const local = settings.axis === "x" ? [settings.offset, cy, cz] : settings.axis === "y" ? [cx, settings.offset, cz] : [cx, cy, settings.offset];
+    const [px, py, pz] = sectionPointFromFrame(local as [number, number, number], frame);
+    helper.position.set(px, py, pz);
+    const basis = new THREE.Matrix4().makeBasis(
+      new THREE.Vector3(frame.xAxis.x, frame.xAxis.y, frame.xAxis.z),
+      new THREE.Vector3(frame.yAxis.x, frame.yAxis.y, frame.yAxis.z),
+      new THREE.Vector3(frame.zAxis.x, frame.zAxis.y, frame.zAxis.z),
+    );
+    const turn = new THREE.Euler(...(settings.axis === "x" ? [0, Math.PI / 2, 0] : settings.axis === "y" ? [-Math.PI / 2, 0, 0] : [0, 0, 0]) as [number, number, number]);
+    helper.quaternion.setFromRotationMatrix(basis).multiply(new THREE.Quaternion().setFromEuler(turn));
+    quad.scale.set(span, span, 1);
+    border.scale.set(span, span, 1);
+  } else if (settings.axis === "x") {
     helper.position.set(settings.offset, center.y, center.z);
     helper.rotation.set(0, Math.PI / 2, 0);
     quad.scale.set(spanZ, spanY, 1);
@@ -11334,6 +11408,32 @@ function modifierEdgeMaterialStyle(active: boolean, hovered: boolean, previewAct
 // Scaling a view-space point about the camera keeps it on the same pixel; in
 // an orthographic view only its depth may change, towards the viewer also for
 // a point behind the camera, which that view draws too.
+/**
+ * The thin edge lines' materials, one per look and shared (marked cached, so taking the lines
+ * down leaves them): the lines are built again whenever the pointer moves onto another edge, and
+ * a material per edge and per rebuild made three.js compile their shaders again each time.
+ */
+const modifierEdgeMaterials = new Map<string, THREE.LineBasicMaterial>();
+
+function modifierEdgeMaterial(style: { color: string; opacity: number; linewidth: number }, onlyVisible: boolean) {
+  const key = `${style.color}:${style.opacity}:${style.linewidth}:${onlyVisible}`;
+  let material = modifierEdgeMaterials.get(key);
+  if (!material) {
+    material = new THREE.LineBasicMaterial({
+      color: style.color,
+      depthTest: onlyVisible,
+      depthWrite: false,
+      transparent: true,
+      opacity: style.opacity,
+      linewidth: style.linewidth,
+    });
+    if (onlyVisible) pullModifierEdgeTowardCamera(material);
+    material.userData.cached = true;
+    modifierEdgeMaterials.set(key, material);
+  }
+  return material;
+}
+
 function pullModifierEdgeTowardCamera(material: THREE.LineBasicMaterial) {
   const pull = MODIFIER_EDGE_DEPTH_PULL.toFixed(4);
   material.onBeforeCompile = (shader) => {
@@ -11364,20 +11464,7 @@ function wideModifierEdgeLine(state: ThreeState, points: number[], color: string
   }
   const geometry = new LineSegmentsGeometry();
   geometry.setPositions(segments);
-  const material = new LineMaterial({
-    color,
-    linewidth,
-    worldUnits: false,
-    transparent: true,
-    opacity,
-    depthTest: false,
-    depthWrite: false,
-    alphaToCoverage: false,
-  });
-  material.toneMapped = false;
-  const rect = state.renderer.domElement.getBoundingClientRect();
-  material.resolution.set(Math.max(1, rect.width), Math.max(1, rect.height));
-  const line = new LineSegments2(geometry, material);
+  const line = new LineSegments2(geometry, sharedOverlayLineMaterial(state, { color, linewidth, opacity, depthTest: false }));
   line.renderOrder = renderOrder;
   line.frustumCulled = false;
   setObjectRenderLayer(line, RENDER_LAYER_MODIFIERS);
@@ -11414,16 +11501,7 @@ function rebuildModifierEdges(
     }
     const geometry = new THREE.BufferGeometry();
     geometry.setAttribute("position", new THREE.Float32BufferAttribute(edge.points, 3));
-    const material = new THREE.LineBasicMaterial({
-      color: style.color,
-      depthTest: onlyVisible,
-      depthWrite: false,
-      transparent: true,
-      opacity: style.opacity,
-      linewidth: style.linewidth,
-    });
-    if (onlyVisible) pullModifierEdgeTowardCamera(material);
-    const line = new THREE.Line(geometry, material);
+    const line = new THREE.Line(geometry, modifierEdgeMaterial(style, onlyVisible));
     line.userData.modifierEdgeId = edge.id;
     line.renderOrder = hovered ? 1003 : active ? 1002 : 1001;
     setObjectRenderLayer(line, RENDER_LAYER_MODIFIERS);
@@ -11790,15 +11868,6 @@ function syncTransformOverlay(
     ...footprintDimensionMarks,
     [heightHandleKey]: [heightMark, heightAtHandle],
     [liftHandleKey]: [makeDimensionMark("elevation", liftHandleKey, "elevation", liftLabel, liftAnchor, liftTarget, liftDimensionOutward, project)],
-  };
-  const screenOffsetFromCenter = (point: { x: number; y: number }, distance: number) => {
-    const dx = point.x - centerPoint.x;
-    const dy = point.y - centerPoint.y;
-    const length = Math.max(1, Math.hypot(dx, dy));
-    return {
-      x: point.x + (dx / length) * distance,
-      y: point.y + (dy / length) * distance,
-    };
   };
   const rotationSides = rotationHandleSidesForCamera(state, frame.center, xFootAxis, zFootAxis);
   const sidePoint = (side: RotationHandleSide, y: number) => {
@@ -12636,6 +12705,31 @@ function updateSelectedGroundFootprintPreviews(state: ThreeState, drag: DragStat
   });
 }
 
+/**
+ * The footprint's two materials are the same for every selection, so they are made once and
+ * shared (marked cached, so taking a footprint down leaves them). A new pair for each footprint
+ * was thrown away with it at every change of the selected body, and with it three.js threw away
+ * their compiled shaders and compiled them again for the next footprint.
+ */
+let selectedFootprintMaterials: { fill: THREE.MeshBasicMaterial; outline: THREE.LineBasicMaterial } | null = null;
+
+function sharedSelectedFootprintMaterials() {
+  if (!selectedFootprintMaterials) {
+    const fill = new THREE.MeshBasicMaterial({
+      color: "#7f8f95",
+      transparent: true,
+      opacity: 0.22,
+      depthWrite: false,
+      side: THREE.DoubleSide,
+    });
+    const outline = new THREE.LineBasicMaterial({ color: "#00aeea", transparent: true, opacity: 0.92 });
+    fill.userData.cached = true;
+    outline.userData.cached = true;
+    selectedFootprintMaterials = { fill, outline };
+  }
+  return selectedFootprintMaterials;
+}
+
 function createSelectedGroundFootprint(shape: WorkplaneShape, workplane: PlacementWorkplane) {
   const frame = selectionFrameForShapes([shape], [shape.id], workplane);
   if (!frame) {
@@ -12659,23 +12753,12 @@ function createSelectedGroundFootprint(shape: WorkplaneShape, workplane: Placeme
   const fillGeometry = new THREE.BufferGeometry();
   fillGeometry.setAttribute("position", new THREE.BufferAttribute(new Float32Array(fillPositions), 3));
   fillGeometry.computeVertexNormals();
-  const fill = new THREE.Mesh(
-    fillGeometry,
-    new THREE.MeshBasicMaterial({
-      color: "#7f8f95",
-      transparent: true,
-      opacity: 0.22,
-      depthWrite: false,
-      side: THREE.DoubleSide,
-    }),
-  );
+  const materials = sharedSelectedFootprintMaterials();
+  const fill = new THREE.Mesh(fillGeometry, materials.fill);
   group.add(fill);
 
   const points = [...footprint, footprint[0].clone()];
-  const outline = new THREE.Line(
-    new THREE.BufferGeometry().setFromPoints(points),
-    new THREE.LineBasicMaterial({ color: "#00aeea", transparent: true, opacity: 0.92 }),
-  );
+  const outline = new THREE.Line(new THREE.BufferGeometry().setFromPoints(points), materials.outline);
   outline.userData.shapeId = shape.id;
   group.add(outline);
 
@@ -12722,14 +12805,19 @@ function groupChildAppearance(group: WorkplaneShape, child: WorkplaneShape): Wor
 // visible from every side.
 const TRANSPARENT_SOLID_OPACITY = 0.4;
 
+function holeOpacity(shape: WorkplaneShape) {
+  if (strongHoles) return shape.importedMesh ? 0.6 : 0.72;
+  return shape.importedMesh ? 0.34 : 0.52;
+}
+
 function sharedShapeMaterial(shape: WorkplaneShape, vertexColors = false) {
   const seeThrough = !shape.hole && Boolean(shape.transparent);
-  const color = shape.hole ? "#b7c0c9" : vertexColors ? "#ffffff" : shape.color;
+  const color = shape.hole ? (strongHoles ? STRONG_HOLE_COLOR : "#b7c0c9") : vertexColors ? "#ffffff" : shape.color;
   const key = JSON.stringify({
     color,
     vertexColors,
     transparent: Boolean(shape.hole) || seeThrough,
-    opacity: shape.hole ? (shape.importedMesh ? 0.34 : 0.52) : seeThrough ? TRANSPARENT_SOLID_OPACITY : 1,
+    opacity: shape.hole ? holeOpacity(shape) : seeThrough ? TRANSPARENT_SOLID_OPACITY : 1,
     roughness: shape.hole ? 0.88 : 0.57,
     depthWrite: !seeThrough,
     side: "double",
@@ -12744,7 +12832,7 @@ function sharedShapeMaterial(shape: WorkplaneShape, vertexColors = false) {
     color,
     vertexColors,
     transparent: Boolean(shape.hole) || seeThrough,
-    opacity: shape.hole ? (shape.importedMesh ? 0.34 : 0.52) : seeThrough ? TRANSPARENT_SOLID_OPACITY : 1,
+    opacity: shape.hole ? holeOpacity(shape) : seeThrough ? TRANSPARENT_SOLID_OPACITY : 1,
     roughness: shape.hole ? 0.88 : 0.57,
     metalness: 0.02,
     depthWrite: !seeThrough,
@@ -12997,6 +13085,12 @@ function createShapeObject(
         gridfinityScoopRight: shape.gridfinityScoopRight,
         gridfinityScoopRadius: shape.gridfinityScoopRadius,
         gridfinityFloorHeight: shape.gridfinityFloorHeight,
+        gridfinityCompartmentsX: shape.gridfinityCompartmentsX,
+        gridfinityCompartmentsZ: shape.gridfinityCompartmentsZ,
+        gridfinityDividerThickness: shape.gridfinityDividerThickness,
+        gridfinityDividerPositionsX: shape.gridfinityDividerPositionsX,
+        gridfinityDividerPositionsZ: shape.gridfinityDividerPositionsZ,
+        gridfinityCompartmentLabels: shape.gridfinityCompartmentLabels,
       })), material, shape);
       break;
     case "loft":
@@ -13485,14 +13579,15 @@ function addShapeEdgeDecorations(group: THREE.Group, mesh: THREE.Mesh, prepared:
   const importedTriangleCount = shape.importedMesh?.triangleCount ?? 0;
   const skipHeavyImportedEdges = Boolean(shape.importedMesh) && importedTriangleCount > IMPORTED_SELECTED_EDGE_TRIANGLE_LIMIT;
   // The setting draws a line on every body, in the colour chosen.
-  const allEdgeLines = edgeLineStyle.enabled && importedTriangleCount <= ALL_EDGE_LINES_IMPORTED_TRIANGLE_LIMIT;
+  // "Show holes more clearly" (#662) gives every hole that line too, darker.
+  const allEdgeLines = (edgeLineStyle.enabled || (strongHoles && Boolean(shape.hole))) && importedTriangleCount <= ALL_EDGE_LINES_IMPORTED_TRIANGLE_LIMIT;
   if ((group.userData.showEdges || complexEdges || allEdgeLines) && (!skipHeavyImportedEdges || (allEdgeLines && !group.userData.showEdges))) {
     const selectedOutline = Boolean(group.userData.showEdges);
     const selectedRoundedBox = selectedOutline && shape.kind === "box" && Boolean(shape.radius && shape.radius > 0);
-    const edgeColor = selectedOutline ? "#00aeea" : shape.hole ? "#697989" : allEdgeLines ? edgeLineStyle.color : complexEdges ? "#141b21" : darkenHex(shape.color, 0.34);
+    const edgeColor = selectedOutline ? "#00aeea" : shape.hole ? (strongHoles ? STRONG_HOLE_EDGE_COLOR : "#697989") : allEdgeLines ? edgeLineStyle.color : complexEdges ? "#141b21" : darkenHex(shape.color, 0.34);
     // Edge lines on every body are a help to tell dark parts apart, not a drawing: half strength
     // keeps them readable without the hard black frame they had.
-    const edgeOpacity = selectedRoundedBox ? 0 : selectedOutline ? 0.98 : shape.hole ? 0.44 : allEdgeLines ? 0.5 : complexEdges ? 0.38 : shape.kind === "text" ? 0.86 : 0.2;
+    const edgeOpacity = selectedRoundedBox ? 0 : selectedOutline ? 0.98 : shape.hole ? (strongHoles ? 0.85 : 0.44) : allEdgeLines ? 0.5 : complexEdges ? 0.38 : shape.kind === "text" ? 0.86 : 0.2;
     if (selectedOutline && shape.importedMesh && shape.cadDisplayEdgesVersion === 2 && Boolean(shape.cadDisplayEdges?.length)) {
       addCadDisplayEdges(group, shape, edgeColor, edgeOpacity);
     } else {

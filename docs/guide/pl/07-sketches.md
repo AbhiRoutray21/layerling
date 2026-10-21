@@ -84,6 +84,10 @@ Jeśli płaszczyzna robocza leży na boku bryły, rysujesz tak, jak patrzysz na 
 
 Przez {{ui:inspector.editSketch}} możesz w każdej chwili wrócić do szkicu, żeby go zmienić. Dwukrotne kliknięcie bryły robi to samo, jak w Tinkercadzie (zablokowana bryła zostaje zamknięta). {{ui:workspace.doubleClickOpensSketch}} w ustawieniach to wyłącza. Obróbki krawędzi, które już zrobiłeś na bryle, przepadają jednak, bo krawędzie powstają od nowa.
 
+Szkic z kilkoma konturami daje jedną bryłę, a nakładające się kontury łączą się w niej. Aby każdy kontur był osobno, zaznacz bryłę i kliknij {{ui:inspector.separateParts}}: każdy zewnętrzny kontur staje się osobną bryłą z otworami, które w nim leżą, i zachowuje wysokość, kolor i miejsce bryły. Każda część ma własny szkic do edycji, razem z liniami pomocniczymi, więc możesz podnosić lub obniżać części pojedynczo, a potem je połączyć lub odjąć. Przeszkadzają w tym obróbki krawędzi, podobnie jak bryła rozciągnięta później: wtedy jest rozdzielana jak siatka.
+
+**Inny rodzaj bryły z tego samego szkicu:** plakietka u góry szkicu mówi, czym on się stanie: {{ui:sketch.modeBadgeExtrude}}, {{ui:sketch.modeBadgeRevolve}} lub {{ui:sketch.modeBadgeSweep}}. Kliknij ją i wybierz inny, także podczas edycji istniejącej bryły: zaimportowany SVG, który wchodzi wyciągnięty, po przełączeniu na {{ui:sketch.modeBadgeRevolve}} staje się wazonem lub gałką. Kontur sięgający za oś przesuwa się w lewo, aż jego prawa krawędź leży na osi; [[Ctrl]]+[[Z]] cofa to przesunięcie. Po zakończeniu nowa bryła zajmuje miejsce starej, z jej nazwą i kolorem, ze stopą na tej samej wysokości. Obróbki krawędzi przepadają, jak przy każdej zmianie szkicu.
+
 ### Obracanie szkicu
 
 Przy obracaniu rysujesz połowę przekroju **po lewej stronie osi** pokazanej w szkicu. Obok widzisz podgląd 3D obrotu. Od razu pokazuje, jak będzie wyglądać bryła. Kontur musi być zamknięty, albo budujesz otwartą linię jako obrys, zobacz niżej. Na koniec kliknij {{ui:sketch.finishRevolve}}. Pozostałe bryły projektu są pokazane od przodu, w tym samym widoku co profil, z osią pośrodku: rysuj profil obok nich lub nad nimi. Bryła stoi tam, gdzie ją narysowałeś, a pozioma linia przez środek szkicu to podłoże: profil nad nią daje bryłę stojącą wyżej, a jego najniższy punkt to stopa bryły.
@@ -152,7 +156,7 @@ Wszystkie cztery dotyczą tylko wzorca, nigdy szkicu.
 
 | Klawisz | Działanie |
 | --- | --- |
-| [[Esc]] | kończy łańcuch linii, czyści zaznaczenie |
+| [[Esc]] | odkłada narzędzie (powrót do {{ui:sketch.select}}), potem czyści zaznaczenie |
 | [[Delete]] | usuwa zaznaczony element |
 | [[Ctrl]]+[[C]] | kopiuje zaznaczenie |
 | [[Ctrl]]+[[X]] | wycina zaznaczenie |

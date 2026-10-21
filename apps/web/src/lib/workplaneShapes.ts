@@ -1,7 +1,7 @@
 import { createLocalId } from "@/lib/localIds";
 import { fieldFormulasEqual } from "@/lib/fieldFormulas";
 import { threadFootprintPatch } from "@/lib/threadGeometry";
-import { gridfinityFootprintPatch } from "@/lib/gridfinityGeometry";
+import { gridfinityCompartmentLabelsEqual, gridfinityDividerPositionsEqual, gridfinityFootprintPatch } from "@/lib/gridfinityGeometry";
 import { MCP_SHAPE_SETTING_KEYS } from "@/lib/mcpShapeSettings";
 import { bentTubeSegmentsEqual } from "@/lib/bentTubeGeometry";
 import { qrSettingsEqual } from "@/lib/qrCode";
@@ -615,6 +615,12 @@ export function workplaneShapesEqual(a: WorkplaneShape, b: WorkplaneShape) {
     a.gridfinityScoopRight === b.gridfinityScoopRight &&
     a.gridfinityScoopRadius === b.gridfinityScoopRadius &&
     a.gridfinityFloorHeight === b.gridfinityFloorHeight &&
+    a.gridfinityCompartmentsX === b.gridfinityCompartmentsX &&
+    a.gridfinityCompartmentsZ === b.gridfinityCompartmentsZ &&
+    a.gridfinityDividerThickness === b.gridfinityDividerThickness &&
+    gridfinityDividerPositionsEqual(a.gridfinityDividerPositionsX, b.gridfinityDividerPositionsX) &&
+    gridfinityDividerPositionsEqual(a.gridfinityDividerPositionsZ, b.gridfinityDividerPositionsZ) &&
+    gridfinityCompartmentLabelsEqual(a.gridfinityCompartmentLabels, b.gridfinityCompartmentLabels) &&
     a.dovetailNeckWidth === b.dovetailNeckWidth &&
     a.dovetailClearance === b.dovetailClearance &&
     a.loftBottomOutline === b.loftBottomOutline &&

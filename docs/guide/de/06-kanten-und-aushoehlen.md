@@ -58,7 +58,7 @@ Dosen, Becher, Gehäuse und Abdeckungen haben eines gemeinsam: Sie sind innen le
 
 1. Wähle den Körper aus und klicke auf {{ui:editor.tool.hollow}}, oder klicke mit der rechten Maustaste auf den Körper und wähle es im Menü.
 2. Stelle die {{ui:shell.wall}} ein.
-3. Schalte unter {{ui:shell.openings}} die Seiten ein, die offen bleiben: {{ui:shell.side.top}}, {{ui:shell.side.bottom}}, {{ui:shell.side.front}}, {{ui:shell.side.back}}, {{ui:shell.side.left}} oder {{ui:shell.side.right}}, beliebig viele – {{ui:shell.side.front}} allein ergibt einen Schacht für eine Schublade, {{ui:shell.side.left}} und {{ui:shell.side.right}} einen Tunnel. Ist keine Seite eingeschaltet, bleibt der Körper rundum geschlossen, mit einem Hohlraum in der Mitte.
+3. Schalte unter {{ui:shell.openings}} die Seiten ein, die offen bleiben: {{ui:shell.side.top}}, {{ui:shell.side.bottom}}, {{ui:shell.side.front}}, {{ui:shell.side.back}}, {{ui:shell.side.left}} oder {{ui:shell.side.right}}, beliebig viele – {{ui:shell.side.front}} allein ergibt einen Schacht für eine Schublade, {{ui:shell.side.left}} und {{ui:shell.side.right}} einen Tunnel. Ist keine Seite eingeschaltet, bleibt der Körper rundum geschlossen, mit einem Hohlraum in der Mitte. {{ui:shell.side.top}} ist beim Öffnen schon eingeschaltet; ein Klick darauf schließt die Oberseite wieder. Ein rundum geschlossener Körper sieht von außen unverändert aus: Den Hohlraum zeigt die Schnittansicht.
 4. Entscheide, ob die {{ui:shell.edges}} {{ui:shell.edges.round}} oder {{ui:shell.edges.sharp}} sein sollen.
 5. Klicke auf {{ui:shell.apply}}.
 

@@ -13,9 +13,9 @@ Mit der Maus:
 | rechte Maustaste kurz klicken | auf einem Körper ein Menü mit den häufigsten Befehlen: duplizieren, Aussparung oder Körper, gruppieren, ausblenden, sperren, löschen und mehr; auf leerer Fläche Einfügen und Alle auswählen |
 | mittlere Maustaste ziehen | die Ansicht verschieben |
 | Mausrad | hinein- und herauszoomen |
-| [[Strg]] halten und mit links ziehen | ebenfalls verschieben |
+| [[Strg]] / [[Cmd]] halten und mit links ziehen | ebenfalls verschieben (auf dem Trackpad eines MacBooks: [[Cmd]] halten, drücken und ziehen) |
 
-Wie schnell das Mausrad zoomt, stellst du in den Einstellungen unter {{ui:workspace.appearance}} mit {{ui:workspace.zoomSpeed}} ein: ein Regler von 1 bis 14, zu Beginn 5; über 10 wird nur das Mausrad schneller. Eine Raste des Mausrads zoomt in jedem Browser gleich stark, ein Trackpad zoomt danach, wie weit du streichst.
+Wie schnell das Mausrad zoomt, stellst du in den Einstellungen unter {{ui:workspace.appearance}} mit {{ui:workspace.zoomSpeed}} ein: ein Regler von 1 bis 14, zu Beginn 5. Er gilt nur für Mausrad und Trackpad: die Knöpfe und die Tasten [[+]] und [[−]] zoomen immer in denselben kleinen Schritten. Eine Raste des Mausrads zoomt in jedem Browser gleich stark, ein Trackpad zoomt danach, wie weit du streichst.
 
 Auf einem Tablet oder Handy zoomen zwei Finger (spreizen und zusammenziehen) und verschieben die Ansicht (gemeinsam schieben). Ein Finger auf leerer Fläche dreht die Ansicht, und ein Antippen dort hebt die Auswahl auf; auf einer Form oder einem Griff arbeitet er am Entwurf, so wie die linke Maustaste. Wer auch mit einem Finger drehen möchte, der auf einer Form beginnt, schaltet in der Kameraleiste {{ui:camera.touchRotate}} ein. Der Schalter erscheint auf Geräten mit Touchscreen.
 
@@ -46,11 +46,14 @@ Am linken Rand liegt eine schmale Leiste. Von oben nach unten:
 
 Ein Entwurf öffnet sich so, wie du ihn verlassen hast: Blickwinkel, Zoom und Ausschnitt der Ansicht bleiben mit ihm in diesem Browser erhalten, du machst also dort weiter, wo du aufgehört hast, auch nach „Home“ oder dem Schließen der Seite. Eine gespeicherte Datei (.lyl) nimmt die Ansicht mit, sie öffnet sich also auch anderswo darin. Die Ansicht gehört nicht zum Rückgängig-Verlauf.
 
+Du kannst in jedem Entwurf außerdem vier eigene Ansichten festhalten. [[Umschalt]]+[[7]], [[Umschalt]]+[[8]], [[Umschalt]]+[[9]] oder [[Umschalt]]+[[0]] speichert die Ansicht genau so, wie sie ist - Blickwinkel, Ausschnitt, Zoom und flach oder perspektivisch - unter dieser Taste, und die Taste allein ([[7]], [[8]], [[9]] oder [[0]]) holt sie zurück. Eine Meldung unten bestätigt das Speichern; speicherst du erneut unter derselben Taste, ersetzt das die Ansicht. Wie die Ansicht oben bleiben die gespeicherten Ansichten mit dem Entwurf in diesem Browser und reisen in einer gespeicherten Datei (.lyl) mit; zum Rückgängig-Verlauf gehören sie nicht.
+
 ## Ins Innere schauen: die Schnittansicht
 
 {{ui:camera.sectionView}}, der letzte Knopf der Leiste (das Schnittwerkzeug), schneidet die Ansicht entlang einer Ebene auf. So prüfst du Wände, Hohlräume und Teile, die ineinandergreifen. Geschnitten wird nur die Ansicht: Entwurf, Dateien und jeder Export bleiben vollständig. Wo die Ebene durch einen Körper geht, ist der Schnitt in der etwas dunkleren Farbe des Körpers gefüllt, und eine Aussparung darin bleibt leer, so erkennst du Massives und Hohles; die gefüllte Fläche erscheint einen Moment, nachdem die Ebene stillsteht.
 
 - Wähle die Achse, quer zu der die Ebene steht: X (Breite), Y (Tiefe) oder Z (Höhe), wie bei den Positionsfeldern. Sie beginnt in der Mitte deines Entwurfs.
+- {{ui:camera.sectionOrientation}} legt fest, wonach sich diese Achsen richten. {{ui:camera.sectionOrientationWorld}} nimmt die Achsen des Entwurfs. {{ui:camera.sectionOrientationWorkplane}} nimmt die der Arbeitsebene: Z schneidet dann parallel zu ihr, X und Y quer dazu, und die Lage zählt ab ihrem Ursprung. Liegt die Arbeitsebene auf einer schrägen Fläche, schneidest du so parallel zu dieser Fläche, und der Schnitt wandert mit, wenn du die Arbeitsebene umsetzt. {{ui:camera.sectionOrientationView}} stellt die Ebene zum Bildschirm: Sie nimmt weg, was vor ihr liegt, und mit dem Regler schiebst du sie in Blickrichtung tiefer in den Entwurf, etwa um an ein verdecktes Teil zu kommen und es anzuklicken. Drehst du danach die Ansicht, klickst du noch einmal darauf, und der Schnitt richtet sich nach dem neuen Blick.
 - {{ui:camera.sectionCoarse}} schiebt die Ebene über den ganzen Entwurf, {{ui:camera.sectionFine}} nur ein Stück um ihre aktuelle Stelle, für Zehntelmillimeter. Die Position kannst du auch eintippen.
 - Der Knopf neben den Achsen zeigt die andere Seite des Schnitts, {{ui:camera.sectionReset}} setzt die Ebene zurück in die Mitte, {{ui:camera.sectionShowPlane}} blendet die blaue Ebene aus.
 - Was der Schnitt freilegt, kannst du anklicken und auswählen, auch innere Wände.
@@ -92,7 +95,7 @@ Das Zahnrad im Menüband ({{ui:editor.workspaceSettings}}) öffnet die Einstellu
 
 {{ui:workspace.theme}} legt das Farbschema des ganzen Programms fest: {{ui:workspace.themeSystem}} folgt deinem Rechner, dazu kommen {{ui:workspace.themeLight}}, {{ui:workspace.themeDark}} und {{ui:workspace.themeGraphite}}. Du kannst es auch oben rechts im Editor ändern.
 
-{{ui:workspace.toolbarSize}} macht die Knöpfe der Leiste oben, ihr Formenmenü und die Kamerasteuerung links kleiner oder größer: {{ui:workspace.toolbarSizeSmall}}, {{ui:workspace.toolbarSizeMedium}} (wie bisher) oder {{ui:workspace.toolbarSizeLarge}}. Klein lässt auf einem Laptop mehr Platz für die Arbeitsebene, groß trifft sich leichter auf einem großen Bildschirm oder mit dem Finger. Mit großen Knöpfen gehen die Gruppen der Leiste in eine zweite Zeile, wenn das Fenster für sie zu schmal ist. Die Größe merkt sich dieser Browser, sie gilt für jedes Design.
+{{ui:workspace.toolbarSize}} macht die Knöpfe der Leiste oben, ihr Formenmenü, die Kamerasteuerung links und die Eigenschaftentafel rechts kleiner oder größer: {{ui:workspace.toolbarSizeSmall}}, {{ui:workspace.toolbarSizeMedium}} (wie bisher) oder {{ui:workspace.toolbarSizeLarge}}. Klein lässt auf einem Laptop mehr Platz für die Arbeitsebene, groß trifft sich leichter auf einem großen Bildschirm oder mit dem Finger. Mit großen Knöpfen gehen die Gruppen der Leiste in eine zweite Zeile, wenn das Fenster für sie zu schmal ist. Die Größe merkt sich dieser Browser, sie gilt für jedes Design.
 
 {{ui:workspace.viewCubePosition}} stellt den Ansichtswürfel in eine andere Ecke der Arbeitsfläche: {{ui:workspace.viewCubePositionTopLeft}} (wie bisher), {{ui:workspace.viewCubePositionTopRight}}, {{ui:workspace.viewCubePositionBottomLeft}} oder {{ui:workspace.viewCubePositionBottomRight}}. In jeder Ecke außer oben links rückt die Kamerasteuerung nach oben an den Platz, den der Würfel frei gemacht hat. Unten rechts steht der Würfel knapp über der Auswahl {{ui:inspector.snapGrid}}. Solange rechts die Eigenschaften einer Form offen sind, weicht ein Würfel auf der rechten Seite links daneben aus. Die Ecke merkt sich dieser Browser, sie gilt für jedes Design. In einem schmalen Fenster, etwa auf dem Handy, ist die Einstellung ausgeblendet und der Würfel bleibt oben links.
 
@@ -120,6 +123,8 @@ Die Skizzenansicht hat eigene Farben: {{ui:workspace.sketchBackground}} für das
 
 ![Drei dunkle Körper mit eingeschalteten Kantenlinien: Die Umrisse halten sie auseinander.](shot:edge-lines)
 
+{{ui:workspace.strongHoles}} zeichnet Löcher in dunklerem Grau, weniger durchsichtig und mit einer dunklen Linie drumherum. Das hilft, wenn ein Loch zwischen durchsichtigen Körpern schwer zu finden ist. Anders als die Kantenlinien bleibt es auch im Schnellmodus an.
+
 ### Darstellung: Licht und Schatten
 
 {{ui:workspace.showShadows}} schaltet die Schlagschatten ein und aus. Zwei Regler bestimmen, wie die Körper beleuchtet sind. {{ui:workspace.shadowStrength}} sagt, wie dunkel die Schlagschatten sind, und {{ui:workspace.shadeContrast}} schiebt Licht vom gleichmäßigen Umgebungslicht zum Hauptlicht: Richtung „kräftig“ werden die Schattenseiten dunkler und die Schatten besser sichtbar, Richtung „weich“ wird alles flacher. Am oberen Ende wird der Kontrast sehr kräftig, sodass Schattenseiten und Schatten richtig dunkel werden. {{ui:workspace.shadowSoftness}} macht die Ränder der Schatten weich statt scharf. {{ui:workspace.lightAzimuth}} dreht das Hauptlicht um die Platte (0° von vorn, 90° von rechts), und {{ui:workspace.lightElevation}} hebt es an, bei 90° steht es wie bei Tinkercad senkrecht über der Platte, und die Schatten fallen genau unter die Körper. {{ui:workspace.lightReset}} stellt alles zurück.
@@ -142,7 +147,7 @@ Die Skizzenansicht hat eigene Farben: {{ui:workspace.sketchBackground}} für das
 
 {{ui:workspace.startInPerspective}}: Der Editor öffnet dann in der perspektivischen Ansicht, nicht in der flachen.
 
-{{ui:workspace.zoomSpeed}} ist ein Regler von langsam bis schnell: wie schnell das Rad zoomt; oberhalb von 10 wird nur das Rad schneller. {{ui:workspace.cameraInertia}}: Lässt du die Maus nach dem Drehen los, dreht die Ansicht noch kurz weiter und bremst sanft ab. Ausgeschaltet bleibt sie sofort stehen, wie in Tinkercad und Fusion 360.
+{{ui:workspace.zoomSpeed}} ist ein Regler von langsam bis schnell: wie schnell Rad und Trackpad zoomen; die Zoomknöpfe und -tasten behalten ihre eigenen kleinen Schritte. {{ui:workspace.cameraInertia}}: Lässt du die Maus nach dem Drehen los, dreht die Ansicht noch kurz weiter und bremst sanft ab. Ausgeschaltet bleibt sie sofort stehen, wie in Tinkercad und Fusion 360.
 
 {{ui:workspace.overhangAngle}} ist der Winkel, ab dem eine Fläche als Überhang gilt, wenn du im Sichtbarkeitsmenü Überhänge zeigen einschaltest: Diese Flächen sind rot und weiß schraffiert. 30° ist vorsichtig, 70° rechnet mit guter Kühlung des Drucks; 45° ist der übliche Start.
 

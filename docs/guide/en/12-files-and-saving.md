@@ -20,7 +20,7 @@ With dozens of designs a single list is not enough. On the start page, {{ui:shar
 - **Rename and delete** are in the folder's menu. Deleting a folder deletes no design: what was in it moves one level up.
 - **Search** looks through every folder; a design that is found shows its folder, and a click on it opens the folder.
 
-{{ui:dashboard.backupAll}} keeps the folders: the designs sit in the backup file in their folders, and restoring the backup puts them back there. The folders of this browser are separate from the folders on a server.
+{{ui:dashboard.backupAll}} keeps the folders: the designs sit in the backup file in their folders, and restoring the backup puts them back there. The folders of this browser are separate from the folders on a server. The card pictures go into the file too, so they are back as soon as you restore.
 
 ## Backing up and passing on
 

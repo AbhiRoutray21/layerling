@@ -57,7 +57,7 @@ A dobozokban, poharakban, házakban és fedelekben közös, hogy belül üresek,
 
 1. Jelöld ki a testet, és kattints a {{ui:editor.tool.hollow}} gombra, vagy kattints jobb gombbal a testre, és válaszd ki a menüből.
 2. Állítsd be a {{ui:shell.wall}} értékét.
-3. A {{ui:shell.openings}} alatt kapcsold be azokat az oldalakat, amelyek nyitva maradnak: {{ui:shell.side.top}}, {{ui:shell.side.bottom}}, {{ui:shell.side.front}}, {{ui:shell.side.back}}, {{ui:shell.side.left}} vagy {{ui:shell.side.right}}, ahányat csak akarsz – egyedül az {{ui:shell.side.front}} fióknak való nyílást ad, a {{ui:shell.side.left}} és a {{ui:shell.side.right}} alagutat. Ha egyik oldal sincs bekapcsolva, a test minden oldalon zárt marad, középen egy üreggel.
+3. A {{ui:shell.openings}} alatt kapcsold be azokat az oldalakat, amelyek nyitva maradnak: {{ui:shell.side.top}}, {{ui:shell.side.bottom}}, {{ui:shell.side.front}}, {{ui:shell.side.back}}, {{ui:shell.side.left}} vagy {{ui:shell.side.right}}, ahányat csak akarsz – egyedül az {{ui:shell.side.front}} fióknak való nyílást ad, a {{ui:shell.side.left}} és a {{ui:shell.side.right}} alagutat. Ha egyik oldal sincs bekapcsolva, a test minden oldalon zárt marad, középen egy üreggel. A {{ui:shell.side.top}} a panel megnyitásakor már be van kapcsolva; egy kattintás rá újra lezárja a tetejét. A minden oldalon zárt test kívülről változatlannak látszik: az üreget a metszetnézet mutatja.
 4. Döntsd el, hogy a {{ui:shell.edges}} {{ui:shell.edges.round}} vagy {{ui:shell.edges.sharp}} legyenek.
 5. Kattints a {{ui:shell.apply}} gombra.
 

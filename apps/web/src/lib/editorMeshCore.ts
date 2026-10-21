@@ -512,6 +512,12 @@ function geometryMeshForShape(shape: WorkplaneShape): MeshData | null {
         gridfinityScoopRight: shape.gridfinityScoopRight,
         gridfinityScoopRadius: shape.gridfinityScoopRadius,
         gridfinityFloorHeight: shape.gridfinityFloorHeight,
+        gridfinityCompartmentsX: shape.gridfinityCompartmentsX,
+        gridfinityCompartmentsZ: shape.gridfinityCompartmentsZ,
+        gridfinityDividerThickness: shape.gridfinityDividerThickness,
+        gridfinityDividerPositionsX: shape.gridfinityDividerPositionsX,
+        gridfinityDividerPositionsZ: shape.gridfinityDividerPositionsZ,
+        gridfinityCompartmentLabels: shape.gridfinityCompartmentLabels,
       });
       break;
     case "loft":
@@ -636,6 +642,20 @@ function geometryMeshForShape(shape: WorkplaneShape): MeshData | null {
   }
 
   return geometry ? bufferGeometryToMeshData(sanitizeName(shape.name), geometry) : null;
+}
+
+/**
+ * How far a mesh reaches along a direction: the largest dot product of its vertices with it,
+ * -Infinity for none. A loop, because spreading a big import's vertices into Math.max overflows
+ * the call stack (about 100,000 values).
+ */
+export function meshReachAlong(mesh: Pick<MeshData, "vertices">, direction: { x: number; y: number; z: number }) {
+  let reach = -Infinity;
+  for (const [x, y, z] of mesh.vertices) {
+    const along = x * direction.x + y * direction.y + z * direction.z;
+    if (along > reach) reach = along;
+  }
+  return reach;
 }
 
 export function meshForShape(shape: WorkplaneShape): MeshData {

@@ -22,7 +22,6 @@ import {
   normalizeGearHelixAngle,
   normalizeGearHelixQuality,
   normalizeGearPressureAngle,
-  normalizeGearProfile,
   normalizeGearRim,
   normalizeGearTeeth,
   normalizeGearToothSize,
@@ -681,6 +680,12 @@ export function sceneShape(shape: Partial<WorkplaneShape> & Pick<WorkplaneShape,
     gridfinityScoopRight: shape.gridfinityScoopRight,
     gridfinityScoopRadius: shape.gridfinityScoopRadius,
     gridfinityFloorHeight: shape.gridfinityFloorHeight,
+    gridfinityCompartmentsX: shape.gridfinityCompartmentsX,
+    gridfinityCompartmentsZ: shape.gridfinityCompartmentsZ,
+    gridfinityDividerThickness: shape.gridfinityDividerThickness,
+    gridfinityDividerPositionsX: shape.gridfinityDividerPositionsX,
+    gridfinityDividerPositionsZ: shape.gridfinityDividerPositionsZ,
+    gridfinityCompartmentLabels: shape.gridfinityCompartmentLabels,
     knurlPattern: shape.knurlPattern,
     knurlCount: shape.knurlCount,
     knurlDepth: shape.knurlDepth,
@@ -739,6 +744,21 @@ export function sceneShape(shape: Partial<WorkplaneShape> & Pick<WorkplaneShape,
     locked: shape.locked ?? false,
     hidden: shape.hidden ?? false,
   });
+}
+
+/**
+ * A shape read back from a clipboard. `sceneShape` fills the defaults, but it names only the fields
+ * it knows, so on its own it dropped everything else a copy carries: see-through, edge treatments,
+ * mirroring, a text's stroke and spacing, the exact CAD body. Within one design the tab kept the
+ * copy and nothing showed; pasted into another design all of it was gone (#642). The fields of
+ * the copy now go on top of the defaults. Anything without a name, kind and colour is not a shape.
+ */
+export function clipboardShape(entry: unknown): WorkplaneShape | null {
+  if (!entry || typeof entry !== "object") return null;
+  const shape = entry as Partial<WorkplaneShape>;
+  const { name, kind, color } = shape;
+  if (typeof name !== "string" || typeof kind !== "string" || typeof color !== "string") return null;
+  return canonicalizeShape({ ...sceneShape({ ...shape, name, kind, color }), ...shape, name, kind, color });
 }
 
 export function makeShapeFromAsset(
@@ -948,6 +968,9 @@ export function makeShapeFromAsset(
     gridfinityScoopRight: asset.kind === "gridfinity" ? customization.gridfinityScoopRight : undefined,
     gridfinityScoopRadius: asset.kind === "gridfinity" ? customization.gridfinityScoopRadius : undefined,
     gridfinityFloorHeight: asset.kind === "gridfinity" ? customization.gridfinityFloorHeight : undefined,
+    gridfinityCompartmentsX: asset.kind === "gridfinity" ? customization.gridfinityCompartmentsX : undefined,
+    gridfinityCompartmentsZ: asset.kind === "gridfinity" ? customization.gridfinityCompartmentsZ : undefined,
+    gridfinityDividerThickness: asset.kind === "gridfinity" ? customization.gridfinityDividerThickness : undefined,
     hingeClearance: asset.kind === "hinge" ? normalizeHingeClearance(customization.hingeClearance ?? DEFAULT_HINGE_CLEARANCE) : undefined,
     hingePinless: asset.kind === "hinge" ? customization.hingePinless === true : undefined,
     hingeKnuckles: asset.kind === "hinge" ? normalizeHingeKnuckles(customization.hingeKnuckles ?? DEFAULT_HINGE_KNUCKLES, width, normalizeHingeClearance(customization.hingeClearance)) : undefined,

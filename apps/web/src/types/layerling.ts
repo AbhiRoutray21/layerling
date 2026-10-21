@@ -225,6 +225,12 @@ export type ShapeCustomization = {
   gridfinityScoopRadius?: number;
   /** Gridfinity bin: the floor's height inside in mm, measured from the underside; missing is 5.95, and at the highest the bin is solid up to the lip's support, or to the top without the lip. */
   gridfinityFloorHeight?: number;
+  /** Gridfinity bin: compartments across, a whole number; missing is 1, a bin without dividers (#554). */
+  gridfinityCompartmentsX?: number;
+  /** Gridfinity bin: compartments deep, a whole number; missing is 1. */
+  gridfinityCompartmentsZ?: number;
+  /** Gridfinity bin: the dividers' thickness in mm, 0.8 to 3; missing is 1.2. */
+  gridfinityDividerThickness?: number;
   /** Knurling: grooves straight along the axis, or crossed into diamonds. */
   knurlPattern?: "straight" | "diamond" | "round";
   /** Knurling: number of grooves around the grip. */
@@ -323,6 +329,8 @@ export type WorkplaneWorkspaceSettings = {
   edgeLines: boolean;
   /** Colour of those edge lines. */
   edgeColor: string;
+  /** Holes drawn darker and denser, with a line round them, so they stand out among see-through bodies (#662). */
+  strongHoles: boolean;
   showShadows: boolean;
   /** The camera keeps turning for a moment after you let go, and slows down. */
   cameraInertia: boolean;
@@ -395,6 +403,8 @@ export type SketchPoint = {
   handleIn?: { x: number; z: number };
   handleOut?: { x: number; z: number };
   mode?: "corner" | "smooth" | "split";
+  /** Part of a locked outline (#653): the point keeps its place, and the sides between locked points stay as they are. */
+  locked?: boolean;
 };
 
 export type SketchSegment = {
@@ -436,14 +446,18 @@ export type SketchStroke = { width: number; align: SketchStrokeAlign; join: Sket
 export type TextKeyringSide = "left" | "right" | "top";
 /**
  * A key ring hole on a text (#215): a round hole `offset` mm beyond the letters' box on `side`,
- * centred on that side. With `ear` the text also grows a round ear round the hole that joins
+ * centred on that side, or `along` mm off its middle (#671: up on the left and right, to the
+ * right on top). With `ear` the text also grows a round ear round the hole that joins
  * its outline - the bottom layer of a name tag; the layers above only get the hole where it
  * reaches them. The box grows by the ear on that side; the letters keep their size.
  */
-export type TextKeyring = { side: TextKeyringSide; diameter: number; offset: number; ear?: boolean };
+export type TextKeyring = { side: TextKeyringSide; diameter: number; offset: number; along?: number; ear?: boolean };
 
-/** A key ring hole in an extruded sketch (#391): its middle in the sketch's own mm, its size, the side it is on and whether the layer has the ear. */
-export type SketchKeyring = { side: TextKeyringSide; diameter: number; x: number; z: number; ear?: boolean };
+/**
+ * A key ring hole in an extruded sketch (#391): its middle in the sketch's own mm, its size, the side it is on and whether the layer has the ear.
+ * `along` is how far the card moved it off the middle of its side (#671), kept so the card reads it back.
+ */
+export type SketchKeyring = { side: TextKeyringSide; diameter: number; x: number; z: number; along?: number; ear?: boolean };
 /**
  * A sketch built set in from its outlines: every edge `distance` mm inward, every corner rounded to
  * `radius` mm. The face tool keeps the outline of the face it pushes out or in here and builds the
@@ -474,6 +488,21 @@ export type GearProfile = "involute" | "round" | "simple";
 export type GridfinityType = "bin" | "baseplate";
 /** How a label shelf's corners are finished where it meets a wall or another shelf. */
 export type GridfinityLabelCorner = "round" | "chamfer";
+/**
+ * A label in one compartment of a Gridfinity bin with dividers (#554): column 0 is the left, row 0 the back. It stands
+ * against one side of the compartment, the bin's wall or a divider; `length` is a share of that side in per cent (10 to
+ * 100, missing the full length), `align` where a shorter one sits along it (start towards -x on a back or front side and
+ * towards -z on a left or right one; missing the middle), `width` how far it reaches out in mm (missing 14, within what
+ * the compartment takes).
+ */
+export type GridfinityCompartmentLabel = {
+  column: number;
+  row: number;
+  side: "back" | "front" | "left" | "right";
+  length?: number;
+  align?: "start" | "middle" | "end";
+  width?: number;
+};
 
 /** Was aus dem Gewinde wird: Stange, Schraube, Mutter oder das Loch dafuer. */
 export type ThreadRole = "rod" | "screw" | "nut" | "bore";
@@ -769,6 +798,18 @@ export type WorkplaneShape = {
   gridfinityScoopRadius?: number;
   /** Gridfinity bin: the floor's height inside in mm, measured from the underside; missing is 5.95, and at the highest the bin is solid up to the lip's support, or to the top without the lip. */
   gridfinityFloorHeight?: number;
+  /** Gridfinity bin: compartments across, a whole number; missing is 1, a bin without dividers (#554). */
+  gridfinityCompartmentsX?: number;
+  /** Gridfinity bin: compartments deep, a whole number; missing is 1. */
+  gridfinityCompartmentsZ?: number;
+  /** Gridfinity bin: the dividers' thickness in mm, 0.8 to 3; missing is 1.2. */
+  gridfinityDividerThickness?: number;
+  /** Gridfinity bin: each divider across, in mm from the inside of the left wall to its middle, left to right; missing spaces them evenly. */
+  gridfinityDividerPositionsX?: number[];
+  /** Gridfinity bin: each divider deep, in mm from the inside of the back wall to its middle, back to front; missing spaces them evenly. */
+  gridfinityDividerPositionsZ?: number[];
+  /** Gridfinity bin with dividers: the compartments' labels, one for each compartment that has one. */
+  gridfinityCompartmentLabels?: GridfinityCompartmentLabel[];
   /** Knurling: grooves straight along the axis, or crossed into diamonds. */
   knurlPattern?: "straight" | "diamond" | "round";
   /** Knurling: number of grooves around the grip. */

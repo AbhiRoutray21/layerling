@@ -5,6 +5,7 @@ import { GuideHelpLink } from "@/components/GuideHelpLink";
 import { guideChapterForShape, guideSectionForShape } from "@/lib/guideLinks";
 import { useInspectorCard } from "@/lib/inspectorCards";
 import { ChevronDown, ChevronUp, Cylinder, Eye, EyeOff, FolderOpen, Grid3x3, Layers, Link2, Lock, Minus, Pencil, Plus, RefreshCw, RotateCcw, Split, Tags, Unlock } from "lucide-react";
+import { createPortal } from "react-dom";
 import { Fragment, createContext, useCallback, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type Dispatch, type ReactNode, type SetStateAction } from "react";
 import {
   DEFAULT_GEAR_HELIX_ANGLE,
@@ -25,15 +26,14 @@ import {
   gearTypeHasHelix,
   gearToothPitch,
   DEFAULT_GEAR_BACKLASH,
-  involuteGearDiameter,
   involuteGearModule,
   involuteGearPair,
+  gearPairFitPatches,
   MAX_GEAR_BACKLASH,
   MAX_GEAR_PRESSURE_ANGLE,
   MIN_GEAR_PRESSURE_ANGLE,
   normalizeGearBacklash,
   normalizeGearPressureAngle,
-  normalizeGearProfile,
   DEFAULT_GEAR_RIM,
   MAX_GEAR_RIM,
   MIN_GEAR_RIM,
@@ -169,7 +169,8 @@ import { MAX_TEXT_EDGE, MIN_TEXT_EDGE, normalizeTextEdge } from "@/lib/textEdge"
 import { wheelBaseStep, wheelNextValue, wheelTurn } from "@/lib/wheelValueStep";
 import { textHasFill } from "@/lib/textFill";
 import { TEXT_FILL_CHOICES, textFillChoice, textLineSettingsInView, textStrokeForChoice, textStrokeWider, type TextFillChoice } from "@/lib/textFillChoice";
-import { MAX_TEXT_LAYERS, MAX_TEXT_LAYER_GROW, MIN_TEXT_LAYER_HEIGHT, namesFromList, type NameTagKeyring, type TextLayer } from "@/lib/textLayers";
+import { MAX_TEXT_LAYERS, MAX_TEXT_LAYER_GROW, MIN_TEXT_LAYER_HEIGHT, nameTagKeyringAlongLimit, namesFromList, type NameTagKeyring, type TextLayer } from "@/lib/textLayers";
+import { iconKeyringAlongLimit } from "@/lib/sketchKeyring";
 import { DEFAULT_KEYRING_DIAMETER, MAX_TEXT_SPACING, MIN_KEYRING_DIAMETER, MIN_TEXT_SPACING, TEXT_KEYRING_SIDES } from "@/lib/textGeometry";
 import { addTextLayer, MIN_LETTER_SIZE, MIN_NAME_TAG_LAYERS, NAME_TAG_GAP, NAME_TAG_LAYERS, NAME_TAG_LETTER_SIZE, removeTextLayer, textLetterSize, textLetterSizePatch, textSpacingPatch, type NameTagStack } from "@/lib/nameTag";
 import { FONT_MANAGER_OPTION, requestFontManager } from "@/lib/fontManagerEvents";
@@ -184,11 +185,28 @@ import {
   DEFAULT_GRIDFINITY_LABEL_CORNER,
   GRIDFINITY_LABEL_WALL_KEYS,
   GRIDFINITY_SCOOP_WALL_KEYS,
+  MAX_GRIDFINITY_DIVIDER_THICKNESS,
   MAX_GRIDFINITY_HEIGHT_UNITS,
+  MIN_GRIDFINITY_COMPARTMENT_LABEL_LENGTH,
+  MIN_GRIDFINITY_COMPARTMENT_LABEL_MM,
+  MIN_GRIDFINITY_DIVIDER_THICKNESS,
   MIN_GRIDFINITY_FLOOR_HEIGHT,
   MIN_GRIDFINITY_LABEL_WIDTH,
   MIN_GRIDFINITY_SCOOP_RADIUS,
   MIN_GRIDFINITY_UNITS,
+  type GridfinityAxis,
+  type GridfinityWall,
+  gridfinityCompartmentCount,
+  gridfinityCompartmentCountPatch,
+  gridfinityCompartmentLabel,
+  gridfinityCompartmentLabelMaxWidth,
+  gridfinityCompartmentMax,
+  gridfinityCompartments,
+  gridfinityDividerFits,
+  gridfinityDividerLimits,
+  gridfinityDividerPositionPatch,
+  gridfinityDividerPositions,
+  gridfinityDividerThickness,
   gridfinityFloorFits,
   gridfinityFloorHeight,
   gridfinityFloorMaxHeight,
@@ -204,6 +222,7 @@ import {
   gridfinityScoopFits,
   gridfinityScoopMaxRadius,
   gridfinityScoopRadius,
+  gridfinityScoopsLeftOut,
   gridfinityShapePatch,
   normalizeGridfinityType,
 } from "@/lib/gridfinityGeometry";
@@ -229,7 +248,7 @@ import {
 import { regularPolygonAspect } from "@/lib/regularPolygonFootprint";
 import { DEFAULT_TAPER_DIMENSION_MAX, MAX_HIGH_RESOLUTION_SIDES, MAX_HIGH_RESOLUTION_STEPS, POSITION_TYPED_LIMIT, RULER_MAX_LENGTH, customSnapGridLabel, positionReach, shapeDimensionLimit, snapGridOptions, snapGridStep } from "@/lib/workplaneSettings";
 import { printerPresetById } from "@/lib/printBed";
-import type { BentTubeInnerProfile, BentTubeProfile, CustomSnapGrid, GearType, GridSize, MeasurementAccuracy, ShapeCustomization, SketchProfile, SketchStroke, SketchStrokeAlign, SketchStrokeJoin, ThreadHead, ThreadProfile, ThreadRole, WorkplaneShape, WorkplaneWorkspaceSettings } from "@/types/layerling";
+import type { BentTubeInnerProfile, BentTubeProfile, CustomSnapGrid, GearType, GridfinityCompartmentLabel, GridSize, MeasurementAccuracy, ShapeCustomization, SketchProfile, SketchStroke, SketchStrokeAlign, SketchStrokeJoin, ThreadHead, ThreadProfile, ThreadRole, WorkplaneShape, WorkplaneWorkspaceSettings } from "@/types/layerling";
 import { selectWholeValue } from "@/lib/numberField";
 import { formulaMatchesValue, formulaToRemember, withFieldFormula, type FieldFormulas } from "@/lib/fieldFormulas";
 import { useKeptColors, useRecentColors } from "@/lib/recentColors";
@@ -387,7 +406,7 @@ const RELATIVE_SIZE_PROPERTY_IDS = new Set(["width", "height", "length", "diamet
 const ROTATION_PROPERTY_IDS = new Set(["rotateX", "rotateY", "rotateZ"]);
 
 function propertyUsesLengthUnit(key: string) {
-  return ["textLineWidth", "textEdgeSize", "letterSize", "iconWidth", "keyringDiameter", "positionX", "positionY", "positionZ", "pivotX", "pivotY", "pivotZ", "radius", "length", "width", "height", "bevel", "topRadius", "baseRadius", "thickness", "outerDiameter", "innerDiameter", "textRadius", "extrudeTopOffsetX", "extrudeTopOffsetZ", "toothSize", "toothWidth", "gearBacklash", "centerHole", "slotSmallEnd", "slotCentreDistance", "sketchLineWidth", "topLength", "topWidth", "bottomLength", "bottomWidth", "diameter", "pitch", "clearance", "axialClearance", "boltClearance", "threadDepth", "threadCoreDiameter", "threadLength", "headHeight", "chamfer", "chamferBottom", "headChamfer", "wire", "starOuterSize", "starInnerSize", "starOuterFillet", "starInnerFillet", "heartTipFillet", "crescentThickness", "crescentTipFillet", "honeycombCellSize", "honeycombWallThickness", "honeycombFrameWidth", "cornerFillet", "topBottomFillet", "bentTubeSize", "bentTubeWall", "bentTubeSegmentLength", "bentTubeBendRadius", "dovetailNeckWidth", "dovetailClearance", "hingePinDiameter", "hingeLeafThickness", "hingeClearance", "screwHoleShaft", "screwHoleHeadDepth", "knurlDepth", "knurlChamfer", "loftBottomWidth", "loftBottomDepth", "loftTopWidth", "loftTopDepth", "loftBottomCorner", "loftTopCorner", "loftOffsetX", "loftOffsetZ", "loftWall", "gridfinityLabelBackLength", "gridfinityLabelBackOffset", "gridfinityLabelBackWidth", "gridfinityLabelCornerSize", "gridfinityLabelFrontLength", "gridfinityLabelFrontOffset", "gridfinityLabelFrontWidth", "gridfinityLabelLeftLength", "gridfinityLabelLeftOffset", "gridfinityLabelLeftWidth", "gridfinityLabelRightLength", "gridfinityLabelRightOffset", "gridfinityLabelRightWidth", "gridfinityScoopRadius", "gridfinityFloorHeight"].includes(key);
+  return ["textLineWidth", "textEdgeSize", "letterSize", "iconWidth", "keyringDiameter", "keyringAlong", "positionX", "positionY", "positionZ", "pivotX", "pivotY", "pivotZ", "radius", "length", "width", "height", "bevel", "topRadius", "baseRadius", "thickness", "outerDiameter", "innerDiameter", "textRadius", "extrudeTopOffsetX", "extrudeTopOffsetZ", "toothSize", "toothWidth", "gearBacklash", "centerHole", "slotSmallEnd", "slotCentreDistance", "sketchLineWidth", "topLength", "topWidth", "bottomLength", "bottomWidth", "diameter", "pitch", "clearance", "axialClearance", "boltClearance", "threadDepth", "threadCoreDiameter", "threadLength", "headHeight", "chamfer", "chamferBottom", "headChamfer", "wire", "starOuterSize", "starInnerSize", "starOuterFillet", "starInnerFillet", "heartTipFillet", "crescentThickness", "crescentTipFillet", "honeycombCellSize", "honeycombWallThickness", "honeycombFrameWidth", "cornerFillet", "topBottomFillet", "bentTubeSize", "bentTubeWall", "bentTubeSegmentLength", "bentTubeBendRadius", "dovetailNeckWidth", "dovetailClearance", "hingePinDiameter", "hingeLeafThickness", "hingeClearance", "screwHoleShaft", "screwHoleHeadDepth", "knurlDepth", "knurlChamfer", "loftBottomWidth", "loftBottomDepth", "loftTopWidth", "loftTopDepth", "loftBottomCorner", "loftTopCorner", "loftOffsetX", "loftOffsetZ", "loftWall", "gridfinityLabelBackLength", "gridfinityLabelBackOffset", "gridfinityLabelBackWidth", "gridfinityLabelCornerSize", "gridfinityLabelFrontLength", "gridfinityLabelFrontOffset", "gridfinityLabelFrontWidth", "gridfinityLabelLeftLength", "gridfinityLabelLeftOffset", "gridfinityLabelLeftWidth", "gridfinityLabelRightLength", "gridfinityLabelRightOffset", "gridfinityLabelRightWidth", "gridfinityScoopRadius", "gridfinityFloorHeight", "gridfinityDividerThickness", "gridfinityDividerPositionX", "gridfinityDividerPositionZ", "gridfinityCompartmentLabelWidth"].includes(key);
 }
 
 /**
@@ -979,8 +998,10 @@ function getShapePropertiesWithAppLimits(shape: WorkplaneShape, onUpdate: ShapeI
       const maxFloor = gridfinityFloorMaxHeight(fields);
       properties.push({ id: "gridfinityFloorHeight", label: t("prop.gridfinityFloorHeight"), value: gridfinityFloorHeight(fields), min: MIN_GRIDFINITY_FLOOR_HEIGHT, max: maxFloor, step: 0.05, hint: t("gridfinity.floorHeightHint"), onChange: (value) => onUpdate({ gridfinityFloorHeight: clamp(value, MIN_GRIDFINITY_FLOOR_HEIGHT, maxFloor) }) });
     }
+    const compartments = gridfinityCompartments(fields);
     if (gridfinityLabelFits(fields)) {
       // Label shelves (#455): each wall's switch with its own width, length and position under it, then the corners they share.
+      // A bin with dividers has a label in each compartment instead (#554), set in the compartments card; the corners stay here.
       const walls = [
         { wall: "back", label: "prop.gridfinityLabelBack" },
         { wall: "front", label: "prop.gridfinityLabelFront" },
@@ -988,6 +1009,7 @@ function getShapePropertiesWithAppLimits(shape: WorkplaneShape, onUpdate: ShapeI
         { wall: "right", label: "prop.gridfinityLabelRight" },
       ] as const;
       walls.forEach(({ wall, label }) => {
+        if (compartments) return;
         const keys = GRIDFINITY_LABEL_WALL_KEYS[wall];
         const { on } = keys;
         properties.push({ type: "toggle", id: on, label: t(label), value: shape[on] === true, onChange: (value) => onUpdate({ [on]: value }) });
@@ -1005,7 +1027,10 @@ function getShapePropertiesWithAppLimits(shape: WorkplaneShape, onUpdate: ShapeI
           properties.push({ id: keys.offset, label: t("prop.gridfinityLabelOffset"), value: clamp(shape[keys.offset] ?? 0, -limits.offset, limits.offset), min: -limits.offset, max: limits.offset, step: 1, onChange: (value) => onUpdate({ [keys.offset]: value }) });
         }
       });
-      if (walls.some(({ wall }) => shape[GRIDFINITY_LABEL_WALL_KEYS[wall].on] === true)) {
+      const shelves = compartments
+        ? compartments.cells.some((cell) => gridfinityCompartmentLabel(fields, cell.column, cell.row))
+        : walls.some(({ wall }) => shape[GRIDFINITY_LABEL_WALL_KEYS[wall].on] === true);
+      if (shelves) {
         properties.push(
           {
             type: "select",
@@ -1033,7 +1058,7 @@ function getShapePropertiesWithAppLimits(shape: WorkplaneShape, onUpdate: ShapeI
       });
       if (walls.some(({ wall }) => shape[GRIDFINITY_SCOOP_WALL_KEYS[wall]] === true)) {
         const max = Math.max(MIN_GRIDFINITY_SCOOP_RADIUS, gridfinityScoopMaxRadius(fields));
-        properties.push({ id: "gridfinityScoopRadius", label: t("prop.gridfinityScoopRadius"), value: gridfinityScoopRadius(fields), min: MIN_GRIDFINITY_SCOOP_RADIUS, max, step: 0.5, onChange: (value) => onUpdate({ gridfinityScoopRadius: clamp(value, MIN_GRIDFINITY_SCOOP_RADIUS, max) }) });
+        properties.push({ id: "gridfinityScoopRadius", label: t("prop.gridfinityScoopRadius"), value: gridfinityScoopRadius(fields), min: MIN_GRIDFINITY_SCOOP_RADIUS, max, step: 0.5, hint: gridfinityScoopsLeftOut(fields) ? t("gridfinity.scoopsLeftOutHint") : undefined, onChange: (value) => onUpdate({ gridfinityScoopRadius: clamp(value, MIN_GRIDFINITY_SCOOP_RADIUS, max) }) });
       }
     }
     return properties;
@@ -2309,7 +2334,7 @@ export function ShapeInspector({
   onWrapAroundCylinder,
   onLayerText,
   onTextTags,
-  onBundleKeyringTab,
+  onFixKeyringTab,
   textLayerStack: nameTagStack,
   iconTag,
   qrCode,
@@ -2340,8 +2365,8 @@ export function ShapeInspector({
   onLayerText?: (patch: TextLayerPatch) => void;
   /** One tag like this text or stack per name, laid out in rows (#215). */
   onTextTags?: (names: string[], gap: number) => void;
-  /** Holds a key ring tab of its own together with the nearest tag in one click (#598). */
-  onBundleKeyringTab?: () => void;
+  /** Fixes a key ring tab of its own to the nearest tag in one click, where it was put (#598). */
+  onFixKeyringTab?: () => void;
   /** The selected name tag's words, font and layers, read from its layers as they stand (#215). */
   textLayerStack?: NameTagStack | null;
   /** The icon tag card's wiring, for a sketch body or an icon tag; null for anything else. */
@@ -2650,7 +2675,7 @@ export function ShapeInspector({
           onInteractionActiveChange={onInteractionActiveChange}
         />
       ) : null}
-      {shape.keyringTab && onBundleKeyringTab ? <KeyringTabBundleButton disabled={locked} onBundle={onBundleKeyringTab} /> : null}
+      {shape.keyringTab && onFixKeyringTab ? <KeyringTabFixButton disabled={locked} onFix={onFixKeyringTab} /> : null}
       {shape.kind === "text" && onLayerText ? <MakeLayersButton disabled={locked} onLayerText={onLayerText} /> : null}
       {qrCode ? <QrCodeCard key={`qr-code-${shape.id}`} shapeId={shape.id} controls={qrCode} disabled={locked} /> : null}
       {iconTag?.isTag ? (
@@ -2914,6 +2939,9 @@ export function ShapeInspector({
           </div>
         ) : null}
       </div>
+      {shape.kind === "gridfinity" ? (
+        <GridfinityCompartmentsCard shape={shape} workspace={workspace} locked={locked} defaults={propertyDefaults?.compartments} onUpdate={onUpdate} onInteractionActiveChange={onInteractionActiveChange} />
+      ) : null}
       <div className={`property-card ${positionOpen ? "" : "collapsed"}`}>
         <button
           className="property-card-header"
@@ -3084,17 +3112,17 @@ export function ShapeInspector({
 export type TextLayerPatch = { text?: string; font?: string; letterSize?: number; layers?: TextLayer[]; keyring?: NameTagKeyring | null; /** "Free" (#598): the hole comes off the tag and a key ring tab of its own is put beside it. */ keyringTab?: boolean };
 
 /**
- * A key ring tab of its own (#598): once it is in place, one click holds it together with the
- * nearest tag, as Ctrl+B would, so nobody needs to know the bundle to keep the two together.
+ * A key ring tab of its own (#598): once it is in place, one click fixes it to the nearest tag
+ * where it is, so the hole goes through the tag's layers and the ear stays with the tag.
  */
-function KeyringTabBundleButton({ disabled, onBundle }: { disabled: boolean; onBundle: () => void }) {
+function KeyringTabFixButton({ disabled, onFix }: { disabled: boolean; onFix: () => void }) {
   return (
     <div className="name-tag-start">
-      <button className="inspector-action-button name-tag-start-button" type="button" disabled={disabled} onClick={onBundle}>
+      <button className="inspector-action-button name-tag-start-button" type="button" disabled={disabled} onClick={onFix}>
         <Link2 size={17} strokeWidth={2.5} />
-        <span>{t("nameTag.keyringTabBundle")}</span>
+        <span>{t("nameTag.keyringTabFix")}</span>
       </button>
-      <p className="name-tag-hint">{t("nameTag.keyringTabBundleHint")}</p>
+      <p className="name-tag-hint">{t("nameTag.keyringTabFixHint")}</p>
     </div>
   );
 }
@@ -3413,14 +3441,16 @@ function NameTagCard({
               <div className="name-tag-sides" role="radiogroup" aria-label={t("nameTag.keyringSide")}>
                 <span>{t("nameTag.keyringSide")}</span>
                 {TEXT_KEYRING_SIDES.map((side) => (
-                  <button key={side} type="button" role="radio" aria-checked={keyring.side === side} className={keyring.side === side ? "active" : ""} disabled={disabled} onClick={() => onLayerText({ keyring: { ...keyring, side } })}>
+                  <button key={side} type="button" role="radio" aria-checked={!keyring.free && keyring.side === side} className={!keyring.free && keyring.side === side ? "active" : ""} disabled={disabled} onClick={() => onLayerText({ keyring: { side, diameter: keyring.diameter } })}>
                     {t(`nameTag.side.${side}`)}
                   </button>
                 ))}
-                <button type="button" title={t("nameTag.side.freeHint")} disabled={disabled} onClick={() => onLayerText({ keyringTab: true })}>
+                <button type="button" role="radio" aria-checked={Boolean(keyring.free)} className={keyring.free ? "active" : ""} title={t("nameTag.side.freeHint")} disabled={disabled} onClick={() => onLayerText({ keyringTab: true })}>
                   {t("nameTag.side.free")}
                 </button>
               </div>
+              {/* A hole fixed freely (#598) stands where it was put, not on a side. */}
+              {!keyring.free ? <KeyringAlongProperty keyring={keyring} limit={nameTagKeyringAlongLimit(source, layers, keyring)} workspace={workspace} disabled={disabled} onChange={(next) => onLayerText({ keyring: next })} onInteractionActiveChange={onInteractionActiveChange} /> : null}
             </>
           ) : null}
           <NameListFields disabled={disabled} onTextTags={onTextTags} onInteractionActiveChange={onInteractionActiveChange} />
@@ -3542,6 +3572,43 @@ function MakeIconLayersButton({ disabled, onLayer }: { disabled: boolean; onLaye
  * The icon tag card, open and first: the icon's width, the layers as the name tag has them, and
  * how many tags of it - typed in, or as many as fit on the plate - laid out on the plate's middle.
  */
+/**
+ * Where along its side the key ring tab sits (#671), in mm off the middle: up on the left and
+ * right, to the right on top. The slider stays within the side, so the tab never leaves it.
+ */
+function KeyringAlongProperty({ keyring, limit, workspace, disabled, onChange, onInteractionActiveChange }: {
+  keyring: NameTagKeyring;
+  limit: number;
+  workspace: WorkplaneWorkspaceSettings;
+  disabled: boolean;
+  onChange: (keyring: NameTagKeyring) => void;
+  onInteractionActiveChange?: (active: boolean) => void;
+}) {
+  const reach = Math.max(0, Math.floor(limit * 10) / 10);
+  const value = Math.min(reach, Math.max(-reach, keyring.along ?? 0));
+  const change = (along: number) => {
+    const { along: _along, ...rest } = keyring;
+    const shift = Math.round(Math.min(reach, Math.max(-reach, along)) * 1000) / 1000;
+    onChange(shift ? { ...rest, along: shift } : rest);
+  };
+  return (
+    <RangeProperty
+      id="keyringAlong"
+      label={t("nameTag.keyringAlong")}
+      hint={t(keyring.side === "top" ? "nameTag.keyringAlongHintTop" : "nameTag.keyringAlongHint")}
+      value={value}
+      min={-reach}
+      max={reach}
+      step={0.1}
+      workspace={workspace}
+      disabled={disabled || reach <= 0}
+      onChange={change}
+      onReset={value !== 0 ? () => change(0) : undefined}
+      onInteractionActiveChange={onInteractionActiveChange}
+    />
+  );
+}
+
 function IconTagCard({ shapeId, controls, workspace, disabled, onInteractionActiveChange }: {
   shapeId: string;
   controls: IconTagControls;
@@ -3618,14 +3685,22 @@ function IconTagCard({ shapeId, controls, workspace, disabled, onInteractionActi
               <div className="name-tag-sides" role="radiogroup" aria-label={t("nameTag.keyringSide")}>
                 <span>{t("nameTag.keyringSide")}</span>
                 {TEXT_KEYRING_SIDES.map((side) => (
-                  <button key={side} type="button" role="radio" aria-checked={stack.keyring!.side === side} className={stack.keyring!.side === side ? "active" : ""} disabled={disabled} onClick={() => onLayer({ keyring: { ...stack.keyring!, side } })}>
+                  <button key={side} type="button" role="radio" aria-checked={!stack.keyring!.free && stack.keyring!.side === side} className={!stack.keyring!.free && stack.keyring!.side === side ? "active" : ""} disabled={disabled} onClick={() => onLayer({ keyring: { side, diameter: stack.keyring!.diameter } })}>
                     {t(`nameTag.side.${side}`)}
                   </button>
                 ))}
-                <button type="button" title={t("nameTag.side.freeHint")} disabled={disabled} onClick={() => onLayer({ keyringTab: true })}>
+                <button type="button" role="radio" aria-checked={Boolean(stack.keyring!.free)} className={stack.keyring!.free ? "active" : ""} title={t("nameTag.side.freeHint")} disabled={disabled} onClick={() => onLayer({ keyringTab: true })}>
                   {t("nameTag.side.free")}
                 </button>
               </div>
+              {!stack.keyring.free ? <KeyringAlongProperty
+                keyring={stack.keyring}
+                limit={iconKeyringAlongLimit(stack.source, stack.keyring.side, stack.keyring.diameter, stack.layers[stack.layers.length - 1]?.grow ?? 0, stack.width)}
+                workspace={workspace}
+                disabled={disabled}
+                onChange={(next) => onLayer({ keyring: next })}
+                onInteractionActiveChange={onInteractionActiveChange}
+              /> : null}
             </>
           ) : null}
           <ShapePropertyRows properties={properties.slice(1)} workspace={workspace} disabled={disabled} onInteractionActiveChange={onInteractionActiveChange} />
@@ -3844,13 +3919,179 @@ function BentTubeSegmentsCard({
   );
 }
 
+/** Where a compartment label sits along its side: towards -x on a back or front side, towards the back on a left or right one. */
+const GRIDFINITY_LABEL_ALIGN_OPTIONS: Record<"across" | "deep", Array<{ value: NonNullable<GridfinityCompartmentLabel["align"]>; label: MessageKey }>> = {
+  across: [{ value: "start", label: "gridfinity.alignLeft" }, { value: "middle", label: "gridfinity.alignMiddle" }, { value: "end", label: "gridfinity.alignRight" }],
+  deep: [{ value: "start", label: "gridfinity.alignBack" }, { value: "middle", label: "gridfinity.alignMiddle" }, { value: "end", label: "gridfinity.alignFront" }],
+};
+const GRIDFINITY_LABEL_SIDE_OPTIONS: Array<{ value: GridfinityWall; label: MessageKey }> = [
+  { value: "back", label: "gridfinity.labelSideBack" },
+  { value: "front", label: "gridfinity.labelSideFront" },
+  { value: "left", label: "gridfinity.labelSideLeft" },
+  { value: "right", label: "gridfinity.labelSideRight" },
+];
+
+/**
+ * A Gridfinity bin's compartments (#554): how many each way and how thick the dividers are, then a menu that picks one
+ * divider each way and its slider that moves it, and menus for the row and the column that pick the compartment whose
+ * label the rows under them set. Shown on every bin with room for dividers, so a bin of one compartment can be divided here.
+ */
+function GridfinityCompartmentsCard({
+  shape,
+  workspace,
+  locked,
+  defaults,
+  onUpdate,
+  onInteractionActiveChange,
+}: {
+  shape: WorkplaneShape;
+  workspace: WorkplaneWorkspaceSettings;
+  locked: boolean;
+  /** What the counts and the thickness are on a bin made new, for the reset arrows beside them. */
+  defaults?: PropertyDefaultValues | null;
+  onUpdate: ShapeInspectorUpdate;
+  onInteractionActiveChange?: (active: boolean) => void;
+}) {
+  const [open, setOpen] = useInspectorCard("gridfinityCompartments", true);
+  const [chosen, setChosen] = useState({ x: 0, z: 0, row: 0, column: 0 });
+
+  useEffect(() => setChosen({ x: 0, z: 0, row: 0, column: 0 }), [shape.id]);
+
+  const fields = { ...shape, depth: shapeOverallFootprintDimensions(shape).depth };
+  if (!gridfinityDividerFits(fields)) return null;
+  const compartments = gridfinityCompartments(fields);
+  const choose = (changes: Partial<typeof chosen>) => setChosen((current) => ({ ...current, ...changes }));
+  const counts = { x: gridfinityCompartmentCount(fields, "x"), z: gridfinityCompartmentCount(fields, "z") };
+  const countRow = (axis: GridfinityAxis, id: string, label: MessageKey, hint?: string): ShapePropertyConfig => {
+    const max = gridfinityCompartmentMax(fields, axis);
+    return { id, label: t(label), value: counts[axis], min: 1, max, step: 1, hint, onChange: (value) => onUpdate(gridfinityCompartmentCountPatch(axis, clamp(Math.round(value), 1, max))) };
+  };
+  const properties: ShapePropertyConfig[] = [
+    countRow("x", "gridfinityCompartmentsX", "prop.gridfinityCompartmentsX"),
+    countRow("z", "gridfinityCompartmentsZ", "prop.gridfinityCompartmentsZ", t("gridfinity.compartmentsHint")),
+  ];
+  if (compartments) {
+    properties.push({ id: "gridfinityDividerThickness", label: t("prop.gridfinityDividerThickness"), value: gridfinityDividerThickness(fields), min: MIN_GRIDFINITY_DIVIDER_THICKNESS, max: MAX_GRIDFINITY_DIVIDER_THICKNESS, step: 0.1, onChange: (value) => onUpdate({ gridfinityDividerThickness: clamp(value, MIN_GRIDFINITY_DIVIDER_THICKNESS, MAX_GRIDFINITY_DIVIDER_THICKNESS) }) });
+  }
+
+  // One menu and one slider each way, whichever divider the menu picks; moving it writes that way's whole list.
+  ([["x", "gridfinityDividerX", "prop.gridfinityDividerAcross", "gridfinity.fromLeft"], ["z", "gridfinityDividerZ", "prop.gridfinityDividerDeep", "gridfinity.fromBack"]] as const).forEach(([axis, id, label, numbered]) => {
+    const positions = gridfinityDividerPositions(fields, axis);
+    if (positions.length === 0) return;
+    const index = Math.min(chosen[axis], positions.length - 1);
+    const limits = gridfinityDividerLimits(fields, axis, index);
+    if (!limits) return;
+    properties.push(
+      {
+        type: "select",
+        id,
+        label: t(label),
+        value: String(index),
+        options: positions.map((_position, position) => ({ value: String(position), label: t(numbered, { number: position + 1 }) })),
+        onChange: (value) => choose({ [axis]: Number(value) }),
+      },
+      {
+        id: axis === "x" ? "gridfinityDividerPositionX" : "gridfinityDividerPositionZ",
+        label: t("prop.gridfinityDividerPosition"),
+        value: clamp(positions[index], limits.min, limits.max),
+        min: limits.min,
+        max: limits.max,
+        step: 0.1,
+        hint: t("gridfinity.dividerPositionHint"),
+        onChange: (value) => onUpdate(gridfinityDividerPositionPatch(fields, axis, index, value)),
+      },
+    );
+  });
+
+  if (compartments && gridfinityLabelFits(fields)) {
+    const rows = counts.z;
+    const columns = counts.x;
+    const row = Math.min(chosen.row, rows - 1);
+    const column = Math.min(chosen.column, columns - 1);
+    const cell = compartments.cells.find((entry) => entry.row === row && entry.column === column);
+    const numbered = (count: number, key: MessageKey) => Array.from({ length: count }, (_entry, position) => ({ value: String(position), label: t(key, { number: position + 1 }) }));
+    if (rows > 1) properties.push({ type: "select", id: "gridfinityCompartmentRow", label: t("prop.gridfinityCompartmentRow"), value: String(row), options: numbered(rows, "gridfinity.fromBack"), onChange: (value) => choose({ row: Number(value) }) });
+    if (columns > 1) properties.push({ type: "select", id: "gridfinityCompartmentColumn", label: t("prop.gridfinityCompartmentColumn"), value: String(column), options: numbered(columns, "gridfinity.fromLeft"), onChange: (value) => choose({ column: Number(value) }) });
+    if (cell) {
+      const labels = shape.gridfinityCompartmentLabels ?? [];
+      const stored = labels.find((entry) => entry.column === column && entry.row === row);
+      // Every other compartment's label stays as it is, also those of compartments a smaller count leaves out for now.
+      const writeLabel = (next: GridfinityCompartmentLabel | null) => {
+        const rest = labels.filter((entry) => entry.column !== column || entry.row !== row);
+        const all = (next ? [...rest, next] : rest).sort((a, b) => a.row - b.row || a.column - b.column);
+        onUpdate({ gridfinityCompartmentLabels: all.length > 0 ? all : undefined });
+      };
+      // A side is offered when a label 4 mm wide still leaves 6 mm open, and the side already set always is.
+      const sides = GRIDFINITY_LABEL_SIDE_OPTIONS.filter(({ value }) => value === stored?.side || gridfinityCompartmentLabelMaxWidth(fields, cell, value) >= MIN_GRIDFINITY_LABEL_WIDTH);
+      properties.push({
+        type: "select",
+        id: "gridfinityCompartmentLabel",
+        label: t("prop.gridfinityCompartmentLabel"),
+        value: stored?.side ?? "none",
+        options: [{ value: "none", label: t("gridfinity.labelNone") }, ...sides.map(({ value, label }) => ({ value, label: t(label) }))],
+        onChange: (value) => {
+          const side = GRIDFINITY_LABEL_SIDE_OPTIONS.find((option) => option.value === value)?.value;
+          writeLabel(side ? { ...stored, column, row, side } : null);
+        },
+      });
+      const built = gridfinityCompartmentLabel(fields, column, row);
+      if (stored && built) {
+        const maxWidth = gridfinityCompartmentLabelMaxWidth(fields, cell, built.side);
+        const change = (changes: Partial<GridfinityCompartmentLabel>) => {
+          const next: GridfinityCompartmentLabel = { ...stored, ...changes };
+          // 100 % and the middle are what a label has unset, so they are written as unset.
+          if (next.length === undefined || next.length >= 100) delete next.length;
+          if (next.align === "middle") delete next.align;
+          writeLabel(next);
+        };
+        // A shelf that comes out shorter than 4 mm is left out, which the row says rather than leave it unexplained.
+        const tooShort = built.length < 100 && (built.length / 100) * 2 * (built.side === "back" || built.side === "front" ? cell.hx : cell.hz) < MIN_GRIDFINITY_COMPARTMENT_LABEL_MM;
+        properties.push({ id: "gridfinityCompartmentLabelLength", label: t("prop.gridfinityCompartmentLabelLength"), value: built.length, min: MIN_GRIDFINITY_COMPARTMENT_LABEL_LENGTH, max: 100, step: 1, hint: t(tooShort ? "gridfinity.compartmentLabelTooShortHint" : "gridfinity.compartmentLabelLengthHint"), onChange: (value) => change({ length: clamp(value, MIN_GRIDFINITY_COMPARTMENT_LABEL_LENGTH, 100) }) });
+        if (built.length < 100) {
+          const options = GRIDFINITY_LABEL_ALIGN_OPTIONS[built.side === "back" || built.side === "front" ? "across" : "deep"];
+          properties.push({
+            type: "select",
+            id: "gridfinityCompartmentLabelAlign",
+            label: t("prop.gridfinityLabelOffset"),
+            value: built.align,
+            options: options.map(({ value, label }) => ({ value, label: t(label) })),
+            onChange: (value) => change({ align: options.find((option) => option.value === value)?.value ?? "middle" }),
+          });
+        }
+        properties.push({ id: "gridfinityCompartmentLabelWidth", label: t("prop.gridfinityLabelWidth"), value: built.width, min: MIN_GRIDFINITY_LABEL_WIDTH, max: Math.max(MIN_GRIDFINITY_LABEL_WIDTH, maxWidth), step: 0.5, onChange: (value) => change({ width: clamp(value, MIN_GRIDFINITY_LABEL_WIDTH, maxWidth) }) });
+      }
+    }
+  }
+
+  return (
+    <div className={`property-card ${open ? "" : "collapsed"}`}>
+      <button
+        className="property-card-header"
+        type="button"
+        aria-expanded={open}
+        aria-controls={`gridfinity-compartments-${shape.id}`}
+        onClick={() => setOpen((current) => !current)}
+      >
+        <span>{t("inspector.gridfinityCompartments")}</span>
+        <ChevronUp className={open ? "" : "collapsed"} size={25} strokeWidth={2.8} />
+      </button>
+      {open ? (
+        <div className="property-list" id={`gridfinity-compartments-${shape.id}`}>
+          <ShapePropertyRows properties={properties} defaults={defaults} workspace={workspace} disabled={locked} onInteractionActiveChange={onInteractionActiveChange} />
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
 type PropertyDefaultValues = ReadonlyMap<string, number | string | boolean>;
 
 /**
  * The values a shape of this kind has when it is made new, with the defaults saved in the
- * settings, by property id. The main list, the taper card and the twist card each have
- * their own, as some ids (a pyramid's top width) mean different things in them. Null for
- * a shape that is not made from the toolbar: a sketch, a mesh, a group.
+ * settings, by property id. The main list, the taper card, the twist card and a Gridfinity
+ * bin's compartments card each have their own, as some ids (a pyramid's top width) mean
+ * different things in them. Null for a shape that is not made from the toolbar: a sketch,
+ * a mesh, a group.
  */
 function shapePropertyDefaults(kind: WorkplaneShape["kind"], workspace: WorkplaneWorkspaceSettings) {
   const asset = shapeDefaultsAsset(kind);
@@ -3869,7 +4110,13 @@ function shapePropertyDefaults(kind: WorkplaneShape["kind"], workspace: Workplan
       ["bottomWidth", taperSize.bottomWidth],
     ]);
     const twist = new Map<string, number | string | boolean>([["extrudeTwist", 0], ["extrudeTopOffsetX", 0], ["extrudeTopOffsetZ", 0]]);
-    return { main, taper, twist };
+    // A Gridfinity bin's compartments card (#554): the counts and the dividers' thickness, not the labels of one bin.
+    let compartments: Map<string, number | string | boolean> | null = null;
+    if (fresh.kind === "gridfinity") {
+      const fields = { ...fresh, depth: shapeOverallFootprintDimensions(fresh).depth };
+      compartments = new Map<string, number | string | boolean>([["gridfinityCompartmentsX", gridfinityCompartmentCount(fields, "x")], ["gridfinityCompartmentsZ", gridfinityCompartmentCount(fields, "z")], ["gridfinityDividerThickness", gridfinityDividerThickness(fields)]]);
+    }
+    return { main, taper, twist, compartments };
   } catch {
     return null;
   }
@@ -3966,10 +4213,34 @@ export function SnapGridControl({
   onObjectSnapChange?: (enabled: boolean) => void;
 }) {
   const label = (size: GridSize) => customSnapGridLabel(size, customGrids) ?? measurementOptionLabel(size);
+  // The menu goes onto the page itself: the corner of the 3D view lies under the toolbar and its pinned Shapes
+  // panel, so no z-index within it could bring the menu over them (#616, still behind it after 1.93.0).
+  const selectRef = useRef<HTMLButtonElement>(null);
+  const [menuPlace, setMenuPlace] = useState<CSSProperties | null>(null);
+  useLayoutEffect(() => {
+    if (!snapOpen) {
+      setMenuPlace(null);
+      return;
+    }
+    const place = () => {
+      const row = selectRef.current?.parentElement?.getBoundingClientRect();
+      if (!row) return;
+      setMenuPlace({
+        position: "fixed",
+        right: Math.max(4, window.innerWidth - row.right),
+        bottom: window.innerHeight - row.top + 4,
+        maxHeight: Math.max(120, row.top - 12),
+        zIndex: 75,
+      });
+    };
+    place();
+    window.addEventListener("resize", place);
+    return () => window.removeEventListener("resize", place);
+  }, [snapOpen]);
   return (
     <div className="snap-row">
       <span>{t("inspector.snapGrid")}</span>
-      <button className="snap-select" data-help={t("inspector.snapGrid")} onClick={() => onSnapOpenChange((value) => !value)}>
+      <button ref={selectRef} className="snap-select" data-help={t("inspector.snapGrid")} onClick={() => onSnapOpenChange((value) => !value)}>
         <span className="snap-select-label">{label(snap)}</span>
         <ChevronDown size={12} fill="currentColor" />
       </button>
@@ -3979,8 +4250,8 @@ export function SnapGridControl({
           <button type="button" data-help={t("inspector.unitsSwitch")} aria-pressed={units === "Imperial"} onClick={() => onUnitsChange("Imperial")}>in</button>
         </span>
       ) : null}
-      {snapOpen ? (
-        <div className="snap-menu">
+      {snapOpen && menuPlace ? createPortal(
+        <div className="snap-menu" style={menuPlace}>
           {snapGridOptions(units, customGrids).map((size) => (
             <button
               key={size}
@@ -3999,7 +4270,8 @@ export function SnapGridControl({
               <span>{t("inspector.objectSnap")}</span>
             </label>
           ) : null}
-        </div>
+        </div>,
+        document.body,
       ) : null}
     </div>
   );
@@ -4518,6 +4790,7 @@ export function SelectionInspector({
   shapes,
   onSetHole,
   onSetColor,
+  onUpdateShapes,
   onToggleLocked,
   onToggleHidden,
   onInteractionActiveChange,
@@ -4533,6 +4806,8 @@ export function SelectionInspector({
   shapes: readonly WorkplaneShape[];
   onSetHole: (hole: boolean) => void;
   onSetColor: (color: string) => void;
+  /** Changes to several of the selected parts in one step: "Fit module" for two gears (#645). */
+  onUpdateShapes?: (changes: readonly { id: string; patch: Partial<WorkplaneShape> }[], message?: string) => void;
   onToggleLocked: () => void;
   /** Hides the selected parts, or shows them again when all of them are hidden (#491); the button of a single part's panel. */
   onToggleHidden?: () => void;
@@ -4568,6 +4843,12 @@ export function SelectionInspector({
   const swatch = sharedColor ?? solids[0]?.color ?? SOLID_COLORS[0];
   // Two involute gears: where they mesh (#201).
   const gearPair = shapes.length === 2 ? involuteGearPair(shapes[0], shapes[1]) : null;
+  // The module that would let them mesh where they stand (#645), unless they mesh there already.
+  const fitModule = gearPair?.fitModule && (gearPair.distance === null || Math.abs(gearPair.distance - gearPair.current) > 0.005) ? gearPair.fitModule : null;
+  const fitGearPair = () => {
+    if (!fitModule || !onUpdateShapes) return;
+    onUpdateShapes(gearPairFitPatches(shapes[0], shapes[1], fitModule), t("status.gearPairFitted", { module: plainNumber(fitModule) }));
+  };
   const pick = (color: string) => {
     onSetColor(color);
     rememberColor(color);
@@ -4668,7 +4949,13 @@ export function SelectionInspector({
           {gearPair.distance === null
             ? t("inspector.gearPairMismatch", { a: plainNumber(gearPair.modules[0]), b: plainNumber(gearPair.modules[1]) })
             : t(gearPair.internal ? "inspector.gearPairInternal" : "inspector.gearPair", { distance: plainNumber(gearPair.distance), current: plainNumber(gearPair.current) })}
+          {fitModule ? <> {t("inspector.gearPairFit", { module: plainNumber(fitModule) })}</> : null}
         </p>
+      ) : null}
+      {fitModule && onUpdateShapes ? (
+        <button type="button" className="inspector-action-button selection-gear-fit" disabled={anyLocked} title={t("inspector.gearPairFitHint")} onClick={fitGearPair}>
+          {t("inspector.gearPairFitApply")}
+        </button>
       ) : null}
       <p className="selection-inspector-hint">{t("inspector.selectionHint")}</p>
       {!movable.moved ? (

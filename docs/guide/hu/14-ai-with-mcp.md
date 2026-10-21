@@ -67,7 +67,7 @@ Az MI ugyanazokkal a funkciókkal dolgozik, mint te, ugyanazon az úton, mint a 
 | `layerling_ungroup_objects` | csoportokat bont fel |
 | `layerling_boolean_cut` | tömör testeket vág lyukakkal |
 | `layerling_intersect_objects` | csak azt tartja meg, ami az objektumokban közös (Metszet) |
-| `layerling_separate_parts` | egy alakzatot a különálló részeire bont |
+| `layerling_separate_parts` | egy alakzatot a különálló részeire bont, a vázlattestet körvonalanként egy testre |
 | `layerling_split_objects` | tömör testeket vagy lyukakat vág ketté egy síkkal |
 | `layerling_list_edges` | felsorolja egy objektum valódi CAD-éleit |
 | `layerling_apply_edge_treatment` | kiválasztott éleket tör le vagy kerekít le |
@@ -94,6 +94,7 @@ Az MI ugyanazokkal a funkciókkal dolgozik, mint te, ugyanazon az úton, mint a 
 | `layerling_delete_custom_shape` | eltávolít egy saját alakzatot; a beillesztett testek megmaradnak |
 | `layerling_show_workplane` | elrejti és megmutatja a tárgyasztalt a rácsával, például az alsó oldalról készülő képhez (csak a nézet) |
 | `layerling_set_section_view` | egy sík mentén felnyitja a nézetet, hogy belenézz (csak a nézet, semmi sem vágódik szét) |
+| `layerling_saved_view` | elmenti az aktuális nézetet a 7, 8, 9 vagy 0 billentyű alá, és visszaállítja, mint a Shift+billentyű és a billentyű (csak a nézet) |
 | `layerling_clear_history` | véglegesen töröl minden visszavonási lépést, ahogy az előzménynézet „Előzmények törlése” gombja; `confirm: true` kell hozzá |
 | `layerling_set_history_view` | visszatekint a projekt egy korábbi állapotára, mint az előzménynézet (a valódi terv érintetlen marad; a módosító eszközök várnak, amíg bezárul) |
 | `layerling_restore_from_history` | objektumokat (csoportokon belüli alkatrészeket is) hoz vissza másolatként egy korábbi állapotból a tervbe, mint az előzménynézet visszahozó gombja - egy lépés, amelyet a visszavonás visszavesz |

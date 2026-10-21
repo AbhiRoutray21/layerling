@@ -1,11 +1,11 @@
 ---
-title: Fils, engrenages et autres pièces
+title: Filetages, engrenages et autres pièces
 summary: Vis, écrous et trous taraudés qui s'emboîtent, plus engrenage, ressort, tube cintré, queue d'aronde, trou en forme de goutte, trou lamé et trou fraisé.
 ---
 
 Outre les formes de base, la bibliothèque contient certaines pièces qui seraient fastidieuses à assembler soi-même. Tous peuvent être modifiés ultérieurement dans leurs paramètres.
 
-## Sujets
+## Filetages
 
 Choisissez {{ui:shape.thread}} dans la bibliothèque de formes. Sous {{ui:inspector.threadRole}}, vous décidez ce que cela doit être :
 
@@ -16,7 +16,7 @@ Choisissez {{ui:shape.thread}} dans la bibliothèque de formes. Sous {{ui:inspec
 
 ![Une vis avec une culasse. À droite : type et forme de la tête, plus bas taille, pas et profil.](shot:thread-screw)
 
-Vous choisissez la taille sous {{ui:prop.threadSize}} dans une liste : métrique de M2 ​​à M12, les tailles en pouces UNC et UNF du n° 4 à 1 pouce et les filetages de tuyau G1/16 à G4. Si vous choisissez {{ui:thread.customSize}}, vous définissez vous-même {{ui:prop.diameter}} et {{ui:prop.pitch}}. Pour une taille en pouces ou une taille G, le champ demande {{ui:prop.threadsPerInch}} au lieu du pas en millimètres.
+Vous choisissez la taille sous {{ui:prop.threadSize}} dans une liste : métrique de M2 ​​à M24, les tailles en pouces UNC et UNF du n° 4 à 1 pouce et les filetages de tuyau G1/16 à G4. Si vous choisissez {{ui:thread.customSize}}, vous définissez vous-même {{ui:prop.diameter}} et {{ui:prop.pitch}}. Pour une taille en pouces ou une taille G, le champ demande {{ui:prop.threadsPerInch}} au lieu du pas en millimètres.
 
 La liste regroupe les tailles par série, et une ligne sous le champ nomme la série de la taille que vous avez choisie, avec des exemples que vous connaissez de la vie quotidienne :
 
@@ -40,13 +40,13 @@ Plus de paramètres :
 - **{{ui:prop.threadChamferTop}}, {{ui:prop.threadChamferBottom}}, {{ui:prop.headChamfer}} et {{ui:prop.rimChamfer}} :** Chanfreins aux extrémités pour que le filetage démarre proprement et que la tête n'ait pas d'arête vive. Chaque extrémité d'une tige, d'un écrou ou d'un trou taraudé possède son propre chanfrein, de sorte que le haut peut être long et le bas court ou nul. Une vis n'en a qu'une à son extrémité, étiquetée {{ui:prop.chamfer}}. Sur un écrou ou un trou taraudé, le chanfrein est la pièce dans laquelle la bouche s'ouvre au-delà du diamètre extérieur ; le cône s'étend à 45 degrés jusqu'au noyau du filetage, de sorte qu'aucun rebord n'est laissé au niveau du diamètre extérieur.
 
 La commutation d'un thread entre {{ui:thread.rod}} et {{ui:thread.bore}} conserve sa longueur. Un écrou et une vis partent de leurs mesures standards.
-- **{{ui:prop.quality}} :** Avec quelle précision le fil est calculé. Plus haut, c'est plus précis, mais plus lent.
+- **{{ui:prop.quality}} :** Avec quelle précision le filetage est calculé. Plus haut, c'est plus précis, mais plus lent.
 
-Les fils imprimés sont un sujet à part entière. Faites d'abord la paire vis et écrou à titre de test avant d'imprimer une grande pièce et ajustez le jeu à votre imprimante.
+Les filetages imprimés sont un sujet à part entière. Faites d'abord la paire vis et écrou à titre de test avant d'imprimer une grande pièce et ajustez le jeu à votre imprimante.
 
-## Fils pour l'impression 3D
+## Filetages pour l'impression 3D
 
-Un fil imprimé a besoin d'air à deux endroits, et ils agissent différemment :
+Un filetage imprimé a besoin d'air à deux endroits, et ils agissent différemment :
 
 - **Le jeu dans le diamètre ({{ui:prop.clearance}}) :** rend l'écrou plus large. La vis a alors la moitié de la valeur de l'air de chaque côté, 0,2 mm à 0,4 mm. Le filetage tourne facilement, mais la vis peut vaciller latéralement.
 - **Jouer le long de l'axe ({{ui:prop.axialClearance}}) :** rend les dents de l'écrou plus fines. La vis peut alors se déplacer d'avant en arrière le long de l'axe de cette valeur lorsqu'elle n'est pas serrée. Il n’y a pas d’air supplémentaire sur le côté.
@@ -56,8 +56,8 @@ Ensemble, ils réalisent l'écart entre les flancs : environ 0,58 fois le jeu da
 **Conséquences à connaître**
 
 - **La vis a du jeu le long de l'axe.** Sans charge, elle peut se déplacer d'avant en arrière de cette valeur. Pour les fixations, les couvercles et les boîtiers, cela n'a pas d'importance ; pour une vis mère qui doit être positionnée exactement comme elle le fait, alors gardez-la petite ou à 0 là-bas.
-- **Les dents de l'écrou deviennent plus fines.** Avec 0,3 mm au pas de 1,75 mm, chaque dent est presque un tiers plus fine en son milieu et donc nettement moins solide. Pour les pièces fortement chargées, utilisez plutôt un fil plus grossier.
-- **Plus à calculer.** La forme de la dent obtient des points supplémentaires, donc le fil a plus de triangles et prend un peu plus de temps à calculer.
+- **Les dents de l'écrou deviennent plus fines.** Avec 0,3 mm au pas de 1,75 mm, chaque dent est presque un tiers plus fine en son milieu et donc nettement moins solide. Pour les pièces fortement chargées, utilisez plutôt un filetage plus grossier.
+- **Plus à calculer.** La forme de la dent obtient des points supplémentaires, donc le filetage a plus de triangles et prend un peu plus de temps à calculer.
 - **Pas d'arc réel dans l'export STEP pour le profil Whitworth.** Un filetage {{ui:thread.profileWhitworth}} avec du jeu le long de l'axe va vers l'outil de bord et l'export STEP sous forme de forme de dent composée de pièces droites, pas avec les vrais arcs de cercle. A 0, tout reste comme avant.
 
 **Conseils**
@@ -71,7 +71,7 @@ Ensemble, ils réalisent l'écart entre les flancs : environ 0,58 fois le jeu da
 7. **Ébavurez et rodez.** Les premiers tours sont souvent raides car de petits restes de l'empreinte se trouvent sur les flancs. Tournez-le d'avant en arrière plusieurs fois et il fonctionne plus facilement. Le chanfrein au début facilite l'enfilage.
 8. **Une autre imprimante ou un autre filament.** Le jeu dépend de l'imprimante, du matériau et de la buse. Imprimez à nouveau la paire de test lorsque vous modifiez l'un ou l'autre.
 
-L'outil de bord prend un fil comme corps exact. Vous pouvez chanfreiner ou arrondir la pièce qui la porte avec le filetage déjà en place, ou les rebords d'une tête de vis, voir [Casser les bords et creuser les corps](chapter:edges-and-hollowing). Travailler les bords d'un filetage prend un certain temps : quelques secondes pour un filetage M6, environ une demi-minute pour un filetage de tuyau G1/2. Le moyen le plus rapide de casser le bord d'une tête de vis reste le chanfrein de la tête dans les propriétés.
+L'outil de bord prend un filetage comme corps exact. Vous pouvez chanfreiner ou arrondir la pièce qui la porte avec le filetage déjà en place, ou les rebords d'une tête de vis, voir [Casser les bords et creuser les corps](chapter:edges-and-hollowing). Travailler les bords d'un filetage prend un certain temps : quelques secondes pour un filetage M6, environ une demi-minute pour un filetage de tuyau G1/2. Le moyen le plus rapide de casser le bord d'une tête de vis reste le chanfrein de la tête dans les propriétés.
 
 ## Engrenages
 
@@ -132,6 +132,10 @@ Un bac peut aussi recevoir une rampe pour les doigts le long de n'importe quelle
 
 Un bac peut aussi avoir un fond relevé, pour une ébauche où découper des formes : {{ui:prop.gridfinityFloorHeight}} règle la hauteur du fond, mesurée depuis le dessous du bac (5,95 mm, le fond de 1,2 mm sur les pieds, tant que vous ne la réglez pas), et le bac est plein jusque-là. Avec rebord, elle va jusqu'à l'endroit où le support du rebord d'empilage quitte la paroi, 1,65 mm sous 7 mm par unité de hauteur (19,35 mm pour 3 unités), si bien que le rebord reste entier et que les pieds d'un bac empilé dessus restent à 1,3 mm du fond ; sans rebord, elle va jusqu'en haut, et le bac est un bloc plein. Groupez-y des trous à la forme de vos outils, aussi profonds que nécessaire. Les rampes pour les doigts partent du fond relevé, et les tablettes d'étiquette avancent moins dans le bac pour que leur dessous finisse encore au-dessus du fond ; dès que le fond ne leur laisse plus de place, leurs interrupteurs disparaissent (au-delà de 15,35 mm et de 15,54 mm dans un bac de 3 unités avec rebord) et reviennent quand vous l'abaissez. Un bac de 1 unité de hauteur avec rebord n'a pas la place de relever son fond et n'affiche pas ce champ. Un fond relevé ne fait pas non plus partie de la spécification.
 
+Un bac peut aussi être divisé en cases sans y grouper de boîtes comme cloisons : sous {{ui:inspector.gridfinityCompartments}}, juste après {{ui:inspector.properties}}, {{ui:prop.gridfinityCompartmentsX}} et {{ui:prop.gridfinityCompartmentsZ}} règlent leur nombre, jusqu'à 4 par unité de grille dans chaque sens (2 par cellule de la demi-grille) et 40 en tout. Les cloisons occupent toute la hauteur, du fond (ou du fond relevé) jusqu'à 0,85 mm sous 7 mm par unité de hauteur, là où s'arrêtent aussi les tablettes d'étiquette, si bien qu'un bac empilé sur le rebord s'y pose comme avant. Les cloisons demandent un bac d'au moins 2 unités de hauteur, dont le fond reste au moins 3 mm sous leur haut ; sans cette place, le bac est construit sans elles, et elles reviennent dès qu'il y a de nouveau la place. {{ui:prop.gridfinityDividerThickness}} vaut 1,2 mm tant que vous ne la réglez pas, de 0,8 à 3 mm. Les cloisons sont d'abord réparties régulièrement. Pour en déplacer une, choisissez-la sous {{ui:prop.gridfinityDividerAcross}} ou {{ui:prop.gridfinityDividerDeep}}, comptée depuis la gauche ou depuis l'arrière, et réglez sa {{ui:prop.gridfinityDividerPosition}}, mesurée de l'intérieur de la paroi gauche ou arrière jusqu'au milieu de la cloison ; chaque case garde au moins 6 mm de large. Dès qu'une cloison a été déplacée, les cloisons de ce sens gardent leur place en millimètres quand le bac change de taille ; un nouveau nombre de cases répartit de nouveau régulièrement les cloisons de ce sens. Chaque case a les coins intérieurs du bac, arrondis de 2,8 mm, et les arêtes de son fond sont arrondies de 2,8 mm aussi, avec ou sans rampe. Les rampes pour les doigts se répètent dans chaque case : avec une rampe sur la paroi arrière, chaque case en a une sur son côté arrière, contre la paroi ou contre une cloison. Dans une case étroite, le rayon diminue pour laisser 2 mm de fond plat, et une case trop étroite même pour 3,5 mm perd les rampes de ce sens ; une remarque sous {{ui:prop.gridfinityScoopRadius}} le signale. Les cloisons ne font pas non plus partie de la spécification.
+
+Un bac à cloisons peut avoir une tablette d'étiquette par case au lieu des tablettes le long de ses parois : celles-ci sont pour les bacs sans cases, et leurs interrupteurs reviennent dès que le bac n'a plus qu'une case. Dans un bac de 3 unités de hauteur ou plus, choisissez une case avec {{ui:prop.gridfinityCompartmentRow}} et {{ui:prop.gridfinityCompartmentColumn}} (chacune affichée seulement s'il y en a plus d'une), puis sous {{ui:prop.gridfinityCompartmentLabel}} le côté contre lequel se trouve sa tablette, la paroi du bac ou une cloison ; un côté n'est proposé que si une tablette y laisse la case ouverte. {{ui:prop.gridfinityCompartmentLabelLength}} va de 10 à 100 ; une tablette qui ferait moins de 4 mm est omise, et une remarque en dessous le signale. Une tablette plus courte fait apparaître {{ui:prop.gridfinityLabelOffset}} : {{ui:gridfinity.alignLeft}}, {{ui:gridfinity.alignMiddle}} ou {{ui:gridfinity.alignRight}} sur un côté arrière ou avant, ou {{ui:gridfinity.alignBack}}, {{ui:gridfinity.alignMiddle}} ou {{ui:gridfinity.alignFront}} sur un côté gauche ou droit. {{ui:prop.gridfinityLabelWidth}} vaut 14 mm tant que vous ne la réglez pas, moins dans une case étroite, et une tablette n'avance jamais au point de fermer sa case : au moins 6 mm restent libres devant elle. Les tablettes ont le profil de celles des parois, et {{ui:prop.gridfinityLabelCorner}} et {{ui:prop.gridfinityLabelCornerSize}} sous {{ui:inspector.properties}} valent aussi pour elles.
+
 ## Charnière
 
 La {{ui:shape.hinge}} s'imprime d'un seul tenant et se déplace ensuite (print-in-place) : deux feuilles posées ouvertes à plat sur la plaque, avec des jointures alternées sur un axe entre elles. La goupille appartient à la feuille arrière et traverse avec jeu les articulations de la feuille avant. Vous définissez le {{ui:prop.hingeLength}}, le {{ui:prop.hingeOpenWidth}} et le {{ui:prop.hingeKnuckleDiameter}}, plus le nombre de {{ui:prop.hingeKnuckles}} (impair, donc la broche est maintenue aux deux extrémités), le {{ui:prop.hingePinDiameter}} et le {{ui:prop.hingeLeafThickness}}.
@@ -158,7 +162,7 @@ Faites un trou dans la larme et regroupez-la avec la pièce. Sa longueur s'éten
 
 Un **trou taraudé** situé sur le côté s'affaisse également au sommet de la même manière. Donnez-lui sa propre larme : ajoutez un trou {{ui:shape.teardrop}} dont le {{ui:prop.teardropDiameter}} correspond au noyau du filetage, le diamètre que ses dents laissent libre (environ 8,4 mm pour du M10), de même longueur que le trou taraudé, et sélectionnez les deux. Cliquez sur {{ui:editor.tool.align}} et alignez-les au milieu — le milieu de la larme est le milieu de sa partie ronde, et non de sa boîte avec la pointe, de sorte que les deux cercles se superposent parfaitement — puis regroupez les deux avec la pièce. Le filetage est découpé comme d'habitude et la pointe ouvre le haut du trou, ce qui permet de l'imprimer sans supports.
 
-## Lamage et fraisage
+## Lamage et fraisage
 
 Une tête de vis ne devrait souvent pas être fière. Le {{ui:shape.counterbore}} découpe une poche ronde pour une vis à tête creuse (DIN 912), le {{ui:shape.countersink}} un cône pour une vis à tête fraisée (DIN 7991). Les deux se tiennent avec la tête vers le haut : le {{ui:prop.screwHoleHead}} est le diamètre de la poche ou du cône, le {{ui:prop.screwHoleShaft}} l'alésage en dessous, le {{ui:prop.screwHoleLength}} toute la longueur. Sur le lamage, vous placez le {{ui:prop.screwHoleHeadDepth}}, sur le fraisage le {{ui:prop.screwHoleAngle}} (90° convient aux vis à tête fraisée). Les valeurs par défaut correspondent à une vis M3.
 

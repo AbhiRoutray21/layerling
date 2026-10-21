@@ -84,6 +84,10 @@ Ligt het werkvlak op de zijkant van een lichaam, dan teken je zoals je naar die 
 
 Met {{ui:inspector.editSketch}} kun je op elk moment terug naar de schets om hem te veranderen. Een dubbelklik op het lichaam doet hetzelfde, zoals in Tinkercad (een vergrendeld lichaam blijft dicht); {{ui:workspace.doubleClickOpensSketch}} in de instellingen zet dat uit. Randbewerkingen die je al op het lichaam hebt gemaakt gaan wel verloren, omdat de randen opnieuw worden gemaakt.
 
+Een schets met meerdere omtrekken geeft één lichaam, en omtrekken die overlappen, versmelten erin. Wil je elke omtrek apart, selecteer dan het lichaam en klik op {{ui:inspector.separateParts}}: elke buitenste omtrek wordt een eigen lichaam met de gaten die erin liggen, en houdt de hoogte, kleur en plaats van het lichaam. Elk deel heeft zijn eigen schets om te bewerken, met de hulplijnen, zodat je de delen een voor een kunt optillen of laten zakken en ze daarna samenvoegen of aftrekken. Randbewerkingen verhinderen dat, net als een lichaam dat achteraf is uitgerekt: dat wordt dan als net gescheiden.
+
+**Een ander soort lichaam uit dezelfde schets:** het label bovenaan de schets zegt wat hij wordt: {{ui:sketch.modeBadgeExtrude}}, {{ui:sketch.modeBadgeRevolve}} of {{ui:sketch.modeBadgeSweep}}. Klik erop en kies een ander, ook terwijl je een bestaand lichaam bewerkt: een geïmporteerde SVG, die geëxtrudeerd binnenkomt, wordt een vaas of een knop als je hem op {{ui:sketch.modeBadgeRevolve}} zet. Een omtrek die over de as reikt, schuift naar links tot zijn rechterrand op de as ligt; [[Ctrl]]+[[Z]] draait het verschuiven terug. Bij het afronden neemt het nieuwe lichaam de plaats van het oude in, met zijn naam en kleur en de voet op dezelfde hoogte. Randbewerkingen gaan verloren, zoals bij elke wijziging van een schets.
+
 ### Omwentelen
 
 Bij draaien teken je de halve doorsnede **links van de as** die in de schets getoond wordt. Daarnaast zie je een 3D-voorbeeld van het draaien. Dat laat meteen zien hoe het lichaam eruit gaat zien. De omtrek moet gesloten zijn, of je bouwt een open lijn als lijn met dikte, zie hieronder. Klik aan het eind op {{ui:sketch.finishRevolve}}. De andere lichamen van het ontwerp worden van voren getoond, in dezelfde weergave als het profiel, met de as in het midden: teken het profiel naast of boven ze. Het lichaam staat waar je het getekend hebt, en de horizontale lijn door het midden van de schets is de grond: een profiel erboven geeft een lichaam dat hoger staat, en het laagste punt is de voet van het lichaam.
@@ -152,7 +156,7 @@ Alle vier raken alleen de referentie, nooit de schets.
 
 | Toets | Werking |
 | --- | --- |
-| [[Esc]] | lijnketen beëindigen, selectie opheffen |
+| [[Esc]] | gereedschap neerleggen (terug naar {{ui:sketch.select}}), dan selectie opheffen |
 | [[Delete]] | geselecteerd element verwijderen |
 | [[Ctrl]]+[[C]] | selectie kopiëren |
 | [[Ctrl]]+[[X]] | selectie knippen |
