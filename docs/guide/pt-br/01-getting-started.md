@@ -59,7 +59,7 @@ O nome do projeto ({{ui:confirm.projectName}}) fica bem no topo. Clique nele, di
 
 ### Opções de visibilidade
 
-{{ui:editor.visibilityOptions}}, a seta ao lado do ícone de olho, reúne o que você pode mostrar ou ocultar: a lista de objetos, tudo o que você ocultou, as anotações e as saliências da impressão. Mais em [Selecionar e organizar](chapter:select-and-arrange).
+Em {{ui:editor.visibilityOptions}}, na seta ao lado do ícone de olho, você encontra o que pode mostrar ou ocultar: a lista de objetos, tudo o que você ocultou, as anotações e as saliências da impressão. Mais em [Selecionar e organizar](chapter:select-and-arrange).
 
 ### Ocultar selecionados
 
