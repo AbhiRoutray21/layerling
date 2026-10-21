@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+## 1.97.0
+
 - **Trackpad pinch zooms in full steps in Chrome:** Chrome (on a Mac and on Linux) sends a pinch as Ctrl wheel steps far smaller than a notch. OrbitControls counts those ten times over, but the notch count of #331 replaces the step it reads, so a pinch zoomed a tenth as far. `wheelZoomDelta` now multiplies a small Ctrl step by `PINCH_WHEEL_FACTOR` itself; a mouse notch with Ctrl held stays as it is, and Safari's pinch (`pinchWheelDelta`) is made that much smaller, so it zooms as before. Unit tests in `wheelZoom.test.ts`; not tried with a real trackpad. Reported by mail.
 - **The properties panel follows the toolbar size:** Small, Medium and Large in the settings now scale the panel on the right as well (`zoom: var(--toolbar-scale)` on `.shape-inspector`), as they already did the ribbon, the shape library and the camera controls. Measured in the dev server: 240, 320 and 400 px wide, docked to the full height, and moved by its header it follows the pointer one to one. The guide (chapter View, all guide languages) says so. Reported by mail.
 - **Take a sketch apart by its outlines (#669):** Separate Parts on an extruded sketch body now splits it into one exact body per outer outline, overlapping outlines included, each with a sketch of its own (`lib/sketchOutlineParts.ts`, `sketchOutlineParts.test.ts`); a status message says how many outlines came apart. The MCP action `separate_parts` does the same, and its description in the MCP tools and the three SKILL.md files, the guide's MCP table and the sketch chapter (all languages) say so. In French the button is now "Séparer les pièces".
