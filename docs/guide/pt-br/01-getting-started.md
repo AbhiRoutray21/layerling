@@ -17,9 +17,9 @@ Depois, todos os seus projetos aparecem na página inicial com uma miniatura. El
 
 ## Conhecendo o editor
 
-![O editor com duas formas no plano de trabalho. A faixa de opções no topo, os controles da câmera à esquerda, as configurações da forma selecionada à direita.](shot:editor-overview)
+![O editor com duas formas no plano de trabalho. A barra de opções no topo, os controles da câmera à esquerda, as configurações da forma selecionada à direita.](shot:editor-overview)
 
-- **No topo** fica a faixa de opções. Ela é organizada por tarefa: {{ui:editor.group.clipboard}}, {{ui:editor.group.history}}, {{ui:editor.group.shapes}}, {{ui:editor.group.visibility}}, {{ui:editor.group.combine}}, {{ui:editor.group.modify}}, {{ui:editor.group.arrange}}, {{ui:editor.group.manage}} e {{ui:editor.group.help}}. Passe o mouse sobre um ícone para ver o nome dele. O pequeno ponto de interrogação, por exemplo nas configurações de uma forma, na biblioteca de formas ou nos painéis de ferramentas, leva direto ao capítulo correspondente deste guia.
+- **No topo** fica a barra de opções. Ela é organizada por tarefa: {{ui:editor.group.clipboard}}, {{ui:editor.group.history}}, {{ui:editor.group.shapes}}, {{ui:editor.group.visibility}}, {{ui:editor.group.combine}}, {{ui:editor.group.modify}}, {{ui:editor.group.arrange}}, {{ui:editor.group.manage}} e {{ui:editor.group.help}}. Passe o mouse sobre um ícone para ver o nome dele. O pequeno ponto de interrogação, por exemplo nas configurações de uma forma, na biblioteca de formas ou nos painéis de ferramentas, leva direto ao capítulo correspondente deste guia.
 - **No centro** fica o plano de trabalho. É aqui que você posiciona as formas, dá forma a elas e vê o resultado.
 - **À direita** aparecem as configurações da forma selecionada: cor, dimensões, posição e tudo o mais que compõe a forma. Digitar números é mais exato do que arrastar.
 - **À esquerda** ficam os controles da câmera, com o cubo de visualização acima deles. Eles levam você pela cena; mais em [Vista e plano de trabalho](chapter:view-and-workplane).
@@ -89,7 +89,7 @@ No rodapé você encontra: {{ui:dashboard.sponsor}}, que leva à página onde vo
 
 Por exemplo, vamos montar um cubo com um furo.
 
-1. Clique em {{ui:editor.addShape}} na faixa de opções e escolha {{ui:shape.box}}. A forma agora fica presa ao ponteiro do mouse. Um clique no plano de trabalho a coloca ali.
+1. Clique em {{ui:editor.addShape}} na barra de opções e escolha {{ui:shape.box}}. A forma agora fica presa ao ponteiro do mouse. Um clique no plano de trabalho a coloca ali.
 2. À direita, defina as dimensões, por exemplo 40 mm de comprimento, 40 mm de largura e 20 mm de altura.
 3. Coloque um {{ui:shape.cylinder}} no centro do mesmo jeito, com 14 mm de diâmetro e 30 mm de altura. Ele deve ser mais alto que o cubo, para atravessá-lo de ponta a ponta.
 4. Selecione o cilindro e clique em {{ui:inspector.hole}} à direita. Ele fica transparente: o sólido virou uma ferramenta que tira material.
