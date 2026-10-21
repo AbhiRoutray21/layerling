@@ -107,3 +107,10 @@ html[data-view-cube-position="bottom-right"] .second-view-stage .view-cube {
     order: 2;
   }
 }
+
+/* The status message (globals.css .editor-status), placed for this window:
+   it has no toolbar above it, and no settings panel on the right. */
+.second-view-stage .second-view-notice {
+  top: 22px;
+  max-width: calc(100vw - 130px);
+}

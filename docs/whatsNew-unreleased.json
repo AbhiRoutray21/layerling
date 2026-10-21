@@ -1,1 +1,38 @@
-[]
+[
+  {
+    "title": {
+      "de": "Eine zweite Ansicht im eigenen Fenster",
+      "en": "A second view in its own window",
+      "ar": "عرض ثانٍ في نافذة خاصة به",
+      "cs": "Druhý pohled ve vlastním okně",
+      "da": "En anden visning i sit eget vindue",
+      "fr": "Une deuxième vue dans sa propre fenêtre",
+      "hu": "Második nézet saját ablakban",
+      "it": "Una seconda vista nella sua finestra",
+      "ja": "専用ウィンドウで2つ目のビュー",
+      "nl": "Een tweede weergave in een eigen venster",
+      "pl": "Drugi widok we własnym oknie",
+      "pt-br": "Uma segunda vista em sua própria janela",
+      "ru": "Второй вид в отдельном окне",
+      "sl": "Drugi pogled v lastnem oknu",
+      "tr": "Kendi penceresinde ikinci bir görünüm"
+    },
+    "body": {
+      "de": "Der neue Knopf in der Kameraleiste öffnet ein zweites Fenster, das denselben Entwurf durch eine eigene Kamera zeigt. Es folgt jeder Änderung, hat seinen eigenen Ansichtswürfel und seine eigene Kameraleiste und öffnet sich dort, wo du es verlassen hast.",
+      "en": "The new button in the camera bar opens a second window that shows the same design through a camera of its own. It follows every change, has its own view cube and camera bar, and opens where you left it.",
+      "ar": "يفتح الزر الجديد في شريط الكاميرا نافذة ثانية تعرض التصميم نفسه عبر كاميرا خاصة بها. تتبع كل تغيير، ولها مكعب عرض وشريط كاميرا خاصان بها، وتُفتح حيث تركتها.",
+      "cs": "Nové tlačítko v liště kamery otevře druhé okno, které ukazuje tentýž projekt vlastní kamerou. Sleduje každou změnu, má vlastní pohledovou kostku i lištu kamery a otevře se tam, kde jste ho nechali.",
+      "da": "Den nye knap i kamerabjælken åbner et andet vindue, der viser det samme design gennem sit eget kamera. Det følger hver ændring, har sin egen visningsterning og kamerabjælke og åbner, hvor du forlod det.",
+      "fr": "Le nouveau bouton de la barre de caméra ouvre une deuxième fenêtre qui montre le même design à travers sa propre caméra. Elle suit chaque modification, a son propre cube de vue et sa propre barre de caméra, et s'ouvre là où vous l'avez laissée.",
+      "hu": "A kamerasáv új gombja egy második ablakot nyit, amely ugyanazt a tervet saját kamerán át mutatja. Követ minden változtatást, saját nézetkockája és kamerasávja van, és ott nyílik meg, ahol hagytad.",
+      "it": "Il nuovo pulsante nella barra della fotocamera apre una seconda finestra che mostra lo stesso progetto da una fotocamera propria. Segue ogni modifica, ha il suo cubo di vista e la sua barra della fotocamera, e si apre dove l'hai lasciata.",
+      "ja": "カメラバーの新しいボタンで、同じデザインを専用のカメラで映す2つ目のウィンドウが開きます。すべての変更に追従し、専用のビューキューブとカメラバーを持ち、前回閉じた位置に開きます。",
+      "nl": "De nieuwe knop in de camerabalk opent een tweede venster dat hetzelfde ontwerp door een eigen camera toont. Het volgt elke wijziging, heeft een eigen weergavekubus en camerabalk, en opent waar je het liet.",
+      "pl": "Nowy przycisk na pasku kamery otwiera drugie okno, które pokazuje ten sam projekt przez własną kamerę. Śledzi każdą zmianę, ma własną kostkę widoku i pasek kamery i otwiera się tam, gdzie je zostawiłeś.",
+      "pt-br": "O novo botão na barra da câmera abre uma segunda janela que mostra o mesmo projeto por uma câmera própria. Ela acompanha cada alteração, tem seu próprio cubo de vista e sua própria barra da câmera, e abre onde você a deixou.",
+      "ru": "Новая кнопка на панели камеры открывает второе окно, которое показывает тот же проект через собственную камеру. Оно следит за каждым изменением, у него свой куб вида и своя панель камеры, и оно открывается там, где вы его оставили.",
+      "sl": "Novi gumb v vrstici kamere odpre drugo okno, ki kaže isti načrt skozi lastno kamero. Sledi vsaki spremembi, ima svojo kocko pogleda in vrstico kamere ter se odpre tam, kjer ste ga pustili.",
+      "tr": "Kamera çubuğundaki yeni düğme, aynı tasarımı kendi kamerasından gösteren ikinci bir pencere açar. Her değişikliği izler, kendi görünüm küpü ve kamera çubuğu vardır ve onu bıraktığınız yerde açılır."
+    }
+  }
+]

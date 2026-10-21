@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { useCallback, useEffect, useRef, type RefObject } from "react";
-import { fitCameraDepthRange } from "@/components/workplane/cameraRig";
+import { fitCameraDepthRange, syncViewCube, toggleCameraProjection, type CameraRig } from "@/components/workplane/cameraRig";
 import type { ThreeState } from "@/components/workplane/ViewportOverlays";
 import { readDesignView, readSavedViews, SAVED_VIEW_KEYS, writeDesignView, writeSavedViews, type DesignView } from "@/lib/designView";
 import { t } from "@/lib/i18n";
@@ -8,7 +8,7 @@ import { t } from "@/lib/i18n";
 /**
  * Where the camera of the 3D view looks, as a view that can be kept and brought back: the view a
  * design was left in (#220), the one it had before a sketch opened (#150), and the four views saved
- * under the keys 7, 8, 9 and 0.
+ * under the keys 7, 8, 9 and 0. The second view's window saves and brings back those four too.
  */
 
 /** Where the camera looked, per design, while the view was taken down for a sketch (#150). */
@@ -19,7 +19,7 @@ export function rememberCameraView(projectId: string | null | undefined, state: 
   rememberedCameraViews.set(projectId ?? "", cameraViewOf(state));
 }
 
-function cameraViewOf(state: ThreeState): DesignView {
+function cameraViewOf(state: CameraRig): DesignView {
   return {
     orthographic: state.camera instanceof THREE.OrthographicCamera,
     position: state.camera.position.toArray() as [number, number, number],
@@ -29,7 +29,7 @@ function cameraViewOf(state: ThreeState): DesignView {
   };
 }
 
-function applyCameraView(state: ThreeState, view: DesignView) {
+function applyCameraView(state: CameraRig, view: DesignView) {
   state.camera.up.fromArray(view.up);
   state.camera.position.fromArray(view.position);
   state.controls.target.fromArray(view.target);
@@ -41,6 +41,34 @@ function applyCameraView(state: ThreeState, view: DesignView) {
   state.needsRender = true;
 }
 
+/** Turns a camera to a kept view, switching between the flat and the normal view where they differ. */
+function showCameraView(state: CameraRig, view: DesignView) {
+  if ((state.camera instanceof THREE.OrthographicCamera) !== view.orthographic) toggleCameraProjection(state);
+  applyCameraView(state, view);
+}
+
+/**
+ * Shift+7, 8, 9 or 0, in the 3D view or the second view: the view of that window's camera as it is
+ * now - turn, pan, zoom and projection - goes into the design's slot. Returns the message saying so.
+ */
+export function saveViewInSlot(projectId: string | null | undefined, state: CameraRig, slot: number) {
+  const views = readSavedViews(projectId);
+  views[slot] = cameraViewOf(state);
+  writeSavedViews(projectId, views);
+  return t("camera.viewSaved", { key: SAVED_VIEW_KEYS[slot] });
+}
+
+/**
+ * 7, 8, 9 or 0, in either window: that window's camera goes to the view saved there. Returns null when
+ * it did, or, for an empty slot, the message that says how to fill it.
+ */
+export function showViewInSlot(projectId: string | null | undefined, state: CameraRig, slot: number) {
+  const view = readSavedViews(projectId)[slot];
+  if (!view) return t("camera.savedViewEmpty", { key: SAVED_VIEW_KEYS[slot] });
+  showCameraView(state, view);
+  return null;
+}
+
 type DesignViewOptions = {
   threeRef: RefObject<ThreeState | null>;
   projectIdRef: RefObject<string | null | undefined>;
@@ -49,8 +77,6 @@ type DesignViewOptions = {
   designViewRestoredRef: RefObject<boolean>;
   orthographicView: boolean;
   setOrthographicView: (orthographic: boolean) => void;
-  toggleCameraProjection: (state: ThreeState) => void;
-  syncViewCube: (state: ThreeState, cube: HTMLDivElement | null) => void;
   onNotice?: (message: string) => void;
 };
 
@@ -65,9 +91,8 @@ export function useDesignViews(options: DesignViewOptions) {
   const readyRef = useRef(false);
 
   const showView = useCallback((state: ThreeState, view: DesignView) => {
-    const { toggleCameraProjection, syncViewCube, viewCubeRef, setOrthographicView } = optionsRef.current;
-    if ((state.camera instanceof THREE.OrthographicCamera) !== view.orthographic) toggleCameraProjection(state);
-    applyCameraView(state, view);
+    const { viewCubeRef, setOrthographicView } = optionsRef.current;
+    showCameraView(state, view);
     syncViewCube(state, viewCubeRef.current);
     setOrthographicView(state.camera instanceof THREE.OrthographicCamera);
   }, []);
@@ -125,10 +150,7 @@ export function useDesignViews(options: DesignViewOptions) {
     const { threeRef, projectIdRef, onNotice } = optionsRef.current;
     const state = threeRef.current;
     if (!state) return false;
-    const views = readSavedViews(projectIdRef.current);
-    views[slot] = cameraViewOf(state);
-    writeSavedViews(projectIdRef.current, views);
-    onNotice?.(t("camera.viewSaved", { key: SAVED_VIEW_KEYS[slot] }));
+    onNotice?.(saveViewInSlot(projectIdRef.current, state, slot));
     return true;
   }, []);
 

@@ -16,6 +16,7 @@ import {
   zoomCameraBy,
   type CameraRig,
 } from "@/components/workplane/cameraRig";
+import { saveViewInSlot, showViewInSlot } from "@/components/workplane/cameraViews";
 import { disposeCutPreviewResources, renderFrame } from "@/components/workplane/renderFrame";
 import { SecondViewCameraBar } from "@/components/workplane/SecondViewCameraBar";
 import { ViewCube } from "@/components/workplane/ViewCube";
@@ -24,6 +25,7 @@ import { leftButtonCameraAction } from "@/lib/cameraMouseButtons";
 import { t } from "@/lib/i18n";
 import { placementOf, readSecondViewPlacement, secondViewSupported, secondViewWindowFeatures, writeSecondViewPlacement } from "@/lib/secondViewPlacement";
 import { orbitViewBy, panViewBy, viewArrowStep } from "@/lib/viewArrowKeys";
+import { savedViewForKey } from "@/lib/designView";
 import { viewFaceForKey } from "@/lib/viewCubeDrag";
 import { ZOOM_STEP_IN, ZOOM_STEP_OUT } from "@/lib/workplaneSettings";
 
@@ -109,6 +111,8 @@ type SecondViewWindowProps = {
   popup: Window;
   /** The 3D view whose scene the window draws. */
   threeRef: RefObject<ThreeState | null>;
+  /** The design, whose four saved views (7, 8, 9, 0) this window shares with the 3D view. */
+  projectId: string | null | undefined;
   /** The main window's selection, which F frames here too. */
   getSelectedIds: () => readonly string[];
   /** Whether anything is selected there, for the bar's "Center view on selection". */
@@ -117,7 +121,7 @@ type SecondViewWindowProps = {
   onClosed: () => void;
 };
 
-export function SecondViewWindow({ popup, threeRef, getSelectedIds, hasSelection, onClosed }: SecondViewWindowProps) {
+export function SecondViewWindow({ popup, threeRef, projectId, getSelectedIds, hasSelection, onClosed }: SecondViewWindowProps) {
   const [container, setContainer] = useState<HTMLElement | null>(null);
   const hostRef = useRef<HTMLDivElement | null>(null);
   const cubeRef = useRef<HTMLDivElement | null>(null);
@@ -126,6 +130,17 @@ export function SecondViewWindow({ popup, threeRef, getSelectedIds, hasSelection
   onClosedRef.current = onClosed;
   const getSelectedIdsRef = useRef(getSelectedIds);
   getSelectedIdsRef.current = getSelectedIds;
+  const projectIdRef = useRef(projectId);
+  projectIdRef.current = projectId;
+  // A message of this window's own (a view saved, an empty key): the editor's may be hidden behind it.
+  const [notice, setNotice] = useState<string | null>(null);
+  const noticeTimerRef = useRef(0);
+  const showNotice = useCallback((message: string) => {
+    setNotice(message);
+    window.clearTimeout(noticeTimerRef.current);
+    noticeTimerRef.current = window.setTimeout(() => setNotice(null), 2500);
+  }, []);
+  useEffect(() => () => window.clearTimeout(noticeTimerRef.current), []);
   const getRig = useCallback(() => rigRef.current, []);
   const closeTimerRef = useRef(0);
   const [orthographic, setOrthographic] = useState(false);
@@ -302,6 +317,17 @@ export function SecondViewWindow({ popup, threeRef, getSelectedIds, hasSelection
         return;
       }
       if (event.ctrlKey || event.metaKey || event.altKey) return;
+      // 7, 8, 9 and 0 bring back the design's saved views, Shift with them saves this window's view there.
+      const savedView = savedViewForKey(event.key, event.code, event.shiftKey);
+      if (savedView) {
+        event.preventDefault();
+        if (savedView.save) showNotice(saveViewInSlot(projectIdRef.current, rig, savedView.slot));
+        else moveCamera((view) => {
+          const empty = showViewInSlot(projectIdRef.current, view, savedView.slot);
+          if (empty) showNotice(empty);
+        });
+        return;
+      }
       const face = viewFaceForKey(event.key, event.code, event.shiftKey);
       const key = event.key.toLowerCase();
       let move: ((view: CameraRig) => void) | null = null;
@@ -380,13 +406,14 @@ export function SecondViewWindow({ popup, threeRef, getSelectedIds, hasSelection
       canvas.remove();
       rigRef.current = null;
     };
-  }, [container, focusSelection, moveCamera, popup, threeRef]);
+  }, [container, focusSelection, moveCamera, popup, showNotice, threeRef]);
 
   if (!container) return null;
   return createPortal(
     <main className="second-view-stage">
       <div className="second-view-canvas" ref={hostRef} />
       <ViewCube getRig={getRig} cubeRef={cubeRef} />
+      {notice ? <p className="editor-status second-view-notice" role="status">{notice}</p> : null}
       <SecondViewCameraBar
         hasSelection={hasSelection}
         orthographic={orthographic}

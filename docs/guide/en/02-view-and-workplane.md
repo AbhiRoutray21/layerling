@@ -39,6 +39,7 @@ At the left edge is a narrow bar. From the top:
 - {{ui:camera.focusSelection}} zooms to the selection ([[F]] or [[Shift]]+[[F]]).
 - {{ui:camera.zoomIn}} and {{ui:camera.zoomOut}} zoom step by step, as do the keys [[+]] and [[−]].
 - {{ui:camera.orthographic}} switches to a flat view in which parallel edges stay parallel. For measuring and lining up edges that is often more comfortable than the perspective view. [[O]] switches back and forth, and a second click returns.
+- {{ui:camera.secondView}} opens a second view of the design in a window of its own, described below. A second click closes it.
 - {{ui:camera.hideWorkplane}} (the eye over a grid) hides the plate with its grid, so you can look at the underside of a design from below. Only the view changes: new shapes still land on the workplane. A second click shows it again.
 - {{ui:camera.placeWorkplane}}, the tape measure and the framing square are tools of their own, covered below and in [Measuring and notes](chapter:measuring-and-notes).
 
@@ -47,6 +48,10 @@ The small arrow at the very top of the bar hides it if it gets in the way.
 A design opens the way you left it: the angle, zoom and position of the view are kept with it in this browser, so you continue where you stopped, also after going Home or closing the page. A saved file (.lyl) carries the view along, so it opens in it elsewhere too. The view is not part of the undo history.
 
 You can also keep four views of your own in each design. [[Shift]]+[[7]], [[Shift]]+[[8]], [[Shift]]+[[9]] or [[Shift]]+[[0]] saves the view exactly as it is - angle, position, zoom, and flat or perspective - under that key, and the key alone ([[7]], [[8]], [[9]] or [[0]]) brings it back. A message at the bottom confirms the save; saving again under the same key replaces the view. Like the view above, the saved views stay with the design in this browser and travel in a saved file (.lyl), and they are not part of the undo history.
+
+### A second view in its own window
+
+{{ui:camera.secondView}} opens a window that shows the same design through a camera of its own, so you can see it from two sides at once - from the front, say, while you work from above. Every change you make in the editor shows there straight away; the design is only changed in the main window, and the handles stay there too. In the second window the mouse and the view cube turn its view as they do here, and so do the keys: [[1]] to [[6]], [[F]], [[Home]], [[O]], [[+]] and [[−]], the arrow keys to turn and [[Ctrl]] with the arrows to slide. [[F]] there zooms to what is selected in the editor. The design's four saved views work there too: [[7]], [[8]], [[9]] and [[0]] bring them back, and [[Shift]] with one of these keys saves that window's view under it - for both windows. Its own camera bar has {{ui:camera.home}}, {{ui:camera.focusSelection}}, {{ui:camera.zoomIn}}, {{ui:camera.zoomOut}}, {{ui:camera.orthographic}} and {{ui:camera.hideWorkplane}}, and they act on that window alone. The window opens where you left it, at the same size, and closes with the editor. On phones and tablets the button is not shown.
 
 ## Looking inside: the section view
 
