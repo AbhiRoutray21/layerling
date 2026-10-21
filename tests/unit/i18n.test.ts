@@ -23,7 +23,7 @@ const FILES = import.meta.glob("../../apps/web/src/lib/messages.*.ts", { eager: 
 const CATALOGUES: Record<string, Record<string, string> | undefined> = {};
 for (const [path, module] of Object.entries(FILES)) {
   const code = /messages\.([a-z-]+)\.ts$/.exec(path)?.[1];
-  if (code) CATALOGUES[code] = module[`MESSAGES_${code.toUpperCase()}`];
+  if (code) CATALOGUES[code] = module[`MESSAGES_${code.toUpperCase().replace(/-/g, "_")}`];
 }
 /** The languages that must have every sentence; a language still on its way is held to less (i18nLanguages.test.ts). */
 const COMPLETE_LANGUAGES = LANGUAGES.filter((language) => LANGUAGE_INFO[language].complete);
@@ -109,6 +109,14 @@ describe("language detection", () => {
     expect(languageFromTag("ru-RU")).toBe("ru");
     expect(languageFromTag("es-ES")).toBe(null);
     expect(languageFromTag(undefined)).toBe(null);
+  });
+
+  it("serves Brazilian Portuguese for a browser that asks for pt-BR", () => {
+    expect(languageFromTag("pt-BR")).toBe("pt-br");
+  });
+
+  it("does not serve Brazilian Portuguese for European Portuguese", () => {
+    expect(languageFromTag("pt-PT")).toBe(null);
   });
 
   it("recognises only the languages it can serve", () => {

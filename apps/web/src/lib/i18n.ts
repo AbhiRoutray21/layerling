@@ -85,6 +85,7 @@ const LOADERS: Partial<Record<Language, CatalogueLoader>> = {
   fr: () => import("@/lib/messages.fr").then((module) => module.MESSAGES_FR),
   // Polish is a separate chunk: only browsers that pick Polish download it.
   pl: () => import("@/lib/messages.pl").then((module) => module.MESSAGES_PL),
+  "pt-br": () => import("@/lib/messages.pt-br").then((module) => module.MESSAGES_PT_BR),
   // Russian is a separate chunk as well: the fork adds it, the author has no Russian.
   ru: () => import("@/lib/messages.ru").then((module) => module.MESSAGES_RU),
   sl: () => import("@/lib/messages.sl").then((module) => module.MESSAGES_SL),
