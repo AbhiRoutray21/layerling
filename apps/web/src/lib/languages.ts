@@ -412,7 +412,7 @@ export const LANGUAGE_INFO: Readonly<Record<Language, LanguageInfo>> = {
     readme: "README.md",
     quickstartAnchor: "windows-quickstart",
     legal: { imprint: "Informações legais", privacy: "Política de privacidade" },
-    keyNames: { Click: "Clique", RightClick: "Clique direito", Drag: "Arrastar" },
+    keyNames: { Click: "Clique", RightClick: "Clique direito", Drag: "Arraste" },
     asciiUmlauts: false,
     complete: false,
     guide: {
