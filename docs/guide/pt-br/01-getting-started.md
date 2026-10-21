@@ -27,7 +27,7 @@ Depois, todos os seus projetos aparecem na página inicial com uma miniatura. El
 
 ## Os botões em volta da área de trabalho
 
-Passe o mouse sobre um botão para ver o nome dele. Se não tiver certeza do que um botão faz, clique em {{ui:interactiveHelp.title}} na área {{ui:editor.group.help}} ([[Shift]]+[[F1]]) e depois no botão. Estes são os mais perguntados.
+Passe o mouse sobre um botão para ver o nome dele. Se não tiver certeza do que um botão faz, clique em {{ui:interactiveHelp.title}} na área {{ui:editor.group.help}} ([[Shift]]+[[F1]]) e depois no botão. Estes são os botões que mais geram perguntas.
 
 ### Colar
 
