@@ -16,7 +16,7 @@
  * (Čeština, Dansk, Deutsch, Français, ...); then the others, by the name in their own script.
  * A new language goes in at its place, not at the end.
  */
-export const LANGUAGES = ["en", "cs", "da", "de", "fr", "it", "hu", "nl", "pl", "pt-br", "sl", "tr", "ru", "ar", "ja"] as const;
+export const LANGUAGES = ["en", "cs", "da", "de", "es", "fr", "it", "hu", "nl", "pl", "pt-br", "sl", "tr", "ru", "ar", "ja"] as const;
 export type Language = (typeof LANGUAGES)[number];
 export const DEFAULT_LANGUAGE: Language = "en";
 
@@ -196,6 +196,61 @@ export const LANGUAGE_INFO: Readonly<Record<Language, LanguageInfo>> = {
       printAllLead: "Alle Kapitel hintereinander, zum Drucken oder zum Speichern als PDF: Drücke Strg+P und schalte in den Druckeinstellungen „Kopf- und Fußzeilen“ aus. Möchtest du nur einen Teil drucken, wähle dort die Seitenzahlen.",
       printContents: "Inhalt",
       printButton: "Drucken",
+    },
+  },
+  // Spanish as written in Spain: the whole interface and the 17 chapters of the guide, informal ("tú") like the German
+  // "du". A browser that asks for the Spanish of Latin America (es-MX, es-AR, ...) gets it too, rather than English.
+  // Not marked complete on purpose, like Hungarian: sentences added later show in English until the Spanish ones follow
+  // in a small pull request, so a release never waits for them. The README stays English.
+  es: {
+    name: "Español",
+    htmlLang: "es-ES",
+    numberLocale: "es-ES",
+    quotes: ["«", "»"],
+    guideDir: "guia-es",
+    communityUrl: GITHUB_DISCUSSIONS,
+    readme: "README.md",
+    quickstartAnchor: "windows-quickstart",
+    legal: { imprint: "Aviso legal", privacy: "Política de privacidad" },
+    // The labels of a Spanish keyboard.
+    keyNames: {
+      Ctrl: "Ctrl",
+      Shift: "Mayús",
+      Delete: "Supr",
+      Backspace: "Retroceso",
+      Home: "Inicio",
+      End: "Fin",
+      "Page Up": "Re Pág",
+      "Page Down": "Av Pág",
+      Enter: "Intro",
+      Click: "Clic",
+      RightClick: "Clic derecho",
+      Drag: "Arrastrar",
+    },
+    asciiUmlauts: false,
+    complete: false,
+    guide: {
+      site: "Guía de usuario de layerling",
+      home: "Guía de usuario",
+      openEditor: "Abrir el editor",
+      backToEditor: "Volver al editor",
+      editorElsewhere: "El editor ya está abierto en otra pestaña: cambia a ella.",
+      chapters: "Capítulos",
+      onThisPage: "En esta página",
+      previous: "Capítulo anterior",
+      next: "Capítulo siguiente",
+      overviewLead: "Todo lo que sabe hacer layerling, paso a paso. Las imágenes salen del programa en marcha y se renuevan con cada versión.",
+      sourceNote: "Esta guía crece con el programa. Si falta algo o algo no es correcto, dínoslo en las",
+      forum: "discusiones",
+      notTranslated: "Este capítulo aún no está traducido al español. A continuación, el texto en inglés.",
+      languageMenu: "Idioma",
+      search: "Buscar en la guía",
+      searchNothing: "No se ha encontrado nada.",
+      printAll: "Guía completa, para imprimir",
+      printAllTitle: "Toda la guía en una sola página",
+      printAllLead: "Todos los capítulos seguidos, para imprimir o guardar como PDF: pulsa Ctrl+P y desactiva «Encabezados y pies de página» en las opciones de impresión. Para imprimir solo una parte, elige allí los números de página.",
+      printContents: "Índice",
+      printButton: "Imprimir",
     },
   },
   nl: {
