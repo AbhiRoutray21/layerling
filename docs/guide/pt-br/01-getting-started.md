@@ -39,7 +39,7 @@ Passe o mouse sobre um botão para ver o nome dele. Se não tiver certeza do que
 
 ### Desagrupar
 
-{{ui:editor.tool.ungroup}} ([[Ctrl]]+[[Shift]]+[[G]]) desfaz o grupo selecionado nas formas de que ele foi feito.
+{{ui:editor.tool.ungroup}} ([[Ctrl]]+[[Shift]]+[[G]]) desfaz o grupo de união selecionado, separando as formas que o compõem.
 
 ### Configurações da área de trabalho
 
