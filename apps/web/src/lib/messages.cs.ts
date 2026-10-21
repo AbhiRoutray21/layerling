@@ -2213,7 +2213,7 @@ export const MESSAGES_CS: Record<MessageKey, string> = {
   "camera.perspective": "Zpět na perspektivní pohled",
   "camera.secondView": "Otevřít druhý pohled",
   "camera.closeSecondView": "Zavřít druhý pohled",
-  "secondView.title": "Druhý pohled",
+  "secondView.title": "Pohled Layerling",
   "camera.placeWorkplane": "Umístit pracovní rovinu",
   "camera.resetWorkplane": "Vrátit pracovní rovinu na podložku",
   "camera.hideFaceWorkplane": "Skrýt pracovní rovinu na ploše",

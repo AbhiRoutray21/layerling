@@ -2205,7 +2205,7 @@ export const MESSAGES_RU: Partial<Record<MessageKey, string>> = {
   "camera.perspective": "Вернуться к перспективному виду",
   "camera.secondView": "Открыть второй вид",
   "camera.closeSecondView": "Закрыть второй вид",
-  "secondView.title": "Второй вид",
+  "secondView.title": "Вид Layerling",
   "camera.placeWorkplane": "Поставить рабочую плоскость",
   "camera.resetWorkplane": "Вернуть рабочую плоскость на основание",
   "camera.hideFaceWorkplane": "Скрыть рабочую плоскость на грани",

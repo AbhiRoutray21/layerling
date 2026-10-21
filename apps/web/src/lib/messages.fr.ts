@@ -2198,7 +2198,7 @@ export const MESSAGES_FR: Partial<Record<MessageKey, string>> = {
   "camera.perspective": "Retour à la vue en perspective",
   "camera.secondView": "Ouvrir une deuxième vue",
   "camera.closeSecondView": "Fermer la deuxième vue",
-  "secondView.title": "Deuxième vue",
+  "secondView.title": "Vue Layerling",
   "camera.placeWorkplane": "Placer le plan de travail",
   "camera.resetWorkplane": "Plan de travail retour à la plaque de base",
   "camera.hideFaceWorkplane": "Masquer le plan de travail de la face",

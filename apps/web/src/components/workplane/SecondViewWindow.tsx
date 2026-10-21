@@ -35,6 +35,8 @@ import { ZOOM_STEP_IN, ZOOM_STEP_OUT } from "@/lib/workplaneSettings";
  */
 
 const WINDOW_NAME = "layerling-second-view";
+/** The window's own page (public/view.html), so its address bar names it instead of showing about:blank. */
+const VIEW_PAGE = "/view.html";
 
 /** The OrbitControls settings the second view takes over from the 3D view's camera. */
 const SHARED_CONTROL_SETTINGS = [
@@ -63,7 +65,26 @@ function localStorageOrNull() {
 
 /** Opens the window where it was last; called straight from the click, or the browser blocks it as a popup. */
 export function openSecondViewWindow(): Window | null {
-  return window.open("", WINDOW_NAME, secondViewWindowFeatures(readSecondViewPlacement(localStorageOrNull())));
+  // Opened without an address first: a window kept from before (the editor was reloaded) already
+  // on its page is taken as it is, where opening the page again would reload it under the view.
+  // A new one, still empty, goes to the page.
+  const popup = window.open("", WINDOW_NAME, secondViewWindowFeatures(readSecondViewPlacement(localStorageOrNull())));
+  try {
+    if (popup && popup.location.pathname !== VIEW_PAGE) popup.location.replace(VIEW_PAGE);
+  } catch {
+    // The window went to another site, whose address cannot be read: send it back by name.
+    window.open(VIEW_PAGE, WINDOW_NAME);
+  }
+  return popup;
+}
+
+/** Whether the window shows its own page, loaded far enough to be filled. */
+function viewPageReady(popup: Window) {
+  try {
+    return popup.location.pathname === VIEW_PAGE && popup.document.readyState !== "loading";
+  } catch {
+    return false;
+  }
 }
 
 /** Whether to offer the second view at all: not on a phone or a tablet. False until mounted, as the served page. */
@@ -108,7 +129,8 @@ export function SecondViewWindow({ popup, threeRef, getSelectedIds, hasSelection
   const getRig = useCallback(() => rigRef.current, []);
   const closeTimerRef = useRef(0);
   const [orthographic, setOrthographic] = useState(false);
-  // Hidden in this window only: the plate is hidden while this view draws, and shown again after.
+  // Shown or hidden in each window on its own: the plate is the 3D view's, so while this view draws
+  // it takes this window's choice, and the 3D view's own after.
   const [workplaneHidden, setWorkplaneHidden] = useState(false);
   const workplaneHiddenRef = useRef(workplaneHidden);
   workplaneHiddenRef.current = workplaneHidden;
@@ -140,66 +162,84 @@ export function SecondViewWindow({ popup, threeRef, getSelectedIds, hasSelection
   useEffect(() => {
     // React's development mode takes an effect down and sets it up again at once: the window stays.
     window.clearTimeout(closeTimerRef.current);
-    const doc = popup.document;
-    doc.title = t("secondView.title");
-    // A window kept from before (the editor was reloaded) still holds the old page.
-    doc.head.replaceChildren();
-    doc.body.replaceChildren();
-    const copyStyle = (node: Node) => {
-      if (!(node instanceof HTMLStyleElement) && !(node instanceof HTMLLinkElement && node.rel === "stylesheet")) return;
-      const copy = node.cloneNode(true) as HTMLElement;
-      // The blank page has no address of its own to resolve a relative link against.
-      if (node instanceof HTMLLinkElement) copy.setAttribute("href", node.href);
-      doc.head.appendChild(copy);
-    };
-    document.head.childNodes.forEach(copyStyle);
-    const copyTheme = () => {
-      const source = document.documentElement;
-      const target = doc.documentElement;
-      // An attribute taken away counts too: Medium is the toolbar size without one.
-      for (const { name } of Array.from(target.attributes)) {
-        if (!source.hasAttribute(name)) target.removeAttribute(name);
-      }
-      for (const { name, value } of Array.from(source.attributes)) {
-        target.setAttribute(name, value);
-      }
-    };
-    copyTheme();
-    // Styles that arrive later (a part of the page loaded on demand) and a theme switch follow along.
-    const styleObserver = new MutationObserver((records) => records.forEach((record) => record.addedNodes.forEach(copyStyle)));
-    styleObserver.observe(document.head, { childList: true });
-    const themeObserver = new MutationObserver(copyTheme);
-    themeObserver.observe(document.documentElement, { attributes: true });
+    let takeDown = () => {};
+    const setUp = () => {
+      const doc = popup.document;
+      // The page's own text goes, and so does the view of a window kept from before (the editor was reloaded).
+      doc.head.replaceChildren();
+      doc.body.replaceChildren();
+      // Only now: the title is an element in the head, and clearing the head took it away.
+      doc.title = t("secondView.title");
+      const copyStyle = (node: Node) => {
+        if (!(node instanceof HTMLStyleElement) && !(node instanceof HTMLLinkElement && node.rel === "stylesheet")) return;
+        const copy = node.cloneNode(true) as HTMLElement;
+        // Copied with the full address, as the editor's page resolved it.
+        if (node instanceof HTMLLinkElement) copy.setAttribute("href", node.href);
+        doc.head.appendChild(copy);
+      };
+      document.head.childNodes.forEach(copyStyle);
+      const copyTheme = () => {
+        const source = document.documentElement;
+        const target = doc.documentElement;
+        // An attribute taken away counts too: Medium is the toolbar size without one.
+        for (const { name } of Array.from(target.attributes)) {
+          if (!source.hasAttribute(name)) target.removeAttribute(name);
+        }
+        for (const { name, value } of Array.from(source.attributes)) {
+          target.setAttribute(name, value);
+        }
+      };
+      copyTheme();
+      // Styles that arrive later (a part of the page loaded on demand) and a theme switch follow along.
+      const styleObserver = new MutationObserver((records) => records.forEach((record) => record.addedNodes.forEach(copyStyle)));
+      styleObserver.observe(document.head, { childList: true });
+      const themeObserver = new MutationObserver(copyTheme);
+      themeObserver.observe(document.documentElement, { attributes: true });
 
-    const root = doc.createElement("div");
-    root.className = "second-view-root";
-    doc.body.appendChild(root);
-    setContainer(root);
+      const root = doc.createElement("div");
+      root.className = "second-view-root";
+      doc.body.appendChild(root);
+      setContainer(root);
 
-    // Its place and size are kept for next time: when it is resized, and before it closes.
-    const remember = () => {
-      if (!popup.closed) writeSecondViewPlacement(localStorageOrNull(), placementOf(popup));
+      // Its place and size are kept for next time: when it is resized, and before it closes.
+      const remember = () => {
+        if (!popup.closed) writeSecondViewPlacement(localStorageOrNull(), placementOf(popup));
+      };
+      const closed = () => {
+        remember();
+        onClosedRef.current();
+      };
+      const closeWithEditor = () => {
+        remember();
+        popup.close();
+      };
+      popup.addEventListener("pagehide", closed);
+      popup.addEventListener("resize", remember);
+      window.addEventListener("pagehide", closeWithEditor);
+      takeDown = () => {
+        styleObserver.disconnect();
+        themeObserver.disconnect();
+        popup.removeEventListener("pagehide", closed);
+        popup.removeEventListener("resize", remember);
+        window.removeEventListener("pagehide", closeWithEditor);
+      };
     };
-    const closed = () => {
-      remember();
-      onClosedRef.current();
-    };
-    const closeWithEditor = () => {
-      remember();
-      popup.close();
-    };
-    popup.addEventListener("pagehide", closed);
-    popup.addEventListener("resize", remember);
-    window.addEventListener("pagehide", closeWithEditor);
+    // A new window is still on its way to its page; the view is built once that has loaded.
+    const waitTimer = window.setInterval(() => {
+      if (popup.closed) {
+        window.clearInterval(waitTimer);
+        onClosedRef.current();
+      } else if (viewPageReady(popup)) {
+        window.clearInterval(waitTimer);
+        setUp();
+      }
+    }, 30);
     return () => {
-      styleObserver.disconnect();
-      themeObserver.disconnect();
-      popup.removeEventListener("pagehide", closed);
-      popup.removeEventListener("resize", remember);
-      window.removeEventListener("pagehide", closeWithEditor);
+      window.clearInterval(waitTimer);
+      takeDown();
       setContainer(null);
       closeTimerRef.current = window.setTimeout(() => {
-        remember();
+        if (!popup.closed) writeSecondViewPlacement(localStorageOrNull(), placementOf(popup));
         popup.close();
       });
     };
@@ -316,7 +356,7 @@ export function SecondViewWindow({ popup, threeRef, getSelectedIds, hasSelection
       rig.camera.updateMatrixWorld();
       syncViewCube(rig, cubeRef.current);
       const plateVisible = state.workplaneLayer.visible;
-      if (workplaneHiddenRef.current) state.workplaneLayer.visible = false;
+      state.workplaneLayer.visible = !workplaneHiddenRef.current;
       try {
         renderFrame({ renderer, scene: state.scene, camera: rig.camera, shapeRecords: state.shapeRecords, sectionPlane: state.sectionPlane });
       } finally {

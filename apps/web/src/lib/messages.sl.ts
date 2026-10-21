@@ -1651,7 +1651,7 @@ export const MESSAGES_SL: Partial<Record<MessageKey, string>> = {
   "camera.perspective": "Nazaj na perspektivni pogled",
   "camera.secondView": "Odpri drugi pogled",
   "camera.closeSecondView": "Zapri drugi pogled",
-  "secondView.title": "Drugi pogled",
+  "secondView.title": "Pogled Layerling",
   "camera.placeWorkplane": "Postavi delovno ravnino",
   "camera.resetWorkplane": "Delovna ravnina nazaj na osnovno ploščo",
   "camera.hideFaceWorkplane": "Skrij delovno ravnino ploskve",

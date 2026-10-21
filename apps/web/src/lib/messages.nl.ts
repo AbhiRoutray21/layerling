@@ -2214,7 +2214,7 @@ export const MESSAGES_NL: Record<MessageKey, string> = {
   "camera.perspective": "Terug naar perspectiefweergave",
   "camera.secondView": "Tweede weergave openen",
   "camera.closeSecondView": "Tweede weergave sluiten",
-  "secondView.title": "Tweede weergave",
+  "secondView.title": "Layerling-weergave",
   "camera.placeWorkplane": "Werkvlak plaatsen",
   "camera.resetWorkplane": "Werkvlak terug naar de basisplaat",
   "camera.hideFaceWorkplane": "Vlakwerkvlak verbergen",

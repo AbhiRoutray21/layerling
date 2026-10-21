@@ -2214,7 +2214,7 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "camera.perspective": "Zurück zur perspektivischen Ansicht",
   "camera.secondView": "Zweite Ansicht öffnen",
   "camera.closeSecondView": "Zweite Ansicht schließen",
-  "secondView.title": "Zweite Ansicht",
+  "secondView.title": "Layerling-Ansicht",
   "camera.placeWorkplane": "Arbeitsebene setzen",
   "camera.resetWorkplane": "Arbeitsebene zurück auf die Grundplatte",
   "camera.hideFaceWorkplane": "Arbeitsebene auf der Fläche ausblenden",

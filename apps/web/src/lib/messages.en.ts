@@ -2215,7 +2215,7 @@ export const MESSAGES_EN = {
   "camera.perspective": "Back to perspective view",
   "camera.secondView": "Open a second view",
   "camera.closeSecondView": "Close the second view",
-  "secondView.title": "Second view",
+  "secondView.title": "Layerling view",
   "camera.placeWorkplane": "Place workplane",
   "camera.resetWorkplane": "Workplane back to the base plate",
   "camera.hideFaceWorkplane": "Hide face workplane",
