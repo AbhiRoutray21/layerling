@@ -87,7 +87,7 @@ No rodapé você encontra: {{ui:dashboard.sponsor}}, que leva à página onde vo
 
 ## Sua primeira peça
 
-Como exemplo, vamos montar um cubo com um furo.
+Por exemplo, vamos montar um cubo com um furo.
 
 1. Clique em {{ui:editor.addShape}} na faixa de opções e escolha {{ui:shape.box}}. A forma agora fica presa ao ponteiro do mouse. Um clique no plano de trabalho a coloca ali.
 2. À direita, defina as dimensões, por exemplo 40 mm de comprimento, 40 mm de largura e 20 mm de altura.
