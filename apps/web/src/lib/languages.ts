@@ -16,7 +16,7 @@
  * (Čeština, Dansk, Deutsch, Français, ...); then the others, by the name in their own script.
  * A new language goes in at its place, not at the end.
  */
-export const LANGUAGES = ["en", "cs", "da", "de", "fr", "it", "hu", "nl", "pl", "sl", "tr", "ru", "ar", "ja"] as const;
+export const LANGUAGES = ["en", "cs", "da", "de", "fr", "it", "hu", "nl", "pl", "pt-br", "sl", "tr", "ru", "ar", "ja"] as const;
 export type Language = (typeof LANGUAGES)[number];
 export const DEFAULT_LANGUAGE: Language = "en";
 
@@ -398,6 +398,47 @@ export const LANGUAGE_INFO: Readonly<Record<Language, LanguageInfo>> = {
       printButton: "Печать",
     },
   },
+  // Brazilian Portuguese: fetched when chosen, not complete yet (missing sentences show in English).
+  // The code carries the region so it is never taken for the Portuguese of Portugal. It stays a
+  // valid language tag, as every code here is; its export swaps the hyphen (MESSAGES_PT_BR).
+  // The README and the guide stay English until they are translated.
+  "pt-br": {
+    name: "Português do Brasil",
+    htmlLang: "pt-BR",
+    numberLocale: "pt-BR",
+    quotes: ["“", "”"],
+    guideDir: "guia",
+    communityUrl: GITHUB_DISCUSSIONS,
+    readme: "README.md",
+    quickstartAnchor: "windows-quickstart",
+    legal: { imprint: "Informações legais", privacy: "Política de privacidade" },
+    keyNames: { Click: "Clique", RightClick: "Clique direito", Drag: "Arrastar" },
+    asciiUmlauts: false,
+    complete: false,
+    guide: {
+      site: "Guia do usuário do layerling",
+      home: "Guia do usuário",
+      openEditor: "Abrir o editor",
+      backToEditor: "Voltar ao editor",
+      editorElsewhere: "O editor já está aberto em outra aba - é só mudar para ela.",
+      chapters: "Capítulos",
+      onThisPage: "Nesta página",
+      previous: "Capítulo anterior",
+      next: "Próximo capítulo",
+      overviewLead: "Tudo o que o layerling sabe fazer, passo a passo. As imagens são tiradas do programa em funcionamento e renovadas a cada versão.",
+      sourceNote: "Este guia cresce junto com o programa. Se algo estiver faltando ou errado, avise nas",
+      forum: "discussões",
+      notTranslated: "Este capítulo ainda não foi traduzido para o português. Segue o texto em inglês.",
+      languageMenu: "Idioma",
+      search: "Pesquisar no guia",
+      searchNothing: "Nada encontrado.",
+      printAll: "Guia completo, para imprimir",
+      printAllTitle: "O guia completo em uma página",
+      printAllLead: "Todos os capítulos em sequência, para imprimir ou salvar como PDF: pressione Ctrl+P e desative \"Cabeçalhos e rodapés\" nas configurações de impressão. Para imprimir só uma parte, escolha ali os números das páginas.",
+      printContents: "Sumário",
+      printButton: "Imprimir",
+    },
+  },
   sl: {
     name: "Slovenščina",
     htmlLang: "sl",
@@ -654,9 +695,13 @@ export function isLanguage(value: unknown): value is Language {
 
 /**
  * The language a browser asks for, as far as we can serve it. `de-AT` and plain `de` both mean
- * German; anything layerling does not speak falls back to English.
+ * German; anything layerling does not speak falls back to English. A language kept apart by its
+ * region is matched on both: `pt-BR` is `pt-br`.
  */
 export function languageFromTag(tag: string | undefined | null): Language | null {
-  const primary = tag?.trim().toLowerCase().split("-")[0];
+  const subtags = tag?.trim().toLowerCase().split("-") ?? [];
+  const withRegion = subtags.slice(0, 2).join("-");
+  if (isLanguage(withRegion)) return withRegion;
+  const primary = subtags[0];
   return isLanguage(primary) ? primary : null;
 }

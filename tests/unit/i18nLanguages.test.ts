@@ -16,13 +16,13 @@ const FILES = import.meta.glob("../../apps/web/src/lib/messages.*.ts", { eager: 
 
 function catalogueOf(language: string) {
   const entry = Object.entries(FILES).find(([path]) => path.endsWith(`/messages.${language}.ts`));
-  return entry ? entry[1][`MESSAGES_${language.toUpperCase()}`] : undefined;
+  return entry ? entry[1][`MESSAGES_${language.toUpperCase().replace(/-/g, "_")}`] : undefined;
 }
 
 describe("the language registry", () => {
   it("lists English first, then the Latin-script languages by their own names, then the others", () => {
     expect(LANGUAGES[0]).toBe("en");
-    const latin = LANGUAGES.filter((language) => language !== "en" && /^[\p{Script=Latin}]+$/u.test(LANGUAGE_INFO[language].name));
+    const latin = LANGUAGES.filter((language) => language !== "en" && /^[\p{Script=Latin} ]+$/u.test(LANGUAGE_INFO[language].name));
     const names = latin.map((language) => LANGUAGE_INFO[language].name);
     expect(names).toEqual([...names].sort(new Intl.Collator("en").compare));
     // a language in another script never stands between two in the Latin one

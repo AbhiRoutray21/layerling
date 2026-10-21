@@ -766,7 +766,7 @@ export async function loadValues() {
 export async function loadMessages(language) {
   const load = async (code) => {
     const module = await import(pathToFileURL(join(root, "apps", "web", "src", "lib", `messages.${code}.ts`)).href);
-    return module[`MESSAGES_${code.toUpperCase()}`];
+    return module[`MESSAGES_${code.toUpperCase().replace(/-/g, "_")}`];
   };
   const english = await load("en");
   return language === "en" ? english : { ...english, ...(await load(language)) };
