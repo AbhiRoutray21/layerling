@@ -15,7 +15,7 @@ Se você já tem um arquivo para continuar, use {{ui:dashboard.importGeometry}}.
 
 Depois, todos os seus projetos aparecem na página inicial com uma miniatura. Eles ficam guardados no seu navegador e são salvos automaticamente a cada alteração, por isso não há botão de salvar. **layerling não se responsabiliza pelos projetos guardados no navegador.** Um navegador pode falhar, ou uma atualização pode causar problemas, então faça backup dos seus projetos de vez em quando com {{ui:dashboard.backupAll}} na página inicial, ou salve-os como arquivos. Um backup volta com {{ui:dashboard.restoreBackup}}. Como juntar projetos num arquivo e passá-los adiante está em [Arquivos e salvamento](chapter:files-and-saving).
 
-## O editor num relance
+## Conhecendo o editor
 
 ![O editor com duas formas no plano de trabalho. A faixa de opções no topo, os controles da câmera à esquerda, as configurações da forma selecionada à direita.](shot:editor-overview)
 
