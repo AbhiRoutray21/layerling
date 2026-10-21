@@ -21,7 +21,7 @@ Depois, todos os seus projetos aparecem na página inicial com uma miniatura. El
 
 - **No topo** fica a barra de opções. Ela é organizada por tarefa: {{ui:editor.group.clipboard}}, {{ui:editor.group.history}}, {{ui:editor.group.shapes}}, {{ui:editor.group.visibility}}, {{ui:editor.group.combine}}, {{ui:editor.group.modify}}, {{ui:editor.group.arrange}}, {{ui:editor.group.manage}} e {{ui:editor.group.help}}. Passe o mouse sobre um ícone para ver o nome dele. O pequeno ponto de interrogação, por exemplo nas configurações de uma forma, na biblioteca de formas ou nos painéis de ferramentas, leva direto ao capítulo correspondente deste guia.
 - **No centro** fica o plano de trabalho. É aqui que você posiciona as formas, dá forma a elas e vê o resultado.
-- **À direita** aparecem as configurações da forma selecionada: cor, dimensões, posição e tudo o mais que compõe a forma. Digitar números é mais exato do que arrastar.
+- **À direita** fica o **painel de propriedades**, com as configurações da forma selecionada: cor, dimensões, posição e tudo o mais que compõe a forma. Digitar números é mais exato do que arrastar.
 - **À esquerda** ficam os controles da câmera, com o cubo de visualização acima deles. Eles levam você pela cena; mais em [Vista e plano de trabalho](chapter:view-and-workplane).
 - **Bem no topo** você alterna entre {{ui:editor.modeGeometry}} e {{ui:editor.modeSketch}}, renomeia o projeto e escolhe o idioma e o tema de cores.
 
@@ -75,7 +75,7 @@ O nome do projeto ({{ui:confirm.projectName}}) fica bem no topo. Clique nele, di
 
 ### Grade de encaixe
 
-{{ui:inspector.snapGrid}}, no fim das propriedades, é o passo em que mover e redimensionar se encaixam. Ao lado, a pequena chave **mm | in** troca a unidade. Mais em [Vista e plano de trabalho](chapter:view-and-workplane).
+{{ui:inspector.snapGrid}}, no fim do painel de propriedades, é o passo em que mover e redimensionar se encaixam. Ao lado, a pequena chave **mm | in** troca a unidade. Mais em [Vista e plano de trabalho](chapter:view-and-workplane).
 
 ### Unidade: milímetros ou polegadas
 
@@ -90,9 +90,9 @@ No rodapé você encontra: {{ui:dashboard.sponsor}}, que leva à página onde vo
 Por exemplo, vamos montar um cubo com um furo.
 
 1. Clique em {{ui:editor.addShape}} na barra de opções e escolha {{ui:shape.box}}. A forma agora fica presa ao ponteiro do mouse. Um clique no plano de trabalho a coloca ali.
-2. À direita, defina as dimensões, por exemplo 40 mm de comprimento, 40 mm de largura e 20 mm de altura.
+2. No painel de propriedades, defina as dimensões, por exemplo 40 mm de comprimento, 40 mm de largura e 20 mm de altura.
 3. Coloque um {{ui:shape.cylinder}} no centro do mesmo jeito, com 14 mm de diâmetro e 30 mm de altura. Ele deve ser mais alto que o cubo, para atravessá-lo de ponta a ponta.
-4. Selecione o cilindro e clique em {{ui:inspector.hole}} à direita. Ele fica transparente: o sólido virou uma ferramenta que tira material.
+4. Selecione o cilindro e clique em {{ui:inspector.hole}} no painel de propriedades. Ele fica transparente: o sólido virou uma ferramenta que tira material.
 5. Selecione as duas formas e clique em {{ui:editor.tool.group}}. Agora o cubo tem um furo.
 
 ![O cilindro é um orifício e sai pelo topo do cubo.](shot:hole-before)
