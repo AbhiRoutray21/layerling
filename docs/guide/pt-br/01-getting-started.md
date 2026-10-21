@@ -75,7 +75,7 @@ Em {{ui:editor.visibilityOptions}}, na seta ao lado do ícone de olho, você enc
 
 ### Grade de encaixe
 
-{{ui:inspector.snapGrid}}, no fim do painel de propriedades, é o passo em que mover e redimensionar se encaixam. Ao lado, a pequena chave **mm | in** troca a unidade. Mais em [Vista e plano de trabalho](chapter:view-and-workplane).
+{{ui:inspector.snapGrid}}, no fim do painel de propriedades, define o incremento usado ao mover e redimensionar as formas. Ao lado, a pequena chave **mm | in** troca a unidade. Mais em [Vista e plano de trabalho](chapter:view-and-workplane).
 
 ### Unidade: milímetros ou polegadas
 
