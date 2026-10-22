@@ -6,6 +6,7 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **layerling speaks Simplified and Traditional Chinese (#710):** The whole interface (`messages.zh-cn.ts`, `messages.zh-tw.ts`, 2,861 sentences each), the 17 chapters of the guide in `docs/guide/zh-cn/` and `zh-tw/` and a README of its own for each (`README.zh-cn.md`, `README.zh-tw.md`), chosen in the language menu; browsers that ask for zh-Hans, zh-Hant, zh-TW, zh-HK or zh-MO get the matching one. Marked not complete, like Hungarian and Spanish: sentences added later show in English until the Chinese ones follow. Made with a large AI model and proof-read in part by the contributor, a native speaker; more readers are welcome. Contributed by @crazykay.
 ## 1.99.0
 
 - **Rounded box radii to 0.01 mm (#705):** `normalizeCornerFillet` and `normalizeTopBottomFillet` rounded to a tenth of a millimetre, so a corner fillet of 0.25 mm came back as 0.3 mm. They round to a hundredth now, and the fields (the shape's properties and the defaults in the workspace settings) step by 0.05. The CAD solid reads the same functions, so it follows. Unit test in `roundedBoxGeometry.test.ts` (0.25 stays 0.25, 7.336 becomes 7.34). Reported by @Algotz on GitHub.

@@ -1,1 +1,14 @@
-[]
+[
+  {
+    "title": {
+      "de": "layerling spricht Chinesisch",
+      "en": "layerling speaks Chinese",
+      "hu": "A layerling kínaiul is beszél"
+    },
+    "body": {
+      "de": "Die Oberfläche und die Anleitung gibt es jetzt auf Chinesisch, vereinfacht und traditionell. Du wählst sie im Sprachmenü; ein chinesischer Browser bekommt sie von selbst. Was noch nicht übersetzt ist, erscheint auf Englisch.",
+      "en": "The interface and the guide are now in Chinese, simplified and traditional. Choose one in the language menu; a Chinese browser gets it by itself. Whatever is not translated yet shows in English.",
+      "hu": "A felület és az útmutató mostantól kínaiul is elérhető, egyszerűsített és hagyományos írással. A nyelvmenüben választható, egy kínai böngésző magától megkapja. Ami még nincs lefordítva, angolul jelenik meg."
+    }
+  }
+]

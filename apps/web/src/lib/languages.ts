@@ -16,9 +16,20 @@
  * (Čeština, Dansk, Deutsch, Français, ...); then the others, by the name in their own script.
  * A new language goes in at its place, not at the end.
  */
-export const LANGUAGES = ["en", "cs", "da", "de", "es", "fr", "it", "hu", "nl", "pl", "pt-br", "sl", "tr", "ru", "ar", "ja"] as const;
+export const LANGUAGES = ["en", "cs", "da", "de", "es", "fr", "it", "hu", "nl", "pl", "pt-br", "sl", "tr", "ru", "ar", "ja", "zh-cn", "zh-tw"] as const;
 export type Language = (typeof LANGUAGES)[number];
 export const DEFAULT_LANGUAGE: Language = "en";
+
+/**
+ * Tags that name a script or a region before a language entry of their own: browsers write
+ * zh-Hans, zh-Hant, zh-HK and zh-MO instead of zh-CN and zh-TW.
+ */
+export const LANGUAGE_TAG_ALIASES: Readonly<Record<string, Language>> = {
+  "zh-hans": "zh-cn",
+  "zh-hant": "zh-tw",
+  "zh-hk": "zh-tw",
+  "zh-mo": "zh-tw",
+};
 
 /** The words of a guide page that are not chapter text, in the language of the page. */
 export type GuideStrings = {
@@ -742,6 +753,87 @@ export const LANGUAGE_INFO: Readonly<Record<Language, LanguageInfo>> = {
       printButton: "印刷",
     },
   },
+  // Simplified Chinese: the whole interface, the 17 chapters of the guide and a README of its own.
+  // The code carries the region, as Brazilian Portuguese does, so a browser that asks for zh-CN or
+  // zh-Hans-CN is served it; other Chinese variants stay on English until a translation exists.
+  "zh-cn": {
+    name: "简体中文",
+    htmlLang: "zh-CN",
+    numberLocale: "zh-CN",
+    quotes: ["“", "”"],
+    guideDir: "zh-cn",
+    communityUrl: GITHUB_DISCUSSIONS,
+    readme: "README.zh-cn.md",
+    quickstartAnchor: "windows-快速上手",
+    legal: { imprint: "版本说明", privacy: "隐私政策" },
+    // Chinese keyboards label the keys in English; only the mouse actions get Chinese names.
+    keyNames: { Ctrl: "Ctrl", Shift: "Shift", Delete: "Delete", Backspace: "Backspace", Home: "Home", End: "End", "Page Up": "Page Up", "Page Down": "Page Down", Enter: "Enter", Click: "单击", RightClick: "右键单击", Drag: "拖动" },
+    asciiUmlauts: false,
+    complete: false,
+    guide: {
+      site: "layerling 用户指南",
+      home: "用户指南",
+      openEditor: "打开编辑器",
+      backToEditor: "返回编辑器",
+      editorElsewhere: "编辑器已在另一个标签页中打开，请切换到那里。",
+      chapters: "章节",
+      onThisPage: "本页内容",
+      previous: "上一章",
+      next: "下一章",
+      overviewLead: "layerling 的全部功能，逐步讲解。图片取自运行中的程序，并随每个版本更新。",
+      sourceNote: "本指南随程序一同完善。如有缺漏或错误，请到",
+      forum: "讨论区反馈",
+      notTranslated: "本章尚未翻译为简体中文，以下为英文原文。",
+      languageMenu: "语言",
+      search: "搜索指南",
+      searchNothing: "未找到结果。",
+      printAll: "打印完整指南",
+      printAllTitle: "完整用户指南",
+      printAllLead: "所有章节依次排列，可打印或保存为 PDF：按 Ctrl+P，并在打印设置中关闭“页眉和页脚”。只打印部分章节时，请在其中选择页码。",
+      printContents: "目录",
+      printButton: "打印",
+    },
+  },
+  // Traditional Chinese as written in Taiwan: the whole interface, the 17 chapters of the guide
+  // and a README of its own. zh-TW, zh-Hant and the Hong Kong and Macau tags are matched to it.
+  "zh-tw": {
+    name: "繁體中文",
+    htmlLang: "zh-TW",
+    numberLocale: "zh-TW",
+    quotes: ["「", "」"],
+    guideDir: "zh-tw",
+    communityUrl: GITHUB_DISCUSSIONS,
+    readme: "README.zh-tw.md",
+    quickstartAnchor: "windows-快速上手",
+    legal: { imprint: "版本說明", privacy: "隱私權政策" },
+    // Chinese keyboards label the keys in English; only the mouse actions get Chinese names.
+    keyNames: { Ctrl: "Ctrl", Shift: "Shift", Delete: "Delete", Backspace: "Backspace", Home: "Home", End: "End", "Page Up": "Page Up", "Page Down": "Page Down", Enter: "Enter", Click: "點擊", RightClick: "右鍵點擊", Drag: "拖曳" },
+    asciiUmlauts: false,
+    complete: false,
+    guide: {
+      site: "layerling 使用者指南",
+      home: "使用者指南",
+      openEditor: "開啟編輯器",
+      backToEditor: "返回編輯器",
+      editorElsewhere: "編輯器已在另一個分頁中開啟，請切換到那裡。",
+      chapters: "章節",
+      onThisPage: "本頁內容",
+      previous: "上一章",
+      next: "下一章",
+      overviewLead: "layerling 的全部功能，逐步說明。圖片取自執行中的程式，並隨每個版本更新。",
+      sourceNote: "本指南隨程式一同完善。如有缺漏或錯誤，請到",
+      forum: "討論區告訴我們",
+      notTranslated: "本章尚未翻譯為繁體中文，以下為英文原文。",
+      languageMenu: "語言",
+      search: "搜尋指南",
+      searchNothing: "找不到結果。",
+      printAll: "列印完整指南",
+      printAllTitle: "完整使用者指南",
+      printAllLead: "所有章節依次排列，可列印或儲存為 PDF：按 Ctrl+P，並在列印設定中關閉「頁首及頁尾」。只列印部分章節時，請在其中選擇頁碼。",
+      printContents: "目錄",
+      printButton: "列印",
+    },
+  },
 };
 
 export function isLanguage(value: unknown): value is Language {
@@ -757,6 +849,8 @@ export function languageFromTag(tag: string | undefined | null): Language | null
   const subtags = tag?.trim().toLowerCase().split("-") ?? [];
   const withRegion = subtags.slice(0, 2).join("-");
   if (isLanguage(withRegion)) return withRegion;
+  const alias = LANGUAGE_TAG_ALIASES[withRegion];
+  if (alias) return alias;
   const primary = subtags[0];
   return isLanguage(primary) ? primary : null;
 }

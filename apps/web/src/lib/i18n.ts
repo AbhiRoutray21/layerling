@@ -3,6 +3,7 @@ import { MESSAGES_EN, type MessageKey } from "@/lib/messages.en";
 import {
   DEFAULT_LANGUAGE,
   LANGUAGE_INFO,
+  LANGUAGE_TAG_ALIASES,
   LANGUAGES,
   isLanguage,
   languageFromTag,
@@ -95,6 +96,8 @@ const LOADERS: Partial<Record<Language, CatalogueLoader>> = {
   it: () => import("@/lib/messages.it").then((module) => module.MESSAGES_IT),
   ar: () => import("@/lib/messages.ar").then((module) => module.MESSAGES_AR),
   ja: () => import("@/lib/messages.ja").then((module) => module.MESSAGES_JA),
+  "zh-cn": () => import("@/lib/messages.zh-cn").then((module) => module.MESSAGES_ZH_CN),
+  "zh-tw": () => import("@/lib/messages.zh-tw").then((module) => module.MESSAGES_ZH_TW),
 };
 
 const catalogues = createCatalogueStore({ en: MESSAGES_EN, de: MESSAGES_DE }, LOADERS);
@@ -189,7 +192,7 @@ export function detectLanguage(): Language {
  */
 export const LANGUAGE_BOOT_SCRIPT = `try{var m=${JSON.stringify(
   Object.fromEntries(LANGUAGES.map((language) => [language, LANGUAGE_INFO[language].htmlLang])),
-)},l=null;try{var s=localStorage.getItem(${JSON.stringify(LANGUAGE_STORAGE_KEY)});if(m[s])l=s}catch(e){}if(!l){var t=navigator.languages||[navigator.language];for(var i=0;i<t.length&&!l;i++){var p=String(t[i]||"").trim().toLowerCase().split("-"),r=p.slice(0,2).join("-");l=m[r]?r:m[p[0]]?p[0]:null}}document.documentElement.lang=m[l||${JSON.stringify(DEFAULT_LANGUAGE)}]}catch(e){}`;
+)},a=${JSON.stringify(LANGUAGE_TAG_ALIASES)},l=null;try{var s=localStorage.getItem(${JSON.stringify(LANGUAGE_STORAGE_KEY)});if(m[s])l=s}catch(e){}if(!l){var t=navigator.languages||[navigator.language];for(var i=0;i<t.length&&!l;i++){var p=String(t[i]||"").trim().toLowerCase().split("-"),r=p.slice(0,2).join("-");l=m[r]?r:a[r]?a[r]:m[p[0]]?p[0]:null}}document.documentElement.lang=m[l||${JSON.stringify(DEFAULT_LANGUAGE)}]}catch(e){}`;
 
 export function translate(
   language: Language,

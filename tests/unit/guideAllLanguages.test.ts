@@ -21,8 +21,8 @@ type Chapter = { file: string; number: string; body: string };
 const AI_CHAPTER_NUMBER = "14";
 
 describe("the guide in every language", () => {
-  it("covers the thirteen guide languages", () => {
-    expect(LANGUAGES.sort()).toEqual(["ar", "cs", "da", "de", "en", "es", "fr", "hu", "nl", "pl", "pt-br", "ru", "sl"]);
+  it("covers the fifteen guide languages", () => {
+    expect(LANGUAGES.sort()).toEqual(["ar", "cs", "da", "de", "en", "es", "fr", "hu", "nl", "pl", "pt-br", "ru", "sl", "zh-cn", "zh-tw"]);
   });
 
   it("writes headings with a plain space, so they render as headings", async () => {
