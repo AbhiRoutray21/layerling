@@ -134,5 +134,15 @@
       "tr": "Çizim düzenleyicisinde hiçbir şey seçili değilken Ctrl ve ok tuşları, 3B görünümde olduğu gibi görünümü kaydırır: her basışta görüntünün onda biri, Shift ile birlikte yarısı. Çizim okun gösterdiği yöne hareket eder.",
       "es": "Sin nada seleccionado en el editor de bocetos, Ctrl y las flechas desplazan la vista, como en la vista 3D: una décima parte de la imagen por pulsación, o la mitad si además pulsas Mayús. El boceto se mueve hacia donde apunta la flecha."
     }
+  },
+  {
+    "title": {
+      "de": "Ausgleich für Gridfinity-Bodenplatten",
+      "en": "Padding for Gridfinity baseplates"
+    },
+    "body": {
+      "de": "Eine Gridfinity-Bodenplatte kann jetzt an jeder Seite einen massiven Ausgleich bekommen, damit sie eine Schublade füllt, die keine ganze Zahl von Einheiten misst: Stell im Eigenschaften-Fenster „Ausgleich rechts“ oder eine andere Seite ein. Das Raster bleibt bei ganzen Einheiten, und die Platte wird um den Ausgleich größer.",
+      "en": "A Gridfinity baseplate can now have a solid border on any side, so it fills a drawer that is not a whole number of units: set \"Padding on the right\" or another side in the Properties panel. The grid stays whole units, and the plate's size grows with the padding."
+    }
   }
 ]
