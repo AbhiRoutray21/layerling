@@ -15873,3 +15873,55 @@ html[data-theme="dark"] .interactive-help-window a:not(.primary):not(.secondary)
   transform: scaleX(1);
   transition: transform 2s linear;
 }
+
+/* Links inside running text: the page resets every link to its surroundings,
+   so a link in a sentence looked like plain text. These get the accent colour, an underline and a
+   small arrow for "opens in a new tab", in the welcome panel, the what's-new note, the video lists
+   and the help window. */
+.dashboard-welcome-switch a,
+.dashboard-welcome-videos a,
+.whats-new-note a,
+.guide-videos a,
+.interactive-help-more a {
+  color: #8f4700;
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 3px;
+}
+
+.dashboard-welcome-switch a:hover,
+.dashboard-welcome-videos a:hover,
+.whats-new-note a:hover,
+.guide-videos a:hover,
+.interactive-help-more a:hover {
+  color: #ad6206;
+  text-decoration-thickness: 2.5px;
+}
+
+.dashboard-welcome-switch a[target="_blank"]::after,
+.dashboard-welcome-videos a[target="_blank"]::after,
+.whats-new-note a[target="_blank"]::after,
+.guide-videos a[target="_blank"]::after,
+.interactive-help-more a[target="_blank"]::after {
+  content: "\00a0\2197\FE0E";
+  display: inline-block;
+  font-size: 0.85em;
+  text-decoration: none;
+}
+
+html[data-theme="dark"] .dashboard-welcome-switch a,
+html[data-theme="dark"] .dashboard-welcome-videos a,
+html[data-theme="dark"] .whats-new-note a,
+html[data-theme="dark"] .guide-videos a,
+html[data-theme="dark"] .interactive-help-more a {
+  color: #f3a452;
+}
+
+html[data-theme="dark"] .dashboard-welcome-switch a:hover,
+html[data-theme="dark"] .dashboard-welcome-videos a:hover,
+html[data-theme="dark"] .whats-new-note a:hover,
+html[data-theme="dark"] .guide-videos a:hover,
+html[data-theme="dark"] .interactive-help-more a:hover {
+  color: #ffc784;
+}

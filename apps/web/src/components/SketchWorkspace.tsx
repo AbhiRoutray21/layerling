@@ -26,7 +26,7 @@ import { isSketchPrimitive, type SketchPrimitive } from "@/lib/sketchPrimitives"
 import { meshForShape } from "@/lib/editorMeshCore";
 import { mirrorSign, resizedImportedMeshPositions } from "@/lib/workplaneShapes";
 import { DEFAULT_SNAP_GRID, DEFAULT_WORKPLANE_WORKSPACE, keyboardNudgeCoarseFactor, keyboardNudgeStep, normalizeSnapGrid, normalizeWorkspaceSettings, snapGridStep as snapStep, orbitControlsZoomSpeed, zoomDistanceScale, ZOOM_STEP_IN, ZOOM_STEP_OUT } from "@/lib/workplaneSettings";
-import type { GridSize, SketchImage, SketchOperation, SketchPoint, SketchProfile, SketchSegment, SketchStroke, SketchStrokeAlign, SketchStrokeCap, SketchStrokeJoin, WorkplaneShape, WorkplaneWorkspaceSettings } from "@/types/layerling";
+import type { GridSize, SketchImage, SketchOperation, SketchPoint, SketchProfile, SketchSegment, SketchStroke, SketchStrokeAlign, SketchStrokeCap, SketchStrokeJoin, SweepAnchor, WorkplaneShape, WorkplaneWorkspaceSettings } from "@/types/layerling";
 import { resizePointerOnGrid } from "@/lib/sketchFrameResize";
 import { resizeSketchPoints, resizeSketchPointsToSize, type ResizeHandle, type SelectionBounds } from "@/lib/sketchSelectionResize";
 import { changesLockedOutline, sketchLockState } from "@/lib/sketchLock";
@@ -53,6 +53,8 @@ type SketchWorkspaceProps = {
   operation?: SketchOperation;
   /** What the sketch becomes changed from the badge at the top (#655). */
   onOperationChange?: (operation: SketchOperation) => void;
+  /** Which edge of a swept section runs along the path, from the badge at the top (#732). */
+  onSweepAnchorChange?: (anchor: SweepAnchor) => void;
   revolvePreviewPositions?: number[] | null;
   referenceShapes: WorkplaneShape[];
   /** Where a workplane inside a body cuts it: the outline of the cut per body (id), as an SVG path of loops. */
@@ -537,6 +539,7 @@ export function SketchWorkspace({
   profile,
   operation = "extrude",
   onOperationChange,
+  onSweepAnchorChange,
   revolvePreviewPositions = null,
   referenceShapes,
   referenceSlices,
@@ -1828,6 +1831,18 @@ export function SketchWorkspace({
             <option value="revolve">{t("sketch.modeBadgeRevolve")}</option>
             <option value="sweep">{t("sketch.modeBadgeSweep")}</option>
           </select>
+          {operation === "sweep" && onSweepAnchorChange ? (
+            <select
+              aria-label={t("sketch.sweepAnchorHint")}
+              title={t("sketch.sweepAnchorHint")}
+              value={profile.sweepAnchor ?? "center"}
+              onChange={(event) => onSweepAnchorChange(event.target.value as SweepAnchor)}
+            >
+              <option value="center">{t("sketch.sweepAnchorCenter")}</option>
+              <option value="left">{t("sketch.sweepAnchorLeft")}</option>
+              <option value="right">{t("sketch.sweepAnchorRight")}</option>
+            </select>
+          ) : null}
         </label>
       ) : (
         <div className="sketch-mode-badge">{operation === "revolve" ? t("sketch.modeBadgeRevolve") : operation === "sweep" ? t("sketch.modeBadgeSweep") : t("sketch.modeBadge")}</div>

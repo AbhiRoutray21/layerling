@@ -1,6 +1,16 @@
 [
   {
     "title": {
+      "de": "Keine Fremdkörper mehr beim Verrunden importierter Teile",
+      "en": "No stray strip when rounding an imported part"
+    },
+    "body": {
+      "de": "Beim Verrunden eines importierten Teils mit einem engen Einschnitt konnte bei großem Radius ein dünner Streifen über dem Einschnitt entstehen. Jetzt meldet layerling, dass der Radius für diese Kante zu groß ist, statt den Streifen zu zeigen.",
+      "en": "Rounding an imported part with a narrow bay could leave a thin strip over the bay at a large radius. Now layerling says the radius is too large for that edge instead of showing the strip."
+    }
+  },
+  {
+    "title": {
       "de": "Der SVG-Grundriss wird an der Arbeitsfläche geschnitten",
       "en": "The SVG footprint is cut at the workplane",
       "ar": "يُقطع أثر الارتكاز في SVG عند مستوى العمل",
@@ -93,6 +103,26 @@
     "body": {
       "de": "Im SVG-Export „Sichtbare Kanten von oben“ bekommt eine verrundete Oberkante jetzt ihren äußeren Umriss, dort, wo die Rundung in die Wand darunter übergeht – ebenso die Draufsicht der 2D-Zeichnung. Die Umrisse bleiben auch an spitzen Ecken von Schrift geschlossen und dort, wo eine Bohrung durch zwei aufeinanderliegende Teile geht, sodass sich jede Fläche im Laserprogramm gravieren lässt.",
       "en": "In the SVG export's \"Visible edges from above\", a rounded top edge now gets its outer outline, where the rounding runs into the wall below it – and so does the 2D drawing's top view. Outlines also stay closed at the sharp corners of text and where a bore goes through two parts lying on each other, so a laser program can engrave every area."
+    }
+  },
+  {
+    "title": {
+      "de": "Sweep: Kante des Profils auf den Pfad legen",
+      "en": "Sweep: put an edge of the section on the path"
+    },
+    "body": {
+      "de": "In der Pfad-Skizze sitzt das Profil nicht mehr nur mittig auf dem Pfad: Im Menü neben der Modusanzeige legst du stattdessen seine linke oder rechte Kante auf den Pfad. So folgt eine Leiste der Kante eines Teils, ohne dass du den Pfad um die halbe Breite verschieben musst.",
+      "en": "In the sweep sketch the section is no longer only centred on the path: in the menu next to the mode badge you can put its left or right edge on the path instead. A rail then follows the edge of a part without you having to move the path by half the width."
+    }
+  },
+  {
+    "title": {
+      "de": "3MF- und OBJ-Export deutlich schneller",
+      "en": "3MF and OBJ export much faster"
+    },
+    "body": {
+      "de": "Ein fein aus einem Bild nachgezeichnetes Modell mit vielen Dreiecken hielt die Seite beim Schreiben der Datei lange beschäftigt, auf langsamen Rechnern bis Chrome fragte, ob er warten soll. Das Verschweißen der Punkte, der größte Einzelposten, ist rund dreißigmal schneller.",
+      "en": "A finely traced model with many triangles kept the page busy while the file was written, on slow computers until Chrome asked whether to wait. Welding the points, the biggest single item, is about thirty times faster."
     }
   }
 ]

@@ -495,7 +495,12 @@ export type SketchProfile = {
   keyring?: SketchKeyring;
   /** Built set in from its outlines by the face tool: the body keeps the face's outline and builds the inset from it. */
   inset?: SketchInset;
+  /** Which edge of a swept cross-section runs along the path: "center" (the default, left out) or "left"/"right" as seen along the path. */
+  sweepAnchor?: SweepAnchor;
 };
+
+/** Where the cross-section of a sweep sits on its path, across it. */
+export type SweepAnchor = "left" | "center" | "right";
 
 export type SketchOperation = "extrude" | "revolve" | "sweep";
 
