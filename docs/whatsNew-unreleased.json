@@ -84,5 +84,15 @@
       "de": "Verrundung und Fase an einem Körper mit Verjüngung und Neigung oder Verdrehung verschieben ihn nicht mehr: Die Neigung wurde nach dem Verrunden ein zweites Mal angewendet, jetzt bleibt der Körper, wie er vor der Kante war.",
       "en": "A fillet or chamfer on a body with taper and lean or twist no longer shifts it: the lean was applied a second time after the edge work, now the body stays as it was before the edge."
     }
+  },
+  {
+    "title": {
+      "de": "Sichtbare Kanten im SVG: Rundungen und geschlossene Umrisse",
+      "en": "Visible edges in the SVG: rounded edges and closed outlines"
+    },
+    "body": {
+      "de": "Im SVG-Export „Sichtbare Kanten von oben“ bekommt eine verrundete Oberkante jetzt ihren äußeren Umriss, dort, wo die Rundung in die Wand darunter übergeht – ebenso die Draufsicht der 2D-Zeichnung. Die Umrisse bleiben auch an spitzen Ecken von Schrift geschlossen und dort, wo eine Bohrung durch zwei aufeinanderliegende Teile geht, sodass sich jede Fläche im Laserprogramm gravieren lässt.",
+      "en": "In the SVG export's \"Visible edges from above\", a rounded top edge now gets its outer outline, where the rounding runs into the wall below it – and so does the 2D drawing's top view. Outlines also stay closed at the sharp corners of text and where a bore goes through two parts lying on each other, so a laser program can engrave every area."
+    }
   }
 ]

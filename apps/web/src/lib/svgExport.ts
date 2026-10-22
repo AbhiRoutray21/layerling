@@ -78,10 +78,12 @@ type SvgPolyline = { points: DrawingPoint[]; closed: boolean };
 /**
  * The drawing projection splits an edge where its visibility changes, so the same line can come
  * whole and in pieces, as the top and the bottom rim of a bore do, and two bodies' ends of one line
- * can lie a hair apart. Points closer than `tolerance` become one, every segment is split where
- * another one ends on it, and each piece is kept once, so the pieces meet end to end.
+ * can lie a hair apart - and the top and the bottom rim of a bore cut through a rounded top are
+ * cut into triangles each their own way, so they run up to a few thousandths of a millimetre apart.
+ * Points closer than `tolerance` become one, every segment is split where another one ends on it,
+ * and each piece is kept once, so the pieces meet end to end.
  */
-function overlapFreeSegments(segments: ReadonlyArray<readonly [DrawingPoint, DrawingPoint]>, tolerance = 5e-4) {
+function overlapFreeSegments(segments: ReadonlyArray<readonly [DrawingPoint, DrawingPoint]>, tolerance = 5e-3) {
   const cellSize = 1;
   const cells = new Map<string, DrawingPoint[]>();
   const cellsAround = (x: number, y: number, reach: number) => {
@@ -126,6 +128,33 @@ function overlapFreeSegments(segments: ReadonlyArray<readonly [DrawingPoint, Dra
     }
   }
   return [...pieces.values()];
+}
+
+/** Millimetres: loose ends this close are joined, and loose bits this short are left out - far below a laser's kerf. */
+const LOOSE_END_REACH = 0.02;
+
+/**
+ * Joins the loose ends that lie closer than `reach` to each other, the nearest first. Where a body's outline
+ * turns sharply, or two bodies' walls stand one on the other, the projection can give a few thousandths of a
+ * millimetre of the line to the neighbour only; without the join the outline stays open, and a laser program
+ * cannot fill it.
+ */
+function joinedLooseEnds(segments: ReadonlyArray<readonly [DrawingPoint, DrawingPoint]>, reach = LOOSE_END_REACH) {
+  const degree = new Map<DrawingPoint, number>();
+  segments.forEach(([a, b]) => [a, b].forEach((point) => degree.set(point, (degree.get(point) ?? 0) + 1)));
+  const ends = [...degree].filter(([, count]) => count === 1).map(([point]) => point);
+  const pairs = ends.flatMap((a, index) => ends.slice(index + 1).map((b) => ({ a, b, gap: Math.hypot(b[0] - a[0], b[1] - a[1]) })))
+    .filter(({ gap }) => gap <= reach)
+    .sort((first, second) => first.gap - second.gap);
+  const joined = new Set<DrawingPoint>();
+  const bridges: Array<readonly [DrawingPoint, DrawingPoint]> = [];
+  for (const { a, b } of pairs) {
+    if (joined.has(a) || joined.has(b)) continue;
+    joined.add(a);
+    joined.add(b);
+    bridges.push([a, b]);
+  }
+  return [...segments, ...bridges];
 }
 
 type GraphEdge = readonly [number, number];
@@ -223,7 +252,8 @@ function enclosedFaces(points: readonly DrawingPoint[], edges: readonly GraphEdg
 /**
  * What one body shows from above as lines for a laser or plotter: the outline of every area it shows,
  * closed, so the area can be filled; a crease between two of its own areas once, as a line inside; and
- * edges that close nothing as open lines.
+ * edges that close nothing as open lines - but not a stub of a few thousandths of a millimetre, the end of a
+ * neighbour's line that stood a hair off this body's.
  */
 function bodyLines(segments: ReadonlyArray<readonly [DrawingPoint, DrawingPoint]>): SvgPolyline[] {
   const points: DrawingPoint[] = [];
@@ -237,14 +267,16 @@ function bodyLines(segments: ReadonlyArray<readonly [DrawingPoint, DrawingPoint]
     }
     return found;
   };
-  const edges = overlapFreeSegments(segments).map(([a, b]): GraphEdge => [id(a), id(b)]);
+  const edges = joinedLooseEnds(overlapFreeSegments(segments)).map(([a, b]): GraphEdge => [id(a), id(b)]);
   const loose = bridgeEdges(points.length, edges);
   const closing = edges.filter((_, index) => !loose.has(index));
   const { uses } = enclosedFaces(points, closing);
   const outline = closing.filter((_, index) => uses[index] === 1);
   const inside = [...closing.filter((_, index) => uses[index] !== 1), ...edges.filter((_, index) => loose.has(index))];
   const loops = enclosedFaces(points, outline).faces.map((face): SvgPolyline => ({ points: face.map((node) => points[node]!), closed: true }));
-  return [...loops, ...chainSegments(inside.map(([a, b]) => [points[a]!, points[b]!] as const))];
+  const lines = chainSegments(inside.map(([a, b]) => [points[a]!, points[b]!] as const))
+    .filter((line) => line.closed || line.points.slice(1).reduce((sum, point, index) => sum + Math.hypot(point[0] - line.points[index]![0], point[1] - line.points[index]![1]), 0) >= LOOSE_END_REACH);
+  return [...loops, ...lines];
 }
 
 /** Drops the points a line passes straight through: the pieces a split left behind. */

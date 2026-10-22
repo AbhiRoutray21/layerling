@@ -75,9 +75,11 @@ export function projectDrawingMeshes(meshes: readonly DrawingMesh[], rotation: D
   const center = bounds.getCenter(new THREE.Vector3()).toArray() as DrawingPoint3;
   const size = bounds.getSize(new THREE.Vector3());
   const project = (p: THREE.Vector3): DrawingPoint => [p.x - center[0], center[1] - p.y];
+  // A silhouette is where the surface turns from facing the viewer to facing away - or to running along the
+  // view, as a rounded edge meets the wall below it: the outline of a filleted top seen from above.
   const candidates = [...edges.values()].filter(({ normals }) => normals.length !== 2
     || normals[0]!.dot(normals[1]!) < Math.cos(25 * Math.PI / 180)
-    || (normals.some((n) => n.z > 1e-7) && normals.some((n) => n.z < -1e-7)));
+    || (normals.some((n) => n.z > 1e-7) && normals.some((n) => n.z < 1e-7)));
   if (candidates.length > MAX_DRAWING_EDGES) throw new DrawingTooComplexError("This view has too many drawing edges. Choose fewer or simpler objects.");
   const geometry = new THREE.BufferGeometry();
   // Keep Float32 BVH coordinates near the origin for far-away parts.
