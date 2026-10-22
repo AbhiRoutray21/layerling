@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **A hollowed body that was turned stretches the right way (#729):** A hollowed body is built again when it is resized, from the shape it was hollowed from. When the body had been turned by 90 degrees and baked, its width and depth had changed places while that shape kept its pose, so a change of the depth stretched the width. The stretch is now read in the axes of the shape it was hollowed from. Reported by @NWoods56 in #729.
+- **Links in running text look like links:** The page resets every link to the colour and underline of its surroundings, so the "Export to layerling" link in the Tinkercad box of the start page read as plain text. The links inside sentences - there, in the welcome panel's video list, the what's-new note, the guide window's video list and the help window's further answers - are underlined now, in the accent colour (lighter on the dark and graphite grounds), with a small arrow for "opens in a new tab". The footer and the buttons are unchanged.
 - **The SVG footprint is cut at the workplane (#727):** With View "Footprint on the workplane" the cut lay a hair above the lowest point of all bodies, so one part reaching below the workplane moved it down there and the parts standing on the workplane were missing from the file. It is now cut a hair above the workplane whenever a body reaches through it; with all bodies above or below it, it stays at the lowest point. Reported by @DevxDre in #727.
 ## 1.101.0
 
