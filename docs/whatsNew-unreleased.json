@@ -41,12 +41,48 @@
     "title": {
       "de": "Referenzbilder zum Ausrichten",
       "en": "Reference images to line parts up on",
-      "hu": "Mintaképek az igazításhoz"
+      "ar": "صور مرجعية لمحاذاة القطع",
+      "cs": "Referenční obrázky pro zarovnání dílů",
+      "da": "Referencebilleder til at placere dele efter",
+      "fr": "Images de référence pour aligner les pièces",
+      "hu": "Mintaképek az igazításhoz",
+      "it": "Immagini di riferimento per allineare i pezzi",
+      "ja": "部品を合わせるための参照画像",
+      "nl": "Referentiebeelden om onderdelen op uit te lijnen",
+      "pl": "Obrazy referencyjne do ustawiania części",
+      "pt-br": "Imagens de referência para alinhar peças",
+      "ru": "Опорные изображения для выравнивания деталей",
+      "sl": "Referenčne slike za poravnavo delov",
+      "tr": "Parçaları hizalamak için referans görselleri",
+      "es": "Imágenes de referencia para alinear piezas"
     },
     "body": {
       "de": "Im Import gibt es jetzt Referenzbild: ein Bild, das auf der Platte oder auf der Fläche der Arbeitsebene liegt, etwa das Foto einer Platine unter ihrem Gehäuse. Du machst es durchsichtig, kalibrierst es mit zwei Punkten und ihrem wirklichen Abstand und sperrst es. Es wird nie gedruckt oder exportiert.",
       "en": "The import window now has Reference image: a picture on the plate or on the workplane's face, a photo of a board under its case, say. Make it see-through, calibrate it by two points and their real distance, and lock it. It is never printed or exported.",
-      "hu": "Az importálás ablakban most már Mintakép is van: egy kép a tárgyasztalon vagy a munkasík felületén, például egy áramköri lap fotója a doboza alatt. Átlátszóvá teheted, két ponttal és valódi távolságukkal kalibrálhatod, és zárolhatod. Sosem nyomtatódik ki és sosem exportálódik."
+      "ar": "في نافذة الاستيراد الآن «صورة مرجعية»: صورة على اللوح أو على وجه مستوى العمل، مثل صورة لوحة إلكترونية تحت علبتها. اجعلها شفافة، وعايرها بنقطتين ومسافتهما الحقيقية، وثبّتها. لا تُطبع ولا تُصدَّر أبدًا.",
+      "cs": "V okně importu je nově Referenční obrázek: obrázek na desce nebo na ploše pracovní roviny, třeba fotka desky pod jejím krytem. Můžete ho zprůhlednit, kalibrovat pomocí dvou bodů a jejich skutečné vzdálenosti a zamknout. Nikdy se netiskne ani neexportuje.",
+      "da": "Importvinduet har nu Referencebillede: et billede på pladen eller på arbejdsplanets flade, for eksempel et foto af et print under dets kabinet. Gør det gennemsigtigt, kalibrér det med to punkter og deres rigtige afstand, og lås det. Det bliver aldrig printet eller eksporteret.",
+      "fr": "La fenêtre d'import a maintenant Image de référence : une image sur le plateau ou sur la face du plan de travail, par exemple la photo d'une carte sous son boîtier. Rendez-la transparente, calibrez-la avec deux points et leur distance réelle, et verrouillez-la. Elle n'est jamais imprimée ni exportée.",
+      "hu": "Az importálás ablakban most már Mintakép is van: egy kép a tárgyasztalon vagy a munkasík felületén, például egy áramköri lap fotója a doboza alatt. Átlátszóvá teheted, két ponttal és valódi távolságukkal kalibrálhatod, és zárolhatod. Sosem nyomtatódik ki és sosem exportálódik.",
+      "it": "La finestra di importazione ha ora Immagine di riferimento: un'immagine sulla piastra o sulla faccia del piano di lavoro, per esempio la foto di una scheda sotto il suo case. Rendila trasparente, calibrala con due punti e la loro distanza reale, e bloccala. Non viene mai stampata né esportata.",
+      "ja": "インポート画面に「参照画像」が加わりました。プレートや作業面の上に画像を置けます。たとえばケースの下に入る基板の写真です。透過にしたり、2点と実際の距離で校正したり、ロックしたりできます。印刷も書き出しもされません。",
+      "nl": "Het importvenster heeft nu Referentiebeeld: een beeld op de plaat of op het vlak van het werkvlak, bijvoorbeeld een foto van een printplaat onder zijn behuizing. Maak het doorzichtig, kalibreer het met twee punten en hun echte afstand, en vergrendel het. Het wordt nooit geprint of geëxporteerd.",
+      "pl": "W oknie importu jest teraz Obraz referencyjny: obraz na płycie lub na ścianie płaszczyzny roboczej, na przykład zdjęcie płytki pod jej obudową. Możesz go uczynić półprzezroczystym, skalibrować dwoma punktami i ich rzeczywistą odległością oraz zablokować. Nigdy nie jest drukowany ani eksportowany.",
+      "pt-br": "A janela de importação agora tem Imagem de referência: uma imagem na placa ou na face do plano de trabalho, por exemplo a foto de uma placa sob a sua caixa. Deixe-a transparente, calibre-a por dois pontos e a distância real deles, e trave-a. Ela nunca é impressa nem exportada.",
+      "ru": "В окне импорта появилось Опорное изображение: картинка на плите или на грани рабочей плоскости, например фото платы под её корпусом. Сделайте его полупрозрачным, откалибруйте по двум точкам и их реальному расстоянию и заблокируйте. Оно никогда не печатается и не экспортируется.",
+      "sl": "V oknu za uvoz je zdaj Referenčna slika: slika na plošči ali na ploskvi delovne ravnine, na primer fotografija vezja pod njegovim ohišjem. Naredite jo prosojno, umerite jo z dvema točkama in njuno pravo razdaljo ter jo zaklenite. Nikoli se ne natisne ali izvozi.",
+      "tr": "İçe aktarma penceresinde artık Referans görseli var: plakanın veya çalışma düzleminin yüzeyinin üzerinde bir görsel, örneğin bir kartın kasasının altındaki fotoğrafı. Saydamlaştırabilir, iki nokta ve gerçek mesafeleriyle kalibre edebilir ve kilitleyebilirsin. Hiçbir zaman yazdırılmaz ya da dışa aktarılmaz.",
+      "es": "La ventana de importación tiene ahora Imagen de referencia: una imagen sobre la placa o sobre la cara del plano de trabajo, por ejemplo la foto de una placa bajo su carcasa. Hazla transparente, calíbrala con dos puntos y su distancia real, y bloquéala. Nunca se imprime ni se exporta."
+    }
+  },
+  {
+    "title": {
+      "de": "Verrunden bei geneigten Körpern",
+      "en": "Fillets on leaning bodies"
+    },
+    "body": {
+      "de": "Verrundung und Fase an einem Körper mit Verjüngung und Neigung oder Verdrehung verschieben ihn nicht mehr: Die Neigung wurde nach dem Verrunden ein zweites Mal angewendet, jetzt bleibt der Körper, wie er vor der Kante war.",
+      "en": "A fillet or chamfer on a body with taper and lean or twist no longer shifts it: the lean was applied a second time after the edge work, now the body stays as it was before the edge."
     }
   }
 ]
