@@ -206,7 +206,8 @@ import { importedShapeFromStl } from "@/lib/stlImport";
 import { exportMeshesToStl } from "@/lib/stlExport";
 import { exportMeshesTo3mf, THREE_MF_MEDIA_TYPE } from "@/lib/threemfExport";
 import { importedShapeFromSvg, invalidSvgMeshReason } from "@/lib/svgImport";
-import { toSvgProjection, type SvgProjectionLayer } from "@/lib/svgExport";
+import { toSvgProjection, toSvgTopEdges, type SvgProjectionLayer } from "@/lib/svgExport";
+import { DrawingTooComplexError } from "@/lib/drawingProjection";
 import { DEFAULT_TAPER_DIMENSION_MAX, keyboardNudgeCoarseFactor, keyboardNudgeStep, normalizeShapeCustomizations, normalizeSnapGrid, normalizeWorkspaceSettings, shapeDimensionLimit, workplaneSettingsFingerprint } from "@/lib/workplaneSettings";
 import { MCP_GRIDFINITY_LIST_KEYS, mcpGridfinityListParams, mcpThreadSizeParams } from "@/lib/mcpShapeSettings";
 import { createNoteId, normalizeNotes, NOTE_COUNT_LIMIT, patchNote, referencePoints } from "@/lib/workplaneNotes";
@@ -314,7 +315,7 @@ export type HistoryProjectRequest = {
 };
 type ExportFormat = "stl" | "3mf" | "obj" | "step" | "svg" | "png" | "lyl" | "drawing";
 type DirectExportFormat = Exclude<ExportFormat, "step" | "png" | "lyl" | "drawing">;
-type SvgExportView = "silhouette" | "footprint";
+type SvgExportView = "silhouette" | "footprint" | "edges";
 type ViewImageOptions = { plate: boolean; transparent: boolean };
 type LylHistoryLimit = EditorHistoryExportLimit;
 /** "file" writes into the file the design is tied to (asking for one the first time), "fileAs" always asks (#251). */
@@ -1415,6 +1416,28 @@ async function footprintSvg(shapes: readonly WorkplaneShape[], title: string) {
   const result = offset === null ? null : sectionSvgDocument(bodies, "y", offset, title);
   if (!result) throw new Error(t("status.sectionSvgNothing"));
   return result;
+}
+
+/**
+ * The SVG of the edges seen from above (#591), each colour's as lines in that colour, every area it shows closed.
+ * The bodies are joined and separated by colour, as STL and 3MF get them, so a part reaching through another gets
+ * the line where it comes out. Null for a design with more edges or triangles than the drawing's projection takes:
+ * the export then writes the silhouette and says why.
+ */
+async function visibleEdgesSvg(shapes: readonly WorkplaneShape[], title: string) {
+  const { solids, meshes: cut } = await exportBodiesWithLooseHoles(shapes);
+  const { meshes, quellen } = await colorSeparatedExportMeshes(solids, cut);
+  if (meshes.length === 0) throw new Error(t("status.sectionSvgNothing"));
+  const bodies = meshes.map((mesh, index) => {
+    const body = solids[quellen[index]];
+    return { name: body ? displayShapeName(body) : mesh.name, color: body?.color ?? "#000000", mesh };
+  });
+  try {
+    return toSvgTopEdges(bodies, title);
+  } catch (error) {
+    if (error instanceof DrawingTooComplexError) return null;
+    throw error;
+  }
 }
 
 /** `cutMeshes` holds a body's mesh where loose holes have cut it (#203); the others are built from the shape. */
@@ -10404,11 +10427,13 @@ export function LayerlingEditor({
         // The file the export window writes as STL, 3MF or OBJ, from the same bodies: visible solids only, loose
         // holes taken off, overlapping bodies merged (STL) or separated by colour (3MF, OBJ), and the tiny loose
         // pieces left out. ids limit it to those objects (holes still cut). SVG is the top view the window writes:
-        // the silhouette from above, or with view "footprint" only the outlines standing on the workplane (#692).
+        // the silhouette from above, with view "footprint" only the outlines standing on the workplane (#692), or with
+        // view "edges" the edges seen from above (#591); a design with too many of them gets the silhouette, and
+        // the answer says `fellBack`.
         const format = params.format === undefined ? "stl" : mcpString(params.format, "stl").toLowerCase();
         if (format !== "stl" && format !== "3mf" && format !== "obj" && format !== "svg") throw new Error("format must be stl, 3mf, obj or svg");
         const svgView = params.view === undefined ? "silhouette" : mcpString(params.view, "silhouette").toLowerCase();
-        if (svgView !== "silhouette" && svgView !== "footprint") throw new Error("view must be silhouette or footprint");
+        if (svgView !== "silhouette" && svgView !== "footprint" && svgView !== "edges") throw new Error("view must be silhouette, footprint or edges");
         const ids = Array.isArray(params.ids) ? params.ids.filter((id): id is string => typeof id === "string") : [];
         const all = currentShapes();
         const chosen = ids.length ? all.filter((shape) => ids.includes(shape.id)) : all;
@@ -10421,18 +10446,23 @@ export function LayerlingEditor({
         if (format === "svg") {
           let svg: string;
           let outlines: number | undefined;
-          if (svgView === "footprint") {
+          let fellBack = false;
+          const edgesSvg = svgView === "edges" ? await visibleEdgesSvg(visible, projectName) : null;
+          if (edgesSvg !== null) {
+            svg = edgesSvg;
+          } else if (svgView === "footprint") {
             const result = await footprintSvg(visible, projectName);
             svg = result.svg;
             outlines = result.loopCount;
           } else {
+            fellBack = svgView === "edges";
             const { solids, meshes: cutMeshes, cut } = await exportBodiesWithLooseHoles(visible);
             svg = await toSvg(solids, projectName, cutMeshes.map((mesh, index) => (cut[index] ? mesh : null)));
           }
           const svgBytes = new TextEncoder().encode(svg);
           let svgBinary = "";
           for (let index = 0; index < svgBytes.length; index += 8192) svgBinary += String.fromCharCode(...svgBytes.subarray(index, index + 8192));
-          return { format, view: svgView, fileName: projectExportFileName(projectName, "svg"), bytes: svgBytes.length, ...(outlines === undefined ? {} : { outlines }), base64: btoa(svgBinary) };
+          return { format, view: svgView, fileName: projectExportFileName(projectName, "svg"), bytes: svgBytes.length, ...(outlines === undefined ? {} : { outlines }), ...(fellBack ? { fellBack } : {}), base64: btoa(svgBinary) };
         }
         const { solids: cutSolids, meshes, cut: wasCut, holeCutsFailed } = await exportBodiesWithLooseHoles(visible);
         const joined = await (format === "stl" ? unionOverlappingExportMeshes(cutSolids, meshes, wasCut) : colorSeparatedExportMeshes(cutSolids, meshes, wasCut));
@@ -10941,11 +10971,12 @@ export function LayerlingEditor({
     const selectedNotice = exportable.length === 1
       ? t("status.exportedSelectedOne")
       : t("status.exportedSelectedMany", { count: exportable.length });
-    const finishNotice = (label: string) => {
+    // `note` adds what the user should know about the file, and keeps the message up a little longer.
+    const finishNotice = (label: string, note = "") => {
       setTopPanel(null);
       setNotice((selectionScoped
         ? t("status.exportedSelectedAs", { selected: selectedNotice, label })
-        : t("status.exportedAs", { label })) + hiddenNote);
+        : t("status.exportedAs", { label })) + hiddenNote + note, note !== "");
     };
     const failNotice = (label: string, error: unknown) => {
       setNotice(error instanceof Error ? localizedError(error.message) : t("status.exportFailed", { label }));
@@ -10959,10 +10990,23 @@ export function LayerlingEditor({
         .catch((error: unknown) => failNotice("SVG", error));
       return;
     }
+    const silhouetteSvg = () => exportBodiesWithLooseHoles(sourceShapes)
+      .then(({ solids: cutSolids, meshes, cut }) => toSvg(cutSolids, exportName.trim() || projectName, meshes.map((mesh, index) => (cut[index] ? mesh : null))));
+    if (format === "svg" && svgView === "edges") {
+      // The edges seen from above (#591); a design too large for them gets the silhouette, and the notice says so.
+      setNotice(t("status.buildingSvg"), true);
+      void visibleEdgesSvg(sourceShapes, exportName.trim() || projectName)
+        .then(async (edges) => {
+          const content = edges ?? await silhouetteSvg();
+          await downloadTextFile(projectExportFileName(exportName, "svg"), content, "image/svg+xml;charset=utf-8");
+          finishNotice("SVG", edges === null ? t("status.svgEdgesTooComplex") : "");
+        })
+        .catch((error: unknown) => failNotice("SVG", error));
+      return;
+    }
     if (format === "svg") {
       setNotice(t("status.buildingSvg"), true);
-      void exportBodiesWithLooseHoles(sourceShapes)
-        .then(({ solids: cutSolids, meshes, cut }) => toSvg(cutSolids, exportName.trim() || projectName, meshes.map((mesh, index) => (cut[index] ? mesh : null))))
+      void silhouetteSvg()
         .then((content) => downloadTextFile(projectExportFileName(exportName, "svg"), content, "image/svg+xml;charset=utf-8"))
         .then(() => finishNotice("SVG"))
         .catch((error: unknown) => failNotice("SVG", error));
@@ -14804,7 +14848,7 @@ function TopActionPanel({
     svg: {
       label: "SVG",
       description: t("export.svg.description"),
-      note: t(svgView === "footprint" ? "export.svg.noteFootprint" : "export.svg.note"),
+      note: t(svgView === "footprint" ? "export.svg.noteFootprint" : svgView === "edges" ? "export.svg.noteEdges" : "export.svg.note"),
     },
     png: {
       label: "PNG",
@@ -14975,6 +15019,7 @@ function TopActionPanel({
                 <select aria-label={t("export.svg.view")} value={svgView} onChange={(event) => setSvgView(event.target.value as SvgExportView)}>
                   <option value="silhouette">{t("export.svg.viewSilhouette")}</option>
                   <option value="footprint">{t("export.svg.viewFootprint")}</option>
+                  <option value="edges">{t("export.svg.viewEdges")}</option>
                 </select>
               </label>
             </section>

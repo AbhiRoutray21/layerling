@@ -1223,7 +1223,7 @@ export const tools = [
       properties: {
         ...editorTargetSchema.properties,
         format: { type: "string", enum: ["stl", "3mf", "obj", "svg"], description: "The file format. Defaults to stl." },
-        view: { type: "string", enum: ["silhouette", "footprint"], description: "For svg only: silhouette from above (default) or the footprint on the workplane." },
+        view: { type: "string", enum: ["silhouette", "footprint", "edges"], description: "For svg only: silhouette from above (default), the footprint on the workplane, or the edges seen from above as lines in each body's colour, every area closed (a design with too many edges gets the silhouette, and the answer says fellBack)." },
         ids: { type: "array", items: { type: "string" }, description: "Objects to export. Defaults to the whole design." },
         path: { type: "string", description: "Where to write the file, e.g. C:/print/part.stl. Directories are made as needed. Omit it to get the file as base64." },
       },

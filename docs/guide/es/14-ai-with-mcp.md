@@ -104,7 +104,7 @@ La IA trabaja con las mismas funciones que tú, por el mismo camino que sigues c
 | `layerling_restore_from_history` | trae al diseño, como copias, objetos de un estado anterior (también piezas dentro de grupos), igual que «Traer al diseño» en la vista del historial; es un solo paso, que deshacer revierte |
 | `layerling_export_section_svg` | devuelve los contornos en un plano de corte como SVG a escala 1:1, a partir de los mismos cuerpos que la exportación |
 | `layerling_export_drawing` | hace el plano para el taller de la exportación «2D»: tres vistas a escala 1:1 en una hoja ISO, con las medidas totales y una tabla de los taladros redondos, como texto SVG o como PDF |
-| `layerling_export_mesh` | escribe el archivo de la ventana de exportación en STL, 3MF, OBJ o SVG (vista superior o huella), a partir de los mismos cuerpos; en una ruta de este ordenador o en base64 |
+| `layerling_export_mesh` | escribe el archivo de la ventana de exportación en STL, 3MF, OBJ o SVG (vista superior, huella o aristas visibles), a partir de los mismos cuerpos; en una ruta de este ordenador o en base64 |
 | `layerling_save_project` | guarda el diseño editable completo como archivo .lyl en una ruta del ordenador donde funciona el servidor MCP, sin cuadro de diálogo; un archivo existente solo se sustituye con `overwrite`, se escribe a través de un archivo temporal y el destino de Ctrl+S en el editor no cambia |
 | `layerling_set_workplane` | coloca el plano de trabajo en un lateral de un cuerpo o lo devuelve a la placa base, y lo oculta o lo muestra |
 | `layerling_capture_image` | hace una captura de la vista: de frente, desde arriba, de lado, en diagonal desde una esquina y más |

@@ -100,7 +100,7 @@ De AI werkt met dezelfde functies als jij, via dezelfde weg als jouw bediening i
 | `layerling_restore_from_history` | haalt objecten (ook onderdelen in groepen) uit een eerdere toestand als kopieën terug in het ontwerp, zoals „In het ontwerp halen” in de geschiedenisweergave - één stap die ongedaan maken terugneemt |
 | `layerling_export_section_svg` | geeft de contouren op een doorsnedevlak terug als SVG op 1:1, van dezelfde lichamen als de export |
 | `layerling_export_drawing` | maakt de werkplaatstekening van de "2D"-export: drie aanzichten op 1:1 op een ISO-blad met buitenmaten en een tabel van de ronde boringen, als SVG-tekst of PDF |
-| `layerling_export_mesh` | schrijft het bestand van het exportvenster als STL, 3MF, OBJ of SVG (bovenaanzicht of voetafdruk), uit dezelfde lichamen; naar een pad op deze computer of als base64 |
+| `layerling_export_mesh` | schrijft het bestand van het exportvenster als STL, 3MF, OBJ of SVG (bovenaanzicht, voetafdruk of zichtbare randen), uit dezelfde lichamen; naar een pad op deze computer of als base64 |
 | `layerling_save_project` | slaat het hele bewerkbare ontwerp op als .lyl-bestand op een pad op de computer waarop de MCP-server draait, zonder dialoog; een bestaand bestand wordt alleen met `overwrite` vervangen, het wordt via een tijdelijk bestand geschreven, en het doel van Ctrl+S in de editor blijft zoals het was |
 | `layerling_set_workplane` | legt het werkvlak op een zijde van een lichaam of terug op de grondplaat, en verbergt of toont het |
 | `layerling_capture_image` | maakt een afbeelding van de weergave: voorkant, bovenkant, zijkant, schuin vanuit een hoek en meer |

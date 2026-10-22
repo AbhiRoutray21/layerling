@@ -100,7 +100,7 @@ AI'en arbejder med de samme funktioner som dig, gennem den samme vej som din han
 | `layerling_restore_from_history` | henter objekter (også dele i grupper) fra en tidligere tilstand tilbage i designet som kopier, som historikvisningens knap til at hente ind i designet - ét trin, som fortryd tager tilbage |
 | `layerling_export_section_svg` | returnerer omridsene på et skæreplan som en SVG i 1:1, fra de samme former som eksporten |
 | `layerling_export_drawing` | laver værkstedstegningen fra "2D"-eksporten: tre visninger i 1:1 på et ISO-ark med samlede størrelser og en tabel over de runde boringer, som SVG-tekst eller PDF |
-| `layerling_export_mesh` | skriver eksportvinduets fil som STL, 3MF, OBJ eller SVG (topvisning eller fodaftryk) af de samme legemer; til en sti på denne computer eller som base64 |
+| `layerling_export_mesh` | skriver eksportvinduets fil som STL, 3MF, OBJ eller SVG (topvisning, fodaftryk eller synlige kanter) af de samme legemer; til en sti på denne computer eller som base64 |
 | `layerling_save_project` | gemmer hele det redigerbare design som en .lyl-fil på en sti på den computer, hvor MCP-serveren kører, uden dialog; en eksisterende fil erstattes kun med `overwrite`, der skrives via en midlertidig fil, og målet for Ctrl+S i editoren bliver, som det var |
 | `layerling_set_workplane` | lægger arbejdsplanet på en side af en form eller tilbage på grundpladen, og skjuler eller viser det |
 | `layerling_capture_image` | tager et billede af visningen: forfra, oppefra, fra siden, diagonalt fra et hjørne og mere |
