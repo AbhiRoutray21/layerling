@@ -104,7 +104,7 @@ Ein gedrehter Körper ist ein exakter Körper wie ein ausgezogener: Er nimmt Fas
 
 Du zeichnest zwei Dinge auf dasselbe Blatt:
 
-- **Der Querschnitt** als geschlossener Umriss, wie sonst auch. Zeichne ihn so, wie du ihn sähest, wenn du vom Anfang des Pfades aus am Pfad entlangblickst: quer zum Pfad ist links und rechts in der Skizze, oben ist oben am fertigen Körper. Ein hohler Querschnitt, ein Kanal oder ein Rohr, ist ein Umriss mit einem zweiten darin. Der Querschnitt sitzt quer mittig auf dem Pfad, und der Körper steht mit dem tiefsten Punkt des Querschnitts auf der Skizzenebene.
+- **Der Querschnitt** als geschlossener Umriss, wie sonst auch. Zeichne ihn so, wie du ihn sähest, wenn du vom Anfang des Pfades aus am Pfad entlangblickst: quer zum Pfad ist links und rechts in der Skizze, oben ist oben am fertigen Körper. Ein hohler Querschnitt, ein Kanal oder ein Rohr, ist ein Umriss mit einem zweiten darin. Der Querschnitt sitzt standardmäßig quer mittig auf dem Pfad. Im Menü neben der Modusanzeige oben legst du stattdessen seine linke oder rechte Kante auf den Pfad ({{ui:sketch.sweepAnchorLeft}}, {{ui:sketch.sweepAnchorRight}}, in Pfadrichtung gesehen), sodass eine Leiste auf einer Seite der Linie sitzt oder der Kante eines Teils folgt. Der Körper steht mit dem tiefsten Punkt des Querschnitts auf der Skizzenebene.
 
 - **Der Pfad** als {{ui:sketch.construction}}: Schalte sie ein und zeichne Linien oder Kurven, eine einzige Kette, offen oder geschlossen (eine geschlossene Kette ergibt einen Ring). Der Pfad liegt flach in der Skizzenebene.
 

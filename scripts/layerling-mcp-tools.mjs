@@ -527,7 +527,7 @@ export const tools = [
   },
   {
     name: "layerling_sweep_sketch",
-    description: "Pull a cross-section along a path as one exact body, like the editor's Sweep sketch (#400): a cable channel that turns a corner, a conduit, a guard round a belt, a ring round a hexagon. The path is a list of points in the sketch plane, [x, z] in mm on the workplane (z runs towards the front), joined by straight lines; closed joins the last point to the first and makes a ring. The section is a rectangle (width across the path, height up) or a circle (width is the diameter), solid or hollow with a wall thickness. It is drawn at the first point and seen looking along the path, so it starts there. The body stands on the plane with the lowest point of the section, a corner of the path is a mitre, and the result is an exact body: fillet, chamfer and the STEP export work on it. Returns the new object.",
+    description: "Pull a cross-section along a path as one exact body, like the editor's Sweep sketch (#400): a cable channel that turns a corner, a conduit, a guard round a belt, a ring round a hexagon. The path is a list of points in the sketch plane, [x, z] in mm on the workplane (z runs towards the front), joined by straight lines; closed joins the last point to the first and makes a ring. The section is a rectangle (width across the path, height up) or a circle (width is the diameter), solid or hollow with a wall thickness. It is drawn at the first point and seen looking along the path, so it starts there. `anchor` (left, center or right, default center) says which part of the section runs along the path: its middle, or its left or right edge as seen looking along the path, so a rail can sit on one side of the line (#732). The body stands on the plane with the lowest point of the section, a corner of the path is a mitre, and the result is an exact body: fillet, chamfer and the STEP export work on it. Returns the new object.",
     inputSchema: {
       ...editorTargetSchema,
       required: ["path", "section"],
@@ -535,6 +535,7 @@ export const tools = [
         ...editorTargetSchema.properties,
         path: { type: "array", items: { anyOf: [{ type: "array", items: { type: "number" }, minItems: 2, maxItems: 2 }, { type: "object", properties: { x: { type: "number" }, z: { type: "number" } } }] }, minItems: 2, description: "The points of the path, [x, z] or { x, z }, in mm." },
         closed: { type: "boolean", description: "Join the last point to the first: a ring." },
+        anchor: { type: "string", enum: ["left", "center", "right"], description: "Which part of the section runs along the path: its middle (default), or its left or right edge as seen looking along the path (#732)." },
         section: {
           type: "object",
           description: "The cross-section.",
@@ -1028,6 +1029,36 @@ export const tools = [
         name: { type: "string", description: "The object's name (default \"QR code\")." },
       },
       required: ["text"],
+    },
+  },
+  {
+    name: "layerling_reference_image",
+    description: "A reference image (#680), like Reference image in the editor's import window: a picture laid on the workplane - the plate, or the face it was set on - to line parts up on, a photo of a circuit board under its case, say. It is a guide, not a body: never exported (STL, 3MF, OBJ, STEP, SVG), never part of a group, bundle, cut or intersection, never in the print estimate or the build volume warning, and kept once in the .lyl file as a project asset. Without `id`, `base64` (and `fileName`, whose extension .png, .jpg, .jpeg, .webp, .gif or .bmp gives the format) adds one, `width` mm wide (1 to 2000; left out, its longer side 100 mm), half see-through, selected. With `id` it changes that one. Either way: `x` and `z` move its middle (editor coordinates, mm), `rotation` turns it about the vertical in degrees, `opacity` 0.1 to 1 sets how solid it is drawn, `calibrate` { from: { x, y }, to: { x, y }, distance } scales it as the sketch's calibration does - two points in the picture's own pixels (0 at its left and top edge) that lie `distance` mm apart in reality; its proportions stay and its middle stays put - and `locked` true keeps it in place and lets clicks through, false unlocks it. A locked image is refused any other change unless `locked: false` comes with it. layerling_update_object and layerling_delete_objects work on it as on any object. Returns the object; its summary has `referenceImage` with opacity and the picture's pixel size. One undo step.",
+    inputSchema: {
+      ...editorTargetSchema,
+      properties: {
+        ...editorTargetSchema.properties,
+        id: { type: "string", description: "A reference image to change; left out, a new one is added from base64." },
+        base64: { type: "string", description: "The picture file as base64, to add a new reference image." },
+        fileName: { type: "string", description: "The picture's file name; its extension gives the format (default reference.png)." },
+        name: { type: "string", description: "The object's name (default: the file name without extension)." },
+        width: { type: "number", minimum: 1, maximum: 2000, description: "A new image's width in mm; the depth follows the picture's proportions." },
+        x: { type: "number", description: "Move its middle to this x (mm)." },
+        z: { type: "number", description: "Move its middle to this z (mm)." },
+        rotation: { type: "number", description: "Turn about the vertical axis, in degrees." },
+        opacity: { type: "number", minimum: 0.1, maximum: 1, description: "How solid the picture is drawn: 1 solid, 0.1 barely there (a new one starts at 0.6)." },
+        calibrate: {
+          type: "object",
+          description: "Scale it so that two points of the picture, in its own pixels, lie `distance` mm apart.",
+          properties: {
+            from: { type: "object", properties: { x: { type: "number" }, y: { type: "number" } }, required: ["x", "y"] },
+            to: { type: "object", properties: { x: { type: "number" }, y: { type: "number" } }, required: ["x", "y"] },
+            distance: { type: "number", exclusiveMinimum: 0, description: "The real distance between the two points in mm." },
+          },
+          required: ["from", "to", "distance"],
+        },
+        locked: { type: "boolean", description: "true locks it (it stays put and lets clicks through), false unlocks it." },
+      },
     },
   },
   {

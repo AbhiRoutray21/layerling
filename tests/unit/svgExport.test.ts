@@ -136,6 +136,34 @@ describe("SVG top view of the visible edges", () => {
     expect(Math.min(...barX)).toBeCloseTo(11, 3);
   });
 
+  it("draws the outline of a rounded top where it meets the wall below it", () => {
+    // An arch: a block with a half-round top along its length. Its top runs smoothly into both side walls, so
+    // there is no sharp edge at x = -5 and x = 5 - but from above that is where the arch ends.
+    const arch = box(-5, -10, 5, 10, 0, 5).add(runtime.Manifold.cylinder(20, 5, 5, 48).translate([0, 5, -10]));
+    const loops = loopsOf(pathOf(toSvgTopEdges([{ name: "Arch", color: "#d41721", mesh: meshOf(arch) }]), "Arch"));
+    expect(loops).toHaveLength(1);
+    expect(loops[0]!.trim()).toMatch(/Z$/);
+    const corners = [...loops[0]!.matchAll(/(-?[\d.]+) (-?[\d.]+)/g)].map((match) => `${match[1]},${match[2]}`).sort();
+    expect(corners).toEqual(["-5,-10", "-5,10", "5,-10", "5,10"]);
+  });
+
+  it("keeps an outline closed at the tip of a sharp notch in a body above it", () => {
+    // A block with a narrow V cut into its back edge, just above a plate - as a name tag's letters lie on their
+    // backing: in the notch the plate shows, and its outline runs into the tip, where a look beside the line
+    // lands on the block across the notch.
+    const notched = new runtime.CrossSection([[[-10, -5], [10, -5], [10, 5], [1, 5], [0, 0], [-1, 5], [-10, 5]]])
+      .extrude(1).rotate([-90, 0, 0]).translate([0, 2.5, 0]);
+    const svg = toSvgTopEdges([
+      { name: "Plate", color: "#2b2b2b", mesh: meshOf(box(-20, -10, 20, 10, 0, 2)) },
+      { name: "Block", color: "#d41721", mesh: meshOf(notched) },
+    ]);
+    for (const name of ["Plate", "Block"]) {
+      const loops = loopsOf(pathOf(svg, name));
+      expect(loops.length).toBeGreaterThan(0);
+      expect(loops.every((loop) => loop.trim().endsWith("Z"))).toBe(true);
+    }
+  });
+
   it("says a design is too complex for the view, so the export can fall back on the silhouette", () => {
     // Boxes of 1 mm side by side: twelve sharp edges each, more than the projection takes.
     const vertices: DrawingPoint3[] = [];

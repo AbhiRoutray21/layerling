@@ -26,7 +26,7 @@ import { spreadAlignHandles } from "@/lib/alignHandleSpread";
 import { AlignOverlay, MirrorOverlay, type AlignOverlayState, type MirrorOverlayState } from "@/components/workplane/ActionOverlays";
 import { MoveDimensionOverlay } from "@/components/workplane/MoveDimensionOverlay";
 import { OriginDimensionOverlay } from "@/components/workplane/OriginDimensionOverlay";
-import { SelectionInspector, ShapeInspector, SnapGridControl, type IconTagControls, type QrCodeControls, type ShapeInspectorUpdateOptions, type TextLayerPatch } from "@/components/workplane/ShapeInspector";
+import { SelectionInspector, ShapeInspector, SnapGridControl, type IconTagControls, type QrCodeControls, type ReferenceImageControls, type ShapeInspectorUpdateOptions, type TextLayerPatch } from "@/components/workplane/ShapeInspector";
 import type { NameTagStack } from "@/lib/nameTag";
 import { WorkspaceSettingsModal } from "@/components/workplane/WorkspaceSettingsModal";
 import { appThemePalette, type AppThemePalette, type AppThemePreference, type ResolvedAppTheme } from "@/lib/appTheme";
@@ -103,7 +103,7 @@ import { boundsInsideRect, marqueeMode } from "@/lib/marqueeSelection";
 import { canBeginShapeDrag, handleDimensionLimit, POSITION_TYPED_LIMIT, DEFAULT_SNAP_GRID, DEFAULT_WORKPLANE_WORKSPACE, effectiveViewSettings, viewPixelRatio, normalizeSnapGrid, normalizeWorkspaceSettings, orbitControlsZoomSpeed, readWorkspaceDefault, saveShapeDefaultsForNewDesigns, saveWorkspaceDefault, snapGridForUnits, snapGridStep as snapStep, workplaneSettingsFingerprint, workspaceForUnits, workspaceHydrationSyncDecision, zoomDistanceScale, ZOOM_STEP_IN, ZOOM_STEP_OUT } from "@/lib/workplaneSettings";
 import { withShapeDefaults } from "@/lib/shapeDefaults";
 import { workplaneGridBandWidths, AXIS_ARROW_COLORS, axisArrowLayout, DEFAULT_EDGE_LINE_COLOR, fillLightPosition, keyLightPosition, sceneLightLevels, shadowBlurRadius, workplaneGridLayout, workplaneGridLines, workplaneGridPalette, workplaneLabelLayout, workplaneThemePalette, WORKPLANE_LABEL_ASPECT, WORKPLANE_LINE_ELEVATION, type WorkplaneGridLayout } from "@/lib/workplaneGrid";
-import { cleanNearZero, deformsAboutOrigin, cleanRotationDegrees, isNonSolidShapeKind, mirroredAxisCount, mirrorSign, preservesEdgeTreatmentSize, proportionalResizeScale, resizedImportedCoordinates, resizedImportedMeshPositions, resizedShapeSize, shapeDepth, shapeExtrudeDeformAt, shapeHasExtrudeDeform, shapeHasShapeDeform, shapeHasTaper, shapeSupportsTaper, shapeTaperDimensions, shapeTaperScaleAt, shapeWidth, shapeWithParametricSource } from "@/lib/workplaneShapes";
+import { cleanNearZero, deformsAboutOrigin, cleanRotationDegrees, isNonSolidShape, mirroredAxisCount, mirrorSign, preservesEdgeTreatmentSize, proportionalResizeScale, resizedImportedCoordinates, resizedImportedMeshPositions, resizedShapeSize, shapeDepth, shapeExtrudeDeformAt, shapeHasExtrudeDeform, shapeHasShapeDeform, shapeHasTaper, shapeSupportsTaper, shapeTaperDimensions, shapeTaperScaleAt, shapeWidth, shapeWithParametricSource } from "@/lib/workplaneShapes";
 import { sphereTessellation } from "@/lib/sphereTessellation";
 import { torusTessellation } from "@/lib/torusTessellation";
 import type { LayerlingMcpViewFace } from "@/lib/layerlingMcpProtocol";
@@ -150,11 +150,12 @@ import type { CadModifierEdge } from "@/lib/cadModifierTypes";
 import { cadFaceHighlightPositions, type CadFacePick } from "@/lib/cadFacePick";
 import { cadFacePickMesh, disposeCadFacePickMesh } from "@/lib/cadFacePickMesh";
 import { outwardFaceNormal } from "@/lib/layFlat";
+import { isReferenceImage, referenceImageFacingAxis, referenceImageOpacity } from "@/lib/referenceImage";
 import { axisLockedPoint, circleOfEdgePoints, perpendicularFootOnPlane, perpendicularFootOnSegment, perpendicularPointsOnCircle, pointAcrossCircle, pointOnCircle } from "@/lib/tapeCircle";
 import { syncHistoryPickHighlight } from "@/components/workplane/historyPickHighlight";
 import { orbitViewBy, panViewBy } from "@/lib/viewArrowKeys";
 import { useViewportKeyboardHooks } from "@/components/workplane/viewportKeyboard";
-import { aimPickRay, firstShapeHit, pickLayFlatFace, pickRotationPivot, pickShapeAt, pickShapeIdAt, pointerRayFor, rayPointOnRotationPlane, RENDER_LAYER_SHAPES, splitAxisParameter, usePickOnlyPointer, type LayFlatPick, type PickOnlySelection } from "@/components/workplane/viewportPicking";
+import { aimPickRay, firstShapeHit, pickImagePoint, pickLayFlatFace, pickRotationPivot, pickShapeAt, pickShapeIdAt, pointerRayFor, rayPointOnRotationPlane, RENDER_LAYER_SHAPES, splitAxisParameter, usePickOnlyPointer, type LayFlatPick, type PickOnlySelection } from "@/components/workplane/viewportPicking";
 export type { LayFlatPick } from "@/components/workplane/viewportPicking";
 import { RENDER_LAYER_HELPERS, sharedOverlayLineMaterial, sharedShapeGeometryCache, sharedEdgesGeometryCache, sharedShapeMaterialCache, type PointCardOffset, type ShapeRenderRecord, type ThreeState, type MoveDimensionSession, type NoteOverlayState, type TapePoint, type TapeAttachment, type TapeEdgeAttachment, type TapeModel, type TapeOverlayState, type TapeCandidate, type RotationHandleSide, type RotationHandleSides, type DragItem, quaternionForShape, projectToScreen, syncMoveDimensionWorldLines, syncTransformGuideWorldLines, tapeShapeDimensions, tapePointWorld, tapeEdgeWorldPoints, tapeSegmentWorldPoints, syncTapeOverlay, syncNoteOverlay, NoteOverlay, TapeOverlay, type RulerDimensionOverlayItem, type RulerDimensionOverlayState, syncRulerDimensionOverlay, RulerDimensionOverlay, type CornerRulerInstance, type CornerRulerOverlayState, syncCornerRulerToolOverlay, CornerRulerToolOverlay, syncOriginDimensionWorldLines, shapeCenter, shapeLocalExtents, projectShapeExtent, projectShapesExtent, type OriginDimensionFrame, setObjectRenderLayer, freezeStaticObjectMatrices, formatMeasure, findShapeObject, trimSharedShapeGeometryCache, releaseSharedShapeGeometry, trimSharedShapeMaterialCache, releaseSharedShapeMaterials, disposeMaterialResource, disposeChildren, disposeObject } from "@/components/workplane/ViewportOverlays";
 
@@ -373,6 +374,8 @@ type WorkplaneViewportProps = {
   /** The icon tag card's wiring for the selected sketch body or icon tag. */
   iconTag?: IconTagControls | null;
   qrCode?: QrCodeControls | null;
+  /** The reference image card's wiring (#680). */
+  referenceImage?: ReferenceImageControls | null;
   /**
    * Where the tape measure and the corner ruler are kept while the 3D view is gone - it is taken
    * down for the sketch and built again after it, and the rulers stay standing (forum, #618183).
@@ -395,6 +398,9 @@ type WorkplaneViewportProps = {
   /** The next click on a body sets the rotation pivot. */
   pivotPickMode?: boolean;
   onPivotPick?: (point: PivotPoint | null) => void;
+  /** A reference image being calibrated (#680): a click on it gives a point, through anything in front of it. */
+  imageCalibrationId?: string | null;
+  onImageCalibrationPoint?: (point: { x: number; y: number; z: number }) => void;
   /** Waiting for a click on a face of the selection to lay it flat. */
   layFlatPickMode?: boolean;
   onLayFlatPick?: (pick: LayFlatPick | null) => void;
@@ -1133,6 +1139,7 @@ function shapeMaterialSignature(shape: WorkplaneShape): string {
     multicolor: shape.groupedShapes?.length ? groupShowsPartColors(shape) : undefined,
     imagePlate: shapeResourceId(shape.imagePlate),
     imageData: dataUrlFingerprint(shape.imagePlate?.dataUrl),
+    imageOpacity: shape.imagePlate ? referenceImageOpacity(shape) : undefined,
     sourceFormat: shape.importedMesh?.sourceFormat ?? "",
     mirrored: mirroredAxisCount(shape) % 2,
     cadEdges: shapeResourceId(shape.cadDisplayEdges),
@@ -3348,6 +3355,7 @@ export function WorkplaneViewport({
   textLayerStack,
   iconTag,
   qrCode,
+  referenceImage,
   toolMemory,
   prepareNewShape,
   onUpdateShape,
@@ -3360,6 +3368,8 @@ export function WorkplaneViewport({
   rotationPivot = null,
   pivotPickMode = false,
   onPivotPick,
+  imageCalibrationId = null,
+  onImageCalibrationPoint,
   layFlatPickMode = false,
   onLayFlatPick,
   mateFacePick = null,
@@ -3614,6 +3624,10 @@ export function WorkplaneViewport({
   const noteModeRef = useRef(noteMode);
   const rotationPivotRef = useRef<PivotPoint | null>(rotationPivot);
   const pivotPickModeRef = useRef(pivotPickMode);
+  const imageCalibrationIdRef = useRef(imageCalibrationId);
+  const onImageCalibrationPointRef = useRef(onImageCalibrationPoint);
+  imageCalibrationIdRef.current = imageCalibrationId;
+  onImageCalibrationPointRef.current = onImageCalibrationPoint;
   const layFlatPickModeRef = useRef(layFlatPickMode);
   layFlatPickModeRef.current = layFlatPickMode;
   const mateFacePickRef = useRef(mateFacePick);
@@ -6641,7 +6655,10 @@ export function WorkplaneViewport({
     if (!state) return null;
     const rect = aimPickRay(state, clientX, clientY, RENDER_LAYER_SHAPES);
 
-    const hit = firstShapeHit(state, { needsFace: true, skip });
+    // A reference image (#680) is a guide lying on the plate or a face: shapes and the workplane land on what is under it.
+    const images = shapesRef.current.filter((shape) => shape.imagePlate).map((shape) => shape.id);
+    const passed = images.length ? new Set([...(skip ?? []), ...images]) : skip;
+    const hit = firstShapeHit(state, { needsFace: true, skip: passed });
     if (!hit?.face) return null;
 
     const surface = hit.object as THREE.Mesh<THREE.BufferGeometry>;
@@ -6829,7 +6846,7 @@ export function WorkplaneViewport({
       const rect = state.renderer.domElement.getBoundingClientRect();
       const pointerX = clientX - rect.left;
       const pointerY = clientY - rect.top;
-      const visible = shapesRef.current.filter((shape) => !shape.hidden && !isNonSolidShapeKind(shape.kind));
+      const visible = shapesRef.current.filter((shape) => !shape.hidden && !isNonSolidShape(shape));
       // Die Ecken der Koerperboxen - die Kantenlinien, an denen das Massband
       // einrastet, sind nicht in jeder Ansicht da. Dazu deren echte Eckpunkte.
       const corners = visible.flatMap((shape) => shapeBoxCornersWorld(shape));
@@ -7250,6 +7267,13 @@ export function WorkplaneViewport({
         if (candidate) {
           selectTapeCandidate(candidate);
         }
+        return;
+      }
+
+      if (imageCalibrationIdRef.current) {
+        event.preventDefault();
+        const point = pickImagePoint(state, imageCalibrationIdRef.current, event.clientX, event.clientY);
+        if (point) onImageCalibrationPointRef.current?.(point);
         return;
       }
 
@@ -9502,6 +9526,7 @@ export function WorkplaneViewport({
           textLayerStack={textLayerStack}
           iconTag={iconTag}
           qrCode={qrCode}
+          referenceImage={referenceImage}
           onInteractionActiveChange={onInteractionActiveChange}
           onSnapGridAwayChange={setInspectorSnapGridAway}
         />
@@ -11801,6 +11826,13 @@ function syncMirrorOverlay(
       },
     ],
   };
+  // A reference image is not mirrored across the axis it faces along: that would turn its picture to the back.
+  const selectedSet = new Set(selectedIds);
+  const blocked = new Set<string>(shapes.filter((shape) => selectedSet.has(shape.id) && isReferenceImage(shape)).map((shape) => referenceImageFacingAxis(shape)));
+  if (blocked.size > 0) {
+    next.guides = next.guides.filter((guide) => !blocked.has(guide.key));
+    next.handles = next.handles.filter((handle) => !blocked.has(handle.axis));
+  }
 
   overlayRef.current = next;
   setOverlay(next);
@@ -12862,11 +12894,25 @@ function createRulerMaterials(shape: WorkplaneShape, sideMaterial: THREE.MeshSta
 
 function createImagePlateMaterials(shape: WorkplaneShape, sideMaterial: THREE.MeshStandardMaterial, onTextureReady?: () => void) {
   const sideMaterials = Array.from({ length: 5 }, (_, index) => (index === 0 ? sideMaterial : sideMaterial.clone()));
+  // A reference image (#680) is drawn as see-through as it is set; its thin sides go with it.
+  const opacity = referenceImageOpacity(shape);
+  const seeThrough = opacity < 0.999;
+  if (seeThrough) {
+    sideMaterials.forEach((side, index) => {
+      const faded = index === 0 ? side.clone() : side;
+      faded.transparent = true;
+      faded.opacity = Math.min(faded.opacity, opacity);
+      faded.depthWrite = false;
+      sideMaterials[index] = faded;
+    });
+  }
   const topMaterial = new THREE.MeshStandardMaterial({
     color: "#ffffff",
     roughness: 0.64,
     metalness: 0,
     transparent: true,
+    opacity,
+    depthWrite: !seeThrough,
     alphaTest: 0.02,
     side: THREE.FrontSide,
   });

@@ -4,7 +4,7 @@ import { displayY, displayYTurn, insideZ, insideZTurn } from "@/lib/displayAxes"
 import { GuideHelpLink } from "@/components/GuideHelpLink";
 import { guideChapterForShape, guideSectionForShape } from "@/lib/guideLinks";
 import { useInspectorCard } from "@/lib/inspectorCards";
-import { ChevronDown, ChevronUp, Cylinder, Eye, EyeOff, FolderOpen, Grid3x3, Layers, Link2, Lock, Minus, Pencil, Plus, RefreshCw, RotateCcw, Split, Tags, Unlock } from "lucide-react";
+import { ChevronDown, ChevronUp, Cylinder, Eye, EyeOff, FolderOpen, Grid3x3, Layers, Link2, Lock, Minus, Pencil, Plus, RefreshCw, RotateCcw, Ruler, Split, Tags, Unlock } from "lucide-react";
 import { createPortal } from "react-dom";
 import { Fragment, createContext, useCallback, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type Dispatch, type ReactNode, type SetStateAction } from "react";
 import {
@@ -233,7 +233,7 @@ import {
 import { MAX_HINGE_ANGLE, MAX_HINGE_CLEARANCE, MAX_HINGE_KNUCKLES, MIN_HINGE_CLEARANCE, MIN_HINGE_KNUCKLES, hingePlan, minimumHingeDepth, normalizeHingeAngle, normalizeHingeClearance, normalizeHingeKnuckles, normalizeHingeLeafThickness, normalizeHingePinDiameter } from "@/lib/hingeGeometry";
 import { useLanguage } from "@/lib/useLanguage";
 import { useMovablePanel, type MovablePanelOptions } from "@/lib/useMovablePanel";
-import { isNonSolidShapeKind, resizedShapeSize, shapeDepth, shapeHasTaper, shapeOverallFootprintDimensions, shapeSupportsTaper, shapeTaperDimensions, shapeWidth } from "@/lib/workplaneShapes";
+import { isNonSolidShape, resizedShapeSize, shapeDepth, shapeHasTaper, shapeOverallFootprintDimensions, shapeSupportsTaper, shapeTaperDimensions, shapeWidth } from "@/lib/workplaneShapes";
 import { MAX_SKETCH_REVOLVE_TURNS, normalizeSketchRevolveSettings } from "@/lib/sketchRevolve";
 import { roundSideCount } from "@/lib/roundSideCount";
 import { torusTessellation } from "@/lib/torusTessellation";
@@ -2358,6 +2358,7 @@ export function ShapeInspector({
   textLayerStack: nameTagStack,
   iconTag,
   qrCode,
+  referenceImage,
   onInteractionActiveChange,
   onSnapGridAwayChange,
   proportionLock = false,
@@ -2393,6 +2394,8 @@ export function ShapeInspector({
   iconTag?: IconTagControls | null;
   /** The QR code card's wiring (#553), for a QR code; null for anything else. */
   qrCode?: QrCodeControls | null;
+  /** The reference image card's wiring (#680), for a reference image; null for anything else. */
+  referenceImage?: ReferenceImageControls | null;
   onInteractionActiveChange?: (active: boolean) => void;
   /** The snap control lives in the expanded panel; collapsed, the workplane shows its own. */
   /** Called with true while the inspector does not carry the snap grid control (collapsed, or floating), so the workplane shows it. */
@@ -2698,6 +2701,7 @@ export function ShapeInspector({
       {shape.keyringTab && onFixKeyringTab ? <KeyringTabFixButton disabled={locked} onFix={onFixKeyringTab} /> : null}
       {shape.kind === "text" && onLayerText ? <MakeLayersButton disabled={locked} onLayerText={onLayerText} /> : null}
       {qrCode ? <QrCodeCard key={`qr-code-${shape.id}`} shapeId={shape.id} controls={qrCode} disabled={locked} /> : null}
+      {referenceImage ? <ReferenceImageCard key={`reference-image-${shape.id}`} shapeId={shape.id} controls={referenceImage} workspace={workspace} locked={locked} onInteractionActiveChange={onInteractionActiveChange} /> : null}
       {iconTag?.isTag ? (
         <IconTagCard key={`icon-tag-${shape.id}`} shapeId={shape.id} controls={iconTag} workspace={workspace} disabled={locked} onInteractionActiveChange={onInteractionActiveChange} />
       ) : iconTag ? (
@@ -2705,7 +2709,7 @@ export function ShapeInspector({
       ) : null}
       {shape.groupOperation === "bundle" ? (
         <p className="inspector-bundle-note">{t(nameTagStack || iconTag?.isTag ? "nameTag.bundleNote" : "inspector.bundleNote")}</p>
-      ) : !isNonSolidShapeKind(shape.kind) ? (
+      ) : !isNonSolidShape(shape) ? (
       <div className="shape-state-card" role="group" aria-label={t("inspector.shapeMode")}>
         <button
           className={!shape.hole ? "active solid-choice" : "solid-choice"}
@@ -3566,6 +3570,121 @@ function QrCodeCard({ shapeId, controls, disabled }: { shapeId: string; controls
             <span>{busy ? t("qrCode.building") : t("qrCode.regenerate")}</span>
           </button>
           {error ? <p className="name-tag-hint icon-tag-card-error" role="alert">{error}</p> : null}
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
+/** Where calibrating a reference image stands (#680): waiting for the first or second click, or for the real distance. */
+export type ReferenceImageCalibration = { step: "first" | "second" } | { step: "distance"; measured: number };
+
+export type ReferenceImageControls = {
+  /** How see-through the picture is, in per cent: 0 solid, 90 barely there. */
+  seeThrough: number;
+  onSeeThrough: (percent: number) => void;
+  calibration: ReferenceImageCalibration | null;
+  onCalibrate: () => void;
+  onCalibrateDistance: (distance: number) => void;
+  onCancelCalibration: () => void;
+};
+
+/**
+ * The reference image card (#680), open and first: how see-through the picture is, and calibrating it
+ * as in the sketch - two clicks on the picture and the real distance between them. Lock in the header
+ * keeps it put and lets clicks through to the plate.
+ */
+function ReferenceImageCard({ shapeId, controls, workspace, locked, onInteractionActiveChange }: {
+  shapeId: string;
+  controls: ReferenceImageControls;
+  workspace: WorkplaneWorkspaceSettings;
+  locked: boolean;
+  onInteractionActiveChange?: (active: boolean) => void;
+}) {
+  const [open, setOpen] = useState(true);
+  const { calibration } = controls;
+  const [distance, setDistance] = useState("");
+  useEffect(() => {
+    if (calibration?.step === "distance") setDistance(String(Math.round(calibration.measured * 100) / 100));
+  }, [calibration]);
+  const parsed = Number(distance.replace(",", "."));
+  const ready = Number.isFinite(parsed) && parsed > 0;
+  const apply = () => {
+    if (ready) controls.onCalibrateDistance(parsed);
+  };
+  return (
+    <div className={`property-card name-tag-card reference-image-card ${open ? "" : "collapsed"}`}>
+      <button className="property-card-header" type="button" aria-expanded={open} aria-controls={`reference-image-${shapeId}`} onClick={() => setOpen((current) => !current)}>
+        <span>{t("referenceImage.title")}</span>
+        <ChevronUp className={open ? "" : "collapsed"} size={25} strokeWidth={2.8} />
+      </button>
+      {open ? (
+        <p className="name-tag-hint">
+          {t(locked ? "referenceImage.lockedHint" : "referenceImage.cardHint")}
+          <GuideHelpLink chapter="measuring" section="referenceImage" className="inspector-help-link" />
+        </p>
+      ) : null}
+      {open ? (
+        <div className="property-list name-tag-body" id={`reference-image-${shapeId}`}>
+          <RangeProperty
+            id="imageSeeThrough"
+            label={t("referenceImage.seeThrough")}
+            value={controls.seeThrough}
+            min={0}
+            max={90}
+            step={1}
+            workspace={workspace}
+            disabled={locked}
+            onChange={(value) => controls.onSeeThrough(Math.round(Math.min(90, Math.max(0, value))))}
+            onInteractionActiveChange={onInteractionActiveChange}
+          />
+          {!calibration ? (
+            <button className="inspector-action-button" type="button" disabled={locked} onClick={controls.onCalibrate}>
+              <Ruler size={17} strokeWidth={2.5} />
+              <span>{t("referenceImage.calibrate")}</span>
+            </button>
+          ) : calibration.step !== "distance" ? (
+            <>
+              <p className="name-tag-hint" role="status">{t(calibration.step === "first" ? "referenceImage.clickFirst" : "referenceImage.clickSecond")}</p>
+              <button className="inspector-action-button" type="button" onClick={controls.onCancelCalibration}>
+                <span>{t("common.cancel")}</span>
+              </button>
+            </>
+          ) : (
+            <>
+              <p className="name-tag-hint" role="status">{t("referenceImage.measured", { mm: Math.round(calibration.measured * 100) / 100 })}</p>
+              <label className="reference-image-distance">
+                <span>{t("referenceImage.distance")}</span>
+                <input
+                  type="text"
+                  inputMode="decimal"
+                  value={distance}
+                  autoFocus
+                  aria-invalid={!ready}
+                  data-testid="reference-image-distance"
+                  onChange={(event) => setDistance(event.currentTarget.value)}
+                  onKeyDown={(event) => {
+                    if (event.key === "Enter") {
+                      event.preventDefault();
+                      apply();
+                    } else if (event.key === "Escape") {
+                      event.preventDefault();
+                      controls.onCancelCalibration();
+                    }
+                  }}
+                />
+              </label>
+              <div className="reference-image-actions">
+                <button className="inspector-action-button" type="button" disabled={!ready} onClick={apply}>
+                  <Ruler size={17} strokeWidth={2.5} />
+                  <span>{t("referenceImage.apply")}</span>
+                </button>
+                <button className="inspector-action-button" type="button" onClick={controls.onCancelCalibration}>
+                  <span>{t("common.cancel")}</span>
+                </button>
+              </div>
+            </>
+          )}
         </div>
       ) : null}
     </div>
@@ -4855,7 +4974,7 @@ export function SelectionInspector({
   const [colorOpen, setColorOpen] = useState(false);
   const { colors: recentColors, remember: rememberColor } = useRecentColors(SOLID_COLORS);
   const { colors: keptColors, toggle: toggleKeptColor } = useKeptColors();
-  const solidKinds = shapes.filter((shape) => !isNonSolidShapeKind(shape.kind));
+  const solidKinds = shapes.filter((shape) => !isNonSolidShape(shape));
   const allLocked = shapes.length > 0 && shapes.every((shape) => shape.locked);
   const anyLocked = shapes.some((shape) => shape.locked);
   const allHoles = solidKinds.length > 0 && solidKinds.every((shape) => shape.hole);

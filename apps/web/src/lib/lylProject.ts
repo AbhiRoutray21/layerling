@@ -16,6 +16,7 @@ import { importedShapeFromSvg } from "@/lib/svgImport";
 import { importedShapeFrom3mf } from "@/lib/threemfImport";
 import { normalizeDesignView, normalizeSavedViews, readDesignView, readSavedViews, type DesignView, type SavedDesignViews } from "@/lib/designView";
 import { isSketchKeyring } from "@/lib/sketchKeyring";
+import { isReferenceImageOpacity } from "@/lib/referenceImage";
 import { isThreadProfile } from "@/lib/threadProfiles";
 import { normalizeSnapGrid, normalizeWorkspaceSettings } from "@/lib/workplaneSettings";
 import type { CadDisplayEdge, GridSize, ProjectAsset, ProjectAssetSourceFormat, SketchOperation, SketchRevolveSettings, WorkplaneNote, WorkplaneShape, WorkplaneWorkspaceSettings } from "@/types/layerling";
@@ -33,7 +34,7 @@ function knownSchema(schema: unknown) {
 export const LYL_FORMAT_VERSION = 2;
 export const LYL_MINIMUM_READER_VERSION = 2;
 export const LYL_OLDEST_READABLE_FORMAT_VERSION = 1;
-export const LYL_CREATED_WITH_VERSION = "1.101.0";
+export const LYL_CREATED_WITH_VERSION = "1.102.0";
 export const LYL_MEDIA_TYPE = "application/vnd.layerling.project+zip";
 
 export const LYL_LIMITS = {
@@ -740,6 +741,7 @@ async function serializeShapeNode(
       ...(sketchProfile.silhouette ? { silhouette: true } : {}),
       ...(sketchProfile.keyring ? { keyring: sketchProfile.keyring } : {}),
       ...(sketchProfile.inset ? { inset: sketchProfile.inset } : {}),
+      ...(sketchProfile.sweepAnchor && sketchProfile.sweepAnchor !== "center" ? { sweepAnchor: sketchProfile.sweepAnchor } : {}),
     };
   }
 
@@ -1191,6 +1193,7 @@ function validateSketchProfile(value: unknown, label: string) {
   });
   if (profile.silhouette !== undefined && typeof profile.silhouette !== "boolean") throw new Error(`${label}.silhouette must be true or false`);
   if (profile.keyring !== undefined && !isSketchKeyring(profile.keyring)) throw new Error(`${label}.keyring must be { side, diameter, x, z } and a free place (#598) with corners of -1 or 1 if it has one`);
+  if (profile.sweepAnchor !== undefined && profile.sweepAnchor !== "left" && profile.sweepAnchor !== "center" && profile.sweepAnchor !== "right") throw new Error(`${label}.sweepAnchor must be left, center or right`);
   if (profile.inset !== undefined) {
     const inset = objectRecord(profile.inset, `${label}.inset`);
     const distance = finiteNumber(inset.distance, `${label}.inset.distance`);
@@ -1294,6 +1297,10 @@ function validateShapeDefinition(definition: Record<string, unknown>, label: str
   }
   if (definition.keyringTab !== undefined && typeof definition.keyringTab !== "boolean") {
     throw new Error(`${label}.keyringTab must be true or false`);
+  }
+  // A reference image's see-through (#680): 0.1 to 1, or none on an old picture plate.
+  if (definition.imagePlate !== undefined && !isReferenceImageOpacity((definition.imagePlate as { opacity?: unknown } | null)?.opacity)) {
+    throw new Error(`${label}.imagePlate.opacity must be a number from 0.1 to 1`);
   }
   // A QR code's settings (#553): a text and known choices. Old projects have none.
   if (definition.qrCode !== undefined && !normalizeQrSettings(definition.qrCode)) {

@@ -147,6 +147,15 @@ export function isNonSolidShapeKind(kind: WorkplaneShape["kind"]) {
 }
 
 /**
+ * A shape that is a guide, not a body: a ruler, or a reference image (#680) - a picture laid on
+ * the plate or a face to line parts up on. Neither is exported, cut, grouped, printed or counted
+ * in the print estimate.
+ */
+export function isNonSolidShape(shape: Pick<WorkplaneShape, "kind" | "imagePlate">) {
+  return isNonSolidShapeKind(shape.kind) || Boolean(shape.imagePlate);
+}
+
+/**
  * Eine Verjuengung setzen, wie es das Merkmalsfeld tut: Wer einen der beiden
  * Werte einer Kante angibt, schreibt auch den anderen fest und loescht den
  * Massstab. Ohne das liefe die Schwester weiter dem Massstab nach statt dem,
@@ -309,6 +318,26 @@ function edgeTreatmentPreserveZone(shape: WorkplaneShape): number {
 }
 
 /**
+ * How far the body has been stretched since the hollowing, in the axes of the shape it was hollowed from. A hollowed
+ * body is often baked in the pose of the moment (its turn becomes its mesh, width and depth change places), while
+ * `before` keeps the pose it had: with the two a quarter turn apart, the body's width is `before`'s depth, and
+ * reading them side by side stretched the wrong axis (#729).
+ */
+export function hollowStretchSincePicture(shape: WorkplaneShape, entry: NonNullable<WorkplaneShape["edgeTreatmentHistory"]>[number]) {
+  const applied = entry.appliedFrame;
+  const width = shapeWidth(shape);
+  const depth = shapeDepth(shape);
+  if (!applied) return { x: 1, z: 1, height: 1 };
+  const turn = Math.abs((((entry.before.rotation ?? 0) - applied.rotation) % 180 + 180) % 180);
+  const swapped = Math.abs(turn - 90) < 0.5;
+  return {
+    x: swapped ? depth / Math.max(0.001, applied.depth) : width / Math.max(0.001, applied.width),
+    z: swapped ? width / Math.max(0.001, applied.width) : depth / Math.max(0.001, applied.depth),
+    height: shape.height / Math.max(0.001, applied.height),
+  };
+}
+
+/**
  * The history entry of a hollowing that is the body's last step. Such a body is
  * hollowed again after a resize instead of being stretched: keeping a band at
  * each side of the box only keeps flat walls, a round wall came out with four
@@ -322,7 +351,8 @@ export function shellRebuildEntry(shape: WorkplaneShape) {
   if (features[features.length - 1]?.kind !== "shell" || last?.feature.kind !== "shell" || !last.appliedFrame) return null;
   // A star, knurl or thread is round by definition; stretched unevenly there is
   // nothing to hollow again, so it keeps the bands as before.
-  const stretched = Math.abs(shapeWidth(shape) / Math.max(0.001, last.appliedFrame.width) - shapeDepth(shape) / Math.max(0.001, last.appliedFrame.depth)) > 1e-3;
+  const stretch = hollowStretchSincePicture(shape, last);
+  const stretched = Math.abs(stretch.x - stretch.z) > 1e-3;
   if (stretched && (last.before.kind === "star" || last.before.kind === "knurl" || last.before.kind === "thread")) return null;
   return last;
 }

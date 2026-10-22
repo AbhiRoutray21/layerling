@@ -75,3 +75,15 @@ Referenčna točka je zgolj oznaka v prostoru, kot svinčnikova črta ali točka
 - Tudi merilni trak lahko označi točko: {{ui:camera.tapeMarkMiddle}}, gumb s križcem pod meritvijo, jo postavi na njeno sredino, na primer v središče okrogle luknje. Od točke tudi meri: trak se zaskoči na referenčne točke kakor na oglišča.
 - Točke se shranijo v načrtu, ne pojavijo se v nobenem izvozu in se skupaj z opombami prikažejo ali skrijejo prek {{ui:visibility.notes}}.
 - Umetna inteligenca jih lahko postavi, našteje in odstrani z `layerling_add_reference_points`, `layerling_list_reference_points` in `layerling_remove_reference_points`.
+
+## Referenčne slike
+
+Referenčna slika je slika, po kateri poravnaš dele: položi fotografijo tiskanega vezja na dno njegovega ohišja in postavi distančnike, luknje in izreze za priključke natanko nanjo. Je pomoč, ne telo: nikoli se ne natisne, nikoli ne izvozi (STL, 3MF, OBJ, STEP, SVG), nikoli ni del skupine, svežnja ali reza, in ocena tiskanja jo izpusti.
+
+- Odpri {{ui:editor.import}} in izberi {{ui:import.referenceImage}}, nato sliko PNG, JPG, WebP, GIF ali BMP. Pristane na delovni ravnini - na plošči ali na ploskvi, na katero si položil delovno ravnino -, z daljšo stranico 100 mm in na pol prosojna.
+- Premikaj, vrti in spreminjaj jo z ročaji kot vsako obliko. Telo pred njo je izbrano prvo, zato pri delu na njej ne zgrabiš slike po nesreči.
+- {{ui:referenceImage.seeThrough}} v njenih nastavitvah jo zbledi od povsem vidne do komaj vidne.
+- {{ui:referenceImage.calibrate}} ji da pravo velikost kot v skici: klikni dve točki na sliki, katerih pravo razdaljo poznaš - na primer dve pritrdilni luknji vezja - in vpiši to razdaljo v {{ui:referenceImage.distance}}. Slika ohrani razmerja in sredino.
+- Zakleni jo s ključavnico v glavi njenih nastavitev in ostane na mestu: kliki gredo tedaj skozi njo na ploščo. Za odklepanje jo izberi v seznamu objektov.
+- Slika je v datoteki načrta shranjena enkrat, kolikorkrat jo kopiraš ali razveljaviš. Velika slika poveča datoteko za toliko; sporočilo ob dodajanju pove njeno velikost.
+- UI jo doda, premakne, umeri, zbledi in zaklene z `layerling_reference_image`.
