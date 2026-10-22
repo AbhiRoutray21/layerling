@@ -1,48 +1,50 @@
 ---
-title: Installazione come app, uso offline e hosting autonomo
-summary: Avviare layerling come un normale programma, anche senza connessione, e farlo funzionare sul proprio computer.
+title: Installare come app, lavorare offline e ospitare layerling
+summary: Avviare layerling come un normale programma anche senza connessione e usarlo sul proprio computer.
 ---
 
-## Installazione come app
+## Installare come app
 
-Puoi installare layerling come un normale programma. Avrà così una propria icona e una finestra dedicata, senza barra degli indirizzi. Dopo la prima visita si avvierà anche **senza connessione Internet**. I tuoi progetti restano sul computer. Installarlo è utile: l’app si avvia più rapidamente perché non deve essere caricata ogni volta, funziona senza Internet e riduce il carico sul server. Non perdi nulla: layerling ti avvisa comunque quando è disponibile una nuova versione.
+Puoi installare layerling come un normale programma. Avrà un’icona e una finestra proprie, senza barra degli indirizzi. Dopo la prima visita, si avvia anche **senza connessione Internet**. I tuoi progetti restano sul computer. Installare l’app è comodo: si avvia più rapidamente perché non deve essere ricaricata ogni volta, funziona offline e riduce il carico sul server. Non perdi gli aggiornamenti: layerling ti avvisa quando è disponibile una nuova versione.
 
-Nella pagina iniziale compare un suggerimento con {{ui:installHint.install}} se il browser supporta l’installazione. Altrimenti:
+Se il browser lo consente, nella pagina iniziale compare l’avviso {{ui:installHint.install}}. In caso contrario:
 
 - **Chrome ed Edge:** fai clic sull’icona di installazione a destra della barra degli indirizzi oppure scegli «Installa come app» dal menu del browser.
 - **Safari su Mac:** apri il menu «File» e scegli «Aggiungi al Dock».
-- **Safari su iPhone e iPad:** tocca l’icona di condivisione, poi «Aggiungi alla schermata Home».
-- **Firefox:** non permette di installare app. layerling può comunque funzionare offline in una scheda.
+- **Safari su iPhone e iPad:** tocca l’icona di condivisione e poi «Aggiungi alla schermata Home».
+- **Firefox:** non consente di installare app. layerling può comunque funzionare offline in una scheda.
 
-Puoi chiudere il suggerimento nella pagina iniziale con {{ui:installHint.dismiss}}. Se avvii di nuovo l’app installata con Chrome o Edge, la finestra già aperta torna in primo piano invece di aprirne un’altra.
+Puoi chiudere l’avviso nella pagina iniziale con {{ui:installHint.dismiss}}. Se avvii una seconda volta layerling installato in Chrome o Edge, la finestra già aperta torna in primo piano invece di aprirne un’altra.
+
+Su computer, layerling installato con Chrome o Edge si registra anche come programma per i file `.lyl`: facendo doppio clic su un progetto nel gestore file, questo si apre in layerling e [[Ctrl]]+[[S]] lo salva di nuovo nello stesso file. Su Android non è possibile, perché il browser non offre l’associazione dei file alle app web installate; per aprire un progetto, usa {{ui:dashboard.importGeometry}} nella pagina iniziale.
 
 ## Aggiornamenti
 
-Quando è disponibile una versione più recente, layerling te lo segnala nella pagina iniziale. Con {{ui:dashboard.updateBannerLink}} puoi leggere le novità. Il numero di versione si trova in basso a destra. Ricarica la pagina per passare alla nuova versione.
+Quando è disponibile una nuova versione, layerling lo segnala nella pagina iniziale. Con {{ui:dashboard.updateBannerLink}} puoi leggere le novità. Il numero di versione si trova in basso a destra. Dopo aver ricaricato la pagina, avrai la nuova versione.
 
-Su layerling.com e sugli altri server web, una pagina aperta rileva automaticamente gli aggiornamenti. Di tanto in tanto controlla la versione sul server quando torni alla scheda, oppure subito se un file del programma di cui ha bisogno non è più disponibile. Se nel frattempo è stato installato un aggiornamento, in basso a destra appare una scheda che lo segnala e ne elenca le novità. Con {{ui:newVersion.reload}} il progetto aperto viene prima salvato nel browser e poi la pagina viene ricaricata; al termine ritrovi il progetto com’era. {{ui:newVersion.later}} nasconde la scheda per 15 minuti. Ricarica appena possibile: una pagina che resta sulla vecchia versione potrebbe caricare parti della nuova versione incompatibili. La stessa scheda compare anche se è già successo: i processi CAD, caricati solo al primo utilizzo, indicano la versione a cui appartengono. Se questa non corrisponde a quella della pagina — dopo un aggiornamento o quando usi una copia salvata di una versione precedente — la scheda chiede di ricaricare la pagina prima che le due versioni entrino in conflitto.
+Su layerling.com e sugli altri server web, una pagina aperta rileva automaticamente gli aggiornamenti. Controlla di tanto in tanto la versione sul server quando torni alla scheda e subito se scompare un file del programma di cui ha bisogno. Se nel frattempo è stata installata una nuova versione, in basso a destra compare un riquadro con le novità. {{ui:newVersion.reload}} prima salva nel browser il progetto aperto e poi ricarica la pagina: ritroverai il progetto nello stato in cui l’avevi lasciato. {{ui:newVersion.later}} nasconde il riquadro per 15 minuti. Ricarica la pagina appena possibile: se continui a usare la versione precedente, potrebbe caricare componenti della nuova versione incompatibili con essa. Lo stesso riquadro compare se questo è già successo: i processi CAD, che vengono caricati solo al primo utilizzo, indicano la propria versione. Se non corrisponde a quella della pagina — dopo un aggiornamento o quando è stata conservata una copia di una vecchia versione — il riquadro chiede di ricaricare la pagina prima che le due versioni entrino in conflitto.
 
-Se layerling è aperto in più schede, queste si controllano a vicenda: quando un’altra scheda esegue una versione più recente, in fondo alla scheda vecchia appare un avviso che ti invita a ricaricarla. Se lo stesso progetto è aperto in due schede, entrambe ti avvisano perché il salvataggio automatico potrebbe sovrascrivere le modifiche dell’altra. Se apri layerling in un’altra scheda mentre è già in esecuzione, la nuova scheda propone di continuare in quella già aperta e offre la possibilità di chiudersi. Se vuoi usare intenzionalmente due schede, per esempio per affiancare due progetti, fai clic su {{ui:tabs.keepHere}} nella nuova scheda. Anche questa guida si apre in una scheda separata: se layerling è aperto accanto, il pulsante in alto a destra mostra «Torna all’editor» e chiude la guida invece di aprire un secondo editor.
+Se layerling è aperto in più schede, queste si controllano a vicenda: quando una scheda rileva che un’altra sta già usando una versione più recente, mostra un avviso in basso e ti chiede di ricaricarla. Se lo stesso progetto è aperto in due schede, entrambe ti avvisano, perché il salvataggio automatico potrebbe sovrascrivere le modifiche dell’altra scheda. Se apri layerling in una nuova scheda mentre è già aperto, la nuova scheda ti propone di continuare in quella esistente e offre di chiudersi. Se invece vuoi usare intenzionalmente due schede, per esempio per affiancare due progetti, fai clic su {{ui:tabs.keepHere}}. Anche questa guida si apre in una scheda separata: mentre layerling è aperto accanto, il pulsante in alto a destra mostra «Torna all’editor» e chiude la guida, invece di aprire una seconda istanza dell’editor.
 
 ## Lingua e aspetto
 
-Scegli la lingua dall’elenco in alto a destra. Il selettore accanto permette di scegliere {{ui:theme.short.system}} (segue il sistema operativo), {{ui:theme.short.light}}, {{ui:theme.short.dark}} e {{ui:theme.short.graphite}}, un grigio scuro neutro.
+Scegli la lingua nell’elenco in alto a destra. Accanto trovi il tema: {{ui:theme.short.system}} segue le impostazioni del sistema operativo, {{ui:theme.short.light}} e {{ui:theme.short.dark}} selezionano il tema chiaro o scuro, mentre {{ui:theme.short.graphite}} applica un grigio scuro neutro.
 
-## Esecuzione autonoma
+## Usare layerling sul proprio computer o server
 
-layerling è software libero (AGPL-3.0) e può essere eseguito sul tuo computer o su un server, per esempio in un laboratorio, un’associazione o una scuola. Ci sono diversi modi per farlo, descritti nel [README su GitHub](https://github.com/henmedia/layerling/blob/main/README.md#getting-started):
+layerling è software libero (AGPL-3.0) e puoi usarlo sul tuo computer o server, per esempio in un laboratorio, un’associazione o una scuola. Ci sono diversi metodi, descritti nel [README su GitHub](https://github.com/henmedia/layerling/blob/main/README.md#getting-started):
 
-- **Avvio rapido su Windows:** una sola riga in PowerShell installa tutto e crea un collegamento sul desktop. Se layerling è già in esecuzione, un altro doppio clic non avvia un secondo server: apre soltanto la pagina.
-- **Docker:** per dispositivi NAS e server domestici, senza dover installare Node.js. Ogni versione è disponibile come immagine pronta all’uso `henmedia/layerling` su Docker Hub (anche `ghcr.io/henmedia/layerling`) per amd64 e arm64. Il comando `docker run -d -p 3000:3000 henmedia/layerling:latest` la avvia; su un NAS puoi cercarla nel registro del gestore dei container.
-- **Esportazione statica:** il risultato è composto da file normali che qualsiasi server web può distribuire. Devono trovarsi nella radice di un indirizzo (`https://layerling.example.com/` o `http://192.168.0.5:8080/`), non in una sottocartella e non vanno aperti direttamente dal disco; nel README trovi i passaggi. Se accanto a `index.html` c’è una cartella `store` scrivibile e il server supporta PHP, questa può essere usata anche come spazio condiviso per i progetti.
+- **Avvio rapido su Windows:** una sola riga in PowerShell installa tutto e crea un collegamento sul desktop. Se layerling è già in esecuzione, un altro doppio clic non avvia un secondo server: apre semplicemente la pagina.
+- **Docker:** per dispositivi NAS e server domestici, senza bisogno di installare Node.js. Ogni versione viene pubblicata su Docker Hub come immagine pronta all’uso `henmedia/layerling` (disponibile anche come `ghcr.io/henmedia/layerling`) per amd64 e arm64. Per avviarla, usa `docker run -d -p 3000:3000 -v layerling-thumbnails:/app/.codex/project-thumbnails henmedia/layerling:latest`; su un NAS puoi cercarla nel registro del gestore dei container. Il volume `layerling-thumbnails` conserva le immagini di anteprima della pagina iniziale quando aggiorni il programma. Senza il volume, le anteprime scompaiono ogni volta che viene ricreato il container e ricompaiono solo dopo aver aperto il progetto.
+- **Esportazione statica:** il risultato è composto da normali file che qualsiasi server web può pubblicare. Devono trovarsi nella radice dell’indirizzo (`https://layerling.example.com/` oppure `http://192.168.0.5:8080/`), non in una sottocartella e non possono essere aperti direttamente dal disco; nel README trovi i passaggi. Se sul server è presente una cartella `store` scrivibile accanto a `index.html` e PHP è attivo, la cartella diventa anche lo spazio condiviso per i progetti.
 
 Il collegamento MCP per gli assistenti IA è disponibile solo nel server di sviluppo; vedi [Progettare con un’IA](chapter:ai-with-mcp).
 
-## Aiuto e feedback
+## Aiuto e commenti
 
-- Nell’editor, la sezione {{ui:editor.group.help}} contiene la {{ui:editor.guide}}, con le operazioni principali, e la panoramica delle [scorciatoie da tastiera](chapter:shortcuts). Ogni sezione della guida rapida ha un punto interrogativo che rimanda al capitolo corrispondente.
+- Nell’editor, l’area {{ui:editor.group.help}} contiene {{ui:editor.guide}}, con i movimenti principali e la panoramica delle [scorciatoie da tastiera](chapter:shortcuts). Ogni sezione della guida rapida ha un punto interrogativo che rimanda al capitolo corrispondente di questa guida.
 
-![La guida rapida nell’editor. In alto sono elencati video realizzati da altre persone e ogni sezione ha un punto interrogativo.](shot:quick-guide)
+![La guida rapida nell’editor. In alto sono elencati i video realizzati da altri e ogni sezione ha un punto interrogativo.](shot:quick-guide)
 
-- Domande, suggerimenti e segnalazioni di bug sono benvenuti nel [forum](https://forum.drucktipps3d.de/forum/board/127-layerling/) e su [GitHub](https://github.com/henmedia/layerling/discussions).
-- Le novità di ogni versione sono riportate nelle note di rilascio, disponibili in fondo alla pagina iniziale e all’editor.
+- Puoi fare domande, inviare suggerimenti e segnalare problemi nel [forum](https://forum.drucktipps3d.de/forum/board/127-layerling/) o su [GitHub](https://github.com/henmedia/layerling/discussions).
+- Le novità di ciascuna versione sono nelle note di rilascio, in fondo alla pagina iniziale e all’editor.

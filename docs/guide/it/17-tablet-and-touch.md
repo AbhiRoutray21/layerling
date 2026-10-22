@@ -1,48 +1,52 @@
 ---
 title: Tablet e comandi touch
-summary: Lavorare con le dita o uno stilo: selezionare più corpi, ruotare e ingrandire la vista, usare il menu con pressione prolungata e sapere cosa aspettarsi su iPad.
+summary: Lavorare con le dita o uno stilo: selezionare più corpi, ruotare e ingrandire la vista, usare il menu con pressione prolungata e conoscere le particolarità dell’iPad.
 ---
 
 ## Dita e stilo
 
-layerling funziona nel browser di un tablet e come app dalla schermata Home. Un tocco equivale a un clic con il tasto sinistro del mouse. Le tre cose che mancano su un tablet — tasto destro, tasto Maiusc e rotellina — hanno gesti dedicati:
+layerling funziona nel browser di un tablet e come app dalla schermata Home. Un tocco con un dito equivale a un clic del tasto sinistro del mouse. Tre elementi che mancano su un tablet — il tasto destro del mouse, il tasto Maiusc e la rotellina — hanno gesti dedicati:
 
-| Cosa vuoi fare | Su un tablet |
+| Operazione | Su un tablet |
 | --- | --- |
 | Selezionare un corpo | Toccalo. |
-| Selezionare più corpi | Tieni il dito fermo per mezzo secondo, scegli {{ui:contextMenu.selectMultiple}}, poi tocca i corpi uno dopo l’altro. Se tocchi di nuovo un corpo selezionato, lo deselezioni. |
+| Selezionare più corpi | Tieni il dito fermo per mezzo secondo, scegli {{ui:contextMenu.selectMultiple}}, poi tocca i corpi uno dopo l’altro. Toccando di nuovo un corpo selezionato, lo rimuovi dalla selezione. |
 | Selezionare tutti i corpi | Tieni il dito fermo per mezzo secondo su uno spazio vuoto e scegli {{ui:contextMenu.selectAll}}. |
 | Aprire il menu del clic destro | Tieni il dito fermo per mezzo secondo su un corpo o su uno spazio vuoto. |
 | Spostare un corpo | Trascinalo. |
-| Ridimensionare, ruotare o sollevare un corpo | Trascina le maniglie, i quadratini e le frecce che gli stanno attorno. Puoi afferrarle con il dito anche toccando poco di lato. |
+| Ridimensionare, ruotare o sollevare un corpo | Trascina le maniglie, i piccoli quadrati e le frecce attorno al corpo. Puoi toccarle anche leggermente di lato. |
 | Ruotare la vista | Trascina un dito su uno spazio vuoto oppure trascina il cubo di orientamento. |
-| Ingrandire o rimpicciolire la vista | Usa due dita: allontanale per ingrandire, avvicinale per rimpicciolire. |
-| Spostare la vista | Fai scorrere due dita insieme. |
-| Annullare la selezione | Tocca uno spazio vuoto. Non farlo mentre è attivo {{ui:camera.touchRotate}}, perché un dito ruota la vista; inoltre, in modalità {{ui:contextMenu.selectMultiple}}, il primo tocco sullo spazio vuoto termina solo la modalità e mantiene la selezione, mentre il successivo la annulla. |
+| Ingrandire o ridurre la vista | Usa due dita: allargale per avvicinarti, avvicinale per allontanarti. |
+| Spostare la vista | Fai scorrere insieme due dita. |
+| Annullare la selezione | Tocca uno spazio vuoto. Non farlo mentre è attivo {{ui:camera.touchRotate}}, perché in quel caso un dito ruota la vista. Inoltre, in modalità {{ui:contextMenu.selectMultiple}}, il primo tocco su uno spazio vuoto chiude la modalità senza modificare la selezione; il tocco successivo la annulla. |
 
 ## Selezionare più corpi
 
-Senza il tasto Maiusc, {{ui:contextMenu.selectMultiple}} nel menu che appare con una pressione prolungata svolge la stessa funzione di Maiusc+clic su un computer. Quando la modalità è attiva, appare un messaggio e ogni tocco su un corpo lo aggiunge alla selezione o lo rimuove. Toccare uno spazio vuoto o premere [[Esc]] su una tastiera termina la modalità e mantiene la selezione. Nel frattempo puoi continuare a ruotare la vista trascinando un dito sullo spazio vuoto. Poi {{ui:editor.tool.group}}, {{ui:editor.tool.align}} o lo spostamento si applicano a tutti i corpi selezionati.
+Su un computer, {{ui:contextMenu.selectMultiple}} nel menu che appare tenendo premuto sostituisce Maiusc+clic. Quando la modalità è attiva, un messaggio te lo segnala e ogni tocco su un corpo lo aggiunge alla selezione o lo rimuove. Toccando uno spazio vuoto o premendo [[Esc]] su una tastiera, esci dalla modalità senza modificare la selezione. Nel frattempo puoi continuare a ruotare la vista trascinando un dito su uno spazio vuoto. A quel punto {{ui:editor.tool.group}}, {{ui:editor.tool.align}} o lo spostamento si applicano a tutti i corpi selezionati.
+
+Lo stesso menu contiene {{ui:contextMenu.carry}}, che su un dispositivo touch corrisponde al tasto [[C]]. La selezione segue il dito sulle facce degli altri corpi; tocca una faccia per appoggiarvi gli oggetti, anche se è inclinata. Basta un solo tocco. Puoi trovare la voce del menu anche cercando «appoggia» o «naviga» nella ricerca dei comandi ([[Ctrl]]+[[K]] sulla tastiera).
 
 ## Ruotare e ingrandire la vista
 
-Trascina un dito su uno spazio vuoto per ruotare la vista; usa due dita per ingrandirla o spostarla. Se inizi il gesto su un corpo, agisci sul corpo, non sulla vista. Se preferisci ruotare la vista con un dito, attiva {{ui:camera.touchRotate}} nella barra della fotocamera: ovunque inizi il gesto, un dito ruota la vista invece di selezionare. Questa opzione compare solo sui dispositivi con schermo touch.
+Trascinando un dito su uno spazio vuoto ruoti la vista; usando due dita puoi ingrandirla e spostarla. Se inizi il gesto su un corpo, agisci sul corpo e non sulla vista. Se preferisci ruotare la vista anche iniziando il gesto su un corpo, attiva {{ui:camera.touchRotate}} nella barra della videocamera: un dito ruoterà la vista invece di selezionare, a prescindere da dove inizi il gesto. L’interruttore compare solo sui dispositivi con schermo touch.
 
-Trascinando il cubo di orientamento in alto a sinistra ruoti la vista; toccando uno dei suoi lati, angoli o spigoli passi direttamente alla vista corrispondente. Vedi [Vista e piano di lavoro](chapter:view-and-workplane).
+Trascina il cubo di orientamento in alto a sinistra per ruotare la vista. Toccandone una faccia, uno spigolo o un angolo passi direttamente alla vista corrispondente. Vedi [Vista e piano di lavoro](chapter:view-and-workplane).
 
 ## Maniglie, punti piccoli e stilo
 
-La punta del dito copre ciò che tocchi. Con layerling puoi raggiungere maniglie, punti, linee e spigoli anche con un tocco un po’ decentrato rispetto a quanto è possibile con il puntatore del mouse, ma uno stilo è più preciso. Questo vale per gli stilo che il tablet riconosce come penne, come Apple Pencil o S Pen. Uno stilo normale con punta in gomma viene invece rilevato come un dito e non è più preciso: usalo come useresti il dito. Su iPad, Apple Pencil può anche restare sospesa sopra lo schermo e, dopo un momento, mostrare il nome di un controllo in un fumetto, come il suggerimento che appare passando il puntatore del mouse.
+La punta del dito copre ciò che vuoi selezionare. layerling permette di raggiungere maniglie, punti, linee e spigoli anche con un po’ più di margine rispetto al puntatore del mouse, ma uno stilo è più preciso. Questo vale per uno stilo riconosciuto dal tablet come penna, come Apple Pencil o S Pen. Uno stilo semplice con punta di gomma viene rilevato come un dito e non è più preciso: usalo come useresti un dito. Su iPad, se Apple Pencil supporta il rilevamento quando è sollevata dallo schermo, dopo un momento compare anche il nome del controllo in un piccolo fumetto, come il suggerimento mostrato dal puntatore del mouse.
 
-Se i corpi si spostano quando li toccano bambini o persone di fretta, attiva {{ui:workspace.selectBeforeMoving}} nelle impostazioni: prima dovrai selezionare un corpo e solo un trascinamento successivo potrà spostarlo.
+Se i bambini o chi ha fretta spostano i corpi per errore, attiva {{ui:workspace.selectBeforeMoving}} nelle impostazioni: prima dovrai selezionare il corpo; solo un trascinamento successivo lo sposterà.
 
-## Su iPad o iPhone
+## Su iPad e iPhone
 
-- **Installala come app.** In Safari, tocca l’icona di condivisione e scegli «Aggiungi alla schermata Home». L’app si apre in una finestra dedicata, senza barra degli indirizzi, e funziona anche senza connessione; vedi [Installazione e uso offline](chapter:offline-and-install).
-- **I progetti restano nel browser.** Non serve un account e non viene caricato nulla. Safari applica una propria regola contro il tracciamento: elimina i dati salvati da un sito dopo sette giorni senza visite a quel sito tramite Safari. Le app web aggiunte alla schermata Home sono escluse da questa regola, come documenta WebKit. È un motivo in più per usare l’app dalla schermata Home e fare copie di sicurezza dei lavori importanti: {{ui:dashboard.backupAll}} nella pagina iniziale raccoglie tutti i progetti in un unico file.
-- **File.** Safari permette a una pagina di scrivere in un file solo tramite un download. Perciò {{ui:editor.export}} salva il file nella cartella Download dell’app File e [[Ctrl]]+[[S]] sulla tastiera lo scarica di nuovo; vedi [File e salvataggio](chapter:files-and-saving).
-- **La tastiera non è necessaria.** Ogni strumento ha un pulsante nella barra multifunzione e, toccando un campo numerico, si apre la tastiera su schermo. Collegando una tastiera all’iPad puoi usare le [scorciatoie da tastiera](chapter:shortcuts).
+- **Installalo come app.** In Safari, tocca l’icona di condivisione e scegli «Aggiungi alla schermata Home». L’app si apre in una finestra propria, senza barra degli indirizzi, e funziona anche senza connessione; vedi [Lavorare offline e installare l’app](chapter:offline-and-install).
+- **I progetti restano nel browser.** Non serve un account e i dati non vengono caricati online. Safari applica una propria regola contro il tracciamento: elimina i dati salvati da un sito dopo sette giorni senza visite al sito in Safari. Come documentato da WebKit, questa regola non si applica alle web app aggiunte alla schermata Home. Ecco un altro motivo per usare l’app dalla schermata Home e fare copie di sicurezza dei lavori importanti: {{ui:dashboard.backupAll}} nella pagina iniziale raccoglie tutti i progetti in un unico file.
+- **File.** Safari consente a una pagina di scrivere in un file solo tramite un download. Perciò {{ui:editor.export}} salva il file nella cartella Download dell’app File e [[Ctrl]]+[[S]] sulla tastiera lo scarica di nuovo; vedi [File, salvataggio e condivisione](chapter:files-and-saving).
+- **La tastiera non è necessaria.** Ogni strumento ha un pulsante nella barra e toccando un campo numerico si apre la tastiera su schermo. Una tastiera collegata all’iPad aggiunge le [scorciatoie da tastiera](chapter:shortcuts).
 
-## Laboratori con i bambini
+## Laboratori con bambini
 
-Qui dita e stilo con punta in gomma funzionano allo stesso modo. Due impostazioni semplificano il lavoro in classe: {{ui:workspace.selectBeforeMoving}}, per evitare che un tocco sposti un corpo per sbaglio, e {{ui:camera.touchRotate}}, per ruotare sempre la vista con un dito. Il pulsante con il punto interrogativo nel gruppo Aiuto della barra multifunzione attiva {{ui:interactiveHelp.title}}: toccando un pulsante, un campo o una maniglia ne viene mostrata la spiegazione. Tocca di nuovo quel pulsante o premi [[Esc]] per uscire.
+In questo caso le dita e gli stilo con la punta di gomma funzionano allo stesso modo. Due impostazioni semplificano le attività di gruppo: {{ui:workspace.selectBeforeMoving}} impedisce che un tocco sposti accidentalmente un corpo; {{ui:camera.touchRotate}} fa sì che un dito ruoti sempre la vista. Il pulsante con il punto interrogativo nel gruppo Aiuto della barra attiva {{ui:interactiveHelp.title}}: toccando un pulsante, un campo o una maniglia ne viene spiegato il funzionamento. Tocca di nuovo lo stesso pulsante o premi [[Esc]] per uscire.
+
+Per un’intera classe, attiva {{ui:workspace.simpleMode}} nelle impostazioni. La barra mostra solo gli strumenti utili in laboratorio (copia, incolla, duplica, elimina, annulla, raggruppa, specchia, smussa, raccorda, svuota, allinea ed esporta); la raccolta delle forme mostra un elenco ridotto e i pulsanti sono più grandi. La pagina iniziale mostra solo i progetti, senza notizie, testo di benvenuto, pulsanti di aiuto o collegamenti che portano fuori da layerling. Basta un tocco per attivare questa modalità; per disattivarla, tieni premuto per due secondi il pulsante che la sostituisce. Un link che termina con `?mode=simple` attiva la modalità semplificata sul dispositivo che lo apre; `?mode=full` la disattiva. Chi gestisce layerling su un server può avviare tutti gli utenti in modalità semplificata impostando `LAYERLING_SIMPLE_MODE=true`, oppure renderla obbligatoria per tutti con `always`, in modo che non sia possibile disattivarla. Vedi il README.
