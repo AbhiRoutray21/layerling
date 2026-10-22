@@ -1723,6 +1723,8 @@ export const MESSAGES_FR: Partial<Record<MessageKey, string>> = {
   "prop.loftOffsetZ": "Décalage supérieur en longueur",
   "prop.loftWall": "Épaisseur de paroi (0 = solide)",
   "prop.loftSmooth": "Transition en douceur (%)",
+  "prop.loftSegments": "Segments par cercle",
+  "loft.segmentsHint": "Avec combien de segments droits un cercle entier ou un arrondi est dessiné, dans la vue et dans STL, OBJ et 3MF. Plus de segments donnent un rendu plus rond et des fichiers plus gros.",
   "loft.smoothHint": "0 est un cône droit, comme un cône. 100 donne une courbe en S : les côtés laissent les deux extrémités droites et changent de taille entre les deux, comme un adaptateur de tuyau qui s'évase doucement d'un tuyau étroit à un tuyau large.",
   "prop.loftTwist": "Torsion",
   "prop.sketchFill": "Remplir",

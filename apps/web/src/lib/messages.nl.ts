@@ -1737,6 +1737,8 @@ export const MESSAGES_NL: Record<MessageKey, string> = {
   "prop.loftOffsetZ": "Verschuiving boven in lengte",
   "prop.loftWall": "Wanddikte (0 = massief)",
   "prop.loftSmooth": "Vloeiende overgang (%)",
+  "prop.loftSegments": "Segmenten per cirkel",
+  "loft.segmentsHint": "Uit hoeveel rechte stukjes een hele cirkel of afronding wordt getekend, in het beeld en in STL, OBJ en 3MF. Meer stukjes ziet er ronder uit en maakt grotere bestanden.",
   "loft.smoothHint": "0 is een rechte taps toelopende vorm, zoals een kegel. 100 geeft een S-curve: de zijkanten vertrekken aan beide uiteinden recht omhoog en veranderen daartussen van maat, zoals een slangverloopstuk dat vloeiend van een smalle naar een brede buis uitloopt.",
   "prop.loftTwist": "Draaiing",
   "prop.sketchFill": "Vulling",

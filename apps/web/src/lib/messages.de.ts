@@ -1737,6 +1737,8 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "prop.loftOffsetZ": "Versatz oben in der Länge",
   "prop.loftWall": "Wandstärke (0 = voll)",
   "prop.loftSmooth": "Weicher Übergang (%)",
+  "prop.loftSegments": "Segmente je Kreis",
+  "loft.segmentsHint": "Aus wie vielen geraden Stücken ein ganzer Kreis oder eine Rundung gezeichnet wird, in der Ansicht und in STL, OBJ und 3MF. Mehr Stücke wirken runder und machen größere Dateien.",
   "loft.smoothHint": "0 ist eine gerade Verjüngung wie bei einem Kegel. Bei 100 laufen die Seiten an beiden Enden gerade nach oben und ändern dazwischen ihre Größe in einer S-Kurve, wie ein Schlauchadapter, der sich weich von einem schmalen zu einem weiten Rohr aufweitet.",
   "prop.loftTwist": "Verdrehung",
   "prop.sketchFill": "Füllung",

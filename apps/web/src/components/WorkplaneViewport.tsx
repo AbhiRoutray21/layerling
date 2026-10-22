@@ -39,7 +39,7 @@ import { viewDirectionFromName, viewFaceForKey, type ViewCubeFace } from "@/lib/
 import { ViewCube } from "@/components/workplane/ViewCube";
 import { openSecondViewWindow, SecondViewWindow, useSecondViewSupported } from "@/components/workplane/SecondViewWindow";
 import { createGearGeometry } from "@/lib/gearGeometry";
-import { createStarGeometry } from "@/lib/starGeometry";
+import { createStarGeometry, starSettingsForSize } from "@/lib/starGeometry";
 import { createHeartGeometry } from "@/lib/heartGeometry";
 import { createCrescentGeometry } from "@/lib/crescentGeometry";
 import { createSlotGeometry } from "@/lib/slotGeometry";
@@ -1057,6 +1057,7 @@ function tapeShapeTopologyKey(shape: WorkplaneShape): string {
     loftWall: shape.loftWall,
     loftTwist: shape.loftTwist,
     loftSmooth: shape.loftSmooth,
+    loftSegments: shape.loftSegments,
     slotEndRatio: shape.slotEndRatio,
     loftTiltX: shape.loftTiltX,
     loftTiltZ: shape.loftTiltZ,
@@ -1364,6 +1365,7 @@ function shapeGeometrySignature(shape: WorkplaneShape): string {
     loftWall: shape.loftWall,
     loftTwist: shape.loftTwist,
     loftSmooth: shape.loftSmooth,
+    loftSegments: shape.loftSegments,
     slotEndRatio: shape.slotEndRatio,
     loftTiltX: shape.loftTiltX,
     loftTiltZ: shape.loftTiltZ,
@@ -2562,6 +2564,9 @@ function resizedShapePatchFromFrame(shape: WorkplaneShape, center: THREE.Vector3
   };
   if (shape.kind === "cone") {
     patch.baseRadius = width / 2;
+  }
+  if (shape.kind === "star") {
+    Object.assign(patch, starSettingsForSize({ ...shape, width: shapeWidth(shape), depth: shapeDepth(shape) }, width, depth));
   }
   return patch;
 }
@@ -6194,6 +6199,9 @@ export function WorkplaneViewport({
           : { width: nextValue, size: resizedShapeSize(nextValue, shapeDepth(shape)) };
         if (shape.kind === "cone") {
           patch.baseRadius = nextValue / 2;
+        }
+        if (shape.kind === "star") {
+          Object.assign(patch, starSettingsForSize({ ...shape, width: shapeWidth(shape), depth: shapeDepth(shape) }, nextValue, nextValue));
         }
         return patchWithResizeAnchor(shape, patch, axis, anchor);
       }

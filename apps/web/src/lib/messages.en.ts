@@ -1738,6 +1738,8 @@ export const MESSAGES_EN = {
   "prop.loftOffsetZ": "Top Offset in Length",
   "prop.loftWall": "Wall Thickness (0 = solid)",
   "prop.loftSmooth": "Smooth transition (%)",
+  "prop.loftSegments": "Segments per circle",
+  "loft.segmentsHint": "How many straight pieces a full circle or rounded corner is drawn with, in the view and in STL, OBJ and 3MF. More pieces look rounder and make larger files.",
   "loft.smoothHint": "0 is a straight taper, like a cone. 100 gives an S-curve: the sides leave both ends straight up and change their size in between, like a hose adapter that flares smoothly from a narrow to a wide pipe.",
   "prop.loftTwist": "Twist",
   "prop.sketchFill": "Fill",

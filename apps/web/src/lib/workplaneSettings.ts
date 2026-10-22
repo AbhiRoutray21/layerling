@@ -439,6 +439,7 @@ export function normalizeShapeCustomizations(value: unknown, fallback: ShapeCust
       }
       entry.loftTwist = optionalShapeNumber(source.loftTwist, fallbackEntry?.loftTwist, -360, 360);
       entry.loftSmooth = optionalShapeNumber(source.loftSmooth, fallbackEntry?.loftSmooth, 0, 1);
+      entry.loftSegments = optionalShapeNumber(source.loftSegments, fallbackEntry?.loftSegments, 16, 360, true);
       entry.loftTiltX = optionalShapeNumber(source.loftTiltX, fallbackEntry?.loftTiltX, -45, 45);
       entry.loftTiltZ = optionalShapeNumber(source.loftTiltZ, fallbackEntry?.loftTiltZ, -45, 45);
       for (const key of ["loftBottomSides", "loftTopSides"] as const) {

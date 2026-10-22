@@ -82,6 +82,8 @@ export const MESSAGES_CS: Record<MessageKey, string> = {
   "status.sketchLinesStraightened": "Počet narovnaných úseček: {count}",
   "gear.herringbone": "Šípové ozubení",
   "prop.loftSmooth": "Plynulý přechod (%)",
+  "prop.loftSegments": "Segmenty na kruh",
+  "loft.segmentsHint": "Z kolika rovných úseků se kreslí celý kruh nebo zaoblení, v pohledu i v STL, OBJ a 3MF. Více úseků vypadá kulatěji a dělá větší soubory.",
   "loft.smoothHint": "Při 0 se těleso zužuje přímočaře jako kužel. Při 100 mají boky průběh ve tvaru S: na obou koncích začínají rovnoběžně s osou a rozměr se mění mezi nimi, například u plynulého přechodu z úzké trubky na širší.",
   "prop.torusSides": "Počet segmentů prstence",
   "prop.torusSteps": "Počet segmentů průřezu",

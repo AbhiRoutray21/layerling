@@ -286,6 +286,8 @@ export type ShapeCustomization = {
   loftTwist?: number;
   /** Transition: 0 to 1, how much of an S-curve the sides take between the ends (#271). */
   loftSmooth?: number;
+  /** Transition: straight pieces of a full circle in the mesh, 96 if missing (#755). */
+  loftSegments?: number;
   /** Capsule: the small end's diameter as a share of the large one, 1 or missing for equal ends (#206). */
   slotEndRatio?: number;
   /** Transition: degrees the top end tilts about the x axis and about the z axis (#205). */
@@ -901,6 +903,8 @@ export type WorkplaneShape = {
   loftTwist?: number;
   /** Transition: 0 to 1, how much of an S-curve the sides take between the ends (#271). */
   loftSmooth?: number;
+  /** Transition: straight pieces of a full circle in the mesh, 96 if missing (#755). */
+  loftSegments?: number;
   /** Capsule: the small end's diameter as a share of the large one, 1 or missing for equal ends (#206). */
   slotEndRatio?: number;
   /** Transition: degrees the top end tilts about the x axis and about the z axis (#205). */
