@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+## 1.101.0
+
 - **SVG export: the edges seen from above (#591, PR #726 by DevxDre):** Under View the SVG export has a third choice next to the silhouette and the footprint, "Visible edges from above": the edges you see from above as lines in the colour of their body, pockets, engraved and raised text and parts standing on others included, every area closed with an even-odd fill, for laser cutters and plotters. A design with too many edges gets the silhouette, and the message says so. The MCP tool `layerling_export_mesh` takes `view: "edges"` too. Texts for every language; the guide describes it in "Files and saving".
 - **Take your Tinkercad designs with you (#683):** A member of the community made a free bookmark, Export to layerling, that turns a Tinkercad design into a `.lyl` file with its real shapes. It is a project of its own, not part of layerling, and we have not tested it ourselves yet. The start page ("Know Tinkercad?") and the guide (Files and saving, Importing, and the tip in Getting started) point to it in every language, and a card in "What's new" mentions it.
 - **The mouse wheel zooms with "scroll one screen at a time" (Edge on Windows) and in Firefox:** A wheel that counts in pages or lines sent 1 or 3 instead of a notch's 100 pixels, so a notch zoomed a hundredth as far whatever the zoom speed. Pages and lines are turned into pixels now. The labels in the workspace settings that wrap to two lines no longer run over the next row.
