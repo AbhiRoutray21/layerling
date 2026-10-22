@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "title": {
+      "de": "Offene Seiten für Gridfinity-Behälter",
+      "en": "Open sides for Gridfinity bins"
+    },
+    "body": {
+      "de": "Ein Gridfinity-Behälter kann jetzt an jeder Seite offen sein, ohne Wand und Stapelrand: Schalte im Eigenschaften-Fenster „Vorne offen“ oder eine andere Seite ein, und Behälter, die zueinander offen sind, ergeben eine durchgehende Reihe. Sind alle vier Seiten offen, wird der Behälter zur Schale.",
+      "en": "A Gridfinity bin can now be open on any side, with no wall and no stacking lip there: switch on \"Open at the front\" or another side in the Properties panel, and bins open towards each other make one continuous run. With all four sides open the bin is a tray."
+    }
+  }
+]
