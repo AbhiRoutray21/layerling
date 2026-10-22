@@ -2,7 +2,7 @@
 
 import { GuideHelpLink } from "@/components/GuideHelpLink";
 import { ShapeMenuPanel } from "@/components/workplane/ShapeMenuPanel";
-import { AlertTriangle, ArrowDownToLine, ArrowUpFromLine, Blend, Check, CircleHelp, Percent, Circle as CircleIcon, CloudUpload, Download, Eye, EyeOff, FilePlus2, FolderOpen, Hexagon as HexagonIcon, Info, ListTree, Pencil, Pentagon as PentagonIcon, Rotate3d, Route as RouteIcon, Search, Square as SquareIcon, Star as StarIcon, Triangle as TriangleIcon, X } from "lucide-react";
+import { AlertTriangle, ArrowDownToLine, ArrowUpFromLine, Check, CircleHelp, Percent, Circle as CircleIcon, CloudUpload, Download, Eye, EyeOff, FilePlus2, FolderOpen, Hexagon as HexagonIcon, Info, ListTree, Pencil, Pentagon as PentagonIcon, Rotate3d, Route as RouteIcon, Search, Square as SquareIcon, Star as StarIcon, Triangle as TriangleIcon, X } from "lucide-react";
 import { ObjectListPanel } from "@/components/workplane/ObjectListPanel";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import { useWheelField } from "@/lib/useWheelField";
@@ -71,7 +71,7 @@ import {
   ToolbarHideSelectedIcon,
   ToolbarHomeIcon,
   ToolbarImportIcon,
-  ToolbarIntersectionIcon,
+  ToolbarIntersectionIcon, ToolbarIntersectPreviewIcon,
   ToolbarKeyboardIcon,
   ToolbarFilletIcon,
   ToolbarHistoryIcon,
@@ -201,7 +201,7 @@ import {
   type LylFileHandle,
 } from "@/lib/lylFileAccess";
 import { simplifyTrianglePositions } from "@/lib/meshSimplify";
-import { clipboardShape, displayShapeName, iconTagAsset, qrCodeAsset, libraryShapeAssets, makeShapeFromAsset, nameTagAsset, shapeAssetLabel, shapeAssetMenuLabel, toolbarShapeAssets } from "@/lib/shapeCatalog";
+import { clipboardShape, displayShapeName, iconTagAsset, qrCodeAsset, libraryShapeAssets, makeShapeFromAsset, nameTagAsset, shapeAssetColor, shapeAssetLabel, shapeAssetMenuLabel, toolbarShapeAssets } from "@/lib/shapeCatalog";
 import { importedShapeFromStl } from "@/lib/stlImport";
 import { exportMeshesToStl } from "@/lib/stlExport";
 import { exportMeshesTo3mf, THREE_MF_MEDIA_TYPE } from "@/lib/threemfExport";
@@ -12511,6 +12511,7 @@ export function LayerlingEditor({
           }
           addShape(shape);
         }}
+        shapeCustomizations={workspaceSettings.shapeCustomizations}
       />
       <div className="editor-body">
         {outlinerOpen ? (
@@ -13440,6 +13441,7 @@ function SecondaryToolbar({
   overhangAngle,
   onToggleOverhangs,
   renderMyShapes,
+  shapeCustomizations,
   objects,
   onSelectObject,
 }: {
@@ -13565,6 +13567,8 @@ function SecondaryToolbar({
   onToggleOverhangs: () => void;
   /** Custom shapes above the library; gets the way to close the menu. */
   renderMyShapes?: (close: () => void) => ReactNode;
+  /** The shape defaults, so each library entry can show the colour it will be added in. */
+  shapeCustomizations: WorkplaneWorkspaceSettings["shapeCustomizations"];
   /** The bodies of the design, so the command search can find them by name. */
   objects: ReadonlyArray<{ id: string; name: string; kind: string; hidden: boolean }>;
   onSelectObject: (id: string) => void;
@@ -13812,7 +13816,7 @@ function SecondaryToolbar({
     { id: "bundle", label: t("editor.tool.bundle"), icon: ToolbarBundleIcon, action: onBundle, enabled: canGroup },
     { id: "ungroup", label: t("editor.tool.ungroup"), icon: ToolbarUngroupIcon, action: onUngroup, enabled: canUngroup },
     { id: "intersect", label: t("editor.tool.intersect"), icon: ToolbarIntersectionIcon, action: onIntersect, enabled: canIntersect || intersectPreviewActive },
-    { id: "intersect-preview", label: t("editor.tool.intersectPreview"), icon: Blend, action: onIntersectPreview, enabled: canIntersect || intersectPreviewActive, active: intersectPreviewActive },
+    { id: "intersect-preview", label: t("editor.tool.intersectPreview"), icon: ToolbarIntersectPreviewIcon, action: onIntersectPreview, enabled: canIntersect || intersectPreviewActive, active: intersectPreviewActive },
   ];
   const modifyTools = [
     { id: "mirror", label: t("editor.tool.mirror"), icon: ToolbarMirrorIcon, action: onMirror, enabled: canModifySelection, active: mirrorMode },
@@ -14058,6 +14062,7 @@ function SecondaryToolbar({
                     type="button"
                     title={shapeAssetMenuLabel(shape).replace(/\s+/g, " ")}
                     aria-label={shapeAssetMenuLabel(shape).replace(/\s+/g, " ")}
+                    style={{ "--shape-default-color": shapeAssetColor(shape, shapeCustomizations[shape.kind]) } as CSSProperties}
                     draggable
                     onClick={() => {
                       if (suppressNextShapeClickRef.current) {
@@ -14113,7 +14118,12 @@ function SecondaryToolbar({
                     }}
                     onDragEnd={closeShapesAfterPick}
                   >
-                    <img src={shape.menuIcon} alt="" draggable={false} />
+                    <span
+                      className="shape-menu-thumb"
+                      style={{ "--shape-icon": `url(/${shape.menuIcon.replace(/^\/+/, "")})` } as CSSProperties}
+                    >
+                      <img src={shape.menuIcon} alt="" draggable={false} />
+                    </span>
                     <span className={shapeAssetMenuLabel(shape).split(/\s+/).some((word) => word.length > 13) ? "long-word" : undefined}>{shapeAssetMenuLabel(shape)}</span>
                   </button>
                 ))}

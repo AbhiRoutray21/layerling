@@ -97,6 +97,8 @@ Das Zahnrad im Menüband ({{ui:editor.workspaceSettings}}) öffnet die Einstellu
 
 {{ui:workspace.toolbarSize}} macht die Knöpfe der Leiste oben, ihr Formenmenü, die Kamerasteuerung links und die Eigenschaftentafel rechts kleiner oder größer: {{ui:workspace.toolbarSizeSmall}}, {{ui:workspace.toolbarSizeMedium}} (wie bisher) oder {{ui:workspace.toolbarSizeLarge}}. Klein lässt auf einem Laptop mehr Platz für die Arbeitsebene, groß trifft sich leichter auf einem großen Bildschirm oder mit dem Finger. Mit großen Knöpfen gehen die Gruppen der Leiste in eine zweite Zeile, wenn das Fenster für sie zu schmal ist. Die Größe merkt sich dieser Browser, sie gilt für jedes Design.
 
+{{ui:workspace.shapeColors}} zeigt auf den Bildern der Formenbibliothek die Farbe, in der eine neue Form beginnt (die Farbe ihrer Art oder die, die du mit {{ui:inspector.saveDefaults}} gespeichert hast). Schalte es aus, wenn dir graue Bilder lieber sind; dein Browser merkt sich die Wahl.
+
 {{ui:workspace.viewCubePosition}} stellt den Ansichtswürfel in eine andere Ecke der Arbeitsfläche: {{ui:workspace.viewCubePositionTopLeft}} (wie bisher), {{ui:workspace.viewCubePositionTopRight}}, {{ui:workspace.viewCubePositionBottomLeft}} oder {{ui:workspace.viewCubePositionBottomRight}}. In jeder Ecke außer oben links rückt die Kamerasteuerung nach oben an den Platz, den der Würfel frei gemacht hat. Unten rechts steht der Würfel knapp über der Auswahl {{ui:inspector.snapGrid}}. Solange rechts die Eigenschaften einer Form offen sind, weicht ein Würfel auf der rechten Seite links daneben aus. Die Ecke merkt sich dieser Browser, sie gilt für jedes Design. In einem schmalen Fenster, etwa auf dem Handy, ist die Einstellung ausgeblendet und der Würfel bleibt oben links.
 
 ### Darstellung: Schnellmodus

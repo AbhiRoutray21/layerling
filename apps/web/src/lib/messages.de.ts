@@ -2344,6 +2344,8 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "workspace.simpleMode": "Einfacher Modus",
   "workspace.simpleModeHint": "Für Kinder und Einsteiger: weniger Werkzeuge, eine kurze Formenliste, größere Knöpfe und eine Startseite ohne Verweise aus layerling hinaus.",
   "workspace.simpleModeOff": "Halten, um den einfachen Modus auszuschalten",
+  "workspace.shapeColors": "Formen in Farbe",
+  "workspace.shapeColorsHint": "Die Bilder der Formenbibliothek zeigen die Farbe, in der eine neue Form beginnt. Ausschalten für graue Bilder.",
   "workspace.viewCubePosition": "Position des Ansichtswürfels",
   "workspace.viewCubePositionTopLeft": "Oben links",
   "workspace.viewCubePositionTopRight": "Oben rechts",
