@@ -16,7 +16,7 @@ import { type PlacementPoint, type PlacementWorkplane } from "@/lib/placementWor
 import { capturePointer } from "@/lib/pointerCapture";
 import { GuideHelpLink } from "@/components/GuideHelpLink";
 import { displayY, insideZ } from "@/lib/displayAxes";
-import { isNonSolidShapeKind, preservesEdgeTreatmentSize, resizedImportedMeshPositions, shapeDepth, shapeExtrudeDeformAt, shapeHasExtrudeDeform, shapeHasTaper, shapeOverallFootprintDimensions, shapeTaperScaleAt, shapeWidth } from "@/lib/workplaneShapes";
+import { isNonSolidShape, preservesEdgeTreatmentSize, resizedImportedMeshPositions, shapeDepth, shapeExtrudeDeformAt, shapeHasExtrudeDeform, shapeHasTaper, shapeOverallFootprintDimensions, shapeTaperScaleAt, shapeWidth } from "@/lib/workplaneShapes";
 import { type RotationAxis } from "@/components/workplane/TransformOverlay";
 import { type AlignAxes, type FrameCuboid } from "@/lib/alignFrame";
 import type { MeasurementAccuracy, WorkplaneNote, WorkplaneShape, WorkplaneWorkspaceSettings } from "@/types/layerling";
@@ -1101,7 +1101,7 @@ export function syncRulerDimensionOverlay(
       const rulerPose = { x: ruler.x, z: ruler.z, rotation: ruler.rotation, length: shapeWidth(ruler), crossWidth: shapeDepth(ruler) };
       const axisAcross = new THREE.Vector3(0, 0, 1).applyQuaternion(quaternionForShape(ruler));
       shapes.forEach((candidate) => {
-        if (candidate.id === ruler.id || isNonSolidShapeKind(candidate.kind) || candidate.hidden) return;
+        if (candidate.id === ruler.id || isNonSolidShape(candidate) || candidate.hidden) return;
         const match = rulerDimensionMatch(rulerPose, {
           x: candidate.x,
           z: candidate.z,
@@ -1292,7 +1292,7 @@ export function syncCornerRulerToolOverlay(
     // Mehrere markierte Koerper zaehlen zusammen wie einer: gemessen wird
     // ihre gemeinsame Umrissbox, wie beim Abstand zum Nullpunkt.
     const wanted = new Set(selectedIds);
-    const selectedShapes = shapes.filter((s) => wanted.has(s.id) && !s.hidden && !isNonSolidShapeKind(s.kind));
+    const selectedShapes = shapes.filter((s) => wanted.has(s.id) && !s.hidden && !isNonSolidShape(s));
 
     rulers.forEach((ruler) => {
       const armWidth = CORNER_RULER_ARM_WIDTH;
@@ -1405,7 +1405,7 @@ export function syncCornerRulerToolOverlay(
       const flatRotation = cornerRulerFlatRotation(ruler.frame);
       shapes.forEach((candidate) => {
         if (flatRotation === null) return;
-        if (isNonSolidShapeKind(candidate.kind) || candidate.hidden) return;
+        if (isNonSolidShape(candidate) || candidate.hidden) return;
         if (wanted.has(candidate.id)) return;
         const { armX, armZ } = cornerRulerDimensionMatchesFromCorner(
           { x: ruler.corner.x, z: ruler.corner.z },

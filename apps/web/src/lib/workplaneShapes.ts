@@ -147,6 +147,15 @@ export function isNonSolidShapeKind(kind: WorkplaneShape["kind"]) {
 }
 
 /**
+ * A shape that is a guide, not a body: a ruler, or a reference image (#680) - a picture laid on
+ * the plate or a face to line parts up on. Neither is exported, cut, grouped, printed or counted
+ * in the print estimate.
+ */
+export function isNonSolidShape(shape: Pick<WorkplaneShape, "kind" | "imagePlate">) {
+  return isNonSolidShapeKind(shape.kind) || Boolean(shape.imagePlate);
+}
+
+/**
  * Eine Verjuengung setzen, wie es das Merkmalsfeld tut: Wer einen der beiden
  * Werte einer Kante angibt, schreibt auch den anderen fest und loescht den
  * Massstab. Ohne das liefe die Schwester weiter dem Massstab nach statt dem,

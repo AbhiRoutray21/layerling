@@ -986,11 +986,17 @@ export type WorkplaneShape = {
   };
   /** A shape that only shows what a preview would make (the common part of an intersection, #372): not picked, not saved. */
   previewOnly?: boolean;
+  /**
+   * A reference image (#680): a thin box with a picture on top, laid on the plate or a face to line
+   * parts up on. A guide, never exported, cut, grouped or printed; the picture is a project asset in the .lyl file.
+   */
   imagePlate?: {
     dataUrl: string;
     mimeType: string;
     pixelWidth: number;
     pixelHeight: number;
+    /** How opaque the picture is drawn, 0.1 to 1 (#680); left out, solid, as old picture plates were. */
+    opacity?: number;
   };
   parametricSource?: ParametricSource;
   sketchProfile?: SketchProfile;
