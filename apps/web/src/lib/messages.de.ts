@@ -936,6 +936,8 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "faceTool.inset": "Rand zur Flächenkante",
   "faceTool.radius": "Eckenradius",
   "faceTool.depth": "Tiefe",
+  "faceTool.separate": "Als eigener Körper (nicht gruppiert)",
+  "faceTool.separateHint": "Das neue Teil steht neben dem Körper statt mit ihm in einer Gruppe: Du kannst es gleich in der Größe ändern, verschieben oder damit schneiden. Ohne den Schalter wird es gruppiert.",
   "faceTool.repick": "Andere Fläche",
   "faceTool.apply": "Erzeugen",
   "faceTool.bodyName": "Flächenextrusion",

@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "title": {
+      "de": "Fläche herausschieben: neues Teil als eigener Körper",
+      "en": "Face tool: the new part as a body of its own"
+    },
+    "body": {
+      "de": "Im Fenster Fläche gibt es den Schalter \"Als eigener Körper (nicht gruppiert)\". Ist er an, steht das herausgeschobene Teil (oder das Loch einer Tasche) neben dem Körper statt in einer Gruppe: Du kannst es gleich in der Größe ändern, verschieben oder damit schneiden.",
+      "en": "The Face window has a new switch, \"As a body of its own (not grouped)\". With it on, the part pushed out of the face (or the hole of a pocket) stands beside the body instead of in a group with it: resize it, move it or use it to cut right away."
+    }
+  }
+]

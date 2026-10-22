@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **Face tool: the new part as a body of its own (#750):** The Face window has a switch, "As a body of its own (not grouped)". With it on, what is pushed out of the face (or the hole of a pocket) is created beside the body instead of in a group with it and comes up selected, ready to be resized, moved or used to cut; without it everything stays as before, grouped. `layerling_push_face` has the same as `separate`. The switch is `separate` in `FaceToolSettings`; the editor's Create and the MCP command both commit the body alone when it is on. Type-checked and tested; not tried in a browser yet. Asked for by @nnicolas50-max in #750.
+
 ## 1.102.0
 
 - **The 3MF and OBJ export weld points much faster (#734):** A design of four colours traced from a picture (139,000 triangles) kept the page busy for seconds while the file was written, and on a slow computer Chrome asked whether to wait. `weldMeshVertices` looked in 27 neighbouring cells of one tolerance each, with a string key per cell, for every point; it now looks in cells 16 tolerances wide and only in the next one when the point is that close to its edge, with a number as the key. The welding of that model went from about 1.1 s to 0.04 s, writing the 3MF from 1.75 s to 0.6 s on the test computer. The result is the same set of points (`tests/unit/meshWeld.test.ts` holds it against the old search). The colour separation and the size estimate still run in the page and take their time; moving them to a worker is not done.

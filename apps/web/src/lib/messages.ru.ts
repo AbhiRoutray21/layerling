@@ -933,6 +933,8 @@ export const MESSAGES_RU: Partial<Record<MessageKey, string>> = {
   "faceTool.inset": "Отступ от края грани",
   "faceTool.radius": "Радиус углов",
   "faceTool.depth": "Глубина",
+  "faceTool.separate": "Как отдельное тело (без группы)",
+  "faceTool.separateHint": "Новая деталь встаёт рядом с телом, а не в группе с ним: её можно сразу изменить в размере, переместить или вырезать ею. Без переключателя она сгруппирована.",
   "faceTool.repick": "Другая грань",
   "faceTool.apply": "Создать",
   "faceTool.bodyName": "Выдавливание грани",

@@ -1010,6 +1010,8 @@ export const MESSAGES_CS: Record<MessageKey, string> = {
   "faceTool.inset": "Odsazení od okraje plochy",
   "faceTool.radius": "Poloměr rohů",
   "faceTool.depth": "Hloubka",
+  "faceTool.separate": "Jako samostatné těleso (neseskupené)",
+  "faceTool.separateHint": "Nová část stojí vedle tělesa, ne s ním ve skupině: můžete ji hned zvětšit či zmenšit, posunout nebo s ní řezat. Bez přepínače je seskupená.",
   "faceTool.repick": "Jiná plocha",
   "faceTool.apply": "Vytvořit",
   "faceTool.bodyName": "Vysunutí plochy",

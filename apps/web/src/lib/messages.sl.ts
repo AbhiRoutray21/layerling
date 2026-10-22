@@ -2608,6 +2608,8 @@ export const MESSAGES_SL: Partial<Record<MessageKey, string>> = {
   "faceTool.inset": "Odmik od roba ploskve",
   "faceTool.radius": "Polmer vogalov",
   "faceTool.depth": "Globina",
+  "faceTool.separate": "Kot samostojno telo (ni združeno)",
+  "faceTool.separateHint": "Novi del stoji ob telesu, ne v skupini z njim: takoj mu lahko spremeniš velikost, ga premakneš ali z njim rezkaš. Brez stikala je združen.",
   "faceTool.repick": "Druga ploskev",
   "faceTool.apply": "Ustvari",
   "faceTool.bodyName": "Izvlek ploskve",

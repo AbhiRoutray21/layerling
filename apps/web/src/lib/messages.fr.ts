@@ -926,6 +926,8 @@ export const MESSAGES_FR: Partial<Record<MessageKey, string>> = {
   "faceTool.inset": "Retrait depuis le bord de la face",
   "faceTool.radius": "Rayon des coins",
   "faceTool.depth": "Profondeur",
+  "faceTool.separate": "Comme un corps à part (non groupé)",
+  "faceTool.separateHint": "La nouvelle pièce se place à côté du corps au lieu d'être groupée avec lui : vous pouvez tout de suite la redimensionner, la déplacer ou couper avec. Sans l'interrupteur, elle est groupée.",
   "faceTool.repick": "Une autre face",
   "faceTool.apply": "Créer",
   "faceTool.bodyName": "Extrusion de face",

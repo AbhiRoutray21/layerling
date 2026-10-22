@@ -936,6 +936,8 @@ export const MESSAGES_NL: Record<MessageKey, string> = {
   "faceTool.inset": "Inspringing vanaf de rand van het vlak",
   "faceTool.radius": "Hoekradius",
   "faceTool.depth": "Diepte",
+  "faceTool.separate": "Als een eigen lichaam (niet gegroepeerd)",
+  "faceTool.separateHint": "Het nieuwe deel staat naast het lichaam in plaats van er in een groep mee: je kunt het meteen een andere maat geven, verplaatsen of ermee snijden. Zonder de schakelaar wordt het gegroepeerd.",
   "faceTool.repick": "Ander vlak",
   "faceTool.apply": "Maken",
   "faceTool.bodyName": "Vlakextrusie",
