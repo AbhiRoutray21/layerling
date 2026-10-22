@@ -144,5 +144,25 @@
       "de": "Eine Gridfinity-Bodenplatte kann jetzt an jeder Seite einen massiven Ausgleich bekommen, damit sie eine Schublade füllt, die keine ganze Zahl von Einheiten misst: Stell im Eigenschaften-Fenster „Ausgleich rechts“ oder eine andere Seite ein. Das Raster bleibt bei ganzen Einheiten, und die Platte wird um den Ausgleich größer.",
       "en": "A Gridfinity baseplate can now have a solid border on any side, so it fills a drawer that is not a whole number of units: set \"Padding on the right\" or another side in the Properties panel. The grid stays whole units, and the plate's size grows with the padding."
     }
+  },
+  {
+    "title": {
+      "de": "Loft: Segmente pro Kreis einstellbar",
+      "en": "Loft: segments per circle"
+    },
+    "body": {
+      "de": "Die Kreise und runden Ecken eines Loft waren immer aus 96 Teilstücken gebaut, bei großen runden Enden sah man die Facetten. Das neue Feld \"Segmente pro Kreis\" (16 bis 360) stellt es ein. Es gilt in der Ansicht und in STL, OBJ und 3MF.",
+      "en": "The circles and rounded corners of a Loft were always built from 96 pieces, so on a large round end the facets showed. The new field \"Segments per circle\" (16 to 360) sets it, in the view and in STL, OBJ and 3MF."
+    }
+  },
+  {
+    "title": {
+      "de": "Ein skalierter Stern behält seine Form",
+      "en": "A scaled star keeps its shape"
+    },
+    "body": {
+      "de": "Beim Ändern der Größe eines Sterns wuchs nur der äußere Radius, so wurde ein kleinerer Stern weniger spitz und ein größerer spitzer. Der innere Radius und die Rundungen wachsen jetzt mit.",
+      "en": "When a star was resized only its outer size changed, so a smaller star came out less pointy and a larger one more pointy. The inner size and the roundings now stretch with it."
+    }
   }
 ]
