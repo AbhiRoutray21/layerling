@@ -111,4 +111,4 @@ Numa cópia do layerling no seu próprio computador ou servidor, o aviso "Atuali
 
 Quando a peça estiver pronta, clique em {{ui:editor.export}}, escolha STL ou 3MF e baixe o arquivo. Abra-o no seu fatiador, por exemplo Bambu Studio, PrusaSlicer, OrcaSlicer ou Cura. Se você escolher sua impressora nas configurações, dá para ver enquanto modela se a peça cabe na mesa de impressão. Mais em [Impressão](chapter:printing).
 
-> **Dica:** Se você vem do Tinkercad, vai se achar rapidinho: a mesa, as formas, sólido e orifício, agrupar, alinhar e espelhar funcionam quase igual. O que é novo é principalmente chanfro e arredondamento, vazar, roscas e esboços.
+> **Dica:** Se você vem do Tinkercad, vai se achar rapidinho: a mesa, as formas, sólido e orifício, agrupar, alinhar e espelhar funcionam quase igual. O que é novo é principalmente chanfro e arredondamento, vazar, roscas e esboços. Seus próprios designs do Tinkercad também podem vir junto, veja [Files, saving and sharing](chapter:files-and-saving).

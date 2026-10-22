@@ -120,6 +120,8 @@ export const MESSAGES_JA: Partial<Record<MessageKey, string>> = {
   "welcome.lead": "layerlingは、ブラウザーで動く3Dプリントのための3D CADです。Tinkercadと同じくらい使いやすく、Fusion 360へ一歩近づいたもの。無料、アカウント不要、インストール不要。作ったものはこのコンピューターに残ります。",
   "welcome.switchTitle": "Tinkercadをご存じですか？",
   "welcome.switchBody": "それならすぐに使いこなせます。シェイプを作業平面にドラッグ、穴をグループ化、整列、ミラー、バンドル、Altドラッグでコピー。操作はあえて同じにしてあります。あちらで困っていた制限にぶつかることがなくなるだけです。さらに「設定 → 外観」でワンクリックすれば、作業エリアの見た目も同じにできます。",
+  "welcome.switchImport": "Tinkercadのデザインも持ってこられます。コミュニティの無料ツールが、layerlingの一部ではなく、私たちもまだ試していませんが、それをlayerlingのファイルに変換します。",
+  "welcome.switchImportLink": "Export to layerling",
   "welcome.gapTitle": "layerlingで加わるもの",
   "welcome.gap1": "エッジの面取り（角をななめに切る）とフィレット（角を丸める）。いつでも取り消しや変更ができ、正確なCADジオメトリとしてSTEPファイルまで反映されます。",
   "welcome.gap2": "ボディの中空化（中をくりぬく。壁の厚さは同じ）と、平面による分割。ななめにも切れます。",

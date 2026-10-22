@@ -124,6 +124,8 @@ export const MESSAGES_FR: Partial<Record<MessageKey, string>> = {
   "welcome.lead": "layerling est une CAO pour l'impression 3D, directement dans votre navigateur - aussi simple à utiliser que Tinkercad, mais un pas vers Fusion 360. Gratuit, sans compte, sans installation - et ce que vous construisez reste sur cet ordinateur.",
   "welcome.switchTitle": "Vous connaissez Tinkercad ?",
   "welcome.switchBody": "Ensuite, vous trouverez immédiatement votre chemin : faites glisser les formes sur le plan de travail, regroupez les trous, alignez, mettez en miroir, regroupez, Alt-glissez pour une copie - les commandes sont délibérément les mêmes. Vous n’atteignez tout simplement plus les limites qui vous dérangeaient là-bas. Et sous Paramètres → Apparence, un clic donne également à la zone de travail son aspect.",
+  "welcome.switchImport": "Vos designs Tinkercad peuvent aussi venir avec vous : un outil gratuit de la communauté, qui ne fait pas partie de layerling et que nous n'avons pas encore testé, les convertit en fichiers layerling.",
+  "welcome.switchImportLink": "Export to layerling",
   "welcome.gapTitle": "Ce que layerling apporte en plus",
   "welcome.gap1": "Chanfreinez et arêtes de congé, reprises ou modifiées à tout moment, sur la géométrie CAO exacte jusqu'au fichier STEP.",
   "welcome.gap2": "Évidez les corps (même épaisseur de paroi) et divisez-les avec un rabot, également incliné.",

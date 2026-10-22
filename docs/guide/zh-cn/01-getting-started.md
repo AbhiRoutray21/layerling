@@ -111,4 +111,4 @@ layerling 是一款直接在浏览器里运行的 3D 打印设计程序。你用
 
 零件做好后，点击 {{ui:editor.export}}，选择 STL 或 3MF 并下载文件。在你的切片软件中打开它，例如 Bambu Studio、PrusaSlicer、OrcaSlicer 或 Cura。如果在设置中选好了打印机，你在建模时就能看出零件是否能放进打印床。详见[打印](chapter:printing)。
 
-> **提示：** 如果你来自 Tinkercad，会很快上手：平台、形状、实体与孔、分组、对齐和镜像的用法几乎一样。新东西主要是倒角与圆角、抽壳、螺纹和草图。
+> **提示：** 如果你来自 Tinkercad，会很快上手：平台、形状、实体与孔、分组、对齐和镜像的用法几乎一样。新东西主要是倒角与圆角、抽壳、螺纹和草图。 你自己的 Tinkercad 设计也可以带过来，见 [文件、保存与分享](chapter:files-and-saving)。

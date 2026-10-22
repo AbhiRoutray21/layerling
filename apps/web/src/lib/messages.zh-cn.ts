@@ -130,6 +130,8 @@ export const MESSAGES_ZH_CN: Partial<Record<MessageKey, string>> = {
   "welcome.lead": "layerling 是直接在浏览器中进行 3D 打印的 CAD——和 Tinkercad 一样易用，同时迈向 Fusion 360。免费、无需账号、无需安装——你构建的东西都保存在这台电脑上。",
   "welcome.switchTitle": "熟悉 Tinkercad 吗？",
   "welcome.switchBody": "那你马上就能上手：把形状拖到工作平面上，分组挖孔、对齐、镜像、捆绑，按住 Alt 拖动复制——操作方式刻意保持一致。只是不再受那边让你困扰的限制。而且在“设置 → 外观”中，一键就能让工作区看起来也一样。",
+  "welcome.switchImport": "你的 Tinkercad 设计也可以带过来：社区的一个免费工具（不属于 layerling，我们也还没有测试过）可以把它们转换成 layerling 文件。",
+  "welcome.switchImportLink": "Export to layerling",
   "welcome.gapTitle": "layerling 新增的功能",
   "welcome.gap1": "对边进行倒角和圆角，圆角半径还可沿边变化，随时撤销或修改，全程基于精确的 CAD 几何体，直至 STEP 文件。",
   "welcome.gap2": "抽壳实体（壁厚均匀），并用平面分割，也可以斜切。",

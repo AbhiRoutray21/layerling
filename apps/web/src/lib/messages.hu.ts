@@ -114,6 +114,8 @@ export const MESSAGES_HU: Partial<Record<MessageKey, string>> = {
   "welcome.lead": "A layerling CAD 3D nyomtatáshoz, közvetlenül a böngésződben – olyan könnyen használható, mint a Tinkercad, de egy lépéssel közelebb a Fusion 360-hoz. Ingyenes, nem kell hozzá fiók, sem telepítés – és amit építesz, ezen a gépen marad.",
   "welcome.switchTitle": "Ismered a Tinkercadet?",
   "welcome.switchBody": "Akkor azonnal eligazodsz: húzz alakzatokat a munkasíkra, csoportosíts lyukakat, igazíts, tükrözz, fogd kötegbe, Alt-húzással másolj – a kezelés szándékosan ugyanaz. Csak azokba a korlátokba nem ütközöl többé, amelyek ott zavartak. A Beállítások → Megjelenés alatt pedig egy kattintással a munkaterület is úgy néz ki.",
+  "welcome.switchImport": "A Tinkercad-terveidet is áthozhatod: a közösség egy ingyenes eszköze, amely nem része a layerlingnek, és amit mi még nem próbáltunk ki, layerling-fájlokká alakítja őket.",
+  "welcome.switchImportLink": "Export to layerling",
   "welcome.gapTitle": "Amit a layerling hozzátesz",
   "welcome.gap1": "Élletörés és lekerekítés az éleken, bármikor visszavonható vagy módosítható, pontos CAD-geometrián egészen a STEP-fájlig.",
   "welcome.gap2": "Testek kiüregelése (egyenletes falvastagsággal) és kettévágása síkkal, ferdén is.",

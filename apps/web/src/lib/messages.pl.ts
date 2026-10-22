@@ -136,6 +136,8 @@ export const MESSAGES_PL: Partial<Record<MessageKey, string>> = {
   "welcome.lead": "layerling to CAD do druku 3D, prosto w przeglądarce. Tak łatwy jak Tinkercad, ale o krok bliżej Fusion 360. Za darmo, bez konta i bez instalacji, a to, co zbudujesz, zostaje na tym komputerze.",
   "welcome.switchTitle": "Znasz Tinkercada?",
   "welcome.switchBody": "To od razu się odnajdziesz: przeciągasz kształty na płaszczyznę roboczą, grupujesz otwory, wyrównujesz, odbijasz lustrzanie, łączysz w zestawy, a przeciągnięcie z Alt robi kopię. Sterowanie jest celowo takie samo. Po prostu nie trafiasz już na ograniczenia, które tam przeszkadzały. A w Ustawienia → Wygląd jednym kliknięciem obszar roboczy wygląda też jak tam.",
+  "welcome.switchImport": "Swoje projekty z Tinkercada też możesz przenieść: darmowe narzędzie od społeczności, które nie jest częścią layerlinga i którego jeszcze nie testowaliśmy, zamienia je na pliki layerlinga.",
+  "welcome.switchImportLink": "Export to layerling",
   "welcome.gapTitle": "Co dodaje layerling",
   "welcome.gap1": "Fazowanie i zaokrąglanie krawędzi, także zaokrąglenie z promieniem zmieniającym się wzdłuż krawędzi, które można w każdej chwili cofnąć lub zmienić, na dokładnej geometrii CAD aż do pliku STEP.",
   "welcome.gap2": "Wydrążanie brył (równa grubość ścianki) i dzielenie ich płaszczyzną, także ukośną.",

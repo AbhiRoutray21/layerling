@@ -1,6 +1,44 @@
 [
   {
     "title": {
+      "de": "Tinkercad-Designs mitnehmen",
+      "en": "Take your Tinkercad designs with you",
+      "ar": "انقل تصاميمك من Tinkercad معك",
+      "cs": "Přeneste si své návrhy z Tinkercadu",
+      "da": "Tag dine Tinkercad-designs med",
+      "fr": "Emportez vos designs Tinkercad",
+      "hu": "Hozd át a Tinkercad-terveidet",
+      "it": "Porta con te i tuoi design di Tinkercad",
+      "ja": "Tinkercadのデザインを持ってこよう",
+      "nl": "Neem je Tinkercad-ontwerpen mee",
+      "pl": "Zabierz swoje projekty z Tinkercada",
+      "pt-br": "Leve seus designs do Tinkercad com você",
+      "ru": "Перенесите свои проекты из Tinkercad",
+      "sl": "Prenesite svoje načrte iz Tinkercada",
+      "tr": "Tinkercad tasarımlarını yanına al",
+      "es": "Trae tus diseños de Tinkercad"
+    },
+    "body": {
+      "de": "Jemand aus der Community hat ein kostenloses Lesezeichen gebaut, Export to layerling, das ein Tinkercad-Design in deinem Browser samt echter Formen in eine layerling-Datei umwandelt. Es ist ein eigenes Projekt, nicht Teil von layerling, und wir haben es selbst noch nicht getestet – wir sind gespannt, wie es bei dir läuft. Du findest es in der Anleitung unter „Dateien und Speichern“ und auf der Startseite.",
+      "en": "A member of the community has made a free bookmark, Export to layerling, that converts a Tinkercad design in your browser into a layerling file with its real shapes. It is a project of its own, not part of layerling, and we have not tested it ourselves yet - we are curious how it works for you. You find it in the guide under Files and saving and on the start page.",
+      "ar": "صنع أحد أفراد المجتمع إشارة مرجعية مجانية باسم Export to layerling، تحوّل تصميم Tinkercad في متصفحك إلى ملف layerling بأشكاله الحقيقية. هو مشروع مستقل وليس جزءًا من layerling، ولم نجرّبه بأنفسنا بعد - نتطلع لمعرفة كيف يعمل معك. ستجده في الدليل ضمن الملفات والحفظ وفي الصفحة الرئيسية.",
+      "cs": "Někdo z komunity vytvořil bezplatnou záložku Export to layerling, která v prohlížeči převede návrh z Tinkercadu i se skutečnými tvary na soubor layerlingu. Je to samostatný projekt, není součástí layerlingu a sami jsme ho ještě nezkoušeli – zajímá nás, jak vám bude fungovat. Najdete ho v průvodci v části Soubory a ukládání a na úvodní stránce.",
+      "da": "Én fra fællesskabet har lavet et gratis bogmærke, Export to layerling, der laver et Tinkercad-design i din browser om til en layerling-fil med de rigtige former. Det er et projekt for sig, ikke en del af layerling, og vi har ikke selv prøvet det endnu – vi er spændte på, hvordan det virker for dig. Du finder det i vejledningen under Filer og gemning og på startsiden.",
+      "fr": "Un membre de la communauté a créé un favori gratuit, Export to layerling, qui convertit un design Tinkercad dans votre navigateur en fichier layerling avec ses vraies formes. C'est un projet à part, qui ne fait pas partie de layerling, et nous ne l'avons pas encore testé nous-mêmes – nous sommes curieux de savoir comment il fonctionne pour vous. Vous le trouvez dans le guide sous Fichiers et enregistrement, et sur la page d'accueil.",
+      "hu": "Valaki a közösségből készített egy ingyenes könyvjelzőt, az Export to layerlinget, amely a böngésződben egy Tinkercad-tervet a valódi formáival együtt layerling-fájllá alakít. Ez önálló projekt, nem része a layerlingnek, és mi magunk még nem próbáltuk ki – kíváncsiak vagyunk, nálad hogyan működik. Megtalálod az útmutatóban a Fájlok és mentés résznél, valamint a kezdőlapon.",
+      "it": "Una persona della community ha creato un segnalibro gratuito, Export to layerling, che converte nel tuo browser un design di Tinkercad in un file layerling con le sue forme reali. È un progetto a sé, non parte di layerling, e non l'abbiamo ancora provato noi: siamo curiosi di sapere come funziona per te. Lo trovi nella guida, sotto File e salvataggio, e nella pagina iniziale.",
+      "ja": "コミュニティの方が、ブラウザ上でTinkercadのデザインを本物の形のままlayerlingのファイルに変換する無料のブックマーク「Export to layerling」を作りました。これは独立したプロジェクトでlayerlingの一部ではなく、私たちもまだ試していません。皆さんの環境でどう動くか楽しみです。ガイドの「ファイルと保存」とスタートページで紹介しています。",
+      "nl": "Iemand uit de community heeft een gratis bladwijzer gemaakt, Export to layerling, die een Tinkercad-ontwerp in je browser met zijn echte vormen omzet naar een layerling-bestand. Het is een eigen project, geen onderdeel van layerling, en we hebben het zelf nog niet getest – we zijn benieuwd hoe het voor jou werkt. Je vindt het in de handleiding onder Bestanden en opslaan en op de startpagina.",
+      "pl": "Ktoś ze społeczności zrobił darmową zakładkę Export to layerling, która w przeglądarce zamienia projekt z Tinkercada wraz z prawdziwymi kształtami na plik layerlinga. To osobny projekt, nie jest częścią layerlinga i sami jeszcze go nie testowaliśmy – jesteśmy ciekawi, jak u Ciebie działa. Znajdziesz go w przewodniku w części Pliki i zapisywanie oraz na stronie startowej.",
+      "pt-br": "Alguém da comunidade criou um favorito gratuito, Export to layerling, que converte um design do Tinkercad no seu navegador em um arquivo do layerling com suas formas reais. É um projeto à parte, não faz parte do layerling, e ainda não o testamos: estamos curiosos para saber como funciona para você. Você o encontra no guia, em Arquivos e salvamento, e na página inicial.",
+      "ru": "Участник сообщества сделал бесплатную закладку Export to layerling, которая в браузере превращает проект Tinkercad вместе с настоящими формами в файл layerling. Это отдельный проект, он не входит в layerling, и мы сами его ещё не проверяли — нам интересно, как он работает у вас. Он описан в руководстве в разделе «Файлы и сохранение» и на стартовой странице.",
+      "sl": "Nekdo iz skupnosti je naredil brezplačen zaznamek Export to layerling, ki v brskalniku pretvori načrt iz Tinkercada z vsemi pravimi oblikami v datoteko layerlinga. Je samostojen projekt, ni del layerlinga in ga sami še nismo preizkusili – zanima nas, kako deluje pri vas. Najdete ga v priročniku v poglavju Datoteke in shranjevanje ter na začetni strani.",
+      "tr": "Topluluktan biri, tarayıcında bir Tinkercad tasarımını gerçek şekilleriyle bir layerling dosyasına dönüştüren ücretsiz bir yer imi yaptı: Export to layerling. Ayrı bir proje, layerling'in parçası değil ve biz henüz kendimiz denemedik – senin için nasıl çalıştığını merak ediyoruz. Kılavuzda Dosyalar ve kaydetme bölümünde ve başlangıç sayfasında bulabilirsin.",
+      "es": "Alguien de la comunidad ha creado un marcador gratuito, Export to layerling, que convierte un diseño de Tinkercad en tu navegador en un archivo de layerling con sus formas reales. Es un proyecto aparte, no forma parte de layerling, y aún no lo hemos probado nosotros: tenemos curiosidad por saber cómo te funciona. Lo encuentras en la guía, en Archivos y guardado, y en la página de inicio."
+    }
+  },
+  {
+    "title": {
       "de": "Eine zweite Ansicht im eigenen Fenster",
       "en": "A second view in its own window",
       "ar": "عرض ثانٍ في نافذة خاصة به",

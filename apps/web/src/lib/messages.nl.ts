@@ -129,6 +129,8 @@ export const MESSAGES_NL: Record<MessageKey, string> = {
   "welcome.lead": "layerling is CAD voor 3D-printen, gewoon in je browser - net zo makkelijk als Tinkercad, maar een stap richting Fusion 360. Gratis, zonder account, zonder installatie - en wat je bouwt blijft op deze computer.",
   "welcome.switchTitle": "Ken je Tinkercad?",
   "welcome.switchBody": "Dan vind je meteen je weg: vormen naar het werkvlak slepen, gaten groeperen, uitlijnen, spiegelen, bundelen, met Alt slepen voor een kopie - de bediening is bewust hetzelfde. Je loopt alleen niet meer tegen de grenzen aan die je daar hinderden. En onder Instellingen → Weergave laat één klik ook het werkgebied er zo uitzien.",
+  "welcome.switchImport": "Ook je Tinkercad-ontwerpen kunnen mee: een gratis hulpmiddel uit de community, geen onderdeel van layerling en door ons nog niet getest, zet ze om in layerling-bestanden.",
+  "welcome.switchImportLink": "Export to layerling",
   "welcome.gapTitle": "Wat layerling toevoegt",
   "welcome.gap1": "Randen afschuinen en afronden, op elk moment terug te draaien of aan te passen, op exacte CAD-geometrie tot in het STEP-bestand.",
   "welcome.gap2": "Lichamen uithollen (gelijke wanddikte) en met een vlak splitsen, ook schuin.",

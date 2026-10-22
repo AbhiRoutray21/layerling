@@ -132,6 +132,8 @@ export const MESSAGES_PT_BR: Partial<Record<MessageKey, string>> = {
   "welcome.lead": "layerling é um CAD para impressão 3D, direto no navegador - tão fácil quanto o Tinkercad, mas um passo em direção ao Fusion 360. Gratuito, sem conta, sem instalação - e o que você constrói fica neste computador.",
   "welcome.switchTitle": "Conhece o Tinkercad?",
   "welcome.switchBody": "Então você vai se orientar na hora: arraste formas para o plano de trabalho, agrupe orifícios, alinhe, espelhe, crie conjuntos e arraste com Alt para copiar. Os controles são os mesmos de propósito. Você só não esbarra mais nas limitações que incomodavam lá. E em Configurações → Aparência, um clique também deixa a área de trabalho com o mesmo visual.",
+  "welcome.switchImport": "Seus designs do Tinkercad também podem vir junto: uma ferramenta gratuita da comunidade, que não faz parte do layerling e que ainda não testamos, converte-os em arquivos do layerling.",
+  "welcome.switchImportLink": "Export to layerling",
   "welcome.gapTitle": "O que layerling tem a mais",
   "welcome.gap1": "Chanfrar e arredondar arestas, desfazendo ou alterando a qualquer momento, com geometria CAD exata até o arquivo STEP.",
   "welcome.gap2": "Tornar sólidos ocos (com parede de espessura uniforme) e dividi-los com um plano, inclinado também.",

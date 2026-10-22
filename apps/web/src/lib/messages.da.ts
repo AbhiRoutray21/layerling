@@ -131,6 +131,8 @@ export const MESSAGES_DA: Partial<Record<MessageKey, string>> = {
   "welcome.lead": "layerling er CAD til 3D-print, lige i din browser – lige så let at bruge som Tinkercad, men et skridt mod Fusion 360. Gratis, ingen konto, ingen installation – og det du bygger bliver på denne computer.",
   "welcome.switchTitle": "Kender du Tinkercad?",
   "welcome.switchBody": "Så finder du dig til rette med det samme: træk former ud på arbejdsplanet, gruppér huller, justér, spejl, bundt, Alt-træk for en kopi – knapperne er med vilje de samme. Du møder bare ikke længere de begrænsninger der irriterede dig der. Og under Indstillinger → Udseende gør ét klik arbejdsområdet ligesom der.",
+  "welcome.switchImport": "Dine Tinkercad-designs kan også komme med: et gratis værktøj fra fællesskabet, som ikke er en del af layerling og endnu ikke er prøvet af os, laver dem om til layerling-filer.",
+  "welcome.switchImportLink": "Export to layerling",
   "welcome.gapTitle": "Hvad layerling tilføjer",
   "welcome.gap1": "Fase og rund kanter, trukket tilbage eller ændret når som helst, på præcis CAD-geometri helt ind i STEP-filen.",
   "welcome.gap2": "Hulrum i former (jævn vægtykkelse) og del dem med et plan, også skråt.",

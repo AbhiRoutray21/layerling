@@ -108,6 +108,8 @@ export const MESSAGES_TR: Partial<Record<MessageKey, string>> = {
   "welcome.lead": "layerling, doğrudan tarayıcında çalışan, 3D baskı için bir CAD programı - Tinkercad kadar kolay, ama Fusion 360'a doğru bir adım. Ücretsiz, hesap yok, kurulum yok - ve yaptıkların bu bilgisayarda kalır.",
   "welcome.switchTitle": "Tinkercad'i biliyor musun?",
   "welcome.switchBody": "O zaman hemen yolunu bulursun: şekilleri çalışma düzlemine sürükle, delikleri grupla, hizala, aynala, paketle, Alt ile sürükleyerek kopyala - kontroller bilerek aynı tutuldu. Sadece orada seni rahatsız eden sınırlara artık takılmazsın. Ayarlar → Görünüm altında tek tıkla çalışma alanı da ona benzer.",
+  "welcome.switchImport": "Tinkercad tasarımların da seninle gelebilir: topluluktan ücretsiz bir araç, layerling'in parçası değil ve henüz bizim tarafımızdan denenmedi, onları layerling dosyalarına dönüştürür.",
+  "welcome.switchImportLink": "Export to layerling",
   "welcome.gapTitle": "layerling'in ekledikleri",
   "welcome.gap1": "Kenarlara pah kırma ve yuvarlatma; istediğin zaman geri alınabilir veya değiştirilebilir, STEP dosyasına kadar tam CAD geometrisiyle.",
   "welcome.gap2": "Gövdelerin içini boşalt (eşit et kalınlığı) ve bir düzlemle, eğik de olsa, böl.",

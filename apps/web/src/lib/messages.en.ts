@@ -130,6 +130,8 @@ export const MESSAGES_EN = {
   "welcome.lead": "layerling is CAD for 3D printing, right in your browser - as easy to use as Tinkercad, but a step towards Fusion 360. Free, no account, no installation - and what you build stays on this computer.",
   "welcome.switchTitle": "Know Tinkercad?",
   "welcome.switchBody": "Then you will find your way at once: drag shapes onto the workplane, group holes, align, mirror, bundle, Alt-drag for a copy - the controls are deliberately the same. You just no longer hit the limits that bothered you there. And under Settings → Appearance one click makes the work area look like it too.",
+  "welcome.switchImport": "Your Tinkercad designs can come along too: a free tool from the community, not part of layerling and not yet tested by us, converts them into layerling files.",
+  "welcome.switchImportLink": "Export to layerling",
   "welcome.gapTitle": "What layerling adds",
   "welcome.gap1": "Chamfer and fillet edges, a fillet with a radius that changes along the edge too, taken back or changed at any time, on exact CAD geometry all the way into the STEP file.",
   "welcome.gap2": "Hollow out bodies (even wall thickness) and split them with a plane, slanted too.",

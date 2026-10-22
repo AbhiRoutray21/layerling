@@ -129,6 +129,8 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "welcome.lead": "layerling ist 3D-CAD für den 3D-Druck, direkt im Browser - so leicht zu bedienen wie Tinkercad, aber ein Stück Richtung Fusion 360. Kostenlos, ohne Konto und ohne Installation - und was du baust, bleibt auf diesem Rechner.",
   "welcome.switchTitle": "Du kennst Tinkercad?",
   "welcome.switchBody": "Dann findest du dich sofort zurecht: Formen auf die Arbeitsebene ziehen, Aussparungen gruppieren, Ausrichten, Spiegeln, Bündeln, mit Alt eine Kopie ziehen - die Bedienung ist bewusst dieselbe. Du stößt hier nur nicht mehr an die Grenzen, die dich dort gestört haben. Und unter Einstellungen → Darstellung sieht der Arbeitsbereich auf Knopfdruck auch aus wie dort.",
+  "welcome.switchImport": "Deine Tinkercad-Designs kannst du auch mitnehmen: Ein kostenloses Werkzeug aus der Community, nicht Teil von layerling und von uns noch nicht getestet, wandelt sie in layerling-Dateien um.",
+  "welcome.switchImportLink": "Export to layerling",
   "welcome.gapTitle": "Was layerling zusätzlich kann",
   "welcome.gap1": "Kanten fasen und verrunden, auch mit einem Radius, der entlang der Kante wächst, jederzeit zurücknehmbar oder änderbar, auf exakter CAD-Geometrie bis in die STEP-Datei.",
   "welcome.gap2": "Körper aushöhlen (gleichmäßige Wandstärke) und mit einer Ebene teilen, auch schräg.",

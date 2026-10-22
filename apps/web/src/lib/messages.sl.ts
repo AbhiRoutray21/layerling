@@ -118,6 +118,8 @@ export const MESSAGES_SL: Partial<Record<MessageKey, string>> = {
   "welcome.lead": "layerling je CAD za 3D tisk – prav tako enostaven kot Tinkercad, a korak proti programu Fusion 360. Brezplačen, brez računa, brez spleta – in vse, kar zgradiš, ostane v tem računalniku.",
   "welcome.switchTitle": "Poznaš Tinkercad?",
   "welcome.switchBody": "Potem se boš takoj znašel: povleci oblike na delovno ravnino, v skupino združi luknje, poravnaj, zrcali, poveži v sveženj, z Alt-povleci naredi kopijo – upravljanje je namenoma enako. Le da ne naletiš več na omejitve, ki so te motile tam.",
+  "welcome.switchImport": "Prenesete lahko tudi svoje načrte iz Tinkercada: brezplačno orodje skupnosti, ki ni del layerlinga in ga še nismo preizkusili, jih pretvori v datoteke layerlinga.",
+  "welcome.switchImportLink": "Export to layerling",
   "welcome.gapTitle": "Kar layerling doda",
   "welcome.gap1": "Posnetje in zaokrožitev robov, vedno povratna, na natančni CAD geometriji vse do datoteke STEP.",
   "welcome.gap2": "Izdolbljenje teles (enakomerna debelina sten) in delitev z ravnino, tudi poševno.",

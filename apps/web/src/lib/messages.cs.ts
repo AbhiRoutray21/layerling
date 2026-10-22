@@ -217,6 +217,8 @@ export const MESSAGES_CS: Record<MessageKey, string> = {
   "welcome.lead": "Layerling je CAD pro 3D tisk přímo v prohlížeči. Ovládá se snadno jako Tinkercad, ale nabízí něco navíc směrem k Fusion 360. Zdarma, bez účtu a instalace. Vaše modely zůstávají na tomto počítači.",
   "welcome.switchTitle": "Znáte Tinkercad?",
   "welcome.switchBody": "Pak se rychle zorientujete: přetáhněte tvary na pracovní rovinu, slučujte je s výřezy, zarovnávejte, zrcadlete, seskupujte nebo vytvořte kopii tažením s Alt. Ovládání je záměrně podobné, ale už vás neomezují stejné hranice. V Nastavení → Vzhled lze jedním kliknutím přizpůsobit i vzhled pracovní plochy.",
+  "welcome.switchImport": "Můžete si přenést i své návrhy z Tinkercadu: bezplatný nástroj od komunity, který není součástí layerlingu a který jsme ještě sami nezkoušeli, je převede na soubory layerlingu.",
+  "welcome.switchImportLink": "Export to layerling",
   "welcome.gapTitle": "Co Layerling přidává",
   "welcome.gap1": "Zkosení a zaoblení hran, která můžete kdykoliv změnit nebo odstranit. Přesná CAD geometrie zůstává zachována i při exportu do STEP.",
   "welcome.gap2": "Vytváření dutin s rovnoměrnou tloušťkou stěn a rozdělování těles rovinou, i šikmou.",
