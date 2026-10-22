@@ -28,6 +28,7 @@ import { mirrorSign, resizedImportedMeshPositions } from "@/lib/workplaneShapes"
 import { DEFAULT_SNAP_GRID, DEFAULT_WORKPLANE_WORKSPACE, keyboardNudgeCoarseFactor, keyboardNudgeStep, normalizeSnapGrid, normalizeWorkspaceSettings, snapGridStep as snapStep, orbitControlsZoomSpeed, zoomDistanceScale, ZOOM_STEP_IN, ZOOM_STEP_OUT } from "@/lib/workplaneSettings";
 import type { GridSize, SketchImage, SketchOperation, SketchPoint, SketchProfile, SketchSegment, SketchStroke, SketchStrokeAlign, SketchStrokeCap, SketchStrokeJoin, SweepAnchor, WorkplaneShape, WorkplaneWorkspaceSettings } from "@/types/layerling";
 import { resizePointerOnGrid } from "@/lib/sketchFrameResize";
+import { viewArrowStep } from "@/lib/viewArrowKeys";
 import { resizeSketchPoints, resizeSketchPointsToSize, type ResizeHandle, type SelectionBounds } from "@/lib/sketchSelectionResize";
 import { changesLockedOutline, sketchLockState } from "@/lib/sketchLock";
 import { dragRotationDegrees, rotateSketchPointsAbout, sketchPointsPivot } from "@/lib/sketchRotation";
@@ -1490,6 +1491,23 @@ export function SketchWorkspace({
       }
       const target = event.target;
       if (target instanceof HTMLElement && (target.isContentEditable || ["INPUT", "TEXTAREA", "SELECT"].includes(target.tagName))) return;
+      // As in the 3D view: with nothing selected, Ctrl+arrows slide the sketch that way, a tenth of the
+      // view a press (Shift: half).
+      const panStep = !selected && !selectedHandle && !pointerAction ? viewArrowStep(event)?.pan : undefined;
+      if (panStep && (event.ctrlKey || event.metaKey)) {
+        event.preventDefault();
+        setView((current) => {
+          const height = workspace.depth / current.zoom;
+          return {
+            ...current,
+            pan: {
+              x: clamp(current.pan.x - panStep[0] * height, -workspace.width / 2, workspace.width / 2),
+              z: clamp(current.pan.z + panStep[1] * height, -workspace.depth / 2, workspace.depth / 2),
+            },
+          };
+        });
+        return;
+      }
       if (event.ctrlKey || event.metaKey || event.altKey) return;
       if (activePoint && !pointerAction && (tool === "line" || tool === "smooth") && /^[0-9.,<]$/.test(event.key)) {
         event.preventDefault();
