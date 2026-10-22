@@ -1,1 +1,40 @@
-[]
+[
+  {
+    "title": {
+      "de": "Der SVG-Grundriss wird an der Arbeitsfläche geschnitten",
+      "en": "The SVG footprint is cut at the workplane",
+      "ar": "يُقطع أثر الارتكاز في SVG عند مستوى العمل",
+      "cs": "Půdorys v SVG se řeže u pracovní roviny",
+      "da": "SVG-fodaftrykket skæres ved arbejdsplanet",
+      "fr": "L'empreinte SVG est coupée au niveau du plan de travail",
+      "hu": "Az SVG felfekvési felület a munkasíknál metsz",
+      "it": "L'impronta SVG viene tagliata al piano di lavoro",
+      "ja": "SVGの接地面を作業面で切るように",
+      "nl": "De SVG-voetafdruk wordt bij het werkvlak gesneden",
+      "pl": "Ślad w SVG jest przecinany na płaszczyźnie roboczej",
+      "pt-br": "A pegada em SVG é cortada no plano de trabalho",
+      "ru": "След в SVG режется на рабочей плоскости",
+      "sl": "Odtis v SVG se reže na delovni ravnini",
+      "tr": "SVG taban izi çalışma düzleminde kesiliyor",
+      "es": "La huella en SVG se corta en el plano de trabajo"
+    },
+    "body": {
+      "de": "Beim SVG-Export „Aufstandsfläche auf der Arbeitsebene“ konnte ein Teil, das unter die Arbeitsebene reicht, den Schnitt mit nach unten ziehen, und die Teile, die auf der Arbeitsebene stehen, fehlten in der Datei. Der Schnitt liegt jetzt knapp über der Arbeitsebene, sobald ein Teil hindurchreicht.",
+      "en": "With \"Footprint on the workplane\" in the SVG export, one part reaching below the workplane could pull the cut down with it, and the parts standing on the workplane were missing from the file. The cut now lies just above the workplane whenever a part reaches through it.",
+      "ar": "في تصدير SVG بخيار «أثر الارتكاز على مستوى العمل»، كان جزء يمتد تحت مستوى العمل يسحب القطع معه إلى الأسفل، وكانت الأجزاء الواقفة على مستوى العمل مفقودة من الملف. صار القطع الآن فوق مستوى العمل مباشرة كلما امتد جزء عبره.",
+      "cs": "U exportu SVG s volbou „Půdorys na pracovní rovině“ mohl jeden díl zasahující pod pracovní rovinu stáhnout řez s sebou dolů a díly stojící na pracovní rovině v souboru chyběly. Řez teď leží těsně nad pracovní rovinou, kdykoli jí některý díl prochází.",
+      "da": "Ved \"Fodaftryk på arbejdsplanet\" i SVG-eksporten kunne en del, der rager ned under arbejdsplanet, trække snittet med ned, og de dele, der står på arbejdsplanet, manglede i filen. Snittet ligger nu lige over arbejdsplanet, så snart en del går igennem det.",
+      "fr": "Avec « Empreinte sur le plan de travail » dans l'export SVG, une pièce descendant sous le plan de travail pouvait entraîner la coupe vers le bas, et les pièces posées sur le plan manquaient dans le fichier. La coupe se place maintenant juste au-dessus du plan de travail dès qu'une pièce le traverse.",
+      "hu": "Az SVG-export „Felfekvési felület a munkasíkon” nézetében egy, a munkasík alá nyúló rész magával húzhatta lefelé a metszetet, és a munkasíkon álló részek hiányoztak a fájlból. A metszet most közvetlenül a munkasík fölött van, ha egy rész átnyúlik rajta.",
+      "it": "Con «Impronta sul piano di lavoro» nell'esportazione SVG, un pezzo che scendeva sotto il piano di lavoro poteva trascinare in basso il taglio, e i pezzi appoggiati sul piano mancavano nel file. Il taglio ora si trova appena sopra il piano di lavoro ogni volta che un pezzo lo attraversa.",
+      "ja": "SVG書き出しの「作業面への接地面」で、作業面より下にはみ出す部品が1つあると切断位置が一緒に下がり、作業面に載っている部品がファイルから抜けることがありました。部品が作業面を貫いているときは、切断位置を作業面のすぐ上にしました。",
+      "nl": "Bij \"Voetafdruk op het werkvlak\" in de SVG-export kon één onderdeel dat onder het werkvlak uitsteekt de snede mee omlaag trekken, waardoor de onderdelen die op het werkvlak staan in het bestand ontbraken. De snede ligt nu net boven het werkvlak zodra een onderdeel erdoorheen gaat.",
+      "pl": "Przy „Ślad na płaszczyźnie roboczej” w eksporcie SVG jedna część sięgająca poniżej płaszczyzny roboczej mogła pociągnąć cięcie w dół, a części stojące na płaszczyźnie roboczej brakowało w pliku. Cięcie leży teraz tuż nad płaszczyzną roboczą, gdy tylko jakaś część przez nią przechodzi.",
+      "pt-br": "Com \"Pegada no plano de trabalho\" na exportação SVG, uma peça que passava abaixo do plano de trabalho podia puxar o corte para baixo, e as peças apoiadas no plano de trabalho faltavam no arquivo. O corte agora fica logo acima do plano de trabalho sempre que uma peça o atravessa.",
+      "ru": "При «След на рабочей плоскости» в экспорте SVG одна деталь, уходящая ниже рабочей плоскости, могла утянуть сечение вниз, и детали, стоящие на рабочей плоскости, пропадали из файла. Теперь сечение проходит чуть выше рабочей плоскости, если какая-то деталь её пересекает.",
+      "sl": "Pri »Odtis na delovni ravnini« v izvozu SVG je lahko en del, ki sega pod delovno ravnino, potegnil rez s seboj navzdol, deli, ki stojijo na delovni ravnini, pa so v datoteki manjkali. Rez zdaj leži tik nad delovno ravnino, kadar jo kak del prebada.",
+      "tr": "SVG dışa aktarımında \"Çalışma düzlemindeki taban izi\" seçildiğinde, çalışma düzleminin altına inen tek bir parça kesiti de aşağı çekebiliyordu ve çalışma düzleminde duran parçalar dosyada eksik kalıyordu. Kesit artık bir parça çalışma düzleminden geçtiğinde düzlemin hemen üstünde yer alıyor.",
+      "es": "Con «Huella en el plano de trabajo» en la exportación SVG, una pieza que bajaba por debajo del plano de trabajo podía arrastrar el corte hacia abajo, y las piezas apoyadas en el plano faltaban en el archivo. Ahora el corte queda justo encima del plano de trabajo siempre que una pieza lo atraviesa."
+    }
+  }
+]
