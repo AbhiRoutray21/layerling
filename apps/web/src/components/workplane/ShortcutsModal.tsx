@@ -157,6 +157,8 @@ const SHORTCUT_GROUPS: ShortcutGroup[] = [
       { combos: ["Ctrl+Shift+Z", "Ctrl+Y"], label: "shortcuts.redo" },
       { combos: ["R"], label: "shortcuts.sketchRotate" },
       { combos: ["L"], label: "shortcuts.sketchLockImage" },
+      { combos: ["Ctrl+← / → / ↑ / ↓"], label: "shortcuts.pan" },
+      { combos: ["Ctrl+Shift+← / → / ↑ / ↓"], label: "shortcuts.panCoarse" },
       { combos: ["Home"], label: "shortcuts.sketchResetView" },
       { combos: ["F", "Shift+F"], label: "shortcuts.sketchFocusSelection" },
       { combos: ["+", "−"], label: "shortcuts.sketchZoom" },
