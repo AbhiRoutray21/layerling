@@ -6,6 +6,7 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **The sketch follows the unit setting (#757):** With Imperial (or any other unit) chosen in the workplane settings, the sketch editor still read and typed in millimetres. Its dimension labels, the measure tool, the line preview, the selection size, image sizes and the typed fields (line length, dimension, width and height, fillet and chamfer size, image size and calibration, image position) now use the workspace unit, inches as fractions or decimals as set; the sketch itself stays in millimetres. Reported by @radomnik.
 ## 1.102.0
 
 - **The 3MF and OBJ export weld points much faster (#734):** A design of four colours traced from a picture (139,000 triangles) kept the page busy for seconds while the file was written, and on a slow computer Chrome asked whether to wait. `weldMeshVertices` looked in 27 neighbouring cells of one tolerance each, with a string key per cell, for every point; it now looks in cells 16 tolerances wide and only in the next one when the point is that close to its edge, with a number as the key. The welding of that model went from about 1.1 s to 0.04 s, writing the 3MF from 1.75 s to 0.6 s on the test computer. The result is the same set of points (`tests/unit/meshWeld.test.ts` holds it against the old search). The colour separation and the size estimate still run in the page and take their time; moving them to a worker is not done.
