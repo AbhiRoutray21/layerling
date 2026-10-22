@@ -1031,6 +1031,36 @@ export const tools = [
     },
   },
   {
+    name: "layerling_reference_image",
+    description: "A reference image (#680), like Reference image in the editor's import window: a picture laid on the workplane - the plate, or the face it was set on - to line parts up on, a photo of a circuit board under its case, say. It is a guide, not a body: never exported (STL, 3MF, OBJ, STEP, SVG), never part of a group, bundle, cut or intersection, never in the print estimate or the build volume warning, and kept once in the .lyl file as a project asset. Without `id`, `base64` (and `fileName`, whose extension .png, .jpg, .jpeg, .webp, .gif or .bmp gives the format) adds one, `width` mm wide (1 to 2000; left out, its longer side 100 mm), half see-through, selected. With `id` it changes that one. Either way: `x` and `z` move its middle (editor coordinates, mm), `rotation` turns it about the vertical in degrees, `opacity` 0.1 to 1 sets how solid it is drawn, `calibrate` { from: { x, y }, to: { x, y }, distance } scales it as the sketch's calibration does - two points in the picture's own pixels (0 at its left and top edge) that lie `distance` mm apart in reality; its proportions stay and its middle stays put - and `locked` true keeps it in place and lets clicks through, false unlocks it. A locked image is refused any other change unless `locked: false` comes with it. layerling_update_object and layerling_delete_objects work on it as on any object. Returns the object; its summary has `referenceImage` with opacity and the picture's pixel size. One undo step.",
+    inputSchema: {
+      ...editorTargetSchema,
+      properties: {
+        ...editorTargetSchema.properties,
+        id: { type: "string", description: "A reference image to change; left out, a new one is added from base64." },
+        base64: { type: "string", description: "The picture file as base64, to add a new reference image." },
+        fileName: { type: "string", description: "The picture's file name; its extension gives the format (default reference.png)." },
+        name: { type: "string", description: "The object's name (default: the file name without extension)." },
+        width: { type: "number", minimum: 1, maximum: 2000, description: "A new image's width in mm; the depth follows the picture's proportions." },
+        x: { type: "number", description: "Move its middle to this x (mm)." },
+        z: { type: "number", description: "Move its middle to this z (mm)." },
+        rotation: { type: "number", description: "Turn about the vertical axis, in degrees." },
+        opacity: { type: "number", minimum: 0.1, maximum: 1, description: "How solid the picture is drawn: 1 solid, 0.1 barely there (a new one starts at 0.6)." },
+        calibrate: {
+          type: "object",
+          description: "Scale it so that two points of the picture, in its own pixels, lie `distance` mm apart.",
+          properties: {
+            from: { type: "object", properties: { x: { type: "number" }, y: { type: "number" } }, required: ["x", "y"] },
+            to: { type: "object", properties: { x: { type: "number" }, y: { type: "number" } }, required: ["x", "y"] },
+            distance: { type: "number", exclusiveMinimum: 0, description: "The real distance between the two points in mm." },
+          },
+          required: ["from", "to", "distance"],
+        },
+        locked: { type: "boolean", description: "true locks it (it stays put and lets clicks through), false unlocks it." },
+      },
+    },
+  },
+  {
     name: "layerling_measure_section",
     description: "Measure on a cut through the design, like \"Measure\" in the editor's section view: wall thickness, a gap, a clearance. Without axis and offset it measures on the section view as it is set, also when it is turned to the workplane or the view; the points are then given and returned in world coordinates and land on that plane. Both points snap to the outline of the cut (within snapRadius mm, default 1): first to the nearest wall, then the second one preferably square to its wall as seen from the first - give it a point near the opposite wall and it returns the true thickness. Points are in the editor's coordinates (x, z, elevation); the one along the axis is set to the plane. axis and offset work like layerling_export_section_svg and default to the section view or the middle of the design. Round outlines (a hole, a cylinder) also snap: the centre of the circle; a second point near the spot across the centre from a first one on the circle lands exactly across, so the distance is the diameter; and with the centre as the first point the second lands on the circle, so the distance is the radius. Returns the snapped points with their snap kind (perpendicular, corner, outline, center, opposite or free), distance, circle (\"diameter\", \"radius\" or null) and deltaX, deltaZ, deltaElevation. The section view itself is left as it is.",
     inputSchema: {

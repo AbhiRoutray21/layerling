@@ -36,5 +36,17 @@
       "tr": "SVG dışa aktarımında \"Çalışma düzlemindeki taban izi\" seçildiğinde, çalışma düzleminin altına inen tek bir parça kesiti de aşağı çekebiliyordu ve çalışma düzleminde duran parçalar dosyada eksik kalıyordu. Kesit artık bir parça çalışma düzleminden geçtiğinde düzlemin hemen üstünde yer alıyor.",
       "es": "Con «Huella en el plano de trabajo» en la exportación SVG, una pieza que bajaba por debajo del plano de trabajo podía arrastrar el corte hacia abajo, y las piezas apoyadas en el plano faltaban en el archivo. Ahora el corte queda justo encima del plano de trabajo siempre que una pieza lo atraviesa."
     }
+  },
+  {
+    "title": {
+      "de": "Referenzbilder zum Ausrichten",
+      "en": "Reference images to line parts up on",
+      "hu": "Mintaképek az igazításhoz"
+    },
+    "body": {
+      "de": "Im Import gibt es jetzt Referenzbild: ein Bild, das auf der Platte oder auf der Fläche der Arbeitsebene liegt, etwa das Foto einer Platine unter ihrem Gehäuse. Du machst es durchsichtig, kalibrierst es mit zwei Punkten und ihrem wirklichen Abstand und sperrst es. Es wird nie gedruckt oder exportiert.",
+      "en": "The import window now has Reference image: a picture on the plate or on the workplane's face, a photo of a board under its case, say. Make it see-through, calibrate it by two points and their real distance, and lock it. It is never printed or exported.",
+      "hu": "Az importálás ablakban most már Mintakép is van: egy kép a tárgyasztalon vagy a munkasík felületén, például egy áramköri lap fotója a doboza alatt. Átlátszóvá teheted, két ponttal és valódi távolságukkal kalibrálhatod, és zárolhatod. Sosem nyomtatódik ki és sosem exportálódik."
+    }
   }
 ]

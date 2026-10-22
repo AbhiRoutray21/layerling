@@ -16,6 +16,7 @@ import { importedShapeFromSvg } from "@/lib/svgImport";
 import { importedShapeFrom3mf } from "@/lib/threemfImport";
 import { normalizeDesignView, normalizeSavedViews, readDesignView, readSavedViews, type DesignView, type SavedDesignViews } from "@/lib/designView";
 import { isSketchKeyring } from "@/lib/sketchKeyring";
+import { isReferenceImageOpacity } from "@/lib/referenceImage";
 import { isThreadProfile } from "@/lib/threadProfiles";
 import { normalizeSnapGrid, normalizeWorkspaceSettings } from "@/lib/workplaneSettings";
 import type { CadDisplayEdge, GridSize, ProjectAsset, ProjectAssetSourceFormat, SketchOperation, SketchRevolveSettings, WorkplaneNote, WorkplaneShape, WorkplaneWorkspaceSettings } from "@/types/layerling";
@@ -1294,6 +1295,10 @@ function validateShapeDefinition(definition: Record<string, unknown>, label: str
   }
   if (definition.keyringTab !== undefined && typeof definition.keyringTab !== "boolean") {
     throw new Error(`${label}.keyringTab must be true or false`);
+  }
+  // A reference image's see-through (#680): 0.1 to 1, or none on an old picture plate.
+  if (definition.imagePlate !== undefined && !isReferenceImageOpacity((definition.imagePlate as { opacity?: unknown } | null)?.opacity)) {
+    throw new Error(`${label}.imagePlate.opacity must be a number from 0.1 to 1`);
   }
   // A QR code's settings (#553): a text and known choices. Old projects have none.
   if (definition.qrCode !== undefined && !normalizeQrSettings(definition.qrCode)) {

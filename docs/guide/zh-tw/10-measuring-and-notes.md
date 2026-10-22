@@ -77,3 +77,15 @@ summary: 捲尺、標尺與角尺，到原點的距離，附著在零件上的�
 - 拖曳形狀時，它的邊與中心會吸附到點，就像吸附到其他形狀一樣（{{ui:workspace.objectSnap}}）。角尺也會吸附到點。
 - 點會儲存在設計中，不會出現在任何匯出裡，並與備註一起由 {{ui:visibility.notes}} 顯示或隱藏。
 - AI 可以用 `layerling_add_reference_points`、`layerling_list_reference_points` 和 `layerling_remove_reference_points` 標記、列出與移除它們。
+
+## 參考圖片
+
+參考圖片是用來對齊零件的圖片：把電路板的照片放在外殼底部，然後直接在上面放置支柱、孔和接頭開口。它是輔助參考，不是實體：永遠不會被列印或匯出（STL、3MF、OBJ、STEP、SVG），永遠不會成為組合、捆綁或切割的一部分，列印估算也不會計入它。
+
+- 開啟 {{ui:editor.import}} 並選擇 {{ui:import.referenceImage}}，然後選擇一張 PNG、JPG、WebP、GIF 或 BMP 圖片。它會放在工作平面上——底板上，或你設定工作平面的那個面上——長邊為 100 mm，半透明。
+- 像任何形狀一樣用控制點移動、旋轉和調整大小。它前面的實體會被優先選取，因此在它上面操作不會抓起圖片。
+- 設定中的 {{ui:referenceImage.seeThrough}} 可以把它從不透明淡化到幾乎看不見。
+- {{ui:referenceImage.calibrate}} 讓它恢復真實尺寸，與草圖中相同：點擊圖片上兩個你知道實際距離的點——例如電路板的兩個安裝孔——並在 {{ui:referenceImage.distance}} 中輸入該距離。圖片會保持比例和中心不變。
+- 用設定標題列中的鎖將它鎖定，它就會固定不動：點擊會穿過它落到底板上。在物件清單中選取它即可解鎖。
+- 無論複製或復原多少次，圖片在設計檔案中只儲存一次。大圖片會讓檔案相應變大；新增時的提示會說明它的大小。
+- AI 可以用 `layerling_reference_image` 新增、移動、校準、淡化和鎖定參考圖片。

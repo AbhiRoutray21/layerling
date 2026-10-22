@@ -75,3 +75,15 @@ Et referencepunkt er et bart mærke i rummet, som en blyantsmarkering eller et l
 - Når du trækker en form, snapper dens kanter og dens centrum til et punkt, ligesom de snapper til andre former ({{ui:workspace.objectSnap}}). Vinkelmåleren snapper også til punkter.
 - Punkter gemmes i designet, optræder i ingen eksport og vises eller skjules sammen med noterne af {{ui:visibility.notes}}.
 - En AI kan markere, liste og fjerne dem med `layerling_add_reference_points`, `layerling_list_reference_points` og `layerling_remove_reference_points`.
+
+## Referencebilleder
+
+Et referencebillede er et billede at rette dele ind efter: læg et foto af et printkort i bunden af dets kasse, og placer afstandsstykker, huller og udskæringer til stik lige oven på det. Det er en hjælpelinje, ikke en form: det bliver aldrig printet eller eksporteret (STL, 3MF, OBJ, STEP, SVG), aldrig en del af en gruppe, en samling eller et snit, og printestimatet tæller det ikke med.
+
+- Åbn {{ui:editor.import}} og vælg {{ui:import.referenceImage}}, derefter et PNG-, JPG-, WebP-, GIF- eller BMP-billede. Det lægges på arbejdsplanet - på pladen eller på den flade, du satte arbejdsplanet på - med den længste side 100 mm, halvt gennemsigtigt.
+- Flyt, drej og skaler det med håndtagene som enhver form. En form foran det vælges først, så arbejde oven på det griber ikke billedet.
+- {{ui:referenceImage.seeThrough}} i dets indstillinger falmer det fra helt dækkende til næsten usynligt.
+- {{ui:referenceImage.calibrate}} giver det dets rigtige størrelse, som i skitsen: klik på to punkter på billedet, hvis virkelige afstand du kender - f.eks. to monteringshuller på printkortet - og skriv afstanden i {{ui:referenceImage.distance}}. Billedet beholder sine proportioner og sin midte.
+- Lås det med låsen i overskriften af dets indstillinger, så bliver det liggende: klik går så igennem det til pladen. Vælg det i objektlisten for at låse det op.
+- Billedet gemmes kun én gang i designfilen, uanset hvor ofte det kopieres eller fortrydes. Et stort billede gør filen tilsvarende større; beskeden, når du tilføjer det, siger hvor stort det er.
+- En AI tilføjer, flytter, kalibrerer, falmer og låser et med `layerling_reference_image`.

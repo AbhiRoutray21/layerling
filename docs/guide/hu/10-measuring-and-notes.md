@@ -75,3 +75,15 @@ A referenciapont egy puszta jel a térben, mint egy ceruzajel vagy egy kijelöl�
 - Amikor egy alakzatot húzol, az élei és a közepe úgy illeszkednek egy ponthoz, ahogy más alakzatokhoz ({{ui:workspace.objectSnap}}). A derékszögvonalzó is illeszkedik a pontokhoz.
 - A pontok a tervben mentődnek, egyik exportban sem jelennek meg, és a jegyzetekkel együtt a {{ui:visibility.notes}} kapcsolóval jeleníthetők meg vagy rejthetők el.
 - Egy MI a `layerling_add_reference_points`, a `layerling_list_reference_points` és a `layerling_remove_reference_points` paranccsal jelölheti meg, sorolhatja fel és távolíthatja el őket.
+
+## Mintaképek
+
+A mintakép egy kép, amelyhez a részeket igazíthatod: tedd egy áramköri lap fotóját a doboza aljára, és pontosan rá helyezd a távtartókat, a furatokat és a csatlakozók kivágásait. Segédlet, nem test: sosem nyomtatódik ki, sosem exportálódik (STL, 3MF, OBJ, STEP, SVG), sosem lesz része csoportnak, kötegnek vagy vágásnak, és a nyomtatási becslés sem számol vele.
+
+- Nyisd meg az {{ui:editor.import}} ablakot, és válaszd a {{ui:import.referenceImage}} lehetőséget, majd egy PNG, JPG, WebP, GIF vagy BMP képet. A munkasíkra kerül - a tárgyasztalra vagy arra a felületre, amelyre a munkasíkot tetted -, a hosszabbik oldala 100 mm, félig átlátszó.
+- A fogantyúival úgy mozgatod, forgatod és méretezed, mint bármelyik alakzatot. Az előtte lévő testet választja ki először, így ha rajta dolgozol, nem a képet fogod meg véletlenül.
+- A beállításaiban az {{ui:referenceImage.seeThrough}} a teljesen láthatótól az alig látszóig halványítja.
+- A {{ui:referenceImage.calibrate}} a valódi méretére állítja, mint a vázlatban: kattints a képen két pontra, amelyek valódi távolságát ismered - például a lap két rögzítőfuratára -, és írd be ezt a távolságot a {{ui:referenceImage.distance}} mezőbe. A kép megtartja az arányait és a közepét.
+- A beállításai fejlécében lévő lakattal zárold, és a helyén marad: a kattintások átmennek rajta a tárgyasztalra. Feloldáshoz az objektumlistában válaszd ki újra.
+- A kép egyszer kerül a tervfájlba, akárhányszor másolod vagy vonod vissza. Egy nagy kép ennyivel nagyobbá teszi a fájlt; hozzáadáskor az üzenet megmondja a méretét.
+- Egy MI a `layerling_reference_image` segítségével ad hozzá, mozgat, kalibrál, halványít és zárol egyet.

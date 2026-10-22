@@ -10,7 +10,7 @@ import { acceleratedRaycast, computeBoundsTree } from "three-mesh-bvh";
 import { groupedContentScale, groupedPartSizeScale, scaleGroupedVertices } from "@/lib/groupScale";
 import { dropSplitSlivers, unionSplitManifoldComponents } from "@/lib/manifoldSplit";
 import { splitAxisLabel, splitPlaneIntersectsPoints, splitShapeFromWorldPositions, type ModelSplitPlane } from "@/lib/modelSplit";
-import { canonicalizeShape, cleanRotationDegrees, isNonSolidShapeKind, meshYawDegrees, mirrorSign, normalizeDegrees, resizedImportedCoordinates, resizedShapeSize, shapeDepth, shapeHasShapeDeform, shapeWidth, withHoleMode } from "@/lib/workplaneShapes";
+import { canonicalizeShape, cleanRotationDegrees, isNonSolidShape, meshYawDegrees, mirrorSign, normalizeDegrees, resizedImportedCoordinates, resizedShapeSize, shapeDepth, shapeHasShapeDeform, shapeWidth, withHoleMode } from "@/lib/workplaneShapes";
 import { closedMeshVolume } from "@/lib/cadProfileExtrusion";
 import { meshSurfaceAreas } from "@/lib/printEstimate";
 import { createLocalId, derivedLocalId } from "@/lib/localIds";
@@ -1041,9 +1041,9 @@ async function unionOverlappingExportMeshesRaw(shapes: WorkplaneShape[], meshes:
  * A body cut away entirely drops out; one whose cut fails stays whole and is counted.
  */
 export async function exportBodiesWithLooseHoles(visible: readonly WorkplaneShape[]) {
-  const solids = visible.filter((shape) => !shape.hole && !isNonSolidShapeKind(shape.kind));
+  const solids = visible.filter((shape) => !shape.hole && !isNonSolidShape(shape));
   const meshes = solids.map(meshForShape);
-  const holes = visible.filter((shape) => shape.hole && !isNonSolidShapeKind(shape.kind));
+  const holes = visible.filter((shape) => shape.hole && !isNonSolidShape(shape));
   const untouched = { solids, meshes, cut: solids.map(() => false), holeCutsFailed: 0 };
   if (holes.length === 0 || solids.length === 0) return untouched;
   // Padded like a grouped cut, so a hole flush with a face goes cleanly through it.
@@ -1161,8 +1161,10 @@ export function expandBundles(source: readonly WorkplaneShape[]): WorkplaneShape
 }
 
 export function visibleExportShapes(source: readonly WorkplaneShape[]) {
-  const shown = source.filter((shape) => !shape.hidden);
-  const hidden = source.length - shown.length;
+  // A reference image (#680) is a guide, never part of an export, a section or an estimate.
+  const bodies = source.filter((shape) => !shape.imagePlate);
+  const shown = bodies.filter((shape) => !shape.hidden);
+  const hidden = bodies.length - shown.length;
   const visible = expandBundles(shown);
   const hiddenNote = hidden === 0 ? "" : hidden === 1 ? t("status.exportHiddenSkippedOne") : t("status.exportHiddenSkippedMany", { count: hidden });
   return { visible, hiddenNote };

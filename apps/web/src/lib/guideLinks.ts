@@ -94,6 +94,7 @@ export const GUIDE_SECTIONS = {
   selecting: { chapter: "select", de: "auswaehlen", en: "selecting", nl: "selecteren", ru: "vydelenie", cs: "vyber", sl: "izbiranje", hu: "kijeloeles", es: "seleccionar" },
   layFlat: { chapter: "select", de: "auf-eine-flaeche-legen", en: "laying-flat-on-a-face", nl: "plat-op-een-vlak-leggen", ru: "ukladka-na-gran", cs: "polozeni-na-plochu", sl: "polaganje-na-ploskev", hu: "lapra-fektetes", es: "apoyar-sobre-una-cara" },
   referencePoints: { chapter: "measuring", de: "bezugspunkte", en: "reference-points", nl: "referentiepunten", ru: "opornye-tochki", cs: "referencni-body", sl: "referencne-tocke", hu: "referenciapontok", es: "puntos-de-referencia" },
+  referenceImage: { chapter: "measuring", de: "referenzbilder", en: "reference-images", nl: "referentieafbeeldingen", fr: "images-de-reference", ru: "etalonnye-izobrazheniya", cs: "referencni-obrazky", sl: "referencne-slike", hu: "mintakepek", es: "imagenes-de-referencia" },
   addingText: { chapter: "text", de: "text-hinzufuegen", en: "adding-text", nl: "tekst-toevoegen", ru: "dobavlenie-teksta", cs: "vlozeni-textu", sl: "dodajanje-besedila", hu: "szoeveg-hozzaadasa", es: "anadir-texto" },
   sketchMirror: { chapter: "sketches", de: "spiegeln", en: "mirroring", nl: "spiegelen", fr: "symetrie", ru: "zerkalnoe-otrazhenie", cs: "zrcadleni", sl: "zrcaljenje", hu: "tuekroezes", pl: "odbicie-lustrzane", da: "spejling", es: "reflejar" },
   sketchCurve: { chapter: "sketches", de: "eine-gerade-seite-kruemmen", en: "curving-a-straight-side", nl: "een-rechte-zijde-buigen", ru: "izgib-pryamoy-storony", cs: "prohnuti-prime-strany", sl: "ukrivljanje-ravne-stranice", hu: "egyenes-oldal-goerbitese", es: "curvar-un-lado-recto" },
@@ -131,6 +132,7 @@ type GuideShape = {
   layeredText?: boolean;
   layeredIcon?: boolean;
   qrCode?: unknown;
+  imagePlate?: unknown;
 };
 
 export function guideSectionForShape(shape: GuideShape): GuideSection | undefined {
@@ -140,6 +142,8 @@ export function guideSectionForShape(shape: GuideShape): GuideSection | undefine
   if (shape.layeredIcon && shape.groupedShapes?.length) return "iconTag";
   // A QR code (#553), alone or on its plate, is explained with the texts and tags.
   if (shape.qrCode) return "qrCode";
+  // A reference image (#680) is explained with the other measuring aids.
+  if (shape.imagePlate) return "referenceImage";
   if (shape.groupedShapes?.length) {
     if (shape.groupOperation === "bundle") return "bundling";
     if (shape.groupOperation === "intersection") return "intersection";

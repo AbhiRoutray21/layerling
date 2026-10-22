@@ -30,6 +30,8 @@ export function debugShapeSummary(shape: WorkplaneShape): Record<string, unknown
     mirrorZ: Boolean(shape.mirrorZ),
     importedTriangles: shape.importedMesh?.triangleCount ?? 0,
     imagePlate: shape.imagePlate ? `${shape.imagePlate.pixelWidth}x${shape.imagePlate.pixelHeight}` : null,
+    // A reference image (#680): how opaque it is drawn; never exported.
+    ...(shape.imagePlate ? { referenceImage: { opacity: shape.imagePlate.opacity ?? 1, pixels: { width: shape.imagePlate.pixelWidth, height: shape.imagePlate.pixelHeight } } } : {}),
     edgeTreatments: shape.edgeTreatments ?? [],
     cadDisplayEdgeCount: shape.cadDisplayEdges?.length ?? null,
     cadDisplayEdgesVersion: shape.cadDisplayEdgesVersion ?? null,

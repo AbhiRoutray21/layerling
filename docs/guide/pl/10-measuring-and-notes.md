@@ -77,3 +77,15 @@ Punkt odniesienia to sam znak w przestrzeni, jak kreska ołówkiem albo punkt tr
 - Gdy przeciągasz kształt, jego krawędzie i środek przyciągają się do punktu, tak jak do innych kształtów ({{ui:workspace.objectSnap}}). Kątownik też przyciąga się do punktów.
 - Punkty zapisują się w projekcie, nie pojawiają się w żadnym eksporcie i są pokazywane albo ukrywane razem z notatkami przez {{ui:visibility.notes}}.
 - AI może je stawiać, wypisywać i usuwać poleceniami `layerling_add_reference_points`, `layerling_list_reference_points` i `layerling_remove_reference_points`.
+
+## Obrazy referencyjne
+
+Obraz referencyjny to obraz, do którego wyrównujesz części: połóż zdjęcie płytki drukowanej na dnie jej obudowy i ustaw na nim dystanse, otwory i wycięcia na złącza. To pomoc, a nie bryła: nigdy nie jest drukowany ani eksportowany (STL, 3MF, OBJ, STEP, SVG), nigdy nie wchodzi do grupy, pakietu ani cięcia, a szacunek wydruku go pomija.
+
+- Otwórz {{ui:editor.import}} i wybierz {{ui:import.referenceImage}}, a potem obraz PNG, JPG, WebP, GIF lub BMP. Trafia na płaszczyznę roboczą - na płytę albo na ścianę, na której ustawiono płaszczyznę roboczą - z dłuższym bokiem 100 mm, półprzezroczysty.
+- Przesuwaj go, obracaj i zmieniaj jego rozmiar uchwytami jak każdy kształt. Bryła przed nim jest wybierana pierwsza, więc praca na nim nie chwyta obrazu.
+- {{ui:referenceImage.seeThrough}} w jego ustawieniach rozjaśnia go od pełnego do ledwo widocznego.
+- {{ui:referenceImage.calibrate}} nadaje mu prawdziwy rozmiar, jak w szkicu: kliknij dwa punkty na obrazie, których rzeczywistą odległość znasz - na przykład dwa otwory montażowe płytki - i wpisz tę odległość w {{ui:referenceImage.distance}}. Obraz zachowuje proporcje i środek.
+- Zablokuj go kłódką w nagłówku jego ustawień, a zostanie na miejscu: kliknięcia przechodzą przez niego na płytę. Wybierz go na liście obiektów, aby go odblokować.
+- Obraz jest zapisany w pliku projektu tylko raz, niezależnie od tego, ile razy go skopiujesz lub cofniesz. Duży obraz powiększa plik o tyle samo; komunikat przy dodawaniu podaje jego rozmiar.
+- AI dodaje, przesuwa, kalibruje, rozjaśnia i blokuje go za pomocą `layerling_reference_image`.
