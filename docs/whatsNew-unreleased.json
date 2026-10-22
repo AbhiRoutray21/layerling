@@ -112,5 +112,43 @@
       "tr": "SVG dışa aktarımında siluetin yanında yeni bir görünüm var: \"Yukarıdan görünen kenarlar\". Yukarıdan görünen kenarlar, gövdelerinin renginde çizgiler olarak yazılır; cepler, oyulmuş ve kabartmalı yazı ve başka parçaların üzerinde duran parçalar da dahildir. Her alanın kapalı bir dış hattı vardır, iki gövdenin buluştuğu yerde de, ve lazer programında diğer gövdelerin yerlerini almadan gravür edilebilir. Çok fazla kenarı olan tasarım siluet alır ve mesaj bunu söyler. Siluet varsayılan olarak kalır.",
       "es": "La exportación SVG tiene una vista nueva junto a la silueta, «Aristas visibles desde arriba»: las aristas que se ven desde arriba como líneas del color de su cuerpo, con bolsillos, texto grabado y en relieve y piezas colocadas sobre otras. Cada área tiene un contorno cerrado, también donde se tocan dos cuerpos, y se puede grabar en un programa láser sin incluir los lugares de otros cuerpos. Un diseño con demasiadas aristas recibe la silueta, y el mensaje lo indica. La silueta sigue siendo la opción por defecto."
     }
+  },
+  {
+    "title": {
+      "de": "Das Mausrad zoomt wieder richtig",
+      "en": "The mouse wheel zooms properly again",
+      "ar": "عجلة الفأرة تكبّر وتصغّر بشكل صحيح مجددًا",
+      "cs": "Kolečko myši zase správně přibližuje",
+      "da": "Musehjulet zoomer rigtigt igen",
+      "fr": "La molette de la souris zoome de nouveau correctement",
+      "hu": "Az egérgörgő újra rendesen nagyít",
+      "it": "La rotellina del mouse torna a ingrandire come si deve",
+      "ja": "マウスホイールのズームが正しく働くように",
+      "nl": "Het muiswiel zoomt weer goed",
+      "pl": "Kółko myszy znów poprawnie przybliża",
+      "pt-br": "A roda do mouse volta a dar zoom direito",
+      "ru": "Колесо мыши снова нормально масштабирует",
+      "sl": "Miškino kolesce spet pravilno približuje",
+      "tr": "Fare tekerleği yeniden düzgün yakınlaştırıyor",
+      "es": "La rueda del ratón vuelve a hacer zoom como debe"
+    },
+    "body": {
+      "de": "Ist Windows so eingestellt, dass das Mausrad pro Rastung einen Bildschirm scrollt (oder in Firefox), zoomte das Rad in der 3D-Ansicht kaum, egal wie die Zoomgeschwindigkeit stand. Eine Rastung zoomt jetzt wie bei jedem anderen Rad. In den Arbeitsbereich-Einstellungen laufen lange Beschriftungen nicht mehr in die nächste Zeile.",
+      "en": "If Windows is set to scroll one screen at a time per wheel notch (or in Firefox), the wheel barely zoomed in the 3D view, whatever the zoom speed. A notch now zooms like on any other wheel. In the workspace settings, long labels no longer run over the next row.",
+      "ar": "إذا كان ويندوز مضبوطًا على تمرير شاشة كاملة لكل نقرة من العجلة (أو في Firefox)، كانت العجلة بالكاد تغيّر التكبير في العرض ثلاثي الأبعاد مهما كانت سرعة التكبير. صارت النقرة الآن تكبّر كأي عجلة أخرى. وفي إعدادات مساحة العمل لم تعد التسميات الطويلة تتداخل مع السطر التالي.",
+      "cs": "Když je Windows nastaveno na posun o jednu obrazovku na zářez kolečka (nebo ve Firefoxu), kolečko v 3D pohledu téměř nepřibližovalo, ať byla rychlost zoomu jakákoli. Zářez teď přibližuje jako u každého jiného kolečka. V nastavení pracovní plochy dlouhé popisky už nezasahují do dalšího řádku.",
+      "da": "Hvis Windows er sat til at rulle en hel skærm pr. hjulklik (eller i Firefox), zoomede hjulet knapt nok i 3D-visningen, uanset zoomhastigheden. Et klik zoomer nu som på ethvert andet hjul. I arbejdsområdets indstillinger løber lange etiketter ikke længere ind i næste linje.",
+      "fr": "Quand Windows défile d'un écran par cran de molette (ou dans Firefox), la molette ne zoomait presque pas dans la vue 3D, quelle que soit la vitesse de zoom. Un cran zoome maintenant comme sur toute autre molette. Dans les réglages de l'espace de travail, les longs libellés ne débordent plus sur la ligne suivante.",
+      "hu": "Ha a Windows görgetésenként egy képernyőnyit görget (vagy Firefoxban), a görgő a 3D nézetben alig nagyított, bármilyen volt is a nagyítás sebessége. Egy kattintás most úgy nagyít, mint bármely más görgőn. A munkaterület beállításaiban a hosszú feliratok már nem csúsznak a következő sorba.",
+      "it": "Se Windows è impostato per scorrere una schermata per scatto della rotellina (o in Firefox), la rotellina nella vista 3D ingrandiva appena, qualunque fosse la velocità dello zoom. Uno scatto ora ingrandisce come con qualsiasi altra rotellina. Nelle impostazioni dell'area di lavoro, le etichette lunghe non finiscono più sulla riga successiva.",
+      "ja": "Windowsがホイール1クリックにつき1画面分スクロールする設定(またはFirefox)の場合、ズーム速度にかかわらず3Dビューでホイールがほとんどズームしませんでした。1クリックが他のホイールと同じようにズームします。作業領域の設定では、長いラベルが次の行にはみ出さなくなりました。",
+      "nl": "Als Windows is ingesteld om per klik van het wiel een heel scherm te scrollen (of in Firefox), zoomde het wiel in de 3D-weergave nauwelijks, ongeacht de zoomsnelheid. Een klik zoomt nu zoals bij elk ander wiel. In de instellingen van de werkruimte lopen lange labels niet meer over in de volgende regel.",
+      "pl": "Jeśli Windows jest ustawiony na przewijanie o jeden ekran na ząbek kółka (albo w Firefoksie), kółko w widoku 3D prawie nie przybliżało, niezależnie od szybkości zoomu. Jeden ząbek przybliża teraz jak każde inne kółko. W ustawieniach obszaru roboczego długie etykiety nie wchodzą już na następny wiersz.",
+      "pt-br": "Se o Windows está configurado para rolar uma tela inteira por clique da roda (ou no Firefox), a roda quase não dava zoom na vista 3D, qualquer que fosse a velocidade do zoom. Um clique agora dá zoom como em qualquer outra roda. Nas configurações da área de trabalho, rótulos longos não passam mais para a linha seguinte.",
+      "ru": "Если в Windows колесо прокручивает по целому экрану за щелчок (или в Firefox), в 3D-виде оно почти не масштабировало, какой бы ни была скорость масштабирования. Теперь щелчок масштабирует как на любом другом колесе. В настройках рабочей области длинные подписи больше не заходят на следующую строку.",
+      "sl": "Če je Windows nastavljen na pomik za cel zaslon na klik kolesca (ali v Firefoxu), kolesce v 3D pogledu skoraj ni približevalo, ne glede na hitrost povečave. Klik zdaj približa kot pri vsakem drugem kolescu. V nastavitvah delovnega območja dolge oznake ne segajo več v naslednjo vrstico.",
+      "tr": "Windows tekerleğin her tıkında bir ekran kaydıracak şekilde ayarlıysa (veya Firefox'ta), tekerlek 3B görünümde yakınlaştırma hızı ne olursa olsun neredeyse hiç yakınlaştırmıyordu. Bir tık artık diğer tüm tekerlekler gibi yakınlaştırıyor. Çalışma alanı ayarlarında uzun etiketler artık sonraki satıra taşmıyor.",
+      "es": "Si Windows está configurado para desplazar una pantalla por cada paso de la rueda (o en Firefox), la rueda apenas hacía zoom en la vista 3D, fuera cual fuera la velocidad del zoom. Un paso ahora hace zoom como en cualquier otra rueda. En los ajustes del área de trabajo, las etiquetas largas ya no pasan a la fila siguiente."
+    }
   }
 ]
