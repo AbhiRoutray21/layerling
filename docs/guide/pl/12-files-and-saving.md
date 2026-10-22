@@ -44,7 +44,7 @@ Na górze jest nazwa pliku, pod nią wybierasz format. Gdy coś jest zaznaczone,
 | **3MF** | slicer z kolorami | Każda bryła zostaje osobną częścią z nazwą i kolorem. Nakładające się bryły łączą się tylko wtedy, gdy mają ten sam kolor. Gdy kształt siedzi wewnątrz kształtu w innym kolorze, na przykład logo w płytce, ten zbudowany wcześniej zostawia miejsce na późniejszy. Pasuje do PrusaSlicer, Bambu Studio, OrcaSlicer i Cura. Bambu Studio i OrcaSlicer przy otwieraniu pytają, jak przypisać kolory do filamentów, i nazywają plik „nie z Bambu”. Ten komunikat jest nieszkodliwy. |
 | **OBJ** | modelowanie i wymiana | Szeroko obsługiwany format siatki. Kolory są zapisywane jako kolory wierzchołków w tym samym pliku, bez dodatkowego `.mtl`. Bambu Studio i OrcaSlicer je odczytują i jak przy 3MF pytają, jak przypisać je do filamentów. Inne programy widzą tylko kształt. Jak przy 3MF nakładające się bryły łączą się tylko wtedy, gdy mają ten sam kolor. |
 | **STEP** | pełny program CAD | Zachowuje prostopadłościany, walce, kule i stożki jako dokładną geometrię, podobnie kształty powstające z konturu (gwiazda, serce, elipsa, rura, półkula, okrągły dach, zaokrąglony prostopadłościan, jaskółczy ogon, otwory i inne), wygiętą rurę, gwinty, sprężyny i koła zębate, a także zaokrąglenia i fazki. Pierwszy eksport STEP w sesji raz wczytuje jądro CAD (około 22 MB). |
-| **SVG** | ploter laserowy i ploter | Czysty widok z góry w milimetrach, z otworami i zakrzywionymi konturami. W polu {{ui:export.svg.view}} opcja {{ui:export.svg.viewFootprint}} zapisuje tylko obrysy, którymi obiekty stoją na płaszczyźnie roboczej. |
+| **SVG** | ploter laserowy i ploter | Czysty widok z góry w milimetrach, z otworami i zakrzywionymi konturami. W polu {{ui:export.svg.view}} opcja {{ui:export.svg.viewFootprint}} zapisuje tylko obrysy, którymi obiekty stoją na płaszczyźnie roboczej. {{ui:export.svg.viewEdges}} zapisuje jako linie krawędzie widoczne z góry, każdą bryłę w jej kolorze, zobacz niżej. |
 | **PNG** | posty na forum, serwisy z drukiem, pytania | Obraz widoku w obecnej postaci, w podwójnej rozdzielczości, bez uchwytów, ramek zaznaczenia i wymiarów. {{ui:export.png.plate}} i {{ui:export.png.transparent}} wybierasz w oknie. Najpierw obróć i przybliż widok, aż obraz będzie właściwy. Zaznaczenie nie ma tu znaczenia. |
 | **LYL** | sam layerling | Edytowalny projekt ze wszystkim, co do niego należy. |
 | **2D** | warsztat, tokarka i frezarka, dokumentacja | Rysunek w skali 1:1 jako PDF albo SVG: widok z przodu, z góry i z prawej na arkuszu ISO. Zobacz niżej. |
@@ -54,6 +54,12 @@ Na górze jest nazwa pliku, pod nią wybierasz format. Gdy coś jest zaznaczone,
 Otwór, którego nie zgrupowałeś, jest przy eksporcie wycinany z każdej bryły, do której sięga, tak jak pokazuje to widok. Nie trzeba więc grupować przed każdym eksportem. Przy zaznaczeniu liczą się tylko zaznaczone otwory. Otworu nie da się wyeksportować samego, o czym layerling informuje.
 
 STEP niesie tylko dokładne bryły CAD. To, czego nie da się zapisać dokładnie, na przykład siatka zaimportowana jako STL, zostaje pominięte. Komunikat po eksporcie wymienia te bryły i mówi dlaczego. Do drukarki używaj STL albo 3MF, które niosą wszystko.
+
+### SVG dla lasera lub plotera
+
+Przy {{ui:export.svg.viewEdges}} w polu {{ui:export.svg.view}} SVG pokazuje projekt tak, jak widzisz go z góry, jak widok z góry na rysunku: każda widoczna krawędź jest linią, a krawędzie zasłonięte przez inne części są pomijane. Każda linia ma kolor swojej bryły, więc program lasera albo plotera, który sortuje według koloru, kładzie każdy kolor na osobnej warstwie. To, czy warstwa jest cięta, nacinana czy grawerowana, wybierasz tam.
+
+Każda powierzchnia, którą pokazuje kolor, ma zamknięty kontur, a tam, gdzie spotykają się dwie bryły, linię dostają obie. Powierzchnie są wypełniane regułą parzysto-nieparzystą, więc wypełnienie koloru do grawerowania zostawia wolne jego otwory i miejsca innych brył. Część przechodząca przez inną dostaje linię tam, gdzie z niej wychodzi. SVG jest w skali 1:1 w milimetrach, z przodem projektu na dole strony, w tym samym miejscu co sylwetka. Projekt ze zbyt wieloma krawędziami dla tego widoku, na przykład płyta z setkami otworów, dostaje zamiast niego wypełnioną sylwetkę, a komunikat po eksporcie o tym informuje.
 
 ### Rysunek dla warsztatu
 
