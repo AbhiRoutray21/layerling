@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "title": {
+      "de": "Gridfinity-Bodenplatte passend zur Schublade",
+      "en": "Fit a Gridfinity baseplate to a drawer"
+    },
+    "body": {
+      "de": "Eine Gridfinity-Bodenplatte hat jetzt „Schubladenbreite“ und „Schubladentiefe“ im Eigenschaften-Fenster: Tippe das Innenmaß der Schublade ein, und die Platte nimmt so viele Einheiten, wie hineinpassen, und verteilt den Rest gleichmäßig auf den Ausgleich, sodass sie 0,5 mm kleiner als die Schublade wird.",
+      "en": "A Gridfinity baseplate now has \"Drawer width\" and \"Drawer depth\" in the Properties panel: type the drawer's inside size, and the plate takes as many units as fit and splits the rest evenly into its padding, so it comes out 0.5 mm smaller than the drawer."
+    }
+  }
+]
