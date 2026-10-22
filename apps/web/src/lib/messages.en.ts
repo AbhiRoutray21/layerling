@@ -937,6 +937,8 @@ export const MESSAGES_EN = {
   "faceTool.inset": "Inset from the face's edge",
   "faceTool.radius": "Corner radius",
   "faceTool.depth": "Depth",
+  "faceTool.separate": "As a body of its own (not grouped)",
+  "faceTool.separateHint": "The new part stands beside the body instead of in a group with it: you can resize it, move it or use it to cut right away. Without the switch it is grouped.",
   "faceTool.repick": "Another face",
   "faceTool.apply": "Create",
   "faceTool.bodyName": "Face extrusion",

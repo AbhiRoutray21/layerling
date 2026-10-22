@@ -86,5 +86,15 @@
       "tr": "Döndürme ile çizimde küçük 3B önizleme artık durağan bir resim değil: sol veya sağ düğmeyle sürükleyerek döndür, tekerlekle yakınlaştır, tekerlek düğmesiyle kaydır; böylece alt tarafı da görürsün. Ayarladığın görünüm çizmeye devam ederken korunur.",
       "es": "En el boceto con Revolución, la pequeña vista previa 3D ya no es una imagen fija: arrastra con el botón izquierdo o derecho para girarla, usa la rueda para hacer zoom y el botón de la rueda para moverla, así ves también la parte inferior. La vista que ajustes se mantiene mientras sigues dibujando."
     }
+  },
+  {
+    "title": {
+      "de": "Fläche herausschieben: neues Teil als eigener Körper",
+      "en": "Face tool: the new part as a body of its own"
+    },
+    "body": {
+      "de": "Im Fenster Fläche gibt es den Schalter \"Als eigener Körper (nicht gruppiert)\". Ist er an, steht das herausgeschobene Teil (oder das Loch einer Tasche) neben dem Körper statt in einer Gruppe: Du kannst es gleich in der Größe ändern, verschieben oder damit schneiden.",
+      "en": "The Face window has a new switch, \"As a body of its own (not grouped)\". With it on, the part pushed out of the face (or the hole of a pocket) stands beside the body instead of in a group with it: resize it, move it or use it to cut right away."
+    }
   }
 ]
