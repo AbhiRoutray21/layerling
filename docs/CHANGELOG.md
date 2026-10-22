@@ -6,6 +6,7 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **The SVG footprint is cut at the workplane (#727):** With View "Footprint on the workplane" the cut lay a hair above the lowest point of all bodies, so one part reaching below the workplane moved it down there and the parts standing on the workplane were missing from the file. It is now cut a hair above the workplane whenever a body reaches through it; with all bodies above or below it, it stays at the lowest point. Reported by @DevxDre in #727.
 ## 1.101.0
 
 - **SVG export: the edges seen from above (#591, PR #726 by DevxDre):** Under View the SVG export has a third choice next to the silhouette and the footprint, "Visible edges from above": the edges you see from above as lines in the colour of their body, pockets, engraved and raised text and parts standing on others included, every area closed with an even-odd fill, for laser cutters and plotters. A design with too many edges gets the silhouette, and the message says so. The MCP tool `layerling_export_mesh` takes `view: "edges"` too. Texts for every language; the guide describes it in "Files and saving".
