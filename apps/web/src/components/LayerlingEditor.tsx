@@ -5759,9 +5759,9 @@ export function LayerlingEditor({
     setScalePercentTool({ percent: 100, mode: "together" });
   }, [refuseLockedSelection, scalePercentTool, selectedShapes.length]);
 
-  const applyScalePercentTool = useCallback(() => {
+  const applyScalePercentTool = useCallback((percent?: number) => {
     if (!scalePercentTool) return;
-    const result = scaleSelectionByPercent(selectedIdsRef.current, scalePercentTool.percent, scalePercentTool.mode);
+    const result = scaleSelectionByPercent(selectedIdsRef.current, percent ?? scalePercentTool.percent, scalePercentTool.mode);
     if (!result.ok) {
       setScalePercentError(result.message);
       return;
@@ -11194,7 +11194,8 @@ export function LayerlingEditor({
     // where it cannot ask, the download stays.
     const designId = projectId ?? "";
     let target: LylFileHandle | "download" = "download";
-    if (format === "stl" && lylFileAccessSupported()) {
+    // With "Save STL as a download" the browser hands out the files, and numbers them (#731).
+    if (format === "stl" && lylFileAccessSupported() && !workspaceSettingsRef.current.stlAsDownload) {
       try {
         const linkedBefore = linkedStlFile(designId);
         // A name typed in the window that is not the linked file's asks for a file of its own (reported by mail, 15.10.2026).
@@ -13278,7 +13279,7 @@ export function LayerlingEditor({
           onEstimatePrint={exportSolidVolume}
           onClose={() => setTopPanel(null)}
           onExport={(format, exportName, chooseFile, svgView) => void exportDesign(format, exportName, chooseFile, svgView)}
-          stlFileName={topPanel === "export" ? linkedStlFile(projectId ?? "")?.name ?? null : null}
+          stlFileName={topPanel === "export" && !workspaceSettings.stlAsDownload ? linkedStlFile(projectId ?? "")?.name ?? null : null}
           onExportLyl={exportLylDesign}
           onExportStep={exportStepDesign}
           onExportDrawing={exportDrawingDesign}
@@ -14949,8 +14950,15 @@ function TopActionPanel({
   const showPrintEstimate = panel === "export" && exportFormat !== "drawing" && exportFormat !== "svg" && exportFormat !== "png" && exportFormat !== "lyl" && shapeCount > 0;
   // A picture shows the view as it is, not the selection, so the notes about what goes along do not apply.
   const exportsBodies = exportFormat !== "lyl" && exportFormat !== "png";
+  // The estimate is worked out on a click, not on every opening and every change of format: for a finely traced
+  // multicolour model it takes as long as the export itself (#734). A change of the design or of the format asks again.
+  const [printAsked, setPrintAsked] = useState(false);
   useEffect(() => {
-    if (!showPrintEstimate) return;
+    setPrintAsked(false);
+    setPrintVolume(null);
+  }, [showPrintEstimate, estimateShapes]);
+  useEffect(() => {
+    if (!showPrintEstimate || !printAsked) return;
     let cancelled = false;
     setPrintVolume(null);
     // Kurz warten: beim Tippen oder Ziehen im Hintergrund nicht jedes Mal neu verschmelzen.
@@ -14963,7 +14971,7 @@ function TopActionPanel({
       cancelled = true;
       window.clearTimeout(timer);
     };
-  }, [showPrintEstimate, estimateShapes, onEstimatePrint]);
+  }, [showPrintEstimate, printAsked, estimateShapes, onEstimatePrint]);
   const choosePrintMaterial = (value: string) => {
     const material = normalizePrintMaterial(value);
     setPrintMaterial(material);
@@ -15294,8 +15302,10 @@ function TopActionPanel({
                     <dd>{formatEstimateNumber(estimate.printed.filamentMeters, estimate.printed.filamentMeters < 10 ? 2 : 1)} m</dd>
                   </div>
                 </dl>
-              ) : (
+              ) : printAsked ? (
                 <span className="print-estimate-busy">{t("export.estimateBusy")}</span>
+              ) : (
+                <button type="button" className="print-estimate-material print-estimate-calculate" onClick={() => setPrintAsked(true)}>{t("export.estimateCalculate")}</button>
               )}
               {estimate ? (
                 <span className="print-estimate-note print-estimate-infill">

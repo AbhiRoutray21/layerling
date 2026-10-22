@@ -74,6 +74,7 @@ export const DEFAULT_WORKPLANE_WORKSPACE: WorkplaneWorkspaceSettings = {
   doubleClickOpensSketch: true,
   doubleClickOpensGroup: true,
   objectSnap: true,
+  stlAsDownload: false,
   dimensionsAlwaysVisible: true,
   showRotationAngles: true,
   zoomSpeed: 5,
@@ -707,6 +708,7 @@ export function normalizeWorkspaceSettings(value: unknown, fallback: WorkplaneWo
     doubleClickOpensSketch: booleanOrDefault(candidate.doubleClickOpensSketch, fallback.doubleClickOpensSketch),
     doubleClickOpensGroup: booleanOrDefault(candidate.doubleClickOpensGroup, fallback.doubleClickOpensGroup),
     objectSnap: booleanOrDefault(candidate.objectSnap, fallback.objectSnap),
+    stlAsDownload: booleanOrDefault(candidate.stlAsDownload, fallback.stlAsDownload),
     dimensionsAlwaysVisible: booleanOrDefault(candidate.dimensionsAlwaysVisible, fallback.dimensionsAlwaysVisible),
     showRotationAngles: booleanOrDefault(candidate.showRotationAngles, fallback.showRotationAngles),
     zoomSpeed: numberOrDefault(candidate.zoomSpeed, fallback.zoomSpeed),
@@ -782,6 +784,28 @@ export function resetGridInSavedDefault(storage: Storage | null = browserStorage
   const saved = readWorkspaceDefault(storage);
   if (!saved || !storage) return false;
   return saveWorkspaceDefault({ ...saved.workspace, ...standardGridSettings(saved.workspace.units) }, saved.snap, storage);
+}
+
+/**
+ * "Use my default" (#754): the look the user saved with "Make default" - colours, grid, shadows, camera, shape
+ * starts - put on the design that is open, which a file brings with its own. What belongs to the design itself
+ * stays: the size of the plate, the printer, the units and how they are shown. The grid spacing stays too when the
+ * saved default counts in other units, since it is a length in those.
+ */
+export function workspaceWithSavedDefault(current: WorkplaneWorkspaceSettings, saved: WorkplaneWorkspaceSettings): WorkplaneWorkspaceSettings {
+  const sameUnits = saved.units === current.units;
+  return {
+    ...saved,
+    width: current.width,
+    depth: current.depth,
+    sizePreset: current.sizePreset,
+    printer: current.printer,
+    units: current.units,
+    inchFormat: current.inchFormat,
+    scale: current.scale,
+    accuracy: current.accuracy,
+    ...(sameUnits ? {} : { gridBlockPreset: current.gridBlockPreset, gridBlockSize: current.gridBlockSize }),
+  };
 }
 
 export function readWorkspaceDefault(storage: Storage | null = browserStorage()) {

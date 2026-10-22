@@ -377,6 +377,8 @@ export type WorkplaneWorkspaceSettings = {
   doubleClickOpensGroup: boolean;
   /** Moving a shape snaps its edges and centre to other shapes, with guide lines. */
   objectSnap: boolean;
+  /** An STL leaves as a plain download each time, which the browser numbers (name (1).stl), instead of writing into one linked file (#731). */
+  stlAsDownload: boolean;
   dimensionsAlwaysVisible: boolean;
   /** A turned body shows its angles about X, Y and Z beside it while it is selected. */
   showRotationAngles: boolean;

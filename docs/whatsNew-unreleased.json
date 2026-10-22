@@ -1,1 +1,52 @@
-[]
+[
+  {
+    "title": {
+      "de": "STL als normalen Download speichern",
+      "en": "Save STL as a plain download"
+    },
+    "body": {
+      "de": "In Chrome und Edge schreibt der STL-Export jedes Mal in dieselbe Datei. In den Einstellungen unter Aussehen schaltest du jetzt \"STL als Download speichern\" ein: Dann bekommst du einen normalen Download, und der Browser nummeriert die Dateien selbst, name (1).stl, name (2).stl.",
+      "en": "In Chrome and Edge the STL export writes into the same file each time. In the settings under Appearance you can now switch on \"Save STL as a download\": you then get a plain download and the browser numbers the files itself, name (1).stl, name (2).stl."
+    }
+  },
+  {
+    "title": {
+      "de": "Zurück zu deinen eigenen Einstellungen",
+      "en": "Back to your own settings"
+    },
+    "body": {
+      "de": "Eine geöffnete Datei bringt ihre eigenen Farben, ihr Raster und ihre Platte mit. In den Einstellungen gibt es neben \"Als Vorgabe speichern\" jetzt \"Meine Vorgabe verwenden\": Es legt deine gespeicherten Farben, das Raster, die Schatten, die Kamera und die Formstarts auf den offenen Entwurf. Plattengröße, Drucker und Einheiten bleiben beim Entwurf.",
+      "en": "A file you open brings its own colours, grid and plate. Next to \"Make default\" the settings now have \"Use my default\": it puts your saved colours, grid, shadows, camera and shape starts on the open design. The size of the plate, the printer and the units stay as they are."
+    }
+  },
+  {
+    "title": {
+      "de": "Skalieren in Prozent mit der Tastatur",
+      "en": "Scale by percent from the keyboard"
+    },
+    "body": {
+      "de": "Das Prozentfeld hat beim Öffnen den Fokus, und Enter wendet die Skalierung an. Strg+K, Prozentwert, Enter: ganz ohne Maus.",
+      "en": "The percentage field has the focus when the window opens, and Enter applies the scale. Ctrl+K, the percentage and Enter do it without the mouse."
+    }
+  },
+  {
+    "title": {
+      "de": "Materialschätzung auf Klick",
+      "en": "Material estimate on a click"
+    },
+    "body": {
+      "de": "Der Material-Kasten im Exportfenster rechnet erst, wenn du auf \"Berechnen\" drückst. Bei feinen Mehrfarbmodellen bleibt der Export-Knopf so sofort bedienbar.",
+      "en": "The Material box in the export window now works out its numbers only when you press Calculate. For finely traced multicolour models the Export button stays usable at once."
+    }
+  },
+  {
+    "title": {
+      "de": "Kegelradius beim Auflösen einer Gruppe",
+      "en": "Cone radius kept when ungrouping"
+    },
+    "body": {
+      "de": "Ein Kegel, der mit anderen Teilen gruppiert und vergrößert wurde, behält beim Auflösen der Gruppe jetzt auch seinen größeren Grundradius.",
+      "en": "A cone that was grouped with other parts and made larger now keeps its larger base radius when the group is ungrouped."
+    }
+  }
+]

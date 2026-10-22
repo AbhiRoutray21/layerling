@@ -147,7 +147,7 @@ Bei mehreren Teilen wählst du, wie sie wachsen:
 - **{{ui:scalePercent.mode.together}}:** Die Teile wachsen um ihre gemeinsame Mitte, die Abstände wachsen mit. Das Ganze wird größer, als wäre es ein Teil.
 - **{{ui:scalePercent.mode.each}}:** Jedes Teil wächst an seinem Platz, die Abstände dazwischen bleiben gleich.
 
-Erst {{ui:scalePercent.apply}} ändert den Entwurf, und ein Schritt zurück macht es wieder rückgängig. Ist ein gesperrtes Teil in der Auswahl, öffnet es sich nicht.
+Das Prozentfeld hat beim Öffnen den Fokus, mit der Tastatur geht es also so: [[Strg]]+[[K]], Prozentwert, [[Enter]]; mit [[Esc]] schließt du das Fenster. Erst {{ui:scalePercent.apply}} (oder [[Enter]] im Feld) ändert den Entwurf, und ein Schritt zurück macht es wieder rückgängig. Ist ein gesperrtes Teil in der Auswahl, öffnet es sich nicht.
 
 ## Rückgängig machen
 

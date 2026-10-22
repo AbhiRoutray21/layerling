@@ -3,7 +3,7 @@
 import { GuideHelpLink } from "@/components/GuideHelpLink";
 import { MAX_OVERHANG_ANGLE, MIN_OVERHANG_ANGLE } from "@/lib/overhangLimits";
 import { Box as BoxIcon, ChevronDown, Grid3X3, History, Palette, Plus, RotateCcw, Ruler, Trash2, X } from "lucide-react";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useMovablePanel } from "@/lib/useMovablePanel";
 import { createPortal } from "react-dom";
 import { HexColorInput, HexColorPicker } from "react-colorful";
@@ -76,7 +76,7 @@ import { numberLocale, t, type MessageKey } from "@/lib/i18n";
 import { useLanguage } from "@/lib/useLanguage";
 import { measurementOptionLabel, normalizeScaleForUnits, parseMeasurementInput, scaleOptionsForUnits, WORKSPACE_UNIT_OPTIONS } from "@/lib/measurementUnits";
 import { shapeAssetDefaultDimensions, shapeAssetLabel, shapeAssetSpecialDefaults, toolbarShapeAssets } from "@/lib/shapeCatalog";
-import { BOOLEAN_TRIANGLE_LIMIT_PRESETS, BOOLEAN_TRIANGLE_LIMIT_STEP, DEFAULT_WORKPLANE_WORKSPACE, ZOOM_SPEED_SLIDER_MAX, MAX_BOOLEAN_TRIANGLE_LIMIT, MAX_CUSTOM_SHAPE_DIMENSION, MAX_HIGH_RESOLUTION_SIDES, MAX_HIGH_RESOLUTION_STEPS, MIN_BOOLEAN_TRIANGLE_LIMIT, MIN_CUSTOM_SHAPE_DIMENSION, booleanTriangleLimitPreset, workspaceForUnits, snapGridForUnits, type BooleanTriangleLimitPreset, DEFAULT_SNAP_GRID, MAX_CUSTOM_SNAP_GRID, MAX_CUSTOM_SNAP_GRID_NAME, MAX_CUSTOM_SNAP_GRIDS, MIN_CUSTOM_SNAP_GRID, customSnapGridDivisors, customSnapGridLabel, customSnapGridSize, parseCustomSnapGrid, resetGridInSavedDefault, snapGridOptions, standardGridSettings } from "@/lib/workplaneSettings";
+import { BOOLEAN_TRIANGLE_LIMIT_PRESETS, BOOLEAN_TRIANGLE_LIMIT_STEP, DEFAULT_WORKPLANE_WORKSPACE, ZOOM_SPEED_SLIDER_MAX, MAX_BOOLEAN_TRIANGLE_LIMIT, MAX_CUSTOM_SHAPE_DIMENSION, MAX_HIGH_RESOLUTION_SIDES, MAX_HIGH_RESOLUTION_STEPS, MIN_BOOLEAN_TRIANGLE_LIMIT, MIN_CUSTOM_SHAPE_DIMENSION, booleanTriangleLimitPreset, workspaceForUnits, snapGridForUnits, type BooleanTriangleLimitPreset, DEFAULT_SNAP_GRID, MAX_CUSTOM_SNAP_GRID, MAX_CUSTOM_SNAP_GRID_NAME, MAX_CUSTOM_SNAP_GRIDS, MIN_CUSTOM_SNAP_GRID, customSnapGridDivisors, customSnapGridLabel, customSnapGridSize, parseCustomSnapGrid, readWorkspaceDefault, resetGridInSavedDefault, snapGridOptions, standardGridSettings, workspaceWithSavedDefault } from "@/lib/workplaneSettings";
 import { DEFAULT_SKETCH_BACKGROUND, DEFAULT_SKETCH_GRID_COLOR, DEFAULT_SKETCH_PLATE_COLOR, IMPERIAL_GRID_BLOCK_PRESETS, inchGridPresetMm, workplaneGridPalette } from "@/lib/workplaneGrid";
 import type { BentTubeProfile, CustomSnapGrid, GearProfile, GearType, GridSize, ShapeCustomization, ShapeKind, ThreadHand, ThreadHead, ThreadProfile, ThreadRole, WorkplaneWorkspaceSettings } from "@/types/layerling";
 import { DEFAULT_LOFT } from "@/lib/loftGeometry";
@@ -463,6 +463,8 @@ export function WorkspaceSettingsModal({
   onClose: () => void;
 }) {
   const [defaultSaved, setDefaultSaved] = useState(false);
+  // A default saved earlier or just now: what "Use my default" puts on this design (#754).
+  const savedDefault = useMemo(() => readWorkspaceDefault(), [defaultSaved]);
   useLanguage();
   const [activeSection, setActiveSection] = useState<WorkspaceSettingsSection>("appearance");
   const toolbarSize = useToolbarSize();
@@ -900,6 +902,12 @@ export function WorkspaceSettingsModal({
                     label={t("workspace.objectSnap")}
                     checked={workspace.objectSnap}
                     onChange={(objectSnap) => patchWorkspace({ objectSnap })}
+                  />
+                  <WorkspaceToggle
+                    label={t("workspace.stlAsDownload")}
+                    description={t("workspace.stlAsDownloadHint")}
+                    checked={workspace.stlAsDownload}
+                    onChange={(stlAsDownload) => patchWorkspace({ stlAsDownload })}
                   />
                   <WorkspaceToggle
                     label={t("workspace.showShadows")}
@@ -1489,15 +1497,30 @@ export function WorkspaceSettingsModal({
 
             <div className="workspace-modal-footer">
               <span>{t("workspace.footerHint")}</span>
-              <button
-                className="make-default-button"
-                onClick={() => {
-                  onMakeDefault();
-                  setDefaultSaved(true);
-                }}
-              >
-                {defaultSaved ? t("workspace.defaultSaved") : t("workspace.makeDefault")}
-              </button>
+              <div className="workspace-footer-buttons">
+                {savedDefault ? (
+                  <button
+                    className="make-default-button"
+                    title={t("workspace.useMyDefaultHint")}
+                    onClick={() => {
+                      const next = workspaceWithSavedDefault(workspace, savedDefault.workspace);
+                      setGridBlockSizeDraft(next.gridBlockSize.toFixed(next.accuracy));
+                      onWorkspaceChange({ ...next, scale: normalizeScaleForUnits(next.units, next.scale) });
+                    }}
+                  >
+                    {t("workspace.useMyDefault")}
+                  </button>
+                ) : null}
+                <button
+                  className="make-default-button"
+                  onClick={() => {
+                    onMakeDefault();
+                    setDefaultSaved(true);
+                  }}
+                >
+                  {defaultSaved ? t("workspace.defaultSaved") : t("workspace.makeDefault")}
+                </button>
+              </div>
             </div>
           </div>
         </div>
