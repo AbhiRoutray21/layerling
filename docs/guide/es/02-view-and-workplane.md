@@ -39,6 +39,7 @@ En el borde izquierdo hay una barra estrecha. De arriba abajo:
 - {{ui:camera.focusSelection}} hace zoom a la selección ([[F]] o [[Mayús]]+[[F]]).
 - {{ui:camera.zoomIn}} y {{ui:camera.zoomOut}} hacen zoom paso a paso, igual que las teclas [[+]] y [[−]].
 - {{ui:camera.orthographic}} cambia a una vista plana en la que las aristas paralelas siguen siendo paralelas. Para medir y alinear aristas suele ser más cómoda que la vista en perspectiva. [[O]] alterna entre las dos, y un segundo clic vuelve a la de antes.
+- {{ui:camera.secondView}} abre una segunda vista del diseño en una ventana propia, descrita más abajo. Un segundo clic la cierra.
 - {{ui:camera.hideWorkplane}} (el ojo sobre una cuadrícula) oculta la placa con su cuadrícula, para que puedas mirar desde abajo la parte inferior de un diseño. Solo cambia la vista: las formas nuevas siguen apareciendo en el plano de trabajo. Un segundo clic vuelve a mostrarla.
 - {{ui:camera.placeWorkplane}}, la cinta métrica y la escuadra son herramientas aparte; se explican más abajo y en [Medidas y notas](chapter:measuring-and-notes).
 
@@ -47,6 +48,10 @@ La flechita de arriba del todo de la barra la oculta si te estorba.
 Un diseño se abre tal como lo dejaste: el ángulo, el zoom y la posición de la vista se guardan con él en este navegador, así que retomas el trabajo donde te quedaste, también después de volver a Inicio o de cerrar la página. Un archivo guardado (.lyl) lleva la vista consigo, así que en otro sitio también se abre con ella. La vista no forma parte del historial de deshacer.
 
 Además, en cada diseño puedes guardar cuatro vistas propias. [[Mayús]]+[[7]], [[Mayús]]+[[8]], [[Mayús]]+[[9]] o [[Mayús]]+[[0]] guarda en esa tecla la vista exactamente como está —ángulo, posición, zoom y si es plana o en perspectiva—, y la tecla sola ([[7]], [[8]], [[9]] o [[0]]) la recupera. Un mensaje abajo confirma que se ha guardado; si vuelves a guardar en la misma tecla, se sustituye la vista. Igual que la vista de antes, las vistas guardadas se quedan con el diseño en este navegador y viajan en un archivo guardado (.lyl), y no forman parte del historial de deshacer.
+
+### Una segunda vista en su propia ventana
+
+{{ui:camera.secondView}} abre una ventana que muestra el mismo diseño a través de una cámara propia, para que puedas verlo desde dos lados a la vez; por ejemplo, de frente mientras trabajas desde arriba. Cada cambio que haces en el editor aparece allí al instante; el diseño solo se cambia en la ventana principal, y los tiradores también se quedan allí. En la segunda ventana, el ratón y el cubo de vista giran su vista como aquí, y también las teclas: [[1]] a [[6]], [[F]], [[Inicio]], [[O]], [[+]] y [[−]], las flechas para girar y [[Ctrl]] con las flechas para desplazar. [[F]] allí hace zoom sobre lo que está seleccionado en el editor. Las cuatro vistas guardadas del diseño también funcionan allí: [[7]], [[8]], [[9]] y [[0]] las recuperan, y [[Mayús]] con una de esas teclas guarda en ella la vista de esa ventana, para las dos ventanas. Su propia barra de cámara tiene {{ui:camera.home}}, {{ui:camera.focusSelection}}, {{ui:camera.zoomIn}}, {{ui:camera.zoomOut}}, {{ui:camera.orthographic}} y {{ui:camera.hideWorkplane}}, que actúan solo sobre esa ventana. La ventana se abre donde la dejaste, con el mismo tamaño, y se cierra con el editor. En teléfonos y tabletas el botón no aparece.
 
 ## Mirar por dentro: la vista de sección
 

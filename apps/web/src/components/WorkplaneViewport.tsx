@@ -1,8 +1,8 @@
 "use client";
 
 import { markEscapeHandled } from "@/lib/escapeHandled";
-import { ArrowDownToLine, Check, ChevronLeft, ChevronRight, Crosshair, Cuboid, Download, Eye, EyeOff, FlipHorizontal, GripVertical, Home, Layers, Minus, MousePointer2, PanelsTopLeft, Plus, Rotate3d, RotateCcw, Ruler, RulerDimensionLine, Slice, Spline, Trash2, X } from "lucide-react";
-import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type Dispatch, type DragEvent, type MouseEvent as ReactMouseEvent, type MutableRefObject, type PointerEvent as ReactPointerEvent, type ReactNode, type SetStateAction, type WheelEvent as ReactWheelEvent } from "react";
+import { ArrowDownToLine, Check, ChevronLeft, ChevronRight, Crosshair, Cuboid, Download, Eye, EyeOff, FlipHorizontal, GripVertical, Home, Layers, Minus, MousePointer2, PanelsTopLeft, PictureInPicture2, Plus, Rotate3d, RotateCcw, Ruler, RulerDimensionLine, Slice, Spline, Trash2, X } from "lucide-react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type Dispatch, type DragEvent, type MutableRefObject, type PointerEvent as ReactPointerEvent, type ReactNode, type SetStateAction, type WheelEvent as ReactWheelEvent } from "react";
 import { objectSnapOffset, shiftSnapBox, type ObjectSnapGuide, type SnapBox } from "@/lib/objectSnap";
 import { dragReach } from "@/lib/dragReach";
 import { useMovablePanel, type MovablePanelOptions } from "@/lib/useMovablePanel";
@@ -35,23 +35,9 @@ import { t } from "@/lib/i18n";
 import type { ModelSplitPlane } from "@/lib/modelSplit";
 import { planeCrossingSegments } from "@/lib/splitCutLine";
 import { useLanguage } from "@/lib/useLanguage";
-import { orthographicFramingZoom, perspectiveFramingDistance } from "@/lib/cameraFraming";
-import {
-  beginViewCubeDrag,
-  moveViewCubeDrag,
-  orbitOffsetByDrag,
-  viewCubeAngles,
-  VIEW_CUBE_ZONE_SIZE,
-  VIEW_CUBE_ZONE_START,
-  VIEW_CUBE_ZONES,
-  viewCubeZoneDirection,
-  viewDirectionFromName,
-  viewFaceDirection,
-  viewFaceForKey,
-  type ViewCubeDrag,
-  type ViewCubeFace,
-} from "@/lib/viewCubeDrag";
-import { cameraTurn, cameraTurnOffset, prefersReducedMotion } from "@/lib/viewCubeTransition";
+import { viewDirectionFromName, viewFaceForKey, type ViewCubeFace } from "@/lib/viewCubeDrag";
+import { ViewCube } from "@/components/workplane/ViewCube";
+import { openSecondViewWindow, SecondViewWindow, useSecondViewSupported } from "@/components/workplane/SecondViewWindow";
 import { createGearGeometry } from "@/lib/gearGeometry";
 import { createStarGeometry } from "@/lib/starGeometry";
 import { createHeartGeometry } from "@/lib/heartGeometry";
@@ -79,7 +65,9 @@ import { createLatestRunner, type LatestRunner } from "@/lib/latestRunner";
 import { manifoldRevision, onManifoldReady } from "@/lib/manifoldHandle";
 import { customFontRevision, onCustomFontsChanged } from "@/lib/textFonts";
 import { readSavedViews, SAVED_VIEW_KEYS, savedViewForKey } from "@/lib/designView";
-import { CAMERA_MAX_DISTANCE, fitCameraDepthRange, rememberCameraView, useDesignViews } from "@/components/workplane/cameraViews";
+import { rememberCameraView, useDesignViews } from "@/components/workplane/cameraViews";
+import { CAMERA_FOV, CAMERA_MAX_DISTANCE, CAMERA_MIN_DISTANCE, CAMERA_TARGET, fitCameraDepthRange, frameBounds, resetCamera, selectionBounds, setCameraToViewDirection, setCameraToViewFace, stepCameraTurn, syncViewCube, toggleCameraProjection, updateCameraViewport, zoomCameraBy } from "@/components/workplane/cameraRig";
+import { disposeCutPreviewResources, renderFrame } from "@/components/workplane/renderFrame";
 import { DIMENSION_FORMULA_FIELDS, formulaMatchesMillimeters, formulaToRemember, withFieldFormula } from "@/lib/fieldFormulas";
 import { displayToMillimeters, formatLengthMm, lengthDisplayUnit, millimetersToDisplay, parseLengthMm, parseMeasurementInput, resolveLengthMm, setLengthUnit } from "@/lib/measurementUnits";
 import { computeCornerRulerRelativeCoordinates, cornerRulerAxisModes, cornerRulerFrameForWorkplane, cornerRulerShiftVector, pointAlongRuler, rotateCornerRulerFrame, rulerDimensionMatch, rulerTicks, toggledCornerRulerAxis, toggledCornerRulerMode, type CornerRulerAxis, type RulerDimensionField } from "@/lib/rulerDimensions";
@@ -182,9 +170,6 @@ const START_IN_PERSPECTIVE_STORAGE_KEY = "layerling.editor.startInPerspective";
 const CORNER_RULER_DEFAULT_ARM_X = 100;
 const CORNER_RULER_DEFAULT_ARM_Z = 80;
 const DEFAULT_WORKSPACE = DEFAULT_WORKPLANE_WORKSPACE;
-const CAMERA_FOV = 38;
-/** How close the camera may come to what it looks at, in mm; how far it may back off is in cameraViews. */
-const CAMERA_MIN_DISTANCE = 3;
 
 /**
  * The normal view zooms towards its pivot and stops at the closest distance
@@ -228,20 +213,6 @@ function movePivotToDepthUnder(state: ThreeState, ndcX: number, ndcY: number) {
   state.controls.target.copy(target);
 }
 
-/**
- * The flat (orthographic) view's zoom range, so that it frames exactly what
- * the normal view frames between its closest and farthest distance: its zoom
- * divides the frame it was made with, the normal view's frame grows with the
- * distance. Before, the flat view had a fixed 0.02 to 100 and went much closer.
- */
-function orthographicZoomRange(camera: THREE.OrthographicCamera) {
-  const frameHalfHeight = Math.max(0.001, (camera.top - camera.bottom) / 2);
-  const tanHalf = Math.tan(THREE.MathUtils.degToRad(CAMERA_FOV / 2));
-  return { min: frameHalfHeight / (CAMERA_MAX_DISTANCE * tanHalf), max: frameHalfHeight / (CAMERA_MIN_DISTANCE * tanHalf) };
-}
-
-const CAMERA_HOME = new THREE.Vector3(118, 96, 118);
-const CAMERA_TARGET = new THREE.Vector3(0, 0, 0);
 const MIN_SHAPE_SIZE = 0.01;
 // A height is no longer held to the 220 mm of the old plate: the plate sets how far the sliders reach, the guard is for a typo (#425).
 /** A finger held this long (ms) without moving more than this (px) opens the context menu (#337). */
@@ -3474,6 +3445,9 @@ export function WorkplaneViewport({
   const [cameraControlsCollapsed, setCameraControlsCollapsed] = useState(false);
   const language = useLanguage();
   const [orthographicView, setOrthographicView] = useState(false);
+  /** The window of the second view, while it is open. */
+  const [secondViewWindow, setSecondViewWindow] = useState<Window | null>(null);
+  const secondViewSupported = useSecondViewSupported();
   // Hides the whole plate - grid, labels and any face workplane - for a clear
   // look at the underside. Only the view changes: shapes still land on it.
   const [workplaneLayerHidden, setWorkplaneLayerHidden] = useState(false);
@@ -3622,11 +3596,7 @@ export function WorkplaneViewport({
   const lastWorkspaceSettingsSyncRef = useRef("");
   const pendingWorkspaceHydrationFingerprintRef = useRef<string | null>(null);
   const viewCubeRef = useRef<HTMLDivElement | null>(null);
-  // Dragging the view cube orbits the camera; a press that never passes the
-  // drag threshold stays a click so the faces keep snapping to their views.
-  const viewCubeDragRef = useRef<ViewCubeDrag | null>(null);
-  const suppressViewCubeClickRef = useRef(false);
-  const [viewCubeDragging, setViewCubeDragging] = useState(false);
+  const getViewCubeRig = useCallback(() => threeRef.current, []);
   // Der Umschalter fuer das Drehen mit einem Finger steht nur dort, wo er
   // gebraucht wird. Anfangs falsch, damit das ausgelieferte HTML passt.
   const [touchDevice, setTouchDevice] = useState(false);
@@ -4771,7 +4741,7 @@ export function WorkplaneViewport({
         state.sectionPlaneHelper = null;
       }
       clearSectionCaps(state);
-      disposeCutPreviewResources();
+      disposeCutPreviewResources(state.renderer);
       state.renderer.dispose();
       host.replaceChildren();
       if (window.layerlingCaptureCanvas) {
@@ -4838,7 +4808,7 @@ export function WorkplaneViewport({
   }, [workspaceSettingsKey]);
 
   const { saveView, showSavedView } = useDesignViews({
-    threeRef, projectIdRef, viewCubeRef, designViewRestoredRef, orthographicView, setOrthographicView, toggleCameraProjection, syncViewCube, onNotice,
+    threeRef, projectIdRef, viewCubeRef, designViewRestoredRef, orthographicView, setOrthographicView, onNotice,
   });
 
   // The same keys for MCP (layerling_saved_view), through the functions the keys use.
@@ -8276,43 +8246,10 @@ export function WorkplaneViewport({
     state.cameraTurn = null;
     // The real selection, not renderSelectionIds: the workplane and edge tools hide
     // the outline while they are open, but the objects are still what to look at.
-    const bounds = new THREE.Box3();
-    selectedIdsRef.current.forEach((id) => {
-      const record = state.shapeRecords.get(id);
-      if (record) bounds.expandByObject(record.object);
-    });
-    if (bounds.isEmpty()) return false;
-
-    const center = bounds.getCenter(new THREE.Vector3());
-    const radius = Math.max(bounds.getSize(new THREE.Vector3()).length() / 2, 0.5);
-    const canvas = state.renderer.domElement;
-    const aspect = canvas.clientWidth / Math.max(1, canvas.clientHeight);
-    const offset = state.camera.position.clone().sub(state.controls.target);
-    const direction = offset.lengthSq() > 0
-      ? offset.clone().normalize()
-      : CAMERA_HOME.clone().sub(CAMERA_TARGET).normalize();
-
-    if (state.camera instanceof THREE.OrthographicCamera) {
-      const halfHeight = Math.max(0.001, (state.camera.top - state.camera.bottom) / 2);
-      const zoom = orthographicFramingZoom(radius, halfHeight, aspect);
-      const range = orthographicZoomRange(state.camera);
-      if (zoom) state.camera.zoom = clamp(zoom, range.min, range.max);
-      state.camera.position.copy(center).add(direction.multiplyScalar(clamp(offset.length(), CAMERA_MIN_DISTANCE, CAMERA_MAX_DISTANCE)));
-    } else {
-      const distance = clamp(perspectiveFramingDistance(radius, CAMERA_FOV, aspect), CAMERA_MIN_DISTANCE, CAMERA_MAX_DISTANCE);
-      state.camera.position.copy(center).add(direction.multiplyScalar(distance));
-    }
-
-    // constrainCamera keeps the orbit target on the plate on every frame, as far out as this
-    // part: one parked beyond the plate edge is centred too, as in Tinkercad (#352). The house
-    // button takes the allowance back.
-    state.focusReach = bounds.clone();
-    state.controls.target.copy(center);
-    state.camera.lookAt(center);
-    state.camera.updateProjectionMatrix();
-    state.controls.update();
+    const bounds = selectionBounds(state, selectedIdsRef.current);
+    if (!bounds) return false;
+    frameBounds(state, bounds);
     syncViewCube(state, viewCubeRef.current);
-    state.needsRender = true;
     return true;
   }, []);
 
@@ -8333,85 +8270,6 @@ export function WorkplaneViewport({
     syncViewCube(state, viewCubeRef.current);
   }, []);
 
-  // The bands along a face's sides and its corners look from that edge or corner (#202).
-  const viewCubeZones = (face: ViewCubeFace) => VIEW_CUBE_ZONES.map(([column, row]) => (
-    <span
-      key={`${column}:${row}`}
-      className={`cube-zone ${column !== 0 && row !== 0 ? "cube-zone-corner" : "cube-zone-edge"}`}
-      style={{
-        left: `${VIEW_CUBE_ZONE_START[column + 1]}%`,
-        top: `${VIEW_CUBE_ZONE_START[row + 1]}%`,
-        width: `${VIEW_CUBE_ZONE_SIZE[column + 1]}%`,
-        height: `${VIEW_CUBE_ZONE_SIZE[row + 1]}%`,
-      }}
-      aria-hidden="true"
-      onClick={(event) => {
-        event.stopPropagation();
-        const state = threeRef.current;
-        if (!state) return;
-        setCameraToViewDirection(state, viewCubeZoneDirection(face, column, row));
-        syncViewCube(state, viewCubeRef.current);
-      }}
-    />
-  ));
-
-  const handleViewCubePointerDown = useCallback((event: ReactPointerEvent<HTMLDivElement>) => {
-    event.stopPropagation();
-    if (event.button !== 0 || viewCubeDragRef.current) {
-      return;
-    }
-    suppressViewCubeClickRef.current = false;
-    viewCubeDragRef.current = beginViewCubeDrag(event.pointerId, event.clientX, event.clientY);
-  }, []);
-
-  const handleViewCubePointerMove = useCallback((event: ReactPointerEvent<HTMLDivElement>) => {
-    const drag = viewCubeDragRef.current;
-    if (!drag || drag.pointerId !== event.pointerId) {
-      return;
-    }
-    const move = moveViewCubeDrag(drag, event.clientX, event.clientY);
-    if (!move) {
-      return;
-    }
-    if (move.started) {
-      // Capture only once the press becomes a drag, so a plain click still
-      // lands on the face button underneath.
-      capturePointer(event.currentTarget, event.pointerId);
-      setViewCubeDragging(true);
-    }
-    const state = threeRef.current;
-    if (!state) {
-      return;
-    }
-    state.cameraTurn = null;
-    orbitCameraByDrag(state, move.dx, move.dy);
-    syncViewCube(state, viewCubeRef.current);
-  }, []);
-
-  const endViewCubeDrag = useCallback((event: ReactPointerEvent<HTMLDivElement>) => {
-    const drag = viewCubeDragRef.current;
-    if (!drag || drag.pointerId !== event.pointerId) {
-      return;
-    }
-    viewCubeDragRef.current = null;
-    if (drag.dragging) {
-      suppressViewCubeClickRef.current = true;
-      setViewCubeDragging(false);
-      if (event.currentTarget.hasPointerCapture(event.pointerId)) {
-        event.currentTarget.releasePointerCapture(event.pointerId);
-      }
-    }
-  }, []);
-
-  const handleViewCubeClickCapture = useCallback((event: ReactMouseEvent<HTMLDivElement>) => {
-    // The click that ends a drag must not also snap to the face it ended on.
-    if (suppressViewCubeClickRef.current) {
-      suppressViewCubeClickRef.current = false;
-      event.preventDefault();
-      event.stopPropagation();
-    }
-  }, []);
-
   const zoomCamera = useCallback((scale: number) => {
     const state = threeRef.current;
     if (!state) {
@@ -8419,21 +8277,19 @@ export function WorkplaneViewport({
     }
     state.cameraTurn = null;
 
-    const scaled = zoomDistanceScale(scale);
-    if (scaled < 1) movePivotToDepthUnder(state, 0, 0);
-    if (state.camera instanceof THREE.OrthographicCamera) {
-      const range = orthographicZoomRange(state.camera);
-      state.camera.zoom = clamp(state.camera.zoom / scaled, range.min, range.max);
-    } else {
-      const offset = state.camera.position.clone().sub(state.controls.target);
-      const distance = clamp(offset.length() * scaled, CAMERA_MIN_DISTANCE, CAMERA_MAX_DISTANCE);
-      offset.setLength(distance);
-      state.camera.position.copy(state.controls.target).add(offset);
-    }
-    state.camera.updateProjectionMatrix();
-    state.controls.update();
-    state.needsRender = true;
+    if (zoomDistanceScale(scale) < 1) movePivotToDepthUnder(state, 0, 0);
+    zoomCameraBy(state, scale);
   }, []);
+
+  const toggleSecondView = useCallback(() => {
+    if (secondViewWindow) {
+      setSecondViewWindow(null);
+      return;
+    }
+    setSecondViewWindow(openSecondViewWindow());
+  }, [secondViewWindow]);
+  const closeSecondView = useCallback(() => setSecondViewWindow(null), []);
+  const getSelectedIds = useCallback(() => selectedIdsRef.current, []);
 
   const toggleProjection = useCallback(() => {
     const state = threeRef.current;
@@ -8946,25 +8802,8 @@ export function WorkplaneViewport({
 
   return (
     <main className="workplane-stage">
-      <div
-        className={`view-cube ${viewCubeDragging ? "dragging" : ""}`}
-        aria-label={t("view.cube")}
-        data-help-section="viewCube"
-        onPointerDown={handleViewCubePointerDown}
-        onPointerMove={handleViewCubePointerMove}
-        onPointerUp={endViewCubeDrag}
-        onPointerCancel={endViewCubeDrag}
-        onClickCapture={handleViewCubeClickCapture}
-      >
-        <div className="view-cube-inner" ref={viewCubeRef}>
-          <button type="button" className="cube-face cube-top" aria-label={t("view.bottom")} aria-keyshortcuts="6" title={t("camera.shortcut", { label: t("view.bottom"), keys: "6" })} onClick={() => setViewCubeFace("bottom")}>{t("view.bottomShort")}{viewCubeZones("bottom")}</button>
-          <button type="button" className="cube-face cube-bottom" aria-label={t("view.top")} aria-keyshortcuts="5" title={t("camera.shortcut", { label: t("view.top"), keys: "5" })} onClick={() => setViewCubeFace("top")}>{t("view.topShort")}{viewCubeZones("top")}</button>
-          <button type="button" className="cube-face cube-front" aria-label={t("view.front")} aria-keyshortcuts="1" title={t("camera.shortcut", { label: t("view.front"), keys: "1" })} onClick={() => setViewCubeFace("front")}>{t("view.frontShort")}{viewCubeZones("front")}</button>
-          <button type="button" className="cube-face cube-back" aria-label={t("view.back")} aria-keyshortcuts="2" title={t("camera.shortcut", { label: t("view.back"), keys: "2" })} onClick={() => setViewCubeFace("back")}>{t("view.backShort")}{viewCubeZones("back")}</button>
-          <button type="button" className="cube-face cube-right" aria-label={t("view.right")} aria-keyshortcuts="4" title={t("camera.shortcut", { label: t("view.right"), keys: "4" })} onClick={() => setViewCubeFace("right")}>{t("view.rightShort")}{viewCubeZones("right")}</button>
-          <button type="button" className="cube-face cube-left" aria-label={t("view.left")} aria-keyshortcuts="3" title={t("camera.shortcut", { label: t("view.left"), keys: "3" })} onClick={() => setViewCubeFace("left")}>{t("view.leftShort")}{viewCubeZones("left")}</button>
-        </div>
-      </div>
+      <ViewCube getRig={getViewCubeRig} cubeRef={viewCubeRef} />
+      {secondViewWindow ? <SecondViewWindow popup={secondViewWindow} threeRef={threeRef} projectId={projectId} getSelectedIds={getSelectedIds} hasSelection={selectedIds.length > 0} onClosed={closeSecondView} /> : null}
 
       <div className={`camera-controls ${cameraControlsCollapsed ? "collapsed" : ""}`} aria-label={t("camera.controls")} data-help-section="cameraBar">
         {cameraControlsCollapsed ? (
@@ -9021,6 +8860,18 @@ export function WorkplaneViewport({
             >
               <Cuboid size={24} strokeWidth={2.15} aria-hidden="true" />
             </button>
+            {/* The second view in a window of its own. Not on a phone or a tablet. */}
+            {secondViewSupported ? (
+              <button
+                className={secondViewWindow ? "active" : ""}
+                aria-label={secondViewWindow ? t("camera.closeSecondView") : t("camera.secondView")}
+                aria-pressed={Boolean(secondViewWindow)}
+                title={secondViewWindow ? t("camera.closeSecondView") : t("camera.secondView")}
+                onClick={toggleSecondView}
+              >
+                <PictureInPicture2 size={24} strokeWidth={2.15} aria-hidden="true" />
+              </button>
+            ) : null}
             <div className="workplane-display-control-group">
               <button
                 className={workplaneLayerHidden ? "active" : ""}
@@ -10048,156 +9899,6 @@ function createThreeScene(host: HTMLDivElement): ThreeState {
   return state;
 }
 
-function resetCamera(state: ThreeState) {
-  state.cameraTurn = null;
-  state.focusReach = null;
-  state.camera.up.set(0, 1, 0);
-  state.camera.position.copy(CAMERA_HOME);
-  state.controls.target.copy(CAMERA_TARGET);
-  if (state.camera instanceof THREE.OrthographicCamera) {
-    state.camera.zoom = 1;
-    const distance = CAMERA_HOME.distanceTo(CAMERA_TARGET);
-    const halfHeight = distance * Math.tan(THREE.MathUtils.degToRad(CAMERA_FOV / 2));
-    const canvas = state.renderer.domElement;
-    updateOrthographicFrustum(state.camera, canvas.clientWidth / Math.max(1, canvas.clientHeight), halfHeight);
-  } else {
-    state.camera.zoom = 1;
-  }
-  state.camera.lookAt(CAMERA_TARGET);
-  state.camera.updateProjectionMatrix();
-  state.controls.update();
-}
-
-function updateCameraViewport(
-  camera: THREE.PerspectiveCamera | THREE.OrthographicCamera,
-  width: number,
-  height: number,
-) {
-  const aspect = width / Math.max(1, height);
-  if (camera instanceof THREE.PerspectiveCamera) {
-    camera.aspect = aspect;
-  } else {
-    const halfHeight = Math.max(0.001, (camera.top - camera.bottom) / 2);
-    updateOrthographicFrustum(camera, aspect, halfHeight);
-    return;
-  }
-  camera.updateProjectionMatrix();
-}
-
-function updateOrthographicFrustum(camera: THREE.OrthographicCamera, aspect: number, halfHeight: number) {
-  camera.left = -halfHeight * aspect;
-  camera.right = halfHeight * aspect;
-  camera.top = halfHeight;
-  camera.bottom = -halfHeight;
-  camera.updateProjectionMatrix();
-}
-
-function toggleCameraProjection(state: ThreeState) {
-  state.cameraTurn = null;
-  const current = state.camera;
-  const target = state.controls.target;
-  const canvas = state.renderer.domElement;
-  const aspect = canvas.clientWidth / Math.max(1, canvas.clientHeight);
-  const offset = current.position.clone().sub(target);
-  const direction = offset.lengthSq() > 0
-    ? offset.clone().normalize()
-    : CAMERA_HOME.clone().sub(CAMERA_TARGET).normalize();
-  let next: THREE.PerspectiveCamera | THREE.OrthographicCamera;
-
-  if (current instanceof THREE.PerspectiveCamera) {
-    const visibleHalfHeight = Math.max(
-      0.001,
-      offset.length() * Math.tan(THREE.MathUtils.degToRad(current.getEffectiveFOV() / 2)),
-    );
-    next = new THREE.OrthographicCamera(
-      -visibleHalfHeight * aspect,
-      visibleHalfHeight * aspect,
-      visibleHalfHeight,
-      -visibleHalfHeight,
-      current.near,
-      current.far,
-    );
-    next.position.copy(current.position);
-  } else {
-    const visibleHalfHeight = Math.max(0.001, (current.top - current.bottom) / (2 * current.zoom));
-    const distance = clamp(
-      visibleHalfHeight / Math.tan(THREE.MathUtils.degToRad(CAMERA_FOV / 2)),
-      CAMERA_MIN_DISTANCE,
-      CAMERA_MAX_DISTANCE,
-    );
-    next = new THREE.PerspectiveCamera(CAMERA_FOV, aspect, 0.1, 6000);
-    next.position.copy(target).addScaledVector(direction, distance);
-  }
-
-  if (next instanceof THREE.OrthographicCamera) {
-    const range = orthographicZoomRange(next);
-    state.controls.minZoom = range.min;
-    state.controls.maxZoom = range.max;
-  }
-  next.up.copy(current.up);
-  next.layers.mask = current.layers.mask;
-  next.lookAt(target);
-  next.updateProjectionMatrix();
-  fitCameraDepthRange(next, target);
-  next.updateMatrixWorld();
-  state.camera = next;
-  state.controls.object = next;
-  state.controls.update();
-  state.needsRender = true;
-}
-
-function setCameraToViewFace(state: ThreeState, face: ViewCubeFace) {
-  setCameraToViewDirection(state, viewFaceDirection(face));
-}
-
-/** Looks at the orbit target from a unit direction, keeping the distance: a face, an edge or a corner of the view cube. */
-function setCameraToViewDirection(state: ThreeState, direction: THREE.Vector3, animate = true) {
-  const offset = state.camera.position.clone().sub(state.controls.target);
-  const distance = clamp(offset.length(), CAMERA_MIN_DISTANCE, CAMERA_MAX_DISTANCE);
-
-  if (animate && !prefersReducedMotion()) {
-    // A click on the cube turns the view; the render loop eases the camera there and keeps
-    // drawing while it does. A second click starts from wherever the first has got to.
-    state.cameraTurn = cameraTurn(offset, direction.clone().normalize().multiplyScalar(distance), performance.now());
-    state.needsRender = true;
-    return;
-  }
-
-  state.cameraTurn = null;
-  state.camera.up.set(0, 1, 0);
-  state.camera.position.copy(state.controls.target).add(direction.multiplyScalar(distance));
-  state.camera.lookAt(state.controls.target);
-  state.camera.updateProjectionMatrix();
-  state.controls.update();
-  state.needsRender = true;
-}
-
-/** One frame of the view cube turn, before OrbitControls orients the camera. */
-function stepCameraTurn(state: ThreeState, now: number): boolean {
-  const turn = state.cameraTurn;
-  if (!turn) return false;
-  const { offset, done } = cameraTurnOffset(turn, now);
-  state.camera.up.set(0, 1, 0);
-  state.camera.position.copy(state.controls.target).add(offset);
-  state.camera.lookAt(state.controls.target);
-  state.camera.updateProjectionMatrix();
-  if (done) state.cameraTurn = null;
-  return true;
-}
-
-/** Orbits the camera around the controls target for a drag on the view cube. */
-function orbitCameraByDrag(state: ThreeState, dx: number, dy: number) {
-  state.cameraTurn = null;
-  const offset = orbitOffsetByDrag(state.camera.position.clone().sub(state.controls.target), dx, dy);
-
-  state.camera.up.set(0, 1, 0);
-  state.camera.position.copy(state.controls.target).add(offset);
-  state.camera.lookAt(state.controls.target);
-  state.camera.updateProjectionMatrix();
-  state.controls.update();
-  state.needsRender = true;
-}
-
 function constrainCamera(state: ThreeState, workspace: WorkspaceSettings) {
   // The pivot stays on the plate, but as far out as the part "Center view" went to, so that part can be centred (#352).
   const reach = state.focusReach;
@@ -10228,16 +9929,6 @@ function constrainCamera(state: ThreeState, workspace: WorkspaceSettings) {
     state.camera.updateProjectionMatrix();
   }
 }
-
-function syncViewCube(state: ThreeState, cube: HTMLDivElement | null) {
-  if (!cube) {
-    return;
-  }
-
-  const { pitch, yaw } = viewCubeAngles(state.camera.position.clone().sub(state.controls.target));
-  cube.style.transform = `rotateX(${-pitch}deg) rotateY(${-yaw}deg)`;
-}
-
 
 function refreshFrozenObjectMatrix(object: THREE.Object3D) {
   object.updateMatrix();
@@ -10780,256 +10471,6 @@ function linesFromPoints(points: number[], material: THREE.LineBasicMaterial) {
   const lines = new THREE.LineSegments(geometry, material);
   lines.renderOrder = 1;
   return lines;
-}
-
-// The cut a hole makes in a body is drawn from depth textures rather than from a
-// boolean. A hole fragment lies inside a body when it falls between the body's
-// near and its far depth at that pixel, and a body fragment lies inside a hole
-// the same way; four depth textures carry those bounds. Nothing runs on the CPU
-// for it, so the preview keeps up with a shape while it is being dragged, and no
-// result has to be cached or dropped when a gesture starts.
-const CUT_PREVIEW_COLOR = 0x30363a;
-const CUT_PREVIEW_OPACITY = 0.34;
-// Window depth is not linear, so a bias in window units opens a gap where the cut
-// meets the surface that grows as the view is pulled back. The band is widened by it
-// rather than narrowed, so a hole flush with a face stays visible - the cutter pads
-// by 0.05 the same way - and the bias only has to be big enough to break a tie.
-const CUT_PREVIEW_DEPTH_BIAS = 1e-7;
-
-type CutPreviewResources = {
-  bodiesNear: THREE.WebGLRenderTarget;
-  bodiesFar: THREE.WebGLRenderTarget;
-  frontDepth: THREE.MeshBasicMaterial;
-  backDepth: THREE.MeshBasicMaterial;
-  // The hole shaded where it lies inside a body: what is going to be cut out,
-  // drawn on the hole itself. Nothing has to know the shape of either body - only
-  // whether a fragment sits between the near and the far depth of the other one.
-  ink: THREE.ShaderMaterial;
-  width: number;
-  height: number;
-};
-
-let cutPreviewResources: CutPreviewResources | null = null;
-
-function cutPreviewInkMaterial() {
-  return new THREE.ShaderMaterial({
-    transparent: true,
-    depthTest: false,
-    depthWrite: false,
-    // Both sides, so the far wall of a hole that goes right through fills the cut.
-    // The stencil keeps one layer per pixel, so the two walls cannot add up to a
-    // darker ring.
-    side: THREE.DoubleSide,
-    stencilWrite: true,
-    stencilFunc: THREE.NotEqualStencilFunc,
-    stencilRef: 1,
-    stencilFail: THREE.KeepStencilOp,
-    stencilZFail: THREE.KeepStencilOp,
-    stencilZPass: THREE.ReplaceStencilOp,
-    uniforms: {
-      nearDepth: { value: null },
-      farDepth: { value: null },
-      resolution: { value: new THREE.Vector2(1, 1) },
-      // Written straight into the frame, so the tint keeps the values it was
-      // given instead of being converted twice.
-      tint: { value: new THREE.Color().setHex(CUT_PREVIEW_COLOR, THREE.LinearSRGBColorSpace) },
-      opacity: { value: CUT_PREVIEW_OPACITY },
-      bias: { value: CUT_PREVIEW_DEPTH_BIAS },
-    },
-    vertexShader: [
-      "void main() {",
-      "  gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);",
-      "}",
-    ].join("\n"),
-    fragmentShader: [
-      "uniform sampler2D nearDepth;",
-      "uniform sampler2D farDepth;",
-      "uniform vec2 resolution;",
-      "uniform vec3 tint;",
-      "uniform float opacity;",
-      "uniform float bias;",
-      "void main() {",
-      "  // Both sides are window-space depth, so they compare directly.",
-      "  float depth = gl_FragCoord.z;",
-      "  vec2 uv = gl_FragCoord.xy / resolution;",
-      "  float near = texture2D(nearDepth, uv).r;",
-      "  float far = texture2D(farDepth, uv).r;",
-      "  if (depth < near - bias || depth > far + bias) {",
-      "    discard;",
-      "  }",
-      "  gl_FragColor = vec4(tint, opacity);",
-      "}",
-    ].join("\n"),
-  });
-}
-
-function cutPreviewDepthTarget(width: number, height: number) {
-  const depthTexture = new THREE.DepthTexture(width, height);
-  depthTexture.format = THREE.DepthFormat;
-  depthTexture.type = THREE.UnsignedIntType;
-  const target = new THREE.WebGLRenderTarget(width, height, {
-    minFilter: THREE.NearestFilter,
-    magFilter: THREE.NearestFilter,
-    depthBuffer: true,
-    stencilBuffer: false,
-    depthTexture,
-  });
-  target.texture.colorSpace = THREE.NoColorSpace;
-  return target;
-}
-
-function disposeCutPreviewResources() {
-  if (!cutPreviewResources) {
-    return;
-  }
-  [cutPreviewResources.bodiesNear, cutPreviewResources.bodiesFar].forEach((target) =>
-    target.dispose(),
-  );
-  [
-    cutPreviewResources.frontDepth,
-    cutPreviewResources.backDepth,
-    cutPreviewResources.ink,
-  ].forEach((material) => material.dispose());
-  cutPreviewResources = null;
-}
-
-function cutPreviewResourcesFor(width: number, height: number) {
-  if (
-    cutPreviewResources &&
-    cutPreviewResources.width === width &&
-    cutPreviewResources.height === height
-  ) {
-    return cutPreviewResources;
-  }
-  disposeCutPreviewResources();
-  cutPreviewResources = {
-    bodiesNear: cutPreviewDepthTarget(width, height),
-    bodiesFar: cutPreviewDepthTarget(width, height),
-    frontDepth: new THREE.MeshBasicMaterial({
-      colorWrite: false,
-      depthWrite: true,
-      depthTest: true,
-      depthFunc: THREE.LessDepth,
-      side: THREE.FrontSide,
-    }),
-    backDepth: new THREE.MeshBasicMaterial({
-      colorWrite: false,
-      depthWrite: true,
-      depthTest: true,
-      depthFunc: THREE.LessDepth,
-      side: THREE.BackSide,
-    }),
-    ink: cutPreviewInkMaterial(),
-    width,
-    height,
-  };
-  return cutPreviewResources;
-}
-
-function drawCutPreviews(state: ThreeState) {
-  const bodies: THREE.Object3D[] = [];
-  const holes: THREE.Object3D[] = [];
-  state.shapeRecords.forEach((record) => {
-    const object = record.object;
-    if (!object || record.shape.hidden || !object.visible) {
-      return;
-    }
-    if (record.shape.hole) {
-      holes.push(object);
-    } else {
-      bodies.push(object);
-    }
-  });
-  if (bodies.length === 0 || holes.length === 0) {
-    return;
-  }
-
-  const renderer = state.renderer;
-  const scene = state.scene;
-  const camera = state.camera;
-  const frameTarget = renderer.getRenderTarget();
-  const size = frameTarget
-    ? new THREE.Vector2(frameTarget.width, frameTarget.height)
-    : renderer.getDrawingBufferSize(new THREE.Vector2());
-  const resources = cutPreviewResourcesFor(size.x, size.y);
-
-  const shapes = [...bodies, ...holes];
-  const wasVisible = new Map(shapes.map((object) => [object, object.visible] as const));
-  const previousAutoClear = renderer.autoClear;
-  const previousOverride = scene.overrideMaterial;
-  const previousBackground = scene.background;
-  const previousMask = camera.layers.mask;
-
-  const renderSet = (visible: THREE.Object3D[]) => {
-    const wanted = new Set(visible);
-    shapes.forEach((object) => {
-      object.visible = wanted.has(object);
-    });
-  };
-
-  try {
-    renderer.autoClear = false;
-    camera.layers.set(RENDER_LAYER_SHAPES);
-    // A scene background is repainted by every render() call, and this renders
-    // the scene four more times; left alone it would wipe the frame.
-    scene.background = null;
-
-    // The section plane clips per material, and these are the preview's own: without
-    // it the depth textures keep the geometry that was cut away, and the ink lands in
-    // the removed half. Where the plane is gone the depth reads 1.0, which discards
-    // the ink there by itself.
-    const sectionPlane = state.sectionPlane ?? null;
-    for (const material of [resources.frontDepth, resources.backDepth]) {
-      if ((material.clippingPlanes?.[0] ?? null) !== sectionPlane) {
-        material.clippingPlanes = sectionPlane ? [sectionPlane] : null;
-        material.needsUpdate = true;
-      }
-    }
-
-    const depthPass = (
-      visible: THREE.Object3D[],
-      material: THREE.Material,
-      target: THREE.WebGLRenderTarget,
-    ) => {
-      renderSet(visible);
-      renderer.setRenderTarget(target);
-      renderer.clear(true, true, false);
-      scene.overrideMaterial = material;
-      renderer.render(scene, camera);
-    };
-
-    depthPass(bodies, resources.frontDepth, resources.bodiesNear);
-    depthPass(bodies, resources.backDepth, resources.bodiesFar);
-
-    // The hole is drawn once, over the frame, and shaded where it lies inside a
-    // body. The stencil decides which of its fragments gets a pixel: one layer, so
-    // the shading stays even wherever the hole turns back on itself.
-    resources.ink.uniforms.nearDepth.value = resources.bodiesNear.depthTexture;
-    resources.ink.uniforms.farDepth.value = resources.bodiesFar.depthTexture;
-    (resources.ink.uniforms.resolution.value as THREE.Vector2).set(
-      resources.width,
-      resources.height,
-    );
-    renderSet(holes);
-    renderer.setRenderTarget(frameTarget);
-    renderer.clear(false, false, true);
-    scene.overrideMaterial = resources.ink;
-    renderer.render(scene, camera);
-  } finally {
-    shapes.forEach((object) => {
-      object.visible = wasVisible.get(object) ?? true;
-    });
-    scene.overrideMaterial = previousOverride;
-    scene.background = previousBackground;
-    camera.layers.mask = previousMask;
-    renderer.autoClear = previousAutoClear;
-    renderer.setRenderTarget(frameTarget);
-  }
-}
-
-function renderFrame(state: ThreeState) {
-  state.renderer.render(state.scene, state.camera);
-  drawCutPreviews(state);
 }
 
 function updateShapeObjectTransform(object: THREE.Group, shape: WorkplaneShape) {

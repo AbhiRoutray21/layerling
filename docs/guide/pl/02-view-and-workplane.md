@@ -39,6 +39,7 @@ Przy lewej krawędzi jest wąski pasek. Od góry:
 - {{ui:camera.focusSelection}} przybliża do zaznaczenia ([[F]] albo [[Shift]]+[[F]]).
 - {{ui:camera.zoomIn}} i {{ui:camera.zoomOut}} przybliżają krok po kroku, podobnie jak klawisze [[+]] i [[−]].
 - {{ui:camera.orthographic}} przełącza na płaski widok, w którym równoległe krawędzie zostają równoległe. Do mierzenia i wyrównywania krawędzi bywa wygodniejszy od widoku perspektywicznego. [[O]] przełącza w obie strony, a drugie kliknięcie przywraca poprzedni widok.
+- {{ui:camera.secondView}} otwiera drugi widok projektu we własnym oknie, opisanym niżej. Drugie kliknięcie je zamyka.
 - {{ui:camera.hideWorkplane}} (oko nad siatką) ukrywa płytę z siatką, żeby obejrzeć projekt od spodu. Zmienia się tylko widok: nowe kształty dalej trafiają na płaszczyznę roboczą. Drugie kliknięcie pokazuje ją z powrotem.
 - {{ui:camera.placeWorkplane}}, narzędzie Zmierz i kątownik to osobne narzędzia, opisane niżej i w rozdziale [Pomiary i notatki](chapter:measuring-and-notes).
 
@@ -47,6 +48,10 @@ Mała strzałka na samej górze paska ukrywa go, jeśli przeszkadza.
 Projekt otwiera się tak, jak go zostawiłeś: kąt, przybliżenie i położenie widoku zapamiętuje ta przeglądarka, więc kontynuujesz tam, gdzie skończyłeś, także po powrocie do strony startowej albo zamknięciu strony. Zapisany plik (.lyl) zabiera widok ze sobą, więc także gdzie indziej otworzy się w tym widoku. Widok nie należy do historii cofania.
 
 W każdym projekcie możesz też zachować cztery własne widoki. [[Shift]]+[[7]], [[Shift]]+[[8]], [[Shift]]+[[9]] lub [[Shift]]+[[0]] zapisuje widok dokładnie taki, jaki jest - kąt, położenie, przybliżenie oraz widok płaski albo perspektywiczny - pod tym klawiszem, a sam klawisz ([[7]], [[8]], [[9]] lub [[0]]) przywraca go. Komunikat na dole potwierdza zapis; ponowny zapis pod tym samym klawiszem zastępuje widok. Tak jak widok opisany wyżej, zapisane widoki zostają z projektem w tej przeglądarce i są zabierane w zapisanym pliku (.lyl). Nie należą do historii cofania.
+
+### Drugi widok we własnym oknie
+
+{{ui:camera.secondView}} otwiera okno, które pokazuje ten sam projekt przez własną kamerę, więc widzisz go z dwóch stron naraz - na przykład z przodu, gdy pracujesz od góry. Każda zmiana w edytorze od razu się tam pojawia; sam projekt zmienia się tylko w głównym oknie i tam też zostają uchwyty. W drugim oknie mysz i kostka widoku obracają jego widok tak jak tutaj, podobnie klawisze: [[1]] do [[6]], [[F]], [[Home]], [[O]], [[+]] i [[−]], strzałki do obracania i [[Ctrl]] ze strzałkami do przesuwania. [[F]] przybliża tam to, co jest zaznaczone w edytorze. Działają tam też cztery zapisane widoki projektu: [[7]], [[8]], [[9]] i [[0]] je przywracają, a [[Shift]] z jednym z tych klawiszy zapisuje pod nim widok tego okna - dla obu okien. Jego własny pasek kamery ma {{ui:camera.home}}, {{ui:camera.focusSelection}}, {{ui:camera.zoomIn}}, {{ui:camera.zoomOut}}, {{ui:camera.orthographic}} i {{ui:camera.hideWorkplane}}, które działają tylko na to okno. Okno otwiera się tam, gdzie je zostawiłeś, w tym samym rozmiarze, i zamyka się razem z edytorem. Na telefonach i tabletach przycisk się nie pokazuje.
 
 ## Zajrzyj do środka: widok przekroju
 
