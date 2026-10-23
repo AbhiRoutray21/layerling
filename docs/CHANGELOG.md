@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **The framing square's numbers no longer sit on each other (#777):** With a body right at the corner of the framing square the three green distance fields (X, Y, Z) fell on the same spot and covered each other and the square's buttons. They now step aside where they would overlap, and stay at the middle of their arrows where there is room. Reported by @willi1955.
+
 ## 1.103.1
 
 - **Sketch: the keys 1 to 3 also change a selection (#347):** With the Select tool and lines or points selected, 1 makes the lines straight and the points corners, 2 turns the lines into curves and 3 makes the points smooth, all selected ones at once and as one step in the history, as in Tinkercad. With nothing selected the keys pick the drawing tool as before; the keys are named in the tooltips of the buttons. Asked for by @djelliott19.

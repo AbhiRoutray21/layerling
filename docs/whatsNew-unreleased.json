@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "title": {
+      "de": "Winkellineal: Abstandsfelder überdecken sich nicht mehr",
+      "en": "Framing square: the distance fields no longer cover each other"
+    },
+    "body": {
+      "de": "Lag ein Körper direkt an der Ecke des Winkellineals, fielen die drei grünen Abstandsfelder (X, Y, Z) auf dieselbe Stelle und verdeckten sich und die Knöpfe des Lineals. Jetzt weichen sie einander aus, wo sie sich überdecken würden, und bleiben in der Mitte ihrer Pfeile, wo Platz ist.",
+      "en": "When a body sat right at the corner of the framing square, the three green distance fields (X, Y, Z) fell on the same spot and covered each other and the square's buttons. They now step aside where they would overlap, and stay at the middle of their arrows where there is room."
+    }
+  }
+]
