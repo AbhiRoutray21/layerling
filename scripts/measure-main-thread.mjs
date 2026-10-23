@@ -257,6 +257,38 @@ const ACTIONS = [
     run: (id) => mcp("split_objects", { ids: [id], axis: "x", position: 0 }),
   },
   {
+    // Four cuts that do not depend on each other: what a pool of workers could share out.
+    key: "split-four", label: "Split four imported 100k-triangle spheres with one plane",
+    setup: async () => {
+      const made = [];
+      for (let k = 0; k < 4; k += 1) {
+        const id = importedIds(await mcp("import_file", { fileName: `s${k}.stl`, base64: midStl }))[0];
+        await mcp("update_object", { id, x: k * 70 - 105 });
+        made.push(id);
+      }
+      return made;
+    },
+    run: (made) => mcp("split_objects", { ids: made, axis: "y", position: 0 }),
+  },
+  {
+    // The same after a split of four small boxes, so every worker that will help has started.
+    key: "split-four-warm", label: "The same, workers already started",
+    setup: async () => {
+      const boxes = [];
+      for (let k = 0; k < 4; k += 1) boxes.push((await mcp("create_shape", { kind: "box", x: k * 15, z: 60, width: 10, depth: 10, height: 10 })).object.id);
+      await mcp("split_objects", { ids: boxes, axis: "y", position: 60 });
+      await mcp("delete_objects", { ids: ids((await mcp("list_objects")).objects) });
+      const made = [];
+      for (let k = 0; k < 4; k += 1) {
+        const id = importedIds(await mcp("import_file", { fileName: `s${k}.stl`, base64: midStl }))[0];
+        await mcp("update_object", { id, x: k * 70 - 105 });
+        made.push(id);
+      }
+      return made;
+    },
+    run: (made) => mcp("split_objects", { ids: made, axis: "y", position: 0 }),
+  },
+  {
     key: "export-stl", label: "Export STL of a 300k-triangle import and 40 boxes",
     setup: async () => {
       await mcp("import_file", { fileName: "sphere.stl", base64: bigStl });

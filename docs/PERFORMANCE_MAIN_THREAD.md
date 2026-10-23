@@ -129,6 +129,29 @@ runs (the build stamp covers a worker from another build, not one replaced mid-r
 memory a large cut now takes twice (page and worker each hold the mesh while it runs). Workers do
 not raise the memory limit of a tab (#683).
 
+## Step 2: a pool of workers - measured, not built
+
+A single cut cannot be shared between workers; a pool only helps when several cuts wait at the
+same time. In the editor that is Split through several objects (the honeycomb conversion is the
+other loop). A prototype ran up to `hardwareConcurrency - 1` workers (3 here, at most 4) and
+started the cuts of a split together. Measured against the same code with one worker, median of
+3 runs, actions `split-four` and `split-four-warm` (the second after a split of four small boxes,
+so every worker has started):
+
+| Split four imported 100k spheres | 1 worker | 3 workers |
+| --- | ---: | ---: |
+| Duration, workers cold | 3,816 ms | 2,717 ms |
+| Duration, workers warm | 3,675 ms | 2,634 ms |
+| Main thread blocked, cold | 1,257 ms | 1,964 ms |
+| Main thread blocked, warm | 1,418 ms | 1,338 ms |
+| Longest input delay, cold / warm | 1,166 / 1,311 ms | 1,219 / 1,251 ms |
+
+The pool saves about a second, 28 %, on this one action, and nothing on a single cut. It does not
+make the editor freeze less: the longest freeze, about 1.1 s, is the page handling the eight
+halves after the answer (see step 1), and while the extra workers start the main thread is blocked
+longer. Each further worker also holds its own Manifold and its copy of the meshes (not
+measured). Not worth it for now; the time after the answer is the larger lever.
+
 ## Still on the main thread
 
 Not profiled yet, so without a cause:
