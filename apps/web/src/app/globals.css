@@ -5266,7 +5266,7 @@ html[data-simple-mode="on"]:not([data-toolbar-size]) .shape-menu-dropdown:not(.s
 .export-format-slider {
   position: relative;
   display: grid;
-  grid-template-columns: repeat(8, minmax(0, 1fr));
+  grid-template-columns: repeat(9, minmax(0, 1fr));
   height: 38px;
   padding: 3px;
   overflow: hidden;
@@ -5280,7 +5280,7 @@ html[data-simple-mode="on"]:not([data-toolbar-size]) .shape-menu-dropdown:not(.s
   top: 3px;
   bottom: 3px;
   left: 3px;
-  width: calc((100% - 6px) / 8);
+  width: calc((100% - 6px) / 9);
   content: "";
   background: #fff;
   border: 1px solid #ddab78;
@@ -5305,16 +5305,20 @@ html[data-simple-mode="on"]:not([data-toolbar-size]) .shape-menu-dropdown:not(.s
   transform: translateX(400%);
 }
 
-.export-format-slider[data-format="png"]::before {
+.export-format-slider[data-format="dxf"]::before {
   transform: translateX(500%);
 }
 
-.export-format-slider[data-format="lyl"]::before {
+.export-format-slider[data-format="png"]::before {
   transform: translateX(600%);
 }
 
-.export-format-slider[data-format="drawing"]::before {
+.export-format-slider[data-format="lyl"]::before {
   transform: translateX(700%);
+}
+
+.export-format-slider[data-format="drawing"]::before {
+  transform: translateX(800%);
 }
 
 .export-format-slider button {
@@ -5345,7 +5349,7 @@ html[data-simple-mode="on"]:not([data-toolbar-size]) .shape-menu-dropdown:not(.s
 
 @media (max-width: 480px) {
   .export-format-slider {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(5, minmax(0, 1fr));
     height: auto;
     gap: 3px;
   }
