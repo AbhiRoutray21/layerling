@@ -255,6 +255,7 @@ import { getSectionBounds, sectionAxisLetter, sectionMeshInFrame, sectionPlaceme
 import { footprintCutOffset, projectSectionPoint, SECTION_VIEW_FACE, sectionSvgDocument, sliceMeshContours } from "@/lib/sectionSvg";
 import type { AlignAxis, AlignHandleStatus, AlignTarget, GridSize, ParametricSource, ProjectAsset, ShapeAsset, ShapeCustomization, ShapeKind, SketchImage, SketchOperation, SketchPoint, SketchProfile, SketchRevolveSettings, SketchSegment, ShellEdges, ShellOpenings, ShellSide, SweepAnchor, WorkplaneNote, WorkplaneShape, WorkplaneWorkspaceSettings } from "@/types/layerling";
 import { type Vec3, type MeshData, type Cuboid, type ShapeUpdatePatch, type ManifoldSolid, MIN_SHAPE_DIMENSION, resetManifoldRuntime, cleanModelDimension, getManifoldRuntime, meshForShape, meshReachAlong, appendMeshData, formatTriangleCount, shapeAabb, boundsForShapes, boundsForCuboids, meshAabb, boundsForPositions, quantizedPointKey } from "@/lib/editorMeshCore";
+import { meshPartCount } from "@/lib/meshPartCount";
 import { buildGroupedShapeOffThread, splitShapesByPlaneOffThread, subscribeGeometryBusy, warmGeometryWorker } from "@/lib/geometryWorker";
 import { cloneAsGroupChild, meshDataToManifoldMesh, shapeToManifoldSolid, unionOverlappingExportMeshes, exportBodiesWithLooseHoles, exportSolidVolume, type ExportSolidVolume, PRINT_MATERIAL_STORAGE_KEY, PRINT_INFILL_STORAGE_KEY, PRINT_WALLS_STORAGE_KEY, formatEstimateNumber, formatSectionOffset, SECTION_SEEN_FROM_KEYS, expandBundles, visibleExportShapes, multicolorExportSolids, exportFaceColors, colorSeparatedExportMeshes, disposeManifold, canIntersectShapes, buildIntersectionShapeFromSelection, groupedShape, quaternionForShape, rotationFromQuaternion, cleanShapePatch, restoreGroupedChildren, restoreGroupedChildrenForEdges } from "@/lib/editorBooleans";
 import { handleViewArrowKey } from "@/lib/viewArrowKeys";
@@ -2299,10 +2300,10 @@ const NO_EDGE_IDS: number[] = [];
 function separablePartCount(shape: WorkplaneShape) {
   if (shape.locked || shape.hole) return 0;
   if (shape.groupedShapes?.length && !shape.importedMesh) return shape.groupedShapes.length;
-  if (!shape.importedMesh) return meshFaceComponents(meshForShape(shape)).length;
+  if (!shape.importedMesh) return meshPartCount(meshForShape(shape), SEPARATE_PARTS_VERTEX_TOLERANCE);
   const cached = importedPartCounts.get(shape.importedMesh);
   if (cached !== undefined) return cached;
-  const count = meshFaceComponents(meshForShape(shape)).length;
+  const count = meshPartCount(meshForShape(shape), SEPARATE_PARTS_VERTEX_TOLERANCE);
   importedPartCounts.set(shape.importedMesh, count);
   return count;
 }
