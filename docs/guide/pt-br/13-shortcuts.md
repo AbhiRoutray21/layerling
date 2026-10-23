@@ -15,7 +15,7 @@ Não acha uma ferramenta? Pressione [[Ctrl]]+[[K]] ou clique na lupa na área {{
 
 - A pesquisa entende a palavra em português, em inglês e em alemão, e ignora maiúsculas e acentos: "aushoehlen" encontra {{ui:editor.tool.hollow}}.
 - Cada entrada mostra as teclas que fazem o mesmo e a área da barra de opções onde ela fica, para você aprender onde está.
-- Entradas em cinza não podem ser executadas agora, quase sempre porque nada está selecionado. Elas continuam na lista para que a pesquisa ainda mostre onde a ferramenta fica.
+- Entradas em cinza não podem ser executadas agora, na maioria das vezes porque nada está selecionado. Elas continuam na lista para que a pesquisa ainda mostre onde a ferramenta fica.
 
 O guia que você está lendo também tem uma caixa de pesquisa, no topo de cada página: digite uma ou duas palavras e ela lista as seções que contêm todas elas, com as palavras encontradas destacadas. Clique numa delas, ou pressione [[Enter]] para a primeira, para ir direto até lá.
 - O nome de uma forma adiciona essa forma ao plano de trabalho, como clicar nela no menu de formas.
@@ -29,10 +29,10 @@ Não acha onde ler sobre um botão ou um campo? Deixe o programa levar você at�
 
 - Clique num botão, num campo, numa chave, numa alça, numa área da barra de opções ou na barra de título de uma janela. O elemento **não** faz o que normalmente faz. Em vez disso, abre uma pequena janela com o nome do elemento, um resumo curto da parte deste guia que fala dele, até dois outros lugares que o mencionam, e {{ui:interactiveHelp.open}}.
 - A ajuda é sobre o elemento que você apontou, não sobre a janela inteira em volta dele. Um elemento sem nome próprio usa o mais próximo em volta dele; dentro de uma janela, ele recorre ao ponto de interrogação dessa janela.
-- {{ui:interactiveHelp.open}} abre o guia nessa seção numa nova aba. Lá a seção fica contornada em cor, do título até o fim, para você ver onde ela começa e termina.
+- {{ui:interactiveHelp.open}} abre o guia nessa seção numa nova aba. Lá, a seção fica com um contorno colorido, do título até o fim, para você ver onde ela começa e termina.
 - Se o guia não fala nada sobre o elemento, a janela diz isso e oferece {{ui:interactiveHelp.search}}.
 - [[Esc]], ou o ponto de interrogação de novo, sai do modo. Numa tela sensível ao toque não existe passar o mouse por cima: um toque num elemento abre a janela na hora.
 
-A janela se move pela barra de título, como as outras janelas. O programa encontra a seção pelo nome do elemento (o texto de um botão, o nome de um campo), porque este guia escreve cada botão como ele se chama no programa. Ele procura na mesma pesquisa da caixa no topo de cada página do guia, no idioma que você está usando, e roda inteiramente no seu navegador.
+A janela se move pela barra de título, como as outras janelas. O programa encontra a seção pelo nome do elemento (o texto de um botão, o nome de um campo), porque este guia usa os nomes dos botões exatamente como aparecem no programa. Ele procura na mesma pesquisa da caixa no topo de cada página do guia, no idioma que você está usando, e roda inteiramente no seu navegador.
 
 {{shortcuts}}
