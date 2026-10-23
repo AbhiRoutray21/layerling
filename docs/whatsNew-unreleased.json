@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "title": {
+      "de": "Wandstärke für Gridfinity-Behälter",
+      "en": "Wall thickness for Gridfinity bins"
+    },
+    "body": {
+      "de": "Die Wand eines Gridfinity-Behälters ist nicht mehr auf 0,95 mm festgelegt: Stell sie im Eigenschaften-Fenster unter „Wandstärke“ ein, von 0,8 mm bis dorthin, wo sich die Wände treffen. Die Außenseite bleibt gleich, der Behälter passt also weiter und lässt sich stapeln; lassen die Wände innen weniger als 1 mm frei, wird er massiv.",
+      "en": "A Gridfinity bin's wall is no longer fixed at 0.95 mm: set \"Wall thickness\" in the Properties panel, from 0.8 mm up to where the walls meet. The outside stays the same, so the bin still fits and stacks; once the walls leave less than 1 mm inside, it is built solid."
+    }
+  }
+]
