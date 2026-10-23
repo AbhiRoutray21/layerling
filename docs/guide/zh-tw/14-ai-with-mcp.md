@@ -105,7 +105,7 @@ AI 使用的是與你相同的功能，走的也是你在編輯器中操作時�
 | `layerling_restore_from_history` | 把物件（也包括群組內的部件）從較早的狀態以副本帶回設計，就像歷史記錄檢視的「帶入設計」——復原時一步就能撤回 |
 | `layerling_export_section_svg` | 以 1:1 的 SVG 回傳剖切平面上的輪廓，所用實體與匯出時相同 |
 | `layerling_export_drawing` | 製作「2D」匯出的工程圖：在 ISO 圖紙上以 1:1 繪出三個視圖，標註整體尺寸並附圓孔表格，可輸出 SVG 文字或 PDF |
-| `layerling_export_mesh` | 寫出匯出視窗的檔案，可為 STL、3MF、OBJ 或 SVG（俯視、底面輪廓或可見邊），所用實體相同；可寫到這台電腦上的路徑，或以 base64 回傳 |
+| `layerling_export_mesh` | 寫出匯出視窗的檔案，可為 STL、3MF、OBJ、SVG（俯視、底面輪廓或可見邊）或用於雷射切割的 DXF，所用實體相同；可寫到這台電腦上的路徑，或以 base64 回傳 |
 | `layerling_save_project` | 把整個可編輯設計儲存成 .lyl 檔，寫到執行 MCP 伺服器的那台電腦上的路徑，不會跳出對話方塊；既有檔案只有在指定 `overwrite` 時才會被取代，寫入時會先經過暫存檔，而編輯器中 Ctrl+S 的目標維持不變 |
 | `layerling_set_workplane` | 把工作平面放到實體的某個面，或放回底板，並可隱藏或顯示 |
 | `layerling_capture_image` | 擷取檢視畫面：前視、上視、側視、從角落斜看等 |
