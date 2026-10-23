@@ -784,6 +784,7 @@ export const MESSAGES_RU: Partial<Record<MessageKey, string>> = {
   "shortcuts.dropToWorkplane": "Опустить выделение на рабочую плоскость",
   "shortcuts.nudge": "Сдвинуть на один шаг сетки с учётом поворота вида",
   "shortcuts.nudgeCoarse": "Сдвинуть на пять шагов сетки",
+  "shortcuts.nudgeFine": "Сдвинуть на одну пятую шага сетки",
   "shortcuts.raise": "Поднять или опустить выделение",
   "shortcuts.rotate": "Повернуть на 45°",
   "transform.rotateHandle": "Перетащите, чтобы повернуть",
