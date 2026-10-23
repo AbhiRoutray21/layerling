@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "title": {
+      "de": "Fase am Gridfinity-Stapelrand",
+      "en": "A chamfer on the Gridfinity lip"
+    },
+    "body": {
+      "de": "Die scharfe Oberkante des Stapelrands lässt sich jetzt direkt am Gridfinity-Behälter fasen: Stell sie im Eigenschaften-Fenster unter „Fase am Stapelrand“ auf bis zu 1 mm ein. Das ist dieselbe Fase, die das Kantenwerkzeug macht, ohne dass du die Kanten auswählen musst.",
+      "en": "The sharp top of a Gridfinity bin's stacking lip can now be chamfered on the bin itself: set \"Lip chamfer\" in the Properties panel, up to 1 mm. It is the same chamfer the edge tool makes, without picking the edges."
+    }
+  }
+]
