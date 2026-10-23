@@ -7,7 +7,7 @@ Esta é a ideia mais importante do layerling, e ela se aprende rápido: **toda f
 
 ## Sólido ou orifício
 
-Selecione uma forma e clique em {{ui:inspector.solid}} ou {{ui:inspector.hole}} nas configurações dela. Pelo teclado é mais rápido: [[H]] transforma a seleção em orifício, [[S]] a transforma de novo em sólido. Os dois também estão no menu que um clique direito no sólido abre. Um orifício aparece transparente, para você ver onde ele está. [[T]] deixa um sólido transparente, por exemplo para olhar dentro de uma carcaça; um segundo toque o deixa opaco de novo. Isso vale para a seleção inteira: se algum sólido já está transparente, todos ficam opacos; senão, todos ficam transparentes.
+Selecione uma forma e clique em {{ui:inspector.solid}} ou {{ui:inspector.hole}} no painel de propriedades. Pelo teclado é mais rápido: [[H]] transforma a seleção em orifício, [[S]] a transforma de novo em sólido. As duas opções também estão no menu que aparece com um clique direito no sólido. Um orifício aparece transparente, para você ver onde ele está. [[T]] deixa um sólido transparente, por exemplo para olhar dentro de uma carcaça; pressione [[T]] de novo para deixá-lo opaco. Com vários sólidos selecionados, [[T]] vale para todos: se pelo menos um já estiver transparente, todos ficam opacos; se nenhum estiver, todos ficam transparentes.
 
 Enquanto nada estiver agrupado, um orifício não faz nada. Ele só fica ali e mostra onde algo vai sumir depois.
 
@@ -49,25 +49,25 @@ Um grupo de união inteiro também pode ser um sólido ou um orifício. Vale uma
 
 ## Interseção
 
-{{ui:editor.tool.intersect}} mantém só o que dois ou mais sólidos têm em comum. Coloque duas formas uma sobre a outra, sobrepostas, selecione as duas e clique no botão. Assim um cilindro e uma caixa viram uma peça com um lado redondo e um lado reto. Um grupo de união conta do jeito que aparece, com os orifícios. Se um orifício também estiver selecionado, o que sobra é o que todos os sólidos têm em comum com todos os orifícios. Se as formas não têm nada em comum, nada é alterado e uma mensagem avisa. Ao lado, {{ui:editor.tool.intersectPreview}} mostra a parte em comum antes de você aplicá-la: as formas selecionadas ficam transparentes, e o que elas têm em comum aparece em verde. Selecione e mova cada forma separadamente, e a parte verde acompanha; {{ui:editor.tool.intersect}} aplica, [[Esc]] fecha a prévia.
+{{ui:editor.tool.intersect}} mantém só o que dois ou mais sólidos têm em comum. Coloque duas formas uma sobre a outra, sobrepostas, selecione as duas e clique em {{ui:editor.tool.intersect}}. Assim um cilindro e uma caixa viram uma peça com um lado redondo e um lado reto. Um grupo de união entra na interseção do jeito que aparece, com os orifícios já recortados. Se um orifício também estiver selecionado, o que sobra é o que todos os sólidos têm em comum com todos os orifícios. Se as formas não têm nada em comum, uma mensagem informa que nada foi alterado. Ao lado de {{ui:editor.tool.intersect}}, o botão {{ui:editor.tool.intersectPreview}} exibe a parte em comum antes de você aplicá-la: as formas selecionadas ficam transparentes, e o que elas têm em comum aparece em verde. Selecione e mova cada forma separadamente, e a parte verde acompanha; {{ui:editor.tool.intersect}} aplica, [[Esc]] fecha a prévia.
 
 ## Editando um grupo de união
 
-Se um furo ficou pequeno demais, você não precisa desfazer o grupo de união e montar tudo de novo. Selecione o grupo de união e clique em {{ui:group.edit}} nas configurações dele, no ícone de pasta na lista de objetos, ou pressione [[E]]. Um clique duplo no grupo de união faz o mesmo, como no Tinkercad, e num conjunto também; se preferir que não, desligue {{ui:workspace.doubleClickOpensGroup}} nas configurações. Uma peça só começa a se mover depois que o ponteiro foi arrastado alguns pixels, então um clique ou clique duplo tremido não a desloca. As peças agora ficam separadas, e você as altera com qualquer ferramenta: aumentar um orifício, mover um sólido, adicionar um orifício.
+Se um furo ficou pequeno demais, você não precisa desfazer o grupo de união e montar tudo de novo. Selecione o grupo de união e clique em {{ui:group.edit}} no painel de propriedades, no ícone de pasta na lista de objetos, ou pressione [[E]]. Um clique duplo no grupo de união faz o mesmo, como no Tinkercad, e num conjunto também; se preferir que não, desligue {{ui:workspace.doubleClickOpensGroup}} nas configurações. Uma peça só começa a se mover depois que o ponteiro foi arrastado alguns pixels, então um clique ou clique duplo tremido não a desloca. As peças agora ficam separadas, e você as altera com qualquer ferramenta: aumentar um orifício, mover um sólido, adicionar um orifício.
 
 ![O grupo de união em edição: a barra embaixo tem Cancelar e Concluído, e a lista de objetos mostra as peças.](shot:open-group)
 
-Aparece uma barra na parte de baixo da imagem. {{ui:group.done}} reconstrói o grupo de união, com o nome, a cor e o estado de sólido ou orifício. {{ui:common.cancel}} o devolve sem alterações.
+Uma barra aparece na parte de baixo da área de trabalho. {{ui:group.done}} reconstrói o grupo de união, com o nome, a cor e o estado de sólido ou orifício. {{ui:common.cancel}} o devolve sem alterações.
 
 Se uma das peças for ela mesma um grupo de união, você pode editá-la do mesmo jeito, e assim por diante, até onde o seu projeto for. A barra mostra onde você está, por exemplo "Suporte › Ressalto do parafuso". {{ui:group.done}} e {{ui:common.cancel}} sempre concluem o grupo de união mais interno e levam você um nível para fora. Enquanto você está dentro de um grupo de união, só os grupos entre as peças dele podem ser editados; para editar outro, conclua primeiro.
 
 Ao contrário de {{ui:editor.tool.ungroup}}, que desfaz um grupo de união de vez, editar mantém o grupo: o nome e as configurações ficam, e você sempre pode voltar com {{ui:common.cancel}}.
 
-Uma observação: arredondamentos e chanfros que você aplicou no grupo de união **inteiro** se perdem na reconstrução. A barra avisa isso.
+Uma observação: arredondamentos e chanfros que você aplicou no grupo de união **inteiro** se perdem na reconstrução. A barra mostra esse aviso.
 
 ## Dividindo
 
-{{ui:editor.tool.split}}, na área {{ui:editor.group.modify}}, corta a seleção em duas com um plano, por exemplo uma peça grande demais para a mesa de impressão, ou uma cujo interior você quer ver. Selecione um ou mais sólidos ou orifícios e clique no botão. Um plano translúcido mostra exatamente onde o corte vai passar, e uma linha branca o marca nos próprios sólidos, onde o plano os encontra; nada muda até você aplicar.
+{{ui:editor.tool.split}}, na área {{ui:editor.group.modify}}, corta a seleção em duas com um plano, por exemplo uma peça grande demais para a mesa de impressão, ou uma cujo interior você quer ver. Selecione um ou mais sólidos ou orifícios e clique em {{ui:editor.tool.split}}. Um plano translúcido mostra exatamente onde o corte vai passar, e uma linha branca o marca nos próprios sólidos, onde o plano os encontra; nada muda até você aplicar.
 
 - {{ui:split.orientation}}: **X** faz um corte vertical entre esquerda e direita, **Y** entre frente e trás, **Z** um corte horizontal entre cima e baixo. Os eixos têm os mesmos nomes do cartão Posição, com Z para cima. O plano começa paralelo ao plano de trabalho, então na mesa com Z.
 - {{ui:split.workplane}}: {{ui:split.workplaneParallel}} deita o plano paralelo ao plano de trabalho, {{ui:split.workplaneAcrossX}} e {{ui:split.workplaneAcrossY}} o deixam em pé, perpendicular a ele, atravessando a direção X ou Y dele. Onde a origem do plano de trabalho cruza a seleção, o plano passa por ela; senão, pelo meio. Assim você coloca o plano de trabalho numa face inclinada com [[W]] e corta bem ali, sem mexer nos controles deslizantes.
