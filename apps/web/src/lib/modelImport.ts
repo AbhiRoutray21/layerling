@@ -9,7 +9,10 @@ import { scaleSvgText } from "@/lib/svgScale";
 import { decodeSvgBytes, importedShapeFromSvgWithReport, prepareSvgImport } from "@/lib/svgImport";
 import { importedShapesFrom3mf } from "@/lib/threemfImport";
 import { sketchProfileFromSvg } from "@/lib/svgSketch";
+import { DXF_SKETCH_COLOR, DXF_SKETCH_HEIGHT, DxfImportError, sketchProfileFromDxf } from "@/lib/dxfImport";
 import { importedPictureSvg, isPictureFile, svgEmbeddedPicture } from "@/lib/pictureIcon";
+import { createLocalId } from "@/lib/localIds";
+import { canonicalizeShape } from "@/lib/workplaneShapes";
 import type { ProjectAsset, SketchProfile, WorkplaneShape } from "@/types/layerling";
 
 /**
@@ -35,7 +38,7 @@ async function prepareImportFiles(files: readonly File[]) {
     }
     try {
       const entries = unzipSync(new Uint8Array(await file.arrayBuffer()), {
-        filter: (entry) => !entry.name.endsWith("/") && /\.(obj|mtl|stl|3mf|svg|step|stp)$/i.test(entry.name) && !/(^|\/)__MACOSX\//.test(entry.name),
+        filter: (entry) => !entry.name.endsWith("/") && /\.(obj|mtl|stl|3mf|svg|step|stp|dxf)$/i.test(entry.name) && !/(^|\/)__MACOSX\//.test(entry.name),
       });
       const inside = Object.entries(entries).map(([name, bytes]) => new File([bytes as BlobPart], name.split("/").pop() || name));
       if (!inside.some((entry) => !/\.mtl$/i.test(entry.name))) {
@@ -76,6 +79,11 @@ export async function importModelFiles(
      * the sketch of its outlines. Null keeps the mesh - so does an import without it.
      */
     svgAsSketch?: (mesh: WorkplaneShape, profile: SketchProfile) => Promise<WorkplaneShape | null>;
+    /**
+     * Builds a sketch body from a sketch and its height: how a DXF comes in (#774). Without it a DXF cannot be read
+     * (the dashboard's import has no kernel at hand).
+     */
+    sketchFromProfile?: (profile: SketchProfile, height: number) => Promise<WorkplaneShape>;
     /** An SVG keeps its place on its drawing page, so files of one page line up (#258). Left out: the setting in the import window. */
     svgKeepPagePosition?: boolean;
     /** An SVG or a picture comes in at this width in mm, scaled from its own size (#448). Null or left out: its own size. */
@@ -101,6 +109,57 @@ export async function importModelFiles(
   for (let index = 0; index < files.length; index += 1) {
     const file = files[index];
     if (options.cancelled?.()) return null;
+
+    // A DXF comes in as sketch bodies of its closed outlines and their holes beside them (#774): no mesh, no file kept.
+    if (/\.dxf$/i.test(file.name)) {
+      options.onProgress?.(index, files.length, file, false);
+      try {
+        if (!options.sketchFromProfile) throw new Error(t("status.importUnsupported"));
+        const dxf = sketchProfileFromDxf(new TextDecoder().decode(new Uint8Array(await file.arrayBuffer())));
+        // Every solid outline a body, its holes loose holes beside it: each moved and sized in the editor itself.
+        const name = file.name.replace(/\.dxf$/i, "");
+        const shapes: WorkplaneShape[] = [];
+        for (const profile of dxf.parts.solids) {
+          const built = await options.sketchFromProfile(profile, DXF_SKETCH_HEIGHT);
+          shapes.push({ ...built, name: name || built.name, color: DXF_SKETCH_COLOR });
+        }
+        for (const profile of dxf.parts.holes) {
+          shapes.push({ ...(await options.sketchFromProfile(profile, DXF_SKETCH_HEIGHT)), hole: true, color: DXF_SKETCH_COLOR });
+        }
+        dxf.parts.roundHoles.forEach(({ x, z, diameter }) => {
+          shapes.push(canonicalizeShape({
+            id: createLocalId("shape"),
+            name: "Cylinder",
+            kind: "cylinder",
+            color: DXF_SKETCH_COLOR,
+            hole: true,
+            x,
+            z,
+            elevation: 0,
+            size: diameter,
+            width: diameter,
+            depth: diameter,
+            height: DXF_SKETCH_HEIGHT,
+            rotation: 0,
+            rotationX: 0,
+            rotationZ: 0,
+          }));
+        });
+        result.shapes.push(...shapes);
+        result.importedFileNames.push(file.name);
+        if (dxf.unit) result.notes.push(t("status.importDxfUnit", { name: file.name, unit: dxf.unit }));
+        if (dxf.unitless) result.notes.push(t("status.importDxfUnitless", { name: file.name }));
+        if (dxf.openLeftOut > 0) result.notes.push(t("status.importDxfOpen", { name: file.name, count: dxf.openLeftOut }));
+        const skipped = Object.values(dxf.skipped).reduce((sum, count) => sum + count, 0);
+        if (skipped > 0) result.notes.push(t("status.importDxfSkipped", { name: file.name, count: skipped, kinds: Object.keys(dxf.skipped).join(", ") }));
+      } catch (error) {
+        const reason = error instanceof DxfImportError
+          ? t(error.reason === "binary" ? "status.importDxfBinary" : error.reason === "empty" ? "status.importDxfEmpty" : error.reason === "tooComplex" ? "status.importDxfTooComplex" : "status.importUnreadable")
+          : error instanceof Error ? error.message : t("status.importUnreadable");
+        result.failures.push({ fileName: file.name, reason });
+      }
+      continue;
+    }
 
     // A PNG or JPG comes in traced into an outline, as an SVG (#359).
     const isPicture = isPictureFile(file);

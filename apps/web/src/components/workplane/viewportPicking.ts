@@ -78,10 +78,16 @@ export function pickShapeAt(
     // A copy lies exactly on its original, so the ray meets both at the same distance and the one
     // that comes first in the list wins - the original, though the copy is the body that is selected.
     // Pressing on it then selected the original and moved that, and the copy chain was gone (#484).
+    const tiedHits = pickableHits.filter((entry) => entry.distance - hit.distance <= PICK_TIE_DISTANCE);
+    // A loose hole flush with a body's face (a hole the height of the plate it cuts, as a DXF brings them, #774)
+    // meets the ray where the body does: the press means the hole, which is all one sees there, even with the
+    // body selected - or the hole could not be picked to move or size it.
+    const holes = tiedHits.filter((entry) => shapes.find((candidate) => candidate.id === entry.object.userData.shapeId)?.hole);
+    const candidates = holes.length > 0 ? holes : tiedHits;
     const tied = preferIds.length > 0
-      ? pickableHits.find((entry) => entry.distance - hit.distance <= PICK_TIE_DISTANCE && preferIds.includes(entry.object.userData.shapeId as string))
+      ? candidates.find((entry) => preferIds.includes(entry.object.userData.shapeId as string))
       : undefined;
-    return (tied ?? hit).object.userData.shapeId as string;
+    return (tied ?? candidates[0]).object.userData.shapeId as string;
   }
 
   // A press that just misses still means the body next to it: a thin wall or
