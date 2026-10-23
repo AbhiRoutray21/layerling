@@ -40,16 +40,13 @@ const STRAIGHT_TOLERANCE = 1e-4;
 /** Larger circles than this are taken for straight lines. */
 const MAX_ARC_RADIUS = 100_000;
 const MIN_ARC_RADIUS = 1e-4;
+/** How many longer runs are still tried after a run fails to be an arc. */
+const DXF_ARC_MISSES = 12;
 
 type Point = { x: number; y: number };
 
 function distance(a: Point, b: Point) {
   return Math.hypot(a.x - b.x, a.y - b.y);
-}
-
-/** Signed area of the turn a -> b -> c: positive turns left (counter-clockwise). */
-function cross(a: Point, b: Point, c: Point) {
-  return (b.x - a.x) * (c.y - b.y) - (b.y - a.y) * (c.x - b.x);
 }
 
 function distanceToLine(point: Point, a: Point, b: Point) {
@@ -132,16 +129,26 @@ function fittedCircle(points: readonly Point[]) {
   return { center, radius };
 }
 
-function turnSign(points: readonly Point[], from: number, to: number, count: number) {
-  let sign = 0;
-  for (let index = from + 1; index < to; index += 1) {
-    const turn = cross(points[(index - 1) % count], points[index % count], points[(index + 1) % count]);
-    const current = Math.sign(turn);
-    if (current === 0) return 0;
-    if (sign === 0) sign = current;
-    else if (sign !== current) return 0;
+/**
+ * Which way the corners from `from` to `to` run round a centre: +1 counter-clockwise, -1 clockwise, 0 when they
+ * turn back. A step back shorter than the tolerance is the jitter of a mesh's outline (a sketch body's curve or an
+ * imported part: their corners wander a few thousandths of a millimetre either side of the line) and is let pass.
+ */
+function runAround(points: readonly Point[], from: number, to: number, count: number, center: Point, radius: number) {
+  const steps: number[] = [];
+  let total = 0;
+  for (let index = from; index < to; index += 1) {
+    const a = points[index % count];
+    const b = points[(index + 1) % count];
+    const angle = Math.atan2(b.y - center.y, b.x - center.x) - Math.atan2(a.y - center.y, a.x - center.x);
+    const step = Math.atan2(Math.sin(angle), Math.cos(angle));
+    steps.push(step);
+    total += step;
   }
-  return sign;
+  const sign = Math.sign(total);
+  if (sign === 0) return { sign: 0, total };
+  if (steps.some((step) => sign * step < 0 && Math.abs(step) * radius > DXF_FIT_TOLERANCE)) return { sign: 0, total };
+  return { sign, total };
 }
 
 function isRoundCircle(radius: number) {
@@ -153,7 +160,9 @@ function wholeCircle(points: readonly Point[]) {
   if (points.length < 8) return null;
   const circle = fittedCircle(points);
   if (!circle || !isRoundCircle(circle.radius)) return null;
-  if (turnSign(points, 0, points.length + 1, points.length) === 0) return null;
+  // Once round, one way: a loop that turns back or goes round twice is no circle.
+  const around = runAround(points, 0, points.length, points.length, circle.center, circle.radius);
+  if (around.sign === 0 || Math.abs(Math.abs(around.total) - Math.PI * 2) > 1e-3) return null;
   for (let index = 0; index < points.length; index += 1) {
     const point = points[index];
     if (Math.abs(distance(point, circle.center) - circle.radius) > DXF_FIT_TOLERANCE) return null;
@@ -171,20 +180,21 @@ function arcRun(points: readonly Point[], from: number, to: number) {
   const end = at(to);
   const circle = circleThrough(start, at(Math.floor((from + to) / 2)), end);
   if (!circle || !isRoundCircle(circle.radius)) return null;
-  const sign = turnSign(points, from, to, count);
+  const { sign, total } = runAround(points, from, to, count, circle.center, circle.radius);
   if (sign === 0) return null;
-  let swept = 0;
   for (let index = from; index < to; index += 1) {
     const a = at(index);
     const b = at(index + 1);
     if (index > from && Math.abs(distance(a, circle.center) - circle.radius) > DXF_FIT_TOLERANCE) return null;
     if (sagitta(distance(a, b), circle.radius) > DXF_ROUND_SAGITTA) return null;
-    const angle = Math.atan2(b.y - circle.center.y, b.x - circle.center.x) - Math.atan2(a.y - circle.center.y, a.x - circle.center.x);
-    swept += Math.abs(Math.atan2(Math.sin(angle), Math.cos(angle)));
   }
   // An arc stays an arc; a loop that closes on itself is a circle and was caught before.
-  if (swept >= Math.PI * 2 - 1e-6) return null;
-  return { center: circle.center, radius: circle.radius, sign };
+  if (Math.abs(total) >= Math.PI * 2 - 1e-6) return null;
+  // Corners that lie on the straight line from start to end within the tolerance are a line, not an arc of a
+  // circle many metres wide.
+  let bent = false;
+  for (let index = from + 1; index < to && !bent; index += 1) bent = distanceToLine(at(index), start, end) > DXF_FIT_TOLERANCE;
+  return { center: circle.center, radius: circle.radius, sign, bent };
 }
 
 function degrees(radians: number) {
@@ -220,17 +230,30 @@ export function dxfLoopEntities(loop: readonly DxfPoint[]): DxfEntity[] {
   }
   if (count < 3) return [{ type: "line", from: toTuple(points[0]), to: toTuple(points[1]) }];
 
-  const corner = points.findIndex((_, index) => !smoothCorner(points, index));
-  const first = corner === -1 ? 0 : corner;
+  // Start where a curve surely ends: of the corners that cannot sit inside a curve, the one next to the longest
+  // side (the end of a straight side). A wobbly outline has such corners inside its curves as well.
+  const side = (index: number) => distance(points[(index + count - 1) % count], points[index]) + distance(points[index], points[(index + 1) % count]);
+  let first = 0;
+  for (let index = 0, longest = -1; index < count; index += 1) {
+    if (smoothCorner(points, index) || side(index) <= longest) continue;
+    longest = side(index);
+    first = index;
+  }
   const entities: DxfEntity[] = [];
   let index = first;
   const last = first + count;
   while (index < last) {
     let best: { to: number; center: Point; radius: number; sign: number } | null = null;
-    for (let to = index + 2; to <= last; to += 1) {
+    // The longest arc from here. A short run of a wobbly outline can fail where a longer one holds (three
+    // corners a few thousandths off give a poor circle), so a few failures in a row are looked past.
+    for (let to = index + 2, misses = 0; to <= last && misses <= DXF_ARC_MISSES; to += 1) {
       const run = arcRun(points, index, to);
-      if (!run) break;
-      best = { to, ...run };
+      if (!run) {
+        misses += 1;
+        continue;
+      }
+      misses = 0;
+      if (run.bent) best = { to, ...run };
     }
     if (best) {
       const a = points[index % count];

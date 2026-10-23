@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **DXF export finds circles and arcs on wobbly outlines (#774):** A sketch body's outline - a DXF read back in, a drawn curve - has corners a few thousandths of a millimetre off the curve and unevenly spaced, and the arc check gave up on them: a hole came out as many small arcs instead of one circle. `dxfExport.ts` now checks the direction round the fitted centre and lets steps back within 0.01 mm pass, looks past a short run that fails (three corners a few thousandths off give a poor circle where a longer run holds), and keeps a run whose corners lie on a straight line within 0.01 mm a line rather than an arc of a circle metres wide. A unit test with a wobbly circle and a wobbly rounded rectangle (`dxfExport.test.ts`). The guide's DXF row is now also in Danish, Arabic and both Chinese guides; the Brazilian Portuguese guide has no files chapter yet. Asked by @plazmabokor on GitHub.
+
 ## 1.104.0
 
 - **Opening a project no longer starts hundreds of compression workers (#786):** Opening a `.lyl` file saves the project once before the editor appears, at compression level 1, and the zip library started one worker for every entry of at least 160,000 bytes, so a project with many mesh assets could launch hundreds at once. A streaming zip writer now runs at most two compression jobs at a time; small entries stay synchronous, level 0 stays uncompressed, entry order and timestamps are kept, and a worker error stops the save and ends the remaining work. This is not a fix for the memory errors some very large imports show. Contributed by @taylormadearmy.
