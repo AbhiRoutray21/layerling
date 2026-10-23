@@ -28,5 +28,15 @@
       "de": "Stellst du das Lineal auf oder kippst es, misst es entlang seiner eigenen Richtung: Senkrecht neben einem Körper zeigt es dessen Höhe, statt weiter über die Platte zu messen.",
       "en": "Stand the ruler up or tip it and it measures along its own direction: upright beside a body it shows the body's height instead of measuring along the plate."
     }
+  },
+  {
+    "title": {
+      "de": "Pfeiltasten ändern Zahlen",
+      "en": "The arrow keys change a number"
+    },
+    "body": {
+      "de": "In einem angeklickten Zahlenfeld der Eigenschaften ändern jetzt die Tasten Hoch und Runter den Wert um einen Schritt, mit Umschalt um einen größeren und mit Alt um einen feineren, wie es das Mausrad schon konnte. Bisher bewegten die Tasten nur den Textcursor.",
+      "en": "In a number field of the properties you have clicked, the Up and Down keys now change the value by one step, with Shift a larger step and with Alt a finer one, as the mouse wheel already did. Until now the keys only moved the text cursor."
+    }
   }
 ]

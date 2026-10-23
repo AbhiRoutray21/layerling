@@ -4594,15 +4594,12 @@ function RangeProperty({
   const numberInputRef = useRef<HTMLInputElement>(null);
   const keepSelectedRef = useRef(false);
   const wheelHandlerRef = useRef<((event: WheelEvent) => void) | null>(null);
-  wheelHandlerRef.current = (event: WheelEvent) => {
-    const input = numberInputRef.current;
-    const turn = wheelTurn(event);
-    if (!input || disabled || !editing || document.activeElement !== input || turn === 0) return;
-    event.preventDefault();
+  // Up and Down in the focused field do the same as the wheel: one step, Shift a larger one, Alt a finer one (#749, MartinShake).
+  const stepFieldValue = (direction: 1 | -1, modifiers: { shift: boolean; ctrl: boolean; alt: boolean }) => {
     const base = wheelBaseStep(controlMin, controlMax, controlStep, unit === "in");
     const parsed = parseMeasurementInput(draft);
     const current = Number.isFinite(parsed) ? parsed : controlValue;
-    const turned = wheelNextValue(current, turn < 0 ? 1 : -1, base, { shift: event.shiftKey, ctrl: event.ctrlKey, alt: event.altKey });
+    const turned = wheelNextValue(current, direction, base, modifiers);
     // The wheel stops at the field's lower limit, also for the figure shown: it went on below it, into negative sizes, which the body
     // then kept at the limit and the field showed again as 0.01 only when it was left (#576, prmod3d).
     const next = freePosition ? turned : Math.max(turned, controlMin);
@@ -4615,6 +4612,13 @@ function RangeProperty({
     // The whole value stays selected, so that typing after the wheel replaces it, as after the click (#226).
     // Every render until a key is typed puts the selection back, as the field's value is written again.
     keepSelectedRef.current = true;
+  };
+  wheelHandlerRef.current = (event: WheelEvent) => {
+    const input = numberInputRef.current;
+    const turn = wheelTurn(event);
+    if (!input || disabled || !editing || document.activeElement !== input || turn === 0) return;
+    event.preventDefault();
+    stepFieldValue(turn < 0 ? 1 : -1, { shift: event.shiftKey, ctrl: event.ctrlKey, alt: event.altKey });
   };
   useLayoutEffect(() => {
     const input = numberInputRef.current;
@@ -4673,6 +4677,9 @@ function RangeProperty({
               } else if (event.key === "Escape") {
                 setDraft(openingDraft());
                 setEditing(false);
+              } else if ((event.key === "ArrowUp" || event.key === "ArrowDown") && !disabled && editing && !event.metaKey) {
+                event.preventDefault();
+                stepFieldValue(event.key === "ArrowUp" ? 1 : -1, { shift: event.shiftKey, ctrl: event.ctrlKey, alt: event.altKey });
               }
             }}
           />
