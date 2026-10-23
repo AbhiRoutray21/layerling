@@ -2051,8 +2051,6 @@ export function rotationFromQuaternion(quaternion: THREE.Quaternion) {
   };
 }
 
-export const ARROW_KEYS: ReadonlySet<string> = new Set(["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"]);
-
 export function cleanShapePatch(patch: ShapeUpdatePatch): Partial<WorkplaneShape> {
   const { bakeTransform: _bakeTransform, ...rest } = patch;
   const next = { ...rest };

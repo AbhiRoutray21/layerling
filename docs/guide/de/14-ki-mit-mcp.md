@@ -1,9 +1,9 @@
 ---
 title: Mit einer KI bauen (MCP)
-summary: Wie ein KI-Assistent wie Claude oder Codex in deinem geöffneten Editor Formen anlegt, ändert, gruppiert und Bilder der Ansicht aufnimmt.
+summary: Wie ein KI-Assistent wie Gemini, Claude oder Codex in deinem geöffneten Editor Formen anlegt, ändert, gruppiert und Bilder der Ansicht aufnimmt.
 ---
 
-layerling bringt einen MCP-Server mit. MCP ist ein Standard, über den ein KI-Assistent Werkzeuge in anderen Programmen benutzen kann. Damit sieht ein KI-Client wie Claude oder Codex einen offenen Editor-Tab und arbeitet darin: Er legt Formen an, ändert Maße, gruppiert, schneidet, rundet Kanten, liest die Szene aus und nimmt Bilder der Ansicht auf. Du beschreibst das Teil, die KI baut es, du siehst zu und greifst jederzeit ein.
+layerling bringt einen MCP-Server mit. MCP ist ein Standard, über den ein KI-Assistent Werkzeuge in anderen Programmen benutzen kann. Damit sieht ein KI-Client wie Gemini, Claude oder Codex einen offenen Editor-Tab und arbeitet darin: Er legt Formen an, ändert Maße, gruppiert, schneidet, rundet Kanten, liest die Szene aus und nimmt Bilder der Ansicht auf. Du beschreibst das Teil, die KI baut es, du siehst zu und greifst jederzeit ein.
 
 Die Brücke zwischen KI-Client und Editor läuft **lokal auf deinem Rechner**. Bedenke aber: Was die KI liest, also die Szene und die Bilder der Ansicht, geht an den Anbieter deines KI-Clients, so wie jede andere Eingabe dort auch.
 
@@ -27,7 +27,11 @@ Claude Desktop liest keine Projektdateien. Trage den Server in seiner eigenen Ko
 
 Kopiere den Skill aus `docs/skills/layerling-mcp-skill` in deinen Codex-Skill-Ordner, trage den Server anhand von `docs/mcp/codex-config.example.toml` in deine Codex-Konfiguration ein und starte Codex neu.
 
-Die ausführliche Anleitung für alle drei steht in der [README auf GitHub](https://github.com/henmedia/layerling/blob/main/README.de.md#layerling-mcp-skill).
+### Gemini & Antigravity
+
+Antigravity findet den Skill im Arbeitsordner unter `.agents/skills/layerling-mcp-skill` von selbst. Für die Gemini CLI kopierst du den Skill aus `docs/skills/layerling-mcp-skill` in deinen globalen Skill-Ordner (`~/.gemini/skills/`), trägst den Server anhand von `docs/mcp/gemini-config.example.json` in deine Einstellungen ein und startest den Client neu.
+
+Die ausführliche Anleitung für jeden Client steht in der [README auf GitHub](https://github.com/henmedia/layerling/blob/main/README.de.md#layerling-mcp-skill).
 
 ## Eine Kopie auf NAS oder Server
 

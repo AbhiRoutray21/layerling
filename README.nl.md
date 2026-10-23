@@ -99,8 +99,8 @@ Het is geen volledig CAD-pakket: er is geen parametrische tijdlijn en er zijn ge
 ### Bestanden
 
 - **Je eigen lettertypen** – gebruik elk TrueType-, OpenType- of WOFF-lettertype voor tekst, of in Chrome en Edge een lettertype dat op de computer is geïnstalleerd. Een ontwerp bewaart alleen de omtrekken van de letters die het gebruikt, dus het opent overal. Arabisch en Hebreeuws lopen van rechts naar links, Arabische letters worden aan elkaar geschreven.
-- **Je eigen modellen meebrengen** – importeer STL, OBJ, 3MF, STEP of SVG en bouw eromheen. Een SVG komt binnen als schetslichaam: een vlak, een lijn aan de buiten- of binnenkant van de lijnen, een silhouet zonder gaten, of de tekening rondom verbreed - samen een koekjesvorm uit één bestand, of de lagen van een meerkleurig logo. De vorm Tekst heeft dezelfde vulmodi, en de vormenbibliotheek heeft een naamplaatje: een tekst in gekleurde lagen voor een meerkleurige print, eventueel met een gat voor een sleutelring en een afgeronde of afgeschuinde rand op de letters, en een icoonplaatje: een SVG-icoon in dezelfde gekleurde lagen, met een aantal en "zoveel als er passen" om een printbed te vullen. Een gekleurde OBJ – uit layerling, of uit Tinkercad als ZIP met de bijbehorende `.mtl` – of een gekleurde 3MF, slicerprojecten inbegrepen, komt binnen als één lichaam per kleur, en een 3MF met meerdere objecten als één lichaam per object.
-- **Exporteren wat je slicer wil** – STL, 3MF met namen en kleuren, of OBJ met kleuren, voor de selectie of de hele scène (verborgen onderdelen blijven buiten), plus STEP als het ontwerp verder moet naar een volwaardig CAD-programma. PNG slaat een strakke afbeelding van de weergave op, op dubbele resolutie en desgewenst met een transparante achtergrond.
+- **Je eigen modellen meebrengen** – importeer STL, OBJ, 3MF, STEP, SVG of DXF en bouw eromheen. Een DXF-onderdeelcontour, zoals een lasersnijbedrijf of leverancier die stuurt, komt binnen als lichaam met de gaten als eigen gaten, bogen en cirkels blijven echt. Een SVG komt binnen als schetslichaam: een vlak, een lijn aan de buiten- of binnenkant van de lijnen, een silhouet zonder gaten, of de tekening rondom verbreed - samen een koekjesvorm uit één bestand, of de lagen van een meerkleurig logo. De vorm Tekst heeft dezelfde vulmodi, en de vormenbibliotheek heeft een naamplaatje: een tekst in gekleurde lagen voor een meerkleurige print, eventueel met een gat voor een sleutelring en een afgeronde of afgeschuinde rand op de letters, en een icoonplaatje: een SVG-icoon in dezelfde gekleurde lagen, met een aantal en "zoveel als er passen" om een printbed te vullen. Een gekleurde OBJ – uit layerling, of uit Tinkercad als ZIP met de bijbehorende `.mtl` – of een gekleurde 3MF, slicerprojecten inbegrepen, komt binnen als één lichaam per kleur, en een 3MF met meerdere objecten als één lichaam per object.
+- **Exporteren wat je slicer wil** – STL, 3MF met namen en kleuren, of OBJ met kleuren, voor de selectie of de hele scène (verborgen onderdelen blijven buiten), plus STEP als het ontwerp verder moet naar een volwaardig CAD-programma, en het bovenaanzicht als SVG of als DXF met echte bogen en cirkels voor een lasersnijder. PNG slaat een strakke afbeelding van de weergave op, op dubbele resolutie en desgewenst met een transparante achtergrond.
 - **Tekening exporteren** – selecteer een onderdeel, of hef de selectie op voor het hele zichtbare ontwerp, en kies **Exporteren → Tekening → PDF of SVG**. Maakt een voor-, boven- en rechterzijaanzicht in Europese projectie op een technisch tekenblad met rand, zonenummers en een titelblok rechtsonder, met buitenmaten, verborgen randen en tabellen met diameter en positie van ronde boringen evenwijdig aan de assen. De aanzichten zijn 1:1 in millimeters; het blad is het kleinste ISO-formaat liggend waar het op past (of een groter afwijkend formaat). Print op **100% / werkelijke grootte**. Posities worden gemeten vanaf de linkeronderhoek van elk aanzicht. De gatentabellen gebruiken de nominale maten van de mesh en bematen schuine of niet-ronde gaten, schroefdraad, diepten en toleranties niet automatisch. De projectie is overgenomen uit het tekenwerk van [Cadverix-3D](https://github.com/WC3D/Cadverix-3D).
 - **Updatemelding** – in het gepubliceerde programma merkt een open pagina zelf een nieuwe versie op en biedt aan om op te slaan en te herladen, met een lijst van wat er nieuw is.
 - **Projecten als bestanden** – sla een heel project op, inclusief geschiedenis, schetsen en groepen, als `.lyl`-bestand en werk ergens anders verder. In Chrome en Edge kies je zelf de map en slaat Ctrl+S weer op in datzelfde bestand; andere browsers downloaden het. Oudere `.skf`-bestanden uit eerdere versies openen nog steeds; bij opslaan wordt er dan een `.lyl` naast gezet.
@@ -431,6 +431,33 @@ als sjabloon, en vervang het scriptpad door het absolute pad op je computer. Her
 Use $layerling-mcp-skill to list my open layerling editors and inspect the current scene.
 ```
 
+### Gemini & Antigravity
+
+Voor Antigravity bevat de repo een kopie van de skill in `.agents/skills/layerling-mcp-skill`, die Antigravity zelf
+vindt. Kopieer voor Gemini CLI de skill uit `docs/skills/layerling-mcp-skill` naar je globale skillsmap.
+
+Windows PowerShell:
+
+```powershell
+New-Item -ItemType Directory -Force "$env:USERPROFILE\.gemini\skills" | Out-Null
+Copy-Item -Recurse -Force "docs\skills\layerling-mcp-skill" "$env:USERPROFILE\.gemini\skills\layerling-mcp-skill"
+```
+
+macOS of Linux:
+
+```bash
+mkdir -p ~/.gemini/skills
+cp -R docs/skills/layerling-mcp-skill ~/.gemini/skills/
+```
+
+Voeg daarna de server toe aan de `settings.json` van Gemini CLI of de `mcp_config.json` van Antigravity, met
+[`docs/mcp/gemini-config.example.json`](docs/mcp/gemini-config.example.json) als sjabloon, en vervang het scriptpad door
+het absolute pad op je computer. Herstart de client en vraag:
+
+```text
+Use the layerling MCP tools to list my open layerling editors and inspect the current scene.
+```
+
 ### Een AI-client toegang geven tot een kopie op een NAS of server
 
 Een kopie die je zelf host (de Docker-image op een NAS, een thuisserver) kan een AI-client de open editors via het netwerk
@@ -463,7 +490,7 @@ ook. Goede plekken om te beginnen:
 
 - bugfixes in de editor
 - testgevallen voor geometrie en booleaanse bewerkingen
-- randgevallen bij import en export (STL, OBJ, 3MF, STEP, SVG)
+- randgevallen bij import en export (STL, OBJ, 3MF, STEP, SVG, DXF)
 - verfijning van de gebruikersinterface
 - screenshots en video's voor de documentatie
 - verbeteringen in toegankelijkheid en prestaties

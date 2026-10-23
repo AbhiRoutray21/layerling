@@ -101,8 +101,8 @@ Ein vollständiges CAD-Paket ist es nicht: Es gibt keine parametrische Zeitleist
 ### Dateien
 
 - **Eigene Schriften** – jede TrueType-, OpenType- oder WOFF-Schrift für Text, in Chrome und Edge auch eine auf dem Computer installierte. Ein Entwurf behält nur die Umrisse der benutzten Buchstaben und öffnet sich deshalb überall. Arabisch und Hebräisch laufen von rechts nach links, arabische Buchstaben verbinden sich.
-- **Eigene Modelle mitbringen** – STL, OBJ, 3MF, STEP oder SVG importieren und darum herum konstruieren. Ein SVG kommt als Skizzenkörper: als Fläche, als Kontur außen oder innen an seinen Linien, als Silhouette ohne Löcher oder rundum verbreitert - zusammen ein Ausstecher aus einer Datei oder die Schichten eines mehrfarbigen Logos. Die Textform hat dieselben Füllmodi, und die Formen-Bibliothek hat ein Namensschild: ein Text in farbigen Schichten für den Mehrfarbdruck, auf Wunsch mit Schlüsselringloch und gerundeter oder abgeschrägter Kante an den Buchstaben, und ein Symbolschild: ein SVG-Symbol in denselben farbigen Schichten, mit Anzahl und „so viele wie passen“, um eine Platte zu füllen. Eine farbige OBJ – aus layerling oder aus Tinkercad als ZIP mit ihrer `.mtl` – oder eine farbige 3MF, auch ein Slicer-Projekt, kommt als ein Körper je Farbe, eine 3MF mit mehreren Objekten als ein Körper je Objekt.
-- **Exportieren, was dein Slicer will** – STL, 3MF mit Namen und Farben oder OBJ mit Farben, für die Auswahl oder die ganze Szene (Ausgeblendetes bleibt draußen), dazu STEP, wenn der Entwurf in ein vollwertiges CAD weiterreisen soll. PNG speichert ein sauberes Bild der Ansicht, in doppelter Auflösung und auf Wunsch mit durchsichtigem Hintergrund.
+- **Eigene Modelle mitbringen** – STL, OBJ, 3MF, STEP, SVG oder DXF importieren und darum herum konstruieren. Eine DXF-Teilekontur, wie ein Laserschneid-Dienst oder ein Lieferant sie schickt, kommt als Körper mit ihren Löchern als eigenen Löchern, Bögen und Kreise bleiben echt. Ein SVG kommt als Skizzenkörper: als Fläche, als Kontur außen oder innen an seinen Linien, als Silhouette ohne Löcher oder rundum verbreitert - zusammen ein Ausstecher aus einer Datei oder die Schichten eines mehrfarbigen Logos. Die Textform hat dieselben Füllmodi, und die Formen-Bibliothek hat ein Namensschild: ein Text in farbigen Schichten für den Mehrfarbdruck, auf Wunsch mit Schlüsselringloch und gerundeter oder abgeschrägter Kante an den Buchstaben, und ein Symbolschild: ein SVG-Symbol in denselben farbigen Schichten, mit Anzahl und „so viele wie passen“, um eine Platte zu füllen. Eine farbige OBJ – aus layerling oder aus Tinkercad als ZIP mit ihrer `.mtl` – oder eine farbige 3MF, auch ein Slicer-Projekt, kommt als ein Körper je Farbe, eine 3MF mit mehreren Objekten als ein Körper je Objekt.
+- **Exportieren, was dein Slicer will** – STL, 3MF mit Namen und Farben oder OBJ mit Farben, für die Auswahl oder die ganze Szene (Ausgeblendetes bleibt draußen), dazu STEP, wenn der Entwurf in ein vollwertiges CAD weiterreisen soll, und die Draufsicht als SVG oder als DXF mit echten Bögen und Kreisen für den Laserschneider. PNG speichert ein sauberes Bild der Ansicht, in doppelter Auflösung und auf Wunsch mit durchsichtigem Hintergrund.
 - **Zeichnung exportieren** – ein Teil auswählen oder die Auswahl für den ganzen sichtbaren Entwurf aufheben, dann **Exportieren → Zeichnung → PDF oder SVG** wählen. Erstellt Vorder-, Drauf- und rechte Seitenansicht in Erstwinkelprojektion auf einem gerahmten Zeichnungsblatt mit Zonennummern und Schriftfeld unten rechts, mit Gesamtmaßen, verdeckten Kanten und Tabellen für Durchmesser und Positionen achsparalleler runder Bohrungen. Maßstab 1:1 in Millimetern; das Blatt wächst mit dem Entwurf. Bei **100 % / tatsächlicher Größe** drucken. Bohrungspositionen beziehen sich auf die linke untere Ecke der Gesamtmaße jeder Ansicht. Schräge oder unrunde Bohrungen, Gewinde, Tiefen und Toleranzen werden nicht automatisch bemaßt. Die Projektion basiert auf der Zeichnungsarbeit aus [Cadverix-3D](https://github.com/WC3D/Cadverix-3D).
 - **Hinweis auf Updates** – im veröffentlichten Programm bemerkt eine offene Seite eine neue Version selbst und bietet an, zu speichern und neu zu laden, samt Liste des Neuen.
 - **Ordner für Entwürfe** – die Entwürfe auf der Startseite in Ordner sortieren (auch Ordner in Ordnern), per Ziehen oder mit „Verschieben nach …“; die Suche schaut in alle, und „Alle sichern“ nimmt sie mit.
@@ -450,6 +450,33 @@ Pfad auf deinem Rechner ersetzt. Codex neu starten und bitten:
 Use $layerling-mcp-skill to list my open layerling editors and inspect the current scene.
 ```
 
+### Gemini & Antigravity
+
+Für Antigravity liegt eine Kopie des Skills unter `.agents/skills/layerling-mcp-skill` im Repo, die Antigravity von selbst
+findet. Für die Gemini CLI kopierst du den Skill aus `docs/skills/layerling-mcp-skill` in deinen globalen Skill-Ordner.
+
+Windows PowerShell:
+
+```powershell
+New-Item -ItemType Directory -Force "$env:USERPROFILE\.gemini\skills" | Out-Null
+Copy-Item -Recurse -Force "docs\skills\layerling-mcp-skill" "$env:USERPROFILE\.gemini\skills\layerling-mcp-skill"
+```
+
+macOS oder Linux:
+
+```bash
+mkdir -p ~/.gemini/skills
+cp -R docs/skills/layerling-mcp-skill ~/.gemini/skills/
+```
+
+Trage danach den Server in die `settings.json` der Gemini CLI oder die `mcp_config.json` von Antigravity ein; als Vorlage
+dient [`docs/mcp/gemini-config.example.json`](docs/mcp/gemini-config.example.json), wobei du den Skriptpfad durch den
+absoluten Pfad auf deinem Rechner ersetzt. Den Client neu starten und bitten:
+
+```text
+Use the layerling MCP tools to list my open layerling editors and inspect the current scene.
+```
+
 ### Eine KI an eine Kopie auf NAS oder Server lassen
 
 Eine Kopie, die du selbst betreibst (das Docker-Image auf einer NAS, ein Heimserver), kann einen KI-Client ihre offenen
@@ -484,7 +511,7 @@ auch. Gute Anlaufstellen:
 
 - Fehlerbehebungen im Editor
 - Testfälle für Geometrie und boolesche Operationen
-- Grenzfälle bei Import und Export (STL, OBJ, 3MF, STEP, SVG)
+- Grenzfälle bei Import und Export (STL, OBJ, 3MF, STEP, SVG, DXF)
 - Feinschliff an der Oberfläche
 - Bildschirmfotos und Videos für die Dokumentation
 - Barrierefreiheit und Geschwindigkeit
