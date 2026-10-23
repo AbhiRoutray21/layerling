@@ -313,8 +313,11 @@ The folder has **no login**: whoever can reach the page can read, write and dele
 a workshop that is the point; on a publicly reachable site, protect it or leave it out.
 
 Nothing in the folder is meant to be opened by its address: layerling reads and writes it only through `store.php`.
-On Apache, `store.php` writes a `.htaccess` into the folder that refuses every direct request. nginx and other servers
-ignore that file, so deny access to `store/` there yourself (in nginx: `location /store/ { deny all; }`).
+On Apache, `store.php` writes a `.htaccess` into the folder that refuses every direct request. Apache reads it only where
+`AllowOverride` lets it (Debian's default for `/var/www` is `None`, which ignores it), and nginx and other servers never
+do, so deny access to `store/` there yourself (in Apache: `<Directory /var/www/html/store> Require all denied </Directory>`,
+in nginx: `location /store/ { deny all; }`). `store.php` also checks every export it saves, so a file that could run in a
+browser is refused either way.
 
 One thing to remember when deploying: if you mirror the export with an option that removes anything extra – `rsync
 --delete`, `robocopy /MIR`, WinSCP `-delete` – exclude `store` explicitly, or every update will wipe the projects.

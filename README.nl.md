@@ -306,8 +306,11 @@ thuisnetwerk of in een werkplaats is dat juist de bedoeling; op een publiek bere
 weglaten.
 
 Niets in de map is bedoeld om via zijn adres te openen: layerling leest en schrijft hem alleen via `store.php`. Onder
-Apache zet `store.php` er een `.htaccess` in die elke directe aanvraag weigert. nginx en andere servers negeren dat
-bestand; blokkeer `store/` daar zelf (in nginx: `location /store/ { deny all; }`).
+Apache zet `store.php` er een `.htaccess` in die elke directe aanvraag weigert. Apache leest die alleen waar
+`AllowOverride` het toestaat (Debian zet `/var/www` op `None` en slaat hem over), nginx en andere servers nooit; blokkeer
+`store/` daar zelf (in Apache: `<Directory /var/www/html/store> Require all denied </Directory>`, in nginx:
+`location /store/ { deny all; }`). `store.php` controleert bovendien elke export die het opslaat en weigert een bestand
+dat in een browser iets zou kunnen uitvoeren.
 
 Eén ding om te onthouden bij het uitrollen: spiegel je de export met een optie die alles wat extra is verwijdert – `rsync
 --delete`, `robocopy /MIR`, WinSCP `-delete` – sluit `store` dan expliciet uit, anders wist elke update de projecten.
