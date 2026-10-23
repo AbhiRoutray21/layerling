@@ -2437,6 +2437,8 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "workspace.stlAsDownloadHint": "Chrome und Edge schreiben eine STL jedes Mal in dieselbe Datei. Mit diesem Schalter kommt stattdessen ein normaler Download: Der Browser nummeriert dann die Dateien, name (1).stl, name (2).stl.",
   "workspace.confirmTabClose": "Vor dem Schließen des Tabs nachfragen",
   "workspace.confirmTabCloseHint": "Ist ein Entwurf offen, fragt der Browser beim Schließen oder Neuladen des Tabs mit seiner eigenen Frage „Seite verlassen?“ nach. Deine Entwürfe sind nach jeder Änderung ohnehin gespeichert, die Frage ist nur eine Gedächtnisstütze. Den Wortlaut bestimmt der Browser.",
+  "workspace.softLighting": "Weiches Licht",
+  "workspace.softLightingHint": "Das meiste Licht kommt aus deiner Blickrichtung und dreht mit der Ansicht, so bleibt keine Fläche dunkel und keine wird weiß überstrahlt. Schatten bleiben.",
   "workspace.showShadows": "Schatten zeigen",
   "workspace.cameraInertia": "Kamera läuft nach",
   "workspace.cameraInertiaHint": "Nach dem Loslassen dreht die Ansicht kurz weiter und bremst sanft ab. Aus: Sie steht sofort, wie in Tinkercad und Fusion 360.",

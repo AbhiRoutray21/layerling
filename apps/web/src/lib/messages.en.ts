@@ -2438,6 +2438,8 @@ export const MESSAGES_EN = {
   "workspace.stlAsDownloadHint": "Chrome and Edge write an STL into the same file each time. Switch this on to get a plain download instead: the browser then numbers the files, name (1).stl, name (2).stl.",
   "workspace.confirmTabClose": "Ask before closing the tab",
   "workspace.confirmTabCloseHint": "When a design is open, closing or reloading the tab brings up your browser's own question \"Leave site?\". Your designs are saved after every change either way, so the question is only a reminder. The wording is the browser's.",
+  "workspace.softLighting": "Soft light",
+  "workspace.softLightingHint": "Most of the light comes from where you look and turns with the view, so no face is left dark and none is burnt out to white. Shadows stay.",
   "workspace.overhangAngle": "Mark overhangs from {angle}°",
   "workspace.overhangStrict": "30° (careful)",
   "workspace.overhangLoose": "70° (good cooling)",

@@ -363,6 +363,8 @@ export type WorkplaneWorkspaceSettings = {
   fastMode: boolean;
   /** Lighting contrast, -100 (soft) to 100 (punchy); 0 is the original look. */
   shadeContrast: number;
+  /** Soft light (#812): most of the light comes from the viewer's eye and turns with the camera, so no face is left dark or burnt out. Off by default. */
+  softLighting: boolean;
   /** How dark the cast shadows are, 0 to 100 (100 = as before). */
   shadowStrength: number;
   /** How soft the shadow edges are, 0 (crisp, as before) to 100. */

@@ -8,5 +8,15 @@
       "de": "Hat ein Skizzenpunkt zwei getrennte Griffe, macht „Glatt“ (im Menü des Punkts oder mit der Taste 3) ihn jetzt sofort zu einem glatten Punkt: Beide Griffe liegen danach auf einer Linie, jeder behält seine Länge. Der Umweg über „Ecke“ ist nicht mehr nötig.",
       "en": "When a sketch point has two separate handles, Smooth (in the point's menu or with the 3 key) now makes it a smooth point at once: both handles end up on one line, each keeping its length. No more detour through Corner."
     }
+  },
+  {
+    "title": {
+      "de": "Weiches Licht",
+      "en": "Soft light"
+    },
+    "body": {
+      "de": "In den Einstellungen unter Aussehen gibt es jetzt „Weiches Licht“: Das meiste Licht kommt dann aus deiner Blickrichtung und dreht mit der Ansicht. Keine Fläche bleibt dunkel, und die Oberseite eines dunklen Körpers wird nicht mehr weiß überstrahlt.",
+      "en": "Appearance in the settings now has \"Soft light\": most of the light then comes from where you look and turns with the view. No face is left dark, and the top of a dark body is no longer burnt out to white."
+    }
   }
 ]

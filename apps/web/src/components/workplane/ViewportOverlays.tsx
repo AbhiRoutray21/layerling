@@ -108,7 +108,7 @@ export type ThreeState = {
   /** The filled cut face of the section view (#516). */
   sectionCapGroup: THREE.Group | null;
   /** The scene's lights, so the settings can change how punchy the shading is. */
-  lights: { ambient: THREE.HemisphereLight; key: THREE.DirectionalLight; fill: THREE.DirectionalLight };
+  lights: { ambient: THREE.HemisphereLight; key: THREE.DirectionalLight; fill: THREE.DirectionalLight; head: THREE.DirectionalLight };
   disposeInteractionListeners: () => void;
   resize: () => void;
 };

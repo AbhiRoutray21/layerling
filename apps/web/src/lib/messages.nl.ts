@@ -2437,6 +2437,8 @@ export const MESSAGES_NL: Record<MessageKey, string> = {
   "workspace.stlAsDownloadHint": "Chrome en Edge schrijven een STL elke keer naar hetzelfde bestand. Zet dit aan voor een gewone download: de browser nummert de bestanden dan, naam (1).stl, naam (2).stl.",
   "workspace.confirmTabClose": "Vragen voor het sluiten van het tabblad",
   "workspace.confirmTabCloseHint": "Is er een ontwerp open, dan stelt de browser bij het sluiten of herladen van het tabblad zijn eigen vraag \"Site verlaten?\". Je ontwerpen worden na elke wijziging toch opgeslagen, de vraag is alleen een herinnering. De tekst bepaalt de browser.",
+  "workspace.softLighting": "Zacht licht",
+  "workspace.softLightingHint": "Het meeste licht komt uit je kijkrichting en draait mee met het beeld, zodat geen vlak donker blijft of wit overstraald wordt. Schaduwen blijven.",
   "workspace.overhangAngle": "Overhang markeren vanaf {angle}°",
   "workspace.overhangStrict": "30° (voorzichtig)",
   "workspace.overhangLoose": "70° (goede koeling)",
