@@ -92,5 +92,25 @@
       "tr": "Eskiz düzenleyicide artık “Yönet” altındaki “Not” düğmesi veya N tuşu, 3D editördeki gibi eskize bir not koyar. Notlar eskizin gövdesine aittir: 3D görünümde gövdenin üzerinde durur ve onunla birlikte hareket eder; eskizi yeniden açtığınızda, 3D'de konulanlar da dahil, yine eskizin üzerindedir.",
       "ja": "スケッチエディターで、「管理」の「メモ」ボタンまたは N キーを使って、3Dエディターと同じようにスケッチにメモを置けるようになりました。メモはスケッチのボディに属します。3D ビューではボディの上にあり、ボディと一緒に動きます。スケッチを再び開くと、3D で置いたものも含めて、メモがスケッチ上に戻ります。"
     }
+  },
+  {
+    "title": {
+      "de": "Alt mit den Pfeiltasten verschiebt in feinen Schritten",
+      "en": "Alt with the arrow keys moves in fine steps"
+    },
+    "body": {
+      "de": "Umschalt mit einer Pfeiltaste verschiebt einen Körper um fünf Rasterschritte; Alt macht jetzt das Gegenteil und verschiebt ihn um ein Fünftel eines Rasterschritts, bei 1 mm Raster also um 0,2 mm. Es geht auf der Arbeitsfläche und in der Skizze (Punkte, Linien, Bild und Kurvengriffe), und die Kürzelliste nennt es.",
+      "en": "Shift with an arrow key moves a body by five grid steps; Alt now does the opposite and moves it by a fifth of a grid step, so with a 1 mm grid it is 0.2 mm. It works on the workplane and in the sketch (points, lines, image and curve handles), and the shortcut list names it."
+    }
+  },
+  {
+    "title": {
+      "de": "Eine Gruppe zeigt unter der Skizze ihre echten Umrisse",
+      "en": "A group shows its real outline under the sketch"
+    },
+    "body": {
+      "de": "Eine Gruppe aus mehreren Körpern, etwa einer runden Platte und einem Zahnrad, erschien unter der Skizze als einfacher Kasten. Jetzt zeigt sie die Umrisse ihrer Teile, die runde Platte und das Zahnrad, und die Skizze rastet daran ein.",
+      "en": "A group of bodies, say a round plate and a gear, was drawn under the sketch as a plain box. It now shows the outline of each of its parts, the round plate and the gear, and the sketch snaps to them."
+    }
   }
 ]
