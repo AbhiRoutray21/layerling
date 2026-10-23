@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **Search the keyboard shortcuts:** The shortcuts window has a search box at the top. It keeps only the shortcuts whose sentence, group or keys contain every word typed, in the language of the interface and under the key names it shows (Cmd and Option on a Mac); capital letters and accents do not matter, "ctrl+z" finds the combination, and a single letter or digit finds that key and the words starting with it rather than every word that holds the letter. Groups left empty disappear, and a search that finds nothing says so. The X at the end of the box empties it, and with the box empty the whole list is back. The box has the focus when the window opens (not on a touch screen, where that would bring up the keyboard) and stays in place while the list scrolls; the Print button prints what the window shows. The window's styles moved from `globals.css` to `shortcuts.css`, which the Graphite theme reads too. Texts in every interface language; the guide (chapter Keyboard shortcuts, every guide language) describes it. Unit test in `shortcutsSearch.test.ts` (jsdom); not tried in a real browser yet.
+
 ## 1.103.1
 
 - **Sketch: the keys 1 to 3 also change a selection (#347):** With the Select tool and lines or points selected, 1 makes the lines straight and the points corners, 2 turns the lines into curves and 3 makes the points smooth, all selected ones at once and as one step in the history, as in Tinkercad. With nothing selected the keys pick the drawing tool as before; the keys are named in the tooltips of the buttons. Asked for by @djelliott19.

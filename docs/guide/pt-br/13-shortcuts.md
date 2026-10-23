@@ -7,6 +7,8 @@ Os atalhos funcionam enquanto o plano de trabalho estiver em foco. Enquanto voc�
 
 No editor, {{ui:editor.keyboardShortcuts}} na área {{ui:editor.group.help}} abre a mesma lista numa janela. O botão de impressora na janela ({{ui:shortcuts.print}}) imprime só a lista, em preto sobre branco, a lista inteira em um lado de uma folha A4 ou Carta, em três colunas, para deixar à mão como referência rápida; a janela de impressão do navegador também oferece salvar como PDF.
 
+A caixa no alto da janela pesquisa a lista: ela mantém só os atalhos cuja frase, grupo ou teclas contêm todas as palavras digitadas, então "ctrl+z" deixa só essas linhas. Maiúsculas e acentos não importam, e uma única letra ou dígito encontra essa tecla e as palavras que começam com ela. O X no fim da caixa a esvazia; com a caixa vazia, a lista inteira volta. O botão de impressora imprime o que a janela mostra, então depois de uma pesquisa imprime só os atalhos encontrados.
+
 ![A janela de atalhos de teclado no editor.](shot:shortcuts)
 
 ## Pesquisa de comandos

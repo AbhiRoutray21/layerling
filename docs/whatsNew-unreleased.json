@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "title": {
+      "de": "Tastenkürzel durchsuchen",
+      "en": "Search the keyboard shortcuts"
+    },
+    "body": {
+      "de": "Das Fenster mit den Tastenkürzeln hat oben ein Suchfeld. Es zeigt nur die Kürzel, deren Beschreibung, Gruppe oder Tasten jedes eingetippte Wort enthalten, etwa \"ctrl+z\" oder \"spiegel\". Das X am Ende des Feldes leert es, und mit leerem Feld ist die ganze Liste wieder da.",
+      "en": "The keyboard shortcuts window has a search box at the top. It shows only the shortcuts whose description, group or keys contain every word you type, such as \"ctrl+z\" or \"mirror\". The X at the end of the box empties it, and with the box empty the whole list is back."
+    }
+  }
+]

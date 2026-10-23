@@ -7,6 +7,8 @@ Le scorciatoie funzionano quando il piano di lavoro è attivo. Mentre scrivi in 
 
 Nell’editor, {{ui:editor.keyboardShortcuts}} nell’area {{ui:editor.group.help}} apre lo stesso elenco in una finestra. Il pulsante di stampa nella finestra ({{ui:shortcuts.print}}) stampa l’elenco da solo, in bianco e nero, su un unico lato di un foglio A4 o Letter, disposto in tre colonne: puoi tenerlo a portata di mano come promemoria. La finestra di stampa del browser permette anche di salvarlo in PDF.
 
+La casella in cima alla finestra cerca nell’elenco: tiene solo le scorciatoie la cui frase, il cui gruppo o i cui tasti contengono ogni parola scritta, così "ctrl+z" lascia solo quelle righe. Maiuscole e accenti non contano, e una sola lettera o cifra trova quel tasto e le parole che iniziano con essa. La X in fondo alla casella la svuota; con la casella vuota torna l’elenco intero. Il pulsante di stampa stampa ciò che mostra la finestra, quindi dopo una ricerca stampa solo le scorciatoie trovate.
+
 ![La finestra delle scorciatoie da tastiera nell’editor.](shot:shortcuts)
 
 ## Ricerca dei comandi
