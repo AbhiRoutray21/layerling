@@ -1894,6 +1894,27 @@ export default function Home() {
     return t("notice.savedToServer", { name: savedProject.name });
   }, [activeProjectId, projects, refreshSharedProjects]);
 
+  /**
+   * An export file - STL, 3MF, STEP, SVG ... - into the folder of the open design, or the open folder of the
+   * store for one that is not on the server (#779). A name that is taken is refused unless `overwrite` is set,
+   * and the refusal carries `exists` so the editor can ask for a second press.
+   */
+  const saveExportFileToShared = useCallback(async ({ fileName, blob, overwrite }: { fileName: string; blob: Blob; overwrite?: boolean }) => {
+    const activeProject = projects.find((project) => project.id === activeProjectId);
+    const targetPath = activeProject?.sharedProject?.path ?? sharedPathRef.current;
+    const query = new URLSearchParams({ exportFile: fileName });
+    if (targetPath) query.set("path", targetPath);
+    if (overwrite) query.set("overwrite", "1");
+    const response = await fetch(`${SHARED_PROJECTS_ENDPOINT}?${query.toString()}`, { method: "POST", body: blob });
+    const payload = await response.json().catch(() => ({})) as { error?: string; exists?: boolean; file?: { fileName: string; path: string } };
+    if (!response.ok || !payload.file) {
+      const failure = new Error(payload.error ?? t("notice.saveSharedFailed"));
+      (failure as Error & { exists?: boolean }).exists = response.status === 409 && payload.exists === true;
+      throw failure;
+    }
+    return t("notice.exportSavedToServer", { name: payload.file.fileName, folder: payload.file.path || "/" });
+  }, [activeProjectId, projects]);
+
   /** Puts a project into a folder of the store as a file that is not there yet. */
   const putProjectOnServer = useCallback(async (project: DashboardProject, targetPath: string) => {
     const bytes = await projectPackageBytes(project);
@@ -2688,6 +2709,7 @@ export default function Home() {
               onHome={openDashboard}
               onOpenLylProjectFile={openLylProjectFromFile}
               onSaveSharedProject={saveActiveProjectToShared}
+              onSaveExportFile={saveExportFileToShared}
               serverFileName={activeProject?.sharedProject?.fileName ?? null}
               onProjectShapesChange={updateProjectShapes}
               onProjectSnapshot={updateProjectSnapshot}

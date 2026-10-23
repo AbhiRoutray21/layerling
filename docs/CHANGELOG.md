@@ -6,6 +6,7 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **Export files can be saved on the server (#779):** When the server folder is on, the export window has "Save to the server" for STL, 3MF, OBJ, STEP, SVG, PNG and the drawing as well, not only for the design file. The file is written into the folder of the open design (or the folder open on the start page), so a program that shares it, such as a slicer in Docker, can open it. It does not show in the list of designs; a file of the same name is replaced only by a second press on the button. Asked for by @nekoprog.
 - **The framing square's numbers no longer sit on each other (#777):** With a body right at the corner of the framing square the three green distance fields (X, Y, Z) fell on the same spot and covered each other and the square's buttons. They now step aside where they would overlap, and stay at the middle of their arrows where there is room. Reported by @willi1955.
 
 ## 1.103.1

@@ -108,6 +108,8 @@ Wenn layerling auf einem eigenen Rechner oder Webserver läuft, kann es einen ge
 
 Zwei Dinge machen das schneller: {{ui:dashboard.sendAllToServer}} auf der Startseite legt alle Entwürfe dieses Browsers auf einmal auf den Server, und mit dem Haken bei {{ui:dashboard.newOnServer}} startet jeder neue Entwurf gleich im Serverordner und sichert sich dort ab der ersten Änderung. Der Haken bleibt in diesem Browser gespeichert. Ein Entwurf, der nicht mitkommt - etwa weil sein Name auf dem Server schon vergeben ist -, bleibt im Browser, und die Meldung sagt, wie viele es sind.
 
+Auch die anderen Exportformate (STL, 3MF, OBJ, STEP, SVG, PNG und die Zeichnung) können in denselben Ordner: Im Export-Fenster schreibt {{ui:export.saveToShared}} die Datei neben deinen Entwurf, oder in den Ordner, den du auf der Startseite geöffnet hast, wenn der Entwurf nicht auf dem Server liegt. Ein Programm, das den Ordner teilt, etwa ein Slicer in Docker, kann sie dort öffnen. In der Liste der Entwürfe erscheint die Datei nicht. Liegt eine Datei dieses Namens schon dort, sagt es die Meldung, und ein zweiter Druck auf den Knopf ersetzt sie.
+
 Das ist kein gleichzeitiges Bearbeiten: Wer eine Datei öffnet, arbeitet an einer eigenen Kopie. Hat inzwischen jemand anderes die Datei geändert, verweigert layerling das Überschreiben.
 
 Auf layerling.com ist diese Funktion nicht eingeschaltet. Wie du sie auf einem eigenen Server einrichtest, steht in der [README auf GitHub](https://github.com/henmedia/layerling/blob/main/README.de.md#gemeinsame-entwürfe-im-netz).

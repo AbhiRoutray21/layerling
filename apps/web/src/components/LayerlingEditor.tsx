@@ -2470,6 +2470,7 @@ export function LayerlingEditor({
   onHome,
   onOpenLylProjectFile,
   onSaveSharedProject,
+  onSaveExportFile,
   serverFileName = null,
   onProjectShapesChange,
   onProjectSnapshot,
@@ -2500,6 +2501,8 @@ export function LayerlingEditor({
   onHome?: (leaving: { itemCount: number }) => void;
   onOpenLylProjectFile?: (file: File, shared?: undefined, fileHandle?: LylFileHandle) => Promise<{ ok: boolean; message: string } | void> | { ok: boolean; message: string } | void;
   onSaveSharedProject?: (request: { exportName: string; bytes: Uint8Array; thumbnailDataUrl: string; targetFileName?: string }) => Promise<string>;
+  /** An export file put into the server folder instead of the downloads (#779). Resolves to the notice; a file that is there already rejects with `exists`. */
+  onSaveExportFile?: (request: { fileName: string; blob: Blob; overwrite?: boolean }) => Promise<string>;
   /** Set while the open project came from the server; then it saves back there by itself. */
   serverFileName?: string | null;
   onProjectShapesChange?: (snapshot: {
@@ -11126,8 +11129,34 @@ export function LayerlingEditor({
     void run();
   }, [commitShapes]);
 
+  /**
+   * Where a finished export goes: the downloads, or the server folder (#779). A file of that name on the
+   * server is replaced only by a second press on the same name, which the notice asks for, so nothing is
+   * overwritten by one click. Resolves to the server's notice, or null for a download.
+   */
+  const serverExportReplaceRef = useRef("");
+  const deliverExportFile = useCallback(async (fileName: string, content: Blob | string, type: string, toServer: boolean): Promise<string | null> => {
+    const blob = typeof content === "string" ? new Blob([content], { type }) : content;
+    if (!toServer) {
+      await downloadBlobFile(fileName, blob);
+      return null;
+    }
+    if (!onSaveExportFile) throw new Error(t("export.serverUnavailable"));
+    try {
+      const message = await onSaveExportFile({ fileName, blob, overwrite: serverExportReplaceRef.current === fileName });
+      serverExportReplaceRef.current = "";
+      return message;
+    } catch (error) {
+      if ((error as { exists?: boolean }).exists) {
+        serverExportReplaceRef.current = fileName;
+        throw new Error(t("export.serverExists", { name: fileName }));
+      }
+      throw error;
+    }
+  }, [onSaveExportFile]);
+
   /** The view as a picture, from the viewport's own clean capture. */
-  const exportViewImage = useCallback(async (exportName: string, options: ViewImageOptions) => {
+  const exportViewImage = useCallback(async (exportName: string, options: ViewImageOptions, toServer = false) => {
     const dataUrl = window.layerlingCaptureImage?.(options) ?? "";
     const comma = dataUrl.indexOf(",");
     if (!dataUrl.startsWith("data:image/png") || comma < 0) {
@@ -11137,10 +11166,14 @@ export function LayerlingEditor({
     const binary = atob(dataUrl.slice(comma + 1));
     const bytes = new Uint8Array(binary.length);
     for (let index = 0; index < binary.length; index += 1) bytes[index] = binary.charCodeAt(index);
-    await downloadBlobFile(projectExportFileName(exportName, "png"), new Blob([bytes], { type: "image/png" }));
+    const savedOn = await deliverExportFile(projectExportFileName(exportName, "png"), new Blob([bytes], { type: "image/png" }), "image/png", toServer).catch((error: unknown) => {
+      setNotice(error instanceof Error ? localizedError(error.message) : t("status.imageFailed"), true);
+      return undefined;
+    });
+    if (savedOn === undefined) return;
     setTopPanel(null);
-    setNotice(t("status.imageSaved"));
-  }, [setNotice]);
+    setNotice(savedOn ?? t("status.imageSaved"));
+  }, [deliverExportFile, setNotice]);
 
   /**
    * Was ein Export mitnimmt: im Verlaufsblick den gezeigten Stand, sonst die
@@ -11154,7 +11187,7 @@ export function LayerlingEditor({
   }, [hasSelection, selectedShapes, shapes]);
 
   /** `chooseFile` asks for a new STL even when the design already has one (Save as). `svgView` picks what an SVG shows (#692). */
-  const exportDesign = useCallback(async (format: DirectExportFormat, exportName: string, chooseFile = false, svgView: SvgExportView = "silhouette") => {
+  const exportDesign = useCallback(async (format: DirectExportFormat, exportName: string, chooseFile = false, svgView: SvgExportView = "silhouette", toServer = false) => {
     const source = exportSource();
     const selectionScoped = source.selection;
     // Ausgeblendetes bleibt draussen, wie bei vergleichbaren Programmen: ein beiseitegelegtes
@@ -11174,11 +11207,15 @@ export function LayerlingEditor({
       ? t("status.exportedSelectedOne")
       : t("status.exportedSelectedMany", { count: exportable.length });
     // `note` adds what the user should know about the file, and keeps the message up a little longer.
+    let savedOn: string | null = null;
     const finishNotice = (label: string, note = "") => {
       setTopPanel(null);
-      setNotice((selectionScoped
+      setNotice((savedOn ?? (selectionScoped
         ? t("status.exportedSelectedAs", { selected: selectedNotice, label })
-        : t("status.exportedAs", { label })) + hiddenNote + note, note !== "");
+        : t("status.exportedAs", { label }))) + hiddenNote + note, note !== "");
+    };
+    const deliver = async (fileName: string, content: Blob | string, type: string) => {
+      savedOn = await deliverExportFile(fileName, content, type, toServer);
     };
     const failNotice = (label: string, error: unknown) => {
       setNotice(error instanceof Error ? localizedError(error.message) : t("status.exportFailed", { label }));
@@ -11187,7 +11224,7 @@ export function LayerlingEditor({
       // Only what stands on the workplane: the section a hair above the lowest point (#692).
       setNotice(t("status.buildingSvg"), true);
       void footprintSvg(sourceShapes, exportName.trim() || projectName)
-        .then((result) => downloadTextFile(projectExportFileName(exportName, "svg"), result.svg, "image/svg+xml;charset=utf-8"))
+        .then((result) => deliver(projectExportFileName(exportName, "svg"), result.svg, "image/svg+xml;charset=utf-8"))
         .then(() => finishNotice("SVG"))
         .catch((error: unknown) => failNotice("SVG", error));
       return;
@@ -11200,7 +11237,7 @@ export function LayerlingEditor({
       void visibleEdgesSvg(sourceShapes, exportName.trim() || projectName)
         .then(async (edges) => {
           const content = edges ?? await silhouetteSvg();
-          await downloadTextFile(projectExportFileName(exportName, "svg"), content, "image/svg+xml;charset=utf-8");
+          await deliver(projectExportFileName(exportName, "svg"), content, "image/svg+xml;charset=utf-8");
           finishNotice("SVG", edges === null ? t("status.svgEdgesTooComplex") : "");
         })
         .catch((error: unknown) => failNotice("SVG", error));
@@ -11209,7 +11246,7 @@ export function LayerlingEditor({
     if (format === "svg") {
       setNotice(t("status.buildingSvg"), true);
       void silhouetteSvg()
-        .then((content) => downloadTextFile(projectExportFileName(exportName, "svg"), content, "image/svg+xml;charset=utf-8"))
+        .then((content) => deliver(projectExportFileName(exportName, "svg"), content, "image/svg+xml;charset=utf-8"))
         .then(() => finishNotice("SVG"))
         .catch((error: unknown) => failNotice("SVG", error));
       return;
@@ -11236,7 +11273,7 @@ export function LayerlingEditor({
     const designId = projectId ?? "";
     let target: LylFileHandle | "download" = "download";
     // With "Save STL as a download" the browser hands out the files, and numbers them (#731).
-    if (format === "stl" && lylFileAccessSupported() && !workspaceSettingsRef.current.stlAsDownload) {
+    if (format === "stl" && !toServer && lylFileAccessSupported() && !workspaceSettingsRef.current.stlAsDownload) {
       try {
         const linkedBefore = linkedStlFile(designId);
         // A name typed in the window that is not the linked file's asks for a file of its own (reported by mail, 15.10.2026).
@@ -11264,7 +11301,7 @@ export function LayerlingEditor({
         if (format === "stl") {
           const bytes = new Uint8Array(exportMeshesToStl(fertig));
           if (target === "download") {
-            await downloadBlobFile(projectExportFileName(exportName, "stl"), new Blob([bytes], { type: "model/stl" }));
+            await deliver(projectExportFileName(exportName, "stl"), new Blob([bytes], { type: "model/stl" }), "model/stl");
           } else {
             await writeLylFile(target, bytes).catch(() => {
               // Gone, moved or locked: the next STL export asks for a file again.
@@ -11279,10 +11316,10 @@ export function LayerlingEditor({
             return { ...mesh, name: source?.name || mesh.name, color: source?.color, faceColors: partFaceColors(mesh, quellen[index]) };
           });
           const bytes = exportMeshesTo3mf(bodies, { title: exportName.trim() || projectName });
-          await downloadBlobFile(projectExportFileName(exportName, "3mf"), new Blob([bytes as BlobPart], { type: THREE_MF_MEDIA_TYPE }));
+          await deliver(projectExportFileName(exportName, "3mf"), new Blob([bytes as BlobPart], { type: THREE_MF_MEDIA_TYPE }), THREE_MF_MEDIA_TYPE);
         } else {
           const bodies = fertig.map((mesh, index) => ({ ...mesh, color: bodiesWritten[quellen[index]]?.color, faceColors: partFaceColors(mesh, quellen[index]) }));
-          await downloadTextFile(projectExportFileName(exportName, "obj"), exportMeshesToObj(bodies), "text/plain");
+          await deliver(projectExportFileName(exportName, "obj"), exportMeshesToObj(bodies), "text/plain");
         }
         // The file is written either way; the notice below only adds a caveat.
         setTopPanel(null);
@@ -11291,13 +11328,13 @@ export function LayerlingEditor({
         const splinterNote = splinters > 0 ? ` ${t("status.exportSplinters", { count: splinters })}` : "";
         if (gescheitert > 0) setNotice(t("status.exportUnionFailed"), true);
         else if (bedPrinter && exportOverhangs.length > 0) setNotice(bedOverhangMessage(exportOverhangs, `${bedPrinter.vendor} ${bedPrinter.model}`), true);
-        else if (verschmolzen > 0) setNotice(t("status.exportUnioned", { count: verschmolzen, label }) + hiddenNote + splinterNote);
+        else if (verschmolzen > 0) setNotice(t("status.exportUnioned", { count: verschmolzen, label }) + (savedOn ? ` ${savedOn}` : "") + hiddenNote + splinterNote);
         else if (savedFile) setNotice(t("status.stlSavedToFile", { name: savedFile.name }) + hiddenNote + splinterNote);
-        else if (splinters > 0) setNotice(t("status.exportSplinters", { count: splinters }));
+        else if (splinters > 0) setNotice((savedOn ? `${savedOn} ` : "") + t("status.exportSplinters", { count: splinters }));
         else finishNotice(label);
       })
       .catch((error: unknown) => failNotice(label, error));
-  }, [bedPrinter, exportSource, projectId, projectName]);
+  }, [bedPrinter, deliverExportFile, exportSource, projectId, projectName]);
 
   /**
    * The drawing of a set of bodies, from the same bodies as the export (visible solids, holes taken
@@ -11316,7 +11353,7 @@ export function LayerlingEditor({
     return { drawing: generateDrawing(meshes, title, drawingLabelsInLanguage()), hiddenNote };
   }, []);
 
-  const exportDrawingDesign = useCallback(async (exportName: string, format: "svg" | "pdf") => {
+  const exportDrawingDesign = useCallback(async (exportName: string, format: "svg" | "pdf", toServer = false) => {
     if (drawingExporting) return;
     const source = exportSource();
     setDrawingExporting(true);
@@ -11330,18 +11367,19 @@ export function LayerlingEditor({
       }
       const { drawingToSvg, drawingToPdf } = await import("@/lib/drawingExport");
       const filename = projectExportFileName(`${title} drawing`, format);
-      if (format === "svg") await downloadTextFile(filename, drawingToSvg(drawing), "image/svg+xml;charset=utf-8");
-      else await downloadBlobFile(filename, new Blob([drawingToPdf(drawing) as BlobPart], { type: "application/pdf" }));
+      const savedOn = format === "svg"
+        ? await deliverExportFile(filename, drawingToSvg(drawing), "image/svg+xml;charset=utf-8", toServer)
+        : await deliverExportFile(filename, new Blob([drawingToPdf(drawing) as BlobPart], { type: "application/pdf" }), "application/pdf", toServer);
       setTopPanel(null);
-      setNotice(t("status.exportedDrawing", { format: format.toUpperCase() }) + hiddenNote);
+      setNotice((savedOn ?? t("status.exportedDrawing", { format: format.toUpperCase() })) + hiddenNote);
     } catch (error) {
       setNotice(error instanceof Error ? localizedError(error.message) : t("status.drawingFailed"), true);
     } finally {
       setDrawingExporting(false);
     }
-  }, [buildDrawing, drawingExporting, exportSource, projectName, shapes]);
+  }, [buildDrawing, deliverExportFile, drawingExporting, exportSource, projectName, shapes]);
 
-  const exportStepDesign = useCallback(async (exportName: string) => {
+  const exportStepDesign = useCallback(async (exportName: string, toServer = false) => {
     if (stepExporting) {
       return;
     }
@@ -11360,14 +11398,14 @@ export function LayerlingEditor({
       const { exportShapesToStep } = await import("@/lib/stepExport");
       const { blob, exportedCount, skipped } = await exportShapesToStep(sourceShapes);
       const text = await blob.text();
-      await downloadTextFile(projectExportFileName(exportName, "step"), text, "application/step");
+      const savedOn = await deliverExportFile(projectExportFileName(exportName, "step"), text, "application/step", toServer);
       setTopPanel(null);
       if (skipped.length > 0) console.info("layerling: STEP export skipped", skipped);
       // Name what was left out and why, so it is not missed (#184).
       const named = skipped.slice(0, 3).map((entry) => t("status.exportStepSkippedItem", { name: entry.name, reason: t(`status.exportStepSkip.${entry.code}`) }));
       const more = skipped.length > 3 ? t("status.exportStepSkippedMore", { count: skipped.length - 3 }) : "";
       const skipNote = skipped.length === 0 ? "" : t("status.exportStepSkippedList", { list: named.join(", ") + more });
-      setNotice((exportedCount === 1
+      setNotice((savedOn ? `${savedOn} ` : "") + (exportedCount === 1
         ? t("status.exportedStepOne", { skipNote })
         : t("status.exportedStepMany", { count: exportedCount, skipNote })) + hiddenNote);
     } catch (error: unknown) {
@@ -11381,7 +11419,7 @@ export function LayerlingEditor({
     } finally {
       setStepExporting(false);
     }
-  }, [exportSource, projectName, stepExporting]);
+  }, [deliverExportFile, exportSource, projectName, stepExporting]);
 
   const exportLylDesign = useCallback(async (exportName: string, historyLimit: LylHistoryLimit, target: LylExportTarget = "download") => {
     if (lylExporting) return;
@@ -13320,7 +13358,7 @@ export function LayerlingEditor({
           estimateShapes={exportTargetShapes}
           onEstimatePrint={exportSolidVolume}
           onClose={() => setTopPanel(null)}
-          onExport={(format, exportName, chooseFile, svgView) => void exportDesign(format, exportName, chooseFile, svgView)}
+          onExport={(format, exportName, chooseFile, svgView, toServer) => void exportDesign(format, exportName, chooseFile, svgView, toServer)}
           stlFileName={topPanel === "export" && !workspaceSettings.stlAsDownload ? linkedStlFile(projectId ?? "")?.name ?? null : null}
           onExportLyl={exportLylDesign}
           onExportStep={exportStepDesign}
@@ -14919,14 +14957,14 @@ function TopActionPanel({
   estimateShapes: readonly WorkplaneShape[];
   onEstimatePrint: (shapes: readonly WorkplaneShape[]) => Promise<ExportSolidVolume>;
   onClose: () => void;
-  onExport: (format: DirectExportFormat, exportName: string, chooseFile?: boolean, svgView?: SvgExportView) => void;
+  onExport: (format: DirectExportFormat, exportName: string, chooseFile?: boolean, svgView?: SvgExportView, toServer?: boolean) => void;
   /** The STL file this design exports into, once one was chosen (Chrome and Edge). */
   stlFileName?: string | null;
   onExportLyl: (exportName: string, historyLimit: LylHistoryLimit, target?: LylExportTarget) => void;
-  onExportStep: (exportName: string) => void;
-  onExportDrawing: (exportName: string, format: "svg" | "pdf") => void;
+  onExportStep: (exportName: string, toServer?: boolean) => void;
+  onExportDrawing: (exportName: string, format: "svg" | "pdf", toServer?: boolean) => void;
   drawingExporting: boolean;
-  onExportImage: (exportName: string, options: ViewImageOptions) => void;
+  onExportImage: (exportName: string, options: ViewImageOptions, toServer?: boolean) => void;
   sharedProjectsEnabled: boolean;
   lylExporting: boolean;
   stepExporting: boolean;
@@ -15092,13 +15130,13 @@ function TopActionPanel({
     },
   };
   const selectedExport = exportDetails[exportFormat];
-  const runSelectedExport = () => {
+  const runSelectedExport = (toServer = false) => {
     if (drawingExporting || stepExporting || lylExporting) return;
-    if (exportFormat === "drawing") onExportDrawing(exportName, drawingFormat);
-    else if (exportFormat === "step") onExportStep(exportName);
-    else if (exportFormat === "png") onExportImage(exportName, imageOptions);
+    if (exportFormat === "drawing") onExportDrawing(exportName, drawingFormat, toServer);
+    else if (exportFormat === "step") onExportStep(exportName, toServer);
+    else if (exportFormat === "png") onExportImage(exportName, imageOptions, toServer);
     else if (exportFormat === "lyl") onExportLyl(exportName, lylHistoryLimit, lylFileAccessSupported() ? "fileAs" : "download");
-    else onExport(exportFormat, exportName, false, svgView);
+    else onExport(exportFormat, exportName, false, svgView, toServer);
   };
 
   return (
@@ -15441,7 +15479,19 @@ function TopActionPanel({
                   <span>{t("export.saveToShared")}</span>
                 </button>
               ) : null}
-              <button className="export-primary-button" onClick={runSelectedExport} disabled={(shapeCount === 0 && exportsBodies) || stepExporting || lylExporting || drawingExporting}>
+              {exportFormat !== "lyl" && sharedProjectsEnabled ? (
+                <button
+                  className="export-shared-button"
+                  type="button"
+                  title={t("export.saveFileToServerHint")}
+                  onClick={() => runSelectedExport(true)}
+                  disabled={(shapeCount === 0 && exportsBodies) || stepExporting || lylExporting || drawingExporting}
+                >
+                  <CloudUpload />
+                  <span>{t("export.saveToShared")}</span>
+                </button>
+              ) : null}
+              <button className="export-primary-button" onClick={() => runSelectedExport()} disabled={(shapeCount === 0 && exportsBodies) || stepExporting || lylExporting || drawingExporting}>
                 <Download />
                 {exportFormat === "lyl" ? (lylExporting ? t("export.savingProject") : t("export.saveProject")) : null}
                 <span hidden={exportFormat === "lyl"}>

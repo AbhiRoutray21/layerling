@@ -108,6 +108,8 @@ When layerling runs on your own computer or web server, it can offer a shared fo
 
 Two things make that quicker: {{ui:dashboard.sendAllToServer}} on the start page puts every design of this browser on the server in one go, and ticking {{ui:dashboard.newOnServer}} makes every new design start in the server folder, so it is saved there from the first change on. The tick is kept in this browser. A design that cannot go - its name is taken on the server, say - stays in the browser, and the message says how many.
 
+The other export formats (STL, 3MF, OBJ, STEP, SVG, PNG and the drawing) can go into the same folder: in the export window, {{ui:export.saveToShared}} writes the file next to your design, or into the folder you have open on the start page for a design that is not on the server. A program that shares the folder, such as a slicer in Docker, can open it from there. The file does not appear in the list of designs. If a file of that name is already there, the message says so, and pressing the button again replaces it.
+
 That is not simultaneous editing: whoever opens a file works on a copy of their own. If somebody else has changed the file in the meantime, layerling refuses to overwrite it.
 
 On layerling.com this function is not switched on. How to set it up on your own server is described in the [README on GitHub](https://github.com/henmedia/layerling/blob/main/README.md).
