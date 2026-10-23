@@ -321,8 +321,11 @@ Der Ordner hat **keine Anmeldung**: Wer die Seite erreicht, kann darin lesen, sc
 der Werkstatt ist genau das der Zweck; auf einer öffentlich erreichbaren Seite schütze ihn oder lege ihn nicht an.
 
 Nichts im Ordner soll über seine Adresse geöffnet werden: layerling liest und schreibt ihn nur über `store.php`. Unter
-Apache legt `store.php` dort eine `.htaccess` an, die jeden direkten Abruf abweist. nginx und andere Server beachten
-diese Datei nicht; sperre `store/` dort selbst (in nginx: `location /store/ { deny all; }`).
+Apache legt `store.php` dort eine `.htaccess` an, die jeden direkten Abruf abweist. Apache liest sie nur, wo
+`AllowOverride` es erlaubt (Debian stellt `/var/www` auf `None` und übergeht sie), nginx und andere Server nie; sperre
+`store/` dort selbst (in Apache: `<Directory /var/www/html/store> Require all denied </Directory>`, in nginx:
+`location /store/ { deny all; }`). `store.php` prüft außerdem jeden Export, den es speichert, und weist eine Datei ab,
+die in einem Browser etwas ausführen könnte.
 
 Beim Ausliefern daran denken: Wer den Export mit einer Option spiegelt, die Überzähliges löscht – `rsync --delete`,
 `robocopy /MIR`, WinSCP `-delete` –, muss `store` ausdrücklich ausnehmen. Sonst räumt jedes Update die Projekte weg.

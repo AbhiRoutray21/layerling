@@ -1,5 +1,20 @@
 [
   {
+    "version": "1.106.1",
+    "items": [
+      {
+        "title": {
+          "de": "Sicherer Speicherordner auf dem eigenen Server",
+          "en": "A safer store folder on your own server"
+        },
+        "body": {
+          "de": "Wer layerling selbst auf einem Webserver betreibt und den Ordner „store“ nutzt: store.php nimmt jetzt nur noch Exportdateien an, die wirklich das sind, was ihr Name sagt, und der Ordner wird nicht mehr direkt ausgeliefert. Ersetze store.php durch die neue Fassung. Auf layerling.com und im Docker-Image ändert sich nichts.",
+          "en": "If you run layerling on your own web server with a \"store\" folder: store.php now only accepts export files that really are what their name says, and the folder is no longer served directly. Replace store.php with the new one. Nothing changes on layerling.com or in the Docker image."
+        }
+      }
+    ]
+  },
+  {
     "version": "1.106.0",
     "items": [
       {

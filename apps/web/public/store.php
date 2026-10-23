@@ -774,6 +774,53 @@ function export_file_name(string $requested): ?string
 }
 
 /**
+ * Whether an export file is what its name says and nothing a browser could run (GHSA-wj5x-5r5v-89r3).
+ * The guard file keeps the folder from being served, but many servers never read it (Debian's Apache
+ * ignores .htaccess under /var/www, nginx always does), so the bytes are checked as well: an SVG may hold
+ * only plain drawing elements - what layerling's own SVG, drawing and section exports write - and no
+ * event handler, link, script URL or DOCTYPE; the binary formats must start with their signature, STEP
+ * with its header; STL, OBJ and DXF may not start with a tag, so a server that sends no type for them
+ * cannot have the browser take them for a web page.
+ */
+function export_bytes_acceptable(string $extension, string $bytes): bool
+{
+    $head = ltrim(substr($bytes, 0, 4096), "\xEF\xBB\xBF \t\r\n\0");
+    switch ($extension) {
+        case 'png':
+            return strncmp($bytes, "\x89PNG\r\n\x1a\n", 8) === 0;
+        case 'pdf':
+            return strncmp($bytes, '%PDF-', 5) === 0;
+        case '3mf':
+            return strncmp($bytes, "PK\x03\x04", 4) === 0;
+        case 'step':
+        case 'stp':
+            return strncmp($head, 'ISO-10303-21', 12) === 0;
+        case 'svg':
+            return svg_is_plain_drawing($bytes);
+        default:
+            return $head !== '' && $head[0] !== '<';
+    }
+}
+
+/** An SVG made only of shapes, text and their descriptions, with nothing in it that runs or loads. */
+function svg_is_plain_drawing(string $svg): bool
+{
+    if (preg_match('/<!DOCTYPE|<!ENTITY|<\?xml-stylesheet|javascript\s*:|\son[a-z]+\s*=|href\s*=|url\s*\(/i', $svg) === 1) {
+        return false;
+    }
+    $allowed = ['svg', 'g', 'path', 'rect', 'circle', 'ellipse', 'line', 'polyline', 'polygon', 'text', 'tspan', 'title', 'desc', 'metadata'];
+    if (preg_match_all('/<\s*([A-Za-z_][\w:.\-]*)/', $svg, $tags) === false) {
+        return false;
+    }
+    foreach ($tags[1] as $tag) {
+        if (!in_array(strtolower($tag), $allowed, true)) {
+            return false;
+        }
+    }
+    return in_array('svg', array_map('strtolower', $tags[1]), true);
+}
+
+/**
  * An export file - STL, 3MF, OBJ, STEP, SVG, DXF, PNG or PDF - written into a folder of the store (#779), so a
  * slicer that shares the folder can open it. It is no project: the list does not show it. A file of that
  * name is replaced only when the request says so (overwrite=1); otherwise the answer is 409 with `exists`.
@@ -797,6 +844,10 @@ function handle_save_export(string $root, string $folder, string $requested): vo
     }
     if (strlen($bytes) > MAX_PROJECT_BYTES) {
         fail('The file exceeds the shared storage size limit', 413);
+    }
+    $extension = strtolower((string) pathinfo($fileName, PATHINFO_EXTENSION));
+    if (!export_bytes_acceptable($extension, $bytes)) {
+        fail('That is not a ' . strtoupper($extension) . ' file layerling would write', 400);
     }
 
     $filePath = $folder . DIRECTORY_SEPARATOR . $fileName;
