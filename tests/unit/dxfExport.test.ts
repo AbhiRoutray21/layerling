@@ -99,6 +99,23 @@ describe("DXF for laser cutting (#774): lines, arcs and circles", () => {
     expectClosedChain(entities);
   });
 
+  it("still finds the circle and the arcs when the corners wander a few thousandths off the curve", () => {
+    // A sketch body's outline (a DXF read back, a drawn curve): many uneven corners, each a little in or out.
+    const wobble = (index: number) => 0.004 * Math.sin(index * 2.7) * Math.cos(index * 1.3);
+    const hole = circlePoints(0, 0, 15, 352).map(([x, y], index): DxfPoint => {
+      const scale = (15 + wobble(index)) / 15;
+      return [x * scale, y * scale];
+    });
+    const circle = dxfLoopEntities(hole);
+    expect(types(circle)).toEqual(["circle"]);
+    expect(Math.abs((circle[0] as Extract<DxfEntity, { type: "circle" }>).radius - 15)).toBeLessThan(0.005);
+    const plate = roundedRectangle(100, 60, 5, 40).map(([x, y], index): DxfPoint => [x + wobble(index), y - wobble(index + 5)]);
+    const entities = dxfLoopEntities(plate);
+    expect(entities.filter((entity) => entity.type === "arc")).toHaveLength(4);
+    expect(entities.filter((entity) => entity.type === "line")).toHaveLength(4);
+    expectClosedChain(entities);
+  });
+
   it("makes a slot two lines and two half circles", () => {
     const slot = [...circlePoints(62, 30, 4, 12, -Math.PI / 2, Math.PI / 2, false), ...circlePoints(38, 30, 4, 12, Math.PI / 2, Math.PI * 1.5, false)];
     const entities = dxfLoopEntities(slot);
