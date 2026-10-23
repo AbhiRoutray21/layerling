@@ -208,6 +208,8 @@ import { exportMeshesToStl } from "@/lib/stlExport";
 import { exportMeshesTo3mf, THREE_MF_MEDIA_TYPE } from "@/lib/threemfExport";
 import { importedShapeFromSvg, invalidSvgMeshReason } from "@/lib/svgImport";
 import { toSvgProjection, toSvgTopEdges, type SvgProjectionLayer } from "@/lib/svgExport";
+import { outlinesToDxf, type DxfResult } from "@/lib/dxfExport";
+import type { CrossSection } from "manifold-3d";
 import { DrawingTooComplexError } from "@/lib/drawingProjection";
 import { DEFAULT_TAPER_DIMENSION_MAX, keyboardNudgeCoarseFactor, keyboardNudgeStep, normalizeShapeCustomizations, normalizeSnapGrid, normalizeWorkspaceSettings, shapeDimensionLimit, workplaneSettingsFingerprint } from "@/lib/workplaneSettings";
 import { MCP_GRIDFINITY_LIST_KEYS, mcpGridfinityListParams, mcpGridfinityPaddingPatch, mcpThreadSizeParams } from "@/lib/mcpShapeSettings";
@@ -314,9 +316,11 @@ export type HistoryProjectRequest = {
   /** Das Bild der Arbeitsflaeche in diesem Stand, fuer die Karte in der Uebersicht. */
   thumbnailDataUrl: string | null;
 };
-type ExportFormat = "stl" | "3mf" | "obj" | "step" | "svg" | "png" | "lyl" | "drawing";
+type ExportFormat = "stl" | "3mf" | "obj" | "step" | "svg" | "dxf" | "png" | "lyl" | "drawing";
 type DirectExportFormat = Exclude<ExportFormat, "step" | "png" | "lyl" | "drawing">;
 type SvgExportView = "silhouette" | "footprint" | "edges";
+/** What a DXF for laser cutting shows (#774): the outline from above, or what stands on the workplane; never inner edges, which a laser would cut. */
+type DxfExportView = "silhouette" | "footprint";
 type ViewImageOptions = { plate: boolean; transparent: boolean };
 type LylHistoryLimit = EditorHistoryExportLimit;
 /** "file" writes into the file the design is tied to (asking for one the first time), "fileAs" always asks (#251). */
@@ -1488,6 +1492,102 @@ async function toSvg(shapes: WorkplaneShape[], title: string, cutMeshes: Readonl
   }
 
   return toSvgProjection(layers, title);
+}
+
+/**
+ * The DXF for a laser cutting shop (#774): every body's outline from above, as in the SVG, but joined into one area,
+ * so two bodies that touch or overlap give one contour and no line is cut twice. The round parts come back as arcs
+ * and circles (dxfExport.ts). `cutMeshes` as in toSvg.
+ */
+async function silhouetteDxf(shapes: WorkplaneShape[], cutMeshes: ReadonlyArray<MeshData | null> = []): Promise<DxfResult & { openCount: number }> {
+  const runtime = await getManifoldRuntime();
+  const created: unknown[] = [];
+  const sections: CrossSection[] = [];
+  try {
+    for (const [index, shape] of shapes.entries()) {
+      const cut = cutMeshes[index];
+      let solid: ManifoldSolid | null;
+      if (cut) {
+        const manifoldMesh = meshDataToManifoldMesh(runtime, cut);
+        try {
+          solid = runtime.Manifold.ofMesh(manifoldMesh);
+          created.push(solid);
+        } finally {
+          disposeManifold(manifoldMesh);
+        }
+      } else {
+        const own: ManifoldSolid[] = [];
+        solid = shapeToManifoldSolid(runtime, shape, own);
+        created.push(...own);
+      }
+      if (!solid || solid.status() !== "NoError" || solid.numTri() < 1) {
+        throw new Error(`Could not convert ${shape.name} into a watertight SVG outline`);
+      }
+      // Seen from above with the front at the bottom of the page, as toSvg turns it.
+      const topView = solid.rotate([-90, 0, 0]);
+      if (topView !== solid) created.push(topView);
+      const projection = topView.project();
+      created.push(projection);
+      sections.push(projection);
+    }
+    const joined = runtime.CrossSection.union(sections);
+    created.push(joined);
+    const simplified = joined.simplify(0.00001);
+    if (simplified !== joined) created.push(simplified);
+    const loops = simplified.toPolygons().map((polygon) => polygon.map(([x, y]) => [x, y] as const));
+    return { ...outlinesToDxf({ loops }), openCount: 0 };
+  } finally {
+    [...new Set(created)].reverse().forEach(disposeManifold);
+  }
+}
+
+/**
+ * The DXF of only what stands on the workplane (#774), cut as the footprint SVG is (#692), the bodies' outlines
+ * joined into one area. An outline that does not close (a mesh with a gap) cannot be cut and is left out; the
+ * answer counts it.
+ */
+async function footprintDxf(shapes: readonly WorkplaneShape[]): Promise<DxfResult & { openCount: number }> {
+  const { solids, meshes: cut } = await exportBodiesWithLooseHoles(shapes);
+  const { meshes } = await colorSeparatedExportMeshes(solids, cut);
+  const offset = footprintCutOffset(meshes);
+  if (offset === null) throw new Error(t("status.sectionSvgNothing"));
+  const runtime = await getManifoldRuntime();
+  const created: unknown[] = [];
+  let openCount = 0;
+  try {
+    const sections = meshes.flatMap((mesh) => {
+      const loops = sliceMeshContours(mesh, "y", offset);
+      openCount += loops.filter((loop) => !loop.closed).length;
+      const closed = loops.filter((loop) => loop.closed && loop.points.length >= 3).map((loop) => loop.points.map((point) => [point.u, point.v] as [number, number]));
+      if (closed.length === 0) return [];
+      const section = new runtime.CrossSection(closed, "EvenOdd");
+      created.push(section);
+      return [section];
+    });
+    if (sections.length === 0) throw new Error(t("status.sectionSvgNothing"));
+    const joined = runtime.CrossSection.union(sections);
+    created.push(joined);
+    const simplified = joined.simplify(0.00001);
+    if (simplified !== joined) created.push(simplified);
+    const loops = simplified.toPolygons().map((polygon) => polygon.map(([x, y]) => [x, y] as const));
+    if (loops.length === 0) throw new Error(t("status.sectionSvgNothing"));
+    return { ...outlinesToDxf({ loops }), openCount };
+  } finally {
+    [...new Set(created)].reverse().forEach(disposeManifold);
+  }
+}
+
+/** The DXF the export window and the AI bridge write (#774). */
+async function exportDxf(shapes: WorkplaneShape[], view: DxfExportView) {
+  if (view === "footprint") return footprintDxf(shapes);
+  const { solids, meshes, cut } = await exportBodiesWithLooseHoles(shapes);
+  return silhouetteDxf(solids, meshes.map((mesh, index) => (cut[index] ? mesh : null)));
+}
+
+/** What the message after a DXF export says about the file: how many circles, arcs and lines, and outlines left out. */
+function dxfExportNote(result: DxfResult & { openCount: number }) {
+  return t("status.dxfSummary", { circles: result.counts.circles, arcs: result.counts.arcs, lines: result.counts.lines })
+    + (result.openCount > 0 ? t("status.dxfOpenLeftOut", { count: result.openCount }) : "");
 }
 
 function triggerBrowserDownload(filename: string, content: string, type: string) {
@@ -10633,9 +10733,10 @@ export function LayerlingEditor({
         // view "edges" the edges seen from above (#591); a design with too many of them gets the silhouette, and
         // the answer says `fellBack`.
         const format = params.format === undefined ? "stl" : mcpString(params.format, "stl").toLowerCase();
-        if (format !== "stl" && format !== "3mf" && format !== "obj" && format !== "svg") throw new Error("format must be stl, 3mf, obj or svg");
+        if (format !== "stl" && format !== "3mf" && format !== "obj" && format !== "svg" && format !== "dxf") throw new Error("format must be stl, 3mf, obj, svg or dxf");
         const svgView = params.view === undefined ? "silhouette" : mcpString(params.view, "silhouette").toLowerCase();
         if (svgView !== "silhouette" && svgView !== "footprint" && svgView !== "edges") throw new Error("view must be silhouette, footprint or edges");
+        if (format === "dxf" && svgView === "edges") throw new Error("A DXF for laser cutting has no edges view: inner edges would be cut. Use silhouette or footprint");
         const ids = Array.isArray(params.ids) ? params.ids.filter((id): id is string => typeof id === "string") : [];
         const all = currentShapes();
         const chosen = ids.length ? all.filter((shape) => ids.includes(shape.id)) : all;
@@ -10645,6 +10746,18 @@ export function LayerlingEditor({
         if (!visible.some((shape) => !shape.hole && !isNonSolidShape(shape))) throw new Error(t(hiddenNote ? "status.exportOnlyHidden" : "status.addSolidBeforeExport"));
         const invalidSvg = visible.map(invalidSvgMeshReason).find((reason): reason is string => Boolean(reason));
         if (invalidSvg) throw new Error(t("status.svgInvalid", { reason: invalidSvg }));
+        if (format === "dxf") {
+          // For a laser cutting shop (#774): layer 0, colour 7, millimetres, the round parts as arcs and circles.
+          const result = await exportDxf(visible, svgView === "footprint" ? "footprint" : "silhouette");
+          const dxfBytes = new TextEncoder().encode(result.dxf);
+          let dxfBinary = "";
+          for (let index = 0; index < dxfBytes.length; index += 8192) dxfBinary += String.fromCharCode(...dxfBytes.subarray(index, index + 8192));
+          return {
+            format, view: svgView, fileName: projectExportFileName(projectName, "dxf"), bytes: dxfBytes.length,
+            width: Number(result.width.toFixed(3)), depth: Number(result.height.toFixed(3)), ...result.counts,
+            ...(result.openCount > 0 ? { openLeftOut: result.openCount } : {}), base64: btoa(dxfBinary),
+          };
+        }
         if (format === "svg") {
           let svg: string;
           let outlines: number | undefined;
@@ -11183,6 +11296,18 @@ export function LayerlingEditor({
     const failNotice = (label: string, error: unknown) => {
       setNotice(error instanceof Error ? localizedError(error.message) : t("status.exportFailed", { label }));
     };
+    if (format === "dxf") {
+      // For a laser cutting shop (#774): lines, arcs and circles on layer 0, in millimetres. The edges view would
+      // turn inner edges into cuts, so it draws the silhouette.
+      setNotice(t("status.buildingDxf"), true);
+      void exportDxf(sourceShapes, svgView === "footprint" ? "footprint" : "silhouette")
+        .then(async (result) => {
+          await downloadTextFile(projectExportFileName(exportName, "dxf"), result.dxf, "application/dxf");
+          finishNotice("DXF", dxfExportNote(result));
+        })
+        .catch((error: unknown) => failNotice("DXF", error));
+      return;
+    }
     if (format === "svg" && svgView === "footprint") {
       // Only what stands on the workplane: the section a hair above the lowest point (#692).
       setNotice(t("status.buildingSvg"), true);
@@ -14945,6 +15070,7 @@ function TopActionPanel({
   const [exportFormat, setExportFormat] = useState<ExportFormat>("stl");
   const [drawingFormat, setDrawingFormat] = useState<"svg" | "pdf">("pdf");
   const [svgView, setSvgView] = useState<SvgExportView>("silhouette");
+  const [dxfView, setDxfView] = useState<DxfExportView>("silhouette");
   const [exportName, setExportName] = useState(projectName);
   const previousProjectNameRef = useRef(projectName);
   // Starts at the history setting from the workspace settings, so a project
@@ -14989,7 +15115,7 @@ function TopActionPanel({
     }
   });
   const [imageOptions, setImageOptions] = useState<ViewImageOptions>({ plate: true, transparent: false });
-  const showPrintEstimate = panel === "export" && exportFormat !== "drawing" && exportFormat !== "svg" && exportFormat !== "png" && exportFormat !== "lyl" && shapeCount > 0;
+  const showPrintEstimate = panel === "export" && exportFormat !== "drawing" && exportFormat !== "svg" && exportFormat !== "dxf" && exportFormat !== "png" && exportFormat !== "lyl" && shapeCount > 0;
   // A picture shows the view as it is, not the selection, so the notes about what goes along do not apply.
   const exportsBodies = exportFormat !== "lyl" && exportFormat !== "png";
   // The estimate is worked out on a click, not on every opening and every change of format: for a finely traced
@@ -15080,6 +15206,11 @@ function TopActionPanel({
       description: t("export.svg.description"),
       note: t(svgView === "footprint" ? "export.svg.noteFootprint" : svgView === "edges" ? "export.svg.noteEdges" : "export.svg.note"),
     },
+    dxf: {
+      label: "DXF",
+      description: t("export.dxf.description"),
+      note: t(dxfView === "footprint" ? "export.dxf.noteFootprint" : "export.dxf.note"),
+    },
     png: {
       label: "PNG",
       description: t("export.png.description"),
@@ -15098,7 +15229,7 @@ function TopActionPanel({
     else if (exportFormat === "step") onExportStep(exportName);
     else if (exportFormat === "png") onExportImage(exportName, imageOptions);
     else if (exportFormat === "lyl") onExportLyl(exportName, lylHistoryLimit, lylFileAccessSupported() ? "fileAs" : "download");
-    else onExport(exportFormat, exportName, false, svgView);
+    else onExport(exportFormat, exportName, false, exportFormat === "dxf" ? dxfView : svgView);
   };
 
   return (
@@ -15221,7 +15352,7 @@ function TopActionPanel({
                   : t(scopeLabel === "selected" ? "export.scopeSelected" : "export.scopeTotal", { count: shapeCount })}</span>
             </div>
             <div className="export-format-slider" data-format={exportFormat} role="radiogroup" aria-label={t("export.formatLabel")}>
-              {(["stl", "3mf", "obj", "step", "svg", "png", "lyl", "drawing"] as const).map((format) => (
+              {(["stl", "3mf", "obj", "step", "svg", "dxf", "png", "lyl", "drawing"] as const).map((format) => (
                 <button
                   key={format}
                   type="button"
@@ -15257,6 +15388,18 @@ function TopActionPanel({
                   <option value="silhouette">{t("export.svg.viewSilhouette")}</option>
                   <option value="footprint">{t("export.svg.viewFootprint")}</option>
                   <option value="edges">{t("export.svg.viewEdges")}</option>
+                </select>
+              </label>
+            </section>
+          ) : null}
+
+          {exportFormat === "dxf" ? (
+            <section className="export-setting-section">
+              <label>
+                <strong>{t("export.svg.view")}</strong>{" "}
+                <select aria-label={t("export.svg.view")} value={dxfView} onChange={(event) => setDxfView(event.target.value as DxfExportView)}>
+                  <option value="silhouette">{t("export.svg.viewSilhouette")}</option>
+                  <option value="footprint">{t("export.svg.viewFootprint")}</option>
                 </select>
               </label>
             </section>

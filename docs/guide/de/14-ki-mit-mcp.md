@@ -101,7 +101,7 @@ Die KI arbeitet mit denselben Funktionen wie du, sie läuft über denselben Weg 
 | `layerling_restore_from_history` | holt Objekte (auch Teile in Gruppen) aus einem früheren Stand als Kopien in den Entwurf zurück, wie „In den Entwurf holen“ in der Verlaufsansicht - ein Schritt, den Rückgängig zurücknimmt |
 | `layerling_export_section_svg` | liefert die Umrisse auf einer Schnittebene als SVG im Maßstab 1:1, aus denselben Körpern wie der Export |
 | `layerling_export_drawing` | macht die Werkstattzeichnung des Exports „2D“: drei Ansichten im Maßstab 1:1 auf einem ISO-Blatt mit Gesamtmaßen und einer Tabelle der runden Bohrungen, als SVG-Text oder PDF |
-| `layerling_export_mesh` | schreibt die Datei des Exportfensters als STL, 3MF, OBJ oder SVG (Draufsicht, Aufstandsfläche oder sichtbare Kanten), aus denselben Körpern; an einen Pfad auf diesem Rechner oder als Base64 |
+| `layerling_export_mesh` | schreibt die Datei des Exportfensters als STL, 3MF, OBJ, SVG (Draufsicht, Aufstandsfläche oder sichtbare Kanten) oder DXF für den Laserschnitt, aus denselben Körpern; an einen Pfad auf diesem Rechner oder als Base64 |
 | `layerling_save_project` | speichert den ganzen bearbeitbaren Entwurf als .lyl-Datei an einem Pfad auf dem Rechner, auf dem der MCP-Server läuft, ohne Dialog; eine vorhandene Datei wird nur mit `overwrite` ersetzt, geschrieben wird über eine temporäre Datei, und das Ziel von Strg+S im Editor bleibt, wie es war |
 | `layerling_set_workplane` | legt die Arbeitsebene auf eine Seite eines Körpers, setzt sie auf die Grundplatte zurück oder blendet sie aus und ein |
 | `layerling_capture_image` | nimmt ein Bild der Ansicht auf, von vorn, oben, seitlich, schräg von einer Ecke und mehr |

@@ -101,7 +101,7 @@ AI používá stejné funkce a stejné zpracování příkazů jako ruční ovl�
 | `layerling_restore_from_history` | vrátí objekty (i díly ve skupinách) ze staršího stavu do návrhu jako kopie, jako tlačítko „Vrátit do návrhu“ v historii - jeden krok, který Zpět vrátí |
 | `layerling_export_section_svg` | vrátí obrysy řezu jako SVG v měřítku 1:1 ze stejných těles jako běžný export |
 | `layerling_export_drawing` | vytvoří technický výkres tří pohledů v měřítku 1:1 na listu ISO s celkovými rozměry a tabulkou kruhových otvorů, jako SVG nebo PDF |
-| `layerling_export_mesh` | zapíše soubor exportního okna jako STL, 3MF, OBJ nebo SVG (pohled shora, půdorys nebo viditelné hrany) ze stejných těles; na cestu v tomto počítači nebo jako base64 |
+| `layerling_export_mesh` | zapíše soubor exportního okna jako STL, 3MF, OBJ, SVG (pohled shora, půdorys nebo viditelné hrany) nebo DXF pro laserové řezání ze stejných těles; na cestu v tomto počítači nebo jako base64 |
 | `layerling_save_project` | uloží celý upravitelný návrh jako soubor .lyl na cestu v počítači, kde běží server MCP, bez dialogu; existující soubor se nahradí jen s `overwrite`, zapisuje se přes dočasný soubor a cíl Ctrl+S v editoru zůstává, jaký byl |
 | `layerling_set_workplane` | položí pracovní rovinu na plochu tělesa nebo zpět na podložku a přepíná její viditelnost |
 | `layerling_capture_image` | pořídí snímek zepředu, shora, z boku, šikmo z rohu a z dalších pohledů |
