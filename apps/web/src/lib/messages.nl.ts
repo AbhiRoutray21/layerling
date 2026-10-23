@@ -786,6 +786,7 @@ export const MESSAGES_NL: Record<MessageKey, string> = {
   "shortcuts.dropToWorkplane": "Selectie op het werkvlak laten vallen",
   "shortcuts.nudge": "Eén rasterstap verplaatsen, volgens de draaiing van de weergave",
   "shortcuts.nudgeCoarse": "Vijf rasterstappen verplaatsen",
+  "shortcuts.nudgeFine": "Een vijfde rasterstap verplaatsen",
   "shortcuts.raise": "Selectie omhoog of omlaag",
   "shortcuts.rotate": "45° draaien",
   "transform.rotateHandle": "Sleep om te draaien",
