@@ -18,5 +18,15 @@
       "de": "Mit dem Werkzeug Auswählen und gewählten Linien oder Punkten macht die Taste 1 Linien gerade und Punkte zu Ecken, 2 macht Linien zu Kurven und 3 macht Punkte weich, alle gewählten auf einmal. Ohne Auswahl wählen die Tasten wie bisher das Zeichenwerkzeug. Die Tasten stehen in den Hinweisen der Knöpfe.",
       "en": "With the Select tool and lines or points selected, key 1 makes lines straight and points corners, 2 turns lines into curves and 3 makes points smooth, all selected ones at once. With nothing selected the keys still pick the drawing tool. The keys are named in the tooltips of the buttons."
     }
+  },
+  {
+    "title": {
+      "de": "Gridfinity-Bodenplatte passend zur Schublade",
+      "en": "Fit a Gridfinity baseplate to a drawer"
+    },
+    "body": {
+      "de": "Eine Gridfinity-Bodenplatte hat jetzt „Schubladenbreite“ und „Schubladentiefe“ im Eigenschaften-Fenster: Tippe das Innenmaß der Schublade ein, und die Platte nimmt so viele Einheiten, wie hineinpassen, und verteilt den Rest gleichmäßig auf den Ausgleich, sodass sie 0,5 mm kleiner als die Schublade wird.",
+      "en": "A Gridfinity baseplate now has \"Drawer width\" and \"Drawer depth\" in the Properties panel: type the drawer's inside size, and the plate takes as many units as fit and splits the rest evenly into its padding, so it comes out 0.5 mm smaller than the drawer."
+    }
   }
 ]
