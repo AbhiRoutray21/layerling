@@ -105,7 +105,7 @@ L’IA usa le stesse funzioni che hai a disposizione, attraverso lo stesso perco
 | `layerling_restore_from_history` | Ripristina nel progetto come copie gli oggetti di uno stato precedente, comprese le parti all’interno dei gruppi, come «Inserisci nel progetto» nella vista Cronologia; l’operazione è un singolo passaggio annullabile. |
 | `layerling_export_section_svg` | Restituisce in formato SVG, in scala 1:1, i contorni sul piano di sezione, usando gli stessi corpi dell’esportazione. |
 | `layerling_export_drawing` | Crea il disegno tecnico dell’esportazione «2D»: tre viste in scala 1:1 su un foglio ISO, con dimensioni complessive e tabella dei fori circolari, in formato SVG testuale o PDF. |
-| `layerling_export_mesh` | Esporta i corpi della finestra di esportazione in formato STL, 3MF, OBJ o SVG (vista dall’alto, impronta o spigoli visibili), in un percorso del computer o come base64. |
+| `layerling_export_mesh` | Esporta i corpi della finestra di esportazione in formato STL, 3MF, OBJ, SVG (vista dall’alto, impronta o spigoli visibili) o DXF per il taglio laser, in un percorso del computer o come base64. |
 | `layerling_save_project` | Salva l’intero progetto modificabile come file `.lyl` in un percorso del computer su cui è in esecuzione il server MCP, senza finestra di dialogo. Un file esistente viene sostituito solo con `overwrite`; il salvataggio avviene tramite un file temporaneo e non modifica la destinazione di [[Ctrl]]+[[S]] nell’editor. |
 | `layerling_set_workplane` | Posiziona il piano di lavoro su un lato di un corpo o lo riporta alla piastra di base, e lo nasconde o lo mostra. |
 | `layerling_capture_image` | Acquisisce un’immagine della vista: frontale, dall’alto, laterale, diagonale da un angolo e altre prospettive. |

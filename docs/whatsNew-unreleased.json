@@ -1,6 +1,18 @@
 [
   {
     "title": {
+      "de": "DXF für den Laserschnitt",
+      "en": "DXF for laser cutting shops",
+      "hu": "DXF lézervágáshoz"
+    },
+    "body": {
+      "de": "Das Exportfenster hat jetzt DXF: die Draufsicht oder die Aufstandsfläche als ein Umriss aus Linien, echten Bögen und Kreisen auf Layer 0 in Weiß, in Millimetern - so, wie Laserschneid-Betriebe die Datei verlangen. Löcher und Rundungen werden echte Kreise und Bögen statt vieler kurzer Geraden, an denen der Schneidkopf ruckelt. Noch nicht an einem Laserschneider erprobt: Rückmeldungen sind willkommen.",
+      "en": "The export window now has DXF: the top view or the footprint as one outline of lines, true arcs and circles on layer 0 in white, in millimetres - the way laser cutting shops ask for the file. Holes and roundings become real circles and arcs instead of many short straight pieces that make the cutting head shake. Not yet tried on a laser cutter: feedback is welcome.",
+      "hu": "Az exportablakban mostantól DXF is van: a felülnézet vagy a felfekvési felület egyetlen körvonalként, egyenesekből, valódi ívekből és körökből, a 0-s rétegen, fehér színnel, milliméterben - ahogy a lézervágó cégek kérik. A furatok és lekerekítések valódi körök és ívek lesznek, nem sok rövid egyenes, amitől a vágófej rázkódik. Lézervágón még nincs kipróbálva: a visszajelzéseket szívesen fogadjuk."
+    }
+  },
+  {
+    "title": {
       "de": "Winkellineal: Abstandsfelder überdecken sich nicht mehr",
       "en": "Framing square: the distance fields no longer cover each other"
     },

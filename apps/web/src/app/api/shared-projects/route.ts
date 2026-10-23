@@ -19,7 +19,7 @@ const SEARCH_RESULT_LIMIT = 200;
 const SEARCH_DEPTH_LIMIT = 12;
 const SEARCH_FOLDER_LIMIT = 2000;
 /** What an export can be called on the server (#779): the files a slicer or a laser software opens. */
-const EXPORT_FILE_EXTENSIONS = ["stl", "3mf", "obj", "step", "stp", "svg", "png", "pdf"];
+const EXPORT_FILE_EXTENSIONS = ["stl", "3mf", "obj", "step", "stp", "svg", "dxf", "png", "pdf"];
 
 type SharedProjectFile = {
   fileName: string;
