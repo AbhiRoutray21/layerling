@@ -11966,6 +11966,23 @@ export function LayerlingEditor({
     [importFiles],
   );
 
+  /**
+   * What the import window's drop zone does with dropped files. layerling designs (.lyl) go into the open design, as
+   * with "Insert into this design" (HopGabor62, #683: a big Tinkercad import comes as several .lyl files, and dragging
+   * them is easier than picking from a list); opening one as a new design has its own button above the zone.
+   */
+  const dropFiles = useCallback(
+    async (files: FileList | File[]) => {
+      const dropped = Array.from(files);
+      if (dropped.length && dropped.every((file) => /\.(lyl|skf)$/i.test(file.name))) {
+        for (const file of dropped) await insertLylDesign(file);
+        return;
+      }
+      selectFiles(dropped);
+    },
+    [insertLylDesign, selectFiles],
+  );
+
   const selectShape = useCallback((id: string | string[] | null, mode: "replace" | "toggle" = "replace") => {
     setSelectedIds((current) => {
       if (Array.isArray(id)) {
@@ -13424,7 +13441,7 @@ export function LayerlingEditor({
           sharedProjectsEnabled={sharedProjectsEnabled}
           lylExporting={lylExporting}
           stepExporting={stepExporting}
-          onImportFiles={selectFiles}
+          onImportFiles={(files) => void dropFiles(files)}
           onPickFile={() => fileInputRef.current?.click()}
           onPickProjectFile={() => void pickProjectFile()}
           onPickInsertProjectFile={() => insertProjectFileInputRef.current?.click()}

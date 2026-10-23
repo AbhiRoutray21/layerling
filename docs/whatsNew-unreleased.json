@@ -8,5 +8,15 @@
       "de": "Das Vorschaubild eines Entwurfs in der Übersicht war ein verkleinerter Abzug des Editors: Wer nah herangezoomt hatte, bekam einen angeschnittenen Ausschnitt, wer weit herausgezoomt hatte, winzige Körper in der Ecke der Platte. Jetzt wird für das Bild kurz auf alle Körper eingepasst, aus der Richtung, aus der du schaust. Dein Bildschirm bleibt dabei, wie er ist.",
       "en": "The preview picture of a design in the overview was a shrunken copy of the editor: with a close-up you got a cut-off detail, zoomed far out you got tiny bodies in the corner of the plate. For the picture the view is now briefly fitted to all bodies, from the side you are looking from. Your screen stays as it is."
     }
+  },
+  {
+    "title": {
+      "de": "Entwürfe per Ziehen einfügen",
+      "en": "Drop designs to insert them"
+    },
+    "body": {
+      "de": "Legst du eine oder mehrere layerling-Dateien (.lyl) im Ablagefeld des Import-Fensters ab, kommen ihre Körper in den offenen Entwurf, wie bei „In diesen Entwurf einfügen“. Praktisch, wenn ein großer Tinkercad-Import in mehrere Dateien zerlegt ist.",
+      "en": "Drop one or more layerling files (.lyl) on the drop zone of the import window and their bodies are added to the open design, as with \"Insert into this design\". Handy when a large Tinkercad import comes in several files."
+    }
   }
 ]
