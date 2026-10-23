@@ -8,5 +8,25 @@
       "de": "Umschalt+N blendet die Notizen und Bezugspunkte ein und aus, im 3D-Editor und in der Skizze, wie „Notizen und Punkte anzeigen“ im Sichtbarkeitsmenü. N allein setzt weiter eine Notiz.",
       "en": "Shift+N shows or hides the notes and reference points, in the 3D editor and in a sketch, like \"Show notes and points\" in the Visibility menu. N alone still places a note."
     }
+  },
+  {
+    "title": {
+      "de": "Bezugspunkte rasten beim Ziehen ein",
+      "en": "Reference points snap while you drag them"
+    },
+    "body": {
+      "de": "Ziehst du einen Bezugspunkt, rastet er an Ecken, Kanten- und Flächenmitten der Körper und an anderen Punkten ein. Mit gedrückter Alt-Taste bleibt er frei.",
+      "en": "Drag a reference point and it snaps to the corners, the middles of the edges and faces of bodies, and to other points. Hold Alt to let it go free."
+    }
+  },
+  {
+    "title": {
+      "de": "Das Lineal misst auch aufgestellt",
+      "en": "The ruler measures when stood up"
+    },
+    "body": {
+      "de": "Stellst du das Lineal auf oder kippst es, misst es entlang seiner eigenen Richtung: Senkrecht neben einem Körper zeigt es dessen Höhe, statt weiter über die Platte zu messen.",
+      "en": "Stand the ruler up or tip it and it measures along its own direction: upright beside a body it shows the body's height instead of measuring along the plate."
+    }
   }
 ]
