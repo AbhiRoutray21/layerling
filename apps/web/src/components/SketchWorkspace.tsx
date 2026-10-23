@@ -6,6 +6,7 @@ import { markEscapeHandled } from "@/lib/escapeHandled";
 import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties, type Dispatch, type SetStateAction, type FocusEvent as ReactFocusEvent, type KeyboardEvent as ReactKeyboardEvent, type MouseEvent as ReactMouseEvent, type PointerEvent as ReactPointerEvent, type WheelEvent as ReactWheelEvent } from "react";
 import { SnapGridControl } from "@/components/workplane/ShapeInspector";
 import { SketchRevolvePreview } from "@/components/SketchRevolvePreview";
+import { SketchNotes } from "@/components/SketchNotes";
 import { ToolbarConstructionLineIcon } from "@/components/toolbarIcons";
 import { constructionCrossings } from "@/lib/sketchConstruction";
 import { outlineSideMiddles, sketchSnapPoints } from "@/lib/sketchSnapPoints";
@@ -26,7 +27,7 @@ import { isSketchPrimitive, type SketchPrimitive } from "@/lib/sketchPrimitives"
 import { meshForShape } from "@/lib/editorMeshCore";
 import { mirrorSign, resizedImportedMeshPositions } from "@/lib/workplaneShapes";
 import { DEFAULT_SNAP_GRID, DEFAULT_WORKPLANE_WORKSPACE, keyboardNudgeCoarseFactor, keyboardNudgeStep, normalizeSnapGrid, normalizeWorkspaceSettings, snapGridStep as snapStep, orbitControlsZoomSpeed, zoomDistanceScale, ZOOM_STEP_IN, ZOOM_STEP_OUT } from "@/lib/workplaneSettings";
-import type { GridSize, SketchImage, SketchOperation, SketchPoint, SketchProfile, SketchSegment, SketchStroke, SketchStrokeAlign, SketchStrokeCap, SketchStrokeJoin, SweepAnchor, WorkplaneShape, WorkplaneWorkspaceSettings } from "@/types/layerling";
+import type { GridSize, SketchImage, SketchNote, SketchOperation, SketchPoint, SketchProfile, SketchSegment, SketchStroke, SketchStrokeAlign, SketchStrokeCap, SketchStrokeJoin, SweepAnchor, WorkplaneShape, WorkplaneWorkspaceSettings } from "@/types/layerling";
 import { resizePointerOnGrid } from "@/lib/sketchFrameResize";
 import { viewArrowStep } from "@/lib/viewArrowKeys";
 import { resizeSketchPoints, resizeSketchPointsToSize, type ResizeHandle, type SelectionBounds } from "@/lib/sketchSelectionResize";
@@ -129,6 +130,14 @@ type SketchWorkspaceProps = {
   /** Leave the holes out (#197), set in the same panel. */
   onSilhouetteChange?: (silhouette: boolean) => void;
   strokePreview?: string | null;
+  /** The sketch body's notes: pins and cards as in the 3D view; with `noteMode`, the next click puts one there. */
+  notes?: readonly SketchNote[];
+  noteNumbers?: ReadonlyMap<string, number>;
+  noteMode?: boolean;
+  /** Puts a note on the spot and gives its id, or null when there is no room for another. */
+  onAddNote?: (spot: { x: number; z: number }) => string | null;
+  onUpdateNote?: (id: string, patch: Partial<SketchNote>) => void;
+  onRemoveNote?: (id: string) => void;
 };
 
 type SketchReferenceFootprint = {
@@ -608,6 +617,12 @@ export function SketchWorkspace({
   onStrokeChange,
   onSilhouetteChange,
   strokePreview = null,
+  notes,
+  noteNumbers,
+  noteMode = false,
+  onAddNote,
+  onUpdateNote,
+  onRemoveNote,
 }: SketchWorkspaceProps) {
   useLanguage();
   const workspace = useMemo(() => normalizeWorkspaceSettings(initialWorkspace, DEFAULT_WORKPLANE_WORKSPACE), [initialWorkspace]);
@@ -683,6 +698,7 @@ export function SketchWorkspace({
     });
   };
   const [svgSize, setSvgSize] = useState({ width: 0, height: 0 });
+  const [editingNoteId, setEditingNoteId] = useState<string | null>(null);
   const svgRef = useRef<SVGSVGElement | null>(null);
   const wrapRef = useRef<HTMLElement | null>(null);
   // Width or height of the selected shape, while its value is typed (#168).
@@ -1223,6 +1239,14 @@ export function SketchWorkspace({
   const rightPressRef = useRef<{ x: number; y: number } | null>(null);
 
   const handlePanPointerDownCapture = (event: ReactPointerEvent<SVGSVGElement>) => {
+    // With the note tool, a click anywhere - on a line as well - puts the note there, and nothing else happens.
+    const notePoint = noteMode && event.button === 0 && onAddNote ? unsnappedPointFromEvent(event) : null;
+    if (notePoint) {
+      event.preventDefault();
+      event.stopPropagation();
+      setEditingNoteId(onAddNote!(notePoint));
+      return;
+    }
     if (event.button === 2) rightPressRef.current = { x: event.clientX, y: event.clientY };
     if (isSketchPanGesture(event)) beginPan(event);
     else retargetTouchPress(event);
@@ -1952,7 +1976,7 @@ export function SketchWorkspace({
       <section ref={wrapRef} className="sketch-plate-wrap" aria-label="2D sketch plate">
         <svg
           ref={svgRef}
-          className={`sketch-plate tool-${tool} ${pointerAction?.kind === "pan" ? "panning" : ""}`}
+          className={`sketch-plate tool-${tool} ${pointerAction?.kind === "pan" ? "panning" : ""} ${noteMode ? "note-mode" : ""}`}
           viewBox={`${pan.x - width / 2} ${pan.z - depth / 2} ${width} ${depth}`}
           preserveAspectRatio="xMidYMid meet"
           onPointerDownCapture={handlePanPointerDownCapture}
@@ -2640,6 +2664,27 @@ export function SketchWorkspace({
           ) : null}
           {hover && ["line", "arc", "bezier", "smooth", "measure"].includes(tool) ? <circle className="sketch-cursor-point" cx={hover.x} cy={hover.z} r={hoverPointRadius} pointerEvents="none" /> : null}
         </svg>
+        {notes?.length && onUpdateNote && onRemoveNote ? (
+          <SketchNotes
+            notes={notes}
+            numbers={noteNumbers ?? new Map()}
+            toScreen={(spot) => {
+              // Where the plate's viewBox puts the spot, centred and kept in proportion (xMidYMid meet).
+              const scale = Math.min(svgSize.width / width, svgSize.height / depth) || 0;
+              return {
+                x: (svgSize.width - width * scale) / 2 + (spot.x - pan.x + width / 2) * scale,
+                y: (svgSize.height - depth * scale) / 2 + (spot.z - pan.z + depth / 2) * scale,
+              };
+            }}
+            toSketch={unsnappedPointFromEvent}
+            viewWidth={svgSize.width}
+            editingId={editingNoteId}
+            onEditingIdChange={setEditingNoteId}
+            onChange={onUpdateNote}
+            onRemove={onRemoveNote}
+            workspace={workspace}
+          />
+        ) : null}
         {typedLine && activePoint ? (() => {
           const overlayPos = getOverlayPos(typedLine.sketchPos);
           if (!overlayPos) return null;

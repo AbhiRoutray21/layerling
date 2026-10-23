@@ -211,9 +211,9 @@ import { toSvgProjection, toSvgTopEdges, type SvgProjectionLayer } from "@/lib/s
 import { DrawingTooComplexError } from "@/lib/drawingProjection";
 import { DEFAULT_TAPER_DIMENSION_MAX, keyboardNudgeCoarseFactor, keyboardNudgeStep, normalizeShapeCustomizations, normalizeSnapGrid, normalizeWorkspaceSettings, shapeDimensionLimit, workplaneSettingsFingerprint } from "@/lib/workplaneSettings";
 import { MCP_GRIDFINITY_LIST_KEYS, mcpGridfinityListParams, mcpGridfinityPaddingPatch, mcpThreadSizeParams } from "@/lib/mcpShapeSettings";
-import { createNoteId, normalizeNotes, NOTE_COUNT_LIMIT, patchNote, referencePoints } from "@/lib/workplaneNotes";
+import { normalizeNotes, referencePoints } from "@/lib/workplaneNotes";
 import { notesAfterShapeChange, notesPinnedTo, notesPutBack } from "@/lib/noteAnchoring";
-import { newReferencePositions, referencePointsForBox, unionReferenceBoxes, type ReferencePointSpot, type ReferencePosition } from "@/lib/referencePoints";
+import { referencePointsForBox, unionReferenceBoxes, type ReferencePointSpot, type ReferencePosition } from "@/lib/referencePoints";
 import {
   normalizePlacementWorkplane,
   placementPatchForNewShape,
@@ -238,6 +238,10 @@ import { svgSketchMatchesMesh } from "@/lib/svgSketch";
 import { DEFAULT_SKETCH_STROKE, normalizeSketchStroke, strokedSketchProfile } from "@/lib/sketchStroke";
 import { bottomCadModifierEdgeIds, horizontalCadModifierEdgeIds, topCadModifierEdgeIds, verticalCadModifierEdgeIds } from "@/lib/topEdges";
 import { movedWithEditedOutline, placedLikeExisting, placeSketchShape, sketchBodyAnchor, type SketchAnchor } from "@/lib/sketchPlacement";
+import { notesWithSketchNotes, sketchNoteFrame, sketchNotesFromBody } from "@/lib/sketchNotes";
+import { useSketchNotes } from "@/lib/useSketchNotes";
+import { useEditorNotes } from "@/lib/useEditorNotes";
+import { NoteToolButton } from "@/components/workplane/NoteToolButton";
 import { separatesBySketch, sketchOutlineParts } from "@/lib/sketchOutlineParts";
 import { sketchOutlineBounds } from "@/lib/sketchKeyring";
 import { meshSlicePath, planeCutsMesh } from "@/lib/sketchSlice";
@@ -448,13 +452,6 @@ const LEAVE_SNAPSHOT_DEADLINE_MS = 600;
  * moves any more. A drag in progress keeps changing and so keeps waiting.
  */
 const PROJECT_SYNC_HELD_MAX_MS = 2000;
-
-/**
- * So lange darf eine Notiz getippt oder gezogen werden, ohne dass daraus ein
- * Schritt im Verlauf wird. Danach steht sie darin - wie ein Absatz in einem
- * Textfeld, nicht wie ein Buchstabe.
- */
-const NOTE_COMMIT_IDLE_MS = 700;
 
 const MAX_SKETCH_HISTORY_ENTRIES = 100;
 const NORMAL_SELECTION_CAD_EDGE_MIN_ANGLE = 60;
@@ -2822,7 +2819,6 @@ export function LayerlingEditor({
   const [thumbnailMissingCheck, setThumbnailMissingCheck] = useState(0);
   const shapesRef = useRef(shapes);
   const notesRef = useRef(notes);
-  const noteCommitTimerRef = useRef<number | null>(null);
   const projectAssetsRef = useRef(projectAssets);
   const selectedIdsRef = useRef(selectedIds);
   const workspaceSettingsRef = useRef(workspaceSettings);
@@ -4192,55 +4188,7 @@ export function LayerlingEditor({
     [appendHistoryEntry, setNotice, syncProjectShapes],
   );
 
-  const addNote = useCallback(
-    (note: { x: number; y: number; z: number; anchor?: WorkplaneNote["anchor"] }) => {
-      if (notesRef.current.length >= NOTE_COUNT_LIMIT) {
-        setNotice(t("status.noteLimitReached", { count: NOTE_COUNT_LIMIT }));
-        return null;
-      }
-      const created: WorkplaneNote = { id: createNoteId(), text: "", x: note.x, y: note.y, z: note.z };
-      if (note.anchor) created.anchor = note.anchor;
-      commitNotes([...notesRef.current, created], note.anchor ? t("status.notePinned") : t("status.noteAdded"));
-      return created.id;
-    },
-    [commitNotes, setNotice],
-  );
-
-  /**
-   * Reference points: bare marks in space that shapes snap to. They live among
-   * the notes (so they are saved, undone and shared like them) but are not notes.
-   */
-  const addReferencePoints = useCallback(
-    (positions: ReferencePosition[]) => {
-      const fresh = newReferencePositions(notesRef.current, positions);
-      if (fresh.length === 0) {
-        setNotice(t("status.pointsExist"));
-        return [] as string[];
-      }
-      const room = NOTE_COUNT_LIMIT - notesRef.current.length;
-      if (room <= 0) {
-        setNotice(t("status.noteLimitReached", { count: NOTE_COUNT_LIMIT }));
-        return [] as string[];
-      }
-      const created: WorkplaneNote[] = fresh.slice(0, room).map((position) => ({
-        id: createNoteId(),
-        text: "",
-        ...position,
-        kind: "point",
-        collapsed: true,
-      }));
-      setNotesVisible(true);
-      commitNotes([...notesRef.current, ...created], t("status.pointsAdded", { count: created.length }));
-      return created.map((point) => point.id);
-    },
-    [commitNotes, setNotice],
-  );
-
-  const removeAllReferencePoints = useCallback(() => {
-    const points = referencePoints(notesRef.current);
-    if (points.length === 0) return;
-    commitNotes(notesRef.current.filter((note) => note.kind !== "point"), t("status.pointsRemoved", { count: points.length }));
-  }, [commitNotes]);
+  const { addNote, addReferencePoints, removeAllReferencePoints, updateNote, removeNote } = useEditorNotes({ notesRef, setNotes, commitNotes, setNotice, setNotesVisible });
 
   const markSelectionPoints = useCallback(
     (spot: ReferencePointSpot) => {
@@ -4248,48 +4196,6 @@ export function LayerlingEditor({
       if (box) addReferencePoints(referencePointsForBox(box, spot));
     },
     [addReferencePoints, selectedShapes],
-  );
-
-  /**
-   * Beim Tippen und beim Ziehen faellt pro Anschlag eine Aenderung an. Jede
-   * davon in den Verlauf zu legen, machte Rueckgaengig unbrauchbar - also geht
-   * ein solcher Zwischenstand nur in den Zustand, und der Verlauf bekommt ihn,
-   * wenn die Hand stillhaelt oder das Feld den Fokus abgibt.
-   */
-  const updateNote = useCallback(
-    (id: string, patch: Partial<WorkplaneNote>, transient = false) => {
-      const next = patchNote(notesRef.current, id, patch);
-      if (!next) return;
-      if (noteCommitTimerRef.current !== null) {
-        window.clearTimeout(noteCommitTimerRef.current);
-        noteCommitTimerRef.current = null;
-      }
-      if (!transient) {
-        commitNotes(next);
-        return;
-      }
-      notesRef.current = next;
-      setNotes(next);
-      noteCommitTimerRef.current = window.setTimeout(() => {
-        noteCommitTimerRef.current = null;
-        commitNotes(notesRef.current);
-      }, NOTE_COMMIT_IDLE_MS);
-    },
-    [commitNotes],
-  );
-
-  const removeNote = useCallback(
-    (id: string) => {
-      if (noteCommitTimerRef.current !== null) {
-        window.clearTimeout(noteCommitTimerRef.current);
-        noteCommitTimerRef.current = null;
-      }
-      const current = notesRef.current;
-      const removed = current.find((note) => note.id === id);
-      if (!removed) return;
-      commitNotes(current.filter((note) => note.id !== id), t(removed.kind === "point" ? "status.pointRemoved" : "status.noteRemoved"));
-    },
-    [commitNotes],
   );
 
   /**
@@ -4433,7 +4339,9 @@ export function LayerlingEditor({
       // unless the edit sets it - or clears it with `stroke: undefined`.
       const withStroke = "stroke" in next || !latest?.stroke ? next : { ...next, stroke: latest.stroke };
       // The same for the side of a swept section that runs along the path (#732).
-      const carried = "sweepAnchor" in withStroke || !latest?.sweepAnchor ? withStroke : { ...withStroke, sweepAnchor: latest.sweepAnchor };
+      const anchored = "sweepAnchor" in withStroke || !latest?.sweepAnchor ? withStroke : { ...withStroke, sweepAnchor: latest.sweepAnchor };
+      // And for the sketch's notes.
+      const carried = "notes" in anchored || !latest?.notes ? anchored : { ...anchored, notes: latest.notes };
       // Moving shapes over each other makes no shared points where their lines cross (#239); drawing does.
       const snapshot = cloneSketchProfile(latest && onlyMovesPoints(latest, carried) ? carried : addLineIntersectionPoints(carried, createLocalId));
       // A locked outline (#653) stays as it is, whatever tool tried to change it.
@@ -4477,8 +4385,12 @@ export function LayerlingEditor({
     revolveSettings?: Partial<SketchRevolveSettings>,
     workplaneOverride?: PlacementWorkplane,
   ) => {
-    const initial = cloneSketchProfile(profile ?? emptySketchProfile());
+    const body = editingId ? shapesRef.current.find((shape) => shape.id === editingId) : undefined;
+    const drawn = profile ?? emptySketchProfile();
+    // The body's notes come along, shown on the sketch, and go back to the body when it is finished.
+    const initial = cloneSketchProfile({ ...drawn, notes: body ? sketchNotesFromBody(notesRef.current, body, sketchNoteFrame(body, operation, drawn, revolveSettings)) : [] });
     setCruiseAsset(null);
+    setNoteMode(false);
     setWorkplaneMode(false);
     setActiveSketchWorkplane(normalizePlacementWorkplane(workplaneOverride ?? placementWorkplaneRef.current));
     setToolbarMode("sketch");
@@ -4558,6 +4470,7 @@ export function LayerlingEditor({
 
   const cancelSketch = useCallback(() => {
     setSketchActive(false);
+    setNoteMode(false);
     sketchEditAnchorRef.current = null;
     sketchOperationSwitchRef.current = null;
     setSketchActivePointId(null);
@@ -4571,6 +4484,8 @@ export function LayerlingEditor({
     setToolbarMode("geometry");
     setNotice(t("status.sketchCancelled"));
   }, []);
+
+  const sketchNotes = useSketchNotes({ profile: sketchProfile, commit: commitSketchProfile, notes, editedId: editingSketchShapeId, onPlaced: () => setNoteMode(false), setNotice });
 
   /**
    * What the open sketch becomes - extruded, revolved or swept - changed while drawing (#655). The sketch
@@ -5263,6 +5178,8 @@ export function LayerlingEditor({
   }, [sketchActive, sketchOperation, sketchProfile]);
 
   const finishSketch = useCallback(async () => {
+    // The notes are not part of the body's sketch: they become the body's own.
+    const { notes: sketchNotes, ...drawnProfile } = sketchProfile;
     const edited = editingSketchShapeId ? shapes.find((shape) => shape.id === editingSketchShapeId) ?? null : null;
     // Switched to another kind of body (#655): a new body of that kind takes the edited one's place.
     const switchedBody = edited && sketchOperationSwitchRef.current ? edited : null;
@@ -5272,16 +5189,16 @@ export function LayerlingEditor({
     try {
       if (switchedBody) {
         setNotice(t("status.buildingSketch"), true);
-        resolved = await sketchBodyAsOperation(switchedBody, sketchProfile, sketchOperation, sketchRevolveSettings);
+        resolved = await sketchBodyAsOperation(switchedBody, drawnProfile, sketchOperation, sketchRevolveSettings);
       } else if (sketchOperation === "revolve") {
         setNotice(t("status.buildingSketch"), true);
-        const revolved = await shapeFromRevolvedSketchProfile(sketchProfile, sketchRevolveSettings, existing);
+        const revolved = await shapeFromRevolvedSketchProfile(drawnProfile, sketchRevolveSettings, existing);
         resolved = placeSketchShape(revolved, activeSketchWorkplane, existing);
         if (!existing && resolved && placementWorkplaneIsBase(activeSketchWorkplane)) {
           // The body stands where the profile was drawn (#525): its foot at the height of the lowest point of the profile,
           // the line through the origin being the ground. A profile above it makes a body that stands on whatever is there.
           const runtime = await getManifoldRuntime();
-          const outline = sketchOutlineBounds(revolveBuildProfile(runtime, sketchProfile));
+          const outline = sketchOutlineBounds(revolveBuildProfile(runtime, drawnProfile));
           if (outline) resolved = canonicalizeShape({ ...resolved, elevation: (resolved.elevation ?? 0) - outline.maxZ });
         }
         if (existing?.sketchProfile && resolved) {
@@ -5291,7 +5208,7 @@ export function LayerlingEditor({
           const shift = revolveAxisShift(
             existing,
             { profile: revolveBuildProfile(runtime, existing.sketchProfile), settings: existing.sketchRevolve ?? {} },
-            { profile: revolveBuildProfile(runtime, sketchProfile), settings: sketchRevolveSettings },
+            { profile: revolveBuildProfile(runtime, drawnProfile), settings: sketchRevolveSettings },
             base ? existing.width / Math.max(0.001, base.baseWidth) : 1,
             base ? existing.depth / Math.max(0.001, base.baseDepth) : 1,
             1,
@@ -5303,8 +5220,8 @@ export function LayerlingEditor({
         setNotice(t("status.buildingSketch"), true);
         // A sweep is built like an extrusion, from the outlines along the construction line (#400).
         const extrusion = sketchOperation === "sweep"
-          ? await cadShapeFromSketchSweep(sketchProfile, existing)
-          : await cadShapeFromSketchProfile(sketchProfile, height, existing);
+          ? await cadShapeFromSketchSweep(drawnProfile, existing)
+          : await cadShapeFromSketchProfile(drawnProfile, height, existing);
         resolved = placeSketchShape(extrusion, activeSketchWorkplane, existing);
         if (existing && resolved) {
           // Put the body where its outline is: it is centred on the new outline, and the edit may have moved that middle.
@@ -5328,6 +5245,7 @@ export function LayerlingEditor({
       setNotice(t("status.closeProfile"), true);
       return;
     }
+    if (sketchNotes) notesRef.current = notesWithSketchNotes(notesRef.current, edited?.id ?? null, resolved, sketchNotes, sketchNoteFrame(resolved, sketchOperation, drawnProfile, sketchRevolveSettings));
     const nextShapes = edited ? shapes.map((shape) => (shape.id === edited.id ? resolved : shape)) : [...shapes, resolved];
     commitShapes(
       nextShapes,
@@ -5341,6 +5259,7 @@ export function LayerlingEditor({
             : t("status.exactSketchCreated"),
     );
     setSketchActive(false);
+    setNoteMode(false);
     setSketchStrokePanelOpen(false);
     setSketchRevolvePreview(null);
     setEditingSketchShapeId(null);
@@ -12047,7 +11966,10 @@ export function LayerlingEditor({
           if (escapeWasHandled(event)) return;
           event.preventDefault();
           // As in 3D: first the tool goes down, then the selection (#664).
-          if (sketchEscapeAction(sketchTool) === "selectTool") {
+          if (noteMode) {
+            setNoteMode(false);
+            setNotice("");
+          } else if (sketchEscapeAction(sketchTool) === "selectTool") {
             setActiveSketchTool("select");
           } else {
             setSketchActivePointId(null);
@@ -12086,6 +12008,9 @@ export function LayerlingEditor({
           // L locks what is selected: the template image, or an outline (#653).
           if (sketchSelection && sketchSelection.kind !== "image") toggleSketchOutlineLock();
           else toggleSelectedSketchImageLock();
+        } else if (!shortcut && !event.altKey && (event.code === "KeyN" || key === "n")) {
+          event.preventDefault();
+          toggleNoteTool();
         }
         return;
       }
@@ -12796,6 +12721,12 @@ export function LayerlingEditor({
             onSnapChange={(snap) => updateProjectWorkspaceSettings({ workspace: workspaceSettingsRef.current, snap })}
             initialWorkspace={workspaceSettings}
             onPlanePoint={addSketchPlanePoint}
+            notes={notesVisible ? sketchNotes.notes : undefined}
+            noteNumbers={sketchNotes.numbers}
+            noteMode={noteMode}
+            onAddNote={sketchNotes.add}
+            onUpdateNote={sketchNotes.update}
+            onRemoveNote={sketchNotes.remove}
             fromMiddle={sketchFromMiddle}
             onAddPrimitive={addSketchPrimitive}
             onAddArc={addSketchArc}
@@ -14188,6 +14119,7 @@ function SecondaryToolbar({
         plain("sketch-arc", t("sketch.arc"), drawGroup, true, () => onSketchTool("arc"), { icon: SKETCH_PALETTE_ICONS.arc, active: sketchTool === "arc" }),
         plain("sketch-bezier", t("sketch.bezier"), drawGroup, true, () => onSketchTool("bezier"), { icon: SKETCH_PALETTE_ICONS.bezier, active: sketchTool === "bezier" }),
         plain("sketch-smooth", t("sketch.smooth"), drawGroup, true, () => onSketchTool("smooth"), { icon: SKETCH_PALETTE_ICONS.smooth, active: sketchTool === "smooth" }),
+        plain("note", t("editor.tool.note"), t("editor.group.manage"), true, onNoteTool, { icon: ToolbarNoteIcon, active: noteMode }),
         plain("sketch-construction", t("sketch.construction"), drawGroup, true, () => onSketchConstruction?.(), { icon: ToolbarConstructionLineIcon, active: Boolean(sketchConstruction), keywords: ["construction", "guide", "helper", "hilfslinie", "hilfs", "konstruktion"] }),
         plain("sketch-from-middle", t("sketch.fromMiddle"), drawGroup, true, () => onSketchFromMiddle?.(), { icon: ToolbarMiddleLineIcon, active: Boolean(sketchFromMiddle), keywords: ["middle", "center", "centre", "mitte", "mittellinie", "symmetric", "symmetrisch"] }),
         ...sketchShapeMenuItems.map(({ primitive, label, icon }) => plain(
@@ -14517,16 +14449,7 @@ function SecondaryToolbar({
       <div className="toolbar-section toolbar-actions-section" data-group="manage">
         <div className="toolbar-section-label">{t("editor.group.manage")}</div>
         <div className="action-buttons">
-          {simpleMode ? null : <button
-            className={`action-icon-button ${noteMode ? "active" : ""}`}
-            aria-label={t("editor.tool.note")}
-            aria-pressed={noteMode}
-            title={`${t("editor.tool.note")} (${COMMAND_SHORTCUTS.note})`}
-            onClick={onNoteTool}
-            disabled={historyViewActive}
-          >
-            <ToolbarNoteIcon />
-          </button>}
+          {simpleMode ? null : <NoteToolButton active={noteMode} shortcut={COMMAND_SHORTCUTS.note} onClick={onNoteTool} disabled={historyViewActive} />}
           {simpleMode ? null : <button className="action-icon-button" aria-label={t("editor.import")} title={`${t("editor.import")} (${COMMAND_SHORTCUTS.import})`} onClick={() => onTopPanel("import")} disabled={historyViewActive}>
             <ToolbarImportIcon />
           </button>}
@@ -14787,6 +14710,11 @@ function SecondaryToolbar({
                 </div>
               </div>
             )}
+            {/* Notes go on a sketch as in 3D: they are the sketch body's. */}
+            {simpleMode || !sketchActive ? null : <div className="toolbar-section toolbar-actions-section" data-group="manage">
+              <div className="toolbar-section-label">{t("editor.group.manage")}</div>
+              <div className="action-buttons"><NoteToolButton active={noteMode} shortcut={COMMAND_SHORTCUTS.note} onClick={onNoteTool} /></div>
+            </div>}
             {/* Sketch mode has its own keys; the help opens from here too. */}
             {simpleMode ? null : <div className="toolbar-section toolbar-actions-section" data-group="help">
               <div className="toolbar-section-label">{t("editor.group.help")}</div>

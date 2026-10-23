@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import "./historyView.css";
+import "./notes.css";
 import "./myShapes.css";
 import "./viewCube.css";
 import "./secondView.css";

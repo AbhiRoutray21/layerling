@@ -65,6 +65,7 @@ A note records what the geometry does not say: "This screw is 0.3 mm too tight",
 - If its body is deleted, or no visible body is under it any more, the note stays where it stood, on the workplane.
 - Dragging the pin moves the note. A click on the pin folds the card away, only the small number stays; another click opens it again. A click into the text edits it.
 - While you write, [[Enter]] keeps the text and [[Esc]] puts it back to how it was before you started; [[Shift]]+[[Enter]] starts a new line.
+- **In a sketch**, {{ui:editor.tool.note}} (under {{ui:editor.group.manage}}) or [[N]] places a note too, anywhere on the sketch. All of a sketch's notes belong to its body: in the 3D view they sit on it, on the top of an extruded or swept body and on the drawn profile of a revolved one, and move with it. When you open the sketch again it shows the body's notes, including those placed in 3D. In the sketch, Undo takes back a note like a line, and {{ui:sketch.cancel}} discards what you changed in the notes.
 
 Notes are saved in the design, appear in no export and can be shown or hidden with {{ui:visibility.notes}} (in {{ui:editor.visibilityOptions}}, the arrow beside the eye icon).
 
