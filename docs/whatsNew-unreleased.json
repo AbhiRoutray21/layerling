@@ -18,5 +18,17 @@
       "de": "Legst du eine oder mehrere layerling-Dateien (.lyl) im Ablagefeld des Import-Fensters ab, kommen ihre Körper in den offenen Entwurf, wie bei „In diesen Entwurf einfügen“. Praktisch, wenn ein großer Tinkercad-Import in mehrere Dateien zerlegt ist.",
       "en": "Drop one or more layerling files (.lyl) on the drop zone of the import window and their bodies are added to the open design, as with \"Insert into this design\". Handy when a large Tinkercad import comes in several files."
     }
+  },
+  {
+    "title": {
+      "de": "DXF öffnen",
+      "en": "Open DXF files",
+      "hu": "DXF megnyitása"
+    },
+    "body": {
+      "de": "Eine DXF, etwa ein Teileumriss vom Laserschneid-Betrieb oder vom Lieferanten, kommt jetzt als Teile zum Weiterarbeiten herein: jeder Umriss ein Körper, jedes Loch darin ein eigenes Loch (ein rundes als Zylinder), das du im 3D-Editor verschiebst und in der Größe änderst. In Millimetern, Bögen und Kreise als echte Bögen. Text, Bemaßungen und nicht geschlossene Umrisse fallen weg, die Meldung sagt, wie viele.",
+      "en": "A DXF, such as a part outline from a laser cutting shop or a supplier, now comes in as parts to work on: every outline a body, every hole in it a hole of its own (a round one a cylinder) that you move and size in the 3D editor. In millimetres, its arcs and circles as true arcs. Text, dimensions and outlines that do not close are left out, and the message says how many.",
+      "hu": "Egy DXF, például egy lézervágó cégtől vagy beszállítótól kapott alkatrész-körvonal, mostantól szerkeszthető részekként érkezik: minden körvonalból test lesz, a benne lévő minden furatból külön furat (a kerekből henger), amelyet a 3D szerkesztőben mozgatsz és méretezel. Milliméterben, az ívek és körök valódi ívekként. A szöveg, a méretvonalak és a nem záródó körvonalak kimaradnak, és az üzenet megmondja, hány."
+    }
   }
 ]
