@@ -305,6 +305,10 @@ De map heeft **geen login**: wie de pagina kan bereiken, kan lezen, schrijven en
 thuisnetwerk of in een werkplaats is dat juist de bedoeling; op een publiek bereikbare site moet je hem beveiligen of
 weglaten.
 
+Niets in de map is bedoeld om via zijn adres te openen: layerling leest en schrijft hem alleen via `store.php`. Onder
+Apache zet `store.php` er een `.htaccess` in die elke directe aanvraag weigert. nginx en andere servers negeren dat
+bestand; blokkeer `store/` daar zelf (in nginx: `location /store/ { deny all; }`).
+
 Eén ding om te onthouden bij het uitrollen: spiegel je de export met een optie die alles wat extra is verwijdert – `rsync
 --delete`, `robocopy /MIR`, WinSCP `-delete` – sluit `store` dan expliciet uit, anders wist elke update de projecten.
 

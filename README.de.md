@@ -320,6 +320,10 @@ PHP können.
 Der Ordner hat **keine Anmeldung**: Wer die Seite erreicht, kann darin lesen, schreiben und löschen. Im Heimnetz oder in
 der Werkstatt ist genau das der Zweck; auf einer öffentlich erreichbaren Seite schütze ihn oder lege ihn nicht an.
 
+Nichts im Ordner soll über seine Adresse geöffnet werden: layerling liest und schreibt ihn nur über `store.php`. Unter
+Apache legt `store.php` dort eine `.htaccess` an, die jeden direkten Abruf abweist. nginx und andere Server beachten
+diese Datei nicht; sperre `store/` dort selbst (in nginx: `location /store/ { deny all; }`).
+
 Beim Ausliefern daran denken: Wer den Export mit einer Option spiegelt, die Überzähliges löscht – `rsync --delete`,
 `robocopy /MIR`, WinSCP `-delete` –, muss `store` ausdrücklich ausnehmen. Sonst räumt jedes Update die Projekte weg.
 

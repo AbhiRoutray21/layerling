@@ -25,27 +25,32 @@ const SEARCH_DEPTH_LIMIT = 12;
 const SEARCH_FOLDER_LIMIT = 2000;
 const MAX_PROJECT_BYTES   = 512 * 1024 * 1024;  // mirrors LYL_LIMITS.archiveBytes
 /** The files an export may be called on the server (#779), as in route.ts. */
-const EXPORT_FILE_EXTENSIONS = ['stl', '3mf', 'obj', 'step', 'stp', 'svg', 'png', 'pdf'];
+const EXPORT_FILE_EXTENSIONS = ['stl', '3mf', 'obj', 'step', 'stp', 'svg', 'dxf', 'png', 'pdf'];
 const MAX_THUMBNAIL_BYTES = 5 * 1024 * 1024;
 const LYL_MEDIA_TYPE      = 'application/vnd.layerling.project+zip';
 /** A folder name may not look like a path, a hidden file, or carry control codes. */
 const FOLDER_NAME_UNSAFE = "<>:\"|?*/\\";
 
 /**
- * Apache stops serving anything executable from the folder. Belt and braces:
- * only .lyl and .png ever get written, and both under names we built ourselves.
- * `php_flag` is deliberately absent - it throws a 500 on servers running PHP as
- * FPM rather than as a module, which would break the whole directory.
+ * Apache serves nothing from the folder at all. The app never fetches a file there by its address -
+ * projects, pictures and exports all go through this script - and a slicer that shares the folder
+ * reads it on disk. An export is written as it comes (#779), so an SVG with a script in it, opened
+ * from the folder, would run on the app's own address and reach every visitor's designs in their
+ * browser (GHSA-wj5x-5r5v-89r3). Nothing in here may execute either. `php_flag` is deliberately
+ * absent - it throws a 500 on servers running PHP as FPM rather than as a module, which would break
+ * the whole directory. An existing store gets this guard on its next request (ensure_store_guard).
  */
 const STORE_HTACCESS = <<<'HTACCESS'
-# Written by store.php. Projects live here; nothing in here may execute.
+# Written by store.php. Projects live here; nothing in here is served or may execute.
 Options -ExecCGI -Indexes
 RemoveHandler .php .phtml .php3 .php4 .php5 .php7 .php8 .phar
 RemoveType .php .phtml .phar
 <IfModule mod_authz_core.c>
-  <FilesMatch "\.(?i:ph(p[0-9]?|tml|ar))$">
-    Require all denied
-  </FilesMatch>
+  Require all denied
+</IfModule>
+<IfModule !mod_authz_core.c>
+  Order allow,deny
+  Deny from all
 </IfModule>
 HTACCESS;
 
@@ -769,7 +774,7 @@ function export_file_name(string $requested): ?string
 }
 
 /**
- * An export file - STL, 3MF, OBJ, STEP, SVG, PNG or PDF - written into a folder of the store (#779), so a
+ * An export file - STL, 3MF, OBJ, STEP, SVG, DXF, PNG or PDF - written into a folder of the store (#779), so a
  * slicer that shares the folder can open it. It is no project: the list does not show it. A file of that
  * name is replaced only when the request says so (overwrite=1); otherwise the answer is 409 with `exists`.
  */

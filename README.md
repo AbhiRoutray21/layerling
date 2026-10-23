@@ -312,6 +312,10 @@ and the short guide in the editor explains how to switch it on. The web server n
 The folder has **no login**: whoever can reach the page can read, write and delete what is in it. On a home network or in
 a workshop that is the point; on a publicly reachable site, protect it or leave it out.
 
+Nothing in the folder is meant to be opened by its address: layerling reads and writes it only through `store.php`.
+On Apache, `store.php` writes a `.htaccess` into the folder that refuses every direct request. nginx and other servers
+ignore that file, so deny access to `store/` there yourself (in nginx: `location /store/ { deny all; }`).
+
 One thing to remember when deploying: if you mirror the export with an option that removes anything extra – `rsync
 --delete`, `robocopy /MIR`, WinSCP `-delete` – exclude `store` explicitly, or every update will wipe the projects.
 
