@@ -205,7 +205,7 @@ import { simplifyTrianglePositions } from "@/lib/meshSimplify";
 import { clipboardShape, displayShapeName, iconTagAsset, qrCodeAsset, libraryShapeAssets, makeShapeFromAsset, nameTagAsset, shapeAssetColor, shapeAssetLabel, shapeAssetMenuLabel, toolbarShapeAssets } from "@/lib/shapeCatalog";
 import { importedShapeFromStl } from "@/lib/stlImport";
 import { exportMeshesToStl } from "@/lib/stlExport";
-import { exportMeshesTo3mf, THREE_MF_MEDIA_TYPE } from "@/lib/threemfExport";
+import { exportMeshesTo3mfAsync, THREE_MF_MEDIA_TYPE } from "@/lib/threemfExport";
 import { importedShapeFromSvg, invalidSvgMeshReason } from "@/lib/svgImport";
 import { toSvgProjection, toSvgTopEdges, type SvgProjectionLayer } from "@/lib/svgExport";
 import { outlinesToDxf, type DxfResult } from "@/lib/dxfExport";
@@ -10837,7 +10837,7 @@ export function LayerlingEditor({
             faceColors: partFaceColors(mesh, joined.quellen[index]),
           }));
           bytes = format === "3mf"
-            ? exportMeshesTo3mf(bodies, { title: projectName }) as Uint8Array
+            ? await exportMeshesTo3mfAsync(bodies, { title: projectName })
             : new TextEncoder().encode(exportMeshesToObj(bodies));
         }
         let binary = "";
@@ -11435,7 +11435,7 @@ export function LayerlingEditor({
             const source = bodiesWritten[quellen[index]];
             return { ...mesh, name: source?.name || mesh.name, color: source?.color, faceColors: partFaceColors(mesh, quellen[index]) };
           });
-          const bytes = exportMeshesTo3mf(bodies, { title: exportName.trim() || projectName });
+          const bytes = await exportMeshesTo3mfAsync(bodies, { title: exportName.trim() || projectName });
           await downloadBlobFile(projectExportFileName(exportName, "3mf"), new Blob([bytes as BlobPart], { type: THREE_MF_MEDIA_TYPE }));
         } else {
           const bodies = fertig.map((mesh, index) => ({ ...mesh, color: bodiesWritten[quellen[index]]?.color, faceColors: partFaceColors(mesh, quellen[index]) }));
