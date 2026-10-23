@@ -201,7 +201,6 @@ import {
   writeLylFile,
   type LylFileHandle,
 } from "@/lib/lylFileAccess";
-import { simplifyTrianglePositions } from "@/lib/meshSimplify";
 import { clipboardShape, displayShapeName, iconTagAsset, qrCodeAsset, libraryShapeAssets, makeShapeFromAsset, nameTagAsset, shapeAssetColor, shapeAssetLabel, shapeAssetMenuLabel, toolbarShapeAssets } from "@/lib/shapeCatalog";
 import { importedShapeFromStl } from "@/lib/stlImport";
 import { exportMeshesToStl } from "@/lib/stlExport";
@@ -256,8 +255,8 @@ import { footprintCutOffset, projectSectionPoint, SECTION_VIEW_FACE, sectionSvgD
 import type { AlignAxis, AlignHandleStatus, AlignTarget, GridSize, ParametricSource, ProjectAsset, ShapeAsset, ShapeCustomization, ShapeKind, SketchImage, SketchOperation, SketchPoint, SketchProfile, SketchRevolveSettings, SketchSegment, ShellEdges, ShellOpenings, ShellSide, SweepAnchor, WorkplaneNote, WorkplaneShape, WorkplaneWorkspaceSettings } from "@/types/layerling";
 import { type Vec3, type MeshData, type Cuboid, type ShapeUpdatePatch, type ManifoldSolid, MIN_SHAPE_DIMENSION, resetManifoldRuntime, cleanModelDimension, getManifoldRuntime, meshForShape, meshReachAlong, appendMeshData, formatTriangleCount, shapeAabb, boundsForShapes, boundsForCuboids, meshAabb, boundsForPositions, quantizedPointKey } from "@/lib/editorMeshCore";
 import { meshPartCount } from "@/lib/meshPartCount";
-import { buildGroupedShapeOffThread, splitShapesByPlaneOffThread, subscribeGeometryBusy, warmGeometryWorker } from "@/lib/geometryWorker";
-import { cloneAsGroupChild, meshDataToManifoldMesh, shapeToManifoldSolid, unionOverlappingExportMeshes, exportBodiesWithLooseHoles, exportSolidVolume, type ExportSolidVolume, PRINT_MATERIAL_STORAGE_KEY, PRINT_INFILL_STORAGE_KEY, PRINT_WALLS_STORAGE_KEY, formatEstimateNumber, formatSectionOffset, SECTION_SEEN_FROM_KEYS, expandBundles, visibleExportShapes, multicolorExportSolids, exportFaceColors, colorSeparatedExportMeshes, disposeManifold, canIntersectShapes, buildIntersectionShapeFromSelection, groupedShape, quaternionForShape, rotationFromQuaternion, cleanShapePatch, restoreGroupedChildren, restoreGroupedChildrenForEdges } from "@/lib/editorBooleans";
+import { buildGroupedShapeOffThread, exportSolidVolumeOffThread, simplifyTrianglePositionsOffThread, splitShapesByPlaneOffThread, subscribeGeometryBusy, warmGeometryWorker } from "@/lib/geometryWorker";
+import { cloneAsGroupChild, meshDataToManifoldMesh, shapeToManifoldSolid, unionOverlappingExportMeshes, exportBodiesWithLooseHoles, type ExportSolidVolume, PRINT_MATERIAL_STORAGE_KEY, PRINT_INFILL_STORAGE_KEY, PRINT_WALLS_STORAGE_KEY, formatEstimateNumber, formatSectionOffset, SECTION_SEEN_FROM_KEYS, expandBundles, visibleExportShapes, multicolorExportSolids, exportFaceColors, colorSeparatedExportMeshes, disposeManifold, canIntersectShapes, buildIntersectionShapeFromSelection, groupedShape, quaternionForShape, rotationFromQuaternion, cleanShapePatch, restoreGroupedChildren, restoreGroupedChildrenForEdges } from "@/lib/editorBooleans";
 import { handleViewArrowKey } from "@/lib/viewArrowKeys";
 import { escapeWasHandled } from "@/lib/escapeHandled";
 import { sketchEscapeAction } from "@/lib/sketchEscape";
@@ -10210,7 +10209,7 @@ export function LayerlingEditor({
           : mcpNumber(params.targetTriangles, Number.NaN);
         if (!Number.isFinite(requested) || requested <= 0) throw new Error(hasPercent ? "keepPercent must be a number above 0 and below 100" : "targetTriangles must be a positive number");
         if (Math.round(requested) >= source.triangleCount) throw new Error(`The mesh has ${source.triangleCount} triangles; the target must be below that`);
-        const result = await simplifyTrianglePositions(source.positions, requested);
+        const result = await simplifyTrianglePositionsOffThread(source.positions, requested);
         const simplified = simplifiedMeshShape(target, result.positions);
         if (!simplified) throw new Error("The mesh cannot be simplified any further without changing its form");
         commitShapes(
@@ -10566,7 +10565,7 @@ export function LayerlingEditor({
         if (params.walls !== undefined && !(typeof params.walls === "number" && Number.isInteger(params.walls) && params.walls >= 1 && params.walls <= 6)) {
           throw new Error("walls must be a whole number from 1 to 6");
         }
-        const volume = await exportSolidVolume(source);
+        const volume = await exportSolidVolumeOffThread(source);
         if (volume.solids === 0) throw new Error("Nothing to estimate: no visible solid body");
         const estimate = printEstimate(volume.volumeMm3, material);
         const withInfill = printEstimateWithInfill(
@@ -13475,7 +13474,7 @@ export function LayerlingEditor({
           onlyHoles={exportHolesOnly}
           hiddenCount={exportHiddenCount}
           estimateShapes={exportTargetShapes}
-          onEstimatePrint={exportSolidVolume}
+          onEstimatePrint={exportSolidVolumeOffThread}
           onClose={() => setTopPanel(null)}
           onExport={(format, exportName, chooseFile, svgView) => void exportDesign(format, exportName, chooseFile, svgView)}
           stlFileName={topPanel === "export" && !workspaceSettings.stlAsDownload ? linkedStlFile(projectId ?? "")?.name ?? null : null}
