@@ -8422,14 +8422,15 @@ export function LayerlingEditor({
       const rebuilt = canonicalizeShape({ ...result.group, groupOperation: operation });
       // The same group, not a new one: its id stays, so anything holding that id
       // (MCP, the object list, the level around it) still finds it.
-      const regrouped = canonicalizeShape(withHoleMode({
+      // Its own pivot stays on the same spot, however the parts moved while it was open (#807).
+      const regrouped = canonicalizeShape(carryShapePivot(original, withHoleMode({
         ...rebuilt,
         id: original.id,
         name: original.name,
         color: ownColour ? original.color : rebuilt.color,
         transparent: original.transparent,
         hidden: original.hidden,
-      }, Boolean(original.hole)));
+      }, Boolean(original.hole))));
       const partIds = new Set(parts.map((shape) => shape.id));
       const message = "mergeWarning" in result && result.mergeWarning ? result.mergeWarning : t("status.groupClosed", { name: displayShapeName(regrouped) });
       commitOpenGroupTransition(
