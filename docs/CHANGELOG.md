@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **Fit a Gridfinity baseplate to a drawer (#455):** Filling a drawer meant working out the units and the paddings by hand. A baseplate now has **Drawer width** and **Drawer depth**, each showing the drawer the plate fills, 0.5 mm larger than the plate. Typing a drawer's inside size takes as many units as fit, up to 6, and splits the rest evenly into the two paddings of that axis, up to 41 mm a side, so the plate comes out 0.5 mm smaller than the drawer: 292.1 mm gives 6 units and 19.8 mm each side. Only the axis typed changes, in one undo step; a section of a larger drawer padded on one side only is set with the padding rows. Nothing new is stored: the rows are worked out from the size, like the units. A padded baseplate's size is now kept to 0.01 mm, as its padding is. Contributed by @mlugo-apx.
+
 ## 1.103.0
 
 - **The sketch follows the unit setting (#757):** With Imperial (or any other unit) chosen in the workplane settings, the sketch editor still read and typed in millimetres. Its dimension labels, the measure tool, the line preview, the selection size, image sizes and the typed fields (line length, dimension, width and height, fillet and chamfer size, image size and calibration, image position) now use the workspace unit, inches as fractions or decimals as set; the sketch itself stays in millimetres. Reported by @radomnik.
