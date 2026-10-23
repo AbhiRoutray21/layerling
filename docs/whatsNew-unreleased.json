@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "title": {
+      "de": "Vorschaubilder zeigen alle Körper, egal wie weit gezoomt",
+      "en": "Preview pictures show all bodies, however far you have zoomed"
+    },
+    "body": {
+      "de": "Das Vorschaubild eines Entwurfs in der Übersicht war ein verkleinerter Abzug des Editors: Wer nah herangezoomt hatte, bekam einen angeschnittenen Ausschnitt, wer weit herausgezoomt hatte, winzige Körper in der Ecke der Platte. Jetzt wird für das Bild kurz auf alle Körper eingepasst, aus der Richtung, aus der du schaust. Dein Bildschirm bleibt dabei, wie er ist.",
+      "en": "The preview picture of a design in the overview was a shrunken copy of the editor: with a close-up you got a cut-off detail, zoomed far out you got tiny bodies in the corner of the plate. For the picture the view is now briefly fitted to all bodies, from the side you are looking from. Your screen stays as it is."
+    }
+  }
+]

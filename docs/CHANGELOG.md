@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **Preview pictures show all bodies, however far you have zoomed:** The preview of a design in the overview, in the shared copy and on the server was a shrunken copy of the editor's screen, so it depended on the zoom the work was done in: a close-up showed a cut-off detail, zooming far out left tiny bodies in the corner of the plate. For the picture the view is now fitted to all bodies for a moment, from the side the view looks from, and put back at once; the screen does not change. A design without bodies keeps the screen as it is. Suggested by Jürgen Keller.
+
 ## 1.104.0
 
 - **Opening a project no longer starts hundreds of compression workers (#786):** Opening a `.lyl` file saves the project once before the editor appears, at compression level 1, and the zip library started one worker for every entry of at least 160,000 bytes, so a project with many mesh assets could launch hundreds at once. A streaming zip writer now runs at most two compression jobs at a time; small entries stay synchronous, level 0 stays uncompressed, entry order and timestamps are kept, and a worker error stops the save and ends the remaining work. This is not a fix for the memory errors some very large imports show. Contributed by @taylormadearmy.
