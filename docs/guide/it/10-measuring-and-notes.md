@@ -65,6 +65,7 @@ Una nota registra informazioni che la geometria non può esprimere: “Questa vi
 - Se il corpo viene eliminato, o se sotto la nota non resta più alcun corpo visibile, la nota rimane nella stessa posizione sul piano di lavoro.
 - Trascina il fermaglio per spostare la nota. Facendo clic sul fermaglio, la scheda si comprime e resta visibile solo il numero; fai di nuovo clic per riaprirla. Fai clic sul testo per modificarlo.
 - Durante la modifica, [[Enter]] salva il testo e [[Esc]] lo ripristina com’era prima; [[Shift]]+[[Enter]] inserisce una nuova riga.
+- **In uno schizzo**, anche {{ui:editor.tool.note}} (in {{ui:editor.group.manage}}) o [[N]] inseriscono una nota, in qualsiasi punto dello schizzo. Tutte le note di uno schizzo appartengono al suo corpo: nella vista 3D stanno su di esso, sopra un corpo creato con {{ui:sketch.extrude}} o {{ui:sketch.sweep}} e sul profilo disegnato di uno creato con {{ui:sketch.revolve}}, e si spostano con lui. Quando riapri lo schizzo, mostra le note del corpo, comprese quelle inserite in 3D. Nello schizzo, {{ui:sketch.undo}} annulla una nota come una linea e {{ui:sketch.cancel}} scarta ciò che hai cambiato nelle note.
 
 Le note vengono salvate nel progetto, non compaiono nelle esportazioni e possono essere mostrate o nascoste con {{ui:visibility.notes}} (in {{ui:editor.visibilityOptions}}, la freccia accanto all’icona dell’occhio).
 

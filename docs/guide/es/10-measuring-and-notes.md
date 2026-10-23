@@ -65,6 +65,7 @@ Una nota recoge lo que la geometría no dice: «Este tornillo va 0,3 mm demasiad
 - Si se elimina su cuerpo, o ya no queda ningún cuerpo visible debajo, la nota se queda donde estaba, sobre el plano de trabajo.
 - Arrastrar la chincheta mueve la nota. Un clic en la chincheta pliega la tarjeta y solo queda el número pequeño; otro clic la vuelve a abrir. Un clic en el texto lo edita.
 - Mientras escribes, [[Intro]] guarda el texto y [[Esc]] lo deja como estaba antes de empezar; [[Mayús]]+[[Intro]] empieza una línea nueva.
+- **En un boceto**, {{ui:editor.tool.note}} (en {{ui:editor.group.manage}}) o [[N]] también colocan una nota, en cualquier lugar del boceto. Todas las notas de un boceto pertenecen a su cuerpo: en la vista 3D se sitúan sobre él, encima de un cuerpo hecho con {{ui:sketch.extrude}} o {{ui:sketch.sweep}} y sobre el perfil dibujado de uno hecho con {{ui:sketch.revolve}}, y se mueven con él. Cuando vuelves a abrir el boceto, muestra las notas del cuerpo, también las colocadas en 3D. En el boceto, {{ui:sketch.undo}} deshace una nota como una línea, y {{ui:sketch.cancel}} descarta lo que hayas cambiado en las notas.
 
 Las notas se guardan en el diseño, no aparecen en ninguna exportación y se pueden mostrar u ocultar con {{ui:visibility.notes}} (en {{ui:editor.visibilityOptions}}, la flecha junto al icono del ojo).
 

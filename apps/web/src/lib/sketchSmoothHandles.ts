@@ -14,6 +14,7 @@ export function cloneSketchProfile(profile: SketchProfile): SketchProfile {
     ...(profile.keyring ? { keyring: { ...profile.keyring } } : {}),
     ...(profile.inset ? { inset: { ...profile.inset } } : {}),
     ...(profile.sweepAnchor && profile.sweepAnchor !== "center" ? { sweepAnchor: profile.sweepAnchor } : {}),
+    ...(profile.notes ? { notes: profile.notes.map((note) => ({ ...note })) } : {}),
   };
 }
 

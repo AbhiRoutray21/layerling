@@ -124,7 +124,7 @@ export type MoveDimensionSession = {
 };
 
 /** Breite einer offenen Notizkarte samt Nadel und Abstand, in Bildpunkten. */
-const NOTE_CARD_REACH = 260;
+export const NOTE_CARD_REACH = 260;
 
 /** Weiter waechst das Textfeld nicht mit; darueber hinaus wird darin gerollt. */
 const NOTE_TEXT_MAX_HEIGHT = 168;
@@ -865,7 +865,8 @@ export function NoteOverlay({
   onToggle: (noteId: string) => void;
   onTextChange: (noteId: string, text: string) => void;
   onTextCommit: (noteId: string) => void;
-  onDetach: (noteId: string) => void;
+  /** Left out where a note cannot be released from a body: in a sketch, every note is the sketch body's. */
+  onDetach?: (noteId: string) => void;
   onRemove: (noteId: string) => void;
   onEditingIdChange: (noteId: string | null) => void;
 }) {
@@ -956,7 +957,7 @@ export function NoteOverlay({
                   onChange={(text) => onTextChange(note.id, text)}
                 />
                 <div className="note-card-actions">
-                  {note.attached ? (
+                  {!onDetach ? <span /> : note.attached ? (
                     <button type="button" className="note-action" onClick={() => onDetach(note.id)}>{t("note.detach")}</button>
                   ) : <span className="note-hint">{t("note.free")}</span>}
                   <span className="note-card-end">

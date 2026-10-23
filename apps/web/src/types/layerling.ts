@@ -496,6 +496,14 @@ export type SketchKeyring = { side: TextKeyringSide; diameter: number; x: number
  */
 export type SketchInset = { distance: number; radius: number };
 
+/**
+ * A note on an open sketch, in the sketch's own mm. In the 3D view it is an ordinary note pinned to
+ * the sketch body; `offPlane` keeps where it stands off the sketch's plane when it came from there:
+ * a share of the height for an extrusion or a sweep (0.5, the top, when left out), an angle round
+ * the axis for a revolve (the middle of the turn when left out).
+ */
+export type SketchNote = { id: string; text: string; x: number; z: number; collapsed?: boolean; offPlane?: number };
+
 export type SketchProfile = {
   points: SketchPoint[];
   segments: SketchSegment[];
@@ -509,6 +517,8 @@ export type SketchProfile = {
   inset?: SketchInset;
   /** Which edge of a swept cross-section runs along the path: "center" (the default, left out) or "left"/"right" as seen along the path. */
   sweepAnchor?: SweepAnchor;
+  /** The sketch body's notes, only while the sketch is open, so that undo takes them along; a body never keeps them here. */
+  notes?: SketchNote[];
 };
 
 /** Where the cross-section of a sweep sits on its path, across it. */

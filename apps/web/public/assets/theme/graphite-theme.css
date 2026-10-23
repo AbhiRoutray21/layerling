@@ -3202,75 +3202,6 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .inspector-bundle-note 
   box-shadow: 0 1px 4px rgba(40, 110, 150, 0.12);
 }
 
-:where(html[data-theme="dark"][data-palette="graphite"]) .note-pin {
-  border: 2px solid var(--panel);
-  background: var(--primary);
-  color: #fff;
-  box-shadow: var(--shadow);
-}
-
-:where(html[data-theme="dark"][data-palette="graphite"]) .note-pin.attached {
-  box-shadow: var(--shadow), 0 0 0 3px color-mix(in srgb, var(--primary) 35%, transparent);
-}
-
-:where(html[data-theme="dark"][data-palette="graphite"]) .note-pin.point-pin {
-  background: #ff9a2e;
-  color: #1b1b1b;
-}
-
-:where(html[data-theme="dark"][data-palette="graphite"]) .point-field {
-  color: var(--foreground);
-}
-
-:where(html[data-theme="dark"][data-palette="graphite"]) .point-field input {
-  border: 1px solid var(--border);
-  background: var(--tile);
-  color: var(--foreground);
-}
-
-:where(html[data-theme="dark"][data-palette="graphite"]) .point-field input:focus-visible {
-  outline: 2px solid var(--primary);
-}
-
-:where(html[data-theme="dark"][data-palette="graphite"]) .point-field small {
-  color: var(--muted);
-}
-
-:where(html[data-theme="dark"][data-palette="graphite"]) .note-card {
-  border: 1px solid var(--border-strong);
-  background: var(--panel);
-  box-shadow: var(--shadow);
-}
-
-:where(html[data-theme="dark"][data-palette="graphite"]) .note-text {
-  border: 1px solid var(--border);
-  background: var(--tile);
-  color: var(--foreground);
-}
-
-:where(html[data-theme="dark"][data-palette="graphite"]) .note-text:focus-visible {
-  outline: 2px solid var(--primary);
-}
-
-:where(html[data-theme="dark"][data-palette="graphite"]) .note-action {
-  border: 0;
-  background: none;
-  color: var(--muted-strong);
-}
-
-:where(html[data-theme="dark"][data-palette="graphite"]) .note-action:hover {
-  background: var(--tile-hover);
-  color: var(--foreground);
-}
-
-:where(html[data-theme="dark"][data-palette="graphite"]) .note-action.danger:hover {
-  color: var(--filament-coral);
-}
-
-:where(html[data-theme="dark"][data-palette="graphite"]) .note-hint {
-  color: var(--muted-strong);
-}
-
 :where(html[data-theme="dark"][data-palette="graphite"]) .tape-segment {
   stroke: #5a3917;
 }
@@ -7551,6 +7482,75 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .history-view-inside {
   color: #8fdaf5;
   background: rgba(0, 174, 234, 0.12);
   border-color: rgba(0, 174, 234, 0.4);
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .note-pin {
+  border: 2px solid var(--panel);
+  background: var(--primary);
+  color: #fff;
+  box-shadow: var(--shadow);
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .note-pin.attached {
+  box-shadow: var(--shadow), 0 0 0 3px color-mix(in srgb, var(--primary) 35%, transparent);
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .note-pin.point-pin {
+  background: #ff9a2e;
+  color: #1b1b1b;
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .point-field {
+  color: var(--foreground);
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .point-field input {
+  border: 1px solid var(--border);
+  background: var(--tile);
+  color: var(--foreground);
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .point-field input:focus-visible {
+  outline: 2px solid var(--primary);
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .point-field small {
+  color: var(--muted);
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .note-card {
+  border: 1px solid var(--border-strong);
+  background: var(--panel);
+  box-shadow: var(--shadow);
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .note-text {
+  border: 1px solid var(--border);
+  background: var(--tile);
+  color: var(--foreground);
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .note-text:focus-visible {
+  outline: 2px solid var(--primary);
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .note-action {
+  border: 0;
+  background: none;
+  color: var(--muted-strong);
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .note-action:hover {
+  background: var(--tile-hover);
+  color: var(--foreground);
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .note-action.danger:hover {
+  color: var(--filament-coral);
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .note-hint {
+  color: var(--muted-strong);
 }
 
 :where(html[data-theme="dark"][data-palette="graphite"]) .my-shapes-section {
