@@ -48,5 +48,15 @@
       "de": "In einem angeklickten Zahlenfeld der Eigenschaften ändern jetzt die Tasten Hoch und Runter den Wert um einen Schritt, mit Umschalt um einen größeren und mit Alt um einen feineren, wie es das Mausrad schon konnte. Bisher bewegten die Tasten nur den Textcursor.",
       "en": "In a number field of the properties you have clicked, the Up and Down keys now change the value by one step, with Shift a larger step and with Alt a finer one, as the mouse wheel already did. Until now the keys only moved the text cursor."
     }
+  },
+  {
+    "title": {
+      "de": "Fase am Gridfinity-Stapelrand",
+      "en": "A chamfer on the Gridfinity lip"
+    },
+    "body": {
+      "de": "Die scharfe Oberkante des Stapelrands lässt sich jetzt direkt am Gridfinity-Behälter fasen: Stell sie im Eigenschaften-Fenster unter „Fase am Stapelrand“ auf bis zu 1 mm ein. Das ist dieselbe Fase, die das Kantenwerkzeug macht, ohne dass du die Kanten auswählen musst.",
+      "en": "The sharp top of a Gridfinity bin's stacking lip can now be chamfered on the bin itself: set \"Lip chamfer\" in the Properties panel, up to 1 mm. It is the same chamfer the edge tool makes, without picking the edges."
+    }
   }
 ]

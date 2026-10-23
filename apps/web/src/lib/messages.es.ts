@@ -2042,6 +2042,8 @@ export const MESSAGES_ES: Partial<Record<MessageKey, string>> = {
   "prop.gridfinityUnitsZ": "Unidades de fondo",
   "prop.gridfinityUnitsY": "Unidades de alto",
   "prop.gridfinityLip": "Borde para apilar",
+  "prop.gridfinityLipChamfer": "Chaflán del borde para apilar",
+  "gridfinity.lipChamferHint": "Achaflana la arista superior del borde para apilar; con 0 queda viva, como la dibuja la especificación de Gridfinity.",
   "prop.gridfinityMagnets": "Orificios para imanes",
   "prop.gridfinityHalfGrid": "Media cuadrícula (21 mm)",
   "gridfinity.halfGridHint": "Las unidades de ancho y de fondo cuentan celdas de 21 mm, cada una con su propio pie; cuatro caben en un hueco de la placa base.",
