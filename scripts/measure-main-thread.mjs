@@ -18,6 +18,8 @@
  *   node scripts/measure-main-thread.mjs --url http://localhost:3021 --token measure-token-0123456789
  *
  * Options: --only <action,...>  --runs <n> (default 2, the table shows the median)  --json <file>
+ *          --gpu (draw with the graphics card; without it SwiftShader, as in a container)
+ *          --channel msedge (an installed browser instead of Playwright's Chromium)
  * The test data is made here, the same at every run: a sphere of about 300,000 triangles as
  * binary STL and as OBJ, 60 boxes with 20 cylinder holes, and so on.
  */
@@ -40,6 +42,9 @@ const ONLY = option("only", "")?.split(",").filter(Boolean);
 const JSON_OUT = option("json", "");
 /** A folder to write a CPU profile of each measured run into (Chrome DevTools opens .cpuprofile files). */
 const PROFILE_DIR = option("profile", "");
+const GPU = process.argv.includes("--gpu");
+/** An installed browser instead of Playwright's own Chromium, such as "msedge" or "chrome". */
+const CHANNEL = option("channel", "");
 const FREEZE_MS = 200;
 const scratch = mkdtempSync(join(tmpdir(), "layerling-measure-"));
 
@@ -425,8 +430,19 @@ const ACTIONS = [
 
 // ---- Run ------------------------------------------------------------------------------------
 
-const browser = await chromium.launch({ args: ["--use-gl=angle", "--use-angle=swiftshader", "--enable-unsafe-swiftshader"] });
+// --gpu draws with the computer's graphics card instead of software rendering (SwiftShader).
+const browser = await chromium.launch({ ...(CHANNEL ? { channel: CHANNEL } : {}), args: GPU ? ["--enable-gpu", "--ignore-gpu-blocklist", "--use-gl=angle"] : ["--use-gl=angle", "--use-angle=swiftshader", "--enable-unsafe-swiftshader"] });
 const context = await browser.newContext({ viewport: { width: 1500, height: 950 }, locale: "de-DE", acceptDownloads: true });
+{
+  const page = await context.newPage();
+  const renderer = await page.evaluate(() => {
+    const gl = document.createElement("canvas").getContext("webgl2");
+    const info = gl?.getExtension("WEBGL_debug_renderer_info");
+    return gl ? String(gl.getParameter(info ? info.UNMASKED_RENDERER_WEBGL : gl.RENDERER)) : "no WebGL2";
+  });
+  console.error(`renderer: ${renderer}`);
+  await page.close();
+}
 const results = [];
 for (const action of ACTIONS.filter((entry) => !ONLY?.length || ONLY.includes(entry.key))) {
   const runs = [];
