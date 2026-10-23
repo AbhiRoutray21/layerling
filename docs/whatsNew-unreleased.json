@@ -1,6 +1,16 @@
 [
   {
     "title": {
+      "de": "Tinkercad-Importe mit tief verschachtelten Gruppen öffnen sich wieder",
+      "en": "Tinkercad imports with deeply nested groups open again"
+    },
+    "body": {
+      "de": "Ein Entwurf mit vielen ineinander verschachtelten Gruppen, wie ihn der Tinkercad-Importer ablegen kann, ließ den Browser-Tab beim Öffnen abstürzen („Speicher voll“), schon bei einer Datei von 12 MB. Der Editor bildete für jede Gruppe einen Schlüssel, der mit jeder Verschachtelungsstufe doppelt so lang wurde (bei 19 Stufen 346 MB). Jetzt bleibt er klein, und die Dateien öffnen sich.",
+      "en": "A design with many groups nested inside each other, as the Tinkercad importer can write them, made the browser tab crash on opening (\"out of memory\"), even with a file of 12 MB. The editor made a key for each group that doubled in length with every level of nesting (346 MB at 19 levels). It now stays small, and the files open."
+    }
+  },
+  {
+    "title": {
       "de": "DXF für den Laserschnitt",
       "en": "DXF for laser cutting shops",
       "hu": "DXF lézervágáshoz"
