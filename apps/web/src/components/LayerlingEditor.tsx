@@ -2893,7 +2893,7 @@ export function LayerlingEditor({
   // Left open on an iPad, which greys out files of types it does not know (#219).
   const projectFileAccept = useFileAccept(".lyl,.skf");
   const myShapesFileAccept = useFileAccept(".zip,.lyl,.skf");
-  const importFileAccept = useFileAccept(`.stl,.obj,.mtl,.zip,.3mf,.step,.stp,.svg,image/svg+xml,${PICTURE_FILE_ACCEPT}`);
+  const importFileAccept = useFileAccept(`.stl,.obj,.mtl,.zip,.3mf,.step,.stp,.svg,.dxf,image/svg+xml,${PICTURE_FILE_ACCEPT}`);
   const projectFileInputRef = useRef<HTMLInputElement | null>(null);
   const insertProjectFileInputRef = useRef<HTMLInputElement | null>(null);
   const sketchImageInputRef = useRef<HTMLInputElement | null>(null);
@@ -10569,7 +10569,7 @@ export function LayerlingEditor({
         const importer = importFilesRef.current;
         if (!importer) throw new Error("The import is not ready yet");
         const fileName = mcpString(params.fileName, "").trim();
-        if (!fileName) throw new Error("fileName is required, with its extension (.obj, .stl, .3mf, .step, .svg or .zip)");
+        if (!fileName) throw new Error("fileName is required, with its extension (.obj, .stl, .3mf, .step, .svg, .dxf or .zip)");
         const hasText = typeof params.text === "string";
         const hasBase64 = typeof params.base64 === "string";
         if (hasText === hasBase64) throw new Error("Give the file either as text or as base64");
@@ -11912,6 +11912,8 @@ export function LayerlingEditor({
       svgWidth: importOptions?.svgWidth !== undefined ? importOptions.svgWidth : takeImportSvgWidth(),
       // An SVG comes in as a sketch body, its fill changeable afterwards (#197); should the
       // kernel build it differently from the mesh, the mesh stays.
+      // A DXF comes in as sketch bodies of its outlines, its holes loose holes beside them (#774).
+      sketchFromProfile: async (profile, height) => canonicalizeShape(await cadShapeFromSketchProfile(profile, height)),
       svgAsSketch: async (mesh, profile) => {
         const built = await cadShapeFromSketchProfile(profile, mesh.height);
         if (!svgSketchMatchesMesh(built, mesh)) return null;
