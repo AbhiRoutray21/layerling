@@ -63,9 +63,9 @@ En note registrerer hvad geometrien ikke siger: "Denne skrue er 0,3 mm for stram
 - Hvis dens form slettes, eller der ikke længere er en synlig form under den, bliver noten stående, hvor den var, på arbejdsplanet.
 - Træk i nålen flytter noten. Et klik på nålen folder kortet sammen, så kun det lille tal bliver stående, og et klik mere åbner det igen. Et klik i teksten redigerer den.
 - Mens du skriver, bevarer [[Enter]] teksten og [[Esc]] sætter den tilbage til hvordan den var før du begyndte; [[Shift]]+[[Enter]] starter en ny linje.
-- **I en skitse** sætter {{ui:editor.tool.note}} (under {{ui:editor.group.manage}}) eller [[N]] også en note, hvor som helst på skitsen. Alle en skitses noter hører til dens form: i 3D-visningen sidder de på den, oven på en form lavet med {{ui:sketch.extrude}} eller {{ui:sketch.sweep}} og på den tegnede profil af en form lavet med {{ui:sketch.revolve}}, og de flytter sig med den. Når du åbner skitsen igen, viser den formens noter, også dem der er sat i 3D. I skitsen tager {{ui:sketch.undo}} en note tilbage ligesom en linje, og {{ui:sketch.cancel}} kasserer det, du har ændret i noterne.
+- **I en skitse** sætter {{ui:editor.tool.note}} (under {{ui:editor.group.manage}}) eller [[N]] også en note, hvor som helst på skitsen. Alle en skitses noter hører til dens form: i 3D-visningen sidder de på den, oven på en form lavet med {{ui:sketch.extrude}} eller {{ui:sketch.sweep}} og på den tegnede profil af en form lavet med {{ui:sketch.revolve}}, og de flytter sig med den. Når du åbner skitsen igen, viser den formens noter, også dem der er sat i 3D. I skitsen tager {{ui:sketch.undo}} en note tilbage ligesom en linje, og {{ui:sketch.cancel}} kasserer det, du har ændret i noterne. [[Shift]]+[[N]] viser eller skjuler noterne også her.
 
-Noter gemmes i designet, optræder i ingen eksport og kan vises eller skjules med {{ui:visibility.notes}} (under {{ui:editor.visibilityOptions}}, pilen ved siden af øje-ikonet).
+Noter gemmes i designet, optræder i ingen eksport og kan vises eller skjules med {{ui:visibility.notes}} (under {{ui:editor.visibilityOptions}}, pilen ved siden af øje-ikonet) eller med [[Shift]]+[[N]].
 
 ## Referencepunkter
 
@@ -74,7 +74,7 @@ Et referencepunkt er et bart mærke i rummet, som en blyantsmarkering eller et l
 - Træk et punkt for at flytte det, eller klik det for at se dets koordinater og taste nye; de bruger den enhed du har sat. Kortet kan trækkes væk i dets titellinje hvis det dækker noget, og et dobbeltklik på titellinjen sætter det tilbage. {{ui:common.delete}} fjerner det.
 - Målebåndet kan også markere et punkt: {{ui:camera.tapeMarkMiddle}}, sigtekorn-knappen under et mål, sætter et i dets midte, for eksempel i midten af et rundt hul.
 - Når du trækker en form, snapper dens kanter og dens centrum til et punkt, ligesom de snapper til andre former ({{ui:workspace.objectSnap}}). Vinkelmåleren snapper også til punkter.
-- Punkter gemmes i designet, optræder i ingen eksport og vises eller skjules sammen med noterne af {{ui:visibility.notes}}.
+- Punkter gemmes i designet, optræder i ingen eksport og vises eller skjules sammen med noterne af {{ui:visibility.notes}} ([[Shift]]+[[N]]).
 - En AI kan markere, liste og fjerne dem med `layerling_add_reference_points`, `layerling_list_reference_points` og `layerling_remove_reference_points`.
 
 ## Referencebilleder

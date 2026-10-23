@@ -138,7 +138,7 @@ import { useHistoryViewPicking } from "./workplane/useHistoryViewPicking";
 import { ShortcutsModal } from "./workplane/ShortcutsModal";
 import { InteractiveHelp } from "./InteractiveHelp";
 import { CommandPalette, type PaletteCommand } from "./workplane/CommandPalette";
-import { COMMAND_KEYWORDS, SHAPE_KEYWORDS } from "@/lib/commandKeywords";
+import { COMMAND_KEYWORDS, COMMAND_SHORTCUTS, SHAPE_KEYWORDS } from "@/lib/commandKeywords";
 import { ShapeContextMenu, type ShapeContextMenuItem } from "./workplane/ShapeContextMenu";
 import { nextSelectionTransparency } from "@/lib/selectionTransparency";
 import { canonicalizeShape, cloneWorkplaneShapeTreeWithFreshIds, cleanNearZero, cleanRotationDegrees, isNonSolidShape, meshYawDegrees, preservesEdgeTreatmentSize, serializeShapesForSync, shapeDepth, shapeExtrudeDeformPatch, shapeHasShapeDeform, shapeTaperPatch, shapeTransformShouldRemainEditable, shapeWidth, shapeWithParametricSource, patchTouchesBodyParameters, withHoleMode, workplaneShapesEqual, shellNeedingRebuild, hollowStretchSincePicture } from "@/lib/workplaneShapes";
@@ -12173,6 +12173,10 @@ export function LayerlingEditor({
           // L locks what is selected: the template image, or an outline (#653).
           if (sketchSelection && sketchSelection.kind !== "image") toggleSketchOutlineLock();
           else toggleSelectedSketchImageLock();
+        } else if (!shortcut && !event.altKey && event.shiftKey && (event.code === "KeyN" || key === "n")) {
+          // Shift+N shows or hides the notes, as in 3D; N alone places one.
+          event.preventDefault();
+          toggleNotesVisible();
         } else if (!shortcut && !event.altKey && (event.code === "KeyN" || key === "n")) {
           event.preventDefault();
           toggleNoteTool();
@@ -12361,6 +12365,14 @@ export function LayerlingEditor({
         return;
       }
 
+      // Shift+N shows or hides the notes and reference points, as the Visibility menu does; N alone
+      // is the note tool. Ctrl+N stays the browser's new window.
+      if (!shortcut && key === "n" && event.shiftKey && !event.altKey) {
+        event.preventDefault();
+        toggleNotesVisible();
+        return;
+      }
+
       if (shortcut && (key === "o" || key === "O") && event.shiftKey) {
         event.preventDefault();
         setOutlinerOpen((open) => !open);
@@ -12463,6 +12475,7 @@ export function LayerlingEditor({
     copySketchSelectionToClipboard,
     noteMode,
     toggleNoteTool,
+    toggleNotesVisible,
     cutSelected,
     cutSketchSelection,
     deleteSelected,
@@ -13629,37 +13642,6 @@ const sketchShapeMenuItems = [
   { primitive: "boltCircle", label: "sketch.boltCircle", icon: SketchBoltCircleIcon },
 ] satisfies Array<{ primitive: SketchPrimitive; label: MessageKey; icon: ComponentType<SVGProps<SVGSVGElement>> }>;
 
-/** The keys that do what a toolbar button does, shown beside it in the command search. */
-const COMMAND_SHORTCUTS: Readonly<Record<string, string>> = {
-  copy: "Ctrl+C",
-  paste: "Ctrl+V",
-  duplicate: "Ctrl+D",
-  delete: "Delete",
-  undo: "Ctrl+Z",
-  redo: "Ctrl+Y",
-  outliner: "Ctrl+Shift+O",
-  "toggle-hidden": "Ctrl+H",
-  "show-hidden": "Ctrl+Shift+H",
-  group: "Ctrl+G",
-  bundle: "Ctrl+B",
-  ungroup: "Ctrl+Shift+G",
-  align: "L",
-  mirror: "M",
-  fillet: "B",
-  chamfer: "Shift+B",
-  drop: "D",
-  note: "N",
-  import: "Ctrl+I",
-  "interactive-help": "Shift+F1",
-  export: "Ctrl+E",
-  "sketch-copy": "Ctrl+C",
-  "sketch-paste": "Ctrl+V",
-  "sketch-duplicate": "Ctrl+D",
-  "sketch-delete": "Delete",
-  "sketch-undo": "Ctrl+Z",
-  "sketch-redo": "Ctrl+Y",
-};
-
 type SketchIconName = Parameters<typeof SketchReferenceIcon>[0]["name"];
 
 /** A sketch tool's picture as a component of its own, for the command search. */
@@ -14285,6 +14267,7 @@ function SecondaryToolbar({
         plain("sketch-bezier", t("sketch.bezier"), drawGroup, true, () => onSketchTool("bezier"), { icon: SKETCH_PALETTE_ICONS.bezier, active: sketchTool === "bezier" }),
         plain("sketch-smooth", t("sketch.smooth"), drawGroup, true, () => onSketchTool("smooth"), { icon: SKETCH_PALETTE_ICONS.smooth, active: sketchTool === "smooth" }),
         plain("note", t("editor.tool.note"), t("editor.group.manage"), true, onNoteTool, { icon: ToolbarNoteIcon, active: noteMode }),
+        plain("notes", t("visibility.notes"), t("editor.group.manage"), true, onToggleNotes, { icon: notesVisible ? Eye : EyeOff, active: notesVisible }),
         plain("sketch-construction", t("sketch.construction"), drawGroup, true, () => onSketchConstruction?.(), { icon: ToolbarConstructionLineIcon, active: Boolean(sketchConstruction), keywords: ["construction", "guide", "helper", "hilfslinie", "hilfs", "konstruktion"] }),
         plain("sketch-from-middle", t("sketch.fromMiddle"), drawGroup, true, () => onSketchFromMiddle?.(), { icon: ToolbarMiddleLineIcon, active: Boolean(sketchFromMiddle), keywords: ["middle", "center", "centre", "mitte", "mittellinie", "symmetric", "symmetrisch"] }),
         ...sketchShapeMenuItems.map(({ primitive, label, icon }) => plain(

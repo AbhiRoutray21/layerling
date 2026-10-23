@@ -775,6 +775,7 @@ export const MESSAGES_ES: Partial<Record<MessageKey, string>> = {
   "shortcuts.lock": "Bloquear o desbloquear la selección",
   "shortcuts.hide": "Ocultar la selección",
   "shortcuts.showHidden": "Mostrar todo lo oculto",
+  "shortcuts.toggleNotes": "Mostrar u ocultar notas y puntos",
   "shortcuts.import": "Abrir o cerrar el cuadro de importación",
   "shortcuts.export": "Abrir o cerrar el cuadro de exportación",
   "shortcuts.save": "Guardar el diseño en su archivo",

@@ -769,6 +769,7 @@ export const MESSAGES_ZH_TW: Partial<Record<MessageKey, string>> = {
   "shortcuts.lock": "鎖定或解鎖選取項目",
   "shortcuts.hide": "隱藏選取項目",
   "shortcuts.showHidden": "顯示所有隱藏項目",
+  "shortcuts.toggleNotes": "顯示或隱藏備註與參考點",
   "shortcuts.import": "開啟或關閉匯入對話方塊",
   "shortcuts.export": "開啟或關閉匯出對話方塊",
   "shortcuts.save": "將設計儲存到其檔案",
