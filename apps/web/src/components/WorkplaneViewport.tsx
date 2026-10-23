@@ -157,6 +157,8 @@ import { orbitViewBy, panViewBy } from "@/lib/viewArrowKeys";
 import { useViewportKeyboardHooks } from "@/components/workplane/viewportKeyboard";
 import { aimPickRay, firstShapeHit, pickImagePoint, pickLayFlatFace, pickRotationPivot, pickShapeAt, pickShapeIdAt, pointerRayFor, rayPointOnRotationPlane, RENDER_LAYER_SHAPES, splitAxisParameter, usePickOnlyPointer, type LayFlatPick, type PickOnlySelection } from "@/components/workplane/viewportPicking";
 export type { LayFlatPick } from "@/components/workplane/viewportPicking";
+import { fastEdgesGeometry } from "@/lib/fastEdgesGeometry";
+import { buildImportedMeshGeometry, computeImportedBoundsTree, putGeometryOnBase, takePreparedImportedMeshGeometry } from "@/lib/importedMeshDisplay";
 import { RENDER_LAYER_HELPERS, sharedOverlayLineMaterial, sharedShapeGeometryCache, sharedEdgesGeometryCache, sharedShapeMaterialCache, type PointCardOffset, type ShapeRenderRecord, type ThreeState, type MoveDimensionSession, type NoteOverlayState, type TapePoint, type TapeAttachment, type TapeEdgeAttachment, type TapeModel, type TapeOverlayState, type TapeCandidate, type RotationHandleSide, type RotationHandleSides, type DragItem, quaternionForShape, projectToScreen, syncMoveDimensionWorldLines, syncTransformGuideWorldLines, tapeShapeDimensions, tapePointWorld, tapeEdgeWorldPoints, tapeSegmentWorldPoints, syncTapeOverlay, syncNoteOverlay, NoteOverlay, TapeOverlay, type RulerDimensionOverlayItem, type RulerDimensionOverlayState, syncRulerDimensionOverlay, RulerDimensionOverlay, type CornerRulerInstance, type CornerRulerOverlayState, syncCornerRulerToolOverlay, CornerRulerToolOverlay, syncOriginDimensionWorldLines, shapeCenter, shapeLocalExtents, projectShapeExtent, projectShapesExtent, type OriginDimensionFrame, setObjectRenderLayer, freezeStaticObjectMatrices, formatMeasure, findShapeObject, trimSharedShapeGeometryCache, releaseSharedShapeGeometry, trimSharedShapeMaterialCache, releaseSharedShapeMaterials, disposeMaterialResource, disposeChildren, disposeObject } from "@/components/workplane/ViewportOverlays";
 
 const WORKPLANE_WIDTH = 200;
@@ -2293,7 +2295,7 @@ function placementFeatureSnap(
   if ((geometry.index?.count ?? geometry.getAttribute("position").count) > 600_000) return null;
   let edges = surface.userData.placementFeatureEdges as { geometry: THREE.BufferGeometry; positions: Float32Array } | undefined;
   if (!edges || edges.geometry !== geometry) {
-    const edgeGeometry = new THREE.EdgesGeometry(geometry, 25);
+    const edgeGeometry = fastEdgesGeometry(geometry, 25);
     edges = { geometry, positions: Float32Array.from(edgeGeometry.getAttribute("position").array as ArrayLike<number>) };
     edgeGeometry.dispose();
     surface.userData.placementFeatureEdges = edges;
@@ -12478,7 +12480,7 @@ function enableAcceleratedMeshPicking(mesh: THREE.Mesh, geometry: THREE.BufferGe
   mesh.raycast = acceleratedRaycast;
   const bvhGeometry = geometry as THREE.BufferGeometry & { boundsTree?: unknown };
   if ((force || triangles >= BVH_PICKING_TRIANGLE_THRESHOLD) && !bvhGeometry.boundsTree) {
-    computeBoundsTree.call(geometry, { targetLeafSize: 12 });
+    computeImportedBoundsTree(geometry);
   }
 }
 
@@ -13224,15 +13226,8 @@ function getImportedMeshCache(mesh: NonNullable<WorkplaneShape["importedMesh"]>)
     return cached;
   }
 
-  const geometry = new THREE.BufferGeometry();
-  geometry.setAttribute("position", new THREE.Float32BufferAttribute(mesh.positions, 3));
-  const hasNormals = Boolean(mesh.normals && mesh.normals.length === mesh.positions.length);
-  if (hasNormals && mesh.normals) {
-    geometry.setAttribute("normal", new THREE.Float32BufferAttribute(mesh.normals, 3));
-  } else {
-    geometry.computeVertexNormals();
-  }
-  putGeometryOnBase(geometry, hasNormals);
+  // A mesh the geometry worker has just made comes with its geometry worked out (lib/importedMeshDisplay.ts).
+  const geometry = takePreparedImportedMeshGeometry(mesh) ?? buildImportedMeshGeometry(mesh);
   geometry.userData.cached = true;
   const next = { geometry, edges: new Map<number, THREE.EdgesGeometry>() };
   importedGeometryCache.set(mesh, next);
@@ -13409,7 +13404,7 @@ function getEdgesGeometry(shape: WorkplaneShape, geometry: THREE.BufferGeometry,
     return cached;
   }
 
-  const edges = new THREE.EdgesGeometry(geometry, threshold);
+  const edges = fastEdgesGeometry(geometry, threshold);
   edges.userData.cached = true;
   cache.set(threshold, edges);
   return edges;
@@ -13443,16 +13438,6 @@ function setComplexEdgeVisibility(object: THREE.Object3D, visible: boolean) {
 function addTextShape(group: THREE.Group, material: THREE.MeshStandardMaterial, shape: WorkplaneShape, geometryCacheKey: string) {
   const geometry = sharedShapeGeometry(geometryCacheKey, () => textDisplayGeometry(shape));
   addMesh(group, geometry, material, shape);
-}
-
-function putGeometryOnBase(geometry: THREE.BufferGeometry, preserveNormals = false) {
-  if (!preserveNormals || !geometry.getAttribute("normal")) {
-    geometry.computeVertexNormals();
-  }
-  geometry.computeBoundingBox();
-  const minY = geometry.boundingBox?.min.y ?? 0;
-  geometry.translate(0, -minY, 0);
-  return geometry;
 }
 
 function createRoofGeometry(width: number, height: number, depth: number) {

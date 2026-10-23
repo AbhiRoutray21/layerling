@@ -1,9 +1,7 @@
 import { unzipSync } from "fflate";
 import { t } from "@/lib/i18n";
 import { importExtensionSupported } from "@/lib/importExtensions";
-import { importedShapesFromObj } from "@/lib/objImport";
 import { attachProjectAsset, projectAssetFromBytes, sourceFormatForFileName } from "@/lib/projectAssets";
-import { importedShapeFromStl } from "@/lib/stlImport";
 import { readKeepSvgPage } from "@/lib/importPreferences";
 import { scaleSvgText } from "@/lib/svgScale";
 import { decodeSvgBytes, importedShapeFromSvgWithReport, prepareSvgImport } from "@/lib/svgImport";
@@ -186,7 +184,7 @@ export async function importModelFiles(
       // die Datei als Ganzes bauen sie nicht nach.
       if (isObj || is3mf) {
         const colored = isObj
-          ? importedShapesFromObj(file.name, new TextDecoder().decode(bytes), prepared.mtlSources)
+          ? await (await import("@/lib/geometryWorker")).importedShapesFromObjOffThread(file.name, new TextDecoder().decode(bytes), prepared.mtlSources)
           : importedShapesFrom3mf(file.name, buffer);
         if ("missingMaterialColors" in colored && colored.missingMaterialColors) result.notes.push(t("status.importObjNoMtl", { name: file.name }));
         if ("droppedVertexColors" in colored && colored.droppedVertexColors) result.notes.push(t("status.importObjVertexColors", { name: file.name }));
@@ -243,7 +241,8 @@ export async function importModelFiles(
           continue;
         }
       } else {
-        shape = importedShapeFromStl(file.name, buffer);
+        // Read off the page (lib/geometryWorker.ts), loaded only when a file needs it.
+        shape = await (await import("@/lib/geometryWorker")).importedShapeFromStlOffThread(file.name, buffer);
       }
       // Eine eigene OBJ traegt ihr Netz selbst ("json") und braucht die Datei nicht.
       if (shape.importedMesh?.sourceFormat === "json") {
