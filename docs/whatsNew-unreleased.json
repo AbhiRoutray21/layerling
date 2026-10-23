@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "title": {
+      "de": "Notizen mit Umschalt+N ein- und ausblenden",
+      "en": "Show or hide notes with Shift+N"
+    },
+    "body": {
+      "de": "Umschalt+N blendet die Notizen und Bezugspunkte ein und aus, im 3D-Editor und in der Skizze, wie „Notizen und Punkte anzeigen“ im Sichtbarkeitsmenü. N allein setzt weiter eine Notiz.",
+      "en": "Shift+N shows or hides the notes and reference points, in the 3D editor and in a sketch, like \"Show notes and points\" in the Visibility menu. N alone still places a note."
+    }
+  }
+]
