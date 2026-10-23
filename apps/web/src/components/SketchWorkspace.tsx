@@ -486,7 +486,7 @@ const REFERENCE_OUTLINE_TRIANGLE_LIMIT = 20000;
  * a heart or a wedge was drawn as the rectangle of its width and depth, the same square for all of them.
  */
 export function shapeMeshFootprint(shape: WorkplaneShape): SketchReferenceFootprint | null {
-  if (shape.importedMesh || shape.groupedShapes?.length || shape.kind === "box" || isRoundReference(shape)) return null;
+  if (shape.importedMesh || shape.kind === "box" || (isRoundReference(shape) && !shape.groupedShapes?.length)) return null;
   let mesh: ReturnType<typeof meshForShape>;
   try {
     mesh = meshForShape(shape);
@@ -494,10 +494,42 @@ export function shapeMeshFootprint(shape: WorkplaneShape): SketchReferenceFootpr
     return null;
   }
   if (!mesh.faces.length || mesh.faces.length > REFERENCE_OUTLINE_TRIANGLE_LIMIT) return null;
+  if (shape.groupedShapes?.length) return groupMeshFootprint(shape, mesh);
   const positions: number[] = [];
   mesh.faces.forEach((face) => face.forEach((index) => positions.push(...mesh.vertices[index])));
   const footprint = footprintOfPositions(positions, (x, z) => ({ x, z }), Math.max(shape.width, shape.depth, shape.height), shape.height);
   return footprint ? { ...footprint, world: true } : null;
+}
+
+/**
+ * The outline of a group (#778): each visible member's own outline, in one path. A group's mesh holds its members one after
+ * the other, so a member's triangles are the ones whose vertices lie in its range. Taken as one body, the group would show only
+ * the bottom of its lowest member, and a group with a plate on top of a gear showed the gear, not the plate; without the mesh
+ * it fell back to a box, the same square for every group.
+ */
+function groupMeshFootprint(shape: WorkplaneShape, mesh: ReturnType<typeof meshForShape>): SketchReferenceFootprint | null {
+  const fills: string[] = [];
+  const outlines: string[] = [];
+  let start = 0;
+  for (const child of (shape.groupedShapes ?? []).filter((entry) => !entry.hidden)) {
+    let count: number;
+    try {
+      count = meshForShape(child).vertices.length;
+    } catch {
+      return null;
+    }
+    const end = start + count;
+    const positions: number[] = [];
+    mesh.faces.forEach((face) => {
+      if (face[0] >= start && face[0] < end) face.forEach((index) => positions.push(...mesh.vertices[index]));
+    });
+    const part = footprintOfPositions(positions, (x, z) => ({ x, z }), Math.max(child.width, child.depth, child.height), child.height);
+    if (part?.fillD) fills.push(part.fillD);
+    if (part?.outlineD) outlines.push(part.outlineD);
+    start = end;
+  }
+  if (!outlines.length) return null;
+  return { fillD: fills.length === outlines.length ? fills.join(" ") : null, outlineD: outlines.join(" "), world: true };
 }
 
 /** The outline of a mesh seen from above: its bottom triangles, as a fill and as the boundary round them; the hull when it has no flat bottom. */
