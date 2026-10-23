@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "title": {
+      "de": "Notizen in Skizzen",
+      "en": "Notes on sketches"
+    },
+    "body": {
+      "de": "Im Skizzen-Editor setzen jetzt der Knopf „Notiz“ unter „Verwalten“ und die Taste N eine Notiz auf die Skizze, wie im 3D-Editor. Die Notizen gehören zum Körper der Skizze: In der 3D-Ansicht sitzen sie darauf und wandern mit ihm, und öffnest du die Skizze wieder, sind sie dort zurück, auch die in 3D gesetzten.",
+      "en": "In the sketch editor, the Note button under Manage or the N key now puts a note on the sketch, as in the 3D editor. The notes belong to the sketch's body: in the 3D view they sit on it and move with it, and when you open the sketch again they are back on it, including the ones placed in 3D."
+    }
+  }
+]
