@@ -2,11 +2,43 @@
   {
     "title": {
       "de": "Notizen in Skizzen",
-      "en": "Notes on sketches"
+      "en": "Notes on sketches",
+      "ar": "ملاحظات على الرسومات التخطيطية",
+      "cs": "Poznámky v náčrtech",
+      "da": "Noter på skitser",
+      "es": "Notas en los bocetos",
+      "fr": "Des notes sur les esquisses",
+      "hu": "Jegyzetek a vázlatokon",
+      "it": "Note sugli schizzi",
+      "nl": "Notities op schetsen",
+      "pl": "Notatki na szkicach",
+      "ru": "Заметки в эскизах",
+      "sl": "Opombe na skicah",
+      "zh-cn": "草图上的备注",
+      "zh-tw": "草圖上的備註",
+      "pt-br": "Anotações em esboços",
+      "tr": "Eskizlerde notlar",
+      "ja": "スケッチにメモ"
     },
     "body": {
       "de": "Im Skizzen-Editor setzen jetzt der Knopf „Notiz“ unter „Verwalten“ und die Taste N eine Notiz auf die Skizze, wie im 3D-Editor. Die Notizen gehören zum Körper der Skizze: In der 3D-Ansicht sitzen sie darauf und wandern mit ihm, und öffnest du die Skizze wieder, sind sie dort zurück, auch die in 3D gesetzten.",
-      "en": "In the sketch editor, the Note button under Manage or the N key now puts a note on the sketch, as in the 3D editor. The notes belong to the sketch's body: in the 3D view they sit on it and move with it, and when you open the sketch again they are back on it, including the ones placed in 3D."
+      "en": "In the sketch editor, the Note button under Manage or the N key now puts a note on the sketch, as in the 3D editor. The notes belong to the sketch's body: in the 3D view they sit on it and move with it, and when you open the sketch again they are back on it, including the ones placed in 3D.",
+      "ar": "في محرر الرسم التخطيطي، يضع الآن زر «ملاحظة» ضمن «إدارة» أو المفتاح N ملاحظة على الرسم، كما في المحرر ثلاثي الأبعاد. الملاحظات تخص جسم الرسم: في العرض ثلاثي الأبعاد تجلس عليه وتتحرك معه، وعندما تفتح الرسم مرة أخرى تعود إليه، ومنها التي وُضعت في العرض ثلاثي الأبعاد.",
+      "cs": "V editoru náčrtů teď tlačítko „Poznámka“ v sekci „Správa“ nebo klávesa N vloží do náčrtu poznámku, stejně jako ve 3D editoru. Poznámky patří k tělesu náčrtu: ve 3D zobrazení na něm sedí a pohybují se s ním, a když náčrt znovu otevřete, jsou zpět na něm, včetně těch vložených ve 3D.",
+      "da": "I skitse-editoren sætter knappen “Note” under “Administrér” eller tasten N nu en note på skitsen, som i 3D-editoren. Noterne hører til skitsens form: i 3D-visningen sidder de på den og flytter sig med den, og når du åbner skitsen igen, er de tilbage på den, også dem der er sat i 3D.",
+      "es": "En el editor de bocetos, el botón «Nota» de «Gestionar» o la tecla N colocan ahora una nota en el boceto, como en el editor 3D. Las notas pertenecen al cuerpo del boceto: en la vista 3D se sitúan sobre él y se mueven con él, y al volver a abrir el boceto vuelven a estar ahí, también las colocadas en 3D.",
+      "fr": "Dans l'éditeur d'esquisses, le bouton « Remarque » sous « Gérer » ou la touche N pose maintenant une note sur l'esquisse, comme dans l'éditeur 3D. Les notes appartiennent au corps de l'esquisse : dans la vue 3D, elles se posent dessus et se déplacent avec lui, et quand vous rouvrez l'esquisse, elles y sont de nouveau, y compris celles placées en 3D.",
+      "hu": "A vázlatszerkesztőben most a „Kezelés” alatti „Jegyzet” gomb vagy az N billentyű jegyzetet tesz a vázlatra, mint a 3D-szerkesztőben. A jegyzetek a vázlat testéhez tartoznak: a 3D nézetben rajta ülnek és vele együtt mozognak, és ha újra megnyitod a vázlatot, ott vannak rajta, a 3D-ben elhelyezettek is.",
+      "it": "Nell’editor degli schizzi, il pulsante «Nota» in «Gestisci» o il tasto N ora inseriscono una nota nello schizzo, come nell’editor 3D. Le note appartengono al corpo dello schizzo: nella vista 3D stanno su di esso e si spostano con lui, e quando riapri lo schizzo sono di nuovo lì, comprese quelle inserite in 3D.",
+      "nl": "In de schetseditor zetten de knop “Notitie” onder “Beheren” en de toets N nu een notitie op de schets, zoals in de 3D-editor. De notities horen bij het lichaam van de schets: in de 3D-weergave zitten ze erop en bewegen ze mee, en als je de schets opnieuw opent, staan ze er weer op, ook die in 3D zijn gezet.",
+      "pl": "W edytorze szkiców przycisk „Notatka” w sekcji „Zarządzaj” lub klawisz N umieszcza teraz notatkę na szkicu, jak w edytorze 3D. Notatki należą do bryły szkicu: w widoku 3D siedzą na niej i przesuwają się razem z nią, a po ponownym otwarciu szkicu znów na nim są, także te umieszczone w 3D.",
+      "ru": "В редакторе эскизов кнопка «Заметка» в разделе «Управление» или клавиша N теперь ставит заметку на эскиз, как в 3D-редакторе. Заметки принадлежат телу эскиза: в 3D-виде они сидят на нём и перемещаются вместе с ним, а когда вы снова открываете эскиз, они снова на нём, в том числе поставленные в 3D.",
+      "sl": "V urejevalniku skic zdaj gumb „Opomba“ pod „Upravljanje“ ali tipka N postavi opombo na skico, kot v 3D urejevalniku. Opombe pripadajo telesu skice: v 3D pogledu sedijo na njem in se premikajo z njim, in ko skico znova odpreš, so spet na njej, tudi tiste, postavljene v 3D.",
+      "zh-cn": "在草图编辑器中，现在可以用“管理”中的“备注”按钮或 N 键在草图上放置备注，与 3D 编辑器中相同。备注属于草图的实体：在 3D 视图中，它们位于实体上并随之移动；再次打开草图时，它们会回到草图上，包括在 3D 中放置的备注。",
+      "zh-tw": "在草圖編輯器中，現在可以用「管理」中的「備註」按鈕或 N 鍵在草圖上放置備註，與 3D 編輯器中相同。備註屬於草圖的實體：在 3D 檢視中，它們位於實體上並隨之移動；再次開啟草圖時，它們會回到草圖上，包括在 3D 中放置的備註。",
+      "pt-br": "No editor de esboços, o botão “Anotação” em “Gerenciar” ou a tecla N agora colocam uma anotação no esboço, como no editor 3D. As anotações pertencem ao corpo do esboço: na visualização 3D ficam sobre ele e se movem junto, e quando você abre o esboço de novo, elas voltam a aparecer nele, inclusive as colocadas em 3D.",
+      "tr": "Eskiz düzenleyicide artık “Yönet” altındaki “Not” düğmesi veya N tuşu, 3D editördeki gibi eskize bir not koyar. Notlar eskizin gövdesine aittir: 3D görünümde gövdenin üzerinde durur ve onunla birlikte hareket eder; eskizi yeniden açtığınızda, 3D'de konulanlar da dahil, yine eskizin üzerindedir.",
+      "ja": "スケッチエディターで、「管理」の「メモ」ボタンまたは N キーを使って、3Dエディターと同じようにスケッチにメモを置けるようになりました。メモはスケッチのボディに属します。3D ビューではボディの上にあり、ボディと一緒に動きます。スケッチを再び開くと、3D で置いたものも含めて、メモがスケッチ上に戻ります。"
     }
   }
 ]

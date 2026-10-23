@@ -65,6 +65,7 @@ Notatka zapisuje to, czego geometria nie mówi: „Ta śruba jest o 0,3 mm za ci
 - Gdy jej bryła zostanie usunięta albo pod nią nie ma już widocznej bryły, notatka zostaje tam, gdzie stała, na płaszczyźnie roboczej.
 - Przeciągnięcie pinezki przesuwa notatkę. Kliknięcie pinezki zwija kartę, zostaje tylko mały numer; kolejne kliknięcie znów ją rozwija. Kliknięcie w tekst pozwala go edytować.
 - Podczas pisania [[Enter]] zachowuje tekst, a [[Esc]] przywraca go do stanu sprzed rozpoczęcia. [[Shift]]+[[Enter]] zaczyna nowy wiersz.
+- **W szkicu** notatkę umieszcza też {{ui:editor.tool.note}} (w sekcji {{ui:editor.group.manage}}) lub klawisz [[N]], w dowolnym miejscu szkicu. Wszystkie notatki szkicu należą do jego bryły: w widoku 3D siedzą na niej, na wierzchu bryły utworzonej przez {{ui:sketch.extrude}} lub {{ui:sketch.sweep}} i na narysowanym profilu bryły utworzonej przez {{ui:sketch.revolve}}, i przesuwają się razem z nią. Po ponownym otwarciu szkic pokazuje notatki bryły, także te umieszczone w 3D. W szkicu {{ui:sketch.undo}} cofa notatkę tak jak linię, a {{ui:sketch.cancel}} odrzuca zmiany w notatkach.
 
 Notatki zapisują się w projekcie, nie pojawiają się w żadnym eksporcie i można je pokazać albo ukryć przez {{ui:visibility.notes}} (w {{ui:editor.visibilityOptions}}, strzałce obok ikony oka).
 
