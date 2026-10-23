@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+## 1.103.1
+
 - **Sketch: the keys 1 to 3 also change a selection (#347):** With the Select tool and lines or points selected, 1 makes the lines straight and the points corners, 2 turns the lines into curves and 3 makes the points smooth, all selected ones at once and as one step in the history, as in Tinkercad. With nothing selected the keys pick the drawing tool as before; the keys are named in the tooltips of the buttons. Asked for by @djelliott19.
 - **Several objects turn rigidly, even past the edge (#763):** Turning several selected objects with the rotate handle rounded each centre to the grid and kept it inside the workplane, so objects near the edge stopped while the rest went on and the arrangement broke. The group now turns exactly around its pivot and keeps its spacing. Reported by @MethylBromide.
 - **Fit a Gridfinity baseplate to a drawer (#455):** Filling a drawer meant working out the units and the paddings by hand. A baseplate now has **Drawer width** and **Drawer depth**, each showing the drawer the plate fills, 0.5 mm larger than the plate. Typing a drawer's inside size takes as many units as fit, up to 6, and splits the rest evenly into the two paddings of that axis, up to 41 mm a side, so the plate comes out 0.5 mm smaller than the drawer: 292.1 mm gives 6 units and 19.8 mm each side. Only the axis typed changes, in one undo step; a section of a larger drawer padded on one side only is set with the padding rows. Nothing new is stored: the rows are worked out from the size, like the units. A padded baseplate's size is now kept to 0.01 mm, as its padding is. Contributed by @mlugo-apx.
