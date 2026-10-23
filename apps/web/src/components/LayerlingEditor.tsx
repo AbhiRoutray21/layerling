@@ -255,7 +255,8 @@ import { getSectionBounds, sectionAxisLetter, sectionMeshInFrame, sectionPlaceme
 import { footprintCutOffset, projectSectionPoint, SECTION_VIEW_FACE, sectionSvgDocument, sliceMeshContours } from "@/lib/sectionSvg";
 import type { AlignAxis, AlignHandleStatus, AlignTarget, GridSize, ParametricSource, ProjectAsset, ShapeAsset, ShapeCustomization, ShapeKind, SketchImage, SketchOperation, SketchPoint, SketchProfile, SketchRevolveSettings, SketchSegment, ShellEdges, ShellOpenings, ShellSide, SweepAnchor, WorkplaneNote, WorkplaneShape, WorkplaneWorkspaceSettings } from "@/types/layerling";
 import { type Vec3, type MeshData, type Cuboid, type ShapeUpdatePatch, type ManifoldSolid, MIN_SHAPE_DIMENSION, resetManifoldRuntime, cleanModelDimension, getManifoldRuntime, meshForShape, meshReachAlong, appendMeshData, formatTriangleCount, shapeAabb, boundsForShapes, boundsForCuboids, meshAabb, boundsForPositions, quantizedPointKey } from "@/lib/editorMeshCore";
-import { cloneAsGroupChild, meshDataToManifoldMesh, shapeToManifoldSolid, splitShapesByPlane, unionOverlappingExportMeshes, exportBodiesWithLooseHoles, exportSolidVolume, type ExportSolidVolume, PRINT_MATERIAL_STORAGE_KEY, PRINT_INFILL_STORAGE_KEY, PRINT_WALLS_STORAGE_KEY, formatEstimateNumber, formatSectionOffset, SECTION_SEEN_FROM_KEYS, expandBundles, visibleExportShapes, multicolorExportSolids, exportFaceColors, colorSeparatedExportMeshes, disposeManifold, canIntersectShapes, buildIntersectionShapeFromSelection, groupedShape, quaternionForShape, rotationFromQuaternion, cleanShapePatch, restoreGroupedChildren, restoreGroupedChildrenForEdges, buildGroupedShapeFromSelection } from "@/lib/editorBooleans";
+import { buildGroupedShapeOffThread, splitShapesByPlaneOffThread, subscribeGeometryBusy, warmGeometryWorker } from "@/lib/geometryWorker";
+import { cloneAsGroupChild, meshDataToManifoldMesh, shapeToManifoldSolid, unionOverlappingExportMeshes, exportBodiesWithLooseHoles, exportSolidVolume, type ExportSolidVolume, PRINT_MATERIAL_STORAGE_KEY, PRINT_INFILL_STORAGE_KEY, PRINT_WALLS_STORAGE_KEY, formatEstimateNumber, formatSectionOffset, SECTION_SEEN_FROM_KEYS, expandBundles, visibleExportShapes, multicolorExportSolids, exportFaceColors, colorSeparatedExportMeshes, disposeManifold, canIntersectShapes, buildIntersectionShapeFromSelection, groupedShape, quaternionForShape, rotationFromQuaternion, cleanShapePatch, restoreGroupedChildren, restoreGroupedChildrenForEdges } from "@/lib/editorBooleans";
 import { handleViewArrowKey } from "@/lib/viewArrowKeys";
 import { escapeWasHandled } from "@/lib/escapeHandled";
 import { sketchEscapeAction } from "@/lib/sketchEscape";
@@ -1082,7 +1083,7 @@ async function restoreEdgeTreatmentInShape(shape: WorkplaneShape, path: number[]
   }
 
   restoredChildren[childIndex] = restoredChild.shape;
-  const rebuilt = await buildGroupedShapeFromSelection(restoredChildren, triangleLimit);
+  const rebuilt = await buildGroupedShapeOffThread(restoredChildren, triangleLimit);
   if (!rebuilt.group) {
     return null;
   }
@@ -2855,6 +2856,30 @@ export function LayerlingEditor({
   const [scalePercentError, setScalePercentError] = useState<string | null>(null);
   const editorLanguage = useLanguage();
   const { notice, noticeAction, setNotice, holdNotice, releaseNotice, dismissNotice, reportNoticesRef } = useEditorNotice();
+  // Cuts and splits run in a worker (lib/geometryWorker.ts): one that takes a moment says so, and
+  // the editor stays usable meanwhile. Leaving the editor calls off what it still had running.
+  const geometryAbortRef = useRef<AbortController | null>(null);
+  const splitAbortRef = useRef<AbortController | null>(null);
+  useEffect(() => {
+    const controller = new AbortController();
+    geometryAbortRef.current = controller;
+    let shownTimer: number | null = null;
+    const unsubscribe = subscribeGeometryBusy((busy) => {
+      if (busy) {
+        shownTimer ??= window.setTimeout(() => setNotice(t("status.computing"), true), 300);
+        return;
+      }
+      if (shownTimer !== null) window.clearTimeout(shownTimer);
+      shownTimer = null;
+      if (noticeRef.current === t("status.computing")) dismissNotice();
+    });
+    return () => {
+      unsubscribe();
+      if (shownTimer !== null) window.clearTimeout(shownTimer);
+      controller.abort();
+      splitAbortRef.current?.abort();
+    };
+  }, [dismissNotice, setNotice]);
   const showHiddenRef = useRef<() => void>(() => undefined);
   // The design for which the hidden shapes were told once, when its shapes first arrived (#489).
   const hiddenNoticedProjectRef = useRef<string | null>(null);
@@ -3254,6 +3279,7 @@ export function LayerlingEditor({
         // Allow a real grouping action to retry if an idle preload was interrupted.
         resetManifoldRuntime();
       });
+      warmGeometryWorker();
     };
     if ("requestIdleCallback" in window) {
       const idleId = window.requestIdleCallback(warmBooleanRuntime, { timeout: 1500 });
@@ -6410,7 +6436,11 @@ export function LayerlingEditor({
     const runId = splitRunRef.current + 1;
     splitRunRef.current = runId;
     setSplitSession({ ...session, busy: true, error: null, picking: false });
-    const outcome = await splitShapesByPlane(splitTargetShapes, plane, () => splitRunRef.current === runId && sourceContextIsCurrent());
+    // A new split calls off the one before it, which would be thrown away anyway.
+    splitAbortRef.current?.abort();
+    const splitAbort = new AbortController();
+    splitAbortRef.current = splitAbort;
+    const outcome = await splitShapesByPlaneOffThread(splitTargetShapes, plane, () => splitRunRef.current === runId && sourceContextIsCurrent(), splitAbort.signal);
     if (splitRunRef.current !== runId) return;
     if (outcome.status === "stale" || !sourceContextIsCurrent()) {
       splitRunRef.current += 1;
@@ -7784,7 +7814,7 @@ export function LayerlingEditor({
     setHolePatternTool({ ...tool, busy: true });
     const sourceFingerprint = projectShapesFingerprint(shapesRef.current);
     const sourceProjectId = projectInfoRef.current.projectId;
-    const result = await buildGroupedShapeFromSelection([source, ...plan.holes], workspaceSettingsRef.current.booleanTriangleLimit);
+    const result = await buildGroupedShapeOffThread([source, ...plan.holes], workspaceSettingsRef.current.booleanTriangleLimit, geometryAbortRef.current?.signal);
     if (projectInfoRef.current.projectId !== sourceProjectId || projectShapesFingerprint(shapesRef.current) !== sourceFingerprint) {
       setHolePatternTool(null);
       setNotice(t("status.groupChanged"));
@@ -7937,7 +7967,7 @@ export function LayerlingEditor({
       commitShapes([...shapesRef.current, body], body.id, createdMessage);
       return;
     }
-    const result = await buildGroupedShapeFromSelection([source, body], workspaceSettingsRef.current.booleanTriangleLimit);
+    const result = await buildGroupedShapeOffThread([source, body], workspaceSettingsRef.current.booleanTriangleLimit, geometryAbortRef.current?.signal);
     if (projectInfoRef.current.projectId !== sourceProjectId || projectShapesFingerprint(shapesRef.current) !== sourceFingerprint) {
       setFaceTool(null);
       setNotice(t("status.groupChanged"));
@@ -8116,7 +8146,7 @@ export function LayerlingEditor({
       for (const shape of pending) {
         const parts = honeycombReplacementParts(shape);
         if (!parts) continue;
-        const result = await buildGroupedShapeFromSelection([parts.body, ...parts.holes], workspaceSettingsRef.current.booleanTriangleLimit);
+        const result = await buildGroupedShapeOffThread([parts.body, ...parts.holes], workspaceSettingsRef.current.booleanTriangleLimit, geometryAbortRef.current?.signal);
         if (!result.group) continue;
         replacements.set(shape.id, canonicalizeShape({ ...result.group, id: shape.id, name: shape.name, color: shape.color, locked: shape.locked, groupOperation: "group" }));
       }
@@ -8213,7 +8243,7 @@ export function LayerlingEditor({
 
     const sourceFingerprint = projectShapesFingerprint(shapesRef.current);
     const sourceProjectId = projectInfoRef.current.projectId;
-    const result = await buildGroupedShapeFromSelection(selectedShapes, workspaceSettingsRef.current.booleanTriangleLimit);
+    const result = await buildGroupedShapeOffThread(selectedShapes, workspaceSettingsRef.current.booleanTriangleLimit, geometryAbortRef.current?.signal);
     if (projectInfoRef.current.projectId !== sourceProjectId || projectShapesFingerprint(shapesRef.current) !== sourceFingerprint) {
       setNotice(t("status.groupChanged"));
       return;
@@ -8498,7 +8528,7 @@ export function LayerlingEditor({
         ? await buildIntersectionShapeFromSelection(parts, workspaceSettingsRef.current.booleanTriangleLimit)
         : operation === "bundle"
           ? { group: groupedShape(parts) }
-          : await buildGroupedShapeFromSelection(parts, workspaceSettingsRef.current.booleanTriangleLimit);
+          : await buildGroupedShapeOffThread(parts, workspaceSettingsRef.current.booleanTriangleLimit, geometryAbortRef.current?.signal);
       if (
         projectInfoRef.current.projectId !== sourceProjectId ||
         projectShapesFingerprint(shapesRef.current) !== sourceFingerprint ||
@@ -9701,7 +9731,7 @@ export function LayerlingEditor({
         if (plan.holes.length === 0) throw new Error("No hole fits on that face with this size and margin");
         const sourceFingerprint = projectShapesFingerprint(currentShapes());
         const sourceProjectId = projectInfoRef.current.projectId;
-        const result = await buildGroupedShapeFromSelection([target, ...plan.holes], workspaceSettingsRef.current.booleanTriangleLimit);
+        const result = await buildGroupedShapeOffThread([target, ...plan.holes], workspaceSettingsRef.current.booleanTriangleLimit, geometryAbortRef.current?.signal);
         if (projectInfoRef.current.projectId !== sourceProjectId || projectShapesFingerprint(currentShapes()) !== sourceFingerprint) {
           throw new Error("The scene changed while perforating; run the command again");
         }
@@ -9772,7 +9802,7 @@ export function LayerlingEditor({
             normal: [normal.x, normal.y, normal.z].map((value) => Number(value.toFixed(4))),
           };
         }
-        const result = await buildGroupedShapeFromSelection([target, body], workspaceSettingsRef.current.booleanTriangleLimit);
+        const result = await buildGroupedShapeOffThread([target, body], workspaceSettingsRef.current.booleanTriangleLimit, geometryAbortRef.current?.signal);
         if (projectInfoRef.current.projectId !== sourceProjectId || projectShapesFingerprint(currentShapes()) !== sourceFingerprint) {
           throw new Error("The scene changed while pushing the face; run the command again");
         }
@@ -9832,7 +9862,7 @@ export function LayerlingEditor({
         if (groupable.some((shape) => isNonSolidShape(shape))) throw new Error("A ruler isn't a solid and can't be grouped");
         const sourceFingerprint = projectShapesFingerprint(currentShapes());
         const sourceProjectId = projectInfoRef.current.projectId;
-        const result = await buildGroupedShapeFromSelection(groupable, workspaceSettingsRef.current.booleanTriangleLimit);
+        const result = await buildGroupedShapeOffThread(groupable, workspaceSettingsRef.current.booleanTriangleLimit, geometryAbortRef.current?.signal);
         if (projectInfoRef.current.projectId !== sourceProjectId || projectShapesFingerprint(currentShapes()) !== sourceFingerprint) {
           throw new Error("The scene changed while grouping; run the command again");
         }
@@ -10128,7 +10158,7 @@ export function LayerlingEditor({
         }
         const sourceFingerprint = projectShapesFingerprint(currentShapes());
         const sourceProjectId = projectInfoRef.current.projectId;
-        const result = await buildGroupedShapeFromSelection(operands, workspaceSettingsRef.current.booleanTriangleLimit);
+        const result = await buildGroupedShapeOffThread(operands, workspaceSettingsRef.current.booleanTriangleLimit, geometryAbortRef.current?.signal);
         if (projectInfoRef.current.projectId !== sourceProjectId || projectShapesFingerprint(currentShapes()) !== sourceFingerprint) {
           throw new Error("The scene changed while cutting; run the command again");
         }
@@ -10247,10 +10277,11 @@ export function LayerlingEditor({
         const plane = modelSplitPlane(points, axis, requestedPosition, rotation) ?? range;
         const sourceFingerprint = projectShapesFingerprint(currentShapes());
         const sourceProjectId = projectInfoRef.current.projectId;
-        const outcome = await splitShapesByPlane(
+        const outcome = await splitShapesByPlaneOffThread(
           targets,
           plane,
           () => projectInfoRef.current.projectId === sourceProjectId && projectShapesFingerprint(currentShapes()) === sourceFingerprint,
+          geometryAbortRef.current?.signal,
         );
         if (outcome.status === "stale") throw new Error("The scene changed while splitting; run the command again");
         if (outcome.status === "failed") throw new Error(t("split.error.failed", { name: outcome.shape.name, detail: outcome.error }));
@@ -11182,7 +11213,7 @@ export function LayerlingEditor({
         return;
       }
 
-      const result = await buildGroupedShapeFromSelection(testCase.shapes, workspaceSettingsRef.current.booleanTriangleLimit);
+      const result = await buildGroupedShapeOffThread(testCase.shapes, workspaceSettingsRef.current.booleanTriangleLimit, geometryAbortRef.current?.signal);
       if (!result.group) {
         const noticeText = result.consumed ? t("status.groupedHoleConsumed") : result.failureNotice;
         commitShapes(result.consumed ? [] : testCase.shapes, result.consumed ? [] : ids, noticeText);

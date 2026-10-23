@@ -755,7 +755,7 @@ function shapesToManifoldUnion(runtime: ManifoldToplevel, shapes: WorkplaneShape
   return union.status() === "NoError" && union.numTri() > 0 ? union : null;
 }
 
-async function splitShapeByPlane(shape: WorkplaneShape, plane: Pick<ModelSplitPlane, "axis" | "normal" | "position">) {
+export async function splitShapeByPlane(shape: WorkplaneShape, plane: Pick<ModelSplitPlane, "axis" | "normal" | "position">) {
   const created: ManifoldSolid[] = [];
   try {
     const runtime = await getManifoldRuntime();
@@ -821,17 +821,21 @@ export type SplitShapesOutcome =
   | { status: "failed"; shape: WorkplaneShape; error: string }
   | { status: "done"; replacements: Map<string, WorkplaneShape[]>; splitCount: number };
 
-/** Splits every target the plane crosses; `stillCurrent` is asked after each one. */
+/**
+ * Splits every target the plane crosses; `stillCurrent` is asked after each one. `splitOne` makes
+ * each cut, off the page in the editor (lib/geometryWorker.ts).
+ */
 export async function splitShapesByPlane(
   targets: readonly WorkplaneShape[],
   plane: Pick<ModelSplitPlane, "axis" | "normal" | "position">,
   stillCurrent: () => boolean,
+  splitOne: typeof splitShapeByPlane = splitShapeByPlane,
 ): Promise<SplitShapesOutcome> {
   const replacements = new Map<string, WorkplaneShape[]>();
   let splitCount = 0;
   for (const shape of targets) {
     if (!splitPlaneIntersectsPoints(meshForShape(shape).vertices, plane.normal, plane.position)) continue;
-    const result = await splitShapeByPlane(shape, plane);
+    const result = await splitOne(shape, plane);
     if (!stillCurrent()) return { status: "stale" };
     if (!result.parts) return { status: "failed", shape, error: result.error ?? t("split.error.failedDefault") };
     replacements.set(shape.id, result.parts);
