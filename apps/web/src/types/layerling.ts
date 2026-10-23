@@ -389,6 +389,8 @@ export type WorkplaneWorkspaceSettings = {
   objectSnap: boolean;
   /** An STL leaves as a plain download each time, which the browser numbers (name (1).stl), instead of writing into one linked file (#731). */
   stlAsDownload: boolean;
+  /** The browser asks "Leave site?" when a design is open and the tab is closed or reloaded; off by default (#683 mail). */
+  confirmTabClose: boolean;
   dimensionsAlwaysVisible: boolean;
   /** A turned body shows its angles about X, Y and Z beside it while it is selected. */
   showRotationAngles: boolean;

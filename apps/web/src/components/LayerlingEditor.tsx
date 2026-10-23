@@ -208,6 +208,7 @@ import { exportMeshesToStl } from "@/lib/stlExport";
 import { exportMeshesTo3mf, THREE_MF_MEDIA_TYPE } from "@/lib/threemfExport";
 import { importedShapeFromSvg, invalidSvgMeshReason } from "@/lib/svgImport";
 import { toSvgProjection, toSvgTopEdges, type SvgProjectionLayer } from "@/lib/svgExport";
+import { leaveGuardReleased } from "@/lib/leaveGuard";
 import { outlinesToDxf, type DxfResult } from "@/lib/dxfExport";
 import type { CrossSection } from "manifold-3d";
 import { DrawingTooComplexError } from "@/lib/drawingProjection";
@@ -2925,6 +2926,19 @@ export function LayerlingEditor({
   const projectAssetsRef = useRef(projectAssets);
   const selectedIdsRef = useRef(selectedIds);
   const workspaceSettingsRef = useRef(workspaceSettings);
+
+  // "Ask before closing the tab" (a setting, off): the browser's own "Leave site?" question while a design is open. The design is saved
+  // after every change anyway, so this is only a reminder; the wording is the browser's.
+  useEffect(() => {
+    if (!workspaceSettings.confirmTabClose) return;
+    const ask = (event: BeforeUnloadEvent) => {
+      if (leaveGuardReleased()) return;
+      event.preventDefault();
+      event.returnValue = "";
+    };
+    window.addEventListener("beforeunload", ask);
+    return () => window.removeEventListener("beforeunload", ask);
+  }, [workspaceSettings.confirmTabClose]);
   const snapGridRef = useRef(snapGrid);
   const placementElevationRef = useRef(placementElevation);
   const placementWorkplaneRef = useRef(placementWorkplane);

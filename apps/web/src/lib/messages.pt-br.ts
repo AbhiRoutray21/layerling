@@ -879,6 +879,8 @@ export const MESSAGES_PT_BR: Partial<Record<MessageKey, string>> = {
   "workspace.objectSnap": "Encaixar em outras formas ao mover",
   "workspace.stlAsDownload": "Salvar STL como um download",
   "workspace.stlAsDownloadHint": "Chrome e Edge escrevem o STL no mesmo arquivo todas as vezes. Ligue esta opção para fazer um download comum: o navegador então numera os arquivos, nome (1).stl, nome (2).stl.",
+  "workspace.confirmTabClose": "Perguntar antes de fechar a aba",
+  "workspace.confirmTabCloseHint": "Com um projeto aberto, o navegador faz a própria pergunta \"Sair do site?\" ao fechar ou recarregar a aba. Seus projetos já são salvos após cada alteração, a pergunta é só um lembrete. O texto é do navegador.",
   "workspace.overhangAngle": "Marcar saliências a partir de {angle}°",
   "workspace.overhangStrict": "30° (cuidadoso)",
   "workspace.overhangLoose": "70° (boa refrigeração)",

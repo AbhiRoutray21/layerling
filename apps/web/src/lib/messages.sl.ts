@@ -1800,6 +1800,8 @@ export const MESSAGES_SL: Partial<Record<MessageKey, string>> = {
   "workspace.objectSnap": "Pripni na druge oblike med premikanjem",
   "workspace.stlAsDownload": "Shrani STL kot prenos",
   "workspace.stlAsDownloadHint": "Chrome in Edge STL vsakič zapišeta v isto datoteko. Vklopite to za navaden prenos: brskalnik nato datoteke oštevilči, ime (1).stl, ime (2).stl.",
+  "workspace.confirmTabClose": "Vprašaj pred zapiranjem zavihka",
+  "workspace.confirmTabCloseHint": "Ko je projekt odprt, brskalnik ob zapiranju ali osvežitvi zavihka postavi svoje vprašanje »Zapustim stran?«. Projekti se po vsaki spremembi shranijo tako ali tako, vprašanje je le opomnik. Besedilo določi brskalnik.",
   "workspace.overhangAngle": "Označi previse od {angle}°",
   "workspace.overhangStrict": "30° (previdno)",
   "workspace.overhangLoose": "70° (dobro hlajenje)",

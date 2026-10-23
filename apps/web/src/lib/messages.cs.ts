@@ -2420,6 +2420,8 @@ export const MESSAGES_CS: Record<MessageKey, string> = {
   "workspace.objectSnap": "Při posunu přichytávat k jiným tvarům",
   "workspace.stlAsDownload": "Uložit STL jako stažení",
   "workspace.stlAsDownloadHint": "Chrome a Edge zapisují STL pokaždé do stejného souboru. Zapněte to, aby se místo toho stáhl běžný soubor: prohlížeč pak soubory očísluje, název (1).stl, název (2).stl.",
+  "workspace.confirmTabClose": "Zeptat se před zavřením karty",
+  "workspace.confirmTabCloseHint": "Je-li otevřený návrh, prohlížeč se při zavření nebo obnovení karty zeptá vlastní otázkou „Opustit stránku?“. Návrhy se ukládají po každé změně tak či tak, otázka je jen připomínka. Znění určuje prohlížeč.",
   "workspace.overhangAngle": "Vyznačit převisy od {angle}°",
   "workspace.overhangStrict": "30° (opatrně)",
   "workspace.overhangLoose": "70° (dobré chlazení)",

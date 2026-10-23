@@ -2949,6 +2949,8 @@ export const MESSAGES_IT: Partial<Record<MessageKey, string>> = {
   "workspace.shapeColorsHint": "Le anteprime della raccolta di forme mostrano il colore iniziale delle nuove forme. Disattiva questa opzione per visualizzarle in grigio.",
   "workspace.stlAsDownload": "Scarica STL come file",
   "workspace.stlAsDownloadHint": "Chrome ed Edge salvano ogni STL sovrascrivendo lo stesso file. Attiva questa opzione per scaricarlo normalmente: il browser aggiungerà un numero ai file, come nome (1).stl e nome (2).stl.",
+  "workspace.confirmTabClose": "Chiedi prima di chiudere la scheda",
+  "workspace.confirmTabCloseHint": "Con un progetto aperto, il browser fa la sua domanda «Lasciare il sito?» quando chiudi o ricarichi la scheda. I progetti vengono comunque salvati dopo ogni modifica, la domanda è solo un promemoria. Il testo lo decide il browser.",
   "workspace.useMyDefault": "Usa le mie impostazioni predefinite",
   "workspace.useMyDefaultHint": "Applica a questo progetto i colori, la griglia e le altre impostazioni salvate con «Imposta come predefinito». La dimensione della piastra, la stampante e le unità di misura restano invariate.",
   "sketch.fromMiddle": "Linea dal centro",

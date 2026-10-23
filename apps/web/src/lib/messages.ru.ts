@@ -2417,6 +2417,8 @@ export const MESSAGES_RU: Partial<Record<MessageKey, string>> = {
   "workspace.objectSnap": "Привязка к другим фигурам при перемещении",
   "workspace.stlAsDownload": "Сохранять STL как загрузку",
   "workspace.stlAsDownloadHint": "Chrome и Edge каждый раз записывают STL в один и тот же файл. Включите это, чтобы получать обычную загрузку: тогда браузер нумерует файлы, имя (1).stl, имя (2).stl.",
+  "workspace.confirmTabClose": "Спрашивать перед закрытием вкладки",
+  "workspace.confirmTabCloseHint": "Если открыт проект, браузер при закрытии или перезагрузке вкладки задаёт свой стандартный вопрос «Покинуть сайт?». Проекты и так сохраняются после каждого изменения, вопрос — лишь напоминание. Формулировку задаёт браузер.",
   "workspace.overhangAngle": "Отмечать нависания от {angle}°",
   "workspace.overhangStrict": "30° (осторожно)",
   "workspace.overhangLoose": "70° (хорошее охлаждение)",

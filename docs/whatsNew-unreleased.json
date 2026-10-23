@@ -30,5 +30,15 @@
       "en": "A DXF, such as a part outline from a laser cutting shop or a supplier, now comes in as parts to work on: every outline a body, every hole in it a hole of its own (a round one a cylinder) that you move and size in the 3D editor. In millimetres, its arcs and circles as true arcs. Text, dimensions and outlines that do not close are left out, and the message says how many.",
       "hu": "Egy DXF, például egy lézervágó cégtől vagy beszállítótól kapott alkatrész-körvonal, mostantól szerkeszthető részekként érkezik: minden körvonalból test lesz, a benne lévő minden furatból külön furat (a kerekből henger), amelyet a 3D szerkesztőben mozgatsz és méretezel. Milliméterben, az ívek és körök valódi ívekként. A szöveg, a méretvonalak és a nem záródó körvonalak kimaradnak, és az üzenet megmondja, hány."
     }
+  },
+  {
+    "title": {
+      "de": "Vor dem Schließen des Tabs nachfragen",
+      "en": "Ask before closing the tab"
+    },
+    "body": {
+      "de": "In den Einstellungen gibt es jetzt „Vor dem Schließen des Tabs nachfragen“, standardmäßig aus. Ist es an, fragt der Browser mit seiner eigenen Frage „Seite verlassen?“ nach, wenn du einen Tab mit offenem Entwurf schließt oder neu lädst. Deine Entwürfe sind nach jeder Änderung ohnehin gespeichert, die Frage ist nur eine Gedächtnisstütze, etwa gegen ein versehentliches Strg+W.",
+      "en": "The settings now have \"Ask before closing the tab\", off by default. When it is on, the browser asks its own question \"Leave site?\" if you close or reload a tab with an open design. Your designs are saved after every change anyway, so the question is only a reminder, say against a Ctrl+W by mistake."
+    }
   }
 ]
