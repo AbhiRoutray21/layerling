@@ -25,10 +25,11 @@ export const LAYERLING_VIDEOS = [
     url: "https://youtu.be/-EEt0RSINoY",
   },
   {
-    title: "Layerling - Tussen Tinkercad en Fusion 360 in, en Helemaal Gratis!",
+    // A whole playlist, so new videos in it arrive here without a release.
+    title: "Layerling",
     channel: "Werkplaats Marc",
     lang: "NL",
-    url: "https://youtu.be/X-UuvsfDI-s",
+    url: "https://www.youtube.com/playlist?list=PLQuXPoMXTnRQ",
   },
   {
     // A whole playlist, so new videos in it arrive here without a release.
