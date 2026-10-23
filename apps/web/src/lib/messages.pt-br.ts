@@ -668,6 +668,8 @@ export const MESSAGES_PT_BR: Partial<Record<MessageKey, string>> = {
   "prop.gridfinityUnitsZ": "Unidades na profundidade",
   "prop.gridfinityUnitsY": "Unidades na altura",
   "prop.gridfinityLip": "Borda de empilhamento",
+  "prop.gridfinityLipChamfer": "Chanfro da borda de empilhamento",
+  "gridfinity.lipChamferHint": "Chanfra a aresta superior da borda de empilhamento; com 0 ela fica viva, como a especificação Gridfinity a desenha.",
   "prop.gridfinityMagnets": "Furos para ímãs",
   "prop.gridfinityHalfGrid": "Grade de meio tamanho (21 mm)",
   "prop.gridfinityFloorHeight": "Altura do fundo",

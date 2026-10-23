@@ -28,5 +28,15 @@
       "de": "Stellst du das Lineal auf oder kippst es, misst es entlang seiner eigenen Richtung: Senkrecht neben einem Körper zeigt es dessen Höhe, statt weiter über die Platte zu messen.",
       "en": "Stand the ruler up or tip it and it measures along its own direction: upright beside a body it shows the body's height instead of measuring along the plate."
     }
+  },
+  {
+    "title": {
+      "de": "Fase am Gridfinity-Stapelrand",
+      "en": "A chamfer on the Gridfinity lip"
+    },
+    "body": {
+      "de": "Die scharfe Oberkante des Stapelrands lässt sich jetzt direkt am Gridfinity-Behälter fasen: Stell sie im Eigenschaften-Fenster unter „Fase am Stapelrand“ auf bis zu 1 mm ein. Das ist dieselbe Fase, die das Kantenwerkzeug macht, ohne dass du die Kanten auswählen musst.",
+      "en": "The sharp top of a Gridfinity bin's stacking lip can now be chamfered on the bin itself: set \"Lip chamfer\" in the Properties panel, up to 1 mm. It is the same chamfer the edge tool makes, without picking the edges."
+    }
   }
 ]
