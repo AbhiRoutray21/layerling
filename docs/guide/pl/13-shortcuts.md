@@ -7,6 +7,8 @@ Skróty działają, dopóki płaszczyzna robocza jest aktywna. Gdy piszesz w pol
 
 W edytorze {{ui:editor.keyboardShortcuts}} w sekcji {{ui:editor.group.help}} otwiera tę samą listę jako okno. Przycisk drukarki w oknie ({{ui:shortcuts.print}}) drukuje samą listę, czarno na białym, całą na jednej stronie arkusza A4 albo Letter w trzech kolumnach, żeby mieć ją pod ręką jako ściągę. Okno drukowania przeglądarki pozwala też zapisać ją jako PDF.
 
+Pole u góry okna przeszukuje listę: zostawia tylko skróty, których zdanie, grupa lub klawisze zawierają każde wpisane słowo, więc "ctrl+z" zostawia tylko te wiersze. Wielkość liter i znaki diakrytyczne nie mają znaczenia, a pojedyncza litera lub cyfra znajduje ten klawisz i słowa, które się od niej zaczynają. X na końcu pola je czyści; przy pustym polu wraca cała lista. Przycisk drukarki drukuje to, co pokazuje okno, więc po wyszukiwaniu drukuje tylko znalezione skróty.
+
 ![Okno skrótów klawiszowych w edytorze.](shot:shortcuts)
 
 ## Wyszukiwanie poleceń

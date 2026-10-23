@@ -1,9 +1,11 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import "./historyView.css";
+import "./notes.css";
 import "./myShapes.css";
 import "./viewCube.css";
 import "./secondView.css";
+import "./shortcuts.css";
 import { DiagnoseStrip } from "@/components/DiagnoseStrip";
 import { NewVersionNotice } from "@/components/NewVersionNotice";
 import { ServiceWorkerRegistration } from "@/components/ServiceWorkerRegistration";
