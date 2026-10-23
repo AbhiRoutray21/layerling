@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **Shift+N shows or hides the notes and points:** The notes and reference points could only be shown or hidden with **Show notes and points** in the Visibility menu (the arrow beside the eye icon). [[Shift]]+[[N]] now does the same, in the 3D editor and in the sketch editor, with the same message at the bottom; [[N]] alone still places a note. [[Ctrl]]+[[N]] was not used because the browser keeps it for a new window. The key is in the shortcut list (Organise group in 3D, Sketch group in a sketch, with a new text `shortcuts.toggleNotes` in every language), beside the entry in the command search, where the sketch editor now has the entry too, and in the guide (chapters Sketches and Measuring and notes, every guide language that has them). Type-checked; not tried in a browser yet.
+
 ## 1.105.0
 
 - **Ask before closing the tab (a setting):** In the settings, under the same group as "Save STL as a download", "Ask before closing the tab" makes the browser bring up its own question "Leave site?" when a tab with an open design is closed or reloaded (`beforeunload`; the wording is the browser's and cannot be changed, and there is no "Save" in it). Off by default: a design is saved after every change anyway, so the question is only a reminder, as with Ctrl+W by mistake. A reload layerling starts itself, such as "Save and reload" for a new version, skips it (`leaveGuard.ts`). Texts in nine languages and a sentence in the first chapter of the guide in all of them. Asked for by a user in a mail.

@@ -152,5 +152,6 @@ Alle fire rører kun referencen, aldrig skitsen.
 | [[R]] | drej den lukkede skitse 45° |
 | [[L]] | lås eller lås op for skabelonbilledet |
 | [[N]] | sæt en note: det næste klik placerer den på skitsen |
+| [[Shift]]+[[N]] | vis eller skjul noterne |
 
 > **Tip:** Tegn så få punkter som muligt. Et omrids med få velplacerede punkter giver en glattere form end en virvar af mange.
