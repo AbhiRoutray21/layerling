@@ -1,1 +1,22 @@
-[]
+[
+  {
+    "title": {
+      "de": "Mehrere Objekte drehen sich starr, auch über den Rand",
+      "en": "Several objects turn rigidly, even past the edge"
+    },
+    "body": {
+      "de": "Beim Drehen mehrerer Objekte mit dem Drehgriff wurde jeder Mittelpunkt auf das Raster gerundet und auf die Arbeitsfläche begrenzt, so blieben Objekte am Rand hängen und die Anordnung ging verloren. Die Gruppe dreht sich jetzt exakt um ihren Drehpunkt und behält die Abstände, auch wenn Teile über den Rand der Fläche wandern.",
+      "en": "When several objects were turned with the rotate handle, each centre was rounded to the grid and kept inside the workplane, so objects near the edge got stuck and the arrangement broke. The group now turns exactly around its pivot and keeps its spacing, even when parts move past the edge of the plane."
+    }
+  },
+  {
+    "title": {
+      "de": "Skizze: Tasten 1 bis 3 ändern auch die Auswahl",
+      "en": "Sketch: keys 1 to 3 also change a selection"
+    },
+    "body": {
+      "de": "Mit dem Werkzeug Auswählen und gewählten Linien oder Punkten macht die Taste 1 Linien gerade und Punkte zu Ecken, 2 macht Linien zu Kurven und 3 macht Punkte weich, alle gewählten auf einmal. Ohne Auswahl wählen die Tasten wie bisher das Zeichenwerkzeug. Die Tasten stehen in den Hinweisen der Knöpfe.",
+      "en": "With the Select tool and lines or points selected, key 1 makes lines straight and points corners, 2 turns lines into curves and 3 makes points smooth, all selected ones at once. With nothing selected the keys still pick the drawing tool. The keys are named in the tooltips of the buttons."
+    }
+  }
+]

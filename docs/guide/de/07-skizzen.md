@@ -31,7 +31,7 @@ Ein Körper entsteht nur aus einem **geschlossenen** Umriss.
 
 ![Ein L-förmiger Umriss. Am gewählten Eckpunkt oben links stehen die Längen der beiden Linien in Millimetern und der Winkel dazwischen in Grad.](shot:sketch-outline)
 
-Die Tasten [[1]] bis [[4]] wählen die Zeichenwerkzeuge, in der Reihenfolge der Leiste: {{ui:sketch.line}}, {{ui:sketch.bezier}}, {{ui:sketch.smooth}} und {{ui:sketch.refine}}. Sie gelten, solange keine Linie gezeichnet wird; während einer Linie sind die Ziffern ihre Länge (siehe unten).
+Die Tasten [[1]] bis [[4]] wählen die Zeichenwerkzeuge, in der Reihenfolge der Leiste: {{ui:sketch.line}}, {{ui:sketch.bezier}}, {{ui:sketch.smooth}} und {{ui:sketch.refine}}. Sie gelten, solange keine Linie gezeichnet wird; während einer Linie sind die Ziffern ihre Länge (siehe unten). Mit dem Werkzeug {{ui:sketch.select}} und ausgewählten Linien oder Punkten ändern dieselben Tasten stattdessen die Auswahl: [[1]] macht Linien gerade und Punkte zu Ecken, [[2]] macht Linien zu Kurven und [[3]] macht Punkte weich. Ohne Auswahl wählen sie wie bisher das Werkzeug.
 
 ## Linien nach Maß
 

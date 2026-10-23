@@ -6,6 +6,9 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **Sketch: the keys 1 to 3 also change a selection (#347):** With the Select tool and lines or points selected, 1 makes the lines straight and the points corners, 2 turns the lines into curves and 3 makes the points smooth, all selected ones at once and as one step in the history, as in Tinkercad. With nothing selected the keys pick the drawing tool as before; the keys are named in the tooltips of the buttons. Asked for by @djelliott19.
+- **Several objects turn rigidly, even past the edge (#763):** Turning several selected objects with the rotate handle rounded each centre to the grid and kept it inside the workplane, so objects near the edge stopped while the rest went on and the arrangement broke. The group now turns exactly around its pivot and keeps its spacing. Reported by @MethylBromide.
+
 ## 1.103.0
 
 - **The sketch follows the unit setting (#757):** With Imperial (or any other unit) chosen in the workplane settings, the sketch editor still read and typed in millimetres. Its dimension labels, the measure tool, the line preview, the selection size, image sizes and the typed fields (line length, dimension, width and height, fillet and chamfer size, image size and calibration, image position) now use the workspace unit, inches as fractions or decimals as set; the sketch itself stays in millimetres. Reported by @radomnik.
