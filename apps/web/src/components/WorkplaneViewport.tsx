@@ -144,6 +144,7 @@ import { pivotKeptAhead, ZOOM_PIVOT_REACH_MM, pivotHeightRange, pivotPlateReach 
 import { pointerReach } from "@/lib/pointerReach";
 import { boxSnapSpots, measurementMiddle, nearestReferenceOnScreen, type ReferencePosition } from "@/lib/referencePoints";
 import { planarFaceTriangles, type PivotPoint } from "@/lib/rotationPivot";
+import { roundFaceTriangles } from "@/lib/roundFaceAxis";
 import { OVERHANG_PLATE_TOLERANCE, overhangDownwardLimit } from "@/lib/overhangLimits";
 import { directionIsOwnShapeAxis, rotatedGeometryShapePatch, rotationPatchFromQuaternion as sharedRotationPatchFromQuaternion, signedDegrees } from "@/lib/geometryRotation";
 import type { CadModifierEdge } from "@/lib/cadModifierTypes";
@@ -155,7 +156,7 @@ import { axisLockedPoint, circleOfEdgePoints, perpendicularFootOnPlane, perpendi
 import { syncHistoryPickHighlight } from "@/components/workplane/historyPickHighlight";
 import { orbitViewBy, panViewBy } from "@/lib/viewArrowKeys";
 import { useViewportKeyboardHooks } from "@/components/workplane/viewportKeyboard";
-import { aimPickRay, firstShapeHit, pickImagePoint, pickLayFlatFace, pickRotationPivot, pickShapeAt, pickShapeIdAt, pointerRayFor, rayPointOnRotationPlane, RENDER_LAYER_SHAPES, splitAxisParameter, usePickOnlyPointer, type LayFlatPick, type PickOnlySelection } from "@/components/workplane/viewportPicking";
+import { aimPickRay, firstShapeHit, pickImagePoint, pickLayFlatFace, pickMateFace, pickRotationPivot, pickShapeAt, pickShapeIdAt, pointerRayFor, rayPointOnRotationPlane, RENDER_LAYER_SHAPES, splitAxisParameter, usePickOnlyPointer, type LayFlatPick, type PickOnlySelection } from "@/components/workplane/viewportPicking";
 export type { LayFlatPick } from "@/components/workplane/viewportPicking";
 import { fastEdgesGeometry } from "@/lib/fastEdgesGeometry";
 import { buildImportedMeshGeometry, computeImportedBoundsTree, putGeometryOnBase, takePreparedImportedMeshGeometry } from "@/lib/importedMeshDisplay";
@@ -406,8 +407,8 @@ type WorkplaneViewportProps = {
   /** Waiting for a click on a face of the selection to lay it flat. */
   layFlatPickMode?: boolean;
   onLayFlatPick?: (pick: LayFlatPick | null) => void;
-  /** "Align faces" waiting for a click on a face of one of these bodies. */
-  mateFacePick?: { shapeIds: string[] } | null;
+  /** "Align faces" waiting for a click on a face of one of these bodies; `round` lights up whole round faces. */
+  mateFacePick?: { shapeIds: string[]; round?: boolean } | null;
   onMateFacePick?: (pick: LayFlatPick | null) => void;
   /** "Delete face" waiting for clicks on faces of the prepared body; a click toggles the face. */
   cadFacePick?: CadFacePick | null;
@@ -7367,7 +7368,7 @@ export function WorkplaneViewport({
 
       if (mateFacePickRef.current) {
         event.preventDefault();
-        onMateFacePick?.(pickLayFlatFace(state, event.clientX, event.clientY));
+        onMateFacePick?.(pickMateFace(state, event.clientX, event.clientY));
         return;
       }
 
@@ -7846,7 +7847,7 @@ export function WorkplaneViewport({
         return;
       }
       if (mateFacePickRef.current) {
-        syncLayFlatHover(threeRef.current, mateFacePickRef.current.shapeIds, resolvedThemeRef.current, event.clientX, event.clientY);
+        syncLayFlatHover(threeRef.current, mateFacePickRef.current.shapeIds, resolvedThemeRef.current, event.clientX, event.clientY, mateFacePickRef.current.round);
         return;
       }
       if (cadFacePickRef.current && threeRef.current) {
@@ -11967,6 +11968,7 @@ function syncLayFlatHover(
   theme: ResolvedAppTheme,
   clientX: number | null,
   clientY: number | null,
+  round = false,
 ) {
   if (!state) return;
   let layer = state.layFlatHoverLayer;
@@ -11998,7 +12000,7 @@ function syncLayFlatHover(
     return;
   }
 
-  const key = `${mesh.uuid}:${hit.faceIndex}:${theme}`;
+  const key = `${mesh.uuid}:${hit.faceIndex}:${theme}:${round}`;
   if (layer.userData.key === key) return;
 
   mesh.updateWorldMatrix(true, false);
@@ -12020,7 +12022,7 @@ function syncLayFlatHover(
       world[offset * 3 + 2] = corner.z;
     }
     positions = world;
-    triangles = planarFaceTriangles(world, hit.faceIndex)?.triangles ?? triangles;
+    triangles = (round ? roundFaceTriangles(world, hit.faceIndex) : planarFaceTriangles(world, hit.faceIndex))?.triangles ?? triangles;
   } else {
     const world = new Float64Array(9);
     for (let offset = 0; offset < 3; offset += 1) {

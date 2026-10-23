@@ -1,6 +1,16 @@
 [
   {
     "title": {
+      "de": "Flächen ausrichten: Löcher auf eine Achse",
+      "en": "Align faces: holes on one axis"
+    },
+    "body": {
+      "de": "„Flächen ausrichten“ kann jetzt auch „Gleiche Achse“: die runde Innenseite eines Lochs oder die Außenseite eines Zapfens anklicken, dann eine runde Fläche des anderen Teils, und das Teil steht genau auf deren Achse. Loch über Loch, Zapfen in Loch, auch bei importierten Netzen.",
+      "en": "Align faces now has \"Same axis\": click the round inside of a hole or the outside of a pin, then a round face of the other part, and the part lands right on its axis. Hole over hole, pin into hole, on imported meshes too."
+    }
+  },
+  {
+    "title": {
       "de": "Notizen mit Umschalt+N ein- und ausblenden",
       "en": "Show or hide notes with Shift+N"
     },

@@ -107,7 +107,8 @@ import { EdgeModifierPanel } from "./workplane/EdgeModifierPanel";
 import { ShellPanel } from "./workplane/ShellPanel";
 import { DeleteFacePanel } from "./workplane/DeleteFacePanel";
 import { MateFacesPanel } from "./workplane/MateFacesPanel";
-import { mateMotion, type FacePick, type MateMode } from "@/lib/mateFaces";
+import { concentricMotion, mateMotion, type FacePick, type MateMode } from "@/lib/mateFaces";
+import { roundFaceNear } from "@/lib/roundFaceAxis";
 import { carriedOntoFace } from "@/lib/carryOntoFace";
 import { HolePatternPanel } from "./workplane/HolePatternPanel";
 import { FaceToolPanel } from "./workplane/FaceToolPanel";
@@ -1760,11 +1761,14 @@ function laidFlatShapes(shapes: WorkplaneShape[], movable: WorkplaneShape[], nor
 /**
  * Moves the body of `source` so its face meets the face of `target`, as the
  * "Align faces" tool does: turned parallel about the clicked point, then slid
- * along the target face's normal. Only the turn's angles change on the body,
- * so a shape keeps its own settings.
+ * along the target face's normal; or, concentric, onto the target's axis.
+ * Only the turn's angles change on the body, so a shape keeps its own settings.
  */
 function matedShapes(shapes: WorkplaneShape[], source: FacePick, target: FacePick, mode: MateMode, gap: number): WorkplaneShape[] {
-  const motion = mateMotion(source, target, mode, gap);
+  if (mode === "concentric" && (!source.axis || !target.axis)) return shapes;
+  const motion = mode === "concentric" && source.axis && target.axis
+    ? concentricMotion(source.axis, target.axis)
+    : mateMotion(source, target, mode, gap);
   return shapes.map((shape) => {
     if (shape.id !== source.shapeId) return shape;
     const turned = motion.rotation
@@ -1777,6 +1781,17 @@ function matedShapes(shapes: WorkplaneShape[], source: FacePick, target: FacePic
       elevation: cleanNearZero((turned.elevation ?? 0) + motion.translation.y),
     });
   });
+}
+
+/**
+ * "Align faces" switched to another way of meeting. Concentric needs round
+ * faces: a flat face already clicked is asked for again.
+ */
+function mateToolWithMode<T extends { step: "source" | "target" | "ready"; source: FacePick | null; target: FacePick | null; mode: MateMode }>(tool: T, mode: MateMode): T {
+  if (mode !== "concentric") return { ...tool, mode };
+  if (tool.source && !tool.source.axis) return { ...tool, mode, step: "source", source: null, target: null };
+  if (tool.target && !tool.target.axis) return { ...tool, mode, step: "target", target: null };
+  return { ...tool, mode };
 }
 
 function selectionCenterOnWorkplane(shapes: WorkplaneShape[], workplane: PlacementWorkplane) {
@@ -7648,12 +7663,20 @@ export function LayerlingEditor({
         setNotice(t("status.mateMissedSource"));
         return;
       }
+      if (mateTool.mode === "concentric" && !pick.axis) {
+        setNotice(t("status.mateNotRound"));
+        return;
+      }
       setMateTool({ ...mateTool, step: "target", source: pick });
       setNotice(t("status.mateTarget"));
       return;
     }
     if (!pick || pick.shapeId === mateTool.sourceId) {
       setNotice(t("status.mateMissedTarget"));
+      return;
+    }
+    if (mateTool.mode === "concentric" && !pick.axis) {
+      setNotice(t("status.mateNotRound"));
       return;
     }
     setMateTool({ ...mateTool, step: "ready", target: pick });
@@ -9521,6 +9544,33 @@ export function LayerlingEditor({
           });
           return { shapeId: shape.id, normal: { x: normal.x, y: normal.y, z: normal.z }, point: { x: point.x, y: point.y, z: point.z } };
         };
+        if (params.mode === "concentric") {
+          const roundOf = (shape: WorkplaneShape, value: unknown, label: string): FacePick => {
+            const raw = value && typeof value === "object" ? value as Record<string, unknown> : null;
+            const near = raw && [raw.x, raw.z, raw.elevation].every((entry) => typeof entry === "number" && Number.isFinite(entry))
+              ? { x: raw.x as number, y: raw.elevation as number, z: raw.z as number }
+              : null;
+            if (!near) throw new Error(`mate_faces concentric needs ${label} { x, z, elevation }: a point on or near the round face`);
+            const axis = roundFaceNear(meshForShape(shape), near);
+            if (!axis) throw new Error(`mate_faces found no round face near ${label} on ${displayShapeName(shape)}`);
+            return { shapeId: shape.id, normal: axis.direction, point: axis.point, axis };
+          };
+          const source = roundOf(mover, params.facePoint, "facePoint");
+          const goal = roundOf(target, params.targetFacePoint, "targetFacePoint");
+          const nextShapes = matedShapes(all, source, goal, "concentric", 0);
+          commitShapes(nextShapes, [mover.id], t("status.mated"));
+          const axisSummary = (axis: NonNullable<FacePick["axis"]>) => ({
+            point: { x: Number(axis.point.x.toFixed(4)), z: Number(axis.point.z.toFixed(4)), elevation: Number(axis.point.y.toFixed(4)) },
+            direction: [axis.direction.x, axis.direction.y, axis.direction.z].map((value) => Number(value.toFixed(6))),
+            diameter: Number((axis.radius * 2).toFixed(4)),
+          });
+          return {
+            mode: "concentric",
+            faceAxis: axisSummary(source.axis as NonNullable<FacePick["axis"]>),
+            targetAxis: axisSummary(goal.axis as NonNullable<FacePick["axis"]>),
+            object: mcpShapeSummary(nextShapes.find((shape) => shape.id === mover.id) as WorkplaneShape),
+          };
+        }
         const mode: MateMode = params.mode === "flush" ? "flush" : "against";
         const gap = typeof params.gap === "number" && Number.isFinite(params.gap) ? params.gap : 0;
         const nextShapes = matedShapes(all, faceOf(mover, params.face, "face"), faceOf(target, params.targetFace, "targetFace"), mode, gap);
@@ -13123,7 +13173,7 @@ export function LayerlingEditor({
           layFlatPickMode={layFlatPickMode}
           onLayFlatPick={layFlatOnFace}
           mateFacePick={mateTool && mateTool.step !== "ready"
-            ? { shapeIds: mateTool.step === "source" ? [mateTool.sourceId] : shapes.filter((shape) => shape.id !== mateTool.sourceId && !shape.hidden).map((shape) => shape.id) }
+            ? { shapeIds: mateTool.step === "source" ? [mateTool.sourceId] : shapes.filter((shape) => shape.id !== mateTool.sourceId && !shape.hidden).map((shape) => shape.id), round: mateTool.mode === "concentric" }
             : holePatternTool?.step === "pick"
               ? { shapeIds: [holePatternTool.sourceId] }
               : faceTool?.step === "pick"
@@ -13310,7 +13360,7 @@ export function LayerlingEditor({
           mode={mateTool.mode}
           gap={mateTool.gap}
           workspace={workspaceSettings}
-          onModeChange={(mode) => setMateTool((current) => (current ? { ...current, mode } : current))}
+          onModeChange={(mode) => setMateTool((current) => (current ? mateToolWithMode(current, mode) : current))}
           onGapChange={(gap) => setMateTool((current) => (current ? { ...current, gap } : current))}
           onApply={applyMateFaces}
           onCancel={() => {

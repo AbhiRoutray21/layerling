@@ -76,6 +76,8 @@ To dele skal mødes flade mod flade, eller flugte? Vælg den del der skal flytte
 
 ![Juster flader-panelet: den del der flyttes vælges, en flade på den anden del kommer næst, så flade mod flade eller flugtende, og en valgfri afstand.](shot:mate-faces)
 
+**Huller på én akse:** {{ui:mate.mode.concentric}} retter i stedet runde flader ind: et hul over et hul, en tap i et hul, en skrue i sit gennemgangshul. Vælg det, før du klikker på fladerne. Klik så på den runde inderside af et hul (eller ydersiden af en tap) på den del, der skal flyttes, og på en rund flade på den anden del; hele den runde flade lyser op, mens du peger på den. {{ui:mate.apply}} drejer delen den korteste vej, til de to akser er parallelle, og skubber den på tværs over på den anden akse. Langs aksen bliver den, hvor den var, så en tap beholder sin højde; skub den ind bagefter. Det virker også på importerede mesh, så længe hullet består af facetter rundt om én akse.
+
 **En præcis vinkel mellem to flader:** {{ui:editor.tool.mateFaces}} efterlader fladerne parallelle; der er intet værktøj til en vinkel mellem dem, men sådan kommer du derhen. Først bringer du fladerne sammen med {{ui:editor.tool.mateFaces}}, så de er parallelle. Sæt så rotationspunktet på kanten hvor de mødes ({{ui:editor.tool.rotationPivot}}, klik på kanten eller et hjørne), og tast vinklen, 15 eller 30 for eksempel, i kortet {{ui:inspector.rotation}} på delen. Den drejer omkring det rotationspunkt. Kortets akser er pladens akser, så det virker når kanten løber langs X, Y eller Z.
 
 Lige så enkle er {{ui:editor.tool.dropToWorkplane}} ([[D]]), der lægger markeringen ned på arbejdsplanet, og {{ui:editor.tool.centerOnWorkplane}}.
