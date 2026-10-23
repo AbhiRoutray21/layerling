@@ -111,4 +111,4 @@ En una copia de layerling instalada en tu propio ordenador o servidor, el aviso 
 
 Cuando tu pieza esté lista, haz clic en {{ui:editor.export}}, elige STL o 3MF y descarga el archivo. Ábrelo en tu laminador, por ejemplo Bambu Studio, PrusaSlicer, OrcaSlicer o Cura. Si eliges tu impresora en los ajustes, ves mientras construyes si la pieza cabe en la cama. Tienes más detalles en [Impresión](chapter:printing).
 
-> **Consejo:** Si vienes de Tinkercad, te orientarás enseguida: la placa, las formas, sólidos y orificios, agrupar, alinear y reflejar funcionan casi igual. Lo nuevo es sobre todo el chaflán y el redondeo, el vaciado, las roscas y los bocetos. También puedes traer tus propios diseños de Tinkercad, mira ["Archivos: guardar y compartir"](chapter:files-and-saving).
+> **Consejo:** Si vienes de Tinkercad, te orientarás enseguida: la placa, las formas, sólidos y orificios, agrupar, alinear y reflejar funcionan casi igual. Lo nuevo es sobre todo el chaflán y el redondeo, el vaciado, las roscas y los bocetos. También puedes traer tus propios diseños de Tinkercad, consulta [Archivos: guardar y compartir](chapter:files-and-saving).

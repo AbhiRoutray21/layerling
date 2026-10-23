@@ -39,7 +39,7 @@ import { viewDirectionFromName, viewFaceForKey, type ViewCubeFace } from "@/lib/
 import { ViewCube } from "@/components/workplane/ViewCube";
 import { openSecondViewWindow, SecondViewWindow, useSecondViewSupported } from "@/components/workplane/SecondViewWindow";
 import { createGearGeometry } from "@/lib/gearGeometry";
-import { createStarGeometry } from "@/lib/starGeometry";
+import { createStarGeometry, starSettingsForSize } from "@/lib/starGeometry";
 import { createHeartGeometry } from "@/lib/heartGeometry";
 import { createCrescentGeometry } from "@/lib/crescentGeometry";
 import { createSlotGeometry } from "@/lib/slotGeometry";
@@ -760,10 +760,6 @@ function snapDimension(value: number, step: number, min = MIN_SHAPE_SIZE, max = 
   return clamp(snapped, effectiveMin, max);
 }
 
-function snapPositionValue(value: number, step: number, min: number, max: number) {
-  return clamp(step > 0 ? snapValue(value, step) : value, min, max);
-}
-
 function screenAngle(clientX: number, clientY: number, center: { x: number; y: number }) {
   return Math.atan2(clientY - center.y, clientX - center.x);
 }
@@ -1023,6 +1019,10 @@ function tapeShapeTopologyKey(shape: WorkplaneShape): string {
     gridfinityOpenFront: shape.gridfinityOpenFront,
     gridfinityOpenLeft: shape.gridfinityOpenLeft,
     gridfinityOpenRight: shape.gridfinityOpenRight,
+    gridfinityPaddingBack: shape.gridfinityPaddingBack,
+    gridfinityPaddingFront: shape.gridfinityPaddingFront,
+    gridfinityPaddingLeft: shape.gridfinityPaddingLeft,
+    gridfinityPaddingRight: shape.gridfinityPaddingRight,
     gridfinityCompartmentsX: shape.gridfinityCompartmentsX,
     gridfinityCompartmentsZ: shape.gridfinityCompartmentsZ,
     gridfinityDividerThickness: shape.gridfinityDividerThickness,
@@ -1053,6 +1053,7 @@ function tapeShapeTopologyKey(shape: WorkplaneShape): string {
     loftWall: shape.loftWall,
     loftTwist: shape.loftTwist,
     loftSmooth: shape.loftSmooth,
+    loftSegments: shape.loftSegments,
     slotEndRatio: shape.slotEndRatio,
     loftTiltX: shape.loftTiltX,
     loftTiltZ: shape.loftTiltZ,
@@ -1326,6 +1327,10 @@ function shapeGeometrySignature(shape: WorkplaneShape): string {
     gridfinityOpenFront: shape.gridfinityOpenFront,
     gridfinityOpenLeft: shape.gridfinityOpenLeft,
     gridfinityOpenRight: shape.gridfinityOpenRight,
+    gridfinityPaddingBack: shape.gridfinityPaddingBack,
+    gridfinityPaddingFront: shape.gridfinityPaddingFront,
+    gridfinityPaddingLeft: shape.gridfinityPaddingLeft,
+    gridfinityPaddingRight: shape.gridfinityPaddingRight,
     gridfinityCompartmentsX: shape.gridfinityCompartmentsX,
     gridfinityCompartmentsZ: shape.gridfinityCompartmentsZ,
     gridfinityDividerThickness: shape.gridfinityDividerThickness,
@@ -1356,6 +1361,7 @@ function shapeGeometrySignature(shape: WorkplaneShape): string {
     loftWall: shape.loftWall,
     loftTwist: shape.loftTwist,
     loftSmooth: shape.loftSmooth,
+    loftSegments: shape.loftSegments,
     slotEndRatio: shape.slotEndRatio,
     loftTiltX: shape.loftTiltX,
     loftTiltZ: shape.loftTiltZ,
@@ -2554,6 +2560,9 @@ function resizedShapePatchFromFrame(shape: WorkplaneShape, center: THREE.Vector3
   };
   if (shape.kind === "cone") {
     patch.baseRadius = width / 2;
+  }
+  if (shape.kind === "star") {
+    Object.assign(patch, starSettingsForSize({ ...shape, width: shapeWidth(shape), depth: shapeDepth(shape) }, width, depth));
   }
   return patch;
 }
@@ -6011,9 +6020,11 @@ export function WorkplaneViewport({
           patch.elevation = nextCenter.y - item.startShape.height / 2;
         } else if (transform.items.length > 1) {
           const nextCenter = pivot.clone().add(item.startCenter.clone().sub(pivot).applyQuaternion(rotationDelta));
-          patch.x = snapPositionValue(nextCenter.x, step, -workspaceRef.current.width / 2 + 6, workspaceRef.current.width / 2 - 6);
-          patch.z = snapPositionValue(nextCenter.z, step, -workspaceRef.current.depth / 2 + 6, workspaceRef.current.depth / 2 - 6);
-          patch.elevation = snapPositionValue(nextCenter.y - item.startShape.height / 2, step, MIN_ELEVATION, MAX_ELEVATION);
+          // A group turns rigidly (#763): no grid snap and no workplane limit on the
+          // centres, or the bodies near the edge stop while the rest keep going.
+          patch.x = nextCenter.x;
+          patch.z = nextCenter.z;
+          patch.elevation = clamp(nextCenter.y - item.startShape.height / 2, MIN_ELEVATION, MAX_ELEVATION);
         }
         onUpdateShape(item.id, patch);
       });
@@ -6186,6 +6197,9 @@ export function WorkplaneViewport({
           : { width: nextValue, size: resizedShapeSize(nextValue, shapeDepth(shape)) };
         if (shape.kind === "cone") {
           patch.baseRadius = nextValue / 2;
+        }
+        if (shape.kind === "star") {
+          Object.assign(patch, starSettingsForSize({ ...shape, width: shapeWidth(shape), depth: shapeDepth(shape) }, nextValue, nextValue));
         }
         return patchWithResizeAnchor(shape, patch, axis, anchor);
       }
@@ -12610,6 +12624,10 @@ function createShapeObject(
         gridfinityOpenFront: shape.gridfinityOpenFront,
         gridfinityOpenLeft: shape.gridfinityOpenLeft,
         gridfinityOpenRight: shape.gridfinityOpenRight,
+        gridfinityPaddingBack: shape.gridfinityPaddingBack,
+        gridfinityPaddingFront: shape.gridfinityPaddingFront,
+        gridfinityPaddingLeft: shape.gridfinityPaddingLeft,
+        gridfinityPaddingRight: shape.gridfinityPaddingRight,
         gridfinityCompartmentsX: shape.gridfinityCompartmentsX,
         gridfinityCompartmentsZ: shape.gridfinityCompartmentsZ,
         gridfinityDividerThickness: shape.gridfinityDividerThickness,

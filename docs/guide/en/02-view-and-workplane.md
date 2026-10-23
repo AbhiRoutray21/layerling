@@ -94,7 +94,7 @@ The grid shows the size of the plate. At the bottom right is the **snap step**: 
 
 ### The settings window
 
-The cogwheel in the ribbon ({{ui:editor.workspaceSettings}}) opens the settings. On the left are five areas: {{ui:workspace.appearance}}, {{ui:workspace.measurement}}, {{ui:workspace.workplane}}, {{ui:workspace.shapeDefaults}} and {{ui:workspace.history}}. A change counts at once. {{ui:workspace.makeDefault}} at the bottom saves the current settings as the default, so that a new design starts with them, and {{ui:workspace.close}} at the top right closes the window. This part goes through the settings one by one.
+The cogwheel in the ribbon ({{ui:editor.workspaceSettings}}) opens the settings. On the left are five areas: {{ui:workspace.appearance}}, {{ui:workspace.measurement}}, {{ui:workspace.workplane}}, {{ui:workspace.shapeDefaults}} and {{ui:workspace.history}}. A change counts at once. {{ui:workspace.makeDefault}} at the bottom saves the current settings as the default, so that a new design starts with them. A file you open brings its own settings; {{ui:workspace.useMyDefault}} next to it puts your saved colours, grid and the rest on the open design, keeping the size of its plate, the printer and the units. {{ui:workspace.close}} at the top right closes the window. This part goes through the settings one by one.
 
 ### Appearance: theme, toolbar and view cube
 

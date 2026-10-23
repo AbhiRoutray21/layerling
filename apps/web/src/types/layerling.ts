@@ -235,6 +235,14 @@ export type ShapeCustomization = {
   gridfinityOpenLeft?: boolean;
   /** Gridfinity bin: no wall and no stacking lip along the right. */
   gridfinityOpenRight?: boolean;
+  /** Gridfinity baseplate: a solid border at the plate's height along the back, in mm, outside the grid and inside the box; missing is none, at most 41 (#455). */
+  gridfinityPaddingBack?: number;
+  /** Gridfinity baseplate: the border along the front. */
+  gridfinityPaddingFront?: number;
+  /** Gridfinity baseplate: the border along the left. */
+  gridfinityPaddingLeft?: number;
+  /** Gridfinity baseplate: the border along the right. */
+  gridfinityPaddingRight?: number;
   /** Gridfinity bin: compartments across, a whole number; missing is 1, a bin without dividers (#554). */
   gridfinityCompartmentsX?: number;
   /** Gridfinity bin: compartments deep, a whole number; missing is 1. */
@@ -278,6 +286,8 @@ export type ShapeCustomization = {
   loftTwist?: number;
   /** Transition: 0 to 1, how much of an S-curve the sides take between the ends (#271). */
   loftSmooth?: number;
+  /** Transition: straight pieces of a full circle in the mesh, 96 if missing (#755). */
+  loftSegments?: number;
   /** Capsule: the small end's diameter as a share of the large one, 1 or missing for equal ends (#206). */
   slotEndRatio?: number;
   /** Transition: degrees the top end tilts about the x axis and about the z axis (#205). */
@@ -377,6 +387,8 @@ export type WorkplaneWorkspaceSettings = {
   doubleClickOpensGroup: boolean;
   /** Moving a shape snaps its edges and centre to other shapes, with guide lines. */
   objectSnap: boolean;
+  /** An STL leaves as a plain download each time, which the browser numbers (name (1).stl), instead of writing into one linked file (#731). */
+  stlAsDownload: boolean;
   dimensionsAlwaysVisible: boolean;
   /** A turned body shows its angles about X, Y and Z beside it while it is selected. */
   showRotationAngles: boolean;
@@ -834,6 +846,14 @@ export type WorkplaneShape = {
   gridfinityOpenLeft?: boolean;
   /** Gridfinity bin: no wall and no stacking lip along the right. */
   gridfinityOpenRight?: boolean;
+  /** Gridfinity baseplate: a solid border at the plate's height along the back, in mm, outside the grid and inside the box; missing is none, at most 41 (#455). */
+  gridfinityPaddingBack?: number;
+  /** Gridfinity baseplate: the border along the front. */
+  gridfinityPaddingFront?: number;
+  /** Gridfinity baseplate: the border along the left. */
+  gridfinityPaddingLeft?: number;
+  /** Gridfinity baseplate: the border along the right. */
+  gridfinityPaddingRight?: number;
   /** Gridfinity bin: compartments across, a whole number; missing is 1, a bin without dividers (#554). */
   gridfinityCompartmentsX?: number;
   /** Gridfinity bin: compartments deep, a whole number; missing is 1. */
@@ -883,6 +903,8 @@ export type WorkplaneShape = {
   loftTwist?: number;
   /** Transition: 0 to 1, how much of an S-curve the sides take between the ends (#271). */
   loftSmooth?: number;
+  /** Transition: straight pieces of a full circle in the mesh, 96 if missing (#755). */
+  loftSegments?: number;
   /** Capsule: the small end's diameter as a share of the large one, 1 or missing for equal ends (#206). */
   slotEndRatio?: number;
   /** Transition: degrees the top end tilts about the x axis and about the z axis (#205). */

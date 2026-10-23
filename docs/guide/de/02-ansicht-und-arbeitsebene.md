@@ -94,7 +94,7 @@ Das Gitter zeigt die Größe der Platte. Unten rechts steht das **Raster**: Vers
 
 ### Das Einstellungsfenster
 
-Das Zahnrad im Menüband ({{ui:editor.workspaceSettings}}) öffnet die Einstellungen. Links liegen fünf Bereiche: {{ui:workspace.appearance}}, {{ui:workspace.measurement}}, {{ui:workspace.workplane}}, {{ui:workspace.shapeDefaults}} und {{ui:workspace.history}}. Eine Änderung gilt sofort. {{ui:workspace.makeDefault}} unten sichert die aktuellen Einstellungen als Vorgabe, sodass ein neues Design mit ihnen beginnt, und {{ui:workspace.close}} oben rechts schließt das Fenster. Dieser Teil geht die Einstellungen eine nach der anderen durch.
+Das Zahnrad im Menüband ({{ui:editor.workspaceSettings}}) öffnet die Einstellungen. Links liegen fünf Bereiche: {{ui:workspace.appearance}}, {{ui:workspace.measurement}}, {{ui:workspace.workplane}}, {{ui:workspace.shapeDefaults}} und {{ui:workspace.history}}. Eine Änderung gilt sofort. {{ui:workspace.makeDefault}} unten sichert die aktuellen Einstellungen als Vorgabe, sodass ein neues Design mit ihnen beginnt. Eine geöffnete Datei bringt ihre eigenen Einstellungen mit; {{ui:workspace.useMyDefault}} daneben legt deine gesicherten Farben, das Raster und das Übrige auf den offenen Entwurf und lässt die Größe der Platte, den Drucker und die Einheiten unberührt. {{ui:workspace.close}} oben rechts schließt das Fenster. Dieser Teil geht die Einstellungen eine nach der anderen durch.
 
 ### Darstellung: Thema, Leiste und Ansichtswürfel
 

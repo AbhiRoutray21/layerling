@@ -1,5 +1,211 @@
 [
   {
+    "version": "1.103.1",
+    "items": [
+      {
+        "title": {
+          "de": "Mehrere Objekte drehen sich starr, auch über den Rand",
+          "en": "Several objects turn rigidly, even past the edge"
+        },
+        "body": {
+          "de": "Beim Drehen mehrerer Objekte mit dem Drehgriff wurde jeder Mittelpunkt auf das Raster gerundet und auf die Arbeitsfläche begrenzt, so blieben Objekte am Rand hängen und die Anordnung ging verloren. Die Gruppe dreht sich jetzt exakt um ihren Drehpunkt und behält die Abstände, auch wenn Teile über den Rand der Fläche wandern.",
+          "en": "When several objects were turned with the rotate handle, each centre was rounded to the grid and kept inside the workplane, so objects near the edge got stuck and the arrangement broke. The group now turns exactly around its pivot and keeps its spacing, even when parts move past the edge of the plane."
+        }
+      },
+      {
+        "title": {
+          "de": "Skizze: Tasten 1 bis 3 ändern auch die Auswahl",
+          "en": "Sketch: keys 1 to 3 also change a selection"
+        },
+        "body": {
+          "de": "Mit dem Werkzeug Auswählen und gewählten Linien oder Punkten macht die Taste 1 Linien gerade und Punkte zu Ecken, 2 macht Linien zu Kurven und 3 macht Punkte weich, alle gewählten auf einmal. Ohne Auswahl wählen die Tasten wie bisher das Zeichenwerkzeug. Die Tasten stehen in den Hinweisen der Knöpfe.",
+          "en": "With the Select tool and lines or points selected, key 1 makes lines straight and points corners, 2 turns lines into curves and 3 makes points smooth, all selected ones at once. With nothing selected the keys still pick the drawing tool. The keys are named in the tooltips of the buttons."
+        }
+      },
+      {
+        "title": {
+          "de": "Gridfinity-Bodenplatte passend zur Schublade",
+          "en": "Fit a Gridfinity baseplate to a drawer"
+        },
+        "body": {
+          "de": "Eine Gridfinity-Bodenplatte hat jetzt „Schubladenbreite“ und „Schubladentiefe“ im Eigenschaften-Fenster: Tippe das Innenmaß der Schublade ein, und die Platte nimmt so viele Einheiten, wie hineinpassen, und verteilt den Rest gleichmäßig auf den Ausgleich, sodass sie 0,5 mm kleiner als die Schublade wird.",
+          "en": "A Gridfinity baseplate now has \"Drawer width\" and \"Drawer depth\" in the Properties panel: type the drawer's inside size, and the plate takes as many units as fit and splits the rest evenly into its padding, so it comes out 0.5 mm smaller than the drawer."
+        }
+      }
+    ]
+  },
+  {
+    "version": "1.103.0",
+    "items": [
+      {
+        "title": {
+          "de": "STL als normalen Download speichern",
+          "en": "Save STL as a plain download"
+        },
+        "body": {
+          "de": "In Chrome und Edge schreibt der STL-Export jedes Mal in dieselbe Datei. In den Einstellungen unter Aussehen schaltest du jetzt \"STL als Download speichern\" ein: Dann bekommst du einen normalen Download, und der Browser nummeriert die Dateien selbst, name (1).stl, name (2).stl.",
+          "en": "In Chrome and Edge the STL export writes into the same file each time. In the settings under Appearance you can now switch on \"Save STL as a download\": you then get a plain download and the browser numbers the files itself, name (1).stl, name (2).stl."
+        }
+      },
+      {
+        "title": {
+          "de": "Zurück zu deinen eigenen Einstellungen",
+          "en": "Back to your own settings"
+        },
+        "body": {
+          "de": "Eine geöffnete Datei bringt ihre eigenen Farben, ihr Raster und ihre Platte mit. In den Einstellungen gibt es neben \"Als Vorgabe speichern\" jetzt \"Meine Vorgabe verwenden\": Es legt deine gespeicherten Farben, das Raster, die Schatten, die Kamera und die Formstarts auf den offenen Entwurf. Plattengröße, Drucker und Einheiten bleiben beim Entwurf.",
+          "en": "A file you open brings its own colours, grid and plate. Next to \"Make default\" the settings now have \"Use my default\": it puts your saved colours, grid, shadows, camera and shape starts on the open design. The size of the plate, the printer and the units stay as they are."
+        }
+      },
+      {
+        "title": {
+          "de": "Skalieren in Prozent mit der Tastatur",
+          "en": "Scale by percent from the keyboard"
+        },
+        "body": {
+          "de": "Das Prozentfeld hat beim Öffnen den Fokus, und Enter wendet die Skalierung an. Strg+K, Prozentwert, Enter: ganz ohne Maus.",
+          "en": "The percentage field has the focus when the window opens, and Enter applies the scale. Ctrl+K, the percentage and Enter do it without the mouse."
+        }
+      },
+      {
+        "title": {
+          "de": "Materialschätzung auf Klick",
+          "en": "Material estimate on a click"
+        },
+        "body": {
+          "de": "Der Material-Kasten im Exportfenster rechnet erst, wenn du auf \"Berechnen\" drückst. Bei feinen Mehrfarbmodellen bleibt der Export-Knopf so sofort bedienbar.",
+          "en": "The Material box in the export window now works out its numbers only when you press Calculate. For finely traced multicolour models the Export button stays usable at once."
+        }
+      },
+      {
+        "title": {
+          "de": "Kegelradius beim Auflösen einer Gruppe",
+          "en": "Cone radius kept when ungrouping"
+        },
+        "body": {
+          "de": "Ein Kegel, der mit anderen Teilen gruppiert und vergrößert wurde, behält beim Auflösen der Gruppe jetzt auch seinen größeren Grundradius.",
+          "en": "A cone that was grouped with other parts and made larger now keeps its larger base radius when the group is ungrouped."
+        }
+      },
+      {
+        "title": {
+          "de": "Die Drehkörper-Vorschau lässt sich mit der Maus drehen",
+          "en": "The revolve preview turns with the mouse",
+          "ar": "معاينة الجسم الدوّار تدور بالفأرة",
+          "cs": "Náhled rotačního tělesa se otáčí myší",
+          "da": "Forhåndsvisningen af omdrejningslegemet kan drejes med musen",
+          "fr": "L'aperçu de la révolution se tourne à la souris",
+          "hu": "A forgástest előnézete egérrel forgatható",
+          "it": "L'anteprima del solido di rotazione si gira con il mouse",
+          "ja": "回転体のプレビューをマウスで回せるように",
+          "nl": "Het voorbeeld van het draailichaam draait met de muis",
+          "pl": "Podgląd bryły obrotowej obraca się myszą",
+          "pt-br": "A pré-visualização do sólido de revolução gira com o mouse",
+          "ru": "Предпросмотр тела вращения поворачивается мышью",
+          "sl": "Predogled vrtenine se vrti z miško",
+          "tr": "Döndürme gövdesinin önizlemesi fareyle döndürülebiliyor",
+          "es": "La vista previa del sólido de revolución gira con el ratón"
+        },
+        "body": {
+          "de": "In der Skizze mit „Drehen“ ist die kleine 3D-Vorschau kein Standbild mehr: Mit der linken oder rechten Taste ziehen dreht sie, das Rad zoomt und die Radtaste verschiebt sie, so siehst du auch die Unterseite. Die eingestellte Ansicht bleibt beim Weiterzeichnen erhalten.",
+          "en": "In the sketch with Revolve, the small 3D preview is no longer a still picture: drag with the left or the right button to turn it, use the wheel to zoom and the wheel button to move it, so you can see the underside too. The view you set stays while you keep drawing.",
+          "ar": "في الرسم مع «تدوير»، لم تعد المعاينة ثلاثية الأبعاد الصغيرة صورة ثابتة: اسحب بالزر الأيسر أو الأيمن لتدويرها، وبعجلة الفأرة لتكبيرها، وبزر العجلة لتحريكها، فترى الجانب السفلي أيضًا. تبقى الزاوية التي ضبطتها أثناء متابعة الرسم.",
+          "cs": "V náčrtu s Rotací už malý 3D náhled není pevný obrázek: tažením levým nebo pravým tlačítkem ho otočíte, kolečkem zvětšíte a kolečkovým tlačítkem posunete, takže uvidíte i spodní stranu. Nastavený pohled zůstane i při dalším kreslení.",
+          "da": "I skitsen med Drej er den lille 3D-forhåndsvisning ikke længere et stillbillede: træk med venstre eller højre knap for at dreje den, brug hjulet til at zoome og hjulknappen til at flytte den, så du også kan se undersiden. Den indstillede visning bliver, mens du tegner videre.",
+          "fr": "Dans l'esquisse avec Révolution, le petit aperçu 3D n'est plus une image fixe : glissez avec le bouton gauche ou droit pour le tourner, utilisez la molette pour zoomer et le bouton de la molette pour le déplacer, pour voir aussi le dessous. La vue réglée reste pendant que vous continuez à dessiner.",
+          "hu": "A Forgatás üzemmódú vázlatban a kis 3D-előnézet már nem állókép: a bal vagy a jobb gombbal húzva elforgatható, a görgővel nagyítható, a görgőgombbal pedig mozgatható, így az alsó oldal is látszik. A beállított nézet megmarad, miközben tovább rajzolsz.",
+          "it": "Nello schizzo con Rotazione, la piccola anteprima 3D non è più un'immagine fissa: trascina con il tasto sinistro o destro per ruotarla, usa la rotellina per lo zoom e il tasto della rotellina per spostarla, così vedi anche il lato inferiore. La vista impostata resta mentre continui a disegnare.",
+          "ja": "「回転」のスケッチで、小さな3Dプレビューは静止画ではなくなりました。左または右ボタンのドラッグで回転、ホイールでズーム、ホイールボタンで移動でき、下側も見られます。設定した視点は、スケッチを描き続けても保たれます。",
+          "nl": "In de schets met Draaien is het kleine 3D-voorbeeld geen stilstaand beeld meer: sleep met de linker- of rechterknop om het te draaien, gebruik het wiel om te zoomen en de wielknop om het te verplaatsen, zodat je ook de onderkant ziet. De ingestelde weergave blijft behouden terwijl je verder tekent.",
+          "pl": "W szkicu z Obrotem mały podgląd 3D nie jest już nieruchomym obrazem: przeciągnij lewym lub prawym przyciskiem, aby go obrócić, kółkiem przybliżaj, a przyciskiem kółka przesuwaj, dzięki czemu widać też spód. Ustawiony widok zostaje, gdy rysujesz dalej.",
+          "pt-br": "No esboço com Revolução, a pequena pré-visualização 3D não é mais uma imagem parada: arraste com o botão esquerdo ou direito para girá-la, use a roda para dar zoom e o botão da roda para movê-la, assim você vê também a parte de baixo. A vista que você ajustou continua enquanto você segue desenhando.",
+          "ru": "В эскизе с вращением маленький 3D-предпросмотр больше не статичная картинка: перетаскивайте левой или правой кнопкой, чтобы повернуть, колесом — масштабировать, кнопкой колеса — сдвигать, чтобы видеть и нижнюю сторону. Выбранный вид сохраняется, пока вы продолжаете рисовать.",
+          "sl": "V skici z vrtenjem majhen 3D-predogled ni več mirujoča slika: z vlečenjem z levim ali desnim gumbom ga zasukate, s kolescem povečate, z gumbom kolesca premaknete, tako da vidite tudi spodnjo stran. Nastavljen pogled ostane, medtem ko rišete naprej.",
+          "tr": "Döndürme ile çizimde küçük 3B önizleme artık durağan bir resim değil: sol veya sağ düğmeyle sürükleyerek döndür, tekerlekle yakınlaştır, tekerlek düğmesiyle kaydır; böylece alt tarafı da görürsün. Ayarladığın görünüm çizmeye devam ederken korunur.",
+          "es": "En el boceto con Revolución, la pequeña vista previa 3D ya no es una imagen fija: arrastra con el botón izquierdo o derecho para girarla, usa la rueda para hacer zoom y el botón de la rueda para moverla, así ves también la parte inferior. La vista que ajustes se mantiene mientras sigues dibujando."
+        }
+      },
+      {
+        "title": {
+          "de": "Fläche herausschieben: neues Teil als eigener Körper",
+          "en": "Face tool: the new part as a body of its own"
+        },
+        "body": {
+          "de": "Im Fenster Fläche gibt es den Schalter \"Als eigener Körper (nicht gruppiert)\". Ist er an, steht das herausgeschobene Teil (oder das Loch einer Tasche) neben dem Körper statt in einer Gruppe: Du kannst es gleich in der Größe ändern, verschieben oder damit schneiden.",
+          "en": "The Face window has a new switch, \"As a body of its own (not grouped)\". With it on, the part pushed out of the face (or the hole of a pocket) stands beside the body instead of in a group with it: resize it, move it or use it to cut right away."
+        }
+      },
+      {
+        "title": {
+          "de": "Strg+Pfeiltasten verschieben die Skizze",
+          "en": "Ctrl+arrows slide the sketch",
+          "ar": "Ctrl مع الأسهم يُزيح الرسم التخطيطي",
+          "cs": "Ctrl+šipky posouvají náčrt",
+          "da": "Ctrl+piletaster flytter skitsen",
+          "fr": "Ctrl+flèches fait glisser l'esquisse",
+          "hu": "A Ctrl+nyilak eltolják a vázlatot",
+          "it": "Ctrl+frecce spostano lo schizzo",
+          "ja": "Ctrl+矢印キーでスケッチをスライド",
+          "nl": "Ctrl+pijltjes verschuiven de schets",
+          "pl": "Ctrl+strzałki przesuwają szkic",
+          "pt-br": "Ctrl+setas deslocam o esboço",
+          "ru": "Ctrl+стрелки сдвигают эскиз",
+          "sl": "Ctrl+puščice premikajo skico",
+          "tr": "Ctrl+oklar çizimi kaydırır",
+          "es": "Ctrl+flechas desplazan el boceto"
+        },
+        "body": {
+          "de": "Ist im Skizzen-Editor nichts ausgewählt, verschieben Strg und die Pfeiltasten die Ansicht, wie in der 3D-Ansicht: ein Zehntel des Bildes pro Druck, mit Umschalt dazu die Hälfte. Die Skizze wandert in Pfeilrichtung.",
+          "en": "With nothing selected in the sketch editor, Ctrl and the arrow keys slide the view, as in the 3D view: a tenth of the view a press, half with Shift as well. The sketch moves the way the arrow points.",
+          "ar": "عند عدم تحديد أي شيء في محرر الرسم التخطيطي، يُزيح Ctrl مع الأسهم العرض كما في العرض ثلاثي الأبعاد: عُشر الصورة لكل ضغطة، ونصفها مع Shift أيضًا. ويتحرك الرسم في اتجاه السهم.",
+          "cs": "Když v editoru náčrtu není nic vybráno, Ctrl se šipkami posouvá pohled jako ve 3D pohledu: o desetinu obrazu na stisknutí, se Shift o polovinu. Náčrt se posouvá ve směru šipky.",
+          "da": "Når intet er markeret i skitseeditoren, flytter Ctrl og piletasterne visningen som i 3D-visningen: en tiendedel af billedet pr. tryk, halvdelen med Shift oveni. Skitsen flytter sig den vej, pilen peger.",
+          "fr": "Quand rien n'est sélectionné dans l'éditeur d'esquisse, Ctrl et les flèches font glisser la vue, comme dans la vue 3D : un dixième de l'image par appui, la moitié avec Shift en plus. L'esquisse se déplace dans le sens de la flèche.",
+          "hu": "Ha a vázlatszerkesztőben semmi sincs kijelölve, a Ctrl és a nyilak eltolják a nézetet, mint a 3D nézetben: lenyomásonként a kép tizedével, Shifttel együtt a felével. A vázlat a nyíl irányába mozdul.",
+          "it": "Senza nulla selezionato nell'editor di schizzi, Ctrl e le frecce spostano la vista, come nella vista 3D: un decimo dell'immagine a pressione, la metà con anche Maiusc. Lo schizzo si muove nella direzione della freccia.",
+          "ja": "スケッチエディターで何も選択していないとき、Ctrlと矢印キーで3Dビューと同じようにビューをスライドできます。1回押すごとに画面の10分の1、Shiftも押すと半分動きます。スケッチは矢印の方向に動きます。",
+          "nl": "Als er in de schetseditor niets geselecteerd is, schuiven Ctrl en de pijltjestoetsen de weergave, net als in de 3D-weergave: een tiende van het beeld per druk, de helft met Shift erbij. De schets beweegt in de richting van het pijltje.",
+          "pl": "Gdy w edytorze szkiców nic nie jest zaznaczone, Ctrl ze strzałkami przesuwa widok, jak w widoku 3D: o jedną dziesiątą obrazu na naciśnięcie, o połowę z dodatkowym Shift. Szkic przesuwa się w stronę strzałki.",
+          "pt-br": "Sem nada selecionado no editor de esboços, Ctrl e as setas deslocam a vista, como na vista 3D: um décimo da imagem por toque, a metade com Shift também. O esboço se move na direção da seta.",
+          "ru": "Если в редакторе эскизов ничего не выделено, Ctrl со стрелками сдвигает вид, как в 3D-виде: на десятую часть изображения за нажатие, на половину — вместе с Shift. Эскиз движется в сторону стрелки.",
+          "sl": "Ko v urejevalniku skic ni nič izbrano, Ctrl in puščice premikajo pogled kot v 3D pogledu: za desetino slike na pritisk, s Shift povrhu za polovico. Skica se premakne v smer puščice.",
+          "tr": "Çizim düzenleyicisinde hiçbir şey seçili değilken Ctrl ve ok tuşları, 3B görünümde olduğu gibi görünümü kaydırır: her basışta görüntünün onda biri, Shift ile birlikte yarısı. Çizim okun gösterdiği yöne hareket eder.",
+          "es": "Sin nada seleccionado en el editor de bocetos, Ctrl y las flechas desplazan la vista, como en la vista 3D: una décima parte de la imagen por pulsación, o la mitad si además pulsas Mayús. El boceto se mueve hacia donde apunta la flecha."
+        }
+      },
+      {
+        "title": {
+          "de": "Ausgleich für Gridfinity-Bodenplatten",
+          "en": "Padding for Gridfinity baseplates"
+        },
+        "body": {
+          "de": "Eine Gridfinity-Bodenplatte kann jetzt an jeder Seite einen massiven Ausgleich bekommen, damit sie eine Schublade füllt, die keine ganze Zahl von Einheiten misst: Stell im Eigenschaften-Fenster „Ausgleich rechts“ oder eine andere Seite ein. Das Raster bleibt bei ganzen Einheiten, und die Platte wird um den Ausgleich größer.",
+          "en": "A Gridfinity baseplate can now have a solid border on any side, so it fills a drawer that is not a whole number of units: set \"Padding on the right\" or another side in the Properties panel. The grid stays whole units, and the plate's size grows with the padding."
+        }
+      },
+      {
+        "title": {
+          "de": "Loft: Segmente pro Kreis einstellbar",
+          "en": "Loft: segments per circle"
+        },
+        "body": {
+          "de": "Die Kreise und runden Ecken eines Loft waren immer aus 96 Teilstücken gebaut, bei großen runden Enden sah man die Facetten. Das neue Feld \"Segmente pro Kreis\" (16 bis 360) stellt es ein. Es gilt in der Ansicht und in STL, OBJ und 3MF.",
+          "en": "The circles and rounded corners of a Loft were always built from 96 pieces, so on a large round end the facets showed. The new field \"Segments per circle\" (16 to 360) sets it, in the view and in STL, OBJ and 3MF."
+        }
+      },
+      {
+        "title": {
+          "de": "Ein skalierter Stern behält seine Form",
+          "en": "A scaled star keeps its shape"
+        },
+        "body": {
+          "de": "Beim Ändern der Größe eines Sterns wuchs nur der äußere Radius, so wurde ein kleinerer Stern weniger spitz und ein größerer spitzer. Der innere Radius und die Rundungen wachsen jetzt mit.",
+          "en": "When a star was resized only its outer size changed, so a smaller star came out less pointy and a larger one more pointy. The inner size and the roundings now stretch with it."
+        }
+      }
+    ]
+  },
+  {
     "version": "1.102.0",
     "items": [
       {

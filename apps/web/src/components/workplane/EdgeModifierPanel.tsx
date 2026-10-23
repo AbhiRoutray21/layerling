@@ -146,6 +146,8 @@ export function EdgeModifierSlider({
   length = false,
   disabled = false,
   coarse,
+  autoFocus = false,
+  onEnter,
   onChange,
 }: {
   label: string;
@@ -162,6 +164,10 @@ export function EdgeModifierSlider({
    * still takes the exact value and anything up to the full range: a slider of 3,000 steps gives crooked values (forum, DrJones).
    */
   coarse?: { step: number; max: number };
+  /** The field takes the focus when it appears, so a tool opened from the keyboard can be typed into at once (#760). */
+  autoFocus?: boolean;
+  /** Enter takes the typed value and then calls this with it, for a window that applies on Enter (#760). */
+  onEnter?: (value: number) => void;
   onChange: (value: number) => void;
 }) {
   const safeMin = Number.isFinite(min) ? min : 0;
@@ -192,6 +198,9 @@ export function EdgeModifierSlider({
   // The mouse wheel in the clicked field (#536). What the wheel wrote stays as it is when the field is left, so
   // the rounded reading does not replace the exact value.
   const numberInputRef = useRef<HTMLInputElement>(null);
+  useEffect(() => {
+    if (autoFocus) numberInputRef.current?.focus();
+  }, [autoFocus]);
   const wheelShownRef = useRef<string | null>(null);
   useWheelField(numberInputRef, editing && !disabled, ({ direction, keys }) => {
     const parsed = parseMeasurementInput(draft);
@@ -251,7 +260,13 @@ export function EdgeModifierSlider({
               if (event.key === "Enter") {
                 event.preventDefault();
                 event.stopPropagation();
+                // What the field holds now, as commitDraft will take it (a wheel step is already in the value).
+                const typed = parseMeasurementInput(draft);
+                const entered = wheelShownRef.current !== null && draft === wheelShownRef.current || !Number.isFinite(typed)
+                  ? actualValue
+                  : clamp(toModelValue(typed), safeMin, safeMax);
                 event.currentTarget.blur();
+                onEnter?.(entered);
               } else if (event.key === "Escape") {
                 event.preventDefault();
                 event.stopPropagation();

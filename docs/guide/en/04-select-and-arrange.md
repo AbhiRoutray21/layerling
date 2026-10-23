@@ -125,10 +125,11 @@ For a thicker wall, a raised pad on a face or a pocket cut into it, the {{ui:fac
    - **{{ui:faceTool.inset}}:** how far the new outline stays inside the face's edge. Going out, 0 takes the whole face, which makes a wall thicker. Openings in the face grow by the same amount.
    - **{{ui:faceTool.radius}}:** rounds every corner of the outline, the inner ones too, so a sharp tip ends in an arc. A notch narrower than twice the radius closes, and a part of the face narrower than twice the inset and the radius together is left out.
    - **{{ui:faceTool.depth}}:** how far the new part stands out of the face, or how deep the pocket goes.
+   - **{{ui:faceTool.separate}}:** with the switch on, the new part (or the hole of a pocket) is a body of its own beside the body instead of a group with it, so you can resize it, move it or use it to cut at once.
 3. The result shows at once as a preview and follows every value. {{ui:faceTool.repick}} chooses another face, [[Esc]] closes the tool.
 4. Only {{ui:faceTool.apply}} makes it.
 
-What the tool adds is an ordinary sketch body grouped with the body: nothing is baked in. {{ui:group.edit}} opens the group, and {{ui:inspector.editSketch}} on the new part shows the outline it follows. On the top or the bottom of a plain sketch body - one area, not grouped, mirrored, tapered, twisted or leaning, and without a stroke, key ring, fillet or chamfer - that is the body's own outline, set in when it is built, so its lines and arcs stay exact wherever the CAD kernel can set them in, for the edge tools and the STEP export. Resized later, the part keeps its inset. On any other face, and on every face of an imported mesh, the outline follows the face's triangles, and a curve is made of short straight pieces. The whole thing is one step for {{ui:editor.tool.undo}}. To change the inset or the radius later, undo and run the tool again. To round the top edge afterwards, use {{ui:editor.tool.fillet}} with {{ui:edge.topEdges}} on the group as the last step: like every edge treatment on a group, it joins the group into one body.
+What the tool adds is an ordinary sketch body, grouped with the body unless {{ui:faceTool.separate}} is on (then {{ui:group.edit}} has nothing to open, and the part is free): nothing is baked in. {{ui:group.edit}} opens the group, and {{ui:inspector.editSketch}} on the new part shows the outline it follows. On the top or the bottom of a plain sketch body - one area, not grouped, mirrored, tapered, twisted or leaning, and without a stroke, key ring, fillet or chamfer - that is the body's own outline, set in when it is built, so its lines and arcs stay exact wherever the CAD kernel can set them in, for the edge tools and the STEP export. Resized later, the part keeps its inset. On any other face, and on every face of an imported mesh, the outline follows the face's triangles, and a curve is made of short straight pieces. The whole thing is one step for {{ui:editor.tool.undo}}. To change the inset or the radius later, undo and run the tool again. To round the top edge afterwards, use {{ui:editor.tool.fillet}} with {{ui:edge.topEdges}} on the group as the last step: like every edge treatment on a group, it joins the group into one body.
 
 An AI can do the same through the MCP bridge with `layerling_push_face` (see the chapter [AI with MCP](chapter:ai-with-mcp)).
 
@@ -147,7 +148,7 @@ With several parts you choose how they grow:
 - **{{ui:scalePercent.mode.together}}:** The parts grow around their common centre, and the gaps grow with them. The whole becomes larger as if it were one part.
 - **{{ui:scalePercent.mode.each}}:** Every part grows where it stands, and the gaps between them stay the same.
 
-Only {{ui:scalePercent.apply}} changes the design, and one step back undoes it. With a locked part in the selection it does not open.
+The percentage field has the focus when the window opens, so from the keyboard it is [[Ctrl]]+[[K]], the percentage, [[Enter]]; [[Esc]] closes the window. Only {{ui:scalePercent.apply}} (or [[Enter]] in the field) changes the design, and one step back undoes it. With a locked part in the selection it does not open.
 
 ## Undoing
 

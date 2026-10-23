@@ -104,6 +104,8 @@ Koło zębate na wstążce ({{ui:editor.workspaceSettings}}) otwiera ustawienia.
 
 {{ui:workspace.viewCubePosition}} przenosi kostkę widoku w inny róg obszaru roboczego: {{ui:workspace.viewCubePositionTopLeft}} (jak zawsze), {{ui:workspace.viewCubePositionTopRight}}, {{ui:workspace.viewCubePositionBottomLeft}} albo {{ui:workspace.viewCubePositionBottomRight}}. W każdym rogu poza lewym górnym sterowanie kamerą przesuwa się w górę, na miejsce zwolnione przez kostkę. W prawym dolnym rogu kostka stoi tuż nad przełącznikiem {{ui:inspector.snapGrid}}. Dopóki po prawej są otwarte właściwości kształtu, kostka po prawej stronie odsuwa się na lewo od nich. Róg zapamiętuje ta przeglądarka i obowiązuje on w każdym projekcie. W wąskim oknie, na przykład na telefonie, ustawienie jest ukryte, a kostka zostaje w lewym górnym rogu.
 
+{{ui:workspace.shapeColors}} pokazuje na obrazkach biblioteki kształtów kolor, z jakim startuje nowy kształt (kolor jego rodzaju albo ten, który zapisałeś przyciskiem {{ui:inspector.saveDefaults}}). Wyłącz to, jeśli wolisz szare obrazki. Przeglądarka zapamiętuje ten wybór.
+
 ### Wygląd: tryb szybki
 
 {{ui:workspace.fastMode}} jest dla wolniejszych komputerów. Wyłącza cienie, linie krawędzi na wszystkich bryłach i bezwładność kamery, a widok rysuje tylko w rozdzielczości ekranu. Twoje własne ustawienia zostają zachowane na później, a przełączniki, które nadpisuje, pokazują {{ui:workspace.offInFastMode}}, dopóki jest włączony. Więcej o tym, co pomaga na wolnym komputerze, jest niżej w części „Gdy layerling działa wolno”.
