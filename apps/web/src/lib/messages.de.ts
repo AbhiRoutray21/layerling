@@ -1319,6 +1319,7 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "array.mode.row": "Reihe",
   "array.mode.circle": "Kreis",
   "array.count": "Anzahl (mit Original)",
+  "array.groupCopies": "Kopien gruppieren",
   "array.spacingX": "Abstand X",
   "array.spacingY": "Abstand Y",
   "array.spacingZ": "Abstand Z (Höhe)",

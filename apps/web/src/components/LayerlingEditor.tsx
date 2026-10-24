@@ -65,7 +65,7 @@ import { scaleShapesByPercent } from "@/lib/scaleByPercent";
 import { canToggleGroupColors, groupShowsPartColors } from "@/lib/groupColors";
 import { disposeBoundsTree } from "three-mesh-bvh";
 import { SHELL_SIDES, shellMaxThickness, shellOpeningsFor, shellOpenSides } from "@/lib/shellLimits";
-import { arrayFollowingPivot, circleStepDegrees, clampArrayCount, moveAlongRadius, rotateAroundVertical, rowOffset, singleAxisSpacing, type ArraySettings } from "@/lib/shapeArray";
+import { arrayFollowingPivot, arrayGroupsCopies, circleStepDegrees, clampArrayCount, moveAlongRadius, rotateAroundVertical, rowOffset, singleAxisSpacing, type ArraySettings } from "@/lib/shapeArray";
 import { bedOverhangs, keepDismissedOverhangs, printerPresetById, shapeBedFootprint, type BedOverhang } from "@/lib/printBed";
 import { SplitPanel, type SplitWorkplaneDirection } from "./workplane/SplitPanel";
 import { NO_SPLIT_ROTATION, modelSplitPlane, snapSplitPositionToVertices, splitOrientationForNormal, splitAxisFromLabel, splitAxisLabel, splitRotationAxes, type SplitRotation } from "@/lib/modelSplit";
@@ -5754,11 +5754,43 @@ export function LayerlingEditor({
     setScalePercentError(null);
   }, [scalePercentTool, scaleSelectionByPercent]);
 
-  const applyArrayTool = useCallback(() => {
+  const applyArrayTool = useCallback(async () => {
     if (!arrayTool || selectedShapes.length === 0) return;
     const copies = arrayCopies(selectedShapes, arrayTool);
+    const groupPieces = arrayGroupsCopies(arrayTool) && !selectedShapes.some((shape) => isNonSolidShape(shape));
     setArrayTool(null);
-    commitShapes([...shapes, ...copies], [...selectedIds, ...copies.map((shape) => shape.id)], t("status.arrayCreated", { count: copies.length }));
+    const keepLoose = (message: string) => commitShapes([...shapes, ...copies], [...selectedIds, ...copies.map((shape) => shape.id)], message);
+    if (!groupPieces) {
+      keepLoose(t("status.arrayCreated", { count: copies.length }));
+      return;
+    }
+    // The same Group as the button: the originals and the copies become one object, ungrouped again under Combine.
+    const pieces = [...selectedShapes, ...copies];
+    const sourceFingerprint = projectShapesFingerprint(shapesRef.current);
+    const sourceProjectId = projectInfoRef.current.projectId;
+    const result = await buildGroupedShapeOffThread(pieces, workspaceSettingsRef.current.booleanTriangleLimit, geometryAbortRef.current?.signal);
+    if (projectInfoRef.current.projectId !== sourceProjectId || projectShapesFingerprint(shapesRef.current) !== sourceFingerprint) {
+      setNotice(t("status.groupChanged"));
+      return;
+    }
+    const { group } = result;
+    if (!group) {
+      if (result.consumed) {
+        const selected = new Set(selectedIds);
+        commitShapes(shapesRef.current.filter((shape) => !selected.has(shape.id)), null, t("status.groupedHoleConsumed"));
+        return;
+      }
+      // Grouping did not work out: the pattern still lands, as separate pieces, and the reason is shown.
+      keepLoose(result.failureNotice || t("status.arrayCreated", { count: copies.length }));
+      return;
+    }
+    const selected = new Set(selectedIds);
+    const editableGroup = canonicalizeShape({ ...group, groupOperation: "group" });
+    commitShapes(
+      [...shapesRef.current.filter((shape) => !selected.has(shape.id)), editableGroup],
+      editableGroup.id,
+      result.openGapEdges ? t("status.cutLeftOpen", { count: result.openGapEdges }) : result.mergeWarning ?? t("status.groupedMany", { count: pieces.length }),
+    );
   }, [arrayTool, commitShapes, selectedIds, selectedShapes, shapes]);
 
   const duplicateShapeAt = useCallback((id: string, position: { x: number; z: number }) => {

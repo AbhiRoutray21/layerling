@@ -1307,6 +1307,7 @@ export const MESSAGES_FR: Partial<Record<MessageKey, string>> = {
   "array.mode.row": "Rangée",
   "array.mode.circle": "Cercle",
   "array.count": "Compter (avec original)",
+  "array.groupCopies": "Grouper les copies",
   "array.spacingX": "Espacement X",
   "array.spacingY": "Espacement Y",
   "array.spacingZ": "Espacement Z (hauteur)",

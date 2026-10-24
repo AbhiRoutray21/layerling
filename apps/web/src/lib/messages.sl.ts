@@ -1060,6 +1060,7 @@ export const MESSAGES_SL: Partial<Record<MessageKey, string>> = {
   "array.mode.row": "Vrsta",
   "array.mode.circle": "Krog",
   "array.count": "Število (z izvirnikom)",
+  "array.groupCopies": "Združi kopije",
   "array.spacingX": "Razmak X",
   "array.spacingY": "Razmak Y",
   "array.spacingZ": "Razmak Z (višina)",
