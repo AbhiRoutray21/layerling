@@ -8421,6 +8421,20 @@ html[data-theme="dark"] .touch-multi-select {
   transform: translate(-50%, -50%);
 }
 
+/* For a finger or a rubber-tip stylus the dots keep their look and catch from further away, a finger's width round them (#854). */
+@media (pointer: coarse) {
+  .align-dot {
+    touch-action: none;
+  }
+
+  .align-dot::before {
+    position: absolute;
+    inset: -14px;
+    border-radius: 999px;
+    content: "";
+  }
+}
+
 .align-dot:hover:not(:disabled),
 .align-dot:focus-visible:not(:disabled) {
   background: #e17709;
