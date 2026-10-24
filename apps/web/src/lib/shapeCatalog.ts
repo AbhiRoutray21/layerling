@@ -146,7 +146,7 @@ import {
   normalizeHingeLeafThickness,
   normalizeHingePinDiameter,
 } from "@/lib/hingeGeometry";
-import { DEFAULT_GRIDFINITY_LIP, DEFAULT_GRIDFINITY_MAGNETS, DEFAULT_GRIDFINITY_TYPE, DEFAULT_GRIDFINITY_UNITS, gridfinityFootprintPatch, gridfinityPadding, gridfinitySize, normalizeGridfinityType } from "@/lib/gridfinityGeometry";
+import { DEFAULT_GRIDFINITY_LIP, DEFAULT_GRIDFINITY_MAGNETS, DEFAULT_GRIDFINITY_TRAY_SIZE, DEFAULT_GRIDFINITY_TYPE, DEFAULT_GRIDFINITY_UNITS, gridfinityFootprintPatch, gridfinityPadding, gridfinitySize, normalizeGridfinityType } from "@/lib/gridfinityGeometry";
 import {
   DEFAULT_KNURL_ANGLE,
   DEFAULT_KNURL_CHAMFER,
@@ -860,10 +860,12 @@ export function makeShapeFromAsset(
     gridfinityPaddingRight: customization.gridfinityPaddingRight,
   };
   const gridfinityPaddingSize = gridfinityPadding(gridfinityPaddingFields);
+  // A new tray (#837) has a tray's size, not the bin's.
+  const gridfinityDefaults = normalizeGridfinityType(customization.gridfinityType) === "tray" ? DEFAULT_GRIDFINITY_TRAY_SIZE : defaults;
   const gridfinityFootprint = asset.kind === "gridfinity" ? gridfinityFootprintPatch({
-    width: customization.width ?? defaults.width + gridfinityPaddingSize.left + gridfinityPaddingSize.right,
-    depth: customization.depth ?? defaults.depth + gridfinityPaddingSize.back + gridfinityPaddingSize.front,
-    height: customization.height ?? defaults.height,
+    width: customization.width ?? gridfinityDefaults.width + gridfinityPaddingSize.left + gridfinityPaddingSize.right,
+    depth: customization.depth ?? gridfinityDefaults.depth + gridfinityPaddingSize.back + gridfinityPaddingSize.front,
+    height: customization.height ?? gridfinityDefaults.height,
     gridfinityLip: customization.gridfinityLip,
     gridfinityHalfGrid: customization.gridfinityHalfGrid,
     ...gridfinityPaddingFields,

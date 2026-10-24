@@ -1610,8 +1610,8 @@ function validateShapeDefinition(definition: Record<string, unknown>, label: str
     }
   }
   if (kind === "gridfinity") {
-    // The size is rounded to whole grid units on loading, and the geometry clamps the label shelf's, the finger scoop's, the floor's, the lip chamfer's, the wall's, the corners' and the dividers' values; only nonsense is refused.
-    if (definition.gridfinityType !== undefined && definition.gridfinityType !== "bin" && definition.gridfinityType !== "baseplate") {
+    // The size is rounded to whole grid units on loading (a tray's is kept to its limits), and the geometry clamps the label shelf's, the finger scoop's, the floor's, the lip chamfer's, the wall's, the corners' and the dividers' values; only nonsense is refused.
+    if (definition.gridfinityType !== undefined && definition.gridfinityType !== "bin" && definition.gridfinityType !== "baseplate" && definition.gridfinityType !== "tray") {
       throw new Error(`${label}.gridfinityType is invalid`);
     }
     for (const key of ["gridfinityLip", "gridfinityMagnets", "gridfinityHalfGrid", "gridfinityLabelBack", "gridfinityLabelFront", "gridfinityLabelLeft", "gridfinityLabelRight", "gridfinityScoopBack", "gridfinityScoopFront", "gridfinityScoopLeft", "gridfinityScoopRight", "gridfinityOpenBack", "gridfinityOpenFront", "gridfinityOpenLeft", "gridfinityOpenRight", "hingePinless"] as const) {
