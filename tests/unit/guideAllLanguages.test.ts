@@ -1,11 +1,14 @@
 import { readdirSync, statSync } from "node:fs";
 import { join } from "node:path";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { GUIDE_SECTIONS, guideHref, type GuideSection } from "@/lib/guideLinks";
 // @ts-expect-error the guide build is a plain .mjs module
 import { effectiveChapters, headingIds, loadMessages, loadValues, readChapters, renderBlocks } from "../../scripts/build-guide.mjs";
 // @ts-expect-error the tool list is a plain .mjs module
 import { tools } from "../../scripts/layerling-mcp-tools.mjs";
+
+// These read every language's chapters; under a full parallel run that can take more than the 5 s default.
+vi.setConfig({ testTimeout: 30_000 });
 
 /*
  * guide.test.ts holds the five languages that translate every chapter to the same plan. These
