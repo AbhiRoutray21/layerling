@@ -42,7 +42,7 @@ Po prvním bodu nástroje {{ui:sketch.line}} nebo {{ui:sketch.smooth}} začněte
 
 ## Prohnutí přímé strany
 
-Vyberte úsečku a v zobrazené liště zvolte {{ui:sketch.curveLine}}. Změní se na křivku se dvěma úchyty. Jejich tažením řídíte prohnutí; vzdálenější úchyt ohýbá více. {{ui:sketch.straightenLine}} obnoví přímku. Vybraný bod lze převést na plynulý pomocí {{ui:sketch.smooth}}; dostane úchyty a okolní úseky se stanou křivkami. Klikněte na úchyt a rozsvítí se: šipky ho pak posunou o krok mřížky, se [[Shift]] o větší krok, takže křivku nastavíte přesně.
+Vyberte úsečku a v zobrazené liště zvolte {{ui:sketch.curveLine}}. Změní se na křivku se dvěma úchyty. Jejich tažením řídíte prohnutí; vzdálenější úchyt ohýbá více. {{ui:sketch.straightenLine}} obnoví přímku. Vybraný bod lze převést na plynulý pomocí {{ui:sketch.smooth}}; dostane úchyty a okolní úseky se stanou křivkami. Když vyberete tři nebo více bodů, {{ui:sketch.curveThroughPoints}} v liště proloží jednu plynulou křivku od prvního z nich k poslednímu, přes všechny body mezi nimi, stejně jako ji kreslí nástroj {{ui:sketch.smooth}}; úseky za oběma konci zůstanou beze změny. V jiných programech se tato funkce jmenuje „Fit curve“ nebo „Fit point spline“. Klikněte na úchyt a rozsvítí se: šipky ho pak posunou o krok mřížky, se [[Shift]] o větší krok, takže křivku nastavíte přesně.
 
 ![Spodní strana obrysu L je prohnutá a má úchyty u obou konců.](shot:sketch-curve)
 
