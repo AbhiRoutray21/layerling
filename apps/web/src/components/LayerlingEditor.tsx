@@ -166,7 +166,7 @@ import type { AlignAxis, AlignHandleStatus, AlignTarget, GridSize, ParametricSou
 import { type Vec3, type MeshData, type Cuboid, type ShapeUpdatePatch, type ManifoldSolid, MIN_SHAPE_DIMENSION, resetManifoldRuntime, cleanModelDimension, getManifoldRuntime, meshForShape, meshReachAlong, appendMeshData, formatTriangleCount, shapeAabb, boundsForShapes, boundsForCuboids, meshAabb, boundsForPositions, quantizedPointKey } from "@/lib/editorMeshCore";
 import { meshPartCount } from "@/lib/meshPartCount";
 import { buildGroupedShapeOffThread, exportSolidVolumeOffThread, simplifyTrianglePositionsOffThread, splitShapesByPlaneOffThread, subscribeGeometryBusy, warmGeometryWorker } from "@/lib/geometryWorker";
-import { cloneAsGroupChild, meshDataToManifoldMesh, shapeToManifoldSolid, unionOverlappingExportMeshes, exportBodiesWithLooseHoles, formatSectionOffset, SECTION_SEEN_FROM_KEYS, expandBundles, visibleExportShapes, multicolorExportSolids, exportFaceColors, colorSeparatedExportMeshes, disposeManifold, canIntersectShapes, buildIntersectionShapeFromSelection, groupedShape, quaternionForShape, rotationFromQuaternion, cleanShapePatch, restoreGroupedChildren, restoreGroupedChildrenForEdges } from "@/lib/editorBooleans";
+import { cloneAsGroupChild, meshDataToManifoldMesh, shapeToManifoldSolid, withClosedHolesNote, unionOverlappingExportMeshes, exportBodiesWithLooseHoles, formatSectionOffset, SECTION_SEEN_FROM_KEYS, expandBundles, visibleExportShapes, multicolorExportSolids, exportFaceColors, colorSeparatedExportMeshes, disposeManifold, canIntersectShapes, buildIntersectionShapeFromSelection, groupedShape, quaternionForShape, rotationFromQuaternion, cleanShapePatch, restoreGroupedChildren, restoreGroupedChildrenForEdges } from "@/lib/editorBooleans";
 import { handleViewArrowKey } from "@/lib/viewArrowKeys";
 import { escapeWasHandled } from "@/lib/escapeHandled";
 import { sketchEscapeAction } from "@/lib/sketchEscape";
@@ -6307,7 +6307,7 @@ export function LayerlingEditor({
       setNotice(t("status.splitFailed", { name: shape.name }));
       return;
     }
-    const { replacements, splitCount } = outcome;
+    const { replacements, splitCount, closedHoles } = outcome;
     if (splitCount === 0) {
       setSplitSession((current) => current ? { ...current, busy: false, error: t("split.error.movePlane") } : current);
       setNotice(t("status.splitMissed"));
@@ -6320,9 +6320,9 @@ export function LayerlingEditor({
     commitShapes(
       nextShapes,
       nextSelection,
-      splitCount === 1
+      withClosedHolesNote(splitCount === 1
         ? t("status.splitOne", { count: nextSelection.length })
-        : t("status.splitMany", { count: splitCount, bodies: nextSelection.length }),
+        : t("status.splitMany", { count: splitCount, bodies: nextSelection.length }), closedHoles),
     );
   }, [commitShapes, splitPlane, splitSession, splitTargetShapes]);
 
@@ -8144,7 +8144,7 @@ export function LayerlingEditor({
     commitShapes(
       [...shapesRef.current.filter((shape) => !selected.has(shape.id)), editableGroup],
       editableGroup.id,
-      result.openGapEdges ? t("status.cutLeftOpen", { count: result.openGapEdges }) : result.mergeWarning ?? t("status.groupedMany", { count: selectedShapes.length }),
+      result.openGapEdges ? t("status.cutLeftOpen", { count: result.openGapEdges }) : result.mergeWarning ?? withClosedHolesNote(t("status.groupedMany", { count: selectedShapes.length }), result.closedHoles),
     );
   }, [refuseLockedSelection, commitShapes, selectedIds, selectedShapes]);
 
@@ -9783,10 +9783,11 @@ export function LayerlingEditor({
           throw new Error(result.failureNotice);
         }
         const editableGroup = canonicalizeShape({ ...result.group, groupOperation: "group" });
-        commitShapes([...currentShapes().filter((shape) => !ids.has(shape.id)), editableGroup], editableGroup.id, result.mergeWarning ?? t("status.mcpGrouped", { count: groupable.length }));
+        commitShapes([...currentShapes().filter((shape) => !ids.has(shape.id)), editableGroup], editableGroup.id, result.mergeWarning ?? withClosedHolesNote(t("status.mcpGrouped", { count: groupable.length }), result.closedHoles));
+        const closedHoles = result.closedHoles ? { closedHoles: result.closedHoles } : {};
         return result.mergeWarning
-          ? { object: mcpShapeSummary(editableGroup), warning: result.mergeWarning }
-          : { object: mcpShapeSummary(editableGroup) };
+          ? { object: mcpShapeSummary(editableGroup), warning: result.mergeWarning, ...closedHoles }
+          : { object: mcpShapeSummary(editableGroup), ...closedHoles };
       }
 
       if (command.action === "bundle_objects") {
@@ -10080,8 +10081,8 @@ export function LayerlingEditor({
           throw new Error(result.failureNotice);
         }
         const editableGroup = canonicalizeShape({ ...result.group, groupOperation: "group" });
-        commitShapes([...remainingShapes, editableGroup], editableGroup.id, t("status.mcpBooleanCut"));
-        return { object: mcpShapeSummary(editableGroup) };
+        commitShapes([...remainingShapes, editableGroup], editableGroup.id, withClosedHolesNote(t("status.mcpBooleanCut"), result.closedHoles));
+        return result.closedHoles ? { object: mcpShapeSummary(editableGroup), closedHoles: result.closedHoles } : { object: mcpShapeSummary(editableGroup) };
       }
 
       if (command.action === "wrap_around_cylinder") {
@@ -10199,9 +10200,9 @@ export function LayerlingEditor({
         commitShapes(
           currentShapes().flatMap((shape) => outcome.replacements.get(shape.id) ?? [shape]),
           parts.map((shape) => shape.id),
-          outcome.splitCount === 1
+          withClosedHolesNote(outcome.splitCount === 1
             ? t("status.splitOne", { count: parts.length })
-            : t("status.splitMany", { count: outcome.splitCount, bodies: parts.length }),
+            : t("status.splitMany", { count: outcome.splitCount, bodies: parts.length }), outcome.closedHoles),
         );
         return {
           axis: splitAxisLabel(axis).toLowerCase(),
@@ -10210,6 +10211,7 @@ export function LayerlingEditor({
           min: plane.min,
           max: plane.max,
           splitIds: [...outcome.replacements.keys()],
+          ...(outcome.closedHoles ? { closedHoles: outcome.closedHoles } : {}),
           objects: parts.map(mcpShapeSummary),
         };
       }

@@ -48,5 +48,15 @@
       "de": "layerling bittet den Browser jetzt einmal, den Speicher mit deinen Entwürfen bei Platzmangel nicht zuerst zu leeren. Safari löscht die Daten einer Website, die sieben Tage nicht besucht wurde, nur bei einer installierten App nicht, die Anleitung (Installieren) sagt es jetzt dazu. Gesichert werden sollten wichtige Entwürfe trotzdem als Datei.",
       "en": "layerling now asks the browser once not to clear the storage with your designs first when it runs short of room. Safari clears the data of a website that has not been visited for seven days, but not that of an installed app, and the guide (Installing) now says so. Important designs should still be saved as a file."
     }
+  },
+  {
+    "title": {
+      "de": "Kleine Löcher in Netzen werden geschlossen",
+      "en": "Small holes in meshes are closed"
+    },
+    "body": {
+      "de": "Ein importiertes Netz mit Öffnungen, etwa offenen Augen einer Figur, ließ sich nicht teilen, gruppieren oder ausschneiden. layerling schließt solche Öffnungen jetzt zuerst mit einem flachen Deckel und sagt, wie viele es waren. Ist eine Öffnung dafür zu groß und uneben, erklärt die Meldung, was zu tun ist.",
+      "en": "An imported mesh with openings, such as a figure's open eyes, could not be split, grouped or cut. layerling now closes such openings with a flat cap first and says how many there were. If an opening is too large and uneven for that, the message explains what to do."
+    }
   }
 ]
