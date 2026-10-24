@@ -3,6 +3,7 @@ import "./globals.css";
 import "./historyView.css";
 import "./notes.css";
 import "./myShapes.css";
+import "./attachments.css";
 import "./viewCube.css";
 import "./secondView.css";
 import "./shortcuts.css";

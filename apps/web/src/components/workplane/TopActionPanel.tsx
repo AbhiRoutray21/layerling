@@ -6,16 +6,17 @@ import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react"
 import { t, type MessageKey } from "@/lib/i18n";
 import { useLanguage } from "@/lib/useLanguage";
 import { ToolbarImportIcon } from "../icons";
+import { AttachmentsPanel } from "./AttachmentsPanel";
 import { DEFAULT_INFILL_PERCENT, DEFAULT_PRINT_MATERIAL, DEFAULT_WALLS, INFILL_CHOICES, PRINT_MATERIALS, WALL_CHOICES, normalizeInfillPercent, normalizePrintMaterial, normalizeWalls, printEstimateWithInfill, type PrintMaterial } from "@/lib/printEstimate";
 import { type EditorHistoryExportLimit } from "@/lib/editorHistory";
 import { projectExportFileName, stlNameAsksForNewFile } from "@/lib/exportNames";
 import { readImportSvgWidth, readKeepSvgPage, setImportSvgWidth, storeKeepSvgPage } from "@/lib/importPreferences";
 import { lylFileAccessSupported } from "@/lib/lylFileAccess";
-import type { WorkplaneShape } from "@/types/layerling";
+import type { ProjectAttachment, WorkplaneShape } from "@/types/layerling";
 import { type ExportSolidVolume, PRINT_MATERIAL_STORAGE_KEY, PRINT_INFILL_STORAGE_KEY, PRINT_WALLS_STORAGE_KEY, formatEstimateNumber } from "@/lib/editorBooleans";
 
 
-export type TopPanel = "import" | "export" | null;
+export type TopPanel = "import" | "export" | "attachments" | null;
 export type ExportFormat = "stl" | "3mf" | "obj" | "step" | "svg" | "dxf" | "png" | "lyl" | "drawing";
 export type DirectExportFormat = Exclude<ExportFormat, "step" | "png" | "lyl" | "drawing">;
 export type SvgExportView = "silhouette" | "footprint" | "edges";
@@ -54,6 +55,11 @@ export function TopActionPanel({
   onPickInsertProjectFile,
   onPickReferenceImage,
   workspaceHistoryLimit,
+  attachments,
+  attachmentsLocked,
+  onAttachmentsChange,
+  onAttachmentDownload,
+  onAttachmentNotice,
 }: {
   panel: Exclude<TopPanel, null>;
   projectName: string;
@@ -87,6 +93,12 @@ export function TopActionPanel({
   /** A reference image to line parts up on (#680). */
   onPickReferenceImage: () => void;
   workspaceHistoryLimit: LylHistoryLimit;
+  /** The files kept with the design (#820), and what the panel may do with them. */
+  attachments: readonly ProjectAttachment[];
+  attachmentsLocked: boolean;
+  onAttachmentsChange: (next: ProjectAttachment[]) => void;
+  onAttachmentDownload: (attachment: ProjectAttachment) => void;
+  onAttachmentNotice: (message: string) => void;
 }) {
   const [keepSvgPage, setKeepSvgPage] = useState(false);
   useEffect(() => setKeepSvgPage(readKeepSvgPage()), []);
@@ -198,7 +210,7 @@ export function TopActionPanel({
     : null;
   const lylHistoryStop = (index: number) => ({ "--stop": index / (lylHistoryLimits.length - 1) }) as CSSProperties;
   useLanguage();
-  const title = panel === "export" ? t("panel.export") : t("panel.import");
+  const title = panel === "export" ? t("panel.export") : panel === "attachments" ? t("panel.attachments") : t("panel.import");
 
   const exportDetails: Record<ExportFormat, { label: string; description: string; note: string }> = {
     drawing: {
@@ -259,7 +271,7 @@ export function TopActionPanel({
 
   return (
     <div
-      className={`top-action-panel ${panel === "export" ? "export-action-panel" : panel === "import" ? "import-action-panel" : ""}`}
+      className={`top-action-panel ${panel === "export" ? "export-action-panel" : panel === "import" || panel === "attachments" ? "import-action-panel" : ""}`}
       role="dialog"
       aria-label={title}
     >
@@ -268,12 +280,21 @@ export function TopActionPanel({
           <strong>{title}</strong>
         </div>
         <div className="panel-header-actions">
-          <GuideHelpLink section={panel === "import" ? "importing" : "exporting"} />
+          {panel === "attachments" ? <GuideHelpLink chapter="files" /> : <GuideHelpLink section={panel === "import" ? "importing" : "exporting"} />}
           <button aria-label={t("panel.close", { title })} onClick={onClose}>
             <X size={18} />
           </button>
         </div>
       </header>
+      {panel === "attachments" ? (
+        <AttachmentsPanel
+          attachments={attachments}
+          locked={attachmentsLocked}
+          onChange={onAttachmentsChange}
+          onDownload={onAttachmentDownload}
+          onNotice={onAttachmentNotice}
+        />
+      ) : null}
       {panel === "import" ? (
         <div className="top-action-body">
           <button className="open-lyl-project-button" type="button" onClick={onPickProjectFile}>

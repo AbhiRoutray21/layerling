@@ -7604,6 +7604,7 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .history-view-inside {
 
 :where(html[data-theme="dark"][data-palette="graphite"]) .my-shapes-name-form input,
 :where(html[data-theme="dark"][data-palette="graphite"]) .my-shape-rename input,
+:where(html[data-theme="dark"][data-palette="graphite"]) .attachment-rename input,
 :where(html[data-theme="dark"][data-palette="graphite"]) .my-shapes-folder-rename input {
   color: #323232;
   background: #fff;
@@ -7744,7 +7745,8 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .my-shapes-name-form bu
 }
 
 html[data-theme="dark"]:where([data-palette="graphite"]) .my-shapes-name-form input,
-html[data-theme="dark"]:where([data-palette="graphite"]) .my-shape-rename input {
+html[data-theme="dark"]:where([data-palette="graphite"]) .my-shape-rename input,
+html[data-theme="dark"]:where([data-palette="graphite"]) .attachment-rename input {
   color: #e4e4e4;
   background: #272727;
   border-color: #565656;
@@ -7797,6 +7799,76 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .my-shape-move-select {
 
 html[data-theme="dark"]:where([data-palette="graphite"]) .my-shapes-form-problem {
   color: #ff8a80;
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .attachments-indicator {
+  background: #d9730d;
+  border: 2px solid #f9f9f9;
+  box-shadow: 0 1px 3px rgba(40, 40, 40, 0.35);
+}
+
+html[data-theme="dark"]:where([data-palette="graphite"]) .attachments-indicator {
+  border-color: #272727;
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .attachment-row {
+  background: #fff;
+  border: 1px solid #dddddd;
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .attachment-row > svg {
+  color: #6b6b6b;
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .attachment-name {
+  color: #5a3917;
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .attachment-row small {
+  color: #6b6b6b;
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .attachments-note {
+  color: #565656;
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .attachment-clash {
+  color: #5a3917;
+  background: #f6f6f6;
+  border: 1px solid #e3b98f;
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .attachment-clash small {
+  color: #6b6b6b;
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .attachment-rename input[aria-invalid="true"] {
+  border-color: #b42318;
+}
+
+html[data-theme="dark"]:where([data-palette="graphite"]) .attachment-row {
+  background: #2d2d2d;
+  border-color: #4d4d4d;
+}
+
+html[data-theme="dark"]:where([data-palette="graphite"]) .attachment-row > svg,
+html[data-theme="dark"]:where([data-palette="graphite"]) .attachment-row small,
+html[data-theme="dark"]:where([data-palette="graphite"]) .attachment-clash small {
+  color: #909090;
+}
+
+html[data-theme="dark"]:where([data-palette="graphite"]) .attachment-name {
+  color: #e4e4e4;
+}
+
+html[data-theme="dark"]:where([data-palette="graphite"]) .attachments-note {
+  color: #bababa;
+}
+
+html[data-theme="dark"]:where([data-palette="graphite"]) .attachment-clash {
+  color: #e4e4e4;
+  background: #313131;
+  border-color: #585858;
 }
 
 :where(html[data-theme="dark"][data-palette="graphite"]) .view-cube {

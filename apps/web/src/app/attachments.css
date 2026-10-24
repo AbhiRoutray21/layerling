@@ -1,0 +1,148 @@
+/*
+ * The attachments (#820): the clip's dot in the Manage toolbar and the panel with the list of files
+ * kept with a design. The upload button is the Import panel's, and the small buttons are the ones
+ * of the My shapes list.
+ */
+
+/*
+ * The dot on the clip while a design has attachments: the orange of the badge on the visibility
+ * button, smaller because it only says "there are some", not how many (the button's name does).
+ */
+.action-icon-button.has-attachments {
+  position: relative;
+}
+
+.attachments-indicator {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 10px;
+  height: 10px;
+  background: #d9730d;
+  border: 2px solid #fffaf2;
+  border-radius: 999px;
+  box-shadow: 0 1px 3px rgba(60, 40, 10, 0.35);
+  pointer-events: none;
+}
+
+html[data-theme="dark"] .attachments-indicator {
+  border-color: #2a2118;
+}
+
+.attachments-panel {
+  display: grid;
+  gap: 10px;
+}
+
+.attachments-list {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.attachment-row {
+  display: grid;
+  grid-template-columns: 16px minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  background: #fff;
+  border: 1px solid #ebe1cf;
+  border-radius: 8px;
+}
+
+.attachment-row > svg {
+  width: 16px;
+  height: 16px;
+  color: #8e7a66;
+}
+
+.attachment-name {
+  overflow: hidden;
+  color: #5a3917;
+  font-size: 13px;
+  font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.attachment-row small {
+  color: #8e7a66;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.attachment-actions,
+.attachment-clash-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.attachments-note {
+  margin: 0;
+  color: #7b6249;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.attachment-clash {
+  display: grid;
+  gap: 8px;
+  padding: 10px 12px;
+  color: #5a3917;
+  background: #fff7ec;
+  border: 1px solid #e3b98f;
+  border-radius: 8px;
+}
+
+.attachment-clash p {
+  display: grid;
+  gap: 2px;
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+.attachment-clash small {
+  color: #8e7a66;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.attachment-rename {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.attachment-rename input[aria-invalid="true"] {
+  border-color: #b42318;
+}
+
+html[data-theme="dark"] .attachment-row {
+  background: #35281b;
+  border-color: #5e4c3a;
+}
+
+html[data-theme="dark"] .attachment-row > svg,
+html[data-theme="dark"] .attachment-row small,
+html[data-theme="dark"] .attachment-clash small {
+  color: #b9a58f;
+}
+
+html[data-theme="dark"] .attachment-name {
+  color: #f0e7d9;
+}
+
+html[data-theme="dark"] .attachments-note {
+  color: #cdbca6;
+}
+
+html[data-theme="dark"] .attachment-clash {
+  color: #f0e7d9;
+  background: #3a2c1f;
+  border-color: #7a5b35;
+}

@@ -90,6 +90,7 @@ import { createCadPreviewQueue } from "@/lib/cadPreviewQueue";
 import { cloneWorkplaneShapeSnapshot, compactEdgeTreatmentHistory, edgeTreatmentAppliedFrame, groupBeforeEdgeTreatments, restoreShapeBeforeEdgeTreatment, wasGroupBeforeEdgeTreatments } from "@/lib/edgeTreatmentHistory";
 import { historyStepsAround } from "@/lib/historyStepDescription";
 import { historyViewMcpCommand } from "./workplane/historyViewMcp";
+import { attachmentsFingerprint } from "@/lib/projectAttachments";
 import { appendEditorHistorySnapshot, boundedEditorHistoryState, continuesKeyRun, type KeyRun, editorHistoryBranch, editorHistoryEntry, editorHistoryForExport, historyStateAt, hydrateEditorHistoryState, notesForHistoryIndex, projectSceneFingerprint, projectShapesFingerprint, workplaneForHistoryIndex, type EditorHistoryEntry, type EditorHistoryState } from "@/lib/editorHistory";
 import { snapShapeFootprintToVisibleGrid, visibleGridStep } from "@/lib/gridSnap";
 import { composedShapeRotation, geometryRotationDegreesForShortcut, geometryRotationDelta, rotatedGeometryShapePatch } from "@/lib/geometryRotation";
@@ -162,7 +163,7 @@ import { LAYERLING_MCP_HEARTBEAT_MS, LAYERLING_MCP_POLL_RETRY_MS, LAYERLING_MCP_
 import type { CadFaceInfo, CadModifierComponentMesh, CadModifierDeflection, CadModifierDisplayEdge, CadModifierEdge, CadModifierFaces, CadModifierGridfinityPart, CadModifierHelicalGearPart, CadModifierKind, CadModifierMeshPart, CadModifierPrimitivePart, CadModifierProfilePart, CadModifierQuality, CadModifierSpringPart, CadModifierThreadPart, CadModifierWorkerRequest, CadModifierWorkerResponse } from "@/lib/cadModifierTypes";
 import { getSectionBounds, sectionAxisLetter, sectionMeshInFrame, sectionPlacementWorkplane, sectionPointFromFrame, sectionPointToFrame, type SectionFrame, type SectionOrientation, type SectionPlaneAxis, type SectionPlaneSettings } from "@/lib/sectionView";
 import { footprintCutOffset, projectSectionPoint, SECTION_VIEW_FACE, sectionSvgDocument, sliceMeshContours } from "@/lib/sectionSvg";
-import type { AlignAxis, AlignHandleStatus, AlignTarget, GridSize, ParametricSource, ProjectAsset, ShapeAsset, ShapeCustomization, ShapeKind, SketchImage, SketchOperation, SketchPoint, SketchProfile, SketchRevolveSettings, SketchSegment, ShellEdges, ShellOpenings, ShellSide, SweepAnchor, WorkplaneNote, WorkplaneShape, WorkplaneWorkspaceSettings } from "@/types/layerling";
+import type { AlignAxis, AlignHandleStatus, AlignTarget, GridSize, ParametricSource, ProjectAsset, ProjectAttachment, ShapeAsset, ShapeCustomization, ShapeKind, SketchImage, SketchOperation, SketchPoint, SketchProfile, SketchRevolveSettings, SketchSegment, ShellEdges, ShellOpenings, ShellSide, SweepAnchor, WorkplaneNote, WorkplaneShape, WorkplaneWorkspaceSettings } from "@/types/layerling";
 import { type Vec3, type MeshData, type Cuboid, type ShapeUpdatePatch, type ManifoldSolid, MIN_SHAPE_DIMENSION, resetManifoldRuntime, cleanModelDimension, getManifoldRuntime, meshForShape, meshReachAlong, appendMeshData, formatTriangleCount, shapeAabb, boundsForShapes, boundsForCuboids, meshAabb, boundsForPositions, quantizedPointKey } from "@/lib/editorMeshCore";
 import { meshPartCount } from "@/lib/meshPartCount";
 import { buildGroupedShapeOffThread, exportSolidVolumeOffThread, simplifyTrianglePositionsOffThread, splitShapesByPlaneOffThread, subscribeGeometryBusy, warmGeometryWorker } from "@/lib/geometryWorker";
@@ -219,6 +220,8 @@ export type HistoryProjectRequest = {
   history: EditorHistoryEntry[];
   historyIndex: number;
   assets: ProjectAsset[];
+  /** The files kept with the design (#820): not part of the history, so the new design gets the current ones. */
+  attachments: ProjectAttachment[];
   workspace: WorkplaneWorkspaceSettings;
   snapGrid: GridSize;
   placementElevation: number;
@@ -2465,8 +2468,12 @@ const LOCKED_SHAPE_PATCH_KEYS = new Set(["locked", "hidden", "name"]);
 /** A preview of an intersection is not calculated for more triangles than this: it would stutter while a shape is moved (#372). */
 const INTERSECT_PREVIEW_MAX_TRIANGLES = 40000;
 
+/** The files of a design that has none: one list, so that nothing sees a change where there is none. */
+const NO_ATTACHMENTS: ProjectAttachment[] = [];
+
 export function LayerlingEditor({
   initialAssets = [],
+  initialAttachments,
   initialShapes = [],
   initialHistory,
   initialHistoryIndex,
@@ -2498,6 +2505,8 @@ export function LayerlingEditor({
   onThemePreferenceChange,
 }: {
   initialAssets?: ProjectAsset[];
+  /** The files kept with the design (#820). */
+  initialAttachments?: ProjectAttachment[];
   initialShapes?: WorkplaneShape[];
   initialHistory?: EditorHistoryEntry[];
   initialHistoryIndex?: number;
@@ -2518,6 +2527,7 @@ export function LayerlingEditor({
     history: EditorHistoryEntry[];
     historyIndex: number;
     assets: ProjectAsset[];
+    attachments: ProjectAttachment[];
     projectName: string;
     projectCreatedAt: number;
     workspace: WorkplaneWorkspaceSettings;
@@ -2580,6 +2590,7 @@ export function LayerlingEditor({
   overhangsVisibleRef.current = overhangsVisible;
   const [noteMode, setNoteMode] = useState(false);
   const [projectAssets, setProjectAssets] = useState<ProjectAsset[]>(() => dedupeProjectAssets(initialAssets));
+  const [projectAttachments, setProjectAttachments] = useState<ProjectAttachment[]>(() => initialAttachments ?? NO_ATTACHMENTS);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [clipboard, setClipboard] = useState<WorkplaneShape[]>([]);
   const clipboardCopiedAtRef = useRef(0);
@@ -2857,6 +2868,7 @@ export function LayerlingEditor({
   const shapesRef = useRef(shapes);
   const notesRef = useRef(notes);
   const projectAssetsRef = useRef(projectAssets);
+  const projectAttachmentsRef = useRef(projectAttachments);
   const selectedIdsRef = useRef(selectedIds);
   const workspaceSettingsRef = useRef(workspaceSettings);
 
@@ -3259,6 +3271,10 @@ export function LayerlingEditor({
   useEffect(() => {
     projectAssetsRef.current = projectAssets;
   }, [projectAssets]);
+
+  useEffect(() => {
+    projectAttachmentsRef.current = projectAttachments;
+  }, [projectAttachments]);
 
   useEffect(() => {
     selectedIdsRef.current = selectedIds;
@@ -3891,6 +3907,7 @@ export function LayerlingEditor({
         history: historyRef.current,
         historyIndex: historyIndexRef.current,
         assets: projectAssetsRef.current,
+        attachments: projectAttachmentsRef.current,
         projectName: projectInfoRef.current.projectName,
         projectCreatedAt: projectInfoRef.current.projectCreatedAt,
         workspace: workspaceSettingsRef.current,
@@ -3965,6 +3982,19 @@ export function LayerlingEditor({
       }, 120);
     },
     [emitProjectShapes, flushHeldProjectShapes, onProjectShapesChange, projectId],
+  );
+
+  /**
+   * Sets the files kept with the design and has them saved, as a change to the shapes is saved. They are
+   * not part of the undo history (#820), so this neither adds a step nor can be undone.
+   */
+  const updateProjectAttachments = useCallback(
+    (next: ProjectAttachment[]) => {
+      projectAttachmentsRef.current = next;
+      setProjectAttachments(next);
+      syncProjectShapes(shapesRef.current, true);
+    },
+    [syncProjectShapes],
   );
 
   /*
@@ -5343,6 +5373,9 @@ export function LayerlingEditor({
       const nextAssets = dedupeProjectAssets(initialAssets);
       projectAssetsRef.current = nextAssets;
       setProjectAssets(nextAssets);
+      const nextAttachments = initialAttachments ?? NO_ATTACHMENTS;
+      projectAttachmentsRef.current = nextAttachments;
+      setProjectAttachments(nextAttachments);
       const nextPlacementElevation = Number.isFinite(initialPlacementElevation) ? initialPlacementElevation : 0;
       setPlacementElevation(nextPlacementElevation);
       setPlacementWorkplane(normalizePlacementWorkplane(initialPlacementWorkplane, nextPlacementElevation));
@@ -5383,7 +5416,7 @@ export function LayerlingEditor({
     setHistory(hydratedHistory.entries);
     setHistoryIndex(hydratedHistory.index);
     // Was aus der Datei kam, ist der Stand, der auch auf dem Server liegt.
-    serverSavedFingerprintRef.current = { projectId: projectId ?? null, fingerprint: projectSceneFingerprint(incoming, incomingNotes) };
+    serverSavedFingerprintRef.current = { projectId: projectId ?? null, fingerprint: projectSceneFingerprint(incoming, incomingNotes) + attachmentsFingerprint(projectAttachmentsRef.current) };
     // Ein geoeffneter Entwurf ist keine Meldung wert: Dass er da ist, sieht man.
     setNotice("");
     // Anders, was man nicht sieht: A design that is opened with hidden shapes says so once, with a button to show them (#489).
@@ -5394,7 +5427,7 @@ export function LayerlingEditor({
       // Said a moment later (below): a language that settles after a reload clears every standing message.
       if (incoming.some((shape) => shape.hidden)) hiddenNoticePendingRef.current = true;
     }
-  }, [initialAssets, initialHistory, initialHistoryIndex, initialPlacementElevation, initialPlacementWorkplane, initialShapes, projectId, projectRevision]);
+  }, [initialAssets, initialAttachments, initialHistory, initialHistoryIndex, initialPlacementElevation, initialPlacementWorkplane, initialShapes, projectId, projectRevision]);
 
   // A design opened with hidden shapes says so once, with a button to show them (#489). Only once the
   // language and the shapes have settled, or the message would be wiped as out of date.
@@ -5997,6 +6030,7 @@ export function LayerlingEditor({
         history: branch.entries,
         historyIndex: branch.index,
         assets: projectAssetsRef.current,
+        attachments: projectAttachmentsRef.current,
         workspace: workspaceSettingsRef.current,
         snapGrid,
         placementElevation: view.placementElevation,
@@ -10789,6 +10823,7 @@ export function LayerlingEditor({
           history: exportedHistory.entries,
           historyIndex: exportedHistory.index,
           assets: projectAssetsRef.current,
+          attachments: projectAttachmentsRef.current,
           workspace: workspaceSettingsRef.current,
           snapGrid,
           placementElevation: view ? view.placementElevation : placementElevation,
@@ -11547,6 +11582,7 @@ export function LayerlingEditor({
         history: exportedHistory.entries,
         historyIndex: exportedHistory.index,
         assets: projectAssetsRef.current,
+        attachments: projectAttachmentsRef.current,
         workspace: workspaceSettingsRef.current,
         snapGrid,
         placementElevation: view ? view.placementElevation : placementElevation,
@@ -11647,6 +11683,7 @@ export function LayerlingEditor({
           : reportErrorsRef.current,
       });
       const exportedHistory = editorHistoryForExport(historyRef.current, historyIndexRef.current, "unlimited");
+      // No attachments in a bug report (#820): the file is meant to be sent in, and what a user attached to the design is theirs.
       const bytes = await exportLylProject({
         projectId: projectInfoRef.current.projectId,
         projectName,
@@ -11748,6 +11785,7 @@ export function LayerlingEditor({
         history: exportedHistory.entries,
         historyIndex: exportedHistory.index,
         assets: projectAssetsRef.current,
+        attachments: projectAttachmentsRef.current,
         workspace: workspaceSettingsRef.current,
         snapGrid,
         placementElevation,
@@ -11783,7 +11821,8 @@ export function LayerlingEditor({
     // laedt seine Formen nach, und dieser Effekt lief danach ein zweites Mal -
     // mit demselben Inhalt. Das galt frueher als Aenderung und liess einen
     // Entwurf, den niemand angefasst hatte, kurz darauf hochladen.
-    const fingerprint = projectSceneFingerprint(shapes, notes);
+    // The files of the design count as content too: one added or removed is saved to the server like a shape.
+    const fingerprint = projectSceneFingerprint(shapes, notes) + attachmentsFingerprint(projectAttachments);
     if (serverSaveProjectRef.current !== (projectId ?? null)) {
       serverSaveProjectRef.current = projectId ?? null;
       serverSaveStoppedRef.current = false;
@@ -11802,7 +11841,7 @@ export function LayerlingEditor({
       serverSaveTimerRef.current = null;
       void saveToServerRef.current();
     }, SERVER_SAVE_IDLE_MS);
-  }, [notes, projectId, serverFileName, shapes]);
+  }, [notes, projectAttachments, projectId, serverFileName, shapes]);
 
   // Leaving the editor is the other moment worth saving at. The upload itself
   // lives in the page above, so it survives this component going away.
@@ -12805,6 +12844,7 @@ export function LayerlingEditor({
         noteMode={noteMode}
         notesVisible={notesVisible}
         noteCount={notes.length}
+        attachmentCount={projectAttachments.length}
         onNoteTool={toggleNoteTool}
         onToggleNotes={toggleNotesVisible}
         overhangsVisible={overhangsVisible}
@@ -13453,6 +13493,11 @@ export function LayerlingEditor({
           onPickInsertProjectFile={() => insertProjectFileInputRef.current?.click()}
           onPickReferenceImage={() => referenceImageInputRef.current?.click()}
           workspaceHistoryLimit={workspaceSettings.historyLimit}
+          attachments={projectAttachments}
+          attachmentsLocked={historyViewIndex !== null}
+          onAttachmentsChange={updateProjectAttachments}
+          onAttachmentDownload={(attachment) => void downloadBlobFile(attachment.name, new Blob([attachment.bytes as BlobPart], { type: attachment.mediaType }))}
+          onAttachmentNotice={setNotice}
         />
       ) : null}
       <input
