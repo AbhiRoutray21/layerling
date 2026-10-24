@@ -11,6 +11,13 @@ import { normalizeSketchStroke, SKETCH_STROKE_JOINS } from "@/lib/sketchStroke";
 import { normalizeTextEdge } from "@/lib/textEdge";
 import { isTextKeyring } from "@/lib/textGeometry";
 import { normalizeNotes } from "@/lib/workplaneNotes";
+import {
+  ATTACHMENT_LIMITS,
+  attachmentListProblem,
+  attachmentProblemText,
+  attachmentTypeForFileName,
+  attachmentTypeForMediaType,
+} from "@/lib/projectAttachments";
 import { normalizeQrSettings } from "@/lib/qrCode";
 import { importedShapeFromStl } from "@/lib/stlImport";
 import { importedShapeFromSvg } from "@/lib/svgImport";
@@ -20,7 +27,7 @@ import { isSketchKeyring } from "@/lib/sketchKeyring";
 import { isReferenceImageOpacity } from "@/lib/referenceImage";
 import { isThreadProfile } from "@/lib/threadProfiles";
 import { normalizeSnapGrid, normalizeWorkspaceSettings } from "@/lib/workplaneSettings";
-import type { CadDisplayEdge, GridSize, ProjectAsset, ProjectAssetSourceFormat, SketchOperation, SketchRevolveSettings, WorkplaneNote, WorkplaneShape, WorkplaneWorkspaceSettings } from "@/types/layerling";
+import type { CadDisplayEdge, GridSize, ProjectAsset, ProjectAssetSourceFormat, ProjectAttachment, SketchOperation, SketchRevolveSettings, WorkplaneNote, WorkplaneShape, WorkplaneWorkspaceSettings } from "@/types/layerling";
 
 export const LYL_SCHEMA_ID = "com.layerling.project";
 /** Written before the rename. Such a package is still opened - and saved back
@@ -32,8 +39,15 @@ function knownSchema(schema: unknown) {
 }
 // Version 2 stores display edges as deduplicated archive assets instead of repeating
 // them inside every undo state. Version 1 packages are still read and migrated.
+// This is the version a design is written with, unless it has attachments.
 export const LYL_FORMAT_VERSION = 2;
 export const LYL_MINIMUM_READER_VERSION = 2;
+// Version 3 adds the files a design carries (#820). It is written only for a design that has
+// some, so every other design stays a version 2 file, and a layerling that knows version 2 only
+// refuses a version 3 package instead of opening it and dropping the files at its next save.
+export const LYL_ATTACHMENTS_FORMAT_VERSION = 3;
+/** The newest format this layerling reads. */
+export const LYL_NEWEST_READABLE_FORMAT_VERSION = LYL_ATTACHMENTS_FORMAT_VERSION;
 export const LYL_OLDEST_READABLE_FORMAT_VERSION = 1;
 export const LYL_CREATED_WITH_VERSION = "1.107.0";
 export const LYL_MEDIA_TYPE = "application/vnd.layerling.project+zip";
@@ -60,7 +74,12 @@ const FEATURE_TYPES = new Set([
   "group", "boolean-subtraction", "boolean-intersection", "mirror", "sketch-extrusion", "sketch-revolve", "sketch-sweep", "fillet", "chamfer", "chamfillet", "shell", "delete-face",
 ]);
 
-type LylAssetKind = "source" | "derived-mesh" | "brep" | "image" | "display-edges";
+type LylAssetKind = "source" | "derived-mesh" | "brep" | "image" | "display-edges" | "attachment";
+
+const LYL_ASSET_KINDS: readonly LylAssetKind[] = ["source", "derived-mesh", "brep", "image", "display-edges", "attachment"];
+
+/** A file the design carries: its name, and the asset that holds its bytes (two names may share one asset). */
+export type LylAttachmentV3 = { id: string; fileName: string; assetId: string };
 
 export type LylAssetRecordV1 = {
   id: string;
@@ -169,7 +188,7 @@ function validateFonts(fonts: unknown) {
 
 export type LylProjectDocumentV1 = {
   schema: typeof LYL_SCHEMA_ID | typeof LEGACY_LYL_SCHEMA_ID;
-  formatVersion: 1 | 2;
+  formatVersion: 1 | 2 | 3;
   minimumReaderVersion: number;
   createdWithVersion: string;
   metadata: {
@@ -197,6 +216,8 @@ export type LylProjectDocumentV1 = {
   groups: Array<{ id: string; nodeId: string; objectId: string; memberNodeIds: string[]; operation: string }>;
   workplanes: Array<{ id: string; kind: "base" | "offset"; elevation: number }>;
   exactCad: Array<{ nodeId: string; objectId: string; brepAssetId?: string; importedStepAssetId?: string }>;
+  /** The files kept with the design (#820), in the order they are listed; a version 3 package only. */
+  attachments?: LylAttachmentV3[];
   /**
    * Fonts of one's own the texts use (#customFonts): only the letters they use, as outlines in the
    * three.js typeface format - never the font file. Older readers pass over them and draw those
@@ -227,6 +248,8 @@ export type LylProjectExportInput = {
   history: EditorHistoryEntry[];
   historyIndex: number;
   assets: ProjectAsset[];
+  /** The files kept with the design (#820). A design with any is written as a version 3 package. */
+  attachments?: ProjectAttachment[];
   workspace: WorkplaneWorkspaceSettings;
   snapGrid: GridSize;
   placementElevation: number;
@@ -251,6 +274,8 @@ export type LylRestoredProject = {
   history: EditorHistoryEntry[];
   historyIndex: number;
   assets: ProjectAsset[];
+  /** The files the design carried, when the file has any. */
+  attachments?: ProjectAttachment[];
   workspace: WorkplaneWorkspaceSettings;
   snapGrid: GridSize;
   placementElevation: number;
@@ -322,6 +347,7 @@ function extensionForAsset(kind: LylAssetKind, mediaType: string, sourceFormat?:
   if (kind === "derived-mesh") return "lylmesh";
   if (kind === "display-edges") return "lyledges";
   if (kind === "brep") return "brep";
+  if (kind === "attachment") return attachmentTypeForMediaType(mediaType)?.extension ?? "bin";
   if (mediaType.includes("png")) return "png";
   if (mediaType.includes("jpeg")) return "jpg";
   if (mediaType.includes("webp")) return "webp";
@@ -619,6 +645,19 @@ class LylArchiveBuilder {
         : await this.addAsset("source", encode(), asset.mediaType, options);
       this.sourceIdMap.set(asset.id, record.id);
     }
+  }
+
+  /**
+   * Registers the files a design carries and lists each under its own name. Bytes that are the same
+   * are stored once, and hashed once however often the design is saved, as the sources are.
+   */
+  async addAttachments(attachments: readonly ProjectAttachment[]) {
+    const records: LylAttachmentV3[] = [];
+    for (const attachment of attachments) {
+      const asset = await this.addCachedAsset(attachment.bytes, "attachment", () => attachment.bytes, attachment.mediaType);
+      records.push({ id: attachment.id, fileName: attachment.name, assetId: asset.id });
+    }
+    return records;
   }
 
   addDerivedMesh(mesh: NonNullable<WorkplaneShape["importedMesh"]>) {
@@ -984,6 +1023,13 @@ export async function exportLylProject(input: LylProjectExportInput) {
   const stateShapes = exportEntries.map((entry) => entry.shapes);
   const designFonts = embeddedFonts(stateShapes);
   await builder.addSources(input.assets, referencedSourceAssetIds(stateShapes));
+  // The files of the design (#820) become assets of the kind "attachment", and the document lists them
+  // below under their own names. The list is checked first with what a reader would check, so a
+  // package that would not open again is never written.
+  const attachments = input.attachments ?? [];
+  const attachmentProblem = attachmentListProblem(attachments);
+  if (attachmentProblem) throw new Error(attachmentProblemText(attachmentProblem.problem, attachmentProblem.fileName));
+  const attachmentRecords = await builder.addAttachments(attachments);
   const sourceAssetsByArchiveId = new Map(builder.assets.filter((asset) => asset.kind === "source").map((asset) => [asset.id, asset]));
   // A state is serialized once and its text remembered on its history entry: the
   // states of an unchanged history come out the same on every save, and a long
@@ -1034,8 +1080,11 @@ export async function exportLylProject(input: LylProjectExportInput) {
   const selectedWorkplaneId = placementWorkplaneIsBase(placementWorkplane) ? "workplane-base" : "workplane-active";
   const document: Omit<LylProjectDocumentV1, "states"> & { states: typeof STATES_PLACEHOLDER } = {
     schema: LYL_SCHEMA_ID,
-    formatVersion: LYL_FORMAT_VERSION,
-    minimumReaderVersion: LYL_MINIMUM_READER_VERSION,
+    // Only a design that has attachments is a version 3 package: a layerling that does not know them
+    // refuses it (see LYL_ATTACHMENTS_FORMAT_VERSION) instead of dropping the files at its next save.
+    // Every other design is written exactly as before.
+    formatVersion: attachmentRecords.length > 0 ? LYL_ATTACHMENTS_FORMAT_VERSION : LYL_FORMAT_VERSION,
+    minimumReaderVersion: attachmentRecords.length > 0 ? LYL_ATTACHMENTS_FORMAT_VERSION : LYL_MINIMUM_READER_VERSION,
     createdWithVersion: LYL_CREATED_WITH_VERSION,
     metadata: {
       ...(input.projectId ? { projectId: input.projectId } : {}),
@@ -1056,6 +1105,7 @@ export async function exportLylProject(input: LylProjectExportInput) {
       ...(selectedWorkplaneId === "workplane-active" ? [{ id: "workplane-active" as const, kind: "offset" as const, elevation: placementElevation }] : []),
     ],
     exactCad: indexes.exactCad,
+    ...(attachmentRecords.length > 0 ? { attachments: attachmentRecords } : {}),
     ...(designFonts.length ? { fonts: designFonts } : {}),
     editor: {
       workspace: normalizeWorkspaceSettings(input.workspace),
@@ -1701,13 +1751,13 @@ async function validateDocumentAndAssets(raw: unknown, files: ArchiveFiles) {
   const document = objectRecord(raw, "project.json") as unknown as LylProjectDocumentV1;
   if (!knownSchema(document.schema)) throw new Error("This file is not a layerling project");
   if (!Number.isInteger(document.formatVersion)) throw new Error("layerling formatVersion is missing");
-  if (document.formatVersion > LYL_FORMAT_VERSION) {
+  if (document.formatVersion > LYL_NEWEST_READABLE_FORMAT_VERSION) {
     throw new Error(`This project uses project format ${document.formatVersion}, which requires a newer layerling version`);
   }
   if (document.formatVersion < LYL_OLDEST_READABLE_FORMAT_VERSION) {
     throw new Error(`Packaged project format ${document.formatVersion} requires migration support that is not available`);
   }
-  if (!Number.isInteger(document.minimumReaderVersion) || document.minimumReaderVersion > LYL_FORMAT_VERSION) {
+  if (!Number.isInteger(document.minimumReaderVersion) || document.minimumReaderVersion > LYL_NEWEST_READABLE_FORMAT_VERSION) {
     throw new Error("This project requires a newer layerling reader and was not opened");
   }
   const metadata = objectRecord(document.metadata, "metadata");
@@ -1726,7 +1776,7 @@ async function validateDocumentAndAssets(raw: unknown, files: ArchiveFiles) {
     const asset = document.assets[index];
     const id = stringValue(asset?.id, `assets[${index}].id`);
     if (assetById.has(id)) throw new Error(`Duplicate asset ID '${id}'`);
-    if (!asset || !["source", "derived-mesh", "brep", "image", "display-edges"].includes(asset.kind)) throw new Error(`Asset '${id}' has an unknown type`);
+    if (!asset || !LYL_ASSET_KINDS.includes(asset.kind)) throw new Error(`Asset '${id}' has an unknown type`);
     if (!safeArchivePath(asset.path) || assetPaths.has(asset.path)) throw new Error(`Asset '${id}' has an unsafe or duplicate path`);
     assetPaths.add(asset.path);
     const bytes = files[asset.path];
@@ -1737,8 +1787,18 @@ async function validateDocumentAndAssets(raw: unknown, files: ArchiveFiles) {
     if (asset.kind === "source" && !["stl", "obj", "svg", "step", "3mf"].includes(asset.sourceFormat ?? "")) {
       throw new Error(`Source asset '${id}' has an unknown source format`);
     }
+    // An attachment's bytes are checked again here, whatever the package says about them: its type has to
+    // be one that may be attached and its content has to be what that type is (see projectAttachments.ts).
+    if (asset.kind === "attachment") {
+      const type = attachmentTypeForMediaType(asset.mediaType);
+      if (!type) throw new Error(`Attachment asset '${id}' has a file type that cannot be attached`);
+      const problem = bytes.byteLength === 0 ? "empty" : bytes.byteLength > ATTACHMENT_LIMITS.fileBytes ? "tooBig" : type.check(bytes);
+      if (problem) throw new Error(`Attachment asset '${id}': ${attachmentProblemText(problem)}`);
+    }
     assetById.set(id, asset);
   }
+  // The list of files comes after the assets: it is checked against them.
+  const attachments = validateAttachments(document, assetById);
 
   const stateById = new Map<string, LylStateV1>();
   const activeObjectIds = new Set<string>();
@@ -1816,7 +1876,30 @@ async function validateDocumentAndAssets(raw: unknown, files: ArchiveFiles) {
       finiteNumber(coordinates.z, `editor.${fieldName}.${field}.z`);
     }
   }
-  return { document, assetById, stateById };
+  return { document, assetById, stateById, attachments };
+}
+
+/** The list of files a package carries, checked: each has its file, a name that suits its type, and the whole is within the limits. */
+function validateAttachments(document: LylProjectDocumentV1, assetById: Map<string, LylAssetRecordV1>) {
+  if (document.attachments === undefined) return [];
+  if (document.formatVersion < LYL_ATTACHMENTS_FORMAT_VERSION) throw new Error(`Project format ${document.formatVersion} does not carry attachments`);
+  if (!Array.isArray(document.attachments)) throw new Error("project.json attachments must be a list");
+  const ids = new Set<string>();
+  const records = document.attachments.map((entry, index): LylAttachmentV3 => {
+    const record = objectRecord(entry, `attachments[${index}]`);
+    const id = stringValue(record.id, `attachments[${index}].id`);
+    const fileName = stringValue(record.fileName, `attachments[${index}].fileName`);
+    const assetId = stringValue(record.assetId, `attachments[${index}].assetId`);
+    if (ids.has(id)) throw new Error(`Duplicate attachment ID '${id}'`);
+    ids.add(id);
+    const asset = assetById.get(assetId);
+    if (!asset || asset.kind !== "attachment") throw new Error(`Attachment '${fileName}' is missing its file`);
+    if (attachmentTypeForFileName(fileName)?.mediaType !== asset.mediaType) throw new Error(`Attachment '${fileName}' does not match the type of its file`);
+    return { id, fileName, assetId };
+  });
+  const problem = attachmentListProblem(records.map((record) => ({ name: record.fileName, byteLength: assetById.get(record.assetId)?.byteLength ?? 0 })));
+  if (problem) throw new Error(attachmentProblemText(problem.problem, problem.fileName));
+  return records;
 }
 
 type ImportedMesh = NonNullable<WorkplaneShape["importedMesh"]>;
@@ -2015,6 +2098,12 @@ async function restoreV1(document: LylProjectDocumentV1, assetById: Map<string, 
   const hydrated = hydrateEditorHistoryState(shapes, history, document.history.index, "unlimited", notes, placementWorkplane);
   const restoredView = normalizeDesignView(document.editor.view);
   const restoredSavedViews = normalizeSavedViews(document.editor.savedViews);
+  // The files were checked with the document; each is copied out of the archive.
+  const attachments = (document.attachments ?? []).map((record): ProjectAttachment => {
+    const asset = assetById.get(record.assetId) as LylAssetRecordV1;
+    const bytes = new Uint8Array(files[asset.path]);
+    return { id: record.id, name: record.fileName, mediaType: asset.mediaType, bytes, byteLength: bytes.byteLength, sha256: asset.sha256 };
+  });
   if (hydrated.entries.length !== history.length || hydrated.index !== document.history.index) throw new Error("Undo history could not be restored without data loss");
   return {
     sourceProjectId: document.metadata.projectId,
@@ -2026,6 +2115,7 @@ async function restoreV1(document: LylProjectDocumentV1, assetById: Map<string, 
     history: hydrated.entries,
     historyIndex: hydrated.index,
     assets: [...runtimeAssetByArchiveId.values()],
+    ...(attachments.length > 0 ? { attachments } : {}),
     workspace: normalizeWorkspaceSettings(document.editor.workspace),
     snapGrid: normalizeSnapGrid(document.editor.snapGrid),
     placementElevation: document.editor.placementElevation,
