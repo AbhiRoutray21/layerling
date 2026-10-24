@@ -10,7 +10,7 @@ layerling läuft im Browser eines Tablets und als App vom Startbildschirm. Ein F
 | Du willst | Auf dem Tablet |
 | --- | --- |
 | Einen Körper wählen | Auf ihn tippen. |
-| Mehrere Körper wählen | Einen Körper antippen: Unten links erscheint ein runder Knopf. Halte ihn mit einem Finger und tippe mit einem anderen die weiteren Körper an; ein Tipp auf einen gewählten Körper nimmt ihn wieder heraus. Oder einen Finger eine halbe Sekunde ruhig halten, {{ui:contextMenu.selectMultiple}} wählen, dann einen Körper nach dem anderen antippen. |
+| Mehrere Körper wählen | Einen Finger eine halbe Sekunde ruhig halten, {{ui:contextMenu.selectMultiple}} wählen, dann einen Körper nach dem anderen antippen. Ein Tipp auf einen gewählten Körper nimmt ihn wieder heraus. |
 | Alle Körper wählen | Einen Finger eine halbe Sekunde ruhig auf die leere Fläche halten, {{ui:contextMenu.selectAll}} wählen. |
 | Das Menü eines Rechtsklicks öffnen | Einen Finger eine halbe Sekunde ruhig auf einen Körper oder die leere Fläche halten. |
 | Einen Körper verschieben | Ihn ziehen. |
