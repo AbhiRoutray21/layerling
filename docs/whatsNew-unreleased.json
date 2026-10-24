@@ -18,5 +18,15 @@
       "de": "Eine offen geschaltete Seite eines Gridfinity-Behälters muss nicht mehr ganz offen sein: Im Eigenschaften-Fenster hat jede offene Seite die Zeilen „Tiefe“, „Breite“ und „Position“ für ihre Öffnung, für einen Schlitz zum Hineingreifen oder eine niedrigere Wand. Die Ecken und der Stapelrand neben der Öffnung bleiben, Behälter lassen sich also weiter darauf stapeln. Mit „Ecken der Öffnung“ und „Größe der Öffnungsecken“ lassen sich die Ecken der Öffnung selbst verrunden oder fasen.",
       "en": "A Gridfinity bin's open side no longer has to be open in full: in the Properties panel each open side has \"Depth\", \"Width\" and \"Position\" rows for its opening, for a slot to reach into or a lower wall. The corners and the lip beside the opening stay, so bins still stack on it. \"Opening corners\" and \"Opening corner size\" round or chamfer the opening's own corners."
     }
+  },
+  {
+    "title": {
+      "de": "Kurve durch Punkte",
+      "en": "Curve through points"
+    },
+    "body": {
+      "de": "Wähle in der Skizze drei oder mehr Punkte eines Umrisses und klicke in der Leiste auf „Kurve durch Punkte“: Vom ersten bis zum letzten Punkt entsteht eine fließende Kurve durch alle Punkte dazwischen, in anderen Programmen „Fit curve“ oder „Fit point spline“ genannt. Die Linien jenseits der beiden Enden bleiben, wie sie sind.",
+      "en": "Select three or more points of an outline in a sketch and click \"Curve through points\" in the bar: one flowing curve runs from the first point to the last, through all the points between, what other programs call \"Fit curve\" or \"Fit point spline\". The lines beyond the two ends stay as they are."
+    }
   }
 ]
