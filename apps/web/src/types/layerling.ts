@@ -1017,6 +1017,9 @@ export type WorkplaneShape = {
     baseDepth: number;
     baseHeight: number;
     triangleCount: number;
+    // Only on the sketch's own copy of a body on a workplane set on a face: how many triangles of `positions` belong to
+    // each visible part in turn (one count for a single body); the sketch shows each part as seen from the plane (#778). Never saved.
+    partTriangleCounts?: number[];
     sourceFormat: "stl" | "obj" | "svg" | "json" | "step" | "3mf";
     // IndexedDB persistence uses this only in compact stored shape records.
     // Runtime editor shapes are hydrated with the full immutable mesh resource.

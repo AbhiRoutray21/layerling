@@ -3619,7 +3619,7 @@ export function LayerlingEditor({
     if (onBase && !shapes.some(tilted)) return shapes;
     return shapes.map((shape) => shape.hidden || shape.id === editingSketchShapeId || (onBase && !tilted(shape))
       ? shape
-      : sketchReferenceShapeOnWorkplane(shape, activeSketchWorkplane));
+      : sketchReferenceShapeOnWorkplane(shape, activeSketchWorkplane, !onBase));
   }, [activeSketchWorkplane, editingSketchShapeId, revolveSketchFront, shapes, sketchActive]);
   // A workplane inside a body cuts it: the sketch view shows the outline of the cut (a hollow body
   // gives a ring), where a workplane on a face shows that face. Per body, as an SVG path in the
