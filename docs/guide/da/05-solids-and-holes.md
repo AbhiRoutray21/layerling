@@ -28,6 +28,8 @@ Sådan får du:
 
 Hvis der er flere solider i gruppen, samles de. To solider der rører hinanden bliver til én del.
 
+Med store meshes, som et importeret STL med hundredvis af tusinde trekanter, tager skæringen nogle få sekunder. layerling arbejder så i baggrunden og viser "{{ui:status.computing}}"; imens kan du dreje visningen og bruge grænsefladen. Ændrer du scenen i den tid, kasseres resultatet, og layerling siger det. Det samme gælder {{ui:editor.tool.split}}.
+
 Du kan behandle en gruppe som en form: flytte, rotere, farve, gruppere igen. {{ui:editor.tool.ungroup}} ([[Ctrl]]+[[Shift]]+[[G]]) opløser den og de enkelte dele er tilbage.
 
 ### Gøre en gruppe til et hul
@@ -80,6 +82,8 @@ En bemærkning: fas og rund du har lagt på **hele** gruppen mistes ved genopbyg
 {{ui:split.apply}} eller [[Enter]] laver snittet, [[Esc]] annullerer (mens der vælges en flade, stopper den første [[Esc]] kun valget). Hvert objekt planet skærer bliver til to lukkede former, opkaldt efter deres side, for eksempel "Kasse (Z+)" og "Kasse (Z-)"; objekter det rammer ved siden af bliver som de er. Et hul bliver til to huller, og en udhulet form beholder sit hulrum. Begge halvdele bliver hvor de var - til printning, læg hver på sin snitflade med {{ui:editor.tool.layFlat}}.
 
 Halvdelene er almindelige meshes: indstillinger som en cylinders sider eller en teksts bogstaver er væk, så sæt dem først. [[Ctrl]]+[[Z]] bringer originalen tilbage i ét skridt. Låste og skjulte objekter kan ikke deles.
+
+Et importeret mesh skal have en lukket overflade for at blive delt, grupperet eller skåret. Har det åbninger, som øjnene på en figur der er ladt åbne, eller en revne i et scan, lukker layerling dem først med et fladt låg og siger hvor mange den lukkede. Den lukker små åbninger og flade åbninger af enhver størrelse; en stor åbning hvis kant bøjer, overlader den til dig, og beskeden siger det. Luk den i det program modellen kommer fra, eller med et mesh-reparationsværktøj, og importer den igen.
 
 ## Adskil dele
 

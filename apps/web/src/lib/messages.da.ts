@@ -2353,6 +2353,8 @@ export const MESSAGES_DA: Partial<Record<MessageKey, string>> = {
   "workspace.stlAsDownloadHint": "Chrome og Edge skriver en STL ind i den samme fil hver gang. Slå dette til for at få en almindelig download i stedet: browseren nummerer så filerne, navn (1).stl, navn (2).stl.",
   "workspace.confirmTabClose": "Spørg før fanen lukkes",
   "workspace.confirmTabCloseHint": "Når et design er åbent, viser din browser sit eget spørgsmål, når du lukker fanen eller genindlæser den: \"Vil du forlade denne side?\". Dine designs gemmes alligevel efter hver ændring, så spørgsmålet er blot en påmindelse. Formuleringen er browserens.",
+  "workspace.softLightingHint": "Det meste af lyset kommer fra den retning, du ser i, og drejer sig med synet, så ingen flade bliver mørk, og ingen flade brændes ud til hvidt. Skyggerne bliver dog.",
+  "workspace.softLighting": "Blødt lys",
   "workspace.overhangAngle": "Markér overhæng fra {angle}°",
   "workspace.overhangStrict": "30° (forsigtig)",
   "workspace.overhangLoose": "70° (god køling)",
