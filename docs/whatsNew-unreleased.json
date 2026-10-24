@@ -18,5 +18,15 @@
       "de": "Ein Rechtsklick bietet jetzt „Anderes auswählen…“, wenn mehrere Formen unter dem Zeiger liegen: Die Liste zeigt sie von vorn nach hinten, die Form unter dem Zeiger wird auch durch andere hindurch umrandet, und ein Klick wählt sie aus. So kommst du an eine Aussparung in einem Körper, ohne die Ansicht zu drehen.",
       "en": "A right click now offers \"Select other…\" when several shapes lie under the pointer: the list shows them from front to back, the one you point at is outlined even through the others, and a click selects it. So you reach a hole inside a body without turning the view."
     }
+  },
+  {
+    "title": {
+      "de": "Das Winkellineal bleibt liegen",
+      "en": "The framing square stays where you put it"
+    },
+    "body": {
+      "de": "Ein gesetztes Winkellineal gehört jetzt zum Entwurf: Nach dem Neuladen oder beim nächsten Öffnen liegt es an derselben Stelle, gleich gedreht und mit denselben Messpunkten, auch aus einer .lyl-Datei. Mit dem × entfernst du es.",
+      "en": "A placed framing square now belongs to the design: after a reload or the next time you open it, it lies in the same place, turned the same way and measuring from the same points, also from a .lyl file. The × removes it."
+    }
   }
 ]
