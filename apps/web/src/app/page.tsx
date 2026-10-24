@@ -2016,14 +2016,23 @@ export default function Home() {
   const placeNewDesign = useCallback(async (project: DashboardProject, path = sharedPathRef.current): Promise<{ project: DashboardProject; problem?: string }> => {
     await serverAnswer.wait();
     if (!newDesignsGoToServer()) return { project };
-    const taken = [...projectsRef.current, ...sharedProjectsRef.current].map((entry) => entry.name);
-    const isTaken = taken.some((name) => name.trim().toLowerCase() === project.name.trim().toLowerCase());
-    const named = isTaken ? { ...project, name: duplicateName(project.name, taken, duplicateNamePatterns(), PROJECT_NAME_LIMIT) } : project;
-    try {
-      const saved = await putProjectOnServer(named, path);
-      return { project: { ...named, folderId: null, sharedProject: { fileName: saved.fileName, revision: saved.revision, path: saved.path ?? path } } };
-    } catch (error) {
-      return { project, problem: error instanceof Error ? localizedError(error.message) : t("notice.saveSharedFailed") };
+    // The names of the folder on screen are known; a name taken in another folder shows when the server refuses it.
+    const taken = path === sharedPathRef.current ? sharedProjectsRef.current.map((entry) => entry.name) : [];
+    const nameFor = (name: string) => duplicateName(name, taken, duplicateNamePatterns(), PROJECT_NAME_LIMIT);
+    let named = taken.some((name) => name.trim().toLowerCase() === project.name.trim().toLowerCase()) ? { ...project, name: nameFor(project.name) } : project;
+    for (let attempt = 0; ; attempt += 1) {
+      try {
+        const saved = await putProjectOnServer(named, path);
+        return { project: { ...named, folderId: null, sharedProject: { fileName: saved.fileName, revision: saved.revision, path: saved.path ?? path } } };
+      } catch (error) {
+        const message = error instanceof Error ? error.message : "";
+        if (message === t("notice.serverNameTaken", { name: named.name }) && attempt < 3) {
+          taken.push(named.name);
+          named = { ...project, name: nameFor(project.name) };
+          continue;
+        }
+        return { project, problem: message ? localizedError(message) : t("notice.saveSharedFailed") };
+      }
     }
   }, [newDesignsGoToServer, putProjectOnServer, serverAnswer]);
   // For the ways in that are set up above this point.
@@ -3755,7 +3764,7 @@ function Dashboard({
                     <button
                       className="dashboard-select dashboard-backup-button"
                       type="button"
-                      title={t("dashboard.newFolderTitle")}
+                      title={t(sharedProjectsEnabled && newDesignsOnServer ? "dashboard.newFolderOnServerTitle" : "dashboard.newFolderTitle")}
                       onClick={() => {
                         setLocalFolderNameDraft(suggestDesignFolderName(designFolders, t("shared.newFolderSuggestion"), openFolderId));
                         setLocalFolderDialog({ mode: "create" });

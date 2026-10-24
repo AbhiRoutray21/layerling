@@ -1409,6 +1409,11 @@ html[data-theme="dark"] .dashboard-trademark {
   color: #34503e;
 }
 
+.storage-notice.on-server .storage-notice-button.secondary {
+  color: #24553a;
+  box-shadow: inset 0 0 0 2px #3d8a59;
+}
+
 .storage-notice-icon {
   display: grid;
   flex: none;
@@ -12362,6 +12367,12 @@ html[data-theme="dark"] .storage-notice.on-server .storage-notice-text strong {
 
 html[data-theme="dark"] .storage-notice.on-server .storage-notice-text span {
   color: #bcd6c5;
+}
+
+html[data-theme="dark"] .storage-notice.on-server .storage-notice-button.secondary {
+  color: #dff0e5;
+  background: #15291d;
+  box-shadow: inset 0 0 0 2px #4f9a6a;
 }
 
 html[data-theme="dark"] .storage-notice-button.secondary {

@@ -89,6 +89,7 @@ export const MESSAGES_NL: Record<MessageKey, string> = {
   "dashboard.sharedProjects": "Op de server",
   "dashboard.projects": "Ontwerpen",
   "dashboard.newFolderTitle": "Een map maken voor de ontwerpen in deze browser",
+  "dashboard.newFolderOnServerTitle": "Een map maken in de servermap",
   "dashboard.folderTrailLabel": "Pad naar deze map",
   "dashboard.parentFolderRoot": "Terug naar alle ontwerpen",
   "dashboard.folderEmpty": "Lege map",

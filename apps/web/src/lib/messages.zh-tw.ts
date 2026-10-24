@@ -90,6 +90,7 @@ export const MESSAGES_ZH_TW: Partial<Record<MessageKey, string>> = {
   "dashboard.sharedProjects": "伺服器上",
   "dashboard.projects": "設計",
   "dashboard.newFolderTitle": "為這個瀏覽器的設計建立資料夾",
+  "dashboard.newFolderOnServerTitle": "在伺服器資料夾中新增資料夾",
   "dashboard.folderTrailLabel": "此資料夾的路徑",
   "dashboard.parentFolderRoot": "返回所有設計",
   "dashboard.folderEmpty": "空資料夾",

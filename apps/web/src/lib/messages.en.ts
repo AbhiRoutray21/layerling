@@ -90,6 +90,7 @@ export const MESSAGES_EN = {
   "dashboard.sharedProjects": "On the server",
   "dashboard.projects": "Designs",
   "dashboard.newFolderTitle": "Make a folder for the designs of this browser",
+  "dashboard.newFolderOnServerTitle": "Make a folder in the server folder",
   "dashboard.folderTrailLabel": "Path to this folder",
   "dashboard.parentFolderRoot": "Back to all designs",
   "dashboard.folderEmpty": "Empty folder",

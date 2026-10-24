@@ -2839,6 +2839,7 @@ export const MESSAGES_IT: Partial<Record<MessageKey, string>> = {
   "ruler.occlude.on": "I solidi nascondono il righello (fai clic per mantenerlo visibile)",
   "ruler.occlude.off": "Il righello è sempre visibile (fai clic per consentire ai solidi di nasconderlo)",
   "dashboard.newFolderTitle": "Crea una cartella per i progetti di questo browser",
+  "dashboard.newFolderOnServerTitle": "Crea una cartella nella cartella del server",
   "dashboard.folderTrailLabel": "Percorso di questa cartella",
   "dashboard.parentFolderRoot": "Torna a tutti i progetti",
   "dashboard.folderEmpty": "Cartella vuota",

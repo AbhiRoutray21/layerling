@@ -98,6 +98,7 @@ export const MESSAGES_AR: Partial<Record<MessageKey, string>> = {
   "dashboard.sharedProjects": "على الخادم",
   "dashboard.projects": "التصاميم",
   "dashboard.newFolderTitle": "إنشاء مجلد لتصاميم هذا المتصفح",
+  "dashboard.newFolderOnServerTitle": "إنشاء مجلد في مجلد الخادم",
   "dashboard.folderTrailLabel": "المسار إلى هذا المجلد",
   "dashboard.parentFolderRoot": "العودة إلى كل التصاميم",
   "dashboard.folderEmpty": "مجلد فارغ",

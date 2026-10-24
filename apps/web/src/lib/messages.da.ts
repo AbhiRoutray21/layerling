@@ -8,6 +8,7 @@ export const MESSAGES_DA: Partial<Record<MessageKey, string>> = {
   "common.duplicate": "Duplikér",
   "dashboard.parentFolderRoot": "Tilbage til alle design",
   "dashboard.newFolderTitle": "Lav en mappe til designene i denne browser",
+  "dashboard.newFolderOnServerTitle": "Opret en mappe i servermappen",
   "dashboard.moveToRoot": "Design (ingen mappe)",
   "dashboard.moveNoFolders": "Der er ingen mappe endnu. Lav en med Ny mappe.",
   "dashboard.folderTrailLabel": "Sti til denne mappe",

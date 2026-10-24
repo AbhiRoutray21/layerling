@@ -92,6 +92,7 @@ export const MESSAGES_ES: Partial<Record<MessageKey, string>> = {
   "dashboard.sharedProjects": "En el servidor",
   "dashboard.projects": "Diseños",
   "dashboard.newFolderTitle": "Crear una carpeta para los diseños de este navegador",
+  "dashboard.newFolderOnServerTitle": "Crear una carpeta en la carpeta del servidor",
   "dashboard.folderTrailLabel": "Ruta hasta esta carpeta",
   "dashboard.parentFolderRoot": "Volver a todos los diseños",
   "dashboard.folderEmpty": "Carpeta vacía",

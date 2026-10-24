@@ -84,6 +84,7 @@ export const MESSAGES_FR: Partial<Record<MessageKey, string>> = {
   "dashboard.sharedProjects": "Sur le serveur",
   "dashboard.projects": "Dessins",
   "dashboard.newFolderTitle": "Créer un dossier pour les dessins de ce navigateur",
+  "dashboard.newFolderOnServerTitle": "Créer un dossier dans le dossier du serveur",
   "dashboard.folderTrailLabel": "Chemin vers ce dossier",
   "dashboard.parentFolderRoot": "Retour à tous les dessins",
   "dashboard.folderEmpty": "Dossier vide",

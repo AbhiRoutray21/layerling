@@ -92,6 +92,7 @@ export const MESSAGES_PT_BR: Partial<Record<MessageKey, string>> = {
   "dashboard.sharedProjects": "No servidor",
   "dashboard.projects": "Projetos",
   "dashboard.newFolderTitle": "Criar uma pasta para os projetos deste navegador",
+  "dashboard.newFolderOnServerTitle": "Criar uma pasta na pasta do servidor",
   "dashboard.folderTrailLabel": "Caminho até esta pasta",
   "dashboard.parentFolderRoot": "Voltar para todos os projetos",
   "dashboard.folderEmpty": "Pasta vazia",

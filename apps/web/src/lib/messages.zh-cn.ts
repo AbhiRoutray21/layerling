@@ -90,6 +90,7 @@ export const MESSAGES_ZH_CN: Partial<Record<MessageKey, string>> = {
   "dashboard.sharedProjects": "服务器上",
   "dashboard.projects": "设计",
   "dashboard.newFolderTitle": "为此浏览器的设计创建一个文件夹",
+  "dashboard.newFolderOnServerTitle": "在服务器文件夹中新建文件夹",
   "dashboard.folderTrailLabel": "到此文件夹的路径",
   "dashboard.parentFolderRoot": "返回所有设计",
   "dashboard.folderEmpty": "空文件夹",

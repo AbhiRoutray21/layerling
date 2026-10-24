@@ -217,6 +217,7 @@ export const MESSAGES_CS: Record<MessageKey, string> = {
   "dashboard.sharedProjects": "Na serveru",
   "dashboard.projects": "Projekty",
   "dashboard.newFolderTitle": "Vytvořit složku pro projekty v tomto prohlížeči",
+  "dashboard.newFolderOnServerTitle": "Vytvořit složku ve složce na serveru",
   "dashboard.folderTrailLabel": "Cesta k této složce",
   "dashboard.parentFolderRoot": "Zpět ke všem projektům",
   "dashboard.folderEmpty": "Prázdná složka",

@@ -95,6 +95,7 @@ export const MESSAGES_RU: Partial<Record<MessageKey, string>> = {
   "dashboard.sharedProjects": "На сервере",
   "dashboard.projects": "Проекты",
   "dashboard.newFolderTitle": "Создать папку для проектов в этом браузере",
+  "dashboard.newFolderOnServerTitle": "Создать папку в папке на сервере",
   "dashboard.folderTrailLabel": "Путь к этой папке",
   "dashboard.parentFolderRoot": "Назад ко всем проектам",
   "dashboard.folderEmpty": "Пустая папка",

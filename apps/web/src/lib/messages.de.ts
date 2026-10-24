@@ -89,6 +89,7 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "dashboard.sharedProjects": "Auf dem Server",
   "dashboard.projects": "Entwürfe",
   "dashboard.newFolderTitle": "Einen Ordner für die Entwürfe dieses Browsers anlegen",
+  "dashboard.newFolderOnServerTitle": "Einen Ordner im Serverordner anlegen",
   "dashboard.folderTrailLabel": "Weg zu diesem Ordner",
   "dashboard.parentFolderRoot": "Zurück zu allen Entwürfen",
   "dashboard.folderEmpty": "Leerer Ordner",

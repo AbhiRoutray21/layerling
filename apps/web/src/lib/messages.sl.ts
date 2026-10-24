@@ -78,6 +78,7 @@ export const MESSAGES_SL: Partial<Record<MessageKey, string>> = {
   "dashboard.sharedProjects": "Na strežniku",
   "dashboard.projects": "Projekti",
   "dashboard.newFolderTitle": "Ustvari mapo za projekte v tem brskalniku",
+  "dashboard.newFolderOnServerTitle": "Ustvari mapo v mapi na strežniku",
   "dashboard.folderTrailLabel": "Pot do te mape",
   "dashboard.parentFolderRoot": "Nazaj na vse projekte",
   "dashboard.folderEmpty": "Prazna mapa",

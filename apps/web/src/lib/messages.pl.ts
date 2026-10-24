@@ -96,6 +96,7 @@ export const MESSAGES_PL: Partial<Record<MessageKey, string>> = {
   "dashboard.sharedProjects": "Na serwerze",
   "dashboard.projects": "Projekty",
   "dashboard.newFolderTitle": "Utwórz folder na projekty z tej przeglądarki",
+  "dashboard.newFolderOnServerTitle": "Utwórz folder w folderze na serwerze",
   "dashboard.folderTrailLabel": "Ścieżka do tego folderu",
   "dashboard.parentFolderRoot": "Wróć do wszystkich projektów",
   "dashboard.folderEmpty": "Pusty folder",
