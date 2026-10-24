@@ -30,6 +30,16 @@ Einen einzelnen Entwurf sicherst du im Editor: {{ui:editor.export}}, dann das Fo
 
 **In den eigenen Ordner speichern (Chrome und Edge).** Dort öffnet der Knopf den Speichern-Dialog deines Systems: Ordner und Namen wählst du selbst, und eine vorhandene Datei lässt sich ersetzen. Danach speichert [[Strg]]+[[S]] den Entwurf ohne Dialog wieder in genau diese Datei. Ein Entwurf, den du aus einer `.lyl`-Datei mit {{ui:dashboard.importGeometry}} oder dem Öffnen-Knopf im Export-Fenster geöffnet hast, wird ebenfalls in diese Datei zurückgespeichert. Einmalig fragt der Browser womöglich nach der Erlaubnis, die Datei zu ändern. Nach dem Neuladen der Seite kennt der Entwurf seine Datei nicht mehr, das nächste [[Strg]]+[[S]] fragt wieder danach; der Dialog beginnt im zuletzt benutzten Ordner. Firefox und Safari erlauben einer Seite nicht, so in Dateien zu schreiben. Dort wird die Datei wie bisher in den Downloads-Ordner heruntergeladen, und [[Strg]]+[[S]] lädt sie erneut herunter; Firefox lässt sich unter Einstellungen, Allgemein, Downloads so einstellen, dass es jedes Mal nach dem Ordner fragt.
 
+## Anhänge
+
+Eine Anleitung, eine Teileliste oder ein paar Notizen können als Dateien beim Entwurf bleiben. {{ui:editor.attachments}} in der Leiste {{ui:editor.group.manage}}, die Büroklammer, öffnet die Liste; ein kleiner Punkt an der Büroklammer zeigt, dass der Entwurf welche hat.
+
+- **{{ui:attachments.upload}}:** Wähle eine oder mehrere Dateien mit der Endung `.md` (Markdown) oder `.txt`. Eine Datei muss reiner Text (UTF-8) sein und höchstens 2 MB groß; ein Entwurf nimmt bis zu 16 Dateien und zusammen 8 MB auf.
+- **Die Liste:** Der Pfeil lädt eine Datei so herunter, wie sie hochgeladen wurde. Der Papierkorb entfernt sie; die Zeile fragt vorher noch einmal nach, und eine entfernte Datei kommt mit Rückgängig nicht zurück, weil Anhänge nicht zum Rückgängig-Verlauf gehören.
+- **Ein Name, den es schon gibt:** layerling fragt, was geschehen soll. {{ui:attachments.replace}} legt den neuen Inhalt in die Datei dieses Namens, die ihren Platz in der Liste behält. {{ui:common.rename}} fügt die neue Datei unter einem anderen Namen hinzu und schlägt den ersten freien vor, etwa `notizen 2.md`. Das Kreuz lässt die neue Datei weg. Groß- und Kleinschreibung zählen gleich, und dieselbe Datei noch einmal hochzuladen ändert nichts.
+
+Anhänge werden wie alles andere mit dem Entwurf gespeichert: im Browser, in einer LYL-Datei, in einer Sicherung und in einem Entwurf auf einem Server, wohin sie gelangen, sobald eine hinzukommt oder wegfällt. Mit {{ui:import.insertProject}} oder mit einer eigenen Form kommen sie nicht mit, und ein Fehlerbericht enthält sie nicht. Ein Entwurf mit Anhängen wird als neuere Art von LYL-Datei gespeichert: Ein älteres layerling sagt, dass es sie nicht öffnen kann, statt die Dateien zu verlieren. Ein Entwurf ohne Anhänge wird genau wie bisher gespeichert.
+
 ## Exportieren
 
 Klicke auf {{ui:editor.export}} oder drücke [[Strg]]+[[E]].

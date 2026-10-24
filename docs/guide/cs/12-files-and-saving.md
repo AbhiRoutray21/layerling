@@ -30,6 +30,16 @@ Jeden projekt uložíte v editoru přes {{ui:editor.export}}, formát **LYL** a 
 
 **Ukládání do vlastní složky v Chrome a Edge.** Tlačítko otevře systémový dialog pro výběr složky a názvu, včetně přepsání souboru. Následné [[Ctrl]]+[[S]] ukládá do stejného souboru bez dialogu. Také projekt otevřený z `.lyl` přes {{ui:dashboard.importGeometry}} nebo tlačítko otevření v exportním okně se ukládá zpět do původního souboru. Prohlížeč může požádat o povolení zápisu. Po obnovení stránky se vazba na soubor zapomene a další [[Ctrl]]+[[S]] se zeptá znovu; dialog začíná v naposledy použité složce. Firefox a Safari takový zápis nepovolují. Soubor stáhnou do Stažených souborů a [[Ctrl]]+[[S]] jej stáhne znovu. Firefox lze v Nastavení → Obecné → Stahování nastavit, aby se na složku vždy zeptal.
 
+## Přílohy
+
+Návod, seznam dílů nebo pár poznámek mohou zůstat u projektu jako soubory. {{ui:editor.attachments}} v liště {{ui:editor.group.manage}}, sponka, otevře seznam; malá tečka na sponce ukazuje, že projekt nějaké má.
+
+- **{{ui:attachments.upload}}:** Vyberte jeden nebo více souborů `.md` (Markdown) nebo `.txt`. Soubor musí být prostý text (UTF-8) a nejvýše 2 MB; projekt pojme až 16 souborů a dohromady 8 MB.
+- **Seznam:** Šipka stáhne soubor tak, jak byl nahrán. Koš ho odebere; řádek se předtím ještě jednou zeptá a odebraný soubor se zpět nevrátí, protože přílohy nejsou součástí historie kroků zpět.
+- **Název, který už existuje:** layerling se zeptá, co udělat. {{ui:attachments.replace}} vloží nový obsah do souboru s tímto názvem, který zůstane na svém místě v seznamu. {{ui:common.rename}} přidá nový soubor pod jiným názvem a navrhne první volný, například `poznamky 2.md`. Křížek nový soubor vynechá. Velká a malá písmena se berou stejně a nahrání téhož souboru znovu nic nezmění.
+
+Přílohy se ukládají s projektem jako všechno ostatní: v prohlížeči, do souboru LYL, do zálohy i v projektu na serveru, kam se dostanou, jakmile se nějaká přidá nebo odebere. S {{ui:import.insertProject}} ani s vlastním tvarem se nepřenášejí a hlášení chyby je neobsahuje. Projekt s přílohami se ukládá jako novější druh souboru LYL: starší layerling řekne, že ho neotevře, místo aby soubory ztratil. Projekt bez příloh se ukládá úplně stejně jako dřív.
+
 ## Export
 
 Použijte {{ui:editor.export}} nebo [[Ctrl]]+[[E]].
