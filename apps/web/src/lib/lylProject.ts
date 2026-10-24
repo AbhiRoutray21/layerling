@@ -12,11 +12,11 @@ import { normalizeTextEdge } from "@/lib/textEdge";
 import { isTextKeyring } from "@/lib/textGeometry";
 import { normalizeNotes } from "@/lib/workplaneNotes";
 import {
-  ATTACHMENT_LIMITS,
   attachmentListProblem,
   attachmentProblemText,
   attachmentTypeForFileName,
   attachmentTypeForMediaType,
+  attachmentsFormatVersion,
 } from "@/lib/projectAttachments";
 import { normalizeQrSettings } from "@/lib/qrCode";
 import { importedShapeFromStl } from "@/lib/stlImport";
@@ -47,8 +47,14 @@ export const LYL_MINIMUM_READER_VERSION = 2;
 // some, so every other design stays a version 2 file, and a layerling that knows version 2 only
 // refuses a version 3 package instead of opening it and dropping the files at its next save.
 export const LYL_ATTACHMENTS_FORMAT_VERSION = 3;
+// Version 4 adds attachment types beyond text (pictures and PDF, #820). A layerling that reads
+// version 3 refuses a package with a type it does not know, so a design with such a file is written
+// as version 4 and an older layerling says the design needs a newer one. A design whose attachments
+// are all text stays a version 3 file. Which version each type needs is the `formatVersion` column
+// of ATTACHMENT_TYPES in projectAttachments.ts.
+export const LYL_FILE_TYPES_FORMAT_VERSION = 4;
 /** The newest format this layerling reads. */
-export const LYL_NEWEST_READABLE_FORMAT_VERSION = LYL_ATTACHMENTS_FORMAT_VERSION;
+export const LYL_NEWEST_READABLE_FORMAT_VERSION = LYL_FILE_TYPES_FORMAT_VERSION;
 export const LYL_OLDEST_READABLE_FORMAT_VERSION = 1;
 export const LYL_CREATED_WITH_VERSION = "1.110.0";
 export const LYL_MEDIA_TYPE = "application/vnd.layerling.project+zip";
@@ -189,7 +195,7 @@ function validateFonts(fonts: unknown) {
 
 export type LylProjectDocumentV1 = {
   schema: typeof LYL_SCHEMA_ID | typeof LEGACY_LYL_SCHEMA_ID;
-  formatVersion: 1 | 2 | 3;
+  formatVersion: 1 | 2 | 3 | 4;
   minimumReaderVersion: number;
   createdWithVersion: string;
   metadata: {
@@ -1003,8 +1009,8 @@ function activeProjectIndexes(state: LylStateV1) {
   return { features, groups, sketches, exactCad };
 }
 
-function zipAsync(files: ArchiveFiles, level: NonNullable<LylProjectExportInput["compressionLevel"]> = 6) {
-  return boundedProjectZip(files, level);
+function zipAsync(files: ArchiveFiles, level: NonNullable<LylProjectExportInput["compressionLevel"]> = 6, stored?: ReadonlySet<string>) {
+  return boundedProjectZip(files, level, stored);
 }
 
 function unzipAsync(bytes: Uint8Array) {
@@ -1090,11 +1096,12 @@ export async function exportLylProject(input: LylProjectExportInput) {
   const selectedWorkplaneId = placementWorkplaneIsBase(placementWorkplane) ? "workplane-base" : "workplane-active";
   const document: Omit<LylProjectDocumentV1, "states"> & { states: typeof STATES_PLACEHOLDER } = {
     schema: LYL_SCHEMA_ID,
-    // Only a design that has attachments is a version 3 package: a layerling that does not know them
-    // refuses it (see LYL_ATTACHMENTS_FORMAT_VERSION) instead of dropping the files at its next save.
-    // Every other design is written exactly as before.
-    formatVersion: attachmentRecords.length > 0 ? LYL_ATTACHMENTS_FORMAT_VERSION : LYL_FORMAT_VERSION,
-    minimumReaderVersion: attachmentRecords.length > 0 ? LYL_ATTACHMENTS_FORMAT_VERSION : LYL_MINIMUM_READER_VERSION,
+    // Only a design that has attachments is a version 3 package, or version 4 when one of them is of a
+    // type that came with version 4: a layerling that does not know them refuses it (see
+    // LYL_ATTACHMENTS_FORMAT_VERSION and LYL_FILE_TYPES_FORMAT_VERSION) instead of dropping the files
+    // at its next save. Every other design is written exactly as before.
+    formatVersion: attachmentsFormatVersion(attachments) ?? LYL_FORMAT_VERSION,
+    minimumReaderVersion: attachmentsFormatVersion(attachments) ?? LYL_MINIMUM_READER_VERSION,
     createdWithVersion: LYL_CREATED_WITH_VERSION,
     metadata: {
       ...(input.projectId ? { projectId: input.projectId } : {}),
@@ -1143,7 +1150,9 @@ export async function exportLylProject(input: LylProjectExportInput) {
   if (Object.keys(builder.files).length > LYL_LIMITS.entries) {
     throw new Error("Project has too many stored assets for the project format. Export with fewer history steps.");
   }
-  return zipAsync(Object.fromEntries(Object.entries(builder.files).sort(([a], [b]) => a.localeCompare(b))), input.compressionLevel);
+  // Attached pictures and PDF files are compressed already: they go in as they are (see `compressed`).
+  const stored = new Set(builder.assets.filter((asset) => asset.kind === "attachment" && attachmentTypeForMediaType(asset.mediaType)?.compressed).map((asset) => asset.path));
+  return zipAsync(Object.fromEntries(Object.entries(builder.files).sort(([a], [b]) => a.localeCompare(b))), input.compressionLevel, stored);
 }
 
 function inspectZipBeforeExpansion(bytes: Uint8Array) {
@@ -1825,7 +1834,8 @@ async function validateDocumentAndAssets(raw: unknown, files: ArchiveFiles) {
     if (asset.kind === "attachment") {
       const type = attachmentTypeForMediaType(asset.mediaType);
       if (!type) throw new Error(`Attachment asset '${id}' has a file type that cannot be attached`);
-      const problem = bytes.byteLength === 0 ? "empty" : bytes.byteLength > ATTACHMENT_LIMITS.fileBytes ? "tooBig" : type.check(bytes);
+      if (bytes.byteLength > type.maxBytes) throw new Error(`Attachment asset '${id}' is larger than ${type.maxBytes / (1024 * 1024)} MB`);
+      const problem = bytes.byteLength === 0 ? "empty" : type.check(bytes);
       if (problem) throw new Error(`Attachment asset '${id}': ${attachmentProblemText(problem)}`);
     }
     assetById.set(id, asset);
@@ -1927,11 +1937,17 @@ function validateAttachments(document: LylProjectDocumentV1, assetById: Map<stri
     ids.add(id);
     const asset = assetById.get(assetId);
     if (!asset || asset.kind !== "attachment") throw new Error(`Attachment '${fileName}' is missing its file`);
-    if (attachmentTypeForFileName(fileName)?.mediaType !== asset.mediaType) throw new Error(`Attachment '${fileName}' does not match the type of its file`);
+    const type = attachmentTypeForFileName(fileName);
+    if (type?.mediaType !== asset.mediaType) throw new Error(`Attachment '${fileName}' does not match the type of its file`);
+    // A package that says it is older than its files: a hand-made one, or one changed by hand.
+    if (type.formatVersion > document.formatVersion) throw new Error(`Project format ${document.formatVersion} does not carry ${type.label} attachments`);
     return { id, fileName, assetId };
   });
   const problem = attachmentListProblem(records.map((record) => ({ name: record.fileName, byteLength: assetById.get(record.assetId)?.byteLength ?? 0 })));
   if (problem) throw new Error(attachmentProblemText(problem.problem, problem.fileName));
+  // More files, or more bytes, than version 3 allowed: such a list is written as version 4 only.
+  const needed = attachmentsFormatVersion(records.map((record) => assetById.get(record.assetId)!));
+  if (needed !== undefined && needed > document.formatVersion) throw new Error(`Project format ${document.formatVersion} does not carry this many attachments`);
   return records;
 }
 

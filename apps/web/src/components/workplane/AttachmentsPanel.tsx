@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, Download, Eye, FileText, Trash2, Upload, X } from "lucide-react";
+import { Check, Download, Eye, FileImage, FileText, Trash2, Upload, X } from "lucide-react";
 import { useRef, useState, type FormEvent } from "react";
 import { formatFileSize } from "@/lib/formatFileSize";
 import { t, type MessageKey } from "@/lib/i18n";
@@ -8,7 +8,9 @@ import {
   ATTACHMENT_LIMITS,
   AttachmentError,
   attachmentAcceptList,
+  attachmentMaxBytes,
   attachmentNameProblem,
+  attachmentTypeForFileName,
   attachmentView,
   cleanAttachmentName,
   findAttachmentByName,
@@ -21,6 +23,9 @@ import {
 } from "@/lib/projectAttachments";
 import type { ProjectAttachment } from "@/types/layerling";
 
+/** A megabyte, as the limits are given in the texts. */
+const MB = 1024 * 1024;
+
 /** The message that says each problem in the user's language; the codes themselves come from `projectAttachments.ts`. */
 const PROBLEM_KEYS: Record<AttachmentProblem, MessageKey> = {
   name: "attachments.problem.name",
@@ -28,6 +33,7 @@ const PROBLEM_KEYS: Record<AttachmentProblem, MessageKey> = {
   empty: "attachments.problem.empty",
   tooBig: "attachments.problem.tooBig",
   notText: "attachments.problem.notText",
+  content: "attachments.problem.content",
   tooMany: "attachments.problem.tooMany",
   tooMuch: "attachments.problem.tooMuch",
   nameTaken: "attachments.problem.nameTaken",
@@ -35,15 +41,18 @@ const PROBLEM_KEYS: Record<AttachmentProblem, MessageKey> = {
 
 /**
  * Why a file or a name is refused, in the user's language. The same values go into every sentence;
- * each message uses the ones it has a place for ({name}, {types}, {size}, {files}, {total}).
+ * each message uses the ones it has a place for ({name}, {kind}, {types}, {size}, {files}, {total}).
+ * {size} is the limit of the file's own type.
  */
 function problemText(problem: AttachmentProblem, name = "") {
   return t(PROBLEM_KEYS[problem], {
     name,
+    kind: attachmentTypeForFileName(name)?.label ?? "",
     types: attachmentAcceptList(", "),
-    size: ATTACHMENT_LIMITS.fileBytes / (1024 * 1024),
+    // The size a file of this name may have: its type's own limit (`maxBytes`).
+    size: attachmentMaxBytes(name) / MB,
     files: ATTACHMENT_LIMITS.files,
-    total: ATTACHMENT_LIMITS.totalBytes / (1024 * 1024),
+    total: ATTACHMENT_LIMITS.totalBytes / MB,
   });
 }
 
@@ -60,7 +69,7 @@ type WaitingFile = { name: string; bytes: Uint8Array };
  *   1. an Upload button (the same button as the Import panel's), which opens the file chooser;
  *   2. a prompt, only while a chosen file has the name of one that is attached already;
  *   3. the list of attached files, each with Download and Remove, and View for the types the viewer
- *      can show (Markdown and text, `view` in the type table);
+ *      can show (Markdown, text and pictures, `view` in the type table);
  *   4. a line with the limits.
  *
  * A file whose name is already attached is not added silently and not turned away: the user is asked
@@ -251,7 +260,8 @@ export function AttachmentsPanel({
         <ul className="attachments-list" aria-label={t("panel.attachments")}>
           {attachments.map((attachment) => (
             <li key={attachment.id} className="attachment-row">
-              <FileText aria-hidden="true" />
+              {/* A picture gets the picture icon; text and PDF the page icon. */}
+              {attachment.mediaType.startsWith("image/") ? <FileImage aria-hidden="true" /> : <FileText aria-hidden="true" />}
               {/* translate="no": a file name is not text to be translated by the browser. */}
               <span className="attachment-name" translate="no" title={attachment.name}>{attachment.name}</span>
               <small>{formatFileSize(attachment.byteLength)}</small>
@@ -285,7 +295,14 @@ export function AttachmentsPanel({
           ))}
         </ul>
       )}
-      <p className="attachments-note">{t("attachments.limits", { types: attachmentAcceptList(", "), files: ATTACHMENT_LIMITS.files, size: ATTACHMENT_LIMITS.fileBytes / (1024 * 1024), total: ATTACHMENT_LIMITS.totalBytes / (1024 * 1024) })}</p>
+      <p className="attachments-note">{t("attachments.limits", {
+        types: attachmentAcceptList(", "),
+        text: ATTACHMENT_LIMITS.textBytes / MB,
+        picture: ATTACHMENT_LIMITS.pictureBytes / MB,
+        pdf: ATTACHMENT_LIMITS.pdfBytes / MB,
+        files: ATTACHMENT_LIMITS.files,
+        total: ATTACHMENT_LIMITS.totalBytes / MB,
+      })}</p>
     </div>
   );
 }
