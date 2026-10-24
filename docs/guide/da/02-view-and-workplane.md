@@ -161,6 +161,8 @@ Skitsevisningen har sine egne farver: {{ui:workspace.sketchBackground}} for vind
 
 {{ui:workspace.startInPerspective}}: editoren åbner så i perspektivvisning, ikke i den flade.
 
+{{ui:workspace.startView}} bestemmer den vinkel, et nyt design åbner i, og som {{ui:camera.home}} vender tilbage til. Drej og zoom visningen, som du kan lide den, og klik så {{ui:workspace.startViewUseCurrent}}; {{ui:workspace.startViewStandard}} giver den sædvanlige visning forfra til højre igen. Det gælder alle designs i denne browser. Et design, du åbner igen, åbner stadig, som du forlod det.
+
 {{ui:workspace.zoomSpeed}} er en skyder fra langsom til hurtig: hvor hurtigt hjulet og trackpad'en zoomer; zoomknapperne og tasterne beholder deres egne små trin. {{ui:workspace.cameraInertia}}: når du slipper musen, drejer visningen videre et øjeblik og falder blødt af. Slået fra stopper den med det samme, som i Tinkercad og Fusion 360.
 
 {{ui:workspace.overhangAngle}} er den vinkel, hvorfra en flade tæller som et overhæng, når du slår **Vis overhæng** til i menuen ved siden af øjet: de flader skraveres rødt og hvidt. 30° er det forsigtige valg, 70° regnes på god køling af printet; 45° er det sædvanlige startpunkt.

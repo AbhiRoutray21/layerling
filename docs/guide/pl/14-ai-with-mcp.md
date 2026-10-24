@@ -99,7 +99,7 @@ AI pracuje tymi samymi funkcjami co Ty, tą samą drogą co Twoja praca w edytor
 | `layerling_delete_custom_shape` | usuwa własny kształt. Wstawione bryły zostają |
 | `layerling_show_workplane` | ukrywa i pokazuje płytę z siatką, na przykład do zdjęcia spodu (tylko widok) |
 | `layerling_set_section_view` | rozcina widok wzdłuż płaszczyzny, żeby zajrzeć do środka (tylko widok, nic nie jest cięte) |
-| `layerling_saved_view` | zapisuje bieżący widok pod klawiszem 7, 8, 9 lub 0 i do niego wraca, jak Shift+klawisz i sam klawisz (tylko widok) |
+| `layerling_saved_view` | zapisuje bieżący widok pod klawiszem 7, 8, 9 lub 0 i do niego wraca, jak Shift+klawisz i sam klawisz (tylko widok); ustawia też widok startowy nowych projektów |
 | `layerling_clear_history` | usuwa na dobre wszystkie kroki cofania, tak jak przycisk „Usuń historię” w widoku historii. Wymaga `confirm: true` |
 | `layerling_set_history_view` | pokazuje wcześniejszy stan projektu, jak widok historii (prawdziwy projekt zostaje nietknięty, a narzędzia zmieniające czekają, aż widok zostanie zamknięty) |
 | `layerling_restore_from_history` | przywraca obiekty (także części wewnątrz grup) z wcześniejszego stanu do projektu jako kopie, jak przycisk Przywróć do projektu w widoku historii. To jeden krok, który cofanie wycofuje |

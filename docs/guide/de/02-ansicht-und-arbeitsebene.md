@@ -155,6 +155,8 @@ Die Skizzenansicht hat eigene Farben: {{ui:workspace.sketchBackground}} für das
 
 {{ui:workspace.startInPerspective}}: Der Editor öffnet dann in der perspektivischen Ansicht, nicht in der flachen.
 
+{{ui:workspace.startView}} legt den Blickwinkel fest, in dem ein neuer Entwurf öffnet und zu dem {{ui:camera.home}} zurückkehrt. Dreh und zoome die Ansicht, wie du sie magst, und klicke dann {{ui:workspace.startViewUseCurrent}}; {{ui:workspace.startViewStandard}} bringt den gewohnten Blick von vorne rechts zurück. Das gilt für alle Entwürfe in diesem Browser. Ein Entwurf, den du wieder öffnest, öffnet weiter so, wie du ihn verlassen hast.
+
 {{ui:workspace.zoomSpeed}} ist ein Regler von langsam bis schnell: wie schnell Rad und Trackpad zoomen; die Zoomknöpfe und -tasten behalten ihre eigenen kleinen Schritte. {{ui:workspace.cameraInertia}}: Lässt du die Maus nach dem Drehen los, dreht die Ansicht noch kurz weiter und bremst sanft ab. Ausgeschaltet bleibt sie sofort stehen, wie in Tinkercad und Fusion 360.
 
 {{ui:workspace.overhangAngle}} ist der Winkel, ab dem eine Fläche als Überhang gilt, wenn du im Sichtbarkeitsmenü Überhänge zeigen einschaltest: Diese Flächen sind rot und weiß schraffiert. 30° ist vorsichtig, 70° rechnet mit guter Kühlung des Drucks; 45° ist der übliche Start.

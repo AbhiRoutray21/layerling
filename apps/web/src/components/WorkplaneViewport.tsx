@@ -34,10 +34,10 @@ import { wheelBaseStep, wheelNextValue } from "@/lib/wheelValueStep";
 import { createLatestRunner, type LatestRunner } from "@/lib/latestRunner";
 import { onManifoldReady } from "@/lib/manifoldHandle";
 import { onCustomFontsChanged } from "@/lib/textFonts";
-import { readSavedViews, SAVED_VIEW_KEYS, savedViewForKey } from "@/lib/designView";
+import { readSavedViews, readStartView, SAVED_VIEW_KEYS, savedViewForKey, writeStartView } from "@/lib/designView";
 import { readCornerRulers, writeCornerRulers } from "@/lib/cornerRulerStore";
 import { rememberCameraView, useDesignViews } from "@/components/workplane/cameraViews";
-import { fitCameraDepthRange, frameBounds, resetCamera, selectionBounds, setCameraToViewDirection, setCameraToViewFace, stepCameraTurn, syncViewCube, toggleCameraProjection, zoomCameraBy } from "@/components/workplane/cameraRig";
+import { fitCameraDepthRange, frameBounds, resetCamera, selectionBounds, startViewOf, setCameraToViewDirection, setCameraToViewFace, stepCameraTurn, syncViewCube, toggleCameraProjection, zoomCameraBy } from "@/components/workplane/cameraRig";
 import { disposeCutPreviewResources, renderFrame } from "@/components/workplane/renderFrame";
 import { DIMENSION_FORMULA_FIELDS, formulaMatchesMillimeters, formulaToRemember, withFieldFormula } from "@/lib/fieldFormulas";
 import { displayToMillimeters, formatLengthMm, lengthDisplayUnit, millimetersToDisplay, parseLengthMm, parseMeasurementInput, resolveLengthMm, setLengthUnit } from "@/lib/measurementUnits";
@@ -413,7 +413,7 @@ declare global {
     /** "Hide workplane" in the camera bar for MCP: sets it when given, returns whether the plate is shown. */
     layerlingWorkplaneDisplay?: (visible?: boolean) => { visible: boolean };
     /** The four saved views (keys 7, 8, 9, 0) for MCP: saves or shows one when asked, returns which keys hold a view. */
-    layerlingSavedViews?: (request?: { save?: number; show?: number }) => { keys: { key: string; saved: boolean }[]; shown?: boolean };
+    layerlingSavedViews?: (request?: { save?: number; show?: number; startView?: "save" | "reset" }) => { keys: { key: string; saved: boolean }[]; shown?: boolean; startView: boolean };
   }
 }
 
@@ -1480,6 +1480,7 @@ export function WorkplaneViewport({
   const [originDimensionOverlay, setOriginDimensionOverlay] = useState<OriginDimensionOverlayData | null>(null);
   const [originDimensionsEnabled, setOriginDimensionsEnabled] = useState(true);
   const [startInPerspective, setStartInPerspective] = useState(true);
+  const [hasStartView, setHasStartView] = useState(() => readStartView() !== null);
   const [sectionViewOpen, setSectionViewOpen] = useState(false);
   const [sectionSettings, setSectionSettings] = useState<SectionPlaneSettings>(DEFAULT_SECTION_SETTINGS);
   const sectionSettingsRef = useRef(sectionSettings);
@@ -2892,18 +2893,39 @@ export function WorkplaneViewport({
     threeRef, projectIdRef, viewCubeRef, designViewRestoredRef, orthographicView, setOrthographicView, onNotice,
   });
 
+  // The view new designs open in and Home goes back to (#853), for every design of this browser.
+  const saveStartView = useCallback(() => {
+    const state = threeRef.current;
+    if (!state) return false;
+    writeStartView(startViewOf(state));
+    setHasStartView(readStartView() !== null);
+    onNotice?.(t("workspace.startViewSaved"));
+    return true;
+  }, [onNotice]);
+
+  const resetStartView = useCallback(() => {
+    writeStartView(null);
+    setHasStartView(false);
+  }, []);
+
   // The same keys for MCP (layerling_saved_view), through the functions the keys use.
   useEffect(() => {
     window.layerlingSavedViews = (request = {}) => {
       if (request.save !== undefined && !saveView(request.save)) throw new Error("The view is not ready yet");
       const shown = request.show !== undefined ? showSavedView(request.show) : undefined;
+      if (request.startView === "save" && !saveStartView()) throw new Error("The view is not ready yet");
+      if (request.startView === "reset") resetStartView();
       const views = readSavedViews(projectIdRef.current);
-      return { keys: SAVED_VIEW_KEYS.map((key, slot) => ({ key, saved: Boolean(views[slot]) })), ...(shown !== undefined ? { shown } : {}) };
+      return {
+        keys: SAVED_VIEW_KEYS.map((key, slot) => ({ key, saved: Boolean(views[slot]) })),
+        ...(shown !== undefined ? { shown } : {}),
+        startView: readStartView() !== null,
+      };
     };
     return () => {
       delete window.layerlingSavedViews;
     };
-  }, [saveView, showSavedView]);
+  }, [saveView, showSavedView, saveStartView, resetStartView]);
 
   useEffect(() => {
     const state = threeRef.current;
@@ -7789,6 +7811,9 @@ export function WorkplaneViewport({
           onMoveDimensionsEnabledChange={changeMoveDimensionsEnabled}
           onOriginDimensionsEnabledChange={changeOriginDimensionsEnabled}
           onStartInPerspectiveChange={changeStartInPerspective}
+          hasStartView={hasStartView}
+          onSaveStartView={saveStartView}
+          onResetStartView={resetStartView}
           onMakeDefault={makeWorkspaceDefault}
           onClose={() => setSettingsOpen(false)}
         />

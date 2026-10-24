@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "title": {
+      "de": "Eigene Startansicht",
+      "en": "A start view of your own"
+    },
+    "body": {
+      "de": "Unter Einstellungen → Darstellung übernimmt „Aktuelle Ansicht nehmen“ den Blickwinkel, den du gerade siehst: Neue Entwürfe öffnen dann so, und die Ausgangsansicht kehrt dorthin zurück. „Standard“ bringt den gewohnten Blick zurück.",
+      "en": "Under Settings → Appearance, \"Use current view\" keeps the angle you are looking from: new designs then open that way, and Home goes back to it. \"Standard\" brings the usual view back."
+    }
+  }
+]
