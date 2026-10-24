@@ -26,7 +26,7 @@ Målebåndet sidder for neden i kamerabjælken ved venstre kant ({{ui:camera.tap
 
 ## Linealen
 
-Du henter {{ui:shape.ruler}} fra formbiblioteket. Den er rent et måleværktøj: den optræder i ingen eksport og kan hverken grupperes eller skæres. For hver form der rører eller overlapper linealen viser den udstrækningen som et flydende tal lige i visningen. Du kan ændre det tal der, og formen følger med. Det flydende plus-symbol laver en kopi af den målte form. Dens påtrykte skala er i millimeter; skifter du enheden til tommer (kontakten nederst til højre), er den i tommer, med en streg for hver sekstendedel tomme og de hele tommer nummereret.
+Du henter {{ui:shape.ruler}} fra formbiblioteket. Den er rent et måleværktøj: den optræder i ingen eksport og kan hverken grupperes eller skæres. For hver form der rører eller overlapper linealen viser den udstrækningen som et flydende tal lige i visningen. Du kan ændre det tal der, og formen følger med. Rejs linealen op eller vip den, så måler den i sin egen retning: står den oprejst ved siden af en form, viser den formens højde. Det flydende plus-symbol laver en kopi af den målte form; det er der, mens linealen ligger ned. Dens påtrykte skala er i millimeter; skifter du enheden til tommer (kontakten nederst til højre), er den i tommer, med en streg for hver sekstendedel tomme og de hele tommer nummereret.
 
 ## Vinkelmåleren
 
