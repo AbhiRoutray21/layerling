@@ -18,5 +18,15 @@
       "de": "In den Einstellungen unter Aussehen gibt es jetzt „Weiches Licht“: Das meiste Licht kommt dann aus deiner Blickrichtung und dreht mit der Ansicht. Keine Fläche bleibt dunkel, und die Oberseite eines dunklen Körpers wird nicht mehr weiß überstrahlt.",
       "en": "Appearance in the settings now has \"Soft light\": most of the light then comes from where you look and turns with the view. No face is left dark, and the top of a dark body is no longer burnt out to white."
     }
+  },
+  {
+    "title": {
+      "de": "Eingefügte Entwürfe bringen ihre Notizen mit",
+      "en": "Inserted designs bring their notes"
+    },
+    "body": {
+      "de": "„In diesen Entwurf einfügen“ und das Ablegen von .lyl-Dateien im Import-Fenster bringen jetzt auch die Notizen und Bezugspunkte des gespeicherten Entwurfs mit, an derselben Stelle. Bisher kamen nur die Körper.",
+      "en": "\"Insert into this design\" and dropping .lyl files on the import window now bring the saved design's notes and reference points too, in the same place. Until now only the bodies came."
+    }
   }
 ]
