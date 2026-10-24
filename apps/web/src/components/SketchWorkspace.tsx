@@ -523,8 +523,11 @@ export function shapeMeshFootprint(shape: WorkplaneShape): SketchReferenceFootpr
   } catch {
     return null;
   }
-  if (!mesh.faces.length || mesh.faces.length > REFERENCE_OUTLINE_TRIANGLE_LIMIT) return null;
+  if (!mesh.faces.length) return null;
+  // A group's limit counts per part (#834): a knurl and a bolt, each under it, were over it together, and the group fell
+  // back to its box, one square for both.
   if (shape.groupedShapes?.length) return groupMeshFootprint(shape, mesh);
+  if (mesh.faces.length > REFERENCE_OUTLINE_TRIANGLE_LIMIT) return null;
   const positions: number[] = [];
   mesh.faces.forEach((face) => face.forEach((index) => positions.push(...mesh.vertices[index])));
   const footprint = footprintOfPositions(positions, (x, z) => ({ x, z }), Math.max(shape.width, shape.depth, shape.height), shape.height);
@@ -550,16 +553,40 @@ function groupMeshFootprint(shape: WorkplaneShape, mesh: ReturnType<typeof meshF
     }
     const end = start + count;
     const positions: number[] = [];
+    let faces = 0;
     mesh.faces.forEach((face) => {
-      if (face[0] >= start && face[0] < end) face.forEach((index) => positions.push(...mesh.vertices[index]));
+      if (face[0] >= start && face[0] < end) {
+        face.forEach((index) => positions.push(...mesh.vertices[index]));
+        faces += 1;
+      }
     });
-    const part = footprintOfPositions(positions, (x, z) => ({ x, z }), Math.max(child.width, child.depth, child.height), child.height);
+    // A part with more triangles than an outline is worked out from shows as its own box, the others keep their outline.
+    const part = faces > REFERENCE_OUTLINE_TRIANGLE_LIMIT
+      ? boxOfPositions(positions)
+      : footprintOfPositions(positions, (x, z) => ({ x, z }), Math.max(child.width, child.depth, child.height), child.height);
     if (part?.fillD) fills.push(part.fillD);
     if (part?.outlineD) outlines.push(part.outlineD);
     start = end;
   }
   if (!outlines.length) return null;
   return { fillD: fills.length === outlines.length ? fills.join(" ") : null, outlineD: outlines.join(" "), world: true };
+}
+
+/** The rectangle round a part's points seen from above, for a part too fine to work its outline out from. */
+function boxOfPositions(positions: ArrayLike<number>): SketchReferenceFootprint | null {
+  let minX = Number.POSITIVE_INFINITY;
+  let maxX = Number.NEGATIVE_INFINITY;
+  let minZ = Number.POSITIVE_INFINITY;
+  let maxZ = Number.NEGATIVE_INFINITY;
+  for (let index = 0; index + 2 < positions.length; index += 3) {
+    minX = Math.min(minX, positions[index]);
+    maxX = Math.max(maxX, positions[index]);
+    minZ = Math.min(minZ, positions[index + 2]);
+    maxZ = Math.max(maxZ, positions[index + 2]);
+  }
+  if (!Number.isFinite(minX) || !Number.isFinite(minZ)) return null;
+  const d = `M ${minX} ${minZ} L ${maxX} ${minZ} L ${maxX} ${maxZ} L ${minX} ${maxZ} Z`;
+  return { fillD: d, outlineD: d };
 }
 
 /**
