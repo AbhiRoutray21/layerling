@@ -44,14 +44,14 @@ En hel gruppe kan også være en solid eller et hul. En simpel regel gælder:
 Nogle gange bør dele kun blive sammen uden at blive til én - et hvidt logo på en sort plade til et flerfarvet print for eksempel. Det er det {{ui:editor.tool.bundle}} ([[Ctrl]]+[[B]]) er til, som i Tinkercad. Et bundt flytter, drejer og skalerer som en form, men intet flettes:
 
 - Hver del beholder sin farve og forbliver en solid eller et hul.
-- Huller skærer intet.
+- Huller skærer intet. Når du grupperer bundtet med andre dele, skærer dets huller de dele, men stadig ikke bundtets egne solider, som i Tinkercad. Så kan en tap med sit hul ved siden af for eksempel bruges igen og igen som et bundt.
 - I en STL-, 3MF- eller OBJ-eksport er hver del sin egen form; i 3MF og OBJ med sin farve.
 
-{{ui:editor.tool.ungroup}} ([[Ctrl]]+[[Shift]]+[[G]]) skiller et bundt ad igen, [[E]] åbner det for redigering som en gruppe. Fas, rund og udhuling virker ikke på et bundt, fordi det ikke er én form: gruppér det til det, eller arbejd på dets dele én ad gangen. Skal et hul i bundtet alligevel skære, så gruppér bundtet (Ctrl+G).
+{{ui:editor.tool.ungroup}} ([[Ctrl]]+[[Shift]]+[[G]]) skiller et bundt ad igen, [[E]] åbner det for redigering som en gruppe. Fas, rund og udhuling virker ikke på et bundt, fordi det ikke er én form: gruppér det til det, eller arbejd på dets dele én ad gangen. Skal et hul i bundtet alligevel skære bundtets egne solider, så skil bundtet ad og gruppér dets dele ([[Ctrl]]+[[G]]).
 
 ## Fælles
 
-{{ui:editor.tool.intersect}} beholder kun hvad to eller flere former har til fælles. Læg to overlappende former oven på hinanden, vælg begge og klik det. Det gør en cylinder og en kasse til et stykke med én rund og én lige side. En gruppe tæller som den ser ud, huller inkluderet. Hvis et hul også er valgt, er det der bliver tilbage hvad alle soliderne deler med alle hullerne.
+{{ui:editor.tool.intersect}} beholder kun hvad to eller flere former har til fælles. Læg to overlappende former oven på hinanden, vælg begge og klik det. Det gør en cylinder og en kasse til et stykke med én rund og én lige side. En gruppe tæller som den ser ud, huller inkluderet. Hvis et hul også er valgt, er det der bliver tilbage hvad alle soliderne deler med alle hullerne. Hvis formerne ikke har noget til fælles, ændres der intet, og en besked siger det.
 
 Ved siden af den viser {{ui:editor.tool.intersectPreview}} den fælles del, før du anvender den: de valgte former bliver gennemsigtige, og det de har til fælles tegnes i grønt. Vælg og flyt hver form for sig, så følger den grønne del med; {{ui:editor.tool.intersect}} anvender den, og [[Esc]] lukker forhåndsvisningen.
 
@@ -71,7 +71,7 @@ En bemærkning: fas og rund du har lagt på **hele** gruppen mistes ved genopbyg
 
 ## Deling
 
-{{ui:editor.tool.split}} i {{ui:editor.group.modify}}-området skærer markeringen over i to med et plan - en del der er for stor til printlejet for eksempel, eller en du vil se indersiden af. Vælg en eller flere solider eller huller og klik det. Et gennemsigtigt plan viser præcis hvor snittet vil gå; intet ændres før du anvender det.
+{{ui:editor.tool.split}} i {{ui:editor.group.modify}}-området skærer markeringen over i to med et plan - en del der er for stor til printlejet for eksempel, eller en du vil se indersiden af. Vælg en eller flere solider eller huller og klik det. Et gennemsigtigt plan viser præcis hvor snittet vil gå, og en hvid linje markerer det på formerne selv, der hvor planet møder dem; intet ændres før du anvender det.
 
 - {{ui:split.orientation}}: **X** laver et lodret snit mellem venstre og højre, **Y** mellem for og bag, **Z** et vandret snit mellem top og bund. Akserne er navngivet som på Positionskortet, med Z op; Z er der planet starter.
 - {{ui:split.workplane}}: {{ui:split.workplaneParallel}} lægger planet parallelt med arbejdsplanet, {{ui:split.workplaneAcrossX}} og {{ui:split.workplaneAcrossY}} stiller det vinkelret på det, på tværs af dets X- eller Y-retning. Skærer arbejdsplanets origo markeringen, går planet gennem det, ellers gennem midten. Så lægger du arbejdsplanet på en skrå flade med [[W]] og skærer præcis der, uden at dreje på drejeskyderne.
@@ -87,6 +87,6 @@ Et importeret mesh skal have en lukket overflade for at blive delt, grupperet el
 
 ## Adskil dele
 
-Hvis en form består af flere separate stykker, for eksempel tekst lavet af enkelte bogstaver, splitter {{ui:inspector.separateParts}} den i uafhængige former.
+Hvis en form består af flere separate stykker, for eksempel tekst lavet af enkelte bogstaver, splitter {{ui:inspector.separateParts}} den i uafhængige former. Posten findes også i den menu du får ved at højreklikke på formen.
 
 > **Tip:** Lav altid huller lidt længere end den del de skal gå igennem. Hvis hullet ender præcis flugtende med fladen, bliver der nogle gange en tynd hinde tilbage. En millimeters overshoot sikrer.

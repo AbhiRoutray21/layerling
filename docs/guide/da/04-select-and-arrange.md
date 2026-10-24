@@ -80,7 +80,7 @@ To dele skal mødes flade mod flade, eller flugte? Vælg den del der skal flytte
 
 **En præcis vinkel mellem to flader:** {{ui:editor.tool.mateFaces}} efterlader fladerne parallelle; der er intet værktøj til en vinkel mellem dem, men sådan kommer du derhen. Først bringer du fladerne sammen med {{ui:editor.tool.mateFaces}}, så de er parallelle. Sæt så rotationspunktet på kanten hvor de mødes ({{ui:editor.tool.rotationPivot}}, klik på kanten eller et hjørne), og tast vinklen, 15 eller 30 for eksempel, i kortet {{ui:inspector.rotation}} på delen. Den drejer omkring det rotationspunkt. Kortets akser er pladens akser, så det virker når kanten løber langs X, Y eller Z.
 
-Lige så enkle er {{ui:editor.tool.dropToWorkplane}} ([[D]]), der lægger markeringen ned på arbejdsplanet, og {{ui:editor.tool.centerOnWorkplane}}.
+Lige så enkle er {{ui:editor.tool.dropToWorkplane}} ([[D]]), der lægger markeringen ned på arbejdsplanet, og {{ui:editor.tool.centerOnWorkplane}}. Med arbejdsplanet på en flade centrerer det på det punkt du valgte med [[W]] og flytter kun markeringen langs fladen, så det der står på den bliver stående.
 
 [[C]] tager markeringen op, ligesom Cruise i Tinkercad: den følger musemarkøren og lægger sig ned på fladen af en anden form du er over, også skrå. Et klik sætter den ned der, [[Esc]] lader den stå hvor den var. Dens underside hviler så på fladen, justeret med fladens kanter som en ny form ville være; den beholder sin egen drejning omkring sin op-akse. Flere dele rejser sammen og bevarer deres afstand. Over den tomme plade stiller [[C]] en skrå del oprejst på arbejdsplanet igen.
 Uden et tastatur har menuen ved et langt tryk {{ui:contextMenu.carry}} til det samme.
