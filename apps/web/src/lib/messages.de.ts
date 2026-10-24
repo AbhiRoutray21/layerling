@@ -2553,7 +2553,7 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "workspace.footerHint": "Die aktuellen Einstellungen für diesen Entwurf sichern.",
   "workspace.makeDefault": "Als Vorgabe sichern",
   "workspace.useMyDefault": "Meine Vorgabe verwenden",
-  "workspace.useMyDefaultHint": "Legt die Farben, das Raster und die übrigen Einstellungen, die du mit „Als Vorgabe sichern“ gespeichert hast, auf diesen Entwurf. Größe der Platte, Drucker und Einheiten bleiben.",
+  "workspace.useMyDefaultHint": "Legt die Farben, das Raster und die übrigen Einstellungen, die du mit „Als Vorgabe sichern“ gespeichert hast, auf diesen Entwurf. Ein Drucker in der Vorgabe kommt mit seiner Plattengröße mit; die Einheiten bleiben.",
   "workspace.defaultSaved": "Als Vorgabe gesichert",
 
   "sketch.toolbar": "Skizzen-Werkzeugleiste",

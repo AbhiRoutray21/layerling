@@ -2553,7 +2553,7 @@ export const MESSAGES_NL: Record<MessageKey, string> = {
   "workspace.footerHint": "Sla de huidige instellingen op voor dit ontwerp.",
   "workspace.makeDefault": "Als standaard instellen",
   "workspace.useMyDefault": "Mijn standaard gebruiken",
-  "workspace.useMyDefaultHint": "Zet de kleuren, het raster en de andere instellingen die je met „Als standaard instellen” hebt bewaard op dit ontwerp. De grootte van het bed, de printer en de eenheden blijven.",
+  "workspace.useMyDefaultHint": "Zet de kleuren, het raster en de andere instellingen die je met „Als standaard instellen” hebt bewaard op dit ontwerp. Een printer in je standaard komt mee met de grootte van zijn bed; de eenheden blijven.",
   "workspace.defaultSaved": "Standaard opgeslagen",
 
   "sketch.toolbar": "Schetswerkbalk",

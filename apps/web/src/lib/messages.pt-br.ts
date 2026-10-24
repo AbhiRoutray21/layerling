@@ -948,7 +948,7 @@ export const MESSAGES_PT_BR: Partial<Record<MessageKey, string>> = {
   "workspace.footerHint": "Salvar as configurações atuais para este projeto.",
   "workspace.makeDefault": "Tornar padrão",
   "workspace.useMyDefault": "Usar minha configuração padrão",
-  "workspace.useMyDefaultHint": "Aplica a este projeto as cores, a grade e as outras configurações que você salvou com “Tornar padrão”. O tamanho da mesa, a impressora e as unidades continuam como estão.",
+  "workspace.useMyDefaultHint": "Aplica a este projeto as cores, a grade e as outras configurações que você salvou com “Tornar padrão”. Uma impressora salva no padrão vem junto com o tamanho da mesa dela; as unidades continuam como estão.",
   "workspace.defaultSaved": "Padrão salvo",
   "workspace.customActive": "Configurações personalizadas ativas",
   "workspace.usingDefaults": "Usando os padrões do layerling",

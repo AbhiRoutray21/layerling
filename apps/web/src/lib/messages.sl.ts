@@ -1891,7 +1891,7 @@ export const MESSAGES_SL: Partial<Record<MessageKey, string>> = {
   "workspace.footerHint": "Shrani trenutne nastavitve za ta projekt.",
   "workspace.makeDefault": "Nastavi kot privzeto",
   "workspace.useMyDefault": "Uporabi mojo privzeto",
-  "workspace.useMyDefaultHint": "Na ta osnutek uporabi barve, mrežo in druge nastavitve, shranjene z „Nastavi kot privzeto“. Velikost plošče, tiskalnik in enote ostanejo.",
+  "workspace.useMyDefaultHint": "Na ta osnutek uporabi barve, mrežo in druge nastavitve, shranjene z „Nastavi kot privzeto“. Tiskalnik iz privzetih nastavitev pride skupaj z velikostjo svoje plošče; enote ostanejo.",
   "workspace.defaultSaved": "Privzeto shranjeno",
   "sketch.toolbar": "Orodna vrstica skice",
   "sketch.group.draw": "Riši",

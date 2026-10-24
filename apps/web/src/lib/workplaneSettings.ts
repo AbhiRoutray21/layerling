@@ -804,18 +804,20 @@ export function resetGridInSavedDefault(storage: Storage | null = browserStorage
 
 /**
  * "Use my default" (#754): the look the user saved with "Make default" - colours, grid, shadows, camera, shape
- * starts - put on the design that is open, which a file brings with its own. What belongs to the design itself
- * stays: the size of the plate, the printer, the units and how they are shown. The grid spacing stays too when the
- * saved default counts in other units, since it is a length in those.
+ * starts - put on the design that is open, which a file brings with its own. A printer in the saved default comes
+ * along with its plate, since that is the printer the user prints on (#850); without one the design keeps its plate
+ * and printer. The units and how they are shown stay with the design. The grid spacing stays too when the saved
+ * default counts in other units, since it is a length in those.
  */
 export function workspaceWithSavedDefault(current: WorkplaneWorkspaceSettings, saved: WorkplaneWorkspaceSettings): WorkplaneWorkspaceSettings {
   const sameUnits = saved.units === current.units;
+  const plate = saved.printer ? saved : current;
   return {
     ...saved,
-    width: current.width,
-    depth: current.depth,
-    sizePreset: current.sizePreset,
-    printer: current.printer,
+    width: plate.width,
+    depth: plate.depth,
+    sizePreset: plate.sizePreset,
+    printer: plate.printer,
     units: current.units,
     inchFormat: current.inchFormat,
     scale: current.scale,

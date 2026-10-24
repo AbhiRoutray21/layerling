@@ -2537,7 +2537,7 @@ export const MESSAGES_FR: Partial<Record<MessageKey, string>> = {
   "workspace.footerHint": "Enregistrez les paramètres actuels de cette conception.",
   "workspace.makeDefault": "Par défaut",
   "workspace.useMyDefault": "Utiliser mon réglage par défaut",
-  "workspace.useMyDefaultHint": "Applique à ce design les couleurs, la grille et les autres réglages enregistrés avec « Par défaut ». La taille du plateau, l’imprimante et les unités restent.",
+  "workspace.useMyDefaultHint": "Applique à ce design les couleurs, la grille et les autres réglages enregistrés avec « Par défaut ». Une imprimante enregistrée par défaut vient avec la taille de son plateau ; les unités restent.",
   "workspace.defaultSaved": "Valeur par défaut enregistrée",
   "sketch.toolbar": "Barre d'outils d'esquisse",
   "sketch.group.draw": "Dessiner",

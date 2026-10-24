@@ -2975,7 +2975,7 @@ export const MESSAGES_IT: Partial<Record<MessageKey, string>> = {
   "workspace.confirmTabClose": "Chiedi prima di chiudere la scheda",
   "workspace.confirmTabCloseHint": "Con un progetto aperto, il browser fa la sua domanda «Lasciare il sito?» quando chiudi o ricarichi la scheda. I progetti vengono comunque salvati dopo ogni modifica, la domanda è solo un promemoria. Il testo lo decide il browser.",
   "workspace.useMyDefault": "Usa le mie impostazioni predefinite",
-  "workspace.useMyDefaultHint": "Applica a questo progetto i colori, la griglia e le altre impostazioni salvate con «Imposta come predefinito». La dimensione della piastra, la stampante e le unità di misura restano invariate.",
+  "workspace.useMyDefaultHint": "Applica a questo progetto i colori, la griglia e le altre impostazioni salvate con «Imposta come predefinito». Una stampante salvata come predefinita arriva con la dimensione della sua piastra; le unità di misura restano invariate.",
   "sketch.fromMiddle": "Linea dal centro",
   "sketch.fromMiddleHint": "Disegna linee a partire dal centro: fai clic prima sul centro, poi trascina verso l’esterno; la linea si estende della stessa lunghezza in entrambe le direzioni.",
   "status.sketchFromMiddleOn": "Linea dal centro attiva: fai clic sul centro, poi sull’estremità; la linea avrà la stessa lunghezza anche dall’altro lato.",

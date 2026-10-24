@@ -2433,7 +2433,7 @@ export const MESSAGES_DA: Partial<Record<MessageKey, string>> = {
   "workspace.footerHint": "Gem de aktuelle indstillinger for dette design.",
   "workspace.makeDefault": "Gør til standard",
   "workspace.useMyDefault": "Brug min standard",
-  "workspace.useMyDefaultHint": "Lægger de farver, gitteret og andre indstillinger, du gemte med „Gør til standard“, på dette design. Pladens størrelse, printeren og enhederne bliver ikke ændret.",
+  "workspace.useMyDefaultHint": "Lægger de farver, gitteret og andre indstillinger, du gemte med „Gør til standard“, på dette design. En printer i standarden kommer med sin pladestørrelse; enhederne bliver ikke ændret.",
   "workspace.defaultSaved": "Standard gemt",
   "sketch.toolbar": "Skitse-værktøjsbjælke",
   "sketch.group.draw": "Tegn",

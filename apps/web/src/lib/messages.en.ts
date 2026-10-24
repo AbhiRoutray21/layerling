@@ -2554,7 +2554,7 @@ export const MESSAGES_EN = {
   "workspace.footerHint": "Save the current settings for this design.",
   "workspace.makeDefault": "Make default",
   "workspace.useMyDefault": "Use my default",
-  "workspace.useMyDefaultHint": "Puts the colours, grid and other settings you saved with “Make default” on this design. The size of the plate, the printer and the units stay.",
+  "workspace.useMyDefaultHint": "Puts the colours, grid and other settings you saved with “Make default” on this design. A printer in your default comes along with its plate size; the units stay.",
   "workspace.defaultSaved": "Default saved",
 
   "sketch.toolbar": "Sketch toolbar",

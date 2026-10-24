@@ -2543,7 +2543,7 @@ export const MESSAGES_CS: Record<MessageKey, string> = {
   "workspace.footerHint": "Uložit aktuální nastavení pro tento projekt.",
   "workspace.makeDefault": "Nastavit jako výchozí",
   "workspace.useMyDefault": "Použít moji výchozí",
-  "workspace.useMyDefaultHint": "Použije na tento návrh barvy, mřížku a další nastavení uložená přes „Nastavit jako výchozí“. Velikost desky, tiskárna a jednotky zůstanou.",
+  "workspace.useMyDefaultHint": "Použije na tento návrh barvy, mřížku a další nastavení uložená přes „Nastavit jako výchozí“. Tiskárna uložená ve výchozím nastavení přijde i s velikostí své desky; jednotky zůstanou.",
   "workspace.defaultSaved": "Výchozí nastavení bylo uloženo",
 
   "sketch.toolbar": "Nástrojová lišta náčrtu",
