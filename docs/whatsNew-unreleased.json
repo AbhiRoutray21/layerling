@@ -28,5 +28,15 @@
       "de": "Ein gesetztes Winkellineal gehört jetzt zum Entwurf: Nach dem Neuladen oder beim nächsten Öffnen liegt es an derselben Stelle, gleich gedreht und mit denselben Messpunkten, auch aus einer .lyl-Datei. Mit dem × entfernst du es.",
       "en": "A placed framing square now belongs to the design: after a reload or the next time you open it, it lies in the same place, turned the same way and measuring from the same points, also from a .lyl file. The × removes it."
     }
+  },
+  {
+    "title": {
+      "de": "Anhänge: Anleitung und Teileliste im Entwurf",
+      "en": "Attachments: instructions and parts lists in the design"
+    },
+    "body": {
+      "de": "Unter Verwalten gibt es jetzt „Anhänge“ (Büroklammer): Häng Markdown- oder Textdateien an einen Entwurf, etwa eine Montageanleitung oder eine Teileliste. Sie bleiben beim Entwurf, auch in der .lyl-Datei, in der Sicherung und im Serverordner. Ein Entwurf mit Anhängen braucht zum Öffnen diese oder eine neuere layerling-Version.",
+      "en": "Manage now has \"Attachments\" (the paperclip): attach Markdown or text files to a design, such as assembly instructions or a parts list. They stay with the design, also in the .lyl file, the backup and the server folder. A design with attachments needs this layerling version or a newer one to open."
+    }
   }
 ]
