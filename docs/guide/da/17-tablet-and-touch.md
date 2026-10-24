@@ -43,7 +43,7 @@ Skrider legemer, når børn eller travle hænder rører ved dem, slår du {{ui:w
 - **Installér den som en app.** I Safari trykker du på Del-ikonet og vælger "Føj til hjemmeskærm". Appen åbner i sit eget vindue uden adresselinje, og den virker uden forbindelse, se [Offline og installation](chapter:offline-and-install).
 - **Dine designs lever i browseren.** Der er ingen konto, og intet uploades. Safari har sin egen regel mod sporing: den sletter det, en hjemmeside har gemt, efter syv dage hvor du ikke har besøgt den i Safari. En webapp lagt på hjemmeskærmen er undtaget fra den regel, som WebKit dokumenterer det. Det er endnu en grund til at bruge appen fra hjemmeskærmen, og til at sikkerhedskopiere vigtigt arbejde: {{ui:dashboard.backupAll}} på startsiden pakker alle designs i én fil.
 - **Filer.** Safari lader en side skrive ind i en fil kun via en download, så {{ui:editor.export}} lægger filen i Downloads i Filer-appen, og [[Ctrl]]+[[S]] på et tastatur downloader den igen; se [Filer og lagring](chapter:files-and-saving).
-- **Ingen tastatur nødvendigt.** Alle værktøjer har en knap i båndet, og et talfelt åbner skærmtastaturet. Med et tastatur på iPad'en får du [tastaturgenveje](chapter:shortcuts).
+- **Ingen tastatur nødvendigt.** Alle værktøjer har en knap i båndet, og et talfelt åbner skærmtastaturet. Med et tastatur på iPad'en får du [tastaturgenveje](chapter:shortcuts). En værdiboks ved siden af et legeme åbner sit talfelt først ved det andet tryk: det første markerer den kun, så en finger, der ved en fejl rammer den, ikke får tastaturet frem.
 
 ## Værksteder med børn
 

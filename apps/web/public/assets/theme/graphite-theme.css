@@ -3526,6 +3526,11 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .touch-multi-select {
   box-shadow: 0 1px 4px rgba(44, 44, 44, 0.09);
 }
 
+:where(html[data-theme="dark"][data-palette="graphite"]) .dimension-label.armed {
+  border-color: rgba(166, 86, 0, 0.85);
+  box-shadow: 0 0 0 3px rgba(173, 89, 0, 0.22), 0 1px 4px rgba(44, 44, 44, 0.09);
+}
+
 :where(html[data-theme="dark"][data-palette="graphite"]) .dimension-input {
   border: 1px solid rgba(166, 86, 0, 0.85);
   background: rgba(255, 255, 255, 0.98);

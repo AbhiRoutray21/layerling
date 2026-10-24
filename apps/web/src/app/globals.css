@@ -8545,6 +8545,12 @@ html[data-theme="dark"] .touch-multi-select {
   box-shadow: 0 1px 4px rgba(58, 40, 20, 0.09);
 }
 
+/* With a finger the first tap on a value box only marks it; the second tap opens the number field (#855). */
+.dimension-label.armed {
+  border-color: rgba(166, 86, 0, 0.85);
+  box-shadow: 0 0 0 3px rgba(173, 89, 0, 0.22), 0 1px 4px rgba(58, 40, 20, 0.09);
+}
+
 .dimension-input {
   position: absolute;
   left: 0;
