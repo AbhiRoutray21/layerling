@@ -62,6 +62,8 @@ import { cleanNearZero, cleanRotationDegrees, isNonSolidShape, resizedShapeSize,
 import type { LayerlingMcpViewFace } from "@/lib/layerlingMcpProtocol";
 import { ownSideForMark } from "@/lib/dimensionSides";
 import { SelectionCounter } from "@/components/workplane/SelectionCounter";
+import { TouchMultiSelectButton } from "@/components/workplane/TouchMultiSelectButton";
+import { showsTouchMultiSelect } from "@/lib/touchMultiSelect";
 import { TransformOverlay, continuousSnappedWheelRotation, getElevationMeasureKey, measureKeyForHandle, ROTATION_WHEEL_SHIFT_SNAP_DEGREES, ROTATION_WHEEL_SNAP_DEGREES, snappedRotationDelta, snappedWheelRotation, type DimensionMark, type EditingCorner, type EditingDimension, type EditingRotation, type PinnedRotationWheelView, type RotationAxis, type RotationPlaneView, type RotationReadout, type TransformHandleKind, type TransformOverlayState } from "@/components/workplane/TransformOverlay";
 import { type AlignAxes, type FrameCuboid } from "@/lib/alignFrame";
 import type { AlignAxis, AlignHandleStatus, AlignTarget, GridSize, MeasurementAccuracy, ShapeAsset, WorkplaneNote, WorkplaneNoteAnchor, WorkplaneShape, WorkplaneWorkspaceSettings } from "@/types/layerling";
@@ -1610,6 +1612,57 @@ export function WorkplaneViewport({
   // gebraucht wird. Anfangs falsch, damit das ausgelieferte HTML passt.
   const [touchDevice, setTouchDevice] = useState(false);
   const [touchRotate, setTouchRotate] = useState(false);
+  // The round Select multiple button of a touch screen (#337): it stands while a body is picked
+  // with a finger. A tap on it locks Select multiple, so every further tap adds a body to the
+  // selection or takes it out; a second tap ends the mode and lets the selection go. A mouse never
+  // needs it.
+  const [touchMultiSelectVisible, setTouchMultiSelectVisible] = useState(false);
+  const [touchMultiSelectActive, setTouchMultiSelectActive] = useState(false);
+  const touchMultiSelectActiveRef = useRef(false);
+  const setTouchMultiSelectActiveState = useCallback((active: boolean) => {
+    touchMultiSelectActiveRef.current = active;
+    setTouchMultiSelectActive((current) => (current === active ? current : active));
+  }, []);
+  const updateTouchMultiSelectVisible = useCallback((visible: boolean) => {
+    setTouchMultiSelectVisible((current) => (current === visible ? current : visible));
+  }, []);
+  const endTouchMultiSelect = useCallback(() => {
+    setTouchMultiSelectActiveState(false);
+    updateTouchMultiSelectVisible(false);
+  }, [setTouchMultiSelectActiveState, updateTouchMultiSelectVisible]);
+  // A tap on the button locks Select multiple; a second tap ends it, takes the selection with it
+  // and puts the button away.
+  const toggleTouchMultiSelect = useCallback(() => {
+    if (touchMultiSelectActiveRef.current) {
+      endTouchMultiSelect();
+      onSelectShape(null);
+    } else {
+      setTouchMultiSelectActiveState(true);
+      updateTouchMultiSelectVisible(true);
+    }
+  }, [endTouchMultiSelect, onSelectShape]);
+  useEffect(() => {
+    // Locked Select multiple keeps the button, even with nothing selected yet.
+    if (selectedIds.length === 0 && !touchMultiSelectActiveRef.current) updateTouchMultiSelectVisible(false);
+  }, [selectedIds.length, updateTouchMultiSelectVisible]);
+  // A new body takes the selection, so the locked mode has nothing left to add to.
+  const shapeCountRef = useRef(shapes.length);
+  useEffect(() => {
+    const count = shapes.length;
+    const grew = count > shapeCountRef.current;
+    shapeCountRef.current = count;
+    if (grew && touchMultiSelectActiveRef.current) endTouchMultiSelect();
+  }, [shapes.length, endTouchMultiSelect]);
+  // The button belongs to plain picking; a tool that takes the taps itself takes it away with it.
+  const touchMultiSelectAvailable = touchMultiSelectVisible
+    && !workplaneMode && !splitActive && !pickOnly
+    && !alignMode && !mirrorMode
+    && !tapeMode && !tapeDeleteMode && !tapeMoveMode && !cornerRulerMode
+    && !modifierActive && !pivotPickMode && !layFlatPickMode && !mateFacePick && !cadFacePick;
+  useEffect(() => {
+    // A button that is not on the screen cannot be locked any more.
+    if (!touchMultiSelectAvailable && touchMultiSelectActiveRef.current) endTouchMultiSelect();
+  }, [touchMultiSelectAvailable, endTouchMultiSelect]);
   const transformOverlayRef = useRef<TransformOverlayState | null>(null);
   const alignOverlayRef = useRef<AlignOverlayState | null>(null);
   const mirrorOverlayRef = useRef<MirrorOverlayState | null>(null);
@@ -5269,6 +5322,9 @@ export function WorkplaneViewport({
 
   const handlePointerDown = useCallback(
     (event: ReactPointerEvent<HTMLDivElement>) => {
+      // A mouse or a pen never shows the button of a touch screen - Shift is there for them.
+      // Locked Select multiple keeps it until its own button ends it.
+      if (event.pointerType !== "touch" && !touchMultiSelectActiveRef.current) updateTouchMultiSelectVisible(false);
       // Wer auf die Arbeitsflaeche klickt, ist mit dem Schreiben fertig. Von
       // allein passiert das hier nicht: Mehrere Werkzeuge fangen den
       // Zeigerdruck ab, und damit nimmt der Browser auch den Fokuswechsel
@@ -5297,14 +5353,20 @@ export function WorkplaneViewport({
         if (touchPointersRef.current.size >= 2) {
           touchEmptyTapRef.current = null;
           cancelLongPress();
+          // Two fingers belong to the camera, not to a selection.
+          if (!touchMultiSelectActiveRef.current) updateTouchMultiSelectVisible(false);
         }
-        if (cameraTouchRef.current) return;
+        if (cameraTouchRef.current) {
+          if (!touchMultiSelectActiveRef.current) updateTouchMultiSelectVisible(false);
+          return;
+        }
         const wantsCamera = touchPointersRef.current.size >= 2 || touchRotateRef.current;
         // Wer gerade an einem Anfasser zieht, meint auch das - dann bleibt
         // alles, wie es ist.
         if (wantsCamera && !transformRef.current && !splitDragRef.current) {
           cancelGestureForCamera();
           cameraTouchRef.current = true;
+          if (!touchMultiSelectActiveRef.current) updateTouchMultiSelectVisible(false);
           handOverTouchToCamera();
           return;
         }
@@ -5614,9 +5676,14 @@ export function WorkplaneViewport({
       }
 
       const id = pickShape(event.clientX, event.clientY, event.pointerType);
+      // A finger on a body shows the round Select multiple button; empty space takes it away,
+      // unless Select multiple is locked.
+      updateTouchMultiSelectVisible(
+        touchMultiSelectActiveRef.current || showsTouchMultiSelect(event.pointerType, id),
+      );
       // Select multiple does what Shift does, for a tablet without the key; a finger on empty space
       // still turns the view and a long press still opens the menu.
-      const additive = event.shiftKey || multiSelectRef.current;
+      const additive = event.shiftKey || multiSelectRef.current || touchMultiSelectActiveRef.current;
       if (event.pointerType === "touch" && !event.shiftKey) beginLongPress(event);
       if (!id && event.pointerType === "touch" && !event.shiftKey) {
         // A finger on empty space turns the view, as in Tinkercad, so a tablet needs no switch for it;
@@ -5822,6 +5889,7 @@ export function WorkplaneViewport({
       onAddShape,
       beginLongPress,
       cancelLongPress,
+      updateTouchMultiSelectVisible,
     ],
   );
 
@@ -6191,9 +6259,12 @@ export function WorkplaneViewport({
         if (emptyTap && emptyTap.pointerId === event.pointerId) {
           touchEmptyTapRef.current = null;
           if (touchPointersRef.current.size === 1 && Math.hypot(event.clientX - emptyTap.x, event.clientY - emptyTap.y) < 8) {
-            // In Select multiple a tap on empty space ends the mode and leaves the selection as it is.
-            if (multiSelectRef.current) onMultiSelectEndRef.current?.();
-            else onSelectShape(null);
+            // Locked Select multiple keeps the selection and its button; the other Select
+            // multiple ends here on empty space, and a plain tap clears the selection.
+            if (!touchMultiSelectActiveRef.current) {
+              if (multiSelectRef.current) onMultiSelectEndRef.current?.();
+              else onSelectShape(null);
+            }
           }
         }
         touchPointersRef.current.delete(event.pointerId);
@@ -7764,6 +7835,9 @@ export function WorkplaneViewport({
             </div>
           </div>
         </section>
+      ) : null}
+      {touchMultiSelectAvailable ? (
+        <TouchMultiSelectButton active={touchMultiSelectActive} onToggle={toggleTouchMultiSelect} />
       ) : null}
     </main>
   );
