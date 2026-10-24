@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+## 1.109.0
+
 - **Touch: a tap beside a body no longer raises the keyboard by accident (#855):** The value boxes around a selected body (a length, a height, a move) are buttons that open a number field, and with it the on-screen keyboard. A finger aiming at the body or at a handle landed on such a box now and then and the keyboard covered the workplane. With a finger the first tap on a box now only marks it (a frame in the accent colour, for 2.5 seconds) and the second tap opens the field (`touchSecondTap.ts`); a mouse and a pen open it at once as before. Reported by @crazykay.
 - **The Align dots are easier to hit with a finger (#854):** The dots of the Align tool are 14 px wide, and a tap that missed one did not start the tool and also ended the multi-selection that aligning several parts depends on. On a touch screen (`pointer: coarse`) the dots keep their look and now catch a tap from a finger's width round them, as the transform and rotate handles already did. Reported by @crazykay.
 - **Alt+W puts the workplane back on the base plate (#845):** Going back to the base plate took Esc while placing, a click beside the plate or the arrow button below the eye; there was no key for it. The shortcuts list has its own row for it, and the guide (View and workplane, every guide language) and the in-app guide (every language) say so. Tried in the editor: with the workplane on the top of a box and the box selected, Alt+W put it back on the plate and kept the selection. Contributed by @gogades.
