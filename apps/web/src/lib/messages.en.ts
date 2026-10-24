@@ -1320,6 +1320,7 @@ export const MESSAGES_EN = {
   "array.mode.row": "Row",
   "array.mode.circle": "Circle",
   "array.count": "Count (with original)",
+  "array.groupCopies": "Group the copies",
   "array.spacingX": "Spacing X",
   "array.spacingY": "Spacing Y",
   "array.spacingZ": "Spacing Z (height)",

@@ -1386,6 +1386,7 @@ export const MESSAGES_CS: Record<MessageKey, string> = {
   "array.mode.row": "Řada",
   "array.mode.circle": "Kružnice",
   "array.count": "Počet včetně originálu",
+  "array.groupCopies": "Seskupit kopie",
   "array.spacingX": "Rozteč X",
   "array.spacingY": "Rozteč Y",
   "array.spacingZ": "Rozteč Z (výška)",

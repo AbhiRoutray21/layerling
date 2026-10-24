@@ -1319,6 +1319,7 @@ export const MESSAGES_NL: Record<MessageKey, string> = {
   "array.mode.row": "Rij",
   "array.mode.circle": "Cirkel",
   "array.count": "Aantal (incl. origineel)",
+  "array.groupCopies": "Kopieën groeperen",
   "array.spacingX": "Tussenafstand X",
   "array.spacingY": "Tussenafstand Y",
   "array.spacingZ": "Tussenafstand Z (hoogte)",
