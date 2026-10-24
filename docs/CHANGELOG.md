@@ -7,6 +7,7 @@ code still carries it - so a lower number further down is older, not newer.
 ## Unreleased
 
 - **Alt+W puts the workplane back on the base plate (#845):** Going back to the base plate took Esc while placing, a click beside the plate or the arrow button below the eye; there was no key for it. The shortcuts list has its own row for it, and the guide (View and workplane, every guide language) and the in-app guide (every language) say so. Tried in the editor: with the workplane on the top of a box and the box selected, Alt+W put it back on the plate and kept the selection. Contributed by @gogades.
+- **A group stretched one way keeps its round parts oval when it is hollowed (#844):** Two cylinders and a box grouped into a capsule, then made wider only, looked right, but Hollow turned the ends into circles of the new length, a "dog bone". Hollow, the edge tools, Ungroup and the boolean tools take a group apart into its shapes again, and a cylinder is always round, so it took the larger of its two stretched sizes. A cylinder the group stretches more one way than the other now comes back as an ellipse of both sizes (`restoreGroupedChildren`, through `cylinderToEllipsePatch`, so one still called "Cylinder" is called "Ellipse"); a group grown the same both ways keeps its cylinders. Stars, knurls and gears have no oval form and stay round. Unit test in `stretchedGroupCylinder.test.ts`; tried in the editor: the capsule widened from 70 to 100 mm hollows as a smooth capsule, and ungrouped gives two ellipses of 42.86 x 30 mm. Reported by @forrrge.
 
 ## 1.108.0
 
