@@ -97,6 +97,8 @@ Tipp: Setze vorher mit {{ui:editor.tool.rotationPivot}} den Drehpunkt auf eine F
 
 Die Kopien erscheinen zuerst als Vorschau. Erst {{ui:array.apply}} legt sie an. Sind die Kopien Aussparungen, gruppierst du sie danach mit dem Körper, in den sie schneiden sollen.
 
+Ist {{ui:array.groupCopies}} angehakt, gruppiert {{ui:array.apply}} das Original und alle Kopien im selben Schritt zu einem Objekt, wie es {{ui:editor.tool.group}} täte: Ein Kranz aus 36 Stücken ist dann ein Teil, das du verschieben, einfärben oder zum Schneiden nehmen kannst. Ab 6 Stücken hakt sich das Kästchen selbst an; hakst du es selbst an oder ab, bleibt es so. {{ui:editor.tool.ungroup}} holt die Stücke zurück. Klappt das Gruppieren nicht, kommt das Muster trotzdem als einzelne Stücke an, und die Meldung sagt, warum.
+
 ## Lochmuster auf einer Fläche
 
 Für Lüftungsschlitze, Lautsprechergitter, Körbe und Gehäuse verteilt das {{ui:holePattern.title}} Löcher gleichmäßig auf einer ebenen Fläche. Du musst dafür kein Loch einzeln anlegen, vervielfältigen und an die Wand setzen. Wähle genau einen Körper aus und klicke in der Gruppe {{ui:editor.group.modify}} der Werkzeugleiste auf {{ui:holePattern.title}}, gleich neben dem Muster. Du kannst auch mit der rechten Maustaste auf den Körper klicken oder es mit [[Strg]]+[[K]] suchen.

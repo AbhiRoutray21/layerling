@@ -10335,12 +10335,36 @@ export function LayerlingEditor({
           radiusChange: mcpNumber(params.radiusChange, 0),
         };
         const copies = arrayCopies(sources, settings);
-        commitShapes(
-          [...shapesRef.current, ...copies],
-          [...sources.map((shape) => shape.id), ...copies.map((shape) => shape.id)],
-          t("status.arrayCreated", { count: copies.length }),
-        );
-        return { settings, originals: sources.map((shape) => shape.id), copies: copies.map(mcpShapeSummary) };
+        const looseResult = (message: string, warning?: string) => {
+          commitShapes(
+            [...shapesRef.current, ...copies],
+            [...sources.map((shape) => shape.id), ...copies.map((shape) => shape.id)],
+            message,
+          );
+          return { settings, originals: sources.map((shape) => shape.id), copies: copies.map(mcpShapeSummary), ...(warning ? { warning } : {}) };
+        };
+        // `group: true` groups the originals and the copies as the Pattern window's box does (#828); left out, they stay loose.
+        if (params.group !== true) return looseResult(t("status.arrayCreated", { count: copies.length }));
+        if (sources.some((shape) => isNonSolidShape(shape))) return looseResult(t("status.arrayCreated", { count: copies.length }), "A ruler isn't a solid and can't be grouped, so the pieces stay loose");
+        const pieces = [...sources, ...copies];
+        const sourceFingerprint = projectShapesFingerprint(currentShapes());
+        const sourceProjectId = projectInfoRef.current.projectId;
+        const result = await buildGroupedShapeOffThread(pieces, workspaceSettingsRef.current.booleanTriangleLimit, geometryAbortRef.current?.signal);
+        if (projectInfoRef.current.projectId !== sourceProjectId || projectShapesFingerprint(currentShapes()) !== sourceFingerprint) {
+          throw new Error("The scene changed while grouping; run the command again");
+        }
+        if (!result.group) {
+          if (result.consumed) {
+            const sourceIds = new Set(sources.map((shape) => shape.id));
+            commitShapes(currentShapes().filter((shape) => !sourceIds.has(shape.id)), null, t("status.mcpGroupConsumed"));
+            return { settings, consumed: true };
+          }
+          return looseResult(result.failureNotice, result.failureNotice);
+        }
+        const sourceIds = new Set(sources.map((shape) => shape.id));
+        const editableGroup = canonicalizeShape({ ...result.group, groupOperation: "group" });
+        commitShapes([...currentShapes().filter((shape) => !sourceIds.has(shape.id)), editableGroup], editableGroup.id, result.mergeWarning ?? t("status.groupedMany", { count: pieces.length }));
+        return { settings, group: mcpShapeSummary(editableGroup), pieces: pieces.length, ...(result.mergeWarning ? { warning: result.mergeWarning } : {}) };
       }
 
       if (command.action === "apply_edge_treatment") {

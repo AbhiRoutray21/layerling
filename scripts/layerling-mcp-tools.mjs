@@ -869,6 +869,7 @@ export const tools = [
         rotateCopies: { type: "boolean", description: "Circle: turn the copies with the circle, default true." },
         rise: { type: "number", description: "Circle: height gained per copy in millimetres, default 0 (a screw when not 0)." },
         radiusChange: { type: "number", description: "Circle: distance from the centre gained per copy in millimetres, default 0 (a spiral when not 0; negative tightens)." },
+        group: { type: "boolean", description: "Group the originals and the copies into one object in the same step, as Group does (holes among them cut the solids), default false. If grouping fails the pieces stay loose and `warning` says why." },
       },
     },
   },

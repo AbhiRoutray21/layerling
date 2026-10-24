@@ -97,6 +97,8 @@ Tip: first set the pivot on a face with {{ui:editor.tool.rotationPivot}}, then t
 
 The copies first appear as a preview. Only {{ui:array.apply}} creates them. If the copies are holes, group them afterwards with the body they should cut into.
 
+With {{ui:array.groupCopies}} ticked, {{ui:array.apply}} groups the original and all copies into one object in the same step, as {{ui:editor.tool.group}} would: a ring of 36 pieces is then one part you can move, colour or cut with. Above 5 pieces the box ticks itself; once you tick or untick it yourself, it stays as you set it. {{ui:editor.tool.ungroup}} brings the pieces back. If grouping does not work out, the pattern still comes in as separate pieces and the message says why.
+
 ## Hole pattern on a face
 
 For vents, speaker grilles, baskets and enclosures the {{ui:holePattern.title}} spreads holes evenly over a flat face. You no longer have to make one hole, repeat it and set it onto the wall. Select exactly one body and click {{ui:holePattern.title}} in the {{ui:editor.group.modify}} group of the toolbar, next to the pattern. You can also right-click the body, or find it with [[Ctrl]]+[[K]].
