@@ -782,10 +782,14 @@ export function boundsForCuboids(bounds: Cuboid[]): Cuboid {
  * cylinder. A group is shown stretched to its size over the vertices it holds, so it has to be sized by them (#667).
  */
 export function boundsForShapesOfVertices(shapes: WorkplaneShape[]): Cuboid {
-  return boundsForCuboids(shapes.map((shape) => meshAabb(shape, true)));
+  return boundsForCuboids(shapes.map((shape) => aabbOfShape(shape, true)));
 }
 
-export function meshAabb(shape: WorkplaneShape, ofVertices = false): Cuboid {
+export function meshAabb(shape: WorkplaneShape): Cuboid {
+  return aabbOfShape(shape, false);
+}
+
+function aabbOfShape(shape: WorkplaneShape, ofVertices: boolean): Cuboid {
   // A wrapped body covers only an arc; its box around the cylinder's axis is what
   // makes "centre on the cylinder" put it on that cylinder's wall (#106).
   if (shape.cylinderWrap && shape.importedMesh && !ofVertices) return shapeAabb(shape);
