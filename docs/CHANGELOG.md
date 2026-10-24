@@ -6,7 +6,7 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
-- **Alt+W puts the workplane back on the base plate:** Going back to the base plate took Esc while placing, a click beside the plate or the arrow button below the eye; there was no key for it. The shortcuts list has its own row for it, and the guide (View and workplane, every guide language) and the in-app guide (every language) say so.
+- **Alt+W puts the workplane back on the base plate (#845):** Going back to the base plate took Esc while placing, a click beside the plate or the arrow button below the eye; there was no key for it. The shortcuts list has its own row for it, and the guide (View and workplane, every guide language) and the in-app guide (every language) say so. Tried in the editor: with the workplane on the top of a box and the box selected, Alt+W put it back on the plate and kept the selection. Contributed by @gogades.
 
 ## 1.108.0
 
