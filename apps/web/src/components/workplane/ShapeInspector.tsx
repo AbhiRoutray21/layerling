@@ -2153,8 +2153,14 @@ function getShapePropertiesWithAppLimits(shape: WorkplaneShape, onUpdate: ShapeI
         value: shape.text ?? "TEXT",
         onChange: (text) => {
           const nextText = text.slice(0, 24) || " ";
-          const nextWidth = clamp(Math.max(Math.min(46, textWidthMax), nextText.length * 19), MIN_SHAPE_SIZE, textWidthMax);
-          onUpdate({ text: nextText, width: nextWidth, size: nextWidth });
+          // Other words keep the letter size and the box follows the letters (#871): only the width was
+          // changed before, and the letters were stretched to fill the old depth.
+          const sized = textLetterSizePatch({ ...shape, text: nextText } as WorkplaneShape, textLetterSize(shape));
+          if (typeof sized.width === "number" && sized.width > textWidthMax) {
+            onUpdate({ text: nextText, width: textWidthMax, size: textWidthMax });
+            return;
+          }
+          onUpdate({ text: nextText, ...sized });
         },
       },
       textFontProperty(shape, onUpdate),

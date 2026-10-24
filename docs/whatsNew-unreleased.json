@@ -58,5 +58,15 @@
       "de": "Ziehst du den schwarzen Hebe-Pfeil mit gedrückter Alt-Taste, bleibt die Form stehen und eine Kopie landet dort, wo du loslässt. So stapelst du Kopien senkrecht, wie du sie mit Alt seitlich schon verschieben konntest.",
       "en": "Drag the black lift arrow with Alt held and the shape stays where it is while a copy lands where you let go. That stacks copies straight up, as Alt already did sideways."
     }
+  },
+  {
+    "title": {
+      "de": "Text ändern: Größe bleibt",
+      "en": "Changing text keeps the size"
+    },
+    "body": {
+      "de": "Tippst du einen anderen Text ein, bleibt die Buchstabengröße jetzt gleich, und die Box passt sich den Buchstaben an. Vorher wurden sie in die alte Box gezogen, ein einzelnes „a“ wurde größer und die Breite stimmte nicht.",
+      "en": "When you type another text, the letter size now stays the same and the box follows the letters. Before, the letters were stretched into the old box: a single \"a\" grew and the width was wrong."
+    }
   }
 ]
