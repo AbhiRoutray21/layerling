@@ -2323,6 +2323,7 @@ export const MESSAGES_IT: Partial<Record<MessageKey, string>> = {
   "workspace.startInPerspective": "Avvia l'editor in vista prospettica",
   "workspace.doubleClickOpensSketch": "Il doppio clic apre lo schizzo",
   "workspace.doubleClickOpensGroup": "Il doppio clic apre un gruppo o un insieme",
+  "workspace.doubleClickCentersView": "Il doppio clic sul piano di lavoro centra lì la vista",
   "workspace.selectBeforeMoving": "Seleziona prima di spostare",
   "workspace.objectSnap": "Aggancia alle altre forme durante lo spostamento",
   "workspace.overhangAngle": "Evidenzia gli sbalzi a partire da {angle}°",

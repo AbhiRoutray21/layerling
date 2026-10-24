@@ -2426,6 +2426,7 @@ export const MESSAGES_CS: Record<MessageKey, string> = {
   "workspace.startInPerspective": "Spouštět editor v perspektivním pohledu",
   "workspace.doubleClickOpensSketch": "Dvojklik otevře náčrt",
   "workspace.doubleClickOpensGroup": "Dvojklik otevře sloučení nebo seskupení",
+  "workspace.doubleClickCentersView": "Dvojklik na pracovní rovinu tam vystředí pohled",
   "workspace.selectBeforeMoving": "Před posunem vyžadovat výběr",
   "workspace.frameByDirection": "Směr rámečku rozhoduje",
   "workspace.frameByDirectionHint": "Rámeček tažený doprava vybere jen to, co leží celé uvnitř, tažený doleva vše, čeho se dotkne (kreslí se čárkovaně), jako v SketchUpu",

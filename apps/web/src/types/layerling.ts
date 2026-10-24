@@ -391,6 +391,8 @@ export type WorkplaneWorkspaceSettings = {
   /** A double click on a sketch body opens its sketch; on a group or bundle, opens it for editing (#150). */
   doubleClickOpensSketch: boolean;
   doubleClickOpensGroup: boolean;
+  /** A double click on empty workplane slides the view so that the spot comes to the middle. */
+  doubleClickCentersView: boolean;
   /** Moving a shape snaps its edges and centre to other shapes, with guide lines. */
   objectSnap: boolean;
   /** An STL leaves as a plain download each time, which the browser numbers (name (1).stl), instead of writing into one linked file (#731). */

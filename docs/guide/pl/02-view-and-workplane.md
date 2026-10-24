@@ -14,6 +14,7 @@ Myszą:
 | przeciągasz środkowym przyciskiem | przesuwasz widok |
 | kręcisz kółkiem myszy | przybliżasz i oddalasz |
 | trzymasz [[Ctrl]] / [[Cmd]] i przeciągasz lewym przyciskiem | też przesuwasz widok (na touchpadzie MacBooka: przytrzymaj [[Cmd]], dociśnij i przeciągnij) |
+| klikasz dwukrotnie puste miejsce płaszczyzny roboczej albo obok płyty | przesuwasz widok tak, że to miejsce jest na środku; potem widok obraca się wokół niego |
 
 Szybkość przybliżania kółkiem ustawia {{ui:workspace.zoomSpeed}} w ustawieniach, w sekcji {{ui:workspace.appearance}}: suwak od 1 do 14, na początek 5. Ustawia on tylko kółko i touchpad: przyciski oraz klawisze [[+]] i [[−]] zawsze przybliżają tymi samymi małymi krokami. Jeden ząbek kółka myszy przybliża tak samo w każdej przeglądarce, a touchpad przybliża zależnie od tego, jak daleko przesuniesz palce.
 
@@ -146,7 +147,7 @@ Widok szkicu ma własne kolory: {{ui:workspace.sketchBackground}} dla okna wokó
 
 {{ui:workspace.frameByDirection}}: ramka przeciągnięta w prawo zaznacza tylko to, co leży w niej w całości, a przeciągnięta w lewo wszystko, czego dotyka (rysowana przerywaną linią), jak w SketchUpie.
 
-{{ui:workspace.doubleClickOpensSketch}} decyduje, czy dwukrotne kliknięcie wyciągniętego szkicu otwiera go ponownie, jak w Tinkercadzie, a {{ui:workspace.doubleClickOpensGroup}}, czy dwukrotne kliknięcie grupy albo zestawu otwiera je do edycji.
+{{ui:workspace.doubleClickOpensSketch}} decyduje, czy dwukrotne kliknięcie wyciągniętego szkicu otwiera go ponownie, jak w Tinkercadzie, a {{ui:workspace.doubleClickOpensGroup}}, czy dwukrotne kliknięcie grupy albo zestawu otwiera je do edycji. {{ui:workspace.doubleClickCentersView}} decyduje, czy dwukrotne kliknięcie pustego miejsca płaszczyzny roboczej przesuwa tam widok.
 
 {{ui:workspace.objectSnap}} sprawia, że krawędzie i środek kształtu przyciągają się podczas przeciągania do innych kształtów. Menu siatki w prawym dolnym rogu ma ten sam przełącznik. {{ui:workspace.cruise}} sprawia, że nowy kształt wisi na wskaźniku myszy i ląduje na ścianie pod nim, jak Cruise w Tinkercadzie. Po wyłączeniu nowy kształt pojawia się na środku płyty. Więcej w rozdziale [Zaznaczanie i rozmieszczanie](chapter:select-and-arrange).
 

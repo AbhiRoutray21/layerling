@@ -14,6 +14,7 @@ summary: 在场景中移动、正对着观察，以及把新形状放到任意�
 | 按住中键拖动 | 平移视图 |
 | 滚轮 | 放大和缩小 |
 | 按住 [[Ctrl]] / [[Cmd]] 并用左键拖动 | 也可平移视图（在 MacBook 触控板上：按住 [[Cmd]]，按下并拖动） |
+| 双击工作平面上的空白处或平台旁边 | 平移视图，使该处位于中央；之后视图绕该处旋转 |
 
 滚轮缩放的速度在设置的 {{ui:workspace.appearance}} 下用 {{ui:workspace.zoomSpeed}} 设定：滑块范围 1 到 14，初始为 5。它只作用于滚轮和触控板：按钮以及 [[+]] 和 [[−]] 键始终按同样的小步距缩放。鼠标滚轮的一格在任何浏览器里缩放幅度都相同，触控板则按你滑过的距离缩放。
 
@@ -139,7 +140,7 @@ X 和 [[Esc]] 会关闭面板；如果正在测量，[[Esc]] 会先结束测量�
 
 {{ui:workspace.frameByDirection}}：向右拖出的选框只选中完全位于其中的对象，向左拖出的选框则选中它碰到的所有对象（以虚线绘制），与 SketchUp 相同。
 
-{{ui:workspace.doubleClickOpensSketch}} 决定双击拉伸出的草图是否会重新打开草图，与 Tinkercad 相同；{{ui:workspace.doubleClickOpensGroup}} 决定双击分组或捆绑是否会打开它进行编辑。
+{{ui:workspace.doubleClickOpensSketch}} 决定双击拉伸出的草图是否会重新打开草图，与 Tinkercad 相同；{{ui:workspace.doubleClickOpensGroup}} 决定双击分组或捆绑是否会打开它进行编辑。{{ui:workspace.doubleClickCentersView}} 决定双击工作平面上的空白处是否会把视图移到该处。
 
 {{ui:workspace.objectSnap}} 让形状的边和中心在拖动时吸附到其他形状；右下角的网格菜单有同样的开关。{{ui:workspace.cruise}} 让新形状挂在鼠标指针上，并落在其下方的面上，类似 Tinkercad 的 Cruise；关闭时，新形状出现在平台中央。更多内容见[选择与排列](chapter:select-and-arrange)。
 

@@ -14,6 +14,7 @@ Mit der Maus:
 | mittlere Maustaste ziehen | die Ansicht verschieben |
 | Mausrad | hinein- und herauszoomen |
 | [[Strg]] / [[Cmd]] halten und mit links ziehen | ebenfalls verschieben (auf dem Trackpad eines MacBooks: [[Cmd]] halten, drücken und ziehen) |
+| Doppelklick auf eine leere Stelle der Arbeitsebene oder neben die Platte | verschiebt die Ansicht, bis diese Stelle in der Mitte liegt; die Ansicht dreht sich dann um sie |
 
 Wie schnell das Mausrad zoomt, stellst du in den Einstellungen unter {{ui:workspace.appearance}} mit {{ui:workspace.zoomSpeed}} ein: ein Regler von 1 bis 14, zu Beginn 5. Er gilt nur für Mausrad und Trackpad: die Knöpfe und die Tasten [[+]] und [[−]] zoomen immer in denselben kleinen Schritten. Eine Raste des Mausrads zoomt in jedem Browser gleich stark, ein Trackpad zoomt danach, wie weit du streichst.
 
@@ -146,7 +147,7 @@ Die Skizzenansicht hat eigene Farben: {{ui:workspace.sketchBackground}} für das
 
 {{ui:workspace.frameByDirection}}: Ein nach rechts gezogener Rahmen nimmt nur, was ganz in ihm liegt, ein nach links gezogener alles, was er berührt (gestrichelt gezeichnet), wie in SketchUp.
 
-{{ui:workspace.doubleClickOpensSketch}} bestimmt, ob ein Doppelklick auf eine extrudierte Skizze die Skizze wieder öffnet, wie in Tinkercad, und {{ui:workspace.doubleClickOpensGroup}}, ob ein Doppelklick auf eine Gruppe oder ein Bündel sie zum Bearbeiten öffnet.
+{{ui:workspace.doubleClickOpensSketch}} bestimmt, ob ein Doppelklick auf eine extrudierte Skizze die Skizze wieder öffnet, wie in Tinkercad, und {{ui:workspace.doubleClickOpensGroup}}, ob ein Doppelklick auf eine Gruppe oder ein Bündel sie zum Bearbeiten öffnet. {{ui:workspace.doubleClickCentersView}} bestimmt, ob ein Doppelklick auf eine leere Stelle der Arbeitsebene die Ansicht dorthin verschiebt.
 
 {{ui:workspace.objectSnap}} lässt die Kanten und die Mitte einer Form beim Ziehen an anderen Formen einrasten; das Rastermenü unten rechts hat denselben Schalter. {{ui:workspace.cruise}} lässt eine neue Form am Mauszeiger hängen und auf der Fläche darunter landen, wie Cruise in Tinkercad; ausgeschaltet erscheint eine neue Form in der Mitte der Platte. Mehr unter [Auswählen und Anordnen](chapter:auswaehlen-und-anordnen).
 

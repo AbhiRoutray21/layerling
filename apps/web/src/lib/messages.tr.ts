@@ -2349,6 +2349,7 @@ export const MESSAGES_TR: Partial<Record<MessageKey, string>> = {
   "workspace.startInPerspective": "Editörü perspektif görünümde başlat",
   "workspace.doubleClickOpensSketch": "Çift tık eskizi açar",
   "workspace.doubleClickOpensGroup": "Çift tık bir grubu veya paketi açar",
+  "workspace.doubleClickCentersView": "Çalışma düzlemine çift tık görünümü oraya ortalar",
   "workspace.selectBeforeMoving": "Taşımadan önce seç",
   "workspace.frameByDirection": "Çerçevenin yönü belirler",
   "workspace.frameByDirectionHint": "Sağa sürüklenen bir çerçeve sadece tamamen içinde olanı, sola sürüklenen ise değdiği her şeyi (kesikli çizilir) seçer, SketchUp'taki gibi",

@@ -2,12 +2,12 @@ import * as THREE from "three";
 import type { ThreeState } from "@/components/workplane/ViewportOverlays";
 import { orthographicFramingZoom, perspectiveFramingDistance } from "@/lib/cameraFraming";
 import { orbitOffsetByDrag, viewCubeAngles, viewFaceDirection, type ViewCubeFace } from "@/lib/viewCubeDrag";
-import { cameraTurn, cameraTurnOffset, prefersReducedMotion, type CameraTurn } from "@/lib/viewCubeTransition";
+import { cameraTurn, cameraTurnOffset, pivotSlide, pivotSlidePoint, prefersReducedMotion, type CameraTurn } from "@/lib/viewCubeTransition";
 import { zoomDistanceScale } from "@/lib/workplaneSettings";
 
 /**
  * The camera of a 3D view and the moves it makes: home, a face of the view cube, a zoom step,
- * framing the selection, the switch between the normal and the flat view. The 3D view and the
+ * framing the selection, a slide to a spot, the switch between the normal and the flat view. The 3D view and the
  * second view's window each have a camera of their own and share these.
  */
 
@@ -198,10 +198,35 @@ export function setCameraToViewDirection(state: CameraRig, direction: THREE.Vect
   state.needsRender = true;
 }
 
-/** One frame of the view cube turn, before OrbitControls orients the camera. */
+/** Slides the view so that a point comes to the middle of the screen and becomes the pivot, from the same angle and distance. */
+export function panCameraTo(state: CameraRig, point: THREE.Vector3, animate = true) {
+  // constrainCamera holds the pivot on the plate; a spot beside it may be centred too, as with
+  // "Center view" (#352), until the house button takes the allowance back.
+  state.focusReach = (state.focusReach?.clone() ?? new THREE.Box3()).expandByPoint(point);
+  if (animate && !prefersReducedMotion()) {
+    state.cameraTurn = pivotSlide(state.controls.target, point, performance.now());
+    state.needsRender = true;
+    return;
+  }
+  state.cameraTurn = null;
+  state.camera.position.add(point.clone().sub(state.controls.target));
+  state.controls.target.copy(point);
+  state.controls.update();
+  state.needsRender = true;
+}
+
+/** One frame of the view cube turn or the slide of the pivot, before OrbitControls orients the camera. */
 export function stepCameraTurn(state: CameraRig, now: number): boolean {
   const turn = state.cameraTurn;
   if (!turn) return false;
+  if ("pivotTo" in turn) {
+    // The camera moves as far as the pivot, so the angle and the distance stay exactly as they were.
+    const { pivot, done } = pivotSlidePoint(turn, now);
+    state.camera.position.add(pivot.clone().sub(state.controls.target));
+    state.controls.target.copy(pivot);
+    if (done) state.cameraTurn = null;
+    return true;
+  }
   const { offset, done } = cameraTurnOffset(turn, now);
   state.camera.up.set(0, 1, 0);
   state.camera.position.copy(state.controls.target).add(offset);

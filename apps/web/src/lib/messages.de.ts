@@ -2438,6 +2438,7 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "workspace.frameByDirectionHint": "Ein Rahmen nach rechts gezogen wählt nur, was ganz darin liegt, nach links gezogen alles, was er berührt (gestrichelt gezeichnet), wie in SketchUp",
   "workspace.doubleClickOpensSketch": "Doppelklick öffnet die Skizze",
   "workspace.doubleClickOpensGroup": "Doppelklick öffnet Gruppe oder Bündel",
+  "workspace.doubleClickCentersView": "Doppelklick auf die Arbeitsebene zentriert die Ansicht dort",
   "workspace.objectSnap": "Beim Verschieben an anderen Formen fangen",
   "workspace.stlAsDownload": "STL als Download speichern",
   "workspace.stlAsDownloadHint": "Chrome und Edge schreiben eine STL jedes Mal in dieselbe Datei. Mit diesem Schalter kommt stattdessen ein normaler Download: Der Browser nummeriert dann die Dateien, name (1).stl, name (2).stl.",

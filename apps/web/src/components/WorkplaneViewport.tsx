@@ -78,7 +78,8 @@ import { axisLockedPoint, circleOfEdgePoints, perpendicularFootOnSegment, pointA
 import { syncHistoryPickHighlight } from "@/components/workplane/historyPickHighlight";
 import { orbitViewBy, panViewBy } from "@/lib/viewArrowKeys";
 import { useViewportKeyboardHooks } from "@/components/workplane/viewportKeyboard";
-import { aimPickRay, firstShapeHit, pickImagePoint, pickLayFlatFace, pickMateFace, pickRotationPivot, pickShapeAt, pickShapeIdAt, pointerRayFor, rayPointOnRotationPlane, RENDER_LAYER_SHAPES, splitAxisParameter, usePickOnlyPointer, type LayFlatPick, type PickOnlySelection } from "@/components/workplane/viewportPicking";
+import { useViewportDoubleClick } from "@/components/workplane/useViewportDoubleClick";
+import { aimPickRay, firstShapeHit, pickImagePoint, pickLayFlatFace, pickMateFace, pickRotationPivot, pickShapeAt, pointerRayFor, rayPointOnRotationPlane, RENDER_LAYER_SHAPES, splitAxisParameter, usePickOnlyPointer, type LayFlatPick, type PickOnlySelection } from "@/components/workplane/viewportPicking";
 import { fastEdgesGeometry } from "@/lib/fastEdgesGeometry";
 import { RENDER_LAYER_HELPERS, type PointCardOffset, type ThreeState, type MoveDimensionSession, type NoteOverlayState, type TapePoint, type TapeAttachment, type TapeEdgeAttachment, type TapeModel, type TapeOverlayState, type TapeCandidate, type DragItem, quaternionForShape, projectToScreen, syncMoveDimensionWorldLines, tapeShapeDimensions, tapePointWorld, tapeEdgeWorldPoints, tapeSegmentWorldPoints, tapeMovableShapeId, syncTapeOverlay, syncNoteOverlay, NoteOverlay, TapeOverlay, type RulerDimensionOverlayItem, type RulerDimensionOverlayState, syncRulerDimensionOverlay, RulerDimensionOverlay, type CornerRulerInstance, type CornerRulerOverlayState, syncCornerRulerToolOverlay, CornerRulerToolOverlay, syncOriginDimensionWorldLines, shapeCenter, shapeLocalExtents, projectShapeExtent, projectShapesExtent, type OriginDimensionFrame, formatMeasure, findShapeObject, releaseSharedShapeMaterials, disposeChildren, disposeObject } from "@/components/workplane/ViewportOverlays";
 import { MIN_SHAPE_SIZE, RENDER_LAYER_PREVIEWS, overhangUniforms, setEdgeLineStyle, setStrongHoles, setRulerInchScale, MODIFIER_EDGE_DEPTH_PULL, clamp, selectionFrameForShapes, refreshFrozenObjectMatrix, updateShapeObjectTransform, applySectionClipping, rebuildShapes, rebuildModifierEdges, rebuildSelectionHelpers, cadFacePickLayerMesh, syncCadFaceLayer, syncBentTubeSegment, TRANSPARENT_SOLID_OPACITY, createShapeObject } from "./workplane/viewportShapeObjects";
@@ -2796,32 +2797,7 @@ export function WorkplaneViewport({
     };
   }, []);
 
-  // A double click on a sketch body opens its sketch, as in similar tools; on a group or a bundle it
-  // opens that for editing (#150). The first click has already selected it, so this is the same
-  // as Edit Sketch or Edit group. Both can be switched off in the settings.
-  const onEditSketchRef = useRef(onEditSketch);
-  onEditSketchRef.current = onEditSketch;
-  const onOpenGroupRef = useRef(onOpenGroup);
-  onOpenGroupRef.current = onOpenGroup;
-  useEffect(() => {
-    const state = threeRef.current;
-    // Pointer capture sends the clicks to the host, not to the canvas inside it.
-    const host = hostRef.current;
-    if (!state || !host) return;
-    const openSketch = (event: MouseEvent) => {
-      if (event.button !== 0 || pivotPickModeRef.current) return;
-      const id = pickShapeIdAt(state, event.clientX, event.clientY);
-      const shape = id ? shapesRef.current.find((candidate) => candidate.id === id) : undefined;
-      if (!shape || shape.locked) return;
-      const selected = selectedIdsRef.current;
-      if (selected.length !== 1 || selected[0] !== shape.id) return;
-      const settings = workspaceRef.current;
-      if (shape.sketchProfile && settings.doubleClickOpensSketch !== false) onEditSketchRef.current?.();
-      else if (shape.groupedShapes?.length && settings.doubleClickOpensGroup !== false) onOpenGroupRef.current?.(shape.id);
-    };
-    host.addEventListener("dblclick", openSketch);
-    return () => host.removeEventListener("dblclick", openSketch);
-  }, []);
+  const emptyPressRef = useViewportDoubleClick({ threeRef, hostRef, shapesRef, selectedIdsRef, workspaceRef, pivotPickModeRef, drawnWorkplane, onEditSketch, onOpenGroup });
 
   useEffect(() => {
     // Each design opens in the projection the app preference asks for. The
@@ -5282,6 +5258,7 @@ export function WorkplaneViewport({
       if (!state) {
         return;
       }
+      emptyPressRef.current = null;
       // Ein Finger ist fuer den Browser die linke Taste. Ab dem zweiten gehoert
       // die Flaeche der Kamera - und solange das so ist, wird nichts
       // ausgewaehlt, auch nicht vom nachgereichten Zeigerdruck, der hier
@@ -5633,6 +5610,7 @@ export function WorkplaneViewport({
         const startY = event.clientY - rect.top;
         event.preventDefault();
         capturePointer(event.currentTarget, event.pointerId);
+        emptyPressRef.current = { x: event.clientX, y: event.clientY };
         marqueeRef.current = {
           pointerId: event.pointerId,
           startX,

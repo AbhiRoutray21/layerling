@@ -2345,6 +2345,7 @@ export const MESSAGES_DA: Partial<Record<MessageKey, string>> = {
   "workspace.startInPerspective": "Start editoren i perspektivvisning",
   "workspace.doubleClickOpensSketch": "Dobbeltklik åbner skitsen",
   "workspace.doubleClickOpensGroup": "Dobbeltklik åbner en gruppe eller et bundt",
+  "workspace.doubleClickCentersView": "Dobbeltklik på arbejdsplanet centrerer visningen der",
   "workspace.selectBeforeMoving": "Vælg før du flytter",
   "workspace.frameByDirection": "Rammens retning afgør",
   "workspace.frameByDirectionHint": "En ramme trukket mod højre vælger kun det, der ligger helt inde i den, en trukket mod venstre alt, den rører ved (tegnet stiplet), som i SketchUp",

@@ -2381,6 +2381,7 @@ export const MESSAGES_ZH_TW: Partial<Record<MessageKey, string>> = {
   "workspace.startInPerspective": "編輯器以透視視圖啟動",
   "workspace.doubleClickOpensSketch": "按兩下開啟草圖",
   "workspace.doubleClickOpensGroup": "按兩下開啟群組或綁定",
+  "workspace.doubleClickCentersView": "按兩下工作平面，視圖以該處為中心",
   "workspace.selectBeforeMoving": "先選取再移動",
   "workspace.frameByDirection": "由框選方向決定",
   "workspace.frameByDirectionHint": "向右拖曳的框只選取完全落在框內的物件，向左拖曳的框則選取所有碰到的物件（以虛線繪製），與 SketchUp 相同",

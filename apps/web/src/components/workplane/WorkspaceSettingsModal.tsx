@@ -899,6 +899,11 @@ export function WorkspaceSettingsModal({
                     onChange={(doubleClickOpensGroup) => patchWorkspace({ doubleClickOpensGroup })}
                   />
                   <WorkspaceToggle
+                    label={t("workspace.doubleClickCentersView")}
+                    checked={workspace.doubleClickCentersView}
+                    onChange={(doubleClickCentersView) => patchWorkspace({ doubleClickCentersView })}
+                  />
+                  <WorkspaceToggle
                     label={t("workspace.objectSnap")}
                     checked={workspace.objectSnap}
                     onChange={(objectSnap) => patchWorkspace({ objectSnap })}

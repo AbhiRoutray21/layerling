@@ -2435,6 +2435,7 @@ export const MESSAGES_NL: Record<MessageKey, string> = {
   "workspace.startInPerspective": "Editor starten in perspectiefweergave",
   "workspace.doubleClickOpensSketch": "Dubbelklik opent de schets",
   "workspace.doubleClickOpensGroup": "Dubbelklik opent een groep of bundel",
+  "workspace.doubleClickCentersView": "Dubbelklik op het werkvlak centreert de weergave daar",
   "workspace.selectBeforeMoving": "Eerst selecteren, dan verplaatsen",
   "workspace.frameByDirection": "De richting van het kader beslist",
   "workspace.frameByDirectionHint": "Een kader dat naar rechts wordt getrokken selecteert alleen wat er helemaal in ligt, naar links alles wat het raakt (gestippeld getekend), zoals in SketchUp",
