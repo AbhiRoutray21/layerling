@@ -38,5 +38,15 @@
       "de": "Die Wand eines Gridfinity-Behälters ist nicht mehr auf 0,95 mm festgelegt: Stell sie im Eigenschaften-Fenster unter „Wandstärke“ ein, von 0,8 mm bis dorthin, wo sich die Wände treffen. Die Außenseite bleibt gleich, der Behälter passt also weiter und lässt sich stapeln; lassen die Wände innen weniger als 1 mm frei, wird er massiv.",
       "en": "A Gridfinity bin's wall is no longer fixed at 0.95 mm: set \"Wall thickness\" in the Properties panel, from 0.8 mm up to where the walls meet. The outside stays the same, so the bin still fits and stacks; once the walls leave less than 1 mm inside, it is built solid."
     }
+  },
+  {
+    "title": {
+      "de": "Der Browser soll deine Entwürfe behalten",
+      "en": "The browser is asked to keep your designs"
+    },
+    "body": {
+      "de": "layerling bittet den Browser jetzt einmal, den Speicher mit deinen Entwürfen bei Platzmangel nicht zuerst zu leeren. Safari löscht die Daten einer Website, die sieben Tage nicht besucht wurde, nur bei einer installierten App nicht, die Anleitung (Installieren) sagt es jetzt dazu. Gesichert werden sollten wichtige Entwürfe trotzdem als Datei.",
+      "en": "layerling now asks the browser once not to clear the storage with your designs first when it runs short of room. Safari clears the data of a website that has not been visited for seven days, but not that of an installed app, and the guide (Installing) now says so. Important designs should still be saved as a file."
+    }
   }
 ]
