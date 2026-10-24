@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "title": {
+      "de": "Alles auf den Server",
+      "en": "Everything on the server"
+    },
+    "body": {
+      "de": "Beginnen neue Entwürfe auf dem Server, gilt das jetzt für jeden Weg: eine Datei öffnen oder importieren, eine Sicherung einspielen, Duplizieren, ein Stand aus dem Verlauf und „Neuer Ordner“. Liegt nichts mehr im Browser, sagt die Startseite das auch.",
+      "en": "When new designs start on the server, every way in goes there now: opening or importing a file, restoring a backup, duplicating, a state from the history and New folder. With nothing left in the browser, the start page says so."
+    }
+  }
+]
