@@ -30,7 +30,7 @@ Du henter {{ui:shape.ruler}} fra formbiblioteket. Den er rent et måleværktøj:
 
 ## Vinkelmåleren
 
-Nogle gange måler man bedre i en ret vinkel. Klik på {{ui:camera.cornerRulerTool}} i kamerabjælken og derefter på arbejdsplanet. En vinkelmåler med to arme i en ret vinkel, med takker som en vinkelhage, placeres der. Den har heller ingen egen form. Klik tæt på et hjørne af en form, og dens hjørne snapper præcis der.
+Nogle gange måler man bedre i en ret vinkel. Klik på {{ui:camera.cornerRulerTool}} i kamerabjælken og derefter på arbejdsplanet. En vinkelmåler med to arme i en ret vinkel, med takker som en vinkelhage, placeres der. Den har heller ingen egen form. Klik tæt på et hjørne af en form, og dens hjørne snapper præcis der. Designet beholder vinkelmåleren, hvor du satte den, også i en gemt LYL-fil: når du åbner designet igen, er den det samme sted, drejet den samme vej og måler fra de samme punkter, indtil du fjerner den.
 
 Vinkelmåleren ligger på arbejdsplanet. Ligger det på siden af en form, ligger vinkelmåleren også på den side, se [Visning og arbejdsplan](chapter:view-and-workplane). Sådan målsætter du på en lodret væg: læg arbejdsplanet på væggen, placér måleren i dens øverste venstre hjørne og klik håndtaget indtil armene peger til højre og ned.
 
@@ -40,7 +40,7 @@ Vinkelmåleren ligger på arbejdsplanet. Ligger det på siden af en form, ligger
 - **Den lille knap til venstre for håndtaget** skifter hvad der måles fra: ydersiden af en form (endepunkt, et ikon med streger) eller dens midte (midtpunkt, et sigtekorn).
   En lille kontakt af samme slags sidder ved siden af hvert grønt tal og sætter kun det tal: for en stående cylinder er det midten i de to arme og bunden i højden, for en liggende midten på tværs og en ende i længden. Når alle tre igen er enige, viser knappen ved håndtaget den fælles tilstand.
 
-Står der former ved en af armene, viser vinkelmåleren automatisk deres dimensioner. Det virker kun på grundpladen, ikke på siden af en form.
+Står der former ved en af armene, viser vinkelmåleren automatisk deres dimensioner, valgt eller ikke: former inden i vinkelmåleren, ved siden af en arm eller på tværs af den. En form uden for den, bag hjørnet eller ved siden af en arm udefra, får ingen. Det virker kun på grundpladen, ikke på siden af en form.
 
 Når du vælger en form, viser vinkelmåleren med grønt hvor langt den er fra hjørnet, langs begge arme og i højden. Klik et grønt tal for at taste en afstand, og formen flytter sig præcis derhen. Med flere former valgt tæller de som én: måleren måler deres fælles omrids, og en tastet værdi flytter dem alle sammen uden at ændre deres position i forhold til hinanden.
 
@@ -48,7 +48,7 @@ De grønne tals hjælpelinjer løber langs det plan, vinkelmåleren ligger i, fr
 
 Med midtpunktet tæller de grønne tal til formens midte, også i højden. Sådan placerer du en kugle med dens centrum præcis 15 mm fra en kant, uden at trække radius fra. På en væg placerer du et hul 40 mm fra venstre og 190 mm fra toppen sådan: vælg hullet, skift til midtpunkt, tast 40 og 190. Højden der tæller udad fra væggen.
 
-Både målebåndet og vinkelmåleren bliver hvor de er mens du skitser og kommer tilbage til 3D-visningen. De gemmes ikke med designet og ikke i historikken, og de forsvinder når du genindlæser siden.
+Både målebåndet og vinkelmåleren bliver hvor de er mens du skitser og kommer tilbage til 3D-visningen. Målebåndet gemmes ikke med designet og ikke i historikken, og det forsvinder når du genindlæser siden; vinkelmåleren gemmes derimod med designet.
 
 ## Afstande til nulpunktet og under flytning
 

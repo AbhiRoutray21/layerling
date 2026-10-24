@@ -30,6 +30,16 @@ Du sikkerhedskopierer et enkelt design i editoren: {{ui:editor.export}}, vælg f
 
 **Gem i din egen mappe (Chrome og Edge).** Der åbner knappen din systems gem-dialog, så du selv vælger mappen og navnet, og en eksisterende fil kan erstattes. Bagefter gemmer [[Ctrl]]+[[S]] designet i den samme fil igen, uden en dialog. Et design åbnet fra en `.lyl`-fil med {{ui:dashboard.importGeometry}} eller åbn-knappen i eksportvinduet gemmer også tilbage i den fil. Browseren kan spørge én gang om tilladelse til at ændre filen. Efter at siden er genindlæst glemmer designet sin fil, og næste [[Ctrl]]+[[S]] spørger igen; dialogen starter i den mappe du brugte sidst. Firefox og Safari lader ikke en side skrive til filer på denne måde. Der downloades filen til Downloads-mappen som før, og [[Ctrl]]+[[S]] downloader den igen; Firefox kan sættes til at spørge efter mappen hver gang under Indstillinger, Generelt, Downloads.
 
+## Vedhæftninger
+
+Instruktioner, en deleiste eller nogle noter kan blive ved designet som filer. {{ui:editor.attachments}} i {{ui:editor.group.manage}}-værktøjslinjen, papirklemmen, åbner listen; en lille prik på papirklemmen viser at designet har nogle.
+
+- **{{ui:attachments.upload}}:** Vælg en eller flere `.md` (Markdown)- eller `.txt`-filer. En fil skal være ren tekst (UTF-8) og højst 2 MB; et design rummer højst 16 filer og 8 MB i alt.
+- **Listen:** Pilen downloader en fil, som den blev uploadet. Skraldespanden fjerner den; rækken spørger én gang til først, og en fjernet fil kan ikke hentes tilbage med fortryd, for vedhæftninger er ikke en del af fortrykshistorikken.
+- **Et navn der allerede er taget:** layerling spørger hvad der skal ske. {{ui:attachments.replace}} lægger det nye indhold i filen med det navn, som bevarer sin plads på listen. {{ui:common.rename}} tilføjer den nye fil under et andet navn og foreslår det første ledige, såsom `notes 2.md`. Krydset lader den nye fil være ude. Store og små bogstaver tæller ens, og den samme fil uploadet igen ændrer intet.
+
+Vedhæftningerne gemmes med designet som alt andet: i browseren, i en LYL-fil, i en sikkerhedskopi og i et design på en server, som de når, så snart en tilføjes eller fjernes. De kommer ikke med {{ui:import.insertProject}} eller med en form fra `Custom shapes`, og en fejlrapportering indeholder dem ikke. Et design med vedhæftninger gemmes som en nyere slags LYL-fil: et ældre layerling siger at det ikke kan åbne den i stedet for at droppe filerne. Et design uden vedhæftninger gemmes nøjagtig som før.
+
 ## Eksport
 
 Klik på {{ui:editor.export}} eller tryk [[Ctrl]]+[[E]].
