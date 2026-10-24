@@ -2719,6 +2719,8 @@ export const MESSAGES_PT_BR: Partial<Record<MessageKey, string>> = {
   "contextMenu.paste": "Colar",
   "contextMenu.selectAll": "Selecionar tudo",
   "contextMenu.selectMultiple": "Selecionar vários",
+  "contextMenu.selectOther": "Selecionar outro…",
+  "contextMenu.selectOtherLabel": "Corpos sob o ponteiro",
   "status.selectMultipleStart": "Selecionar vários: toque nos sólidos para adicioná-los ou removê-los. Toque num espaço vazio ou pressione Esc para terminar.",
   "status.selectMultipleEnd": "Selecionar vários concluído",
   "contextMenu.showHidden": "Mostrar todos os ocultos",

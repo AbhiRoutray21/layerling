@@ -1503,6 +1503,8 @@ export const MESSAGES_ZH_CN: Partial<Record<MessageKey, string>> = {
   "contextMenu.paste": "粘贴",
   "contextMenu.selectAll": "全选",
   "contextMenu.selectMultiple": "多选",
+  "contextMenu.selectOther": "选择其他…",
+  "contextMenu.selectOtherLabel": "指针下的物体",
   "status.selectMultipleStart": "多选：点按实体以添加或移除。点按空白处或按 Esc 完成。",
   "status.selectMultipleEnd": "多选已完成",
   "contextMenu.showHidden": "显示所有隐藏项",

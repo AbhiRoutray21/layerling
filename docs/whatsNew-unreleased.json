@@ -8,5 +8,15 @@
       "de": "Im Muster-Fenster gibt es „Kopien gruppieren“: Dann wird aus dem Original und allen Kopien gleich ein Objekt, ein Kranz aus 36 Stücken ist ein Teil. Ab 6 Stücken ist das Kästchen von selbst angehakt, du kannst es jederzeit abwählen.",
       "en": "The Pattern window has \"Group the copies\": the original and all copies then become one object, so a ring of 36 pieces is one part. Above 5 pieces the box ticks itself, and you can untick it at any time."
     }
+  },
+  {
+    "title": {
+      "de": "Verdeckte Formen auswählen",
+      "en": "Select shapes that are hidden behind others"
+    },
+    "body": {
+      "de": "Ein Rechtsklick bietet jetzt „Anderes auswählen…“, wenn mehrere Formen unter dem Zeiger liegen: Die Liste zeigt sie von vorn nach hinten, die Form unter dem Zeiger wird auch durch andere hindurch umrandet, und ein Klick wählt sie aus. So kommst du an eine Aussparung in einem Körper, ohne die Ansicht zu drehen.",
+      "en": "A right click now offers \"Select other…\" when several shapes lie under the pointer: the list shows them from front to back, the one you point at is outlined even through the others, and a click selects it. So you reach a hole inside a body without turning the view."
+    }
   }
 ]
