@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **Text: other words keep the baseline (#871):** The box of a straight text is laid round the shapes of its letters, so changing the words left it bottom aligned: a "p" ended on the bottom of its box, where the "T" of the old words had stood, instead of reaching below the line, and a word without a tail jumped back up. Typing other words in the Text field now moves the box so that the baseline stays where it was (`textBaselineKeepShift` in `nameTag.ts`, along the text's own depth, so also for a turned text), and the box grows downwards for a tail or upwards for a tall letter. Curved and stretched text and text tilted out of the flat keep their place as before. Unit tests in `nameTag.test.ts`. Reported by @MethylBromide.
+
 ## 1.110.0
 
 - **A bundle of text wrapped round a cylinder is no longer stretched (#667):** A body wrapped round a cylinder covers only an arc, but its box for aligning and centring is the whole cylinder (#106). Grouping or bundling took that box as the size of the group, so the group came out larger than the parts it held, and the view stretched them to fill it: four parts of a medal, one of them wrapped text 122 mm wide that covers 33 mm, made a bundle of 127 x 122 mm over parts that fill 100 x 110 mm, and the medal showed 27 % wider and oval until Undo. The group is now sized by the real vertices of its parts (`boundsForShapesOfVertices`, used by `groupedShape`), so it fits them and sits in their middle. Unit test in `bundleOfWrappedParts.test.ts`. Sizes changing after grouping and ungrouping, reported by @kokobandit; the bundle that showed it, with video and file, by @MiniCoop8.

@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "title": {
+      "de": "Text ändern: Grundlinie bleibt",
+      "en": "Changing text keeps the baseline"
+    },
+    "body": {
+      "de": "Tippst du ein anderes Wort in den Text, bleibt die Grundlinie, auf der die Buchstaben stehen, an ihrer Stelle: Ein „p“ ragt mit seinem Schwanz unter die Zeile, statt dass alle Buchstaben unten an der Box sitzen.",
+      "en": "When you type other words into the text, the baseline the letters stand on stays where it was: a \"p\" reaches below the line with its tail, instead of every text sitting on the bottom of its box."
+    }
+  }
+]
