@@ -107,6 +107,11 @@ AI 使用的是與你相同的功能，走的也是你在編輯器中操作時�
 | `layerling_export_drawing` | 製作「2D」匯出的工程圖：在 ISO 圖紙上以 1:1 繪出三個視圖，標註整體尺寸並附圓孔表格，可輸出 SVG 文字或 PDF |
 | `layerling_export_mesh` | 寫出匯出視窗的檔案，可為 STL、3MF、OBJ、SVG（俯視、底面輪廓或可見邊）或用於雷射切割的 DXF，所用實體相同；可寫到這台電腦上的路徑，或以 base64 回傳 |
 | `layerling_save_project` | 把整個可編輯設計儲存成 .lyl 檔，寫到執行 MCP 伺服器的那台電腦上的路徑，不會跳出對話方塊；既有檔案只有在指定 `overwrite` 時才會被取代，寫入時會先經過暫存檔，而編輯器中 Ctrl+S 的目標維持不變 |
+| `layerling_list_attachments` | 列出附加到設計的檔案（名稱、類型、大小），與「Attachments」面板顯示的一致 |
+| `layerling_get_attachment` | 讀取一個附件，以 base64 傳回其位元組，與面板中的「Download」相同 |
+| `layerling_add_attachment` | 附加一個以 base64 提供的檔案，並經過面板的檢查；已附加的同名檔案只有在 `replace` 時才會被覆寫 |
+| `layerling_rename_attachment` | 為附件改名；內容不變 |
+| `layerling_remove_attachment` | 永久移除一個附件；需要 `confirm: true` |
 | `layerling_set_workplane` | 把工作平面放到實體的某個面，或放回底板，並可隱藏或顯示 |
 | `layerling_capture_image` | 擷取檢視畫面：前視、上視、側視、從角落斜看等 |
 

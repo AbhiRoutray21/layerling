@@ -107,6 +107,11 @@ La IA trabaja con las mismas funciones que tú, por el mismo camino que sigues c
 | `layerling_export_drawing` | hace el plano para el taller de la exportación «2D»: tres vistas a escala 1:1 en una hoja ISO, con las medidas totales y una tabla de los taladros redondos, como texto SVG o como PDF |
 | `layerling_export_mesh` | escribe el archivo de la ventana de exportación en STL, 3MF, OBJ, SVG (vista superior, huella o aristas visibles) o DXF para corte láser, a partir de los mismos cuerpos; en una ruta de este ordenador o en base64 |
 | `layerling_save_project` | guarda el diseño editable completo como archivo .lyl en una ruta del ordenador donde funciona el servidor MCP, sin cuadro de diálogo; un archivo existente solo se sustituye con `overwrite`, se escribe a través de un archivo temporal y el destino de Ctrl+S en el editor no cambia |
+| `layerling_list_attachments` | lista los archivos adjuntos al diseño (nombre, tipo, tamaño), como los muestra el panel Attachments |
+| `layerling_get_attachment` | lee un archivo adjunto, sus bytes en base64, como Download en el panel |
+| `layerling_add_attachment` | adjunta un archivo dado en base64, con las comprobaciones del panel; un nombre ya adjunto solo se sobrescribe con `replace` |
+| `layerling_rename_attachment` | cambia el nombre de un archivo adjunto; su contenido se mantiene |
+| `layerling_remove_attachment` | quita un archivo adjunto para siempre; necesita `confirm: true` |
 | `layerling_set_workplane` | coloca el plano de trabajo en un lateral de un cuerpo o lo devuelve a la placa base, y lo oculta o lo muestra |
 | `layerling_capture_image` | hace una captura de la vista: de frente, desde arriba, de lado, en diagonal desde una esquina y más |
 

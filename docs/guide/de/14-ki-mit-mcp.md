@@ -107,6 +107,11 @@ Die KI arbeitet mit denselben Funktionen wie du, sie läuft über denselben Weg 
 | `layerling_export_drawing` | macht die Werkstattzeichnung des Exports „2D“: drei Ansichten im Maßstab 1:1 auf einem ISO-Blatt mit Gesamtmaßen und einer Tabelle der runden Bohrungen, als SVG-Text oder PDF |
 | `layerling_export_mesh` | schreibt die Datei des Exportfensters als STL, 3MF, OBJ, SVG (Draufsicht, Aufstandsfläche oder sichtbare Kanten) oder DXF für den Laserschnitt, aus denselben Körpern; an einen Pfad auf diesem Rechner oder als Base64 |
 | `layerling_save_project` | speichert den ganzen bearbeitbaren Entwurf als .lyl-Datei an einem Pfad auf dem Rechner, auf dem der MCP-Server läuft, ohne Dialog; eine vorhandene Datei wird nur mit `overwrite` ersetzt, geschrieben wird über eine temporäre Datei, und das Ziel von Strg+S im Editor bleibt, wie es war |
+| `layerling_list_attachments` | listet die an den Entwurf angehängten Dateien (Name, Art, Größe), wie das Fenster Anhänge sie zeigt |
+| `layerling_get_attachment` | liest eine angehängte Datei, ihre Bytes als base64, wie Herunterladen im Fenster |
+| `layerling_add_attachment` | hängt eine als base64 übergebene Datei an, mit den Prüfungen des Fensters; ein schon vorhandener Name wird nur mit `replace` überschrieben |
+| `layerling_rename_attachment` | gibt einer angehängten Datei einen anderen Namen; der Inhalt bleibt |
+| `layerling_remove_attachment` | entfernt eine angehängte Datei endgültig; braucht `confirm: true` |
 | `layerling_set_workplane` | legt die Arbeitsebene auf eine Seite eines Körpers, setzt sie auf die Grundplatte zurück oder blendet sie aus und ein |
 | `layerling_capture_image` | nimmt ein Bild der Ansicht auf, von vorn, oben, seitlich, schräg von einer Ecke und mehr |
 
