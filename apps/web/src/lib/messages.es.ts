@@ -2048,6 +2048,8 @@ export const MESSAGES_ES: Partial<Record<MessageKey, string>> = {
   "gridfinity.halfGridHint": "Las unidades de ancho y de fondo cuentan celdas de 21 mm, cada una con su propio pie; cuatro caben en un hueco de la placa base.",
   "prop.gridfinityFloorHeight": "Altura del fondo",
   "gridfinity.floorHeightHint": "La caja es maciza desde la base hasta esta altura: un bloque en bruto en el que recortar formas.",
+  "prop.gridfinityWallThickness": "Grosor de pared",
+  "gridfinity.wallThicknessHint": "La pared se mide desde el exterior, que no cambia. Con el borde para apilar, una pared de más de 1,75 mm termina en un escalón 0,85 mm por debajo de 7 mm por unidad de altura, sin tocar los pies de una caja apilada encima.",
   "prop.gridfinityOpenBack": "Abierta detrás",
   "prop.gridfinityOpenFront": "Abierta delante",
   "prop.gridfinityOpenLeft": "Abierta a la izquierda",

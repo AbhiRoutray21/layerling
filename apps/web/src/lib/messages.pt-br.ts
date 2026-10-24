@@ -2794,6 +2794,8 @@ export const MESSAGES_PT_BR: Partial<Record<MessageKey, string>> = {
   "gridfinity.baseplateHint": "A placa em que as caixas Gridfinity ficam, com 5 mm de altura: um encaixe para cada unidade de 42 mm da grade.",
   "gridfinity.halfGridHint": "As unidades na largura e na profundidade contam células de 21 mm, cada uma com seu próprio pé; quatro ficam num encaixe da base.",
   "gridfinity.floorHeightHint": "A caixa é maciça da parte de baixo até esta altura, um bloco para recortar formas.",
+  "prop.gridfinityWallThickness": "Espessura da parede",
+  "gridfinity.wallThicknessHint": "A parede é medida a partir do lado de fora, que não muda. Com a borda de empilhamento, uma parede acima de 1,75 mm termina num degrau 0,85 mm abaixo de 7 mm por unidade de altura, sem tocar os pés de uma caixa empilhada em cima.",
   "gridfinity.labelLengthHint": "0 leva o apoio de parede a parede.",
   "gridfinity.labelRound": "Redondos",
   "gridfinity.labelChamfer": "Chanfrados",
