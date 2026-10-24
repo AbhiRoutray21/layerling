@@ -2467,6 +2467,7 @@ export const MESSAGES_EN = {
   "workspace.startInPerspective": "Start editor in perspective view",
   "workspace.doubleClickOpensSketch": "Double-click opens the sketch",
   "workspace.doubleClickOpensGroup": "Double-click opens a group or bundle",
+  "workspace.doubleClickCentersView": "Double-click on the workplane centres the view there",
   "workspace.selectBeforeMoving": "Select before moving",
   "workspace.frameByDirection": "The direction of the frame decides",
   "workspace.frameByDirectionHint": "A frame dragged to the right selects only what lies completely inside it, one dragged to the left everything it touches (drawn dashed), as in SketchUp",

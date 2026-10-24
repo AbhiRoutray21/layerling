@@ -2324,6 +2324,7 @@ export const MESSAGES_JA: Partial<Record<MessageKey, string>> = {
   "workspace.startInPerspective": "エディターを透視投影表示で開始",
   "workspace.doubleClickOpensSketch": "ダブルクリックでスケッチを開く",
   "workspace.doubleClickOpensGroup": "ダブルクリックでグループまたはバンドルを開く",
+  "workspace.doubleClickCentersView": "作業平面をダブルクリックするとそこがビューの中央になる",
   "workspace.selectBeforeMoving": "移動の前に選択する",
   "workspace.frameByDirection": "枠をドラッグする向きで決める",
   "workspace.frameByDirectionHint": "枠を右へドラッグすると、枠の中に全部入ったものだけを選びます。左へドラッグすると、枠にふれたものをすべて選びます（枠は破線で表示）。SketchUpと同じです",

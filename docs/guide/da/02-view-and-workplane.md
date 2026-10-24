@@ -14,6 +14,7 @@ Med musen:
 | træk med midterste knap | flyt visningen |
 | musehjul | zoom ind og ud |
 | hold [[Ctrl]] / [[Cmd]] og træk med venstre knap | flytter også visningen |
+| dobbeltklik på et tomt sted på arbejdsplanet eller ved siden af pladen | flytter visningen, så stedet kommer i midten; visningen drejer derefter om det |
 
 På en MacBook-trackpad: hold [[Cmd]] nede, tryk og træk.
 
@@ -169,7 +170,7 @@ Skitsevisningen har sine egne farver: {{ui:workspace.sketchBackground}} for vind
 
 {{ui:workspace.frameByDirection}}: en ramme, der trækkes til højre, markerer kun det, der ligger helt inden i den, en ramme, der trækkes til venstre, markerer alt, den rører (tegnet stiplet), som i SketchUp.
 
-{{ui:workspace.doubleClickOpensSketch}} afgør, om et dobbeltklik på en presset skitse åbner skitsen igen, som i Tinkercad, og {{ui:workspace.doubleClickOpensGroup}} om et dobbeltklik på en gruppe eller et bundt åbner det til redigering.
+{{ui:workspace.doubleClickOpensSketch}} afgør, om et dobbeltklik på en presset skitse åbner skitsen igen, som i Tinkercad, og {{ui:workspace.doubleClickOpensGroup}} om et dobbeltklik på en gruppe eller et bundt åbner det til redigering. {{ui:workspace.doubleClickCentersView}} afgør, om et dobbeltklik på et tomt sted på arbejdsplanet flytter visningen derhen.
 
 {{ui:workspace.objectSnap}} lader kantene og centrum af en form snappe til andre former, mens du trækker den; gittermenuen nederst til højre har den samme kontakt. {{ui:workspace.cruise}} får en ny form til at hænge ved musepegeren og lande på fladen under den, som Cruise i Tinkercad; slået fra dukker en ny form op i midten af pladen. Mere i [Valg og arrangering](chapter:select-and-arrange).
 

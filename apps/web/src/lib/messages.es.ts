@@ -2431,6 +2431,7 @@ export const MESSAGES_ES: Partial<Record<MessageKey, string>> = {
   "workspace.startInPerspective": "Abrir el editor en vista en perspectiva",
   "workspace.doubleClickOpensSketch": "El doble clic abre el boceto",
   "workspace.doubleClickOpensGroup": "El doble clic abre un grupo o un conjunto",
+  "workspace.doubleClickCentersView": "El doble clic en el plano de trabajo centra allí la vista",
   "workspace.selectBeforeMoving": "Seleccionar antes de mover",
   "workspace.frameByDirection": "Selección según la dirección del recuadro",
   "workspace.frameByDirectionHint": "Un recuadro arrastrado hacia la derecha selecciona solo lo que queda dentro por completo; uno arrastrado hacia la izquierda, todo lo que toca (se dibuja discontinuo), como en SketchUp",

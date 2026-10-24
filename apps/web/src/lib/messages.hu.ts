@@ -2369,6 +2369,7 @@ export const MESSAGES_HU: Partial<Record<MessageKey, string>> = {
   "workspace.startInPerspective": "A szerkesztő perspektivikus nézetben induljon",
   "workspace.doubleClickOpensSketch": "Dupla kattintás megnyitja a vázlatot",
   "workspace.doubleClickOpensGroup": "Dupla kattintás megnyit egy csoportot vagy köteget",
+  "workspace.doubleClickCentersView": "Dupla kattintás a munkasíkon oda helyezi a nézet közepét",
   "workspace.selectBeforeMoving": "Kijelölés mozgatás előtt",
   "workspace.frameByDirection": "A keret iránya dönt",
   "workspace.frameByDirectionHint": "A jobbra húzott keret csak azt jelöli ki, ami teljesen benne van, a balra húzott mindent, amit érint (szaggatott vonallal rajzolva), mint a SketchUpban",

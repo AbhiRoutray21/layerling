@@ -2450,6 +2450,7 @@ export const MESSAGES_FR: Partial<Record<MessageKey, string>> = {
   "workspace.startInPerspective": "Démarrer l'éditeur en vue perspective",
   "workspace.doubleClickOpensSketch": "Un double-clic ouvre l'esquisse",
   "workspace.doubleClickOpensGroup": "Un double-clic ouvre un groupe ou un bundle",
+  "workspace.doubleClickCentersView": "Un double-clic sur le plan de travail y centre la vue",
   "workspace.selectBeforeMoving": "Sélectionner avant de déplacer",
   "workspace.frameByDirection": "Le sens du cadre décide",
   "workspace.frameByDirectionHint": "Un cadre tiré vers la droite ne sélectionne que ce qui est entièrement dedans, tiré vers la gauche tout ce qu'il touche (tracé en pointillés), comme dans SketchUp",

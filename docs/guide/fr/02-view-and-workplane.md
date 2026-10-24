@@ -14,6 +14,7 @@ Avec la souris :
 | faites glisser avec le bouton du milieu | déplacer la vue |
 | molette de la souris | zoomer et dézoomer |
 | maintenez [[Ctrl]] / [[Cmd]] et faites glisser avec le bouton gauche | déplace également la vue |
+| double-clic sur un endroit vide du plan de travail ou à côté de la plaque | déplace la vue pour amener cet endroit au milieu ; la vue tourne ensuite autour de lui |
 
 La vitesse de zoom de la molette se règle avec {{ui:workspace.zoomSpeed}} dans les paramètres, sous {{ui:workspace.appearance}} : un curseur de 1 à 14, réglé sur 5 au départ ; au-dessus de 10, seule la molette devient plus rapide.
 

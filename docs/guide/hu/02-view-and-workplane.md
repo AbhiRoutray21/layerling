@@ -14,6 +14,7 @@ Egérrel:
 | húzás középső gombbal | a nézet mozgatása |
 | egérgörgő | nagyítás és kicsinyítés |
 | [[Ctrl]] / [[Cmd]] nyomva tartása és húzás bal gombbal | szintén a nézetet mozgatja |
+| dupla kattintás a munkasík egy üres pontjára vagy a tárgyasztal mellé | úgy mozgatja a nézetet, hogy az a pont középre kerüljön; a nézet ezután körülötte forog |
 
 Hogy a görgő milyen gyorsan nagyít, azt a beállításokban a {{ui:workspace.appearance}} alatt a {{ui:workspace.zoomSpeed}} adja meg: egy csúszka 1-től 14-ig, kezdetben 5-ön; 10 fölött csak a görgő gyorsul.
 

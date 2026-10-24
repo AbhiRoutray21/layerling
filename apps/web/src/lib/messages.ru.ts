@@ -2457,6 +2457,7 @@ export const MESSAGES_RU: Partial<Record<MessageKey, string>> = {
   "workspace.startInPerspective": "Открывать редактор в перспективном виде",
   "workspace.doubleClickOpensSketch": "Двойной щелчок открывает эскиз",
   "workspace.doubleClickOpensGroup": "Двойной щелчок открывает группу или связку",
+  "workspace.doubleClickCentersView": "Двойной щелчок по рабочей плоскости центрирует там вид",
   "workspace.selectBeforeMoving": "Выделять перед перемещением",
   "workspace.frameByDirection": "Направление рамки решает",
   "workspace.frameByDirectionHint": "Рамка, проведённая вправо, выделяет только то, что целиком внутри неё, влево — всё, чего она касается (рисуется пунктиром), как в SketchUp",

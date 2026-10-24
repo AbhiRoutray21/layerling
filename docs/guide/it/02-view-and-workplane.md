@@ -14,6 +14,7 @@ Con il mouse:
 | trascini con il tasto centrale | sposti la vista |
 | rotellina del mouse | avvicina o allontana la vista |
 | tieni premuto [[Ctrl]] e trascini con il tasto sinistro | sposti la vista anche così |
+| doppio clic su un punto vuoto del piano di lavoro o accanto alla piastra | sposti la vista finché quel punto è al centro; poi la vista ruota attorno a esso |
 
 La velocità dello zoom con la rotellina si imposta con {{ui:workspace.zoomSpeed}} nelle impostazioni, sotto {{ui:workspace.appearance}}: è un cursore da 1 a 14, impostato inizialmente su 5; sopra 10 aumenta la velocità solo della rotellina. Un singolo scatto della rotellina ingrandisce allo stesso modo in tutti i browser; con il trackpad lo zoom dipende da quanto fai scorrere le dita.
 
@@ -145,7 +146,7 @@ Con {{ui:workspace.selectBeforeMoving}} devi prima selezionare un corpo e solo u
 
 Con {{ui:workspace.frameByDirection}}, trascinando un riquadro verso destra selezioni solo gli oggetti che vi rientrano completamente; trascinandolo verso sinistra selezioni tutto ciò che tocca, come indicato dal contorno tratteggiato. Funziona come in SketchUp.
 
-{{ui:workspace.doubleClickOpensSketch}} decide se un doppio clic su uno schizzo estruso lo riapre per modificarlo, come in Tinkercad; {{ui:workspace.doubleClickOpensGroup}} decide se un doppio clic su un gruppo o un insieme lo apre per la modifica.
+{{ui:workspace.doubleClickOpensSketch}} decide se un doppio clic su uno schizzo estruso lo riapre per modificarlo, come in Tinkercad; {{ui:workspace.doubleClickOpensGroup}} decide se un doppio clic su un gruppo o un insieme lo apre per la modifica. {{ui:workspace.doubleClickCentersView}} decide se un doppio clic su un punto vuoto del piano di lavoro sposta lì la vista.
 
 {{ui:workspace.objectSnap}} permette agli spigoli e al centro di una forma di agganciarsi ad altre forme durante il trascinamento; lo stesso interruttore si trova nel menu della griglia in basso a destra. {{ui:workspace.cruise}} fa sì che una nuova forma segua il puntatore e si appoggi alla faccia sottostante, come la funzione Cruise di Tinkercad; se è disattivato, la nuova forma compare al centro della piastra. Altre informazioni in [Selezionare e disporre](chapter:select-and-arrange).
 

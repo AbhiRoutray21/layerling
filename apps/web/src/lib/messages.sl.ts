@@ -2468,6 +2468,7 @@ export const MESSAGES_SL: Partial<Record<MessageKey, string>> = {
   "sketch.typedLineOffPlate": "Plošča ne sega tako daleč. Skrajšaj ali izberi drugo smer.",
   "workspace.doubleClickOpensSketch": "Dvojni klik odpre skico",
   "workspace.doubleClickOpensGroup": "Dvojni klik odpre skupino ali sveženj",
+  "workspace.doubleClickCentersView": "Dvojni klik na delovno ravnino tam centrira pogled",
   "edge.topEdges": "Zgornji robovi",
   "edge.topEdgesHint": "Izbere samo robove čisto na vrhu telesa, na primer rob modelčka za piškote",
   "edge.noTopEdges": "Na vrhu ni roba, ki bi ga bilo mogoče obdelati pri tem pragu.",

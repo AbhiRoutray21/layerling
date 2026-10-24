@@ -14,6 +14,7 @@ summary: 在場景中移動、正對著觀察，以及把新形狀放到任何�
 | 按住中鍵拖曳 | 平移檢視 |
 | 滑鼠滾輪 | 放大與縮小 |
 | 按住 [[Ctrl]] / [[Cmd]] 並以左鍵拖曳 | 也可平移檢視（在 MacBook 觸控式軌跡板上：按住 [[Cmd]]，按下並拖曳） |
+| 按兩下工作平面上的空白處或平台旁邊 | 平移檢視，使該處位於中央；之後檢視繞該處旋轉 |
 
 滾輪縮放的速度在設定的 {{ui:workspace.appearance}} 下用 {{ui:workspace.zoomSpeed}} 設定：滑桿範圍 1 到 14，初始值為 5。它只影響滾輪與觸控式軌跡板：按鈕與 [[+]]、[[−]] 鍵一律以相同的小步距縮放。滑鼠滾輪的一格在任何瀏覽器中的縮放幅度都相同，觸控式軌跡板則依你滑過的距離縮放。
 
@@ -139,7 +140,7 @@ X 與 [[Esc]] 會關閉面板；若正在量測，[[Esc]] 會先結束量測。�
 
 {{ui:workspace.frameByDirection}}：往右拖曳的選取框只會選取完全位於其中的物件，往左拖曳的選取框則會選取它碰到的所有物件（以虛線繪製），與 SketchUp 相同。
 
-{{ui:workspace.doubleClickOpensSketch}} 決定雙擊擠出的草圖是否會重新開啟草圖，與 Tinkercad 相同；{{ui:workspace.doubleClickOpensGroup}} 則決定雙擊群組或綁定是否會開啟它進行編輯。
+{{ui:workspace.doubleClickOpensSketch}} 決定雙擊擠出的草圖是否會重新開啟草圖，與 Tinkercad 相同；{{ui:workspace.doubleClickOpensGroup}} 則決定雙擊群組或綁定是否會開啟它進行編輯。{{ui:workspace.doubleClickCentersView}} 決定按兩下工作平面上的空白處是否會把檢視移到該處。
 
 {{ui:workspace.objectSnap}} 讓形狀的邊與中心在拖曳時吸附到其他形狀；右下角的網格選單有同樣的開關。{{ui:workspace.cruise}} 讓新形狀掛在滑鼠指標上，並落在其下方的面，類似 Tinkercad 的 Cruise；關閉時，新形狀會出現在平台中央。更多內容見[選取與排列](chapter:select-and-arrange)。
 

@@ -14,6 +14,7 @@ With the mouse:
 | drag with the middle button | move the view |
 | mouse wheel | zoom in and out |
 | hold [[Ctrl]] / [[Cmd]] and drag with the left button | also moves the view (on a MacBook trackpad: hold [[Cmd]], press and drag) |
+| double-click on empty workplane or beside the plate | moves the view so that the spot comes to the middle; the view then turns around it |
 
 How fast the wheel zooms is set with {{ui:workspace.zoomSpeed}} in the settings, under {{ui:workspace.appearance}}: a slider from 1 to 14, 5 to begin with. It sets the wheel and the trackpad only: the buttons and the keys [[+]] and [[−]] always zoom in the same small steps. One notch of a mouse wheel zooms alike in every browser, a trackpad zooms with how far you stroke.
 
@@ -146,7 +147,7 @@ The sketch view has its own colours: {{ui:workspace.sketchBackground}} for the w
 
 {{ui:workspace.frameByDirection}}: a frame dragged to the right selects only what lies completely inside it, one dragged to the left everything it touches (drawn dashed), as in SketchUp.
 
-{{ui:workspace.doubleClickOpensSketch}} decides whether a double click on an extruded sketch opens the sketch again, as in Tinkercad, and {{ui:workspace.doubleClickOpensGroup}} whether a double click on a group or a bundle opens it for editing.
+{{ui:workspace.doubleClickOpensSketch}} decides whether a double click on an extruded sketch opens the sketch again, as in Tinkercad, and {{ui:workspace.doubleClickOpensGroup}} whether a double click on a group or a bundle opens it for editing. {{ui:workspace.doubleClickCentersView}} decides whether a double click on empty workplane moves the view to that spot.
 
 {{ui:workspace.objectSnap}} lets the edges and the centre of a shape snap to other shapes while you drag it; the grid menu at the bottom right has the same switch. {{ui:workspace.cruise}} makes a new shape hang on the mouse pointer and land on the face under it, like Cruise in Tinkercad; switched off, a new shape appears in the middle of the plate. More in [Selecting and arranging](chapter:select-and-arrange).
 

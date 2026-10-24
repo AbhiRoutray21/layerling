@@ -876,6 +876,7 @@ export const MESSAGES_PT_BR: Partial<Record<MessageKey, string>> = {
   "workspace.startInPerspective": "Abrir o editor na vista em perspectiva",
   "workspace.doubleClickOpensSketch": "Clique duplo abre o esboço",
   "workspace.doubleClickOpensGroup": "Clique duplo abre um grupo de união ou um conjunto",
+  "workspace.doubleClickCentersView": "Clique duplo no plano de trabalho centraliza a vista ali",
   "workspace.selectBeforeMoving": "Selecionar antes de mover",
   "workspace.frameByDirection": "A direção da moldura define a seleção",
   "workspace.frameByDirectionHint": "Arraste para a direita para selecionar apenas os objetos inteiramente dentro da moldura. Arraste para a esquerda para selecionar todos os objetos que ela tocar; nesse caso, a moldura fica tracejada, como no SketchUp",

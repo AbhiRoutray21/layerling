@@ -14,6 +14,7 @@ Z miško:
 | vlečenje s srednjim gumbom | premikanje pogleda |
 | kolesce miške | približevanje in oddaljevanje |
 | drži [[Ctrl]] / [[Cmd]] in vleci z levim gumbom | prav tako premikanje |
+| dvojni klik na prazno mesto delovne ravnine ali ob ploščo | premakne pogled, da je to mesto na sredini; pogled se nato vrti okoli njega |
 
 Hitrost zumiranja s kolescem nastaviš z {{ui:workspace.zoomSpeed}} v nastavitvah, pod {{ui:workspace.appearance}}: drsnik od 1 do 14, na začetku 5; nad 10 se pospeši le kolešček.
 
