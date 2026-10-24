@@ -3634,6 +3634,25 @@ export function WorkplaneViewport({
       .map((shape) => shape.id);
   }, []);
 
+  // Alt on the lift arrow: the shapes go up as the preview of a copy, these stand-ins hold the place
+  // they never leave (as in a sideways Alt drag), and the copy is made where they are let go (#865).
+  const beginLiftDuplicate = useCallback((state: ThreeState, ids: string[]): { standIns: THREE.Object3D[] } | undefined => {
+    if (!onDuplicateShapesMoved) return undefined;
+    return {
+      standIns: ids.flatMap((id) => {
+        const visual = findShapeObject(state, id);
+        if (!visual?.parent) return [];
+        const standIn = visual.clone();
+        standIn.traverse((child) => {
+          child.userData = {};
+        });
+        standIn.name = "DuplicateDragStandIn";
+        visual.parent.add(standIn);
+        return [standIn];
+      }),
+    };
+  }, [onDuplicateShapesMoved]);
+
   const beginTransform = useCallback(
     (kind: TransformHandleKind, handleKey: string, event: ReactPointerEvent<Element>) => {
       if (event.button !== 0) {
@@ -3748,6 +3767,7 @@ export function WorkplaneViewport({
         liftStartPoint,
         liftHandlePoint,
         liftStartValue,
+        duplicate: kind === "lift" && event.altKey && state ? beginLiftDuplicate(state, frame.ids) : undefined,
         rotationAxisVector: kind === "rotate" ? axisVector : undefined,
         rotationPivot: kind === "rotate" ? pivot : undefined,
         customPivot: kind === "rotate" && Boolean(rotationPivotRef.current),
@@ -3785,7 +3805,7 @@ export function WorkplaneViewport({
       }
       onInteractionActiveChange?.(true);
     },
-    [clearMoveDimensions, onInteractionActiveChange, rememberResizeAnchor, toRawPlanePoint],
+    [beginLiftDuplicate, clearMoveDimensions, onInteractionActiveChange, rememberResizeAnchor, toRawPlanePoint],
   );
 
   // The pivot marker can be dragged to a new place (#140); it is set where it is let go.
@@ -4134,6 +4154,25 @@ export function WorkplaneViewport({
       event.currentTarget.releasePointerCapture(transform.pointerId);
     }
     const bakeRotatedShapes = transform.kind === "rotate" && transform.hasMoved ? transform.ids : [];
+    if (transform.duplicate) {
+      transform.duplicate.standIns.forEach((standIn) => standIn.removeFromParent());
+      const first = transform.items[0];
+      const moved = first ? shapesRef.current.find((entry) => entry.id === first.id) : undefined;
+      if (first && moved) {
+        const delta = {
+          dx: moved.x - first.startShape.x,
+          dz: moved.z - first.startShape.z,
+          delevation: (moved.elevation ?? 0) - (first.startShape.elevation ?? 0),
+        };
+        // The shapes stood in for their copies; put them back where they were.
+        transform.items.forEach((item) => {
+          onUpdateShape(item.id, { x: item.startShape.x, z: item.startShape.z, elevation: item.startShape.elevation ?? 0 });
+        });
+        if (delta.dx !== 0 || delta.dz !== 0 || delta.delevation !== 0) {
+          onDuplicateShapesMoved?.(transform.ids, delta);
+        }
+      }
+    }
     if (transform.kind === "lift") {
       setPinnedMeasureKey(getElevationMeasureKey(transformOverlayRef.current));
     }
@@ -4161,7 +4200,7 @@ export function WorkplaneViewport({
     }
     onInteractionActiveChange?.(false);
     bakeRotatedShapes.forEach((id) => onUpdateShape(id, { bakeTransform: true }));
-  }, [onInteractionActiveChange, onUpdateShape, suppressCornerEditAfterDrag, suppressLiftEditAfterDrag]);
+  }, [onDuplicateShapesMoved, onInteractionActiveChange, onUpdateShape, suppressCornerEditAfterDrag, suppressLiftEditAfterDrag]);
 
   // The calculation a box was last set from (#180), while it still gives the body's size; the
   // box then opens on the formula instead of the number, as the Properties field does.
@@ -5664,6 +5703,7 @@ export function WorkplaneViewport({
           liftStartPoint,
           liftHandlePoint,
           liftStartValue,
+          duplicate: handle.kind === "lift" && event.altKey ? beginLiftDuplicate(state, frame.ids) : undefined,
           rotationAxisVector: handle.kind === "rotate" ? axisVector : undefined,
           rotationPivot: handle.kind === "rotate" ? pivot : undefined,
           customPivot: handle.kind === "rotate" && Boolean(rotationPivotRef.current),
@@ -5886,6 +5926,7 @@ export function WorkplaneViewport({
       onInteractionActiveChange?.(true);
     },
     [
+      beginLiftDuplicate,
       clearMoveDimensions,
       modifierActive,
       onAlignAnchorChange,

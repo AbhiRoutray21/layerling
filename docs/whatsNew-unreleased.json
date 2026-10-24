@@ -48,5 +48,15 @@
       "de": "Das Auge in der Liste der Anhänge öffnet eine .md- oder .txt-Datei zum Lesen, ohne sie herunterzuladen: Markdown formatiert, mit Überschriften, Listen, Tabellen und Code, Text so, wie er geschrieben ist. Escape oder ein Klick daneben schließt das Fenster.",
       "en": "The eye in the list of attachments opens a .md or .txt file to read without downloading it: Markdown formatted, with headings, lists, tables and code, text exactly as written. Escape or a click beside it closes the window."
     }
+  },
+  {
+    "title": {
+      "de": "Kopie nach oben",
+      "en": "A copy upwards"
+    },
+    "body": {
+      "de": "Ziehst du den schwarzen Hebe-Pfeil mit gedrückter Alt-Taste, bleibt die Form stehen und eine Kopie landet dort, wo du loslässt. So stapelst du Kopien senkrecht, wie du sie mit Alt seitlich schon verschieben konntest.",
+      "en": "Drag the black lift arrow with Alt held and the shape stays where it is while a copy lands where you let go. That stacks copies straight up, as Alt already did sideways."
+    }
   }
 ]

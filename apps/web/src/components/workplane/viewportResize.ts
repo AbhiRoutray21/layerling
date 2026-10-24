@@ -49,6 +49,8 @@ export type TransformDragState = {
   liftStartPoint?: THREE.Vector3;
   liftHandlePoint?: THREE.Vector3;
   liftStartValue?: number;
+  /** Alt was held when a lift began: the shapes stand in for a copy that is made on release (#865). */
+  duplicate?: { standIns: THREE.Object3D[] };
   rotationAxisVector?: THREE.Vector3;
   rotationPivot?: THREE.Vector3;
   /** A pivot the user set; the shapes then move around it instead of spinning in place. */
