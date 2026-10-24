@@ -12818,10 +12818,9 @@ export function LayerlingEditor({
         sketchShapeOptions={sketchShapeOptions}
         onSketchShapeOptions={setSketchShapeOptions}
         onSketchImage={() => {
-          if (sketchTool !== "select") {
-            setNotice(t("status.chooseSelectFirst"));
-            return;
-          }
+          // A new sketch starts with the line tool, and the button stayed grey until Select was chosen (#833):
+          // it switches to Select itself, as a click on the arrow would, and opens the picker.
+          if (sketchTool !== "select") chooseSketchTool("select");
           sketchImageInputRef.current?.click();
         }}
         onSketchCopy={copySketchSelectionToClipboard}
