@@ -72,5 +72,15 @@
       "de": "Tippst du einen anderen Text ein, bleibt die Buchstabengröße jetzt gleich, und die Box passt sich den Buchstaben an. Vorher wurden sie in die alte Box gezogen, ein einzelnes „a“ wurde größer und die Breite stimmte nicht.",
       "en": "When you type another text, the letter size now stays the same and the box follows the letters. Before, the letters were stretched into the old box: a single \"a\" grew and the width was wrong."
     }
+  },
+  {
+    "title": {
+      "de": "Bündel mit gewickeltem Text nicht mehr verzerrt",
+      "en": "A bundle with wrapped text is no longer stretched"
+    },
+    "body": {
+      "de": "Ein Bündel (oder eine Gruppe) mit Text, der um einen Zylinder gewickelt ist, wurde so groß wie der ganze Zylinder gemessen und zog die Teile darin in die Breite und ins Ovale. Jetzt richtet sich seine Größe nach den Teilen selbst: nichts wird verzerrt, und das Bündel sitzt in ihrer Mitte.",
+      "en": "A bundle (or a group) holding text wrapped round a cylinder was measured as big as the whole cylinder and pulled the parts inside it wider and oval. Its size now follows the parts themselves: nothing is distorted, and the bundle sits in their middle."
+    }
   }
 ]
