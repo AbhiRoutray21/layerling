@@ -67,6 +67,7 @@ AI používá stejné funkce a stejné zpracování příkazů jako ruční ovl�
 | `layerling_ungroup_objects` | rozloží sloučení |
 | `layerling_boolean_cut` | odečte výřezy od plných těles |
 | `layerling_intersect_objects` | zachová pouze společný průnik objektů |
+| `layerling_hull_objects` | obalí objekty jedním vypouklým tělesem, jako by byly zataveny ve fólii (obal) |
 | `layerling_separate_parts` | rozdělí tvar na jeho nespojené části, těleso z náčrtu na jedno těleso za každý obrys |
 | `layerling_split_objects` | rozdělí tělesa nebo výřezy rovinou na dvě části |
 | `layerling_list_edges` | vypíše skutečné CAD hrany objektu |

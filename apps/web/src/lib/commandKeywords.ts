@@ -22,6 +22,7 @@ export const COMMAND_KEYWORDS: Readonly<Record<string, readonly string[]>> = {
   bundle: ["bundle", "buendel", "bündel", "buendeln", "bündeln", "ohne verrechnung"],
   ungroup: ["ungroup", "split group", "trennen", "aufloesen", "auflösen", "gruppe aufheben"],
   intersect: ["intersect", "intersection", "schnittmenge", "verschneiden", "gemeinsam"],
+  hull: ["hull", "convex hull", "shrink wrap", "wrap", "hülle", "konvexe hülle", "schrumpffolie", "umhüllen"],
   "intersect-preview": ["preview", "common", "overlap", "venn", "vorschau", "gemeinsam", "gemeinsames", "ueberlappung", "schnittmenge"],
   align: ["align", "ausrichten", "buendig", "bündig", "mitte", "center"],
   mirror: ["mirror", "flip", "spiegeln", "spiegelung"],

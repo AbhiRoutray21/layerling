@@ -67,6 +67,7 @@ Umetna inteligenca dela z istimi funkcijami kot ti, teče po isti poti kot tvoje
 | `layerling_ungroup_objects` | razpusti skupine |
 | `layerling_boolean_cut` | reže telesa z luknjami |
 | `layerling_intersect_objects` | obdrži samo to, kar imajo objekti skupnega (presek) |
+| `layerling_hull_objects` | ovije objekte v eno izbočeno telo, kot bi jih skrčili v folijo (ovojnica) |
 | `layerling_separate_parts` | razstavi obliko z ločenimi deli, telo iz skice na eno telo za vsak obris |
 | `layerling_split_objects` | razdeli telesa ali luknje z ravnino na dva dela |
 | `layerling_list_edges` | našteje prave robove CAD objekta |

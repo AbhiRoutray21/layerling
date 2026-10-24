@@ -71,6 +71,7 @@ La IA trabaja con las mismas funciones que tú, por el mismo camino que sigues c
 | `layerling_ungroup_objects` | desagrupa grupos |
 | `layerling_boolean_cut` | corta sólidos con orificios |
 | `layerling_intersect_objects` | conserva solo lo que los objetos tienen en común (Intersección) |
+| `layerling_hull_objects` | envuelve los objetos en un solo cuerpo convexo, como con film retráctil (Envolvente) |
 | `layerling_separate_parts` | separa una forma en sus piezas sueltas, y un cuerpo de boceto en un cuerpo por contorno |
 | `layerling_split_objects` | corta sólidos u orificios en dos con un plano |
 | `layerling_list_edges` | lista las aristas CAD reales de un objeto |

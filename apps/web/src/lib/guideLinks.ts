@@ -146,7 +146,7 @@ export function guideSectionForShape(shape: GuideShape): GuideSection | undefine
   if (shape.imagePlate) return "referenceImage";
   if (shape.groupedShapes?.length) {
     if (shape.groupOperation === "bundle") return "bundling";
-    if (shape.groupOperation === "intersection") return "intersection";
+    if (shape.groupOperation === "intersection" || shape.groupOperation === "hull") return "intersection";
     return "grouping";
   }
   // A body made from a sketch, or a file brought in, is explained where it was made.

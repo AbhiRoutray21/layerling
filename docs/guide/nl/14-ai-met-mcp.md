@@ -67,6 +67,7 @@ De AI werkt met dezelfde functies als jij, via dezelfde weg als jouw bediening i
 | `layerling_ungroup_objects` | heft groepen op |
 | `layerling_boolean_cut` | snijdt lichamen met gaten |
 | `layerling_intersect_objects` | houdt alleen over wat de objecten gemeen hebben (doorsnijding) |
+| `layerling_hull_objects` | verpakt de objecten in één bol lichaam, alsof ze gekrompen zijn in folie (omhulsel) |
 | `layerling_separate_parts` | splitst een vorm in zijn losse delen, een schetslichaam in één lichaam per omtrek |
 | `layerling_split_objects` | snijdt lichamen of gaten met een vlak in tweeën |
 | `layerling_list_edges` | somt de echte CAD-randen van een object op |

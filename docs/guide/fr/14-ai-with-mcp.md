@@ -67,6 +67,7 @@ L'IA fonctionne avec les mêmes fonctions que vous, via le même chemin que votr
 | `layerling_ungroup_objects` | dissout les groupes |
 | `layerling_boolean_cut` | coupe les solides avec des trous |
 | `layerling_intersect_objects` | ne garde que ce que les objets ont en commun (Intersection) |
+| `layerling_hull_objects` | enveloppe les objets dans un seul corps convexe, comme sous film rétractable (Enveloppe) |
 | `layerling_separate_parts` | sépare une forme en ses parties détachées, un corps d'esquisse en un corps par contour |
 | `layerling_split_objects` | coupe des solides ou des trous en deux avec un rabot |
 | `layerling_list_edges` | répertorie les véritables bords CAO d'un objet |

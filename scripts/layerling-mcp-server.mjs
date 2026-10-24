@@ -128,6 +128,8 @@ async function callTool(name, args) {
       return bridgeCommand("group_objects", args, 30000);
     case "layerling_intersect_objects":
       return bridgeCommand("intersect_objects", args, 30000);
+    case "layerling_hull_objects":
+      return bridgeCommand("hull_objects", args, 30000);
     case "layerling_ungroup_objects":
       return bridgeCommand("ungroup_objects", args);
     case "layerling_boolean_cut":

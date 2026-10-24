@@ -71,6 +71,7 @@ AI pracuje tymi samymi funkcjami co Ty, tą samą drogą co Twoja praca w edytor
 | `layerling_ungroup_objects` | rozwiązuje grupy |
 | `layerling_boolean_cut` | wycina otworami materiał z brył |
 | `layerling_intersect_objects` | zostawia tylko to, co obiekty mają wspólnego (część wspólna) |
+| `layerling_hull_objects` | owija obiekty jedną wypukłą bryłą, jak folią termokurczliwą (otoczka) |
 | `layerling_separate_parts` | rozdziela kształt na jego luźne części, bryłę ze szkicu na jedną bryłę na kontur |
 | `layerling_split_objects` | przecina bryły albo otwory na dwie części płaszczyzną |
 | `layerling_list_edges` | wypisuje prawdziwe krawędzie CAD obiektu |

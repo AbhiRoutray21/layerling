@@ -1797,6 +1797,61 @@ export async function buildIntersectionShapeFromSelection(groupable: WorkplaneSh
   };
 }
 
+export type HullBuildResult = {
+  group: WorkplaneShape | null;
+  failureNotice: string;
+};
+
+/** Whether a selection can be hulled: two shapes or more, at least one of them a solid. */
+export function canHullShapes(shapes: WorkplaneShape[]) {
+  const solids = shapes.filter((shape) => !shape.hole && !isNonSolidShape(shape));
+  return shapes.length >= 2 && solids.length >= 1;
+}
+
+/**
+ * The convex hull of the selected solids (#863): the smallest convex body round all of them, as if
+ * they were shrink-wrapped, so a half sphere on a cylinder or four corner posts become one smooth body.
+ * Holes in the selection are cut out of the hull afterwards, as a group cuts them. The parts stay in the
+ * group, which Edit group opens again and builds anew; the hull itself is a mesh (Manifold.hull of the
+ * parts' solids), so its round faces are facets, as the parts' own meshes are.
+ */
+export async function buildHullShapeFromSelection(groupable: WorkplaneShape[], triangleLimit: number): Promise<HullBuildResult> {
+  const shapes = groupable.filter((shape) => !isNonSolidShape(shape));
+  if (!canHullShapes(shapes)) return { group: null, failureNotice: t("status.hullNeedsShapes") };
+  const solids = shapes.filter((shape) => !shape.hole);
+  const holes = shapes.filter((shape) => shape.hole);
+  const sourceTriangleCount = shapes.reduce((total, shape) => total + meshForShape(shape).faces.length, 0);
+  if (sourceTriangleCount > triangleLimit) {
+    return { group: null, failureNotice: t("status.hullTooBig", { count: formatTriangleCount(sourceTriangleCount), limit: formatTriangleCount(triangleLimit) }) };
+  }
+  const created: ManifoldSolid[] = [];
+  try {
+    const runtime = await getManifoldRuntime();
+    const parts: ManifoldSolid[] = [];
+    for (const solid of solids) {
+      const part = shapeToManifoldSolid(runtime, solid, created);
+      if (!part || part.status() !== "NoError" || part.numTri() < 1) return { group: null, failureNotice: t("status.hullFailed") };
+      created.push(part);
+      parts.push(part);
+    }
+    let result = runtime.Manifold.hull(parts);
+    created.push(result);
+    if (holes.length) {
+      const cutter = shapesToManifoldUnion(runtime, holes, created);
+      if (!cutter) return { group: null, failureNotice: t("status.hullFailed") };
+      result = result.subtract(cutter);
+      created.push(result);
+    }
+    if (result.status() !== "NoError" || result.numTri() < 1) return { group: null, failureNotice: t("status.hullFailed") };
+    const group = meshPositionsToGroupShape(shapes, solids, manifoldMeshToPositions(result.getMesh()), "grouped-hull");
+    return group ? { group: { ...group, name: "Hull", hole: false }, failureNotice: "" } : { group: null, failureNotice: t("status.hullFailed") };
+  } catch {
+    return { group: null, failureNotice: t("status.hullFailed") };
+  } finally {
+    Array.from(new Set(created)).forEach(disposeManifold);
+  }
+}
+
 function cutterInteriorTriangleCount(mesh: MeshData, cutters: WorkplaneShape[]) {
   return mesh.faces.reduce((total, [ai, bi, ci]) => {
     const centroid = triangleCentroid([mesh.vertices[ai], mesh.vertices[bi], mesh.vertices[ci]]);
@@ -2238,7 +2293,8 @@ function expandGroupsForBoolean(selection: WorkplaneShape[]): WorkplaneShape[] {
 }
 
 function expandGroupsForBoxBoolean(selection: WorkplaneShape[]): WorkplaneShape[] {
-  return selection.flatMap((shape) => (shape.groupedShapes?.length ? restoreGroupedChildren(shape) : [shape]));
+  // An intersection or a hull is not the sum of its parts: opened, a hull of four boxes would be cut as the four boxes (#863).
+  return selection.flatMap((shape) => (shape.groupedShapes?.length && shape.groupOperation !== "intersection" && shape.groupOperation !== "hull" ? restoreGroupedChildren(shape) : [shape]));
 }
 
 function canUseBoxBoolean(selection: WorkplaneShape[]) {

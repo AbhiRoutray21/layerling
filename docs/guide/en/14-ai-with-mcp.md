@@ -71,6 +71,7 @@ The AI works with the same functions as you, through the same path as your opera
 | `layerling_ungroup_objects` | dissolves groups |
 | `layerling_boolean_cut` | cuts solids with holes |
 | `layerling_intersect_objects` | keeps only what the objects have in common (Intersection) |
+| `layerling_hull_objects` | wraps the objects in one convex body, as if shrink-wrapped (Hull) |
 | `layerling_separate_parts` | separates a shape into its loose parts, a sketch body into one body per outline |
 | `layerling_split_objects` | cuts solids or holes in two with a plane |
 | `layerling_list_edges` | lists the real CAD edges of an object |

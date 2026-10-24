@@ -683,6 +683,18 @@ export const tools = [
     },
   },
   {
+    name: "layerling_hull_objects",
+    description: "Wrap the given objects in their convex hull, like the editor's Hull button: the smallest convex body round all of them, as if shrink-wrapped (a half sphere on a cylinder, four posts become a box). Pass two or more objects, at least one of them a solid; holes among them are cut out of the hull afterwards. The result replaces them and opens like a group, so the parts stay editable; the hull itself is a mesh.",
+    inputSchema: {
+      ...editorTargetSchema,
+      required: ["ids"],
+      properties: {
+        ...editorTargetSchema.properties,
+        ids: { type: "array", items: { type: "string" } },
+      },
+    },
+  },
+  {
     name: "layerling_ungroup_objects",
     description: "Ungroup one or more grouped objects by id and preserve their edited geometry.",
     inputSchema: {

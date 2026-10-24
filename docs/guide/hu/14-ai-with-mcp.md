@@ -67,6 +67,7 @@ Az MI ugyanazokkal a funkciókkal dolgozik, mint te, ugyanazon az úton, mint a 
 | `layerling_ungroup_objects` | csoportokat bont fel |
 | `layerling_boolean_cut` | tömör testeket vág lyukakkal |
 | `layerling_intersect_objects` | csak azt tartja meg, ami az objektumokban közös (Metszet) |
+| `layerling_hull_objects` | egyetlen domború testbe burkolja az objektumokat, mintha zsugorfóliába csomagolnák (Burok) |
 | `layerling_separate_parts` | egy alakzatot a különálló részeire bont, a vázlattestet körvonalanként egy testre |
 | `layerling_split_objects` | tömör testeket vagy lyukakat vág ketté egy síkkal |
 | `layerling_list_edges` | felsorolja egy objektum valódi CAD-éleit |
