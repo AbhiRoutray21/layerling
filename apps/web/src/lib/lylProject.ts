@@ -50,7 +50,7 @@ export const LYL_ATTACHMENTS_FORMAT_VERSION = 3;
 /** The newest format this layerling reads. */
 export const LYL_NEWEST_READABLE_FORMAT_VERSION = LYL_ATTACHMENTS_FORMAT_VERSION;
 export const LYL_OLDEST_READABLE_FORMAT_VERSION = 1;
-export const LYL_CREATED_WITH_VERSION = "1.107.0";
+export const LYL_CREATED_WITH_VERSION = "1.108.0";
 export const LYL_MEDIA_TYPE = "application/vnd.layerling.project+zip";
 
 export const LYL_LIMITS = {
