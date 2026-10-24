@@ -13694,12 +13694,13 @@ html[data-theme="dark"] .grid-settings {
    Gruppe einfach abgeschnitten, jetzt gehen die Symbole eine Stufe zurueck.
    Gemessen (Breite von der linken Kante der ersten bis zur rechten der letzten
    Gruppe, mit Lupen-, Anleitungs-, Kuerzel- und Hilfeknopf und "Flaeche
-   loeschen"): in voller Groesse braucht das Band 2081 px, in der mittleren
-   Stufe 1765 px, in der kleinen 1615 px. Ohne "Flaeche loeschen" waren es
+   loeschen" und "Huelle"): in voller Groesse braucht das Band 2172 px, in der
+   mittleren Stufe 1842 px, in der kleinen 1690 px (24.10.2026, #863). Ohne
+   "Huelle" passten 2081, 1765 und 1615 px. Ohne "Flaeche loeschen" waren es
    2038, 1728 und 1582 px, ohne den Knopf der Interaktiven Hilfe 1990, 1688
    und 1544 px: Jeder neue Knopf verschiebt alle drei Schwellen um das, was
    er braucht - neu messen. */
-@media (max-width: 2081px) {
+@media (max-width: 2180px) {
   :root {
     --toolbar-icon-size: calc(37px * var(--toolbar-scale));
   }
@@ -13720,7 +13721,7 @@ html[data-theme="dark"] .grid-settings {
   }
 }
 
-@media (max-width: 1765px) {
+@media (max-width: 1850px) {
   :root {
     --toolbar-icon-size: calc(34px * var(--toolbar-scale));
   }
@@ -13735,14 +13736,14 @@ html[data-theme="dark"] .grid-settings {
   }
 }
 
-/* Below the width even the smallest step needs (1615 px, measured with the
-   command search, guide, shortcuts, Interactive Help and Delete face buttons;
-   the middle step needs 1765 px and the full size 2081 px) the groups wrap onto a
+/* Below the width even the smallest step needs (1690 px, measured with the
+   command search, guide, shortcuts, Interactive Help, Delete face and Hull buttons;
+   the middle step needs 1842 px and the full size 2172 px) the groups wrap onto a
    further row instead of scrolling sideways: a scrolling bar hides tools and
    cuts off every menu that hangs beneath it. The bar grows, and the editor
    passes its real height on (see --editor-toolbar-height). A new button in
    the bar moves all three thresholds up: measure again. */
-@media (max-width: 1615px) {
+@media (max-width: 1698px) {
   .toolbar-mode-content,
   .sketch-toolbar-ribbon {
     flex-wrap: wrap;
