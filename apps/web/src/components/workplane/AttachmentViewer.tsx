@@ -2,6 +2,7 @@
 
 import { X } from "lucide-react";
 import { useEffect, useMemo } from "react";
+import { GuideHelpLink } from "@/components/GuideHelpLink";
 import { MarkdownView } from "@/components/workplane/MarkdownView";
 import { t } from "@/lib/i18n";
 import { parseMarkdown } from "@/lib/markdownView";
@@ -66,6 +67,7 @@ export function AttachmentViewer({ attachment, onClose }: { attachment: ProjectA
         <header className="workspace-modal-header movable" title={t("panel.moveHint")} {...movable.handleProps}>
           {/* translate="no": a file name is not text to be translated by the browser. */}
           <strong translate="no" title={attachment.name}>{attachment.name}</strong>
+          <GuideHelpLink chapter="files" />
           <button aria-label={t("attachments.viewerClose", { name: attachment.name })} onClick={onClose}>
             <X size={18} />
           </button>
