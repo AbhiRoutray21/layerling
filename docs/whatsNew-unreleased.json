@@ -82,5 +82,15 @@
       "de": "Ein Bündel (oder eine Gruppe) mit Text, der um einen Zylinder gewickelt ist, wurde so groß wie der ganze Zylinder gemessen und zog die Teile darin in die Breite und ins Ovale. Jetzt richtet sich seine Größe nach den Teilen selbst: nichts wird verzerrt, und das Bündel sitzt in ihrer Mitte.",
       "en": "A bundle (or a group) holding text wrapped round a cylinder was measured as big as the whole cylinder and pulled the parts inside it wider and oval. Its size now follows the parts themselves: nothing is distorted, and the bundle sits in their middle."
     }
+  },
+  {
+    "title": {
+      "de": "Mac: Control und Ziehen dreht wieder die Ansicht",
+      "en": "Mac: Control and drag turns the view again"
+    },
+    "body": {
+      "de": "Auf einem Mac dreht die Ansicht wieder, wenn du die Control-Taste hältst und mit dem Trackpad ziehst (ein Control-Klick ist dort der Rechtsklick). Cmd und Ziehen verschiebt die Ansicht weiter.",
+      "en": "On a Mac the view turns again when you hold Control and drag on the trackpad (a Control click is the right click there). Cmd and drag still moves the view."
+    }
   }
 ]
