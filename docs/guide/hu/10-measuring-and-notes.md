@@ -42,7 +42,7 @@ Ha kijelölsz egy testet, a derékszögvonalzó zölddel mutatja, milyen messze 
 
 Középpontnál a zöld számok a test közepéig számolnak, magasságban is. Így egy gömböt a középpontjával pontosan 15 mm-re helyezel egy éltől, a sugár levonása nélkül. Egy falon egy lyukat így helyezel el balról 40, felülről 190 mm-re: jelöld ki a lyukat, válts középpontra, gépeld be a 40-et és a 190-et. A magasság ott a faltól kifelé számol.
 
-A mérőszalag és a derékszögvonalzó is a helyén marad, amíg vázlatot készítesz, és visszatér a 3D nézetbe. Nem mentődnek a tervvel, nincsenek az előzményekben, és az oldal újratöltésekor eltűnnek.
+A mérőszalag és a derékszögvonalzó is a helyén marad, amíg vázlatot készítesz, és visszatér a 3D nézetbe. Egyik sem kerül az előzményekbe. A mérőszalag nem mentődik a tervvel, és az oldal újratöltésekor eltűnik; a derékszögvonalzó a tervvel együtt mentődik.
 
 ## Távolságok az origótól és mozgatás közben
 

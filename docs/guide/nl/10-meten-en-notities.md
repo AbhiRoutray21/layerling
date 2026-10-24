@@ -42,7 +42,7 @@ Selecteer je een lichaam, dan toont de winkelhaak in het groen hoe ver het van d
 
 Met het middelpunt tellen de groene getallen tot het midden van het lichaam, ook in de hoogte. Zo plaats je een bol met zijn middelpunt precies 15 mm van een rand, zonder de straal ervan af te trekken. Op een wand plaats je een gat op 40 mm van links en 190 mm van boven zo: selecteer het gat, schakel naar middelpunt, typ 40 en 190. De hoogte telt daar vanaf de wand naar buiten.
 
-Zowel het meetlint als de winkelhaak blijven staan terwijl je schetst en terugkeert naar de 3D-weergave. Ze worden niet met het ontwerp opgeslagen en niet in de geschiedenis, en ze verdwijnen als je de pagina herlaadt.
+Zowel het meetlint als de winkelhaak blijven staan terwijl je schetst en terugkeert naar de 3D-weergave. Geen van beide komt in de geschiedenis. Het meetlint wordt niet met het ontwerp opgeslagen en verdwijnt als je de pagina herlaadt; de winkelhaak wordt met het ontwerp opgeslagen.
 
 ## Afstanden tot de oorsprong en tijdens het verplaatsen
 

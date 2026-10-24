@@ -42,7 +42,7 @@ Kotno ravnilo se položi na delovno ravnino. Če leži na strani telesa, torej l
 
 S središčem zelene številke štejejo do sredine telesa, tudi v višini. Tako na primer postaviš kroglo s sredino natanko 15 mm ob rob, ne da bi odštel polmer. Na steni tako postaviš luknjo 40 mm z leve in 190 mm od zgoraj: označi luknjo, vklopi središče, vpiši 40 in 190. Višina tam šteje od stene navzven.
 
-Merilni trak in kotno ravnilo ostaneta tam, kjer sta, ko skiciraš in se vrneš v 3D pogled. Z načrtom nista shranjena in ju ni v zgodovini; izgineta, ko stran naložiš znova.
+Merilni trak in kotno ravnilo ostaneta tam, kjer sta, ko skiciraš in se vrneš v 3D pogled. Nobenega ni v zgodovini. Merilni trak se z načrtom ne shrani in izgine, ko stran naložiš znova; kotno ravnilo se shrani z načrtom.
 
 ## Razdalje do ničle in pri premikanju
 

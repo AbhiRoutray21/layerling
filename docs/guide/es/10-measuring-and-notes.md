@@ -44,7 +44,7 @@ Las líneas guía de los números verdes van por el suelo, el plano en el que es
 
 Con el punto medio, los números verdes cuentan hasta el centro del cuerpo, también en altura. Así colocas una esfera con su centro exactamente a 15 mm de una arista sin tener que restar el radio. En una pared, colocas así un orificio a 40 mm de la izquierda y a 190 mm de arriba: selecciona el orificio, cambia a punto medio y escribe 40 y 190. Ahí la altura se cuenta desde la pared hacia fuera.
 
-Tanto la cinta métrica como la escuadra se quedan donde están mientras dibujas un boceto y vuelves a la vista 3D. No se guardan con el diseño ni en el historial, y desaparecen al recargar la página.
+Tanto la cinta métrica como la escuadra se quedan donde están mientras dibujas un boceto y vuelves a la vista 3D. Ninguna de las dos entra en el historial. La cinta métrica no se guarda con el diseño y desaparece al recargar la página; la escuadra se guarda con el diseño.
 
 ## Distancias al origen y al mover
 

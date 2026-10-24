@@ -44,7 +44,7 @@ Linie pomocnicze zielonych liczb biegną po podłodze, czyli w płaszczyźnie, w
 
 Przy punkcie środkowym zielone liczby liczą do środka bryły, także w wysokości. Tak ustawisz kulę środkiem dokładnie 15 mm od krawędzi, bez odejmowania promienia. Na ściance otwór 40 mm od lewej i 190 mm od góry ustawisz tak: zaznacz otwór, przełącz na punkt środkowy, wpisz 40 i 190. Wysokość liczy się tam od ścianki na zewnątrz.
 
-Zarówno narzędzie Zmierz, jak i kątownik zostają tam, gdzie są, gdy szkicujesz i wracasz do widoku 3D. Nie są zapisywane z projektem ani w historii i znikają po przeładowaniu strony.
+Zarówno narzędzie Zmierz, jak i kątownik zostają tam, gdzie są, gdy szkicujesz i wracasz do widoku 3D. Żadne z nich nie trafia do historii. Narzędzie Zmierz nie jest zapisywane z projektem i znika po przeładowaniu strony; kątownik jest zapisywany z projektem.
 
 ## Odległości od początku układu i podczas przesuwania
 

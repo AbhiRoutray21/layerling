@@ -42,7 +42,7 @@ Lorsque vous sélectionnez un corps, le carré d'encadrement indique en vert sa 
 
 Au milieu, les chiffres verts comptent jusqu'au milieu du corps, également en hauteur. De cette façon, vous placez une sphère avec son centre exactement à 15 mm d'un bord, sans soustraire le rayon. Sur un mur vous placez un trou à 40 mm de la gauche et 190 mm du haut comme ceci : sélectionnez le trou, passez au milieu, tapez 40 et 190. La hauteur y compte vers l'extérieur du mur.
 
-Le ruban à mesurer et l'équerre de cadrage restent là où ils se trouvent pendant que vous dessinez et revenez à la vue 3D. Ils ne sont pas enregistrés avec le design ni dans l'historique, et ils disparaissent lorsque vous rechargez la page.
+Le ruban à mesurer et l'équerre de cadrage restent là où ils se trouvent pendant que vous dessinez et revenez à la vue 3D. Aucun des deux n'entre dans l'historique. Le ruban à mesurer n'est pas enregistré avec le design et disparaît lorsque vous rechargez la page ; l'équerre de cadrage est enregistrée avec le design.
 
 ## Distances jusqu'à l'origine et en déplacement
 
