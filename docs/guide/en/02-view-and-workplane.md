@@ -13,7 +13,7 @@ With the mouse:
 | click the right button | on a body, a menu with the most used commands: duplicate, hole or solid, group, hide, lock, delete and more; on empty space Paste and Select all |
 | drag with the middle button | move the view |
 | mouse wheel | zoom in and out |
-| hold [[Ctrl]] / [[Cmd]] and drag with the left button | also moves the view (on a MacBook trackpad: hold [[Cmd]], press and drag) |
+| hold [[Ctrl]] / [[Cmd]] and drag with the left button | also moves the view (on a MacBook trackpad: hold [[Cmd]], press and drag); on a Mac, holding Control instead turns the view, as Control-click is the Mac's right click |
 | double-click on empty workplane or beside the plate | moves the view so that the spot comes to the middle; the view then turns around it |
 
 How fast the wheel zooms is set with {{ui:workspace.zoomSpeed}} in the settings, under {{ui:workspace.appearance}}: a slider from 1 to 14, 5 to begin with. It sets the wheel and the trackpad only: the buttons and the keys [[+]] and [[−]] always zoom in the same small steps. One notch of a mouse wheel zooms alike in every browser, a trackpad zooms with how far you stroke.

@@ -13,7 +13,7 @@ Mit der Maus:
 | rechte Maustaste kurz klicken | auf einem Körper ein Menü mit den häufigsten Befehlen: duplizieren, Aussparung oder Körper, gruppieren, ausblenden, sperren, löschen und mehr; auf leerer Fläche Einfügen und Alle auswählen |
 | mittlere Maustaste ziehen | die Ansicht verschieben |
 | Mausrad | hinein- und herauszoomen |
-| [[Strg]] / [[Cmd]] halten und mit links ziehen | ebenfalls verschieben (auf dem Trackpad eines MacBooks: [[Cmd]] halten, drücken und ziehen) |
+| [[Strg]] / [[Cmd]] halten und mit links ziehen | ebenfalls verschieben (auf dem Trackpad eines MacBooks: [[Cmd]] halten, drücken und ziehen); auf dem Mac dreht Control statt Cmd die Ansicht, denn Control-Klick ist dort der Rechtsklick |
 | Doppelklick auf eine leere Stelle der Arbeitsebene oder neben die Platte | verschiebt die Ansicht, bis diese Stelle in der Mitte liegt; die Ansicht dreht sich dann um sie |
 
 Wie schnell das Mausrad zoomt, stellst du in den Einstellungen unter {{ui:workspace.appearance}} mit {{ui:workspace.zoomSpeed}} ein: ein Regler von 1 bis 14, zu Beginn 5. Er gilt nur für Mausrad und Trackpad: die Knöpfe und die Tasten [[+]] und [[−]] zoomen immer in denselben kleinen Schritten. Eine Raste des Mausrads zoomt in jedem Browser gleich stark, ein Trackpad zoomt danach, wie weit du streichst.
