@@ -1450,6 +1450,18 @@ export async function unionOverlappingExportMeshes(shapes: WorkplaneShape[], mes
   return withoutSplinters(await unionOverlappingExportMeshesRaw(shapes, meshes, cut));
 }
 
+/**
+ * The surface the face tools read a face from: a plain group's or bundle's
+ * solid parts joined into one, as for the export, so a face across two parts
+ * is one face; any other body, and one with a hole among its parts or in a
+ * bundle inside them, as it is drawn.
+ */
+export async function faceReadMesh(shape: WorkplaneShape): Promise<MeshData> {
+  const mesh = meshForShape(shape);
+  if (!isPileOfSolids(shape) || bundleParts(shape).some((part) => part.hole)) return mesh;
+  return (await unionOverlappingExportMeshes([shape], [mesh])).meshes[0];
+}
+
 export async function colorSeparatedExportMeshes(shapes: WorkplaneShape[], meshes: MeshData[], cut?: readonly boolean[]) {
   return withoutSplinters(await colorSeparatedExportMeshesRaw(shapes, meshes, cut));
 }
