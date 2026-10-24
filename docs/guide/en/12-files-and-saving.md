@@ -30,6 +30,16 @@ You back up a single design in the editor: {{ui:editor.export}}, choose the form
 
 **Saving into your own folder (Chrome and Edge).** There the button opens your system's save dialog, so you pick the folder and the name yourself, and an existing file can be replaced. Afterwards [[Ctrl]]+[[S]] saves the design into that same file again, without a dialog. A design opened from a `.lyl` file with {{ui:dashboard.importGeometry}} or the open button of the export window saves back into that file, too. The browser may ask once for permission to change the file. After the page is reloaded the design forgets its file, and the next [[Ctrl]]+[[S]] asks for it again; the dialog starts in the folder you used last. Firefox and Safari do not allow a page to write into files like this. There the file is downloaded to the Downloads folder as before, and [[Ctrl]]+[[S]] downloads it again; Firefox can be set to ask for the folder each time under Settings, General, Downloads.
 
+## Attachments
+
+Instructions, a parts list or a few notes can stay with the design as files. {{ui:editor.attachments}} in the {{ui:editor.group.manage}} toolbar, the paperclip, opens the list; a small dot on the paperclip shows that the design has some.
+
+- **{{ui:attachments.upload}}:** Choose one or more `.md` (Markdown) or `.txt` files. A file has to be plain text (UTF-8) and at most 2 MB; a design holds up to 16 files and 8 MB together.
+- **The list:** The arrow downloads a file as it was uploaded. The bin removes it; the row asks once more first, and a removed file cannot be brought back with undo, because attachments are not part of the undo history.
+- **A name that is already there:** layerling asks what to do. {{ui:attachments.replace}} puts the new content into the file of that name, which keeps its place in the list. {{ui:common.rename}} adds the new file under another name and suggests the first free one, such as `notes 2.md`. The cross leaves the new file out. Upper and lower case count the same, and the same file uploaded again changes nothing.
+
+Attachments are saved with the design like everything else: in the browser, in a LYL file, in a backup and in a design on a server, which they reach as soon as one is added or removed. They do not come along with {{ui:import.insertProject}} or with a custom shape, and a bug report does not contain them. A design with attachments is saved as a newer kind of LYL file: an older layerling says that it cannot open it instead of dropping the files. A design without attachments is saved exactly as before.
+
 ## Exporting
 
 Click {{ui:editor.export}} or press [[Ctrl]]+[[E]].

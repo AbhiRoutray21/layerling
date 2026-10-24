@@ -30,6 +30,16 @@ Een losse back-up van één ontwerp maak je in de editor: {{ui:editor.export}}, 
 
 **Opslaan in je eigen map (Chrome en Edge).** Daar opent de knop het opslagvenster van je systeem, zodat je de map en de naam zelf kiest en een bestaand bestand kunt vervangen. Daarna slaat [[Ctrl]]+[[S]] het ontwerp opnieuw op in datzelfde bestand, zonder venster. Een ontwerp dat je uit een `.lyl`-bestand hebt geopend met {{ui:dashboard.importGeometry}} of met de openknop van het exportvenster, slaat ook weer op in dat bestand. De browser kan één keer om toestemming vragen om het bestand te wijzigen. Nadat de pagina opnieuw is geladen, vergeet het ontwerp zijn bestand en vraagt de volgende [[Ctrl]]+[[S]] er weer om; het venster begint in de map die je het laatst gebruikte. Firefox en Safari staan een pagina niet toe om zo in bestanden te schrijven. Daar wordt het bestand zoals vroeger in de map Downloads gedownload, en [[Ctrl]]+[[S]] downloadt het opnieuw; Firefox kun je onder Instellingen, Algemeen, Downloads zo instellen dat het elke keer naar de map vraagt.
 
+## Bijlagen
+
+Een instructie, een onderdelenlijst of een paar notities kunnen als bestanden bij het ontwerp blijven. {{ui:editor.attachments}} in de balk {{ui:editor.group.manage}}, de paperclip, opent de lijst; een klein stipje op de paperclip laat zien dat het ontwerp er heeft.
+
+- **{{ui:attachments.upload}}:** Kies een of meer bestanden met de extensie `.md` (Markdown) of `.txt`. Een bestand moet gewone tekst (UTF-8) zijn en hoogstens 2 MB groot; een ontwerp bevat tot 16 bestanden en samen 8 MB.
+- **De lijst:** De pijl downloadt een bestand zoals het is geüpload. De prullenbak verwijdert het; de rij vraagt eerst nog een keer, en een verwijderd bestand komt niet terug met ongedaan maken, omdat bijlagen niet bij de geschiedenis van ongedaan maken horen.
+- **Een naam die er al is:** layerling vraagt wat er moet gebeuren. {{ui:attachments.replace}} zet de nieuwe inhoud in het bestand met die naam, dat zijn plaats in de lijst houdt. {{ui:common.rename}} voegt het nieuwe bestand toe onder een andere naam en stelt de eerste vrije voor, zoals `notities 2.md`. Het kruisje laat het nieuwe bestand weg. Hoofdletters en kleine letters tellen gelijk, en hetzelfde bestand nog eens uploaden verandert niets.
+
+Bijlagen worden net als al het andere met het ontwerp opgeslagen: in de browser, in een LYL-bestand, in een back-up en in een ontwerp op een server, waar ze komen zodra er een wordt toegevoegd of verwijderd. Ze gaan niet mee met {{ui:import.insertProject}} of met een eigen vorm, en een bugrapport bevat ze niet. Een ontwerp met bijlagen wordt opgeslagen als een nieuwer soort LYL-bestand: een ouder layerling zegt dat het het niet kan openen in plaats van de bestanden kwijt te raken. Een ontwerp zonder bijlagen wordt precies zo opgeslagen als voorheen.
+
 ## Exporteren
 
 Klik op {{ui:editor.export}} of druk op [[Ctrl]]+[[E]].

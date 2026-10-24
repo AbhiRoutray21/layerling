@@ -78,6 +78,20 @@ export type ProjectAsset = {
 };
 
 /**
+ * A file kept with a design - its instructions, a parts list - and saved, shared and backed up
+ * with it (#820). Not part of the undo history. `mediaType` comes from the content check of
+ * `projectAttachments.ts`, never from the browser.
+ */
+export type ProjectAttachment = {
+  id: string;
+  name: string;
+  mediaType: string;
+  bytes: Uint8Array;
+  byteLength: number;
+  sha256: string;
+};
+
+/**
  * A snap step of the user's own: a measure with a name, such as the 19.05 mm
  * one key takes up on a keyboard. The snap menu offers it whole, halved and
  * quartered.

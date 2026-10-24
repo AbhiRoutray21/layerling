@@ -30,6 +30,16 @@ Vous sauvegardez un seul dessin dans l'éditeur : {{ui:editor.export}}, choisiss
 
 **Enregistrement dans votre propre dossier (Chrome et Edge).** Là, le bouton ouvre la boîte de dialogue d'enregistrement de votre système, vous choisissez donc vous-même le dossier et le nom, et un fichier existant peut être remplacé. Ensuite, [[Ctrl]]+[[S]] enregistre à nouveau la conception dans ce même fichier, sans boîte de dialogue. Un dessin ouvert à partir d'un fichier `.lyl` avec {{ui:dashboard.importGeometry}} ou le bouton Ouvrir de la fenêtre d'exportation est également enregistré dans ce fichier. Le navigateur peut demander une fois l'autorisation de modifier le fichier. Une fois la page rechargée, le design oublie son fichier et le prochain [[Ctrl]]+[[S]] le demande à nouveau ; la boîte de dialogue démarre dans le dossier que vous avez utilisé en dernier. Firefox et Safari n'autorisent pas une page à écrire dans des fichiers comme celui-ci. Là, le fichier est téléchargé dans le dossier Téléchargements comme auparavant, et [[Ctrl]]+[[S]] le télécharge à nouveau ; Firefox peut être configuré pour demander le dossier à chaque fois sous Paramètres, Général, Téléchargements.
 
+## Pièces jointes
+
+Des instructions, une liste de pièces ou quelques notes peuvent rester avec la création sous forme de fichiers. {{ui:editor.attachments}} dans la barre {{ui:editor.group.manage}}, le trombone, ouvre la liste ; un petit point sur le trombone indique que la création en a.
+
+- **{{ui:attachments.upload}} :** Choisissez un ou plusieurs fichiers `.md` (Markdown) ou `.txt`. Un fichier doit être du texte brut (UTF-8) et peser au plus 2 Mo ; une création contient jusqu'à 16 fichiers et 8 Mo au total.
+- **La liste :** La flèche télécharge un fichier tel qu'il a été envoyé. La corbeille le retire ; la ligne demande d'abord une confirmation, et un fichier retiré ne revient pas avec Annuler, car les pièces jointes ne font pas partie de l'historique d'annulation.
+- **Un nom déjà pris :** layerling demande quoi faire. {{ui:attachments.replace}} met le nouveau contenu dans le fichier de ce nom, qui garde sa place dans la liste. {{ui:common.rename}} ajoute le nouveau fichier sous un autre nom et propose le premier nom libre, par exemple `notes 2.md`. La croix laisse le nouveau fichier de côté. Majuscules et minuscules comptent pareil, et renvoyer le même fichier ne change rien.
+
+Les pièces jointes sont enregistrées avec la création comme le reste : dans le navigateur, dans un fichier LYL, dans une sauvegarde et dans une création sur un serveur, où elles arrivent dès qu'on en ajoute ou en retire une. Elles ne suivent pas avec {{ui:import.insertProject}} ni avec une forme personnalisée, et un rapport de bogue ne les contient pas. Une création avec pièces jointes est enregistrée comme un type de fichier LYL plus récent : un layerling plus ancien dit qu'il ne peut pas l'ouvrir au lieu de perdre les fichiers. Une création sans pièces jointes est enregistrée exactement comme avant.
+
 ## Exportation
 
 Cliquez sur {{ui:editor.export}} ou appuyez sur [[Ctrl]]+[[E]].

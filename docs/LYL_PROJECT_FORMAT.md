@@ -39,6 +39,25 @@ Object nodes keep stable layerling object IDs. Groups refer to child node IDs in
 
 Large object data lives in `assets/` and is referenced by content hash, never repeated per state. Imported and baked meshes use `importedMesh.meshAssetId`, exact CAD uses `cadBrepAssetId`, and the display edges of a CAD object use `cadDisplayEdgesAssetId` (`SKFEDG1` little-endian binary: an 8-byte magic, the edge count, the total coordinate count, one 32-bit length per edge, then the coordinates as doubles). Undo states that share an object therefore share one stored copy of its geometry, which keeps autosave proportional to what actually changed rather than to the whole history.
 
+## Version 3: attachments
+
+A design can carry files - its instructions, a parts list - which are saved with it (#820). They are the only addition of version 3, and they are written **only for a design that has some**: such a design is a `formatVersion` 3 package with `minimumReaderVersion` 3, and every other design is written as version 2, byte for byte as before. A layerling that knows version 2 only refuses a version 3 package with its usual "requires a newer layerling" message, instead of opening it and dropping the files at its next save.
+
+```text
+project.lyl
+├── project.json          "attachments": [ { "id", "fileName", "assetId" }, ... ]
+└── assets/
+    └── attachment/       The files themselves: <sha256>.md or <sha256>.txt
+```
+
+- Each file is an asset of the kind `attachment`, so it is checked like every other asset: safe path, size, and SHA-256 against its record. Bytes that are the same are stored once, however many names they have.
+- The list `attachments` in `project.json` holds the name each file goes by (`fileName`) and the asset that holds its bytes (`assetId`). Its `id` is what the file is known by inside the design; it stays the same when the file is replaced or renamed in the editor. The list keeps the order the files are shown in.
+- What may be attached is one table in the code (`ATTACHMENT_TYPES` in `lib/projectAttachments.ts`): `.md` (`text/markdown`) and `.txt` (`text/plain`), both UTF-8 text without NUL bytes. A file is checked by its content, not only by its name, on the way in and on the way out. A package that holds anything else under `attachment` is refused.
+- Limits: 2 MB a file, 16 files and 8 MB together; a name has at most 120 characters, no folder and no control characters, and no two names are the same without regard to case. A package that breaks one of them is refused.
+- A list in a package of version 2 or older is refused: the list belongs to version 3.
+- Attachments are not part of the undo history: they belong to the design, not to one of its states. A file added or removed is saved like any change to the design, in the browser and, for a design in a shared folder, on the server.
+- They are not carried by custom shapes or by "Insert into this design", and the bug report does not contain them.
+
 ## What is preserved
 
 - All current native shape kinds and their editable parameters
@@ -47,6 +66,7 @@ Large object data lives in `assets/` and is referenced by content hash, never re
 - Sketch points, lines, Bezier/smooth handles, disjoint profiles, reference images, and extrusion depth
 - Imported STL, OBJ, 3MF, SVG, and STEP sources, stored once and reused by instances
 - Exact imported STEP data, current exact CAD B-Rep, display edges, chamfer/fillet settings, and reversible edge-treatment history
+- Attachments, the files kept with the design (version 3), in the order they are listed, with their names and their exact bytes
 - Custom fonts used by texts, embedded in `project.json` as a subset of the characters the design's texts use (at most 64 fonts), so the file opens with its lettering on another computer
 - Undo and redo states according to the export choice: Unlimited, 100, 50, or 30 recent actions, the custom limit set in the workspace settings, or None (the current state only, for sharing a file without its steps). Unlimited means every state still retained by the editor, including available redo states.
 - Workspace units, grid/snap settings, dimensions, and active offset workplane
@@ -59,7 +79,7 @@ layerling inspects ZIP metadata before expansion and validates the entire projec
 
 Opening a valid project file creates a new local project. It does not overwrite the project that is currently open. The imported project is then saved through the existing dashboard, thumbnail, IndexedDB, history, and editor lifecycle.
 
-Current safety limits are 512 MB compressed, 1 GB expanded, 256 MB per asset, 64 MB for `project.json`, 4,096 archive entries, 100,000 object nodes per state, and 5,001 distinct states. The live editor retains at most 5,000 history entries and 64 MB of serialized history, so Unlimited means all history currently available inside those safety limits.
+The attachments are checked as well: every attachment asset must be of an allowed type and be what its type says (UTF-8 text, for the two types that exist), the list must refer only to attachment assets and keep to its limits, and its names must be usable and different. Current safety limits are 512 MB compressed, 1 GB expanded, 256 MB per asset, 64 MB for `project.json`, 4,096 archive entries, 100,000 object nodes per state, and 5,001 distinct states. The live editor retains at most 5,000 history entries and 64 MB of serialized history, so Unlimited means all history currently available inside those safety limits.
 
 ## Files from before the rename
 
@@ -74,7 +94,7 @@ back writes a `.lyl`.
 
 ## Compatibility and migrations
 
-The current format is version 2. Readers refuse a higher `formatVersion` or `minimumReaderVersion` instead of partially loading it. Version 2 moves display edges out of every state into deduplicated `display-edges` assets; version 1 packages are still opened, and their inline `definition.cadDisplayEdges` is read as written. The importer also contains an explicit migration for the documented version 0 pure-JSON prototype and preserves its object IDs and valid history. An installation that only knows version 1 refuses a version 2 package, so a project shared with an older installation has to be exported from that older installation.
+A design is written as version 2, or as version 3 when it has attachments (see above); the newest version this layerling reads is 3. Readers refuse a higher `formatVersion` or `minimumReaderVersion` instead of partially loading it. Version 2 moves display edges out of every state into deduplicated `display-edges` assets; version 1 packages are still opened, and their inline `definition.cadDisplayEdges` is read as written. The importer also contains an explicit migration for the documented version 0 pure-JSON prototype and preserves its object IDs and valid history. An installation that only knows version 1 refuses a version 2 package, so a project shared with an older installation has to be exported from that older installation. In the same way an installation that knows version 2 only refuses a version 3 package: a design with attachments has to be opened in a current layerling, and its attachments removed, before an older one can open it.
 
 Future schema changes should add a version-to-version migration, run validation after every migration, and never mutate the user's original file.
 

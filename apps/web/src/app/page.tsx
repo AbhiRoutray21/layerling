@@ -63,6 +63,7 @@ import {
   type PlacementWorkplane,
 } from "@/lib/placementWorkplane";
 import { dedupeProjectAssets } from "@/lib/projectAssets";
+import { formatFileSize } from "@/lib/formatFileSize";
 import { hydrateProjectShapeState, reconcileLoadedProjectShapeCacheEntry, type ImportedMeshResource } from "@/lib/projectShapePersistence";
 import { ToolbarImportIcon } from "@/components/toolbarIcons";
 import { writeDesignView, writeSavedViews } from "@/lib/designView";
@@ -77,7 +78,7 @@ import { PICTURE_FILE_ACCEPT } from "@/lib/pictureIcon";
 import { designsToRecover, hiddenCopiesOf, isInlineThumbnail, LOST_DESIGNS_RECOVERED_KEY, orphanedProjectIds, projectListForLocalStorage, withStoredThumbnails, writeProjectList } from "@/lib/designListStorage";
 import { deleteDesignThumbnail, loadDesignThumbnails, saveDesignThumbnail } from "@/lib/designThumbnailStore";
 import { DEFAULT_SNAP_GRID, DEFAULT_WORKPLANE_WORKSPACE, normalizeSnapGrid, normalizeWorkspaceSettings, readWorkspaceDefault, workplaneSettingsFingerprint } from "@/lib/workplaneSettings";
-import type { GridSize, ProjectAsset, WorkplaneShape, WorkplaneWorkspaceSettings } from "@/types/layerling";
+import type { GridSize, ProjectAsset, ProjectAttachment, WorkplaneShape, WorkplaneWorkspaceSettings } from "@/types/layerling";
 
 type AppView = "dashboard" | "editor";
 type ViewMode = "grid" | "list";
@@ -168,6 +169,8 @@ type ProjectShapeCacheEntry = {
   history: EditorHistoryEntry[];
   historyIndex: number;
   assets: ProjectAsset[];
+  /** The files kept with the design (#820). They travel in the stored package, like the assets. */
+  attachments: ProjectAttachment[];
 };
 
 type ProjectShapeRecord = {
@@ -180,6 +183,8 @@ type ProjectShapeRecord = {
   history?: EditorHistoryEntry[];
   historyIndex?: number;
   assets?: ProjectAsset[];
+  /** Read from the stored package when a project is loaded; never written to the record itself. */
+  attachments?: ProjectAttachment[];
   meshResourceIds?: string[];
   assetResourceIds?: string[];
   updatedAt: number;
@@ -266,18 +271,13 @@ function formatUpdated(timestamp: number, language: Language) {
   return new Intl.DateTimeFormat(language, { month: "short", day: "numeric" }).format(new Date(timestamp));
 }
 
-function formatFileSize(bytes: number) {
-  if (bytes < 1024) return `${bytes} B`;
-  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(bytes < 10 * 1024 ? 1 : 0)} KB`;
-  return `${(bytes / (1024 * 1024)).toFixed(bytes < 10 * 1024 * 1024 ? 1 : 0)} MB`;
-}
-
 function projectShapeCacheEntry(
   revision: number,
   shapes: WorkplaneShape[],
   history?: EditorHistoryEntry[],
   historyIndex?: number,
   assets: ProjectAsset[] = [],
+  attachments: ProjectAttachment[] = [],
 ): ProjectShapeCacheEntry {
   const hydrated = hydrateEditorHistoryState(shapes, history, historyIndex, "unlimited", notesForHistoryIndex(history, historyIndex));
   return {
@@ -286,6 +286,7 @@ function projectShapeCacheEntry(
     history: hydrated.entries,
     historyIndex: hydrated.index,
     assets: dedupeProjectAssets(assets),
+    attachments,
   };
 }
 
@@ -295,9 +296,10 @@ function projectShapeCacheEntryFromEditor(
   history: EditorHistoryEntry[],
   historyIndex: number,
   assets: ProjectAsset[],
+  attachments: ProjectAttachment[],
 ): ProjectShapeCacheEntry {
   if (history.length === 0) {
-    return projectShapeCacheEntry(revision, shapes, history, historyIndex, assets);
+    return projectShapeCacheEntry(revision, shapes, history, historyIndex, assets, attachments);
   }
   return {
     revision,
@@ -305,6 +307,7 @@ function projectShapeCacheEntryFromEditor(
     history,
     historyIndex: Math.min(Math.max(0, historyIndex), history.length - 1),
     assets: dedupeProjectAssets(assets),
+    attachments,
   };
 }
 
@@ -392,6 +395,7 @@ async function loadProjectShapes(projectId: string) {
       history: restored.history,
       historyIndex: restored.historyIndex,
       assets: restored.assets,
+      attachments: restored.attachments,
     };
   }
 
@@ -571,6 +575,7 @@ async function saveProjectShapes(projectId: string, entry: ProjectShapeCacheEntr
     history,
     historyIndex,
     assets: entry.assets,
+    attachments: entry.attachments,
     workspace: context.workspace,
     snapGrid: context.snapGrid,
     placementElevation: context.placementElevation,
@@ -1294,7 +1299,7 @@ export default function Home() {
         if (canceled) return;
         const loadedRevision = record?.revision ?? 0;
         const revision = Math.max(activeProject.revision ?? 0, loadedRevision, 1);
-        const loadedEntry = projectShapeCacheEntry(Math.max(loadedRevision, 1), record?.shapes ?? [], record?.history, record?.historyIndex, record?.assets);
+        const loadedEntry = projectShapeCacheEntry(Math.max(loadedRevision, 1), record?.shapes ?? [], record?.history, record?.historyIndex, record?.assets, record?.attachments);
         const entry = loadedEntry.revision === revision ? loadedEntry : { ...loadedEntry, revision };
         setProjectShapesById((current) => {
           // IndexedDB reads are asynchronous. A local edit/import can update the live
@@ -1504,6 +1509,7 @@ export default function Home() {
     history: EditorHistoryEntry[];
     historyIndex: number;
     assets: ProjectAsset[];
+    attachments: ProjectAttachment[];
     projectName: string;
     projectCreatedAt: number;
     workspace: WorkplaneWorkspaceSettings;
@@ -1515,7 +1521,7 @@ export default function Home() {
     const revision = Math.max(Date.now(), nextProjectRevisionRef.current + 1);
     nextProjectRevisionRef.current = revision;
     newestRequestedRevision.set(snapshot.projectId, revision);
-    const entry = projectShapeCacheEntryFromEditor(revision, snapshot.shapes, snapshot.history, snapshot.historyIndex, snapshot.assets);
+    const entry = projectShapeCacheEntryFromEditor(revision, snapshot.shapes, snapshot.history, snapshot.historyIndex, snapshot.assets, snapshot.attachments);
     setProjectShapesById((current) => {
       const existing = current[snapshot.projectId];
       if (existing && existing.revision > revision) {
@@ -1674,7 +1680,7 @@ export default function Home() {
         sketchPlacementWorkplane: restored.sketchPlacementWorkplane,
         sharedProject: sharedProject ? { fileName: sharedProject.fileName, revision: sharedProject.revision, path: sharedProject.path ?? "" } : undefined,
       };
-      const entry = projectShapeCacheEntry(now, restored.shapes, restored.history, restored.historyIndex, restored.assets);
+      const entry = projectShapeCacheEntry(now, restored.shapes, restored.history, restored.historyIndex, restored.assets, restored.attachments);
       await saveProjectShapes(project.id, entry, projectShapeSaveContext(project));
       // A file saved with a view opens in it; the working copy of a server design keeps its own.
       if (restored.view && !existing) writeDesignView(project.id, restored.view);
@@ -2219,7 +2225,7 @@ export default function Home() {
           placementWorkplane: restored.placementWorkplane,
           sketchPlacementWorkplane: restored.sketchPlacementWorkplane,
         };
-        const entry = projectShapeCacheEntry(now, restored.shapes, restored.history, restored.historyIndex, restored.assets);
+        const entry = projectShapeCacheEntry(now, restored.shapes, restored.history, restored.historyIndex, restored.assets, restored.attachments);
         await saveProjectShapes(project.id, entry, projectShapeSaveContext(project));
         if (restored.view) writeDesignView(project.id, restored.view);
         if (restored.savedViews) writeSavedViews(project.id, restored.savedViews);
@@ -2449,7 +2455,7 @@ export default function Home() {
         thumbnailUrl: null,
         thumbnailVersion: undefined,
       };
-      const entry = projectShapeCacheEntry(now, stored.shapes ?? [], stored.history, stored.historyIndex, stored.assets ?? []);
+      const entry = projectShapeCacheEntry(now, stored.shapes ?? [], stored.history, stored.historyIndex, stored.assets ?? [], stored.attachments);
       await saveProjectShapes(copy.id, entry, projectShapeSaveContext(copy));
       setProjectShapesById((current) => ({ ...current, [copy.id]: entry }));
       setProjects((current) => [copy, ...current]);
@@ -2499,7 +2505,7 @@ export default function Home() {
       placementWorkplane: request.placementWorkplane,
       sketchPlacementWorkplane: request.placementWorkplane,
     };
-    const entry = projectShapeCacheEntryFromEditor(now, request.shapes, request.history, request.historyIndex, request.assets);
+    const entry = projectShapeCacheEntryFromEditor(now, request.shapes, request.history, request.historyIndex, request.assets, request.attachments);
     await saveProjectShapes(copy.id, entry, projectShapeSaveContext(copy));
     setProjectShapesById((current) => ({ ...current, [copy.id]: entry }));
     setProjects((current) => [copy, ...current]);
@@ -2713,6 +2719,7 @@ export default function Home() {
           <div className={view === "editor" ? "editor-stage active" : "editor-stage"} aria-hidden={view !== "editor"}>
             <LayerlingEditor
               initialAssets={activeProjectShapeEntry?.assets ?? []}
+              initialAttachments={activeProjectShapeEntry?.attachments}
               initialShapes={activeProjectShapeEntry?.shapes ?? []}
               initialHistory={activeProjectShapeEntry?.history}
               initialHistoryIndex={activeProjectShapeEntry?.historyIndex}

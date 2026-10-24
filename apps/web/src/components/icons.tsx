@@ -108,6 +108,7 @@ export {
   SketchEllipseIcon,
   SketchHalfCircleIcon,
   SketchPieSliceIcon,
+  ToolbarAttachmentsIcon,
   ToolbarCenterOnWorkplaneIcon,
   ToolbarChamferIcon,
   ToolbarCopyIcon,
