@@ -35,6 +35,7 @@ import { createLatestRunner, type LatestRunner } from "@/lib/latestRunner";
 import { onManifoldReady } from "@/lib/manifoldHandle";
 import { onCustomFontsChanged } from "@/lib/textFonts";
 import { readSavedViews, SAVED_VIEW_KEYS, savedViewForKey } from "@/lib/designView";
+import { readCornerRulers, writeCornerRulers } from "@/lib/cornerRulerStore";
 import { rememberCameraView, useDesignViews } from "@/components/workplane/cameraViews";
 import { fitCameraDepthRange, frameBounds, resetCamera, selectionBounds, setCameraToViewDirection, setCameraToViewFace, stepCameraTurn, syncViewCube, toggleCameraProjection, zoomCameraBy } from "@/components/workplane/cameraRig";
 import { disposeCutPreviewResources, renderFrame } from "@/components/workplane/renderFrame";
@@ -1640,9 +1641,15 @@ export function WorkplaneViewport({
   const tapeIdRef = useRef(0);
   const rulerDimensionOverlayRef = useRef<RulerDimensionOverlayState | null>(null);
   const cornerRulerModeRef = useRef(false);
-  const cornerRulerModelRef = useRef<CornerRulerInstance[]>(toolMemory?.current.cornerRulers ?? []);
+  // Back from the sketch the square comes from the editor's memory; on opening the design, from what the design keeps (#829).
+  const storedCornerRulers = useRef<CornerRulerInstance[] | null>(null);
+  if (storedCornerRulers.current === null) {
+    storedCornerRulers.current = toolMemory?.current.cornerRulers
+      ?? readCornerRulers(projectId).map((ruler, index) => ({ ...ruler, id: `corner-ruler-${index + 1}` }));
+  }
+  const cornerRulerModelRef = useRef<CornerRulerInstance[]>(storedCornerRulers.current);
   const cornerRulerOverlayRef = useRef<CornerRulerOverlayState | null>(null);
-  const cornerRulerIdRef = useRef(toolMemory?.current.cornerRulerId ?? 0);
+  const cornerRulerIdRef = useRef(toolMemory?.current.cornerRulerId ?? storedCornerRulers.current.length);
   const cornerRulerDragRef = useRef<{ id: string; pointerId: number; moved: boolean } | null>(null);
   const rulerDuplicateDragRef = useRef<{ pointerId: number; rulerId: string; shapeId: string; baseAlong: number; planeY: number; sourceX: number; sourceZ: number } | null>(null);
   const alignModeRef = useRef(alignMode);
@@ -4920,6 +4927,8 @@ export function WorkplaneViewport({
    */
   const storeCornerRulerModel = useCallback((next: CornerRulerInstance[]) => {
     cornerRulerModelRef.current = next;
+    // The design keeps where the square stands (#829), beside it in the browser and in its .lyl file.
+    writeCornerRulers(projectIdRef.current, next);
     if (toolMemory) {
       toolMemory.current.cornerRulers = next;
       toolMemory.current.cornerRulerId = cornerRulerIdRef.current;

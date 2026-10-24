@@ -16,6 +16,7 @@ import { importedShapeFromStl } from "@/lib/stlImport";
 import { importedShapeFromSvg } from "@/lib/svgImport";
 import { importedShapeFrom3mf } from "@/lib/threemfImport";
 import { normalizeDesignView, normalizeSavedViews, readDesignView, readSavedViews, type DesignView, type SavedDesignViews } from "@/lib/designView";
+import { normalizeSavedCornerRulers, readCornerRulers, type SavedCornerRuler } from "@/lib/cornerRulerStore";
 import { isSketchKeyring } from "@/lib/sketchKeyring";
 import { isReferenceImageOpacity } from "@/lib/referenceImage";
 import { isThreadProfile } from "@/lib/threadProfiles";
@@ -214,6 +215,8 @@ export type LylProjectDocumentV1 = {
     view?: DesignView;
     /** The views saved under 7, 8, 9 and 0, null where a slot is empty; older readers pass over them. */
     savedViews?: SavedDesignViews;
+    /** The framing square where it was set (#829); older readers pass over it. */
+    cornerRulers?: SavedCornerRuler[];
   };
 };
 
@@ -236,6 +239,8 @@ export type LylProjectExportInput = {
   view?: DesignView | null;
   /** The views saved under 7 to 0; when left out, the ones the browser keeps for this design go in. */
   savedViews?: SavedDesignViews | null;
+  /** The framing square; when left out, the one the browser keeps for this design goes in (#829). */
+  cornerRulers?: SavedCornerRuler[] | null;
   compressionLevel?: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
   /** Weitere Dateien im Paket, etwa der Fehlerbericht; ein Leser uebergeht sie. */
   extraFiles?: Record<string, Uint8Array>;
@@ -260,6 +265,8 @@ export type LylRestoredProject = {
   view?: DesignView;
   /** The views saved under 7 to 0, when the file has any. */
   savedViews?: SavedDesignViews;
+  /** The framing square, when the file has one (#829). */
+  cornerRulers?: SavedCornerRuler[];
   migratedFromVersion?: number;
   /** Set when a newer layerling saved the design: its version, for a hint that an update helps. */
   savedWithNewerVersion?: string;
@@ -1031,6 +1038,7 @@ export async function exportLylProject(input: LylProjectExportInput) {
   const sketchPlacementWorkplane = normalizePlacementWorkplane(input.sketchPlacementWorkplane);
   const view = input.view === undefined ? readDesignView(input.projectId) : normalizeDesignView(input.view);
   const savedViews = normalizeSavedViews(input.savedViews === undefined ? readSavedViews(input.projectId) : input.savedViews);
+  const cornerRulers = normalizeSavedCornerRulers(input.cornerRulers === undefined ? readCornerRulers(input.projectId) : input.cornerRulers);
   const selectedWorkplaneId = placementWorkplaneIsBase(placementWorkplane) ? "workplane-base" : "workplane-active";
   const document: Omit<LylProjectDocumentV1, "states"> & { states: typeof STATES_PLACEHOLDER } = {
     schema: LYL_SCHEMA_ID,
@@ -1066,6 +1074,7 @@ export async function exportLylProject(input: LylProjectExportInput) {
       sketchPlacementWorkplane,
       ...(view ? { view } : {}),
       ...(savedViews ? { savedViews } : {}),
+      ...(cornerRulers ? { cornerRulers } : {}),
     },
   };
   // The states are already text; put them in where the placeholder stands. The
@@ -2015,6 +2024,7 @@ async function restoreV1(document: LylProjectDocumentV1, assetById: Map<string, 
   const hydrated = hydrateEditorHistoryState(shapes, history, document.history.index, "unlimited", notes, placementWorkplane);
   const restoredView = normalizeDesignView(document.editor.view);
   const restoredSavedViews = normalizeSavedViews(document.editor.savedViews);
+  const restoredCornerRulers = normalizeSavedCornerRulers(document.editor.cornerRulers);
   if (hydrated.entries.length !== history.length || hydrated.index !== document.history.index) throw new Error("Undo history could not be restored without data loss");
   return {
     sourceProjectId: document.metadata.projectId,
@@ -2033,6 +2043,7 @@ async function restoreV1(document: LylProjectDocumentV1, assetById: Map<string, 
     sketchPlacementWorkplane: normalizePlacementWorkplane(document.editor.sketchPlacementWorkplane),
     ...(restoredView ? { view: restoredView } : {}),
     ...(restoredSavedViews ? { savedViews: restoredSavedViews } : {}),
+    ...(restoredCornerRulers ? { cornerRulers: restoredCornerRulers } : {}),
     ...(document.formatVersion < LYL_FORMAT_VERSION ? { migratedFromVersion: document.formatVersion } : {}),
   } satisfies LylRestoredProject;
 }
