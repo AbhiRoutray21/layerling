@@ -28,7 +28,7 @@ import { iconSourceFromFile, PICTURE_FILE_ACCEPT, type IconSource } from "@/lib/
 import { loadedManifoldRuntime, onManifoldReady } from "@/lib/manifoldHandle";
 import { canApplySketchCornerTreatment } from "@/lib/sketchFilletChamfer";
 import { SKETCH_POLYGON_DEFAULT_SIDES, SKETCH_STAR_DEFAULT_INNER_PERCENT, sketchPrimitiveGeometry } from "@/lib/sketchPrimitives";
-import { cloneSketchProfile, orderedSketchPaths, withSegmentHandles, withSmoothSketchHandles } from "@/lib/sketchSmoothHandles";
+import { alignedSmoothHandles, cloneSketchProfile, orderedSketchPaths, withSegmentHandles, withSmoothSketchHandles } from "@/lib/sketchSmoothHandles";
 import { changesLockedOutline, setSketchPointsLocked, sketchLockState } from "@/lib/sketchLock";
 import { curveSketchSegment, isSegmentCurved, straightenSketchSegment } from "@/lib/sketchSegmentCurve";
 import { chordHandles, withBezierHandles, withBezierStartHandle } from "@/lib/sketchBezierHandles";
@@ -118,7 +118,7 @@ import { revolveAxisShift } from "@/lib/revolveAxis";
 import { buildSketchRevolveMesh, DEFAULT_SKETCH_REVOLVE_SETTINGS, normalizeSketchRevolveSettings, type SketchRevolveMesh } from "@/lib/sketchRevolve";
 import { AppFooter } from "@/components/AppFooter";
 import { useFileAccept } from "@/lib/fileAccept";
-import { exportLylProject, importLylProject, LYL_CREATED_WITH_VERSION, LYL_MEDIA_TYPE } from "@/lib/lylProject";
+import { exportLylProject, LYL_CREATED_WITH_VERSION, LYL_MEDIA_TYPE } from "@/lib/lylProject";
 import { isBuildMessage, reportWorkerBuild } from "@/lib/buildStamp";
 import { ensureLylFileWritable, forgetLylFile, forgetStlFile, linkedLylFile, linkedStlFile, lylFileAccessSupported, pickLylFileToOpen, pickLylFileToSave, pickStlFileToSave, rememberLylFile, rememberStlFile, writeLylFile, type LylFileHandle } from "@/lib/lylFileAccess";
 import { clipboardShape, displayShapeName, iconTagAsset, qrCodeAsset, makeShapeFromAsset, nameTagAsset, shapeAssetLabel, toolbarShapeAssets } from "@/lib/shapeCatalog";
@@ -166,7 +166,7 @@ import type { AlignAxis, AlignHandleStatus, AlignTarget, GridSize, ParametricSou
 import { type Vec3, type MeshData, type Cuboid, type ShapeUpdatePatch, type ManifoldSolid, MIN_SHAPE_DIMENSION, resetManifoldRuntime, cleanModelDimension, getManifoldRuntime, meshForShape, meshReachAlong, appendMeshData, formatTriangleCount, shapeAabb, boundsForShapes, boundsForCuboids, meshAabb, boundsForPositions, quantizedPointKey } from "@/lib/editorMeshCore";
 import { meshPartCount } from "@/lib/meshPartCount";
 import { buildGroupedShapeOffThread, exportSolidVolumeOffThread, simplifyTrianglePositionsOffThread, splitShapesByPlaneOffThread, subscribeGeometryBusy, warmGeometryWorker } from "@/lib/geometryWorker";
-import { cloneAsGroupChild, meshDataToManifoldMesh, shapeToManifoldSolid, unionOverlappingExportMeshes, exportBodiesWithLooseHoles, formatSectionOffset, SECTION_SEEN_FROM_KEYS, expandBundles, visibleExportShapes, multicolorExportSolids, exportFaceColors, colorSeparatedExportMeshes, disposeManifold, canIntersectShapes, buildIntersectionShapeFromSelection, groupedShape, quaternionForShape, rotationFromQuaternion, cleanShapePatch, restoreGroupedChildren, restoreGroupedChildrenForEdges } from "@/lib/editorBooleans";
+import { cloneAsGroupChild, meshDataToManifoldMesh, shapeToManifoldSolid, withClosedHolesNote, unionOverlappingExportMeshes, exportBodiesWithLooseHoles, formatSectionOffset, SECTION_SEEN_FROM_KEYS, expandBundles, visibleExportShapes, multicolorExportSolids, exportFaceColors, colorSeparatedExportMeshes, disposeManifold, canIntersectShapes, buildIntersectionShapeFromSelection, groupedShape, quaternionForShape, rotationFromQuaternion, cleanShapePatch, restoreGroupedChildren, restoreGroupedChildrenForEdges } from "@/lib/editorBooleans";
 import { handleViewArrowKey } from "@/lib/viewArrowKeys";
 import { escapeWasHandled } from "@/lib/escapeHandled";
 import { sketchEscapeAction } from "@/lib/sketchEscape";
@@ -3619,7 +3619,7 @@ export function LayerlingEditor({
     if (onBase && !shapes.some(tilted)) return shapes;
     return shapes.map((shape) => shape.hidden || shape.id === editingSketchShapeId || (onBase && !tilted(shape))
       ? shape
-      : sketchReferenceShapeOnWorkplane(shape, activeSketchWorkplane));
+      : sketchReferenceShapeOnWorkplane(shape, activeSketchWorkplane, !onBase));
   }, [activeSketchWorkplane, editingSketchShapeId, revolveSketchFront, shapes, sketchActive]);
   // A workplane inside a body cuts it: the sketch view shows the outline of the cut (a hollow body
   // gives a ring), where a workplane on a face shows that face. Per body, as an SVG path in the
@@ -5096,7 +5096,12 @@ export function LayerlingEditor({
       next.segments = next.segments.map((segment) => segment.startId === id || segment.endId === id ? { ...segment, kind: "bezier" } : segment);
       // The point's own handles along its neighbours; the segments around it then need the handle at
       // their other end too, or they would stay straight.
-      if (!point.handleIn || !point.handleOut) next = withSmoothSketchHandles(next, new Set([id]));
+      // A point that already has two handles keeps their lengths; as a smooth point they are lined up (#347).
+      const aligned = mode === "smooth" ? alignedSmoothHandles(point) : null;
+      if (aligned) {
+        point.handleIn = aligned.handleIn;
+        point.handleOut = aligned.handleOut;
+      } else if (!point.handleIn || !point.handleOut || mode === "smooth") next = withSmoothSketchHandles(next, new Set([id]));
       next = withSegmentHandles(next, new Set(next.segments.filter((segment) => segment.startId === id || segment.endId === id).map((segment) => segment.id)));
       const updated = next.points.find((entry) => entry.id === id);
       if (updated) updated.mode = mode;
@@ -5723,7 +5728,7 @@ export function LayerlingEditor({
       return patch ? canonicalizeShape({ ...shape, ...patch }) : shape;
     });
     const skipped = ids.length - targets.length;
-    commitShapes(next, selectedIdsRef.current, t(skipped > 0 ? "status.scaledByPercentSkipped" : "status.scaledByPercent", { percent: Math.round(percent * 10) / 10, count: targets.length, skipped }));
+    commitShapes(next, selectedIdsRef.current, t(skipped > 0 ? "status.scaledByPercentSkipped" : "status.scaledByPercent", { percent: Math.round(percent * 100) / 100, count: targets.length, skipped }));
     return { ok: true as const, count: targets.length, skipped };
   }, [commitShapes]);
 
@@ -6334,7 +6339,7 @@ export function LayerlingEditor({
       setNotice(t("status.splitFailed", { name: shape.name }));
       return;
     }
-    const { replacements, splitCount } = outcome;
+    const { replacements, splitCount, closedHoles } = outcome;
     if (splitCount === 0) {
       setSplitSession((current) => current ? { ...current, busy: false, error: t("split.error.movePlane") } : current);
       setNotice(t("status.splitMissed"));
@@ -6347,9 +6352,9 @@ export function LayerlingEditor({
     commitShapes(
       nextShapes,
       nextSelection,
-      splitCount === 1
+      withClosedHolesNote(splitCount === 1
         ? t("status.splitOne", { count: nextSelection.length })
-        : t("status.splitMany", { count: splitCount, bodies: nextSelection.length }),
+        : t("status.splitMany", { count: splitCount, bodies: nextSelection.length }), closedHoles),
     );
   }, [commitShapes, splitPlane, splitSession, splitTargetShapes]);
 
@@ -8171,7 +8176,7 @@ export function LayerlingEditor({
     commitShapes(
       [...shapesRef.current.filter((shape) => !selected.has(shape.id)), editableGroup],
       editableGroup.id,
-      result.openGapEdges ? t("status.cutLeftOpen", { count: result.openGapEdges }) : result.mergeWarning ?? t("status.groupedMany", { count: selectedShapes.length }),
+      result.openGapEdges ? t("status.cutLeftOpen", { count: result.openGapEdges }) : result.mergeWarning ?? withClosedHolesNote(t("status.groupedMany", { count: selectedShapes.length }), result.closedHoles),
     );
   }, [refuseLockedSelection, commitShapes, selectedIds, selectedShapes]);
 
@@ -8454,14 +8459,15 @@ export function LayerlingEditor({
       const rebuilt = canonicalizeShape({ ...result.group, groupOperation: operation });
       // The same group, not a new one: its id stays, so anything holding that id
       // (MCP, the object list, the level around it) still finds it.
-      const regrouped = canonicalizeShape(withHoleMode({
+      // Its own pivot stays on the same spot, however the parts moved while it was open (#807).
+      const regrouped = canonicalizeShape(carryShapePivot(original, withHoleMode({
         ...rebuilt,
         id: original.id,
         name: original.name,
         color: ownColour ? original.color : rebuilt.color,
         transparent: original.transparent,
         hidden: original.hidden,
-      }, Boolean(original.hole)));
+      }, Boolean(original.hole))));
       const partIds = new Set(parts.map((shape) => shape.id));
       const message = "mergeWarning" in result && result.mergeWarning ? result.mergeWarning : t("status.groupClosed", { name: displayShapeName(regrouped) });
       commitOpenGroupTransition(
@@ -9023,7 +9029,7 @@ export function LayerlingEditor({
 
   const {
     customShapeEntries, customShapeFolders, serverAvailable: customShapesServerAvailable, myShapesFileInputRef,
-    refreshServerShapes, saveSelectionAsMyShape, insertMyShape, renameMyShapeEntry, deleteMyShapeEntry, runCustomShapeMcp,
+    refreshServerShapes, saveSelectionAsMyShape, insertMyShape, insertDesignFile, renameMyShapeEntry, deleteMyShapeEntry, runCustomShapeMcp,
     moveMyShapeToServer, moveMyShapeToFolder, createShapeFolder, renameShapeFolder, deleteShapeFolder,
     backUpMyShapes, loadMyShapeFiles,
   } = useCustomShapes({
@@ -9809,10 +9815,11 @@ export function LayerlingEditor({
           throw new Error(result.failureNotice);
         }
         const editableGroup = canonicalizeShape({ ...result.group, groupOperation: "group" });
-        commitShapes([...currentShapes().filter((shape) => !ids.has(shape.id)), editableGroup], editableGroup.id, result.mergeWarning ?? t("status.mcpGrouped", { count: groupable.length }));
+        commitShapes([...currentShapes().filter((shape) => !ids.has(shape.id)), editableGroup], editableGroup.id, result.mergeWarning ?? withClosedHolesNote(t("status.mcpGrouped", { count: groupable.length }), result.closedHoles));
+        const closedHoles = result.closedHoles ? { closedHoles: result.closedHoles } : {};
         return result.mergeWarning
-          ? { object: mcpShapeSummary(editableGroup), warning: result.mergeWarning }
-          : { object: mcpShapeSummary(editableGroup) };
+          ? { object: mcpShapeSummary(editableGroup), warning: result.mergeWarning, ...closedHoles }
+          : { object: mcpShapeSummary(editableGroup), ...closedHoles };
       }
 
       if (command.action === "bundle_objects") {
@@ -10106,8 +10113,8 @@ export function LayerlingEditor({
           throw new Error(result.failureNotice);
         }
         const editableGroup = canonicalizeShape({ ...result.group, groupOperation: "group" });
-        commitShapes([...remainingShapes, editableGroup], editableGroup.id, t("status.mcpBooleanCut"));
-        return { object: mcpShapeSummary(editableGroup) };
+        commitShapes([...remainingShapes, editableGroup], editableGroup.id, withClosedHolesNote(t("status.mcpBooleanCut"), result.closedHoles));
+        return result.closedHoles ? { object: mcpShapeSummary(editableGroup), closedHoles: result.closedHoles } : { object: mcpShapeSummary(editableGroup) };
       }
 
       if (command.action === "wrap_around_cylinder") {
@@ -10225,9 +10232,9 @@ export function LayerlingEditor({
         commitShapes(
           currentShapes().flatMap((shape) => outcome.replacements.get(shape.id) ?? [shape]),
           parts.map((shape) => shape.id),
-          outcome.splitCount === 1
+          withClosedHolesNote(outcome.splitCount === 1
             ? t("status.splitOne", { count: parts.length })
-            : t("status.splitMany", { count: outcome.splitCount, bodies: parts.length }),
+            : t("status.splitMany", { count: outcome.splitCount, bodies: parts.length }), outcome.closedHoles),
         );
         return {
           axis: splitAxisLabel(axis).toLowerCase(),
@@ -10236,6 +10243,7 @@ export function LayerlingEditor({
           min: plane.min,
           max: plane.max,
           splitIds: [...outcome.replacements.keys()],
+          ...(outcome.closedHoles ? { closedHoles: outcome.closedHoles } : {}),
           objects: parts.map(mcpShapeSummary),
         };
       }
@@ -11896,38 +11904,9 @@ export function LayerlingEditor({
     void flushProjectSnapshot({ evenIfUnchanged: true }).finally(leave);
   }, [flushProjectSnapshot, onHome, saveProjectShapesNow]);
 
-  // A saved design's bodies into the open one - for parts kept as building
-  // blocks. Fresh ids so nothing clashes, embedded source files come along,
-  // one undo step, the new bodies selected where they were saved.
   const insertLylDesign = useCallback(async (file: File) => {
-    const sourceProjectId = projectInfoRef.current.projectId;
-    setNotice(t("status.validatingFile", { name: file.name }), true);
-    try {
-      const restored = await importLylProject(await file.arrayBuffer());
-      if (projectInfoRef.current.projectId !== sourceProjectId) {
-        setNotice(t("status.importCancelled", { count: 1 }));
-        return;
-      }
-      if (restored.shapes.length === 0) {
-        setNotice(t("status.insertDesignEmpty", { name: file.name }));
-        return;
-      }
-      const inserted = restored.shapes.map((shape) => canonicalizeShape(cloneWorkplaneShapeTreeWithFreshIds(shape, "insert")));
-      if (restored.assets.length > 0) {
-        const nextAssets = dedupeProjectAssets([...projectAssetsRef.current, ...restored.assets]);
-        projectAssetsRef.current = nextAssets;
-        setProjectAssets(nextAssets);
-      }
-      commitShapes(
-        [...shapesRef.current, ...inserted],
-        inserted.map((shape) => shape.id),
-        t("status.insertedDesign", { count: inserted.length, name: file.name }),
-      );
-      setTopPanel(null);
-    } catch (error) {
-      setNotice(error instanceof Error ? localizedError(error.message) : t("status.insertDesignFailed", { name: file.name }));
-    }
-  }, [commitShapes]);
+    if (await insertDesignFile(file)) setTopPanel(null);
+  }, [insertDesignFile]);
 
   const importFiles = useCallback(async (selected: File[], fileHandle?: LylFileHandle, importOptions?: { keepSvgPage?: boolean; svgWidth?: number | null }): Promise<{ importedIds: string[]; failures: Array<{ fileName: string; reason: string }> }> => {
     const none = { importedIds: [] as string[], failures: [] as Array<{ fileName: string; reason: string }> };
