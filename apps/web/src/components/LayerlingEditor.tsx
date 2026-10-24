@@ -70,6 +70,7 @@ import { arrayFollowingPivot, arrayGroupsCopies, circleStepDegrees, clampArrayCo
 import { bedOverhangs, keepDismissedOverhangs, printerPresetById, shapeBedFootprint, type BedOverhang } from "@/lib/printBed";
 import { SplitPanel, type SplitWorkplaneDirection } from "./workplane/SplitPanel";
 import { NO_SPLIT_ROTATION, modelSplitPlane, snapSplitPositionToVertices, splitOrientationForNormal, splitAxisFromLabel, splitAxisLabel, splitRotationAxes, type SplitRotation } from "@/lib/modelSplit";
+import { AttachmentViewer } from "./workplane/AttachmentViewer";
 import { GuideModal } from "./workplane/GuideModal";
 import { HistoryViewOverlay, historyStateNameSuffix } from "./workplane/HistoryViewOverlay";
 import { useHistoryViewPicking } from "./workplane/useHistoryViewPicking";
@@ -2681,6 +2682,16 @@ export function LayerlingEditor({
     if (!editorOpen) setInteractiveHelp(false);
   }, [editorOpen]);
   const [guideOpen, setGuideOpen] = useState(false);
+  /**
+   * The attachment open in the viewer (#820), by id. The viewer is drawn from the attachment that has
+   * this id now, so it shows a replaced file's new content and goes away when the file does.
+   */
+  const [viewedAttachmentId, setViewedAttachmentId] = useState<string | null>(null);
+  const viewedAttachment = viewedAttachmentId ? projectAttachments.find((attachment) => attachment.id === viewedAttachmentId) : undefined;
+  // A file that went away is forgotten too, so that it does not open again if the same design comes back.
+  useEffect(() => {
+    if (viewedAttachmentId && !viewedAttachment) setViewedAttachmentId(null);
+  }, [viewedAttachmentId, viewedAttachment]);
   // The object list stays open or closed as it was left, in this browser, for every design (#356).
   const [outlinerOpen, setOutlinerOpen] = useRememberedFlag("layerling.editor.objectListOpen");
   /**
@@ -13621,6 +13632,7 @@ export function LayerlingEditor({
           attachmentsLocked={historyViewIndex !== null}
           onAttachmentsChange={updateProjectAttachments}
           onAttachmentDownload={(attachment) => void downloadBlobFile(attachment.name, new Blob([attachment.bytes as BlobPart], { type: attachment.mediaType }))}
+          onAttachmentView={(attachment) => setViewedAttachmentId(attachment.id)}
           onAttachmentNotice={setNotice}
         />
       ) : null}
@@ -13697,6 +13709,7 @@ export function LayerlingEditor({
         <ShortcutsModal sketchMode={toolbarMode === "sketch"} onClose={() => setShortcutsOpen(false)} />
       ) : null}
       {interactiveHelp ? <InteractiveHelp onExit={toggleInteractiveHelp} /> : null}
+      {viewedAttachment ? <AttachmentViewer attachment={viewedAttachment} onClose={() => setViewedAttachmentId(null)} /> : null}
       {guideOpen ? <GuideModal sharedStore={sharedProjectsEnabled} sketchMode={toolbarMode === "sketch"} onClose={() => setGuideOpen(false)} /> : null}
       {notice ? (
         <p className="editor-status" role="status" aria-live="polite" onMouseEnter={holdNotice} onMouseLeave={releaseNotice}>

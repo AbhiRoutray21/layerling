@@ -38,5 +38,15 @@
       "de": "„Hülle“ unter Verbinden packt die markierten Formen in einen Körper, wie in Schrumpffolie: Aus einer Halbkugel auf einem Zylinder wird eine Kuppel, aus vier Zylindern ein Kasten mit runden Ecken. Die Teile bleiben drin und lassen sich mit „Gruppe bearbeiten“ weiter verschieben.",
       "en": "Hull under Combine wraps the selected shapes in one body, as if shrink-wrapped: a half sphere on a cylinder becomes a dome, four cylinders a box with round corners. The parts stay inside, and Edit group still moves them."
     }
+  },
+  {
+    "title": {
+      "de": "Anhänge lesen",
+      "en": "Read attachments"
+    },
+    "body": {
+      "de": "Das Auge in der Liste der Anhänge öffnet eine .md- oder .txt-Datei zum Lesen, ohne sie herunterzuladen: Markdown formatiert, mit Überschriften, Listen, Tabellen und Code, Text so, wie er geschrieben ist. Escape oder ein Klick daneben schließt das Fenster.",
+      "en": "The eye in the list of attachments opens a .md or .txt file to read without downloading it: Markdown formatted, with headings, lists, tables and code, text exactly as written. Escape or a click beside it closes the window."
+    }
   }
 ]
