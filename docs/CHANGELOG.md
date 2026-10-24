@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **A corner radius for Gridfinity baseplates (#856):** A baseplate's four outer corners were always rounded by 4 mm, as the specification draws them, so a plate pushed into a drawer's square corner left a gap in it. A baseplate now has **Corner radius** under the padding rows, 4 mm to begin with so existing baseplates stay as they are, down to 0 for square corners, padded or not; the sockets keep their rounding, so bins fit as before. A radius within 0.05 mm of 4 is built as 4. A bin keeps the setting and ignores it. The view, the exports and the exact body agree. `layerling_create_shape`, `layerling_update_object` and `layerling_read_scene` take and report `gridfinityCornerRadius`. Asked for by @TinkerBarn in #856. Contributed by @mlugo-apx.
+
 ## 1.110.0
 
 - **A bundle of text wrapped round a cylinder is no longer stretched (#667):** A body wrapped round a cylinder covers only an arc, but its box for aligning and centring is the whole cylinder (#106). Grouping or bundling took that box as the size of the group, so the group came out larger than the parts it held, and the view stretched them to fill it: four parts of a medal, one of them wrapped text 122 mm wide that covers 33 mm, made a bundle of 127 x 122 mm over parts that fill 100 x 110 mm, and the medal showed 27 % wider and oval until Undo. The group is now sized by the real vertices of its parts (`boundsForShapesOfVertices`, used by `groupedShape`), so it fits them and sits in their middle. Unit test in `bundleOfWrappedParts.test.ts`. Sizes changing after grouping and ungrouping, reported by @kokobandit; the bundle that showed it, with video and file, by @MiniCoop8.

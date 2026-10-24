@@ -2105,6 +2105,8 @@ export const MESSAGES_ES: Partial<Record<MessageKey, string>> = {
   "prop.gridfinityPaddingLeft": "Franja a la izquierda",
   "prop.gridfinityPaddingRight": "Franja a la derecha",
   "gridfinity.paddingHint": "Una franja maciza fuera de la cuadrícula, para que la placa base llene un cajón que no mide un número entero de unidades. Cambiarla mantiene las unidades y cambia con ella el tamaño de la placa.",
+  "prop.gridfinityCornerRadius": "Radio de esquina",
+  "gridfinity.cornerRadiusHint": "El radio de las cuatro esquinas exteriores de la placa: 4 mm como las dibuja la especificación de Gridfinity, hasta 0 para esquinas rectas que encajen en las de un cajón. Los huecos conservan su redondeo, así que las cajas encajan como antes.",
   "prop.gridfinityDrawerWidth": "Ancho del cajón",
   "prop.gridfinityDrawerDepth": "Fondo del cajón",
   "gridfinity.drawerHint": "El interior del cajón; la placa sale 0,5 mm más pequeña. Un cajón de más de 334,5 mm, o más grande que tu cama de impresión, lleva varias placas base.",
