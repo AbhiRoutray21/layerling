@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "title": {
+      "de": "Bilder und PDF als Anhang",
+      "en": "Pictures and PDF as attachments"
+    },
+    "body": {
+      "de": "Ein Entwurf kann jetzt auch Bilder (.png, .jpg, .webp) und PDF-Dateien behalten, etwa ein Foto des gedruckten Teils oder ein Datenblatt. Das Auge zeigt ein Bild direkt im Fenster; ein PDF lädst du herunter.",
+      "en": "A design can now also keep pictures (.png, .jpg, .webp) and PDF files, such as a photo of the printed part or a datasheet. The eye shows a picture right in the window; a PDF is downloaded."
+    }
+  }
+]
