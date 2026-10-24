@@ -1391,6 +1391,24 @@ html[data-theme="dark"] .dashboard-trademark {
   border-radius: 10px;
 }
 
+/* The designs are on the server: a statement, not a warning. */
+.storage-notice.on-server {
+  background: #e8f4ec;
+  border-color: #4f9a6a;
+}
+
+.storage-notice.on-server .storage-notice-icon {
+  background: #3d8a59;
+}
+
+.storage-notice.on-server .storage-notice-text strong {
+  color: #1f3d2a;
+}
+
+.storage-notice.on-server .storage-notice-text span {
+  color: #34503e;
+}
+
 .storage-notice-icon {
   display: grid;
   flex: none;
@@ -12331,6 +12349,19 @@ html[data-theme="dark"] .storage-notice-text strong {
 
 html[data-theme="dark"] .storage-notice-text span {
   color: #e2cfb6;
+}
+
+html[data-theme="dark"] .storage-notice.on-server {
+  background: #15291d;
+  border-color: #4f9a6a;
+}
+
+html[data-theme="dark"] .storage-notice.on-server .storage-notice-text strong {
+  color: #dff0e5;
+}
+
+html[data-theme="dark"] .storage-notice.on-server .storage-notice-text span {
+  color: #bcd6c5;
 }
 
 html[data-theme="dark"] .storage-notice-button.secondary {

@@ -412,6 +412,23 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .dashboard-trademark {
   border: 2px solid #e08a2c;
 }
 
+:where(html[data-theme="dark"][data-palette="graphite"]) .storage-notice.on-server {
+  background: #e8f4ec;
+  border-color: #4f9a6a;
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .storage-notice.on-server .storage-notice-icon {
+  background: #3d8a59;
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .storage-notice.on-server .storage-notice-text strong {
+  color: #1f3d2a;
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .storage-notice.on-server .storage-notice-text span {
+  color: #34503e;
+}
+
 :where(html[data-theme="dark"][data-palette="graphite"]) .storage-notice-icon {
   color: #ffffff;
   background: #d9730d;
@@ -5209,6 +5226,19 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .storage-notice-text st
 
 html[data-theme="dark"]:where([data-palette="graphite"]) .storage-notice-text span {
   color: #cccccc;
+}
+
+html[data-theme="dark"]:where([data-palette="graphite"]) .storage-notice.on-server {
+  background: #15291d;
+  border-color: #4f9a6a;
+}
+
+html[data-theme="dark"]:where([data-palette="graphite"]) .storage-notice.on-server .storage-notice-text strong {
+  color: #dff0e5;
+}
+
+html[data-theme="dark"]:where([data-palette="graphite"]) .storage-notice.on-server .storage-notice-text span {
+  color: #bcd6c5;
 }
 
 html[data-theme="dark"]:where([data-palette="graphite"]) .storage-notice-button.secondary {

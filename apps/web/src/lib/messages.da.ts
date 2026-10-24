@@ -2864,6 +2864,7 @@ export const MESSAGES_DA: Partial<Record<MessageKey, string>> = {
   "notice.openSharedFailed": "Kunne ikke åbne serverdesignet",
   "notice.saveSharedFailed": "Kunne ikke gemme designet på serveren",
   "notice.folderCreateFailed": "Kunne ikke oprette mappen",
+  "notice.folderMadeOnServer": "Mappen {name} oprettet på serveren",
   "notice.renamingFolder": "Omdøber mappe {name} …",
   "notice.renamedFolder": "Mappen hedder nu {name}",
   "notice.folderRenameFailed": "Kunne ikke omdøbe mappen",
@@ -3004,6 +3005,8 @@ export const MESSAGES_DA: Partial<Record<MessageKey, string>> = {
   "status.sweepStarted": "Sweep-skitse startet: tegn tværsnittet som en lukket omrids, derefter stien som en konstruktionslinje",
   "status.sweepUpdated": "Sweep opdateret",
   "storageNotice.body": "layerling tager intet ansvar for design der opbevares i browseren. En browser kan fejle, eller en browseropdatering kan give problemer. Gem derfor dine design ind imellem: \"Backup af alle\" samler alle design i én fil, og et åbent design kan gemmes som fil med Eksport (LYL).",
+  "storageNotice.serverTitle": "Dine designs ligger på serveren",
+  "storageNotice.serverBody": "Nye designs starter i servermappen, og denne browser har ingen af sine egne. En tidligere sikkerhedskopi kan stadig hentes ind: den kommer i servermappen.",
   "storageNotice.title": "Dine design ligger i denne browser – tag backup",
   "workspace.customSnapGridParts": "Også halv og kvart",
 };
