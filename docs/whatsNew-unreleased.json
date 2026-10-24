@@ -48,5 +48,15 @@
       "de": "Wählst du in der Skizze zwei oder mehr Umrisse aus, kannst du sie jetzt aneinander ausrichten: links, mittig, rechts, oben oder unten. Zwei Kreise, in beide Richtungen mittig ausgerichtet, werden so zu einem sauberen Ring.",
       "en": "Select two or more outlines in a sketch and you can now line them up: left, centred, right, top or bottom. Two circles centred both ways become a clean ring."
     }
+  },
+  {
+    "title": {
+      "de": "Mehrere Körper auf dem Tablet wählen",
+      "en": "Select several bodies on a tablet"
+    },
+    "body": {
+      "de": "Tippst du auf dem Tablet einen Körper an, erscheint unten links ein runder Knopf. Tippst du ihn an, kommt jeder weitere angetippte Körper zur Auswahl dazu, wie mit der Umschalttaste am Computer. Ein zweiter Tipp auf den Knopf beendet das.",
+      "en": "Tap a body on a tablet and a round button appears in the lower left. Tap it, and every further body you tap joins the selection, as with the Shift key on a computer. A second tap on the button ends it."
+    }
   }
 ]

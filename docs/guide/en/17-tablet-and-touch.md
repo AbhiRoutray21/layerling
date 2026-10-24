@@ -10,7 +10,7 @@ layerling runs in the browser of a tablet, and as an app from its home screen. A
 | You want to | On a tablet |
 | --- | --- |
 | Select a body | Tap it. |
-| Select several bodies | Hold a finger still for half a second, choose {{ui:contextMenu.selectMultiple}}, then tap one body after another. A tap on a selected body takes it out again. |
+| Select several bodies | Tap a body: a round button appears in the lower left. Tap it, and every further body you tap joins the selection; a tap on a selected body takes it out again. A tap on empty space changes nothing; a second tap on the button ends it and clears the selection. Or hold a finger still for half a second, choose {{ui:contextMenu.selectMultiple}}, then tap one body after another. |
 | Select all bodies | Hold a finger still on empty space for half a second, choose {{ui:contextMenu.selectAll}}. |
 | Open the menu of a right click | Hold a finger still on a body or on empty space for half a second. |
 | Move a body | Drag it. |
