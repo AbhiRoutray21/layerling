@@ -5728,7 +5728,7 @@ export function LayerlingEditor({
       return patch ? canonicalizeShape({ ...shape, ...patch }) : shape;
     });
     const skipped = ids.length - targets.length;
-    commitShapes(next, selectedIdsRef.current, t(skipped > 0 ? "status.scaledByPercentSkipped" : "status.scaledByPercent", { percent: Math.round(percent * 10) / 10, count: targets.length, skipped }));
+    commitShapes(next, selectedIdsRef.current, t(skipped > 0 ? "status.scaledByPercentSkipped" : "status.scaledByPercent", { percent: Math.round(percent * 100) / 100, count: targets.length, skipped }));
     return { ok: true as const, count: targets.length, skipped };
   }, [commitShapes]);
 
