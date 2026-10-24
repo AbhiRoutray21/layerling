@@ -18,6 +18,7 @@ import { meshSurfaceAreas } from "@/lib/printEstimate";
 import { createLocalId, derivedLocalId } from "@/lib/localIds";
 import { boundsOverlap, exportColorGroups, meshBounds, overlappingExportClusters } from "@/lib/exportUnion";
 import type { WorkplaneShape } from "@/types/layerling";
+import { cylinderToEllipsePatch } from "@/lib/cylinderToEllipse";
 import { type Vec3, type MeshData, type Cuboid, type ShapeUpdatePatch, type ManifoldSolid, CUTTER_PADDING, CUTTER_LATERAL_PADDING, POINT_TOLERANCE, CUTTER_RESIDUAL_INSET, MIN_SHAPE_DIMENSION, IMPORTED_FALLBACK_BOOLEAN_TRIANGLE_LIMIT, COPLANAR_BOOLEAN_RESCUE_DEGREES, cleanModelDimension, getManifoldRuntime, transformMesh, meshForShape, appendMeshData, formatTriangleCount, shapeAabb, boundsForShapes, boundsForCuboids, meshAabb, geometryFromMeshData, positionsFromGeometryDrawRange, boundsForPositions, positionsDifferFromMeshData, geometryDiffersFromMeshData, positionsBoundaryEdges, meshDataPositions, midpoint, localGroupBounds } from "@/lib/editorMeshCore";
 
 export type GroupBuildResult = {
@@ -2179,8 +2180,12 @@ export function restoreGroupedChildren(group: WorkplaneShape): WorkplaneShape[] 
       .multiply(new THREE.Matrix4().makeRotationFromQuaternion(quaternionForShape(child)))
       .multiply(groupReflection);
     const childRotation = rotationFromQuaternion(new THREE.Quaternion().setFromRotationMatrix(childRotationMatrix));
+    // A cylinder always stays round (canonicalizeShape), so one the group stretches more one way than the other
+    // would come back as a circle of the larger size: an ellipse keeps both (#844).
+    const asEllipse = Math.abs(width - depth) > 1e-6 ? cylinderToEllipsePatch(child) : null;
     const restored: WorkplaneShape = {
       ...child,
+      ...asEllipse,
       id: derivedLocalId(child.id, "ungroup"),
       x: worldCenter.x,
       z: worldCenter.z,
