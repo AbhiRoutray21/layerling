@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **Alt+W puts the workplane back on the base plate:** Going back to the base plate took Esc while placing, a click beside the plate or the arrow button below the eye; there was no key for it. The shortcuts list has its own row for it, and the guide (View and workplane, every guide language) and the in-app guide (every language) say so.
+
 ## 1.108.0
 
 - **Danish: the texts and guide passages new in 1.107.0 (#827):** Soft light with its hint, and the guide's passages on soft light, the cut in the background, closing small holes and the Gridfinity lip chamfer. By @Henrikth12.
