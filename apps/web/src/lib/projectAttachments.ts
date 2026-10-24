@@ -14,7 +14,7 @@ import type { ProjectAttachment } from "@/types/layerling";
  *
  *   - the attachments panel (`AttachmentsPanel.tsx`), when a file is uploaded or renamed,
  *   - the `.lyl` format (`lylProject.ts`), when a package is written and when one is opened,
- *   - later, the AI bridge.
+ *   - the AI bridge (`projectAttachmentsMcp.ts`), when an agent lists, reads, adds, renames or removes one.
  *
  * What it covers, in order:
  *   1. the limits,

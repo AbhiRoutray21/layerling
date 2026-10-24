@@ -69,6 +69,8 @@ export type LayerlingMcpSceneSummary = {
   openGroups?: { groupId: string; name: string; partIds: string[] }[];
   /** The active workplane: the base plate, or a plane set on a face; hidden means it still applies but is not drawn. */
   workplane?: { onBase: boolean; hidden: boolean; origin: { x: number; y: number; z: number }; normal: { x: number; y: number; z: number } };
+  /** The files kept with the design (#820): what they are, never what they hold; layerling_get_attachment reads one. */
+  attachments?: { id: string; name: string; mediaType: string; bytes: number; sha256: string }[];
 };
 
 export type LayerlingMcpEditorSummary = {
@@ -143,6 +145,11 @@ export type LayerlingMcpCommandName =
   | "export_drawing"
   | "export_mesh"
   | "save_project"
+  | "list_attachments"
+  | "get_attachment"
+  | "add_attachment"
+  | "rename_attachment"
+  | "remove_attachment"
   | "import_file"
   | "add_font"
   | "list_fonts"
