@@ -15,6 +15,8 @@ Biblioteket lukker efter hver form, du vælger. Med titellinjen flytter du det d
 
 Vælg en form. Den hænger nu på din musemarkør og lander hvor du klikker. Flyt den over en form og den lægger sig ned på fladen under markøren, også skrå, ligesom Cruise i Tinkercad; over den tomme plade lander den på arbejdsplanet. [[Esc]] annullerer placering. Et værktøj der venter på et klik, såsom målebåndet, vinkelmåleren, en note, {{ui:camera.placeWorkplane}}, {{ui:editor.tool.layFlat}} eller kantværktøjerne, slås fra når du vælger en form, så klikket placerer formen. Den anden vej, hvis du slår et af disse værktøjer til, lægger formen sig ned igen. Hvis du hellere vil have formen til at dukke op i midten af pladen, kan du slå placering ved klik fra i indstillingerne (område {{ui:workspace.appearance}}, kontakt {{ui:workspace.cruise}}).
 
+På en flade fanges formen i fladens midte, når markøren kommer tæt på, ligesom ved et hjørne eller en kant; hold [[Alt]] nede for at sætte den hvor som helst. Trækker du den fra biblioteket over på en flade, lander den altid i midten, med [[Alt]] der, hvor du slipper.
+
 Hvad biblioteket tilbyder:
 
 - **Basiske former:** {{ui:shape.box}}, {{ui:shape.roundedBox}}, {{ui:shape.cylinder}}, {{ui:shape.slot}}, {{ui:shape.ellipse}}, {{ui:shape.polygon}} (tre til fireogtyve sider), {{ui:shape.sphere}}, {{ui:shape.cone}}, {{ui:shape.pyramid}} (med tre til fireogtyve sider, så også tresidet), {{ui:shape.wedge}}, {{ui:shape.roundRoof}}, {{ui:shape.halfSphere}} og {{ui:shape.torus}}.

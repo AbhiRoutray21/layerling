@@ -15,6 +15,8 @@ layerling 里的每个零件都从一个形状开始。用这些形状，你可�
 
 选择一个形状。它会跟随鼠标指针，并在你单击的位置落下。把它移到某个实体上方，它会贴到指针下的面上，斜面也一样，就像 Tinkercad 的 Cruise；在空白平台上方，它会落在工作平面上。[[Esc]] 取消放置。等待单击的工具（例如卷尺、直角尺、便签、{{ui:camera.placeWorkplane}}、{{ui:editor.tool.layFlat}} 或边缘工具）在你选择形状时会被关闭，因此单击会放置形状。反过来，开启其中某个工具会把形状放下。如果你更希望形状直接出现在平台中央，可以在设置中关闭单击放置（{{ui:workspace.appearance}} 区域，{{ui:workspace.cruise}} 开关）。
 
+在一个面上,指针靠近面中心时形状会吸附到该面的中心,就像吸附到角或边一样;按住 [[Alt]] 可放在任意位置。如果从形状库把它拖到一个面上,它总是落在面的中心,按住 [[Alt]] 则落在松开的位置。
+
 形状库提供：
 
 - **基本形状：** {{ui:shape.box}}、{{ui:shape.roundedBox}}、{{ui:shape.cylinder}}、{{ui:shape.slot}}、{{ui:shape.ellipse}}、{{ui:shape.polygon}}（三到二十四条边）、{{ui:shape.sphere}}、{{ui:shape.cone}}、{{ui:shape.pyramid}}（三到二十四条边，因此也有三棱锥）、{{ui:shape.wedge}}、{{ui:shape.roundRoof}}、{{ui:shape.halfSphere}} 和 {{ui:shape.torus}}。

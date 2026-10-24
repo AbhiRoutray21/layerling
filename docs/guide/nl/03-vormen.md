@@ -15,6 +15,8 @@ De bibliotheek sluit na elke vorm die je kiest. Met de titelbalk verplaats je ha
 
 Kies een vorm. Die hangt nu aan de muisaanwijzer en landt waar je klikt. Beweeg je hem over een lichaam, dan gaat hij op het vlak onder de aanwijzer liggen, ook op schuine vlakken, net als Cruise in Tinkercad; boven de lege plaat landt hij op het werkvlak. [[Esc]] breekt het plaatsen af. Een gereedschap dat op een klik wacht, zoals het meetlint, de winkelhaak, een notitie, {{ui:camera.placeWorkplane}}, {{ui:editor.tool.layFlat}} of de randgereedschappen, wordt uitgezet zodra je een vorm kiest, zodat de klik de vorm plaatst. Andersom zet het aanzetten van zo'n gereedschap de vorm weer neer. Wil je liever dat de vorm midden op de plaat verschijnt, dan kun je plaatsen met een klik uitzetten in de instellingen (onderdeel {{ui:workspace.appearance}}, schakelaar {{ui:workspace.cruise}}).
 
+Op een vlak klikt de vorm vast in het midden van dat vlak zodra de aanwijzer erbij komt, zoals bij een hoek of rand; houd [[Alt]] ingedrukt om hem ergens anders neer te zetten. Sleep je hem uit de bibliotheek op een vlak, dan komt hij altijd in het midden, met [[Alt]] waar je loslaat.
+
 Wat de bibliotheek te bieden heeft:
 
 - **Basisvormen:** {{ui:shape.box}}, {{ui:shape.roundedBox}}, {{ui:shape.cylinder}}, {{ui:shape.slot}}, {{ui:shape.ellipse}}, {{ui:shape.polygon}} (drie tot vierentwintig zijden), {{ui:shape.sphere}}, {{ui:shape.cone}}, {{ui:shape.pyramid}} (met drie tot vierentwintig zijden, dus ook driezijdig), {{ui:shape.wedge}}, {{ui:shape.roundRoof}}, {{ui:shape.halfSphere}} en {{ui:shape.torus}}.

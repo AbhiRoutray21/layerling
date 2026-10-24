@@ -15,6 +15,8 @@ La bibliothèque se ferme après chaque forme choisie. Sa barre de titre la dép
 
 Choisissez une forme. Il se bloque désormais sur le pointeur de la souris et atterrit là où vous cliquez. Déplacez-le sur un corps et il se couche sur le visage sous le pointeur, incliné également, comme Cruise dans Tinkercad ; au-dessus de l'assiette vide, il atterrit sur le plan de travail. [[Esc]] annule le placement. Un outil qui attend un clic, tel que le ruban à mesurer, le carré d'encadrement, une note, {{ui:camera.placeWorkplane}}, {{ui:editor.tool.layFlat}} ou les outils de bord, est désactivé lorsque vous choisissez une forme, le clic place donc la forme. Dans l’autre sens, l’activation de l’un de ces outils remet la forme en place. Si vous préférez que la forme apparaisse au milieu de la plaque, vous pouvez désactiver le placement en cliquant dans les paramètres (zone {{ui:workspace.appearance}}, interrupteur {{ui:workspace.cruise}}).
 
+Sur une face, la forme s'aligne au milieu de cette face quand le pointeur s'en approche, comme sur un coin ou une arête ; maintiens [[Alt]] pour la poser n'importe où. Glissée depuis la bibliothèque sur une face, elle arrive toujours au milieu de la face, ou avec [[Alt]] là où tu la lâches.
+
 Ce que propose la bibliothèque :
 
 - **Formes de base :** {{ui:shape.box}}, {{ui:shape.roundedBox}}, {{ui:shape.cylinder}}, {{ui:shape.slot}}, {{ui:shape.ellipse}}, {{ui:shape.polygon}} (trois à vingt-quatre côtés), {{ui:shape.sphere}}, {{ui:shape.cone}}, {{ui:shape.pyramid}} (avec trois à vingt-quatre côtés, donc à trois côtés également), {{ui:shape.wedge}}, {{ui:shape.roundRoof}}, {{ui:shape.halfSphere}} et {{ui:shape.torus}}.

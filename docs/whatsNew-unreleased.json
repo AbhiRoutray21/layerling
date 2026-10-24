@@ -68,5 +68,25 @@
       "de": "Ein importiertes Netz mit Öffnungen, etwa offenen Augen einer Figur, ließ sich nicht teilen, gruppieren oder ausschneiden. layerling schließt solche Öffnungen jetzt zuerst mit einem flachen Deckel und sagt, wie viele es waren. Ist eine Öffnung dafür zu groß und uneben, erklärt die Meldung, was zu tun ist.",
       "en": "An imported mesh with openings, such as a figure's open eyes, could not be split, grouped or cut. layerling now closes such openings with a flat cap first and says how many there were. If an opening is too large and uneven for that, the message explains what to do."
     }
+  },
+  {
+    "title": {
+      "de": "Maßband: Länge eintippen verschiebt den Körper",
+      "en": "Tape measure: typing a length moves the body"
+    },
+    "body": {
+      "de": "Liegt ein Ende einer Messung auf einem Körper, lässt sich ihre Zahl anklicken. Tippst du eine neue Länge ein, rückt der Körper am zweiten Punkt entlang der Messlinie genau auf diesen Abstand, wie beim Lineal in Tinkercad.",
+      "en": "When one end of a measurement sits on a body, its number can be clicked. Type a new length, and the body at the second point moves along the measured line to exactly that distance, as with the ruler in Tinkercad."
+    }
+  },
+  {
+    "title": {
+      "de": "Formen rasten in der Flächenmitte ein",
+      "en": "Shapes snap to the middle of a face"
+    },
+    "body": {
+      "de": "Setzt du eine neue Form auf eine Fläche, rastet sie in der Mitte der Fläche ein, sobald der Zeiger in die Nähe kommt. Aus der Formenliste auf eine Fläche gezogen, landet sie immer in der Mitte. Mit gedrückter Alt-Taste setzt du sie frei ab.",
+      "en": "When you place a new shape on a face, it snaps to the middle of that face once the pointer comes near it. Dragged from the shape library onto a face, it always lands in the middle. Hold Alt to set it down anywhere."
+    }
   }
 ]

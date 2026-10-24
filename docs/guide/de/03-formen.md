@@ -15,6 +15,8 @@ Die Bibliothek schließt sich nach jeder gewählten Form. Mit der Titelleiste ve
 
 Wähle eine Form aus. Sie hängt jetzt am Mauszeiger und landet dort, wo du klickst. Fährst du dabei über einen Körper, legt sie sich auf die Fläche unter dem Zeiger, auch auf eine schräge, wie beim Cruise in Tinkercad; über der leeren Platte landet sie auf der Arbeitsebene. Drückst du [[Esc]], wird das Absetzen abgebrochen. Ein Werkzeug, das auf einen Klick wartet, etwa das Maßband, das Winkellineal, eine Notiz, {{ui:camera.placeWorkplane}}, {{ui:editor.tool.layFlat}} oder die Kantenwerkzeuge, wird beim Wählen einer Form abgeschaltet, damit der Klick die Form absetzt. Umgekehrt legt das Einschalten eines dieser Werkzeuge die Form wieder weg. Wer die Form lieber direkt in der Mitte der Platte haben möchte, kann das Absetzen per Klick in den Einstellungen abschalten (Bereich {{ui:workspace.appearance}}, Schalter {{ui:workspace.cruise}}).
 
+Auf einer Fläche rastet die Form in deren Mitte ein, sobald der Zeiger in die Nähe kommt, so wie an einer Ecke oder Kante; mit gedrückter [[Alt]]-Taste setzt du sie irgendwo ab. Ziehst du sie stattdessen aus der Bibliothek auf eine Fläche, landet sie immer in deren Mitte, mit [[Alt]] dort, wo du loslässt.
+
 Was die Bibliothek bietet:
 
 - **Grundformen:** {{ui:shape.box}}, {{ui:shape.roundedBox}}, {{ui:shape.cylinder}}, {{ui:shape.slot}}, {{ui:shape.ellipse}}, {{ui:shape.polygon}} (drei bis vierundzwanzig Seiten), {{ui:shape.sphere}}, {{ui:shape.cone}}, {{ui:shape.pyramid}} (mit drei bis vierundzwanzig Seiten, also auch dreiseitig), {{ui:shape.wedge}}, {{ui:shape.roundRoof}}, {{ui:shape.halfSphere}} und {{ui:shape.torus}}.

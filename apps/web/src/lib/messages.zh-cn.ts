@@ -2258,6 +2258,7 @@ export const MESSAGES_ZH_CN: Partial<Record<MessageKey, string>> = {
   "camera.deleteMeasurement": "删除测量段",
   "camera.deleteAllMeasurements": "删除所有测量",
   "camera.tapeMarkMiddle": "将中点标记为参考点",
+  "camera.tapeTypeLength": "输入长度:第二个点处的物体沿线移动",
   "camera.sectionView": "剖视图",
   "camera.sectionActive": "剖切已启用",
   "camera.sectionInactive": "剖切未启用",

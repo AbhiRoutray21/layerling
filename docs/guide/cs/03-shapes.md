@@ -15,6 +15,8 @@ Knihovna se zavře po každém vybraném tvaru. Záhlavím ji přesunete tam, kd
 
 Vybraný tvar sleduje myš a položí se kliknutím. Nad tělesem se orientuje podle plochy pod ukazatelem, i šikmé, podobně jako Cruise v Tinkercadu. Nad prázdnou podložkou dopadne na pracovní rovinu. [[Esc]] umísťování zruší. Nástroje čekající na kliknutí, například měření, úhelník, poznámka, {{ui:camera.placeWorkplane}}, {{ui:editor.tool.layFlat}} nebo úpravy hran, se při výběru tvaru vypnou. Kliknutí pak skutečně umístí tvar. Obráceně zapnutí takového nástroje ukončí umísťování tvaru. Chcete-li nové tvary rovnou uprostřed podložky, vypněte {{ui:workspace.cruise}} v části {{ui:workspace.appearance}}.
 
+Na ploše se tvar přichytí k jejímu středu, jakmile se ukazatel přiblíží, stejně jako k rohu nebo hraně; podržte [[Alt]] a položíte ho kamkoli. Přetažený z knihovny na plochu přistane vždy v jejím středu, s [[Alt]] tam, kde ho pustíte.
+
 Knihovna nabízí:
 
 - **Základní tvary:** {{ui:shape.box}}, {{ui:shape.roundedBox}}, {{ui:shape.cylinder}}, {{ui:shape.slot}}, {{ui:shape.ellipse}}, {{ui:shape.polygon}} se třemi až 24 stranami, {{ui:shape.sphere}}, {{ui:shape.cone}}, {{ui:shape.pyramid}} se třemi až 24 stranami, {{ui:shape.wedge}}, {{ui:shape.roundRoof}}, {{ui:shape.halfSphere}} a {{ui:shape.torus}}.

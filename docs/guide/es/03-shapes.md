@@ -15,6 +15,8 @@ La biblioteca se cierra cada vez que eliges una forma. Puedes arrastrarla por la
 
 Elige una forma. Ahora va pegada al puntero del ratón y se coloca donde hagas clic. Si la pasas por encima de un cuerpo, se apoya sobre la cara que queda bajo el puntero, también sobre las inclinadas, como el Cruise de Tinkercad; sobre la placa vacía, se coloca en el plano de trabajo. [[Esc]] cancela la colocación. Las herramientas que esperan un clic, como la cinta métrica, la escuadra, una nota, {{ui:camera.placeWorkplane}}, {{ui:editor.tool.layFlat}} o las herramientas de aristas, se desactivan al elegir una forma, para que el clic coloque la forma. Y al revés: si activas una de esas herramientas, se cancela la forma que estabas colocando. Si prefieres que la forma aparezca en el centro de la placa, puedes desactivar la colocación con clic en los ajustes (apartado {{ui:workspace.appearance}}, interruptor {{ui:workspace.cruise}}).
 
+Sobre una cara, la forma se ajusta al centro de esa cara cuando el puntero se acerca, como en una esquina o una arista; mantén [[Alt]] para dejarla en cualquier sitio. Si la arrastras desde la biblioteca a una cara, siempre cae en el centro, o con [[Alt]] donde la sueltes.
+
 Lo que ofrece la biblioteca:
 
 - **Formas básicas:** {{ui:shape.box}}, {{ui:shape.roundedBox}}, {{ui:shape.cylinder}}, {{ui:shape.slot}}, {{ui:shape.ellipse}}, {{ui:shape.polygon}} (de tres a veinticuatro lados), {{ui:shape.sphere}}, {{ui:shape.cone}}, {{ui:shape.pyramid}} (de tres a veinticuatro lados, así que también triangular), {{ui:shape.wedge}}, {{ui:shape.roundRoof}}, {{ui:shape.halfSphere}} y {{ui:shape.torus}}.

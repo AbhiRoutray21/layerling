@@ -15,6 +15,8 @@ La libreria si chiude dopo aver scelto una forma. Puoi spostarla trascinando la 
 
 Scegli una forma. Ora segue il puntatore del mouse e viene posizionata dove fai clic. Passa sopra un corpo e si appoggia alla faccia sottostante, anche se inclinata, come con Cruise in Tinkercad; sopra la piastra vuota si appoggia al piano di lavoro. [[Esc]] annulla il posizionamento. Gli strumenti che aspettano un clic, come il metro a nastro, la squadra, una nota, {{ui:camera.placeWorkplane}}, {{ui:editor.tool.layFlat}} o gli strumenti per gli spigoli, si disattivano quando scegli una forma, così il clic la posiziona. Al contrario, attivando uno di quegli strumenti la forma viene posizionata. Se preferisci che le forme appaiano al centro della piastra, puoi disattivare il posizionamento con un clic nelle impostazioni, nella sezione {{ui:workspace.appearance}}, usando l’interruttore {{ui:workspace.cruise}}.
 
+Su una faccia la forma si aggancia al centro della faccia quando il puntatore si avvicina, come a uno spigolo o a un bordo; tieni premuto [[Alt]] per posarla ovunque. Trascinata dalla libreria su una faccia, finisce sempre al centro, oppure con [[Alt]] dove la rilasci.
+
 La libreria contiene:
 
 - **Forme di base:** {{ui:shape.box}}, {{ui:shape.roundedBox}}, {{ui:shape.cylinder}}, {{ui:shape.slot}}, {{ui:shape.ellipse}}, {{ui:shape.polygon}} (da tre a ventiquattro lati), {{ui:shape.sphere}}, {{ui:shape.cone}}, {{ui:shape.pyramid}} (da tre a ventiquattro lati, anche triangolare), {{ui:shape.wedge}}, {{ui:shape.roundRoof}}, {{ui:shape.halfSphere}} e {{ui:shape.torus}}.

@@ -15,6 +15,8 @@ A könyvtár minden kiválasztott alakzat után bezárul. A címsorral áthelyez
 
 Válassz egy alakzatot. Most az egérmutatón lóg, és oda kerül, ahová kattintasz. Ha egy test fölé viszed, a mutató alatti lapra fekszik, a ferdékre is, mint a Cruise a Tinkercadben; az üres tárgyasztal fölött a munkasíkra kerül. Az [[Esc]] megszakítja az elhelyezést. Egy kattintásra váró eszköz, például a mérőszalag, a derékszögvonalzó, egy jegyzet, a {{ui:camera.placeWorkplane}}, a {{ui:editor.tool.layFlat}} vagy az élműveleti eszközök kikapcsolnak, amikor alakzatot választasz, így a kattintás az alakzatot helyezi el. Fordítva is igaz: ha bekapcsolod valamelyik ilyen eszközt, az alakzat újra lekerül. Ha inkább azt szeretnéd, hogy az alakzat a tárgyasztal közepén jelenjen meg, a kattintással történő elhelyezést kikapcsolhatod a beállításokban ({{ui:workspace.appearance}} rész, {{ui:workspace.cruise}} kapcsoló).
 
+Egy lapon az alakzat a lap közepére ugrik, amint a mutató a közelébe ér, ahogy egy sarokra vagy élre is; tartsd lenyomva az [[Alt]] billentyűt, hogy bárhová letedd. Ha a könyvtárból húzod egy lapra, mindig a közepére kerül, [[Alt]] mellett oda, ahol elengeded.
+
 Amit a tár kínál:
 
 - **Alapalakzatok:** {{ui:shape.box}}, {{ui:shape.roundedBox}}, {{ui:shape.cylinder}}, {{ui:shape.slot}}, {{ui:shape.ellipse}}, {{ui:shape.polygon}} (három-huszonnégy oldallal), {{ui:shape.sphere}}, {{ui:shape.cone}}, {{ui:shape.pyramid}} (három-huszonnégy oldallal, így háromoldalú is), {{ui:shape.wedge}}, {{ui:shape.roundRoof}}, {{ui:shape.halfSphere}} és {{ui:shape.torus}}.

@@ -2283,6 +2283,7 @@ export const MESSAGES_AR: Partial<Record<MessageKey, string>> = {
   "camera.deleteMeasurement": "حذف قياس",
   "camera.deleteAllMeasurements": "حذف جميع القياسات",
   "camera.tapeMarkMiddle": "تعليم المنتصف كنقطة مرجعية",
+  "camera.tapeTypeLength": "اكتب طولاً: يتحرك الجسم عند النقطة الثانية على طول الخط",
   "camera.sectionView": "عرض المقطع",
   "camera.sectionActive": "المقطع مُفعّل",
   "camera.sectionInactive": "المقطع غير مُفعّل",

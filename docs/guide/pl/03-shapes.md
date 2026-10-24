@@ -15,6 +15,8 @@ Biblioteka zamyka się po każdym wybranym kształcie. Za pasek tytułu można j
 
 Wybierz kształt. Zawiśnie teraz na wskaźniku myszy i wyląduje tam, gdzie klikniesz. Przesuń go nad bryłę, a położy się na ścianie pod wskaźnikiem, także na skośnej, jak Cruise w Tinkercadzie. Nad pustą płytą ląduje na płaszczyźnie roboczej. [[Esc]] anuluje umieszczanie. Narzędzie, które czeka na kliknięcie, takie jak narzędzie Zmierz, kątownik, notatka, {{ui:camera.placeWorkplane}}, {{ui:editor.tool.layFlat}} albo narzędzia krawędzi, wyłącza się, gdy wybierzesz kształt, więc kliknięcie umieszcza kształt. I odwrotnie: włączenie jednego z tych narzędzi odkłada kształt. Jeśli wolisz, żeby kształt pojawiał się na środku płyty, wyłącz umieszczanie kliknięciem w ustawieniach (sekcja {{ui:workspace.appearance}}, przełącznik {{ui:workspace.cruise}}).
 
+Na ścianie kształt przyciąga się do jej środka, gdy wskaźnik się zbliży, tak jak do narożnika czy krawędzi; przytrzymaj [[Alt]], aby postawić go gdziekolwiek. Przeciągnięty z biblioteki na ścianę zawsze ląduje na jej środku, a z [[Alt]] tam, gdzie go puścisz.
+
 Co oferuje biblioteka:
 
 - **Kształty podstawowe:** {{ui:shape.box}}, {{ui:shape.roundedBox}}, {{ui:shape.cylinder}}, {{ui:shape.slot}}, {{ui:shape.ellipse}}, {{ui:shape.polygon}} (od trzech do dwudziestu czterech boków), {{ui:shape.sphere}}, {{ui:shape.cone}}, {{ui:shape.pyramid}} (od trzech do dwudziestu czterech boków, więc także trójboczna), {{ui:shape.wedge}}, {{ui:shape.roundRoof}}, {{ui:shape.halfSphere}} i {{ui:shape.torus}}.

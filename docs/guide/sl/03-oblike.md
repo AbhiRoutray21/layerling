@@ -15,6 +15,8 @@ Knjižnica se zapre po vsaki izbrani obliki. Z naslovno vrstico jo premakneš tj
 
 Izberi obliko. Zdaj visi na kazalcu miške in pristane tja, kamor klikneš. Če pri tem zapelješ čez telo, se položi na ploskev pod kazalcem, tudi na poševno, kot pri Cruiseu v Tinkercadu; nad prazno ploščo pristane na delovni ravnini. Če pritisneš [[Esc]], se odlaganje prekine. Orodje, ki čaka na klik, na primer merilni trak, kotomer, opomba, {{ui:camera.placeWorkplane}}, {{ui:editor.tool.layFlat}} ali robna orodja, se ob izbiri oblike izklopi, da klik odloži obliko. Obratno vklop enega teh orodij obliko spet odloži. Kdor želi obliko raje kar na sredino plošče, lahko odlaganje s klikom izklopi v nastavitvah (področje {{ui:workspace.appearance}}, stikalo {{ui:workspace.cruise}}).
 
+Na ploskvi se oblika pripne na njeno sredino, ko se ji kazalec približa, tako kot na vogal ali rob; držite [[Alt]], da jo odložite kamor koli. Če jo iz knjižnice povlečete na ploskev, vedno pristane na sredini, z [[Alt]] tam, kjer jo spustite.
+
 Kaj ponuja knjižnica:
 
 - **Osnovne oblike:** {{ui:shape.box}}, {{ui:shape.roundedBox}}, {{ui:shape.cylinder}}, {{ui:shape.slot}}, {{ui:shape.ellipse}}, {{ui:shape.polygon}} (od treh do štiriindvajset stranic), {{ui:shape.sphere}}, {{ui:shape.cone}}, {{ui:shape.pyramid}} (s tremi do štiriindvajset stranicami, torej tudi tristrana), {{ui:shape.wedge}}, {{ui:shape.roundRoof}}, {{ui:shape.halfSphere}} in {{ui:shape.torus}}.
