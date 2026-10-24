@@ -139,7 +139,7 @@ En ekstruderet skitse har lodrette vægge. Et stempel, en prægeform eller en do
 3. På kopien, åbn dens skitse igen og slet det ydre omrids, så kun omridset af hullet er tilbage. Afslut skitsen, skift formen til {{ui:inspector.hole}} og giv den en smallere bund end top med {{ui:inspector.taper}}.
 4. Flyt hullet ind i den første form, hvor hullet var, og gruppér de to.
 
-Væggene hælder nu udvendig og indvendig. Taper skalerer hele omridset, så det er eksakt for almindelige former, hvor du kan vælge størrelserne så væggene løber parallelt, og kun en tilnærmelse for fine detaljer som bogstaver.
+Væggene hælder nu udvendig og indvendig. {{ui:inspector.taper}} skalerer hele omridset, så det er eksakt for almindelige former, hvor du kan vælge størrelserne så væggene løber parallelt, og kun en tilnærmelse for fine detaljer som bogstaver.
 
 ## Et billede som skabelon
 
