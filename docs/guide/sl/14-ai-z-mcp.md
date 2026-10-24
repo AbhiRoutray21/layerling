@@ -102,6 +102,11 @@ Umetna inteligenca dela z istimi funkcijami kot ti, teče po isti poti kot tvoje
 | `layerling_export_drawing` | naredi delavniško risbo izvoza »2D«: trije pogledi v merilu 1:1 na listu ISO s skupnimi merami in tabelo okroglih izvrtin, kot besedilo SVG ali PDF |
 | `layerling_export_mesh` | zapiše datoteko izvoznega okna kot STL, 3MF, OBJ, SVG (tloris, odtis ali vidni robovi) ali DXF za lasersko rezanje iz istih teles; na pot v tem računalniku ali kot base64 |
 | `layerling_save_project` | shrani celoten urejevalni načrt kot datoteko .lyl na pot v računalniku, na katerem teče strežnik MCP, brez pogovornega okna; obstoječa datoteka se zamenja le z `overwrite`, piše se prek začasne datoteke, cilj Ctrl+S v urejevalniku pa ostane, kakršen je bil |
+| `layerling_list_attachments` | našteje datoteke, priložene načrtu (ime, vrsta, velikost), kot jih kaže plošča Priloge |
+| `layerling_get_attachment` | prebere eno priloženo datoteko, njene bajte kot base64, kot Prenesi na plošči |
+| `layerling_add_attachment` | priloži datoteko, podano kot base64, s preverjanji plošče; že priloženo ime prepiše le z `replace` |
+| `layerling_rename_attachment` | priloženi datoteki da drugo ime; vsebina ostane |
+| `layerling_remove_attachment` | priloženo datoteko trajno odstrani; zahteva `confirm: true` |
 | `layerling_export_section_svg` | izda obrise na ravnini prereza kot SVG v merilu 1:1, iz istih teles kot izvoz |
 | `layerling_set_workplane` | položi delovno ravnino na stran telesa, jo ponastavi na osnovno ploščo ali jo skrije in prikaže |
 | `layerling_capture_image` | posname sliko pogleda, od spredaj, zgoraj, s strani, poševno z vogala in več |

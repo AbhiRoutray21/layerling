@@ -103,6 +103,11 @@ Az MI ugyanazokkal a funkciókkal dolgozik, mint te, ugyanazon az úton, mint a 
 | `layerling_export_drawing` | elkészíti a „2D” export műhelyrajzát: három nézet 1:1 méretarányban ISO lapon, befoglaló méretekkel és a kerek furatok táblázatával, SVG-szövegként vagy PDF-ként |
 | `layerling_export_mesh` | az exportablak fájlját STL, 3MF, OBJ, SVG (felülnézet, felfekvési felület vagy látható élek) vagy lézervágáshoz DXF formában írja ki ugyanazokból a testekből; ezen a számítógépen megadott helyre vagy base64-ként |
 | `layerling_save_project` | elmenti a teljes szerkeszthető tervet .lyl fájlként egy útvonalra azon a gépen, amelyen az MCP-kiszolgáló fut, párbeszédablak nélkül; meglévő fájlt csak az `overwrite` cserél le, ideiglenes fájlon át íródik, és a Ctrl+S célja a szerkesztőben változatlan marad |
+| `layerling_list_attachments` | felsorolja a tervhez csatolt fájlokat (név, típus, méret), ahogy az Attachments panel mutatja őket |
+| `layerling_get_attachment` | beolvas egy csatolt fájlt, a bájtjait base64-ként, mint a panel Download gombja |
+| `layerling_add_attachment` | csatol egy base64-ként megadott fájlt a panel ellenőrzéseivel; a már csatolt nevet csak `replace` mellett írja felül |
+| `layerling_rename_attachment` | más nevet ad egy csatolt fájlnak; a tartalma marad |
+| `layerling_remove_attachment` | véglegesen eltávolít egy csatolt fájlt; `confirm: true` kell hozzá |
 | `layerling_set_workplane` | egy test oldalára vagy vissza az alaplapra teszi a munkasíkot, és elrejti vagy megmutatja |
 | `layerling_capture_image` | képet készít a nézetről: elölről, felülről, oldalról, ferdén egy sarokból és még sok másból |
 

@@ -232,6 +232,16 @@ async function callTool(name, args) {
       }
       return { ...summary, path: target, overwritten: exists };
     }
+    case "layerling_list_attachments":
+      return bridgeCommand("list_attachments", args);
+    case "layerling_get_attachment":
+      return bridgeCommand("get_attachment", args, 30000);
+    case "layerling_add_attachment":
+      return bridgeCommand("add_attachment", args, 30000);
+    case "layerling_rename_attachment":
+      return bridgeCommand("rename_attachment", args);
+    case "layerling_remove_attachment":
+      return bridgeCommand("remove_attachment", args);
     case "layerling_import_file":
       return bridgeCommand("import_file", args);
     case "layerling_add_font":

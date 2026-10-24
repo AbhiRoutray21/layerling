@@ -91,6 +91,7 @@ import { cloneWorkplaneShapeSnapshot, compactEdgeTreatmentHistory, edgeTreatment
 import { historyStepsAround } from "@/lib/historyStepDescription";
 import { historyViewMcpCommand } from "./workplane/historyViewMcp";
 import { attachmentsFingerprint } from "@/lib/projectAttachments";
+import { ATTACHMENT_MCP_READ_ACTIONS, attachmentMcpCommand, attachmentMcpList } from "@/lib/projectAttachmentsMcp";
 import { appendEditorHistorySnapshot, boundedEditorHistoryState, continuesKeyRun, type KeyRun, editorHistoryBranch, editorHistoryEntry, editorHistoryForExport, historyStateAt, hydrateEditorHistoryState, notesForHistoryIndex, projectSceneFingerprint, projectShapesFingerprint, workplaneForHistoryIndex, type EditorHistoryEntry, type EditorHistoryState } from "@/lib/editorHistory";
 import { snapShapeFootprintToVisibleGrid, visibleGridStep } from "@/lib/gridSnap";
 import { composedShapeRotation, geometryRotationDegreesForShortcut, geometryRotationDelta, rotatedGeometryShapePatch } from "@/lib/geometryRotation";
@@ -206,6 +207,8 @@ const HISTORY_VIEW_MCP_ACTIONS = new Set([
   "set_history_view",
   "restore_from_history",
   "clear_history",
+  // Reading a design's files, as Download in the attachments panel still works there (#820).
+  ...ATTACHMENT_MCP_READ_ACTIONS,
 ]);
 
 /**
@@ -8976,6 +8979,7 @@ export function LayerlingEditor({
         origin: placementWorkplaneRef.current.origin,
         normal: placementWorkplaneRef.current.normal,
       },
+      attachments: attachmentMcpList(projectAttachmentsRef.current),
       ...(includeRawShapes ? { rawShapes: currentShapes.map((shape) => canonicalizeShape(shape)) } : {}),
     };
   }, [initialSnap]);
@@ -9124,6 +9128,13 @@ export function LayerlingEditor({
         summary: mcpShapeSummary,
       });
       if (historyResult !== undefined) return historyResult;
+
+      // The files kept with the design (#820): the same checks as the attachments panel, see projectAttachmentsMcp.ts.
+      const attachmentResult = await attachmentMcpCommand(command.action, params, {
+        attachments: () => projectAttachmentsRef.current,
+        setAttachments: updateProjectAttachments,
+      });
+      if (attachmentResult !== undefined) return attachmentResult;
 
       if (command.action === "list_objects") {
         return { objects: currentShapes().map(mcpShapeSummary) };
@@ -10983,6 +10994,7 @@ export function LayerlingEditor({
     closeHistoryView,
     openHistoryView,
     runCustomShapeMcp,
+    updateProjectAttachments,
   ]);
 
   useEffect(() => {
