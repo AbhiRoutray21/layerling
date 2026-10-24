@@ -188,7 +188,7 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "welcome.morePrintersTitle": "Bereit zum Druck",
   "welcome.morePrintersBody": "rund 220 Drucker mit ihrer Bauplatte; layerling warnt, wenn etwas übersteht oder zu hoch ist, markiert Überhänge, die Stützen bräuchten, und schätzt beim Export Gewicht und Filament.",
   "welcome.moreImportTitle": "Importieren",
-  "welcome.moreImportBody": "STL, OBJ und 3MF mit ihren Farben, STEP und SVG sowie Bilder als Vorlage - und Teile aus anderen layerling-Entwürfen direkt in den offenen einfügen. Ein SVG kommt als Skizze: als Fläche, als Kontur außen oder innen oder als Silhouette ohne Löcher, etwa für einen Ausstecher, und als Rotationsskizze dreht es sich zu einem runden Körper wie einer Vase. Ein SVG-Muster oder ein Schriftzug lässt sich um einen Zylinder wickeln, erhaben oder als Gravur.",
+  "welcome.moreImportBody": "STL, OBJ, 3MF und SVG mit ihren Farben, STEP sowie Bilder als Vorlage - und Teile aus anderen layerling-Entwürfen direkt in den offenen einfügen. Ein SVG kommt als Skizze: als Fläche, als Kontur außen oder innen oder als Silhouette ohne Löcher, etwa für einen Ausstecher, und als Rotationsskizze dreht es sich zu einem runden Körper wie einer Vase. Ein SVG-Muster oder ein Schriftzug lässt sich um einen Zylinder wickeln, erhaben oder als Gravur.",
   "installHint.title": "layerling als App installieren",
   "installHint.body": "Als App startet layerling schneller, läuft ohne Internet, hat ein eigenes Symbol und Fenster und muss nicht jedes Mal neu geladen werden. Du verlierst nichts: Deine Entwürfe bleiben, wie sie sind, und layerling zeigt dir weiter an, wenn es eine neue Version gibt.",
   "installHint.install": "Jetzt installieren",

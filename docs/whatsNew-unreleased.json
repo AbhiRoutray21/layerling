@@ -51,6 +51,16 @@
   },
   {
     "title": {
+      "de": "Mehrfarbige SVG: ein Körper je Farbe",
+      "en": "Multi-colour SVG: one body per colour"
+    },
+    "body": {
+      "de": "Ein SVG in mehreren Farben kommt jetzt als ein Körper je Farbe an, jeder in seiner Farbe und an seinem Platz in der Zeichnung, bereit für den Mehrfarbdruck. Ein SVG in einer Farbe bleibt ein Körper, ebenso eines mit mehr als 12 Farben wie ein nachgezeichnetes Bild.",
+      "en": "An SVG drawn in several colours now comes in as one body per colour, each in its colour and in its place in the drawing, ready for a multicolour print. An SVG of one colour stays one body, and so does one of more than 12 colours, such as a traced picture."
+    }
+  },
+  {
+    "title": {
       "de": "Kleine Löcher in Netzen werden geschlossen",
       "en": "Small holes in meshes are closed"
     },
