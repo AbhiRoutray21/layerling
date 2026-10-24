@@ -48,7 +48,7 @@ De grønne tals hjælpelinjer løber langs det plan, vinkelmåleren ligger i, fr
 
 Med midtpunktet tæller de grønne tal til formens midte, også i højden. Sådan placerer du en kugle med dens centrum præcis 15 mm fra en kant, uden at trække radius fra. På en væg placerer du et hul 40 mm fra venstre og 190 mm fra toppen sådan: vælg hullet, skift til midtpunkt, tast 40 og 190. Højden der tæller udad fra væggen.
 
-Både målebåndet og vinkelmåleren bliver hvor de er mens du skitser og kommer tilbage til 3D-visningen. Målebåndet gemmes ikke med designet og ikke i historikken, og det forsvinder når du genindlæser siden; vinkelmåleren gemmes derimod med designet.
+Både målebåndet og vinkelmåleren bliver hvor de er mens du skitser og kommer tilbage til 3D-visningen. Ingen af dem er i historikken. Målebåndet gemmes ikke med designet og forsvinder når du genindlæser siden; vinkelmåleren gemmes derimod med designet.
 
 ## Afstande til nulpunktet og under flytning
 
