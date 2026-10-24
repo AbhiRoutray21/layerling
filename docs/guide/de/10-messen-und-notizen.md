@@ -36,7 +36,7 @@ Das Winkellineal legt sich auf die Arbeitsebene. Liegt sie auf der Seite eines K
 - **Das ×** daneben entfernt es.
 - **Der kleine Knopf links am Griff** schaltet um, wovon aus gemessen wird: von der Außenkante eines Körpers (Eckpunkt, Symbol mit Linien) oder von seiner Mitte (Mittelpunkt, Fadenkreuz). Neben jeder grünen Zahl sitzt ein ebensolcher kleiner Schalter, der nur diese Zahl umstellt: bei einem stehenden Zylinder die Mitte in den beiden Armen und die Unterseite in der Höhe, bei einem liegenden die Mitte quer und ein Ende längs. Stimmen alle drei wieder überein, zeigt der Knopf am Griff den gemeinsamen Modus.
 
-Stehen Körper an einem der Arme, zeigt das Winkellineal automatisch deren Maße an. Das geht nur auf der Grundplatte, nicht auf der Seite eines Körpers.
+Stehen Körper an einem der Arme, zeigt das Winkellineal automatisch deren Maße an, ausgewählt oder nicht: Körper innerhalb des Winkels, neben einem Arm oder quer darüber. Ein Körper außerhalb, hinter der Ecke oder von außen neben einem Arm, bekommt keine. Das geht nur auf der Grundplatte, nicht auf der Seite eines Körpers.
 
 Markierst du einen Körper, zeigt das Winkellineal in Grün, wie weit er von der Ecke entfernt ist, entlang beider Arme und in der Höhe. Ein Klick auf eine grüne Zahl öffnet ein Eingabefeld: Tippe den gewünschten Abstand ein, und der Körper rückt genau dorthin. Sind mehrere Körper markiert, zählen sie zusammen wie einer. Gemessen wird ihr gemeinsamer Umriss, und ein eingetippter Wert verschiebt alle gemeinsam, ohne dass sich ihre Lage zueinander ändert.
 
