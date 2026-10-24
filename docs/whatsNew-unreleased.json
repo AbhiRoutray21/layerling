@@ -38,5 +38,15 @@
       "de": "Unter Verwalten gibt es jetzt „Anhänge“ (Büroklammer): Häng Markdown- oder Textdateien an einen Entwurf, etwa eine Montageanleitung oder eine Teileliste. Sie bleiben beim Entwurf, auch in der .lyl-Datei, in der Sicherung und im Serverordner. Ein Entwurf mit Anhängen braucht zum Öffnen diese oder eine neuere layerling-Version.",
       "en": "Manage now has \"Attachments\" (the paperclip): attach Markdown or text files to a design, such as assembly instructions or a parts list. They stay with the design, also in the .lyl file, the backup and the server folder. A design with attachments needs this layerling version or a newer one to open."
     }
+  },
+  {
+    "title": {
+      "de": "Mehrere Körper auf dem Tablet wählen",
+      "en": "Select several bodies on a tablet"
+    },
+    "body": {
+      "de": "Tippst du auf dem Tablet einen Körper an, erscheint unten links ein runder Knopf. Halte ihn mit einem Finger und tippe mit einem anderen weitere Körper an: Sie kommen zur Auswahl dazu, wie mit der Umschalttaste am Computer.",
+      "en": "Tap a body on a tablet and a round button appears in the lower left. Hold it with one finger and tap more bodies with another: they join the selection, as with the Shift key on a computer."
+    }
   }
 ]
