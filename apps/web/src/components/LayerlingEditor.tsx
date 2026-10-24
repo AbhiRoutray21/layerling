@@ -118,7 +118,7 @@ import { revolveAxisShift } from "@/lib/revolveAxis";
 import { buildSketchRevolveMesh, DEFAULT_SKETCH_REVOLVE_SETTINGS, normalizeSketchRevolveSettings, type SketchRevolveMesh } from "@/lib/sketchRevolve";
 import { AppFooter } from "@/components/AppFooter";
 import { useFileAccept } from "@/lib/fileAccept";
-import { exportLylProject, importLylProject, LYL_CREATED_WITH_VERSION, LYL_MEDIA_TYPE } from "@/lib/lylProject";
+import { exportLylProject, LYL_CREATED_WITH_VERSION, LYL_MEDIA_TYPE } from "@/lib/lylProject";
 import { isBuildMessage, reportWorkerBuild } from "@/lib/buildStamp";
 import { ensureLylFileWritable, forgetLylFile, forgetStlFile, linkedLylFile, linkedStlFile, lylFileAccessSupported, pickLylFileToOpen, pickLylFileToSave, pickStlFileToSave, rememberLylFile, rememberStlFile, writeLylFile, type LylFileHandle } from "@/lib/lylFileAccess";
 import { clipboardShape, displayShapeName, iconTagAsset, qrCodeAsset, makeShapeFromAsset, nameTagAsset, shapeAssetLabel, toolbarShapeAssets } from "@/lib/shapeCatalog";
@@ -8997,7 +8997,7 @@ export function LayerlingEditor({
 
   const {
     customShapeEntries, customShapeFolders, serverAvailable: customShapesServerAvailable, myShapesFileInputRef,
-    refreshServerShapes, saveSelectionAsMyShape, insertMyShape, renameMyShapeEntry, deleteMyShapeEntry, runCustomShapeMcp,
+    refreshServerShapes, saveSelectionAsMyShape, insertMyShape, insertDesignFile, renameMyShapeEntry, deleteMyShapeEntry, runCustomShapeMcp,
     moveMyShapeToServer, moveMyShapeToFolder, createShapeFolder, renameShapeFolder, deleteShapeFolder,
     backUpMyShapes, loadMyShapeFiles,
   } = useCustomShapes({
@@ -11870,38 +11870,9 @@ export function LayerlingEditor({
     void flushProjectSnapshot({ evenIfUnchanged: true }).finally(leave);
   }, [flushProjectSnapshot, onHome, saveProjectShapesNow]);
 
-  // A saved design's bodies into the open one - for parts kept as building
-  // blocks. Fresh ids so nothing clashes, embedded source files come along,
-  // one undo step, the new bodies selected where they were saved.
   const insertLylDesign = useCallback(async (file: File) => {
-    const sourceProjectId = projectInfoRef.current.projectId;
-    setNotice(t("status.validatingFile", { name: file.name }), true);
-    try {
-      const restored = await importLylProject(await file.arrayBuffer());
-      if (projectInfoRef.current.projectId !== sourceProjectId) {
-        setNotice(t("status.importCancelled", { count: 1 }));
-        return;
-      }
-      if (restored.shapes.length === 0) {
-        setNotice(t("status.insertDesignEmpty", { name: file.name }));
-        return;
-      }
-      const inserted = restored.shapes.map((shape) => canonicalizeShape(cloneWorkplaneShapeTreeWithFreshIds(shape, "insert")));
-      if (restored.assets.length > 0) {
-        const nextAssets = dedupeProjectAssets([...projectAssetsRef.current, ...restored.assets]);
-        projectAssetsRef.current = nextAssets;
-        setProjectAssets(nextAssets);
-      }
-      commitShapes(
-        [...shapesRef.current, ...inserted],
-        inserted.map((shape) => shape.id),
-        t("status.insertedDesign", { count: inserted.length, name: file.name }),
-      );
-      setTopPanel(null);
-    } catch (error) {
-      setNotice(error instanceof Error ? localizedError(error.message) : t("status.insertDesignFailed", { name: file.name }));
-    }
-  }, [commitShapes]);
+    if (await insertDesignFile(file)) setTopPanel(null);
+  }, [insertDesignFile]);
 
   const importFiles = useCallback(async (selected: File[], fileHandle?: LylFileHandle, importOptions?: { keepSvgPage?: boolean; svgWidth?: number | null }): Promise<{ importedIds: string[]; failures: Array<{ fileName: string; reason: string }> }> => {
     const none = { importedIds: [] as string[], failures: [] as Array<{ fileName: string; reason: string }> };
