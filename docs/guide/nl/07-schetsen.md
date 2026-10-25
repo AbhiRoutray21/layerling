@@ -142,7 +142,7 @@ De wanden lopen nu buiten en binnen schuin. Tapsheid schaalt de hele omtrek, dus
 
 ## Een afbeelding als sjabloon
 
-Met {{ui:sketch.addImage}} leg je een foto of tekening onder de schets en trek je die over. Je kunt de grootte, de doorzichtigheid en de positie instellen. Zodra de afbeelding goed ligt, vergrendel je hem met [[L]], zodat je hem niet per ongeluk verschuift tijdens het tekenen. Een vergrendelde afbeelding zit niet in de weg: klikken gaan erdoorheen, zodat je lijnen en punten erop kunt kiezen en er een kader overheen kunt slepen. Een klik op het slotje in zijn hoek ontgrendelt hem; met [[Alt]] ingedrukt klikken selecteert hem zonder hem te ontgrendelen. Bedekken de instellingen aan de rechterrand de afbeelding, sleep ze dan aan hun titelbalk weg; een dubbelklik daarop zet ze weer vast.
+Met {{ui:sketch.addImage}} leg je een foto of tekening onder de schets en trek je die over. Je kunt de grootte, de doorzichtigheid en de positie instellen. Zodra de afbeelding goed ligt, vergrendel je hem met [[Ctrl]]+[[L]], zodat je hem niet per ongeluk verschuift tijdens het tekenen. Een vergrendelde afbeelding zit niet in de weg: klikken gaan erdoorheen, zodat je lijnen en punten erop kunt kiezen en er een kader overheen kunt slepen. Een klik op het slotje in zijn hoek ontgrendelt hem; met [[Alt]] ingedrukt klikken selecteert hem zonder hem te ontgrendelen. Bedekken de instellingen aan de rechterrand de afbeelding, sleep ze dan aan hun titelbalk weg; een dubbelklik daarop zet ze weer vast.
 
 Onder {{ui:sketch.imageAlign}} lijn je een foto uit die niet recht genomen is:
 
@@ -164,10 +164,12 @@ Alle vier raken alleen de referentie, nooit de schets.
 | [[Ctrl]]+[[V]] | plakken |
 | [[Ctrl]]+[[D]] | selectie dupliceren |
 | [[Ctrl]]+[[Z]] | ongedaan maken |
+| [[Ctrl]]+[[A]] | alle punten en lijnen selecteren |
+| [[Ctrl]]+[[I]] | {{ui:sketch.addImage}} |
 | [[Shift]] | tijdens tekenen: lijn vastklikken in stappen van 15°; tijdens slepen: beweging op één as houden |
 | cijfer, [[<]], [[Tab]], [[Enter]] | tijdens tekenen: lengte en hoek van de volgende lijn intypen en vastleggen |
 | [[R]] | gesloten schets 45° draaien |
-| [[L]] | sjabloonafbeelding vergrendelen of ontgrendelen |
+| [[Ctrl]]+[[L]] | sjabloonafbeelding vergrendelen of ontgrendelen |
 | [[N]] | notitie zetten: de volgende klik plaatst haar op de schets |
 | [[Shift]]+[[N]] | notities tonen of verbergen |
 

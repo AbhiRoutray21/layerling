@@ -140,7 +140,7 @@ Stěny nyní mají sklon zvenku i zevnitř. Zúžení škáluje celý obrys, pro
 
 ## Obrázek jako předloha
 
-{{ui:sketch.addImage}} vloží fotografii či kresbu pod náčrt pro obkreslení. Nastavte rozměry, průhlednost a polohu. Poté ji zamkněte [[L]], abyste ji nechtěně neposouvali. Kliknutí i rámeček procházejí zamčeným obrázkem a vybírají body a čáry nad ním. Klik na zámek v jeho rohu ho odemkne; [[Alt]]+klik ho vybere bez odemknutí. Překážející pravý panel lze přesunout za záhlaví a dvojklikem znovu ukotvit.
+{{ui:sketch.addImage}} vloží fotografii či kresbu pod náčrt pro obkreslení. Nastavte rozměry, průhlednost a polohu. Poté ji zamkněte [[Ctrl]]+[[L]], abyste ji nechtěně neposouvali. Kliknutí i rámeček procházejí zamčeným obrázkem a vybírají body a čáry nad ním. Klik na zámek v jeho rohu ho odemkne; [[Alt]]+klik ho vybere bez odemknutí. Překážející pravý panel lze přesunout za záhlaví a dvojklikem znovu ukotvit.
 
 {{ui:sketch.imageAlign}} upravuje nepřesně vyfotografovaný podklad:
 
@@ -162,10 +162,12 @@ Tyto volby mění pouze podklad, nikoli náčrt.
 | [[Ctrl]]+[[V]] | vložení |
 | [[Ctrl]]+[[D]] | duplikování |
 | [[Ctrl]]+[[Z]] | zpět |
+| [[Ctrl]]+[[A]] | výběr všech bodů a čar |
+| [[Ctrl]]+[[I]] | {{ui:sketch.addImage}} |
 | [[Shift]] | kreslení po 15°, při přesunu omezení na jednu osu |
 | číslice, [[<]], [[Tab]], [[Enter]] | zadání a potvrzení délky a úhlu další úsečky |
 | [[R]] | otočení uzavřeného náčrtu o 45° |
-| [[L]] | zamknutí nebo odemknutí podkladu |
+| [[Ctrl]]+[[L]] | zamknutí nebo odemknutí podkladu |
 | [[N]] | vložení poznámky: další kliknutí ji umístí do náčrtu |
 | [[Shift]]+[[N]] | zobrazení nebo skrytí poznámek |
 

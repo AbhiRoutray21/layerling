@@ -140,7 +140,7 @@ Les murs sont désormais inclinés vers l'extérieur et l'intérieur. Taper met 
 
 ## Une image comme modèle
 
-Avec {{ui:sketch.addImage}} vous mettez une photo ou un dessin sous le croquis et vous le tracez. Vous pouvez définir sa taille, son opacité et sa position. Une fois l'image bien placée, verrouillez-la avec [[L]] afin de ne pas la déplacer accidentellement pendant le dessin. Une image verrouillée n'est pas gênante : les clics la traversent, vous pouvez donc sélectionner des lignes et des points dessus et faire glisser un cadre dessus. Un clic sur le cadenas dans son coin le déverrouille ; [[Alt]]+clic le sélectionne sans le déverrouiller. Si ses paramètres sur le bord droit couvrent l'image, faites-les glisser par leur barre de titre ; un double-clic dessus les ancre à nouveau.
+Avec {{ui:sketch.addImage}} vous mettez une photo ou un dessin sous le croquis et vous le tracez. Vous pouvez définir sa taille, son opacité et sa position. Une fois l'image bien placée, verrouillez-la avec [[Ctrl]]+[[L]] afin de ne pas la déplacer accidentellement pendant le dessin. Une image verrouillée n'est pas gênante : les clics la traversent, vous pouvez donc sélectionner des lignes et des points dessus et faire glisser un cadre dessus. Un clic sur le cadenas dans son coin le déverrouille ; [[Alt]]+clic le sélectionne sans le déverrouiller. Si ses paramètres sur le bord droit couvrent l'image, faites-les glisser par leur barre de titre ; un double-clic dessus les ancre à nouveau.
 
 Sous {{ui:sketch.imageAlign}} vous alignez une photo qui n'a pas été prise directement :
 
@@ -162,10 +162,12 @@ Tous les quatre touchent uniquement à la référence, jamais au croquis.
 | [[Ctrl]]+[[V]] | coller |
 | [[Ctrl]]+[[D]] | dupliquer la sélection |
 | [[Ctrl]]+[[Z]] | annuler |
+| [[Ctrl]]+[[A]] | sélectionner tous les points et toutes les lignes |
+| [[Ctrl]]+[[I]] | {{ui:sketch.addImage}} |
 | [[Shift]] | pendant le dessin : tracez la ligne par pas de 15° ; tout en faisant glisser : conserver le mouvement sur un axe |
 | chiffre, [[<]], [[Tab]], [[Enter]] | pendant le dessin : tapez et définissez la longueur et l'angle de la ligne suivante |
 | [[R]] | faire pivoter l'esquisse fermée de 45° |
-| [[L]] | verrouiller ou déverrouiller l'image du modèle |
+| [[Ctrl]]+[[L]] | verrouiller ou déverrouiller l'image du modèle |
 | [[N]] | poser une note : le clic suivant la place sur l'esquisse |
 | [[Shift]]+[[N]] | afficher ou masquer les notes |
 

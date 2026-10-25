@@ -127,7 +127,7 @@ A falak most kívül és belül is lejtenek. A kúposítás az egész körvonala
 
 ## Kép mint minta
 
-A {{ui:sketch.addImage}} segítségével egy fényképet vagy rajzot teszel a vázlat alá, és körberajzolod. Beállíthatod a méretét, az átlátszatlanságát és a helyzetét. Ha a kép a helyén van, zárold az [[L]] billentyűvel, hogy rajzolás közben véletlenül se mozdítsd el. A zárolt kép nincs útban: a kattintások átmennek rajta, így a rajta lévő vonalakat és pontokat kiválaszthatod, és keretet húzhatsz föléjük. A sarkában lévő lakatra kattintva feloldod; az [[Alt]] nyomva tartásával kattintva feloldás nélkül jelölöd ki. Ha a jobb szélen lévő beállításai eltakarják a képet, húzd el őket a címsoruknál fogva; egy dupla kattintás rajta újra rögzíti őket.
+A {{ui:sketch.addImage}} segítségével egy fényképet vagy rajzot teszel a vázlat alá, és körberajzolod. Beállíthatod a méretét, az átlátszatlanságát és a helyzetét. Ha a kép a helyén van, zárold a [[Ctrl]]+[[L]] billentyűkkel, hogy rajzolás közben véletlenül se mozdítsd el. A zárolt kép nincs útban: a kattintások átmennek rajta, így a rajta lévő vonalakat és pontokat kiválaszthatod, és keretet húzhatsz föléjük. A sarkában lévő lakatra kattintva feloldod; az [[Alt]] nyomva tartásával kattintva feloldás nélkül jelölöd ki. Ha a jobb szélen lévő beállításai eltakarják a képet, húzd el őket a címsoruknál fogva; egy dupla kattintás rajta újra rögzíti őket.
 
 Az {{ui:sketch.imageAlign}} alatt egy nem egyenesen készült fényképet igazítasz be:
 
@@ -149,10 +149,12 @@ Mind a négy csak a mintaképet érinti, a vázlatot soha.
 | [[Ctrl]]+[[V]] | beillesztés |
 | [[Ctrl]]+[[D]] | másolat a kijelölésről |
 | [[Ctrl]]+[[Z]] | visszavonás |
+| [[Ctrl]]+[[A]] | minden pont és vonal kijelölése |
+| [[Ctrl]]+[[I]] | {{ui:sketch.addImage}} |
 | [[Shift]] | rajzolás közben: a vonal 15°-os lépésekben illeszkedik; húzás közben: a mozgás egy tengelyen marad |
 | számjegy, [[<]], [[Tab]], [[Enter]] | rajzolás közben: a következő vonal hosszának és szögének begépelése és letétele |
 | [[R]] | a zárt vázlat elforgatása 45°-kal |
-| [[L]] | a mintakép zárolása vagy feloldása |
+| [[Ctrl]]+[[L]] | a mintakép zárolása vagy feloldása |
 | [[N]] | jegyzet elhelyezése: a következő kattintás a vázlatra teszi |
 | [[Shift]]+[[N]] | a jegyzetek megjelenítése vagy elrejtése |
 

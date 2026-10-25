@@ -142,7 +142,7 @@ Stene so zdaj poševne zunaj in znotraj. Zožitev spremeni merilo celotnega obri
 
 ## Slika kot predloga
 
-Z {{ui:sketch.addImage}} položiš fotografijo ali risbo pod skico in jo obrišeš. Nastaviš lahko velikost, prekrivnost in lego. Ko slika leži prav, jo zakleneš s [[L]], da je pri risanju nehote ne premakneš. Zaklenjena slika je iz poti: kliki gredo skozi njo, torej na njej izbiraš črte in točke ter čez njo povlečeš okvir. Klik na ključavnico v njenem kotu jo odklene; klik z [[Alt]] jo izbere, ne da bi jo odklenil. Če njene nastavitve ob desnem robu zakrivajo sliko, jih povlečeš stran za naslovno vrstico; dvoklik nanjo jih spet zasidra.
+Z {{ui:sketch.addImage}} položiš fotografijo ali risbo pod skico in jo obrišeš. Nastaviš lahko velikost, prekrivnost in lego. Ko slika leži prav, jo zakleneš s [[Ctrl]]+[[L]], da je pri risanju nehote ne premakneš. Zaklenjena slika je iz poti: kliki gredo skozi njo, torej na njej izbiraš črte in točke ter čez njo povlečeš okvir. Klik na ključavnico v njenem kotu jo odklene; klik z [[Alt]] jo izbere, ne da bi jo odklenil. Če njene nastavitve ob desnem robu zakrivajo sliko, jih povlečeš stran za naslovno vrstico; dvoklik nanjo jih spet zasidra.
 
 Pod {{ui:sketch.imageAlign}} poravnaš fotografijo, ki ni bila posneta naravnost:
 
@@ -164,10 +164,12 @@ Vsa štiri delujejo samo na predlogo, nikoli na skico.
 | [[Ctrl]]+[[V]] | prilepi |
 | [[Ctrl]]+[[D]] | podvoji izbor |
 | [[Ctrl]]+[[Z]] | razveljavi |
+| [[Ctrl]]+[[A]] | izberi vse točke in črte |
+| [[Ctrl]]+[[I]] | {{ui:sketch.addImage}} |
 | [[Shift]] | pri risanju: črta se zaskoči v korakih po 15°; pri vlečenju: gibanje omejeno na eno os |
 | številka, [[<]], [[Tab]], [[Enter]] | pri risanju: vpiši dolžino in kot naslednje črte in jo postavi |
 | [[R]] | zavrti sklenjeno skico za 45° |
-| [[L]] | zakleni ali odkleni sliko predloge |
+| [[Ctrl]]+[[L]] | zakleni ali odkleni sliko predloge |
 | [[N]] | postavi opombo: naslednji klik jo postavi na skico |
 | [[Shift]]+[[N]] | pokaži ali skrij opombe |
 
