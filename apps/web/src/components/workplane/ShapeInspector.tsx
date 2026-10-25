@@ -2814,15 +2814,14 @@ export function ShapeInspector({
       ) : iconTag ? (
         <MakeIconLayersButton disabled={locked} onLayer={iconTag.onLayer} />
       ) : null}
-      {shape.groupOperation === "bundle" ? (
-        <p className="inspector-bundle-note">{t(nameTagStack || iconTag?.isTag ? "nameTag.bundleNote" : "inspector.bundleNote")}</p>
-      ) : !isNonSolidShape(shape) ? (
+      {shape.groupOperation === "bundle" || !isNonSolidShape(shape) ? (
       <div className="shape-state-card" role="group" aria-label={t("inspector.shapeMode")}>
         <button
           className={!shape.hole ? "active solid-choice" : "solid-choice"}
           onClick={() => {
             const wasHole = Boolean(shape.hole);
-            onUpdate({ hole: false, color: solidColor });
+            // Sending the colour too would paint it onto every part of a group or bundle and lose their own colours.
+            onUpdate(shape.groupedShapes?.length ? { hole: false } : { hole: false, color: solidColor });
             setColorOpen((open) => (wasHole ? false : !open));
           }}
           disabled={locked}
@@ -2931,6 +2930,10 @@ export function ShapeInspector({
           <Split size={17} strokeWidth={2.5} />
           <span>{t("inspector.separateParts")}</span>
         </button>
+      ) : null}
+
+      {shape.groupOperation === "bundle" ? (
+        <p className="inspector-bundle-note">{t(nameTagStack || iconTag?.isTag ? "nameTag.bundleNote" : "inspector.bundleNote")}</p>
       ) : null}
 
       {onWrapAroundCylinder ? (
@@ -5183,6 +5186,17 @@ export function SelectionInspector({
             <span>{t("inspector.hole")} <span className="key-hint">(H)</span></span>
           </button>
           {!noHoles && !allHoles ? <p className="selection-mixed-note">{t("inspector.selectionMixed")}</p> : null}
+          {onUpdateShapes && solids.length > 0 ? (
+            <ToggleProperty
+              label={`${t("inspector.transparent")} (T)`}
+              value={solids.every((shape) => Boolean(shape.transparent))}
+              disabled={anyLocked}
+              onChange={(transparent) => onUpdateShapes(
+                solids.map((shape) => ({ id: shape.id, patch: { transparent: transparent || undefined } })),
+                transparent ? t("status.selectionTransparent") : t("status.selectionOpaque"),
+              )}
+            />
+          ) : null}
         </div>
       ) : null}
       {colorOpen ? (

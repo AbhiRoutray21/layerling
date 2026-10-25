@@ -1237,11 +1237,11 @@ export const SECTION_SEEN_FROM_KEYS = {
 } as const;
 
 /** Die sichtbaren Teile fuer einen Export, dazu der Satz, der die ausgeblendeten nennt. */
-/** A bundle goes out as its parts, each a body of its own with its own colour; its holes cut nothing. */
+/** A bundle goes out as its parts, each a body of its own with its own colour (or the bundle's, with Multicolor off); its holes cut nothing. */
 export function expandBundles(source: readonly WorkplaneShape[]): WorkplaneShape[] {
   return source.flatMap((shape) => (
     shape.groupOperation === "bundle" && shape.groupedShapes?.length
-      ? expandBundles(restoreGroupedChildren(shape)).filter((part) => !part.hidden)
+      ? expandBundles(restoreGroupedChildren(shape).map((part) => (shape.multicolor === false ? { ...part, color: shape.color } : part))).filter((part) => !part.hidden)
       : [shape]
   ));
 }
