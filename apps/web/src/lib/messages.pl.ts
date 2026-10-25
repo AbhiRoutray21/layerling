@@ -2352,6 +2352,8 @@ export const MESSAGES_PL: Partial<Record<MessageKey, string>> = {
   "camera.tapeWholeEdgesHint": "Mierz całe krawędzie: kliknięcie krawędzi mierzy ją w całości, np. obwód okręgu. Wyłączone: kliknięcie stawia punkt na krawędzi, do średnicy lub dowolnej innej odległości. Alt odwraca to na jedno kliknięcie. Na okręgu punkt naprzeciwko się przyciąga, więc średnica wychodzi dokładnie.",
   "camera.deleteMeasurement": "Usuń część pomiaru",
   "camera.deleteAllMeasurements": "Usuń wszystkie pomiary",
+  "camera.hideMeasurements": "Ukryj pomiary",
+  "camera.showMeasurements": "Pokaż pomiary",
   "camera.tapeMarkMiddle": "Zaznacz środek jako punkt odniesienia",
   "camera.tapeTypeLength": "Wpisz długość: bryła przy drugim punkcie przesuwa się wzdłuż linii",
   "camera.sectionView": "Widok przekroju",

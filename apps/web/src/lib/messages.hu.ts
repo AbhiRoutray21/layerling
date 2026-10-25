@@ -2287,6 +2287,8 @@ export const MESSAGES_HU: Partial<Record<MessageKey, string>> = {
   "camera.tapeWholeEdgesHint": "Teljes élek mérése: egy élre kattintva az egészet méri, például egy kör kerületét. Kikapcsolva a kattintás egy pontot tesz az élre, az átmérőhöz vagy bármilyen más távolsághoz. Az Alt egy kattintás erejéig megfordítja. Körön a szemközti pont beugrik, így az átmérő pontosan jön ki.",
   "camera.deleteMeasurement": "Mérésrész törlése",
   "camera.deleteAllMeasurements": "Minden mérés törlése",
+  "camera.hideMeasurements": "Mérések elrejtése",
+  "camera.showMeasurements": "Mérések megjelenítése",
   "camera.tapeMarkMiddle": "A felezőpont megjelölése referenciapontként",
   "camera.tapeTypeLength": "Hossz beírása: a második pontnál lévő test a vonal mentén mozdul",
   "camera.sectionView": "Metszeti nézet",

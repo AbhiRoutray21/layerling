@@ -44,7 +44,7 @@ Le linee guida dei valori verdi seguono il pavimento, cioè il piano su cui pogg
 
 Usando il punto medio, i numeri verdi misurano fino al centro del corpo, anche in altezza. Puoi così posizionare una sfera con il centro esattamente a 15 mm da uno spigolo, senza sottrarne il raggio. Per mettere un foro su una parete a 40 mm da sinistra e 190 mm dall’alto, seleziona il foro, imposta il riferimento al punto medio e digita 40 e 190. In questo caso l’altezza si misura verso l’esterno della parete.
 
-Il metro a nastro e la squadra restano al loro posto mentre lavori nello schizzo e ricompaiono quando torni alla vista 3D. Nessuno dei due entra nella cronologia. Il metro a nastro non viene salvato con il progetto e scompare quando ricarichi la pagina; la squadra viene salvata con il progetto.
+Il metro a nastro e la squadra restano al loro posto mentre lavori nello schizzo e ricompaiono quando torni alla vista 3D. Nessuno dei due entra nella cronologia. La squadra viene salvata con il progetto, e così le misurazioni del metro a nastro, nel browser e nel file .lyl: quando apri il progetto sono di nuovo al loro posto. Il pulsante con l’occhio tra i pulsanti del metro a nastro nasconde tutte le misurazioni e le mostra di nuovo; viene salvato anche se sono nascoste, e aggiungere, spostare o eliminare una misurazione le mostra prima.
 
 ## Distanze dall’origine e durante lo spostamento
 

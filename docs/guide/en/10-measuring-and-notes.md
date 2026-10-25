@@ -44,7 +44,7 @@ The guide lines of the green numbers run along the floor, the plane the framing 
 
 With the midpoint, the green numbers count to the middle of the body, in height as well. That way you place a sphere with its centre exactly 15 mm from an edge, without subtracting the radius. On a wall you place a hole 40 mm from the left and 190 mm from the top like this: select the hole, switch to midpoint, type 40 and 190. The height there counts outward from the wall.
 
-Both the tape measure and the framing square stay where they are while you sketch and come back to the 3D view. Neither is in the history. The tape measure is not saved with the design and goes when you reload the page; the framing square is kept with the design.
+Both the tape measure and the framing square stay where they are while you sketch and come back to the 3D view. Neither is in the history. The framing square is kept with the design, and so are the measurements of the tape measure, in the browser and in the .lyl file: they are there again when you open the design. The eye button among the tape measure's buttons hides all measurements and shows them again; whether they are hidden is kept as well, and adding, moving or deleting a measurement shows them first.
 
 ## Distances to the origin and while moving
 

@@ -2302,6 +2302,8 @@ export const MESSAGES_DA: Partial<Record<MessageKey, string>> = {
   "camera.tapeWholeEdgesHint": "Mål hele kanter: et klik på en kant måler hele den, f.eks. længden af en cirkel. Fra sætter et klik et punkt på kanten, for diameteren eller en hvilken som helst anden afstand. Alt bytter om for ét klik. På en cirkel snapper punktet overfor til, så diameteren kommer ud nøjagtig.",
   "camera.deleteMeasurement": "Slet måledel",
   "camera.deleteAllMeasurements": "Slet alle mål",
+  "camera.hideMeasurements": "Skjul målinger",
+  "camera.showMeasurements": "Vis målinger",
   "camera.tapeMarkMiddle": "Markér midten som referencepunkt",
   "camera.tapeTypeLength": "Skriv en længde: legemet ved det andet punkt flyttes langs linjen",
   "camera.sectionView": "Snitvisning",

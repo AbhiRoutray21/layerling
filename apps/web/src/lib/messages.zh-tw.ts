@@ -2280,6 +2280,8 @@ export const MESSAGES_ZH_TW: Partial<Record<MessageKey, string>> = {
   "camera.tapeWholeEdgesHint": "量測整條邊：點擊一條邊即量測其全長，例如圓的周長。關閉時，點擊會在邊上放置一個點，用於量測直徑或其他任意距離。按住 Alt 可反轉一次。在圓上，對側的點會自動吸附，因此直徑可精確得出。",
   "camera.deleteMeasurement": "刪除量測段",
   "camera.deleteAllMeasurements": "刪除所有量測",
+  "camera.hideMeasurements": "隱藏測量",
+  "camera.showMeasurements": "顯示測量",
   "camera.tapeMarkMiddle": "將中點標記為參考點",
   "camera.tapeTypeLength": "輸入長度:第二個點處的物體沿線移動",
   "camera.sectionView": "剖視圖",

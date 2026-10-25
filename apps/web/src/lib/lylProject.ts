@@ -24,6 +24,7 @@ import { importedShapeFromSvg } from "@/lib/svgImport";
 import { importedShapeFrom3mf } from "@/lib/threemfImport";
 import { normalizeDesignView, normalizeSavedViews, readDesignView, readSavedViews, type DesignView, type SavedDesignViews } from "@/lib/designView";
 import { normalizeSavedCornerRulers, readCornerRulers, type SavedCornerRuler } from "@/lib/cornerRulerStore";
+import { normalizeSavedTape, readTape, type SavedTape } from "@/lib/tapeStore";
 import { isSketchKeyring } from "@/lib/sketchKeyring";
 import { isReferenceImageOpacity } from "@/lib/referenceImage";
 import { isThreadProfile } from "@/lib/threadProfiles";
@@ -244,6 +245,8 @@ export type LylProjectDocumentV1 = {
     savedViews?: SavedDesignViews;
     /** The framing square where it was set (#829); older readers pass over it. */
     cornerRulers?: SavedCornerRuler[];
+    /** The tape measure's measurements and whether they are shown (#881); older readers pass over it. */
+    tapeMeasurements?: SavedTape;
   };
 };
 
@@ -270,6 +273,8 @@ export type LylProjectExportInput = {
   savedViews?: SavedDesignViews | null;
   /** The framing square; when left out, the one the browser keeps for this design goes in (#829). */
   cornerRulers?: SavedCornerRuler[] | null;
+  /** The tape measure's measurements; when left out, the ones the browser keeps for this design go in (#881). */
+  tapeMeasurements?: SavedTape | null;
   compressionLevel?: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
   /** Weitere Dateien im Paket, etwa der Fehlerbericht; ein Leser uebergeht sie. */
   extraFiles?: Record<string, Uint8Array>;
@@ -298,6 +303,8 @@ export type LylRestoredProject = {
   savedViews?: SavedDesignViews;
   /** The framing square, when the file has one (#829). */
   cornerRulers?: SavedCornerRuler[];
+  /** The tape measure's measurements, when the file has them (#881). */
+  tapeMeasurements?: SavedTape;
   migratedFromVersion?: number;
   /** Set when a newer layerling saved the design: its version, for a hint that an update helps. */
   savedWithNewerVersion?: string;
@@ -1093,6 +1100,7 @@ export async function exportLylProject(input: LylProjectExportInput) {
   const view = input.view === undefined ? readDesignView(input.projectId) : normalizeDesignView(input.view);
   const savedViews = normalizeSavedViews(input.savedViews === undefined ? readSavedViews(input.projectId) : input.savedViews);
   const cornerRulers = normalizeSavedCornerRulers(input.cornerRulers === undefined ? readCornerRulers(input.projectId) : input.cornerRulers);
+  const tapeMeasurements = normalizeSavedTape(input.tapeMeasurements === undefined ? readTape(input.projectId) : input.tapeMeasurements);
   const selectedWorkplaneId = placementWorkplaneIsBase(placementWorkplane) ? "workplane-base" : "workplane-active";
   const document: Omit<LylProjectDocumentV1, "states"> & { states: typeof STATES_PLACEHOLDER } = {
     schema: LYL_SCHEMA_ID,
@@ -1134,6 +1142,7 @@ export async function exportLylProject(input: LylProjectExportInput) {
       ...(view ? { view } : {}),
       ...(savedViews ? { savedViews } : {}),
       ...(cornerRulers ? { cornerRulers } : {}),
+      ...(tapeMeasurements ? { tapeMeasurements } : {}),
     },
   };
   // The states are already text; put them in where the placeholder stands. The
@@ -2148,6 +2157,7 @@ async function restoreV1(document: LylProjectDocumentV1, assetById: Map<string, 
   const restoredView = normalizeDesignView(document.editor.view);
   const restoredSavedViews = normalizeSavedViews(document.editor.savedViews);
   const restoredCornerRulers = normalizeSavedCornerRulers(document.editor.cornerRulers);
+  const restoredTape = normalizeSavedTape(document.editor.tapeMeasurements);
   // The files were checked with the document; each is copied out of the archive.
   const attachments = (document.attachments ?? []).map((record): ProjectAttachment => {
     const asset = assetById.get(record.assetId) as LylAssetRecordV1;
@@ -2174,6 +2184,7 @@ async function restoreV1(document: LylProjectDocumentV1, assetById: Map<string, 
     ...(restoredView ? { view: restoredView } : {}),
     ...(restoredSavedViews ? { savedViews: restoredSavedViews } : {}),
     ...(restoredCornerRulers ? { cornerRulers: restoredCornerRulers } : {}),
+    ...(restoredTape ? { tapeMeasurements: restoredTape } : {}),
     ...(document.formatVersion < LYL_FORMAT_VERSION ? { migratedFromVersion: document.formatVersion } : {}),
   } satisfies LylRestoredProject;
 }

@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "title": {
+      "de": "Messungen bleiben im Entwurf",
+      "en": "Measurements stay with the design"
+    },
+    "body": {
+      "de": "Die Messungen des Maßbands werden jetzt mit dem Entwurf gespeichert, auch in der .lyl-Datei, und sind beim Öffnen wieder da. Ein neuer Augenknopf unter den Maßband-Knöpfen blendet sie aus und wieder ein; auch das wird gemerkt.",
+      "en": "The measurements of the tape measure are now saved with the design, also in the .lyl file, and are back when you open it. A new eye button among the tape measure's buttons hides and shows them; that is remembered too."
+    }
+  }
+]

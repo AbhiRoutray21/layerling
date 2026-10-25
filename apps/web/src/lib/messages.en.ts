@@ -2391,6 +2391,8 @@ export const MESSAGES_EN = {
   "camera.tapeWholeEdgesHint": "Measure whole edges: a click on an edge measures all of it, the length of a circle for example. Off, a click puts a point on the edge, for the diameter or any other distance. Alt turns it round for one click. On a circle the point across snaps in, so the diameter comes out exact.",
   "camera.deleteMeasurement": "Delete measurement part",
   "camera.deleteAllMeasurements": "Delete all measurements",
+  "camera.hideMeasurements": "Hide measurements",
+  "camera.showMeasurements": "Show measurements",
   "camera.tapeMarkMiddle": "Mark the middle as a reference point",
   "camera.tapeTypeLength": "Type a length: the body at the second point moves along the line",
   "camera.sectionView": "Section view",

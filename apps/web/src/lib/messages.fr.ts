@@ -2374,6 +2374,8 @@ export const MESSAGES_FR: Partial<Record<MessageKey, string>> = {
   "camera.tapeWholeEdgesHint": "Mesurer des bords entiers : un clic sur un bord mesure la totalité, la longueur d'un cercle par exemple. Désactivé, un clic met un point sur le bord, pour le diamètre ou toute autre distance. Alt le retourne en un clic. Sur un cercle, la pointe en travers s'enclenche, de sorte que le diamètre ressort exactement.",
   "camera.deleteMeasurement": "Supprimer une partie de mesure",
   "camera.deleteAllMeasurements": "Supprimer toutes les mesures",
+  "camera.hideMeasurements": "Masquer les mesures",
+  "camera.showMeasurements": "Afficher les mesures",
   "camera.tapeMarkMiddle": "Marquez le milieu comme point de référence",
   "camera.tapeTypeLength": "Saisir une longueur : le corps au second point se déplace le long de la ligne",
   "camera.sectionView": "Vue en coupe",

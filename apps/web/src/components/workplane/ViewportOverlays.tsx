@@ -189,6 +189,8 @@ export type TapeModel = {
   /** Unit normal of the surface the first point was placed on, while a measurement is under way (#589). */
   startNormal?: [number, number, number] | null;
   hover: TapeCandidate | null;
+  /** The measurements are kept but not drawn (#881). */
+  hidden?: boolean;
 };
 
 export type TapeOverlayState = {
@@ -549,13 +551,14 @@ export function syncTapeOverlay(
   accuracy: MeasurementAccuracy,
 ) {
   const projectedPoints = new Map<string, { screenX: number; screenY: number }>();
-  const points = model.points.map((point) => {
+  // Hidden measurements stay in the model; nothing of them is drawn or can be hit.
+  const points = (model.hidden ? [] : model.points).map((point) => {
     const screen = projectToScreen(tapePointWorld(state, point), state);
     const projected = { screenX: screen.x, screenY: screen.y };
     projectedPoints.set(point.id, projected);
     return { ...point, ...projected };
   });
-  const segments = model.segments.flatMap((segment) => {
+  const segments = (model.hidden ? [] : model.segments).flatMap((segment) => {
     const start = model.points.find((point) => point.id === segment.startId);
     const end = model.points.find((point) => point.id === segment.endId);
     const startScreen = projectedPoints.get(segment.startId);
@@ -583,9 +586,9 @@ export function syncTapeOverlay(
       },
     ];
   });
-  const hoverWorld = model.hover ? tapePointWorld(state, model.hover) : null;
+  const hoverWorld = model.hover && !model.hidden ? tapePointWorld(state, model.hover) : null;
   const hoverScreen = hoverWorld ? projectToScreen(hoverWorld, state) : null;
-  const hoverEdgePoints = model.hover?.edge ? tapeEdgeWorldPoints(state, model.hover.edge) : [];
+  const hoverEdgePoints = model.hover?.edge && !model.hidden ? tapeEdgeWorldPoints(state, model.hover.edge) : [];
   const next: TapeOverlayState = {
     points,
     segments,

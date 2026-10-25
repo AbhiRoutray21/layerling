@@ -42,7 +42,7 @@ Po výběru tělesa se zeleně zobrazí vzdálenosti od rohu podél obou ramen i
 
 V režimu středu vedou zelené rozměry do středu tělesa, včetně výšky. Střed koule tak umístíte přesně 15 mm od okraje bez odečítání poloměru. Otvor na stěně umístíte například 40 mm zleva a 190 mm shora tak, že jej vyberete, zapnete měření od středu a zadáte 40 a 190. Výška v tomto případě směřuje ven ze stěny.
 
-Měřicí nástroj i úhelník zůstávají na místě při přechodu do náčrtu a zpět do 3D. Ani jeden se neukládá do historie. Měřicí nástroj se neukládá do projektu a po obnovení stránky zmizí; úhelník se s projektem ukládá.
+Měřicí nástroj i úhelník zůstávají na místě při přechodu do náčrtu a zpět do 3D. Ani jeden se neukládá do historie. Úhelník se s projektem ukládá, stejně jako měření měřicího nástroje, v prohlížeči i v souboru .lyl: po otevření projektu jsou zase tam. Tlačítko s okem mezi tlačítky měřicího nástroje všechna měření skryje a znovu zobrazí; uloží se i to, zda jsou skrytá, a kdo měření přidá, posune nebo smaže, uvidí je předtím znovu.
 
 ## Vzdálenosti od počátku a při přesouvání
 

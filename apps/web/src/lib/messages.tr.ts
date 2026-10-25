@@ -2274,6 +2274,8 @@ export const MESSAGES_TR: Partial<Record<MessageKey, string>> = {
   "camera.tapeWholeEdgesHint": "Kenarların tamamını ölç: bir kenara tık onun tamamını ölçer, örneğin bir dairenin uzunluğunu. Kapalıyken tık kenara bir nokta koyar; çap veya başka bir mesafe için. Alt bunu tek bir tık için tersine çevirir. Dairede karşıdaki nokta yakalanır, böylece çap tam çıkar.",
   "camera.deleteMeasurement": "Ölçüm parçasını sil",
   "camera.deleteAllMeasurements": "Tüm ölçümleri sil",
+  "camera.hideMeasurements": "Ölçümleri gizle",
+  "camera.showMeasurements": "Ölçümleri göster",
   "camera.tapeMarkMiddle": "Ortayı referans noktası olarak işaretle",
   "camera.tapeTypeLength": "Uzunluk yazın: ikinci noktadaki gövde çizgi boyunca kayar",
   "camera.sectionView": "Kesit görünümü",

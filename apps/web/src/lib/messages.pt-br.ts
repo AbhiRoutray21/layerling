@@ -814,6 +814,8 @@ export const MESSAGES_PT_BR: Partial<Record<MessageKey, string>> = {
   "camera.tapeWholeEdgesHint": "Quando esta opção está ativada, clicar em uma aresta mede seu comprimento total, como a circunferência de um círculo. Quando desativada, o clique marca um ponto na aresta para medir o diâmetro ou outra distância. Segure Alt para inverter o comportamento naquele clique. Em círculos, o segundo ponto se encaixa no ponto oposto ao primeiro para medir o diâmetro exato.",
   "camera.deleteMeasurement": "Excluir parte da medida",
   "camera.deleteAllMeasurements": "Excluir todas as medidas",
+  "camera.hideMeasurements": "Ocultar medições",
+  "camera.showMeasurements": "Mostrar medições",
   "camera.tapeMarkMiddle": "Marcar o meio como ponto de referência",
   "camera.tapeTypeLength": "Digite um comprimento: o corpo no segundo ponto se move ao longo da linha",
   "camera.sectionView": "Vista em corte",

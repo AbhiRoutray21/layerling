@@ -2246,6 +2246,8 @@ export const MESSAGES_IT: Partial<Record<MessageKey, string>> = {
   "camera.tapeWholeEdgesHint": "Misura gli spigoli interi: facendo clic su uno spigolo ne misuri l'intera lunghezza, ad esempio la circonferenza di un cerchio. Se disattivata, un clic posiziona un punto sullo spigolo, per misurare il diametro o un'altra distanza. Alt inverte il comportamento per un singolo clic. Su un cerchio, il punto opposto viene agganciato automaticamente, così il diametro risulta esatto.",
   "camera.deleteMeasurement": "Elimina una parte della misurazione",
   "camera.deleteAllMeasurements": "Elimina tutte le misurazioni",
+  "camera.hideMeasurements": "Nascondi misurazioni",
+  "camera.showMeasurements": "Mostra misurazioni",
   "camera.tapeMarkMiddle": "Segna il punto medio come riferimento",
   "camera.tapeTypeLength": "Digita una lunghezza: il corpo al secondo punto si sposta lungo la linea",
   "camera.sectionView": "Vista in sezione",

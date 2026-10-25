@@ -2349,6 +2349,8 @@ export const MESSAGES_ES: Partial<Record<MessageKey, string>> = {
   "camera.tapeWholeEdgesHint": "Medir aristas enteras: un clic en una arista la mide entera, por ejemplo la longitud de un círculo. Si está desactivado, un clic pone un punto en la arista, para el diámetro o cualquier otra distancia. Alt lo invierte para un solo clic. En un círculo, el punto opuesto se ajusta solo, así que el diámetro sale exacto.",
   "camera.deleteMeasurement": "Eliminar medida",
   "camera.deleteAllMeasurements": "Eliminar todas las medidas",
+  "camera.hideMeasurements": "Ocultar mediciones",
+  "camera.showMeasurements": "Mostrar mediciones",
   "camera.tapeMarkMiddle": "Marcar el punto medio como punto de referencia",
   "camera.tapeTypeLength": "Escribir una longitud: el cuerpo del segundo punto se mueve a lo largo de la línea",
   "camera.sectionView": "Vista de sección",

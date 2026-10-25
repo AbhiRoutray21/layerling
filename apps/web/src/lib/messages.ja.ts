@@ -2224,6 +2224,8 @@ export const MESSAGES_JA: Partial<Record<MessageKey, string>> = {
   "camera.tapeWholeEdgesHint": "エッジ全体を計測します。エッジをクリックすると、その全体の長さ（円なら円周）を計ります。オフのときは、クリックしたところに点を置き、直径などの好きな距離を計れます。Altを押しながらクリックすると、1回だけ反対になります。円では反対側の点がスナップするので、直径がぴったり出ます。",
   "camera.deleteMeasurement": "寸法の一部を削除",
   "camera.deleteAllMeasurements": "すべての寸法を削除",
+  "camera.hideMeasurements": "計測を隠す",
+  "camera.showMeasurements": "計測を表示",
   "camera.tapeMarkMiddle": "真ん中を基準点にする",
   "camera.tapeTypeLength": "長さを入力:2点目の形状が線に沿って移動します",
   "camera.sectionView": "断面表示",

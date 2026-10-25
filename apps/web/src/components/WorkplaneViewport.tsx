@@ -36,6 +36,7 @@ import { onManifoldReady } from "@/lib/manifoldHandle";
 import { onCustomFontsChanged } from "@/lib/textFonts";
 import { readSavedViews, readStartView, SAVED_VIEW_KEYS, savedViewForKey, writeStartView } from "@/lib/designView";
 import { readCornerRulers, writeCornerRulers } from "@/lib/cornerRulerStore";
+import { readTape, savedTape, writeTape } from "@/lib/tapeStore";
 import { rememberCameraView, useDesignViews } from "@/components/workplane/cameraViews";
 import { fitCameraDepthRange, frameBounds, resetCamera, selectionBounds, startViewOf, setCameraToViewDirection, setCameraToViewFace, stepCameraTurn, syncViewCube, toggleCameraProjection, zoomCameraBy } from "@/components/workplane/cameraRig";
 import { disposeCutPreviewResources, renderFrame } from "@/components/workplane/renderFrame";
@@ -701,6 +702,11 @@ function tapePointToSegmentDistance(point: THREE.Vector3, start: THREE.Vector3, 
   const lengthSq = delta.lengthSq();
   const amount = lengthSq > 1e-12 ? clamp(point.clone().sub(start).dot(delta) / lengthSq, 0, 1) : 0;
   return point.distanceTo(start.clone().addScaledVector(delta, amount));
+}
+
+/** A body whose drawing is not built yet (a design just opened) cannot say whether a measurement still fits it (#881). */
+function tapeObjectBuilt(state: ThreeState, shapeId: string) {
+  return findShapeObject(state, shapeId) !== null;
 }
 
 function tapeAttachmentMatchesTopology(state: ThreeState, attachment: TapeAttachment) {
@@ -1463,7 +1469,13 @@ export function WorkplaneViewport({
   const [workplaneLayerHidden, setWorkplaneLayerHidden] = useState(false);
   const workplaneLayerHiddenRef = useRef(workplaneLayerHidden);
   workplaneLayerHiddenRef.current = workplaneLayerHidden;
-  const [tapeModel, setTapeModel] = useState<TapeModel>(() => toolMemory?.current.tape ?? { points: [], segments: [], startPointId: null, hover: null });
+  // Back from the sketch the measurements come from the editor's memory; on opening the design, from what the design keeps (#881).
+  const [tapeModel, setTapeModel] = useState<TapeModel>(() => toolMemory?.current.tape ?? {
+    ...(readTape(projectId) ?? { points: [], segments: [] }),
+    startPointId: null,
+    hover: null,
+  });
+  const savedTapeKeyRef = useRef<string | null>(null);
   const [tapeOverlay, setTapeOverlay] = useState<TapeOverlayState | null>(null);
   const [rulerDimensionOverlay, setRulerDimensionOverlay] = useState<RulerDimensionOverlayState | null>(null);
   const [cornerRulerMode, setCornerRulerMode] = useState(false);
@@ -2315,6 +2327,14 @@ export function WorkplaneViewport({
   useEffect(() => {
     tapeModelRef.current = tapeModel;
     if (toolMemory) toolMemory.current.tape = tapeModel;
+    // The design keeps its measurements (#881), beside it in the browser and in its .lyl file; a point or hover
+    // moving under the pointer is not a change worth writing.
+    const kept = savedTape(tapeModel);
+    const key = kept ? JSON.stringify(kept) : "";
+    if (key !== savedTapeKeyRef.current) {
+      if (savedTapeKeyRef.current !== null || kept) writeTape(projectIdRef.current, kept);
+      savedTapeKeyRef.current = key;
+    }
     if (threeRef.current) {
       syncTapeOverlay(threeRef.current, tapeModel, tapeOverlayRef, setTapeOverlay, workspaceRef.current.accuracy);
       threeRef.current.needsRender = true;
@@ -3169,9 +3189,18 @@ export function WorkplaneViewport({
   }, [cruiseAsset, moveCruiseGhost, placementWorkplane, drawRound]);
 
   const storeTapeModel = useCallback((next: TapeModel) => {
-    tapeModelRef.current = next;
-    setTapeModel(next);
+    // Whether the measurements are shown is kept unless the change says otherwise (an explicit true or false).
+    const kept = "hidden" in next ? next : { ...next, hidden: tapeModelRef.current.hidden };
+    tapeModelRef.current = kept;
+    setTapeModel(kept);
   }, []);
+
+  // Hidden measurements stay in the design and come back with the button (#881).
+  const setTapeHidden = useCallback((hidden: boolean) => {
+    const current = tapeModelRef.current;
+    if (Boolean(current.hidden) === hidden) return;
+    storeTapeModel({ ...current, hidden });
+  }, [storeTapeModel]);
 
   useEffect(() => {
     const current = tapeModelRef.current;
@@ -3183,7 +3212,7 @@ export function WorkplaneViewport({
     const updatedPoints = current.points.map((point) => {
       if (!point.attachment) return point;
       const attachedShape = shapeById.get(point.attachment.shapeId);
-      if (!attachedShape || (state && !attachedShape.hidden && !tapeAttachmentMatchesTopology(state, point.attachment))) {
+      if (!attachedShape || (state && !attachedShape.hidden && tapeObjectBuilt(state, point.attachment.shapeId) && !tapeAttachmentMatchesTopology(state, point.attachment))) {
         removedPointIds.add(point.id);
         return point;
       }
@@ -3199,7 +3228,7 @@ export function WorkplaneViewport({
     const updatedSegments = current.segments.map((segment) => {
       if (!segment.edge) return segment;
       const attachedShape = shapeById.get(segment.edge.shapeId);
-      if (!attachedShape || (state && !attachedShape.hidden && !tapeEdgeMatchesTopology(state, segment.edge))) {
+      if (!attachedShape || (state && !attachedShape.hidden && tapeObjectBuilt(state, segment.edge.shapeId) && !tapeEdgeMatchesTopology(state, segment.edge))) {
         invalidEdgeSegments.add(segment.id);
         return segment;
       }
@@ -6638,11 +6667,19 @@ export function WorkplaneViewport({
 
   const activateTapeAdd = useCallback(() => {
     if (splitActiveRef.current) return;
+    setTapeHidden(false);
     leaveTapeSubModes();
     setTapeActive(true);
     onWorkplaneModeChange(false);
     onCancelCruise?.();
-  }, [onCancelCruise, onWorkplaneModeChange, setTapeActive]);
+  }, [onCancelCruise, onWorkplaneModeChange, setTapeActive, setTapeHidden]);
+
+  const toggleTapeHidden = useCallback(() => {
+    // Leaving a tool that works on the measurements first, so nothing is left half-set on hidden ones.
+    setTapeActive(false);
+    leaveTapeSubModes();
+    setTapeHidden(!tapeModelRef.current.hidden);
+  }, [setTapeActive, setTapeHidden]);
 
   const toggleTapeWholeEdges = useCallback(() => {
     const next = !tapeWholeEdgesRef.current;
@@ -6652,6 +6689,7 @@ export function WorkplaneViewport({
 
   const activateTapeDelete = useCallback(() => {
     if (splitActiveRef.current) return;
+    setTapeHidden(false);
     setTapeActive(false);
     tapeMoveModeRef.current = false;
     setTapeMoveMode(false);
@@ -6659,10 +6697,11 @@ export function WorkplaneViewport({
     setTapeDeleteMode(true);
     onWorkplaneModeChange(false);
     onCancelCruise?.();
-  }, [onCancelCruise, onWorkplaneModeChange, setTapeActive]);
+  }, [onCancelCruise, onWorkplaneModeChange, setTapeActive, setTapeHidden]);
 
   const activateTapeMove = useCallback(() => {
     if (splitActiveRef.current) return;
+    setTapeHidden(false);
     setTapeActive(false);
     tapeDeleteModeRef.current = false;
     setTapeDeleteMode(false);
@@ -6671,7 +6710,7 @@ export function WorkplaneViewport({
     onWorkplaneModeChange(false);
     onCancelCruise?.();
     onSelectShape(null);
-  }, [onCancelCruise, onSelectShape, onWorkplaneModeChange, setTapeActive]);
+  }, [onCancelCruise, onSelectShape, onWorkplaneModeChange, setTapeActive, setTapeHidden]);
 
   const collapseCameraControls = useCallback(() => {
     setCameraControlsCollapsed(true);
@@ -7220,6 +7259,9 @@ export function WorkplaneViewport({
                   </button>
                   <button className={tapeWholeEdges ? "active" : ""} aria-label={t("camera.tapeWholeEdges")} title={t("camera.tapeWholeEdgesHint")} aria-pressed={tapeWholeEdges} onClick={toggleTapeWholeEdges}>
                     <Spline size={20} strokeWidth={2.25} aria-hidden="true" />
+                  </button>
+                  <button className={tapeModel.hidden ? "active" : ""} aria-label={tapeModel.hidden ? t("camera.showMeasurements") : t("camera.hideMeasurements")} title={tapeModel.hidden ? t("camera.showMeasurements") : t("camera.hideMeasurements")} aria-pressed={Boolean(tapeModel.hidden)} disabled={tapeModel.segments.length === 0} onClick={toggleTapeHidden}>
+                    {tapeModel.hidden ? <EyeOff size={20} strokeWidth={2.25} aria-hidden="true" /> : <Eye size={20} strokeWidth={2.25} aria-hidden="true" />}
                   </button>
                   <button className="tape-clear-button" aria-label={t("camera.deleteAllMeasurements")} title={t("camera.deleteAllMeasurements")} onClick={requestClearTape}>
                     <Trash2 size={19} strokeWidth={2.25} aria-hidden="true" />

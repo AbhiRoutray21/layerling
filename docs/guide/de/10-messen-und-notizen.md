@@ -44,7 +44,7 @@ Die Hilfslinien der grünen Zahlen laufen am Boden entlang, in der Ebene, in der
 
 Mit dem Mittelpunkt zählen die grünen Zahlen bis zur Mitte des Körpers, auch in der Höhe. So setzt du etwa eine Kugel mit ihrer Mitte genau 15 mm neben eine Kante, ohne den Radius abzuziehen. Auf einer Wand setzt du so ein Loch 40 mm von links und 190 mm von oben: Loch markieren, Mittelpunkt einschalten, 40 und 190 eintippen. Die Höhe zählt dort von der Wand aus nach außen.
 
-Das Maßband und das Winkellineal bleiben stehen, wenn du eine Skizze machst und in die 3D-Ansicht zurückkehrst. Beide stehen nicht im Verlauf. Das Maßband wird nicht mit dem Entwurf gespeichert und ist beim Neuladen der Seite weg; das Winkellineal bleibt mit dem Entwurf gespeichert.
+Das Maßband und das Winkellineal bleiben stehen, wenn du eine Skizze machst und in die 3D-Ansicht zurückkehrst. Beide stehen nicht im Verlauf. Das Winkellineal wird mit dem Entwurf gespeichert, ebenso die Messungen des Maßbands, im Browser und in der .lyl-Datei: Beim Öffnen des Entwurfs sind sie wieder da. Der Augenknopf unter den Maßband-Knöpfen blendet alle Messungen aus und wieder ein; ob sie ausgeblendet sind, wird mitgespeichert, und wer eine Messung setzt, verschiebt oder löscht, sieht sie vorher wieder.
 
 ## Abstände zum Nullpunkt und beim Verschieben
 

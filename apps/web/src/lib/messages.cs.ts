@@ -2385,6 +2385,8 @@ export const MESSAGES_CS: Record<MessageKey, string> = {
   "camera.moveMeasurement": "Přesunout body měření",
   "camera.deleteMeasurement": "Smazat část měření",
   "camera.deleteAllMeasurements": "Smazat všechna měření",
+  "camera.hideMeasurements": "Skrýt měření",
+  "camera.showMeasurements": "Zobrazit měření",
   "camera.sectionView": "Pohled v řezu",
   "camera.sectionActive": "Řez je aktivní",
   "camera.sectionInactive": "Řez je vypnutý",

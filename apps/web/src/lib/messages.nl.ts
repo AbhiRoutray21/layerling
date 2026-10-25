@@ -2390,6 +2390,8 @@ export const MESSAGES_NL: Record<MessageKey, string> = {
   "camera.tapeWholeEdgesHint": "Hele randen meten: een klik op een rand meet de hele rand, bij een cirkel bijvoorbeeld de omtrek. Uitgeschakeld zet een klik een punt op de rand, voor de diameter of een andere afstand. Met Alt werkt het voor één klik andersom. Op een cirkel klikt het tegenoverliggende punt vast, zodat de diameter precies klopt.",
   "camera.deleteMeasurement": "Deel van meting verwijderen",
   "camera.deleteAllMeasurements": "Alle metingen verwijderen",
+  "camera.hideMeasurements": "Metingen verbergen",
+  "camera.showMeasurements": "Metingen tonen",
   "camera.tapeMarkMiddle": "Midden als referentiepunt markeren",
   "camera.tapeTypeLength": "Lengte typen: het lichaam bij het tweede punt schuift langs de lijn",
   "camera.sectionView": "Doorsnede",

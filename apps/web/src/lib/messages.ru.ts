@@ -2381,6 +2381,8 @@ export const MESSAGES_RU: Partial<Record<MessageKey, string>> = {
   "camera.tapeWholeEdgesHint": "Измерять кромки целиком: щелчок по кромке измеряет её всю — например, длину окружности. Если выключено, щелчок ставит точку на кромке — для диаметра или любого другого расстояния. Alt на один щелчок меняет поведение на противоположное. На окружности точка напротив прилипает, так что диаметр получается точным.",
   "camera.deleteMeasurement": "Удалить часть измерения",
   "camera.deleteAllMeasurements": "Удалить все измерения",
+  "camera.hideMeasurements": "Скрыть измерения",
+  "camera.showMeasurements": "Показать измерения",
   "camera.tapeMarkMiddle": "Отмечать середину как опорную точку",
   "camera.tapeTypeLength": "Введите длину: тело во второй точке сдвинется вдоль линии",
   "camera.sectionView": "Вид в разрезе",

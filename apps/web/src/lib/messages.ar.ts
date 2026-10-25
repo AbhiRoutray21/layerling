@@ -2399,6 +2399,8 @@ export const MESSAGES_AR: Partial<Record<MessageKey, string>> = {
   "camera.tapeWholeEdgesHint": "قياس الحواف كاملة: النقر على حافة يقيسها كلها، كمحيط دائرة مثلًا. وعند الإيقاف، يضع النقر نقطة على الحافة، لقياس القطر أو أي مسافة أخرى. وAlt يعكس ذلك لنقرة واحدة. وعلى الدائرة تلتقط النقطة المقابلة تلقائيًا، فيأتي القطر دقيقًا.",
   "camera.deleteMeasurement": "حذف قياس",
   "camera.deleteAllMeasurements": "حذف جميع القياسات",
+  "camera.hideMeasurements": "إخفاء القياسات",
+  "camera.showMeasurements": "إظهار القياسات",
   "camera.tapeMarkMiddle": "تعليم المنتصف كنقطة مرجعية",
   "camera.tapeTypeLength": "اكتب طولاً: يتحرك الجسم عند النقطة الثانية على طول الخط",
   "camera.sectionView": "عرض المقطع",
