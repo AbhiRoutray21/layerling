@@ -181,7 +181,7 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "welcome.morePivotTitle": "Drehpunkt setzen",
   "welcome.morePivotBody": "um die Achse eines Rohrendes oder die Mitte einer Fläche drehen statt um die Mitte des Körpers. Bei einem einzelnen Körper bleibt der Drehpunkt an ihm hängen.",
   "welcome.moreMeasureTitle": "Messen",
-  "welcome.moreMeasureBody": "Maßband (eine eingetippte Länge rückt den Körper auf genau diesen Abstand), Lineal und Winkellineal, Abstände zum Nullpunkt – auch für mehrere markierte Körper –, Notizen direkt an der Arbeitsfläche, Referenzbilder zum Ausrichten (etwa das Foto einer Platine unter ihrem Gehäuse, auf Maß kalibriert) und eine Schnittansicht, die das Modell zum Hineinschauen aufschneidet, darauf Wandstärken und Spalte misst und den Schnitt als SVG für Laser oder Schablone speichert.",
+  "welcome.moreMeasureBody": "Maßband (eine eingetippte Länge rückt den Körper auf genau diesen Abstand; seine Messungen bleiben im Entwurf und lassen sich ausblenden), Lineal und Winkellineal, Abstände zum Nullpunkt – auch für mehrere markierte Körper –, Notizen direkt an der Arbeitsfläche, Referenzbilder zum Ausrichten (etwa das Foto einer Platine unter ihrem Gehäuse, auf Maß kalibriert) und eine Schnittansicht, die das Modell zum Hineinschauen aufschneidet, darauf Wandstärken und Spalte misst und den Schnitt als SVG für Laser oder Schablone speichert.",
   "welcome.moreSaveTitle": "In den eigenen Ordner speichern",
   "welcome.moreSaveBody": "in Chrome und Edge wählst du Ordner und Namen selbst, und Strg+S speichert den Entwurf wieder in diese Datei - eine geöffnete Datei wird an Ort und Stelle ersetzt. Andere Browser laden sie herunter.",
   "welcome.moreBackupTitle": "Alle Entwürfe sichern",

@@ -543,6 +543,18 @@ function tapeScreenPointList(points: THREE.Vector3[], state: ThreeState) {
   }).join(" ");
 }
 
+/** The length of every measurement in millimetres, for MCP: a measured edge counts along the edge. */
+export function tapeSegmentLengths(state: ThreeState, model: TapeModel): Array<{ id: string; length: number }> {
+  return model.segments.flatMap((segment) => {
+    const start = model.points.find((point) => point.id === segment.startId);
+    const end = model.points.find((point) => point.id === segment.endId);
+    if (!start || !end) return [];
+    const edgePoints = segment.edge ? tapeEdgeWorldPoints(state, segment.edge) : [];
+    const worldPoints = edgePoints.length >= 2 ? edgePoints : [tapePointWorld(state, start), tapePointWorld(state, end)];
+    return [{ id: segment.id, length: Math.round(tapePolylineLength(worldPoints) * 1000) / 1000 }];
+  });
+}
+
 export function syncTapeOverlay(
   state: ThreeState,
   model: TapeModel,

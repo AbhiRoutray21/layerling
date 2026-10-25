@@ -68,7 +68,7 @@ import { hydrateProjectShapeState, reconcileLoadedProjectShapeCacheEntry, type I
 import { ToolbarImportIcon } from "@/components/toolbarIcons";
 import { writeDesignView, writeSavedViews } from "@/lib/designView";
 import { writeCornerRulers } from "@/lib/cornerRulerStore";
-import { writeTape } from "@/lib/tapeStore";
+import { readTape, writeTape } from "@/lib/tapeStore";
 import { useFileAccept } from "@/lib/fileAccept";
 import { lylFileAccessSupported, onLylFilesLaunched, pickFilesToImport, rememberLylFile, type LylFileHandle } from "@/lib/lylFileAccess";
 import { exportLylProject, importLylProject, inspectLylProjectPackage, LYL_CREATED_WITH_VERSION, LYL_MEDIA_TYPE, withLylProjectName } from "@/lib/lylProject";
@@ -2586,6 +2586,8 @@ export default function Home() {
       };
       const entry = projectShapeCacheEntry(now, stored.shapes ?? [], stored.history, stored.historyIndex, stored.assets ?? [], stored.attachments);
       await saveProjectShapes(copy.id, entry, projectShapeSaveContext(copy));
+      // The bodies keep their ids in the copy, so the measurements of the tape measure fit it as they did the original (#881).
+      writeTape(copy.id, readTape(source.id));
       // With new designs on the server, the copy goes there too, beside a server original or into the open folder.
       const { project: placed, problem } = await placeNewDesign(copy, source.sharedProject?.path ?? sharedPathRef.current);
       setProjectShapesById((current) => ({ ...current, [placed.id]: entry }));

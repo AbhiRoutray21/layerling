@@ -1199,6 +1199,17 @@ export const tools = [
     },
   },
   {
+    name: "layerling_measurements",
+    description: "The measurements of the editor's tape measure: what is measured and whether they are shown. Call with nothing to read them: visible and measurements, each with its id and its length in millimetres (a measured edge counts along the edge). visible true shows the measurements, false hides them, like the eye among the tape measure's buttons; hidden measurements stay in the design. The measurements belong to the design: they stay in the browser and travel in a .lyl file, never in the undo history, and hiding is kept too. Combine with layerling_capture_image to see them (or not) in the picture. Not available while a sketch is open.",
+    inputSchema: {
+      ...editorTargetSchema,
+      properties: {
+        ...editorTargetSchema.properties,
+        visible: { type: "boolean", description: "true shows the measurements, false hides them. Left out they stay as they are." },
+      },
+    },
+  },
+  {
     name: "layerling_saved_view",
     description: "The four views a design keeps under the keys 7, 8, 9 and 0, like Shift+key (save) and the key alone (show) in the editor. save stores the current view - angle, pan, zoom and flat or perspective - under that key; show turns the camera back to the view saved there and answers with an error if none is. Both may be given; save comes first. Call with neither to read which keys hold a view. Saved views belong to the design: they stay in the browser and travel in a .lyl file, never in the undo history. Combine with layerling_capture_image (face \"current\") for pictures from the same angle every time. startView \"save\" makes the current view the start view of this browser, like \"Use current view\" under Settings > Appearance: new designs open in it and Home (and layerling_capture_image face \"home\") goes back to it; \"reset\" goes back to the standard start view. Returns keys (key, saved), startView (whether a start view of the user's own is set) and, after show, shown.",
     inputSchema: {

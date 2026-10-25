@@ -201,6 +201,7 @@ const HISTORY_VIEW_MCP_ACTIONS = new Set([
   "measure_section",
   "set_section_view",
   "show_workplane",
+  "measurements",
   "saved_view",
   "export_section_svg",
   "export_drawing",
@@ -349,6 +350,8 @@ declare global {
     layerlingSectionView?: (patch: Partial<SectionPlaneSettings> & { center?: boolean }) => { settings: SectionPlaneSettings; bounds: { min: number; max: number; center: number } };
     /** "Hide workplane" in the camera bar for MCP: sets it when given, returns whether the plate is shown. */
     layerlingWorkplaneDisplay?: (visible?: boolean) => { visible: boolean };
+    /** The tape measure's measurements for MCP: shows or hides them when asked, returns what is there (#881). */
+    layerlingMeasurements?: (request?: { visible?: boolean }) => { visible: boolean; measurements: Array<{ id: string; length: number }> };
     /** The four saved views (keys 7, 8, 9, 0) for MCP: saves or shows one when asked, returns which keys hold a view. */
     layerlingSavedViews?: (request?: { save?: number; show?: number; startView?: "save" | "reset" }) => { keys: { key: string; saved: boolean }[]; shown?: boolean; startView: boolean };
   }
@@ -10692,6 +10695,12 @@ export function LayerlingEditor({
         if (!window.layerlingWorkplaneDisplay) throw new Error("The workplane display is not available in this editor");
         if (params.visible !== undefined && typeof params.visible !== "boolean") throw new Error("visible must be true or false");
         return window.layerlingWorkplaneDisplay(params.visible as boolean | undefined);
+      }
+
+      if (command.action === "measurements") {
+        if (!window.layerlingMeasurements) throw new Error("The tape measure is not available in this editor (a sketch is open, or the second view)");
+        if (params.visible !== undefined && typeof params.visible !== "boolean") throw new Error("visible must be true or false");
+        return window.layerlingMeasurements(typeof params.visible === "boolean" ? { visible: params.visible } : undefined);
       }
 
       if (command.action === "set_section_view") {

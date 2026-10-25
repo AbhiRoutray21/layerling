@@ -182,7 +182,7 @@ export const MESSAGES_EN = {
   "welcome.morePivotTitle": "Rotation pivot",
   "welcome.morePivotBody": "turn around the axis of a pipe end or the centre of a face instead of the body's centre. On a single body the pivot stays with it.",
   "welcome.moreMeasureTitle": "Measure",
-  "welcome.moreMeasureBody": "tape measure (a typed length moves the body to exactly that distance), ruler and framing square, distances to the origin - for several selected bodies too -, notes right on the workplane, reference images to line parts up on (a photo of a board under its case, calibrated to size), and a section view that cuts the model open to look inside, measures wall thickness and gaps on the cut and saves it as an SVG for a laser or a template.",
+  "welcome.moreMeasureBody": "tape measure (a typed length moves the body to exactly that distance; its measurements stay with the design and can be hidden), ruler and framing square, distances to the origin - for several selected bodies too -, notes right on the workplane, reference images to line parts up on (a photo of a board under its case, calibrated to size), and a section view that cuts the model open to look inside, measures wall thickness and gaps on the cut and saves it as an SVG for a laser or a template.",
   "welcome.moreSaveTitle": "Save into your folder",
   "welcome.moreSaveBody": "in Chrome and Edge you choose the folder and name yourself, and Ctrl+S saves the design into that file again - a file you opened is replaced in place. Other browsers download it.",
   "welcome.moreBackupTitle": "Back up all designs",
