@@ -1540,6 +1540,7 @@ export const MESSAGES_ZH_TW: Partial<Record<MessageKey, string>> = {
   "contextMenu.carry": "放置在面上",
   "contextMenu.simplify": "簡化網格…",
   "contextMenu.markCenter": "標記中心",
+  "contextMenu.markFaceCenter": "標記此面的中心",
   "contextMenu.markCorners": "標記角點",
   "contextMenu.markMidpoints": "標記邊中點",
   "contextMenu.removeAllPoints": "刪除所有參考點（{count}）",

@@ -1508,6 +1508,7 @@ export const MESSAGES_HU: Partial<Record<MessageKey, string>> = {
   "contextMenu.drop": "Leejtés a munkasíkra",
   "contextMenu.simplify": "Háló egyszerűsítése…",
   "contextMenu.markCenter": "A középpont megjelölése",
+  "contextMenu.markFaceCenter": "Ennek a lapnak a közepe jelölése",
   "contextMenu.markCorners": "A sarkok megjelölése",
   "contextMenu.markMidpoints": "Az élfelezők megjelölése",
   "contextMenu.removeAllPoints": "Minden referenciapont törlése ({count})",

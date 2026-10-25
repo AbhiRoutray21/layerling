@@ -1576,6 +1576,7 @@ export const MESSAGES_AR: Partial<Record<MessageKey, string>> = {
   "contextMenu.carry": "وضع على وجه",
   "contextMenu.simplify": "تبسيط الشبكة…",
   "contextMenu.markCenter": "تعليم المركز",
+  "contextMenu.markFaceCenter": "تحديد مركز هذا الوجه",
   "contextMenu.markCorners": "تعليم الزوايا",
   "contextMenu.markMidpoints": "تعليم منتصفات الحواف",
   "contextMenu.removeAllPoints": "حذف جميع النقاط المرجعية ({count})",

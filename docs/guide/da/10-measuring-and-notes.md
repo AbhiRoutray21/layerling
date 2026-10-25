@@ -76,7 +76,7 @@ Noter gemmes i designet, optræder i ingen eksport og kan vises eller skjules me
 
 ## Referencepunkter
 
-Et referencepunkt er et bart mærke i rummet, som en blyantsmarkering eller et layout-punkt i et værksted: det hører til ingen form, printes aldrig, og andre ting snapper til det. Højreklik en form og vælg {{ui:contextMenu.markCenter}}, {{ui:contextMenu.markCorners}} eller {{ui:contextMenu.markMidpoints}}: punkterne dukker op på formens øverste flade (af hele markeringen, hvis du valgte flere).
+Et referencepunkt er et bart mærke i rummet, som en blyantsmarkering eller et layout-punkt i et værksted: det hører til ingen form, printes aldrig, og andre ting snapper til det. Højreklik en form og vælg {{ui:contextMenu.markCenter}}, {{ui:contextMenu.markCorners}} eller {{ui:contextMenu.markMidpoints}}: punkterne dukker op på formens øverste flade (af hele markeringen, hvis du valgte flere). {{ui:contextMenu.markFaceCenter}} sætter i stedet ét i midten af den flade du højreklikkede på, for eksempel på en side eller en ende.
 
 - Træk et punkt for at flytte det, eller klik det for at se dets koordinater og taste nye; de bruger den enhed du har sat. Kortet kan trækkes væk i dets titellinje hvis det dækker noget, og et dobbeltklik på titellinjen sætter det tilbage. {{ui:common.delete}} fjerner det.
   Hvert kort kan trækkes væk alene, så de andre kort bliver hvor de er. Det kort du rørte sidst ligger foran de andre. **Slet alle** i et kort, eller **Slet alle referencepunkter** i højreklikmenuen (på en form eller på et tomt sted i 3D-visningen), sletter alle punkter på én gang.

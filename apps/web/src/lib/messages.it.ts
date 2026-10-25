@@ -1494,6 +1494,7 @@ export const MESSAGES_IT: Partial<Record<MessageKey, string>> = {
   "contextMenu.drop": "Posiziona sul piano di lavoro",
   "contextMenu.simplify": "Semplifica mesh…",
   "contextMenu.markCenter": "Segna il centro",
+  "contextMenu.markFaceCenter": "Segna il centro di questa faccia",
   "contextMenu.markCorners": "Segna gli angoli",
   "contextMenu.markMidpoints": "Segna i punti medi degli spigoli",
   "contextMenu.removeAllPoints": "Elimina tutti i punti di riferimento ({count})",

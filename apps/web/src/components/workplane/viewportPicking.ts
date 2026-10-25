@@ -4,7 +4,7 @@ import type { PointerEvent as ReactPointerEvent } from "react";
 import type { WorkplaneShape } from "@/types/layerling";
 import type { ThreeState } from "@/components/workplane/ViewportOverlays";
 import { outwardFaceNormal } from "@/lib/layFlat";
-import { planarFaceCentroid, type PivotPoint } from "@/lib/rotationPivot";
+import { planarFaceCentroid, planarFaceTriangles, type PivotPoint } from "@/lib/rotationPivot";
 import { roundFaceTriangles, type RoundFaceAxis } from "@/lib/roundFaceAxis";
 
 /**
@@ -183,6 +183,20 @@ export function pickRotationPivot(state: ThreeState, clientX: number, clientY: n
   if (!hit || hit.faceIndex === undefined || hit.faceIndex === null) return null;
   const positions = worldTrianglePositions(hit.object as THREE.Mesh<THREE.BufferGeometry>);
   return planarFaceCentroid(positions, hit.faceIndex) ?? { x: hit.point.x, y: hit.point.y, z: hit.point.z };
+}
+
+/**
+ * The middle of the flat face under the pointer, for a reference point on it (#881): the centre of the area of every
+ * triangle in that plane joined to the one hit. A curved surface is no face with a middle, so a lone facet gives null.
+ */
+export function pickFaceCentre(state: ThreeState, clientX: number, clientY: number): PivotPoint | null {
+  aimPickRay(state, clientX, clientY, RENDER_LAYER_SHAPES);
+  const hit = firstShapeHit(state, { needsFace: true });
+  if (!hit || hit.faceIndex === undefined || hit.faceIndex === null) return null;
+  const positions = worldTrianglePositions(hit.object as THREE.Mesh<THREE.BufferGeometry>);
+  const face = planarFaceTriangles(positions, hit.faceIndex);
+  if (!face || face.triangles.length < 2) return null;
+  return planarFaceCentroid(positions, hit.faceIndex);
 }
 
 /** A face for "Align faces": as for Lay flat, and for a round face (a hole, a pin) its axis as well. */

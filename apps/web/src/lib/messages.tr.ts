@@ -1526,6 +1526,7 @@ export const MESSAGES_TR: Partial<Record<MessageKey, string>> = {
   "contextMenu.drop": "Çalışma düzlemine indir",
   "contextMenu.simplify": "Ağı sadeleştir…",
   "contextMenu.markCenter": "Merkezi işaretle",
+  "contextMenu.markFaceCenter": "Bu yüzeyin merkezini işaretle",
   "contextMenu.markCorners": "Köşeleri işaretle",
   "contextMenu.markMidpoints": "Kenar ortalarını işaretle",
   "contextMenu.removeAllPoints": "Tüm referans noktalarını sil ({count})",

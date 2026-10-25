@@ -83,7 +83,7 @@ import { syncHistoryPickHighlight, syncPickHighlight } from "@/components/workpl
 import { orbitViewBy, panViewBy } from "@/lib/viewArrowKeys";
 import { useViewportKeyboardHooks } from "@/components/workplane/viewportKeyboard";
 import { useViewportDoubleClick } from "@/components/workplane/useViewportDoubleClick";
-import { aimPickRay, firstShapeHit, pickImagePoint, pickLayFlatFace, pickMateFace, pickRotationPivot, pickShapeAt, pointerRayFor, shapesUnderPointer, rayPointOnRotationPlane, RENDER_LAYER_SHAPES, splitAxisParameter, usePickOnlyPointer, type LayFlatPick, type PickOnlySelection } from "@/components/workplane/viewportPicking";
+import { aimPickRay, firstShapeHit, pickImagePoint, pickLayFlatFace, pickMateFace, pickFaceCentre, pickRotationPivot, pickShapeAt, pointerRayFor, shapesUnderPointer, rayPointOnRotationPlane, RENDER_LAYER_SHAPES, splitAxisParameter, usePickOnlyPointer, type LayFlatPick, type PickOnlySelection } from "@/components/workplane/viewportPicking";
 import { fastEdgesGeometry } from "@/lib/fastEdgesGeometry";
 import { RENDER_LAYER_HELPERS, type PointCardOffset, type ThreeState, type MoveDimensionSession, type NoteOverlayState, type TapePoint, type TapeAttachment, type TapeEdgeAttachment, type TapeModel, type TapeOverlayState, type TapeCandidate, type DragItem, quaternionForShape, projectToScreen, syncMoveDimensionWorldLines, tapeShapeDimensions, tapePointWorld, tapeEdgeWorldPoints, tapeSegmentWorldPoints, tapeMovableShapeId, syncTapeOverlay, tapeSegmentLengths, syncNoteOverlay, NoteOverlay, TapeOverlay, type RulerDimensionOverlayItem, type RulerDimensionOverlayState, syncRulerDimensionOverlay, RulerDimensionOverlay, type CornerRulerInstance, type CornerRulerOverlayState, syncCornerRulerToolOverlay, CornerRulerToolOverlay, syncOriginDimensionWorldLines, shapeCenter, shapeLocalExtents, projectShapeExtent, projectShapesExtent, type OriginDimensionFrame, formatMeasure, findShapeObject, releaseSharedShapeMaterials, disposeChildren, disposeObject } from "@/components/workplane/ViewportOverlays";
 import { MIN_SHAPE_SIZE, RENDER_LAYER_PREVIEWS, overhangUniforms, setEdgeLineStyle, setStrongHoles, setRulerInchScale, MODIFIER_EDGE_DEPTH_PULL, clamp, selectionFrameForShapes, refreshFrozenObjectMatrix, updateShapeObjectTransform, applySectionClipping, rebuildShapes, rebuildModifierEdges, rebuildSelectionHelpers, cadFacePickLayerMesh, syncCadFaceLayer, syncBentTubeSegment, TRANSPARENT_SOLID_OPACITY, createShapeObject } from "./workplane/viewportShapeObjects";
@@ -169,7 +169,8 @@ type WorkplaneViewportProps = {
   onSelectShape: (id: string | string[] | null, mode?: "replace" | "toggle") => void;
   /** A right click that did not turn the view: on a body (now selected) or on empty space. */
   /** `stackIds`: every body under the pointer, front to back, for "Select other" (#804). */
-  onShapeContextMenu?: (request: { shapeId: string | null; clientX: number; clientY: number; stackIds: string[] }) => void;
+  /** `facePoint`: the middle of the flat face under the pointer, when there is one (#881). */
+  onShapeContextMenu?: (request: { shapeId: string | null; clientX: number; clientY: number; stackIds: string[]; facePoint?: { x: number; y: number; z: number } }) => void;
   /** Bodies marked with an outline that shows through what stands in front: the one a row of "Select other" points at (#804). */
   highlightIds?: readonly string[];
   onSetPlacementWorkplane: (workplane: PlacementWorkplane, source: "shape" | "base") => void;
@@ -4820,6 +4821,12 @@ export function WorkplaneViewport({
     const state = threeRef.current;
     return state ? shapesUnderPointer(state, shapesRef.current, clientX, clientY) : [];
   }, []);
+  // The right-click menu offers a reference point in the middle of the flat face it lands on (#881).
+  const faceCentreAt = useCallback((clientX: number, clientY: number, shapeId: string | null) => {
+    const state = threeRef.current;
+    const facePoint = state && shapeId ? pickFaceCentre(state, clientX, clientY) : null;
+    return facePoint ? { facePoint } : {};
+  }, []);
   const highlightKey = highlightIds?.join("\0") ?? "";
   useEffect(() => {
     const state = threeRef.current;
@@ -5402,10 +5409,10 @@ export function WorkplaneViewport({
       cancelGestureForCameraRef.current();
       const shapeId = pickShape(x, y, "touch");
       if (shapeId && !selectedIdsRef.current.includes(shapeId)) onSelectShape(shapeId);
-      onShapeContextMenu({ shapeId, clientX: x, clientY: y, stackIds: shapeStackAt(x, y) });
+      onShapeContextMenu({ shapeId, clientX: x, clientY: y, stackIds: shapeStackAt(x, y), ...faceCentreAt(x, y, shapeId) });
     }, LONG_PRESS_MS);
     longPressRef.current = { pointerId, timer, stop };
-  }, [cancelLongPress, onSelectShape, onShapeContextMenu, pickShape, shapeStackAt]);
+  }, [cancelLongPress, faceCentreAt, onSelectShape, onShapeContextMenu, pickShape, shapeStackAt]);
 
   useEffect(() => cancelLongPress, [cancelLongPress]);
 
@@ -6358,7 +6365,7 @@ export function WorkplaneViewport({
         if (onShapeContextMenu && Math.hypot(event.clientX - rightPress.x, event.clientY - rightPress.y) < 5) {
           const shapeId = pickShape(event.clientX, event.clientY, event.pointerType);
           if (shapeId && !selectedIdsRef.current.includes(shapeId)) onSelectShape(shapeId);
-          onShapeContextMenu({ shapeId, clientX: event.clientX, clientY: event.clientY, stackIds: shapeStackAt(event.clientX, event.clientY) });
+          onShapeContextMenu({ shapeId, clientX: event.clientX, clientY: event.clientY, stackIds: shapeStackAt(event.clientX, event.clientY), ...faceCentreAt(event.clientX, event.clientY, shapeId) });
         }
         return;
       }
@@ -6539,7 +6546,7 @@ export function WorkplaneViewport({
       }
       onInteractionActiveChange?.(false);
     },
-    [cancelGestureForCamera, clearMoveDimensions, onDuplicateShapesMoved, onInteractionActiveChange, onSelectShape, onUpdateShape, rememberResizeAnchor, setMarqueeFromState, shapesInMarquee, suppressCornerEditAfterDrag, suppressLiftEditAfterDrag, onShapeContextMenu, pickShape, shapeStackAt],
+    [cancelGestureForCamera, clearMoveDimensions, onDuplicateShapesMoved, onInteractionActiveChange, onSelectShape, onUpdateShape, rememberResizeAnchor, setMarqueeFromState, shapesInMarquee, suppressCornerEditAfterDrag, suppressLiftEditAfterDrag, onShapeContextMenu, pickShape, shapeStackAt, faceCentreAt],
   );
 
   const handleDrop = useCallback(

@@ -1627,6 +1627,7 @@ export const MESSAGES_CS: Record<MessageKey, string> = {
   "contextMenu.carry": "Položit na plochu",
   "contextMenu.simplify": "Zjednodušit polygonovou síť…",
   "contextMenu.markCenter": "Označit střed",
+  "contextMenu.markFaceCenter": "Označit střed této stěny",
   "contextMenu.markCorners": "Označit rohy",
   "contextMenu.markMidpoints": "Označit středy hran",
   "contextMenu.deleteKey": "Del",

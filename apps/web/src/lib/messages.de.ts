@@ -1567,6 +1567,7 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "contextMenu.carry": "Auf eine Fläche setzen",
   "contextMenu.simplify": "Netz vereinfachen…",
   "contextMenu.markCenter": "Mitte markieren",
+  "contextMenu.markFaceCenter": "Mitte dieser Fläche markieren",
   "contextMenu.markCorners": "Ecken markieren",
   "contextMenu.markMidpoints": "Kantenmitten markieren",
   "contextMenu.removeAllPoints": "Alle Bezugspunkte löschen ({count})",

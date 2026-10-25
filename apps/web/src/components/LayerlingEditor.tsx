@@ -12733,14 +12733,14 @@ export function LayerlingEditor({
    * Auswahl - der Viewport hat den angeklickten Koerper schon ausgewaehlt.
    */
   // `stack`: every body under the pointer, front to back; `listing`: the menu shows them for "Select other" (#804).
-  const [shapeContextMenu, setShapeContextMenu] = useState<{ x: number; y: number; onShape: boolean; stack: string[]; listing?: boolean } | null>(null);
+  const [shapeContextMenu, setShapeContextMenu] = useState<{ x: number; y: number; onShape: boolean; stack: string[]; listing?: boolean; facePoint?: { x: number; y: number; z: number } } | null>(null);
   const [menuHighlightIds, setMenuHighlightIds] = useState<string[]>([]);
   const closeShapeContextMenu = useCallback(() => {
     setShapeContextMenu(null);
     setMenuHighlightIds([]);
   }, []);
-  const openShapeContextMenu = useCallback((request: { shapeId: string | null; clientX: number; clientY: number; stackIds: string[] }) => {
-    setShapeContextMenu({ x: request.clientX, y: request.clientY, onShape: Boolean(request.shapeId), stack: request.stackIds });
+  const openShapeContextMenu = useCallback((request: { shapeId: string | null; clientX: number; clientY: number; stackIds: string[]; facePoint?: { x: number; y: number; z: number } }) => {
+    setShapeContextMenu({ x: request.clientX, y: request.clientY, onShape: Boolean(request.shapeId), stack: request.stackIds, facePoint: request.facePoint });
     setMenuHighlightIds([]);
   }, []);
   // Locking (Ctrl+L, the outliner, the inspector) while a tool is open puts the tool down,
@@ -12875,6 +12875,7 @@ export function LayerlingEditor({
     if (!allHoles) {
       items.push(
         { key: "markCenter", label: t("contextMenu.markCenter"), separated: true, onSelect: () => markSelectionPoints("center") },
+        ...(shapeContextMenu.facePoint ? [{ key: "markFaceCenter", label: t("contextMenu.markFaceCenter"), onSelect: () => addReferencePoints([shapeContextMenu.facePoint as { x: number; y: number; z: number }]) }] : []),
         { key: "markCorners", label: t("contextMenu.markCorners"), onSelect: () => markSelectionPoints("corners") },
         { key: "markMidpoints", label: t("contextMenu.markMidpoints"), onSelect: () => markSelectionPoints("midpoints") },
         ...(referencePoints(notes).length > 0 ? [{ key: "removePoints", label: t("contextMenu.removeAllPoints", { count: referencePoints(notes).length }), danger: true, onSelect: removeAllReferencePoints }] : []),

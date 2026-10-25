@@ -1568,6 +1568,7 @@ export const MESSAGES_EN = {
   "contextMenu.carry": "Set down on a face",
   "contextMenu.simplify": "Simplify mesh…",
   "contextMenu.markCenter": "Mark the centre",
+  "contextMenu.markFaceCenter": "Mark the centre of this face",
   "contextMenu.markCorners": "Mark the corners",
   "contextMenu.markMidpoints": "Mark the edge middles",
   "contextMenu.removeAllPoints": "Delete all reference points ({count})",

@@ -70,7 +70,7 @@ Poznámky se ukládají v projektu, do exportu se nezahrnují a jejich viditelno
 
 ## Referenční body
 
-Referenční bod je samostatná značka v prostoru, podobná rysce při práci v dílně. Nepatří žádnému tělesu, netiskne se a ostatní objekty se na něj přichytávají. Klikněte pravým tlačítkem na těleso a vyberte {{ui:contextMenu.markCenter}}, {{ui:contextMenu.markCorners}} nebo {{ui:contextMenu.markMidpoints}}. Body vzniknou na horní ploše tělesa, případně celého výběru.
+Referenční bod je samostatná značka v prostoru, podobná rysce při práci v dílně. Nepatří žádnému tělesu, netiskne se a ostatní objekty se na něj přichytávají. Klikněte pravým tlačítkem na těleso a vyberte {{ui:contextMenu.markCenter}}, {{ui:contextMenu.markCorners}} nebo {{ui:contextMenu.markMidpoints}}. Body vzniknou na horní ploše tělesa, případně celého výběru. {{ui:contextMenu.markFaceCenter}} místo toho umístí bod doprostřed rovné stěny, na kterou jste klikli pravým tlačítkem, třeba na boku nebo na konci.
 
 - Bod přesunete tažením nebo kliknutím otevřete souřadnice v nastavených jednotkách. Každou kartu lze přetáhnout za záhlaví samostatně; ostatní zůstanou na místě. Dvojklik ji vrátí a naposledy použitá karta se zobrazí vpředu. **Odstranit všechny** na kartě nebo v nabídce pravého tlačítka odstraní všechny body najednou. {{ui:common.delete}} odstraní jednotlivý bod.
 - Bod vytvoří i měřicí nástroj: {{ui:camera.tapeMarkMiddle}} pod hodnotou měření označí jeho střed, například střed kruhového otvoru. Měřit lze také od takového bodu: pásmo se k referenčním bodům přichytává stejně jako k rohům.

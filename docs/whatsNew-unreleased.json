@@ -8,5 +8,15 @@
       "de": "Die Messungen des Maßbands werden jetzt mit dem Entwurf gespeichert, auch in der .lyl-Datei, und sind beim Öffnen wieder da. Ein neuer Augenknopf unter den Maßband-Knöpfen blendet sie aus und wieder ein; auch das wird gemerkt.",
       "en": "The measurements of the tape measure are now saved with the design, also in the .lyl file, and are back when you open it. A new eye button among the tape measure's buttons hides and shows them; that is remembered too."
     }
+  },
+  {
+    "title": {
+      "de": "Mitte einer Fläche markieren",
+      "en": "Mark the centre of a face"
+    },
+    "body": {
+      "de": "Im Rechtsklickmenü eines Körpers setzt „Mitte dieser Fläche markieren“ einen Bezugspunkt in die Mitte der ebenen Fläche, auf die du geklickt hast, an einer Seite oder einem Ende, nicht nur oben. Das Maßband rastet daran ein.",
+      "en": "In the right-click menu of a body, \"Mark the centre of this face\" puts a reference point in the middle of the flat face you clicked, on a side or an end, not only on top. The tape measure snaps to it."
+    }
   }
 ]

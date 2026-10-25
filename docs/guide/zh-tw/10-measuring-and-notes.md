@@ -72,7 +72,7 @@ summary: 捲尺、標尺與角尺，到原點的距離，附著在零件上的�
 
 ## 參考點
 
-參考點是空間中的一個單純標記，就像工作坊裡的鉛筆記號或放樣點：它不屬於任何實體，永遠不會被列印，其他東西會吸附到它上面。在實體上按右鍵，選擇 {{ui:contextMenu.markCenter}}、{{ui:contextMenu.markCorners}} 或 {{ui:contextMenu.markMidpoints}}：點會出現在實體的頂面（如果選取了多個，則出現在整個選取範圍的頂面）。
+參考點是空間中的一個單純標記，就像工作坊裡的鉛筆記號或放樣點：它不屬於任何實體，永遠不會被列印，其他東西會吸附到它上面。在實體上按右鍵，選擇 {{ui:contextMenu.markCenter}}、{{ui:contextMenu.markCorners}} 或 {{ui:contextMenu.markMidpoints}}：點會出現在實體的頂面（如果選取了多個，則出現在整個選取範圍的頂面）。 {{ui:contextMenu.markFaceCenter}} 則把點放在你按右鍵的那個平面的中心，例如側面或端面。
 
 - 拖曳點可移動它，或點擊它查看座標並輸入新座標；座標會使用你設定的單位。如果卡片擋住了東西，可以抓住標題把它單獨拖開：其他卡片留在原處，雙擊標題即可歸位。你最後動過的卡片會排在其他卡片前面。卡片中的 **Delete all**，或右鍵選單（在實體上，或在 3D 檢視空白處）中的 **Delete all reference points**，會一次刪除所有點。{{ui:common.delete}} 會將它移除。
 - 捲尺也能標記點：{{ui:camera.tapeMarkMiddle}}，即量測下方的十字準星按鈕，會在量測中間放一個點，例如圓孔的中心。它也能從一個點開始量測：捲尺吸附參考點就像吸附角一樣。

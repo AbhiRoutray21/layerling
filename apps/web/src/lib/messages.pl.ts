@@ -1564,6 +1564,7 @@ export const MESSAGES_PL: Partial<Record<MessageKey, string>> = {
   "contextMenu.carry": "Odłóż na ścianę",
   "contextMenu.simplify": "Uprość siatkę…",
   "contextMenu.markCenter": "Zaznacz środek",
+  "contextMenu.markFaceCenter": "Zaznacz środek tej ściany",
   "contextMenu.markCorners": "Zaznacz narożniki",
   "contextMenu.markMidpoints": "Zaznacz środki krawędzi",
   "contextMenu.removeAllPoints": "Usuń wszystkie punkty odniesienia ({count})",

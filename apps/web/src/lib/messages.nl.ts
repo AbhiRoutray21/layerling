@@ -1567,6 +1567,7 @@ export const MESSAGES_NL: Record<MessageKey, string> = {
   "contextMenu.carry": "Op een vlak zetten",
   "contextMenu.simplify": "Mesh vereenvoudigen…",
   "contextMenu.markCenter": "Middelpunt markeren",
+  "contextMenu.markFaceCenter": "Midden van dit vlak markeren",
   "contextMenu.markCorners": "Hoeken markeren",
   "contextMenu.markMidpoints": "Randmiddens markeren",
   "contextMenu.removeAllPoints": "Alle referentiepunten verwijderen ({count})",
