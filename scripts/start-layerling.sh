@@ -11,7 +11,7 @@ URL="http://127.0.0.1:$PORT/"
 
 open_browser() {
   if command -v xdg-open >/dev/null 2>&1; then
-    xdg-open "$URL" >/dev/null 2>&1
+    # xdg-open "$URL" >/dev/null 2>&1
   elif command -v open >/dev/null 2>&1; then
     open "$URL"
   else
