@@ -48,7 +48,7 @@ describe("which attachments the viewer shows", () => {
     expect(attachmentView({ mediaType: "text/markdown" })).toBe("markdown");
     expect(attachmentView({ mediaType: "text/plain" })).toBe("text");
     expect(attachmentView({ mediaType: "application/pdf" })).toBeUndefined();
-    for (const type of ATTACHMENT_TYPES) expect(["markdown", "text", undefined], type.extension).toContain(type.view);
+    for (const type of ATTACHMENT_TYPES) expect(["markdown", "text", "image", undefined], type.extension).toContain(type.view);
   });
 });
 

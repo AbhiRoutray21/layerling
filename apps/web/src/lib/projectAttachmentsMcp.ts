@@ -1,6 +1,7 @@
 import {
   ATTACHMENT_LIMITS,
   AttachmentError,
+  attachmentMaxBytes,
   attachmentNameProblem,
   attachmentProblemText,
   cleanAttachmentName,
@@ -63,11 +64,11 @@ export type AttachmentMcpContext = {
 // ---------------------------------------------------------------------------------------------
 
 /**
- * The most base64 characters a file within `ATTACHMENT_LIMITS.fileBytes` can take: four characters for
- * every three bytes, rounded up. Anything longer is refused before it is decoded, so a huge string never
+ * The most base64 characters the largest file that may be attached can take (`attachmentMaxBytes`, a
+ * PDF): four characters for every three bytes, rounded up. The file's own type limit is checked after. Anything longer is refused before it is decoded, so a huge string never
  * turns into a huge buffer only to be thrown away.
  */
-const MAX_BASE64_LENGTH = Math.ceil(ATTACHMENT_LIMITS.fileBytes / 3) * 4;
+const MAX_BASE64_LENGTH = Math.ceil(attachmentMaxBytes() / 3) * 4;
 
 /** Plain base64 (A-Z, a-z, 0-9, + and /), padded with "=" to a multiple of four. */
 const BASE64_PATTERN = /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/;
