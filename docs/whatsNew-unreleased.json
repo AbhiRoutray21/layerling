@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "title": {
+      "de": "Eckenradius für Gridfinity-Bodenplatten",
+      "en": "Corner radius for Gridfinity baseplates"
+    },
+    "body": {
+      "de": "Die äußeren Ecken einer Gridfinity-Bodenplatte müssen nicht mehr mit 4 mm gerundet sein: Stell im Eigenschaften-Fenster „Eckenradius“ ein, bis 0 für rechtwinklige Ecken, die in die Ecken einer Schublade passen. Die Mulden bleiben, wie sie sind, die Behälter passen also wie bisher.",
+      "en": "A Gridfinity baseplate's outer corners no longer have to be rounded by 4 mm: set \"Corner radius\" in the Properties panel, down to 0 for square corners that sit in a drawer's corners. The sockets stay as they are, so bins fit as before."
+    }
+  }
+]
