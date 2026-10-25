@@ -170,7 +170,7 @@ import type { AlignAxis, AlignHandleStatus, AlignTarget, GridSize, ParametricSou
 import { type Vec3, type MeshData, type Cuboid, type ShapeUpdatePatch, type ManifoldSolid, MIN_SHAPE_DIMENSION, resetManifoldRuntime, cleanModelDimension, getManifoldRuntime, meshForShape, meshReachAlong, appendMeshData, formatTriangleCount, shapeAabb, boundsForShapes, boundsForCuboids, meshAabb, boundsForPositions, quantizedPointKey } from "@/lib/editorMeshCore";
 import { meshPartCount } from "@/lib/meshPartCount";
 import { buildGroupedShapeOffThread, exportSolidVolumeOffThread, simplifyTrianglePositionsOffThread, splitShapesByPlaneOffThread, subscribeGeometryBusy, warmGeometryWorker } from "@/lib/geometryWorker";
-import { cloneAsGroupChild, meshDataToManifoldMesh, shapeToManifoldSolid, withClosedHolesNote, unionOverlappingExportMeshes, exportBodiesWithLooseHoles, formatSectionOffset, SECTION_SEEN_FROM_KEYS, expandBundles, visibleExportShapes, multicolorExportSolids, exportFaceColors, colorSeparatedExportMeshes, disposeManifold, canIntersectShapes, buildIntersectionShapeFromSelection, canHullShapes, buildHullShapeFromSelection, groupedShape, quaternionForShape, rotationFromQuaternion, cleanShapePatch, restoreGroupedChildren, restoreGroupedChildrenForEdges } from "@/lib/editorBooleans";
+import { cloneAsGroupChild, faceReadMesh, meshDataToManifoldMesh, shapeToManifoldSolid, withClosedHolesNote, unionOverlappingExportMeshes, exportBodiesWithLooseHoles, formatSectionOffset, SECTION_SEEN_FROM_KEYS, expandBundles, visibleExportShapes, multicolorExportSolids, exportFaceColors, colorSeparatedExportMeshes, disposeManifold, canIntersectShapes, buildIntersectionShapeFromSelection, canHullShapes, buildHullShapeFromSelection, groupedShape, quaternionForShape, rotationFromQuaternion, cleanShapePatch, restoreGroupedChildren, restoreGroupedChildrenForEdges } from "@/lib/editorBooleans";
 import { handleViewArrowKey } from "@/lib/viewArrowKeys";
 import { escapeWasHandled } from "@/lib/escapeHandled";
 import { sketchEscapeAction } from "@/lib/sketchEscape";
@@ -1584,8 +1584,7 @@ type LayFlatSide = keyof typeof LAY_FLAT_SIDES;
  * never counts the wrong way round (the bottom never passes for the top).
  */
 /** The triangles of a body in the world, nine numbers each - what the face readers take. */
-function worldTrianglePositions(shape: WorkplaneShape): Float64Array {
-  const mesh = meshForShape(shape);
+function worldTrianglePositions(mesh: MeshData): Float64Array {
   const positions = new Float64Array(mesh.faces.length * 9);
   mesh.faces.forEach((face, index) => {
     face.forEach((vertexIndex, corner) => {
@@ -2758,6 +2757,7 @@ export function LayerlingEditor({
     busy: boolean;
   } | null>(null);
   const holePatternSettingsRef = useRef<HolePatternSettings>(DEFAULT_HOLE_PATTERN);
+  const holePatternPickRunRef = useRef(0);
   // "Face": a flat face of the selected body, pushed out or cut in as a pocket, with an inset from its edge (#404).
   const [faceTool, setFaceTool] = useState<{
     sourceId: string;
@@ -2768,6 +2768,7 @@ export function LayerlingEditor({
   } | null>(null);
   const [faceToolPreview, setFaceToolPreview] = useState<{ shape: WorkplaneShape | null; empty: boolean } | null>(null);
   const faceToolPreviewRunRef = useRef(0);
+  const faceToolPickRunRef = useRef(0);
   // "Delete face" (#451): faces of the selected body, clicked on its exact tessellation, deleted together.
   const [deleteFaceTool, setDeleteFaceTool] = useState<{
     shapeId: string;
@@ -7656,6 +7657,7 @@ export function LayerlingEditor({
   // "Hole pattern" (#223): pick a flat face of the selected body, set the holes, create them as holes grouped with the body.
   const toggleHolePattern = useCallback(() => {
     if (holePatternTool) {
+      holePatternPickRunRef.current += 1;
       setHolePatternTool(null);
       setNotice(t("status.holePatternCancelled"));
       return;
@@ -7682,23 +7684,30 @@ export function LayerlingEditor({
     setMateTool(null);
     setArrayTool(null);
     setScalePercentTool(null);
+    holePatternPickRunRef.current += 1;
     setHolePatternTool({ sourceId: source.id, step: "pick", face: null, settings: holePatternSettingsRef.current, busy: false });
     setNotice(t("status.holePatternStart"));
   }, [refuseLockedSelection, deleteFaceTool, edgeModifier, holePatternTool, selectedShapes, shellTool, simplifyToolId, splitSession, stopCruise]);
 
-  const pickHolePatternFace = useCallback((pick: LayFlatPick | null) => {
+  const pickHolePatternFace = useCallback(async (pick: LayFlatPick | null) => {
     if (!holePatternTool || holePatternTool.step !== "pick") return;
     const source = shapesRef.current.find((shape) => shape.id === holePatternTool.sourceId);
+    // A group's or bundle's face is read from its parts joined, so it can take a moment; only the last click counts.
+    const run = holePatternPickRunRef.current + 1;
+    holePatternPickRunRef.current = run;
     if (!pick || !source || pick.shapeId !== source.id) {
       setNotice(t("status.holePatternMissed"));
       return;
     }
-    const read = readPerforableFace(worldTrianglePositions(source), pick.point, pick.normal);
+    const fingerprint = projectShapesFingerprint([source]);
+    const read = readPerforableFace(worldTrianglePositions(await faceReadMesh(source)), pick.point, pick.normal);
+    const latest = shapesRef.current.find((shape) => shape.id === source.id);
+    if (holePatternPickRunRef.current !== run || !latest || projectShapesFingerprint([latest]) !== fingerprint) return;
     if (!read.ok) {
       setNotice(t(read.reason === "curved" ? "status.holePatternCurved" : "status.holePatternMissed"));
       return;
     }
-    setHolePatternTool({ ...holePatternTool, step: "ready", face: read.face });
+    setHolePatternTool((current) => current && current.sourceId === source.id && current.step === "pick" ? { ...current, step: "ready", face: read.face } : current);
     setNotice(t("status.holePatternReady"));
   }, [holePatternTool]);
 
@@ -7760,6 +7769,7 @@ export function LayerlingEditor({
       || mateTool || layFlatPickMode || pivotPickMode || arrayTool || scalePercentTool
       || shellTool || deleteFaceTool || edgeModifier || splitSession || simplifyToolId
     ) {
+      holePatternPickRunRef.current += 1;
       setHolePatternTool(null);
     }
   }, [arrayTool, deleteFaceTool, edgeModifier, holePatternTool, layFlatPickMode, mateTool, pivotPickMode, scalePercentTool, selectedIds, shellTool, simplifyToolId, splitSession]);
@@ -7767,6 +7777,7 @@ export function LayerlingEditor({
   // "Face" (#404): pick a flat face of the selected body, then push it out or cut a pocket in, with an inset from its edge.
   const toggleFaceTool = useCallback(() => {
     if (faceTool) {
+      faceToolPickRunRef.current += 1;
       setFaceTool(null);
       setNotice(t("status.faceToolCancelled"));
       return;
@@ -7786,6 +7797,7 @@ export function LayerlingEditor({
       return;
     }
     stopCruise();
+    holePatternPickRunRef.current += 1;
     setHolePatternTool(null);
     setAlignMode(false);
     setMirrorMode(false);
@@ -7795,23 +7807,29 @@ export function LayerlingEditor({
     setArrayTool(null);
     setScalePercentTool(null);
     // Always from the defaults: an inset that fitted the last face can be too wide for this one.
+    faceToolPickRunRef.current += 1;
     setFaceTool({ sourceId: source.id, step: "pick", face: null, settings: DEFAULT_FACE_TOOL, busy: false });
     setNotice(t("status.faceToolStart"));
   }, [refuseLockedSelection, deleteFaceTool, edgeModifier, faceTool, selectedShapes, shellTool, simplifyToolId, splitSession, stopCruise]);
 
-  const pickFaceToolFace = useCallback((pick: LayFlatPick | null) => {
+  const pickFaceToolFace = useCallback(async (pick: LayFlatPick | null) => {
     if (!faceTool || faceTool.step !== "pick") return;
     const source = shapesRef.current.find((shape) => shape.id === faceTool.sourceId);
+    const run = faceToolPickRunRef.current + 1;
+    faceToolPickRunRef.current = run;
     if (!pick || !source || pick.shapeId !== source.id) {
       setNotice(t("status.faceToolMissed"));
       return;
     }
-    const read = readPerforableFace(worldTrianglePositions(source), pick.point, pick.normal);
+    const fingerprint = projectShapesFingerprint([source]);
+    const read = readPerforableFace(worldTrianglePositions(await faceReadMesh(source)), pick.point, pick.normal);
+    const latest = shapesRef.current.find((shape) => shape.id === source.id);
+    if (faceToolPickRunRef.current !== run || !latest || projectShapesFingerprint([latest]) !== fingerprint) return;
     if (!read.ok) {
       setNotice(t(read.reason === "curved" ? "status.faceToolCurved" : "status.faceToolMissed"));
       return;
     }
-    setFaceTool({ ...faceTool, step: "ready", face: read.face, settings: faceToolSettingsOn(read.face, faceTool.settings) });
+    setFaceTool((current) => current && current.sourceId === source.id && current.step === "pick" ? { ...current, step: "ready", face: read.face, settings: faceToolSettingsOn(read.face, current.settings) } : current);
     setNotice(t("status.faceToolReady"));
   }, [faceTool]);
 
@@ -7913,6 +7931,7 @@ export function LayerlingEditor({
       || mateTool || layFlatPickMode || pivotPickMode || arrayTool || scalePercentTool
       || shellTool || deleteFaceTool || edgeModifier || splitSession || simplifyToolId || holePatternTool
     ) {
+      faceToolPickRunRef.current += 1;
       setFaceTool(null);
     }
   }, [arrayTool, deleteFaceTool, edgeModifier, faceTool, holePatternTool, layFlatPickMode, mateTool, pivotPickMode, scalePercentTool, selectedIds, shellTool, simplifyToolId, splitSession]);
@@ -7955,7 +7974,9 @@ export function LayerlingEditor({
     closeSplit();
     stopCruise();
     setShellTool(null);
+    faceToolPickRunRef.current += 1;
     setFaceTool(null);
+    holePatternPickRunRef.current += 1;
     setHolePatternTool(null);
     setAlignMode(false);
     setMirrorMode(false);
@@ -9729,13 +9750,14 @@ export function LayerlingEditor({
           margin: mcpNumber(params.margin, DEFAULT_HOLE_PATTERN.margin),
           depth: depth !== undefined && depth > 0 ? depth : null,
         });
-        const read = readPerforableFace(worldTrianglePositions(target), point, normal);
+        // Taken before the face is read: joining a group's or bundle's parts takes a moment, and the scene may change meanwhile.
+        const sourceFingerprint = projectShapesFingerprint(currentShapes());
+        const sourceProjectId = projectInfoRef.current.projectId;
+        const read = readPerforableFace(worldTrianglePositions(await faceReadMesh(target)), point, normal);
         if (!read.ok) throw new Error(read.reason === "curved" ? "That face is curved; perforate_face needs a flat face" : "perforate_face found no flat face there");
         const plan = holePatternShapes(read.face, settings, t("holePattern.holeName"));
         if (plan.tooMany) throw new Error("That would be too many holes; make them bigger or the spacing wider");
         if (plan.holes.length === 0) throw new Error("No hole fits on that face with this size and margin");
-        const sourceFingerprint = projectShapesFingerprint(currentShapes());
-        const sourceProjectId = projectInfoRef.current.projectId;
         const result = await buildGroupedShapeOffThread([target, ...plan.holes], workspaceSettingsRef.current.booleanTriangleLimit, geometryAbortRef.current?.signal);
         if (projectInfoRef.current.projectId !== sourceProjectId || projectShapesFingerprint(currentShapes()) !== sourceFingerprint) {
           throw new Error("The scene changed while perforating; run the command again");
@@ -9786,10 +9808,10 @@ export function LayerlingEditor({
           depth: mcpNumber(params.depth, DEFAULT_FACE_TOOL.depth),
           separate: params.separate === true,
         });
-        const read = readPerforableFace(worldTrianglePositions(target), point, normal);
-        if (!read.ok) throw new Error(read.reason === "curved" ? "That face is curved; push_face needs a flat face" : "push_face found no flat face there");
         const sourceFingerprint = projectShapesFingerprint(currentShapes());
         const sourceProjectId = projectInfoRef.current.projectId;
+        const read = readPerforableFace(worldTrianglePositions(await faceReadMesh(target)), point, normal);
+        if (!read.ok) throw new Error(read.reason === "curved" ? "That face is curved; push_face needs a flat face" : "push_face found no flat face there");
         const body = await faceToolBody(target, read.face, settings, {
           name: t(settings.direction === "in" ? "faceTool.pocketName" : "faceTool.bodyName"),
           color: target.color,
@@ -12382,11 +12404,13 @@ export function LayerlingEditor({
           return;
         }
         if (holePatternTool) {
+          holePatternPickRunRef.current += 1;
           setHolePatternTool(null);
           setNotice(t("status.holePatternCancelled"));
           return;
         }
         if (faceTool) {
+          faceToolPickRunRef.current += 1;
           setFaceTool(null);
           setNotice(t("status.faceToolCancelled"));
           return;
@@ -12717,7 +12741,9 @@ export function LayerlingEditor({
     setPivotPickMode(false);
     setLayFlatPickMode(false);
     setMateTool(null);
+    holePatternPickRunRef.current += 1;
     setHolePatternTool(null);
+    faceToolPickRunRef.current += 1;
     setFaceTool(null);
     setCarryIds(null);
     setArrayTool(null);
@@ -13250,7 +13276,7 @@ export function LayerlingEditor({
               : faceTool?.step === "pick"
                 ? { shapeIds: [faceTool.sourceId] }
                 : null}
-          onMateFacePick={mateTool ? pickMateFace : faceTool ? pickFaceToolFace : pickHolePatternFace}
+          onMateFacePick={mateTool ? pickMateFace : faceTool ? (pick) => void pickFaceToolFace(pick) : (pick) => void pickHolePatternFace(pick)}
           cadFacePick={historyViewState ? null : cadFacePick}
           onCadFacePick={toggleDeleteFace}
           onNoteAdd={addNote}
@@ -13393,11 +13419,13 @@ export function LayerlingEditor({
           busy={holePatternTool.busy}
           onChange={changeHolePatternSettings}
           onRepick={() => {
+            holePatternPickRunRef.current += 1;
             setHolePatternTool({ ...holePatternTool, step: "pick", face: null });
             setNotice(t("status.holePatternStart"));
           }}
           onApply={() => void applyHolePattern()}
           onCancel={() => {
+            holePatternPickRunRef.current += 1;
             setHolePatternTool(null);
             setNotice(t("status.holePatternCancelled"));
           }}
@@ -13414,11 +13442,13 @@ export function LayerlingEditor({
           busy={faceTool.busy}
           onChange={changeFaceToolSettings}
           onRepick={() => {
+            faceToolPickRunRef.current += 1;
             setFaceTool({ ...faceTool, step: "pick", face: null });
             setNotice(t("status.faceToolStart"));
           }}
           onApply={() => void applyFaceTool()}
           onCancel={() => {
+            faceToolPickRunRef.current += 1;
             setFaceTool(null);
             setNotice(t("status.faceToolCancelled"));
           }}
