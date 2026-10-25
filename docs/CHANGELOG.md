@@ -6,6 +6,7 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **A hollowed or filleted body keeps its exact size:** After Hollow, a fillet, a chamfer or Delete face the body comes back from the CAD kernel as facets, and its sizes were measured on them: a round side falls a few hundredths short, so a cylinder of 38.7 mm showed 38.69 after hollowing. Typing 38.7 again then stretched the body before the hollowing by that error, turned the round cylinder into an ellipse of 38.715 x 38.7 mm and drifted further with every try. A size, centre or bottom within the facets' reach (twice the mesh deflection, 0.02 to 0.1 mm) of what an unturned body had stays the body's own (`shapeFromCadMesh`), and the mesh is drawn stretched by that hair onto the true surface. Unit test in `cadMeshExactSize.test.ts`; tried in the editor: a cylinder of 38.7 x 27 mm hollowed with a 3 mm wall stays 38.7 mm, typing 38.7 changes nothing and 50 mm gives exactly 50. Reported by Jürgen Keller.
 ## 1.111.0
 
 - **A workplane up to 5000 x 5000 mm (#879):** The custom workplane size stopped at 2000 mm in the Workspace settings, a limit the very first version had and for which there is no technical reason (`MAX_WORKSPACE_SIZE` in `WorkspaceSettingsModal.tsx`; saved settings were never cut). It now goes to 5000 mm. A 5000 x 5000 mm plate with the 1 mm grid opens and draws in the editor; how fast it turns on a slow graphics card was not measured. Asked for by @LarryRB.
