@@ -38,5 +38,15 @@
       "de": "In den Einstellungen gibt es den Schalter „Einfügen in der Mitte und abgesetzt“: Beim Einfügen kommen die Teile dann zusammen in die Mitte der Arbeitsebene und stehen darauf, statt an der Stelle, von der sie kamen. Praktisch für Teile aus anderen Programmen, die sonst weit weg von der Platte landen.",
       "en": "The settings have a new switch, \"Paste in the middle and drop\": a paste then sets the parts together in the middle of the workplane and stands them on it, instead of where they came from. Handy for parts from other programs, which can otherwise land far from the plate."
     }
+  },
+  {
+    "title": {
+      "de": "Größere Arbeitsplatte",
+      "en": "A larger workplane"
+    },
+    "body": {
+      "de": "Die Arbeitsplatte lässt sich jetzt bis 5000 × 5000 mm einstellen, bisher war bei 2000 mm Schluss. Das steht in den Einstellungen unter der benutzerdefinierten Größe.",
+      "en": "The workplane can now be set up to 5000 x 5000 mm; it stopped at 2000 mm before. You set it under the custom size in the settings."
+    }
   }
 ]
