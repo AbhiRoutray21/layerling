@@ -2431,6 +2431,8 @@ export const MESSAGES_DA: Partial<Record<MessageKey, string>> = {
   "workspace.doubleClickOpensGroup": "Dobbeltklik åbner en gruppe eller et bundt",
   "workspace.doubleClickCentersView": "Dobbeltklik på arbejdsplanet centrerer visningen der",
   "workspace.selectBeforeMoving": "Vælg før du flytter",
+  "workspace.pasteCentered": "Indsæt i midten og læg ned",
+  "workspace.pasteCenteredHint": "Når du indsætter, placeres delene sammen midt på arbejdsplanet og lægges ned på det, i stedet for at blive liggende, hvor de kom fra. Praktisk for dele kopieret fra andre programmer, som kan lande langt fra pladen.",
   "workspace.frameByDirection": "Rammens retning afgør",
   "workspace.frameByDirectionHint": "En ramme trukket mod højre vælger kun det, der ligger helt inde i den, en trukket mod venstre alt, den rører ved (tegnet stiplet), som i SketchUp",
   "workspace.objectSnap": "Snap til andre former mens du flytter",
