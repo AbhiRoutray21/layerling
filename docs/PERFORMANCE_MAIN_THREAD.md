@@ -311,9 +311,10 @@ nor its effect can be measured here. That needs a computer with a graphics card.
 The Face tool and the hole pattern when clicked, `layerling_push_face` and
 `layerling_perforate_face` read a plain group's or bundle's face from its parts joined (#878); the
 join now runs in the geometry worker (`faceReadPositionsOffThread`), with the "Calculating" notice,
-and the answer is the joined triangles. A click's read still running is called off by a new click
-and when the tool closes. Any other body is read on the page as before; text stays on the page.
-Measured with `face-group` (new).
+and the answer is the joined triangles. A new click stops the click before it waiting; a group's
+read goes on, kept for the next click, and is called off when the pick step ends or the body
+changes. Any other body is read on the page as before; text stays on the page. Measured with
+`face-group` (new).
 
 | Action | Longest block, main at 8615a3d8 → now | Input delay, main at 8615a3d8 → now |
 | --- | ---: | ---: |

@@ -4,7 +4,7 @@ import { describe, expect, it } from "vitest";
 
 /**
  * The face tools' reads in the editor (LayerlingEditor.tsx) go through faceReadPositionsOffThread
- * and can be called off; no test mounts the editor, so its source is read here, spaces folded.
+ * and a click can stop waiting; no test mounts the editor, so its source is read here, spaces folded.
  */
 const editor = readFileSync(fileURLToPath(new URL("../../apps/web/src/components/LayerlingEditor.tsx", import.meta.url)), "utf8").replace(/\s+/g, " ");
 
@@ -14,8 +14,8 @@ function body(start: string, end: string) {
 }
 
 describe("the face tools' reads in the editor", () => {
-  it("read every face through faceReadPositionsOffThread", () => {
-    expect(editor.match(/await faceReadPositionsOffThread\(source, pickAbort\.signal\)/g)).toHaveLength(2);
+  it("read every face through faceReadPositionsOffThread, the clicks through faceReadForClick", () => {
+    expect(editor.match(/await faceReadForClick\(source, fingerprint, pickAbort\.signal\)/g)).toHaveLength(2);
     expect(editor.match(/readPerforableFace\(await faceReadPositionsOffThread\(target, geometryAbortRef\.current\?\.signal\), point, normal\)/g)).toHaveLength(2);
     expect(editor).not.toMatch(/faceReadMesh|faceReadPositions\(/);
   });
@@ -24,21 +24,21 @@ describe("the face tools' reads in the editor", () => {
     ["hole pattern", "const pickHolePatternFace", "holePatternTool", "holePatternPickRunRef", "holePatternPickAbortRef", "status.holePatternMissed"],
     ["Face tool", "const pickFaceToolFace", "faceTool", "faceToolPickRunRef", "faceToolPickAbortRef", "status.faceToolMissed"],
   ]) {
-    const end = `}, [${tool}]);`;
-    it(`calls off the ${name}'s read before it on any new click, keeps its own to call off, and drops a stale answer`, () => {
+    const end = `}, [faceReadForClick, ${tool}]);`;
+    it(`stops the ${name}'s click before it waiting on any new click, keeps its own to stop, and drops a stale answer`, () => {
       const pick = body(start, end);
       const callOff = pick.indexOf(`${abort}.current?.abort();`);
       const kept = pick.indexOf(`${abort}.current = pickAbort;`);
       expect(callOff).toBeGreaterThan(-1);
       expect(callOff).toBeLessThan(pick.indexOf(missed));
       expect(kept).toBeGreaterThan(callOff);
-      expect(kept).toBeLessThan(pick.indexOf("await faceReadPositionsOffThread"));
+      expect(kept).toBeLessThan(pick.indexOf("await faceReadForClick"));
       expect(pick).toMatch(new RegExp(`catch \\(error\\) \\{ if \\(${run}\\.current === run\\) setNotice\\(localizedError`));
       expect(pick).toContain(`if (${run}.current !== run || !latest || projectShapesFingerprint([latest]) !== fingerprint) return;`);
     });
 
-    it(`calls off the ${name}'s read when the tool closes or the editor goes`, () => {
-      expect(editor).toContain(`!== "pick") ${abort}.current?.abort(); ${end}`);
+    it(`stops the ${name}'s click waiting when the tool closes or the editor goes`, () => {
+      expect(editor).toContain(`!== "pick") ${abort}.current?.abort(); }, [${tool}]);`);
       expect(body("return () => { unsubscribe();", "}, [dismissNotice, setNotice]);")).toContain(`${abort}.current?.abort();`);
     });
   }

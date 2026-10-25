@@ -221,15 +221,16 @@ type WorkplaneViewportProps = {
   rotationPivot?: PivotPoint | null;
   /** The next click on a body sets the rotation pivot. */
   pivotPickMode?: boolean;
-  onPivotPick?: (point: PivotPoint | null) => void;
+  /** The pivot clicked or dragged to; a click also gives the face it hit, so a group's face can be read from its parts joined. */
+  onPivotPick?: (point: PivotPoint | null, face?: LayFlatPick | null) => void;
   /** A reference image being calibrated (#680): a click on it gives a point, through anything in front of it. */
   imageCalibrationId?: string | null;
   onImageCalibrationPoint?: (point: { x: number; y: number; z: number }) => void;
   /** Waiting for a click on a face of the selection to lay it flat. */
   layFlatPickMode?: boolean;
   onLayFlatPick?: (pick: LayFlatPick | null) => void;
-  /** "Align faces" waiting for a click on a face of one of these bodies; `round` lights up whole round faces. */
-  mateFacePick?: { shapeIds: string[]; round?: boolean } | null;
+  /** "Align faces" waiting for a click on a face of one of these bodies; `round` lights up whole round faces, `joined` the group's parts joined, whose face is lit in place of the part's. */
+  mateFacePick?: { shapeIds: string[]; round?: boolean; joined?: ArrayLike<number> | null } | null;
   onMateFacePick?: (pick: LayFlatPick | null) => void;
   /** "Delete face" waiting for clicks on faces of the prepared body; a click toggles the face. */
   cadFacePick?: CadFacePick | null;
@@ -1692,6 +1693,7 @@ export function WorkplaneViewport({
   layFlatPickModeRef.current = layFlatPickMode;
   const mateFacePickRef = useRef(mateFacePick);
   mateFacePickRef.current = mateFacePick;
+  const mateFaceHoverRef = useRef<{ x: number; y: number } | null>(null);
   const cadFacePickRef = useRef(cadFacePick);
   cadFacePickRef.current = cadFacePick;
   const cadFaceHoverRef = useRef<number | null>(null);
@@ -2425,7 +2427,17 @@ export function WorkplaneViewport({
 
   useEffect(() => {
     if (!layFlatPickMode && !mateFacePick) syncLayFlatHover(threeRef.current, [], resolvedThemeRef.current, null, null);
+    if (!mateFacePick) mateFaceHoverRef.current = null;
   }, [layFlatPickMode, mateFacePick]);
+
+  // A group's parts joined, or let go, after the pointer stopped on it: its face is lit again without another move.
+  const mateFaceJoined = mateFacePick?.joined ?? null;
+  useEffect(() => {
+    const pick = mateFacePickRef.current;
+    const pointer = mateFaceHoverRef.current;
+    if (!pick || !pointer) return;
+    syncLayFlatHover(threeRef.current, pick.shapeIds, resolvedThemeRef.current, pointer.x, pointer.y, pick.round, mateFaceJoined);
+  }, [mateFaceJoined]);
 
   useEffect(() => {
     if (!cadFacePick) cadFaceHoverRef.current = null;
@@ -5523,7 +5535,8 @@ export function WorkplaneViewport({
 
       if (pivotPickModeRef.current) {
         event.preventDefault();
-        onPivotPick?.(pickRotationPivot(state, event.clientX, event.clientY));
+        const pick = pickRotationPivot(state, event.clientX, event.clientY);
+        onPivotPick?.(pick?.point ?? null, pick?.face);
         return;
       }
 
@@ -6025,7 +6038,8 @@ export function WorkplaneViewport({
         return;
       }
       if (mateFacePickRef.current) {
-        syncLayFlatHover(threeRef.current, mateFacePickRef.current.shapeIds, resolvedThemeRef.current, event.clientX, event.clientY, mateFacePickRef.current.round);
+        mateFaceHoverRef.current = { x: event.clientX, y: event.clientY };
+        syncLayFlatHover(threeRef.current, mateFacePickRef.current.shapeIds, resolvedThemeRef.current, event.clientX, event.clientY, mateFacePickRef.current.round, mateFacePickRef.current.joined);
         return;
       }
       if (cadFacePickRef.current && threeRef.current) {

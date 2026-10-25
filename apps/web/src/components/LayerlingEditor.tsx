@@ -98,7 +98,7 @@ import { ATTACHMENT_MCP_READ_ACTIONS, attachmentMcpCommand, attachmentMcpList } 
 import { appendEditorHistorySnapshot, boundedEditorHistoryState, continuesKeyRun, type KeyRun, editorHistoryBranch, editorHistoryEntry, editorHistoryForExport, historyStateAt, hydrateEditorHistoryState, notesForHistoryIndex, projectSceneFingerprint, projectShapesFingerprint, workplaneForHistoryIndex, type EditorHistoryEntry, type EditorHistoryState } from "@/lib/editorHistory";
 import { snapShapeFootprintToVisibleGrid, visibleGridStep } from "@/lib/gridSnap";
 import { composedShapeRotation, geometryRotationDegreesForShortcut, geometryRotationDelta, rotatedGeometryShapePatch } from "@/lib/geometryRotation";
-import { carryShapePivot, heightPatchKeepingBase, shapePivotFromWorld, shapePivotWorld, type PivotPoint } from "@/lib/rotationPivot";
+import { carryShapePivot, heightPatchKeepingBase, pivotAfterJoin, shapePivotFromWorld, shapePivotWorld, type PivotPoint } from "@/lib/rotationPivot";
 import { createLocalId } from "@/lib/localIds";
 import { canEditGroupAtLevel, mcpOpenGroupSummary, openGroupLevelsStillOpen, trackOpenGroupLevels, type OpenGroupLevel } from "@/lib/openGroupParts";
 import { projectExportFileName, stlNameAsksForNewFile } from "@/lib/exportNames";
@@ -170,7 +170,7 @@ import { footprintCutOffset, projectSectionPoint, SECTION_VIEW_FACE, sectionSvgD
 import type { AlignAxis, AlignHandleStatus, AlignTarget, GridSize, ParametricSource, ProjectAsset, ProjectAttachment, ShapeAsset, ShapeCustomization, ShapeKind, SketchImage, SketchOperation, SketchPoint, SketchProfile, SketchRevolveSettings, SketchSegment, ShellEdges, ShellOpenings, ShellSide, SweepAnchor, WorkplaneNote, WorkplaneShape, WorkplaneWorkspaceSettings } from "@/types/layerling";
 import { type Vec3, type MeshData, type Cuboid, type ShapeUpdatePatch, type ManifoldSolid, MIN_SHAPE_DIMENSION, resetManifoldRuntime, cleanModelDimension, getManifoldRuntime, meshForShape, meshReachAlong, appendMeshData, formatTriangleCount, shapeAabb, boundsForShapes, boundsForCuboids, meshAabb, boundsForPositions, quantizedPointKey } from "@/lib/editorMeshCore";
 import { meshPartCount } from "@/lib/meshPartCount";
-import { buildGroupedShapeOffThread, exportSolidVolumeOffThread, faceReadPositionsOffThread, simplifyTrianglePositionsOffThread, splitShapesByPlaneOffThread, subscribeGeometryBusy, warmGeometryWorker } from "@/lib/geometryWorker";
+import { buildGroupedShapeOffThread, exportSolidVolumeOffThread, callOffFaceRead, faceReadInWorker, createFaceReadKeeper, faceReadPositionsOffThread, simplifyTrianglePositionsOffThread, splitShapesByPlaneOffThread, subscribeGeometryBusy, warmGeometryWorker } from "@/lib/geometryWorker";
 import { cloneAsGroupChild, meshDataToManifoldMesh, shapeToManifoldSolid, withClosedHolesNote, unionOverlappingExportMeshes, exportBodiesWithLooseHoles, formatSectionOffset, SECTION_SEEN_FROM_KEYS, expandBundles, visibleExportShapes, multicolorExportSolids, exportFaceColors, colorSeparatedExportMeshes, disposeManifold, canIntersectShapes, buildIntersectionShapeFromSelection, canHullShapes, buildHullShapeFromSelection, groupedShape, quaternionForShape, rotationFromQuaternion, cleanShapePatch, restoreGroupedChildren, restoreGroupedChildrenForEdges } from "@/lib/editorBooleans";
 import { handleViewArrowKey } from "@/lib/viewArrowKeys";
 import { escapeWasHandled } from "@/lib/escapeHandled";
@@ -2723,6 +2723,10 @@ export function LayerlingEditor({
   // turns around its own centre again.
   const [rotationPivot, setRotationPivot] = useState<{ selectionKey: string; point: PivotPoint } | null>(null);
   const [pivotPickMode, setPivotPickMode] = useState(false);
+  const pivotPickModeRef = useRef(pivotPickMode);
+  pivotPickModeRef.current = pivotPickMode;
+  const pivotPickRunRef = useRef(0);
+  const pivotPickAbortRef = useRef<AbortController | null>(null);
   // Writes the pivot a single body carries; filled in once updateShape exists.
   const writeOwnPivotRef = useRef<(shapeId: string, value: [number, number, number] | undefined) => void>(() => {});
   const [layFlatPickMode, setLayFlatPickMode] = useState(false);
@@ -2758,6 +2762,9 @@ export function LayerlingEditor({
   const faceToolPreviewRunRef = useRef(0);
   const faceToolPickRunRef = useRef(0);
   const faceToolPickAbortRef = useRef<AbortController | null>(null);
+  // The Face tool's or hole pattern's group, read once while the pick step is open: the pointer lights its whole face, and a click takes the same read.
+  const [faceReadAhead, setFaceReadAhead] = useState<{ fingerprint: string; positions: Float64Array } | null>(null);
+  const faceReads = useMemo(() => createFaceReadKeeper((fingerprint, positions) => setFaceReadAhead({ fingerprint, positions })), []);
   // "Delete face" (#451): faces of the selected body, clicked on its exact tessellation, deleted together.
   const [deleteFaceTool, setDeleteFaceTool] = useState<{
     shapeId: string;
@@ -2805,8 +2812,13 @@ export function LayerlingEditor({
       splitAbortRef.current?.abort();
       holePatternPickAbortRef.current?.abort();
       faceToolPickAbortRef.current?.abort();
+      pivotPickAbortRef.current?.abort();
     };
   }, [dismissNotice, setNotice]);
+  // A pivot click still waiting for its group's join is called off when the pivot mode ends.
+  useEffect(() => {
+    if (!pivotPickMode) callOffFaceRead(pivotPickAbortRef.current);
+  }, [pivotPickMode]);
   const showHiddenRef = useRef<() => void>(() => undefined);
   // The design for which the hidden shapes were told once, when its shapes first arrived (#489).
   const hiddenNoticedProjectRef = useRef<string | null>(null);
@@ -3378,6 +3390,35 @@ export function LayerlingEditor({
   const selectedShapes = useMemo(() => shapes.filter((shape) => selectedIds.includes(shape.id)), [selectedIds, shapes]);
   const selectedShape = selectedShapes.at(-1) ?? null;
   const hasSelection = selectedShapes.length > 0;
+
+  const faceJoinSourceId = faceTool?.step === "pick" ? faceTool.sourceId : holePatternTool?.step === "pick" ? holePatternTool.sourceId : null;
+  const faceJoinSource = faceJoinSourceId ? shapes.find((shape) => shape.id === faceJoinSourceId) : undefined;
+  // Only a read that runs in the geometry worker is made ahead: one on the page would hold the page as the tool opens.
+  const faceJoinFingerprint = useMemo(
+    () => (faceJoinSource && faceReadInWorker(faceJoinSource) ? projectShapesFingerprint([faceJoinSource]) : null),
+    [faceJoinSource],
+  );
+  useEffect(() => {
+    if (!faceJoinFingerprint) return;
+    // Called off when the pick step ends or the body changes (keyed by the body's fingerprint: the source object alone is new after any commit).
+    return () => {
+      faceReads.drop(geometryAbortRef.current?.signal.aborted);
+      setFaceReadAhead(null);
+    };
+  }, [faceJoinFingerprint, faceReads]);
+  useEffect(() => {
+    if (!faceJoinFingerprint || !faceJoinSource || projectInteractionActive) return;
+    // Without the "Calculating" notice, once the body has been still a moment, so a slider or a held arrow key reads it once (as Delete face waits).
+    const timer = window.setTimeout(() => faceReads.readAhead(faceJoinSource, faceJoinFingerprint), 250);
+    return () => window.clearTimeout(timer);
+  }, [faceJoinFingerprint, faceReads, projectInteractionActive]);
+  const faceJoinPositions = faceReadAhead && faceReadAhead.fingerprint === faceJoinFingerprint ? faceReadAhead.positions : null;
+  /** A click's read of the tool's body (createFaceReadKeeper); one that would no longer count never answers. */
+  const faceReadForClick = useCallback((source: WorkplaneShape, fingerprint: string, signal: AbortSignal) => faceReads.forClick(source, fingerprint, signal, () => {
+    const latest = shapesRef.current.find((shape) => shape.id === source.id);
+    return latest ? projectShapesFingerprint([latest]) === fingerprint : false;
+  }), [faceReads]);
+
   // One locked shape holds the whole selection: nothing that moves or reshapes it runs.
   const selectionLocked = selectedShapes.some((shape) => shape.locked);
   const refuseLockedSelection = useCallback(() => {
@@ -3888,14 +3929,40 @@ export function LayerlingEditor({
   }, [arrayPivotX, arrayPivotZ]);
 
 
-  const pickRotationPivot = useCallback((point: PivotPoint | null) => {
+  const pickRotationPivot = useCallback(async (target: PivotPoint | null, face?: LayFlatPick | null) => {
+    // On a group the face is read from its parts joined, as the Face tool reads it; only the last click counts.
+    const run = pivotPickRunRef.current + 1;
+    pivotPickRunRef.current = run;
+    callOffFaceRead(pivotPickAbortRef.current);
+    let point = target;
+    const source = face ? shapesRef.current.find((shape) => shape.id === face.shapeId) : undefined;
+    if (target && face && source && faceReadInWorker(source)) {
+      const fingerprint = projectShapesFingerprint([source]);
+      const pivotAbort = new AbortController();
+      pivotPickAbortRef.current = pivotAbort;
+      let triangles: ArrayLike<number>;
+      try {
+        triangles = await faceReadPositionsOffThread(source, pivotAbort.signal);
+      } catch (error) {
+        if (pivotPickRunRef.current === run) setNotice(localizedError(error instanceof Error ? error.message : String(error)), true);
+        return;
+      }
+      // Another click, the pivot mode ended, or the selection or the body changed meanwhile: this one no longer counts.
+      const latest = shapesRef.current.find((shape) => shape.id === source.id);
+      if (
+        pivotPickRunRef.current !== run || !pivotPickModeRef.current || selectedIdsRef.current.join("|") !== selectionKey
+        || !latest || projectShapesFingerprint([latest]) !== fingerprint
+      ) return;
+      point = pivotAfterJoin(target, face, triangles);
+    }
     setPivotPickMode(false);
     if (!point) {
       setNotice(t("status.pivotMissed"));
       return;
     }
-    // A single body keeps its pivot; several bodies share one for this selection.
-    if (ownPivotShape) writeOwnPivotRef.current(ownPivotShape.id, shapePivotFromWorld(ownPivotShape, point));
+    // A single body keeps its pivot, as it stands after the wait; several bodies share one for this selection.
+    const own = ownPivotShape ? shapesRef.current.find((shape) => shape.id === ownPivotShape.id) : undefined;
+    if (own) writeOwnPivotRef.current(own.id, shapePivotFromWorld(own, point));
     else setRotationPivot({ selectionKey, point });
     setNotice(t("status.pivotSet"));
   }, [ownPivotShape, selectionKey]);
@@ -7694,7 +7761,7 @@ export function LayerlingEditor({
     // A group's or bundle's face is read from its parts joined, so it can take a moment; only the last click counts.
     const run = holePatternPickRunRef.current + 1;
     holePatternPickRunRef.current = run;
-    // A new click, even one beside the body, calls off the read before it, which would be thrown away anyway.
+    // A new click, even one beside the body, stops the click before it waiting; a group's read goes on, kept for the next click.
     holePatternPickAbortRef.current?.abort();
     if (!pick || !source || pick.shapeId !== source.id) {
       setNotice(t("status.holePatternMissed"));
@@ -7705,7 +7772,7 @@ export function LayerlingEditor({
     holePatternPickAbortRef.current = pickAbort;
     let triangles: ArrayLike<number>;
     try {
-      triangles = await faceReadPositionsOffThread(source, pickAbort.signal);
+      triangles = await faceReadForClick(source, fingerprint, pickAbort.signal);
     } catch (error) {
       if (holePatternPickRunRef.current === run) setNotice(localizedError(error instanceof Error ? error.message : String(error)), true);
       return;
@@ -7719,7 +7786,7 @@ export function LayerlingEditor({
     }
     setHolePatternTool((current) => current && current.sourceId === source.id && current.step === "pick" ? { ...current, step: "ready", face: read.face } : current);
     setNotice(t("status.holePatternReady"));
-  }, [holePatternTool]);
+  }, [faceReadForClick, holePatternTool]);
 
   const changeHolePatternSettings = useCallback((patch: Partial<HolePatternSettings>) => {
     setHolePatternTool((current) => {
@@ -7784,7 +7851,7 @@ export function LayerlingEditor({
     }
   }, [arrayTool, deleteFaceTool, edgeModifier, holePatternTool, layFlatPickMode, mateTool, pivotPickMode, scalePercentTool, selectedIds, shellTool, simplifyToolId, splitSession]);
 
-  // A face read still running when the tool closes is called off.
+  // A click still waiting when the pick step ends stops waiting.
   useEffect(() => {
     if (holePatternTool?.step !== "pick") holePatternPickAbortRef.current?.abort();
   }, [holePatternTool]);
@@ -7842,7 +7909,7 @@ export function LayerlingEditor({
     faceToolPickAbortRef.current = pickAbort;
     let triangles: ArrayLike<number>;
     try {
-      triangles = await faceReadPositionsOffThread(source, pickAbort.signal);
+      triangles = await faceReadForClick(source, fingerprint, pickAbort.signal);
     } catch (error) {
       if (faceToolPickRunRef.current === run) setNotice(localizedError(error instanceof Error ? error.message : String(error)), true);
       return;
@@ -7856,7 +7923,7 @@ export function LayerlingEditor({
     }
     setFaceTool((current) => current && current.sourceId === source.id && current.step === "pick" ? { ...current, step: "ready", face: read.face, settings: faceToolSettingsOn(read.face, current.settings) } : current);
     setNotice(t("status.faceToolReady"));
-  }, [faceTool]);
+  }, [faceReadForClick, faceTool]);
 
   const changeFaceToolSettings = useCallback((patch: Partial<FaceToolSettings>) => {
     setFaceTool((current) => {
@@ -13293,7 +13360,7 @@ export function LayerlingEditor({
           noteMode={historyViewState ? false : noteMode}
           rotationPivot={activeRotationPivot}
           pivotPickMode={pivotPickMode}
-          onPivotPick={pickRotationPivot}
+          onPivotPick={(point, face) => void pickRotationPivot(point, face)}
           imageCalibrationId={imageCalibration && imageCalibration.points.length < 2 ? imageCalibration.id : null}
           onImageCalibrationPoint={addImageCalibrationPoint}
           layFlatPickMode={layFlatPickMode}
@@ -13301,9 +13368,9 @@ export function LayerlingEditor({
           mateFacePick={mateTool && mateTool.step !== "ready"
             ? { shapeIds: mateTool.step === "source" ? [mateTool.sourceId] : shapes.filter((shape) => shape.id !== mateTool.sourceId && !shape.hidden).map((shape) => shape.id), round: mateTool.mode === "concentric" }
             : holePatternTool?.step === "pick"
-              ? { shapeIds: [holePatternTool.sourceId] }
+              ? { shapeIds: [holePatternTool.sourceId], joined: faceJoinPositions }
               : faceTool?.step === "pick"
-                ? { shapeIds: [faceTool.sourceId] }
+                ? { shapeIds: [faceTool.sourceId], joined: faceJoinPositions }
                 : null}
           onMateFacePick={mateTool ? pickMateFace : faceTool ? (pick) => void pickFaceToolFace(pick) : (pick) => void pickHolePatternFace(pick)}
           cadFacePick={historyViewState ? null : cadFacePick}
