@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **The face tools no longer freeze the editor on a group:** In 1.111.0 the Face tool, the hole pattern, `layerling_push_face` and `layerling_perforate_face` started reading a group's face from its parts joined (#878), and the join ran on the page: pushing the top of four overlapping 512-sided cylinders kept a click waiting about half a second, now 0.04 s. The join runs in the geometry worker, with the "Calculating" notice until the face is read; a group with text in it stays on the page, and a read that takes too long says so. Tried in the editor with the worker and with its file blocked: the Face tool and `layerling_push_face` give the same top of two grouped cubes, 27 x 28 across. Contributed by @mlugo-apx.
+
 ## 1.111.0
 
 - **A workplane up to 5000 x 5000 mm (#879):** The custom workplane size stopped at 2000 mm in the Workspace settings, a limit the very first version had and for which there is no technical reason (`MAX_WORKSPACE_SIZE` in `WorkspaceSettingsModal.tsx`; saved settings were never cut). It now goes to 5000 mm. A 5000 x 5000 mm plate with the 1 mm grid opens and draws in the editor; how fast it turns on a slow graphics card was not measured. Asked for by @LarryRB.

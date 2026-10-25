@@ -170,8 +170,8 @@ import { footprintCutOffset, projectSectionPoint, SECTION_VIEW_FACE, sectionSvgD
 import type { AlignAxis, AlignHandleStatus, AlignTarget, GridSize, ParametricSource, ProjectAsset, ProjectAttachment, ShapeAsset, ShapeCustomization, ShapeKind, SketchImage, SketchOperation, SketchPoint, SketchProfile, SketchRevolveSettings, SketchSegment, ShellEdges, ShellOpenings, ShellSide, SweepAnchor, WorkplaneNote, WorkplaneShape, WorkplaneWorkspaceSettings } from "@/types/layerling";
 import { type Vec3, type MeshData, type Cuboid, type ShapeUpdatePatch, type ManifoldSolid, MIN_SHAPE_DIMENSION, resetManifoldRuntime, cleanModelDimension, getManifoldRuntime, meshForShape, meshReachAlong, appendMeshData, formatTriangleCount, shapeAabb, boundsForShapes, boundsForCuboids, meshAabb, boundsForPositions, quantizedPointKey } from "@/lib/editorMeshCore";
 import { meshPartCount } from "@/lib/meshPartCount";
-import { buildGroupedShapeOffThread, exportSolidVolumeOffThread, simplifyTrianglePositionsOffThread, splitShapesByPlaneOffThread, subscribeGeometryBusy, warmGeometryWorker } from "@/lib/geometryWorker";
-import { cloneAsGroupChild, faceReadMesh, meshDataToManifoldMesh, shapeToManifoldSolid, withClosedHolesNote, unionOverlappingExportMeshes, exportBodiesWithLooseHoles, formatSectionOffset, SECTION_SEEN_FROM_KEYS, expandBundles, visibleExportShapes, multicolorExportSolids, exportFaceColors, colorSeparatedExportMeshes, disposeManifold, canIntersectShapes, buildIntersectionShapeFromSelection, canHullShapes, buildHullShapeFromSelection, groupedShape, quaternionForShape, rotationFromQuaternion, cleanShapePatch, restoreGroupedChildren, restoreGroupedChildrenForEdges } from "@/lib/editorBooleans";
+import { buildGroupedShapeOffThread, exportSolidVolumeOffThread, faceReadPositionsOffThread, simplifyTrianglePositionsOffThread, splitShapesByPlaneOffThread, subscribeGeometryBusy, warmGeometryWorker } from "@/lib/geometryWorker";
+import { cloneAsGroupChild, meshDataToManifoldMesh, shapeToManifoldSolid, withClosedHolesNote, unionOverlappingExportMeshes, exportBodiesWithLooseHoles, formatSectionOffset, SECTION_SEEN_FROM_KEYS, expandBundles, visibleExportShapes, multicolorExportSolids, exportFaceColors, colorSeparatedExportMeshes, disposeManifold, canIntersectShapes, buildIntersectionShapeFromSelection, canHullShapes, buildHullShapeFromSelection, groupedShape, quaternionForShape, rotationFromQuaternion, cleanShapePatch, restoreGroupedChildren, restoreGroupedChildrenForEdges } from "@/lib/editorBooleans";
 import { handleViewArrowKey } from "@/lib/viewArrowKeys";
 import { escapeWasHandled } from "@/lib/escapeHandled";
 import { sketchEscapeAction } from "@/lib/sketchEscape";
@@ -1584,20 +1584,6 @@ type LayFlatSide = keyof typeof LAY_FLAT_SIDES;
  * consistent, so "outward" is taken as away from the body's centre; a face
  * never counts the wrong way round (the bottom never passes for the top).
  */
-/** The triangles of a body in the world, nine numbers each - what the face readers take. */
-function worldTrianglePositions(mesh: MeshData): Float64Array {
-  const positions = new Float64Array(mesh.faces.length * 9);
-  mesh.faces.forEach((face, index) => {
-    face.forEach((vertexIndex, corner) => {
-      const vertex = mesh.vertices[vertexIndex];
-      positions[index * 9 + corner * 3] = vertex[0];
-      positions[index * 9 + corner * 3 + 1] = vertex[1];
-      positions[index * 9 + corner * 3 + 2] = vertex[2];
-    });
-  });
-  return positions;
-}
-
 function nearestFaceNormal(shape: WorkplaneShape, direction: THREE.Vector3): THREE.Vector3 | null {
   const mesh = meshForShape(shape);
   const wanted = direction.clone().normalize();
@@ -2759,6 +2745,7 @@ export function LayerlingEditor({
   } | null>(null);
   const holePatternSettingsRef = useRef<HolePatternSettings>(DEFAULT_HOLE_PATTERN);
   const holePatternPickRunRef = useRef(0);
+  const holePatternPickAbortRef = useRef<AbortController | null>(null);
   // "Face": a flat face of the selected body, pushed out or cut in as a pocket, with an inset from its edge (#404).
   const [faceTool, setFaceTool] = useState<{
     sourceId: string;
@@ -2770,6 +2757,7 @@ export function LayerlingEditor({
   const [faceToolPreview, setFaceToolPreview] = useState<{ shape: WorkplaneShape | null; empty: boolean } | null>(null);
   const faceToolPreviewRunRef = useRef(0);
   const faceToolPickRunRef = useRef(0);
+  const faceToolPickAbortRef = useRef<AbortController | null>(null);
   // "Delete face" (#451): faces of the selected body, clicked on its exact tessellation, deleted together.
   const [deleteFaceTool, setDeleteFaceTool] = useState<{
     shapeId: string;
@@ -2815,6 +2803,8 @@ export function LayerlingEditor({
       if (shownTimer !== null) window.clearTimeout(shownTimer);
       controller.abort();
       splitAbortRef.current?.abort();
+      holePatternPickAbortRef.current?.abort();
+      faceToolPickAbortRef.current?.abort();
     };
   }, [dismissNotice, setNotice]);
   const showHiddenRef = useRef<() => void>(() => undefined);
@@ -7704,12 +7694,23 @@ export function LayerlingEditor({
     // A group's or bundle's face is read from its parts joined, so it can take a moment; only the last click counts.
     const run = holePatternPickRunRef.current + 1;
     holePatternPickRunRef.current = run;
+    // A new click, even one beside the body, calls off the read before it, which would be thrown away anyway.
+    holePatternPickAbortRef.current?.abort();
     if (!pick || !source || pick.shapeId !== source.id) {
       setNotice(t("status.holePatternMissed"));
       return;
     }
     const fingerprint = projectShapesFingerprint([source]);
-    const read = readPerforableFace(worldTrianglePositions(await faceReadMesh(source)), pick.point, pick.normal);
+    const pickAbort = new AbortController();
+    holePatternPickAbortRef.current = pickAbort;
+    let triangles: ArrayLike<number>;
+    try {
+      triangles = await faceReadPositionsOffThread(source, pickAbort.signal);
+    } catch (error) {
+      if (holePatternPickRunRef.current === run) setNotice(localizedError(error instanceof Error ? error.message : String(error)), true);
+      return;
+    }
+    const read = readPerforableFace(triangles, pick.point, pick.normal);
     const latest = shapesRef.current.find((shape) => shape.id === source.id);
     if (holePatternPickRunRef.current !== run || !latest || projectShapesFingerprint([latest]) !== fingerprint) return;
     if (!read.ok) {
@@ -7783,6 +7784,11 @@ export function LayerlingEditor({
     }
   }, [arrayTool, deleteFaceTool, edgeModifier, holePatternTool, layFlatPickMode, mateTool, pivotPickMode, scalePercentTool, selectedIds, shellTool, simplifyToolId, splitSession]);
 
+  // A face read still running when the tool closes is called off.
+  useEffect(() => {
+    if (holePatternTool?.step !== "pick") holePatternPickAbortRef.current?.abort();
+  }, [holePatternTool]);
+
   // "Face" (#404): pick a flat face of the selected body, then push it out or cut a pocket in, with an inset from its edge.
   const toggleFaceTool = useCallback(() => {
     if (faceTool) {
@@ -7826,12 +7832,22 @@ export function LayerlingEditor({
     const source = shapesRef.current.find((shape) => shape.id === faceTool.sourceId);
     const run = faceToolPickRunRef.current + 1;
     faceToolPickRunRef.current = run;
+    faceToolPickAbortRef.current?.abort();
     if (!pick || !source || pick.shapeId !== source.id) {
       setNotice(t("status.faceToolMissed"));
       return;
     }
     const fingerprint = projectShapesFingerprint([source]);
-    const read = readPerforableFace(worldTrianglePositions(await faceReadMesh(source)), pick.point, pick.normal);
+    const pickAbort = new AbortController();
+    faceToolPickAbortRef.current = pickAbort;
+    let triangles: ArrayLike<number>;
+    try {
+      triangles = await faceReadPositionsOffThread(source, pickAbort.signal);
+    } catch (error) {
+      if (faceToolPickRunRef.current === run) setNotice(localizedError(error instanceof Error ? error.message : String(error)), true);
+      return;
+    }
+    const read = readPerforableFace(triangles, pick.point, pick.normal);
     const latest = shapesRef.current.find((shape) => shape.id === source.id);
     if (faceToolPickRunRef.current !== run || !latest || projectShapesFingerprint([latest]) !== fingerprint) return;
     if (!read.ok) {
@@ -7944,6 +7960,10 @@ export function LayerlingEditor({
       setFaceTool(null);
     }
   }, [arrayTool, deleteFaceTool, edgeModifier, faceTool, holePatternTool, layFlatPickMode, mateTool, pivotPickMode, scalePercentTool, selectedIds, shellTool, simplifyToolId, splitSession]);
+
+  useEffect(() => {
+    if (faceTool?.step !== "pick") faceToolPickAbortRef.current?.abort();
+  }, [faceTool]);
 
   // The worker reads the body's faces for picking; the tool starts empty and fills in when they come.
   // `error`: a refusal that is still to be read stays in the panel while the faces come again.
@@ -9762,7 +9782,7 @@ export function LayerlingEditor({
         // Taken before the face is read: joining a group's or bundle's parts takes a moment, and the scene may change meanwhile.
         const sourceFingerprint = projectShapesFingerprint(currentShapes());
         const sourceProjectId = projectInfoRef.current.projectId;
-        const read = readPerforableFace(worldTrianglePositions(await faceReadMesh(target)), point, normal);
+        const read = readPerforableFace(await faceReadPositionsOffThread(target, geometryAbortRef.current?.signal), point, normal);
         if (!read.ok) throw new Error(read.reason === "curved" ? "That face is curved; perforate_face needs a flat face" : "perforate_face found no flat face there");
         const plan = holePatternShapes(read.face, settings, t("holePattern.holeName"));
         if (plan.tooMany) throw new Error("That would be too many holes; make them bigger or the spacing wider");
@@ -9819,7 +9839,7 @@ export function LayerlingEditor({
         });
         const sourceFingerprint = projectShapesFingerprint(currentShapes());
         const sourceProjectId = projectInfoRef.current.projectId;
-        const read = readPerforableFace(worldTrianglePositions(await faceReadMesh(target)), point, normal);
+        const read = readPerforableFace(await faceReadPositionsOffThread(target, geometryAbortRef.current?.signal), point, normal);
         if (!read.ok) throw new Error(read.reason === "curved" ? "That face is curved; push_face needs a flat face" : "push_face found no flat face there");
         const body = await faceToolBody(target, read.face, settings, {
           name: t(settings.direction === "in" ? "faceTool.pocketName" : "faceTool.bodyName"),
