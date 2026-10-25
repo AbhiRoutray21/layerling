@@ -86,7 +86,7 @@ type WorkspaceSettings = WorkplaneWorkspaceSettings;
 type WorkspaceSettingsSection = "appearance" | "measurement" | "workplane" | "shapes" | "history";
 
 const MIN_WORKSPACE_SIZE = 60;
-const MAX_WORKSPACE_SIZE = 2000;
+const MAX_WORKSPACE_SIZE = 5000;
 const MIN_GRID_BLOCK_SIZE = 1;
 const MAX_GRID_BLOCK_SIZE = 200;
 const WORKSPACE_SIZE_PRESETS = [
@@ -906,6 +906,12 @@ export function WorkspaceSettingsModal({
                     description={t("workspace.frameByDirectionHint")}
                     checked={workspace.frameByDirection}
                     onChange={(frameByDirection) => patchWorkspace({ frameByDirection })}
+                  />
+                  <WorkspaceToggle
+                    label={t("workspace.pasteCentered")}
+                    description={t("workspace.pasteCenteredHint")}
+                    checked={workspace.pasteCentered}
+                    onChange={(pasteCentered) => patchWorkspace({ pasteCentered })}
                   />
                   <WorkspaceToggle
                     label={t("workspace.doubleClickOpensSketch")}

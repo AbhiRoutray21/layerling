@@ -28,5 +28,15 @@
       "de": "Ein Entwurf kann jetzt auch Bilder (.png, .jpg, .webp) und PDF-Dateien behalten, etwa ein Foto des gedruckten Teils oder ein Datenblatt. Das Auge zeigt ein Bild direkt im Fenster; ein PDF lädst du herunter.",
       "en": "A design can now also keep pictures (.png, .jpg, .webp) and PDF files, such as a photo of the printed part or a datasheet. The eye shows a picture right in the window; a PDF is downloaded."
     }
+  },
+  {
+    "title": {
+      "de": "Einfügen in der Mitte",
+      "en": "Paste in the middle"
+    },
+    "body": {
+      "de": "In den Einstellungen gibt es den Schalter „Einfügen in der Mitte und abgesetzt“: Beim Einfügen kommen die Teile dann zusammen in die Mitte der Arbeitsebene und stehen darauf, statt an der Stelle, von der sie kamen. Praktisch für Teile aus anderen Programmen, die sonst weit weg von der Platte landen.",
+      "en": "The settings have a new switch, \"Paste in the middle and drop\": a paste then sets the parts together in the middle of the workplane and stands them on it, instead of where they came from. Handy for parts from other programs, which can otherwise land far from the plate."
+    }
   }
 ]
