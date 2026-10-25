@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 // @ts-expect-error - the bridge is plain JavaScript and carries no types.
 import { tools } from "../../scripts/layerling-mcp-tools.mjs";
-import { ATTACHMENT_LIMITS, projectAttachmentFromBytes } from "@/lib/projectAttachments";
+import { ATTACHMENT_LIMITS, attachmentMaxBytes, projectAttachmentFromBytes } from "@/lib/projectAttachments";
 import { ATTACHMENT_MCP_ACTIONS, attachmentMcpCommand, type AttachmentMcpContext } from "@/lib/projectAttachmentsMcp";
 import type { ProjectAttachment } from "@/types/layerling";
 
@@ -107,13 +107,14 @@ describe("adding", () => {
   it("applies the panel's checks and changes nothing when one fails", async () => {
     const { state, run } = await editorWith();
     const png = new Uint8Array([0x89, 0x50, 0x4e, 0x47, 0, 0, 0, 0]);
-    await expect(run("add_attachment", { name: "photo.png", base64: base64(png) })).rejects.toThrow(/not a type of file/);
+    await expect(run("add_attachment", { name: "photo.png", base64: base64(png) })).rejects.toThrow(/not a PNG file/);
+    await expect(run("add_attachment", { name: "drawing.svg", base64: base64("<svg/>") })).rejects.toThrow(/not a type of file/);
     await expect(run("add_attachment", { name: "photo.txt", base64: base64(png) })).rejects.toThrow(/not plain UTF-8 text/);
     await expect(run("add_attachment", { name: "empty.md", base64: "" })).rejects.toThrow(/is empty/);
     await expect(run("add_attachment", { name: "../../notes.md", base64: base64("x") })).resolves.toEqual(
       expect.objectContaining({ attachment: expect.objectContaining({ name: "notes.md" }) }),
     );
-    await expect(run("add_attachment", { name: "big.txt", base64: base64("a".repeat(ATTACHMENT_LIMITS.fileBytes + 1)) })).rejects.toThrow(/larger than/);
+    await expect(run("add_attachment", { name: "big.txt", base64: base64("a".repeat(ATTACHMENT_LIMITS.textBytes + 1)) })).rejects.toThrow(/larger than/);
     expect(state.list().map((entry) => entry.name)).toEqual(["notes.md"]);
   });
 
@@ -121,13 +122,13 @@ describe("adding", () => {
     const { run } = await editorWith();
     await expect(run("add_attachment", { name: "a.md", base64: "not base64!" })).rejects.toThrow(/not valid base64/);
     await expect(run("add_attachment", { name: "a.md" })).rejects.toThrow(/base64 is required/);
-    await expect(run("add_attachment", { name: "a.md", base64: "A".repeat(ATTACHMENT_LIMITS.fileBytes * 2) })).rejects.toThrow(/larger than/);
+    await expect(run("add_attachment", { name: "a.md", base64: "A".repeat(Math.ceil(attachmentMaxBytes() / 3) * 4 + 4) })).rejects.toThrow(/larger than/);
   });
 
   it("keeps to the number of files a design may hold", async () => {
     const files = Array.from({ length: ATTACHMENT_LIMITS.files }, (_, index): [string, string] => [`file ${index}.txt`, "x"]);
     const { run } = await editorWith(...files);
-    await expect(run("add_attachment", { name: "one more.txt", base64: base64("x") })).rejects.toThrow(/at most 16 attachments/);
+    await expect(run("add_attachment", { name: "one more.txt", base64: base64("x") })).rejects.toThrow(`at most ${ATTACHMENT_LIMITS.files} attachments`);
   });
 });
 
@@ -149,7 +150,8 @@ describe("renaming", () => {
 
   it("checks a new extension against the content and the allowed types", async () => {
     const { run } = await editorWith(["notes.md", "a"]);
-    await expect(run("rename_attachment", { name: "notes.md", newName: "notes.pdf" })).rejects.toThrow(/not a type of file/);
+    await expect(run("rename_attachment", { name: "notes.md", newName: "notes.pdf" })).rejects.toThrow(/not a PDF file/);
+    await expect(run("rename_attachment", { name: "notes.md", newName: "notes.svg" })).rejects.toThrow(/not a type of file/);
     await expect(run("rename_attachment", { name: "notes.md" })).rejects.toThrow(/newName is required/);
     await expect(run("rename_attachment", { name: "notes.md", newName: "notes.txt" })).resolves.toBeDefined();
   });

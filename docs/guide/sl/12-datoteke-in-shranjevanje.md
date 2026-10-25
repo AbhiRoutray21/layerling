@@ -32,11 +32,12 @@ Posamezen načrt shraniš v urejevalniku: {{ui:editor.export}}, nato izberi obli
 
 ## Priloge
 
-Navodila, seznam delov ali nekaj opomb lahko ostane pri projektu kot datoteke. {{ui:editor.attachments}} v vrstici {{ui:editor.group.manage}}, sponka, odpre seznam; majhna pika na sponki pokaže, da jih projekt ima.
+Navodila, seznam delov, opombe, fotografija ali podatkovni list lahko ostanejo pri projektu kot datoteke. {{ui:editor.attachments}} v vrstici {{ui:editor.group.manage}}, sponka, odpre seznam; majhna pika na sponki pokaže, da jih projekt ima.
 
-- **{{ui:attachments.upload}}:** Izberi eno ali več datotek `.md` (Markdown) ali `.txt`. Datoteka mora biti navadno besedilo (UTF-8) in največ 2 MB; projekt sprejme do 16 datotek in skupaj 8 MB.
+- **{{ui:attachments.upload}}:** Izberi eno ali več datotek: `.md` (Markdown) ali `.txt` kot navadno besedilo (UTF-8), slike `.png`, `.jpg`, `.jpeg` ali `.webp` ali dokumente `.pdf`. Datoteka se preveri po vsebini, zato je datoteka, ki ni to, kar pravi njeno ime, zavrnjena, drugih vrst, med njimi `.svg`, pa ni mogoče priložiti. Besedilna datoteka ima lahko največ 2 MB, slika 16 MB in PDF 32 MB; projekt sprejme do 32 datotek in skupaj 64 MB.
 - **Seznam:** Puščica prenese datoteko, kakršna je bila naložena. Koš jo odstrani; vrstica prej še enkrat vpraša, odstranjene datoteke pa ni mogoče vrniti z razveljavitvijo, ker priloge niso del zgodovine razveljavitev.
 - **Branje datoteke:** Oko v vrstici datoteke `.md` ali `.txt` jo odpre v oknu za branje, ne da bi jo prenesel. Markdown se prikaže oblikovan, z naslovi, seznami, potrditvenimi polji, tabelami in kodo; besedilna datoteka točno tako, kot je napisana. Delujejo le povezave na spletne strani in e-poštne naslove, odprejo pa se v novem zavihku. Slike, ki jih datoteka navaja, se ne naložijo: na njihovem mestu stoji njihov opis. Okno zapre Escape, križec ali klik poleg njega. Branje deluje tudi v pogledu zgodovine.
+- **Ogled slike:** Oko v vrstici slike jo odpre v istem oknu, pomanjšano, če je velika. PDF nima očesa: prenesi ga in ga odpri v programu, s katerim bereš datoteke PDF.
 - **Ime, ki že obstaja:** layerling vpraša, kaj naj se zgodi. {{ui:attachments.replace}} vstavi novo vsebino v datoteko s tem imenom, ki ohrani svoje mesto na seznamu. {{ui:common.rename}} doda novo datoteko pod drugim imenom in predlaga prvo prosto, na primer `opombe 2.md`. Križec novo datoteko izpusti. Velike in male črke štejejo enako, ponovno nalaganje iste datoteke pa ne spremeni ničesar.
 
 Priloge se shranijo s projektom kot vse drugo: v brskalniku, v datoteki LYL, v varnostni kopiji in v projektu na strežniku, kamor pridejo, takoj ko se katera doda ali odstrani. S {{ui:import.insertProject}} ali z lastno obliko ne gredo zraven, poročilo o napaki pa jih ne vsebuje. Projekt s prilogami se shrani kot novejša vrsta datoteke LYL: starejši layerling pove, da je ne more odpreti, namesto da bi datoteke izgubil. Projekt brez prilog se shrani povsem tako kot prej.

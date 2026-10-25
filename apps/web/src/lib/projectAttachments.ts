@@ -6,8 +6,9 @@ import type { ProjectAttachment } from "@/types/layerling";
  * Files kept with a design (#820): instructions, a parts list, a readme.
  *
  * An attachment is an ordinary file the user uploads. It is saved in the design's `.lyl` package
- * (format version 3, see `lylProject.ts`), so it travels with the design: in the browser, in an
- * exported file, in a backup and in the server folder. It is not part of the undo history.
+ * (format version 3, or 4 for the types that came later; see `lylProject.ts`), so it travels with the
+ * design: in the browser, in an exported file, in a backup and in the server folder. It is not part of
+ * the undo history.
  *
  * This module is the one place that decides what an attachment is. Everything that touches one asks
  * it, so the answer cannot differ between them:
@@ -33,18 +34,30 @@ import type { ProjectAttachment } from "@/types/layerling";
 // ---------------------------------------------------------------------------------------------
 
 /**
- * How much a design may carry. The numbers are small on purpose: the attachments are packed into the
- * design's package and so go through every save of it - the one in the browser after each change, the
- * one to the server folder, every export. A file of a few kilobytes is what instructions and a parts
- * list are; a megabyte of text is already a book.
+ * How much a design may carry. The attachments are packed into the design's package and so go through
+ * every save of it - the one in the browser after each change, the one to the server folder, every
+ * export - which is why there are limits at all. Each kind of file has the size its use needs:
+ *
+ *   - Text: a file of a few kilobytes is what instructions and a parts list are; a megabyte of text is
+ *     already a book. The Markdown viewer reads a file this size in well under a second.
+ *   - Pictures: a photo of the finished assembly, straight from a phone camera (3 to 12 MB as JPEG), or
+ *     a large screenshot or drawing as PNG.
+ *   - PDF: a scanned or original technical document of some pages; scans are the large ones.
+ *
+ * Pictures and PDF files are already compressed, so they are stored in the package as they are and cost a
+ * save little more than copying them (`compressed` in the type table, `boundedProjectZip`).
  */
 export const ATTACHMENT_LIMITS = {
-  /** One file, in bytes. */
-  fileBytes: 2 * 1024 * 1024,
+  /** One `.md` or `.txt` file, in bytes. */
+  textBytes: 2 * 1024 * 1024,
+  /** One picture, in bytes. */
+  pictureBytes: 16 * 1024 * 1024,
+  /** One PDF file, in bytes. */
+  pdfBytes: 32 * 1024 * 1024,
   /** Files in one design. */
-  files: 16,
+  files: 32,
   /** All files of one design together, in bytes. */
-  totalBytes: 8 * 1024 * 1024,
+  totalBytes: 64 * 1024 * 1024,
   /** Characters in a file name, extension included. */
   nameLength: 120,
 } as const;
@@ -61,13 +74,14 @@ export const ATTACHMENT_LIMITS = {
  *   - `name`      the name is empty, has a folder in it, or has no extension to speak of
  *   - `type`      the extension is not one that may be attached
  *   - `empty`     the file has no bytes
- *   - `tooBig`    the file is over `ATTACHMENT_LIMITS.fileBytes`
+ *   - `tooBig`    the file is over the size its type allows (`maxBytes` in the type table)
  *   - `notText`   the file is called text but is not (a binary file renamed to ".txt", say)
+ *   - `content`   the file is not what its extension says (a ".png" that is no PNG picture, say)
  *   - `tooMany`   the list would hold more than `ATTACHMENT_LIMITS.files` files
  *   - `tooMuch`   the list would hold more than `ATTACHMENT_LIMITS.totalBytes` bytes
  *   - `nameTaken` another file of the list already has this name
  */
-export type AttachmentProblem = "name" | "type" | "empty" | "tooBig" | "notText" | "tooMany" | "tooMuch" | "nameTaken";
+export type AttachmentProblem = "name" | "type" | "empty" | "tooBig" | "notText" | "content" | "tooMany" | "tooMuch" | "nameTaken";
 
 /**
  * Thrown where a refused file or list has to stop a calculation. It keeps the code, so a caller that
@@ -87,8 +101,9 @@ export function attachmentProblemText(problem: AttachmentProblem, fileName?: str
     case "name": return `${file} has no usable name`;
     case "type": return `${file} is not a type of file that can be attached`;
     case "empty": return `${file} is empty`;
-    case "tooBig": return `${file} is larger than ${ATTACHMENT_LIMITS.fileBytes / (1024 * 1024)} MB`;
+    case "tooBig": return `${file} is larger than ${attachmentMaxBytes(fileName) / (1024 * 1024)} MB`;
     case "notText": return `${file} is not plain UTF-8 text`;
+    case "content": return `${file} is not a ${(fileName && attachmentTypeForFileName(fileName)?.label) || "file of its type"} file`;
     case "tooMany": return `A design holds at most ${ATTACHMENT_LIMITS.files} attachments`;
     case "tooMuch": return `The attachments of a design hold at most ${ATTACHMENT_LIMITS.totalBytes / (1024 * 1024)} MB together`;
     case "nameTaken": return `${file} is already attached`;
@@ -114,26 +129,61 @@ function textProblem(bytes: Uint8Array): AttachmentProblem | null {
   }
 }
 
+/**
+ * A check for a file that is not text: its first bytes have to be the signature its format starts
+ * with (the "magic number"). That is what tells a real PNG from a program renamed to ".png". It does
+ * not prove the rest of the file is sound, and it does not have to: nothing here decodes the file,
+ * and a browser that shows a picture decodes it in its own image decoder, which runs no code.
+ *
+ * `at` says where the signature sits; WebP's container ("RIFF") has its own name 8 bytes in.
+ */
+function signatureCheck(...parts: Array<{ at: number; bytes: readonly number[] }>) {
+  return (bytes: Uint8Array): AttachmentProblem | null =>
+    parts.every(({ at, bytes: expected }) => expected.every((byte, index) => bytes[at + index] === byte)) ? null : "content";
+}
+
+/** The bytes of an ASCII text, for the signatures below, so that each reads as what it is. */
+const ascii = (text: string) => Array.from(text, (char) => char.charCodeAt(0));
+
 /** One kind of file that may be attached. */
 export type AttachmentType = {
   /** In lower case and without the dot. */
   extension: string;
   /** What the package records the file as, and what a download is given as its type. */
   mediaType: string;
+  /** The type's name in a sentence ("is not a PNG file"); the same in every language. */
+  label: string;
+  /**
+   * The `.lyl` format version that first carries this type. A design with a file of a later type is
+   * written in that version, so an older layerling that would not know the type refuses the package
+   * with "made with a newer layerling" instead of failing on the file (see `lylProject.ts`).
+   */
+  formatVersion: 3 | 4;
+  /** The most bytes one file of this type may have (one of `ATTACHMENT_LIMITS`). */
+  maxBytes: number;
+  /**
+   * True for a type whose files are compressed already (pictures, PDF). The package stores them as they
+   * are: compressing them again would win next to nothing and cost every save the time to try.
+   */
+  compressed?: true;
   /**
    * What the bytes have to be for the extension to be true: null when they are, otherwise the problem.
    * A file is never trusted by its name alone - a name is easy to fake - so every type brings its own check.
    */
   check: (bytes: Uint8Array) => AttachmentProblem | null;
   /**
-   * How the attachment viewer shows the file: "markdown" formatted (`markdownView.ts`), "text" as it is.
-   * A type without it gets no View button in the panel, only Download.
+   * How the attachment viewer shows the file: "markdown" formatted (`markdownView.ts`), "text" as it is,
+   * "image" as the picture it is. A type without it gets no View button in the panel, only Download.
    */
   view?: AttachmentView;
 };
 
 /** The ways the attachment viewer can show a file. */
-export type AttachmentView = "markdown" | "text";
+export type AttachmentView = "markdown" | "text" | "image";
+
+/** The first bytes of the picture types (phase 4 of #820), which every such file starts with. */
+const PNG_SIGNATURE = [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a];
+const JPEG_SIGNATURE = [0xff, 0xd8, 0xff];
 
 /**
  * Every type that may be attached, one row each. This table is the whole definition of "may be
@@ -142,9 +192,51 @@ export type AttachmentView = "markdown" | "text";
  * else has to change.
  */
 export const ATTACHMENT_TYPES: readonly AttachmentType[] = [
-  { extension: "md", mediaType: "text/markdown", check: textProblem, view: "markdown" },
-  { extension: "txt", mediaType: "text/plain", check: textProblem, view: "text" },
+  { extension: "md", mediaType: "text/markdown", label: "Markdown", formatVersion: 3, maxBytes: ATTACHMENT_LIMITS.textBytes, check: textProblem, view: "markdown" },
+  { extension: "txt", mediaType: "text/plain", label: "text", formatVersion: 3, maxBytes: ATTACHMENT_LIMITS.textBytes, check: textProblem, view: "text" },
+  // Pictures: the three kinds every browser shows and a phone or a screenshot tool makes. SVG is left
+  // out on purpose: it is a document, not a picture, and can carry scripts and links to other servers
+  // that run when the downloaded file is opened in a browser. GIF, BMP and HEIC are rare or large, or a
+  // browser cannot show them; each is one more row when it is wanted.
+  { extension: "png", mediaType: "image/png", label: "PNG", formatVersion: 4, maxBytes: ATTACHMENT_LIMITS.pictureBytes, compressed: true, check: signatureCheck({ at: 0, bytes: PNG_SIGNATURE }), view: "image" },
+  { extension: "jpg", mediaType: "image/jpeg", label: "JPEG", formatVersion: 4, maxBytes: ATTACHMENT_LIMITS.pictureBytes, compressed: true, check: signatureCheck({ at: 0, bytes: JPEG_SIGNATURE }), view: "image" },
+  { extension: "jpeg", mediaType: "image/jpeg", label: "JPEG", formatVersion: 4, maxBytes: ATTACHMENT_LIMITS.pictureBytes, compressed: true, check: signatureCheck({ at: 0, bytes: JPEG_SIGNATURE }), view: "image" },
+  { extension: "webp", mediaType: "image/webp", label: "WebP", formatVersion: 4, maxBytes: ATTACHMENT_LIMITS.pictureBytes, compressed: true, check: signatureCheck({ at: 0, bytes: ascii("RIFF") }, { at: 8, bytes: ascii("WEBP") }), view: "image" },
+  // A PDF is kept and downloaded but not shown in the app (no `view`): a PDF viewer is a program of its
+  // own, and the one the browser opens a downloaded file in is already there.
+  { extension: "pdf", mediaType: "application/pdf", label: "PDF", formatVersion: 4, maxBytes: ATTACHMENT_LIMITS.pdfBytes, compressed: true, check: signatureCheck({ at: 0, bytes: ascii("%PDF-") }) },
 ];
+
+/**
+ * The most bytes a file of this name may have: its type's `maxBytes`, or the largest of any type when the
+ * name is of no type (or not known), which is what a check before the type is known has to allow.
+ */
+export function attachmentMaxBytes(fileName?: string) {
+  return (fileName && attachmentTypeForFileName(fileName)?.maxBytes) || Math.max(...ATTACHMENT_TYPES.map((type) => type.maxBytes));
+}
+
+/**
+ * Whether a picture is one the browser can show, for a file whose first bytes are already known to be
+ * right: "content" when its decoder refuses the rest (garbage, HTML or a script behind a real header, a
+ * cut-off file, a picture too large to decode), null when it decodes or the file is no picture.
+ *
+ * The first bytes alone say what a file claims to be; this says that it is one. It is asked where a file
+ * comes in - the panel's upload and the bridge's add and rename, both through `projectAttachmentFromBytes`
+ * - and not when a saved design is opened, which would decode every picture on every load. Decoding runs
+ * in the browser's own image decoder, which only makes pixels; the bitmap is let go straight away.
+ * Where there is no decoder (the unit tests in Node), the check is left to the first bytes.
+ */
+async function pictureProblem(fileName: string, bytes: Uint8Array): Promise<AttachmentProblem | null> {
+  const type = attachmentTypeForFileName(fileName);
+  if (type?.view !== "image" || typeof createImageBitmap !== "function") return null;
+  try {
+    const bitmap = await createImageBitmap(new Blob([bytes as BlobPart], { type: type.mediaType }));
+    bitmap.close();
+    return null;
+  } catch {
+    return "content";
+  }
+}
 
 /** The lower-case extension of a file name, or "" when there is none ("README", ".md" alone). */
 function extensionOf(fileName: string) {
@@ -158,7 +250,11 @@ export function attachmentTypeForFileName(fileName: string) {
   return ATTACHMENT_TYPES.find((type) => type.extension === extension);
 }
 
-/** The type that goes by this media type; how a package's records are matched back to the table. */
+/**
+ * The type that goes by this media type; how a package's records are matched back to the table. Where
+ * two extensions share one media type (".jpg" and ".jpeg"), the first row is the one found, which is
+ * also the extension a package stores the bytes under.
+ */
 export function attachmentTypeForMediaType(mediaType: string) {
   return ATTACHMENT_TYPES.find((type) => type.mediaType === mediaType);
 }
@@ -171,7 +267,31 @@ export function attachmentView(attachment: Pick<ProjectAttachment, "mediaType">)
   return attachmentTypeForMediaType(attachment.mediaType)?.view;
 }
 
-/** The extensions that may be attached, ".md,.txt" for the `accept` of a file chooser or ".md, .txt" for a sentence. */
+/**
+ * The limits format version 3 came with (layerling 1.108). A layerling of that version refuses a list
+ * over them as broken, so a design that goes past them is written as version 4, even with text alone,
+ * and is refused there with "requires a newer layerling" instead.
+ */
+const VERSION_3_LIMITS = { files: 16, totalBytes: 8 * 1024 * 1024 } as const;
+
+/**
+ * The `.lyl` format version a design with these attachments needs: the newest `formatVersion` among
+ * their types, or 4 when there are more of them than version 3 allowed (`VERSION_3_LIMITS`); undefined
+ * when there are none (the design is then written as before attachments).
+ */
+export function attachmentsFormatVersion(attachments: readonly Pick<ProjectAttachment, "mediaType" | "byteLength">[]) {
+  if (attachments.length === 0) return undefined;
+  const totalBytes = attachments.reduce((total, attachment) => total + attachment.byteLength, 0);
+  if (attachments.length > VERSION_3_LIMITS.files || totalBytes > VERSION_3_LIMITS.totalBytes) return 4;
+  let version: 3 | 4 | undefined;
+  for (const attachment of attachments) {
+    const needed = attachmentTypeForMediaType(attachment.mediaType)?.formatVersion ?? 4;
+    if (version === undefined || needed > version) version = needed;
+  }
+  return version;
+}
+
+/** The extensions that may be attached, ".md,.txt,..." for the `accept` of a file chooser or ".md, .txt, ..." for a sentence. */
 export function attachmentAcceptList(separator = ",") {
   return ATTACHMENT_TYPES.map((type) => `.${type.extension}`).join(separator);
 }
@@ -257,9 +377,10 @@ export function attachmentFileProblem(name: string, bytes: Uint8Array): Attachme
   const problem = attachmentNameProblem(name);
   if (problem) return problem;
   if (bytes.byteLength === 0) return "empty";
-  if (bytes.byteLength > ATTACHMENT_LIMITS.fileBytes) return "tooBig";
   const type = attachmentTypeForFileName(name);
-  return type ? type.check(bytes) : "type";
+  if (!type) return "type";
+  if (bytes.byteLength > type.maxBytes) return "tooBig";
+  return type.check(bytes);
 }
 
 /** Why this many files of this size cannot be kept together, or null. Only sizes are looked at, so it also serves a package's records. */
@@ -310,7 +431,7 @@ export function attachmentsFingerprint(attachments: readonly ProjectAttachment[]
  */
 export async function projectAttachmentFromBytes(fileName: string, bytes: Uint8Array, id = createLocalId("attachment")): Promise<ProjectAttachment> {
   const name = cleanAttachmentName(fileName);
-  const problem = attachmentFileProblem(name, bytes);
+  const problem = attachmentFileProblem(name, bytes) ?? (await pictureProblem(name, bytes));
   if (problem) throw new AttachmentError(problem, name || fileName);
   const copy = new Uint8Array(bytes);
   return {

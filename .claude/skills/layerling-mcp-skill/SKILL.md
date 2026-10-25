@@ -170,7 +170,7 @@ A design can carry files (#820): instructions, a parts list, notes, kept inside 
 
 - `layerling_list_attachments({ editorNumber })` lists `id`, `name`, `mediaType`, `bytes` and `sha256` of each file, the total and the limits. `layerling_read_scene` lists them too, without content.
 - `layerling_get_attachment({ editorNumber, id })` (or `name`) returns the file's bytes as `base64`.
-- `layerling_add_attachment({ editorNumber, name, base64 })` attaches a file. The editor's checks apply: `.md` or `.txt`, UTF-8 text, 2 MB a file, 16 files and 8 MB together. A name already attached (in any case) is refused; pass `replace: true` only when the user wants that file overwritten - it keeps its id and name. The same content again changes nothing.
+- `layerling_add_attachment({ editorNumber, name, base64 })` attaches a file. The editor's checks apply: `.md` or `.txt` (UTF-8 text), `.png`, `.jpg`, `.jpeg` or `.webp` (a picture) or `.pdf`, each checked by its content; 2 MB for a text file, 16 MB for a picture, 32 MB for a PDF, 32 files and 64 MB together. A name already attached (in any case) is refused; pass `replace: true` only when the user wants that file overwritten - it keeps its id and name. The same content again changes nothing.
 - `layerling_rename_attachment({ editorNumber, id, newName })` renames a file; its content stays.
 - `layerling_remove_attachment({ editorNumber, id, confirm: true })` removes a file.
 

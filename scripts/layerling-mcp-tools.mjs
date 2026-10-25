@@ -1319,7 +1319,7 @@ export const tools = [
   },
   {
     name: "layerling_list_attachments",
-    description: "List the files kept with the design (#820), as the editor's Attachments panel (the paperclip in the Manage toolbar) shows them: id, name, mediaType, size in bytes and sha256 of each, the total, and the limits (types .md and .txt, 2 MB a file, 16 files, 8 MB together). Their content is not included; layerling_get_attachment reads a file. layerling_read_scene lists them too. Works in the History view.",
+    description: "List the files kept with the design (#820), as the editor's Attachments panel (the paperclip in the Manage toolbar) shows them: id, name, mediaType, size in bytes and sha256 of each, the total, and the limits (types .md, .txt, .png, .jpg, .jpeg, .webp and .pdf; text 2 MB, a picture 16 MB, a PDF 32 MB a file; 32 files and 64 MB together). Their content is not included; layerling_get_attachment reads a file. layerling_read_scene lists them too. Works in the History view.",
     inputSchema: { ...editorTargetSchema },
   },
   {
@@ -1336,7 +1336,7 @@ export const tools = [
   },
   {
     name: "layerling_add_attachment",
-    description: "Attach a file to the design, as Upload in the Attachments panel does; it is saved in the design's .lyl file. Give the bytes as base64. The panel's checks apply: the extension must be an allowed type (.md or .txt), the content must fit it (UTF-8 text without NUL bytes), at most 2 MB a file, 16 files and 8 MB together, and a name without a folder. A name that is already attached (compared without regard to case) is refused unless replace is true; then that file takes the new content and keeps its id, place and name. The same content again changes nothing. Attachments are not in the undo history. Not in the History view.",
+    description: "Attach a file to the design, as Upload in the Attachments panel does; it is saved in the design's .lyl file. Give the bytes as base64. The panel's checks apply: the extension must be an allowed type (.md, .txt, .png, .jpg, .jpeg, .webp or .pdf), the content must fit it (UTF-8 text without NUL bytes for .md and .txt, the format's signature for a picture or a PDF), at most 2 MB for a text file, 16 MB for a picture and 32 MB for a PDF, 32 files and 64 MB together, and a name without a folder. A name that is already attached (compared without regard to case) is refused unless replace is true; then that file takes the new content and keeps its id, place and name. The same content again changes nothing. Attachments are not in the undo history. Not in the History view.",
     inputSchema: {
       ...editorTargetSchema,
       required: ["name", "base64"],

@@ -8,5 +8,15 @@
       "de": "Die äußeren Ecken einer Gridfinity-Bodenplatte müssen nicht mehr mit 4 mm gerundet sein: Stell im Eigenschaften-Fenster „Eckenradius“ ein, bis 0 für rechtwinklige Ecken, die in die Ecken einer Schublade passen. Die Mulden bleiben, wie sie sind, die Behälter passen also wie bisher.",
       "en": "A Gridfinity baseplate's outer corners no longer have to be rounded by 4 mm: set \"Corner radius\" in the Properties panel, down to 0 for square corners that sit in a drawer's corners. The sockets stay as they are, so bins fit as before."
     }
+  },
+  {
+    "title": {
+      "de": "Bilder und PDF als Anhang",
+      "en": "Pictures and PDF as attachments"
+    },
+    "body": {
+      "de": "Ein Entwurf kann jetzt auch Bilder (.png, .jpg, .webp) und PDF-Dateien behalten, etwa ein Foto des gedruckten Teils oder ein Datenblatt. Das Auge zeigt ein Bild direkt im Fenster; ein PDF lädst du herunter.",
+      "en": "A design can now also keep pictures (.png, .jpg, .webp) and PDF files, such as a photo of the printed part or a datasheet. The eye shows a picture right in the window; a PDF is downloaded."
+    }
   }
 ]

@@ -6,6 +6,7 @@ import {
   importLylProject,
   inspectLylProjectPackage,
   LYL_ATTACHMENTS_FORMAT_VERSION,
+  LYL_FILE_TYPES_FORMAT_VERSION,
   LYL_FORMAT_VERSION,
   LYL_MINIMUM_READER_VERSION,
   withLylProjectName,
@@ -25,6 +26,21 @@ import type { ProjectAttachment, WorkplaneShape } from "@/types/layerling";
 const box: WorkplaneShape = { id: "b", name: "Box", kind: "box", color: "#123456", x: 0, z: 0, size: 20, width: 20, depth: 20, height: 10, rotation: 0 };
 
 const text = (content: string) => new TextEncoder().encode(content);
+/** The smallest bytes that pass for a PNG picture and a PDF: their signature and a little more. */
+const PNG = new Uint8Array([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0, 0, 0, 13]);
+const PDF = text("%PDF-1.7\n%%EOF\n");
+
+/** The compression method of each entry of a ZIP archive, from its central directory: 0 stored, 8 deflate. */
+function compressionMethods(bytes: Uint8Array) {
+  const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+  const methods: Record<string, number> = {};
+  for (let offset = 0; offset + 46 <= bytes.length; offset++) {
+    if (view.getUint32(offset, true) !== 0x02014b50) continue;
+    const nameLength = view.getUint16(offset + 28, true);
+    methods[strFromU8(bytes.subarray(offset + 46, offset + 46 + nameLength))] = view.getUint16(offset + 10, true);
+  }
+  return methods;
+}
 
 async function design(attachments?: ProjectAttachment[]) {
   return exportLylProject({
@@ -122,6 +138,43 @@ describe("attachments in a .lyl package", () => {
     expect(read(await design([])).document.formatVersion).toBe(LYL_FORMAT_VERSION);
   });
 
+  it("writes a design with a picture or a PDF as version 4, and brings the bytes back exactly", async () => {
+    const png = await projectAttachmentFromBytes("photo.png", PNG);
+    const pdf = await projectAttachmentFromBytes("datasheet.pdf", PDF);
+    const notes = await projectAttachmentFromBytes("notes.md", text("# Notes"));
+    const bytes = await design([notes, png, pdf]);
+    const { document, files } = read(bytes);
+    expect(document.formatVersion).toBe(LYL_FILE_TYPES_FORMAT_VERSION);
+    expect(document.minimumReaderVersion).toBe(LYL_FILE_TYPES_FORMAT_VERSION);
+    expect(Object.keys(files).filter((path) => path.startsWith("assets/attachment/")).map((path) => path.split(".").pop()).sort()).toEqual(["md", "pdf", "png"]);
+    // The picture and the PDF are compressed already and go in as they are (method 0); the text is deflated (8).
+    const methods = Object.fromEntries(Object.entries(compressionMethods(bytes)).filter(([path]) => path.startsWith("assets/attachment/")).map(([path, method]) => [path.split(".").pop(), method]));
+    expect(methods).toEqual({ md: 8, pdf: 0, png: 0 });
+    const restored = await importLylProject(bytes);
+    expect(restored.attachments?.map((entry) => [entry.name, entry.mediaType, entry.sha256])).toEqual([notes, png, pdf].map((entry) => [entry.name, entry.mediaType, entry.sha256]));
+    // Text alone keeps a design at version 3, so it still opens in the layerling that brought attachments.
+    expect(read(await design([notes])).document.formatVersion).toBe(LYL_ATTACHMENTS_FORMAT_VERSION);
+  });
+
+  it("refuses a version 3 package that carries a picture", async () => {
+    const bytes = await design([await projectAttachmentFromBytes("photo.png", PNG)]);
+    await expect(importLylProject(mutate(bytes, (document) => {
+      document.formatVersion = 3;
+      document.minimumReaderVersion = 3;
+    }))).rejects.toThrow(/does not carry PNG attachments/);
+  });
+
+  it("writes more text files than version 3 held as version 4, and refuses them as version 3", async () => {
+    const many = await Promise.all(Array.from({ length: 17 }, (_unused, index) => projectAttachmentFromBytes(`note ${index}.txt`, text("x"))));
+    const bytes = await design(many);
+    expect(read(bytes).document.formatVersion).toBe(LYL_FILE_TYPES_FORMAT_VERSION);
+    expect((await importLylProject(bytes)).attachments).toHaveLength(17);
+    await expect(importLylProject(mutate(bytes, (document) => {
+      document.formatVersion = 3;
+      document.minimumReaderVersion = 3;
+    }))).rejects.toThrow(/does not carry this many attachments/);
+  });
+
   it("survives a rename on the start page", async () => {
     const renamed = await withLylProjectName(await withFiles(), "Another name");
     expect((await inspectLylProjectPackage(renamed)).projectName).toBe("Another name");
@@ -132,9 +185,9 @@ describe("attachments in a .lyl package", () => {
     const one = await projectAttachmentFromBytes("a.md", text("x"));
     await expect(design([one, { ...one, id: "second", name: "A.MD" }])).rejects.toThrow(/already attached/);
     await expect(design([{ ...one, name: "folder/a.md" }])).rejects.toThrow(/no usable name/);
-    await expect(design([{ ...one, name: "a.pdf" }])).rejects.toThrow(/not a type of file/);
+    await expect(design([{ ...one, name: "a.svg" }])).rejects.toThrow(/not a type of file/);
     const many = await Promise.all(Array.from({ length: ATTACHMENT_LIMITS.files + 1 }, (_unused, index) => projectAttachmentFromBytes(`f${index}.txt`, text("x"))));
-    await expect(design(many)).rejects.toThrow(/at most 16/);
+    await expect(design(many)).rejects.toThrow(`at most ${ATTACHMENT_LIMITS.files}`);
   });
 });
 
@@ -180,7 +233,7 @@ describe("a package whose attachments are wrong is refused whole", () => {
 
   it("refuses an unknown type, a list that is not a list, a repeated id, a name taken twice and a missing asset", async () => {
     await expect(importLylProject(mutate(await withFiles(), (document) => {
-      document.assets.find((asset) => asset.kind === "attachment")!.mediaType = "application/pdf";
+      document.assets.find((asset) => asset.kind === "attachment")!.mediaType = "image/svg+xml";
     }))).rejects.toThrow(/cannot be attached/);
 
     await expect(importLylProject(mutate(await withFiles(), (document) => {
@@ -215,6 +268,6 @@ describe("a package whose attachments are wrong is refused whole", () => {
     await expect(importLylProject(mutate(await withFiles(), (document) => {
       const list = document.attachments as NonNullable<typeof document.attachments>;
       for (let index = 0; index < ATTACHMENT_LIMITS.files; index += 1) list.push({ id: `extra-${index}`, fileName: `extra ${index}.md`, assetId: list[0].assetId });
-    }))).rejects.toThrow(/at most 16/);
+    }))).rejects.toThrow(`at most ${ATTACHMENT_LIMITS.files}`);
   });
 });
