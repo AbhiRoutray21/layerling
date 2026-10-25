@@ -2,7 +2,7 @@
 import { t } from "@/lib/i18n";
 import { isBuildMessage, reportWorkerBuild } from "@/lib/buildStamp";
 import { cloneSketchProfile } from "@/lib/sketchSmoothHandles";
-import { canonicalizeShape, cleanNearZero } from "@/lib/workplaneShapes";
+import { canonicalizeShape, cleanNearZero, shapeDepth, shapeWidth } from "@/lib/workplaneShapes";
 import { SKETCH_CAD_DEFLECTION } from "@/lib/cadModifierRuntime";
 import { createLocalId } from "@/lib/localIds";
 import { revolveProfileFitsAxis } from "@/lib/cadSketchRevolve";
@@ -343,27 +343,39 @@ export function shapeFromCadMesh(
     maxZ = Math.max(maxZ, positions[index + 2]);
   }
   if (![minX, minY, minZ, maxX, maxY, maxZ].every(Number.isFinite)) return null;
-  const centerX = (minX + maxX) / 2;
-  const centerZ = (minZ + maxZ) / 2;
+  const meshCenterX = (minX + maxX) / 2;
+  const meshCenterZ = (minZ + maxZ) / 2;
   const rawWidth = Math.max(MIN_SHAPE_DIMENSION, maxX - minX);
   const rawHeight = Math.max(MIN_SHAPE_DIMENSION, maxY - minY);
   const rawDepth = Math.max(MIN_SHAPE_DIMENSION, maxZ - minZ);
+  // The kernel's mesh is the exact body cut into facets, so a round side measures a few hundredths short of the body:
+  // a 38.7 mm cylinder hollowed showed 38.69, and typing 38.7 again stretched the body before it into an ellipse that
+  // drifted further with every try (Jürgen Keller, 25.10.2026). A size or place within the facets' reach of what the
+  // body had before is the body's own, so it keeps it; the mesh is stretched by that hair to meet the true surface.
+  const near = Math.min(0.1, Math.max(0.02, 2 * (deflection?.linear ?? source.cadMeshDeflection?.linear ?? 0)));
+  const unturned = !source.rotation && !source.rotationX && !source.rotationZ;
+  const exact = (measured: number, before: number | undefined) => (
+    unturned && typeof before === "number" && Number.isFinite(before) && Math.abs(measured - before) <= near ? before : measured
+  );
+  const centerX = exact(meshCenterX, source.x);
+  const centerZ = exact(meshCenterZ, source.z);
+  const bottom = exact(minY, source.elevation ?? 0);
   const flattenedPositions: number[] = [];
   const flattenedNormals: number[] = [];
   for (let index = 0; index < indices.length; index += 1) {
     const vertex = indices[index] * 3;
-    flattenedPositions.push(positions[vertex] - centerX, positions[vertex + 1] - minY, positions[vertex + 2] - centerZ);
+    flattenedPositions.push(positions[vertex] - centerX, positions[vertex + 1] - bottom, positions[vertex + 2] - centerZ);
     if (normals.length >= vertex + 3) flattenedNormals.push(normals[vertex], normals[vertex + 1], normals[vertex + 2]);
   }
-  const width = cleanModelDimension(rawWidth);
-  const height = cleanModelDimension(rawHeight);
-  const depth = cleanModelDimension(rawDepth);
+  const width = cleanModelDimension(exact(rawWidth, shapeWidth(source)));
+  const height = cleanModelDimension(exact(rawHeight, source.height));
+  const depth = cleanModelDimension(exact(rawDepth, shapeDepth(source)));
   return canonicalizeShape({
     ...source,
     kind: "mesh",
     x: cleanNearZero(centerX, 0.0005),
     z: cleanNearZero(centerZ, 0.0005),
-    elevation: cleanNearZero(minY, 0.0005),
+    elevation: cleanNearZero(bottom, 0.0005),
     width,
     depth,
     height,
@@ -403,7 +415,7 @@ export function shapeFromCadMesh(
     cadBrepFrame: {
       x: cleanNearZero(centerX, 0.0005),
       z: cleanNearZero(centerZ, 0.0005),
-      elevation: cleanNearZero(minY, 0.0005),
+      elevation: cleanNearZero(bottom, 0.0005),
       width,
       depth,
       height,
