@@ -988,7 +988,7 @@ export function SketchWorkspace({
     ? selected.pointIds.map((id) => pointById.get(id)).filter((point): point is SketchPoint => Boolean(point))
     : [];
   const selectedGeometryBounds = boundsForSketchPoints(selectedGeometryPoints);
-  // A selection with a locked outline in it (#653) has no handles to stretch or turn it.
+  // A selection with a locked outline in it (#653) keeps its handles, grey and inert, as a locked body in 3D.
   const selectionLock = selected?.kind === "multiple" ? sketchLockState(profile, selected.pointIds) : "none";
   // Two outlines or more selected: they can be lined up on each other (#836).
   const canAlignOutlines = selected?.kind === "multiple" && canAlignSketchSelection(profile, selected.pointIds);
@@ -1846,7 +1846,7 @@ export function SketchWorkspace({
     minZ: selectedGeometryBounds.minZ - selectionFrameGap,
     maxZ: selectedGeometryBounds.maxZ + selectionFrameGap,
   } : null;
-  const selectionResizeHandles: Array<{ id: ResizeHandle; x: number; z: number; grab: { x: number; z: number } }> = selectedGeometryBounds && selectionFrame && !selectionLocked && pointerAction?.kind !== "rotate-selection" ? ([
+  const selectionResizeHandles: Array<{ id: ResizeHandle; x: number; z: number; grab: { x: number; z: number } }> = selectedGeometryBounds && selectionFrame && pointerAction?.kind !== "rotate-selection" ? ([
     // Corners stretch both ways (Shift keeps the proportions), the sides one way only (#168).
     { id: "nw", x: selectionFrame.minX, z: selectionFrame.minZ },
     { id: "n", x: selectedGeometryBounds.cx, z: selectionFrame.minZ },
@@ -2504,7 +2504,7 @@ export function SketchWorkspace({
                   <rect
                     key={`selection-handle-${handle.id}`}
                     data-sketch-entity="selection-handle"
-                    className={`sketch-geometry-resize-handle handle-${handle.id}`}
+                    className={`sketch-geometry-resize-handle handle-${handle.id} ${selectionLocked ? "locked" : ""}`}
                     x={handle.x - handleSize / 2}
                     y={handle.z - handleSize / 2}
                     width={handleSize}
@@ -2515,15 +2515,17 @@ export function SketchWorkspace({
                         beginPan(event);
                         return;
                       }
-                      if (event.button !== 0 || selected?.kind !== "multiple") return;
+                      if (event.button !== 0 || selected?.kind !== "multiple" || selectionLocked) return;
                       const startPoints = selected.pointIds.map((id) => profile.points.find((entry) => entry.id === id)).filter((entry): entry is SketchPoint => Boolean(entry)).map((entry) => ({ ...entry, handleIn: entry.handleIn ? { ...entry.handleIn } : undefined, handleOut: entry.handleOut ? { ...entry.handleOut } : undefined }));
                       const bounds = boundsForSketchPoints(startPoints);
                       if (!bounds) return;
                       beginEntityDrag(event, { kind: "resize-selection", pointerId: event.pointerId, handle: handle.id, current: { x: handle.x, z: handle.z }, grab: handle.grab, startPoints, bounds });
                     }}
-                  />
+                  >
+                    {selectionLocked ? <title>{t("status.objectLocked")}</title> : null}
+                  </rect>
                 ))}
-                {selectionFrame && selected?.kind === "multiple" && !selected.imageIds?.length && !selectionLocked ? (() => {
+                {selectionFrame && selected?.kind === "multiple" && !selected.imageIds?.length ? (() => {
                   // A curved arrow beyond each corner turns the selection about its middle (#330), like a picture's.
                   const frameCorners = [
                     { x: selectionFrame.minX, z: selectionFrame.minZ }, { x: selectionFrame.maxX, z: selectionFrame.minZ },
@@ -2539,19 +2541,37 @@ export function SketchWorkspace({
                         spots={rotateHandleSpots(frameCorners, frameCentre, rotateHandleGap, turning ? { corner: turning.corner, at: turning.current } : undefined)}
                         screenUnit={screenUnit}
                         entity="selection-rotate-handle"
-                        title={t("sketch.rotateSelection")}
+                        locked={selectionLocked}
+                        title={t(selectionLocked ? "status.objectLocked" : "sketch.rotateSelection")}
                         onPointerDown={(event, corner) => {
                           if (event.button === 1) {
                             beginPan(event);
                             return;
                           }
-                          if (event.button !== 0 || selected?.kind !== "multiple") return;
+                          if (event.button !== 0 || selected?.kind !== "multiple" || selectionLocked) return;
                           const startPoints = selected.pointIds.map((id) => profile.points.find((entry) => entry.id === id)).filter((entry): entry is SketchPoint => Boolean(entry)).map((entry) => ({ ...entry }));
                           const point = unsnappedPointFromEvent(event);
                           if (!point || startPoints.length < 1) return;
                           beginEntityDrag(event, { kind: "rotate-selection", pointerId: event.pointerId, pivot: sketchPointsPivot(startPoints), start: point, current: point, startPoints, snap: event.shiftKey, corner });
                         }}
                       />
+                      {selectionLock === "all" && tool === "select" ? (() => {
+                        // A locked outline wears the picture's padlock while selected: a click on it unlocks the outline.
+                        const spot = lockBadgeSpot(frameCorners[0], frameCorners, plateView, 28 * screenUnit);
+                        return spot ? (
+                          <SketchLockBadge
+                            spot={spot}
+                            screenUnit={screenUnit}
+                            title={t("sketch.unlockOutlineHint")}
+                            onPointerDown={(event) => {
+                              if (event.button !== 0) return;
+                              event.preventDefault();
+                              event.stopPropagation();
+                              onToggleOutlineLock?.();
+                            }}
+                          />
+                        ) : null;
+                      })() : null}
                       {pill && turnLabel && turning ? (
                         // The angle rides above the pointer while turning.
                         <g className="sketch-geometry-dimension" pointerEvents="none" transform={`translate(${turning.current.x} ${turning.current.z - 40 * screenUnit})`}>
@@ -2667,7 +2687,7 @@ export function SketchWorkspace({
             {displayProfile.points.map((point) => (
               <circle
                 data-sketch-entity="point"
-                className={`${isPointSelected(point.id) ? "selected" : ""} ${activePointId === point.id ? "active" : ""}`}
+                className={`${isPointSelected(point.id) ? "selected" : ""} ${activePointId === point.id ? "active" : ""} ${point.locked ? "locked" : ""}`}
                 key={point.id}
                 cx={point.x}
                 cy={point.z}

@@ -8286,6 +8286,30 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .sketch-image-hint {
   border-color: #d59c5f;
 }
 
+:where(html[data-theme="dark"][data-palette="graphite"]) .sketch-plate {
+  --locked-handle-ink: #898989;
+  --locked-handle-fill: #dfdfdf;
+}
+
+html[data-theme="dark"]:where([data-palette="graphite"]) .sketch-plate {
+  --locked-handle-ink: #656565;
+  --locked-handle-fill: #434343;
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .sketch-points circle.locked:not(.selected):not(.active):not(:hover) {
+  fill: var(--locked-handle-ink);
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .sketch-geometry-resize-handle.locked,
+:where(html[data-theme="dark"][data-palette="graphite"]) .sketch-geometry-resize-handle.locked:hover {
+  fill: var(--locked-handle-fill);
+  stroke: var(--locked-handle-ink);
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .sketch-rotate-handle.locked {
+  color: var(--locked-handle-ink);
+}
+
 :where(html[data-theme="dark"][data-palette="graphite"]) .toolbar-section-tools,
 :where(html[data-theme="dark"][data-palette="graphite"]) .toolbar-section .action-buttons {
   background: var(--toolbar-tile);

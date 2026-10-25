@@ -6458,11 +6458,6 @@ html[data-theme="dark"] .sketch-shape-options .unit {
   stroke-width: 3;
 }
 
-/* A locked outline (#653): paler, in any theme, so it reads as fixed. */
-.sketch-segments path.locked {
-  stroke-opacity: 0.5;
-}
-
 .sketch-preview-line {
   stroke: #ce7416;
   stroke-width: 2;

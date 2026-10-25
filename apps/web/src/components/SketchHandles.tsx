@@ -16,12 +16,15 @@ export function SketchRotateHandles({
   spots,
   screenUnit,
   entity,
+  locked = false,
   title,
   onPointerDown,
 }: {
   spots: RotateHandleSpot[];
   screenUnit: number;
   entity: string;
+  /** A locked selection's arrows stay, grey and inert, as on a locked body in 3D. */
+  locked?: boolean;
   title: string;
   onPointerDown: (event: ReactPointerEvent<SVGGElement>, corner: number) => void;
 }) {
@@ -31,7 +34,7 @@ export function SketchRotateHandles({
         // Flat on the plate: the arc lies in the plate and turns about its normal.
         const arrow = rotateHandleArrow((point) => ({ x: point.x, y: point.z }), { x: 0, y: 0, z: 0 }, { x: spot.outward.x, y: 0, z: spot.outward.z }, { x: 0, y: 1, z: 0 }, ARROW_RADIUS);
         return (
-          <g key={spot.corner} className="sketch-rotate-handle" data-sketch-entity={entity} transform={`translate(${spot.x} ${spot.z}) scale(${screenUnit})`} onPointerDown={(event) => onPointerDown(event, spot.corner)}>
+          <g key={spot.corner} className={`sketch-rotate-handle ${locked ? "locked" : ""}`} data-sketch-entity={entity} transform={`translate(${spot.x} ${spot.z}) scale(${screenUnit})`} onPointerDown={(event) => onPointerDown(event, spot.corner)}>
             <title>{title}</title>
             {/* The 40px grab area of the 3D handle. */}
             <rect className="sketch-rotate-handle-hit" x={-20} y={-20} width={40} height={40} />
