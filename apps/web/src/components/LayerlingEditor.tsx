@@ -1322,8 +1322,8 @@ function imagePlateDimensions(pixelWidth: number, pixelHeight: number) {
  * point, drawn as lines in their colours. `shapes` are the visible ones to export, loose holes among them.
  */
 async function footprintSvg(shapes: readonly WorkplaneShape[], title: string) {
-  const { solids, meshes: cut } = await exportBodiesWithLooseHoles(shapes);
-  const { meshes, quellen } = await colorSeparatedExportMeshes(solids, cut);
+  const { solids, meshes: cut, cut: wasCut } = await exportBodiesWithLooseHoles(shapes);
+  const { meshes, quellen } = await colorSeparatedExportMeshes(solids, cut, wasCut);
   const offset = footprintCutOffset(meshes);
   const bodies = offset === null ? [] : meshes.map((mesh, index) => {
     const body = solids[quellen[index]];
@@ -1341,8 +1341,8 @@ async function footprintSvg(shapes: readonly WorkplaneShape[], title: string) {
  * the export then writes the silhouette and says why.
  */
 async function visibleEdgesSvg(shapes: readonly WorkplaneShape[], title: string) {
-  const { solids, meshes: cut } = await exportBodiesWithLooseHoles(shapes);
-  const { meshes, quellen } = await colorSeparatedExportMeshes(solids, cut);
+  const { solids, meshes: cut, cut: wasCut } = await exportBodiesWithLooseHoles(shapes);
+  const { meshes, quellen } = await colorSeparatedExportMeshes(solids, cut, wasCut);
   if (meshes.length === 0) throw new Error(t("status.sectionSvgNothing"));
   const bodies = meshes.map((mesh, index) => {
     const body = solids[quellen[index]];
@@ -1454,8 +1454,8 @@ async function silhouetteDxf(shapes: WorkplaneShape[], cutMeshes: ReadonlyArray<
  * answer counts it.
  */
 async function footprintDxf(shapes: readonly WorkplaneShape[]): Promise<DxfResult & { openCount: number }> {
-  const { solids, meshes: cut } = await exportBodiesWithLooseHoles(shapes);
-  const { meshes } = await colorSeparatedExportMeshes(solids, cut);
+  const { solids, meshes: cut, cut: wasCut } = await exportBodiesWithLooseHoles(shapes);
+  const { meshes } = await colorSeparatedExportMeshes(solids, cut, wasCut);
   const offset = footprintCutOffset(meshes);
   if (offset === null) throw new Error(t("status.sectionSvgNothing"));
   const runtime = await getManifoldRuntime();
@@ -9168,9 +9168,9 @@ export function LayerlingEditor({
   const makeSectionMeshes = useCallback(async (shapesNow: WorkplaneShape[]) => {
     const { visible, hiddenNote } = visibleExportShapes(shapesNow);
     const hiddenCount = shapesNow.length - visible.length;
-    const { solids, meshes: cut } = await exportBodiesWithLooseHoles(visible);
+    const { solids, meshes: cut, cut: wasCut } = await exportBodiesWithLooseHoles(visible);
     if (solids.length === 0) return { solids, meshes: [], quellen: [] as number[], gescheitert: 0, hiddenNote, hiddenCount };
-    const { meshes, quellen, gescheitert } = await colorSeparatedExportMeshes(solids, cut);
+    const { meshes, quellen, gescheitert } = await colorSeparatedExportMeshes(solids, cut, wasCut);
     return { solids, meshes, quellen, gescheitert, hiddenNote, hiddenCount };
   }, []);
   const sectionMeshCacheRef = useRef<{ shapes: WorkplaneShape[]; made: ReturnType<typeof makeSectionMeshes> } | null>(null);
@@ -9213,9 +9213,9 @@ export function LayerlingEditor({
   /** Die Umrisse des Schnitts fuer das Messen - dieselben Koerper wie beim SVG. */
   const sectionContours = useCallback(async (axis: SectionPlaneAxis, offset: number, frame: SectionFrame | null = null) => {
     const { visible } = visibleExportShapes(shapesRef.current);
-    const { solids, meshes: cut } = await exportBodiesWithLooseHoles(visible);
+    const { solids, meshes: cut, cut: wasCut } = await exportBodiesWithLooseHoles(visible);
     if (solids.length === 0) return [];
-    const { meshes } = await colorSeparatedExportMeshes(solids, cut);
+    const { meshes } = await colorSeparatedExportMeshes(solids, cut, wasCut);
     return meshes.flatMap((mesh) => sliceMeshContours(sectionMeshInFrame(mesh, frame), axis, offset));
   }, []);
 
