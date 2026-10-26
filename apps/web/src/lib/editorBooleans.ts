@@ -1373,25 +1373,22 @@ async function colorSeparatedExportMeshesRaw(shapes: WorkplaneShape[], meshes: M
   const ergebnis: MeshData[] = [];
   const quellen: number[] = [];
   const gestutzt: boolean[] = [];
-  koerper.forEach((entry, index) => {
-    const schneider = koerper
-      .map((other, otherIndex) => ({ other, otherIndex }))
-      .filter(({ other, otherIndex }) => other.farbe !== entry.farbe && other.quelle > entry.quelle && durchdringt(index, otherIndex));
-    if (schneider.length === 0 || !runtime) {
-      if (schneider.length > 0) gescheitert += 1;
-      ergebnis.push(entry.mesh);
-      quellen.push(entry.quelle);
-      gestutzt.push(entry.gestutzt);
-      return;
-    }
+
+  /** The bodies of another colour that reach a body and came later: the shapes that cut it (Discussion #79). */
+  const spaeter = (index: number) => koerper
+    .map((other, otherIndex) => ({ other, otherIndex }))
+    .filter(({ other, otherIndex }) => other.farbe !== koerper[index].farbe && other.quelle > koerper[index].quelle && durchdringt(index, otherIndex));
+
+  /** A body with the cutters taken off: what is left, nothing (`leer`), or a cut that did not work (`rest` and `leer` both null/false). */
+  const abziehen = (entry: (typeof koerper)[number], schneider: { other: (typeof koerper)[number] }[]) => {
     const created: ManifoldSolid[] = [];
     let rest: MeshData | null = null;
     let leer = false;
     try {
       const ofMesh = (mesh: MeshData) => {
-        const manifoldMesh = meshDataToManifoldMesh(runtime, mesh);
+        const manifoldMesh = meshDataToManifoldMesh(runtime!, mesh);
         try {
-          const solid = runtime.Manifold.ofMesh(manifoldMesh);
+          const solid = runtime!.Manifold.ofMesh(manifoldMesh);
           created.push(solid);
           return solid.status() === "NoError" && solid.numTri() > 0 ? solid : null;
         } finally {
@@ -1401,7 +1398,7 @@ async function colorSeparatedExportMeshesRaw(shapes: WorkplaneShape[], meshes: M
       const basis = ofMesh(entry.mesh);
       const werkzeuge = schneider.map(({ other }) => ofMesh(other.mesh));
       if (basis && werkzeuge.every(Boolean)) {
-        const vereinigt = werkzeuge.length === 1 ? werkzeuge[0]! : runtime.Manifold.union(werkzeuge as ManifoldSolid[]);
+        const vereinigt = werkzeuge.length === 1 ? werkzeuge[0]! : runtime!.Manifold.union(werkzeuge as ManifoldSolid[]);
         created.push(vereinigt);
         const differenz = basis.subtract(vereinigt);
         created.push(differenz);
@@ -1412,12 +1409,50 @@ async function colorSeparatedExportMeshesRaw(shapes: WorkplaneShape[], meshes: M
       }
     } catch {
       rest = null;
+      leer = false;
     } finally {
       Array.from(new Set(created)).forEach(disposeManifold);
     }
-    if (leer) return;
-    if (rest && rest.faces.length > 0) {
-      ergebnis.push(rest);
+    return { rest, leer };
+  };
+
+  // A body that lies entirely inside later ones of another colour would be cut away to nothing and vanish from the file
+  // without a word (#906: a text inside a plate). It stays whole instead and the later bodies take its pocket.
+  const ersterSchnitt = new Map<number, { rest: MeshData | null; leer: boolean }>();
+  const verschluckt = new Set<number>();
+  if (runtime) {
+    koerper.forEach((entry, index) => {
+      const schneider = spaeter(index);
+      if (schneider.length === 0) return;
+      const ergebnisSchnitt = abziehen(entry, schneider);
+      ersterSchnitt.set(index, ergebnisSchnitt);
+      if (ergebnisSchnitt.leer) verschluckt.add(index);
+    });
+  }
+  koerper.forEach((entry, index) => {
+    const alle = spaeter(index);
+    // A swallowed body is cut only by later swallowed ones; any other body by the later bodies that were not swallowed
+    // and by the earlier ones that were, which win over it.
+    const schneider = verschluckt.has(index)
+      ? alle.filter(({ otherIndex }) => verschluckt.has(otherIndex))
+      : [
+          ...alle.filter(({ otherIndex }) => !verschluckt.has(otherIndex)),
+          ...koerper
+            .map((other, otherIndex) => ({ other, otherIndex }))
+            .filter(({ other, otherIndex }) => verschluckt.has(otherIndex) && other.farbe !== entry.farbe && other.quelle < entry.quelle && durchdringt(index, otherIndex)),
+        ];
+    if (schneider.length === 0 || !runtime) {
+      if (schneider.length > 0) gescheitert += 1;
+      ergebnis.push(entry.mesh);
+      quellen.push(entry.quelle);
+      gestutzt.push(entry.gestutzt);
+      return;
+    }
+    const gleich = schneider.length === alle.length && schneider.every(({ otherIndex }) => alle.some((one) => one.otherIndex === otherIndex));
+    const schnitt = gleich && ersterSchnitt.has(index) ? ersterSchnitt.get(index)! : abziehen(entry, schneider);
+    if (schnitt.leer) return;
+    if (schnitt.rest && schnitt.rest.faces.length > 0) {
+      ergebnis.push(schnitt.rest);
       gestutzt.push(true);
     } else {
       gescheitert += 1;
