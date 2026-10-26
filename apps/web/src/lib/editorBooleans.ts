@@ -2303,6 +2303,9 @@ export function restoreGroupedChildren(group: WorkplaneShape): WorkplaneShape[] 
  * hole is the exact shape it was. A group that mixes solids and holes cuts only its own solids, so it stays closed (#394).
  */
 export function restoreGroupedChildrenForEdges(group: WorkplaneShape): WorkplaneShape[] {
+  // A hull or an intersection is its own body, not the sum of its parts: opened, Hollow hollowed the two rounds of a
+  // hull one by one and the hull was gone, and an intersection could not be hollowed at all (#908). Its mesh goes.
+  if (group.groupOperation === "hull" || group.groupOperation === "intersection") return [group];
   return restoreGroupedChildren(group).flatMap((child) => {
     const grandChildren = child.groupedShapes ?? [];
     const opensCleanly = grandChildren.length > 0
