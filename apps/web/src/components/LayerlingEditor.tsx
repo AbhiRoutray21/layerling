@@ -178,7 +178,7 @@ import { sketchEscapeAction } from "@/lib/sketchEscape";
 import { booleanAutomationScene } from "@/lib/editorAutomation";
 import { debugShapeSummary, mcpPivotRequest, compactShapeSummary, mcpShapeSummary, mcpSketchFillProfile, mcpTextFont } from "@/lib/editorMcpSummary";
 import { sweepAnchorFromParams, sweepPathFromParams, sweepSectionFromParams, sweepSketchProfile } from "@/lib/sweepSketch";
-import { emptySketchProfile, cadShapeFromSketchProfile, cadShapeFromSketchSweep, revolveBuildProfile, shapeFromRevolvedSketchProfile, shapeFromCadMesh, sketchBodyAsOperation, sketchBodyOperation, sketchProfileLeftOfAxis, sketchReferenceShapeOnWorkplane, defaultMcpSketchProfile } from "@/lib/editorSketchCad";
+import { emptySketchProfile, cadShapeFromSketchProfile, cadShapeFromSketchSweep, revolveBuildProfile, shapeFromRevolvedSketchProfile, shapeFromCadMesh, sketchBodyAsOperation, sketchBodyOperation, sketchProfileLeftOfAxis, sketchReferenceShapeOnWorkplane, defaultMcpSketchProfile, type SketchMirrorAbout } from "@/lib/editorSketchCad";
 import { drawingLabelsInLanguage } from "@/lib/drawingLabels";
 import { offersTextLayers, textLayerStack, layeredTextShape, nameTagSource, nameTagsFor, offersIconLayers, iconLayerStack, iconTagArea, layeredIconShape, iconTagCopies, svgIconArea, iconTagFromSvg, keyringTabShape, keyringTabTag, keyringTabAt, keyringTabPlace, textFreeKeyring, textFreeKeyringPlace, iconFreeKeyring, iconFreeKeyringPlace } from "@/lib/editorTextTags";
 import { DEFAULT_KEYRING_DIAMETER } from "@/lib/textGeometry";
@@ -3671,6 +3671,15 @@ export function LayerlingEditor({
   const editedRevolveShape = sketchActive && sketchOperation === "revolve" && editingSketchShapeId ? shapes.find((shape) => shape.id === editingSketchShapeId) : undefined;
   const revolveSketchFront = sketchActive && sketchOperation === "revolve"
     && (placementWorkplaneIsBase(activeSketchWorkplane) || (editedRevolveShape ? revolveBodyStandsUpright(editedRevolveShape) : false));
+  // The sketch of a mirrored body opens as it was drawn; the bodies around it are shown mirrored to match (#896).
+  const sketchMirrorAbout = useMemo((): SketchMirrorAbout | null => {
+    const edited = sketchActive && !revolveSketchFront && editingSketchShapeId ? shapes.find((shape) => shape.id === editingSketchShapeId) : undefined;
+    if (!edited?.sketchProfile || !(edited.mirrorX || edited.mirrorZ)) return null;
+    const operation = sketchBodyOperation(edited);
+    if (operation !== "extrude" && operation !== "sweep") return null;
+    const anchor = sketchBodyAnchor(edited);
+    return { ...(edited.mirrorX ? { x: anchor.x } : {}), ...(edited.mirrorZ ? { z: anchor.z } : {}) };
+  }, [editingSketchShapeId, revolveSketchFront, shapes, sketchActive]);
   const sketchReferenceShapes = useMemo(() => {
     // Only the sketch view shows them; outside it every body would be projected for nothing.
     if (!sketchActive) return shapes;
@@ -3679,15 +3688,20 @@ export function LayerlingEditor({
         ? shape
         : sketchReferenceShapeOnWorkplane(shape, REVOLVE_REFERENCE_WORKPLANE));
     }
+    const onBase = placementWorkplaneIsBase(activeSketchWorkplane);
+    if (sketchMirrorAbout) {
+      return shapes.map((shape) => shape.hidden || shape.id === editingSketchShapeId || isNonSolidShape(shape)
+        ? shape
+        : sketchReferenceShapeOnWorkplane(shape, activeSketchWorkplane, !onBase, sketchMirrorAbout));
+    }
     // On the base plate a body that only stands turned about the vertical keeps its plain outline;
     // one that lies tilted (laid flat, stood on an edge) shows as it sits there, not as it was made (#231).
-    const onBase = placementWorkplaneIsBase(activeSketchWorkplane);
     const tilted = (shape: WorkplaneShape) => Boolean(shape.rotationX || shape.rotationZ);
     if (onBase && !shapes.some(tilted)) return shapes;
     return shapes.map((shape) => shape.hidden || shape.id === editingSketchShapeId || (onBase && !tilted(shape))
       ? shape
       : sketchReferenceShapeOnWorkplane(shape, activeSketchWorkplane, !onBase));
-  }, [activeSketchWorkplane, editingSketchShapeId, revolveSketchFront, shapes, sketchActive]);
+  }, [activeSketchWorkplane, editingSketchShapeId, revolveSketchFront, shapes, sketchActive, sketchMirrorAbout]);
   // A workplane inside a body cuts it: the sketch view shows the outline of the cut (a hollow body
   // gives a ring), where a workplane on a face shows that face. Per body, as an SVG path in the
   // workplane's own coordinates.
@@ -3699,14 +3713,18 @@ export function LayerlingEditor({
       const mesh = meshForShape(shape);
       const vertices = mesh.vertices.map(([x, y, z]) => {
         const local = placementWorkplaneCoordinates(activeSketchWorkplane, { x, y, z });
-        return { x: local.x, h: local.y, z: local.z };
+        return {
+          x: sketchMirrorAbout?.x !== undefined ? 2 * sketchMirrorAbout.x - local.x : local.x,
+          h: local.y,
+          z: sketchMirrorAbout?.z !== undefined ? 2 * sketchMirrorAbout.z - local.z : local.z,
+        };
       });
       if (!planeCutsMesh(vertices.map((vertex) => vertex.h))) return;
       const path = meshSlicePath(vertices, mesh.faces);
       if (path) slices[shape.id] = path;
     });
     return slices;
-  }, [activeSketchWorkplane, editingSketchShapeId, shapes, sketchActive]);
+  }, [activeSketchWorkplane, editingSketchShapeId, shapes, sketchActive, sketchMirrorAbout]);
   // The bodies seen through, all their edges projected onto the sketch plane, to trace round existing work (#354).
   const [sketchShowPartEdges, setSketchShowPartEdges] = useRememberedFlag("layerling.sketch.showPartEdges");
   const sketchReferenceEdges = useMemo(() => {
@@ -3717,12 +3735,16 @@ export function LayerlingEditor({
         const mesh = meshForShape(shape);
         const vertices = mesh.vertices.map(([x, y, z]) => {
           const local = placementWorkplaneCoordinates(revolveSketchFront ? REVOLVE_REFERENCE_WORKPLANE : activeSketchWorkplane, { x, y, z });
-          return { x: local.x, h: local.y, z: local.z };
+          return {
+            x: sketchMirrorAbout?.x !== undefined ? 2 * sketchMirrorAbout.x - local.x : local.x,
+            h: local.y,
+            z: sketchMirrorAbout?.z !== undefined ? 2 * sketchMirrorAbout.z - local.z : local.z,
+          };
         });
         return projectedEdgesPath(vertices, mesh.faces);
       })
       .join("");
-  }, [activeSketchWorkplane, editingSketchShapeId, revolveSketchFront, shapes, sketchActive, sketchShowPartEdges]);
+  }, [activeSketchWorkplane, editingSketchShapeId, revolveSketchFront, shapes, sketchActive, sketchMirrorAbout, sketchShowPartEdges]);
   const debugState = useMemo(
     () =>
       JSON.stringify({

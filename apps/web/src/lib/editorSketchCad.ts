@@ -450,13 +450,24 @@ export function shapeFromCadMesh(
  * A body as the sketch shows it on a workplane. With `seen` (a workplane on a face) the sketch shows each part as it is seen
  * from the plane, not only the face on it (#778): a plane set on a facet of a round body stands a little askew, and the face
  * "on the plane" was then a thin strip of one end, with the parts behind it left out.
+ *
+ * `mirrorAbout`: the sketch of a mirrored body is shown as it was drawn, not mirrored, so the bodies around it are mirrored
+ * to match, about the place of the body's middle in the sketch's own coordinates (#896).
  */
-export function sketchReferenceShapeOnWorkplane(shape: WorkplaneShape, workplane: PlacementWorkplane, seen = false): WorkplaneShape {
+export type SketchMirrorAbout = { x?: number; z?: number };
+
+export function sketchReferenceShapeOnWorkplane(shape: WorkplaneShape, workplane: PlacementWorkplane, seen = false, mirrorAbout?: SketchMirrorAbout): WorkplaneShape {
   const mesh = meshForShape(shape);
   const projectedVertices = mesh.vertices.map(([x, y, z]) => {
     const local = placementWorkplaneCoordinates(workplane, { x, y, z });
-    return { x: local.x, y: -local.y, z: local.z };
+    return {
+      x: mirrorAbout?.x !== undefined ? 2 * mirrorAbout.x - local.x : local.x,
+      y: -local.y,
+      z: mirrorAbout?.z !== undefined ? 2 * mirrorAbout.z - local.z : local.z,
+    };
   });
+  // One mirror turns the triangles inside out; two do not.
+  const reversed = (mirrorAbout?.x !== undefined) !== (mirrorAbout?.z !== undefined);
   // A loop, not Math.min(...list): a large imported mesh has more points than a call takes
   // arguments, and the spread overflowed the stack when the design was opened (#190).
   let minX = Number.POSITIVE_INFINITY;
@@ -476,7 +487,7 @@ export function sketchReferenceShapeOnWorkplane(shape: WorkplaneShape, workplane
   const centerX = (minX + maxX) / 2;
   const centerY = (minY + maxY) / 2;
   const centerZ = (minZ + maxZ) / 2;
-  const triangle = ([a, b, c]: number[]) => [a, b, c].flatMap((index) => {
+  const triangle = ([a, b, c]: number[]) => (reversed ? [a, c, b] : [a, b, c]).flatMap((index) => {
     const vertex = projectedVertices[index];
     return [vertex.x - centerX, vertex.y - centerY, vertex.z - centerZ];
   });
