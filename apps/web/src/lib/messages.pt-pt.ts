@@ -1403,4 +1403,5 @@ export const MESSAGES_PT_PT: Partial<Record<MessageKey, string>> = {
   "aria.colorValue": "{name} {color}",
   "interactiveHelp.open": "Abrir no guia",
   "welcome.guideUrl": "/guia-pt-pt/index.html",
+
 };
