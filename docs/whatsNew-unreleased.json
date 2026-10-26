@@ -38,5 +38,15 @@
       "de": "Stehen viele Körper an den Armen des Winkellineals, zeigt jeder seine Maße, und die Zahlen lassen sich nicht mehr zuordnen. Ein neuer Knopf unter dem Griff des Lineals schaltet das ab: Dann zeigen nur die ausgewählten Körper Maße. Die Wahl wird mit dem Entwurf gespeichert.",
       "en": "With many bodies at the arms of the framing square, each shows its measures and the numbers can no longer be told apart. A new button under the square's handle switches that off: then only the selected bodies show measures. The choice is kept with the design."
     }
+  },
+  {
+    "title": {
+      "de": "Mehrere Entwürfe auf einmal löschen",
+      "en": "Delete several designs at once"
+    },
+    "body": {
+      "de": "Auf der Startseite gibt es über den Entwürfen den Knopf „Auswählen“: Ein Klick auf eine Karte wählt sie aus, „Alle auswählen“ nimmt alle, und „Löschen“ fragt einmal für die ganze Auswahl. So sind viele alte Entwürfe schnell weg. Im Serverordner geht es genauso.",
+      "en": "The start page has a Select button above the designs: a click on a card chooses it, Select all takes every design, and Delete asks once for the whole choice. Many old designs are gone in a moment. It works the same in the server folder."
+    }
   }
 ]

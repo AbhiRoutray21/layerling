@@ -9,6 +9,7 @@ import "./secondView.css";
 import "./shortcuts.css";
 import "./sketchImage.css";
 import "./sketchLock.css";
+import "./dashboardSelect.css";
 import { DiagnoseStrip } from "@/components/DiagnoseStrip";
 import { NewVersionNotice } from "@/components/NewVersionNotice";
 import { ServiceWorkerRegistration } from "@/components/ServiceWorkerRegistration";
