@@ -316,6 +316,10 @@ An installation served as a static export – plain files on a web server – ca
 and layerling offers the same shared storage as above, folders and all. Without the folder the feature stays invisible,
 and the short guide in the editor explains how to switch it on. The web server needs PHP.
 
+PHP limits uploads by default (`upload_max_filesize` and `post_max_size`, a few megabytes), and a large design or a backup of
+many designs can be bigger. `store.php` then says which limit it ran into and what it stands at; raise both in `php.ini`, or in the
+Docker image with a file such as `uploads.ini` in `/usr/local/etc/php/conf.d/` (`upload_max_filesize = 512M`, `post_max_size = 512M`).
+
 The folder has **no login**: whoever can reach the page can read, write and delete what is in it. On a home network or in
 a workshop that is the point; on a publicly reachable site, protect it or leave it out.
 
