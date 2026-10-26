@@ -90,7 +90,7 @@ Hver flade på et legeme kan flyttes den samme afstand, udad eller indad. Det er
 
 1. Vælg ét legeme og klik på {{ui:editor.tool.offset}}, eller højreklik på legemet og vælg det der.
 2. Vælg {{ui:offset.grow}} eller {{ui:offset.shrink}} og indstil {{ui:offset.distance}}.
-3. {{ui:shell.edges}} bestemmer de ydre hjørner: afrundet holder den forskudte flade rund, skarp lader fladerne løbe videre, til de mødes.
+3. {{ui:offset.edges}} bestemmer de ydre hjørner: afrundet holder den forskudte flade rund, skarp lader fladerne løbe videre, til de mødes.
 4. Sæt hak ved {{ui:offset.copy}} for at beholde delen, som den er, og få det forstørrede legeme som en kopi, der allerede er et hul. Grupper hullet med modstykket, så skærer det præcis det spillerum, du valgte.
 5. Klik på {{ui:offset.apply}}.
 

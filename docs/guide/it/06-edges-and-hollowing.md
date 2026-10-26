@@ -89,7 +89,7 @@ Ogni faccia di un corpo può essere spostata della stessa distanza, verso l'este
 
 1. Seleziona un corpo e clicca su {{ui:editor.tool.offset}}, oppure fai clic destro sul corpo e sceglilo lì.
 2. Scegli {{ui:offset.grow}} o {{ui:offset.shrink}} e imposta la {{ui:offset.distance}}.
-3. Gli {{ui:shell.edges}} decidono gli angoli esterni: arrotondato mantiene tonda la superficie, netto lascia proseguire le facce finché non si incontrano.
+3. Gli {{ui:offset.edges}} decidono gli angoli esterni: arrotondato mantiene tonda la superficie, netto lascia proseguire le facce finché non si incontrano.
 4. Spunta {{ui:offset.copy}} per tenere il pezzo com'è e ottenere il corpo ingrandito come copia che è già un vuoto. Raggruppa quel vuoto con il pezzo da accoppiare e taglia esattamente il gioco scelto.
 5. Clicca su {{ui:offset.apply}}.
 

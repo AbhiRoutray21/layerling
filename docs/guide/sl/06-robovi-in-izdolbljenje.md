@@ -87,7 +87,7 @@ Vsako ploskev telesa lahko premakneš za isto razdaljo navzven ali navznoter. To
 
 1. Izberi eno telo in klikni {{ui:editor.tool.offset}} ali z desno tipko klikni telo in ga izberi tam.
 2. Izberi {{ui:offset.grow}} ali {{ui:offset.shrink}} in nastavi {{ui:offset.distance}}.
-3. {{ui:shell.edges}} določajo zunanje vogale: zaobljeno obdrži odmaknjeno površino okroglo, ostro pusti ploskvam, da tečejo naprej, dokler se ne srečajo.
+3. {{ui:offset.edges}} določajo zunanje vogale: zaobljeno obdrži odmaknjeno površino okroglo, ostro pusti ploskvam, da tečejo naprej, dokler se ne srečajo.
 4. Obkljukaj {{ui:offset.copy}}, da del ostane, kakršen je, povečano telo pa dobiš kot kopijo, ki je že luknja. To luknjo združi v skupino s protikosom in izreže natanko zračnost, ki si jo izbral.
 5. Klikni {{ui:offset.apply}}.
 

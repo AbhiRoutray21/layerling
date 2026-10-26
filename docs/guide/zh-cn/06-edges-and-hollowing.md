@@ -89,7 +89,7 @@ summary: 对指定的边做倒角或圆角，为盒子、杯子和壳体抽出�
 
 1. 选择一个实体并点击 {{ui:editor.tool.offset}}，或在实体上点右键后在菜单中选择。
 2. 选择 {{ui:offset.grow}} 或 {{ui:offset.shrink}}，并设置 {{ui:offset.distance}}。
-3. {{ui:shell.edges}} 决定外角：圆角让偏移后的曲面在外角保持圆滑，尖角让各面延伸直到相交。
+3. {{ui:offset.edges}} 决定外角：圆角让偏移后的曲面在外角保持圆滑，尖角让各面延伸直到相交。
 4. 勾选 {{ui:offset.copy}} 可保持零件不变，并把放大后的实体作为已经是孔的副本。把这个孔和配合件编组，它就切出你选定的间隙。
 5. 点击 {{ui:offset.apply}}。
 

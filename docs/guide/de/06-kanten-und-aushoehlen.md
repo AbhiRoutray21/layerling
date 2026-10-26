@@ -89,7 +89,7 @@ Jede Fläche eines Körpers lässt sich um dieselbe Strecke nach außen oder inn
 
 1. Wähle einen Körper und klicke auf {{ui:editor.tool.offset}}, oder klicke den Körper mit der rechten Maustaste an und wähle es dort.
 2. Wähle {{ui:offset.grow}} oder {{ui:offset.shrink}} und stelle den {{ui:offset.distance}} ein.
-3. Die {{ui:shell.edges}} bestimmen die Außenecken: Gerundet hält die versetzte Fläche dort rund, scharf lässt die Flächen weiterlaufen, bis sie sich treffen.
+3. Die {{ui:offset.edges}} bestimmen die Außenecken: Gerundet hält die versetzte Fläche dort rund, scharf lässt die Flächen weiterlaufen, bis sie sich treffen.
 4. Setze den Haken bei {{ui:offset.copy}}, um das Teil zu behalten und den vergrößerten Körper als Kopie zu bekommen, die schon ein Loch ist. Gruppiere dieses Loch mit dem Gegenstück, und es schneidet genau das Spiel, das du gewählt hast.
 5. Klicke auf {{ui:offset.apply}}.
 

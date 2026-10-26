@@ -1488,6 +1488,7 @@ export const MESSAGES_PT_BR: Partial<Record<MessageKey, string>> = {
   "offset.grow": "Aumentar",
   "offset.shrink": "Diminuir",
   "offset.distance": "Distância",
+  "offset.edges": "Cantos externos",
   "offset.edgesHint": "Arredondado mantém redonda a superfície deslocada nos cantos externos; vivo deixa as faces seguirem até se encontrarem.",
   "offset.copy": "Manter o original e adicionar o corpo deslocado como furo",
   "offset.apply": "Deslocar",

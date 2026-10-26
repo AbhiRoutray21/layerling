@@ -87,7 +87,7 @@ Elk vlak van een lichaam kan over dezelfde afstand naar buiten of naar binnen wo
 
 1. Selecteer één lichaam en klik op {{ui:editor.tool.offset}}, of klik met de rechtermuisknop op het lichaam en kies het daar.
 2. Kies {{ui:offset.grow}} of {{ui:offset.shrink}} en stel de {{ui:offset.distance}} in.
-3. De {{ui:shell.edges}} bepalen de buitenhoeken: afgerond houdt het verschoven oppervlak daar rond, scherp laat de vlakken doorlopen tot ze elkaar raken.
+3. De {{ui:offset.edges}} bepalen de buitenhoeken: afgerond houdt het verschoven oppervlak daar rond, scherp laat de vlakken doorlopen tot ze elkaar raken.
 4. Vink {{ui:offset.copy}} aan om het onderdeel te houden en het vergrote lichaam als kopie te krijgen die al een gat is. Groepeer dat gat met het tegenstuk en het snijdt precies de speling die je koos.
 5. Klik op {{ui:offset.apply}}.
 

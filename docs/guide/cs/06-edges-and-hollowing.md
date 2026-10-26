@@ -87,7 +87,7 @@ Každou plochu tělesa lze posunout o stejnou vzdálenost ven nebo dovnitř. To 
 
 1. Vyber jedno těleso a klikni na {{ui:editor.tool.offset}}, nebo na těleso klikni pravým tlačítkem a vyber to tam.
 2. Zvol {{ui:offset.grow}} nebo {{ui:offset.shrink}} a nastav {{ui:offset.distance}}.
-3. {{ui:shell.edges}} rozhodují o vnějších rozích: zaoblené drží odsazený povrch kulatý, ostré nechá plochy pokračovat, dokud se nepotkají.
+3. {{ui:offset.edges}} rozhodují o vnějších rozích: zaoblené drží odsazený povrch kulatý, ostré nechá plochy pokračovat, dokud se nepotkají.
 4. Zaškrtni {{ui:offset.copy}}, aby díl zůstal, jak je, a zvětšené těleso vzniklo jako kopie, která už je dírou. Seskup tuto díru s protikusem a vyřízne přesně vůli, kterou jsi zvolil.
 5. Klikni na {{ui:offset.apply}}.
 

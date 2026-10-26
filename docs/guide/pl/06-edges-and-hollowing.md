@@ -89,7 +89,7 @@ Każdą ścianę bryły można przesunąć o tę samą odległość na zewnątrz
 
 1. Zaznacz jedną bryłę i kliknij {{ui:editor.tool.offset}} albo kliknij bryłę prawym przyciskiem i wybierz to tam.
 2. Wybierz {{ui:offset.grow}} lub {{ui:offset.shrink}} i ustaw {{ui:offset.distance}}.
-3. {{ui:shell.edges}} decydują o zewnętrznych narożach: zaokrąglone utrzymuje odsuniętą powierzchnię okrągłą, ostre pozwala ścianom biec dalej, aż się spotkają.
+3. {{ui:offset.edges}} decydują o zewnętrznych narożach: zaokrąglone utrzymuje odsuniętą powierzchnię okrągłą, ostre pozwala ścianom biec dalej, aż się spotkają.
 4. Zaznacz {{ui:offset.copy}}, aby zachować część bez zmian, a powiększoną bryłę dostać jako kopię, która już jest otworem. Zgrupuj ten otwór z częścią współpracującą, a wytnie dokładnie wybrany luz.
 5. Kliknij {{ui:offset.apply}}.
 

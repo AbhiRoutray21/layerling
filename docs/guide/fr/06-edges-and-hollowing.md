@@ -87,7 +87,7 @@ Chaque face d'un corps peut être déplacée de la même distance, vers l'extér
 
 1. Sélectionne un corps et clique sur {{ui:editor.tool.offset}}, ou fais un clic droit sur le corps et choisis-le là.
 2. Choisis {{ui:offset.grow}} ou {{ui:offset.shrink}} et règle la {{ui:offset.distance}}.
-3. Les {{ui:shell.edges}} décident des coins extérieurs : arrondi garde la surface décalée ronde, vif laisse les faces se prolonger jusqu'à ce qu'elles se rencontrent.
+3. Les {{ui:offset.edges}} décident des coins extérieurs : arrondi garde la surface décalée ronde, vif laisse les faces se prolonger jusqu'à ce qu'elles se rencontrent.
 4. Coche {{ui:offset.copy}} pour garder la pièce telle quelle et obtenir le corps agrandi comme copie qui est déjà un trou. Groupe ce trou avec la pièce complémentaire, il coupe exactement le jeu choisi.
 5. Clique sur {{ui:offset.apply}}.
 

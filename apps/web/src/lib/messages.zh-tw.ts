@@ -624,6 +624,7 @@ export const MESSAGES_ZH_TW: Partial<Record<MessageKey, string>> = {
   "offset.grow": "放大",
   "offset.shrink": "縮小",
   "offset.distance": "距離",
+  "offset.edges": "外角",
   "offset.edgesHint": "圓角會讓偏移後的曲面在外角保持圓滑；尖角則讓各面延伸直到相交。",
   "offset.copy": "保留原件，並把偏移後的實體作為孔加入",
   "offset.apply": "偏移",

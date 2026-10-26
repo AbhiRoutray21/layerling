@@ -630,6 +630,7 @@ export const MESSAGES_ES: Partial<Record<MessageKey, string>> = {
   "offset.grow": "Agrandar",
   "offset.shrink": "Reducir",
   "offset.distance": "Distancia",
+  "offset.edges": "Esquinas exteriores",
   "offset.edgesHint": "Redondeado mantiene redonda la superficie desfasada en las esquinas exteriores; afilado deja que las caras sigan hasta encontrarse.",
   "offset.copy": "Conservar el original y añadir el cuerpo desfasado como hueco",
   "offset.apply": "Desfasar",

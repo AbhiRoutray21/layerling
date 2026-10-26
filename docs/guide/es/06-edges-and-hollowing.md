@@ -89,7 +89,7 @@ Cada cara de un cuerpo puede moverse la misma distancia, hacia fuera o hacia den
 
 1. Selecciona un cuerpo y haz clic en {{ui:editor.tool.offset}}, o haz clic derecho en el cuerpo y elígelo ahí.
 2. Elige {{ui:offset.grow}} o {{ui:offset.shrink}} y fija la {{ui:offset.distance}}.
-3. Los {{ui:shell.edges}} deciden las esquinas exteriores: redondeado mantiene redonda la superficie desfasada, afilado deja que las caras sigan hasta encontrarse.
+3. Los {{ui:offset.edges}} deciden las esquinas exteriores: redondeado mantiene redonda la superficie desfasada, afilado deja que las caras sigan hasta encontrarse.
 4. Marca {{ui:offset.copy}} para conservar la pieza tal cual y obtener el cuerpo agrandado como una copia que ya es un hueco. Agrupa ese hueco con la pieza que encaja y corta exactamente la holgura elegida.
 5. Haz clic en {{ui:offset.apply}}.
 
