@@ -77,6 +77,7 @@ AI'en arbejder med de samme funktioner som dig, gennem den samme vej som din han
 | `layerling_list_edges` | lister objektets rigtige CAD-kanter |
 | `layerling_apply_edge_treatment` | faser eller runder valgte kanter |
 | `layerling_hollow_object` | udhuler en form med jævn væg |
+| `layerling_cut_out` | skærer ét massivt legeme ud af et andet, så de passer sammen: delen bliver, en kopi forstørret med spillerummet trækkes fra det andet legeme |
 | `layerling_offset_object` | forskyder alle flader på et legeme til spillerummet i en pasning: forstørrer eller formindsker det, eller tilføjer den forstørrede kopi som hul |
 | `layerling_list_faces` | lister fladerne på en eksakt form |
 | `layerling_delete_faces` | sletter flader og lukker åbningen |

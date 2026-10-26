@@ -73,6 +73,7 @@ AI používá stejné funkce a stejné zpracování příkazů jako ruční ovl�
 | `layerling_list_edges` | vypíše skutečné CAD hrany objektu |
 | `layerling_apply_edge_treatment` | zkosí nebo zaoblí vybrané hrany |
 | `layerling_hollow_object` | vytvoří dutinu s rovnoměrnou stěnou |
+| `layerling_cut_out` | vyřízne jedno těleso z druhého, aby k sobě pasovala: díl zůstane, kopie zvětšená o vůli se odečte od druhého tělesa |
 | `layerling_offset_object` | odsadí všechny plochy tělesa pro vůli lícovaného spoje: zvětší nebo zmenší těleso, nebo přidá zvětšenou kopii jako díru |
 | `layerling_list_faces` | vypíše plochy přesného tělesa |
 | `layerling_delete_faces` | smaže plochy a uzavře mezeru |
