@@ -646,8 +646,11 @@ export type ShellOpenings = "none" | "top" | "bottom" | "top-bottom" | ShellSide
 export type ShellEdges = "round" | "sharp";
 
 export type EdgeTreatmentFeature = {
-  /** "shell" hollows the body: `amount` is then the wall thickness. "deleteFace" deletes faces and closes the gap (#451). "offset" moves every face by `amount` (#919). */
-  kind: "fillet" | "chamfer" | "chamfillet" | "shell" | "deleteFace" | "offset";
+  /**
+   * "shell" hollows the body: `amount` is then the wall thickness. "deleteFace" deletes faces and closes the gap (#451). "offset" moves every face by `amount` (#919).
+   * "surfaceTexture" lays a relief onto the body: `amount` is its depth, and the entry keeps the body under it.
+   */
+  kind: "fillet" | "chamfer" | "chamfillet" | "shell" | "deleteFace" | "offset" | "surfaceTexture";
   amount: number;
   edgeCount: number;
   /** The edges picked, as the tool numbered them on the body before this treatment: "Edit" picks them again (#227). */
@@ -663,6 +666,8 @@ export type EdgeTreatmentFeature = {
   /** Only for "deleteFace": the faces deleted, as the tool numbered them on the body before. */
   faceIds?: number[];
   faceCount?: number;
+  /** Only for "surfaceTexture": the settings it was made with, masks included. */
+  surfaceTexture?: import("@/lib/surfaceTexture").SurfaceTextureSettings;
 };
 
 export type EdgeTreatmentHistoryEntry = {
@@ -1079,6 +1084,19 @@ export type WorkplaneShape = {
    * that box rather than the arc the mesh actually covers.
    */
   cylinderWrap?: { diameter: number; inward?: boolean };
+  /**
+   * Set on a body made by a surface texture (grooves, knurling, honeycomb, bumps): the
+   * settings it was made with. The body is a mesh with the relief; undo takes it back.
+   */
+  surfaceTexture?: import("@/lib/surfaceTexture").SurfaceTextureSettings;
+  /**
+   * A helper for another body's surface texture: where this convex body reaches into it, the
+   * texture stays away ("exclude") or goes only there ("only"). It counts when that body gets its
+   * texture, also while this one is hidden.
+   */
+  surfaceTextureMask?: import("@/lib/surfaceTexture").SurfaceTextureMaskMode;
+  /** The gold filling the cracks of this textured body (see surfaceTextureShape.ts): it goes when the texture is made anew or taken off. */
+  surfaceFillOf?: string;
   importedMesh?: {
     positions: number[];
     normals?: number[];

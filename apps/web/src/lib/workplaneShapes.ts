@@ -717,6 +717,9 @@ export function workplaneShapesEqual(a: WorkplaneShape, b: WorkplaneShape) {
     a.knurlAngle === b.knurlAngle &&
     a.knurlChamfer === b.knurlChamfer &&
     a.cylinderWrap?.inward === b.cylinderWrap?.inward &&
+    JSON.stringify(a.surfaceTexture ?? null) === JSON.stringify(b.surfaceTexture ?? null) &&
+    a.surfaceTextureMask === b.surfaceTextureMask &&
+    a.surfaceFillOf === b.surfaceFillOf &&
     a.textRadius === b.textRadius &&
     a.textSize === b.textSize &&
     a.textInward === b.textInward &&

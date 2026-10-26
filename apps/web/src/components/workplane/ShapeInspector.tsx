@@ -4,7 +4,7 @@ import { displayY, displayYTurn, insideZ, insideZTurn } from "@/lib/displayAxes"
 import { GuideHelpLink } from "@/components/GuideHelpLink";
 import { guideChapterForShape, guideSectionForShape } from "@/lib/guideLinks";
 import { useInspectorCard } from "@/lib/inspectorCards";
-import { ChevronDown, ChevronUp, Cylinder, Eye, EyeOff, FolderOpen, Grid3x3, Layers, Link2, Lock, Minus, Pencil, Plus, RefreshCw, RotateCcw, Ruler, Split, Tags, Unlock } from "lucide-react";
+import { ChevronDown, ChevronUp, Cylinder, Eraser, Eye, EyeOff, FolderOpen, Grid3x3, ImageUp, Layers, Link2, Lock, Minus, Pencil, Plus, RefreshCw, RotateCcw, Ruler, Split, Tags, Unlock, Waves } from "lucide-react";
 import { createPortal } from "react-dom";
 import { Fragment, createContext, useCallback, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type Dispatch, type ReactNode, type SetStateAction } from "react";
 import {
@@ -162,6 +162,9 @@ import { t, type MessageKey } from "@/lib/i18n";
 import { localizedError } from "@/lib/userErrors";
 import { displayShapeName, makeShapeFromAsset, renamedShapeName } from "@/lib/shapeCatalog";
 import { cylinderToEllipsePatch } from "@/lib/cylinderToEllipse";
+import { normalizeSurfaceTexture, SURFACE_TEXTURE_AXES, SURFACE_TEXTURE_CRACK_STARTS, SURFACE_TEXTURE_CRACK_STYLES, SURFACE_TEXTURE_DEFAULTS, SURFACE_TEXTURE_DETAILS, SURFACE_TEXTURE_DIRECTIONS, SURFACE_TEXTURE_IMAGES, SURFACE_TEXTURE_LIMITS, SURFACE_TEXTURE_MASK_MODES, SURFACE_TEXTURE_PATTERNS, SURFACE_TEXTURE_PROFILES, SURFACE_TEXTURE_PROJECTIONS, SURFACE_TEXTURE_STARTERS, SURFACE_TEXTURE_TILINGS, surfaceTextureImageTile, type SurfaceTextureMaskMode, type SurfaceTexturePattern, type SurfaceTextureSettings } from "@/lib/surfaceTexture";
+import { SURFACE_TEXTURE_OWN_IMAGE_SIZE, surfaceTextureOwnImage } from "@/lib/surfaceTextureImages";
+import { offersSurfaceTextureMask, SURFACE_TEXTURE_LABELS, surfacePatternLabel, surfaceTextureEntry } from "@/lib/surfaceTextureShape";
 import { shapeDefaultsAsset, shapeDefaultsFromShape } from "@/lib/shapeDefaults";
 import { MAX_SCREW_HOLE_ANGLE, MIN_SCREW_HOLE_ANGLE, normalizeScrewHoleAngle, normalizeScrewHoleHeadDepth, normalizeScrewHoleShaft } from "@/lib/screwHoleGeometry";
 import { MAX_TEARDROP_TIP_ANGLE, MIN_TEARDROP_TIP_ANGLE, normalizeTeardropTipAngle, teardropHeightForTipAngle, teardropTipAngle } from "@/lib/teardropGeometry";
@@ -181,6 +184,7 @@ import { QR_BYTE_CAPACITY, qrByteLength, qrTextFits, type QrCodeSettings } from 
 import { ICON_TAG_LAYERS, iconTagFitCount, MAX_ICON_TAG_WIDTH, MAX_ICON_TAGS, MIN_ICON_TAG_WIDTH, normalizeIconTagCount, type IconLayerStack } from "@/lib/iconTag";
 import { PICTURE_FILE_ACCEPT } from "@/lib/pictureIcon";
 import { customFontList, textFontLabel } from "@/lib/textFonts";
+import { SURFACE_TEXT_FONTS } from "@/lib/surfaceTextOutline";
 import { MIN_SLOT_END_RATIO, normalizeSlotEndRatio, taperedSlotOutline } from "@/lib/slotGeometry";
 import { loftMeasures, loftShapePatch, loftTiltLimit, maxLoftWall, MAX_LOFT_SEGMENTS, MAX_LOFT_SIDES, MAX_LOFT_TWIST, MIN_LOFT_SEGMENTS, MIN_LOFT_SIDES, MIN_LOFT_SIZE, normalizeLoftOutline, type LoftMeasures } from "@/lib/loftGeometry";
 import { MAX_KNURL_ANGLE, MIN_KNURL_ANGLE, MIN_KNURL_COUNT, MIN_KNURL_DEPTH, knurlSettings, maxKnurlChamfer, maxKnurlCount, maxKnurlDepth, maxRoundKnurlDepth, normalizeKnurlAngle, normalizeKnurlChamfer, normalizeKnurlCount, normalizeKnurlDepth, normalizeKnurlPattern } from "@/lib/knurlGeometry";
@@ -444,7 +448,7 @@ const RELATIVE_SIZE_PROPERTY_IDS = new Set(["width", "height", "length", "diamet
 const ROTATION_PROPERTY_IDS = new Set(["rotateX", "rotateY", "rotateZ"]);
 
 function propertyUsesLengthUnit(key: string) {
-  return ["textLineWidth", "textEdgeSize", "letterSize", "iconWidth", "keyringDiameter", "keyringAlong", "positionX", "positionY", "positionZ", "pivotX", "pivotY", "pivotZ", "radius", "length", "width", "height", "bevel", "topRadius", "baseRadius", "thickness", "outerDiameter", "innerDiameter", "textRadius", "extrudeTopOffsetX", "extrudeTopOffsetZ", "toothSize", "toothWidth", "gearBacklash", "centerHole", "slotSmallEnd", "slotCentreDistance", "sketchLineWidth", "topLength", "topWidth", "bottomLength", "bottomWidth", "diameter", "pitch", "clearance", "axialClearance", "boltClearance", "threadDepth", "threadCoreDiameter", "threadLength", "headHeight", "chamfer", "chamferBottom", "headChamfer", "wire", "starOuterSize", "starInnerSize", "starOuterFillet", "starInnerFillet", "heartTipFillet", "crescentThickness", "crescentTipFillet", "honeycombCellSize", "honeycombWallThickness", "honeycombFrameWidth", "cornerFillet", "topBottomFillet", "bentTubeSize", "bentTubeWall", "bentTubeSegmentLength", "bentTubeBendRadius", "dovetailNeckWidth", "dovetailClearance", "hingePinDiameter", "hingeLeafThickness", "hingeClearance", "screwHoleShaft", "screwHoleHeadDepth", "knurlDepth", "knurlChamfer", "loftBottomWidth", "loftBottomDepth", "loftTopWidth", "loftTopDepth", "loftBottomCorner", "loftTopCorner", "loftOffsetX", "loftOffsetZ", "loftWall", "gridfinityLabelBackLength", "gridfinityLabelBackOffset", "gridfinityLabelBackWidth", "gridfinityLabelCornerSize", "gridfinityLabelFrontLength", "gridfinityLabelFrontOffset", "gridfinityLabelFrontWidth", "gridfinityLabelLeftLength", "gridfinityLabelLeftOffset", "gridfinityLabelLeftWidth", "gridfinityLabelRightLength", "gridfinityLabelRightOffset", "gridfinityLabelRightWidth", "gridfinityScoopRadius", "gridfinityFloorHeight", "gridfinityLipChamfer", "gridfinityWallThickness", "gridfinityDrawerWidth", "gridfinityDrawerDepth", "gridfinityPaddingBack", "gridfinityPaddingFront", "gridfinityPaddingLeft", "gridfinityPaddingRight", "gridfinityCornerRadius", "gridfinityDividerThickness", "gridfinityDividerPositionX", "gridfinityDividerPositionZ", "gridfinityCompartmentLabelWidth", "gridfinityOpeningCornerSize", "gridfinityOpeningDepthBack", "gridfinityOpeningDepthFront", "gridfinityOpeningDepthLeft", "gridfinityOpeningDepthRight", "gridfinityOpeningWidthBack", "gridfinityOpeningWidthFront", "gridfinityOpeningWidthLeft", "gridfinityOpeningWidthRight", "gridfinityOpeningDistanceBack", "gridfinityOpeningDistanceFront", "gridfinityOpeningDistanceLeft", "gridfinityOpeningDistanceRight"].includes(key);
+  return ["textLineWidth", "textEdgeSize", "letterSize", "iconWidth", "keyringDiameter", "keyringAlong", "positionX", "positionY", "positionZ", "pivotX", "pivotY", "pivotZ", "radius", "length", "width", "height", "bevel", "topRadius", "baseRadius", "thickness", "outerDiameter", "innerDiameter", "textRadius", "extrudeTopOffsetX", "extrudeTopOffsetZ", "toothSize", "toothWidth", "gearBacklash", "centerHole", "slotSmallEnd", "slotCentreDistance", "sketchLineWidth", "topLength", "topWidth", "bottomLength", "bottomWidth", "diameter", "pitch", "clearance", "axialClearance", "boltClearance", "threadDepth", "threadCoreDiameter", "threadLength", "headHeight", "chamfer", "chamferBottom", "headChamfer", "wire", "starOuterSize", "starInnerSize", "starOuterFillet", "starInnerFillet", "heartTipFillet", "crescentThickness", "crescentTipFillet", "honeycombCellSize", "honeycombWallThickness", "honeycombFrameWidth", "cornerFillet", "topBottomFillet", "bentTubeSize", "bentTubeWall", "bentTubeSegmentLength", "bentTubeBendRadius", "dovetailNeckWidth", "dovetailClearance", "hingePinDiameter", "hingeLeafThickness", "hingeClearance", "screwHoleShaft", "screwHoleHeadDepth", "knurlDepth", "knurlChamfer", "loftBottomWidth", "loftBottomDepth", "loftTopWidth", "loftTopDepth", "loftBottomCorner", "loftTopCorner", "loftOffsetX", "loftOffsetZ", "loftWall", "gridfinityLabelBackLength", "gridfinityLabelBackOffset", "gridfinityLabelBackWidth", "gridfinityLabelCornerSize", "gridfinityLabelFrontLength", "gridfinityLabelFrontOffset", "gridfinityLabelFrontWidth", "gridfinityLabelLeftLength", "gridfinityLabelLeftOffset", "gridfinityLabelLeftWidth", "gridfinityLabelRightLength", "gridfinityLabelRightOffset", "gridfinityLabelRightWidth", "gridfinityScoopRadius", "gridfinityFloorHeight", "gridfinityLipChamfer", "gridfinityWallThickness", "gridfinityDrawerWidth", "gridfinityDrawerDepth", "gridfinityPaddingBack", "gridfinityPaddingFront", "gridfinityPaddingLeft", "gridfinityPaddingRight", "gridfinityCornerRadius", "gridfinityDividerThickness", "gridfinityDividerPositionX", "gridfinityDividerPositionZ", "gridfinityCompartmentLabelWidth", "gridfinityOpeningCornerSize", "gridfinityOpeningDepthBack", "gridfinityOpeningDepthFront", "gridfinityOpeningDepthLeft", "gridfinityOpeningDepthRight", "gridfinityOpeningWidthBack", "gridfinityOpeningWidthFront", "gridfinityOpeningWidthLeft", "gridfinityOpeningWidthRight", "gridfinityOpeningDistanceBack", "gridfinityOpeningDistanceFront", "gridfinityOpeningDistanceLeft", "gridfinityOpeningDistanceRight", "surfaceSpacing", "surfaceDepth", "surfaceFade", "surfaceCrackWidth", "surfaceCrackRecess", "surfaceTextSize"].includes(key);
 }
 
 /**
@@ -2476,6 +2480,18 @@ function textFontProperty(shape: WorkplaneShape, onUpdate: ShapeInspectorUpdate)
   };
 }
 
+/** The fonts a text stuck on a surface can take: the built-in ones, then the fonts of one's own this browser keeps. */
+function surfaceTextFontOptions(current: string): SelectPropertyOption[] {
+  const builtIn = t("font.builtInGroup");
+  const own = t("font.customGroup");
+  const options: SelectPropertyOption[] = [
+    ...SURFACE_TEXT_FONTS.map((value) => ({ value, label: value, group: builtIn })),
+    ...customFontList().map((font) => ({ value: font.id, label: font.name, group: own })),
+  ];
+  if (!options.some((option) => option.value === current)) options.push({ value: current, label: textFontLabel(current) ?? t("font.missing"), group: own });
+  return options;
+}
+
 function getShapeProperties(shape: WorkplaneShape, onUpdate: ShapeInspectorUpdate, workspace: WorkplaneWorkspaceSettings): ShapePropertyConfig[] {
   const customLimit = workspace.shapeCustomizations[shape.kind]?.maxDimension;
   // A body turned by right angles names its measures by the way they run now (#230).
@@ -2512,6 +2528,10 @@ export function ShapeInspector({
   canSeparateParts = false,
   onSeparateParts,
   onWrapAroundCylinder,
+  onSurfaceTexture,
+  onRemoveSurfaceTexture,
+  surfaceTextureOpen,
+  onSurfaceTextureOpenChange,
   onLayerText,
   onTextTags,
   onFixKeyringTab,
@@ -2542,6 +2562,12 @@ export function ShapeInspector({
   onSeparateParts?: () => void;
   /** Wraps this body around a cylinder of the given diameter (#106). */
   onWrapAroundCylinder?: (diameter: number, inward: boolean) => void;
+  /** Lays a surface texture onto this body; resolves when it is on (or could not be made). */
+  onSurfaceTexture?: (settings: SurfaceTextureSettings) => Promise<void> | void;
+  onRemoveSurfaceTexture?: () => void;
+  /** Whether the surface texture card is open, when the editor holds it (the toolbar opens it too). */
+  surfaceTextureOpen?: boolean;
+  onSurfaceTextureOpenChange?: (open: boolean) => void;
   /** Splits a text into layers, or builds a layered text again with new words, font or layers (#215). */
   onLayerText?: (patch: TextLayerPatch) => void;
   /** One tag like this text or stack per name, laid out in rows (#215). */
@@ -2760,6 +2786,10 @@ export function ShapeInspector({
   const { colors: recentColors, remember: rememberColor } = useRecentColors(SOLID_COLORS);
   const { colors: keptColors, toggle: toggleKeptColor } = useKeptColors();
   const [minimized, setMinimized] = useState(false);
+  // The surface texture card opened from the toolbar is shown, not left in a folded panel.
+  useEffect(() => {
+    if (surfaceTextureOpen) setMinimized(false);
+  }, [surfaceTextureOpen]);
   // Renaming here works like the pencil in the object list.
   const [nameDraft, setNameDraft] = useState<string | null>(null);
   const nameInputRef = useRef<HTMLInputElement>(null);
@@ -2998,6 +3028,42 @@ export function ShapeInspector({
           onWrap={onWrapAroundCylinder}
           onInteractionActiveChange={onInteractionActiveChange}
         />
+      ) : null}
+
+      {onSurfaceTexture ? (
+        <SurfaceTextureCard
+          key={`surface-${shape.id}`}
+          shape={shape}
+          workspace={workspace}
+          disabled={locked}
+          onApply={onSurfaceTexture}
+          onRemove={onRemoveSurfaceTexture}
+          open={surfaceTextureOpen}
+          onOpenChange={onSurfaceTextureOpenChange}
+          onInteractionActiveChange={onInteractionActiveChange}
+        />
+      ) : null}
+
+      {offersSurfaceTextureMask(shape) ? (
+        <div className="property-card">
+          <div className="property-list cylinder-wrap-body">
+            <SelectProperty
+              type="select"
+              label={t("inspector.surfaceMask")}
+              value={shape.surfaceTextureMask ?? "none"}
+              options={(["none", ...SURFACE_TEXTURE_MASK_MODES] as const).map((value) => ({ value, label: t(SURFACE_TEXTURE_LABELS.mask[value]) }))}
+              disabled={locked}
+              // A mask is a helper one looks through: it turns transparent on the way.
+              onChange={(value) => onUpdate(value === "none" ? { surfaceTextureMask: undefined } : { surfaceTextureMask: value as SurfaceTextureMaskMode, transparent: true })}
+            />
+            {shape.surfaceTextureMask ? (
+              <p className="cylinder-wrap-hint">
+                {t("inspector.surfaceMaskHint")}
+                <GuideHelpLink section="surfaceTexture" className="inspector-help-link" />
+              </p>
+            ) : null}
+          </div>
+        </div>
       ) : null}
 
       {onTextTags && shape.kind === "text" ? (
@@ -4086,6 +4152,426 @@ function CylinderWrapCard({
   );
 }
 
+/** The shapes a bump can take, the half ball first. */
+const BUMP_SHAPES = ["dome", "pointed", "round", "flat"] as const;
+
+/** What the spacing and the width are called where they mean something else than a groove's. */
+const SURFACE_SPACING_LABEL: Partial<Record<SurfaceTexturePattern, MessageKey>> = {
+  cells: "inspector.surfaceSpacingCells",
+  knit: "inspector.surfaceSpacingKnit",
+  rope: "inspector.surfaceSpacingRope",
+  weave: "inspector.surfaceSpacingWeave",
+  grain: "inspector.surfaceSpacingGrain",
+  image: "inspector.surfaceSpacingImage",
+};
+const SURFACE_COVERAGE_LABEL: Partial<Record<SurfaceTexturePattern, MessageKey>> = {
+  cells: "inspector.surfaceCoverageCells",
+  knit: "inspector.surfaceCoverageKnit",
+  rope: "inspector.surfaceCoverageRope",
+  weave: "inspector.surfaceCoverageWeave",
+};
+
+/**
+ * The settings when another pattern is chosen. A pattern with values of its own to start from (cells, knitting, rope,
+ * weave, grain, an image) gets them, and leaving one gives the next the plain defaults back, so a knitted stitch's 5 mm
+ * do not become knurling's spacing. Bumps start as half balls: the V the grooves have by default would make them cones.
+ */
+function surfaceSettingsForPattern(current: SurfaceTextureSettings, pattern: SurfaceTexturePattern): Partial<SurfaceTextureSettings> {
+  const leaving = current.pattern === "bumps" ? null : SURFACE_TEXTURE_STARTERS[current.pattern];
+  const reset = leaving ? Object.fromEntries(Object.keys(leaving).map((key) => [key, SURFACE_TEXTURE_DEFAULTS[key as keyof SurfaceTextureSettings]])) : {};
+  const starter = pattern === "bumps" ? (current.profile === "pointed" ? { profile: "dome" as const } : {}) : SURFACE_TEXTURE_STARTERS[pattern] ?? {};
+  const tile = pattern === "image" ? { spacing: surfaceTextureImageTile(current.image), tileHeight: 0 } : {};
+  return { ...reset, ...starter, ...tile, pattern };
+}
+
+/** A picture file as one's own image for the texture: drawn small (SURFACE_TEXTURE_OWN_IMAGE_SIZE) and turned grey. */
+async function surfaceImageFromFile(file: File) {
+  const url = URL.createObjectURL(file);
+  try {
+    const picture = new Image();
+    picture.src = url;
+    await picture.decode();
+    // A drawing without a size of its own (an SVG) is drawn as large as one's image may be.
+    const width = picture.naturalWidth || SURFACE_TEXTURE_OWN_IMAGE_SIZE, height = picture.naturalHeight || SURFACE_TEXTURE_OWN_IMAGE_SIZE;
+    const scale = Math.min(1, SURFACE_TEXTURE_OWN_IMAGE_SIZE / Math.max(width, height));
+    const w = Math.max(2, Math.round(width * scale)), h = Math.max(2, Math.round(height * scale));
+    const canvas = document.createElement("canvas");
+    canvas.width = w;
+    canvas.height = h;
+    const context = canvas.getContext("2d");
+    if (!context) throw new Error("no canvas");
+    context.drawImage(picture, 0, 0, w, h);
+    return surfaceTextureOwnImage(context.getImageData(0, 0, w, h).data, w, h);
+  } finally {
+    URL.revokeObjectURL(url);
+  }
+}
+
+/**
+ * A surface texture on this body: the pattern, where it goes, and the button. Folded away until
+ * asked for, like wrapping: a step one takes, and undo takes it back. The card keeps its
+ * settings through that undo, so the next try starts from the last one.
+ */
+export function SurfaceTextureCard({
+  shape,
+  workspace,
+  disabled,
+  onApply,
+  onRemove,
+  open: openProp,
+  onOpenChange,
+  onInteractionActiveChange,
+}: {
+  shape: WorkplaneShape;
+  workspace: WorkplaneWorkspaceSettings;
+  disabled: boolean;
+  onApply: (settings: SurfaceTextureSettings) => Promise<void> | void;
+  /** Takes the texture off; given while the body keeps what was under it. */
+  onRemove?: () => void;
+  /** Open or closed as the editor holds it, so the button under "Modify" shows and changes the same; else the card's own. */
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  onInteractionActiveChange?: (active: boolean) => void;
+}) {
+  const [ownOpen, setOwnOpen] = useState(false);
+  const open = openProp ?? ownOpen;
+  const setOpen = (next: boolean) => (onOpenChange ? onOpenChange(next) : setOwnOpen(next));
+  // Opened while it is on screen (from the toolbar, the panel scrolled elsewhere), the card comes into view.
+  const cardRef = useRef<HTMLDivElement>(null);
+  const wasOpen = useRef(open);
+  useEffect(() => {
+    if (open && !wasOpen.current) cardRef.current?.scrollIntoView?.({ block: "nearest", behavior: "smooth" });
+    wasOpen.current = open;
+  }, [open]);
+  const [moreOpen, setMoreOpen] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const [settings, setSettings] = useState(() => normalizeSurfaceTexture(shape.surfaceTexture ?? {}));
+  const set = (patch: Partial<SurfaceTextureSettings>) => setSettings((current) => normalizeSurfaceTexture({ ...current, ...patch }));
+  const applied = shape.surfaceTexture;
+  // A texture made or changed elsewhere (by an assistant, by redo, in a project opened again) shows its own settings;
+  // one taken off leaves the card as it was, to apply again.
+  const appliedKey = applied
+    ? JSON.stringify({ ...applied, masks: applied.masks.length, textOutline: applied.textOutline.length, imageOwn: applied.imageOwn ? applied.imageOwn.data.length : 0 })
+    : "";
+  const [shownKey, setShownKey] = useState(appliedKey);
+  if (appliedKey !== shownKey) {
+    setShownKey(appliedKey);
+    if (applied) setSettings(normalizeSurfaceTexture(applied));
+  }
+  // A texture that keeps the body under it shows its settings to change; one that does not only says what it is.
+  const changeable = Boolean(applied && onRemove && surfaceTextureEntry(shape));
+  const options = <T extends string>(values: readonly T[], label: (value: T) => string) => values.map((value) => ({ value, label: label(value) }));
+  const range = (id: string, label: string, value: number, [min, max]: [number, number], step: number, onChange: (value: number) => void) => (
+    <RangeProperty
+      id={id}
+      label={label}
+      value={value}
+      min={min}
+      max={max}
+      step={step}
+      workspace={workspace}
+      disabled={disabled || busy}
+      onChange={onChange}
+      onInteractionActiveChange={onInteractionActiveChange}
+    />
+  );
+  const striped = settings.pattern === "grooves" || settings.pattern === "knurl";
+  const cracks = settings.pattern === "cracks";
+  // Grain lies in space: no projection, no axis. An image's grey values are its profile and width.
+  const grain = settings.pattern === "grain";
+  const image = settings.pattern === "image";
+  const imageInput = useRef<HTMLInputElement>(null);
+  const [imageError, setImageError] = useState("");
+  const loadImage = async (file: File | undefined) => {
+    if (!file) return;
+    try {
+      const imageOwn = await surfaceImageFromFile(file);
+      setImageError("");
+      set({ image: "own", imageOwn, tileHeight: 0 });
+    } catch (error) {
+      setImageError(t("status.surfaceImageFailed", { error: error instanceof Error ? error.message : String(error) }));
+    }
+  };
+  // A text goes where it is put: what stays smooth for a pattern all over does not hold it back, so those fields go.
+  const text = settings.pattern === "text";
+  const percent = (id: string, label: string, value: number, onChange: (value: number) => void) => range(id, label, Math.round(value * 100), [0, 100], 1, (share) => onChange(share / 100));
+  const apply = async () => {
+    setBusy(true);
+    try {
+      await onApply(settings);
+    } finally {
+      setBusy(false);
+    }
+  };
+  return (
+    <div className={`property-card ${open ? "" : "collapsed"}`} ref={cardRef}>
+      <button
+        className="property-card-header"
+        type="button"
+        aria-expanded={open}
+        aria-controls={`surface-texture-${shape.id}`}
+        onClick={() => setOpen(!open)}
+      >
+        <span>{t("inspector.surfaceTexture")}</span>
+        <ChevronUp className={open ? "" : "collapsed"} size={25} strokeWidth={2.8} />
+      </button>
+      {open ? (
+        <div className="property-list cylinder-wrap-body" id={`surface-texture-${shape.id}`}>
+          {applied && !changeable ? (
+            <p className="cylinder-wrap-hint">
+              {t("inspector.surfaceApplied", { pattern: surfacePatternLabel(applied.pattern) })}
+              <GuideHelpLink section="surfaceTexture" className="inspector-help-link" />
+            </p>
+          ) : (
+            <>
+              <SelectProperty
+                type="select"
+                label={t("inspector.surfacePattern")}
+                value={settings.pattern}
+                options={options(SURFACE_TEXTURE_PATTERNS, (value) => t(SURFACE_TEXTURE_LABELS.pattern[value]))}
+                disabled={disabled || busy}
+                onChange={(value) => set(surfaceSettingsForPattern(settings, value as SurfaceTexturePattern))}
+              />
+              {cracks ? (
+                <>
+                  <SelectProperty
+                    type="select"
+                    label={t("inspector.surfaceCrackStyle")}
+                    value={settings.crackStyle}
+                    options={options(SURFACE_TEXTURE_CRACK_STYLES, (value) => t(SURFACE_TEXTURE_LABELS.crackStyle[value]))}
+                    disabled={disabled || busy}
+                    onChange={(value) => set({ crackStyle: value as SurfaceTextureSettings["crackStyle"] })}
+                  />
+                  <SelectProperty
+                    type="select"
+                    label={t("inspector.surfaceCrackStart")}
+                    value={settings.crackStart}
+                    options={options(SURFACE_TEXTURE_CRACK_STARTS, (value) => t(SURFACE_TEXTURE_LABELS.crackStart[value]))}
+                    disabled={disabled || busy}
+                    onChange={(value) => set({ crackStart: value as SurfaceTextureSettings["crackStart"] })}
+                  />
+                  {range("surfaceCrackCount", t("inspector.surfaceCrackCount"), settings.crackCount, [1, SURFACE_TEXTURE_LIMITS.crackCount[1]], 1, (crackCount) => set({ crackCount }))}
+                  {range("surfaceCrackLength", t("inspector.surfaceCrackLength"), settings.crackLength, [SURFACE_TEXTURE_LIMITS.crackLength[0], 150], 1, (crackLength) => set({ crackLength }))}
+                  {range("surfaceCrackWidth", t("inspector.surfaceCrackWidth"), settings.crackWidth, SURFACE_TEXTURE_LIMITS.crackWidth, 0.1, (crackWidth) => set({ crackWidth }))}
+                </>
+              ) : text ? (
+                <>
+                  <TextProperty type="text" label={t("inspector.surfaceTextContent")} value={settings.textContent} maxLength={200} disabled={disabled || busy} onChange={(textContent) => set({ textContent })} />
+                  <SelectProperty
+                    type="select"
+                    label={t("prop.font")}
+                    value={settings.textFont}
+                    options={surfaceTextFontOptions(settings.textFont)}
+                    disabled={disabled || busy}
+                    onChange={(textFont) => set({ textFont })}
+                  />
+                  {range("surfaceTextSize", t("inspector.surfaceTextSize"), settings.textSize, [SURFACE_TEXTURE_LIMITS.textSize[0], 60], 0.5, (textSize) => set({ textSize }))}
+                  {range("surfaceTextAround", t("inspector.surfaceTextAround"), settings.textAround, SURFACE_TEXTURE_LIMITS.textAround, 1, (textAround) => set({ textAround }))}
+                  {range("surfaceTextHeight", t("inspector.surfaceTextHeight"), settings.textHeight, SURFACE_TEXTURE_LIMITS.textHeight, 1, (textHeight) => set({ textHeight }))}
+                  {range("surfaceTextTurn", t("inspector.surfaceTextTurn"), settings.textTurn, SURFACE_TEXTURE_LIMITS.textTurn, 1, (textTurn) => set({ textTurn }))}
+                  <p className="cylinder-wrap-hint">{t("inspector.surfaceTextHint")}</p>
+                </>
+              ) : (
+                <>
+                  {image ? (
+                    <>
+                      <SelectProperty
+                        type="select"
+                        label={t("inspector.surfaceImage")}
+                        value={settings.image}
+                        // One's own image is there to choose again once it is loaded.
+                        options={options(
+                          SURFACE_TEXTURE_IMAGES.filter((value) => value !== "own" || settings.imageOwn),
+                          (value) => t(SURFACE_TEXTURE_LABELS.image[value]),
+                        )}
+                        disabled={disabled || busy}
+                        onChange={(value) => {
+                          const next = value as SurfaceTextureSettings["image"];
+                          set({ image: next, spacing: surfaceTextureImageTile(next), tileHeight: 0 });
+                        }}
+                      />
+                      <input
+                        ref={imageInput}
+                        type="file"
+                        accept="image/*"
+                        hidden
+                        onChange={(event) => {
+                          void loadImage(event.target.files?.[0]);
+                          event.target.value = "";
+                        }}
+                      />
+                      <button className="inspector-action-button" type="button" disabled={disabled || busy} onClick={() => imageInput.current?.click()}>
+                        <ImageUp size={17} strokeWidth={2.5} />
+                        <span>{t("inspector.surfaceImageLoad")}</span>
+                      </button>
+                      {imageError ? <p className="cylinder-wrap-hint">{imageError}</p> : null}
+                    </>
+                  ) : null}
+                  {range(
+                    "surfaceSpacing",
+                    t(SURFACE_SPACING_LABEL[settings.pattern] ?? "inspector.surfaceSpacing"),
+                    settings.spacing,
+                    [SURFACE_TEXTURE_LIMITS.spacing[0], image ? SURFACE_TEXTURE_LIMITS.spacing[1] : 50],
+                    0.1,
+                    (spacing) => set({ spacing }),
+                  )}
+                  {image ? (
+                    <>
+                      {range("surfaceTileHeight", t("inspector.surfaceTileHeight"), settings.tileHeight, SURFACE_TEXTURE_LIMITS.tileHeight, 0.5, (tileHeight) => set({ tileHeight }))}
+                      <SelectProperty
+                        type="select"
+                        label={t("inspector.surfaceImageTiling")}
+                        value={settings.imageTiling}
+                        options={options(SURFACE_TEXTURE_TILINGS, (value) => t(SURFACE_TEXTURE_LABELS.tiling[value]))}
+                        disabled={disabled || busy}
+                        onChange={(value) => set({ imageTiling: value as SurfaceTextureSettings["imageTiling"] })}
+                      />
+                      <ToggleProperty label={t("inspector.surfaceImageInvert")} value={settings.imageInvert} disabled={disabled || busy} onChange={(imageInvert) => set({ imageInvert })} />
+                      <p className="cylinder-wrap-hint">{t("inspector.surfaceImageHint")}</p>
+                    </>
+                  ) : null}
+                  {settings.pattern === "cells" || grain ? (
+                    <>
+                      {range("surfaceSeed", t("inspector.surfaceSeed"), settings.seed, [1, 999], 1, (seed) => set({ seed }))}
+                      <p className="cylinder-wrap-hint">{t("inspector.surfaceSeedHint")}</p>
+                    </>
+                  ) : null}
+                </>
+              )}
+              {settings.pattern === "bumps" ? (
+                <SelectProperty
+                  type="select"
+                  label={t("inspector.surfaceBumpShape")}
+                  value={settings.profile}
+                  options={options(BUMP_SHAPES, (value) => t(SURFACE_TEXTURE_LABELS.bumpShape[value]))}
+                  disabled={disabled || busy}
+                  onChange={(value) => set({ profile: value as SurfaceTextureSettings["profile"] })}
+                />
+              ) : null}
+              {range("surfaceDepth", t("inspector.surfaceDepth"), settings.depth, SURFACE_TEXTURE_LIMITS.depth, 0.05, (depth) => set({ depth }))}
+              <SelectProperty
+                type="select"
+                label={t("inspector.surfaceDirection")}
+                value={settings.direction}
+                options={options(SURFACE_TEXTURE_DIRECTIONS, (value) => t(SURFACE_TEXTURE_LABELS.direction[value]))}
+                disabled={disabled || busy}
+                onChange={(value) => set({ direction: value as SurfaceTextureSettings["direction"] })}
+              />
+              {cracks ? (
+                <>
+                  {/* The gold: a part of its own in the notch, for a second filament. */}
+                  <ToggleProperty label={t("inspector.surfaceCrackGold")} value={settings.crackGold} disabled={disabled || busy} onChange={(crackGold) => set({ crackGold, ...(crackGold ? { direction: "inward" as const } : {}) })} />
+                  {settings.crackGold ? range("surfaceCrackRecess", t("inspector.surfaceCrackRecess"), settings.crackRecess, SURFACE_TEXTURE_LIMITS.crackRecess, 0.05, (crackRecess) => set({ crackRecess })) : null}
+                  {settings.crackGold ? <p className="cylinder-wrap-hint">{t("inspector.surfaceCrackGoldHint")}</p> : null}
+                </>
+              ) : text ? null : grain ? (
+                <p className="cylinder-wrap-hint">{t("inspector.surfaceGrainHint")}</p>
+              ) : (
+                <SelectProperty
+                  type="select"
+                  label={t("inspector.surfaceProjection")}
+                  value={settings.projection}
+                  options={options(SURFACE_TEXTURE_PROJECTIONS, (value) => t(SURFACE_TEXTURE_LABELS.projection[value]))}
+                  hint={t(SURFACE_TEXTURE_LABELS.projectionHint[settings.projection])}
+                  disabled={disabled || busy}
+                  onChange={(value) => set({ projection: value as SurfaceTextureSettings["projection"] })}
+                />
+              )}
+              {!grain && (cracks || text || settings.projection !== "allRound") ? (
+                <SelectProperty
+                  type="select"
+                  label={t("inspector.surfaceAxis")}
+                  value={settings.axis}
+                  options={options(SURFACE_TEXTURE_AXES, (value) => value.toUpperCase())}
+                  disabled={disabled || busy}
+                  onChange={(value) => set({ axis: value as SurfaceTextureSettings["axis"] })}
+                />
+              ) : null}
+              <button className="name-tag-more" type="button" aria-expanded={moreOpen} onClick={() => setMoreOpen((current) => !current)}>
+                <ChevronDown className={moreOpen ? "open" : ""} size={15} strokeWidth={2.6} />
+                <span>{t(moreOpen ? "inspector.less" : "inspector.more")}</span>
+              </button>
+              {moreOpen ? (
+                <>
+                  {cracks ? (
+                    <>
+                      {percent("surfaceCrackBranch", t("inspector.surfaceCrackBranch"), settings.crackBranch, (crackBranch) => set({ crackBranch }))}
+                      {percent("surfaceCrackJag", t("inspector.surfaceCrackJag"), settings.crackJag, (crackJag) => set({ crackJag }))}
+                      {percent("surfaceCrackRough", t("inspector.surfaceCrackRough"), settings.crackRough, (crackRough) => set({ crackRough }))}
+                      {range("surfaceCrackSeed", t("inspector.surfaceCrackSeed"), settings.crackSeed, [0, 999], 1, (crackSeed) => set({ crackSeed }))}
+                      <p className="cylinder-wrap-hint">{t("inspector.surfaceCrackSeedHint")}</p>
+                    </>
+                  ) : text || grain ? null : image ? (
+                    <>
+                      {range("surfaceImageTurn", t("inspector.surfaceImageTurn"), settings.imageTurn, SURFACE_TEXTURE_LIMITS.imageTurn, 1, (imageTurn) => set({ imageTurn }))}
+                      {range("surfaceImageBlur", t("inspector.surfaceImageBlur"), settings.imageBlur, SURFACE_TEXTURE_LIMITS.imageBlur, 1, (imageBlur) => set({ imageBlur }))}
+                    </>
+                  ) : (
+                    range(
+                      "surfaceCoverage",
+                      t(SURFACE_COVERAGE_LABEL[settings.pattern] ?? "inspector.surfaceCoverage"),
+                      Math.round(settings.width * 100),
+                      [SURFACE_TEXTURE_LIMITS.width[0] * 100, 100],
+                      1,
+                      (share) => set({ width: share / 100 }),
+                    )
+                  )}
+                  {text ? null : (
+                    <>
+                      {settings.pattern === "bumps" || grain || image ? null : (
+                        <SelectProperty
+                          type="select"
+                          label={t("inspector.surfaceProfile")}
+                          value={settings.profile}
+                          options={options(SURFACE_TEXTURE_PROFILES, (value) => t(SURFACE_TEXTURE_LABELS.profile[value]))}
+                          disabled={disabled || busy}
+                          onChange={(value) => set({ profile: value as SurfaceTextureSettings["profile"] })}
+                        />
+                      )}
+                      {striped ? range("surfaceAngle", t("inspector.surfaceAngle"), settings.angle, SURFACE_TEXTURE_LIMITS.angle, 1, (angle) => set({ angle })) : null}
+                      <ToggleProperty label={t("inspector.surfaceOutside")} value={settings.outside} disabled={disabled || busy} onChange={(outside) => set({ outside })} />
+                      <ToggleProperty label={t("inspector.surfaceInside")} value={settings.inside} disabled={disabled || busy} onChange={(inside) => set({ inside })} />
+                      {range("surfaceBottomFree", t("inspector.surfaceBottomFree"), settings.bottomFree, SURFACE_TEXTURE_LIMITS.bottomFree, 1, (bottomFree) => set({ bottomFree }))}
+                      {range("surfaceTopFree", t("inspector.surfaceTopFree"), settings.topFree, SURFACE_TEXTURE_LIMITS.topFree, 1, (topFree) => set({ topFree }))}
+                      {range("surfaceZoneFrom", t("inspector.surfaceZoneFrom"), settings.zoneFrom, SURFACE_TEXTURE_LIMITS.zoneFrom, 1, (zoneFrom) => set({ zoneFrom }))}
+                      {range("surfaceZoneTo", t("inspector.surfaceZoneTo"), settings.zoneTo, SURFACE_TEXTURE_LIMITS.zoneTo, 1, (zoneTo) => set({ zoneTo }))}
+                      <ToggleProperty label={t("inspector.surfaceKeepEdges")} value={settings.keepEdges} disabled={disabled || busy} onChange={(keepEdges) => set({ keepEdges })} />
+                    </>
+                  )}
+                  {range("surfaceFade", t("inspector.surfaceFade"), settings.fade, SURFACE_TEXTURE_LIMITS.fade, 0.1, (fade) => set({ fade }))}
+                  <SelectProperty
+                    type="select"
+                    label={t("inspector.surfaceDetail")}
+                    value={settings.detail}
+                    options={options(SURFACE_TEXTURE_DETAILS, (value) => t(SURFACE_TEXTURE_LABELS.detail[value]))}
+                    disabled={disabled || busy}
+                    onChange={(value) => set({ detail: value as SurfaceTextureSettings["detail"] })}
+                  />
+                  <p className="cylinder-wrap-hint">{t("inspector.surfaceMaskTip")}</p>
+                </>
+              ) : null}
+              <p className="cylinder-wrap-hint">
+                {applied ? t("inspector.surfaceChangeHint", { pattern: surfacePatternLabel(applied.pattern) }) : t("inspector.surfaceHint")}
+                <GuideHelpLink section="surfaceTexture" className="inspector-help-link" />
+              </p>
+              <button className="inspector-action-button" type="button" disabled={disabled || busy} onClick={apply}>
+                <Waves size={17} strokeWidth={2.5} />
+                <span>{t(busy ? "inspector.surfaceWorking" : applied ? "inspector.surfaceChange" : "inspector.surfaceApply")}</span>
+              </button>
+              {applied ? (
+                <button className="inspector-action-button" type="button" disabled={disabled || busy} onClick={onRemove}>
+                  <Eraser size={17} strokeWidth={2.5} />
+                  <span>{t("inspector.surfaceRemove")}</span>
+                </button>
+              ) : null}
+            </>
+          )}
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
 function BentTubeSegmentsCard({
   shape,
   workspace,
@@ -4879,7 +5365,7 @@ function RangeProperty({
  * field is uncontrolled: the shape's text is written into it only while it is not being edited,
  * and a word being composed (Japanese, Chinese, Korean) is committed once, when it is done.
  */
-function TextProperty({ label, value, disabled, onChange, onInteractionActiveChange }: Omit<TextPropertyConfig, "id"> & { id?: string } & { disabled?: boolean; onInteractionActiveChange?: (active: boolean) => void }) {
+function TextProperty({ label, value, disabled, maxLength = 24, onChange, onInteractionActiveChange }: Omit<TextPropertyConfig, "id"> & { id?: string } & { disabled?: boolean; maxLength?: number; onInteractionActiveChange?: (active: boolean) => void }) {
   const holdInteraction = useInteractionHold(onInteractionActiveChange);
   const field = useRef<HTMLInputElement>(null);
   const editing = useRef(false);
@@ -4895,7 +5381,7 @@ function TextProperty({ label, value, disabled, onChange, onInteractionActiveCha
         type="text"
         defaultValue={value}
         disabled={disabled}
-        maxLength={24}
+        maxLength={maxLength}
         spellCheck={false}
         onFocus={() => {
           editing.current = true;
