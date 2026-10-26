@@ -1,5 +1,70 @@
 [
   {
+    "version": "1.112.0",
+    "items": [
+      {
+        "title": {
+          "de": "Messungen bleiben im Entwurf",
+          "en": "Measurements stay with the design"
+        },
+        "body": {
+          "de": "Die Messungen des Maßbands werden jetzt mit dem Entwurf gespeichert, auch in der .lyl-Datei, und sind beim Öffnen wieder da. Ein neuer Augenknopf unter den Maßband-Knöpfen blendet sie aus und wieder ein; auch das wird gemerkt.",
+          "en": "The measurements of the tape measure are now saved with the design, also in the .lyl file, and are back when you open it. A new eye button among the tape measure's buttons hides and shows them; that is remembered too."
+        }
+      },
+      {
+        "title": {
+          "de": "Mitte einer Fläche markieren",
+          "en": "Mark the centre of a face"
+        },
+        "body": {
+          "de": "Im Rechtsklickmenü eines Körpers setzt „Mitte dieser Fläche markieren“ einen Bezugspunkt in die Mitte der ebenen Fläche, auf die du geklickt hast, an einer Seite oder einem Ende, nicht nur oben. Das Maßband rastet daran ein.",
+          "en": "In the right-click menu of a body, \"Mark the centre of this face\" puts a reference point in the middle of the flat face you clicked, on a side or an end, not only on top. The tape measure snaps to it."
+        }
+      },
+      {
+        "title": {
+          "de": "Gridfinity-Schalen in jeder Größe",
+          "en": "Gridfinity trays of any size"
+        },
+        "body": {
+          "de": "Die Gridfinity-Form hat unter „Art“ jetzt auch „Schale“: eine Schale beliebiger Größe in mm mit flachem Boden, ohne Füße und Stapelrand, etwa für Spieleinsätze. Fächer, Griffmulden, Etikettenleisten und offene Seiten funktionieren wie in einem Behälter, und die Trennwände reichen bis oben.",
+          "en": "The Gridfinity shape now has \"Tray\" under \"Type\": a tray of any size in mm with a flat bottom and no feet or stacking lip, for board game inserts and the like. Compartments, finger scoops, label shelves and open sides work as in a bin, and the dividers run up to the top."
+        }
+      },
+      {
+        "title": {
+          "de": "Winkellineal: Maße nur für die Auswahl",
+          "en": "Framing square: measures for the selection only"
+        },
+        "body": {
+          "de": "Stehen viele Körper an den Armen des Winkellineals, zeigt jeder seine Maße, und die Zahlen lassen sich nicht mehr zuordnen. Ein neuer Knopf unter dem Griff des Lineals schaltet das ab: Dann zeigen nur die ausgewählten Körper Maße. Die Wahl wird mit dem Entwurf gespeichert.",
+          "en": "With many bodies at the arms of the framing square, each shows its measures and the numbers can no longer be told apart. A new button under the square's handle switches that off: then only the selected bodies show measures. The choice is kept with the design."
+        }
+      },
+      {
+        "title": {
+          "de": "Scharnier mit Kegeln",
+          "en": "A hinge with cones"
+        },
+        "body": {
+          "de": "Das Scharnier gibt es jetzt auch mit Kegeln statt Stift: Jeder zweite Knöchel endet in Kegeln, die in Mulden der Nachbarn passen, ohne lange Brücke, die durchhängen könnte. Statt der Zahl der Knöchel kannst du außerdem ihre größte Breite angeben.",
+          "en": "The hinge now also comes with cones instead of a pin: every other knuckle ends in cones that fit into recesses of its neighbours, with no long bridge that could sag. Instead of the number of knuckles you can also give their widest width."
+        }
+      },
+      {
+        "title": {
+          "de": "Mehrere Entwürfe auf einmal löschen",
+          "en": "Delete several designs at once"
+        },
+        "body": {
+          "de": "Auf der Startseite gibt es über den Entwürfen den Knopf „Auswählen“: Ein Klick auf eine Karte wählt sie aus, „Alle auswählen“ nimmt alle, und „Löschen“ fragt einmal für die ganze Auswahl. So sind viele alte Entwürfe schnell weg. Im Serverordner geht es genauso.",
+          "en": "The start page has a Select button above the designs: a click on a card chooses it, Select all takes every design, and Delete asks once for the whole choice. Many old designs are gone in a moment. It works the same in the server folder."
+        }
+      }
+    ]
+  },
+  {
     "version": "1.111.0",
     "items": [
       {
