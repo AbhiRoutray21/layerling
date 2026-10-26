@@ -36,7 +36,7 @@
 
 You own a 3D printer. You want a part that fits something, not a career in CAD.
 
-layerling works the way you already think: put a shape on the plate, drag it to size, turn a second shape into a hole, group the two, export, print. There is nothing to learn before you start and **nothing to sign up for** – open the page and build. Your designs stay in your own browser: no account, no cloud, nothing uploaded anywhere.
+layerling works the way you already think: put a shape on the plate, drag it to size, turn a second shape into a hole, group the two, export, print. There is nothing to learn before you start and **nothing to sign up for** – open the page and build. Your designs stay in your own browser by default: no account, no cloud, nothing uploaded anywhere. If you run your own copy, they can live in a folder on your server instead, so every device in the house sees the same ones.
 
 ### Coming From Tinkercad?
 
@@ -84,12 +84,13 @@ It is not a full CAD package: there is no parametric timeline and no assemblies.
 - **Multicolor groups** – a group can show every part in its own colour, also after holes were cut into it, and a 3MF or OBJ export keeps those colours, so the slicer can map the parts onto filaments.
 - **Bundle** – Ctrl+B holds parts together like Tinkercad's bundle: they move, turn and scale as one, but keep their colours and stay separate bodies in the export – handy for multicolour prints.
 - **Intersection** – keep only what two or more selected solids have in common, or where solids and holes overlap.
+- **Hull** – wrap the selected shapes in their convex hull, the smallest body without dents round all of them: a half sphere on a cylinder becomes a dome, four posts a box with round corners. Holes in the selection are cut out afterwards.
 - **Split** – cut solids or holes in two with a plane; a hollowed body keeps its cavity. Turn the plane for an angled cut, drag its arrow, or lay it on any face with "Pick face".
 
 ### Refining
 
 - **Chamfer and fillet** – break or round any edge of a solid, and remove or change the treatment again later.
-- **Sketches** – draw outlines with lines, curves and ready-made shapes, set lines by length and angle as you draw ("50<30", Shift snaps in 15° steps), type lengths, angles and sizes (sums like "60+12.5" work in every number field), round or chamfer corners, snap to the outlines of other bodies, draw construction lines to snap to, and extrude or revolve them into exact bodies. A revolve with a pitch winds the outline up as one continuous helical strand instead of rings, like filament on a spool. A sketch can also be built as a stroke: a closed outline becomes a frame, inside, outside or centred on the line, and an open line a stripe with flat, square or round ends.
+- **Sketches** – draw outlines with lines, curves and ready-made shapes, set lines by length and angle as you draw ("50<30", Shift snaps in 15° steps), type lengths, angles and sizes (sums like "60+12.5" work in every number field), round or chamfer corners, snap to the outlines of other bodies, draw construction lines to snap to, and extrude, revolve or sweep them along a path into exact bodies. A revolve with a pitch winds the outline up as one continuous helical strand instead of rings, like filament on a spool. A sketch can also be built as a stroke: a closed outline becomes a frame, inside, outside or centred on the line, and an open line a stripe with flat, square or round ends.
 - **Hollowing** – turn a body into walls of one thickness, open on any sides you choose (top, bottom, front, back, left, right, in any combination) or closed – for boxes, cups and cases.
 - **Delete face** – click the faces of a fillet, a hole or a boss and delete them: the faces around them grow to close the gap, and the body stays exact for more fillets and the STEP export.
 - **Custom shapes** – keep bodies you need again and again at the top of the shape library and insert them into any design with a click or by dragging; in the browser, or with the shared store on the server for every device. "Back up all" takes them along.
@@ -107,7 +108,8 @@ It is not a full CAD package: there is no parametric timeline and no assemblies.
 - **Folders for your designs** – sort the designs on the start page into folders (and folders into folders) by dragging them or with "Move to …"; the search looks through all of them, and "Back up all" keeps them.
 - **Projects as files** – save a whole project, history, sketches and groups included, as a `.lyl` file and carry on elsewhere. In Chrome and Edge you choose the folder yourself and Ctrl+S saves into that same file again; other browsers download it. Older `.skf` files from earlier versions still open; saving then writes a `.lyl` beside them.
 - **Bug report** – one link in the footer saves a ZIP with the design as a `.lyl` and a text with the version, browser and last messages, ready to attach in the forum or on GitHub, which refuse a bare `.lyl`.
-- **Designs you recognise** – everything lives in your own browser, each design with a thumbnail.
+- **Designs you recognise** – each design with a thumbnail, in your own browser or in the server folder.
+- **Attachments** – keep notes, a photo of the printed part or a datasheet inside the design: `.md` and `.txt` files, `.png`, `.jpg` and `.webp` pictures and PDF files travel with the `.lyl` file. The eye opens a text or a picture in a window; a PDF is downloaded. SVG is not accepted, since it can carry scripts.
 
 ### Viewing
 
@@ -115,6 +117,7 @@ It is not a full CAD package: there is no parametric timeline and no assemblies.
 - **Turn the view at the cube** – dragging the view cube turns the view like the right mouse button, with one finger on a tablet; a click still jumps to that side, and a click on a corner or an edge looks from there. Keys **1**–**6** jump too, and **Shift+1**–**6** also zoom to the selection.
 - **Four saved views per design** – **Shift+7**, **8**, **9** or **0** saves the view exactly as it is (angle, pan, zoom), and the key alone brings it back. Each design keeps its own, and a saved `.lyl` file carries them along.
 - **The view cube in any corner** – Settings > Appearance > **View cube position** puts the cube in the top left, top right, bottom left or bottom right; in any corner but the top left, the camera controls move up into its place.
+- **In your language** – the program and its user guide come in English, German and 16 more languages; the language list is at the very top right.
 - **Look from below** – the eye over a grid in the camera bar hides the plate, so the underside of a design can be seen without it in the way.
 - **A second view in its own window** – a button in the camera bar opens a second window that shows the same design through a camera of its own, with its own view cube and camera bar, and follows every change. It opens where you last left it.
 - **Panels where you want them** – the object list, the settings, the section view, the tape measure and the tool panels for edges, hollowing and patterns move by their title bar and open there again; a double-click docks them.
@@ -144,7 +147,7 @@ The shortest way is the hosted version. Nothing to install, nothing to sign up f
 
 **https://layerling.com/**
 
-The rest of this section is about running your own copy: on your computer, or on a machine in the workshop that everyone opens in their browser. Wherever the app is served from, the designs never leave the browser they were made in, and exports download straight to the person's own computer.
+The rest of this section is about running your own copy: on your computer, or on a machine in the workshop that everyone opens in their browser. Wherever the app is served from, nothing is sent to anyone else: designs stay in the browser they were made in (or in the server folder you set up yourself), and exports download straight to the person's own computer.
 
 ### Windows Quickstart
 
@@ -198,7 +201,7 @@ The quickest way is a single command:
 docker run -d --name layerling -p 3000:3000 -v layerling-thumbnails:/app/.codex/project-thumbnails --restart unless-stopped ghcr.io/henmedia/layerling:latest
 ```
 
-The `-v` option keeps the preview pictures of the start page in a Docker volume named `layerling-thumbnails`, so they survive an update; without it they are inside the container and gone each time it is created again (the designs themselves live in the browser and are not affected). On a NAS with a container manager (Synology Container Manager, Unraid, Portainer), search for `henmedia/layerling` in its registry (Docker Hub) or enter `henmedia/layerling:latest`, map port 3000, and add a volume for `/app/.codex/project-thumbnails`. To update, pull the image again and recreate the container (or let Watchtower do it).
+The `-v` option keeps the preview pictures of the start page in a Docker volume named `layerling-thumbnails`, so they survive an update; without it they are inside the container and gone each time it is created again (the designs themselves are not affected: they live in the browser or in the server folder). On a NAS with a container manager (Synology Container Manager, Unraid, Portainer), search for `henmedia/layerling` in its registry (Docker Hub) or enter `henmedia/layerling:latest`, map port 3000, and add a volume for `/app/.codex/project-thumbnails`. To update, pull the image again and recreate the container (or let Watchtower do it).
 
 The image tags are plain version numbers **without a "v"**: `ghcr.io/henmedia/layerling:1.42.0`, while the GitHub release is called `v1.42.0`. A pull only fetches the new image; a container that already exists keeps running the old one until it is removed and created again:
 

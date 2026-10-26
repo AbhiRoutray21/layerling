@@ -36,7 +36,7 @@
 
 Du hast einen 3D-Drucker. Du willst ein Teil, das passt – keine Laufbahn als CAD-Konstrukteur.
 
-layerling arbeitet so, wie du ohnehin denkst: Form auf die Platte stellen, auf Maß ziehen, eine zweite Form zur Aussparung erklären, beides gruppieren, exportieren, drucken. Es gibt nichts zu lernen, bevor du anfängst, und **nichts anzumelden** – Seite öffnen und bauen. Deine Entwürfe bleiben in deinem eigenen Browser: kein Konto, keine Cloud, nichts wird irgendwohin hochgeladen.
+layerling arbeitet so, wie du ohnehin denkst: Form auf die Platte stellen, auf Maß ziehen, eine zweite Form zur Aussparung erklären, beides gruppieren, exportieren, drucken. Es gibt nichts zu lernen, bevor du anfängst, und **nichts anzumelden** – Seite öffnen und bauen. Deine Entwürfe bleiben standardmäßig in deinem eigenen Browser: kein Konto, keine Cloud, nichts wird irgendwohin hochgeladen. Wenn du eine eigene Instanz betreibst, können sie stattdessen in einem Ordner auf deinem Server liegen, sodass jedes Gerät im Haus dieselben sieht.
 
 ### Von Tinkercad umgestiegen?
 
@@ -85,12 +85,13 @@ Ein vollständiges CAD-Paket ist es nicht: Es gibt keine parametrische Zeitleist
 - **Mehrfarbige Gruppen** – eine Gruppe kann jedes Teil in seiner eigenen Farbe zeigen, auch nachdem Aussparungen hineingeschnitten wurden, und der 3MF- oder OBJ-Export behält diese Farben, so dass der Slicer die Teile Filamenten zuordnen kann.
 - **Bündeln** – Strg+B hält Teile zusammen wie das Bündel in Tinkercad: Sie bewegen, drehen und skalieren sich gemeinsam, behalten aber ihre Farben und bleiben im Export getrennte Körper – praktisch für den Mehrfarbdruck.
 - **Schnittmenge** – nur das behalten, wo sich die ausgewählten Körper und Aussparungen überlappen.
+- **Hülle** – die gewählten Formen in ihre konvexe Hülle packen, den kleinsten Körper ohne Dellen um alle: Eine Halbkugel auf einem Zylinder wird zur Kuppel, vier Pfosten zu einem Kasten mit runden Ecken. Aussparungen in der Auswahl werden danach herausgeschnitten.
 - **Teilen** – Körper oder Aussparungen mit einer Ebene in zwei schneiden; ein ausgehöhlter Körper behält seinen Hohlraum. Gedreht schneidet die Ebene schräg; am Pfeil ziehen verschiebt sie, und mit „Fläche wählen“ legst du sie auf eine beliebige Fläche.
 
 ### Bearbeiten
 
 - **Kanten fasen und verrunden** – jede Kante eines Körpers brechen oder abrunden und später wieder zurücknehmen oder ändern.
-- **Skizzen** – Umrisse aus Linien, Kurven und fertigen Formen zeichnen, Linien schon beim Zeichnen nach Länge und Winkel setzen („50<30“, Umschalt rastet in 15°-Schritten ein), Längen, Winkel und Größen eintippen (Rechnungen wie „60+12,5“ gehen in jedem Zahlenfeld), Ecken runden oder fasen, an den Umrissen anderer Körper einrasten, Hilfslinien zum Einrasten ziehen und daraus exakte Körper ziehen oder drehen. Eine Drehung mit Steigung windet den Umriss als einen durchgehenden Strang zur Schraubenlinie statt zu Ringen, wie Filament auf einer Spule. Eine Skizze lässt sich auch als Kontur bauen: Ein geschlossener Umriss wird ein Rahmen, innen, außen oder mittig auf der Linie, eine offene Linie ein Streifen mit flachen, eckigen oder runden Enden.
+- **Skizzen** – Umrisse aus Linien, Kurven und fertigen Formen zeichnen, Linien schon beim Zeichnen nach Länge und Winkel setzen („50<30“, Umschalt rastet in 15°-Schritten ein), Längen, Winkel und Größen eintippen (Rechnungen wie „60+12,5“ gehen in jedem Zahlenfeld), Ecken runden oder fasen, an den Umrissen anderer Körper einrasten, Hilfslinien zum Einrasten ziehen und daraus exakte Körper ziehen, drehen oder an einem Pfad entlangziehen. Eine Drehung mit Steigung windet den Umriss als einen durchgehenden Strang zur Schraubenlinie statt zu Ringen, wie Filament auf einer Spule. Eine Skizze lässt sich auch als Kontur bauen: Ein geschlossener Umriss wird ein Rahmen, innen, außen oder mittig auf der Linie, eine offene Linie ein Streifen mit flachen, eckigen oder runden Enden.
 - **Aushöhlen** – aus einem Körper Wände gleicher Stärke machen, auf jeder gewünschten Seite offen (oben, unten, vorne, hinten, links, rechts, beliebig kombiniert) oder ganz geschlossen – für Dosen, Becher und Gehäuse.
 - **Fläche löschen** – die Flächen einer Verrundung, eines Lochs oder eines Zapfens anklicken und löschen: Die Flächen ringsum wachsen und schließen die Lücke, und der Körper bleibt exakt für weitere Verrundungen und den STEP-Export.
 - **Eigene Formen** – Körper, die du immer wieder brauchst, oben in der Formenliste ablegen und per Klick oder Ziehen in jeden Entwurf setzen; im Browser oder, mit dem Serverspeicher, auf dem Server für jedes Gerät. „Alle sichern“ nimmt sie mit.
@@ -108,7 +109,8 @@ Ein vollständiges CAD-Paket ist es nicht: Es gibt keine parametrische Zeitleist
 - **Ordner für Entwürfe** – die Entwürfe auf der Startseite in Ordner sortieren (auch Ordner in Ordnern), per Ziehen oder mit „Verschieben nach …“; die Suche schaut in alle, und „Alle sichern“ nimmt sie mit.
 - **Projekte als Datei** – ein ganzes Projekt samt Verlauf, Skizzen und Gruppen als `.lyl` sichern und anderswo weiterbauen. In Chrome und Edge wählst du den Ordner selbst, und Strg+S speichert wieder in genau diese Datei; andere Browser laden sie herunter. Ältere `.skf`-Dateien aus früheren Fassungen öffnen sich weiterhin; gespeichert wird dann als `.lyl` daneben.
 - **Fehlerbericht** – ein Link in der Fußzeile speichert ein ZIP mit dem Entwurf als `.lyl` und einem Text mit Version, Browser und den letzten Meldungen, fertig zum Anhängen im Forum oder bei GitHub, die eine bloße `.lyl` ablehnen.
-- **Entwürfe, die du wiedererkennst** – alles liegt in deinem eigenen Browser, jeder Entwurf mit Vorschaubild.
+- **Entwürfe, die du wiedererkennst** – jeder Entwurf mit Vorschaubild, in deinem Browser oder im Serverordner.
+- **Anhänge** – Notizen, ein Foto des gedruckten Teils oder ein Datenblatt im Entwurf aufbewahren: `.md`- und `.txt`-Dateien, Bilder als `.png`, `.jpg` und `.webp` sowie PDF-Dateien reisen mit der `.lyl`-Datei. Das Auge öffnet einen Text oder ein Bild in einem Fenster; ein PDF wird heruntergeladen. SVG wird nicht angenommen, weil es Skripte tragen kann.
 
 ### Ansicht
 
@@ -116,6 +118,7 @@ Ein vollständiges CAD-Paket ist es nicht: Es gibt keine parametrische Zeitleist
 - **Ansicht am Würfel drehen** – Ziehen am Ansichtswürfel dreht die Ansicht wie die rechte Maustaste, auf dem Tablet mit einem Finger; ein Klick springt weiter auf die gerade Seite, ein Klick auf eine Ecke oder Kante schaut von dort. Die Tasten **1**–**6** springen ebenfalls, **Umschalt+1**–**6** zoomen dabei auf die Auswahl.
 - **Vier gespeicherte Ansichten je Entwurf** – **Umschalt+7**, **8**, **9** oder **0** speichert die Ansicht genau so, wie sie ist (Blickwinkel, Ausschnitt, Zoom), und die Taste allein holt sie zurück. Jeder Entwurf hat seine eigenen, und eine gespeicherte `.lyl`-Datei nimmt sie mit.
 - **Der Ansichtswürfel in jeder Ecke** – Einstellungen > Darstellung > **Position des Ansichtswürfels** stellt den Würfel oben links, oben rechts, unten links oder unten rechts hin; in jeder Ecke außer oben links rückt die Kamerasteuerung an seinen Platz nach oben.
+- **In deiner Sprache** – das Programm und seine Anleitung gibt es auf Englisch, Deutsch und in 16 weiteren Sprachen; die Sprachliste steht ganz oben rechts.
 - **Von unten schauen** – das Auge über dem Gitter in der Kameraleiste blendet die Platte aus, damit die Unterseite eines Entwurfs frei zu sehen ist.
 - **Eine zweite Ansicht im eigenen Fenster** – ein Knopf in der Kameraleiste öffnet ein zweites Fenster, das denselben Entwurf durch eine eigene Kamera zeigt, mit eigenem Ansichtswürfel und eigener Kameraleiste, und folgt jeder Änderung. Es öffnet sich dort, wo du es zuletzt gelassen hast.
 - **Fenster nach Wunsch** – Objektliste, Einstellungen, Schnittansicht, Maßband und die Werkzeugfenster für Kanten, Aushöhlen und Muster lassen sich an ihrer Titelleiste frei verschieben und öffnen sich dort wieder; ein Doppelklick dockt sie an.
@@ -146,8 +149,8 @@ Am schnellsten geht es mit der gehosteten Fassung. Nichts zu installieren, nicht
 **https://layerling.com/**
 
 Der Rest dieses Abschnitts handelt davon, eine eigene Instanz zu betreiben: auf deinem Rechner oder auf einem Rechner in
-der Werkstatt, den alle im Browser öffnen. Woher die App auch ausgeliefert wird: Die Entwürfe verlassen den Browser nicht,
-in dem sie entstanden sind, und Exporte landen direkt auf dem Rechner der jeweiligen Person.
+der Werkstatt, den alle im Browser öffnen. Woher die App auch ausgeliefert wird: Nichts geht an Dritte. Die Entwürfe bleiben
+im Browser, in dem sie entstanden sind (oder im Serverordner, den du selbst einrichtest), und Exporte landen direkt auf dem Rechner der jeweiligen Person.
 
 ### Schnellstart unter Windows
 
@@ -201,7 +204,7 @@ Am schnellsten geht es mit einem einzigen Befehl:
 docker run -d --name layerling -p 3000:3000 -v layerling-thumbnails:/app/.codex/project-thumbnails --restart unless-stopped ghcr.io/henmedia/layerling:latest
 ```
 
-Die Option `-v` legt die Vorschaubilder der Startseite in ein Docker-Volume namens `layerling-thumbnails`, damit sie ein Update überstehen; ohne sie liegen sie im Container und sind bei jedem Neuanlegen weg (die Entwürfe selbst liegen im Browser und sind nicht betroffen). Auf einem NAS mit Container-Verwaltung (Synology Container Manager, Unraid, Portainer) suchst du in der Registrierung (Docker Hub) nach `henmedia/layerling` oder trägst `henmedia/layerling:latest` ein, gibst Port 3000 frei und legst ein Volume für `/app/.codex/project-thumbnails` an. Zum Aktualisieren das Image neu holen und den Container neu anlegen (oder Watchtower das erledigen lassen).
+Die Option `-v` legt die Vorschaubilder der Startseite in ein Docker-Volume namens `layerling-thumbnails`, damit sie ein Update überstehen; ohne sie liegen sie im Container und sind bei jedem Neuanlegen weg (die Entwürfe selbst sind davon nicht berührt: Sie liegen im Browser oder im Serverordner). Auf einem NAS mit Container-Verwaltung (Synology Container Manager, Unraid, Portainer) suchst du in der Registrierung (Docker Hub) nach `henmedia/layerling` oder trägst `henmedia/layerling:latest` ein, gibst Port 3000 frei und legst ein Volume für `/app/.codex/project-thumbnails` an. Zum Aktualisieren das Image neu holen und den Container neu anlegen (oder Watchtower das erledigen lassen).
 
 Die Image-Tags sind reine Versionsnummern **ohne „v“**: `ghcr.io/henmedia/layerling:1.42.0`, das GitHub-Release heißt dagegen `v1.42.0`. Ein Pull holt nur das neue Image; ein vorhandener Container läuft mit dem alten weiter, bis er entfernt und neu angelegt wird:
 
