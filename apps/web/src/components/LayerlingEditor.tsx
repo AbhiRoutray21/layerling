@@ -167,12 +167,17 @@ import { useRememberedFlag } from "@/lib/useRememberedFlag";
 import { BUG_REPORT_FILE, bugReportText, rememberBugReportEvent, type BugReportEvent } from "@/lib/bugReport";
 import { formatLengthMm, lengthDisplayUnit } from "@/lib/measurementUnits";
 import { wrapMeshAroundCylinder, type CylinderWrapError } from "@/lib/cylinderWrap";
+import { normalizeSurfaceTexture, SURFACE_TEXTURE_AXES, SURFACE_TEXTURE_CRACK_STARTS, SURFACE_TEXTURE_CRACK_STYLES, SURFACE_TEXTURE_DETAILS, SURFACE_TEXTURE_DIRECTIONS, SURFACE_TEXTURE_IMAGES, SURFACE_TEXTURE_LIMITS, SURFACE_TEXTURE_PATTERNS, SURFACE_TEXTURE_PROFILES, SURFACE_TEXTURE_PROJECTIONS, SURFACE_TEXTURE_TILINGS, type SurfaceTextureMask, type SurfaceTextureSettings } from "@/lib/surfaceTexture";
+import { normalizeSurfaceTextureOwnImage, SURFACE_TEXTURE_OWN_IMAGE_SIZE } from "@/lib/surfaceTextureImages";
+import { SURFACE_TEXT_FONTS, surfaceTextOutline } from "@/lib/surfaceTextOutline";
+import { useInspectorCard } from "@/lib/inspectorCards";
+import { canChangeSurfaceTexture, canTextureSurface, offersSurfaceTexture, offersSurfaceTextureMask, sceneWithSurfaceBody, shapeUnderSurfaceTexture, surfaceTextureEntry, surfaceTextureGoldShape, surfacePatternLabel, surfaceTexturedShape, surfaceTextureInput, surfaceTextureMaskOf, surfaceTextureMasksFor, textureSurfaceOffThread } from "@/lib/surfaceTextureShape";
 import { screenAlignedNudge } from "@/lib/keyboardNudge";
 import { LAYERLING_MCP_HEARTBEAT_MS, LAYERLING_MCP_POLL_RETRY_MS, LAYERLING_MCP_ROUTE, type LayerlingMcpCommand, type LayerlingMcpSceneSummary, type LayerlingMcpViewFace } from "@/lib/layerlingMcpProtocol";
 import type { CadFaceInfo, CadModifierComponentMesh, CadModifierDeflection, CadModifierDisplayEdge, CadModifierEdge, CadModifierFaces, CadModifierGridfinityPart, CadModifierHelicalGearPart, CadModifierKind, CadModifierMeshPart, CadModifierPrimitivePart, CadModifierProfilePart, CadModifierQuality, CadModifierSpringPart, CadModifierThreadPart, CadModifierWorkerRequest, CadModifierWorkerResponse } from "@/lib/cadModifierTypes";
 import { getSectionBounds, sectionAxisLetter, sectionMeshInFrame, sectionPlacementWorkplane, sectionPointFromFrame, sectionPointToFrame, type SectionFrame, type SectionOrientation, type SectionPlaneAxis, type SectionPlaneSettings } from "@/lib/sectionView";
 import { footprintCutOffset, projectSectionPoint, SECTION_VIEW_FACE, sectionSvgDocument, sliceMeshContours } from "@/lib/sectionSvg";
-import type { AlignAxis, AlignHandleStatus, AlignTarget, GridSize, ParametricSource, ProjectAsset, ProjectAttachment, ShapeAsset, ShapeCustomization, ShapeKind, SketchImage, SketchOperation, SketchPoint, SketchProfile, SketchRevolveSettings, SketchSegment, ShellEdges, ShellOpenings, ShellSide, SweepAnchor, WorkplaneNote, WorkplaneShape, WorkplaneWorkspaceSettings } from "@/types/layerling";
+import type { AlignAxis, AlignHandleStatus, AlignTarget, EdgeTreatmentFeature, GridSize, ParametricSource, ProjectAsset, ProjectAttachment, ShapeAsset, ShapeCustomization, ShapeKind, SketchImage, SketchOperation, SketchPoint, SketchProfile, SketchRevolveSettings, SketchSegment, ShellEdges, ShellOpenings, ShellSide, SweepAnchor, WorkplaneNote, WorkplaneShape, WorkplaneWorkspaceSettings } from "@/types/layerling";
 import { type Vec3, type MeshData, type Cuboid, type ShapeUpdatePatch, type ManifoldSolid, MIN_SHAPE_DIMENSION, resetManifoldRuntime, cleanModelDimension, getManifoldRuntime, meshForShape, meshReachAlong, appendMeshData, formatTriangleCount, shapeAabb, boundsForShapes, boundsForCuboids, meshAabb, boundsForPositions, quantizedPointKey } from "@/lib/editorMeshCore";
 import { meshPartCount } from "@/lib/meshPartCount";
 import { buildGroupedShapeOffThread, exportSolidVolumeOffThread, callOffFaceRead, faceReadInWorker, createFaceReadKeeper, faceReadPositionsOffThread, simplifyTrianglePositionsOffThread, splitShapesByPlaneOffThread, subscribeGeometryBusy, warmGeometryWorker } from "@/lib/geometryWorker";
@@ -317,7 +322,7 @@ type EdgeFeatureRevertOption = {
   entryId: string;
   path: number[];
   label: string;
-  kind: CadModifierKind;
+  kind: EdgeTreatmentFeature["kind"];
   amount: number;
   endAmount?: number;
   edgeCount: number;
@@ -702,6 +707,7 @@ function edgeTreatmentLabel(feature: NonNullable<WorkplaneShape["edgeTreatments"
   if (feature.kind === "shell") return `hollow (${size} walls, open ${shellOpenSides(feature.openings).join(" + ") || "none"})`;
   if (feature.kind === "offset") return `offset (${feature.offsetShrink ? "-" : "+"}${size})`;
   if (feature.kind === "deleteFace") return `face deletion (${feature.faceCount ?? 0} face${feature.faceCount === 1 ? "" : "s"})`;
+  if (feature.kind === "surfaceTexture") return `surface texture (${feature.surfaceTexture?.pattern ?? "relief"}, ${size} deep)`;
   return `${feature.kind === "fillet" ? "fillet" : feature.kind === "chamfillet" ? "chamfillet" : "chamfer"} (${size}, ${feature.edgeCount} edge${feature.edgeCount === 1 ? "" : "s"})`;
 }
 
@@ -4509,8 +4515,8 @@ export function LayerlingEditor({
     const entry = option && selectedShape && option.path.length === 0
       ? (selectedShape.edgeTreatmentHistory ?? []).find((candidate) => candidate.id === option.entryId)
       : undefined;
-    // A deletion of faces has no "Edit" (it is not editable): it can only be taken back.
-    if (!selectedShape || !option || !entry || entry.feature.kind === "deleteFace") {
+    // A deletion of faces has no "Edit" (it is not editable): it can only be taken back. A texture is changed in its card.
+    if (!selectedShape || !option || !entry || entry.feature.kind === "deleteFace" || entry.feature.kind === "surfaceTexture") {
       setNotice(t("status.chooseEdgeFeature"), true);
       return;
     }
@@ -4540,7 +4546,7 @@ export function LayerlingEditor({
       setShellTool({ thickness: feature.amount, openings: feature.openings ?? "top", edges: feature.shellEdges ?? "round", busy: false, error: null });
     } else if (feature.kind === "offset") {
       setShellTool({ mode: "offset", thickness: feature.amount, shrink: feature.offsetShrink === true, keepCopy: false, openings: "none", edges: feature.shellEdges ?? "round", busy: false, error: null });
-    } else {
+    } else if (feature.kind !== "surfaceTexture") {
       edgeEditRequestRef.current = {
         shapeId: restored.shape.id,
         historyLength: restored.shape.edgeTreatmentHistory?.length ?? 0,
@@ -8938,6 +8944,98 @@ export function LayerlingEditor({
     );
   }, [commitShapes, cylinderWrapErrorText, selectedShape, selectedShapes.length, shapes]);
 
+  /**
+   * Lays a surface texture onto the selected body. The texture is computed on its worker; when the
+   * body changed meanwhile, the result is for something else and is dropped.
+   */
+  const textureSelectedSurface = useCallback(async (settings: SurfaceTextureSettings) => {
+    if (selectedShapes.length !== 1 || !selectedShape) {
+      setNotice(t("status.selectOneToTexture"));
+      return;
+    }
+    const current = selectedShape;
+    // A texture is changed by making it again on the body under it, where the textured body stands now.
+    const under = canChangeSurfaceTexture(current) ? shapeUnderSurfaceTexture(current) : null;
+    if (!under && !canTextureSurface(current)) {
+      setNotice(t(current.locked ? "status.objectLocked" : current.surfaceTexture ? "status.alreadyTextured" : "status.selectOneToTexture"));
+      return;
+    }
+    const source = under ?? current;
+    setNotice(t("status.surfaceTexturing"));
+    // The masks in the design that reach into the body go with the settings, and are kept with the texture.
+    const masks = surfaceTextureMasksFor(source, shapesRef.current);
+    let outcome: Awaited<ReturnType<typeof textureSurfaceOffThread>>;
+    let used: SurfaceTextureSettings;
+    try {
+      // A text's letters are drawn here, where the fonts are, and go to the worker as outlines.
+      const textOutline = settings.pattern === "text" ? await surfaceTextOutline({ content: settings.textContent, font: settings.textFont, size: settings.textSize }) : [];
+      if (settings.pattern === "text" && !textOutline.length) {
+        setNotice(t("status.surfaceNoText"));
+        return;
+      }
+      used = { ...settings, masks, textOutline };
+      outcome = await textureSurfaceOffThread(surfaceTextureInput(source), used);
+    } catch (error) {
+      setNotice(t("status.surfaceFailed", { error: error instanceof Error ? error.message : String(error) }));
+      return;
+    }
+    if (shapesRef.current.find((shape) => shape.id === current.id) !== current) {
+      setNotice(t("status.surfaceOutdated"));
+      return;
+    }
+    const textured = outcome.stats.nothing ? null : surfaceTexturedShape(source, outcome.positions, used);
+    if (!textured) {
+      setNotice(t("status.surfaceNothing"));
+      return;
+    }
+    const { stats } = outcome;
+    // Cracks that found no way across the body would leave it as it was.
+    if (stats.cracks && stats.cracks.lines === 0) {
+      setNotice(t("status.surfaceNoCracks"));
+      return;
+    }
+    // A text whose letters came onto no face that may get them (a mask over it) would leave the body as it was.
+    if (stats.text && !stats.text.placed) {
+      setNotice(t("status.surfaceTextMissed"));
+      return;
+    }
+    const gold = outcome.fill ? surfaceTextureGoldShape(textured, outcome.fill, `${displayShapeName(textured)} – ${t("surfaceTexture.goldPart")}`) : null;
+    const pattern = surfacePatternLabel(textured.surfaceTexture?.pattern ?? settings.pattern);
+    const triangles = formatTriangleCount(stats.triangles);
+    // The masks are the mask bodies standing now, as for a new texture: one deleted since no longer counts.
+    const masksBefore = under ? current.surfaceTexture?.masks.length ?? 0 : 0;
+    const done = stats.around ? t("status.surfaceTexturedAround", { pattern, count: stats.around, triangles }) : t("status.surfaceTextured", { pattern, triangles });
+    const notes = [
+      masks.length ? t("status.surfaceMasksUsed", { count: masks.length }) : "",
+      masksBefore && !masks.length ? t("status.surfaceMasksGone", { count: masksBefore }) : "",
+      stats.cracks ? t("status.surfaceCracks", { count: stats.cracks.lines, length: Math.round(stats.cracks.length) }) : "",
+      gold ? t("status.surfaceGold") : "",
+      stats.text?.torn ? t("status.surfaceTextTorn") : "",
+      stats.limited ? t("status.surfaceCoarser") : "",
+      stats.tooDeep ? t("status.surfaceTooDeep") : "",
+    ].filter(Boolean);
+    // The first sentence ends without a full stop when it stands alone.
+    const message = notes.length ? `${done}. ${notes.join(" ")}` : done;
+    // The gold of cracks made before gives way; new gold comes in as a part of its own.
+    commitShapes(sceneWithSurfaceBody(shapesRef.current, current.id, textured, gold), [textured.id], message);
+  }, [commitShapes, selectedShape, selectedShapes.length]);
+
+  /** Takes the texture off the selected body: the body under it comes back, where the textured one stands. */
+  const removeSelectedSurfaceTexture = useCallback(() => {
+    if (selectedShapes.length !== 1 || !selectedShape) return;
+    if (selectedShape.locked) {
+      setNotice(t("status.objectLocked"));
+      return;
+    }
+    const under = shapeUnderSurfaceTexture(selectedShape);
+    if (!under) {
+      setNotice(t("status.alreadyTextured"));
+      return;
+    }
+    const pattern = surfacePatternLabel(selectedShape.surfaceTexture?.pattern ?? "knurl");
+    commitShapes(sceneWithSurfaceBody(shapesRef.current, selectedShape.id, under, null), [under.id], t("status.surfaceRemoved", { pattern }));
+  }, [commitShapes, selectedShape, selectedShapes.length]);
+
   /** The selected name tag as its panel shows it: words, font and layers read from its layers as they stand (#215). */
   const selectedNameTag = useMemo(
     () => (selectedShapes.length === 1 && selectedShape && selectedShape.kind !== "text" && offersTextLayers(selectedShape) ? textLayerStack(selectedShape) : null),
@@ -9208,6 +9306,12 @@ export function LayerlingEditor({
       },
     };
   }, [commitShapes, historyViewState, imageCalibration, selectedReferenceImage]);
+
+  // The surface texture card, opened and closed by the button under "Modify" as by its own header; like the other
+  // cards it stays open for the next body until it is closed.
+  const [surfaceTextureOpen, setSurfaceTextureOpen] = useInspectorCard("surfaceTexture", false);
+  const canSurfaceTexture = selectedShapes.length === 1 && offersSurfaceTexture(selectedShape) && !selectedShape?.locked;
+  const toggleSurfaceTextureTool = useCallback(() => setSurfaceTextureOpen((open) => !open), [setSurfaceTextureOpen]);
 
   const simplifyToolShape = simplifyToolId && selectedShapes.length === 1 && selectedShape?.id === simplifyToolId && offersMeshSimplify(selectedShape)
     ? selectedShape
@@ -10536,6 +10640,95 @@ export function LayerlingEditor({
           t("status.mcpWrapped"),
         );
         return { object: mcpShapeSummary(wrapped) };
+      }
+
+      if (command.action === "texture_surface") {
+        const target = findShape(params.id) ?? (selectedIdsRef.current.length === 1 ? findShape(selectedIdsRef.current[0]) : null);
+        if (!target) throw new Error("Select one object to texture, or pass its id");
+        if (target.locked) throw new Error("Unlock the object before texturing it");
+        // A textured body is textured again from the body under its texture, or that body comes back.
+        const under = target.surfaceTexture ? shapeUnderSurfaceTexture(target) : null;
+        if (target.surfaceTexture && !under) throw new Error("This object's texture keeps no body under it (other steps came after it, or it was made by an older version): undo it first, then texture the plain body again");
+        if (params.remove !== undefined && typeof params.remove !== "boolean") throw new Error("remove must be true or false");
+        if (params.remove === true) {
+          if (!under || !target.surfaceTexture) throw new Error("This object has no surface texture to remove");
+          commitShapes(
+            sceneWithSurfaceBody(currentShapes(), target.id, under, null),
+            [under.id],
+            t("status.surfaceRemoved", { pattern: surfacePatternLabel(target.surfaceTexture.pattern) }),
+          );
+          return { object: mcpShapeSummary(under), removed: true };
+        }
+        if (!under && !canTextureSurface(target)) throw new Error("This object cannot be textured; a bundle or a measuring tool has no body of its own");
+        const source = under ?? target;
+        // A choice the bridge does not know is refused rather than quietly replaced by the default.
+        ["textContent", "textFont"].forEach((key) => {
+          if (params[key] !== undefined && typeof params[key] !== "string") throw new Error(`${key} must be text`);
+        });
+        const choices: Record<string, readonly string[]> = { pattern: SURFACE_TEXTURE_PATTERNS, profile: SURFACE_TEXTURE_PROFILES, direction: SURFACE_TEXTURE_DIRECTIONS, projection: SURFACE_TEXTURE_PROJECTIONS, axis: SURFACE_TEXTURE_AXES, detail: SURFACE_TEXTURE_DETAILS, crackStyle: SURFACE_TEXTURE_CRACK_STYLES, crackStart: SURFACE_TEXTURE_CRACK_STARTS, image: SURFACE_TEXTURE_IMAGES, imageTiling: SURFACE_TEXTURE_TILINGS };
+        Object.entries(choices).forEach(([key, allowed]) => {
+          if (params[key] !== undefined && !allowed.includes(String(params[key]))) throw new Error(`${key} must be one of ${allowed.join(", ")}`);
+        });
+        Object.keys(SURFACE_TEXTURE_LIMITS).forEach((key) => {
+          if (params[key] !== undefined && !Number.isFinite(mcpNumber(params[key], Number.NaN))) throw new Error(`${key} must be a number`);
+        });
+        ["keepEdges", "outside", "inside", "crackGold", "imageInvert"].forEach((key) => {
+          if (params[key] !== undefined && typeof params[key] !== "boolean") throw new Error(`${key} must be true or false`);
+        });
+        if (params.imageOwn !== undefined && !normalizeSurfaceTextureOwnImage(params.imageOwn)) {
+          throw new Error(`imageOwn must be { width, height, data }: whole numbers from 2 to ${SURFACE_TEXTURE_OWN_IMAGE_SIZE} and width × height grey values (0 to 255, a row at a time from the top) as Base64`);
+        }
+        if (params.image === "own" && params.imageOwn === undefined && !(under && target.surfaceTexture?.imageOwn)) throw new Error("image own needs imageOwn: the grey values of one's own image");
+        // Masks: the bodies named in `masks`, or else the bodies marked as masks that reach into this one.
+        let masks: SurfaceTextureMask[];
+        if (params.masks !== undefined) {
+          if (!Array.isArray(params.masks)) throw new Error("masks must be a list of { id, mode }");
+          masks = params.masks.map((entry: unknown) => {
+            const { id, mode } = (entry ?? {}) as { id?: unknown; mode?: unknown };
+            const body = typeof id === "string" ? findShape(id) : null;
+            if (!body) throw new Error(`No object ${String(id)} for a mask`);
+            if (mode !== "exclude" && mode !== "only") throw new Error("A mask's mode must be exclude or only");
+            if (body.id === target.id || !offersSurfaceTextureMask(body)) throw new Error(`${body.name} cannot be a mask: a mask is another box, cylinder, sphere, cone or pyramid`);
+            const mask = surfaceTextureMaskOf(body, mode);
+            if (!mask) throw new Error(`${body.name} has too many faces to be a mask`);
+            return mask;
+          });
+        } else masks = surfaceTextureMasksFor(source, currentShapes());
+        // A change keeps the settings it does not name.
+        const settings = { ...normalizeSurfaceTexture({ ...(under ? target.surfaceTexture : {}), ...params }), masks };
+        if (settings.pattern === "text") {
+          // A font of one's own may be named by its name as well as by its id; a name nobody knows is refused.
+          const font = mcpTextFont(settings.textFont) ?? settings.textFont;
+          if (!isCustomFontId(font) && !SURFACE_TEXT_FONTS.includes(font)) throw new Error(`textFont must be one of ${SURFACE_TEXT_FONTS.join(", ")}, or the name of a font of one's own`);
+          settings.textFont = font;
+          // The letters are drawn here, where the fonts are; outlines handed in are not taken.
+          settings.textOutline = await surfaceTextOutline({ content: settings.textContent, font: settings.textFont, size: settings.textSize });
+          if (!settings.textOutline.length) throw new Error("textContent has no letters to write");
+        }
+        const outcome = await textureSurfaceOffThread(surfaceTextureInput(source), settings);
+        if (findShape(target.id) !== target) throw new Error("The object changed while the texture was computed; texture it again");
+        const textured = outcome.stats.nothing ? null : surfaceTexturedShape(source, outcome.positions, settings);
+        if (!textured) throw new Error("No part of this body gets the pattern: check outside and inside, bottomFree and topFree, and zoneFrom and zoneTo");
+        if (outcome.stats.cracks && outcome.stats.cracks.lines === 0) throw new Error("No crack found a way across this body: try another crackStart (anywhere goes on any body), more crackLength, or let the pattern reach more faces");
+        if (outcome.stats.text && !outcome.stats.text.placed) throw new Error("The text came onto no face that may get it (a mask lies over it): move it with textAround and textHeight, or change the masks");
+        const gold = outcome.fill ? surfaceTextureGoldShape(textured, outcome.fill, `${displayShapeName(textured)} – ${t("surfaceTexture.goldPart")}`) : null;
+        commitShapes(
+          sceneWithSurfaceBody(currentShapes(), target.id, textured, gold),
+          [textured.id],
+          t("status.surfaceTextured", { pattern: surfacePatternLabel(settings.pattern), triangles: formatTriangleCount(outcome.stats.triangles) }),
+        );
+        const { triangles, around, spacing, limited, tooDeep, bedClamped, cracks, text, projection } = outcome.stats;
+        // One's own image is told by its size, not its grey values.
+        const { masks: _planes, textOutline: _outline, imageOwn, ...rest } = settings;
+        const shown = { ...rest, imageOwn: imageOwn ? { width: imageOwn.width, height: imageOwn.height } : null };
+        return {
+          object: mcpShapeSummary(textured),
+          ...(gold ? { gold: mcpShapeSummary(gold) } : {}),
+          changed: Boolean(under),
+          settings: shown,
+          masks: masks.length,
+          texture: { triangles, projection, around, spacing, limited, tooDeep, bedClamped, ...(cracks ? { cracks } : {}), ...(text ? { text } : {}) },
+        };
       }
 
       if (command.action === "simplify_mesh") {
@@ -13311,6 +13504,9 @@ export function LayerlingEditor({
         canSimplify={selectedShapes.length === 1 && offersMeshSimplify(selectedShape) && !selectedShape?.locked}
         onSimplify={startSimplifyTool}
         simplifyActive={Boolean(simplifyToolShape)}
+        canSurfaceTexture={canSurfaceTexture}
+        onSurfaceTextureTool={toggleSurfaceTextureTool}
+        surfaceTextureActive={canSurfaceTexture && surfaceTextureOpen}
         onMirror={toggleMirrorMode}
         onRotationPivot={toggleRotationPivot}
         onArray={toggleArrayTool}
@@ -13577,6 +13773,10 @@ export function LayerlingEditor({
           onSelectionLock={toggleLocked}
           onSelectionHide={toggleHidden}
           onWrapAroundCylinder={selectedShapes.length === 1 && offersCylinderWrap(selectedShape) ? wrapSelectionAroundCylinder : undefined}
+          onSurfaceTexture={selectedShapes.length === 1 && offersSurfaceTexture(selectedShape) ? textureSelectedSurface : undefined}
+          onRemoveSurfaceTexture={selectedShapes.length === 1 && surfaceTextureEntry(selectedShape) ? removeSelectedSurfaceTexture : undefined}
+          surfaceTextureOpen={surfaceTextureOpen}
+          onSurfaceTextureOpenChange={setSurfaceTextureOpen}
           onLayerText={selectedShapes.length === 1 && offersTextLayers(selectedShape) ? layerSelectedText : undefined}
           onTextTags={selectedShapes.length === 1 && offersTextLayers(selectedShape) ? makeTextTags : undefined}
           onFixKeyringTab={selectedShapes.length === 1 && selectedShape?.keyringTab && !historyViewState ? () => void fixKeyringTab() : undefined}
