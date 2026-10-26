@@ -174,6 +174,7 @@ import { buildGroupedShapeOffThread, exportSolidVolumeOffThread, callOffFaceRead
 import { cloneAsGroupChild, meshDataToManifoldMesh, shapeToManifoldSolid, withClosedHolesNote, unionOverlappingExportMeshes, exportBodiesWithLooseHoles, formatSectionOffset, SECTION_SEEN_FROM_KEYS, expandBundles, visibleExportShapes, multicolorExportSolids, exportFaceColors, colorSeparatedExportMeshes, disposeManifold, canIntersectShapes, buildIntersectionShapeFromSelection, canHullShapes, buildHullShapeFromSelection, groupedShape, quaternionForShape, rotationFromQuaternion, cleanShapePatch, restoreGroupedChildren, restoreGroupedChildrenForEdges } from "@/lib/editorBooleans";
 import { handleViewArrowKey } from "@/lib/viewArrowKeys";
 import { escapeWasHandled } from "@/lib/escapeHandled";
+import { handleSketchEditorKey } from "@/lib/sketchEditorKeys";
 import { sketchEscapeAction } from "@/lib/sketchEscape";
 import { booleanAutomationScene } from "@/lib/editorAutomation";
 import { debugShapeSummary, mcpPivotRequest, compactShapeSummary, mcpShapeSummary, mcpSketchFillProfile, mcpTextFont } from "@/lib/editorMcpSummary";
@@ -5084,6 +5085,13 @@ export function LayerlingEditor({
     setActiveSketchTool(tool);
     if (eraseSelection) deleteSelectedSketchEntity();
   }, [deleteSelectedSketchEntity, setActiveSketchTool, sketchSelection, sketchTool]);
+
+  // The button and Ctrl+I. A new sketch starts with the line tool, and the button stayed grey until Select
+  // was chosen (#833): it switches to Select itself, as a click on the arrow would, and opens the picker.
+  const openSketchImagePicker = useCallback(() => {
+    if (sketchTool !== "select") chooseSketchTool("select");
+    sketchImageInputRef.current?.click();
+  }, [chooseSketchTool, sketchTool]);
 
   const copySketchSelectionToClipboard = useCallback(() => {
     const copied = copySketchSelection(sketchProfile, sketchSelection);
@@ -12429,61 +12437,43 @@ export function LayerlingEditor({
       }
 
       if (sketchActive && toolbarMode === "sketch") {
-        if (event.key === "Escape") {
-          // A crop, a calibration or the mirror panel that closes with this key is all it does.
-          if (escapeWasHandled(event)) return;
-          event.preventDefault();
-          // As in 3D: first the tool goes down, then the selection (#664).
-          if (noteMode) {
-            setNoteMode(false);
-            setNotice("");
-          } else if (sketchEscapeAction(sketchTool) === "selectTool") {
-            setActiveSketchTool("select");
-          } else {
-            setSketchActivePointId(null);
-            setSketchSelection(null);
-            setNotice(t("status.sketchSelectionCleared"));
-          }
-        } else if (event.key === "Delete" || event.key === "Backspace") {
-          event.preventDefault();
-          if (sketchSelection) deleteSelectedSketchEntity();
-          else if (sketchMeasurement) clearSketchMeasurement();
-          else deleteSelectedSketchEntity();
-        } else if (shortcut && key === "z") {
-          event.preventDefault();
-          if (event.shiftKey) sketchRedo();
-          else sketchUndo();
-        } else if (shortcut && key === "y") {
-          event.preventDefault();
-          sketchRedo();
-        } else if (shortcut && key === "c") {
-          event.preventDefault();
-          copySketchSelectionToClipboard();
-        } else if (shortcut && key === "x") {
-          event.preventDefault();
-          cutSketchSelection();
-        } else if (shortcut && key === "v") {
-          event.preventDefault();
-          pasteSketchSelection();
-        } else if (shortcut && key === "d") {
-          event.preventDefault();
-          duplicateSketchSelection();
-        } else if (!shortcut && !event.altKey && (event.code === "KeyR" || key === "r")) {
-          event.preventDefault();
-          rotateSelectedClosedSketch45();
-        } else if (!shortcut && !event.altKey && (event.code === "KeyL" || key === "l")) {
-          event.preventDefault();
-          // L locks what is selected: the template image, or an outline (#653).
-          if (sketchSelection && sketchSelection.kind !== "image") toggleSketchOutlineLock();
-          else toggleSelectedSketchImageLock();
-        } else if (!shortcut && !event.altKey && event.shiftKey && (event.code === "KeyN" || key === "n")) {
-          // Shift+N shows or hides the notes, as in 3D; N alone places one.
-          event.preventDefault();
-          toggleNotesVisible();
-        } else if (!shortcut && !event.altKey && (event.code === "KeyN" || key === "n")) {
-          event.preventDefault();
-          toggleNoteTool();
-        }
+        handleSketchEditorKey(event, {
+          escape: () => {
+            // As in 3D: first the tool goes down, then the selection (#664).
+            if (noteMode) {
+              setNoteMode(false);
+              setNotice("");
+            } else if (sketchEscapeAction(sketchTool) === "selectTool") {
+              setActiveSketchTool("select");
+            } else {
+              setSketchActivePointId(null);
+              setSketchSelection(null);
+              setNotice(t("status.sketchSelectionCleared"));
+            }
+          },
+          deleteSelection: () => (!sketchSelection && sketchMeasurement ? clearSketchMeasurement() : deleteSelectedSketchEntity()),
+          undo: sketchUndo,
+          redo: sketchRedo,
+          copy: copySketchSelectionToClipboard,
+          cut: cutSketchSelection,
+          paste: pasteSketchSelection,
+          duplicate: duplicateSketchSelection,
+          selectAll: () => {
+            // Every point and line, as Ctrl+A takes every body in 3D; the template images stay out, as reference images do there.
+            if (sketchTool !== "select") chooseSketchTool("select");
+            const pointIds = sketchProfile.points.map((point) => point.id);
+            const segmentIds = sketchProfile.segments.map((segment) => segment.id);
+            const count = pointIds.length + segmentIds.length;
+            setSketchSelection(count ? { kind: "multiple", pointIds, segmentIds, imageIds: [] } : null);
+            setNotice(count === 0 ? t("status.sketchSelectionCleared") : count === 1 ? t("status.sketchSelectedOne") : t("status.sketchSelectedMany", { count }));
+          },
+          // What is selected: the template image, or an outline (#653).
+          toggleLock: () => (sketchSelection && sketchSelection.kind !== "image" ? toggleSketchOutlineLock() : toggleSelectedSketchImageLock()),
+          addImage: openSketchImagePicker,
+          rotate45: rotateSelectedClosedSketch45,
+          toggleNotes: toggleNotesVisible,
+          toggleNoteTool,
+        });
         return;
       }
 
@@ -12804,6 +12794,9 @@ export function LayerlingEditor({
     sketchActive,
     sketchRedo,
     sketchMeasurement,
+    sketchProfile,
+    chooseSketchTool,
+    openSketchImagePicker,
     sketchSelection,
     sketchTool,
     setActiveSketchTool,
@@ -13062,12 +13055,7 @@ export function LayerlingEditor({
         onSketchPrimitive={(primitive) => addSketchPrimitive(primitive, { x: 0, z: 0 })}
         sketchShapeOptions={sketchShapeOptions}
         onSketchShapeOptions={setSketchShapeOptions}
-        onSketchImage={() => {
-          // A new sketch starts with the line tool, and the button stayed grey until Select was chosen (#833):
-          // it switches to Select itself, as a click on the arrow would, and opens the picker.
-          if (sketchTool !== "select") chooseSketchTool("select");
-          sketchImageInputRef.current?.click();
-        }}
+        onSketchImage={openSketchImagePicker}
         onSketchCopy={copySketchSelectionToClipboard}
         onSketchPaste={pasteSketchSelection}
         onSketchDuplicate={duplicateSketchSelection}
