@@ -12,7 +12,7 @@ import { groupedContentScale, groupedPartSizeScale, scaleGroupedVertices } from 
 import { dropSplitSlivers, unionSplitManifoldComponents } from "@/lib/manifoldSplit";
 import { splitAxisLabel, splitPlaneIntersectsPoints, splitShapeFromWorldPositions, type ModelSplitPlane } from "@/lib/modelSplit";
 import { starSettingsForSize } from "@/lib/starGeometry";
-import { canonicalizeShape, cleanRotationDegrees, isNonSolidShape, meshYawDegrees, mirrorSign, normalizeDegrees, resizedImportedCoordinates, resizedShapeSize, shapeDepth, shapeHasShapeDeform, shapeWidth, withHoleMode } from "@/lib/workplaneShapes";
+import { canonicalizeShape, cleanRotationDegrees, isNonSolidShape, meshYawDegrees, mirrorSign, normalizeDegrees, resizedImportedCoordinates, resizedShapeSize, shapeDepth, shapeHasShapeDeform, shapeHasTaper, shapeTaperDimensions, shapeWidth, withHoleMode } from "@/lib/workplaneShapes";
 import { closedMeshVolume } from "@/lib/cadProfileExtrusion";
 import { meshSurfaceAreas } from "@/lib/printEstimate";
 import { createLocalId, derivedLocalId } from "@/lib/localIds";
@@ -2270,6 +2270,21 @@ function coneRadiiForWidth(cone: WorkplaneShape, width: number): Partial<Workpla
   };
 }
 
+/** The taper and the lean of a part a group stretches by `scaleX` along its width and `scaleZ` along its depth. */
+function taperedPartPatch(part: WorkplaneShape, scaleX: number, scaleZ: number): Partial<WorkplaneShape> {
+  const patch: Partial<WorkplaneShape> = {};
+  if (shapeHasTaper(part)) {
+    const taper = shapeTaperDimensions(part);
+    patch.taperTopWidth = Math.max(MIN_SHAPE_DIMENSION, taper.topWidth * scaleX);
+    patch.taperBottomWidth = Math.max(MIN_SHAPE_DIMENSION, taper.bottomWidth * scaleX);
+    patch.taperTopDepth = Math.max(MIN_SHAPE_DIMENSION, taper.topDepth * scaleZ);
+    patch.taperBottomDepth = Math.max(MIN_SHAPE_DIMENSION, taper.bottomDepth * scaleZ);
+  }
+  if (part.extrudeTopOffsetX) patch.extrudeTopOffsetX = part.extrudeTopOffsetX * scaleX;
+  if (part.extrudeTopOffsetZ) patch.extrudeTopOffsetZ = part.extrudeTopOffsetZ * scaleZ;
+  return patch;
+}
+
 export function restoreGroupedChildren(group: WorkplaneShape): WorkplaneShape[] {
   const children = group.groupedShapes ?? [];
   if (children.length === 0) {
@@ -2319,6 +2334,9 @@ export function restoreGroupedChildren(group: WorkplaneShape): WorkplaneShape[] 
       // A cone is shaped by its own radii, not by its width: they stretch with it (#756).
       ...(child.kind === "cone" ? coneRadiiForWidth(child, width) : {}),
       ...(child.kind === "star" ? starSettingsForSize({ ...child, width: shapeWidth(child), depth: shapeDepth(child) }, width, depth) : {}),
+      // A taper and a lean are kept in millimetres: they stretch with the part, or a tapered top fell back to its
+      // old size when a widened group was cut with a hole or opened (#893).
+      ...taperedPartPatch(child, partScale.width, partScale.depth),
       rotation: childRotation.rotation,
       rotationX: childRotation.rotationX,
       rotationZ: childRotation.rotationZ,
