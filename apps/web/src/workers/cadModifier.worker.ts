@@ -19,7 +19,7 @@ import { meshTreatedBody } from "@/lib/cadMeshAccuracy";
 import { planarMeshFaces } from "@/lib/cadPlanarMesh";
 import { cadFlatFaceMeshStraysFromOutline } from "@/lib/cadFaceOutline";
 import { buildMessage } from "@/lib/buildStamp";
-import { CAD_MODIFIER_KERNEL_RESTART_MESSAGE, CAD_MODIFIER_RUNTIME_BASE, VARIABLE_FILLET_ONE_EDGE_MESSAGE, cadModifierCappedDeflection, cadModifierTessellationDeflection, cadModifierTopologyEdgeIsSelectable, cadTransformRequiresGeneralTransform, isCadModifierKernelExhausted, isCadModifierWasmMemoryFault } from "@/lib/cadModifierRuntime";
+import { CAD_MODIFIER_KERNEL_RESTART_MESSAGE, CAD_MODIFIER_RUNTIME_BASE, VARIABLE_FILLET_ONE_EDGE_MESSAGE, cadModifierCappedDeflection, cadModifierTessellationDeflection, cadModifierTopologyEdgeIsSelectable, applyCadTransform, isCadModifierKernelExhausted, isCadModifierWasmMemoryFault } from "@/lib/cadModifierRuntime";
 
 const HASH_UPPER_BOUND = 2_147_483_647;
 const CAD_EDGE_WIREFRAME_DEFLECTION = 0.035;
@@ -176,27 +176,6 @@ function meshPartToAsciiStl(part: CadModifierMeshPart) {
   }
   lines[lines.length - 1] = "endsolid layerling";
   return lines.join("\n");
-}
-
-function isCadTransform(transform: number[] | undefined): transform is number[] {
-  return Boolean(transform?.length === 12 && transform.every(Number.isFinite));
-}
-
-function isIdentityCadTransform(transform: number[]) {
-  const identity = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0];
-  return transform.every((value, index) => Math.abs(value - identity[index]) < 1e-9);
-}
-
-function applyCadTransform(cad: OcctKernel, shape: ShapeHandle, transform: number[] | undefined) {
-  if (!isCadTransform(transform) || isIdentityCadTransform(transform)) return shape;
-  if (cadTransformRequiresGeneralTransform(transform)) {
-    return cad.generalTransform(shape, transform);
-  }
-  try {
-    return cad.transform(shape, transform);
-  } catch {
-    return cad.generalTransform(shape, transform);
-  }
 }
 
 const ROTATE_Z_TO_Y: number[] = [
