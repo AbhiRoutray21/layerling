@@ -174,6 +174,7 @@ import type { AlignAxis, AlignHandleStatus, AlignTarget, GridSize, ParametricSou
 import { type Vec3, type MeshData, type Cuboid, type ShapeUpdatePatch, type ManifoldSolid, MIN_SHAPE_DIMENSION, resetManifoldRuntime, cleanModelDimension, getManifoldRuntime, meshForShape, meshReachAlong, appendMeshData, formatTriangleCount, shapeAabb, boundsForShapes, boundsForCuboids, meshAabb, boundsForPositions, quantizedPointKey } from "@/lib/editorMeshCore";
 import { meshPartCount } from "@/lib/meshPartCount";
 import { buildGroupedShapeOffThread, exportSolidVolumeOffThread, callOffFaceRead, faceReadInWorker, createFaceReadKeeper, faceReadPositionsOffThread, simplifyTrianglePositionsOffThread, splitShapesByPlaneOffThread, subscribeGeometryBusy, warmGeometryWorker } from "@/lib/geometryWorker";
+import { roundedAlignedValue } from "@/lib/alignRounding";
 import { cloneAsGroupChild, meshDataToManifoldMesh, shapeToManifoldSolid, withClosedHolesNote, unionOverlappingExportMeshes, exportBodiesWithLooseHoles, formatSectionOffset, SECTION_SEEN_FROM_KEYS, expandBundles, visibleExportShapes, multicolorExportSolids, exportFaceColors, colorSeparatedExportMeshes, disposeManifold, canIntersectShapes, buildIntersectionShapeFromSelection, canHullShapes, buildHullShapeFromSelection, groupedShape, quaternionForShape, rotationFromQuaternion, cleanShapePatch, restoreGroupedChildren, restoreGroupedChildrenForEdges } from "@/lib/editorBooleans";
 import { handleViewArrowKey } from "@/lib/viewArrowKeys";
 import { escapeWasHandled } from "@/lib/escapeHandled";
@@ -1869,18 +1870,18 @@ function alignedShapesForSelection(
       const shift = shiftAlongAxis(axes, axis, delta);
       return {
         ...shape,
-        x: cleanNearZero(Number((shape.x + shift.x).toFixed(4)), ALIGN_EPSILON),
-        z: cleanNearZero(Number((shape.z + shift.z).toFixed(4)), ALIGN_EPSILON),
-        elevation: cleanNearZero(Number(((shape.elevation ?? 0) + shift.y).toFixed(4)), ALIGN_EPSILON),
+        x: cleanNearZero(roundedAlignedValue(shape.x + shift.x), ALIGN_EPSILON),
+        z: cleanNearZero(roundedAlignedValue(shape.z + shift.z), ALIGN_EPSILON),
+        elevation: cleanNearZero(roundedAlignedValue((shape.elevation ?? 0) + shift.y), ALIGN_EPSILON),
       };
     }
     if (axis === "x") {
-      return { ...shape, x: cleanNearZero(Number((shape.x + delta).toFixed(4)), ALIGN_EPSILON) };
+      return { ...shape, x: cleanNearZero(roundedAlignedValue(shape.x + delta), ALIGN_EPSILON) };
     }
     if (axis === "z") {
-      return { ...shape, z: cleanNearZero(Number((shape.z + delta).toFixed(4)), ALIGN_EPSILON) };
+      return { ...shape, z: cleanNearZero(roundedAlignedValue(shape.z + delta), ALIGN_EPSILON) };
     }
-    return { ...shape, elevation: cleanNearZero(Number(((shape.elevation ?? 0) + delta).toFixed(4)), ALIGN_EPSILON) };
+    return { ...shape, elevation: cleanNearZero(roundedAlignedValue((shape.elevation ?? 0) + delta), ALIGN_EPSILON) };
   });
 
   return { nextShapes, moved };
@@ -1920,10 +1921,10 @@ function mirroredShapePatch(shape: WorkplaneShape, axis: AlignAxis, pivot: numbe
   const rotationPatch = rotationFromQuaternion(nextQuaternion);
   const positionPatch =
     axis === "x"
-      ? { x: cleanNearZero(Number(nextCenter.toFixed(4)), ALIGN_EPSILON) }
+      ? { x: cleanNearZero(roundedAlignedValue(nextCenter), ALIGN_EPSILON) }
       : axis === "z"
-        ? { z: cleanNearZero(Number(nextCenter.toFixed(4)), ALIGN_EPSILON) }
-        : { elevation: cleanNearZero(Number((nextCenter - shape.height / 2).toFixed(4)), ALIGN_EPSILON) };
+        ? { z: cleanNearZero(roundedAlignedValue(nextCenter), ALIGN_EPSILON) }
+        : { elevation: cleanNearZero(roundedAlignedValue(nextCenter - shape.height / 2), ALIGN_EPSILON) };
 
   return {
     ...shape,
