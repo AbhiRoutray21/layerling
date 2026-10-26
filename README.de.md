@@ -133,6 +133,7 @@ Ein vollständiges CAD-Paket ist es nicht: Es gibt keine parametrische Zeitleist
 Von anderen gemacht, nicht von diesem Projekt:
 
 <!-- videos:start -->
+- [I Tried Layerling After Tinkercad… Is It REALLY Better?](https://youtu.be/5DpOxdoNwqs) – Maker Mates Studio 3D Printing (Englisch). Jemand, der von Tinkercad kommt, probiert layerling aus und vergleicht die beiden.
 - [Layerling CAD Videos](https://www.youtube.com/playlist?list=PLc09BHr_6nn8) – Printology (Englisch). Eine Playlist über layerling, bisher mit „I'm 100% In on Layerling - The Next Big Free CAD“ und „Layerling Features That Blow Tinkercad Out Of The Water“.
 - [Print by Layer](https://www.youtube.com/playlist?list=PLejZBz4L7CGQ) – Print N Repeat (Englisch). Eine Playlist über layerling, bisher mit „The EASIEST Way to Design Hinges in Layerling“ und „The EASIEST Way to 3D Model Threads!“.
 - [Layerling la nueva herramienta gratuita de modelado 3D, más completo que Tinkercad](https://youtu.be/-EEt0RSINoY) – Fulcro 1900 (Spanisch). Ein Video über layerling als neues, kostenloses 3D-Modellierwerkzeug, das vollständiger ist als Tinkercad.
