@@ -3071,6 +3071,8 @@ export const MESSAGES_AR: Partial<Record<MessageKey, string>> = {
   "notice.backupDoneWithShapes": "تم النسخ الاحتياطي للتصاميم ({count}) والأشكال المخصصة ({shapes}) في {name}",
   "notice.backupShapesRestored": "الأشكال المخصصة: أُضيف {count}، وكان {skipped} موجودًا من قبل.",
   "notice.backupFailed": "فشل النسخ الاحتياطي: {reason}",
+  "notice.backupInterrupted": "توقفت آخر نسخة احتياطية عند التصميم {index} من {total}، \"{name}\"، وأُعيد تحميل الصفحة. على الأرجح نفدت ذاكرة المتصفح عنده: احفظ هذا التصميم وحده كملف (تصدير، LYL) أو بسّط أكبر شبكاته، ثم أعد النسخ الاحتياطي.",
+  "notice.backupSkipped": "تعذّرت قراءة {count} وهي غير موجودة في النسخة الاحتياطية: {names}",
   "notice.backupNotReadable": "{name} ليس ملف ZIP قابلًا للقراءة",
   "notice.backupNoDesigns": "{name} لا يحتوي على أي تصميم لـ layerling",
   "notice.restoringBackup": "جارٍ استعادة التصاميم … {index} من {total}",

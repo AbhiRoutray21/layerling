@@ -2929,6 +2929,8 @@ export const MESSAGES_ZH_CN: Partial<Record<MessageKey, string>> = {
   "notice.backupDoneWithShapes": "已备份 {count} 个设计和 {shapes} 个自定义形状到 {name}",
   "notice.backupShapesRestored": "自定义形状：已添加 {count} 个，{skipped} 个已存在。",
   "notice.backupFailed": "备份失败：{reason}",
+  "notice.backupInterrupted": "上次备份在第 {index} / {total} 个设计“{name}”处停止，页面已重新加载。很可能是浏览器内存不足：请把这个设计单独另存为文件（导出，LYL），或简化其中最大的网格，然后再备份一次。",
+  "notice.backupSkipped": "{count} 个无法读取，未包含在备份中：{names}",
   "notice.backupNotReadable": "{name} 不是可读取的 ZIP 文件",
   "notice.backupNoDesigns": "{name} 中不含 layerling 设计",
   "notice.restoringBackup": "正在恢复设计……{index}/{total}",

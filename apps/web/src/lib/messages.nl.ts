@@ -3070,6 +3070,8 @@ export const MESSAGES_NL: Record<MessageKey, string> = {
   "notice.backupDoneWithShapes": "Back-up van {count} ontwerpen en {shapes} eigen vormen gemaakt in {name}",
   "notice.backupShapesRestored": "Eigen vormen: {count} toegevoegd, {skipped} waren er al.",
   "notice.backupFailed": "Back-up mislukt: {reason}",
+  "notice.backupInterrupted": "De laatste back-up stopte bij ontwerp {index} van {total}, ‘{name}’, en de pagina werd opnieuw geladen. Waarschijnlijk had de browser er geen geheugen meer voor: sla dat ontwerp apart op als bestand (Exporteren, LYL) of vereenvoudig de grootste meshes, en maak dan opnieuw een back-up.",
+  "notice.backupSkipped": "{count} konden niet worden gelezen en ontbreken in de back-up: {names}",
   "notice.backupNotReadable": "{name} is geen leesbaar ZIP-bestand",
   "notice.backupNoDesigns": "{name} bevat geen layerling-ontwerp",
   "notice.restoringBackup": "Ontwerpen terugzetten … {index} van {total}",

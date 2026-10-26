@@ -72,7 +72,7 @@ import { readTape, writeTape } from "@/lib/tapeStore";
 import { useFileAccept } from "@/lib/fileAccept";
 import { lylFileAccessSupported, onLylFilesLaunched, pickFilesToImport, rememberLylFile, type LylFileHandle } from "@/lib/lylFileAccess";
 import { exportLylProject, importLylProject, inspectLylProjectPackage, LYL_CREATED_WITH_VERSION, LYL_MEDIA_TYPE, withLylProjectName } from "@/lib/lylProject";
-import { backupDesignAlreadyThere, backupEntryPaths, backupFileName, backupFolderPaths, backupThumbnailPath, unpackBackupFolders, isBackupFileName, packBackup, unpackBackup, zipHoldsDesigns } from "@/lib/projectBackup";
+import { backupDesignAlreadyThere, backupEntryPaths, backupFileName, backupFolderPaths, backupThumbnailPath, unpackBackupFolders, isBackupFileName, createBackupWriter, unpackBackup, zipHoldsDesigns } from "@/lib/projectBackup";
 import { customShapesBackupEntries, restoreCustomShapesFromBackup } from "@/lib/myShapes";
 import { SHARED_PROJECTS_ENDPOINT } from "@/lib/sharedProjectsEndpoint";
 import { PICTURE_FILE_ACCEPT } from "@/lib/pictureIcon";
@@ -220,6 +220,35 @@ type ProjectShapeResourceRecord =
 const PROJECTS_STORAGE_KEY = "layerling.projects";
 /** Whether a new design starts in the server folder when there is one (#316). Kept in this browser. */
 const NEW_DESIGNS_ON_SERVER_KEY = "layerling.newDesignsOnServer";
+/**
+ * Where "Back up all" is, noted before each design (#887). When the browser runs out of memory on a large design,
+ * Safari reloads the page and the backup never gets to say anything; the start page reads this afterwards and
+ * names the design it stopped at. Cleared when the backup ends, either way.
+ */
+const BACKUP_PROGRESS_KEY = "layerling.backupInProgress";
+type BackupProgress = { index: number; total: number; name: string };
+
+function writeBackupProgress(progress: BackupProgress | null) {
+  try {
+    if (progress) window.localStorage.setItem(BACKUP_PROGRESS_KEY, JSON.stringify(progress));
+    else window.localStorage.removeItem(BACKUP_PROGRESS_KEY);
+  } catch {
+    // Without storage the backup still works; only the note after a reload is missing.
+  }
+}
+
+/** A backup that was cut off by a reload, read once: the note goes with it. */
+function takeInterruptedBackup(): BackupProgress | null {
+  try {
+    const raw = window.localStorage.getItem(BACKUP_PROGRESS_KEY);
+    window.localStorage.removeItem(BACKUP_PROGRESS_KEY);
+    const value = raw ? JSON.parse(raw) as Partial<BackupProgress> : null;
+    return value && typeof value.name === "string" && typeof value.index === "number" && typeof value.total === "number" ? value as BackupProgress : null;
+  } catch {
+    return null;
+  }
+}
+
 /** How long a new design waits for the server's answer before it goes where the start page says. */
 const SERVER_ANSWER_WAIT_MS = 8000;
 
@@ -1150,6 +1179,9 @@ export default function Home() {
     setResolvedTheme(resolveAppTheme(storedTheme, systemPrefersDark));
     const { projects: storedProjects, legacyShapes } = readStoredProjects();
     setProjects(storedProjects);
+    // A backup the page did not live to finish says where it stopped (#887).
+    const interruptedBackup = takeInterruptedBackup();
+    if (interruptedBackup) setDashboardNotice(t("notice.backupInterrupted", { ...interruptedBackup }));
     void (async () => {
       const thumbnails = await loadDesignThumbnails();
       thumbnails.forEach((dataUrl, projectId) => {
@@ -2250,30 +2282,45 @@ export default function Home() {
     try {
       // A design in a folder goes into the ZIP in that folder, so a restore puts it back there (#496).
       const names = backupEntryPaths(projects.map((project) => ({ name: project.name, folder: folderPathNames(designFolders, project.folderId) })), t("dashboard.backupFallbackName"));
-      const entries = [];
+      // Each design goes into the file as it comes and is let go, instead of all of them and then the whole ZIP once
+      // more in memory, where large designs made Safari reload the page without a word (#887).
+      const writer = createBackupWriter();
+      const skipped: string[] = [];
       for (let index = 0; index < projects.length; index += 1) {
         setDashboardNotice(t("notice.backingUp", { index: index + 1, total: projects.length }));
-        entries.push({ name: names[index], bytes: await projectPackageBytes(projects[index]) });
+        // Noted before the design is read, so a page that is gone in the middle can say afterwards where it stopped.
+        writeBackupProgress({ index: index + 1, total: projects.length, name: projects[index].name });
+        try {
+          writer.add(names[index], await projectPackageBytes(projects[index]));
+        } catch (error) {
+          // One design that cannot be read does not cost the backup of the others; the message names it.
+          skipped.push(`${projects[index].name} (${error instanceof Error ? localizedError(error.message) : String(error)})`);
+          continue;
+        }
         // The card picture goes along, so a restore shows it at once.
-        const thumbnail = await projectThumbnailPngBytes(projects[index].thumbnailUrl);
-        if (thumbnail) entries.push({ name: backupThumbnailPath(names[index]), bytes: thumbnail });
+        const thumbnail = await projectThumbnailPngBytes(projects[index].thumbnailUrl).catch(() => null);
+        if (thumbnail) writer.add(backupThumbnailPath(names[index]), thumbnail);
       }
-      entries.push(...shapeEntries);
+      shapeEntries.forEach((entry) => writer.add(entry.name, entry.bytes));
       // Folders with no design anywhere inside them go along as empty folders.
       const holding = new Set(projects.flatMap((project) => folderTrail(designFolders, folderOfDesign(designFolders, project.folderId)).map((folder) => folder.id)));
       const emptyFolders = designFolders.filter((folder) => !holding.has(folder.id) && !designFolders.some((other) => other.parentId === folder.id));
-      backupFolderPaths(emptyFolders.map((folder) => folderPathNames(designFolders, folder.id))).forEach((name) => entries.push({ name, bytes: new Uint8Array() }));
+      backupFolderPaths(emptyFolders.map((folder) => folderPathNames(designFolders, folder.id))).forEach((name) => writer.add(name, new Uint8Array()));
       const fileName = backupFileName(new Date());
-      const url = URL.createObjectURL(new Blob([packBackup(entries) as BlobPart], { type: "application/zip" }));
+      const url = URL.createObjectURL(writer.finish());
+      writeBackupProgress(null);
       const link = document.createElement("a");
       link.href = url;
       link.download = fileName;
       link.click();
       window.setTimeout(() => URL.revokeObjectURL(url), 10_000);
-      setDashboardNotice(shapeCount
-        ? t("notice.backupDoneWithShapes", { count: projects.length, shapes: shapeCount, name: fileName })
-        : t("notice.backupDone", { count: projects.length, name: fileName }));
+      const saved = projects.length - skipped.length;
+      const done = shapeCount
+        ? t("notice.backupDoneWithShapes", { count: saved, shapes: shapeCount, name: fileName })
+        : t("notice.backupDone", { count: saved, name: fileName });
+      setDashboardNotice(skipped.length ? `${done} ${t("notice.backupSkipped", { count: skipped.length, names: skipped.join("; ") })}` : done);
     } catch (error) {
+      writeBackupProgress(null);
       setDashboardNotice(t("notice.backupFailed", { reason: error instanceof Error ? localizedError(error.message) : String(error) }));
     }
   }, [designFolders, projects]);

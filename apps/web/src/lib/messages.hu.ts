@@ -2917,6 +2917,8 @@ export const MESSAGES_HU: Partial<Record<MessageKey, string>> = {
   "notice.backupDoneWithShapes": "{count} terv és {shapes} saját alakzat biztonsági mentése kész ide: {name}",
   "notice.backupShapesRestored": "Saját alakzatok: {count} hozzáadva, {skipped} már megvolt.",
   "notice.backupFailed": "A biztonsági mentés nem sikerült: {reason}",
+  "notice.backupInterrupted": "Az utolsó biztonsági mentés a(z) {total} tervből a(z) {index}. tervnél („{name}”) leállt, és az oldal újratöltődött. Valószínűleg a böngészőnek elfogyott a memóriája: mentsd ezt a tervet külön fájlba (Exportálás, LYL), vagy egyszerűsítsd a legnagyobb hálóit, aztán ments újra.",
+  "notice.backupSkipped": "{count} nem olvasható, és hiányzik a mentésből: {names}",
   "notice.backupNotReadable": "{name}: nem olvasható ZIP-fájl",
   "notice.backupNoDesigns": "{name}: nem tartalmaz layerling tervet",
   "notice.restoringBackup": "Tervek visszaállítása … {index}/{total}",

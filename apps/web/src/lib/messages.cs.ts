@@ -3048,6 +3048,8 @@ export const MESSAGES_CS: Record<MessageKey, string> = {
   "notice.backupDoneWithShapes": "Zálohováno {count} projektů a {shapes} vlastních tvarů do {name}",
   "notice.backupShapesRestored": "Vlastní tvary: přidáno {count}, již existovalo {skipped}.",
   "notice.backupFailed": "Záloha se nezdařila: {reason}",
+  "notice.backupInterrupted": "Poslední záloha se zastavila u návrhu {index} z {total}, „{name}“, a stránka se znovu načetla. Nejspíš u něj prohlížeči došla paměť: ulož tento návrh samostatně jako soubor (Export, LYL) nebo zjednoduš jeho největší sítě a pak zálohuj znovu.",
+  "notice.backupSkipped": "{count} se nepodařilo přečíst a v záloze chybí: {names}",
   "notice.backupNotReadable": "{name} není čitelný ZIP soubor",
   "notice.backupNoDesigns": "{name} neobsahuje projekt layerlingu",
   "notice.restoringBackup": "Obnovování projektů… {index} z {total}",

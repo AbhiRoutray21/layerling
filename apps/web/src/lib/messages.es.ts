@@ -3013,6 +3013,8 @@ export const MESSAGES_ES: Partial<Record<MessageKey, string>> = {
   "notice.backupDoneWithShapes": "Copia de seguridad de {count} diseños y {shapes} formas personalizadas hecha en {name}",
   "notice.backupShapesRestored": "Formas personalizadas: {count} añadidas, {skipped} ya estaban.",
   "notice.backupFailed": "La copia de seguridad ha fallado: {reason}",
+  "notice.backupInterrupted": "La última copia de seguridad se detuvo en el diseño {index} de {total}, «{name}», y la página se recargó. Lo más probable es que el navegador se quedara sin memoria con él: guarda ese diseño por separado como archivo (Exportar, LYL) o simplifica sus mallas más grandes y vuelve a hacer la copia.",
+  "notice.backupSkipped": "{count} no se pudieron leer y faltan en la copia: {names}",
   "notice.backupNotReadable": "{name} no es un archivo ZIP legible",
   "notice.backupNoDesigns": "{name} no contiene ningún diseño de layerling",
   "notice.restoringBackup": "Restaurando diseños… {index} de {total}",

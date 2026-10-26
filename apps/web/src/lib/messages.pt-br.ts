@@ -3045,6 +3045,8 @@ export const MESSAGES_PT_BR: Partial<Record<MessageKey, string>> = {
   "notice.backupDoneWithShapes": "Backup de {count} projetos e {shapes} formas personalizadas feito em {name}",
   "notice.backupShapesRestored": "Formas personalizadas: {count} adicionadas, {skipped} já estavam aqui.",
   "notice.backupFailed": "O backup falhou: {reason}",
+  "notice.backupInterrupted": "O último backup parou no design {index} de {total}, \"{name}\", e a página foi recarregada. Provavelmente o navegador ficou sem memória nele: salve esse design sozinho como arquivo (Exportar, LYL) ou simplifique suas maiores malhas e faça o backup de novo.",
+  "notice.backupSkipped": "{count} não puderam ser lidos e faltam no backup: {names}",
   "notice.backupNotReadable": "{name} não é um arquivo ZIP legível",
   "notice.backupNoDesigns": "{name} não contém nenhum projeto do layerling",
   "notice.restoringBackup": "Restaurando projetos … {index} de {total}",

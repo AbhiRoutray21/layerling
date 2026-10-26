@@ -2340,6 +2340,8 @@ export const MESSAGES_SL: Partial<Record<MessageKey, string>> = {
   "notice.backupDoneWithShapes": "Varnostno kopiranih projektov: {count}, lastnih oblik: {shapes}, datoteka: {name}",
   "notice.backupShapesRestored": "Lastne oblike: dodanih {count}, že obstoječih {skipped}.",
   "notice.backupFailed": "Varnostno kopiranje ni uspelo: {reason}",
+  "notice.backupInterrupted": "Zadnja varnostna kopija se je ustavila pri načrtu {index} od {total}, »{name}«, in stran se je znova naložila. Najverjetneje je brskalniku zmanjkalo pomnilnika: shrani ta načrt posebej kot datoteko (Izvoz, LYL) ali poenostavi njegove največje mreže in nato ponovi kopiranje.",
+  "notice.backupSkipped": "{count} ni bilo mogoče prebrati in manjkajo v kopiji: {names}",
   "notice.backupNotReadable": "{name} ni berljiva datoteka ZIP",
   "notice.backupNoDesigns": "{name} ne vsebuje nobenega projekta Layerling",
   "notice.restoringBackup": "Obnavljanje projektov … {index} od {total}",

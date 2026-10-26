@@ -2856,6 +2856,8 @@ export const MESSAGES_JA: Partial<Record<MessageKey, string>> = {
   "notice.backupDoneWithShapes": "{count}件のデザインと{shapes}個のカスタムシェイプを{name}にバックアップしました",
   "notice.backupShapesRestored": "カスタムシェイプ：{count}個を追加、{skipped}個はすでにありました。",
   "notice.backupFailed": "バックアップに失敗しました：{reason}",
+  "notice.backupInterrupted": "前回のバックアップは {total} 件中 {index} 件目のデザイン「{name}」で止まり、ページが再読み込みされました。おそらくブラウザーのメモリーが不足しました。このデザインだけをファイルとして保存する（エクスポート、LYL）か、最大のメッシュを簡略化してから、もう一度バックアップしてください。",
+  "notice.backupSkipped": "{count} 件を読み込めず、バックアップに含まれていません: {names}",
   "notice.backupNotReadable": "{name}は読み取れるZIPファイルではありません",
   "notice.backupNoDesigns": "{name}にはlayerlingのデザインが含まれていません",
   "notice.restoringBackup": "デザインを復元中 … {total}件中{index}件目",

@@ -3070,6 +3070,8 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "notice.backupDoneWithShapes": "{count} Entwürfe und {shapes} eigene Formen in {name} gesichert",
   "notice.backupShapesRestored": "Eigene Formen: {count} hinzugefügt, {skipped} waren schon da.",
   "notice.backupFailed": "Sichern fehlgeschlagen: {reason}",
+  "notice.backupInterrupted": "Die letzte Sicherung brach bei Entwurf {index} von {total} ab, „{name}“, und die Seite wurde neu geladen. Vermutlich hat der Browser dabei keinen Speicher mehr gehabt: Speichere diesen Entwurf einzeln als Datei (Exportieren, LYL) oder vereinfache seine größten Netze, dann sichere noch einmal.",
+  "notice.backupSkipped": "{count} ließen sich nicht lesen und fehlen in der Sicherung: {names}",
   "notice.backupNotReadable": "{name} ist keine lesbare ZIP-Datei",
   "notice.backupNoDesigns": "In {name} steckt kein layerling-Entwurf",
   "notice.restoringBackup": "Stelle Entwürfe wieder her … {index} von {total}",

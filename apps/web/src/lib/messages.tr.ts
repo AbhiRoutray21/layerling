@@ -2903,6 +2903,8 @@ export const MESSAGES_TR: Partial<Record<MessageKey, string>> = {
   "notice.backupDoneWithShapes": "{count} tasarım ve {shapes} özel şekil {name} dosyasına yedeklendi",
   "notice.backupShapesRestored": "Özel şekiller: {count} eklendi, {skipped} tanesi zaten vardı.",
   "notice.backupFailed": "Yedekleme başarısız: {reason}",
+  "notice.backupInterrupted": "Son yedekleme {total} tasarımdan {index}. tasarımda (\"{name}\") durdu ve sayfa yeniden yüklendi. Büyük olasılıkla tarayıcının belleği yetmedi: bu tasarımı ayrı bir dosya olarak kaydedin (Dışa aktar, LYL) ya da en büyük ağlarını basitleştirin, sonra yeniden yedekleyin.",
+  "notice.backupSkipped": "{count} okunamadı ve yedekte yok: {names}",
   "notice.backupNotReadable": "{name} okunabilir bir ZIP dosyası değil",
   "notice.backupNoDesigns": "{name} hiç layerling tasarımı içermiyor",
   "notice.restoringBackup": "Tasarımlar geri yükleniyor … {total} tasarımdan {index}.",

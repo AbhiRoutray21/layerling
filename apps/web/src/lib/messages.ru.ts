@@ -2914,6 +2914,8 @@ export const MESSAGES_RU: Partial<Record<MessageKey, string>> = {
   "notice.backupDoneWithShapes": "Создана резервная копия: проектов — {count}, собственных фигур — {shapes}, файл — {name}",
   "notice.backupShapesRestored": "Собственные фигуры: добавлено {count}, уже были: {skipped}.",
   "notice.backupFailed": "Не удалось создать резервную копию: {reason}",
+  "notice.backupInterrupted": "Последнее резервное копирование остановилось на проекте {index} из {total}, «{name}», и страница перезагрузилась. Скорее всего, браузеру не хватило памяти: сохрани этот проект отдельно как файл (Экспорт, LYL) или упрости его самые большие сетки, а затем сделай копию снова.",
+  "notice.backupSkipped": "{count} не удалось прочитать, их нет в копии: {names}",
   "notice.backupNotReadable": "{name} — нечитаемый ZIP-файл",
   "notice.backupNoDesigns": "В {name} нет ни одного проекта layerling",
   "notice.restoringBackup": "Восстановление проектов… {index} из {total}",

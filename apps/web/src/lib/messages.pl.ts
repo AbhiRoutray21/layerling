@@ -3016,6 +3016,8 @@ export const MESSAGES_PL: Partial<Record<MessageKey, string>> = {
   "notice.backupDoneWithShapes": "Kopia zapasowa w {name}, projekty: {count}, własne kształty: {shapes}",
   "notice.backupShapesRestored": "Własne kształty: dodane {count}, już były {skipped}.",
   "notice.backupFailed": "Kopia zapasowa się nie powiodła: {reason}",
+  "notice.backupInterrupted": "Ostatnia kopia zapasowa zatrzymała się na projekcie {index} z {total}, „{name}”, a strona została przeładowana. Najpewniej przeglądarce zabrakło pamięci: zapisz ten projekt osobno jako plik (Eksport, LYL) lub uprość jego największe siatki i zrób kopię ponownie.",
+  "notice.backupSkipped": "{count} nie udało się odczytać i brakuje ich w kopii: {names}",
   "notice.backupNotReadable": "{name} nie jest czytelnym plikiem ZIP",
   "notice.backupNoDesigns": "{name} nie zawiera projektu layerling",
   "notice.restoringBackup": "Przywracanie projektów … {index} z {total}",

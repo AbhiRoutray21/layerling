@@ -3071,6 +3071,8 @@ export const MESSAGES_EN = {
   "notice.backupDoneWithShapes": "Backed up {count} designs and {shapes} custom shapes in {name}",
   "notice.backupShapesRestored": "Custom shapes: {count} added, {skipped} already there.",
   "notice.backupFailed": "Backup failed: {reason}",
+  "notice.backupInterrupted": "The last backup stopped at design {index} of {total}, \"{name}\", and the page was reloaded. Most likely the browser ran out of memory on it: save that design on its own as a file (Export, LYL) or simplify its largest meshes, then back up again.",
+  "notice.backupSkipped": "{count} could not be read and are missing from the backup: {names}",
   "notice.backupNotReadable": "{name} is not a readable ZIP file",
   "notice.backupNoDesigns": "{name} contains no layerling design",
   "notice.restoringBackup": "Restoring designs … {index} of {total}",

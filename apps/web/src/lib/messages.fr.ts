@@ -3046,6 +3046,8 @@ export const MESSAGES_FR: Partial<Record<MessageKey, string>> = {
   "notice.backupDoneWithShapes": "{count} conceptions et {shapes} formes personnalisées sauvegardées dans {name}",
   "notice.backupShapesRestored": "Formes personnalisées : {count} ajoutée(s), {skipped} déjà présente(s).",
   "notice.backupFailed": "Échec de la sauvegarde : {reason}",
+  "notice.backupInterrupted": "La dernière sauvegarde s'est arrêtée au design {index} sur {total}, « {name} », et la page a été rechargée. Le navigateur a très probablement manqué de mémoire : enregistrez ce design seul dans un fichier (Exporter, LYL) ou simplifiez ses plus grands maillages, puis sauvegardez à nouveau.",
+  "notice.backupSkipped": "{count} n'ont pas pu être lus et manquent dans la sauvegarde : {names}",
   "notice.backupNotReadable": "{name} n'est pas un fichier ZIP lisible",
   "notice.backupNoDesigns": "{name} ne contient aucune conception layerling",
   "notice.restoringBackup": "Restauration des conceptions… {index} sur {total}",

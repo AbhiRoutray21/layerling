@@ -2861,6 +2861,8 @@ export const MESSAGES_IT: Partial<Record<MessageKey, string>> = {
   "notice.backupDoneWithShapes": "Backup di {count} progetti e {shapes} forme personalizzate completato in {name}",
   "notice.backupShapesRestored": "Forme personalizzate: {count} aggiunte, {skipped} già presenti.",
   "notice.backupFailed": "Backup non riuscito: {reason}",
+  "notice.backupInterrupted": "L'ultimo backup si è fermato al progetto {index} di {total}, «{name}», e la pagina è stata ricaricata. Probabilmente il browser ha esaurito la memoria: salva quel progetto da solo come file (Esporta, LYL) o semplifica le sue mesh più grandi, poi rifai il backup.",
+  "notice.backupSkipped": "{count} non sono stati letti e mancano nel backup: {names}",
   "notice.backupNotReadable": "{name} non è un file ZIP leggibile",
   "notice.backupNoDesigns": "{name} non contiene alcun progetto layerling",
   "notice.restoringBackup": "Ripristino dei progetti in corso … {index} di {total}",

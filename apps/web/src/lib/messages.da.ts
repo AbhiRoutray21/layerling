@@ -2936,6 +2936,8 @@ export const MESSAGES_DA: Partial<Record<MessageKey, string>> = {
   "notice.backupDoneWithShapes": "Sikkerhedskopierede {count} designs og {shapes} egne former i {name}",
   "notice.backupShapesRestored": "Egne former: {count} tilføjet, {skipped} var der allerede.",
   "notice.backupFailed": "Sikkerhedskopiering fejlede: {reason}",
+  "notice.backupInterrupted": "Den seneste sikkerhedskopi stoppede ved design {index} af {total}, \"{name}\", og siden blev genindlæst. Sandsynligvis løb browseren tør for hukommelse ved det: gem det design alene som fil (Eksporter, LYL) eller forenkl dets største net, og tag så sikkerhedskopien igen.",
+  "notice.backupSkipped": "{count} kunne ikke læses og mangler i sikkerhedskopien: {names}",
   "notice.backupNotReadable": "{name} er ikke en læselig ZIP-fil",
   "notice.backupNoDesigns": "{name} indeholder intet layerling-design",
   "notice.restoringBackup": "Gendanner designs … {index} af {total}",
