@@ -671,6 +671,8 @@ export const MESSAGES_PT_BR: Partial<Record<MessageKey, string>> = {
   "hinge.stylePin": "Com pino",
   "hinge.styleCone": "Com cones",
   "hinge.styleConeHint": "Cones em um nó sim, outro não encaixam em reentrâncias dos outros. Sem pino nem pontes, imprime deitada sem ceder.",
+  "prop.hingeConeSize": "Diâmetro do cone",
+  "prop.hingeConeSizeHint": "Onde o cone nasce do seu nó. Maior segura melhor; por padrão, o maior que couber.",
   "prop.hingePinDiameter": "Diâmetro do pino",
   "prop.hingeLeafThickness": "Espessura da aba",
   "prop.hingePinless": "Sem pino (use o seu)",

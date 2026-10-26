@@ -2043,6 +2043,8 @@ export const MESSAGES_ZH_TW: Partial<Record<MessageKey, string>> = {
   "hinge.stylePin": "帶銷",
   "hinge.styleCone": "帶圓錐",
   "hinge.styleConeHint": "每隔一個關節的圓錐嵌入其他關節的凹坑。沒有銷，也沒有懸空橋，平放列印不會下垂。",
+  "prop.hingeConeSize": "圓錐直徑",
+  "prop.hingeConeSizeHint": "圓錐從關節長出處的直徑。越大越牢固；預設取能放下的最大值。",
   "prop.hingePinDiameter": "插銷直徑",
   "prop.hingeLeafThickness": "葉片厚度",
   "prop.hingePinless": "無插銷（使用自備插銷）",

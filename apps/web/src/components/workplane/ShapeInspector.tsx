@@ -257,7 +257,7 @@ import {
   gridfinityWallThickness,
   normalizeGridfinityType,
 } from "@/lib/gridfinityGeometry";
-import { MAX_HINGE_ANGLE, MAX_HINGE_CLEARANCE, MAX_HINGE_KNUCKLES, MIN_HINGE_CLEARANCE, MIN_HINGE_KNUCKLES, hingePlan, minimumHingeDepth, normalizeHingeAngle, normalizeHingeClearance, normalizeHingeKnuckles, normalizeHingeKnuckleWidth, normalizeHingeLeafThickness, normalizeHingePinDiameter } from "@/lib/hingeGeometry";
+import { hingeLargestConeSize, MAX_HINGE_ANGLE, MAX_HINGE_CLEARANCE, MAX_HINGE_KNUCKLES, MIN_HINGE_CLEARANCE, MIN_HINGE_KNUCKLES, hingePlan, minimumHingeDepth, normalizeHingeAngle, normalizeHingeClearance, normalizeHingeKnuckles, normalizeHingeKnuckleWidth, normalizeHingeLeafThickness, normalizeHingePinDiameter } from "@/lib/hingeGeometry";
 import { useLanguage } from "@/lib/useLanguage";
 import { useMovablePanel, type MovablePanelOptions } from "@/lib/useMovablePanel";
 import { isNonSolidShape, resizedShapeSize, shapeDepth, shapeHasTaper, shapeOverallFootprintDimensions, shapeSupportsTaper, shapeTaperDimensions, shapeWidth } from "@/lib/workplaneShapes";
@@ -1203,10 +1203,21 @@ function getShapePropertiesWithAppLimits(shape: WorkplaneShape, onUpdate: ShapeI
         id: "hingeStyle",
         label: t("prop.hingeStyle"),
         value: plan.style,
-        options: [{ value: "pin", label: t("hinge.stylePin") }, { value: "cone", label: t("hinge.styleCone") }],
+        options: [{ value: "pin", label: t("hinge.stylePin") }, { value: "pinless", label: t("prop.hingePinless") }, { value: "cone", label: t("hinge.styleCone") }],
         hint: plan.style === "cone" ? t("hinge.styleConeHint") : undefined,
-        onChange: (value) => onUpdate({ hingeStyle: value === "cone" ? "cone" : undefined }),
+        // The old "without pin" switch is part of this choice now (#907).
+        onChange: (value) => onUpdate({ hingeStyle: value === "cone" || value === "pinless" ? value : undefined, hingePinless: undefined }),
       },
+      ...(plan.style === "cone" ? [{
+        id: "hingeConeSize",
+        label: t("prop.hingeConeSize"),
+        value: plan.coneRadius * 2,
+        min: 0.6,
+        max: Math.max(0.6, hingeLargestConeSize(plan.knuckleLength, shape.height, plan.clearance)),
+        step: 0.1,
+        hint: t("prop.hingeConeSizeHint"),
+        onChange: (value: number) => onUpdate({ hingeConeSize: value }),
+      }] : []),
       {
         id: "hingeKnuckles",
         label: t("prop.hingeKnuckles"),
@@ -1237,7 +1248,7 @@ function getShapePropertiesWithAppLimits(shape: WorkplaneShape, onUpdate: ShapeI
         step: 0.1,
         onChange: (value: number) => {
           const pin = normalizeHingePinDiameter(value, shape.height, plan.clearance);
-          onUpdate({ hingePinDiameter: pin, hingeLeafThickness: normalizeHingeLeafThickness(plan.leaf, shape.height, pin, plan.clearance) });
+          onUpdate({ hingePinDiameter: pin, hingeLeafThickness: normalizeHingeLeafThickness(plan.leaf, shape.height, pin, plan.clearance, plan.style) });
         },
       }]),
       {
@@ -1245,12 +1256,11 @@ function getShapePropertiesWithAppLimits(shape: WorkplaneShape, onUpdate: ShapeI
         label: t("prop.hingeLeafThickness"),
         value: plan.leaf,
         min: 0.4,
-        max: Math.max(0.5, plan.radius - plan.boreRadius),
+        max: plan.style === "cone" ? shape.height : Math.max(0.5, plan.radius - plan.boreRadius),
         step: 0.1,
-        onChange: (value) => onUpdate({ hingeLeafThickness: normalizeHingeLeafThickness(value, shape.height, plan.pinRadius * 2, plan.clearance) }),
+        onChange: (value) => onUpdate({ hingeLeafThickness: normalizeHingeLeafThickness(value, shape.height, plan.pinRadius * 2, plan.clearance, plan.style) }),
       },
       { id: "hingeAngle", label: t("prop.hingeAngle"), value: plan.angle, min: 0, max: MAX_HINGE_ANGLE, step: 1, onChange: (value) => onUpdate({ hingeAngle: normalizeHingeAngle(value) }) },
-      ...(plan.style === "cone" ? [] : [{ type: "toggle" as const, id: "hingePinless", label: t("prop.hingePinless"), value: plan.pinless, onChange: (value: boolean) => onUpdate({ hingePinless: value }) }]),
       {
         id: "hingeClearance",
         label: t("prop.hingeClearance"),
@@ -1261,7 +1271,7 @@ function getShapePropertiesWithAppLimits(shape: WorkplaneShape, onUpdate: ShapeI
         onChange: (value) => {
           const clearance = normalizeHingeClearance(value);
           const pin = normalizeHingePinDiameter(plan.pinRadius * 2, shape.height, clearance);
-          onUpdate({ hingeClearance: clearance, hingePinDiameter: pin, hingeLeafThickness: normalizeHingeLeafThickness(plan.leaf, shape.height, pin, clearance) });
+          onUpdate({ hingeClearance: clearance, hingePinDiameter: pin, hingeLeafThickness: normalizeHingeLeafThickness(plan.leaf, shape.height, pin, clearance, plan.style) });
         },
       },
       ...roundSideProperties(shape, shape.height, shape.height, onUpdate),

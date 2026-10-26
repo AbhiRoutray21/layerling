@@ -145,6 +145,8 @@ G 规格是符合 ISO 228-1 的平行惠氏管螺纹，常见于水、燃气、�
 
 铰链也可以做成{{ui:hinge.styleCone}}（在{{ui:prop.hingeStyle}}下）：每隔一个关节的两端是圆锥，嵌入相邻关节的锥形凹坑。没有销，也没有可能下垂的长悬空桥，所以可以平放打印；圆锥为 45°。它是网格，因此倒角和圆角对它无效，STEP 导出包含的是三角形；关节对圆锥来说太短时，会做得更少。除了关节数量，也可以指定{{ui:prop.hingeKnuckleWidth}}：关节不会比它更宽，数量由长度决定；输入关节数量会取消宽度。
 
+{{ui:prop.hingeStyle}}有三个选项：{{ui:hinge.stylePin}}、{{ui:prop.hingePinless}}（为自备销留的孔）和{{ui:hinge.styleCone}}。选圆锥时，{{ui:prop.hingeConeSize}}决定圆锥从关节长出处的大小；圆锥越大越牢固，默认取能放下的最大值。带圆锥的铰链没有销也没有孔，所以它的翼板可以和整个关节一样厚：把{{ui:prop.hingeLeafThickness}}设为关节直径，翼板就与关节齐平；这样的铰链最多打开约 90°，因为厚翼板会相碰。
+
 ## 滚花
 
 {{ui:shape.knurl}} 是布满四周沟槽的圆形握持面，用于旋钮、拨轮和工具手柄。在 {{ui:prop.knurlPattern}} 下选择 {{ui:knurl.straight}}（沿轴线的沟槽，像控制旋钮）、{{ui:knurl.diamond}}（两排斜向沟槽交叉成小菱形），或 {{ui:knurl.round}}（沿轴线的沟槽和凸脊形成柔和的圆弧波纹，握感舒适而没有锐利的棱）。圆形沟槽保持浅于半个齿距，否则凸脊会在根部鼓起；深度过大会自动退让。你设置 {{ui:prop.diameter}} 和 {{ui:prop.height}}、{{ui:prop.knurlCount}} 的数量和 {{ui:prop.knurlDepth}}；交叉滚花还要设置相对轴线的 {{ui:prop.knurlAngle}}。{{ui:prop.knurlChamfer}} 以 45 度断开两端，像车削的旋钮；0 则保持尖锐。

@@ -2043,6 +2043,8 @@ export const MESSAGES_ZH_CN: Partial<Record<MessageKey, string>> = {
   "hinge.stylePin": "带销",
   "hinge.styleCone": "带圆锥",
   "hinge.styleConeHint": "每隔一个关节的圆锥嵌入其他关节的凹坑。没有销，也没有悬空桥，平放打印不会下垂。",
+  "prop.hingeConeSize": "圆锥直径",
+  "prop.hingeConeSizeHint": "圆锥从关节长出处的直径。越大越牢固；默认取能放下的最大值。",
   "prop.hingePinDiameter": "销直径",
   "prop.hingeLeafThickness": "叶片厚度",
   "prop.hingePinless": "无销（使用自备销）",

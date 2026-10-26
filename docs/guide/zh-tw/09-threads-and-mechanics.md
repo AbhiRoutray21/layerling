@@ -145,6 +145,8 @@ G 規格是符合 ISO 228-1 的平行惠氏管螺紋，常見於水、瓦斯、�
 
 鉸鏈也可以做成{{ui:hinge.styleCone}}（在{{ui:prop.hingeStyle}}下）：每隔一個關節的兩端是圓錐，嵌入相鄰關節的錐形凹坑。沒有銷，也沒有可能下垂的長懸空橋，所以可以平放列印；圓錐為 45°。它是網格，因此倒角和圓角對它無效，STEP 匯出包含的是三角形；關節對圓錐來說太短時，會做得更少。除了關節數量，也可以指定{{ui:prop.hingeKnuckleWidth}}：關節不會比它更寬，數量由長度決定；輸入關節數量會取消寬度。
 
+{{ui:prop.hingeStyle}}有三個選項：{{ui:hinge.stylePin}}、{{ui:prop.hingePinless}}（為自備銷留的孔）和{{ui:hinge.styleCone}}。選圓錐時，{{ui:prop.hingeConeSize}}決定圓錐從關節長出處的大小；圓錐越大越牢固，預設取能放下的最大值。帶圓錐的鉸鏈沒有銷也沒有孔，所以它的翼板可以和整個關節一樣厚：把{{ui:prop.hingeLeafThickness}}設為關節直徑，翼板就與關節齊平；這樣的鉸鏈最多開啟約 90°，因為厚翼板會相碰。
+
 ## 滾花
 
 {{ui:shape.knurl}} 是四周佈滿溝槽的圓形握持面，用於旋鈕、撥輪與工具握把。在 {{ui:prop.knurlPattern}} 下選擇 {{ui:knurl.straight}}（沿軸線的溝槽，像控制旋鈕）、{{ui:knurl.diamond}}（兩排斜向溝槽交叉成小菱形），或 {{ui:knurl.round}}（沿軸線的溝槽與凸脊形成柔和的圓弧波浪，握感舒適而沒有銳利稜線）。圓弧溝槽保持淺於半個節距，否則凸脊會在根部鼓起；深度過大會自動退讓。你設定 {{ui:prop.diameter}} 與 {{ui:prop.height}}、{{ui:prop.knurlCount}} 的數量與 {{ui:prop.knurlDepth}}；交叉滾花還要設定相對軸線的 {{ui:prop.knurlAngle}}。{{ui:prop.knurlChamfer}} 以 45 度切開兩端，像車削的旋鈕；0 則保持尖銳。

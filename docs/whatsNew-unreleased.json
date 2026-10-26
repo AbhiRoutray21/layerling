@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "title": {
+      "de": "Scharnier: Kegelgröße und bündiges Blatt",
+      "en": "Hinge: cone size and a flush leaf"
+    },
+    "body": {
+      "de": "Beim Scharnier mit Kegeln stellst du jetzt den Kegeldurchmesser ein (standardmäßig so groß, wie es passt), und das Blatt darf so dick sein wie der ganze Knöchel, also bündig. Die Bauart ist eine Auswahl aus Mit Stift, Ohne Stift und Mit Kegeln.",
+      "en": "On the hinge with cones you now set the cone diameter (as large as fits by default), and the leaf may be as thick as the whole knuckle, flush with it. The style is one choice of With pin, Without pin and With cones."
+    }
+  }
+]

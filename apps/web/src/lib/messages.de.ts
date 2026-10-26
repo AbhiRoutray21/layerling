@@ -2087,6 +2087,8 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "hinge.stylePin": "Mit Stift",
   "hinge.styleCone": "Mit Kegeln",
   "hinge.styleConeHint": "Kegel an jedem zweiten Knöchel stecken in Mulden der anderen. Es gibt keinen Stift und keine Brücke, so druckt es liegend ohne Durchhängen.",
+  "prop.hingeConeSize": "Kegeldurchmesser",
+  "prop.hingeConeSizeHint": "Dort, wo der Kegel aus seinem Knöchel wächst. Größer hält besser; standardmäßig so groß, wie es passt.",
   "prop.hingePinDiameter": "Stiftdurchmesser",
   "prop.hingeLeafThickness": "Blattstärke",
   "prop.hingePinless": "Ohne Stift (eigener Stift)",

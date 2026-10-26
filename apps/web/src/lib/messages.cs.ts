@@ -2126,6 +2126,8 @@ export const MESSAGES_CS: Record<MessageKey, string> = {
   "hinge.stylePin": "S čepem",
   "hinge.styleCone": "S kužely",
   "hinge.styleConeHint": "Kužely na každém druhém kloubu zapadají do důlků v ostatních. Není tu čep ani most, takže se tiskne vleže bez prověšení.",
+  "prop.hingeConeSize": "Průměr kužele",
+  "prop.hingeConeSizeHint": "V místě, kde kužel vyrůstá z kloubu. Větší drží lépe; ve výchozím stavu co největší, jak se vejde.",
   "prop.hingePinDiameter": "Průměr čepu",
   "prop.hingeLeafThickness": "Tloušťka křídla",
   "prop.hingePinless": "Bez čepu (vlastní čep)",

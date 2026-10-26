@@ -1980,6 +1980,8 @@ export const MESSAGES_IT: Partial<Record<MessageKey, string>> = {
   "hinge.stylePin": "Con perno",
   "hinge.styleCone": "Con coni",
   "hinge.styleConeHint": "Coni su un nodo sì e uno no si incastrano in incavi degli altri. Niente perno né ponti: si stampa in piano senza cedere.",
+  "prop.hingeConeSize": "Diametro del cono",
+  "prop.hingeConeSizeHint": "Dove il cono nasce dal suo nodo. Più grande tiene meglio; di serie è il più grande possibile.",
   "prop.hingePinDiameter": "Diametro del perno",
   "prop.hingeLeafThickness": "Spessore dell'ala",
   "prop.hingePinless": "Senza perno (perno proprio)",

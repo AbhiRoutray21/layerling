@@ -2080,6 +2080,8 @@ export const MESSAGES_RU: Partial<Record<MessageKey, string>> = {
   "hinge.stylePin": "Со штифтом",
   "hinge.styleCone": "С конусами",
   "hinge.styleConeHint": "Конусы на каждом втором звене входят в углубления остальных. Нет штифта и мостов, поэтому печатается лёжа без провисания.",
+  "prop.hingeConeSize": "Диаметр конуса",
+  "prop.hingeConeSizeHint": "В месте, где конус вырастает из звена. Больше — держит лучше; по умолчанию как можно больше.",
   "prop.hingePinDiameter": "Диаметр оси",
   "prop.hingeLeafThickness": "Толщина полотна",
   "prop.hingePinless": "Без оси (своя ось)",

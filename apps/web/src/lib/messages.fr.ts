@@ -2073,6 +2073,8 @@ export const MESSAGES_FR: Partial<Record<MessageKey, string>> = {
   "hinge.stylePin": "Avec axe",
   "hinge.styleCone": "Avec cônes",
   "hinge.styleConeHint": "Des cônes sur une articulation sur deux s'emboîtent dans des creux des autres. Pas d'axe ni de pont : il s'imprime à plat sans s'affaisser.",
+  "prop.hingeConeSize": "Diamètre du cône",
+  "prop.hingeConeSizeHint": "À l'endroit où le cône sort de son articulation. Plus grand tient mieux ; par défaut aussi grand que possible.",
   "prop.hingePinDiameter": "Diamètre de la broche",
   "prop.hingeLeafThickness": "Épaisseur des feuilles",
   "prop.hingePinless": "Sans broche (votre propre broche)",

@@ -2005,6 +2005,8 @@ export const MESSAGES_HU: Partial<Record<MessageKey, string>> = {
   "hinge.stylePin": "Csappal",
   "hinge.styleCone": "Kúpokkal",
   "hinge.styleConeHint": "Minden második csuklószem kúpjai a többi mélyedéseibe illeszkednek. Nincs csap és nincs áthidalás, így fekve nyomtatható belógás nélkül.",
+  "prop.hingeConeSize": "Kúp átmérője",
+  "prop.hingeConeSizeHint": "Ott, ahol a kúp kinő a csuklószemből. A nagyobb jobban tart; alapból a lehető legnagyobb.",
   "prop.hingePinDiameter": "Csapátmérő",
   "prop.hingeLeafThickness": "Szárnyvastagság",
   "prop.hingePinless": "Csap nélkül (saját csap)",

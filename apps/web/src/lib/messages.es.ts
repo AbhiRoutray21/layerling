@@ -2064,6 +2064,8 @@ export const MESSAGES_ES: Partial<Record<MessageKey, string>> = {
   "hinge.stylePin": "Con pasador",
   "hinge.styleCone": "Con conos",
   "hinge.styleConeHint": "Conos en uno de cada dos nudillos encajan en huecos de los demás. No hay pasador ni puentes, así que se imprime tumbada sin combarse.",
+  "prop.hingeConeSize": "Diámetro del cono",
+  "prop.hingeConeSizeHint": "Donde el cono sale de su nudillo. Más grande sujeta mejor; por defecto es lo más grande que cabe.",
   "prop.hingePinDiameter": "Diámetro del pasador",
   "prop.hingeLeafThickness": "Grosor de la hoja",
   "prop.hingePinless": "Sin pasador (pon el tuyo)",

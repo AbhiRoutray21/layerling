@@ -2081,6 +2081,8 @@ export const MESSAGES_AR: Partial<Record<MessageKey, string>> = {
   "hinge.stylePin": "بمسمار",
   "hinge.styleCone": "بمخاريط",
   "hinge.styleConeHint": "مخاريط على كل مفصل ثانٍ تدخل في تجاويف الآخرين. لا مسمار ولا جسور، فتُطبع مسطحة دون ترهل.",
+  "prop.hingeConeSize": "قطر المخروط",
+  "prop.hingeConeSizeHint": "عند المكان الذي ينمو فيه المخروط من مفصله. الأكبر يثبت أفضل؛ وهو افتراضيًا أكبر ما يتسع.",
   "prop.hingePinDiameter": "قطر الدبوس",
   "prop.hingeLeafThickness": "سمك الجناح",
   "prop.hingePinless": "بدون دبوس (دبوسك الخاص)",

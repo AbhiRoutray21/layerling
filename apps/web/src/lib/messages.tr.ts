@@ -2015,6 +2015,8 @@ export const MESSAGES_TR: Partial<Record<MessageKey, string>> = {
   "hinge.stylePin": "Pimli",
   "hinge.styleCone": "Konili",
   "hinge.styleConeHint": "Her ikinci mafsaldaki koniler diğerlerinin çukurlarına oturur. Pim ve köprü yok; yatık basılır, sarkmaz.",
+  "prop.hingeConeSize": "Koni çapı",
+  "prop.hingeConeSizeHint": "Koninin mafsaldan çıktığı yerde. Büyük olan daha iyi tutar; varsayılan olarak sığabildiği kadar büyük.",
   "prop.hingePinDiameter": "Pim çapı",
   "prop.hingeLeafThickness": "Kanat kalınlığı",
   "prop.hingePinless": "Pimsiz (kendi pimini kullan)",

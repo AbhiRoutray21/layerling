@@ -41,18 +41,22 @@ const MIN_KNUCKLE_LENGTH = 1;
 /** The cone hinge needs a cone at least this big to hold; knuckles that are too short for it are made fewer. */
 const MIN_CONE_RADIUS = 0.8;
 /** A wall at least this thick stays in a knuckle between the two recesses. */
-const CONE_WALL = 1;
+const CONE_WALL = 0.4;
 
-export type HingeStyle = "pin" | "cone";
+export type HingeStyle = "pin" | "pinless" | "cone";
 
-/** The hinge's style: a pin through the knuckles (default), or cones on every other knuckle nesting into the others (#907). */
-export function normalizeHingeStyle(value?: string): HingeStyle {
-  return value === "cone" ? "cone" : "pin";
+/**
+ * The hinge's style (#907): a printed pin through the knuckles (default), a bore for a pin of one's own ("pinless", which
+ * `hingePinless` used to switch on and still does for designs that have it), or cones on every other knuckle nesting into the others.
+ */
+export function normalizeHingeStyle(value?: string, pinless?: boolean): HingeStyle {
+  if (value === "cone" || value === "pinless" || value === "pin") return value;
+  return pinless === true ? "pinless" : "pin";
 }
 
 /** Whether the hinge is made of parts the CAD kernel knows (boxes, cylinders, tubes): the pin hinge is, the cone hinge is a mesh. */
-export function hingeHasExactParts(shape: Pick<HingeShapeFields, "hingeStyle">) {
-  return normalizeHingeStyle(shape.hingeStyle) === "pin";
+export function hingeHasExactParts(shape: Pick<HingeShapeFields, "hingeStyle" | "hingePinless">) {
+  return normalizeHingeStyle(shape.hingeStyle, shape.hingePinless) !== "cone";
 }
 
 /** The radial gap that leaves `clearance` between two 45 degree cones measured across the surfaces. */
@@ -66,7 +70,9 @@ function coneGap(clearance: number) {
  */
 export function hingeConeRadius(length: number, height: number, clearance: number) {
   const reach = (length - CONE_WALL) / 2 - coneGap(clearance) + clearance;
-  return Math.max(0, Math.min((height / 2) * 0.6, reach));
+  // The recess keeps a wall of 0.6 mm round it in the round end of the knuckle.
+  const room = height / 2 - 0.6 - (coneGap(clearance) - clearance);
+  return Math.max(0, Math.min(room, reach));
 }
 
 function clamp(value: number, min: number, max: number) {
@@ -114,18 +120,33 @@ export function normalizeHingePinDiameter(value: number | undefined, height: num
   return clamp(finite(value, Math.min(DEFAULT_HINGE_PIN_DIAMETER, height * 0.4)), Math.min(0.2, max), max);
 }
 
-/** A leaf stays below B's bore: no thicker than the knuckle's radius less bore radius. */
-export function normalizeHingeLeafThickness(value: number | undefined, height: number, pinDiameter: number, clearance = DEFAULT_HINGE_CLEARANCE) {
+/**
+ * A leaf stays below B's bore: no thicker than the knuckle's radius less bore radius. The cone hinge has no bore, so its
+ * leaf may be as thick as the whole knuckle: flush with it (#907).
+ */
+export function normalizeHingeLeafThickness(value: number | undefined, height: number, pinDiameter: number, clearance = DEFAULT_HINGE_CLEARANCE, style: HingeStyle = "pin") {
   const radius = Math.max(0.5, height / 2);
-  const max = Math.max(0.1, radius - pinDiameter / 2 - clearance);
+  const max = style === "cone" ? Math.max(0.1, height) : Math.max(0.1, radius - pinDiameter / 2 - clearance);
   return clamp(finite(value, DEFAULT_HINGE_LEAF_THICKNESS), Math.min(MIN_LEAF, max), max);
+}
+
+/**
+ * How far from the axis a leaf ends beside the other part's knuckle, so that the clearance holds: where its top corner comes
+ * closest to the round knuckle, or, for a leaf thicker than the radius, its edge level with the axis.
+ */
+function leafReach(radius: number, leaf: number, clearance: number) {
+  if (leaf > radius) return radius + clearance;
+  return Math.sqrt((radius + clearance) * (radius + clearance) - (radius - leaf) * (radius - leaf));
 }
 
 /** The depth below which a leaf would not reach past the other part's knuckles. */
 export function minimumHingeDepth(height: number, leaf: number, clearance: number) {
-  const radius = height / 2;
-  const start = Math.sqrt((radius + clearance) * (radius + clearance) - (radius - leaf) * (radius - leaf));
-  return 2 * (start + 0.5);
+  return 2 * (leafReach(height / 2, leaf, clearance) + 0.5);
+}
+
+/** The largest cone diameter that fits knuckles `length` long on a hinge `height` high, for the size field. */
+export function hingeLargestConeSize(length: number, height: number, clearance: number) {
+  return 2 * Math.max(0.3, hingeConeRadius(length, height, clearance));
 }
 
 export type HingeShapeFields = Pick<WorkplaneShape, "width" | "height"> & {
@@ -138,8 +159,10 @@ export type HingeShapeFields = Pick<WorkplaneShape, "width" | "height"> & {
   hingeClearance?: number;
   /** No printed pin: the bore runs through every knuckle, for a pin of one's own. */
   hingePinless?: boolean;
-  /** "pin" (default) or "cone": cones on every other knuckle nesting into the others, which prints without bridges. */
+  /** "pin" (default), "pinless" (a bore for a pin of one's own) or "cone": cones on every other knuckle nesting into the others. */
   hingeStyle?: string;
+  /** The cone hinge: the diameter of a cone where it grows from its knuckle, in mm; left out, the largest that fits. */
+  hingeConeSize?: number;
   /** Part B folded up about the pin's axis, in degrees (0 = lying flat, 180 = closed). */
   hingeAngle?: number;
   sides?: number;
@@ -154,15 +177,18 @@ export function hingePlan(shape: HingeShapeFields) {
   const pinDiameter = normalizeHingePinDiameter(shape.hingePinDiameter, height, clearance);
   const pinRadius = pinDiameter / 2;
   const boreRadius = pinRadius + clearance;
-  const leaf = normalizeHingeLeafThickness(shape.hingeLeafThickness, height, pinDiameter, clearance);
+  const style = normalizeHingeStyle(shape.hingeStyle, shape.hingePinless);
+  const leaf = normalizeHingeLeafThickness(shape.hingeLeafThickness, height, pinDiameter, clearance, style);
   const knuckleWidth = normalizeHingeKnuckleWidth(shape.hingeKnuckleWidth);
-  const style = normalizeHingeStyle(shape.hingeStyle);
   let knuckles = knuckleWidth ? hingeKnucklesForWidth(width, knuckleWidth, clearance) : normalizeHingeKnuckles(shape.hingeKnuckles, width, clearance);
   const lengthFor = (count: number) => (width - (count - 1) * clearance) / count;
   // Knuckles too short to carry a cone are made fewer, the way ones shorter than 1 mm are.
   if (style === "cone") while (knuckles > MIN_HINGE_KNUCKLES && hingeConeRadius(lengthFor(knuckles), height, clearance) < MIN_CONE_RADIUS) knuckles -= 2;
   const knuckleLength = lengthFor(knuckles);
-  const coneRadius = style === "cone" ? Math.max(0.3, hingeConeRadius(knuckleLength, height, clearance)) : 0;
+  const largestCone = Math.max(0.3, hingeConeRadius(knuckleLength, height, clearance));
+  const coneRadius = style === "cone"
+    ? Number.isFinite(shape.hingeConeSize) && (shape.hingeConeSize as number) > 0 ? clamp((shape.hingeConeSize as number) / 2, 0.3, largestCone) : largestCone
+    : 0;
   const gap = coneGap(clearance);
   // The recess takes the cone with the gap all round: its opening where the knuckles meet, and how deep it goes into the knuckle.
   const recessRadius = coneRadius - clearance + gap;
@@ -171,7 +197,7 @@ export function hingePlan(shape: HingeShapeFields) {
   const chord = Math.sqrt(Math.max(0, radius * radius - (radius - leaf) * (radius - leaf)));
   // The leaf's top corner is where it comes closest to the round knuckle:
   // the clearance has to hold there, not just level with the leaf.
-  const leafStart = Math.sqrt((radius + clearance) * (radius + clearance) - (radius - leaf) * (radius - leaf));
+  const leafStart = leafReach(radius, leaf, clearance);
   // Each leaf keeps at least half a millimetre beyond the other's knuckles.
   const depth = Math.max(minimumHingeDepth(height, leaf, clearance), shape.depth ?? shape.width);
   const segments = Array.from({ length: knuckles }, (_, index) => {
@@ -180,7 +206,7 @@ export function hingePlan(shape: HingeShapeFields) {
   });
   // A multiple of four puts a corner exactly at the bottom of every circle.
   const sides = Math.max(16, Math.ceil(roundSideCount(shape.sides, height, height) / 4) * 4);
-  const pinless = shape.hingePinless === true;
+  const pinless = style === "pinless";
   const angle = normalizeHingeAngle(shape.hingeAngle);
   return { width, depth, height, radius, clearance, pinless, angle, style, coneRadius, recessRadius, recessDepth, pinRadius, boreRadius, leaf, knuckles, knuckleLength, chord, leafStart, segments, sides };
 }

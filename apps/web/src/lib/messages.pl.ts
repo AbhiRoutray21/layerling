@@ -2067,6 +2067,8 @@ export const MESSAGES_PL: Partial<Record<MessageKey, string>> = {
   "hinge.stylePin": "Z sworzniem",
   "hinge.styleCone": "Ze stożkami",
   "hinge.styleConeHint": "Stożki na co drugim członie wchodzą w wgłębienia pozostałych. Nie ma sworznia ani mostów, więc drukuje się płasko bez zwisania.",
+  "prop.hingeConeSize": "Średnica stożka",
+  "prop.hingeConeSizeHint": "W miejscu, gdzie stożek wyrasta ze swojego członu. Większy trzyma lepiej; domyślnie jak największy.",
   "prop.hingePinDiameter": "Średnica sworznia",
   "prop.hingeLeafThickness": "Grubość skrzydełka",
   "prop.hingePinless": "Bez sworznia (własny sworzeń)",

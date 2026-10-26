@@ -619,6 +619,7 @@ export function workplaneShapesEqual(a: WorkplaneShape, b: WorkplaneShape) {
     a.hingeKnuckles === b.hingeKnuckles &&
     a.hingeKnuckleWidth === b.hingeKnuckleWidth &&
     a.hingeStyle === b.hingeStyle &&
+    a.hingeConeSize === b.hingeConeSize &&
     a.hingePinDiameter === b.hingePinDiameter &&
     a.hingeLeafThickness === b.hingeLeafThickness &&
     a.hingeClearance === b.hingeClearance &&

@@ -2040,6 +2040,8 @@ export const MESSAGES_JA: Partial<Record<MessageKey, string>> = {
   "hinge.stylePin": "ピン付き",
   "hinge.styleCone": "円すい付き",
   "hinge.styleConeHint": "1つおきのナックルの円すいが、ほかのナックルのくぼみにはまります。ピンもブリッジもないので、寝かせて垂れずに印刷できます。",
+  "prop.hingeConeSize": "円すいの直径",
+  "prop.hingeConeSizeHint": "円すいがナックルから生える位置での直径。大きいほど保持力が高く、標準では収まる最大の大きさです。",
   "prop.hingePinDiameter": "ピンの直径",
   "prop.hingeLeafThickness": "羽根の厚さ",
   "prop.hingePinless": "ピンなし（自分で用意する）",

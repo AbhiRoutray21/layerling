@@ -2088,6 +2088,8 @@ export const MESSAGES_EN = {
   "hinge.stylePin": "With pin",
   "hinge.styleCone": "With cones",
   "hinge.styleConeHint": "Cones on every other knuckle nest into recesses in the others. There is no pin and no bridge, so it prints lying flat without sagging.",
+  "prop.hingeConeSize": "Cone diameter",
+  "prop.hingeConeSizeHint": "Where the cone grows from its knuckle. Bigger holds better; it is as large as fits by default.",
   "prop.hingePinDiameter": "Pin diameter",
   "prop.hingeLeafThickness": "Leaf thickness",
   "prop.hingePinless": "Without pin (use your own)",

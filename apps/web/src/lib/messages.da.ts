@@ -1984,6 +1984,8 @@ export const MESSAGES_DA: Partial<Record<MessageKey, string>> = {
   "hinge.stylePin": "Med stift",
   "hinge.styleCone": "Med kegler",
   "hinge.styleConeHint": "Kegler på hvert andet led sidder i fordybninger i de andre. Der er ingen stift og ingen bro, så det printes liggende uden at hænge.",
+  "prop.hingeConeSize": "Keglediameter",
+  "prop.hingeConeSizeHint": "Der hvor keglen vokser ud af leddet. Større holder bedre; som standard så stor som muligt.",
   "prop.hingePinDiameter": "Pinddiameter",
   "prop.hingeLeafThickness": "Bladtykkelse",
   "prop.hingePinless": "Uden pind (egen pind)",

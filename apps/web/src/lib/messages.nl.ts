@@ -2087,6 +2087,8 @@ export const MESSAGES_NL: Record<MessageKey, string> = {
   "hinge.stylePin": "Met pen",
   "hinge.styleCone": "Met kegels",
   "hinge.styleConeHint": "Kegels op om de andere knokkel passen in uithollingen van de andere. Geen pen en geen brug, dus het print liggend zonder door te hangen.",
+  "prop.hingeConeSize": "Kegeldiameter",
+  "prop.hingeConeSizeHint": "Waar de kegel uit zijn knokkel groeit. Groter houdt beter; standaard zo groot als past.",
   "prop.hingePinDiameter": "Pendiameter",
   "prop.hingeLeafThickness": "Bladdikte",
   "prop.hingePinless": "Zonder pen (eigen pen)",

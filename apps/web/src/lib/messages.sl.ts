@@ -1514,6 +1514,8 @@ export const MESSAGES_SL: Partial<Record<MessageKey, string>> = {
   "hinge.stylePin": "S trnom",
   "hinge.styleCone": "S stožci",
   "hinge.styleConeHint": "Stožci na vsakem drugem členku se vstavijo v vdolbine drugih. Ni trna in ni mostov, zato se tiska ležeče brez povesa.",
+  "prop.hingeConeSize": "Premer stožca",
+  "prop.hingeConeSizeHint": "Tam, kjer stožec zraste iz členka. Večji drži bolje; privzeto čim večji, kolikor gre.",
   "prop.hingePinDiameter": "Premer čepa",
   "prop.hingeLeafThickness": "Debelina krila",
   "prop.hingePinless": "Brez čepa (lasten čep)",
