@@ -1790,6 +1790,7 @@ export const MESSAGES_CS: Record<MessageKey, string> = {
   "shape.doubleCountersink": "Oboustranné kuželové zahloubení",
   "shape.thread": "Závit",
   "shape.spring": "Pružina",
+  "shape.paraboloid": "Paraboloid",
   "shape.gridfinity": "Gridfinity",
   "shape.polygon": "Mnohoúhelník",
   "shape.ruler": "Pravítko",

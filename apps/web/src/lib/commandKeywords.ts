@@ -104,6 +104,7 @@ export const SHAPE_KEYWORDS: Readonly<Record<string, readonly string[]>> = {
   slot: ["capsule", "kapsel", "langloch", "oblong"],
   "half-sphere": ["dome", "halbkugel", "kuppel"],
   star: ["stern"],
+  paraboloid: ["parabola", "parabel", "bullet", "kuppe"],
   heart: ["herz"],
   ruler: ["lineal", "measure", "messen"],
 };

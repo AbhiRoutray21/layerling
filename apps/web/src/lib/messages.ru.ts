@@ -1710,6 +1710,7 @@ export const MESSAGES_RU: Partial<Record<MessageKey, string>> = {
   "shape.nameTag": "Бирка с именем",
   "shape.roundRoof": "Круглая крыша",
   "shape.halfSphere": "Полусфера",
+  "shape.paraboloid": "Параболоид",
   "shape.torus": "Тор",
   "shape.tube": "Труба",
   "shape.bentTube": "Изогнутая труба",
