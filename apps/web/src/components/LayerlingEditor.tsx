@@ -135,6 +135,8 @@ import { importedShapeFromSvg, invalidSvgMeshReason } from "@/lib/svgImport";
 import { toSvgProjection, toSvgTopEdges, type SvgProjectionLayer } from "@/lib/svgExport";
 import { leaveGuardReleased } from "@/lib/leaveGuard";
 import { outlinesToDxf, type DxfResult } from "@/lib/dxfExport";
+import { type StencilBridgeOptions } from "@/lib/stencilBridges";
+import { withStencilBridges } from "@/lib/stencilBridgeSection";
 import type { CrossSection } from "manifold-3d";
 import { DrawingTooComplexError } from "@/lib/drawingProjection";
 import { DEFAULT_TAPER_DIMENSION_MAX, keyboardNudgeCoarseFactor, keyboardNudgeStep, normalizeShapeCustomizations, normalizeSnapGrid, normalizeWorkspaceSettings, shapeDimensionLimit, workplaneSettingsFingerprint } from "@/lib/workplaneSettings";
@@ -1406,7 +1408,11 @@ async function toSvg(shapes: WorkplaneShape[], title: string, cutMeshes: Readonl
  * so two bodies that touch or overlap give one contour and no line is cut twice. The round parts come back as arcs
  * and circles (dxfExport.ts). `cutMeshes` as in toSvg.
  */
-async function silhouetteDxf(shapes: WorkplaneShape[], cutMeshes: ReadonlyArray<MeshData | null> = []): Promise<DxfResult & { openCount: number }> {
+/**
+ * Every body's outline from above, joined into one area, so two bodies that touch or overlap give one contour and
+ * no line is cut twice; with `bridges`, the parts that would fall out held by stencil bridges. `cutMeshes` as in toSvg.
+ */
+async function silhouetteLoops(shapes: WorkplaneShape[], cutMeshes: ReadonlyArray<MeshData | null> = [], bridges: StencilBridgeOptions | null = null) {
   const runtime = await getManifoldRuntime();
   const created: unknown[] = [];
   const sections: CrossSection[] = [];
@@ -1439,13 +1445,24 @@ async function silhouetteDxf(shapes: WorkplaneShape[], cutMeshes: ReadonlyArray<
     }
     const joined = runtime.CrossSection.union(sections);
     created.push(joined);
-    const simplified = joined.simplify(0.00001);
-    if (simplified !== joined) created.push(simplified);
+    const bridged = withStencilBridges(runtime, joined, bridges, created);
+    const simplified = bridged.section.simplify(0.00001);
+    if (simplified !== bridged.section) created.push(simplified);
     const loops = simplified.toPolygons().map((polygon) => polygon.map(([x, y]) => [x, y] as const));
-    return { ...outlinesToDxf({ loops }), openCount: 0 };
+    return { loops, bridgeCount: bridged.bridgeCount, unheldCount: bridged.unheldCount };
   } finally {
     [...new Set(created)].reverse().forEach(disposeManifold);
   }
+}
+
+/**
+ * The DXF for a laser cutting shop (#774): every body's outline from above, as in the SVG, but joined into one area,
+ * so two bodies that touch or overlap give one contour and no line is cut twice. The round parts come back as arcs
+ * and circles (dxfExport.ts). `cutMeshes` as in toSvg.
+ */
+async function silhouetteDxf(shapes: WorkplaneShape[], cutMeshes: ReadonlyArray<MeshData | null> = [], bridges: StencilBridgeOptions | null = null): Promise<DxfResult & { openCount: number; bridgeCount: number; unheldCount: number }> {
+  const { loops, bridgeCount, unheldCount } = await silhouetteLoops(shapes, cutMeshes, bridges);
+  return { ...outlinesToDxf({ loops }), openCount: 0, bridgeCount, unheldCount };
 }
 
 /**
@@ -1453,7 +1470,7 @@ async function silhouetteDxf(shapes: WorkplaneShape[], cutMeshes: ReadonlyArray<
  * joined into one area. An outline that does not close (a mesh with a gap) cannot be cut and is left out; the
  * answer counts it.
  */
-async function footprintDxf(shapes: readonly WorkplaneShape[]): Promise<DxfResult & { openCount: number }> {
+async function footprintDxf(shapes: readonly WorkplaneShape[], bridges: StencilBridgeOptions | null = null): Promise<DxfResult & { openCount: number; bridgeCount: number; unheldCount: number }> {
   const { solids, meshes: cut, cut: wasCut } = await exportBodiesWithLooseHoles(shapes);
   const { meshes } = await colorSeparatedExportMeshes(solids, cut, wasCut);
   const offset = footprintCutOffset(meshes);
@@ -1474,27 +1491,42 @@ async function footprintDxf(shapes: readonly WorkplaneShape[]): Promise<DxfResul
     if (sections.length === 0) throw new Error(t("status.sectionSvgNothing"));
     const joined = runtime.CrossSection.union(sections);
     created.push(joined);
-    const simplified = joined.simplify(0.00001);
-    if (simplified !== joined) created.push(simplified);
+    const bridged = withStencilBridges(runtime, joined, bridges, created);
+    const simplified = bridged.section.simplify(0.00001);
+    if (simplified !== bridged.section) created.push(simplified);
     const loops = simplified.toPolygons().map((polygon) => polygon.map(([x, y]) => [x, y] as const));
     if (loops.length === 0) throw new Error(t("status.sectionSvgNothing"));
-    return { ...outlinesToDxf({ loops }), openCount };
+    return { ...outlinesToDxf({ loops }), openCount, bridgeCount: bridged.bridgeCount, unheldCount: bridged.unheldCount };
   } finally {
     [...new Set(created)].reverse().forEach(disposeManifold);
   }
 }
 
 /** The DXF the export window and the AI bridge write (#774). */
-async function exportDxf(shapes: WorkplaneShape[], view: DxfExportView) {
-  if (view === "footprint") return footprintDxf(shapes);
+async function exportDxf(shapes: WorkplaneShape[], view: DxfExportView, bridges: StencilBridgeOptions | null = null) {
+  if (view === "footprint") return footprintDxf(shapes, bridges);
   const { solids, meshes, cut } = await exportBodiesWithLooseHoles(shapes);
-  return silhouetteDxf(solids, meshes.map((mesh, index) => (cut[index] ? mesh : null)));
+  return silhouetteDxf(solids, meshes.map((mesh, index) => (cut[index] ? mesh : null)), bridges);
+}
+
+/** The silhouette SVG as one joined area, its parts that would fall out held by stencil bridges: for a plotter or a laser. */
+async function stencilSvg(shapes: WorkplaneShape[], title: string, bridges: StencilBridgeOptions) {
+  const { solids, meshes, cut } = await exportBodiesWithLooseHoles(shapes);
+  const { loops, bridgeCount, unheldCount } = await silhouetteLoops(solids, meshes.map((mesh, index) => (cut[index] ? mesh : null)), bridges);
+  if (loops.length === 0) throw new Error(t("status.sectionSvgNothing"));
+  return { svg: toSvgProjection([{ name: title, color: solids[0]?.color ?? "#000000", polygons: loops }], title), bridgeCount, unheldCount };
+}
+
+/** What the message after an export with stencil bridges adds: how many bridges went in, and how many parts none could hold. */
+function bridgeNote(count: number | undefined, unheld = 0) {
+  return (count ? t("status.stencilBridgesAdded", { count }) : "") + (unheld ? t("status.stencilBridgesUnheld", { count: unheld }) : "");
 }
 
 /** What the message after a DXF export says about the file: how many circles, arcs and lines, and outlines left out. */
-function dxfExportNote(result: DxfResult & { openCount: number }) {
+function dxfExportNote(result: DxfResult & { openCount: number; bridgeCount?: number; unheldCount?: number }) {
   return t("status.dxfSummary", { circles: result.counts.circles, arcs: result.counts.arcs, lines: result.counts.lines })
-    + (result.openCount > 0 ? t("status.dxfOpenLeftOut", { count: result.openCount }) : "");
+    + (result.openCount > 0 ? t("status.dxfOpenLeftOut", { count: result.openCount }) : "")
+    + bridgeNote(result.bridgeCount, result.unheldCount);
 }
 
 function triggerBrowserDownload(filename: string, content: string, type: string) {
@@ -11541,7 +11573,7 @@ export function LayerlingEditor({
   }, [hasSelection, selectedShapes, shapes]);
 
   /** `chooseFile` asks for a new STL even when the design already has one (Save as). `svgView` picks what an SVG shows (#692). */
-  const exportDesign = useCallback(async (format: DirectExportFormat, exportName: string, chooseFile = false, svgView: SvgExportView = "silhouette", toServer = false) => {
+  const exportDesign = useCallback(async (format: DirectExportFormat, exportName: string, chooseFile = false, svgView: SvgExportView = "silhouette", toServer = false, bridges: StencilBridgeOptions | null = null) => {
     const source = exportSource();
     const selectionScoped = source.selection;
     // Ausgeblendetes bleibt draussen, wie bei vergleichbaren Programmen: ein beiseitegelegtes
@@ -11578,12 +11610,24 @@ export function LayerlingEditor({
       // For a laser cutting shop (#774): lines, arcs and circles on layer 0, in millimetres. The edges view would
       // turn inner edges into cuts, so it draws the silhouette.
       setNotice(t("status.buildingDxf"), true);
-      void exportDxf(sourceShapes, svgView === "footprint" ? "footprint" : "silhouette")
+      void exportDxf(sourceShapes, svgView === "footprint" ? "footprint" : "silhouette", bridges)
         .then(async (result) => {
           await deliver(projectExportFileName(exportName, "dxf"), result.dxf, "application/dxf");
           finishNotice("DXF", dxfExportNote(result));
         })
         .catch((error: unknown) => failNotice("DXF", error));
+      return;
+    }
+    if (format === "svg" && svgView === "silhouette" && bridges) {
+      // A stencil for a plotter or a laser: one joined area, the parts that would fall out held by bridges.
+      setNotice(t("status.buildingSvg"), true);
+      void stencilSvg(sourceShapes, exportName.trim() || projectName, bridges)
+        .then(async (result) => {
+          await deliver(projectExportFileName(exportName, "svg"), result.svg, "image/svg+xml;charset=utf-8");
+          // The bridges sentence follows "… as SVG", which has no full stop of its own.
+          finishNotice("SVG", result.bridgeCount || result.unheldCount ? `.${bridgeNote(result.bridgeCount, result.unheldCount)}` : "");
+        })
+        .catch((error: unknown) => failNotice("SVG", error));
       return;
     }
     if (format === "svg" && svgView === "footprint") {
@@ -13761,7 +13805,7 @@ export function LayerlingEditor({
           estimateShapes={exportTargetShapes}
           onEstimatePrint={exportSolidVolumeOffThread}
           onClose={() => setTopPanel(null)}
-          onExport={(format, exportName, chooseFile, svgView, toServer) => void exportDesign(format, exportName, chooseFile, svgView, toServer)}
+          onExport={(format, exportName, chooseFile, svgView, toServer, bridges) => void exportDesign(format, exportName, chooseFile, svgView, toServer, bridges)}
           stlFileName={topPanel === "export" && !workspaceSettings.stlAsDownload ? linkedStlFile(projectId ?? "")?.name ?? null : null}
           onExportLyl={exportLylDesign}
           onExportStep={exportStepDesign}
