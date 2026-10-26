@@ -43,7 +43,7 @@ Auch eine ganze Gruppe kann ein Körper oder eine Aussparung sein. Dabei gilt ei
 
 Manchmal sollen Teile nur zusammenbleiben, ohne eins zu werden – etwa ein weißes Logo auf einer schwarzen Platte für den Mehrfarbdruck. Dafür gibt es {{ui:editor.tool.bundle}} ([[Strg]]+[[B]]), wie in Tinkercad. Ein Bündel lässt sich verschieben, drehen und in der Größe ändern wie eine Form, aber nichts wird verrechnet:
 
-- Jedes Teil behält seine Farbe und bleibt Körper oder Aussparung.
+- Jedes Teil behält seine Farbe und bleibt Körper oder Aussparung. Die Einstellungen des Bündels haben dieselben Karten wie die einer Gruppe: {{ui:inspector.solid}} und {{ui:inspector.hole}} für das ganze Bündel (die Farben der Teile bleiben dabei), {{ui:inspector.transparent}} ([[T]]) und {{ui:inspector.multicolor}} ([[Umschalt]]+[[M]]); ist „Multicolor“ ausgeschaltet, zeigt und exportiert sich das Bündel in einer Farbe. {{ui:inspector.separateParts}} löst das Bündel auf, wie es [[Strg]]+[[Umschalt]]+[[G]] tut.
 - Aussparungen schneiden nicht. Gruppierst du das Bündel mit anderen Teilen, schneiden seine Aussparungen diese Teile, die Körper des Bündels selbst aber weiterhin nicht – wie in Tinkercad. So lässt sich zum Beispiel ein Zapfen mit seiner Bohrung daneben als Bündel immer wieder verwenden.
 - Beim Export als STL, 3MF oder OBJ ist jedes Teil ein eigener Körper; im 3MF und OBJ mit seiner Farbe.
 

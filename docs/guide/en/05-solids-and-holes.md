@@ -43,7 +43,7 @@ A whole group can also be a solid or a hole. A simple rule applies:
 
 Sometimes parts should only stay together without becoming one - a white logo on a black plate for a multicolour print, say. That is what {{ui:editor.tool.bundle}} ([[Ctrl]]+[[B]]) is for, as in Tinkercad. A bundle moves, turns and resizes like a shape, but nothing is merged:
 
-- Every part keeps its colour and stays a solid or a hole.
+- Every part keeps its colour and stays a solid or a hole. The bundle's settings have the same cards as a group's: {{ui:inspector.solid}} and {{ui:inspector.hole}} for the whole bundle (which keep the parts' colours), {{ui:inspector.transparent}} ([[T]]) and {{ui:inspector.multicolor}} ([[Shift]]+[[M]]); with Multicolor switched off the bundle shows and exports in one colour. {{ui:inspector.separateParts}} takes the bundle apart, as [[Ctrl]]+[[Shift]]+[[G]] does.
 - Holes cut nothing. When you group the bundle with other parts, its holes cut those parts but still not the bundle's own solids, as in Tinkercad. So a peg with its hole beside it, say, can be used again and again as a bundle.
 - In an STL, 3MF or OBJ export every part is a body of its own; in 3MF and OBJ with its colour.
 

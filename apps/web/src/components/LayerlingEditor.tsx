@@ -63,7 +63,7 @@ import { storedCustomFonts } from "@/lib/customFontStore";
 import { ArrayPanel } from "./workplane/ArrayPanel";
 import { ScalePercentPanel, type ScalePercentSettings } from "./workplane/ScalePercentPanel";
 import { scaleShapesByPercent } from "@/lib/scaleByPercent";
-import { canToggleGroupColors, groupShowsPartColors } from "@/lib/groupColors";
+import { canToggleGroupColors, colorForParts, groupShowsPartColors } from "@/lib/groupColors";
 import { disposeBoundsTree } from "three-mesh-bvh";
 import { SHELL_SIDES, shellMaxThickness, shellOpeningsFor, shellOpenSides } from "@/lib/shellLimits";
 import { arrayFollowingPivot, arrayGroupsCopies, circleStepDegrees, clampArrayCount, moveAlongRadius, rotateAroundVertical, rowOffset, singleAxisSpacing, type ArraySettings } from "@/lib/shapeArray";
@@ -1127,7 +1127,7 @@ function shapeWithInspectorPatch(shape: WorkplaneShape, cleanedPatch: Partial<Wo
   // Rahmen und laesst das gebackene Netz in Ruhe.
   const neugebaut = patchTouchesBodyParameters(cleanedPatch) ? rebuiltParametricShape(shape, cleanedPatch) : null;
   const patched = neugebaut ?? { ...shape, ...textShrinkPatch(shape, curvedTextPatch(shape, heightPatchKeepingBase(shape, cleanedPatch))) };
-  const canonicalBase = canonicalizeShape("hole" in cleanedPatch ? withHoleMode(patched, Boolean(cleanedPatch.hole), cleanedPatch.color) : patched);
+  const canonicalBase = canonicalizeShape("hole" in cleanedPatch ? withHoleMode(patched, Boolean(cleanedPatch.hole), colorForParts(patched, cleanedPatch.color)) : patched);
   return bakeTransform ? canonicalizeShape(bakeShapeTransformIntoMesh(canonicalBase)) : canonicalBase;
 }
 
@@ -3546,6 +3546,8 @@ export function LayerlingEditor({
     () => selectedShapes.length === 1 && Boolean(selectedShape && selectedShape.groupOperation !== "bundle" && (separatesBySketch(selectedShape) || separablePartCount(selectedShape) > 1)),
     [selectedShape, selectedShapes.length],
   );
+  // A bundle has no loose bodies to split off: "Separate Parts" takes it apart, as Ctrl+Shift+G does.
+  const selectedIsSingleBundle = selectedShapes.length === 1 && selectedShape?.groupOperation === "bundle" && Boolean(selectedShape.groupedShapes?.length);
   const toggleModifierEdge = useCallback((id: number, singleEdge = false) => {
     // Nebenwirkungen (setNotice) hier im Funktionskoerper, nicht im
     // setState-Updater - der laeuft unter React StrictMode doppelt.
@@ -7575,7 +7577,7 @@ export function LayerlingEditor({
       commitShapes(
         shapes.map((shape) => {
           if (!selected.has(shape.id) || isNonSolidShape(shape)) return shape;
-          const solid = withHoleMode(shape, false, color);
+          const solid = withHoleMode(shape, false, colorForParts(shape, color));
           return canonicalizeShape({ ...solid, color, ...(canToggleGroupColors(solid) ? { multicolor: false } : {}) });
         }),
         selectedIds,
@@ -9641,7 +9643,7 @@ export function LayerlingEditor({
           if (neugebaut) return withPivotRequest(neugebaut);
           const merged = { ...shape, ...textShrinkPatch(shape, curvedTextPatch(shape, heightPatchKeepingBase(shape, sauber))) };
           // Solid/hole goes through the same rule as the inspector: a mixed group keeps its parts' own state.
-          const patched = typeof sauber.hole === "boolean" ? withHoleMode(merged, sauber.hole, sauber.color) : merged;
+          const patched = typeof sauber.hole === "boolean" ? withHoleMode(merged, sauber.hole, colorForParts(merged, sauber.color)) : merged;
           const width = shapeWidth(patched);
           const depth = shapeDepth(patched);
           const canonical = withPivotRequest(canonicalizeShape({ ...patched, size: Math.max(width, depth) }));
@@ -13354,8 +13356,8 @@ export function LayerlingEditor({
           onCancelInteraction={cancelInteraction}
           onEditSketch={beginSketchEdit}
           onOpenGroup={selectedShapes.length === 1 && canEditGroup(selectedShape) ? openGroupForEditing : undefined}
-          canSeparateParts={canSeparateSelectedParts}
-          onSeparateParts={separateSelectedParts}
+          canSeparateParts={canSeparateSelectedParts || selectedIsSingleBundle}
+          onSeparateParts={selectedIsSingleBundle ? ungroupSelected : separateSelectedParts}
           onSelectionHole={setSelectionHoleMode}
           onSelectionColor={setSelectionColor}
           onSelectionUpdateShapes={updateShapesTogether}
