@@ -30,6 +30,7 @@ export type ShapeKind =
   | "doubleCountersink"
   | "teardrop"
   | "loft"
+  | "vase"
   | "thread"
   | "spring"
   | "gridfinity"
@@ -1079,6 +1080,10 @@ export type WorkplaneShape = {
    * that box rather than the arc the mesh actually covers.
    */
   cylinderWrap?: { diameter: number; inward?: boolean };
+  /** Only for "vase": the vase tool's settings; the frame gives its height and widest diameter. */
+  vase?: import("@/lib/vase/vase-geometry.mjs").VaseSettings;
+  /** An accessory laid out for a vase (its id): laying them out again replaces it. */
+  vasePartOf?: string;
   importedMesh?: {
     positions: number[];
     normals?: number[];

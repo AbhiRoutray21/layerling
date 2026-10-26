@@ -147,3 +147,24 @@ Za gravuro vklopi {{ui:inspector.wrapInward}}: potem gre debelina v steno. Oblik
 Oblika, ki je že ovita, je mreža ovitega predmeta in je ni mogoče ovijati znova: razveljavi ovijanje ali pa ponovno ovij ravno izvirnik z drugim premerom.
 
 Rezultat je mreža kot uvožen model. Z Razveljavi je oblika spet ravna; za drug premer najprej nazaj in nato znova ovij. Daljše od enega kroga okoli valja ne gre, tedaj layerling navede najmanjši premer, ki ustreza.
+
+## Vaza
+
+{{ui:shape.vase}} je samostojno telo za vaze, lonce in senčnike. Njene mere so pod {{ui:inspector.properties}}, oblika in vzorec na kartici {{ui:inspector.vaseForm}}; vse lahko kadar koli spremenite, tudi po shranjevanju:
+
+- {{ui:prop.vaseProfile}}: steklenica, trebušasta, skleda z vratom, sod, valj ali lijak. Višina in največji premer sta meri same oblike: povlecite ročaje ali vpišite {{ui:prop.vaseDiameter}} in {{ui:prop.height}}.
+- {{ui:prop.vaseSection}}: krog, mnogokotnik z zaobljenimi vogali ali val (mehak, koničast, loki ali lamele). {{ui:prop.vaseTwist}} ga po višini zasuka, {{ui:prop.vaseSway}} ga zaniha sem in tja.
+- {{ui:prop.vaseBody}}: {{ui:vase.bodySolid}} je za način vaze v rezalniku (tudi »spiralizacija«): rezalnik natisne eno steno v spirali, brez pokrova in polnila, zato je telo narisano polno. {{ui:vase.bodyHollow}} da pravo steno in dno za običajen tisk.
+- {{ui:prop.vaseEffect}}: nova vaza je gladka. Na izbiro so utori, proge, Voronojeve celice ali ploskve (low poly) na zunanji strani, po želji le v delu višine; spadajo k vazi in ostanejo z njo nastavljivi.
+
+{{ui:prop.vaseSection2}} pusti, da prerez po višini mehko preide v drugega, na primer iz kroga spodaj v šestkotnik zgoraj.
+
+Gumb {{ui:inspector.vaseDraw}} na vrhu nastavitev vaze odpre lastno veliko okno nad delovno površino: v njem vazo narišeš sam, v pravih milimetrih. Premakneš ga za naslovno vrstico in ga za vogal povečaš; vaza v pogledu sledi vsaki spremembi. {{ui:vaseDraw.tabProfile}} jo pokaže od strani: vleci točke, najvišja določa višino, najširša premer; {{ui:vaseDraw.handle}} da točki kot, {{ui:vaseDraw.corner}} pregib. {{ui:vaseDraw.tabSection}} pokaže prerez od zgoraj, {{ui:prop.vaseDrawSymmetry}} pa narisano zrcali ali ponavlja. {{ui:vaseDraw.tabTwist}} nariše zasuk kot krivuljo po višini. Datoteka SVG iz risarskega programa postane prerez ali oblika telesa, mreža vzorčne vaze (STL, 3MF, OBJ) oblika telesa. Fotografijo vaze lahko podložiš in obrišeš, ali pa {{ui:vaseDraw.takeOutline}} prevzame njen obris. En poteg z miško je en korak razveljavitve; dokler vlečeš, pogled kaže vazo grobo.
+
+Kartica {{ui:inspector.vaseFloor}} vsebuje, kar telo poleg oblike potrebuje. Pri votli vazi: odtočne luknje z naklonom proti njim, votlo nogo, predrto steno ({{ui:prop.vaseCutout}}: Voronoi, satovje, rombi ali krogi, za svetilke in košare) in {{ui:prop.vaseLamp}}, viseč, stoječ z grlom ali nad LED-ploščkom. Pri polni vazi {{ui:prop.vaseReinforce}} izreže fine reže, skozi katere rezalnik v načinu vaze natisne rebra znotraj ali dvojno steno, v enem potegu. Vdolbine za gumijaste nogice gredo pri obeh. {{ui:prop.vaseWatertight}} dvigne steno in dno votle vaze na vsaj 1,6 mm.
+
+Na kartici {{ui:inspector.vaseParts}} dobi vaza svojo opremo. {{ui:prop.vaseLegs}} so lahko oblikovane skupaj z vazo, potem so del nje, ali vtične, s pušami v dnu; stojalo nosi vazo od spodaj. {{ui:prop.vaseSaucer}} ujame vodo ali je skrit v nogi. Votla vaza lahko sprejme {{ui:prop.vaseInsert}}: vložek za rastlino, vložek z zalogo vode za lonec, ki se zaliva sam, držalo za stebla ali cevke za vodo. {{ui:prop.vaseLid}} se natakne čez rob, zaskoči v utor ali se privije na navoj v steni. {{ui:inspector.vasePartsMake}} postavi dele kot samostojne predmete, pripravljene za tisk, poleg vaze, obrnjene na glavo, kjer se tako bolje natisnejo. Puše, utor ali navoj vaza že ima. Po spremembi jih postavi znova: prejšnji deli se zamenjajo. Če del ne ustreza tej vazi, urejevalnik to pove, na primer ko vložek ne bi šel skozi ozek vrat.
+
+Kartica {{ui:inspector.vasePrint}} pove, kaj vaza potrebuje za tisk: težo v izbranem materialu ({{ui:prop.vaseMaterial}}) in dolžino filamenta – pri polni vazi izračunano za način vaze v rezalniku, z eno linijo vzdolž stene. Pod tem so napotki za tisk: previs nad 45° z višino, kjer je, pretanka stena, kaj potrebujejo pokrov, svetilka ali noge, in nastavitve rezalnika za rebra in dvojno steno.
+
+{{ui:prop.vaseQuality}} določa, kako fino se vaza razdeli na trikotnike: finejše je videti bolj gladko, a pri velikih vazah upočasni urejevalnik.
