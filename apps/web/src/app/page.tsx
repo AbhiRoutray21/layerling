@@ -1,7 +1,8 @@
 "use client";
 
 import { requestPersistentStorage } from "@/lib/persistentStorage";
-import { Archive, ArchiveRestore, ArrowLeft, Clock3, Copy, EllipsisVertical, Folder, FolderInput, FolderKanban, FolderPlus, FolderUp, Grid3X3, List, Pencil, Plus, RefreshCw, Search, Server, ShieldAlert, SlidersHorizontal, Sparkles, Trash2, X } from "lucide-react";
+import { keepShownSelection, localDesignKey, selectionHasStale, serverDesignKey, toggleDesignSelection } from "@/lib/designSelection";
+import { Archive, ArchiveRestore, ArrowLeft, Check, CheckSquare, Clock3, Copy, EllipsisVertical, Folder, FolderInput, FolderKanban, FolderPlus, FolderUp, Grid3X3, List, Pencil, Plus, RefreshCw, Search, Server, ShieldAlert, SlidersHorizontal, Sparkles, Trash2, X } from "lucide-react";
 import { Fragment, useCallback, useEffect, useMemo, useRef, useState, type DragEvent } from "react";
 import { AppFooter } from "@/components/AppFooter";
 import { LanguageSwitch } from "@/components/LanguageSwitch";
@@ -1866,6 +1867,14 @@ export default function Home() {
     }
   }, [projects, refreshSharedProjects, removeWorkingCopies]);
 
+  /** Several designs of the server folder, chosen together on the start page (#886): one after the other, as each asks for its own revision. */
+  const deleteSharedProjectsInTurn = useCallback(async (sharedList: SharedProject[]) => {
+    for (const sharedProject of sharedList) {
+      await deleteSharedProject(sharedProject);
+    }
+    if (sharedList.length > 1) setDashboardNotice(t("notice.deletedDesigns", { count: sharedList.length }));
+  }, [deleteSharedProject]);
+
   /** Dropping a project on a folder: the file changes place, nothing else. */
   const moveSharedProject = useCallback(async (sharedProject: SharedProject, targetPath: string) => {
     const from = sharedProject.path ?? "";
@@ -2549,29 +2558,37 @@ export default function Home() {
     }
   };
 
-  const deleteProject = (projectId: string) => {
-    const deleted = projects.find((project) => project.id === projectId);
-    const remainingIds = projects.filter((project) => project.id !== projectId).map((project) => project.id);
-    setProjects((current) => current.filter((project) => project.id !== projectId));
+  /** Deleting designs of this browser: one, or several that were chosen together on the start page (#886). */
+  const deleteProjects = (projectIds: string[]) => {
+    const ids = new Set(projectIds);
+    const deleted = projects.filter((project) => ids.has(project.id));
+    const remainingIds = projects.filter((project) => !ids.has(project.id)).map((project) => project.id);
+    setProjects((current) => current.filter((project) => !ids.has(project.id)));
     setProjectShapesById((current) => {
       const next = { ...current };
-      delete next[projectId];
+      ids.forEach((projectId) => delete next[projectId]);
       return next;
     });
-    if (activeProjectId === projectId) {
+    if (activeProjectId && ids.has(activeProjectId)) {
       setActiveProjectId(null);
     }
-    if (!STATIC_EXPORT_BUILD) {
-      void fetch(`/api/project-thumbnail?projectId=${encodeURIComponent(projectId)}`, { method: "DELETE" });
-    }
-    knownDesignThumbnails.delete(projectId);
-    void deleteDesignThumbnail(projectId);
-    void deleteProjectShapes(projectId)
-      .then(() => (deleted ? deleteHiddenCopies(deleted, remainingIds) : undefined))
-      .catch(() => {
-        setDashboardNotice(t("notice.projectShapesDeleteFailed"));
-      });
+    deleted.forEach((project) => {
+      const projectId = project.id;
+      if (!STATIC_EXPORT_BUILD) {
+        void fetch(`/api/project-thumbnail?projectId=${encodeURIComponent(projectId)}`, { method: "DELETE" });
+      }
+      knownDesignThumbnails.delete(projectId);
+      void deleteDesignThumbnail(projectId);
+      void deleteProjectShapes(projectId)
+        .then(() => deleteHiddenCopies(project, remainingIds))
+        .catch(() => {
+          setDashboardNotice(t("notice.projectShapesDeleteFailed"));
+        });
+    });
+    if (deleted.length > 1) setDashboardNotice(t("notice.deletedDesigns", { count: deleted.length }));
   };
+
+  const deleteProject = (projectId: string) => deleteProjects([projectId]);
 
   const emptyProjectPrompt = view === "dashboard" && emptyProjectPromptId ? projects.find((project) => project.id === emptyProjectPromptId) ?? null : null;
 
@@ -2834,7 +2851,9 @@ export default function Home() {
           localOnlyProjects={projects.filter((project) => !project.sharedProject).length}
           onSendAllToServer={() => void sendAllProjectsToServer()}
           onDeleteProject={deleteProject}
+          onDeleteProjects={deleteProjects}
           onDeleteSharedProject={(project) => void deleteSharedProject(project)}
+          onDeleteSharedProjects={(sharedList) => void deleteSharedProjectsInTurn(sharedList)}
           onDuplicateProject={(projectId) => void duplicateProject(projectId)}
           onDuplicateSharedProject={(project) => void duplicateSharedProject(project)}
           onImportFile={() => void pickDashboardImport()}
@@ -3048,7 +3067,9 @@ function Dashboard({
   viewMode,
   onCreate,
   onDeleteProject,
+  onDeleteProjects,
   onDeleteSharedProject,
+  onDeleteSharedProjects,
   onDuplicateProject,
   onDuplicateSharedProject,
   onImportFile,
@@ -3105,7 +3126,9 @@ function Dashboard({
   viewMode: ViewMode;
   onCreate: () => void;
   onDeleteProject: (projectId: string) => void;
+  onDeleteProjects: (projectIds: string[]) => void;
   onDeleteSharedProject: (project: SharedProject) => void;
+  onDeleteSharedProjects: (projects: SharedProject[]) => void;
   onDuplicateProject: (projectId: string) => void;
   onDuplicateSharedProject: (project: SharedProject) => void;
   onImportFile: () => void;
@@ -3139,6 +3162,10 @@ function Dashboard({
   const [openSharedProjectMenuKey, setOpenSharedProjectMenuKey] = useState<string | null>(null);
   const [projectPendingDeleteId, setProjectPendingDeleteId] = useState<string | null>(null);
   const [sharedProjectPendingDeleteKey, setSharedProjectPendingDeleteKey] = useState<string | null>(null);
+  // Choosing several designs to delete them together (#886): the keys of what is chosen (designSelection.ts).
+  const [selecting, setSelecting] = useState(false);
+  const [selectedKeys, setSelectedKeys] = useState<Set<string>>(() => new Set());
+  const [selectionDeletePending, setSelectionDeletePending] = useState(false);
   // Which project is being dragged, and which drop target it is hovering over.
   // The target is a store path, and "" is the store's own root - so null, not
   // the empty string, means "nothing under the pointer".
@@ -3186,6 +3213,60 @@ function Dashboard({
   const projectPendingDelete = projects.find((project) => project.id === projectPendingDeleteId) ?? null;
   const sharedProjectPendingDelete = shownSharedProjects.find((project) => sharedProjectKey(project) === sharedProjectPendingDeleteKey) ?? null;
   const projectPendingRename = projects.find((project) => project.id === projectPendingRenameId) ?? null;
+
+  // What can be chosen is what the open list shows: the designs of this browser, or those of the server folder.
+  const selectableKeys = dashboardSection === "shared"
+    ? shownSharedProjects.map((project) => serverDesignKey(sharedProjectKey(project)))
+    : projects.map((project) => localDesignKey(project.id));
+  const selectableSignature = selectableKeys.join("\n");
+  const selectedLocal = projects.filter((project) => selectedKeys.has(localDesignKey(project.id)));
+  const selectedShared = shownSharedProjects.filter((project) => selectedKeys.has(serverDesignKey(sharedProjectKey(project))));
+  const selectedCount = dashboardSection === "shared" ? selectedShared.length : selectedLocal.length;
+  const toggleSelected = (key: string) => setSelectedKeys((current) => toggleDesignSelection(current, key));
+  const endSelecting = () => {
+    setSelecting(false);
+    setSelectedKeys(new Set());
+    setSelectionDeletePending(false);
+  };
+  const startSelecting = () => {
+    setOpenProjectMenuId(null);
+    setOpenSharedProjectMenuKey(null);
+    setSelecting(true);
+  };
+  const confirmSelectionDelete = () => {
+    if (dashboardSection === "shared") onDeleteSharedProjects(selectedShared);
+    else onDeleteProjects(selectedLocal.map((project) => project.id));
+    endSelecting();
+  };
+
+  // A design that was deleted, moved away or filtered out leaves the selection; a change of list ends it.
+  useEffect(() => {
+    const shown = selectableSignature ? selectableSignature.split("\n") : [];
+    setSelectedKeys((current) => (selectionHasStale(current, shown) ? keepShownSelection(current, shown) : current));
+  }, [selectableSignature]);
+  useEffect(() => {
+    setSelecting(false);
+    setSelectedKeys(new Set());
+    setSelectionDeletePending(false);
+  }, [dashboardSection, openFolderId, sharedPath]);
+  useEffect(() => {
+    if (!selecting || selectionDeletePending) return;
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") endSelecting();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [selecting, selectionDeletePending]);
+
+  const selectionBar = selecting ? (
+    <div className="dashboard-select-bar" role="toolbar" aria-label={t("dashboard.select")}>
+      <strong role="status">{t("dashboard.selectedCount", { count: selectedCount })}</strong>
+      <button type="button" onClick={() => setSelectedKeys(new Set(selectableKeys))}>{t("dashboard.selectAll")}</button>
+      <button type="button" disabled={selectedCount === 0} onClick={() => setSelectedKeys(new Set())}>{t("dashboard.selectNone")}</button>
+      <button className="delete" type="button" disabled={selectedCount === 0} onClick={() => setSelectionDeletePending(true)}>{t("common.delete")}</button>
+      <button type="button" onClick={endSelecting}>{t("dashboard.selectDone")}</button>
+    </div>
+  ) : null;
 
   useEffect(() => {
     if (!projectPendingDeleteId) return;
@@ -3486,12 +3567,25 @@ function Dashboard({
                   </button>
                   </>
                   )}
+                  {shownSharedProjects.length > 0 ? (
+                    <button
+                      className={`shared-projects-refresh${selecting ? " active" : ""}`}
+                      type="button"
+                      aria-pressed={selecting}
+                      title={t("dashboard.selectTitle")}
+                      onClick={() => (selecting ? endSelecting() : startSelecting())}
+                    >
+                      <CheckSquare size={16} />
+                      <span>{t("dashboard.select")}</span>
+                    </button>
+                  ) : null}
                   <button className="shared-projects-refresh" type="button" onClick={() => onRefreshSharedProjects()} disabled={sharedProjectsLoading}>
                     <RefreshCw size={16} className={sharedProjectsLoading ? "spinning" : undefined} />
                     <span>{t("shared.refresh")}</span>
                   </button>
                 </div>
               </div>
+              {selectionBar}
               {/* Inside a folder the grid is drawn even when there is nothing in
                   it, because the way back is one of its tiles. */}
               {shownSharedProjects.length > 0 || shownSharedFolders.length > 0 || (sharedPath && !searchResults) ? (
@@ -3596,9 +3690,9 @@ function Dashboard({
                     const where = project.path ?? "";
                     return (
                     <article
-                      className={`project-card shared-project-card${draggedSharedKey === key ? " dragging" : ""}`}
+                      className={`project-card shared-project-card${draggedSharedKey === key ? " dragging" : ""}${selecting ? " selectable" : ""}${selecting && selectedKeys.has(serverDesignKey(key)) ? " selected" : ""}`}
                       key={key}
-                      draggable={!searchResults}
+                      draggable={!searchResults && !selecting}
                       title={searchResults ? undefined : t("shared.dragHint")}
                       onDragStart={(event) => {
                         event.dataTransfer.effectAllowed = "move";
@@ -3610,7 +3704,13 @@ function Dashboard({
                         setDropFolderPath(null);
                       }}
                     >
-                      <button className="project-card-open" type="button" onClick={() => onOpenSharedProject(project)}>
+                      <button
+                        className="project-card-open"
+                        type="button"
+                        aria-pressed={selecting ? selectedKeys.has(serverDesignKey(key)) : undefined}
+                        aria-label={selecting ? t("dashboard.selectDesign", { name: project.name }) : undefined}
+                        onClick={() => (selecting ? toggleSelected(serverDesignKey(key)) : onOpenSharedProject(project))}
+                      >
                         <ProjectPreview accent={PROJECT_ACCENTS[index % PROJECT_ACCENTS.length]} thumbnailUrl={project.thumbnailUrl} />
                         <span className="project-card-title" translate="no">{project.name}</span>
                         <span className="project-card-meta">{formatUpdated(project.updatedAt, language)} - {formatFileSize(project.size)}</span>
@@ -3629,6 +3729,9 @@ function Dashboard({
                           <span>{where || t("shared.trailRoot")}</span>
                         </button>
                       ) : null}
+                      {selecting ? (
+                        <span className="project-card-check" aria-hidden="true"><Check size={16} strokeWidth={3} /></span>
+                      ) : (
                       <button
                         className="project-menu-trigger"
                         type="button"
@@ -3643,7 +3746,8 @@ function Dashboard({
                       >
                         <EllipsisVertical size={19} strokeWidth={2.5} />
                       </button>
-                      {openSharedProjectMenuKey === key ? (
+                      )}
+                      {!selecting && openSharedProjectMenuKey === key ? (
                         <div className="project-card-menu" role="menu" aria-label={t("shared.menuFor", { name: project.name })}>
                           {/* Verschieben bietet die Ordner an, die hier offen
                               stehen - in einer Trefferliste waeren das die
@@ -3826,6 +3930,18 @@ function Dashboard({
                       <span>{t("shared.newFolder")}</span>
                     </button>
                   )}
+                  {projects.length > 0 ? (
+                    <button
+                      className={`dashboard-select dashboard-backup-button${selecting ? " active" : ""}`}
+                      type="button"
+                      aria-pressed={selecting}
+                      title={t("dashboard.selectTitle")}
+                      onClick={() => (selecting ? endSelecting() : startSelecting())}
+                    >
+                      <CheckSquare size={17} />
+                      <span>{t("dashboard.select")}</span>
+                    </button>
+                  ) : null}
                   <label className="dashboard-select">
                     <SlidersHorizontal size={17} />
                     <select value={sortMode} onChange={(event) => onSortModeChange(event.currentTarget.value)} aria-label={t("dashboard.sortLabel")}>
@@ -3844,6 +3960,7 @@ function Dashboard({
                 </div>
               </div>
 
+              {selectionBar}
               {/* Two places, one row: the folder on the left holds what is on the
                   server, the cards beside it what this browser holds. Side by
                   side they cannot be mistaken for one another - and the folder
@@ -3990,9 +4107,9 @@ function Dashboard({
                   })}
                   {projects.map((project) => (
                     <article
-                      className={`project-card${draggedProjectId === project.id ? " dragging" : ""}`}
+                      className={`project-card${draggedProjectId === project.id ? " dragging" : ""}${selecting ? " selectable" : ""}${selecting && selectedKeys.has(localDesignKey(project.id)) ? " selected" : ""}`}
                       key={project.id}
-                      draggable
+                      draggable={!selecting}
                       title={sharedProjectsEnabled ? t("dashboard.dragHintServer") : t("shared.dragHint")}
                       onDragStart={(event) => {
                         event.dataTransfer.effectAllowed = "move";
@@ -4001,7 +4118,13 @@ function Dashboard({
                       }}
                       onDragEnd={clearLocalDrag}
                     >
-                      <button className="project-card-open" type="button" onClick={() => onOpenProject(project.id)}>
+                      <button
+                        className="project-card-open"
+                        type="button"
+                        aria-pressed={selecting ? selectedKeys.has(localDesignKey(project.id)) : undefined}
+                        aria-label={selecting ? t("dashboard.selectDesign", { name: project.name }) : undefined}
+                        onClick={() => (selecting ? toggleSelected(localDesignKey(project.id)) : onOpenProject(project.id))}
+                      >
                         <ProjectPreview accent={project.accent} thumbnailUrl={project.thumbnailUrl} />
                         <span className="project-card-title" translate="no">{project.name}</span>
                         <span className="project-card-meta">
@@ -4023,6 +4146,9 @@ function Dashboard({
                           <span>{folderPathNames(designFolders, project.folderId).join(" / ")}</span>
                         </button>
                       ) : null}
+                      {selecting ? (
+                        <span className="project-card-check" aria-hidden="true"><Check size={16} strokeWidth={3} /></span>
+                      ) : (
                       <button
                         className="project-menu-trigger"
                         type="button"
@@ -4038,7 +4164,8 @@ function Dashboard({
                       >
                         <EllipsisVertical size={19} strokeWidth={2.5} />
                       </button>
-                      {openProjectMenuId === project.id ? (
+                      )}
+                      {!selecting && openProjectMenuId === project.id ? (
                         <div className="project-card-menu" role="menu" aria-label={t("dashboard.optionsFor", { name: project.name })}>
                           <button type="button" role="menuitem" onClick={() => startProjectRename(project)}>
                             <Pencil size={16} />
@@ -4127,6 +4254,30 @@ function Dashboard({
           <AppFooter version={LYL_CREATED_WITH_VERSION} updateInfo={update} />
         </section>
       </div>
+
+      {selectionDeletePending && selectedCount > 0 ? (
+        <section className="dashboard-confirm-overlay" role="dialog" aria-modal="true" aria-labelledby="delete-designs-title">
+          <div className="dashboard-confirm-dialog">
+            <header>
+              <strong id="delete-designs-title">{selectedCount === 1 ? t("confirm.deleteProjectTitle") : t("confirm.deleteDesignsTitle")}</strong>
+              <button type="button" aria-label={t("confirm.deleteProjectCancel")} onClick={() => setSelectionDeletePending(false)}>
+                <X size={18} />
+              </button>
+            </header>
+            <p>{selectedCount === 1
+              ? t("confirm.deleteProjectBody", { name: (dashboardSection === "shared" ? selectedShared[0] : selectedLocal[0]).name })
+              : t("confirm.deleteDesignsBody", { count: selectedCount })}</p>
+            <div className="dashboard-confirm-actions">
+              <button className="dashboard-confirm-cancel" type="button" onClick={() => setSelectionDeletePending(false)}>
+                {t("confirm.cancel")}
+              </button>
+              <button className="dashboard-confirm-delete" type="button" onClick={confirmSelectionDelete}>
+                {t("confirm.delete")}
+              </button>
+            </div>
+          </div>
+        </section>
+      ) : null}
 
       {projectPendingDelete ? (
         <section className="dashboard-confirm-overlay" role="dialog" aria-modal="true" aria-labelledby="delete-project-title">

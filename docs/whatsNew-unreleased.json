@@ -48,5 +48,15 @@
       "de": "Das Scharnier gibt es jetzt auch mit Kegeln statt Stift: Jeder zweite Knöchel endet in Kegeln, die in Mulden der Nachbarn passen, ohne lange Brücke, die durchhängen könnte. Statt der Zahl der Knöchel kannst du außerdem ihre größte Breite angeben.",
       "en": "The hinge now also comes with cones instead of a pin: every other knuckle ends in cones that fit into recesses of its neighbours, with no long bridge that could sag. Instead of the number of knuckles you can also give their widest width."
     }
+  },
+  {
+    "title": {
+      "de": "Mehrere Entwürfe auf einmal löschen",
+      "en": "Delete several designs at once"
+    },
+    "body": {
+      "de": "Auf der Startseite gibt es über den Entwürfen den Knopf „Auswählen“: Ein Klick auf eine Karte wählt sie aus, „Alle auswählen“ nimmt alle, und „Löschen“ fragt einmal für die ganze Auswahl. So sind viele alte Entwürfe schnell weg. Im Serverordner geht es genauso.",
+      "en": "The start page has a Select button above the designs: a click on a card chooses it, Select all takes every design, and Delete asks once for the whole choice. Many old designs are gone in a moment. It works the same in the server folder."
+    }
   }
 ]
