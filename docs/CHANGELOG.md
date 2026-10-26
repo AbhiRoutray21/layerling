@@ -6,6 +6,7 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **Brazilian Portuguese: chapter 1 of the guide brought up to date (PR #931):** Two new sentences about pasting (and the setting that puts pasted parts in the middle of the workplane), the link text of the Tinkercad tip that was still in English, and "barra de opções" and "projetos" as in the rest of the translation. Contributed by @lmagalhaes.
 - **Brazilian Portuguese: 43 sentences from 1.111.0 (PR #929):** The interface in Brazilian Portuguese (`pt-br`) gains the sentences it was missing since 1.111.0 - the attachments panel, "Colar no meio e baixar", "Luz suave", the calculation status lines, "Agrupar cópias" and the Alt+arrow shortcut - and five welcome sentences and two sketch shortcuts are brought up to date with the English. The language stays marked as incomplete until two people have read it. Contributed by @lmagalhaes.
 ## 1.113.0
 
