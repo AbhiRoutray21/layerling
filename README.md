@@ -117,7 +117,7 @@ It is not a full CAD package: there is no parametric timeline and no assemblies.
 - **Turn the view at the cube** – dragging the view cube turns the view like the right mouse button, with one finger on a tablet; a click still jumps to that side, and a click on a corner or an edge looks from there. Keys **1**–**6** jump too, and **Shift+1**–**6** also zoom to the selection.
 - **Four saved views per design** – **Shift+7**, **8**, **9** or **0** saves the view exactly as it is (angle, pan, zoom), and the key alone brings it back. Each design keeps its own, and a saved `.lyl` file carries them along.
 - **The view cube in any corner** – Settings > Appearance > **View cube position** puts the cube in the top left, top right, bottom left or bottom right; in any corner but the top left, the camera controls move up into its place.
-- **In your language** – the program and its user guide come in English, German and 16 more languages; the language list is at the very top right.
+- **In your language** – the program and its user guide come in English, German and 17 more languages; the language list is at the very top right.
 - **Look from below** – the eye over a grid in the camera bar hides the plate, so the underside of a design can be seen without it in the way.
 - **A second view in its own window** – a button in the camera bar opens a second window that shows the same design through a camera of its own, with its own view cube and camera bar, and follows every change. It opens where you last left it.
 - **Panels where you want them** – the object list, the settings, the section view, the tape measure and the tool panels for edges, hollowing and patterns move by their title bar and open there again; a double-click docks them.

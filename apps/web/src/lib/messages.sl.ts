@@ -250,7 +250,7 @@ export const MESSAGES_SL: Partial<Record<MessageKey, string>> = {
   "installHint.ios": "V Safariju: ikona Share → »Add to Home Screen«.",
   "installHint.firefox": "Firefox ne more namestiti aplikacij – layerling se tu še vedno zažene brez povezave v zavihku.",
   "welcome.moreLanguagesTitle": "Tvoj jezik",
-  "welcome.moreLanguagesBody": "program in njegov priročnik govorita angleško, nemško in še 16 drugih jezikov; seznam jezikov je čisto zgoraj desno in v nastavitvah na začetni strani.",
+  "welcome.moreLanguagesBody": "program in njegov priročnik govorita angleško, nemško in še 17 drugih jezikov; seznam jezikov je čisto zgoraj desno in v nastavitvah na začetni strani.",
   "welcome.moreOfflineTitle": "Deluje brez povezave",
   "welcome.moreOfflineBody": "layerling deluje tudi brez interneta – projekti ostanejo v tvojem računalniku.",
   "welcome.moreAiTitle": "Gradnja z umetno inteligenco",
