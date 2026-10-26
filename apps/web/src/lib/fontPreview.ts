@@ -2,7 +2,7 @@ import { JAPANESE_FONT, customFontRevision, japaneseTypefaceLoaded, textFont, te
 
 /**
  * A line of text in one of the editor's typefaces, as an SVG path, for the font picker and the font
- * window (#930). It is drawn from the same outlines the text shape is built from, so a font of one's own
+ * window. It is drawn from the same outlines the text shape is built from, so a font of one's own
  * shows as it will come out, whether or not the browser has it installed.
  */
 export type FontPreview = {

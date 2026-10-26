@@ -2,7 +2,7 @@ import { beforeAll, describe, expect, it } from "vitest";
 import { fontPreview } from "@/lib/fontPreview";
 import { loadTextFonts } from "@/lib/textFonts";
 
-// The font list draws every font in its own letters (#930).
+// The font list draws every font in its own letters.
 describe("the preview of a font", () => {
   beforeAll(async () => {
     await loadTextFonts();

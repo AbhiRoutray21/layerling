@@ -13,7 +13,7 @@ const PREVIEW_SIZE = 24;
 const LIST_MAX_HEIGHT = 340;
 
 /**
- * One line of text in a typeface, drawn from its outlines (#930). Nothing is shown while the fonts are
+ * One line of text in a typeface, drawn from its outlines. Nothing is shown while the fonts are
  * still loading, or for a font that cannot be drawn; the name beside it says what it is anyway.
  */
 export function FontPreviewLine({ fontId, text, height = 28 }: { fontId: string; text: string; height?: number }) {
@@ -40,7 +40,7 @@ export function FontPreviewLine({ fontId, text, height = 28 }: { fontId: string;
 
 /**
  * The font choice of a text: a closed field that shows the chosen font in its own letters and a list
- * that shows every font so, each with the shape's own words (#930). It stands in for the plain select
+ * that shows every font so, each with the shape's own words. It stands in for the plain select
  * the other properties use, which cannot draw anything in a list entry.
  */
 export function FontPicker({

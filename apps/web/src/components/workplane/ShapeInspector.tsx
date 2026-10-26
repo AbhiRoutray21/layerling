@@ -417,7 +417,7 @@ type SelectPropertyConfig = {
   options: SelectPropertyOption[];
   /** Eine Zeile unter dem Feld, die die getroffene Wahl erklaert. */
   hint?: string;
-  /** The words a font picker draws every font with (#930): set, the entries are fonts and the field is a picker, not a plain select. */
+  /** The words a font picker draws every font with: set, the entries are fonts and the field is a picker, not a plain select. */
   fontSample?: string;
   onChange: (value: string) => void;
 };
@@ -2452,7 +2452,7 @@ function sketchFillProperties(profile: SketchProfile, onUpdate: ShapeInspectorUp
  */
 function textFontProperty(shape: WorkplaneShape, onUpdate: ShapeInspectorUpdate): ShapePropertyConfig {
   const current = shape.font ?? "Multilanguage";
-  // The words of the text itself, so the list shows how they will look (#930).
+  // The words of the text itself, so the list shows how they will look.
   const sample = typeof shape.text === "string" ? shape.text : "";
   const builtIn = t("font.builtInGroup");
   const own = t("font.customGroup");

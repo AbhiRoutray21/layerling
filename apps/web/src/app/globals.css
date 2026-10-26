@@ -10369,7 +10369,7 @@ html[data-theme="dark"] .shape-inspector .name-tag-start .name-tag-start-button:
   line-height: 1.35;
 }
 
-/* The font picker (#930): a field that draws the chosen font, and a list that draws every font. */
+/* The font picker: a field that draws the chosen font, and a list that draws every font. */
 .font-picker-button {
   display: flex;
   align-items: center;
