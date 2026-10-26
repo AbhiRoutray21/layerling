@@ -18,6 +18,7 @@ import { createLoftGeometry } from "@/lib/loftGeometry";
 import { createHingeGeometry } from "@/lib/hingeGeometry";
 import { createGridfinityGeometry } from "@/lib/gridfinityGeometry";
 import { createKnurlGeometry } from "@/lib/knurlGeometry";
+import { createVaseGeometry, fittedVaseMesh } from "@/lib/vaseShape";
 import { createTeardropGeometry } from "@/lib/teardropGeometry";
 import { createScrewHoleGeometry } from "@/lib/screwHoleGeometry";
 import { createHoneycombGeometry } from "@/lib/honeycombGeometry";
@@ -249,6 +250,7 @@ export function tapeShapeTopologyKey(shape: WorkplaneShape): string {
     knurlDepth: shape.knurlDepth,
     knurlAngle: shape.knurlAngle,
     knurlChamfer: shape.knurlChamfer,
+    vase: shape.kind === "vase" ? JSON.stringify(shape.vase ?? null) : undefined,
     dovetailNeckWidth: shape.dovetailNeckWidth,
     dovetailClearance: shape.dovetailClearance,
     loftBottomOutline: shape.loftBottomOutline,
@@ -569,6 +571,7 @@ export function shapeGeometrySignature(shape: WorkplaneShape): string {
     knurlDepth: shape.knurlDepth,
     knurlAngle: shape.knurlAngle,
     knurlChamfer: shape.knurlChamfer,
+    vase: shape.kind === "vase" ? JSON.stringify(shape.vase ?? null) : undefined,
     dovetailNeckWidth: shape.dovetailNeckWidth,
     dovetailClearance: shape.dovetailClearance,
     loftBottomOutline: shape.loftBottomOutline,
@@ -1566,6 +1569,9 @@ export function createShapeObject(
     case "knurl":
       addMesh(group, sharedShapeGeometry(geometryCacheKey, () => createKnurlGeometry({ width, height, knurlPattern: shape.knurlPattern, knurlCount: shape.knurlCount, knurlDepth: shape.knurlDepth, knurlAngle: shape.knurlAngle, knurlChamfer: shape.knurlChamfer })), material, shape);
       break;
+    case "vase":
+      addMesh(group, sharedShapeGeometry(geometryCacheKey, () => createVaseGeometry({ width, depth, height, vase: shape.vase })), material, shape);
+      break;
     case "hinge":
       addMesh(group, sharedShapeGeometry(geometryCacheKey, () => createHingeGeometry({
         width,
@@ -2161,7 +2167,9 @@ export function addShapeEdgeDecorations(group: THREE.Group, mesh: THREE.Mesh, pr
     Boolean(shape.importedMesh) ||
     ["cone", "pyramid", "roof", "roundRoof", "halfSphere", "paraboloid", "torus", "tube", "ring", "star", "gear", "wedge", "polygon", "heart", "crescent", "slot", "dovetail", "hinge", "gridfinity", "knurl", "teardrop", "counterbore", "countersink", "doubleCountersink", "honeycomb", "loft"].includes(shape.kind);
   const importedTriangleCount = shape.importedMesh?.triangleCount ?? 0;
-  const skipHeavyImportedEdges = Boolean(shape.importedMesh) && importedTriangleCount > IMPORTED_SELECTED_EDGE_TRIANGLE_LIMIT;
+  // A vase's relief has an edge at every rib: drawn like a heavy imported mesh, without the lines.
+  const skipHeavyImportedEdges = (Boolean(shape.importedMesh) && importedTriangleCount > IMPORTED_SELECTED_EDGE_TRIANGLE_LIMIT)
+    || (shape.kind === "vase" && fittedVaseMesh(shape).triangleCount > IMPORTED_SELECTED_EDGE_TRIANGLE_LIMIT);
   // The setting draws a line on every body, in the colour chosen.
   // "Show holes more clearly" (#662) gives every hole that line too, darker.
   const allEdgeLines = (edgeLineStyle.enabled || (strongHoles && Boolean(shape.hole))) && importedTriangleCount <= ALL_EDGE_LINES_IMPORTED_TRIANGLE_LIMIT;

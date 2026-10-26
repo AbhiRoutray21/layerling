@@ -199,6 +199,8 @@ type WorkplaneViewportProps = {
   /** Whether the surface texture card is open; the toolbar opens and closes it too. */
   surfaceTextureOpen?: boolean;
   onSurfaceTextureOpenChange?: (open: boolean) => void;
+  /** Lays the selected vase's accessories out beside it. */
+  onVaseAccessories?: () => void;
   onLayerText?: (patch: TextLayerPatch) => void;
   onTextTags?: (names: string[], gap: number) => void;
   /** Fixes the selected key ring tab to the nearest tag, where it was put (#598). */
@@ -1373,6 +1375,7 @@ export function WorkplaneViewport({
   onRemoveSurfaceTexture,
   surfaceTextureOpen,
   onSurfaceTextureOpenChange,
+  onVaseAccessories,
   onLayerText,
   onTextTags,
   onFixKeyringTab,
@@ -7922,6 +7925,7 @@ export function WorkplaneViewport({
           onRemoveSurfaceTexture={onRemoveSurfaceTexture}
           surfaceTextureOpen={surfaceTextureOpen}
           onSurfaceTextureOpenChange={onSurfaceTextureOpenChange}
+          onVaseAccessories={onVaseAccessories}
           onLayerText={onLayerText}
           onTextTags={onTextTags}
           onFixKeyringTab={onFixKeyringTab}
