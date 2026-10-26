@@ -78,6 +78,7 @@ import { rotatedGeometryShapePatch, rotationPatchFromQuaternion as sharedRotatio
 import type { CadModifierEdge } from "@/lib/cadModifierTypes";
 import { type CadFacePick } from "@/lib/cadFacePick";
 import { disposeCadFacePickMesh } from "@/lib/cadFacePickMesh";
+import { latchedDragAxis, type DragAxis } from "@/lib/dragAxisLatch";
 import { axisLockedPoint, circleOfEdgePoints, perpendicularFootOnSegment, pointAcrossCircle, pointOnCircle } from "@/lib/tapeCircle";
 import { syncHistoryPickHighlight, syncPickHighlight } from "@/components/workplane/historyPickHighlight";
 import { orbitViewBy, panViewBy } from "@/lib/viewArrowKeys";
@@ -441,6 +442,8 @@ type DragState = {
   /** Where the pointer went down, in screen pixels: the shape stays put until it has really travelled (#150). */
   startClient: { x: number; y: number };
   started?: boolean;
+  /** The axis a Shift drag settled on; kept until Shift is let go (#909). */
+  axisLatch?: DragAxis | null;
   /**
    * Alt was held when the drag began: what moves is a copy. Until the drop
    * creates it, the dragged shapes stand for the copy and these stand-ins
@@ -6189,16 +6192,24 @@ export function WorkplaneViewport({
       let deltaY = point.y - drag.startPoint.y;
       let deltaZ = point.z - drag.startPoint.z;
       // Shift keeps the move on one axis of the workplane: the one the pointer
-      // has travelled further along since the drag began. It is decided anew
-      // with every move, so crossing the diagonal switches axis.
-      const axisLock = event.shiftKey ? dragAxisLock(drag.workplane, deltaX, deltaY, deltaZ) : null;
+      // has travelled further along once it has gone a few pixels. The axis is then
+      // kept until Shift is let go, so crossing the diagonal does not switch it (#909).
+      let axisLock: ReturnType<typeof dragAxisLock> | null = null;
+      if (event.shiftKey) {
+        const dominant = dragAxisLock(drag.workplane, deltaX, deltaY, deltaZ);
+        const choice = latchedDragAxis(drag.axisLatch ?? null, dominant.along, Math.hypot(event.clientX - drag.startClient.x, event.clientY - drag.startClient.y));
+        drag.axisLatch = choice.latched;
+        axisLock = choice.along ? dragAxisLock(drag.workplane, deltaX, deltaY, deltaZ, choice.along) : { ...dominant, delta: { x: 0, y: 0, z: 0 }, still: true };
+      } else {
+        drag.axisLatch = null;
+      }
       if (axisLock) {
         deltaX = axisLock.delta.x;
         deltaY = axisLock.delta.y;
         deltaZ = axisLock.delta.z;
       }
       const state = threeRef.current;
-      if (drag.snapMoving && drag.snapTargets?.length && state) {
+      if (drag.snapMoving && drag.snapTargets?.length && state && !axisLock?.still) {
         let guides: ObjectSnapGuide[] = [];
         const raw = event.altKey ? null : toRawPlanePoint(event.clientX, event.clientY, new THREE.Plane(new THREE.Vector3(0, 1, 0), -drag.workplane.origin.y));
         if (raw) {
@@ -8173,10 +8184,10 @@ function findSelectedGroundFootprint(state: ThreeState, id: string) {
  * the one the move has gone further along. On the flat workplane those are
  * X and Z; on a tilted one they are the plane's own.
  */
-function dragAxisLock(workplane: PlacementWorkplane, deltaX: number, deltaY: number, deltaZ: number) {
+function dragAxisLock(workplane: PlacementWorkplane, deltaX: number, deltaY: number, deltaZ: number, forced?: DragAxis): { along: DragAxis; delta: { x: number; y: number; z: number }; still?: boolean } {
   const alongX = deltaX * workplane.xAxis.x + deltaY * workplane.xAxis.y + deltaZ * workplane.xAxis.z;
   const alongZ = deltaX * workplane.zAxis.x + deltaY * workplane.zAxis.y + deltaZ * workplane.zAxis.z;
-  const along: "x" | "z" = Math.abs(alongX) >= Math.abs(alongZ) ? "x" : "z";
+  const along: DragAxis = forced ?? (Math.abs(alongX) >= Math.abs(alongZ) ? "x" : "z");
   const axis = along === "x" ? workplane.xAxis : workplane.zAxis;
   const distance = along === "x" ? alongX : alongZ;
   return { along, delta: { x: axis.x * distance, y: axis.y * distance, z: axis.z * distance } };
