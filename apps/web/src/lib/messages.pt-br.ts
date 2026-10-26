@@ -392,7 +392,7 @@ export const MESSAGES_PT_BR: Partial<Record<MessageKey, string>> = {
   "editor.import": "Importar",
   "editor.export": "Exportar",
   "editor.attachments": "Anexos",
-  "editor.attachmentsCount": "Anexos ({count})",
+  "editor.attachmentsCount": "{count} anexo(s)",
   "editor.workspaceSettings": "Configurações da área de trabalho",
   "editor.keyboardShortcuts": "Atalhos de teclado",
   "editor.bugReport": "Relatar erro",
