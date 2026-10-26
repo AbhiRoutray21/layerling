@@ -6,6 +6,7 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **Brazilian Portuguese: 43 sentences from 1.111.0 (PR #929):** The interface in Brazilian Portuguese (`pt-br`) gains the sentences it was missing since 1.111.0 - the attachments panel, "Colar no meio e baixar", "Luz suave", the calculation status lines, "Agrupar cópias" and the Alt+arrow shortcut - and five welcome sentences and two sketch shortcuts are brought up to date with the English. The language stays marked as incomplete until two people have read it. Contributed by @lmagalhaes.
 ## 1.113.0
 
 - **A paraboloid shape (#922):** A new shape **Paraboloid** next to the half sphere: a dome whose height falls with the square of the distance from the axis, with a rounded tip and an oval footprint when width and depth differ. One property, the number of steps. It is a mesh body, not an exact CAD profile; it is in the shape catalogue, the command search and the AI bridge like the other shapes.
