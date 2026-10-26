@@ -2190,6 +2190,7 @@ export const MESSAGES_NL: Record<MessageKey, string> = {
   "gridfinity.paddingHint": "Een massieve opvulling buiten het raster, zodat de draagplaat een lade vult die geen heel aantal eenheden meet. Een andere opvulling houdt de eenheden en verandert de maat van de plaat mee.",
   "prop.gridfinityCornerRadius": "Hoekradius",
   "gridfinity.cornerRadiusHint": "De straal van de vier buitenhoeken van de plaat: 4 mm zoals de Gridfinity-specificatie ze tekent, tot 0 voor rechte hoeken die in de hoeken van een lade passen. De vakken houden hun ronding, dus bakken passen zoals voorheen.",
+  "gridfinity.binCornerRadiusHint": "De straal van de buitenhoeken van de bak boven zijn voeten: 3,75 mm zoals de Gridfinity-specificatie ze tekent, tot 0 voor rechte hoeken, zodat bakken naast elkaar in een lade ook waar er vier samenkomen alleen hun spleten van 0,5 mm laten. De voeten, de binnenkant en de schuine kanten van de stapellip houden hun ronding, dus de bak staat in een plaat en stapelt zoals voorheen.",
   "prop.gridfinityDrawerWidth": "Ladebreedte",
   "prop.gridfinityDrawerDepth": "Ladediepte",
   "gridfinity.drawerHint": "De binnenmaat van de lade; de plaat wordt 0,5 mm kleiner. Een lade groter dan 334,5 mm of groter dan je printbed krijgt meerdere draagplaten.",
