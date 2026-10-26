@@ -77,6 +77,7 @@ La IA trabaja con las mismas funciones que tú, por el mismo camino que sigues c
 | `layerling_list_edges` | lista las aristas CAD reales de un objeto |
 | `layerling_apply_edge_treatment` | achaflana o redondea las aristas elegidas |
 | `layerling_hollow_object` | vacía un cuerpo con una pared uniforme |
+| `layerling_offset_object` | desfasa todas las caras de un cuerpo para la holgura de un ajuste: lo agranda o reduce, o añade la copia agrandada como hueco |
 | `layerling_list_faces` | lista las caras de un cuerpo exacto |
 | `layerling_delete_faces` | elimina caras y cierra el hueco |
 | `layerling_array_objects` | multiplica en una fila o en un círculo |

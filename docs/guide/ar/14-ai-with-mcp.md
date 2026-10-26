@@ -77,6 +77,7 @@ summary: كيف ينشئ مساعد ذكاء اصطناعي مثل Gemini أو C
 | `layerling_list_edges` | تسرد حواف CAD الحقيقية لجسم |
 | `layerling_apply_edge_treatment` | تشطف الحواف المختارة أو تنعّمها |
 | `layerling_hollow_object` | تفرّغ جسمًا بجدار متساوي السمك |
+| `layerling_offset_object` | تزيح كل أوجه الجسم لخلوص التركيب: تكبّره أو تصغّره أو تضيف النسخة المكبّرة كثقب |
 | `layerling_list_faces` | تسرد أوجه جسم دقيق |
 | `layerling_delete_faces` | تحذف أوجهًا وتسدّ الفجوة |
 | `layerling_array_objects` | تكرّر في صف أو على دائرة |

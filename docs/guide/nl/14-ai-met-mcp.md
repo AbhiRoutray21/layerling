@@ -73,6 +73,7 @@ De AI werkt met dezelfde functies als jij, via dezelfde weg als jouw bediening i
 | `layerling_list_edges` | somt de echte CAD-randen van een object op |
 | `layerling_apply_edge_treatment` | schuint gekozen randen af of rondt ze af |
 | `layerling_hollow_object` | holt een lichaam uit met een gelijkmatige wand |
+| `layerling_offset_object` | verschuift alle vlakken van een lichaam voor de speling van een pasvorm: vergroot of verkleint het, of voegt de vergrote kopie als gat toe |
 | `layerling_list_faces` | somt de vlakken van een exact lichaam op |
 | `layerling_delete_faces` | verwijdert vlakken en sluit de opening |
 | `layerling_array_objects` | vermenigvuldigt in een rij of op een cirkel |

@@ -77,6 +77,7 @@ AI 使用与你相同的功能，走的是与你在编辑器中的操作相同�
 | `layerling_list_edges` | 列出一个对象真实的 CAD 边 |
 | `layerling_apply_edge_treatment` | 对选定的边做倒角或圆角 |
 | `layerling_hollow_object` | 用均匀的壁抽壳实体 |
+| `layerling_offset_object` | 移动实体的所有面以得到配合间隙：放大或缩小实体，或把放大的副本作为孔添加 |
 | `layerling_list_faces` | 列出精确实体的面 |
 | `layerling_delete_faces` | 删除面并闭合缺口 |
 | `layerling_array_objects` | 按行或沿圆周复制 |

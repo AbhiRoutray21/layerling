@@ -77,6 +77,7 @@ AI pracuje tymi samymi funkcjami co Ty, tą samą drogą co Twoja praca w edytor
 | `layerling_list_edges` | wypisuje prawdziwe krawędzie CAD obiektu |
 | `layerling_apply_edge_treatment` | fazuje albo zaokrągla wybrane krawędzie |
 | `layerling_hollow_object` | drąży bryłę z równą ścianką |
+| `layerling_offset_object` | odsuwa wszystkie ściany bryły na luz pasowania: powiększa lub zmniejsza ją albo dodaje powiększoną kopię jako otwór |
 | `layerling_list_faces` | wypisuje ściany dokładnej bryły |
 | `layerling_delete_faces` | usuwa ściany i zamyka lukę |
 | `layerling_array_objects` | powiela w rzędzie albo na okręgu |

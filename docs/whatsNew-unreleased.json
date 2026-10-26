@@ -18,5 +18,15 @@
       "de": "Bei Rohr und Ring gibt es den Schalter „Bohrung schneidet beim Gruppieren wie ein Loch“. Gruppierst du dann zwei Rohre in einer T-Verbindung, öffnet die Bohrung auch die Wand des anderen Rohrs.",
       "en": "Tube and ring have a new switch, “Bore cuts as a hole when grouped”. Group two tubes in a T-junction and the bore now opens the wall of the other tube too."
     }
+  },
+  {
+    "title": {
+      "de": "Versatz: Körper um einen Abstand vergrößern oder verkleinern",
+      "en": "Offset: grow or shrink a body by a distance"
+    },
+    "body": {
+      "de": "Das neue Werkzeug „Versatz“ neben „Aushöhlen“ verschiebt jede Fläche eines Körpers um denselben Abstand, nach außen oder innen. So bekommst du das Spiel für Passungen und Schnappverbindungen: Mit dem Haken „Original behalten“ bleibt dein Teil, und die vergrößerte Kopie liegt schon als Loch daneben, bereit zum Gruppieren mit dem Gegenstück.",
+      "en": "The new Offset tool next to Hollow moves every face of a body by the same distance, out or in. That gives you the clearance for press fits and snap joints: with \"Keep the original\" ticked your part stays and the grown copy is already a hole beside it, ready to group with the mating part."
+    }
   }
 ]
