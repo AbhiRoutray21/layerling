@@ -151,6 +151,8 @@ Nosná deska může mít pruh, pro zásuvku, která nemá celý počet jednotek 
 
 {{ui:prop.hingeClearance}} je mezera kolem čepu, mezi klouby a před křídly. Při 0,4 mm dobře seřízená tiskárna obvykle vytvoří pant uvolnitelný lehkým pootočením. Při slepení vůli zvětšete, při viklání zmenšete. Tiskněte naležato jako v náhledu a bez podpěr. Do křídel lze přidat otvory nebo je začlenit do většího dílu, například víka.
 
+Pant lze vyrobit i {{ui:hinge.styleCone}} (pod {{ui:prop.hingeStyle}}): každý druhý kloub pak končí kužely, které zapadají do kuželových důlků sousedních kloubů. Není tu čep ani dlouhý most, který by se mohl prověsit, takže se tiskne vleže; kužely mají sklon 45°. Je to síť, takže na něm nefungují zkosení a zaoblení a export STEP obsahuje trojúhelníky; kde by klouby byly na kužel příliš krátké, vytvoří jich méně. Místo počtu kloubů lze zadat {{ui:prop.hingeKnuckleWidth}}: klouby jsou pak nejvýše tak široké a jejich počet vyplyne z délky; zadání počtu kloubů šířku opět zruší.
+
 ## Rýhované úchopy
 
 {{ui:shape.knurl}} je kulatý úchop pro ovladače, ruční kolečka a rukojeti. {{ui:prop.knurlPattern}} nabízí {{ui:knurl.straight}} podél osy, {{ui:knurl.diamond}} se dvěma křížícími se šikmými soustavami a {{ui:knurl.round}} s oblými podélnými vlnami pro měkký úchop. Oblé drážky musí být mělčí než polovina rozteče, jinak se vyboulují u paty; příliš velká hloubka se omezí. Zadejte {{ui:prop.diameter}}, {{ui:prop.height}}, {{ui:prop.knurlCount}}, {{ui:prop.knurlDepth}} a u křížení {{ui:prop.knurlAngle}} vůči ose. {{ui:prop.knurlChamfer}} zkosí oba konce pod 45°, nula zachová ostré hrany.

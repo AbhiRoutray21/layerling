@@ -175,6 +175,10 @@ export type ShapeCustomization = {
   honeycombFrameWidth?: number;
   /** Hinge: how many knuckles share the axis, odd so the pin's part holds both ends. */
   hingeKnuckles?: number;
+  /** Hinge: the knuckles are at most this wide in mm and their number follows; left out, the count of `hingeKnuckles` stands (#907). */
+  hingeKnuckleWidth?: number;
+  /** Hinge: "pin" (default) or "cone": cones on every other knuckle that nest into the others, printing without bridges (#907). */
+  hingeStyle?: "pin" | "cone";
   /** Hinge: diameter of the pin in mm; the other part's bore is wider by the clearance. */
   hingePinDiameter?: number;
   /** Hinge: thickness of the two leaves in mm. */
@@ -828,6 +832,10 @@ export type WorkplaneShape = {
   honeycombFrameWidth?: number;
   /** Hinge: how many knuckles share the axis, odd so the pin's part holds both ends. */
   hingeKnuckles?: number;
+  /** Hinge: the knuckles are at most this wide in mm and their number follows; left out, the count of `hingeKnuckles` stands (#907). */
+  hingeKnuckleWidth?: number;
+  /** Hinge: "pin" (default) or "cone": cones on every other knuckle that nest into the others, printing without bridges (#907). */
+  hingeStyle?: "pin" | "cone";
   /** Hinge: diameter of the pin in mm; the other part's bore is wider by the clearance. */
   hingePinDiameter?: number;
   /** Hinge: thickness of the two leaves in mm. */

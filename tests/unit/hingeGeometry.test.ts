@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import * as THREE from "three";
 import { hingeWorldParts } from "@/lib/hingeParts";
-import { hingeLocalParts, hingePlan, hingeTriangles, normalizeHingeKnuckles, normalizeHingeLeafThickness, normalizeHingePinDiameter } from "@/lib/hingeGeometry";
+import { hingeConeRadius, hingeKnucklesForWidth, hingeLocalParts, hingePlan, hingeTriangles, normalizeHingeKnuckleWidth, normalizeHingeKnuckles, normalizeHingeLeafThickness, normalizeHingePinDiameter } from "@/lib/hingeGeometry";
 
 type V = [number, number, number];
 
@@ -181,5 +181,85 @@ describe("hinge geometry", () => {
       expect(range(corners, axis)[0]).toBeCloseTo(range(mesh, axis)[0], 1);
       expect(range(corners, axis)[1]).toBeCloseTo(range(mesh, axis)[1], 1);
     }
+  });
+});
+
+describe("a knuckle width instead of a count (#907)", () => {
+  it("takes the fewest odd knuckles that are not wider than asked", () => {
+    // 40 mm with 0.4 mm gaps: 3 knuckles are 13.07 wide, 5 are 7.68, 7 are 5.37, 9 are 4.09.
+    expect(hingeKnucklesForWidth(40, 14)).toBe(3);
+    expect(hingeKnucklesForWidth(40, 8)).toBe(5);
+    expect(hingeKnucklesForWidth(40, 5.4)).toBe(7);
+    expect(hingeKnucklesForWidth(40, 5.3)).toBe(9);
+  });
+
+  it("follows the length of the hinge", () => {
+    expect(hingeKnucklesForWidth(80, 8)).toBe(11);
+    expect(hingePlan({ width: 80, height: 8, hingeKnuckleWidth: 8 }).knuckles).toBe(11);
+    expect(hingePlan({ width: 40, height: 8, hingeKnuckleWidth: 8 }).knuckles).toBe(5);
+  });
+
+  it("reaches 31 knuckles and no further, and never one shorter than 1 mm", () => {
+    expect(hingeKnucklesForWidth(300, 1)).toBe(31);
+    expect(hingePlan({ width: 20, height: 8, hingeKnuckleWidth: 1 }).knuckleLength).toBeGreaterThanOrEqual(1);
+  });
+
+  it("leaves the count to hingeKnuckles without a width, and a width below 1 counts as 1", () => {
+    expect(hingePlan({ width: 40, height: 8, hingeKnuckles: 7 }).knuckles).toBe(7);
+    expect(hingePlan({ width: 40, height: 8, hingeKnuckles: 7, hingeKnuckleWidth: 0 }).knuckles).toBe(7);
+    expect(normalizeHingeKnuckleWidth(0)).toBeUndefined();
+    expect(normalizeHingeKnuckleWidth(-3)).toBeUndefined();
+    expect(normalizeHingeKnuckleWidth(0.4)).toBe(1);
+    expect(normalizeHingeKnuckleWidth(6)).toBe(6);
+  });
+
+  it("builds a closed body with the computed count", () => {
+    const triangles = hingeTriangles({ width: 40, height: 8, hingeKnuckleWidth: 5.4 });
+    expect(edgeProblems(triangles)).toBe(0);
+    expect(hingePlan({ width: 40, height: 8, hingeKnuckleWidth: 5.4 }).knuckles).toBe(7);
+  });
+});
+
+describe("the cone hinge (#907)", () => {
+  const cases = [
+    { width: 40, height: 8, hingeStyle: "cone" },
+    { width: 40, height: 8, hingeStyle: "cone", hingeAngle: 90 },
+    { width: 60, depth: 50, height: 10, hingeStyle: "cone", hingeKnuckles: 7, hingeClearance: 0.3, sides: 24 },
+    { width: 30, height: 6, hingeStyle: "cone", hingeKnuckleWidth: 5 },
+    { width: 15, height: 12, hingeStyle: "cone", hingeKnuckles: 15 },
+  ];
+
+  it("is a closed, consistently wound body in every case", () => {
+    cases.forEach((shape) => expect(edgeProblems(hingeTriangles(shape)), JSON.stringify(shape)).toBe(0));
+  });
+
+  it("has no pin and no bore, only cones and recesses", () => {
+    const plain = JSON.stringify(hingeTriangles({ width: 40, height: 8 }));
+    const coned = JSON.stringify(hingeTriangles({ width: 40, height: 8, hingeStyle: "cone" }));
+    expect(coned).not.toBe(plain);
+    const plan = hingePlan({ width: 40, height: 8, hingeStyle: "cone" });
+    expect(plan.style).toBe("cone");
+    expect(plan.coneRadius).toBeGreaterThan(0.7);
+    expect(plan.recessRadius).toBeGreaterThan(plan.coneRadius - plan.clearance);
+  });
+
+  it("keeps a wall between the two recesses of a knuckle and the clearance to the cone", () => {
+    cases.forEach((shape) => {
+      const plan = hingePlan(shape);
+      expect(plan.knuckleLength - 2 * plan.recessDepth, JSON.stringify(shape)).toBeGreaterThanOrEqual(0.99);
+      // The cone's point stays short of the recess's by the radial gap.
+      expect(plan.recessDepth + plan.clearance - plan.coneRadius).toBeGreaterThan(0);
+    });
+  });
+
+  it("makes fewer knuckles when they are too short for a cone", () => {
+    const plan = hingePlan({ width: 15, height: 12, hingeStyle: "cone", hingeKnuckles: 15 });
+    expect(plan.knuckles).toBeLessThan(15);
+    expect(hingeConeRadius(plan.knuckleLength, 12, plan.clearance)).toBeGreaterThanOrEqual(0.8);
+  });
+
+  it("is the pin hinge when the style is anything else", () => {
+    expect(hingePlan({ width: 40, height: 8, hingeStyle: "other" }).style).toBe("pin");
+    expect(hingeTriangles({ width: 40, height: 8, hingeStyle: "other" }).length).toBe(hingeTriangles({ width: 40, height: 8 }).length);
   });
 });

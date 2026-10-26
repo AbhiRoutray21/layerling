@@ -38,5 +38,15 @@
       "de": "Stehen viele Körper an den Armen des Winkellineals, zeigt jeder seine Maße, und die Zahlen lassen sich nicht mehr zuordnen. Ein neuer Knopf unter dem Griff des Lineals schaltet das ab: Dann zeigen nur die ausgewählten Körper Maße. Die Wahl wird mit dem Entwurf gespeichert.",
       "en": "With many bodies at the arms of the framing square, each shows its measures and the numbers can no longer be told apart. A new button under the square's handle switches that off: then only the selected bodies show measures. The choice is kept with the design."
     }
+  },
+  {
+    "title": {
+      "de": "Scharnier mit Kegeln",
+      "en": "A hinge with cones"
+    },
+    "body": {
+      "de": "Das Scharnier gibt es jetzt auch mit Kegeln statt Stift: Jeder zweite Knöchel endet in Kegeln, die in Mulden der Nachbarn passen, ohne lange Brücke, die durchhängen könnte. Statt der Zahl der Knöchel kannst du außerdem ihre größte Breite angeben.",
+      "en": "The hinge now also comes with cones instead of a pin: every other knuckle ends in cones that fit into recesses of its neighbours, with no long bridge that could sag. Instead of the number of knuckles you can also give their widest width."
+    }
   }
 ]

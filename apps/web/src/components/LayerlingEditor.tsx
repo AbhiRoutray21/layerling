@@ -8,6 +8,7 @@ import type { AppThemePreference, ResolvedAppTheme } from "@/lib/appTheme";
 import { t, type MessageKey } from "@/lib/i18n";
 import { useLanguage } from "@/lib/useLanguage";
 import { loftShapePatch, type LoftMeasures } from "@/lib/loftGeometry";
+import { hingeHasExactParts } from "@/lib/hingeGeometry";
 import { hingeWorldParts } from "@/lib/hingeParts";
 import { copyViaSelectionField, decodeClipboardPayload, encodeClipboardPayload, LOCAL_CLIPBOARD_LIMIT, newestClipboard, type ClipboardPayload } from "@/lib/clipboardPayload";
 import { bentTubeNaturalDimensions, normalizedBentTubeFields } from "@/lib/bentTubeGeometry";
@@ -2163,7 +2164,7 @@ function textGlyphIndexByFace(shape: WorkplaneShape, faceCount: number) {
 
 function cadModifierSourceParts(shape: WorkplaneShape) {
   // The hinge reaches the kernel as the boxes, cylinders and tubes it is made of.
-  if (shape.kind === "hinge" && !shape.importedMesh && !shape.cadBrep && !shapeHasShapeDeform(shape)) return hingeWorldParts(shape);
+  if (shape.kind === "hinge" && hingeHasExactParts(shape) && !shape.importedMesh && !shape.cadBrep && !shapeHasShapeDeform(shape)) return hingeWorldParts(shape);
   if (shape.kind !== "text" || shape.importedMesh || shape.cadBrep) return [shape];
   const mesh = meshForShape(shape);
   const components = meshFaceComponents(mesh).filter((component) => component.length > 0);

@@ -480,6 +480,8 @@ function geometryMeshForShape(shape: WorkplaneShape): MeshData | null {
         depth,
         height,
         hingeKnuckles: shape.hingeKnuckles,
+        hingeKnuckleWidth: shape.hingeKnuckleWidth,
+        hingeStyle: shape.hingeStyle,
         hingePinDiameter: shape.hingePinDiameter,
         hingeLeafThickness: shape.hingeLeafThickness,
         hingeClearance: shape.hingeClearance,

@@ -378,10 +378,12 @@ export function normalizeShapeCustomizations(value: unknown, fallback: ShapeCust
     }
     if (kind === "hinge") {
       entry.hingeKnuckles = optionalShapeNumber(source.hingeKnuckles, fallbackEntry?.hingeKnuckles, 3, 15, true);
+      entry.hingeKnuckleWidth = optionalShapeNumber(source.hingeKnuckleWidth, fallbackEntry?.hingeKnuckleWidth, 1, MAX_CUSTOM_SHAPE_DIMENSION);
       entry.hingePinDiameter = optionalShapeNumber(source.hingePinDiameter, fallbackEntry?.hingePinDiameter, 0.2, MAX_CUSTOM_SHAPE_DIMENSION);
       entry.hingeLeafThickness = optionalShapeNumber(source.hingeLeafThickness, fallbackEntry?.hingeLeafThickness, 0.1, MAX_CUSTOM_SHAPE_DIMENSION);
       entry.hingeClearance = optionalShapeNumber(source.hingeClearance, fallbackEntry?.hingeClearance, 0.1, 1);
       entry.hingePinless = typeof source.hingePinless === "boolean" ? source.hingePinless : fallbackEntry?.hingePinless;
+      entry.hingeStyle = source.hingeStyle === "cone" ? "cone" : source.hingeStyle === "pin" ? "pin" : fallbackEntry?.hingeStyle;
     }
     if (kind === "gridfinity") {
       entry.gridfinityType = source.gridfinityType === "bin" || source.gridfinityType === "baseplate" || source.gridfinityType === "tray" ? source.gridfinityType : fallbackEntry?.gridfinityType;

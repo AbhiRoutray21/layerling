@@ -257,7 +257,7 @@ import {
   gridfinityWallThickness,
   normalizeGridfinityType,
 } from "@/lib/gridfinityGeometry";
-import { MAX_HINGE_ANGLE, MAX_HINGE_CLEARANCE, MAX_HINGE_KNUCKLES, MIN_HINGE_CLEARANCE, MIN_HINGE_KNUCKLES, hingePlan, minimumHingeDepth, normalizeHingeAngle, normalizeHingeClearance, normalizeHingeKnuckles, normalizeHingeLeafThickness, normalizeHingePinDiameter } from "@/lib/hingeGeometry";
+import { MAX_HINGE_ANGLE, MAX_HINGE_CLEARANCE, MAX_HINGE_KNUCKLES, MIN_HINGE_CLEARANCE, MIN_HINGE_KNUCKLES, hingePlan, minimumHingeDepth, normalizeHingeAngle, normalizeHingeClearance, normalizeHingeKnuckles, normalizeHingeKnuckleWidth, normalizeHingeLeafThickness, normalizeHingePinDiameter } from "@/lib/hingeGeometry";
 import { useLanguage } from "@/lib/useLanguage";
 import { useMovablePanel, type MovablePanelOptions } from "@/lib/useMovablePanel";
 import { isNonSolidShape, resizedShapeSize, shapeDepth, shapeHasTaper, shapeOverallFootprintDimensions, shapeSupportsTaper, shapeTaperDimensions, shapeWidth } from "@/lib/workplaneShapes";
@@ -1199,26 +1199,47 @@ function getShapePropertiesWithAppLimits(shape: WorkplaneShape, onUpdate: ShapeI
       { id: "length", label: t("prop.hingeOpenWidth"), value: depth, min: minimumHingeDepth(shape.height, plan.leaf, plan.clearance), max: 300, onChange: setDepth },
       { id: "height", label: t("prop.hingeKnuckleDiameter"), value: shape.height, min: 2, max: 60, onChange: setHeight },
       {
+        type: "select",
+        id: "hingeStyle",
+        label: t("prop.hingeStyle"),
+        value: plan.style,
+        options: [{ value: "pin", label: t("hinge.stylePin") }, { value: "cone", label: t("hinge.styleCone") }],
+        hint: plan.style === "cone" ? t("hinge.styleConeHint") : undefined,
+        onChange: (value) => onUpdate({ hingeStyle: value === "cone" ? "cone" : undefined }),
+      },
+      {
         id: "hingeKnuckles",
         label: t("prop.hingeKnuckles"),
         value: plan.knuckles,
         min: MIN_HINGE_KNUCKLES,
         max: MAX_HINGE_KNUCKLES,
         step: 2,
-        onChange: (value) => onUpdate({ hingeKnuckles: normalizeHingeKnuckles(value, width, plan.clearance) }),
+        // Typing a count takes the width away: the two ways of saying how many do not mix (#907).
+        onChange: (value) => onUpdate({ hingeKnuckles: normalizeHingeKnuckles(value, width, plan.clearance), hingeKnuckleWidth: undefined }),
       },
       {
+        id: "hingeKnuckleWidth",
+        label: t("prop.hingeKnuckleWidth"),
+        value: shape.hingeKnuckleWidth ?? 0,
+        min: 0,
+        max: 100,
+        step: 0.5,
+        hint: t("prop.hingeKnuckleWidthHint"),
+        onChange: (value) => onUpdate({ hingeKnuckleWidth: normalizeHingeKnuckleWidth(value) }),
+      },
+      // The cone hinge has no pin: its cones take the pin's place.
+      ...(plan.style === "cone" ? [] : [{
         id: "hingePinDiameter",
         label: t("prop.hingePinDiameter"),
         value: plan.pinRadius * 2,
         min: 0.2,
         max: Math.max(0.4, shape.height - 2 * (plan.clearance + 0.4)),
         step: 0.1,
-        onChange: (value) => {
+        onChange: (value: number) => {
           const pin = normalizeHingePinDiameter(value, shape.height, plan.clearance);
           onUpdate({ hingePinDiameter: pin, hingeLeafThickness: normalizeHingeLeafThickness(plan.leaf, shape.height, pin, plan.clearance) });
         },
-      },
+      }]),
       {
         id: "hingeLeafThickness",
         label: t("prop.hingeLeafThickness"),
@@ -1229,7 +1250,7 @@ function getShapePropertiesWithAppLimits(shape: WorkplaneShape, onUpdate: ShapeI
         onChange: (value) => onUpdate({ hingeLeafThickness: normalizeHingeLeafThickness(value, shape.height, plan.pinRadius * 2, plan.clearance) }),
       },
       { id: "hingeAngle", label: t("prop.hingeAngle"), value: plan.angle, min: 0, max: MAX_HINGE_ANGLE, step: 1, onChange: (value) => onUpdate({ hingeAngle: normalizeHingeAngle(value) }) },
-      { type: "toggle", id: "hingePinless", label: t("prop.hingePinless"), value: plan.pinless, onChange: (value) => onUpdate({ hingePinless: value }) },
+      ...(plan.style === "cone" ? [] : [{ type: "toggle" as const, id: "hingePinless", label: t("prop.hingePinless"), value: plan.pinless, onChange: (value: boolean) => onUpdate({ hingePinless: value }) }]),
       {
         id: "hingeClearance",
         label: t("prop.hingeClearance"),
