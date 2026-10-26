@@ -195,13 +195,16 @@ import {
   MAX_GRIDFINITY_HEIGHT_UNITS,
   MAX_GRIDFINITY_LIP_CHAMFER,
   MAX_GRIDFINITY_PADDING,
+  MAX_GRIDFINITY_TRAY_HEIGHT,
+  MAX_GRIDFINITY_TRAY_SIZE,
   MIN_GRIDFINITY_COMPARTMENT_LABEL_LENGTH,
   MIN_GRIDFINITY_COMPARTMENT_LABEL_MM,
   MIN_GRIDFINITY_DIVIDER_THICKNESS,
   MIN_GRIDFINITY_DRAWER,
-  MIN_GRIDFINITY_FLOOR_HEIGHT,
   MIN_GRIDFINITY_LABEL_WIDTH,
   MIN_GRIDFINITY_SCOOP_RADIUS,
+  MIN_GRIDFINITY_TRAY_HEIGHT,
+  MIN_GRIDFINITY_TRAY_SIZE,
   MIN_GRIDFINITY_UNITS,
   MIN_GRIDFINITY_WALL_THICKNESS,
   type GridfinityAxis,
@@ -224,6 +227,7 @@ import {
   gridfinityFloorFits,
   gridfinityFloorHeight,
   gridfinityFloorMaxHeight,
+  gridfinityFloorMinHeight,
   gridfinityLabelCornerSize,
   gridfinityLabelFits,
   gridfinityLabelLength,
@@ -275,7 +279,7 @@ import {
 import { regularPolygonAspect } from "@/lib/regularPolygonFootprint";
 import { DEFAULT_TAPER_DIMENSION_MAX, MAX_HIGH_RESOLUTION_SIDES, MAX_HIGH_RESOLUTION_STEPS, POSITION_TYPED_LIMIT, RULER_MAX_LENGTH, customSnapGridLabel, positionReach, shapeDimensionLimit, snapGridOptions, snapGridStep } from "@/lib/workplaneSettings";
 import { printerPresetById } from "@/lib/printBed";
-import type { BentTubeInnerProfile, BentTubeProfile, CustomSnapGrid, GearType, GridfinityCompartmentLabel, GridSize, MeasurementAccuracy, ShapeCustomization, SketchProfile, SketchStroke, SketchStrokeAlign, SketchStrokeJoin, ThreadHead, ThreadProfile, ThreadRole, WorkplaneShape, WorkplaneWorkspaceSettings } from "@/types/layerling";
+import type { BentTubeInnerProfile, BentTubeProfile, CustomSnapGrid, GearType, GridfinityCompartmentLabel, GridfinityType, GridSize, MeasurementAccuracy, ShapeCustomization, SketchProfile, SketchStroke, SketchStrokeAlign, SketchStrokeJoin, ThreadHead, ThreadProfile, ThreadRole, WorkplaneShape, WorkplaneWorkspaceSettings } from "@/types/layerling";
 import { selectWholeValue } from "@/lib/numberField";
 import { formulaMatchesValue, formulaToRemember, withFieldFormula, type FieldFormulas } from "@/lib/fieldFormulas";
 import { useKeptColors, useRecentColors } from "@/lib/recentColors";
@@ -992,7 +996,7 @@ function getShapePropertiesWithAppLimits(shape: WorkplaneShape, onUpdate: ShapeI
 
   if (shape.kind === "gridfinity") {
     const plan = gridfinityPlan({ ...shape, depth });
-    // The size is whole grid units; every change writes the box they make.
+    // The size is whole grid units; every change writes the box they make; a tray's is free in mm.
     const apply = (next: Parameters<typeof gridfinityShapePatch>[1]) => {
       const patch = gridfinityShapePatch({ ...shape, depth }, next);
       onUpdate({ ...patch, size: resizedShapeSize(patch.width, patch.depth) });
@@ -1003,19 +1007,28 @@ function getShapePropertiesWithAppLimits(shape: WorkplaneShape, onUpdate: ShapeI
         id: "gridfinityType",
         label: t("prop.gridfinityType"),
         value: plan.type,
-        options: [{ value: "bin", label: t("gridfinity.bin") }, { value: "baseplate", label: t("gridfinity.baseplate") }],
-        hint: t(plan.type === "bin" ? "gridfinity.binHint" : "gridfinity.baseplateHint"),
+        options: [{ value: "bin", label: t("gridfinity.bin") }, { value: "baseplate", label: t("gridfinity.baseplate") }, { value: "tray", label: t("gridfinity.tray") }],
+        hint: t(plan.type === "bin" ? "gridfinity.binHint" : plan.type === "baseplate" ? "gridfinity.baseplateHint" : "gridfinity.trayHint"),
         onChange: (value) => apply({ type: normalizeGridfinityType(value) }),
       },
     ];
     if (plan.type === "bin") {
       properties.push({ type: "toggle", id: "gridfinityHalfGrid", label: t("prop.gridfinityHalfGrid"), value: plan.halfGrid, onChange: (value) => apply({ halfGrid: value }) });
     }
-    const maxUnits = gridfinityMaxUnits(shape);
-    properties.push(
-      { id: "gridfinityUnitsX", label: t("prop.gridfinityUnitsX"), value: plan.count.x, min: MIN_GRIDFINITY_UNITS, max: maxUnits, step: 1, hint: plan.halfGrid ? t("gridfinity.halfGridHint") : undefined, onChange: (value) => apply({ x: Math.round(value) }) },
-      { id: "gridfinityUnitsZ", label: t("prop.gridfinityUnitsZ"), value: plan.count.z, min: MIN_GRIDFINITY_UNITS, max: maxUnits, step: 1, onChange: (value) => apply({ z: Math.round(value) }) },
-    );
+    if (plan.type === "tray") {
+      // A tray (#837) has no grid: its size is free in mm, as a box's.
+      properties.push(
+        { id: "length", label: t("prop.length"), value: plan.size.depth, min: MIN_GRIDFINITY_TRAY_SIZE, max: MAX_GRIDFINITY_TRAY_SIZE, onChange: setDepth },
+        { id: "width", label: t("prop.width"), value: plan.size.width, min: MIN_GRIDFINITY_TRAY_SIZE, max: MAX_GRIDFINITY_TRAY_SIZE, onChange: setWidth },
+        { id: "height", label: t("prop.height"), value: plan.size.height, min: MIN_GRIDFINITY_TRAY_HEIGHT, max: MAX_GRIDFINITY_TRAY_HEIGHT, onChange: setHeight },
+      );
+    } else {
+      const maxUnits = gridfinityMaxUnits(shape);
+      properties.push(
+        { id: "gridfinityUnitsX", label: t("prop.gridfinityUnitsX"), value: plan.count.x, min: MIN_GRIDFINITY_UNITS, max: maxUnits, step: 1, hint: plan.halfGrid ? t("gridfinity.halfGridHint") : undefined, onChange: (value) => apply({ x: Math.round(value) }) },
+        { id: "gridfinityUnitsZ", label: t("prop.gridfinityUnitsZ"), value: plan.count.z, min: MIN_GRIDFINITY_UNITS, max: maxUnits, step: 1, onChange: (value) => apply({ z: Math.round(value) }) },
+      );
+    }
     if (plan.type === "baseplate") {
       // The drawer it fills (#455): typing a drawer's inside size works out the units and the paddings of that axis.
       const drawer = gridfinityDrawerSize({ ...shape, depth });
@@ -1063,7 +1076,8 @@ function getShapePropertiesWithAppLimits(shape: WorkplaneShape, onUpdate: ShapeI
     if (gridfinityFloorFits(fields) && !gridfinityWallSolid(fields)) {
       // The floor (#455): raised, it leaves a bin blank to cut shapes into; it decides what room the shelves and scoops have.
       const maxFloor = gridfinityFloorMaxHeight(fields);
-      properties.push({ id: "gridfinityFloorHeight", label: t("prop.gridfinityFloorHeight"), value: gridfinityFloorHeight(fields), min: MIN_GRIDFINITY_FLOOR_HEIGHT, max: maxFloor, step: 0.05, hint: t("gridfinity.floorHeightHint"), onChange: (value) => onUpdate({ gridfinityFloorHeight: clamp(value, MIN_GRIDFINITY_FLOOR_HEIGHT, maxFloor) }) });
+      const minFloor = gridfinityFloorMinHeight(fields);
+      properties.push({ id: "gridfinityFloorHeight", label: t("prop.gridfinityFloorHeight"), value: gridfinityFloorHeight(fields), min: minFloor, max: maxFloor, step: 0.05, hint: t("gridfinity.floorHeightHint"), onChange: (value) => onUpdate({ gridfinityFloorHeight: clamp(value, minFloor, maxFloor) }) });
     }
     const { switched } = plan;
     if (gridfinityOpenFits(fields)) {
@@ -2536,7 +2550,7 @@ export function ShapeInspector({
   const tiltedMeasures = orientedMeasures(shape).kind === "tilted";
   // What each value would be on a shape of this kind made new, with the saved defaults: the
   // small arrow next to a changed value takes it back there.
-  const propertyDefaults = useMemo(() => shapePropertyDefaults(shape.kind, workspace), [shape.kind, workspace]);
+  const propertyDefaults = useMemo(() => shapePropertyDefaults(shape.kind, workspace, shape.kind === "gridfinity" ? normalizeGridfinityType(shape.gridfinityType) : undefined), [shape.kind, workspace, shape.gridfinityType]);
   const savedDefaults = workspace.shapeCustomizations[shape.kind];
   const defaultsToSave = shapeDefaultsFromShape(shape, workspace.shapeCustomizations);
   const sameDefaults = JSON.stringify(defaultsToSave ?? null) === JSON.stringify(savedDefaults && Object.keys(savedDefaults).length > 0 ? savedDefaults : null);
@@ -4223,7 +4237,7 @@ function GridfinityCompartmentsCard({
   };
   const properties: ShapePropertyConfig[] = [
     countRow("x", "gridfinityCompartmentsX", "prop.gridfinityCompartmentsX"),
-    countRow("z", "gridfinityCompartmentsZ", "prop.gridfinityCompartmentsZ", t("gridfinity.compartmentsHint")),
+    countRow("z", "gridfinityCompartmentsZ", "prop.gridfinityCompartmentsZ", t(normalizeGridfinityType(fields.gridfinityType) === "tray" ? "gridfinity.compartmentsTrayHint" : "gridfinity.compartmentsHint")),
   ];
   if (compartments) {
     properties.push({ id: "gridfinityDividerThickness", label: t("prop.gridfinityDividerThickness"), value: gridfinityDividerThickness(fields), min: MIN_GRIDFINITY_DIVIDER_THICKNESS, max: MAX_GRIDFINITY_DIVIDER_THICKNESS, step: 0.1, onChange: (value) => onUpdate({ gridfinityDividerThickness: clamp(value, MIN_GRIDFINITY_DIVIDER_THICKNESS, MAX_GRIDFINITY_DIVIDER_THICKNESS) }) });
@@ -4350,11 +4364,15 @@ type PropertyDefaultValues = ReadonlyMap<string, number | string | boolean>;
  * different things in them. Null for a shape that is not made from the toolbar: a sketch,
  * a mesh, a group.
  */
-function shapePropertyDefaults(kind: WorkplaneShape["kind"], workspace: WorkplaneWorkspaceSettings) {
+function shapePropertyDefaults(kind: WorkplaneShape["kind"], workspace: WorkplaneWorkspaceSettings, gridfinityType?: GridfinityType) {
   const asset = shapeDefaultsAsset(kind);
   if (!asset) return null;
   try {
-    const fresh = makeShapeFromAsset(asset, undefined, workspace.shapeCustomizations[kind]);
+    // A tray (#837) is held to a tray made new, its floor starting at 1.2 mm, and a bin or baseplate to its own type
+    // where the defaults make a tray.
+    const saved = workspace.shapeCustomizations[kind];
+    const tray = gridfinityType === "tray" || (gridfinityType !== undefined && normalizeGridfinityType(saved?.gridfinityType) === "tray");
+    const fresh = makeShapeFromAsset(asset, undefined, tray ? { ...saved, gridfinityType } : saved);
     const main = new Map<string, number | string | boolean>();
     getShapeProperties(fresh, () => undefined, workspace).forEach((property) => {
       if (property.type !== "text") main.set(property.id, property.value);

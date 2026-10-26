@@ -185,7 +185,7 @@ export type ShapeCustomization = {
   hingePinless?: boolean;
   /** Hinge: the second leaf folded up about the pin, in degrees; 0 lies flat, 180 is closed. */
   hingeAngle?: number;
-  /** Gridfinity: a bin or the baseplate it stands in; the size counts grid units of 42 mm (height units of 7 mm). */
+  /** Gridfinity: a bin or the baseplate it stands in, whose size counts grid units of 42 mm (height units of 7 mm), or a tray of any size in mm (#837). */
   gridfinityType?: GridfinityType;
   /** Gridfinity bin: the stacking lip on top of the wall; missing means on. */
   gridfinityLip?: boolean;
@@ -562,8 +562,8 @@ export type SketchOperation = "extrude" | "revolve" | "sweep";
 export type GearType = "spur" | "helical" | "herringbone" | "bevel" | "internal" | "rack";
 export type GearProfile = "involute" | "round" | "simple";
 
-/** A Gridfinity bin, or the baseplate bins stand in. */
-export type GridfinityType = "bin" | "baseplate";
+/** A Gridfinity bin, the baseplate bins stand in, or a tray of any size with a flat bottom (#837). */
+export type GridfinityType = "bin" | "baseplate" | "tray";
 /** How a label shelf's corners are finished where it meets a wall or another shelf. */
 export type GridfinityLabelCorner = "round" | "chamfer";
 /**
@@ -838,7 +838,7 @@ export type WorkplaneShape = {
   hingePinless?: boolean;
   /** Hinge: the second leaf folded up about the pin, in degrees; 0 lies flat, 180 is closed. */
   hingeAngle?: number;
-  /** Gridfinity: a bin or the baseplate it stands in; the size counts grid units of 42 mm (height units of 7 mm). */
+  /** Gridfinity: a bin or the baseplate it stands in, whose size counts grid units of 42 mm (height units of 7 mm), or a tray of any size in mm (#837). */
   gridfinityType?: GridfinityType;
   /** Gridfinity bin: the stacking lip on top of the wall; missing means on. */
   gridfinityLip?: boolean;

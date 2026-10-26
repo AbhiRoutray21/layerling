@@ -18,5 +18,15 @@
       "de": "Im Rechtsklickmenü eines Körpers setzt „Mitte dieser Fläche markieren“ einen Bezugspunkt in die Mitte der ebenen Fläche, auf die du geklickt hast, an einer Seite oder einem Ende, nicht nur oben. Das Maßband rastet daran ein.",
       "en": "In the right-click menu of a body, \"Mark the centre of this face\" puts a reference point in the middle of the flat face you clicked, on a side or an end, not only on top. The tape measure snaps to it."
     }
+  },
+  {
+    "title": {
+      "de": "Gridfinity-Schalen in jeder Größe",
+      "en": "Gridfinity trays of any size"
+    },
+    "body": {
+      "de": "Die Gridfinity-Form hat unter „Art“ jetzt auch „Schale“: eine Schale beliebiger Größe in mm mit flachem Boden, ohne Füße und Stapelrand, etwa für Spieleinsätze. Fächer, Griffmulden, Etikettenleisten und offene Seiten funktionieren wie in einem Behälter, und die Trennwände reichen bis oben.",
+      "en": "The Gridfinity shape now has \"Tray\" under \"Type\": a tray of any size in mm with a flat bottom and no feet or stacking lip, for board game inserts and the like. Compartments, finger scoops, label shelves and open sides work as in a bin, and the dividers run up to the top."
+    }
   }
 ]

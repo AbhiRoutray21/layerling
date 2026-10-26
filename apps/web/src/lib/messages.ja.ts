@@ -2040,6 +2040,8 @@ export const MESSAGES_JA: Partial<Record<MessageKey, string>> = {
   "gridfinity.baseplate": "ベースプレート",
   "gridfinity.binHint": "42 mmのGridfinityグリッドに合うビンです。ベースプレートにはまり、ほかのビンの上に重ねられます。ほかのGridfinityジェネレーターで作ったビンにも重ねられます。",
   "gridfinity.baseplateHint": "Gridfinityのビンをのせる、高さ5 mmのプレートです。42 mmのグリッド1つにつき、くぼみが1つあります。",
+  "gridfinity.tray": "トレイ",
+  "gridfinity.trayHint": "平らな底の、mm単位で好きな大きさのトレイです。ボードゲームの収納や小物入れに使えます。脚も重ねるためのふちもないので、ベースプレートには置けず、重ねられません。仕切りとラベル棚は上端まで届きます。",
   "prop.gridfinityUnitsX": "横のマス数",
   "prop.gridfinityUnitsZ": "奥行きのマス数",
   "prop.gridfinityUnitsY": "高さのマス数",
