@@ -24,6 +24,10 @@ import { MIN_SHAPE_SIZE, RENDER_LAYER_PREVIEWS, clamp, selectionFrameForShapes, 
 export const LIFT_HANDLE_HEIGHT_OFFSET_FRACTION = 0.30;
 /** The lift arrow stands this far over a tall body at most, so it does not fly away from it. */
 export const LIFT_HANDLE_MAX_OFFSET = 12;
+/** How far the line of alignment handles stands beside the selection, in mm. It used to grow with the
+ *  selection (16 % of its largest side), which put it 15 mm and more away from a larger body; it stays
+ *  close now, as in Tinkercad. Handles that land on one spot are still pushed apart on the screen. */
+export const ALIGN_HANDLE_OFFSET = 3;
 
 /** How far the lift arrow stands over the face it belongs to; the overlay and the drag plane both use this. */
 export function liftHandleOffset(liftHeight: number) {
@@ -730,7 +734,7 @@ export function syncAlignOverlay(
   const worldCenterX = (worldMinX + worldMaxX) / 2;
   const worldCenterY = (worldMinY + worldMaxY) / 2;
   const worldCenterZ = (worldMinZ + worldMaxZ) / 2;
-  const offset = Math.max(8, Math.max(worldMaxX - worldMinX, worldMaxY - worldMinY, worldMaxZ - worldMinZ) * 0.16);
+  const offset = ALIGN_HANDLE_OFFSET;
   const statusByKey = new Map(statuses.map((status) => [`${status.axis}:${status.target}`, status]));
 
   // The three handles of an axis, minimum, middle and maximum, stand on one line. Where they land close

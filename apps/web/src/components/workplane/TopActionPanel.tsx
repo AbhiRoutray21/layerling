@@ -12,6 +12,7 @@ import { type EditorHistoryExportLimit } from "@/lib/editorHistory";
 import { projectExportFileName, stlNameAsksForNewFile } from "@/lib/exportNames";
 import { readImportSvgWidth, readKeepSvgPage, setImportSvgWidth, storeKeepSvgPage } from "@/lib/importPreferences";
 import { lylFileAccessSupported } from "@/lib/lylFileAccess";
+import { hasOwnShapeName } from "@/lib/shapeCatalog";
 import type { ProjectAttachment, WorkplaneShape } from "@/types/layerling";
 import { type ExportSolidVolume, PRINT_MATERIAL_STORAGE_KEY, PRINT_INFILL_STORAGE_KEY, PRINT_WALLS_STORAGE_KEY, formatEstimateNumber } from "@/lib/editorBooleans";
 
@@ -110,17 +111,21 @@ export function TopActionPanel({
   const [drawingFormat, setDrawingFormat] = useState<"svg" | "pdf">("pdf");
   const [svgView, setSvgView] = useState<SvgExportView>("silhouette");
   const [dxfView, setDxfView] = useState<DxfExportView>("silhouette");
-  const [exportName, setExportName] = useState(projectName);
-  const previousProjectNameRef = useRef(projectName);
+  // One body with a name of its own is exported under that name; a design file keeps the design's name.
+  const ownObjectName = estimateShapes.length === 1 && hasOwnShapeName(estimateShapes[0]) ? estimateShapes[0].name!.trim() : null;
+  const suggestedName = ownObjectName && exportFormat !== "lyl" ? ownObjectName : projectName;
+  const [exportName, setExportName] = useState(suggestedName);
+  const previousSuggestedNameRef = useRef(suggestedName);
   // Starts at the history setting from the workspace settings, so a project
   // file carries what the editor keeps unless it is changed here.
   const [lylHistoryLimit, setLylHistoryLimit] = useState<LylHistoryLimit>(workspaceHistoryLimit);
   useEffect(() => setLylHistoryLimit(workspaceHistoryLimit), [workspaceHistoryLimit]);
+  // A name that is still the one suggested follows a new suggestion; a typed one stays.
   useEffect(() => {
-    const previousProjectName = previousProjectNameRef.current;
-    setExportName((current) => current === previousProjectName ? projectName : current);
-    previousProjectNameRef.current = projectName;
-  }, [projectName]);
+    const previousSuggestedName = previousSuggestedNameRef.current;
+    setExportName((current) => current === previousSuggestedName ? suggestedName : current);
+    previousSuggestedNameRef.current = suggestedName;
+  }, [suggestedName]);
   // A custom number from the settings joins the usual stops in its place; the last stop, None,
   // saves the design with its current state only, for sharing a file without its undo steps (#246).
   const lylHistoryLimits = useMemo<readonly LylHistoryLimit[]>(() => {

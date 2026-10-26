@@ -1068,6 +1068,7 @@ const GENERATED_NAME_KEYS: Record<string, MessageKey> = {
   Group: "shape.group",
   Bundle: "shape.bundle",
   Intersection: "shape.intersection",
+  Hull: "editor.tool.hull",
   "Sketch extrusion": "shape.sketchExtrusion",
   "Sketch revolve": "shape.sketchRevolve",
   Cube: "shape.box",
@@ -1089,6 +1090,13 @@ export function displayShapeName(shape: Pick<WorkplaneShape, "name" | "kind">): 
   const asset = toolbarShapeAssets.find((entry) => entry.kind === shape.kind && entry.name === name);
   if (asset) return shapeAssetLabel(asset);
   return name || shapeAssetLabel({ id: shape.kind, name: shape.kind });
+}
+
+/** Whether the shape carries a name somebody gave it, not one the editor handed out ("Box", "Group"). */
+export function hasOwnShapeName(shape: Pick<WorkplaneShape, "name" | "kind">): boolean {
+  const name = shape.name?.trim() ?? "";
+  if (!name || GENERATED_NAME_KEYS[name]) return false;
+  return !toolbarShapeAssets.some((entry) => entry.kind === shape.kind && (entry.name === name || shapeAssetLabel(entry) === name));
 }
 
 /**
