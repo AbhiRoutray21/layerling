@@ -43,7 +43,7 @@ En hel gruppe kan også være en solid eller et hul. En simpel regel gælder:
 
 Nogle gange bør dele kun blive sammen uden at blive til én - et hvidt logo på en sort plade til et flerfarvet print for eksempel. Det er det {{ui:editor.tool.bundle}} ([[Ctrl]]+[[B]]) er til, som i Tinkercad. Et bundt flytter, drejer og skalerer som en form, men intet flettes:
 
-- Hver del beholder sin farve og forbliver en solid eller et hul.
+- Hver del beholder sin farve og forbliver en solid eller et hul. Bundtets indstillinger har de samme kort som en gruppes: {{ui:inspector.solid}} og {{ui:inspector.hole}} for hele bundtet (de bevarer delenes farver), {{ui:inspector.transparent}} ([[T]]) og {{ui:inspector.multicolor}} ([[Shift]]+[[M]]); med Multicolor slået fra vises og eksporteres bundtet i én farve. {{ui:inspector.separateParts}} tager bundtet ad, som [[Ctrl]]+[[Shift]]+[[G]] gør.
 - Huller skærer intet. Når du grupperer bundtet med andre dele, skærer dets huller de dele, men stadig ikke bundtets egne solider, som i Tinkercad. Så kan en tap med sit hul ved siden af for eksempel bruges igen og igen som et bundt.
 - I en STL-, 3MF- eller OBJ-eksport er hver del sin egen form; i 3MF og OBJ med sin farve.
 
