@@ -241,7 +241,7 @@ export function TransformOverlay({
           onBlur={() => onCommitDimensionEdit()}
           onKeyDown={(event) => {
             if (event.key === "Enter") {
-              onCommitDimensionEdit(event.altKey);
+              onCommitDimensionEdit(event.altKey, event.shiftKey);
             }
             if (event.key === "Escape") {
               onCancelDimensionEdit();

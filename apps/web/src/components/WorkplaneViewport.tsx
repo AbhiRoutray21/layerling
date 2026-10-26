@@ -4413,10 +4413,17 @@ export function WorkplaneViewport({
 
   // Width, depth or height typed for several bodies at once (#259). The box shows the size of the
   // whole selection, so the number sets that: every body is scaled with it, as when it is dragged.
-  const applyTypedSelectionSize = useCallback((edits: { axis: "width" | "depth" | "height"; text: string }[]) => {
+  const applyTypedSelectionSize = useCallback((typed: { axis: "width" | "depth" | "height"; text: string }[], keepProportions = false) => {
     const ids = selectedIdsRef.current;
     const frame = selectionFrameForShapes(shapesRef.current, ids, placementWorkplaneRef.current);
     if (ids.length < 2 || !frame) return;
+    // One measure with its proportions kept (#899): the other two of the selection's frame by the same factor.
+    const single = keepProportions && typed.length === 1 ? typed[0] : null;
+    const singleValue = single ? resolveMeasureMm(single.text, single.axis === "width" ? frame.width : single.axis === "depth" ? frame.depth : frame.height) : NaN;
+    const factor = single ? singleValue / (single.axis === "width" ? frame.width : single.axis === "depth" ? frame.depth : frame.height) : NaN;
+    const edits = single && Number.isFinite(factor) && factor > 0
+      ? (["width", "depth", "height"] as const).map((axis) => ({ axis, text: String((axis === "width" ? frame.width : axis === "depth" ? frame.depth : frame.height) * factor) }))
+      : typed;
     const items: TransformDragItem[] = frame.ids
       .map((id) => shapesRef.current.find((entry) => entry.id === id))
       .filter((entry): entry is WorkplaneShape => Boolean(entry))
@@ -4455,9 +4462,12 @@ export function WorkplaneViewport({
     onInteractionActiveChange?.(false);
   }, [onInteractionActiveChange, onUpdateShape]);
 
-  const commitDimensionEdit = useCallback((aroundCenter = false) => {
+  const commitDimensionEdit = useCallback((aroundCenter = false, proportional = false) => {
     // Alt+Enter (#327): no edge is held, so the shape grows round its middle.
     if (aroundCenter) lastResizeAnchorRef.current = null;
+    // With Keep proportions ticked, or with Shift+Enter, the other two measures follow, as in the properties
+    // panel and as Shift does when a corner is dragged; the box on the body passed the one measure alone (#899).
+    const keepProportions = proportional || proportionLockRef.current;
     const edit = editingDimension;
     const id = selectedIdsRef.current[0];
     const shape = shapesRef.current.find((entry) => entry.id === id);
@@ -4499,10 +4509,10 @@ export function WorkplaneViewport({
       return;
     }
     if (selectedIdsRef.current.length > 1) {
-      applyTypedSelectionSize([{ axis: edit.axis, text: edit.value }]);
+      applyTypedSelectionSize([{ axis: edit.axis, text: edit.value }], keepProportions);
     } else {
       const patch = dimensionPatchFor(shape, edit.axis, edit.value);
-      if (patch) onUpdateShape(id, patch);
+      if (patch) onUpdateShape(id, keepProportions ? patchWithKeptProportions(shape, patch, edit.axis) : patch);
     }
     setEditingDimension(null);
     setPinnedMeasureKey(null);
