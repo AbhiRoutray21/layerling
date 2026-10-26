@@ -1692,6 +1692,7 @@ export const MESSAGES_IT: Partial<Record<MessageKey, string>> = {
   "prop.thickness": "Spessore",
   "prop.outerDiameter": "Diametro esterno",
   "prop.innerDiameter": "Diametro interno",
+  "prop.tubeBoreHole": "Il foro taglia come un vuoto quando si raggruppa",
   "prop.toothSize": "Dimensione del dente",
   "prop.toothWidth": "Larghezza del dente",
   "prop.gearProfile": "Forma del dente",

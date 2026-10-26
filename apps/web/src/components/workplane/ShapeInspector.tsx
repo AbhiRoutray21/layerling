@@ -1572,6 +1572,7 @@ function getShapePropertiesWithAppLimits(shape: WorkplaneShape, onUpdate: ShapeI
         },
         { id: "thickness", label: t("prop.thickness"), value: wall, min: 0.5, max: 20, onChange: (bevel) => onUpdate({ bevel: clamp(bevel, 0.5, wallLimit) }) },
         { id: "height", label: t("prop.height"), value: shape.height, min: MIN_SHAPE_SIZE, max: 160, onChange: setHeight },
+        { type: "toggle" as const, id: "tubeBoreHole", label: t("prop.tubeBoreHole"), value: shape.tubeBoreHole === true, onChange: (value: boolean) => onUpdate({ tubeBoreHole: value || undefined }) },
       ];
     }
     return [
@@ -1588,6 +1589,7 @@ function getShapePropertiesWithAppLimits(shape: WorkplaneShape, onUpdate: ShapeI
       { id: "length", label: t("prop.length"), value: depth, min: MIN_SHAPE_SIZE, max: 160, onChange: setDepth },
       { id: "width", label: t("prop.width"), value: width, min: MIN_SHAPE_SIZE, max: 160, onChange: setWidth },
       { id: "height", label: t("prop.height"), value: shape.height, min: MIN_SHAPE_SIZE, max: 160, onChange: setHeight },
+      { type: "toggle" as const, id: "tubeBoreHole", label: t("prop.tubeBoreHole"), value: shape.tubeBoreHole === true, onChange: (value: boolean) => onUpdate({ tubeBoreHole: value || undefined }) },
     ];
   }
 

@@ -1788,6 +1788,7 @@ export const MESSAGES_EN = {
   "prop.thickness": "Thickness",
   "prop.outerDiameter": "Outer diameter",
   "prop.innerDiameter": "Inner diameter",
+  "prop.tubeBoreHole": "Bore cuts as a hole when grouped",
   "prop.toothSize": "Tooth Size",
   "prop.toothWidth": "Tooth Width",
   "prop.gearProfile": "Tooth Shape",

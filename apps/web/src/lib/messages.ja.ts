@@ -1752,6 +1752,7 @@ export const MESSAGES_JA: Partial<Record<MessageKey, string>> = {
   "prop.thickness": "厚さ",
   "prop.outerDiameter": "外径",
   "prop.innerDiameter": "内径",
+  "prop.tubeBoreHole": "グループ化するとき穴として切り抜く",
   "prop.toothSize": "歯のサイズ",
   "prop.toothWidth": "歯の幅",
   "prop.gearProfile": "歯の形",

@@ -1440,6 +1440,7 @@ export const MESSAGES_SL: Partial<Record<MessageKey, string>> = {
   "prop.thickness": "Debelina",
   "prop.outerDiameter": "Zunanji premer",
   "prop.innerDiameter": "Notranji premer",
+  "prop.tubeBoreHole": "Izvrtina pri združevanju reže kot luknja",
   "prop.toothSize": "Velikost zoba",
   "prop.toothWidth": "Širina zoba",
   "prop.centerHole": "Središčna luknja",

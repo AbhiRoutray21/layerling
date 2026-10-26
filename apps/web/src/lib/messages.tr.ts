@@ -1727,6 +1727,7 @@ export const MESSAGES_TR: Partial<Record<MessageKey, string>> = {
   "prop.thickness": "Kalınlık",
   "prop.outerDiameter": "Dış çap",
   "prop.innerDiameter": "İç çap",
+  "prop.tubeBoreHole": "Delik gruplanınca boşluk gibi keser",
   "prop.toothSize": "Diş boyutu",
   "prop.toothWidth": "Diş genişliği",
   "prop.gearProfile": "Diş şekli",

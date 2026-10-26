@@ -1779,6 +1779,7 @@ export const MESSAGES_AR: Partial<Record<MessageKey, string>> = {
   "prop.thickness": "السمك",
   "prop.outerDiameter": "القطر الخارجي",
   "prop.innerDiameter": "القطر الداخلي",
+  "prop.tubeBoreHole": "يقطع الثقب كفراغ عند التجميع",
   "prop.toothSize": "حجم السن",
   "prop.toothWidth": "عرض السن",
   "prop.gearProfile": "شكل السن",

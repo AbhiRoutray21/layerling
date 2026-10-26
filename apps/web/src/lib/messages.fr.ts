@@ -1773,6 +1773,7 @@ export const MESSAGES_FR: Partial<Record<MessageKey, string>> = {
   "prop.thickness": "Épaisseur",
   "prop.outerDiameter": "Diam. extérieur",
   "prop.innerDiameter": "Diam. intérieur",
+  "prop.tubeBoreHole": "L'alésage coupe comme un trou lors du groupement",
   "prop.toothSize": "Taille des dents",
   "prop.toothWidth": "Largeur des dents",
   "prop.gearProfile": "Forme de la dent",

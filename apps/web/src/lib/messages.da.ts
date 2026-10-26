@@ -3003,6 +3003,7 @@ export const MESSAGES_DA: Partial<Record<MessageKey, string>> = {
   "point.deleteAll": "Slet alle ({count})",
   "prop.outerDiameter": "Udvendig diameter",
   "prop.innerDiameter": "Indvendig diameter",
+  "prop.tubeBoreHole": "Boringen skærer som et hul ved gruppering",
   "prop.textStretch": "Stræk bogstaver til rammen",
   "ruler.occlude.off": "Lineal altid synlig (klik for at lade former skjule den)",
   "aria.toggleCornerRulerSelectedOnly": "Skift om former ved armene viser deres mål",

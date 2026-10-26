@@ -1787,6 +1787,7 @@ export const MESSAGES_NL: Record<MessageKey, string> = {
   "prop.thickness": "Dikte",
   "prop.outerDiameter": "Buitendiameter",
   "prop.innerDiameter": "Binnendiameter",
+  "prop.tubeBoreHole": "Boring snijdt als gat bij groeperen",
   "prop.toothSize": "Tandgrootte",
   "prop.toothWidth": "Tandbreedte",
   "prop.gearProfile": "Tandvorm",

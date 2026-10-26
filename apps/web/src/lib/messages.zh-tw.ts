@@ -1743,6 +1743,7 @@ export const MESSAGES_ZH_TW: Partial<Record<MessageKey, string>> = {
   "prop.thickness": "厚度",
   "prop.outerDiameter": "外徑",
   "prop.innerDiameter": "內徑",
+  "prop.tubeBoreHole": "群組時孔作為空洞切除",
   "prop.toothSize": "齒尺寸",
   "prop.toothWidth": "齒寬",
   "prop.gearProfile": "齒形",

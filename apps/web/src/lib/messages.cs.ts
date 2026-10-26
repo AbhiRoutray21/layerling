@@ -1842,6 +1842,7 @@ export const MESSAGES_CS: Record<MessageKey, string> = {
   "prop.thickness": "Tloušťka",
   "prop.outerDiameter": "Vnější průměr",
   "prop.innerDiameter": "Vnitřní průměr",
+  "prop.tubeBoreHole": "Otvor při seskupení řeže jako díra",
   "prop.toothSize": "Velikost zubu",
   "prop.toothWidth": "Šířka zubu",
   "prop.gearProfile": "Profil zubu",

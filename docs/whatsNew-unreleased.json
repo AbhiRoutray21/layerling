@@ -8,5 +8,15 @@
       "de": "Beim Scharnier mit Kegeln stellst du jetzt den Kegeldurchmesser ein (standardmäßig so groß, wie es passt), und das Blatt darf so dick sein wie der ganze Knöchel, also bündig. Die Bauart ist eine Auswahl aus Mit Stift, Ohne Stift und Mit Kegeln.",
       "en": "On the hinge with cones you now set the cone diameter (as large as fits by default), and the leaf may be as thick as the whole knuckle, flush with it. The style is one choice of With pin, Without pin and With cones."
     }
+  },
+  {
+    "title": {
+      "de": "Rohr: Bohrung als Loch",
+      "en": "Tube: bore as a hole"
+    },
+    "body": {
+      "de": "Bei Rohr und Ring gibt es den Schalter „Bohrung schneidet beim Gruppieren wie ein Loch“. Gruppierst du dann zwei Rohre in einer T-Verbindung, öffnet die Bohrung auch die Wand des anderen Rohrs.",
+      "en": "Tube and ring have a new switch, “Bore cuts as a hole when grouped”. Group two tubes in a T-junction and the bore now opens the wall of the other tube too."
+    }
   }
 ]

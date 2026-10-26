@@ -1780,6 +1780,7 @@ export const MESSAGES_RU: Partial<Record<MessageKey, string>> = {
   "prop.thickness": "Толщина",
   "prop.outerDiameter": "Внешн. диаметр",
   "prop.innerDiameter": "Внутр. диаметр",
+  "prop.tubeBoreHole": "Отверстие при группировке режет как вырез",
   "prop.toothSize": "Размер зуба",
   "prop.toothWidth": "Ширина зуба",
   "prop.gearProfile": "Форма зуба",

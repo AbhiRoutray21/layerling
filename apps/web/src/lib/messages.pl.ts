@@ -1767,6 +1767,7 @@ export const MESSAGES_PL: Partial<Record<MessageKey, string>> = {
   "prop.thickness": "Grubość",
   "prop.outerDiameter": "Śr. zewnętrzna",
   "prop.innerDiameter": "Śr. wewnętrzna",
+  "prop.tubeBoreHole": "Otwór przy grupowaniu tnie jak dziura",
   "prop.toothSize": "Rozmiar zęba",
   "prop.toothWidth": "Szerokość zęba",
   "prop.gearProfile": "Kształt zęba",

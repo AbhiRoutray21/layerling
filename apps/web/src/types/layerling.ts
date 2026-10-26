@@ -175,6 +175,8 @@ export type ShapeCustomization = {
   honeycombFrameWidth?: number;
   /** Hinge: how many knuckles share the axis, odd so the pin's part holds both ends. */
   hingeKnuckles?: number;
+  /** Tube or ring: its bore counts as a hole when the shape is grouped, and cuts what it is grouped with - a wall of another tube in a T-junction (#892). */
+  tubeBoreHole?: boolean;
   /** Hinge: the knuckles are at most this wide in mm and their number follows; left out, the count of `hingeKnuckles` stands (#907). */
   hingeKnuckleWidth?: number;
   /** Hinge, cone style: the diameter of the cones at their root in mm; left out, the largest that fits (#907). */
@@ -834,6 +836,8 @@ export type WorkplaneShape = {
   honeycombFrameWidth?: number;
   /** Hinge: how many knuckles share the axis, odd so the pin's part holds both ends. */
   hingeKnuckles?: number;
+  /** Tube or ring: its bore counts as a hole when the shape is grouped, and cuts what it is grouped with - a wall of another tube in a T-junction (#892). */
+  tubeBoreHole?: boolean;
   /** Hinge: the knuckles are at most this wide in mm and their number follows; left out, the count of `hingeKnuckles` stands (#907). */
   hingeKnuckleWidth?: number;
   /** Hinge, cone style: the diameter of the cones at their root in mm; left out, the largest that fits (#907). */

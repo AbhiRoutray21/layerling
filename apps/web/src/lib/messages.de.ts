@@ -1787,6 +1787,7 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "prop.thickness": "Wandstärke",
   "prop.outerDiameter": "Außen-Ø",
   "prop.innerDiameter": "Innen-Ø",
+  "prop.tubeBoreHole": "Bohrung schneidet beim Gruppieren wie ein Loch",
   "prop.toothSize": "Zahngröße",
   "prop.toothWidth": "Zahnbreite",
   "prop.gearProfile": "Zahnform",

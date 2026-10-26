@@ -2371,18 +2371,36 @@ export function restoreGroupedChildrenForEdges(group: WorkplaneShape): Workplane
   });
 }
 
+/**
+ * A tube or ring whose bore counts as a hole (#892) is cut as two shapes: its outer cylinder, a solid, and its bore, a hole.
+ * The bore then cuts whatever the tube is grouped with, as a hole does - the wall of the other tube in a T-junction, which the
+ * bore of a plain tube never reaches. Only where shapes are combined: the tube itself stays one shape.
+ */
+export function splitBoreTube(shape: WorkplaneShape): WorkplaneShape[] {
+  if (shape.tubeBoreHole !== true || shape.hole || shape.importedMesh || (shape.kind !== "tube" && shape.kind !== "ring")) return [shape];
+  const wall = Math.max(0, shape.bevel ?? 4);
+  const width = shape.width - 2 * wall;
+  const depth = (shape.depth ?? shape.width) - 2 * wall;
+  if (!(width > 0.05) || !(depth > 0.05)) return [shape];
+  const { tubeBoreHole: _flag, bevel: _wall, ...rest } = shape;
+  return [
+    { ...rest, kind: "cylinder", bevel: 0 },
+    { ...rest, id: derivedLocalId(shape.id, "bore"), kind: "cylinder", hole: true, bevel: 0, width, depth, size: Math.max(width, depth) },
+  ];
+}
+
 function expandGroupsForBoolean(selection: WorkplaneShape[]): WorkplaneShape[] {
   return selection.flatMap((shape) => {
     if (shape.importedMesh) {
       return [shape];
     }
     return shape.groupedShapes?.length ? restoreGroupedChildren(shape) : [shape];
-  });
+  }).flatMap(splitBoreTube);
 }
 
 function expandGroupsForBoxBoolean(selection: WorkplaneShape[]): WorkplaneShape[] {
   // An intersection or a hull is not the sum of its parts: opened, a hull of four boxes would be cut as the four boxes (#863).
-  return selection.flatMap((shape) => (shape.groupedShapes?.length && shape.groupOperation !== "intersection" && shape.groupOperation !== "hull" ? restoreGroupedChildren(shape) : [shape]));
+  return selection.flatMap((shape) => (shape.groupedShapes?.length && shape.groupOperation !== "intersection" && shape.groupOperation !== "hull" ? restoreGroupedChildren(shape) : [shape])).flatMap(splitBoreTube);
 }
 
 function canUseBoxBoolean(selection: WorkplaneShape[]) {

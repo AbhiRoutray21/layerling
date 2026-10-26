@@ -1712,6 +1712,7 @@ export const MESSAGES_HU: Partial<Record<MessageKey, string>> = {
   "prop.thickness": "Vastagság",
   "prop.outerDiameter": "Külső átmérő",
   "prop.innerDiameter": "Belső átmérő",
+  "prop.tubeBoreHole": "A furat csoportosításkor lyukként vág",
   "prop.toothSize": "Fogméret",
   "prop.toothWidth": "Fogszélesség",
   "prop.gearProfile": "Fogalak",
