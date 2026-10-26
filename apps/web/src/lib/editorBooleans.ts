@@ -1,6 +1,7 @@
 
 import { removeLooseSplinters } from "@/lib/meshSplinters";
 import { closeSmallMeshHoles } from "@/lib/meshHoleFill";
+import { meshIsConvex } from "@/lib/meshConvexity";
 import type { ManifoldToplevel } from "manifold-3d";
 import { ADDITION, Brush, Evaluator, HOLLOW_INTERSECTION, HOLLOW_SUBTRACTION, INTERSECTION, SUBTRACTION, type CSGOperation } from "three-bvh-csg";
 import * as THREE from "three";
@@ -94,9 +95,15 @@ function paddedCutterShape(shape: WorkplaneShape): WorkplaneShape {
   };
 }
 
-/** A shape of its own outline - not an imported mesh, a sketch body, a text or a group of parts. */
+/**
+ * A shape of its own outline - not an imported mesh, a sketch body, a text or a group of parts - or a mesh
+ * without any inward bulge, such as a box with a fillet. A filleted hole flush with a wall got no widening
+ * and left a skin of no thickness on that wall (#928).
+ */
 function widensEvenlyWhenScaled(shape: WorkplaneShape) {
-  return !shape.importedMesh && !shape.sketchProfile && !shape.groupedShapes?.length && shape.kind !== "text";
+  if (shape.groupedShapes?.length || shape.kind === "text") return false;
+  if (!shape.importedMesh && !shape.sketchProfile) return true;
+  return !!shape.importedMesh && meshIsConvex(shape.importedMesh.positions);
 }
 
 function brushFromShape(shape: WorkplaneShape, cutter = false) {
