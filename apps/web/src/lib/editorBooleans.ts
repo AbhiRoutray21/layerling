@@ -1458,8 +1458,28 @@ export async function unionOverlappingExportMeshes(shapes: WorkplaneShape[], mes
  */
 export async function faceReadMesh(shape: WorkplaneShape): Promise<MeshData> {
   const mesh = meshForShape(shape);
-  if (!isPileOfSolids(shape) || bundleParts(shape).some((part) => part.hole)) return mesh;
+  if (!faceReadJoins(shape)) return mesh;
   return (await unionOverlappingExportMeshes([shape], [mesh])).meshes[0];
+}
+
+/** Whether faceReadMesh joins this body's parts: a plain group or bundle of solids, no hole among them. */
+export function faceReadJoins(shape: WorkplaneShape) {
+  return isPileOfSolids(shape) && !bundleParts(shape).some((part) => part.hole);
+}
+
+/** The triangles of faceReadMesh in the world, nine numbers each: what the face readers take. */
+export async function faceReadPositions(shape: WorkplaneShape): Promise<Float64Array> {
+  const mesh = await faceReadMesh(shape);
+  const positions = new Float64Array(mesh.faces.length * 9);
+  mesh.faces.forEach((face, index) => {
+    face.forEach((vertexIndex, corner) => {
+      const vertex = mesh.vertices[vertexIndex];
+      positions[index * 9 + corner * 3] = vertex[0];
+      positions[index * 9 + corner * 3 + 1] = vertex[1];
+      positions[index * 9 + corner * 3 + 2] = vertex[2];
+    });
+  });
+  return positions;
 }
 
 export async function colorSeparatedExportMeshes(shapes: WorkplaneShape[], meshes: MeshData[], cut?: readonly boolean[]) {

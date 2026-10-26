@@ -6,7 +6,7 @@ import type { WorkplaneShape } from "@/types/layerling";
  * worker, the work is done on the page instead, and the editor neither crashes nor waits forever.
  * A stand-in Worker plays each case; the page's own functions are stand-ins too.
  */
-const page = vi.hoisted(() => ({ calls: 0 }));
+const page = vi.hoisted(() => ({ calls: 0, faceReads: 0 }));
 vi.mock("@/lib/editorBooleans", () => ({
   buildGroupedShapeFromSelection: async () => {
     page.calls += 1;
@@ -14,6 +14,11 @@ vi.mock("@/lib/editorBooleans", () => ({
   },
   splitShapeIfCrossed: async () => ({ parts: null, error: "page" }),
   splitShapesByPlane: async () => ({ status: "done", replacements: new Map(), splitCount: 0 }),
+  faceReadJoins: (shape: { groupedShapes?: unknown[] }) => Boolean(shape.groupedShapes),
+  faceReadPositions: async () => {
+    page.faceReads += 1;
+    return new Float64Array([0, 0, 0]);
+  },
 }));
 
 class FakeWorker {
@@ -45,6 +50,8 @@ class FakeWorker {
   }
 }
 
+const pair = { id: "pair", kind: "box", groupedShapes: [{ id: "a", kind: "box" }, { id: "b", kind: "box" }] } as unknown as WorkplaneShape;
+
 const solidAndHole = [
   { id: "box", kind: "box" },
   { id: "hole", kind: "cylinder", hole: true },
@@ -61,6 +68,7 @@ async function load(build = "") {
 
 beforeEach(() => {
   page.calls = 0;
+  page.faceReads = 0;
   FakeWorker.instances = [];
   FakeWorker.failOnCreate = false;
   dispatched.length = 0;
@@ -182,5 +190,67 @@ describe("geometry worker on the page's side", () => {
     await flush();
     expect(worker.posted[0].task).toBe("warm");
     expect(busy).toEqual([false]);
+  });
+
+  it("joins a group's parts for the face readers in the worker, saying it is calculating", async () => {
+    const { faceReadPositionsOffThread, subscribeGeometryBusy } = await load();
+    const busy: boolean[] = [];
+    subscribeGeometryBusy((value) => busy.push(value));
+    const result = faceReadPositionsOffThread(pair);
+    const worker = FakeWorker.instances[0];
+    worker.hello();
+    await flush();
+    expect(worker.posted[0].task).toBe("face");
+    worker.answer(worker.posted[0].requestId, new Float64Array([1, 2, 3]));
+    expect(await result).toEqual(new Float64Array([1, 2, 3]));
+    expect(busy).toEqual([true, false]);
+    expect(page.faceReads).toBe(0);
+  });
+
+  it("reads a body whose parts are not joined on the page, without the worker", async () => {
+    const { faceReadPositionsOffThread } = await load();
+    expect(await faceReadPositionsOffThread({ id: "box", kind: "box" } as unknown as WorkplaneShape)).toEqual(new Float64Array([0, 0, 0]));
+    expect(FakeWorker.instances).toHaveLength(0);
+    expect(page.faceReads).toBe(1);
+  });
+
+  it("calls off a face read: no answer, and nothing left calculating", async () => {
+    const { faceReadPositionsOffThread, subscribeGeometryBusy } = await load();
+    const busy: boolean[] = [];
+    subscribeGeometryBusy((value) => busy.push(value));
+    const controller = new AbortController();
+    let settled = false;
+    void faceReadPositionsOffThread(pair, controller.signal).then(() => { settled = true; });
+    const worker = FakeWorker.instances[0];
+    worker.hello();
+    await flush();
+    controller.abort();
+    worker.answer(worker.posted[0].requestId, new Float64Array([1, 2, 3]));
+    await flush();
+    expect(settled).toBe(false);
+    expect(busy).toEqual([true, false]);
+    expect(page.faceReads).toBe(0);
+  });
+
+  it("joins a group with text in it on the page, and any group when the worker cannot start", async () => {
+    const { faceReadPositionsOffThread } = await load();
+    const tag = { id: "tag", kind: "box", groupedShapes: [{ id: "plate", kind: "box" }, { id: "words", kind: "text" }] } as unknown as WorkplaneShape;
+    expect(await faceReadPositionsOffThread(tag)).toEqual(new Float64Array([0, 0, 0]));
+    expect(FakeWorker.instances).toHaveLength(0);
+    FakeWorker.failOnCreate = true;
+    const again = await load();
+    expect(await again.faceReadPositionsOffThread(pair)).toEqual(new Float64Array([0, 0, 0]));
+    expect(page.faceReads).toBe(2);
+  });
+
+  it("says so when a face read takes too long", async () => {
+    vi.useFakeTimers();
+    const { faceReadPositionsOffThread, GEOMETRY_WORKER_TIMEOUT_MS } = await load();
+    const result = faceReadPositionsOffThread(pair);
+    const failed = expect(result).rejects.toThrow(/too long/);
+    FakeWorker.instances[0].hello();
+    await vi.advanceTimersByTimeAsync(GEOMETRY_WORKER_TIMEOUT_MS);
+    await failed;
+    expect(page.faceReads).toBe(0);
   });
 });

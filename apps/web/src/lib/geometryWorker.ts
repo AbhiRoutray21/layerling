@@ -1,5 +1,5 @@
 import { buildsDiffer, BUILD_ID, isBuildMessage, reportWorkerBuild } from "@/lib/buildStamp";
-import { buildGroupedShapeFromSelection, exportSolidVolume, splitShapeIfCrossed, splitShapesByPlane, type ExportSolidVolume, type GroupBuildResult, type SplitShapesOutcome } from "@/lib/editorBooleans";
+import { buildGroupedShapeFromSelection, exportSolidVolume, faceReadJoins, faceReadPositions, splitShapeIfCrossed, splitShapesByPlane, type ExportSolidVolume, type GroupBuildResult, type SplitShapesOutcome } from "@/lib/editorBooleans";
 import { packValue, packedTransfer, unpackValue } from "@/lib/geometryTransfer";
 import { resultMeshes, type GeometryTask, type GeometryWorkerRequest, type GeometryWorkerResponse } from "@/lib/geometryWorkerTypes";
 import { rememberPreparedDisplay } from "@/lib/importedMeshDisplay";
@@ -295,4 +295,18 @@ export function simplifyTrianglePositionsOffThread(positions: ArrayLike<number>,
   return runGeometryTask("simplify", { positions: Array.isArray(positions) ? positions : Array.from(positions), target }, () => simplifyTrianglePositions(positions, target), () => {
     throw new Error(t("status.computeTimedOut"));
   }, signal, true);
+}
+
+/**
+ * The face tools' read of a body (faceReadPositions in lib/editorBooleans.ts) off the page when its
+ * parts are joined: for four overlapping 512-sided cylinders the join held the page for half a
+ * second. A body that is not joined is read on the page, quicker than sending it away; text stays
+ * on the page.
+ */
+export function faceReadPositionsOffThread(shape: WorkplaneShape, signal?: AbortSignal): Promise<Float64Array> {
+  const onPage = () => faceReadPositions(shape);
+  if (containsText([shape]) || !faceReadJoins(shape)) return onPage();
+  return runGeometryTask("face", { shape }, onPage, () => {
+    throw new Error(t("status.computeTimedOut"));
+  }, signal);
 }
