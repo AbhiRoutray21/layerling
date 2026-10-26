@@ -573,7 +573,8 @@ export function syncTransformOverlay(
         return Math.hypot(moved.x - origin.x, moved.y - origin.y) / step;
       }),
     );
-    const mid = base.clone().addScaledVector(direction, 22 / screenPerWorld);
+    // Far enough out to clear the dimension labels, and big enough to hit without touching one (#898).
+    const mid = base.clone().addScaledVector(direction, 38 / screenPerWorld);
     const arrow = rotateHandleArrow(
       (point) => {
         const screen = project(new THREE.Vector3(point.x, point.y, point.z));
@@ -582,7 +583,7 @@ export function syncTransformOverlay(
       mid,
       direction,
       axisVector,
-      (26 / screenPerWorld) * 0.6,
+      (36 / screenPerWorld) * 0.6,
     );
     return { key, className, x: arrow.x, y: arrow.y, arc: arrow.arc, heads: arrow.heads };
   };
