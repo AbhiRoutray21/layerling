@@ -36,7 +36,7 @@ De winkelhaak ligt op het werkvlak. Ligt dat op de zijkant van een lichaam, dan 
 - **Het ×** ernaast verwijdert hem.
 - **Het knopje links van de greep** wisselt waarvandaan gemeten wordt: de buitenkant van een lichaam (eindpunt, een icoon met lijnen) of het midden ervan (middelpunt, een vizierkruis). Naast elk groen getal zit zo'n klein schakelaartje dat alleen dat getal omzet: bij een staande cilinder het midden in de twee armen en de onderkant in de hoogte, bij een liggende het midden dwars en een uiteinde in de lengte. Komen alle drie weer overeen, dan toont het knopje bij de greep de gemeenschappelijke stand.
 
-Staan er lichamen bij een van de armen, dan toont de winkelhaak automatisch hun afmetingen. Dat werkt alleen op de bodemplaat, niet op de zijkant van een lichaam.
+Staan er lichamen bij een van de armen, dan toont de winkelhaak automatisch hun afmetingen. Dat werkt alleen op de bodemplaat, niet op de zijkant van een lichaam. De knop met de pijl onder de greep van de winkelhaak schakelt dat uit, zodat alleen de geselecteerde lichamen hun afmetingen tonen; hij wordt met het ontwerp opgeslagen.
 
 Selecteer je een lichaam, dan toont de winkelhaak in het groen hoe ver het van de hoek af staat, langs beide armen en in de hoogte. Klik op een groen getal om een afstand te typen, en het lichaam schuift precies daarheen. Met meerdere lichamen geselecteerd tellen ze als één: de winkelhaak meet hun gezamenlijke omtrek, en een getypte waarde verplaatst ze allemaal samen zonder hun onderlinge posities te veranderen.
 

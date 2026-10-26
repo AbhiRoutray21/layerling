@@ -36,7 +36,7 @@ Kotno ravnilo se položi na delovno ravnino. Če leži na strani telesa, torej l
 - **×** ob njem ga odstrani.
 - **Majhen gumb levo od ročaja** preklopi, od kod se meri: od zunanjega roba telesa (oglišče, simbol s črtami) ali od njegove sredine (središče, nitni križ). Majhno stikalo iste vrste je ob vsaki zeleni številki in nastavi samo to številko: pri stoječem valju sredino v obeh krakih in dno po višini, pri ležečem sredino počez in konec po dolžini. Ko se vse tri spet ujemajo, gumb pri ročaju pokaže skupni način.
 
-Če ob enem od krakov stojijo telesa, kotno ravnilo samodejno pokaže njihove mere. To gre samo na osnovni plošči, ne na strani telesa.
+Če ob enem od krakov stojijo telesa, kotno ravnilo samodejno pokaže njihove mere. To gre samo na osnovni plošči, ne na strani telesa. Gumb s puščico pod ročico kotnega ravnila to izklopi, tako da mere kažejo samo izbrana telesa; shrani se z načrtom.
 
 Če označiš telo, kotno ravnilo zeleno pokaže, kako daleč je od vogala, vzdolž obeh krakov in v višino. Klik na zeleno številko odpre vnosno polje: vpiši želeno razdaljo in telo se premakne natanko tja. Če je označenih več teles, štejejo skupaj kot eno. Meri se njihov skupni obris in vpisana vrednost premakne vse skupaj, ne da bi se njihova lega drugo glede na drugo spremenila.
 

@@ -36,7 +36,7 @@ Kątownik leży na płaszczyźnie roboczej. Jeśli ta leży na boku bryły, kąt
 - **×** obok go usuwa.
 - **Mały przycisk na lewo od uchwytu** przełącza, od czego się mierzy: od zewnętrznej strony bryły (punkt końcowy, ikona z liniami) albo od jej środka (punkt środkowy, celownik). Mały przełącznik tego samego rodzaju stoi przy każdej zielonej liczbie i ustawia tylko tę jedną liczbę: dla stojącego walca środek w obu ramionach i spód w wysokości, dla leżącego środek w poprzek i koniec wzdłuż. Gdy wszystkie trzy znów się zgadzają, przycisk przy uchwycie pokazuje wspólny tryb.
 
-Jeśli przy jednym z ramion stoją bryły, kątownik automatycznie pokazuje ich wymiary. Działa to tylko na płycie bazowej, a nie na boku bryły.
+Jeśli przy jednym z ramion stoją bryły, kątownik automatycznie pokazuje ich wymiary. Działa to tylko na płycie bazowej, a nie na boku bryły. Przycisk ze strzałką pod uchwytem kątownika to wyłącza, więc wymiary pokazują tylko zaznaczone bryły; zapisuje się razem z projektem.
 
 Gdy zaznaczysz bryłę, kątownik pokazuje na zielono, jak daleko jest ona od narożnika, wzdłuż obu ramion i w wysokości. Kliknij zieloną liczbę, aby wpisać odległość, a bryła przesunie się dokładnie tam. Gdy zaznaczonych jest kilka brył, liczą się jako jedna: kątownik mierzy ich wspólny obrys, a wpisana wartość przesuwa je wszystkie razem, nie zmieniając ich położenia względem siebie.
 

@@ -5147,6 +5147,7 @@ export function WorkplaneViewport({
     const existingMode = cornerRulerModelRef.current[0]?.mode ?? "endpoint";
     const existingAxisModes = cornerRulerModelRef.current[0]?.axisModes;
     const stayInView = cornerRulerModelRef.current[0]?.occlude === false;
+    const measuresOfSelection = cornerRulerModelRef.current[0]?.selectedOnly === true;
     const instance: CornerRulerInstance = {
       id: `corner-ruler-${++cornerRulerIdRef.current}`,
       corner: point,
@@ -5157,6 +5158,7 @@ export function WorkplaneViewport({
       mode: existingMode,
       ...(existingAxisModes ? { axisModes: existingAxisModes } : {}),
       ...(stayInView ? { occlude: false } : {}),
+      ...(measuresOfSelection ? { selectedOnly: true } : {}),
     };
     storeCornerRulerModel([instance]);
   }, [storeCornerRulerModel]);
@@ -5178,6 +5180,17 @@ export function WorkplaneViewport({
         if (ruler.id !== id) return ruler;
         const { occlude: _was, ...rest } = ruler;
         return ruler.occlude === false ? rest : { ...rest, occlude: false };
+      })
+    );
+  }, [storeCornerRulerModel]);
+
+  // Whether the bodies at the arms show their measures without being selected (#831).
+  const toggleCornerRulerSelectedOnly = useCallback((id: string) => {
+    storeCornerRulerModel(
+      cornerRulerModelRef.current.map((ruler) => {
+        if (ruler.id !== id) return ruler;
+        const { selectedOnly: _was, ...rest } = ruler;
+        return ruler.selectedOnly === true ? rest : { ...rest, selectedOnly: true };
       })
     );
   }, [storeCornerRulerModel]);
@@ -7771,6 +7784,7 @@ export function WorkplaneViewport({
               onToggleMode={toggleCornerRulerMode}
               onToggleAxisMode={toggleCornerRulerAxisMode}
               onToggleOcclude={toggleCornerRulerOcclude}
+              onToggleSelectedOnly={toggleCornerRulerSelectedOnly}
               onCoordinateClick={beginRulerCoordinateEdit}
             />
           ) : null}

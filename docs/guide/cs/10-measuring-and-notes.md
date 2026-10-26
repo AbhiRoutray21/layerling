@@ -36,7 +36,7 @@ Pro měření v pravém úhlu použijte {{ui:camera.cornerRulerTool}} v liště 
 - **×** vedle úhelníku jej odstraní.
 - **Malé tlačítko vlevo od úchytu** přepíná měření od vnějšího okraje tělesa, se symbolem čar, nebo od jeho středu, se zaměřovacím křížem. Stejný malý přepínač je i u každého zeleného čísla a nastavuje pouze danou kótu. U stojícího válce tak můžete měřit v obou ramenech ke středu a ve výšce ke spodní straně, u ležícího napříč ke středu a podélně ke konci. Pokud se všechna tři nastavení shodují, tlačítko u úchytu ukáže společný režim.
 
-U těles umístěných u ramen úhelník automaticky ukazuje rozměry. To funguje pouze na základní podložce, nikoli na boční stěně.
+U těles umístěných u ramen úhelník automaticky ukazuje rozměry. To funguje pouze na základní podložce, nikoli na boční stěně. Tlačítko se šipkou pod úchytem úhelníku to vypne, takže míry ukazují jen vybraná tělesa; ukládá se s projektem.
 
 Po výběru tělesa se zeleně zobrazí vzdálenosti od rohu podél obou ramen i výškově. Kliknutím na zelené číslo zadáte požadovanou vzdálenost a těleso se přesune. Více vybraných těles se posuzuje jako celek: měří se společný obrys a zadaná hodnota přesune celý výběr bez změny vzájemných poloh.
 

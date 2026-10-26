@@ -40,7 +40,7 @@ Vinkelmåleren ligger på arbejdsplanet. Ligger det på siden af en form, ligger
 - **Den lille knap til venstre for håndtaget** skifter hvad der måles fra: ydersiden af en form (endepunkt, et ikon med streger) eller dens midte (midtpunkt, et sigtekorn).
   En lille kontakt af samme slags sidder ved siden af hvert grønt tal og sætter kun det tal: for en stående cylinder er det midten i de to arme og bunden i højden, for en liggende midten på tværs og en ende i længden. Når alle tre igen er enige, viser knappen ved håndtaget den fælles tilstand.
 
-Står der former ved en af armene, viser vinkelmåleren automatisk deres dimensioner, valgt eller ikke: former inden i vinkelmåleren, ved siden af en arm eller på tværs af den. En form uden for den, bag hjørnet eller ved siden af en arm udefra, får ingen. Det virker kun på grundpladen, ikke på siden af en form.
+Står der former ved en af armene, viser vinkelmåleren automatisk deres dimensioner, valgt eller ikke: former inden i vinkelmåleren, ved siden af en arm eller på tværs af den. En form uden for den, bag hjørnet eller ved siden af en arm udefra, får ingen. Det virker kun på grundpladen, ikke på siden af en form. Knappen med pilen under vinkelmålerens håndtag slår det fra, så kun de valgte former viser deres mål; den gemmes med designet.
 
 Når du vælger en form, viser vinkelmåleren med grønt hvor langt den er fra hjørnet, langs begge arme og i højden. Klik et grønt tal for at taste en afstand, og formen flytter sig præcis derhen. Med flere former valgt tæller de som én: måleren måler deres fælles omrids, og en tastet værdi flytter dem alle sammen uden at ændre deres position i forhold til hinanden.
 

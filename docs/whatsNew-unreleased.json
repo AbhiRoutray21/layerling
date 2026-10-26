@@ -28,5 +28,15 @@
       "de": "Die Gridfinity-Form hat unter „Art“ jetzt auch „Schale“: eine Schale beliebiger Größe in mm mit flachem Boden, ohne Füße und Stapelrand, etwa für Spieleinsätze. Fächer, Griffmulden, Etikettenleisten und offene Seiten funktionieren wie in einem Behälter, und die Trennwände reichen bis oben.",
       "en": "The Gridfinity shape now has \"Tray\" under \"Type\": a tray of any size in mm with a flat bottom and no feet or stacking lip, for board game inserts and the like. Compartments, finger scoops, label shelves and open sides work as in a bin, and the dividers run up to the top."
     }
+  },
+  {
+    "title": {
+      "de": "Winkellineal: Maße nur für die Auswahl",
+      "en": "Framing square: measures for the selection only"
+    },
+    "body": {
+      "de": "Stehen viele Körper an den Armen des Winkellineals, zeigt jeder seine Maße, und die Zahlen lassen sich nicht mehr zuordnen. Ein neuer Knopf unter dem Griff des Lineals schaltet das ab: Dann zeigen nur die ausgewählten Körper Maße. Die Wahl wird mit dem Entwurf gespeichert.",
+      "en": "With many bodies at the arms of the framing square, each shows its measures and the numbers can no longer be told apart. A new button under the square's handle switches that off: then only the selected bodies show measures. The choice is kept with the design."
+    }
   }
 ]

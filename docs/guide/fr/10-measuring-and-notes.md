@@ -36,7 +36,7 @@ Le carré d'encadrement repose sur le plan de travail. Si cela se trouve sur le 
 - **Le ×** à côté le supprime.
 - **Le petit bouton à gauche de la poignée** change ce qui est mesuré à partir de : l'extérieur d'un corps (point final, une icône avec des lignes) ou son milieu (point médian, un réticule).
 
-Si des corps se tiennent près de l'un des bras, le carré d'encadrement affiche automatiquement leurs dimensions. Cela fonctionne uniquement sur la plaque de base, pas sur le côté d'une carrosserie.
+Si des corps se tiennent près de l'un des bras, le carré d'encadrement affiche automatiquement leurs dimensions. Cela fonctionne uniquement sur la plaque de base, pas sur le côté d'une carrosserie. Le bouton à la flèche sous la poignée de l'équerre le désactive, de sorte que seuls les corps sélectionnés montrent leurs dimensions ; il est enregistré avec le design.
 
 Lorsque vous sélectionnez un corps, le carré d'encadrement indique en vert sa distance par rapport au coin, le long des deux bras et en hauteur. Cliquez sur un nombre vert pour saisir une distance et le corps se déplace exactement à cet endroit. Avec plusieurs corps sélectionnés, ils comptent pour un : la règle mesure leur contour commun et une valeur saisie les déplace tous ensemble sans changer leurs positions les uns par rapport aux autres.
 

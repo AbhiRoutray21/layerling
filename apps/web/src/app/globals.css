@@ -7926,13 +7926,15 @@ html[data-theme="dark"] .touch-multi-select {
 }
 
 /* The ruler's lines stay in view over bodies (the eye is open) or hide behind them. */
-.corner-ruler-occlude-toggle {
+.corner-ruler-occlude-toggle,
+.corner-ruler-selected-toggle {
   color: #6b5b46;
   background: rgba(255, 255, 255, 0.96);
   border-color: rgba(182, 97, 8, 0.45);
 }
 
-.corner-ruler-occlude-toggle.active {
+.corner-ruler-occlude-toggle.active,
+.corner-ruler-selected-toggle.active {
   color: #b66108;
 }
 

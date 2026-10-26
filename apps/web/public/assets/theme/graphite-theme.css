@@ -3241,13 +3241,15 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .touch-multi-select {
   background: transparent;
 }
 
-:where(html[data-theme="dark"][data-palette="graphite"]) .corner-ruler-occlude-toggle {
+:where(html[data-theme="dark"][data-palette="graphite"]) .corner-ruler-occlude-toggle,
+:where(html[data-theme="dark"][data-palette="graphite"]) .corner-ruler-selected-toggle {
   color: #595959;
   background: rgba(255, 255, 255, 0.96);
   border-color: rgba(182, 97, 8, 0.45);
 }
 
-:where(html[data-theme="dark"][data-palette="graphite"]) .corner-ruler-occlude-toggle.active {
+:where(html[data-theme="dark"][data-palette="graphite"]) .corner-ruler-occlude-toggle.active,
+:where(html[data-theme="dark"][data-palette="graphite"]) .corner-ruler-selected-toggle.active {
   color: #b66108;
 }
 

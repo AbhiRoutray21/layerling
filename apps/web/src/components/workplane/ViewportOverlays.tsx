@@ -1,5 +1,5 @@
 
-import { Crosshair, Eye, EyeOff, Plus, Rows3, X } from "lucide-react";
+import { Crosshair, Eye, EyeOff, MousePointer2, Plus, Rows3, X } from "lucide-react";
 import { useLayoutEffect, useRef, useState, type Dispatch, type MutableRefObject, type PointerEvent as ReactPointerEvent, type SetStateAction } from "react";
 import type { CameraTurn } from "@/lib/viewCubeTransition";
 import * as THREE from "three";
@@ -1286,6 +1286,8 @@ export type CornerRulerInstance = {
   axisModes?: CornerRulerAxisModes;
   /** Whether a body in front of the ruler hides its lines (true when left out); false keeps them always in view. */
   occlude?: boolean;
+  /** The measures of the bodies at the arms are shown only for the selected bodies (false when left out, #831). */
+  selectedOnly?: boolean;
 };
 
 /** A tick number or a neighbour's measure on the screen; `hidden` when a body stands in front of the place it belongs to. */
@@ -1303,6 +1305,8 @@ type CornerRulerOverlayItem = {
   axisNames: Record<CornerRulerAxis, "X" | "Y" | "Z">;
   /** True when a body in front hides the ruler's lines; false when they stay in view. */
   occlude: boolean;
+  /** True when the bodies at the arms show no measures of their own. */
+  selectedOnly: boolean;
   labels: CornerRulerLabelScreen[];
   neighborLabels: CornerRulerNeighborLabel[];
   selectedCoordinate?: {
@@ -1481,7 +1485,7 @@ export function syncCornerRulerToolOverlay(
       // Flaeche zeigt das Winkellineal nur die Abstaende der Auswahl (#105).
       const flatRotation = cornerRulerFlatRotation(ruler.frame);
       shapes.forEach((candidate) => {
-        if (flatRotation === null) return;
+        if (flatRotation === null || ruler.selectedOnly) return;
         if (isNonSolidShape(candidate) || candidate.hidden) return;
         if (wanted.has(candidate.id)) return;
         const { armX, armZ } = cornerRulerDimensionMatchesFromCorner(
@@ -1525,6 +1529,7 @@ export function syncCornerRulerToolOverlay(
         handleY: handleScreen.y,
         axisNames: { x: worldAxisNameOfDirection(xAxis), z: worldAxisNameOfDirection(zAxis), elevation: worldAxisNameOfDirection(yAxis) },
         occlude,
+        selectedOnly: ruler.selectedOnly === true,
         labels,
         neighborLabels,
         selectedCoordinate,
@@ -1645,6 +1650,7 @@ export function CornerRulerToolOverlay({
   onToggleMode,
   onToggleAxisMode,
   onToggleOcclude,
+  onToggleSelectedOnly,
   onCoordinateClick,
 }: {
   overlay: CornerRulerOverlayState;
@@ -1656,6 +1662,8 @@ export function CornerRulerToolOverlay({
   onToggleAxisMode: (id: string, axis: CornerRulerAxis) => void;
   /** Switches whether a body in front hides the ruler's lines. */
   onToggleOcclude: (id: string) => void;
+  /** Switches whether the bodies at the arms show their measures without being selected (#831). */
+  onToggleSelectedOnly: (id: string) => void;
   onCoordinateClick: (rulerId: string, shapeIds: string[], axis: "x" | "z" | "elevation", value: number, x: number, y: number) => void;
 }) {
   if (overlay.items.length === 0) {
@@ -1754,6 +1762,18 @@ export function CornerRulerToolOverlay({
             onClick={() => onToggleOcclude(item.id)}
           >
             {item.occlude ? <EyeOff size={11} strokeWidth={2.5} aria-hidden="true" /> : <Eye size={11} strokeWidth={2.5} aria-hidden="true" />}
+          </button>
+          <button
+            type="button"
+            className={`corner-ruler-mode-toggle corner-ruler-selected-toggle${item.selectedOnly ? " active" : ""}`}
+            style={{ left: item.handleX, top: item.handleY + 36 }}
+            aria-label={t("aria.toggleCornerRulerSelectedOnly")}
+            aria-pressed={item.selectedOnly}
+            title={item.selectedOnly ? t("ruler.selectedOnly.on") : t("ruler.selectedOnly.off")}
+            onPointerDown={(event) => event.stopPropagation()}
+            onClick={() => onToggleSelectedOnly(item.id)}
+          >
+            <MousePointer2 size={11} strokeWidth={2.5} aria-hidden="true" />
           </button>
           <button
             type="button"

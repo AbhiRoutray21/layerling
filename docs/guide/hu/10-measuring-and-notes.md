@@ -36,7 +36,7 @@ A derékszögvonalzó a munkasíkon fekszik. Ha az egy test oldalán van, a der�
 - **A mellette lévő ×** eltávolítja.
 - **A fogantyútól balra lévő kis gomb** azt váltja, honnan mér: egy test külső oldalától (végpont, vonalas ikon) vagy a közepétől (középpont, célkereszt). Minden zöld szám mellett egy ugyanilyen kis kapcsoló van, amely csak azt a számot állítja: egy álló hengernél a két szárban a közepet, magasságban az alját, egy fekvőnél keresztben a közepet, hosszában az egyik végét. Ha mindhárom újra egyezik, a fogantyúnál lévő gomb a közös módot mutatja.
 
-Ha testek állnak valamelyik szárnál, a derékszögvonalzó automatikusan mutatja a méreteiket. Ez csak az alaplapon működik, egy test oldalán nem.
+Ha testek állnak valamelyik szárnál, a derékszögvonalzó automatikusan mutatja a méreteiket. Ez csak az alaplapon működik, egy test oldalán nem. A derékszögvonalzó fogantyúja alatti nyilas gomb ezt kikapcsolja, így csak a kijelölt testek mutatják a méreteiket; a tervvel együtt mentődik.
 
 Ha kijelölsz egy testet, a derékszögvonalzó zölddel mutatja, milyen messze van a saroktól, mindkét szár mentén és magasságban. Egy zöld számra kattintva távolságot gépelhetsz be, és a test pontosan oda mozdul. Több kijelölt testnél ezek egynek számítanak: a vonalzó a közös körvonalukat méri, egy begépelt érték pedig együtt mozgatja őket anélkül, hogy az egymáshoz viszonyított helyzetük megváltozna.
 

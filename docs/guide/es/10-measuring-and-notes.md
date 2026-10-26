@@ -36,7 +36,7 @@ La escuadra se apoya en el plano de trabajo. Si este está sobre el lateral de u
 - **La ×** que hay al lado la quita.
 - **El botoncito a la izquierda del tirador** cambia desde dónde se mide: desde el exterior de un cuerpo (extremo, un icono con líneas) o desde su centro (punto medio, un punto de mira). Junto a cada número verde hay un pequeño interruptor del mismo tipo que solo cambia ese número: en un cilindro de pie, el centro en los dos brazos y la base en la altura; en uno tumbado, el centro a lo ancho y un extremo a lo largo. Cuando los tres vuelven a coincidir, el botón del tirador muestra el modo común.
 
-Si hay cuerpos junto a uno de los brazos, la escuadra muestra sus medidas automáticamente. Esto solo funciona en la placa base, no en el lateral de un cuerpo.
+Si hay cuerpos junto a uno de los brazos, la escuadra muestra sus medidas automáticamente. Esto solo funciona en la placa base, no en el lateral de un cuerpo. El botón con la flecha bajo el asa de la escuadra lo desactiva, de modo que solo los cuerpos seleccionados muestran sus medidas; se guarda con el diseño.
 
 Cuando seleccionas un cuerpo, la escuadra muestra en verde a qué distancia está de la esquina, a lo largo de los dos brazos y en altura. Haz clic en un número verde para escribir una distancia, y el cuerpo se desplaza exactamente ahí. Con varios cuerpos seleccionados, cuentan como uno solo: se mide su contorno común, y un valor escrito los mueve todos juntos sin cambiar su posición relativa.
 
