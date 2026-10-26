@@ -61,22 +61,40 @@ function ensureSketchCadWorker() {
   return worker;
 }
 
+/** How long the kernel may take for a sketch; a sweep runs a profile along a whole path and gets longer (#884). */
+const SKETCH_CAD_TIMEOUT_MS = 30_000;
+const SKETCH_SWEEP_TIMEOUT_MS = 120_000;
+
+/**
+ * One build on the sketch worker. When it takes too long the worker is stopped, not left to finish: it
+ * worked on in the background, and the next try waited behind it and timed out as well (#884). Every
+ * build still waiting on it is answered with the same message; the next one starts a fresh worker.
+ */
+function requestSketchCad(message: Record<string, unknown>, timeoutMs = SKETCH_CAD_TIMEOUT_MS) {
+  const worker = ensureSketchCadWorker();
+  const requestId = ++sketchCadRequestId;
+  return new Promise<SketchCadBuildResponse>((resolve, reject) => {
+    const timer = window.setTimeout(() => {
+      const error = new Error(t("sketch.cadTimedOut"));
+      sketchCadPending.forEach((pending) => {
+        window.clearTimeout(pending.timer);
+        pending.reject(error);
+      });
+      sketchCadPending.clear();
+      worker.terminate();
+      if (sketchCadWorker === worker) sketchCadWorker = null;
+    }, timeoutMs);
+    sketchCadPending.set(requestId, { resolve, reject, timer });
+    worker.postMessage({ ...message, requestId });
+  });
+}
+
 export async function cadShapeFromSketchProfile(profile: SketchProfile, height: number, existing?: WorkplaneShape | null) {
   const safeHeight = Math.max(MIN_SHAPE_DIMENSION, height);
   // A silhouette leaves its holes out first, so its outer line runs round the outside only (#197).
   const buildProfile = profile.silhouette ? silhouetteSketchProfile(profile) : profile;
-  const buildOnWorker = (build: SketchProfile, stroke?: SketchStroke, inset?: SketchInset) => {
-    const worker = ensureSketchCadWorker();
-    const requestId = ++sketchCadRequestId;
-    return new Promise<SketchCadBuildResponse>((resolve, reject) => {
-      const timer = window.setTimeout(() => {
-        sketchCadPending.delete(requestId);
-        reject(new Error("OpenCascade timed out while building the sketch"));
-      }, 30_000);
-      sketchCadPending.set(requestId, { resolve, reject, timer });
-      worker.postMessage({ type: "build", requestId, profile: cloneSketchProfile(build), height: safeHeight, ...(stroke ? { stroke } : {}), ...(inset ? { inset } : {}) });
-    });
-  };
+  const buildOnWorker = (build: SketchProfile, stroke?: SketchStroke, inset?: SketchInset) =>
+    requestSketchCad({ type: "build", profile: cloneSketchProfile(build), height: safeHeight, ...(stroke ? { stroke } : {}), ...(inset ? { inset } : {}) });
   let response: SketchCadBuildResponse;
   // A key ring hole (#391): the outline the sketch fills with its ear and its hole is worked out here and built as an area.
   const withKeyring = profile.keyring ? keyringSketchProfile(await getManifoldRuntime(), profile) : null;
@@ -154,16 +172,7 @@ export async function cadShapeFromSketchSweep(profile: SketchProfile, existing?:
   if ("problem" in planned) {
     throw new Error(t(planned.problem === "no-profile" ? "sketch.sweepNoProfile" : planned.problem === "no-path" ? "sketch.sweepNoPath" : "sketch.sweepManyPaths"));
   }
-  const worker = ensureSketchCadWorker();
-  const requestId = ++sketchCadRequestId;
-  const response = await new Promise<SketchCadBuildResponse>((resolve, reject) => {
-    const timer = window.setTimeout(() => {
-      sketchCadPending.delete(requestId);
-      reject(new Error("OpenCascade timed out while building the sketch"));
-    }, 30_000);
-    sketchCadPending.set(requestId, { resolve, reject, timer });
-    worker.postMessage({ type: "build", requestId, profile: cloneSketchProfile(profile), height: MIN_SHAPE_DIMENSION, sweep: true });
-  });
+  const response = await requestSketchCad({ type: "build", profile: cloneSketchProfile(profile), height: MIN_SHAPE_DIMENSION, sweep: true }, SKETCH_SWEEP_TIMEOUT_MS);
   if (response.type === "error") throw new Error(t("sketch.sweepFailed"));
   const source = canonicalizeShape({
     ...(existing ?? {
@@ -218,21 +227,11 @@ async function cadShapeFromSketchRevolve(
   // A helix has no exact body yet; the mesh revolve winds it.
   if (!revolveProfileFitsAxis(profile) || settings.pitch) return null;
   try {
-    const worker = ensureSketchCadWorker();
-    const requestId = ++sketchCadRequestId;
-    const response = await new Promise<SketchCadBuildResponse>((resolve, reject) => {
-      const timer = window.setTimeout(() => {
-        sketchCadPending.delete(requestId);
-        reject(new Error("OpenCascade timed out while building the sketch"));
-      }, 30_000);
-      sketchCadPending.set(requestId, { resolve, reject, timer });
-      worker.postMessage({
-        type: "build",
-        requestId,
-        profile: cloneSketchProfile(profile),
-        height: MIN_SHAPE_DIMENSION,
-        revolve: { startAngle: settings.startAngle, sweepAngle: settings.sweepAngle },
-      });
+    const response = await requestSketchCad({
+      type: "build",
+      profile: cloneSketchProfile(profile),
+      height: MIN_SHAPE_DIMENSION,
+      revolve: { startAngle: settings.startAngle, sweepAngle: settings.sweepAngle },
     });
     if (response.type === "error") return null;
     const source = canonicalizeShape({
