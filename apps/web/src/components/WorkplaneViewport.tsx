@@ -4318,7 +4318,9 @@ export function WorkplaneViewport({
 
   // The patch a typed width, depth or height makes to a shape, or null when the
   // text is not a usable size. Shared by the single mark and the corner pair.
-  const dimensionSizePatchFor = useCallback((shape: WorkplaneShape, markAxis: "width" | "depth" | "height", text: string): Partial<WorkplaneShape> | null => {
+  const dimensionSizePatchFor = useCallback((shape: WorkplaneShape, markAxis: "width" | "depth" | "height", text: string, keepProportions = false): Partial<WorkplaneShape> | null => {
+    // The other two measures follow before the held edge is applied, in the order the properties panel uses (#899).
+    const kept = (patch: Partial<WorkplaneShape>, axis: "width" | "depth" | "height") => (keepProportions ? patchWithKeptProportions(shape, patch, axis) : patch);
     const sizeFrame = selectionFrameForShapes([shape], [shape.id]);
     // The mark counts along the workplane the box on screen was drawn in; the shape's fields along its own sides (#419).
     const markFrame = selectionFrameForShapes([shape], [shape.id], placementWorkplaneRef.current);
@@ -4365,7 +4367,7 @@ export function WorkplaneViewport({
         if (shape.kind === "star") {
           Object.assign(patch, starSettingsForSize({ ...shape, width: shapeWidth(shape), depth: shapeDepth(shape) }, nextValue, nextValue));
         }
-        return patchWithResizeAnchor(shape, patch, axis, anchor);
+        return patchWithResizeAnchor(shape, kept(patch, axis), axis, anchor);
       }
     } else if (axis === "depth") {
       const frame = sizeFrame;
@@ -4388,7 +4390,7 @@ export function WorkplaneViewport({
         const patch: Partial<WorkplaneShape> = shape.kind === "cylinder" || shape.kind === "star"
           ? { width: nextValue, depth: nextValue, size: nextValue }
           : { depth: nextValue, size: resizedShapeSize(shapeWidth(shape), nextValue) };
-        return patchWithResizeAnchor(shape, patch, axis, anchor);
+        return patchWithResizeAnchor(shape, kept(patch, axis), axis, anchor);
       }
     } else {
       if (isCornerRulerMidpoint) {
@@ -4398,13 +4400,13 @@ export function WorkplaneViewport({
           elevation: cleanNearZero(clamp((shape.elevation ?? 0) + deltaY, MIN_ELEVATION, MAX_ELEVATION), 0.0005),
         };
       } else {
-        return patchWithResizeAnchor(shape, { height: nextValue }, axis, anchor);
+        return patchWithResizeAnchor(shape, kept({ height: nextValue }, axis), axis, anchor);
       }
     }
   }, []);
 
-  const dimensionPatchFor = useCallback((shape: WorkplaneShape, axis: "width" | "depth" | "height", text: string): Partial<WorkplaneShape> | null => {
-    const patch = dimensionSizePatchFor(shape, axis, text);
+  const dimensionPatchFor = useCallback((shape: WorkplaneShape, axis: "width" | "depth" | "height", text: string, keepProportions = false): Partial<WorkplaneShape> | null => {
+    const patch = dimensionSizePatchFor(shape, axis, text, keepProportions);
     if (!patch) return null;
     // The calculation rides along with the size it set, in the same change (#180); a plain number clears it.
     const formula = formulaToRemember(text);
@@ -4511,8 +4513,8 @@ export function WorkplaneViewport({
     if (selectedIdsRef.current.length > 1) {
       applyTypedSelectionSize([{ axis: edit.axis, text: edit.value }], keepProportions);
     } else {
-      const patch = dimensionPatchFor(shape, edit.axis, edit.value);
-      if (patch) onUpdateShape(id, keepProportions ? patchWithKeptProportions(shape, patch, edit.axis) : patch);
+      const patch = dimensionPatchFor(shape, edit.axis, edit.value, keepProportions);
+      if (patch) onUpdateShape(id, patch);
     }
     setEditingDimension(null);
     setPinnedMeasureKey(null);
