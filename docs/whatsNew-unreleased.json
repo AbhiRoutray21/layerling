@@ -48,5 +48,35 @@
       "de": "Die Liste der Schriften bei Text und Namensschild zeigt jede Schrift jetzt in ihren eigenen Buchstaben, mit den Wörtern deines Textes. So siehst du auch bei eigenen Schriften vor dem Wählen, wie sie aussehen. Auch das Fenster „Eigene Schriften“ zeigt die Vorschau.",
       "en": "The list of fonts for text and name tags now draws every font in its own letters, with the words of your text. So you see how a font looks before you choose it, your own fonts included. The window of your own fonts shows the preview too."
     }
+  },
+  {
+    "title": {
+      "de": "Paraboloid als neue Form",
+      "en": "A paraboloid shape"
+    },
+    "body": {
+      "de": "Neben der Halbkugel gibt es jetzt das Paraboloid: eine Kuppel, die zum Rand hin quadratisch abfällt, mit gerundeter Spitze. Bei unterschiedlicher Breite und Tiefe wird der Grundriss oval.",
+      "en": "Next to the half sphere there is now a paraboloid: a dome whose height falls with the square of the distance from the axis, with a rounded tip. With a different width and depth the footprint becomes oval."
+    }
+  },
+  {
+    "title": {
+      "de": "Lineal mit Millimetern und Zoll",
+      "en": "Ruler with millimetres and inches"
+    },
+    "body": {
+      "de": "Ein Lineal ab 15 mm Breite trägt jetzt beide Skalen: die der gewählten Einheit an der oberen Kante, die andere an der unteren. Für schnelles Umrechnen muss nichts mehr umgeschaltet werden.",
+      "en": "A ruler 15 mm wide or more now carries both scales: the one of your unit along the top edge and the other along the bottom edge. A quick conversion needs no switching any more."
+    }
+  },
+  {
+    "title": {
+      "de": "Stege für herausfallende Teile (DXF und SVG)",
+      "en": "Stencil bridges for falling parts (DXF and SVG)"
+    },
+    "body": {
+      "de": "Beim Lasern fallen die Mitten von Buchstaben wie o, a und b heraus. Im Export von DXF und SVG halten jetzt auf Wunsch kleine Stege solche Teile am Rand fest, wie bei einer Schablone. Breite und Anzahl pro Teil sind einstellbar.",
+      "en": "When a plate with text is laser cut, the middle of letters like o, a and b falls out. The DXF and SVG export can now hold such parts to the material with small bridges, as on a stencil, with a width and a number per part you set."
+    }
   }
 ]
