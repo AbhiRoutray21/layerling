@@ -38,5 +38,15 @@
       "de": "Bei Teilen, die zusammenpassen müssen, wählst du beide Körper und klickst im Bereich Kombinieren auf „Passend ausschneiden“. Das Teil bleibt, der andere Körper bekommt seine Form als Aussparung, auf Wunsch mit Spiel ringsum, etwa 0,2 mm für eine gedruckte Passung. Das Kopieren, Zum-Loch-Machen und Ausrichten entfällt.",
       "en": "For parts that have to fit, select both bodies and click Cut out in the Combine area. The part stays and the other body gets its shape as a cavity, with a clearance all round if you want one, 0.2 mm for a printed fit, say. No more copying, making a hole and aligning it."
     }
+  },
+  {
+    "title": {
+      "de": "Schriftvorschau in der Schriftwahl",
+      "en": "Font preview in the font list"
+    },
+    "body": {
+      "de": "Die Liste der Schriften bei Text und Namensschild zeigt jede Schrift jetzt in ihren eigenen Buchstaben, mit den Wörtern deines Textes. So siehst du auch bei eigenen Schriften vor dem Wählen, wie sie aussehen. Auch das Fenster „Eigene Schriften“ zeigt die Vorschau.",
+      "en": "The list of fonts for text and name tags now draws every font in its own letters, with the words of your text. So you see how a font looks before you choose it, your own fonts included. The window of your own fonts shows the preview too."
+    }
   }
 ]
