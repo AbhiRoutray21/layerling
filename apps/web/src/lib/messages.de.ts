@@ -1193,6 +1193,7 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "status.importFailedMore": " und {count} weitere",
   "status.importColoredParts": "{name} hat {count} Farben und kommt als {count} Körper, alle an ihrem Platz und gemeinsam ausgewählt.",
   "status.importObjectParts": "{name} enthält {objects} Objekte und kommt als {count} Körper, alle an ihrem Platz und gemeinsam ausgewählt.",
+  "status.importStepParts": "{name} enthält {count} Körper; jeder kommt als eigener Körper unter seinem Namen herein, an seinem Platz und gemeinsam ausgewählt.",
   "status.importSvgSkipped": "Aus {name} wurde(n) {count} Form(en) weggelassen, weil sie sich nicht zu einem Körper bauen ließen. Füge überlappende Teile im Zeichenprogramm zusammen, schließe die Umrisse und speichere die SVG neu.",
   "status.importDxfUnit": "{name} ist in „{unit}“ gezeichnet und wurde in Millimeter umgerechnet.",
   "status.importDxfUnitless": "{name} nennt keine Einheit und wurde als Millimeter gelesen. Prüfe die Größe.",

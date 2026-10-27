@@ -1193,6 +1193,7 @@ export const MESSAGES_NL: Record<MessageKey, string> = {
   "status.importFailedMore": " en nog {count}",
   "status.importColoredParts": "{name} heeft {count} kleuren en komt binnen als {count} lichamen, elk op zijn plek en samen geselecteerd.",
   "status.importObjectParts": "{name} bevat {objects} objecten en komt binnen als {count} lichamen, elk op zijn plek en samen geselecteerd.",
+  "status.importStepParts": "{name} bevat {count} lichamen; elk komt binnen als een eigen lichaam onder zijn eigen naam, op zijn plek en samen geselecteerd.",
   "status.importSvgSkipped": "{count} vorm(en) van {name} konden niet tot een massief lichaam worden opgebouwd en zijn weggelaten. Voeg overlappende stukken samen in het tekenprogramma, sluit de contouren en sla de SVG opnieuw op.",
   "status.importDxfUnit": "{name} is getekend in “{unit}” en omgerekend naar millimeters.",
   "status.importDxfUnitless": "{name} noemt geen eenheid en is daarom als millimeters gelezen. Controleer de grootte.",

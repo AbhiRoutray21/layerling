@@ -1194,6 +1194,7 @@ export const MESSAGES_EN = {
   "status.importFailedMore": " and {count} more",
   "status.importColoredParts": "{name} has {count} colours and comes in as {count} bodies, each in its place and selected together.",
   "status.importObjectParts": "{name} holds {objects} objects and comes in as {count} bodies, each in its place and selected together.",
+  "status.importStepParts": "{name} holds {count} solids; each comes in as a body under its own name, in its place and selected together.",
   "status.importSvgSkipped": "{count} shape(s) of {name} did not build into a solid and were left out. Join overlapping pieces in the drawing program, close the outlines and save the SVG again.",
   "status.importDxfUnit": "{name} is drawn in the unit “{unit}”; it was converted to millimetres.",
   "status.importDxfUnitless": "{name} states no unit, so it was read as millimetres. Check the size.",
