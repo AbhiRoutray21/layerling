@@ -898,6 +898,67 @@ function handle_save_export(string $root, string $folder, string $requested): vo
 }
 
 /**
+ * The settings kept for every browser that uses this store: what "Make default" saved, so a new
+ * design starts with it even after the browser forgot it. One JSON file in a hidden folder - a
+ * listing skips names that begin with a dot - under a name taken from a fixed list, never from the
+ * request. Only checked to be a JSON object; the app makes sense of the values, as in route.ts.
+ */
+const SETTINGS_DIRECTORY = '.settings';
+const SETTINGS_NAMES = ['default'];
+const MAX_SETTINGS_BYTES = 256 * 1024;
+
+function settings_path(string $root, string $requested): string
+{
+    if (!in_array($requested, SETTINGS_NAMES, true)) {
+        fail('Unknown settings', 400);
+    }
+    return $root . DIRECTORY_SEPARATOR . SETTINGS_DIRECTORY . DIRECTORY_SEPARATOR . $requested . '.json';
+}
+
+function handle_read_settings(string $root, string $requested): void
+{
+    $filePath = settings_path($root, $requested);
+    $settings = null;
+    if (regular_file_stat($filePath) !== null) {
+        $decoded = json_decode((string) file_get_contents($filePath));
+        if ($decoded instanceof stdClass) {
+            $settings = $decoded;
+        }
+    }
+    send_json(['enabled' => true, 'settings' => $settings]);
+}
+
+function handle_save_settings(string $root, string $requested): void
+{
+    if (!same_origin()) {
+        fail('Shared projects only accept same-origin saves', 403);
+    }
+    $filePath = settings_path($root, $requested);
+    $text = (string) file_get_contents('php://input');
+    if (strlen($text) > MAX_SETTINGS_BYTES) {
+        fail('The settings are too large', 413);
+    }
+    $decoded = json_decode($text);
+    if (!($decoded instanceof stdClass)) {
+        fail('The settings are not JSON', 400);
+    }
+    $folder = dirname($filePath);
+    if (!is_dir($folder) && !@mkdir($folder, 0775, true) && !is_dir($folder)) {
+        fail('The store folder is not writable by the web server', 500);
+    }
+    $temporaryPath = $folder . DIRECTORY_SEPARATOR . '.' . $requested . '.' . bin2hex(random_bytes(8)) . '.tmp';
+    cleanup_later($temporaryPath);
+    if (file_put_contents($temporaryPath, json_encode($decoded, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)) === false) {
+        fail('The store folder is not writable by the web server', 500);
+    }
+    if (!@rename($temporaryPath, $filePath)) {
+        fail('The settings could not be moved into place', 500);
+    }
+    cleanup_now($temporaryPath);
+    send_json(['saved' => true]);
+}
+
+/**
  * Removing a folder. An empty one goes without further ado; one that still
  * holds something needs `recursive=1`, so a request that lost its way cannot
  * take a tree of projects with it.
@@ -1221,6 +1282,10 @@ switch ($method) {
         if ($search !== '') {
             search_store($root, $search);
         }
+        $settings = $_GET['settings'] ?? null;
+        if ($settings !== null && $settings !== '') {
+            handle_read_settings($root, (string) $settings);
+        }
         $requested = $_GET['fileName'] ?? null;
         if ($requested !== null && $requested !== '') {
             handle_download($root, $folder, (string) $requested);
@@ -1252,6 +1317,10 @@ switch ($method) {
         $exportFile = $_GET['exportFile'] ?? null;
         if ($exportFile !== null && $exportFile !== '') {
             handle_save_export($root, $folder, (string) $exportFile);
+        }
+        $settings = $_GET['settings'] ?? null;
+        if ($settings !== null && $settings !== '') {
+            handle_save_settings($root, (string) $settings);
         }
         handle_save($root, $folder);
         break;

@@ -773,6 +773,8 @@ export function workspaceHydrationSyncDecision(pendingFingerprint: string | null
  * design fell back to the built-in settings, shadows and zoom speed included.
  */
 export const WORKSPACE_DEFAULT_STORAGE_KEY = "layerling.workspaceDefault.global";
+/** Fired on the window when this browser's default has just been saved. */
+export const WORKSPACE_DEFAULT_SAVED_EVENT = "layerling:workspace-default-saved";
 
 function browserStorage(): Storage | null {
   try {
@@ -887,6 +889,8 @@ export function saveWorkspaceDefault(
       workspace: normalizeWorkspaceSettings(workspace),
       snap: normalizeSnapGrid(snap, DEFAULT_SNAP_GRID),
     }));
+    // The server store keeps a copy for every browser (serverWorkspaceDefault.ts).
+    if (typeof window !== "undefined" && storage === browserStorage()) window.dispatchEvent(new Event(WORKSPACE_DEFAULT_SAVED_EVENT));
     return true;
   } catch {
     return false;
