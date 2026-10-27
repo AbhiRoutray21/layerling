@@ -2217,11 +2217,7 @@ html[data-theme="dark"] .whats-new-earlier:hover {
   transform: translateY(-1px);
 }
 
-/* All three start tiles have the same cream ground, which the grey-beige icon squares of the two plain ones belong to; the create tile only differs by its orange border and icon. */
-.dashboard-action-tile.create {
-  border-color: #f3a452;
-}
-
+/* All three start tiles look the same at rest (cream ground, plain border); the create tile only differs by its orange icon. */
 .dashboard-action-icon {
   display: grid;
   flex: 0 0 auto;
@@ -12605,7 +12601,6 @@ html[data-theme="dark"] .project-menu-trigger {
 
 html[data-theme="dark"] .dashboard-action-tile.create {
   color: #f7f3ec;
-  border-color: #a3682b;
 }
 
 html[data-theme="dark"] .dashboard-action-tile:not(.create) .dashboard-action-icon {
