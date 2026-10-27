@@ -1,5 +1,30 @@
 [
   {
+    "version": "1.114.0",
+    "items": [
+      {
+        "title": {
+          "de": "Deine Vorgabe bleibt auf dem Server",
+          "en": "Your default stays on the server"
+        },
+        "body": {
+          "de": "Läuft layerling mit einem Serverordner, etwa in Docker, landet „Als Vorgabe sichern“ jetzt auch dort. Leerst du den Browser-Speicher oder öffnest layerling in einem anderen Browser, beginnen neue Entwürfe trotzdem mit deinen eigenen Einstellungen.",
+          "en": "When layerling runs with a server folder, for example in Docker, \"Make default\" now saves there too. Clear the browser storage or open layerling in another browser, and new designs still start with your own settings."
+        }
+      },
+      {
+        "title": {
+          "de": "Eckenradius für Gridfinity-Behälter",
+          "en": "Corner radius for Gridfinity bins"
+        },
+        "body": {
+          "de": "Die äußeren Ecken eines Gridfinity-Behälters müssen nicht mehr mit 3,75 mm gerundet sein: Stell im Eigenschaften-Fenster „Eckenradius“ ein, bis 0 für rechtwinklige Ecken, damit dort, wo vier Behälter in einer Schublade zusammentreffen, nur die Spalten von 0,5 mm zwischen ihnen bleiben. Die Füße und das Innere bleiben, wie sie sind, die Behälter passen also und lassen sich stapeln wie bisher.",
+          "en": "A Gridfinity bin's outer corners no longer have to be rounded by 3.75 mm: set \"Corner radius\" in the Properties panel, down to 0 for square corners, so where four bins meet in a drawer only the 0.5 mm gaps between them are left. The feet and the inside stay as they are, so bins fit and stack as before."
+        }
+      }
+    ]
+  },
+  {
     "version": "1.113.0",
     "items": [
       {
