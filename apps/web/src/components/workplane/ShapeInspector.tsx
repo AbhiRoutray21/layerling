@@ -4872,6 +4872,13 @@ export function SurfaceTextureCard({
                         />
                       )}
                       {striped ? range("surfaceAngle", t("inspector.surfaceAngle"), settings.angle, SURFACE_TEXTURE_LIMITS.angle, 1, (angle) => set({ angle })) : null}
+                      {/* Top and bottom: the pattern's direction there (round tops take some patterns in rings). */}
+                      {grain || cracks ? null : (
+                        <>
+                          {range("surfaceFaceTurn", t("inspector.surfaceFaceTurn"), settings.faceTurn, SURFACE_TEXTURE_LIMITS.faceTurn, 1, (faceTurn) => set({ faceTurn }))}
+                          <p className="cylinder-wrap-hint">{t("inspector.surfaceFaceTurnHint")}</p>
+                        </>
+                      )}
                       {/* Picked faces say where it goes: walls, top, bottom and the height band then do not count. */}
                       {picked ? null : (
                         <>
