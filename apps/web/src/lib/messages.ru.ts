@@ -1673,6 +1673,7 @@ export const MESSAGES_RU: Partial<Record<MessageKey, string>> = {
   "inspector.surfaceZoneTo": "Узор до (%)",
   "inspector.surfaceKeepEdges": "Оставлять острые рёбра гладкими",
   "inspector.surfaceFade": "Плавно на",
+  "inspector.surfaceFadeHint": "Насколько близко узор подходит к рёбрам и гладким граням: там он сходит на нет на стольких миллиметрах. Меньше — ближе к ребру, при 0 — вплотную.",
   "inspector.surfaceDetail": "Детализация",
   "inspector.surfaceHint": "Тело становится полигональной сеткой с рельефом, а тело под ним сохраняется: позже текстуру можно изменить или снова убрать, в том числе после сохранения.",
   "inspector.surfaceApply": "Нанести текстуру",

@@ -4894,6 +4894,7 @@ export function SurfaceTextureCard({
                     </>
                   )}
                   {range("surfaceFade", t("inspector.surfaceFade"), settings.fade, SURFACE_TEXTURE_LIMITS.fade, 0.1, (fade) => set({ fade }))}
+                  <p className="cylinder-wrap-hint">{t("inspector.surfaceFadeHint")}</p>
                   <SelectProperty
                     type="select"
                     label={t("inspector.surfaceDetail")}

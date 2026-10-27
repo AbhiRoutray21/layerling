@@ -357,11 +357,11 @@ const CROSS_STEPS: Record<SurfaceTextureDetail, number> = { coarse: 6, medium: 1
  */
 const BORDER_WALL = 0.15;
 /**
- * A pattern standing out of the body (outward; both ways: its upper half) runs out towards where it stays smooth over at
- * least this many times its height, gently down to the body's edge - over the fade of 1 mm, rope 3 mm high broke off at a
- * box's or a cylinder's edge in a step. Not cut off at a border with a wall either (see BORDER_WALL), for the same reason.
+ * A pattern standing out of the body runs out over the fade right up to the edge of what stays smooth, not cut off at a
+ * border with a wall (see BORDER_WALL): a flat frame stayed round it. The run-out is refined to this share of the fade,
+ * or rope 3 mm high came down over a few long triangles, frayed.
  */
-const RAISED_RUN_OUT = 1.3;
+const RUN_OUT_STEPS = 4;
 /** How far past the fade the distance to a smooth edge is known: the longest triangle on a straight face reaching into it. */
 const FADE_BEYOND = 10;
 /**
@@ -1338,14 +1338,9 @@ function capFaces(base: SurfaceBase, smoothFace: Uint8Array, ax: number) {
   return caps.includes(ax) ? caps : null;
 }
 
-/** Whether the pattern stands out of the body and so runs out gently (see RAISED_RUN_OUT); bumps are left off whole at a border instead. */
+/** Whether the pattern stands out of the body and so runs out right up to the edge (see RUN_OUT_STEPS); bumps are left off whole at a border instead. */
 function standsOut(s: SurfaceTextureSettings) {
   return s.direction !== "inward" && s.pattern !== "bumps" && s.pattern !== "text" && s.pattern !== "cracks";
-}
-
-/** The fade a pattern gets towards where it stays smooth: as set, or longer for one standing out (see RAISED_RUN_OUT). */
-function fadeOf(s: SurfaceTextureSettings) {
-  return standsOut(s) ? Math.max(s.fade, RAISED_RUN_OUT * (s.direction === "both" ? s.depth / 2 : s.depth)) : s.fade;
 }
 
 /** Grooves and knurling around a cylinder or flat are cut into strips along the grooves (see sliceStripes). */
@@ -3093,8 +3088,8 @@ export function createSurfaceTextureSession(positions: ArrayLike<number>) {
       // Then each long straight smooth edge of a flat face on its own: the distance to one line is exactly linear on
       // the face. The nearest of several lines is not: over a long fan from a box's corner to its edge the border came
       // out in the wrong place, and the grooves ran up to the edge there.
-      // A pattern standing out runs out gently instead (see RAISED_RUN_OUT): cut where its run-out begins and ends.
-      const reach = fadeOf(s) + s.margin;
+      // A pattern standing out runs out up to the edge instead (see RUN_OUT_STEPS): cut where its run-out begins and ends.
+      const reach = s.fade + s.margin;
       const wall = Math.min(BORDER_WALL, s.fade);
       const levels = standsOut(s) ? [s.margin, reach].filter((level) => level > 0) : wall > 0 ? [reach - wall, reach] : [reach];
       {
@@ -3219,7 +3214,7 @@ export function createSurfaceTextureSession(positions: ArrayLike<number>) {
     // A text goes where it was put: what stays smooth for a pattern all over (bottom, top, a wall, the height band, sharp
     // edges) does not hold it back - masks do.
     const placed = s.pattern === "text";
-    /** Weight per point: 0 = smooth, 1 = the full pattern, faded in over `fade` mm (see fadeOf; straight faces: see BORDER_WALL). */
+    /** Weight per point: 0 = smooth, 1 = the full pattern, faded in over `fade` mm (straight faces: see BORDER_WALL). */
     const weightsFor = (state: RefinedState) => {
       const { mesh, normals, crease, down, up, adj } = state;
       const v = mesh.vertices;
@@ -3267,9 +3262,9 @@ export function createSurfaceTextureSession(positions: ArrayLike<number>) {
         }
         w0[i] = free ? 0 : 1;
       }
-      const faded = fadeWeights(v, mesh.indices, adj, w0, fadeOf(s), s.margin, state.straightAxis ? FADE_BEYOND : 0);
+      const faded = fadeWeights(v, mesh.indices, adj, w0, s.fade, s.margin, state.straightAxis ? FADE_BEYOND : 0);
       // Straight faces cut along their pattern: a border with a short wall instead of the fade (see BORDER_WALL) - unless
-      // the pattern stands out, which runs out gently.
+      // the pattern stands out, which runs out up to the edge.
       const axisOf = state.straightAxis;
       if (axisOf && faded.distance && !standsOut(s)) {
         const reach = s.fade + s.margin;
@@ -3327,11 +3322,13 @@ export function createSurfaceTextureSession(positions: ArrayLike<number>) {
     // The groove grid: triangles along it are up to a few mm long. Where the pattern fades out (rim, smooth faces), the
     // fade over such a long triangle would smear and look restless. There - only there - it is refined finely; on the
     // straight faces of an angular body cut along lines of equal distance to the edge.
-    if (r.crossMax > 0 || r.straightAxis) {
-      const weightKey = JSON.stringify([r.key, s.bottomFree, s.topFree, s.zoneFrom, s.zoneTo, s.keepEdges, s.edgeAngle, s.fade, fadeOf(s), s.direction, s.margin, s.outside, s.inside, layout.center, s.masks, s.faces]);
+    // A pattern standing out: its run-out, finer still (see RUN_OUT_STEPS).
+    if (r.crossMax > 0 || r.straightAxis || standsOut(s)) {
+      const weightKey = JSON.stringify([r.key, s.bottomFree, s.topFree, s.zoneFrom, s.zoneTo, s.keepEdges, s.edgeAngle, s.fade, s.direction, s.margin, s.outside, s.inside, layout.center, s.masks, s.faces]);
+      const runOut = standsOut(s) ? Math.min(0.5, Math.max(s.fade, 0.25) / RUN_OUT_STEPS) : Math.min(0.5, Math.max(s.fade, 0.25) / 2);
       if (fadeCache?.key === weightKey) state = fadeCache.state;
       else {
-        state = refineTransitions(r, s, layout, weights, faded.distance, Math.max(2 * r.crossMax, Math.min(0.5, Math.max(fadeOf(s), 0.25) / 2)), maxTriangles);
+        state = refineTransitions(r, s, layout, weights, faded.distance, Math.max(2 * r.crossMax, runOut), maxTriangles);
         fadeCache = { key: weightKey, state };
       }
       if (state !== r) {

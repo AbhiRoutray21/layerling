@@ -1739,6 +1739,7 @@ export const MESSAGES_CS: Record<MessageKey, string> = {
   "inspector.surfaceZoneTo": "Vzor do (%)",
   "inspector.surfaceKeepEdges": "Ostré hrany ponechat hladké",
   "inspector.surfaceFade": "Náběh na",
+  "inspector.surfaceFadeHint": "Jak blízko se vzor dostane k hranám a hladkým plochám: dobíhá tam na tolika milimetrech. Menší jde blíž k hraně, při 0 až k ní.",
   "inspector.surfaceDetail": "Jemnost",
   "inspector.surfaceHint": "Těleso se stane sítí s reliéfem a těleso pod ním zůstane zachováno: později můžete texturu změnit nebo znovu odebrat, i po uložení.",
   "inspector.surfaceApply": "Nanést texturu",

@@ -85,6 +85,7 @@ export const MESSAGES_DA: Partial<Record<MessageKey, string>> = {
   "inspector.surfaceZoneTo": "Mønster til (%)",
   "inspector.surfaceKeepEdges": "Hold skarpe kanter glatte",
   "inspector.surfaceFade": "Ton ind over",
+  "inspector.surfaceFadeHint": "Hvor tæt mønsteret kommer på kanter og glatte flader: der løber det ud over så mange millimeter. Mindre går tættere på kanten, ved 0 helt ud til den.",
   "inspector.surfaceDetail": "Detalje",
   "inspector.surfaceHint": "Legemet bliver et mesh med reliefet, og legemet under det bevares: senere kan du ændre overfladestrukturen eller tage den af igen, også efter at have gemt.",
   "inspector.surfaceApply": "Anvend struktur",

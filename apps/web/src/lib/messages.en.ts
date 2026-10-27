@@ -1681,6 +1681,7 @@ export const MESSAGES_EN = {
   "inspector.surfaceZoneTo": "Pattern to (%)",
   "inspector.surfaceKeepEdges": "Keep sharp edges smooth",
   "inspector.surfaceFade": "Fade in over",
+  "inspector.surfaceFadeHint": "How close the pattern comes to edges and smooth faces: it runs out over this many millimetres there. Smaller goes closer to the edge, 0 right up to it.",
   "inspector.surfaceDetail": "Detail",
   "inspector.surfaceHint": "The body becomes a mesh with the relief, and the body under it is kept: later you can change the texture or take it off again, also after saving.",
   "inspector.surfaceApply": "Apply texture",

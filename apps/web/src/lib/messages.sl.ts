@@ -1344,6 +1344,7 @@ export const MESSAGES_SL: Partial<Record<MessageKey, string>> = {
   "inspector.surfaceZoneTo": "Vzorec do (%)",
   "inspector.surfaceKeepEdges": "Ostri robovi ostanejo gladki",
   "inspector.surfaceFade": "Prehod na",
+  "inspector.surfaceFadeHint": "Kako blizu robov in gladkih ploskev seže vzorec: tam izzveni na toliko milimetrih. Manjše gre bliže robu, pri 0 vse do njega.",
   "inspector.surfaceDetail": "Natančnost",
   "inspector.surfaceHint": "Telo postane mreža z reliefom, telo pod njim pa ostane shranjeno: pozneje lahko teksturo spremenite ali jo znova odstranite, tudi po shranjevanju.",
   "inspector.surfaceApply": "Nanesi teksturo",

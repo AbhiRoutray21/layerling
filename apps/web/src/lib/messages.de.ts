@@ -1680,6 +1680,7 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "inspector.surfaceZoneTo": "Muster bis (%)",
   "inspector.surfaceKeepEdges": "Scharfe Kanten glatt lassen",
   "inspector.surfaceFade": "Einblenden über",
+  "inspector.surfaceFadeHint": "Wie dicht das Muster an Kanten und glatte Flächen heranreicht: Über so viele Millimeter läuft es dort aus. Kleiner geht es näher an die Kante, bei 0 bis ganz heran.",
   "inspector.surfaceDetail": "Feinheit",
   "inspector.surfaceHint": "Der Körper wird ein Netz mit dem Relief, und der Körper darunter bleibt erhalten: Später kannst du die Oberfläche ändern oder wieder entfernen, auch nach dem Speichern.",
   "inspector.surfaceApply": "Oberfläche aufbringen",

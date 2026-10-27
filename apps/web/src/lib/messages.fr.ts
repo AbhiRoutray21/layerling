@@ -1666,6 +1666,7 @@ export const MESSAGES_FR: Partial<Record<MessageKey, string>> = {
   "inspector.surfaceZoneTo": "Motif jusqu'à (%)",
   "inspector.surfaceKeepEdges": "Laisser les arêtes vives lisses",
   "inspector.surfaceFade": "Fondu sur",
+  "inspector.surfaceFadeHint": "Jusqu'où le motif s'approche des arêtes et des faces lisses : il s'y estompe sur autant de millimètres. Plus petit, il va plus près de l'arête ; à 0, jusqu'à elle.",
   "inspector.surfaceDetail": "Finesse",
   "inspector.surfaceHint": "Le corps devient un maillage avec le relief, et le corps en dessous est conservé : plus tard, vous pouvez changer la texture ou la retirer, même après l'enregistrement.",
   "inspector.surfaceApply": "Appliquer la texture",

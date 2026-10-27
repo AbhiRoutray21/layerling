@@ -1680,6 +1680,7 @@ export const MESSAGES_NL: Record<MessageKey, string> = {
   "inspector.surfaceZoneTo": "Patroon tot (%)",
   "inspector.surfaceKeepEdges": "Scherpe randen glad laten",
   "inspector.surfaceFade": "Opkomen over",
+  "inspector.surfaceFadeHint": "Hoe dicht het patroon bij randen en gladde vlakken komt: het loopt daar over zoveel millimeter uit. Kleiner gaat dichter naar de rand, bij 0 er helemaal tegenaan.",
   "inspector.surfaceDetail": "Fijnheid",
   "inspector.surfaceHint": "Het lichaam wordt een mesh met het reliëf, en het lichaam eronder blijft bewaard: later kun je de structuur wijzigen of weer verwijderen, ook na het opslaan.",
   "inspector.surfaceApply": "Structuur aanbrengen",
