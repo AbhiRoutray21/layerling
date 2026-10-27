@@ -2264,6 +2264,7 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "gridfinity.paddingHint": "Ein massiver Streifen außerhalb des Rasters, damit die Bodenplatte eine Schublade füllt, die keine ganze Zahl von Einheiten misst. Ändert er sich, bleiben die Einheiten, und die Größe der Platte ändert sich mit.",
   "prop.gridfinityCornerRadius": "Eckenradius",
   "gridfinity.cornerRadiusHint": "Der Radius der vier äußeren Ecken der Platte, von 4 mm, wie die Gridfinity-Spezifikation sie zeichnet, bis 0 für rechtwinklige Ecken, die in die Ecken einer Schublade passen. Die Mulden behalten ihre Rundung, die Behälter passen also wie bisher.",
+  "gridfinity.binCornerRadiusHint": "Der Radius der äußeren Ecken des Behälters über den Füßen: von 3,75 mm, wie die Gridfinity-Spezifikation sie zeichnet, bis 0 für rechtwinklige Ecken, damit nebeneinanderstehende Behälter in einer Schublade auch dort, wo vier zusammentreffen, nur ihre 0,5-mm-Spalten lassen. Die Füße, das Innere und die Schrägen des Stapelrands, auf denen ein gestapelter Behälter steht, behalten ihre Rundung; der Behälter sitzt also in einer Bodenplatte und lässt sich stapeln wie bisher.",
   "prop.gridfinityDrawerWidth": "Schubladenbreite",
   "prop.gridfinityDrawerDepth": "Schubladentiefe",
   "gridfinity.drawerHint": "Das Innenmaß der Schublade; die Platte wird 0,5 mm kleiner. Eine Schublade größer als 334,5 mm oder als dein Druckbett braucht mehrere Bodenplatten.",

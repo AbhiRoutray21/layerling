@@ -2250,6 +2250,7 @@ export const MESSAGES_FR: Partial<Record<MessageKey, string>> = {
   "gridfinity.paddingHint": "Une bordure pleine en dehors de la grille, pour que le socle remplisse un tiroir qui ne fait pas un nombre entier d'unités. La changer garde les unités et change la taille du socle avec elle.",
   "prop.gridfinityCornerRadius": "Rayon des coins",
   "gridfinity.cornerRadiusHint": "Le rayon des quatre coins extérieurs du socle : 4 mm comme la spécification Gridfinity les dessine, jusqu'à 0 pour des coins droits qui épousent ceux d'un tiroir. Les logements gardent leur arrondi, les bacs s'y posent donc comme avant.",
+  "gridfinity.binCornerRadiusHint": "Le rayon des coins extérieurs du bac au-dessus de ses pieds : 3,75 mm comme la spécification Gridfinity les dessine, jusqu'à 0 pour des coins droits, afin que des bacs côte à côte dans un tiroir ne laissent que leurs jeux de 0,5 mm là où quatre se rejoignent. Les pieds, l'intérieur et les pentes du rebord d'empilage gardent leur arrondi, le bac se pose donc dans un socle et s'empile comme avant.",
   "prop.gridfinityDrawerWidth": "Largeur du tiroir",
   "prop.gridfinityDrawerDepth": "Profondeur du tiroir",
   "gridfinity.drawerHint": "L'intérieur du tiroir ; le socle fait 0,5 mm de moins. Un tiroir de plus de 334,5 mm, ou plus grand que votre plateau d'impression, prend plusieurs socles.",
