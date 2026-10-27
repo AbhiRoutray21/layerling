@@ -180,7 +180,7 @@ Med mønsteret {{ui:surfaceTexture.text}} klæber du en tekst på legemet som et
 
 For at holde en del af legemet glat, eller for kun at give en del struktur, bruger du et hjælpelegeme: læg en kasse, en cylinder eller en kugle der, hvor den skal være, vælg den, og vælg under {{ui:inspector.surfaceMask}} enten {{ui:surfaceTexture.maskExclude}} eller {{ui:surfaceTexture.maskOnly}}. Den bliver gennemsigtig, og den tæller med, når det andet legeme får sin struktur, også mens den er skjult. Skjul eller slet den inden printning.
 
-Resultatet er et net som en importeret model, og det bevarer det legeme, det blev lavet på. Vælg det senere, også efter at have gemt, og kortet viser de indstillinger, det blev lavet med: ændr dem, og klik på {{ui:inspector.surfaceChange}}, så laves strukturen igen på det legeme, samme sted og i den størrelse som det har nu. {{ui:inspector.surfaceRemove}} giver det glatte legeme tilbage. Maskelegemer tæller med igen, når strukturen ændres: skjul dem frem for at slette dem, hvis du må ændre den igen senere. Fortryd tager hvert af disse skridt tilbage.
+Resultatet er et mesh som en importeret model, og det bevarer det legeme, det blev lavet på. Vælg det senere, også efter at have gemt, og kortet viser de indstillinger, det blev lavet med: ændr dem, og klik på {{ui:inspector.surfaceChange}}, så laves strukturen igen på det legeme, samme sted og i den størrelse som det har nu. {{ui:inspector.surfaceRemove}} giver det glatte legeme tilbage. Maskelegemer tæller med igen, når strukturen ændres: skjul dem frem for at slette dem, hvis du må ændre den igen senere. Fortryd tager hvert af disse skridt tilbage.
 
 ## En vase
 
