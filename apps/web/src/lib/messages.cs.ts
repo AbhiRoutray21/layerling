@@ -1214,6 +1214,7 @@ export const MESSAGES_CS: Record<MessageKey, string> = {
   "status.noPrintableSurface": "Vybraný objekt nemá tisknutelný povrch",
   "status.onlyOnePart": "Vybraný objekt má pouze jednu souvislou část",
   "status.meshTooDense": "Síť má {triangles} trojúhelníků. Úprava hran zvládá nejvýše {limit}; při větším počtu by výpočet trval příliš dlouho. U tvaru z knihovny zatím použijte jeho vlastní nastavení. Importovaný díl načtěte jako STEP nebo nejprve snižte počet trojúhelníků.",
+  "status.meshDenseAsk": "Tato síť má {triangles} trojúhelníků, víc než {limit}, na které je úprava hran stavěná. Nad tuto hranici to může trvat mnoho minut, stránka se může zaseknout a při jejím zavření přijdeš o vše neuložené. Nejdřív návrh ulož.\n\nPřesto to zkusit?",
   "status.threadTooDense": "Závit má {triangles} trojúhelníků, což překračuje limit {limit} pro úpravu hran. Nejdřív proto zkoste nebo zaoblete těleso a až potom přidejte závit. Zkosení hlavy ve vlastnostech upraví hranu hlavy šroubu bez tohoto postupu.",
   "status.unlockImageDelete": "Před smazáním odemkněte obrázek náčrtu klávesou L",
   "status.unlockImageEdit": "Před úpravou odemkněte obrázek náčrtu klávesou L",

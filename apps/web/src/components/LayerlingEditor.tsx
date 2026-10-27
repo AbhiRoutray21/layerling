@@ -6697,11 +6697,14 @@ export function LayerlingEditor({
       // gebrochenen Schraubenkopf fuehrt. Ein exakt gebautes Gewinde zaehlt
       // hier nicht mit, die Absage gilt dann einem anderen Teil.
       const istGewinde = partInputs.some((part) => part.mesh && part.shape.kind === "thread");
-      setNotice(t(istGewinde ? "status.threadTooDense" : "status.meshTooDense", {
-        triangles: formatTriangleCount(triangleCount),
-        limit: formatTriangleCount(CAD_MODIFIER_PREPARE_TRIANGLE_LIMIT),
-      }), true);
-      return;
+      const denseCounts = { triangles: formatTriangleCount(triangleCount), limit: formatTriangleCount(CAD_MODIFIER_PREPARE_TRIANGLE_LIMIT) };
+      // The limit is where the measurements turn (it can take minutes beyond it), not a wall: whoever
+      // knows their machine may go on after a clear warning (#941). A thread has a better way, so it stays refused.
+      const goOn = !istGewinde && typeof window !== "undefined" && window.confirm(t("status.meshDenseAsk", denseCounts));
+      if (!goOn) {
+        setNotice(t(istGewinde ? "status.threadTooDense" : "status.meshTooDense", denseCounts), true);
+        return;
+      }
     }
     const amount = Math.max(MIN_EDGE_MODIFIER_AMOUNT, Math.min(1, shapeWidth(selectedShape) / 6, shapeDepth(selectedShape) / 6, selectedShape.height / 6));
     cadModifierBaseShapeRef.current = selectedShape;

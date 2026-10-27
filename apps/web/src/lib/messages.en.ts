@@ -1105,6 +1105,7 @@ export const MESSAGES_EN = {
   "status.noPrintableSurface": "The selected object has no printable surface",
   "status.onlyOnePart": "The selected object has only one connected part",
   "status.meshTooDense": "This mesh has {triangles} triangles. Edge treatment handles {limit}; beyond that the kernel takes longer than any wait is worth. For a shape from the shape list, use its own settings for now. For an imported part, import it as STEP or save it with fewer triangles first.",
+  "status.meshDenseAsk": "This mesh has {triangles} triangles, more than the {limit} that edge treatment is built for. Beyond that it can take many minutes, the page can freeze, and anything you have not saved is lost if you have to close it. Save your design first.\n\nTry it anyway?",
   "status.threadTooDense": "A thread is built from {triangles} triangles — too many for edge treatment, which stops at {limit}. So add the thread after the edge treatment: chamfer or round the body first, then the thread. The head chamfer in the properties breaks the screw head's rim without this detour.",
   "status.unlockImageDelete": "Unlock the sketch image with L before deleting it",
   "status.unlockImageEdit": "Unlock the sketch image with L before editing it",
