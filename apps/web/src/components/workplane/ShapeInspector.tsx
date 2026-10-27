@@ -3384,7 +3384,7 @@ export function ShapeInspector({
                 onChange={threadHeadProperty.onChange}
               />
             ) : null}
-            {onProportionLockChange && primaryProperties.some((property) => property.id === "height") && primaryProperties.some((property) => ["width", "length", "diameter"].includes(property.id)) ? (
+            {onProportionLockChange && primaryProperties.some((property) => property.id === "height") && primaryProperties.some((property) => ["width", "length", "diameter", "outerDiameter"].includes(property.id)) ? (
               <ToggleProperty
                 label={t("inspector.keepProportions")}
                 value={proportionLock}
