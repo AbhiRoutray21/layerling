@@ -1177,6 +1177,7 @@ export const MESSAGES_FR: Partial<Record<MessageKey, string>> = {
   "status.importFailedMore": "et {count} autres",
   "status.importColoredParts": "{name} a {count} couleurs et se présente sous forme de {count} corps, chacun à sa place et tous sélectionnés.",
   "status.importObjectParts": "{name} contient {objects} objets et se présente sous forme de {count} corps, chacun à sa place et tous sélectionnés.",
+  "status.importStepParts": "{name} contient {count} corps ; chacun arrive comme un corps à part, sous son propre nom, à sa place et tous sélectionnés ensemble.",
   "status.importSvgSkipped": "{count} formes de {name} n'ont pas pu être transformées en solide et ont été laissées de côté. Joignez les pièces qui se chevauchent dans le programme de dessin, fermez les contours et enregistrez à nouveau le SVG.",
   "status.importDxfUnit": "{name} est dessiné en « {unit} » ; il a été converti en millimètres.",
   "status.importDxfUnitless": "{name} n'indique aucune unité, il a donc été lu en millimètres. Vérifiez la taille.",

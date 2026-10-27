@@ -947,6 +947,7 @@ export const MESSAGES_SL: Partial<Record<MessageKey, string>> = {
   "status.importFailedMore": " in še {count}",
   "status.importColoredParts": "{name} ima barv: {count} in se uvozi kot teles: {count}, vsako na svojem mestu in skupaj izbrana.",
   "status.importObjectParts": "{name} vsebuje objektov: {objects} in se uvozi kot teles: {count}, vsako na svojem mestu in skupaj izbrana.",
+  "status.importStepParts": "{name} vsebuje teles: {count}; vsako se uvozi kot samostojno telo pod svojim imenom, na svojem mestu in skupaj izbrana.",
   "status.importObjNoMtl": "Barve materiala za {name} manjkajo - skupaj izberi še datoteko .mtl ali uvozi celoten ZIP.",
   "status.importObjVertexColors": "{name} ima skoraj v vsaki točki svojo barvo, barvni prehod kot pri skenih in modelih, narejenih z umetno inteligenco. layerling tega ne more prikazati in je datoteko uvozil kot eno telo v eni barvi.",
   "status.importMtlAlone": "Datoteka .mtl vsebuje samo barve. Izberi jo skupaj z ustrezno datoteko .obj.",

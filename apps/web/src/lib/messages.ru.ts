@@ -1184,6 +1184,7 @@ export const MESSAGES_RU: Partial<Record<MessageKey, string>> = {
   "status.importFailedMore": "и ещё {count}",
   "status.importColoredParts": "{name}: цветов — {count}, тел — {count}; каждое на своём месте, все выделены вместе.",
   "status.importObjectParts": "{name}: объектов — {objects}, тел — {count}; каждое на своём месте, все выделены вместе.",
+  "status.importStepParts": "{name}: тел — {count}; каждое входит отдельным телом под своим именем, на своём месте, все выделены вместе.",
   "status.importSvgSkipped": "{count} фигур из {name} не построились в тело и были пропущены. Объедините пересекающиеся части в программе черчения, замкните контуры и сохраните SVG снова.",
   "status.importDxfUnit": "{name} начерчен в единицах «{unit}» и пересчитан в миллиметры.",
   "status.importDxfUnitless": "{name} не указывает единицы, поэтому прочитан в миллиметрах. Проверьте размер.",
