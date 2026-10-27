@@ -883,6 +883,9 @@ function getShapePropertiesWithAppLimits(shape: WorkplaneShape, onUpdate: ShapeI
         onChange: (value) => update({ bentTubeWall: value }),
       });
     }
+    if (fields.bentTubeInnerProfile !== "none") {
+      properties.push({ type: "toggle" as const, id: "tubeBoreHole", label: t("prop.tubeBoreHole"), value: shape.tubeBoreHole === true, onChange: (value: boolean) => onUpdate({ tubeBoreHole: value || undefined }) });
+    }
     properties.push({
       id: "bentTubeQuality",
       label: t("prop.quality"),
