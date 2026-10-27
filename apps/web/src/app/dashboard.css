@@ -403,20 +403,26 @@ html[data-theme="dark"] .dashboard-welcome-guide-link:focus-visible {
   display: none;
 }
 
-/* The designs of this browser live nowhere else: one quiet line over them says so, in the
-   footer's trademark type, a size larger. */
+/* The designs of this browser live nowhere else: a card in the old storage notice's orange, so a
+   beginner does not miss that a crash or an update can lose them. */
 .browser-backup-note {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
-  justify-content: center;
-  gap: 4px 6px;
-  margin: 0 0 12px;
-  color: #988672;
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 1.45;
-  text-align: center;
+  gap: 12px;
+  margin: 0 0 16px;
+  padding: 14px 16px;
+  color: #4a2f10;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.5;
+  background: #fff1dc;
+  border: 2px solid #e08a2c;
+  border-radius: 10px;
+}
+
+.browser-backup-note > span {
+  flex: 1;
+  min-width: 0;
 }
 
 .browser-backup-note > svg {
@@ -482,7 +488,9 @@ html[data-theme="dark"] .design-tab.drop-target {
 }
 
 html[data-theme="dark"] .browser-backup-note {
-  color: #b3a48d;
+  color: #f6e3c9;
+  background: #3a2812;
+  border-color: #d9863a;
 }
 
 html[data-theme="dark"] .browser-backup-note > svg {

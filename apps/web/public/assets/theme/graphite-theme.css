@@ -7308,7 +7308,9 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .dashboard-welcome-guid
 }
 
 :where(html[data-theme="dark"][data-palette="graphite"]) .browser-backup-note {
-  color: #757575;
+  color: #313131;
+  background: #eeeeee;
+  border: 2px solid #e08a2c;
 }
 
 :where(html[data-theme="dark"][data-palette="graphite"]) .browser-backup-note > svg {
@@ -7358,7 +7360,9 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .design-tab.drop-target
 }
 
 html[data-theme="dark"]:where([data-palette="graphite"]) .browser-backup-note {
-  color: #8d8d8d;
+  color: #e0e0e0;
+  background: #2b2b2b;
+  border-color: #d9863a;
 }
 
 html[data-theme="dark"]:where([data-palette="graphite"]) .browser-backup-note > svg {
