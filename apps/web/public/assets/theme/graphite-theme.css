@@ -720,10 +720,6 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .whats-new-earlier:hove
   box-shadow: 0 5px 15px rgba(60, 60, 60, 0.12);
 }
 
-:where(html[data-theme="dark"][data-palette="graphite"]) .dashboard-action-tile.create {
-  border-color: #f3a452;
-}
-
 :where(html[data-theme="dark"][data-palette="graphite"]) .dashboard-action-icon {
   color: #ffffff;
   background: #dd7906;
@@ -5204,7 +5200,6 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .project-menu-trigger {
 
 html[data-theme="dark"]:where([data-palette="graphite"]) .dashboard-action-tile.create {
   color: #f2f2f2;
-  border-color: #a3682b;
 }
 
 html[data-theme="dark"]:where([data-palette="graphite"]) .dashboard-action-tile:not(.create) .dashboard-action-icon {
