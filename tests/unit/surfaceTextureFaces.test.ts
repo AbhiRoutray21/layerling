@@ -208,14 +208,18 @@ describe("picked faces", () => {
 
 describe("faces that stay smooth stay coarse", () => {
   it("keep the smooth top and bottom of a box with bumps at a few triangles", () => {
-    const result = applySurfaceTexture(box(40, 40, 40), { pattern: "bumps" });
-    expect(closed(result)).toMatchObject({ openEdges: 0, nonManifoldEdges: 0, shells: 1 });
-    let flat = 0;
-    for (let t = 0; t < result.indices.length; t += 3) {
-      const ys = [0, 1, 2].map((k) => result.vertices[result.indices[t + k] * 3 + 1]);
-      if (ys.every((y) => Math.abs(y - 40) < 1e-9) || ys.every((y) => Math.abs(y) < 1e-9)) flat += 1;
+    // Each face on its own, bumps near the border are left off whole; along the outline they run up to the rims, whose
+    // points the top and bottom take in.
+    for (const [projection, most] of [["allRound", 200], ["auto", 1000]] as const) {
+      const result = applySurfaceTexture(box(40, 40, 40), { pattern: "bumps", projection });
+      expect(closed(result)).toMatchObject({ openEdges: 0, nonManifoldEdges: 0, shells: 1 });
+      let flat = 0;
+      for (let t = 0; t < result.indices.length; t += 3) {
+        const ys = [0, 1, 2].map((k) => result.vertices[result.indices[t + k] * 3 + 1]);
+        if (ys.every((y) => Math.abs(y - 40) < 1e-9) || ys.every((y) => Math.abs(y) < 1e-9)) flat += 1;
+      }
+      expect(flat, projection).toBeLessThan(most);
     }
-    expect(flat).toBeLessThan(200);
   }, 60_000);
 
   it("merge points inside flat pieces and along straight creases, without moving any", () => {

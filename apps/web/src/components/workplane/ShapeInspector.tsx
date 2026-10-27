@@ -162,7 +162,7 @@ import { t, type MessageKey } from "@/lib/i18n";
 import { localizedError } from "@/lib/userErrors";
 import { displayShapeName, makeShapeFromAsset, renamedShapeName } from "@/lib/shapeCatalog";
 import { cylinderToEllipsePatch } from "@/lib/cylinderToEllipse";
-import { normalizeSurfaceTexture, SURFACE_TEXTURE_AXES, SURFACE_TEXTURE_CRACK_STARTS, SURFACE_TEXTURE_CRACK_STYLES, SURFACE_TEXTURE_DEFAULTS, SURFACE_TEXTURE_DETAILS, SURFACE_TEXTURE_DIRECTIONS, SURFACE_TEXTURE_IMAGES, SURFACE_TEXTURE_LIMITS, SURFACE_TEXTURE_MASK_MODES, SURFACE_TEXTURE_PATTERNS, SURFACE_TEXTURE_PROFILES, SURFACE_TEXTURE_PROJECTIONS, SURFACE_TEXTURE_STARTERS, SURFACE_TEXTURE_TILINGS, surfaceTextureImageTile, type SurfaceTextureFace, type SurfaceTextureMaskMode, type SurfaceTexturePattern, type SurfaceTextureSettings } from "@/lib/surfaceTexture";
+import { normalizeSurfaceTexture, SURFACE_TEXTURE_AXES, SURFACE_TEXTURE_CAP_STYLES, SURFACE_TEXTURE_CRACK_STARTS, SURFACE_TEXTURE_CRACK_STYLES, SURFACE_TEXTURE_DEFAULTS, SURFACE_TEXTURE_DETAILS, SURFACE_TEXTURE_DIRECTIONS, SURFACE_TEXTURE_IMAGES, SURFACE_TEXTURE_LIMITS, SURFACE_TEXTURE_MASK_MODES, SURFACE_TEXTURE_PATTERNS, SURFACE_TEXTURE_PROFILES, SURFACE_TEXTURE_PROJECTIONS, SURFACE_TEXTURE_STARTERS, SURFACE_TEXTURE_TILINGS, surfaceTextureImageTile, type SurfaceTextureFace, type SurfaceTextureMaskMode, type SurfaceTexturePattern, type SurfaceTextureSettings } from "@/lib/surfaceTexture";
 import { SURFACE_TEXTURE_OWN_IMAGE_SIZE, surfaceTextureOwnImage } from "@/lib/surfaceTextureImages";
 import { offersSurfaceTextureMask, SURFACE_TEXTURE_LABELS, surfacePatternLabel, surfaceTextureEntry } from "@/lib/surfaceTextureShape";
 import { LIMITS as VASE_LIMITS, MATERIALS as VASE_MATERIALS, type VaseChoiceKey, type VaseNumberKey } from "@/lib/vase/vase-geometry.mjs";
@@ -4586,6 +4586,8 @@ export function SurfaceTextureCard({
   );
   const striped = settings.pattern === "grooves" || settings.pattern === "knurl";
   const cracks = settings.pattern === "cracks";
+  // Grooves, rope and knitting can lie on a top in rings (see SurfaceTextureSettings.capStyle).
+  const ringPattern = settings.pattern === "grooves" || settings.pattern === "rope" || settings.pattern === "knit";
   // Grain lies in space: no projection, no axis. An image's grey values are its profile and width.
   const grain = settings.pattern === "grain";
   const image = settings.pattern === "image";
@@ -4872,7 +4874,20 @@ export function SurfaceTextureCard({
                         />
                       )}
                       {striped ? range("surfaceAngle", t("inspector.surfaceAngle"), settings.angle, SURFACE_TEXTURE_LIMITS.angle, 1, (angle) => set({ angle })) : null}
-                      {/* Top and bottom: the pattern's direction there (round tops take some patterns in rings). */}
+                      {/* Top and bottom: grooves, rope and knitting in rows or rings, and the pattern's direction there. */}
+                      {ringPattern && settings.projection !== "allRound" && settings.projection !== "flat" ? (
+                        <>
+                          <SelectProperty
+                            type="select"
+                            label={t("inspector.surfaceCapStyle")}
+                            value={settings.capStyle}
+                            options={options(SURFACE_TEXTURE_CAP_STYLES, (value) => t(SURFACE_TEXTURE_LABELS.capStyle[value]))}
+                            hint={t("inspector.surfaceCapStyleHint")}
+                            disabled={disabled || busy}
+                            onChange={(value) => set({ capStyle: value as SurfaceTextureSettings["capStyle"] })}
+                          />
+                        </>
+                      ) : null}
                       {grain || cracks ? null : (
                         <>
                           {range("surfaceFaceTurn", t("inspector.surfaceFaceTurn"), settings.faceTurn, SURFACE_TEXTURE_LIMITS.faceTurn, 1, (faceTurn) => set({ faceTurn }))}
