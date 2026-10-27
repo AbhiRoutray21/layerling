@@ -1,12 +1,12 @@
 [
   {
     "title": {
-      "de": "Auch das gebogene Rohr schneidet als Loch",
-      "en": "The bent tube cuts as a hole too"
+      "de": "STEP-Dateien mit mehreren Körpern",
+      "en": "STEP files with several solids"
     },
     "body": {
-      "de": "Beim gebogenen Rohr mit Öffnung gibt es jetzt den Schalter „Bohrung schneidet beim Gruppieren wie ein Loch“, wie beim Rohr und Ring. Dann schneidet die Öffnung auch die Wand dessen, woran das Rohr stößt oder wodurch es führt, und eine Flüssigkeit kann ungehindert durch.",
-      "en": "A bent tube with an opening now has the switch \"Bore cuts as a hole when grouped\", like the tube and the ring. Then the opening also cuts the wall of whatever the pipe meets or passes through, so a liquid can flow through."
+      "de": "Eine STEP-Datei aus einem anderen CAD-Programm, etwa eine Baugruppe aus Pfosten, Leisten und Platten, kommt jetzt als je ein Körper herein, unter dem Namen aus der Datei und an der richtigen Stelle zueinander, alle gemeinsam ausgewählt. Farben und Gruppen der Datei übernimmt layerling noch nicht.",
+      "en": "A STEP file from another CAD program, an assembly of posts, rails and panels for example, now comes in as one body each, under the name from the file and in the right place to the others, all selected together. layerling does not take over the colours and groups of the file yet."
     }
   }
 ]
