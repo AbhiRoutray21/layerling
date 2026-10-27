@@ -3280,6 +3280,8 @@ export const MESSAGES_SL: Partial<Record<MessageKey, string>> = {
   "holePattern.count.many": "Število lukenj, ki se prilegajo ploskvi: {count}.",
   "holePattern.none": "Tu se ne prilega nobena luknja: ploskev je premajhna za to velikost in rob.",
   "holePattern.tooMany": "To bi bilo več kot {limit} lukenj. Naredi luknje večje ali razmik širši.",
+  "holePattern.allowMany": "Dovoli več lukenj",
+  "holePattern.allowManyAsk": "Vzorec bi imel več kot {limit} lukenj. Vsaka luknja se reže posebej, zato lahko pri precej več traja minute, stran se lahko zamrzne in vse neshranjeno izgine, če jo moraš zapreti. Najprej shrani načrt. Po tvojem soglasju je dovoljeno do {many} lukenj.\n\nVseeno nadaljevati?",
   "holePattern.form": "Oblika luknje",
   "holePattern.form.round": "Okrogla",
   "holePattern.form.square": "Kvadratna",

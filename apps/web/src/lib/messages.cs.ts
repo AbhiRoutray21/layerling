@@ -1092,6 +1092,8 @@ export const MESSAGES_CS: Record<MessageKey, string> = {
   "holePattern.count.many": "Počet otvorů, které se vejdou na plochu: {count}.",
   "holePattern.none": "Otvor se sem nevejde: plocha je pro zvolený rozměr a okraj příliš malá.",
   "holePattern.tooMany": "Vzniklo by více než {limit} otvorů. Zvětšete otvory nebo rozteč.",
+  "holePattern.allowMany": "Povolit více děr",
+  "holePattern.allowManyAsk": "Vzor by měl více než {limit} děr. Každá díra se řeže zvlášť, takže při mnohem větším počtu to může trvat minuty, stránka se může zaseknout a při jejím zavření přijdeš o vše neuložené. Nejdřív návrh ulož. Po tvém souhlasu je povoleno až {many} děr.\n\nPřesto pokračovat?",
   "holePattern.form": "Tvar otvoru",
   "holePattern.form.round": "Kruhový",
   "holePattern.form.square": "Čtvercový",

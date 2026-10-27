@@ -976,6 +976,8 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "holePattern.count.many": "{count} Löcher passen auf die Fläche.",
   "holePattern.none": "Hier passt kein Loch hin: Die Fläche ist zu klein für diese Größe und diesen Rand.",
   "holePattern.tooMany": "Das wären mehr als {limit} Löcher. Mach die Löcher größer oder den Abstand weiter.",
+  "holePattern.allowMany": "Mehr Löcher zulassen",
+  "holePattern.allowManyAsk": "Das Muster hätte mehr als {limit} Löcher. Jedes Loch wird einzeln geschnitten, mit sehr vielen mehr kann es Minuten dauern, die Seite kann einfrieren, und alles Ungespeicherte geht verloren, wenn du sie schließen musst. Speichere dein Design vorher. Nach deiner Zustimmung sind bis zu {many} Löcher erlaubt.\n\nTrotzdem fortfahren?",
   "holePattern.form": "Lochform",
   "holePattern.form.round": "Rund",
   "holePattern.form.square": "Quadratisch",

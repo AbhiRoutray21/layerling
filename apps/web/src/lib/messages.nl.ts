@@ -976,6 +976,8 @@ export const MESSAGES_NL: Record<MessageKey, string> = {
   "holePattern.count.many": "Er passen {count} gaten op het vlak.",
   "holePattern.none": "Hier past geen gat: het vlak is te klein voor deze maat en marge.",
   "holePattern.tooMany": "Dat zouden meer dan {limit} gaten worden. Maak de gaten groter of de tussenafstand ruimer.",
+  "holePattern.allowMany": "Meer gaten toestaan",
+  "holePattern.allowManyAsk": "Het patroon zou meer dan {limit} gaten krijgen. Elk gat wordt apart gesneden, dus met veel meer kan het minuten duren, kan de pagina vastlopen en gaat alles wat niet is opgeslagen verloren als je haar moet sluiten. Sla je ontwerp eerst op. Na je akkoord zijn tot {many} gaten toegestaan.\n\nToch doorgaan?",
   "holePattern.form": "Gatvorm",
   "holePattern.form.round": "Rond",
   "holePattern.form.square": "Vierkant",

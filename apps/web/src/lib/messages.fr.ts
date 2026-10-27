@@ -966,6 +966,8 @@ export const MESSAGES_FR: Partial<Record<MessageKey, string>> = {
   "holePattern.count.many": "{count} trous s'ajustent sur le visage.",
   "holePattern.none": "Aucun trou ne rentre ici : le visage est trop petit pour cette taille et cette marge.",
   "holePattern.tooMany": "Ce serait plus que {limit} trous. Agrandissez les trous ou élargissez l'espacement.",
+  "holePattern.allowMany": "Autoriser plus de trous",
+  "holePattern.allowManyAsk": "La grille aurait plus de {limit} trous. Chaque trou est découpé un par un : avec beaucoup plus, cela peut durer des minutes, la page peut se figer et tout ce qui n'est pas enregistré est perdu si vous devez la fermer. Enregistrez d'abord votre projet. Après votre accord, jusqu'à {many} trous sont autorisés.\n\nContinuer quand même ?",
   "holePattern.form": "Forme du trou",
   "holePattern.form.round": "Rond",
   "holePattern.form.square": "Carré",

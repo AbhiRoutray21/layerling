@@ -977,6 +977,8 @@ export const MESSAGES_EN = {
   "holePattern.count.many": "{count} holes fit on the face.",
   "holePattern.none": "No hole fits here: the face is too small for this size and margin.",
   "holePattern.tooMany": "That would be more than {limit} holes. Make the holes bigger or the spacing wider.",
+  "holePattern.allowMany": "Allow more holes",
+  "holePattern.allowManyAsk": "The pattern would hold more than {limit} holes. Each hole is cut one by one, so with many more it can take minutes, the page can freeze, and anything you have not saved is lost if you have to close it. Save your design first. After you agree, up to {many} holes are allowed.\n\nGo on anyway?",
   "holePattern.form": "Hole shape",
   "holePattern.form.round": "Round",
   "holePattern.form.square": "Square",
