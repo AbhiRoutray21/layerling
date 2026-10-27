@@ -305,6 +305,11 @@ Custom shapes saved to the server go into a folder named `Custom shapes` at the 
 picture each. layerling creates it with the first such shape; it is an ordinary folder, so it shows on the start page and
 a shape in it opens and saves like any design. Neither the Node route nor `store.php` needs anything extra for it.
 
+The settings saved with "Make default" in the workspace settings are kept in the store too, as `.settings/default.json`
+(a hidden folder the start page does not list). A browser that has lost its own, because its data was cleared or it is
+another browser, picks them up when the start page loads, so a new design starts with them again. There is one default for
+the whole store; the last one saved in any browser wins. Delete the file to go back to each browser's own.
+
 Opening a design from the server gives you a private local working copy. Saving back checks the revision on the server
 first; if someone else changed the file in the meantime, layerling refuses to overwrite it and asks you to reload or save
 under a different name. This is shared file storage, not simultaneous editing.

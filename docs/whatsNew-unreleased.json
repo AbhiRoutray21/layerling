@@ -1,6 +1,16 @@
 [
   {
     "title": {
+      "de": "Deine Vorgabe bleibt auf dem Server",
+      "en": "Your default stays on the server"
+    },
+    "body": {
+      "de": "Läuft layerling mit einem Serverordner, etwa in Docker, landet „Als Vorgabe sichern“ jetzt auch dort. Leerst du den Browser-Speicher oder öffnest layerling in einem anderen Browser, beginnen neue Entwürfe trotzdem mit deinen eigenen Einstellungen.",
+      "en": "When layerling runs with a server folder, for example in Docker, \"Make default\" now saves there too. Clear the browser storage or open layerling in another browser, and new designs still start with your own settings."
+    }
+  },
+  {
+    "title": {
       "de": "Eckenradius für Gridfinity-Behälter",
       "en": "Corner radius for Gridfinity bins"
     },
