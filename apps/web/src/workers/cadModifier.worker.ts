@@ -13,7 +13,7 @@ import { importedStepBody } from "@/lib/cadImportedStep";
 import { threadPartSolid } from "@/lib/threadSolid";
 import { springPartSolid } from "@/lib/springSolid";
 import { gridfinityPartSolid } from "@/lib/gridfinitySolid";
-import { fuzzyCut } from "@/lib/cadFuzzyCut";
+import { fuzzyCut, tidiedIfValid } from "@/lib/cadFuzzyCut";
 import { helicalGearPartSolid } from "@/lib/gearSolid";
 import { meshTreatedBody } from "@/lib/cadMeshAccuracy";
 import { planarMeshFaces } from "@/lib/cadPlanarMesh";
@@ -565,9 +565,7 @@ function reconstructParts(cad: OcctKernel, parts: CadModifierMeshPart[]) {
     result = cad.unifySameDomain(result);
   }
   for (const hole of holes) {
-    result = fuzzyCut(cad, result, hole);
-    result = cad.simplify(result);
-    result = cad.unifySameDomain(result);
+    result = tidiedIfValid(cad, fuzzyCut(cad, result, hole), cadShapeIsValid);
   }
   const combined = result;
   // The repair runs on a copy: ShapeFix also rewrites the sub-shapes it
