@@ -11,6 +11,36 @@
   },
   {
     "title": {
+      "de": "Q blendet die Maße aus",
+      "en": "Q hides the measurements"
+    },
+    "body": {
+      "de": "Beim Verschieben kleiner Teile verdecken Maße und Abstände leicht, was man bewegt. Die Taste Q blendet sie aus, ein zweites Q zeigt sie wieder.",
+      "en": "When moving small parts, sizes and distances can cover what you move. The Q key hides them, and Q again brings them back."
+    }
+  },
+  {
+    "title": {
+      "de": "Kleine Werkzeugleiste bleibt klein",
+      "en": "A small toolbar stays small"
+    },
+    "body": {
+      "de": "Veränderte eine Browser-Erweiterung oder die Übersetzung des Browsers die Seite beim Laden, kam die Leiste nach einem Neustart in mittlerer Größe zurück. Größe, einfacher Modus und Ecke des Ansichtswürfels bleiben jetzt erhalten.",
+      "en": "When a browser extension or the browser's translation changed the page while it loaded, the toolbar came back at medium size after a restart. Its size, the simple mode and the view cube's corner now stay as set."
+    }
+  },
+  {
+    "title": {
+      "de": "Gewickelte Körper zeigen das Zylindermaß",
+      "en": "Wrapped bodies show the cylinder's size"
+    },
+    "body": {
+      "de": "Ein um einen Zylinder gewickelter Körper zeigt an seinen Griffen jetzt dieselben Maße wie in den Eigenschaften, also die des Zylinders.",
+      "en": "A body wrapped round a cylinder now shows the same sizes at its handles as in its properties: those of the cylinder."
+    }
+  },
+  {
+    "title": {
       "de": "Importierte STL nicht mehr schwarz",
       "en": "Imported STL files no longer black"
     },
