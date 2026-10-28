@@ -8,5 +8,15 @@
       "de": "Mit „Buchstaben untereinander“ stehen die Buchstaben von oben nach unten, jeder mittig. Das geht bei Text, Namensschildern und Schrift auf Oberflächen; der Buchstabenabstand bestimmt die Lücke dazwischen.",
       "en": "With \"Letters top to bottom\" the letters run downwards, each centred. It works for text, name tags and lettering on surfaces, and the letter spacing sets the gap between them."
     }
+  },
+  {
+    "title": {
+      "de": "Importierte STL nicht mehr schwarz",
+      "en": "Imported STL files no longer black"
+    },
+    "body": {
+      "de": "Manche Programme schreiben in eine STL-Datei keine Flächenrichtungen. Solche Modelle kamen schwarz herein; layerling berechnet die Richtungen jetzt wieder selbst aus den Dreiecken, auch für schon gespeicherte Entwürfe.",
+      "en": "Some programs write no face directions into an STL file. Such models came in black; layerling works the directions out from the triangles again, also in designs saved before."
+    }
   }
 ]
