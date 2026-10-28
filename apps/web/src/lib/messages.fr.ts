@@ -975,6 +975,7 @@ export const MESSAGES_FR: Partial<Record<MessageKey, string>> = {
   "holePattern.size.width": "Largeur",
   "holePattern.size.height": "Hauteur",
   "holePattern.spacing": "Espacement centre à centre",
+  "holePattern.rowSpacing": "Espacement des rangées",
   "holePattern.wall": "Mur entre les trous",
   "holePattern.arrangement": "Disposition",
   "holePattern.arrangement.grid": "Grille",

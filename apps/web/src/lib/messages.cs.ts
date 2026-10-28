@@ -1102,6 +1102,7 @@ export const MESSAGES_CS: Record<MessageKey, string> = {
   "holePattern.size.width": "Šířka",
   "holePattern.size.height": "Výška",
   "holePattern.spacing": "Rozteč středů",
+  "holePattern.rowSpacing": "Rozestup řad",
   "holePattern.arrangement": "Uspořádání",
   "holePattern.arrangement.grid": "Pravoúhlé",
   "holePattern.arrangement.staggered": "Střídavé",

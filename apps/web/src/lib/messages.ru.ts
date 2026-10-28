@@ -982,6 +982,7 @@ export const MESSAGES_RU: Partial<Record<MessageKey, string>> = {
   "holePattern.size.width": "Ширина",
   "holePattern.size.height": "Высота",
   "holePattern.spacing": "Шаг между центрами",
+  "holePattern.rowSpacing": "Расстояние между рядами",
   "holePattern.wall": "Перемычка между отверстиями",
   "holePattern.arrangement": "Расположение",
   "holePattern.arrangement.grid": "Сетка",

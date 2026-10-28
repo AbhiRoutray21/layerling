@@ -28,5 +28,15 @@
       "de": "In der Karte Position wählst du jetzt, wovon X und Y messen: von der Mitte des Körpers wie bisher oder von seiner linken und vorderen Kante. So legst du eine Kante genau auf ein Maß, ohne die halbe Breite auszurechnen.",
       "en": "In the Position card you now choose what X and Y measure from: the middle of the body as before, or its left and front edges. So you put an edge exactly on a measure without working out half the width."
     }
+  },
+  {
+    "title": {
+      "de": "Lochmuster: schmale Löcher dicht nebeneinander",
+      "en": "Hole pattern: narrow holes close together"
+    },
+    "body": {
+      "de": "Rechteckige Löcher und Langlöcher haben jetzt einen eigenen Reihenabstand. Schmale, hohe Schlitze stehen so dicht nebeneinander, wie die Wand es erlaubt, statt so weit auseinander, wie sie hoch sind.",
+      "en": "Rectangle and slot holes now have their own spacing between the rows. Narrow, tall slots stand as close side by side as the wall allows, instead of as far apart as they are high."
+    }
   }
 ]

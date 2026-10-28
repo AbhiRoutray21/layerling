@@ -3299,6 +3299,7 @@ export const MESSAGES_SL: Partial<Record<MessageKey, string>> = {
   "holePattern.size.width": "Širina",
   "holePattern.size.height": "Višina",
   "holePattern.spacing": "Razmik od središča do središča",
+  "holePattern.rowSpacing": "Razmik med vrstami",
   "holePattern.arrangement": "Razporeditev",
   "holePattern.arrangement.grid": "Mreža",
   "holePattern.arrangement.staggered": "Zamaknjeno",

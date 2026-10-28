@@ -591,7 +591,7 @@ export const tools = [
   },
   {
     name: "layerling_perforate_face",
-    description: "Cut a pattern of holes into a flat face of a solid body - the editor's Hole pattern tool (vents, speaker grilles, baskets). The holes are ordinary hole shapes standing on the face and grouped with the body (nothing is baked: ungroup frees them again). Name the body and a side of its own box (targetFace, snapped to the nearest real face; the whole flat face around its middle is used) or give point and normal on the face yourself. Only holes that lie wholly inside the face, at least margin away from its edge, are made. form: round (size = diameter), square (size = side), rectangle and slot (size = width, height = height), hexagon (size = diameter across the corners). spacing is centre to centre; staggered shifts every second row by half a spacing and packs the rows so each hole has neighbours one spacing away. Without depth the holes go through the whole body. A curved face is refused. One undo step.",
+    description: "Cut a pattern of holes into a flat face of a solid body - the editor's Hole pattern tool (vents, speaker grilles, baskets). The holes are ordinary hole shapes standing on the face and grouped with the body (nothing is baked: ungroup frees them again). Name the body and a side of its own box (targetFace, snapped to the nearest real face; the whole flat face around its middle is used) or give point and normal on the face yourself. Only holes that lie wholly inside the face, at least margin away from its edge, are made. form: round (size = diameter), square (size = side), rectangle and slot (size = width, height = height), hexagon (size = diameter across the corners). spacing is centre to centre (for rectangle and slot: along the row, with rowSpacing between the rows); staggered shifts every second row by half a spacing and packs the rows so each hole has neighbours one spacing away. Without depth the holes go through the whole body. A curved face is refused. One undo step.",
     inputSchema: {
       ...editorTargetSchema,
       properties: {
@@ -605,6 +605,7 @@ export const tools = [
         height: { type: "number", minimum: 0.5, maximum: 200, description: "Height of a rectangle or slot in millimetres (default: size)." },
         spacing: { type: "number", minimum: 0.5, maximum: 400, description: "Centre to centre in millimetres (default 9); raised to just over the hole size if smaller." },
         arrangement: { type: "string", enum: ["grid", "staggered"], description: "grid (rows and columns) or staggered (default)." },
+        rowSpacing: { type: "number", minimum: 0.5, maximum: 400, description: "Rectangle and slot only: centre to centre of the rows in millimetres, so narrow holes can sit close in the row (default: the spacing); raised to just over the hole height if smaller." },
         margin: { type: "number", minimum: 0, maximum: 100, description: "Clear distance between the holes and the face's edge in millimetres (default 4)." },
         depth: { type: "number", minimum: 0.1, description: "Depth of the holes in millimetres. Omit to go through the whole body." },
       },

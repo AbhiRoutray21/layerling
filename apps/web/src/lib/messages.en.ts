@@ -986,6 +986,7 @@ export const MESSAGES_EN = {
   "holePattern.size.width": "Width",
   "holePattern.size.height": "Height",
   "holePattern.spacing": "Spacing centre to centre",
+  "holePattern.rowSpacing": "Rows centre to centre",
   "holePattern.wall": "Wall between the holes",
   "holePattern.arrangement": "Arrangement",
   "holePattern.arrangement.grid": "Grid",

@@ -985,6 +985,7 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "holePattern.size.width": "Breite",
   "holePattern.size.height": "Höhe",
   "holePattern.spacing": "Abstand Mitte zu Mitte",
+  "holePattern.rowSpacing": "Reihenabstand",
   "holePattern.wall": "Wand zwischen den Löchern",
   "holePattern.arrangement": "Anordnung",
   "holePattern.arrangement.grid": "Raster",

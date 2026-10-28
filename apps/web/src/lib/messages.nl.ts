@@ -985,6 +985,7 @@ export const MESSAGES_NL: Record<MessageKey, string> = {
   "holePattern.size.width": "Breedte",
   "holePattern.size.height": "Hoogte",
   "holePattern.spacing": "Hart-op-hartafstand",
+  "holePattern.rowSpacing": "Rijafstand",
   "holePattern.wall": "Wand tussen de gaten",
   "holePattern.arrangement": "Opstelling",
   "holePattern.arrangement.grid": "Raster",
