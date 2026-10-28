@@ -141,6 +141,11 @@ html[data-theme="dark"] .sketch-rotate-handle {
   line-height: 1.4;
 }
 
+/* No header above it, so it takes the bottom padding at the top too. */
+.property-card.sketch-image-calibrate-card {
+  padding-top: 18px;
+}
+
 .sketch-image-calibrate-field {
   display: grid;
   gap: 6px;

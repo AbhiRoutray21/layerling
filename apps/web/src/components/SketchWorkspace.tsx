@@ -3350,7 +3350,7 @@ function SketchImageInspector({
         <img src={image.dataUrl} alt="" />
         <span>{image.pixelWidth} × {image.pixelHeight} px</span>
       </div>
-      <div className="property-card">
+      <div className="property-card sketch-image-calibrate-card">
         <div className="property-list">
           <button className={`sketch-image-aspect-toggle ${calibration ? "active" : ""}`} type="button" disabled={image.locked} onClick={() => onCalibrate({ type: calibration ? "cancel" : "start" })}>
             <Ruler size={17} />
