@@ -931,6 +931,7 @@ export const MESSAGES_JA: Partial<Record<MessageKey, string>> = {
   "status.dxfSummary": "。円：{circles}、円弧：{arcs}、線：{lines}。",
   "status.dxfOpenLeftOut": "閉じていない輪郭が{count}個あったので、ファイルに入れませんでした。",
   "status.buildingSketch": "正確なスケッチシェイプを構築しています…",
+  "status.stencilBridgesLead": "。",
   "status.stencilBridgesAdded": "ブリッジを{count}個付けました。",
   "status.stencilBridgesUnheld": "ブリッジでつなげなかったパーツ（落ちてしまいます）：{count}個。",
   "status.chooseSelectFirst": "スケッチ画像を追加する前に「選択」を選んでください",

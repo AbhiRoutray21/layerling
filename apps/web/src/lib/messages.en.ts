@@ -1177,6 +1177,7 @@ export const MESSAGES_EN = {
   "status.svgEdgesTooComplex": ". The design has too many edges for that view, so the SVG holds its filled silhouette.",
   "status.dxfSummary": ". Circles: {circles}, arcs: {arcs}, lines: {lines}.",
   "status.dxfOpenLeftOut": " Outlines left out because they did not close: {count}.",
+  "status.stencilBridgesLead": ".",
   "status.stencilBridgesAdded": " Bridges added: {count}.",
   "status.stencilBridgesUnheld": " Parts no bridge could reach (they would fall out): {count}.",
   "status.mcpAligned": "MCP alignment already {label}",
