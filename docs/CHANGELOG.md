@@ -7,6 +7,7 @@ code still carries it - so a lower number further down is older, not newer.
 ## Unreleased
 
 - **Tape measure, clearer labels and better rendering:** Axis tags, Hovering shows delta changes, XYZ point position.  Better label placement. Fading labels and lines behind bodies, hovering brings them back.
+- **A bent tube's opening is centred again when it cuts as a hole (#892):** With **Bore cuts as a hole when grouped**, the opening of a bent tube sat one wall too low after grouping and cut the bottom of the pipe open, so a T-junction leaked at the bottom. `splitBentTubeBore` built the opening with `bentTubeParameterPatch`, which keeps the underside where it was (right when the size is changed in the panel); the opening now sits in the middle of the pipe's box, lying, standing or tipped. E2e test in `tubeBoreHole.e2e.ts`: the opening's box shares its middle with the pipe's, and the bottom of the wall is still there after grouping. Reported by @WimSnor.
 
 ## 1.115.0
 
