@@ -2412,9 +2412,12 @@ export default function Home() {
         const entry = projectShapeCacheEntry(now, restored.shapes, restored.history, restored.historyIndex, restored.assets, restored.attachments);
         await saveProjectShapes(local.id, entry, projectShapeSaveContext(local));
         let project = local;
+        const thumbnail = entries[index].thumbnail;
         if (toServer) {
           const where = await storeFolderPath(serverBase, entries[index].folder ?? []);
-          const outcome = await placeNewDesign(local, where);
+          // The picture from the backup goes up with the design: the server's card showed none until the design was
+          // next saved from the editor (Jürgen Keller, a browser backup restored into the Docker version).
+          const outcome = await placeNewDesign(thumbnail ? { ...local, thumbnailUrl: pngDataUrl(thumbnail) } : local, where);
           project = outcome.project;
           if (outcome.problem && !serverProblem) serverProblem = outcome.problem;
         }
@@ -2424,7 +2427,6 @@ export default function Home() {
         if (restored.tapeMeasurements) writeTape(project.id, restored.tapeMeasurements);
         restoredProjects.push(project);
         restoredEntries[project.id] = entry;
-        const thumbnail = entries[index].thumbnail;
         if (thumbnail) restoredThumbnails.push({ projectId: project.id, image: pngDataUrl(thumbnail), shapes: restored.shapes.length });
       } catch {
         failed += 1;
