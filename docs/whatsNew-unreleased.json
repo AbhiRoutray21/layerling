@@ -28,5 +28,25 @@
       "de": "Alt+1 bis Alt+0 wählen den Eintrag mit dieser Nummer im Rastermenü, Alt+1 schaltet das Einrasten aus. Komma und Punkt machen den Schritt eine Stufe feiner oder gröber, im 3D-Fenster wie in der Skizze.",
       "en": "Alt+1 to Alt+0 pick that entry of the snap menu, and Alt+1 turns snapping off. Comma and period make the step one size finer or coarser, in the 3D view and in a sketch alike."
     }
+  },
+  {
+    "title": {
+      "de": "Verrundetes Rohr bleibt beim Skalieren rund",
+      "en": "A filleted tube stays round when resized"
+    },
+    "body": {
+      "de": "Ein ausgehöhlter Körper, den du danach verrundet oder gefast hast, wird beim Skalieren neu ausgehöhlt, und die Verrundung kommt wieder an dieselbe Kante. Ein Rohr wird dabei nicht mehr eckig.",
+      "en": "A hollowed body you filleted or chamfered afterwards is hollowed again when you resize it, and the fillet goes back on the same edge. A tube no longer turns square."
+    }
+  },
+  {
+    "title": {
+      "de": "Punkt löschen ändert nur die Nachbarn",
+      "en": "Deleting a point changes only its neighbours"
+    },
+    "body": {
+      "de": "Löschst du in einer Skizze einen Punkt einer glatten Kontur, werden nur die zwei Punkte daneben neu geglättet. Griffe, die du anderswo von Hand gezogen hast, bleiben.",
+      "en": "Deleting a point of a smooth outline in a sketch smooths only the two points beside it again. Handles you set by hand elsewhere stay as they are."
+    }
   }
 ]
