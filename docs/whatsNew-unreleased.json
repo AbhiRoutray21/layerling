@@ -8,5 +8,15 @@
       "de": "Eine STEP-Datei aus einem anderen CAD-Programm bringt jetzt die Farben ihrer Körper mit. Liegen mehrere Körper unter einem Eintrag, etwa alle Schrauben eines Bauteils, wird jeder ein eigenes Teil. Und beim STEP-Export kommen die Farben nicht mehr blasser in der Datei an.",
       "en": "A STEP file from another CAD program now brings the colours of its bodies along. Where several bodies sit under one entry, all the screws of a part say, each becomes a part of its own. And a STEP export no longer makes the colours paler in the file."
     }
+  },
+  {
+    "title": {
+      "de": "Sicherung auf den Server: mit Vorschaubild",
+      "en": "Backup restored to the server: with its picture"
+    },
+    "body": {
+      "de": "Stellst du eine Sicherung wieder her und landen die Entwürfe auf dem Server, etwa in der Docker-Version, behalten sie jetzt ihr Vorschaubild. Bisher blieb die Kachel leer, bis der Entwurf einmal im Editor gespeichert wurde.",
+      "en": "When you restore a backup and the designs go to the server, as in the Docker version, they now keep their picture. Until now the card stayed blank until the design was saved once in the editor."
+    }
   }
 ]
