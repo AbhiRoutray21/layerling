@@ -4,7 +4,7 @@ import { displayY, displayYTurn, insideZ, insideZTurn } from "@/lib/displayAxes"
 import { GuideHelpLink } from "@/components/GuideHelpLink";
 import { guideChapterForShape, guideSectionForShape } from "@/lib/guideLinks";
 import { useInspectorCard } from "@/lib/inspectorCards";
-import { ChevronDown, ChevronUp, Cylinder, Eraser, Eye, EyeOff, FolderOpen, Grid3x3, ImageUp, Layers, Link2, Lock, Minus, Pencil, Plus, RefreshCw, RotateCcw, Ruler, Split, Tags, Unlock, Waves } from "lucide-react";
+import { ChevronDown, ChevronUp, Cylinder, Eraser, Eye, EyeOff, FolderOpen, Grid3x3, ImageUp, Layers, Link2, Lock, Minus, MousePointerClick, Pencil, Plus, RefreshCw, RotateCcw, Ruler, Split, Tags, Unlock, Waves } from "lucide-react";
 import { createPortal } from "react-dom";
 import { Fragment, createContext, useCallback, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type Dispatch, type ReactNode, type SetStateAction } from "react";
 import {
@@ -162,7 +162,7 @@ import { t, type MessageKey } from "@/lib/i18n";
 import { localizedError } from "@/lib/userErrors";
 import { displayShapeName, makeShapeFromAsset, renamedShapeName } from "@/lib/shapeCatalog";
 import { cylinderToEllipsePatch } from "@/lib/cylinderToEllipse";
-import { normalizeSurfaceTexture, SURFACE_TEXTURE_AXES, SURFACE_TEXTURE_CRACK_STARTS, SURFACE_TEXTURE_CRACK_STYLES, SURFACE_TEXTURE_DEFAULTS, SURFACE_TEXTURE_DETAILS, SURFACE_TEXTURE_DIRECTIONS, SURFACE_TEXTURE_IMAGES, SURFACE_TEXTURE_LIMITS, SURFACE_TEXTURE_MASK_MODES, SURFACE_TEXTURE_PATTERNS, SURFACE_TEXTURE_PROFILES, SURFACE_TEXTURE_PROJECTIONS, SURFACE_TEXTURE_STARTERS, SURFACE_TEXTURE_TILINGS, surfaceTextureImageTile, type SurfaceTextureMaskMode, type SurfaceTexturePattern, type SurfaceTextureSettings } from "@/lib/surfaceTexture";
+import { normalizeSurfaceTexture, SURFACE_TEXTURE_AXES, SURFACE_TEXTURE_CAP_EDGES, SURFACE_TEXTURE_CAP_STYLES, SURFACE_TEXTURE_CRACK_STARTS, SURFACE_TEXTURE_CRACK_STYLES, SURFACE_TEXTURE_DEFAULTS, SURFACE_TEXTURE_DETAILS, SURFACE_TEXTURE_DIRECTIONS, SURFACE_TEXTURE_IMAGES, SURFACE_TEXTURE_LIMITS, SURFACE_TEXTURE_MASK_MODES, SURFACE_TEXTURE_PATTERNS, SURFACE_TEXTURE_PROFILES, SURFACE_TEXTURE_PROJECTIONS, SURFACE_TEXTURE_STARTERS, SURFACE_TEXTURE_TILINGS, surfaceTextureImageTile, type SurfaceTextureFace, type SurfaceTextureMaskMode, type SurfaceTexturePattern, type SurfaceTextureSettings } from "@/lib/surfaceTexture";
 import { SURFACE_TEXTURE_OWN_IMAGE_SIZE, surfaceTextureOwnImage } from "@/lib/surfaceTextureImages";
 import { offersSurfaceTextureMask, SURFACE_TEXTURE_LABELS, surfacePatternLabel, surfaceTextureEntry } from "@/lib/surfaceTextureShape";
 import { LIMITS as VASE_LIMITS, MATERIALS as VASE_MATERIALS, type VaseChoiceKey, type VaseNumberKey } from "@/lib/vase/vase-geometry.mjs";
@@ -2749,6 +2749,9 @@ export function ShapeInspector({
   onRemoveSurfaceTexture,
   surfaceTextureOpen,
   onSurfaceTextureOpenChange,
+  surfaceFacePicking,
+  surfacePickedFaces,
+  onSurfaceFacePick,
   onVaseAccessories,
   onLayerText,
   onTextTags,
@@ -2786,6 +2789,11 @@ export function ShapeInspector({
   /** Whether the surface texture card is open, when the editor holds it (the toolbar opens it too). */
   surfaceTextureOpen?: boolean;
   onSurfaceTextureOpenChange?: (open: boolean) => void;
+  /** Whether faces of this body are being picked for its texture with clicks in the view, and the faces picked so far. */
+  surfaceFacePicking?: boolean;
+  surfacePickedFaces?: SurfaceTextureFace[] | null;
+  /** Starts picking faces from these (null: stops), on the faces as the given edge angle bounds them. */
+  onSurfaceFacePick?: (faces: SurfaceTextureFace[] | null, edgeAngle: number) => void;
   /** Lays this vase's accessories out beside it, ready to print. */
   onVaseAccessories?: () => void;
   /** Splits a text into layers, or builds a layered text again with new words, font or layers (#215). */
@@ -3304,6 +3312,9 @@ export function ShapeInspector({
           open={surfaceTextureOpen}
           onOpenChange={onSurfaceTextureOpenChange}
           onInteractionActiveChange={onInteractionActiveChange}
+          facePicking={surfaceFacePicking}
+          pickedFaces={surfacePickedFaces}
+          onFacePick={onSurfaceFacePick}
         />
       ) : null}
 
@@ -4551,6 +4562,9 @@ export function SurfaceTextureCard({
   open: openProp,
   onOpenChange,
   onInteractionActiveChange,
+  facePicking = false,
+  pickedFaces = null,
+  onFacePick,
 }: {
   shape: WorkplaneShape;
   workspace: WorkplaneWorkspaceSettings;
@@ -4562,6 +4576,10 @@ export function SurfaceTextureCard({
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
   onInteractionActiveChange?: (active: boolean) => void;
+  /** Faces picked with clicks in the view (the editor holds the clicks): while picking, they are the card's faces. */
+  facePicking?: boolean;
+  pickedFaces?: SurfaceTextureFace[] | null;
+  onFacePick?: (faces: SurfaceTextureFace[] | null, edgeAngle: number) => void;
 }) {
   const [ownOpen, setOwnOpen] = useState(false);
   const open = openProp ?? ownOpen;
@@ -4588,6 +4606,10 @@ export function SurfaceTextureCard({
     setShownKey(appliedKey);
     if (applied) setSettings(normalizeSurfaceTexture(applied));
   }
+  // Each click in the view comes back as the faces picked so far.
+  useEffect(() => {
+    if (pickedFaces) setSettings((current) => normalizeSurfaceTexture({ ...current, faces: pickedFaces }));
+  }, [pickedFaces]);
   // A texture that keeps the body under it shows its settings to change; one that does not only says what it is.
   const changeable = Boolean(applied && onRemove && surfaceTextureEntry(shape));
   const options = <T extends string>(values: readonly T[], label: (value: T) => string) => values.map((value) => ({ value, label: label(value) }));
@@ -4607,6 +4629,10 @@ export function SurfaceTextureCard({
   );
   const striped = settings.pattern === "grooves" || settings.pattern === "knurl";
   const cracks = settings.pattern === "cracks";
+  // Grooves, rope and knitting can lie on a top in rings (see SurfaceTextureSettings.capStyle).
+  const ringPattern = settings.pattern === "grooves" || settings.pattern === "rope" || settings.pattern === "knit";
+  // Running over or folding over a rim only goes with those: for the others such a choice shows as automatic.
+  const capEdgeShown = !ringPattern && (settings.capEdge === "over" || settings.capEdge === "fold") ? "auto" : settings.capEdge;
   // Grain lies in space: no projection, no axis. An image's grey values are its profile and width.
   const grain = settings.pattern === "grain";
   const image = settings.pattern === "image";
@@ -4624,8 +4650,11 @@ export function SurfaceTextureCard({
   };
   // A text goes where it is put: what stays smooth for a pattern all over does not hold it back, so those fields go.
   const text = settings.pattern === "text";
+  const picked = settings.faces.length > 0;
   const percent = (id: string, label: string, value: number, onChange: (value: number) => void) => range(id, label, Math.round(value * 100), [0, 100], 1, (share) => onChange(share / 100));
   const apply = async () => {
+    // The faces picked so far are in the settings already; picking ends with the texture made.
+    if (facePicking) onFacePick?.(null, settings.edgeAngle);
     setBusy(true);
     try {
       await onApply(settings);
@@ -4817,6 +4846,37 @@ export function SurfaceTextureCard({
                   onChange={(value) => set({ axis: value as SurfaceTextureSettings["axis"] })}
                 />
               ) : null}
+              {/* Where it goes: every face, or only the faces clicked in the view (a text goes where it is put). */}
+              {text || !onFacePick ? null : (
+                <>
+                  <p className="cylinder-wrap-hint">{picked ? t("inspector.surfaceFacesSome", { count: settings.faces.length }) : t("inspector.surfaceFacesAll")}</p>
+                  <button
+                    className={`inspector-action-button ${facePicking ? "active" : ""}`}
+                    type="button"
+                    aria-pressed={facePicking}
+                    disabled={disabled || busy}
+                    onClick={() => onFacePick(facePicking ? null : settings.faces, settings.edgeAngle)}
+                  >
+                    <MousePointerClick size={17} strokeWidth={2.5} />
+                    <span>{t(facePicking ? "inspector.surfaceFacesDone" : "inspector.surfaceFacesPick")}</span>
+                  </button>
+                  {picked ? (
+                    <button
+                      className="inspector-action-button"
+                      type="button"
+                      disabled={disabled || busy}
+                      onClick={() => {
+                        set({ faces: [] });
+                        if (facePicking) onFacePick([], settings.edgeAngle);
+                      }}
+                    >
+                      <RotateCcw size={17} strokeWidth={2.5} />
+                      <span>{t("inspector.surfaceFacesClear")}</span>
+                    </button>
+                  ) : null}
+                  {facePicking ? <p className="cylinder-wrap-hint">{t("inspector.surfaceFacesPickHint")}</p> : null}
+                </>
+              )}
               <button className="name-tag-more" type="button" aria-expanded={moreOpen} onClick={() => setMoreOpen((current) => !current)}>
                 <ChevronDown className={moreOpen ? "open" : ""} size={15} strokeWidth={2.6} />
                 <span>{t(moreOpen ? "inspector.less" : "inspector.more")}</span>
@@ -4859,16 +4919,57 @@ export function SurfaceTextureCard({
                         />
                       )}
                       {striped ? range("surfaceAngle", t("inspector.surfaceAngle"), settings.angle, SURFACE_TEXTURE_LIMITS.angle, 1, (angle) => set({ angle })) : null}
-                      <ToggleProperty label={t("inspector.surfaceOutside")} value={settings.outside} disabled={disabled || busy} onChange={(outside) => set({ outside })} />
-                      <ToggleProperty label={t("inspector.surfaceInside")} value={settings.inside} disabled={disabled || busy} onChange={(inside) => set({ inside })} />
-                      {range("surfaceBottomFree", t("inspector.surfaceBottomFree"), settings.bottomFree, SURFACE_TEXTURE_LIMITS.bottomFree, 1, (bottomFree) => set({ bottomFree }))}
-                      {range("surfaceTopFree", t("inspector.surfaceTopFree"), settings.topFree, SURFACE_TEXTURE_LIMITS.topFree, 1, (topFree) => set({ topFree }))}
-                      {range("surfaceZoneFrom", t("inspector.surfaceZoneFrom"), settings.zoneFrom, SURFACE_TEXTURE_LIMITS.zoneFrom, 1, (zoneFrom) => set({ zoneFrom }))}
-                      {range("surfaceZoneTo", t("inspector.surfaceZoneTo"), settings.zoneTo, SURFACE_TEXTURE_LIMITS.zoneTo, 1, (zoneTo) => set({ zoneTo }))}
+                      {/* Top and bottom: grooves, rope and knitting in rows or rings, and the pattern's direction there. */}
+                      {ringPattern && settings.projection !== "allRound" && settings.projection !== "flat" ? (
+                        <>
+                          <SelectProperty
+                            type="select"
+                            label={t("inspector.surfaceCapStyle")}
+                            value={settings.capStyle}
+                            options={options(SURFACE_TEXTURE_CAP_STYLES, (value) => t(SURFACE_TEXTURE_LABELS.capStyle[value]))}
+                            hint={t("inspector.surfaceCapStyleHint")}
+                            disabled={disabled || busy}
+                            onChange={(value) => set({ capStyle: value as SurfaceTextureSettings["capStyle"] })}
+                          />
+                        </>
+                      ) : null}
+                      {/* Where the side meets a patterned top or bottom: sharp, the side's rows running over (ring patterns), a border. */}
+                      {settings.projection !== "allRound" && settings.projection !== "flat" && !grain && !cracks && settings.pattern !== "text" ? (
+                        <>
+                          <SelectProperty
+                            type="select"
+                            label={t("inspector.surfaceCapEdge")}
+                            value={capEdgeShown}
+                            options={options(SURFACE_TEXTURE_CAP_EDGES.filter((value) => ringPattern || (value !== "over" && value !== "fold")), (value) => t(SURFACE_TEXTURE_LABELS.capEdge[value]))}
+                            disabled={disabled || busy}
+                            onChange={(value) => set({ capEdge: value as SurfaceTextureSettings["capEdge"] })}
+                          />
+                          {/* What the chosen edge does, one line under the whole row: the long label leaves the hint column too narrow. */}
+                          <p className="cylinder-wrap-hint">{t(SURFACE_TEXTURE_LABELS.capEdgeHint[capEdgeShown])}</p>
+                        </>
+                      ) : null}
+                      {grain || cracks ? null : (
+                        <>
+                          {range("surfaceFaceTurn", t("inspector.surfaceFaceTurn"), settings.faceTurn, SURFACE_TEXTURE_LIMITS.faceTurn, 1, (faceTurn) => set({ faceTurn }))}
+                          <p className="cylinder-wrap-hint">{t("inspector.surfaceFaceTurnHint")}</p>
+                        </>
+                      )}
+                      {/* Picked faces say where it goes: walls, top, bottom and the height band then do not count. */}
+                      {picked ? null : (
+                        <>
+                          <ToggleProperty label={t("inspector.surfaceOutside")} value={settings.outside} disabled={disabled || busy} onChange={(outside) => set({ outside })} />
+                          <ToggleProperty label={t("inspector.surfaceInside")} value={settings.inside} disabled={disabled || busy} onChange={(inside) => set({ inside })} />
+                          {range("surfaceBottomFree", t("inspector.surfaceBottomFree"), settings.bottomFree, SURFACE_TEXTURE_LIMITS.bottomFree, 1, (bottomFree) => set({ bottomFree }))}
+                          {range("surfaceTopFree", t("inspector.surfaceTopFree"), settings.topFree, SURFACE_TEXTURE_LIMITS.topFree, 1, (topFree) => set({ topFree }))}
+                          {range("surfaceZoneFrom", t("inspector.surfaceZoneFrom"), settings.zoneFrom, SURFACE_TEXTURE_LIMITS.zoneFrom, 1, (zoneFrom) => set({ zoneFrom }))}
+                          {range("surfaceZoneTo", t("inspector.surfaceZoneTo"), settings.zoneTo, SURFACE_TEXTURE_LIMITS.zoneTo, 1, (zoneTo) => set({ zoneTo }))}
+                        </>
+                      )}
                       <ToggleProperty label={t("inspector.surfaceKeepEdges")} value={settings.keepEdges} disabled={disabled || busy} onChange={(keepEdges) => set({ keepEdges })} />
                     </>
                   )}
                   {range("surfaceFade", t("inspector.surfaceFade"), settings.fade, SURFACE_TEXTURE_LIMITS.fade, 0.1, (fade) => set({ fade }))}
+                  <p className="cylinder-wrap-hint">{t("inspector.surfaceFadeHint")}</p>
                   <SelectProperty
                     type="select"
                     label={t("inspector.surfaceDetail")}
