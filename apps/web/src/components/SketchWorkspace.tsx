@@ -1685,7 +1685,7 @@ export function SketchWorkspace({
         });
         return;
       }
-      const typingLength = activePoint && !pointerAction && (tool === "line" || tool === "smooth") && /^[0-9.,<]$/.test(event.key);
+      const typingLength = !event.altKey && activePoint && !pointerAction && (tool === "line" || tool === "smooth") && /^[0-9.,<]$/.test(event.key);
       // Alt+digit and comma/period pick the snap step as in the 3D view (#748); while a line is drawn,
       // comma and period start its typed length instead.
       const nextSnap = typingLength ? null : snapGridForShortcut(event, snapGridOptions(workspace.units, workspace.customSnapGrids), snapRef.current);
