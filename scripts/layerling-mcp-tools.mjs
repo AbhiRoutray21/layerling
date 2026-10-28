@@ -1333,12 +1333,13 @@ export const tools = [
   },
   {
     name: "layerling_measurements",
-    description: "The measurements of the editor's tape measure: what is measured and whether they are shown. Call with nothing to read them: visible and measurements, each with its id and its length in millimetres (a measured edge counts along the edge). visible true shows the measurements, false hides them, like the eye among the tape measure's buttons; hidden measurements stay in the design. The measurements belong to the design: they stay in the browser and travel in a .lyl file, never in the undo history, and hiding is kept too. Combine with layerling_capture_image to see them (or not) in the picture. Not available while a sketch is open.",
+    description: "The measurements of the editor's tape measure: what is measured and whether they are shown. Call with nothing to read them: visible and measurements, each with its id and its length in millimetres (a measured edge counts along the edge). visible true shows the measurements, false hides them, like the eye among the tape measure's buttons; hidden measurements stay in the design. The measurements belong to the design: they stay in the browser and travel in a .lyl file, never in the undo history, and hiding is kept too. dimensions false hides the sizes and distances the editor shows around the selection by itself (the size marks, the movement dimensions while dragging, the distances to the origin and the angle badge), like the key Q; true shows them again. Only the view changes, for this editor until it is reloaded; a handle pointed at still shows its size. The answer has dimensions too. Combine with layerling_capture_image to see them (or not) in the picture. Not available while a sketch is open.",
     inputSchema: {
       ...editorTargetSchema,
       properties: {
         ...editorTargetSchema.properties,
         visible: { type: "boolean", description: "true shows the measurements, false hides them. Left out they stay as they are." },
+        dimensions: { type: "boolean", description: "false hides the sizes and distances around the selection (key Q), true shows them again. Left out they stay as they are." },
       },
     },
   },

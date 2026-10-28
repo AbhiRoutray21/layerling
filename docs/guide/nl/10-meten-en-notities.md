@@ -53,6 +53,8 @@ In de instellingen onder {{ui:workspace.appearance}} staan twee schakelaars voor
 
 Met {{ui:workspace.dimensionsAlwaysVisible}} blijven de maten altijd zichtbaar.
 
+Zitten ze even in de weg, druk dan op [[Q]]: de maten en afstanden rond de selectie verdwijnen, zodat een deel dat je verschuift goed te zien is. Nog eens [[Q]] haalt ze terug. Een greep waar je naar wijst, toont zijn maat toch.
+
 ## Notities
 
 Een notitie legt vast wat de geometrie niet zegt: "Deze schroef zit 0,3 mm te krap", "het deksel nog printen", "maat van Peter". Plaats er een met {{ui:editor.tool.note}} of de toets [[N]].

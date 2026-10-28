@@ -55,6 +55,8 @@ Nelle impostazioni, sotto {{ui:workspace.appearance}}, trovi due interruttori pe
 
 Con {{ui:workspace.dimensionsAlwaysVisible}} le misure restano sempre visibili.
 
+Se per un momento danno fastidio, premi [[Q]]: le misure e le distanze attorno alla selezione spariscono e il pezzo che sposti si vede bene. Di nuovo [[Q]] le riporta. Una maniglia su cui punti mostra comunque la sua misura.
+
 ## Note
 
 Una nota registra informazioni che la geometria non può esprimere: “Questa vite è troppo stretta di 0,3 mm”, “stampare il coperchio?” oppure “misura presa da Peter”. Inseriscila con {{ui:editor.tool.note}} o premendo [[N]].

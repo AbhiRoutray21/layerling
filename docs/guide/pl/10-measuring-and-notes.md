@@ -55,6 +55,8 @@ W ustawieniach w sekcji {{ui:workspace.appearance}} są dwa przełączniki wymia
 
 Z {{ui:workspace.dimensionsAlwaysVisible}} wymiary są widoczne cały czas.
 
+Jeśli na chwilę przeszkadzają, naciśnij [[Q]]: wymiary i odległości wokół zaznaczenia znikają, a przesuwana część jest dobrze widoczna. Ponowne [[Q]] przywraca je. Uchwyt, na który wskazujesz, nadal pokazuje swój wymiar.
+
 ## Notatki
 
 Notatka zapisuje to, czego geometria nie mówi: „Ta śruba jest o 0,3 mm za ciasna”, „jeszcze wydrukować pokrywkę”, „wymiar od Piotra”. Umieść ją przez {{ui:editor.tool.note}} albo klawiszem [[N]].

@@ -53,6 +53,8 @@ V nastavení {{ui:workspace.appearance}} jsou dva přepínače průběžného k�
 
 {{ui:workspace.dimensionsAlwaysVisible}} ponechá rozměry zobrazené trvale.
 
+Když na chvíli překážejí, stiskněte [[Q]]: rozměry a vzdálenosti kolem výběru zmizí a díl, který posouváte, je dobře vidět. Další [[Q]] je vrátí. Úchyt, na který ukážete, svůj rozměr ukáže i tak.
+
 ## Poznámky
 
 Poznámka zachytí informace, které geometrie nevyjadřuje: „Šroub je o 0,3 mm těsný“, „Ještě vytisknout víko“ nebo „Rozměr od Petra“. Vložíte ji pomocí {{ui:editor.tool.note}} nebo klávesy [[N]].

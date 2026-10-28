@@ -53,6 +53,8 @@ A beállításokban a {{ui:workspace.appearance}} alatt két kapcsoló van az é
 
 A {{ui:workspace.dimensionsAlwaysVisible}} beállítással a méretek állandóan láthatók maradnak.
 
+Ha egy pillanatra zavarnak, nyomd meg a [[Q]] billentyűt: a kijelölés körüli méretek és távolságok eltűnnek, így jól látszik a mozgatott alkatrész. Újabb [[Q]] visszahozza őket. Az a fogantyú, amelyre mutatsz, így is megmutatja a méretét.
+
 ## Jegyzetek
 
 Egy jegyzet azt rögzíti, amit a geometria nem mond el: „Ez a csavar 0,3 mm-rel túl szoros”, „a fedelet még ki kell nyomtatni”, „méret Pétertől”. A {{ui:editor.tool.note}} gombbal vagy az [[N]] billentyűvel helyezel el egyet.

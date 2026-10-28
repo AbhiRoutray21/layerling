@@ -55,6 +55,8 @@ In den Einstellungen unter {{ui:workspace.appearance}} gibt es zwei Schalter fü
 
 Mit {{ui:workspace.dimensionsAlwaysVisible}} bleiben die Maße dauerhaft sichtbar.
 
+Wenn sie kurz stören, drück [[Q]]: Die Maße und Abstände um die Auswahl verschwinden, und ein Teil, das du verschiebst, ist gut zu sehen. Noch einmal [[Q]] holt sie zurück. Ein Griff, auf den du zeigst, zeigt sein Maß trotzdem.
+
 ## Notizen
 
 Eine Notiz hält fest, was die Geometrie nicht sagt: „Hier ist eine Schraube 0,3 mm zu eng“, „Deckel noch drucken“, „Maß von Peter“. Setze sie mit {{ui:editor.tool.note}} oder der Taste [[N]].

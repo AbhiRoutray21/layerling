@@ -55,6 +55,8 @@ En los ajustes, en {{ui:workspace.appearance}}, hay dos interruptores para ver m
 
 Con {{ui:workspace.dimensionsAlwaysVisible}}, las medidas se ven siempre.
 
+Si estorban un momento, pulsa [[Q]]: las medidas y distancias alrededor de la selección desaparecen y la pieza que mueves se ve bien. Otra vez [[Q]] las recupera. Un tirador al que apuntas sigue mostrando su medida.
+
 ## Notas
 
 Una nota recoge lo que la geometría no dice: «Este tornillo va 0,3 mm demasiado justo», «falta imprimir la tapa», «medida de Pedro». Coloca una con {{ui:editor.tool.note}} o con la tecla [[N]].

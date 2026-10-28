@@ -53,6 +53,8 @@ V nastavitvah pod {{ui:workspace.appearance}} sta dve stikali za tekoče mere:
 
 Z {{ui:workspace.dimensionsAlwaysVisible}} mere ostanejo trajno vidne.
 
+Če vas za trenutek motijo, pritisnite [[Q]]: mere in razdalje okoli izbora izginejo, zato je del, ki ga premikate, dobro viden. Ponovni [[Q]] jih vrne. Ročica, na katero pokažete, svojo mero vseeno pokaže.
+
 ## Opombe
 
 Opomba zabeleži, česar geometrija ne pove: »Tu je vijak 0,3 mm preozek«, »Pokrov še natisniti«, »Mera od Petra«. Postaviš jo z {{ui:editor.tool.note}} ali s tipko [[N]].

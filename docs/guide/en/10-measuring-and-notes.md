@@ -55,6 +55,8 @@ In the settings under {{ui:workspace.appearance}} there are two switches for liv
 
 With {{ui:workspace.dimensionsAlwaysVisible}} the dimensions stay visible permanently.
 
+For a moment without them, press [[Q]]: the sizes and distances around the selection disappear, so a part you move is easy to see. [[Q]] again brings them back. A handle you point at still shows its size.
+
 ## Notes
 
 A note records what the geometry does not say: "This screw is 0.3 mm too tight", "print the lid yet", "dimension from Peter". Place one with {{ui:editor.tool.note}} or the [[N]] key.

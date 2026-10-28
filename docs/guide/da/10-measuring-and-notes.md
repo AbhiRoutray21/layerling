@@ -59,6 +59,8 @@ Under {{ui:workspace.appearance}} i indstillingerne er der to kontakter for leve
 
 Med {{ui:workspace.dimensionsAlwaysVisible}} bliver dimensionerne permanent synlige.
 
+Står de i vejen et øjeblik, så tryk [[Q]]: målene og afstandene omkring markeringen forsvinder, så en del du flytter er nem at se. [[Q]] igen henter dem tilbage. Et håndtag du peger på viser stadig sit mål.
+
 ## Noter
 
 En note registrerer hvad geometrien ikke siger: "Denne skrue er 0,3 mm for stram", "print låget endnu", "mål fra Peter". Placér en med {{ui:editor.tool.note}} eller [[N]]-tasten.

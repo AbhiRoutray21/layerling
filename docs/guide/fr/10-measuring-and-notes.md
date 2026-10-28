@@ -53,6 +53,8 @@ Dans les paramètres sous {{ui:workspace.appearance}}, il y a deux commutateurs 
 
 Avec {{ui:workspace.dimensionsAlwaysVisible}} les cotes restent visibles en permanence.
 
+Pour vous en passer un instant, appuyez sur [[Q]] : les cotes et distances autour de la sélection disparaissent, et la pièce que vous déplacez se voit bien. Un nouvel appui sur [[Q]] les ramène. Une poignée que vous survolez affiche quand même sa cote.
+
 ## Remarques
 
 Une note enregistre ce que la géométrie ne dit pas : "Cette vis est trop serrée de 0,3 mm", "imprimez encore le couvercle", "cote de Peter". Placez-en un avec {{ui:editor.tool.note}} ou la clé [[N]].

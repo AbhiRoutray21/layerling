@@ -429,7 +429,7 @@ declare global {
     /** "Hide workplane" in the camera bar for MCP: sets it when given, returns whether the plate is shown. */
     layerlingWorkplaneDisplay?: (visible?: boolean) => { visible: boolean };
     /** The measurements of the tape measure for MCP: shows or hides them when asked, returns what is there (#881). */
-    layerlingMeasurements?: (request?: { visible?: boolean }) => { visible: boolean; measurements: Array<{ id: string; length: number }> };
+    layerlingMeasurements?: (request?: { visible?: boolean; dimensions?: boolean }) => { visible: boolean; dimensions: boolean; measurements: Array<{ id: string; length: number }> };
     /** The four saved views (keys 7, 8, 9, 0) for MCP: saves or shows one when asked, returns which keys hold a view. */
     layerlingSavedViews?: (request?: { save?: number; show?: number; startView?: "save" | "reset" }) => { keys: { key: string; saved: boolean }[]; shown?: boolean; startView: boolean };
   }
@@ -1494,6 +1494,13 @@ export function WorkplaneViewport({
   // Hides the whole plate - grid, labels and any face workplane - for a clear
   // look at the underside. Only the view changes: shapes still land on it.
   const [workplaneLayerHidden, setWorkplaneLayerHidden] = useState(false);
+  // Q hides the sizes and distances around the selection for a while, so a part being moved is easy to see (#981).
+  const [dimensionsHidden, setDimensionsHidden] = useState(false);
+  const dimensionsHiddenRef = useRef(dimensionsHidden);
+  const showDimensions = useCallback((visible: boolean) => {
+    dimensionsHiddenRef.current = !visible;
+    setDimensionsHidden(!visible);
+  }, []);
   const workplaneLayerHiddenRef = useRef(workplaneLayerHidden);
   workplaneLayerHiddenRef.current = workplaneLayerHidden;
   // Back from the sketch the measurements come from the editor's memory; on opening the design, from what the design keeps (#881).
@@ -2548,8 +2555,8 @@ export function WorkplaneViewport({
     setSelectionHelpersVisible(state, !splitActive && !workplaneMode && transformRef.current?.kind !== "rotate");
     if (state) {
       state.modifierLayer.visible = !workplaneMode && !splitActive;
-      state.moveDimensionLayer.visible = !workplaneMode && !splitActive;
-      state.originDimensionLayer.visible = !workplaneMode && !splitActive;
+      state.moveDimensionLayer.visible = !workplaneMode && !splitActive && !dimensionsHiddenRef.current;
+      state.originDimensionLayer.visible = !workplaneMode && !splitActive && !dimensionsHiddenRef.current;
       state.needsRender = true;
     }
     if (splitActive || workplaneMode) {
@@ -2636,6 +2643,14 @@ export function WorkplaneViewport({
     state.workplaneLayer.visible = !workplaneLayerHidden;
     state.needsRender = true;
   }, [workplaneLayerHidden]);
+
+  useEffect(() => {
+    const state = threeRef.current;
+    if (!state) return;
+    state.moveDimensionLayer.visible = !workplaneMode && !splitActive && !dimensionsHidden;
+    state.originDimensionLayer.visible = !workplaneMode && !splitActive && !dimensionsHidden;
+    state.needsRender = true;
+  }, [dimensionsHidden, splitActive, workplaneMode]);
 
   // MCP: the same switch as the eye in the camera bar.
   useEffect(() => {
@@ -3256,14 +3271,17 @@ export function WorkplaneViewport({
       if (typeof request?.visible === "boolean") {
         setTapeHidden(!request.visible);
       }
+      if (typeof request?.dimensions === "boolean") {
+        showDimensions(request.dimensions);
+      }
       const model = tapeModelRef.current;
       const state = threeRef.current;
-      return { visible: !model.hidden, measurements: state ? tapeSegmentLengths(state, model) : [] };
+      return { visible: !model.hidden, dimensions: !dimensionsHiddenRef.current, measurements: state ? tapeSegmentLengths(state, model) : [] };
     };
     return () => {
       delete window.layerlingMeasurements;
     };
-  }, [setTapeHidden]);
+  }, [setTapeHidden, showDimensions]);
 
   useEffect(() => {
     const current = tapeModelRef.current;
@@ -7208,6 +7226,11 @@ export function WorkplaneViewport({
       } else if (key === "o" && !event.ctrlKey && !event.metaKey && !event.altKey) {
         event.preventDefault();
         toggleProjection();
+      } else if (key === "q" && !event.ctrlKey && !event.metaKey && !event.altKey && !event.shiftKey) {
+        event.preventDefault();
+        const visible = dimensionsHiddenRef.current;
+        showDimensions(visible);
+        onNotice?.(t(visible ? "camera.dimensionsShown" : "camera.dimensionsHidden"));
       } else if ((event.key === "+" || event.key === "=") && !event.ctrlKey && !event.metaKey && !event.altKey) {
         // With Ctrl or Cmd these are the browser's own page zoom, which the page must not swallow.
         event.preventDefault();
@@ -7220,7 +7243,7 @@ export function WorkplaneViewport({
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [chooseSnapGrid, focusSelection, onNotice, resetPlacementWorkplane, resetView, tapeToolsOpen, sectionViewOpen, setPlacementWorkplaneAtSelection, setTapeActive, setViewCubeFace, togglePlacementWorkplane, toggleProjection, zoomCamera]);
+  }, [chooseSnapGrid, focusSelection, onNotice, resetPlacementWorkplane, resetView, tapeToolsOpen, sectionViewOpen, setPlacementWorkplaneAtSelection, setTapeActive, setViewCubeFace, showDimensions, togglePlacementWorkplane, toggleProjection, zoomCamera]);
 
   return (
     <main className="workplane-stage">
@@ -7703,25 +7726,26 @@ export function WorkplaneViewport({
           />
           {!workplaneMode && !splitActive ? <SelectionCounter count={selectedIds.length} hostRef={hostRef} /> : null}
           {!workplaneMode && !splitActive && marqueeRect ? <div className={marqueeTouching ? "selection-marquee touching" : "selection-marquee"} style={marqueeRect} /> : null}
-          {!workplaneMode && !splitActive && moveDimensionsEnabled && moveDimensionOverlay ? (
+          {!workplaneMode && !splitActive && moveDimensionsEnabled && !dimensionsHidden && moveDimensionOverlay ? (
             <MoveDimensionOverlay
               overlay={moveDimensionOverlay}
               active={moveDimensionOverlay.active}
               onCommit={commitMoveDimension}
             />
           ) : null}
-          {!workplaneMode && !splitActive && originDimensionsEnabled && originDimensionOverlay ? (
+          {!workplaneMode && !splitActive && originDimensionsEnabled && !dimensionsHidden && originDimensionOverlay ? (
             <OriginDimensionOverlay overlay={originDimensionOverlay} />
           ) : null}
           {!workplaneMode && !splitActive && !pivotPickMode && !layFlatPickMode && !mateFacePick && !cadFacePick && transformOverlay && !alignMode && !mirrorMode && !tapeMode && !tapeDeleteMode && !tapeMoveMode && !modifierActive ? (
             <TransformOverlay
-              box={transformOverlay}
+              // Q leaves out what shows by itself; a handle pointed at still shows its size.
+              box={dimensionsHidden ? { ...transformOverlay, alwaysVisibleDimensionKeys: [] } : transformOverlay}
               measureKey={pinnedMeasureKey ?? hoverMeasureKey}
               editingDimension={editingDimension}
               editingCorner={editingCorner}
               editingRotation={editingRotation}
               rotationReadout={rotationReadout}
-              angleBadge={angleBadge}
+              angleBadge={dimensionsHidden ? null : angleBadge}
               locked={selectionLocked}
               showRotationWheel={activeRotationWheel}
               hideSelectionChrome={activeTransformKind === "rotate"}
