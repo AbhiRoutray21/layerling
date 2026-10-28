@@ -2229,6 +2229,7 @@ export const MESSAGES_CS: Record<MessageKey, string> = {
   "prop.textSpacing": "Mezery mezi písmeny (%)",
   "prop.textSpacingHint": "Mezera mezi písmeny navíc k mezerám písma, v procentech velikosti písmen; pod 0 užší. Písmena si zachovají velikost, rámeček se přizpůsobí.",
   "prop.textStretch": "Roztáhnout písmena na rámeček",
+  "prop.textVertical": "Písmena pod sebou",
   "prop.textRadius": "Poloměr oblouku",
   "prop.textInward": "Podél spodní strany",
   "prop.textFlipped": "Vzhůru nohama",

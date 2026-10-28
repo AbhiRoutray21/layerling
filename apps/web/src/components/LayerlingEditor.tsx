@@ -17,7 +17,7 @@ import { DEFAULT_THREAD_PROFILE, defaultThreadHeadHeight, normalizeThreadHeadHei
 import { curvedTextPatch, MAX_TEXT_SPACING, MIN_TEXT_SPACING } from "@/lib/textGeometry";
 import { normalizeTextEdge } from "@/lib/textEdge";
 import { DEFAULT_TEXT_LAYERS, layerTextKeyringArgument, placedKeyring, layerTextLayersError, nameTagOffsets, normalizeTextLayers, type NameTagKeyring } from "@/lib/textLayers";
-import { NAME_TAG_LAYERS, NAME_TAG_LETTER_SIZE, textShrinkPatch, textSpacingPatch } from "@/lib/nameTag";
+import { NAME_TAG_LAYERS, NAME_TAG_LETTER_SIZE, textLetterSize, textLetterSizePatch, textShrinkPatch, textSpacingPatch } from "@/lib/nameTag";
 import { DEFAULT_ICON_TAG_WIDTH, ICON_TAG_LAYERS, MAX_ICON_TAG_WIDTH, MIN_ICON_TAG_WIDTH, normalizeIconTagCount } from "@/lib/iconTag";
 import type { IconLayerPatch, IconTagControls, ReferenceImageControls, TextLayerPatch } from "@/components/workplane/ShapeInspector";
 import { calibratedReferenceImage, dataUrlByteLength, isReferenceImage, LARGE_REFERENCE_IMAGE_BYTES, mirrorHidesReferenceImage, referenceImageOpacity, referenceImagePixelDistance, referenceImageShape } from "@/lib/referenceImage";
@@ -9005,7 +9005,7 @@ export function LayerlingEditor({
     let used: SurfaceTextureSettings;
     try {
       // A text's letters are drawn here, where the fonts are, and go to the worker as outlines.
-      const textOutline = settings.pattern === "text" ? await surfaceTextOutline({ content: settings.textContent, font: settings.textFont, size: settings.textSize }) : [];
+      const textOutline = settings.pattern === "text" ? await surfaceTextOutline({ content: settings.textContent, font: settings.textFont, size: settings.textSize, vertical: settings.textVertical }) : [];
       if (settings.pattern === "text" && !textOutline.length) {
         setNotice(t("status.surfaceNoText"));
         return;
@@ -9960,6 +9960,11 @@ export function LayerlingEditor({
           if (typeof params.silhouette === "boolean") patch.textSilhouette = params.silhouette || undefined;
           // Straight text only (#382): the letters stretched to fill the box, or fitted with their proportions.
           if (typeof params.stretch === "boolean") patch.textStretch = params.stretch || undefined;
+          // Straight text only (#981): the letters stacked top to bottom; the box turns upright and the letters keep their size.
+          if (typeof params.vertical === "boolean" && !target.textCurved) {
+            const vertical = { ...target, ...patch, textVertical: params.vertical || undefined } as WorkplaneShape;
+            Object.assign(patch, { textVertical: params.vertical || undefined }, vertical.textStretch ? {} : textLetterSizePatch(vertical, textLetterSize({ ...target, ...patch } as WorkplaneShape)));
+          }
           // The space between the letters (#594), in per cent of the letter size; the letters keep their size and the box follows.
           if (params.spacing !== undefined) {
             const spacing = Number(params.spacing);
@@ -10413,7 +10418,9 @@ export function LayerlingEditor({
         const wasText = target.kind === "text";
         // A font by name as update_object takes it: a font of one's own becomes its id, a built-in name stays.
         const font = typeof params.font === "string" ? mcpTextFont(params.font) ?? params.font : undefined;
-        const source = { ...stack.source, ...(typeof params.text === "string" ? { text: params.text.slice(0, 24) || " " } : {}), ...(font ? { font } : {}) };
+        const plainSource = { ...stack.source, ...(typeof params.text === "string" ? { text: params.text.slice(0, 24) || " " } : {}), ...(font ? { font } : {}) };
+        // Vertical letters (#981) turn the tag upright at the letter size it had.
+        const source = typeof params.vertical === "boolean" && !plainSource.textCurved ? nameTagSource(plainSource, { vertical: params.vertical, letterSize: textLetterSize(stack.source) }) : plainSource;
         const requested = params.layers !== undefined ? normalizeTextLayers(params.layers) : null;
         if (params.layers !== undefined && !requested) throw new Error("layers must be 1 to 6 entries with grow, height, color and silhouette");
         const badCorner = layerTextLayersError(params.layers);
@@ -10789,7 +10796,7 @@ export function LayerlingEditor({
           if (!isCustomFontId(font) && !SURFACE_TEXT_FONTS.includes(font)) throw new Error(`textFont must be one of ${SURFACE_TEXT_FONTS.join(", ")}, or the name of a font of one's own`);
           settings.textFont = font;
           // The letters are drawn here, where the fonts are; outlines handed in are not taken.
-          settings.textOutline = await surfaceTextOutline({ content: settings.textContent, font: settings.textFont, size: settings.textSize });
+          settings.textOutline = await surfaceTextOutline({ content: settings.textContent, font: settings.textFont, size: settings.textSize, vertical: settings.textVertical });
           if (!settings.textOutline.length) throw new Error("textContent has no letters to write");
         }
         const outcome = await textureSurfaceOffThread(surfaceTextureInput(source), settings);

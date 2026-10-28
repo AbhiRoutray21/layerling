@@ -3633,6 +3633,7 @@ export const MESSAGES_DA: Partial<Record<MessageKey, string>> = {
   "prop.innerDiameter": "Indvendig diameter",
   "prop.tubeBoreHole": "Boringen skærer som et hul ved gruppering",
   "prop.textStretch": "Stræk bogstaver til rammen",
+  "prop.textVertical": "Bogstaver under hinanden",
   "ruler.occlude.off": "Lineal altid synlig (klik for at lade former skjule den)",
   "aria.toggleCornerRulerSelectedOnly": "Skift om former ved armene viser deres mål",
   "ruler.selectedOnly.on": "Kun valgte former viser mål (klik for at vise alle)",

@@ -6,6 +6,7 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **Vertical text (#981):** Letters could only be set side by side; text running down a door frame or along a pen meant placing them one by one. Straight text now has *Letters top to bottom* under Properties: the letters are stacked, each centred on one upright line, the box turns upright and the letters keep their size, and the letter spacing sets the gap between them. Name tags have the switch too, with all their layers, and so does the Text pattern of the surface texture. Through MCP, `layerling_update_object` and `layerling_layer_text` take `vertical`, `layerling_texture_surface` takes `textVertical`. Asked for by @RepairItDude in #981.
 ## 1.117.1
 
 - **A filleted hollow body stays round when resized:** A hollow body is hollowed again at its new size, but one filleted or chamfered after the hollowing kept bands of wall thickness at its sides instead and only stretched the middle, which turned a round tube into a rounded square. Such a body is now hollowed again too, and its fillets and chamfers go back on the same edges. The edges are found by where they lie, since the CAD kernel numbers the edges of a tube pulled into an oval differently. Reported by Herr Herumradler in the drucktipps3d forum.

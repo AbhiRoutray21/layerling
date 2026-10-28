@@ -2036,6 +2036,7 @@ export const MESSAGES_AR: Partial<Record<MessageKey, string>> = {
   "prop.textSpacing": "تباعد الحروف (%)",
   "prop.textSpacingHint": "مسافة بين الحروف تُضاف إلى مسافة الخط نفسه، بالنسبة المئوية من حجم الحرف؛ وأقل من 0 أضيق. تحتفظ الحروف بحجمها، ويتبعها الصندوق.",
   "prop.textStretch": "مط الحروف لتملأ الإطار",
+  "prop.textVertical": "الأحرف من الأعلى إلى الأسفل",
   "prop.textRadius": "نصف قطر القوس",
   "prop.textInward": "على الجانب السفلي",
   "prop.textFlipped": "رأسًا على عقب",

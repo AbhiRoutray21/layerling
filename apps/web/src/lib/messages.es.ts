@@ -2019,6 +2019,7 @@ export const MESSAGES_ES: Partial<Record<MessageKey, string>> = {
   "prop.textSpacing": "Espaciado (%)",
   "prop.textSpacingHint": "Espacio entre las letras, además del que ya trae la fuente, en porcentaje del tamaño de letra; por debajo de 0, más juntas. Las letras conservan su tamaño y el cuadro se adapta.",
   "prop.textStretch": "Estirar las letras hasta el marco",
+  "prop.textVertical": "Letras de arriba abajo",
   "prop.textRadius": "Radio del arco",
   "prop.textInward": "Por la parte inferior",
   "prop.textFlipped": "Boca abajo",

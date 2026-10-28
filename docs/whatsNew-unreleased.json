@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "title": {
+      "de": "Senkrechter Text",
+      "en": "Vertical text"
+    },
+    "body": {
+      "de": "Mit „Buchstaben untereinander“ stehen die Buchstaben von oben nach unten, jeder mittig. Das geht bei Text, Namensschildern und Schrift auf Oberflächen; der Buchstabenabstand bestimmt die Lücke dazwischen.",
+      "en": "With \"Letters top to bottom\" the letters run downwards, each centred. It works for text, name tags and lettering on surfaces, and the letter spacing sets the gap between them."
+    }
+  }
+]

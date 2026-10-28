@@ -474,6 +474,7 @@ export const tools = [
         silhouette: { type: "boolean", description: "Extruded sketch bodies and texts: true leaves out every outline inside another - holes, and islands in them; on a text the counters of its letters - false brings them back. With an outside stroke this makes a cookie cutter from one SVG; with grow, a base layer under a text." },
         sketchOperation: { type: "string", enum: ["extrude", "revolve", "sweep"], description: "Sketch bodies only: make the body again from its sketch as another kind - an imported SVG comes in extruded, revolve turns its outline about the sketch's vertical axis (x = 0) into a round body, as the sketch's badge does in the editor. The new body keeps the id, name and colour and stands where the old one stood, its foot at the same height; an extrusion made from another kind is 10 mm high. Edge treatments go. For a revolve an outline reaching across the axis is first moved left until its right edge lies on it, so the half cross-section of an SVG turns about its straight side; sweep needs a construction line as the path." },
         stretch: { type: "boolean", description: "Straight text only: true stretches the letters to fill the whole box in both directions, so a capital can be made lower or narrower as in Tinkercad; false (the default) fits them into the box with their proportions kept, centred. Set the box with width and depth." },
+        vertical: { type: "boolean", description: "Straight text only: true stacks the letters top to bottom, each centred on one upright line; the box turns upright and the letters keep their size. Spacing widens or narrows the gap between them. Curved text ignores it." },
         spacing: { type: "number", minimum: -50, maximum: 300, description: "Text only: the space between the letters on top of the font's own, in per cent of the letter size - 0 as the font has it, above it wider, below it tighter (down to -50), up to 300. Straight and curved text; the letters keep their size and the box follows. Not applied to Arabic and Hebrew, whose letters join up." },
         letterEdge: {
           anyOf: [
@@ -807,6 +808,7 @@ export const tools = [
         textAround: { type: "number", description: "Text: where it sits round the axis in degrees, -180 to 180: 0 the front, 90 the right, -90 the left (with axis x or y, 0 is the top and 180 the bottom). Default 0." },
         textHeight: { type: "number", description: "Text: where its middle sits along the axis, in % of the body's size along it, 0 to 100. Default 50." },
         textTurn: { type: "number", description: "Text: turned on the surface in degrees, -180 to 180, counterclockwise seen from outside. Default 0." },
+        textVertical: { type: "boolean", description: "Text: true stacks the letters top to bottom instead of side by side. Default false." },
         seed: { type: "number", description: "Cells and grain: another whole number, 1 to 9999, lays them out anew; the same number gives the same pattern. Default 1." },
         image: { type: "string", enum: ["topography", "wood", "woodRift", "guilloche", "terrazzo", "craquelure", "cord", "moire", "mosaic", "folds", "fingerprint", "rosettes", "own"], description: "Image: a ready height map drawn in code (each tiles without a seam), or own for imageOwn. Default topography." },
         imageOwn: {
@@ -1087,6 +1089,7 @@ export const tools = [
         id: { type: "string", description: "A text, or a layered-text bundle to build again." },
         text: { type: "string", description: "New words for every layer." },
         font: { type: "string", description: "New font for every layer: a built-in name or a font of one's own by name or id." },
+        vertical: { type: "boolean", description: "true stacks the letters of every layer top to bottom, so the tag stands upright at the same letter size; false lays them side by side again." },
         layers: {
           type: "array",
           maxItems: 6,

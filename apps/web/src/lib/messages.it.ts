@@ -1940,6 +1940,7 @@ export const MESSAGES_IT: Partial<Record<MessageKey, string>> = {
   "prop.text": "Testo",
   "prop.textCurved": "Su arco",
   "prop.textStretch": "Adatta le lettere alla cornice",
+  "prop.textVertical": "Lettere dall'alto in basso",
   "prop.textRadius": "Raggio dell'arco",
   "prop.textInward": "Lungo il bordo inferiore",
   "prop.textFlipped": "Capovolto",

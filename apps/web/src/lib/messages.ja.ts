@@ -2089,6 +2089,7 @@ export const MESSAGES_JA: Partial<Record<MessageKey, string>> = {
   "prop.textSpacing": "文字の間隔（%）",
   "prop.textSpacingHint": "フォントのもともとの間隔に足す、文字と文字のあいだのすき間です。文字の大きさに対するパーセントで、0より小さいとつまります。文字の大きさは変わらず、枠の大きさが合わせて変わります。",
   "prop.textStretch": "文字を枠いっぱいに広げる",
+  "prop.textVertical": "文字を縦に並べる",
   "prop.textRadius": "円弧の半径",
   "prop.textInward": "下側に沿わせる",
   "prop.textFlipped": "上下反転",

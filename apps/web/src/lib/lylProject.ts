@@ -1352,6 +1352,9 @@ function validateShapeDefinition(definition: Record<string, unknown>, label: str
   if (definition.textStretch !== undefined && typeof definition.textStretch !== "boolean") {
     throw new Error(`${label}.textStretch must be true or false`);
   }
+  if (definition.textVertical !== undefined && typeof definition.textVertical !== "boolean") {
+    throw new Error(`${label}.textVertical must be true or false`);
+  }
   // The space between a text's letters (#594), in per cent of the letter size.
   if (definition.textSpacing !== undefined && !(typeof definition.textSpacing === "number" && Number.isFinite(definition.textSpacing) && definition.textSpacing >= -50 && definition.textSpacing <= 300)) {
     throw new Error(`${label}.textSpacing must be a number from -50 to 300`);

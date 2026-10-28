@@ -2180,6 +2180,7 @@ export const MESSAGES_NL: Record<MessageKey, string> = {
   "prop.textSpacing": "Letterafstand (%)",
   "prop.textSpacingHint": "Ruimte tussen de letters bovenop die van het lettertype, in procent van de lettergrootte; onder 0 smaller. De letters behouden hun grootte, het kader volgt.",
   "prop.textStretch": "Letters uitrekken tot het kader",
+  "prop.textVertical": "Letters onder elkaar",
   "prop.textRadius": "Boogstraal",
   "prop.textInward": "Langs de onderkant",
   "prop.textFlipped": "Ondersteboven",

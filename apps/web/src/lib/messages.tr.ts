@@ -1971,6 +1971,7 @@ export const MESSAGES_TR: Partial<Record<MessageKey, string>> = {
   "prop.text": "Metin",
   "prop.textCurved": "Yay üzerinde",
   "prop.textStretch": "Harfleri çerçeveye uzat",
+  "prop.textVertical": "Harfler yukarıdan aşağıya",
   "prop.textRadius": "Yay yarıçapı",
   "prop.textInward": "Alt boyunca",
   "prop.textFlipped": "Ters",

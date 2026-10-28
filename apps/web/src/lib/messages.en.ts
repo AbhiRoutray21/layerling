@@ -2181,6 +2181,7 @@ export const MESSAGES_EN = {
   "prop.textSpacing": "Letter spacing (%)",
   "prop.textSpacingHint": "Space between the letters on top of the font's own, in per cent of the letter size; below 0 tighter. The letters keep their size, the box follows.",
   "prop.textStretch": "Stretch letters to the frame",
+  "prop.textVertical": "Letters top to bottom",
   "prop.textRadius": "Arc radius",
   "prop.textInward": "Along the bottom",
   "prop.textFlipped": "Upside down",

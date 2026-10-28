@@ -2173,6 +2173,7 @@ export const MESSAGES_RU: Partial<Record<MessageKey, string>> = {
   "prop.textSpacing": "Интервал между буквами (%)",
   "prop.textSpacingHint": "Расстояние между буквами сверх заданного шрифтом, в процентах от размера букв; ниже 0 — теснее. Буквы сохраняют размер, рамка подстраивается.",
   "prop.textStretch": "Растянуть буквы по рамке",
+  "prop.textVertical": "Буквы сверху вниз",
   "prop.textRadius": "Радиус дуги",
   "prop.textInward": "По нижнему краю",
   "prop.textFlipped": "Вверх ногами",

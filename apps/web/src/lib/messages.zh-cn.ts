@@ -1998,6 +1998,7 @@ export const MESSAGES_ZH_CN: Partial<Record<MessageKey, string>> = {
   "prop.textSpacing": "字距（%）",
   "prop.textSpacingHint": "在字体自带间距之上额外增加的字母间距，以字母大小的百分比表示；小于 0 则更紧。字母大小不变，外框随之调整。",
   "prop.textStretch": "将字母拉伸到外框",
+  "prop.textVertical": "文字竖排",
   "prop.textRadius": "圆弧半径",
   "prop.textInward": "沿底部",
   "prop.textFlipped": "上下翻转",

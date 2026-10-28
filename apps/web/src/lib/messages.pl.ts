@@ -2022,6 +2022,7 @@ export const MESSAGES_PL: Partial<Record<MessageKey, string>> = {
   "prop.textSpacing": "Odstęp między literami (%)",
   "prop.textSpacingHint": "Odstęp między literami ponad własny odstęp czcionki, w procentach wielkości liter. Poniżej 0 ciaśniej. Litery zachowują rozmiar, a ramka podąża za nimi.",
   "prop.textStretch": "Rozciągnij litery do ramki",
+  "prop.textVertical": "Litery jedna pod drugą",
   "prop.textRadius": "Promień łuku",
   "prop.textInward": "Wzdłuż dołu",
   "prop.textFlipped": "Do góry nogami",

@@ -625,6 +625,7 @@ export const MESSAGES_PT_BR: Partial<Record<MessageKey, string>> = {
   "prop.textSpacing": "Espaçamento entre letras (%)",
   "prop.textSpacingHint": "Espaço entre as letras além do da própria fonte, em porcentagem do tamanho da letra; abaixo de 0 fica mais apertado. As letras mantêm o tamanho, a moldura acompanha.",
   "prop.textStretch": "Esticar as letras até a moldura",
+  "prop.textVertical": "Letras de cima para baixo",
   "prop.textRadius": "Raio do arco",
   "prop.textInward": "Pela parte de baixo",
   "prop.textFlipped": "De cabeça para baixo",

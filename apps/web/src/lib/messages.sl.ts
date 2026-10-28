@@ -1609,6 +1609,7 @@ export const MESSAGES_SL: Partial<Record<MessageKey, string>> = {
   "prop.textSpacing": "Razmik med črkami (%)",
   "prop.textSpacingHint": "Razmik med črkami poleg razmika pisave, v odstotkih velikosti črk; pod 0 ožje. Črke ohranijo velikost, okvir jim sledi.",
   "prop.textStretch": "Raztegni črke na okvir",
+  "prop.textVertical": "Črke ena pod drugo",
   "prop.textRadius": "Polmer loka",
   "prop.textInward": "Po spodnji strani",
   "prop.textFlipped": "Na glavo",

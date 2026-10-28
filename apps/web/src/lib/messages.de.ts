@@ -2180,6 +2180,7 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "prop.textSpacing": "Zeichenabstand (%)",
   "prop.textSpacingHint": "Abstand zwischen den Buchstaben zusätzlich zu dem der Schrift, in Prozent der Buchstabengröße; unter 0 enger. Die Buchstaben behalten ihre Größe, der Rahmen folgt.",
   "prop.textStretch": "Buchstaben auf den Rahmen strecken",
+  "prop.textVertical": "Buchstaben untereinander",
   "prop.textRadius": "Bogenradius",
   "prop.textInward": "Unten am Kreis",
   "prop.textFlipped": "Auf den Kopf stellen",
