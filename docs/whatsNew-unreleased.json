@@ -38,5 +38,35 @@
       "de": "Rechteckige Löcher und Langlöcher haben jetzt einen eigenen Reihenabstand. Schmale, hohe Schlitze stehen so dicht nebeneinander, wie die Wand es erlaubt, statt so weit auseinander, wie sie hoch sind.",
       "en": "Rectangle and slot holes now have their own spacing between the rows. Narrow, tall slots stand as close side by side as the wall allows, instead of as far apart as they are high."
     }
+  },
+  {
+    "title": {
+      "de": "Gruppe oder Bündel auf einen Blick",
+      "en": "Group or bundle at a glance"
+    },
+    "body": {
+      "de": "In der Objektliste steht vor einer Gruppe oder einem Bündel jetzt dasselbe Symbol wie auf dem Knopf, der sie gemacht hat, und darunter „Gruppe · 3 Teile“ oder „Bündel · 3 Teile“. Das stimmt auch, wenn du sie umbenannt hast.",
+      "en": "In the Objects panel a group or bundle now shows the same mark as the button that made it, with “Group · 3 parts” or “Bundle · 3 parts” below. That stays right after you rename it."
+    }
+  },
+  {
+    "title": {
+      "de": "Server-Entwurf öffnen: die Kachel zeigt es",
+      "en": "Opening a server design shows on its card"
+    },
+    "body": {
+      "de": "Ein großer Entwurf vom Server braucht ein paar Sekunden. Solange er lädt, dreht sich jetzt ein Kreis auf seiner Kachel, und weitere Klicks warten, bis er offen ist.",
+      "en": "A large design from the server takes a few seconds. While it loads, a circle now turns on its card, and further clicks wait until it is open."
+    }
+  },
+  {
+    "title": {
+      "de": "Serverspeicher: ein Ordner je Benutzer",
+      "en": "Server store: a folder for each user"
+    },
+    "body": {
+      "de": "Wer layerling hinter einem Proxy mit Anmeldung betreibt, kann jedem Benutzer einen eigenen Serverordner geben: mit der Einstellung LAYERLING_USER_HEADER. Ohne sie bleibt alles wie bisher. Große Entwürfe kommen außerdem vom Server, ohne den Speicher zu füllen.",
+      "en": "If you run layerling behind a proxy with sign-in, you can give each user a server folder of their own with the setting LAYERLING_USER_HEADER. Without it everything stays as it was. Large designs also come from the server without filling its memory."
+    }
   }
 ]
