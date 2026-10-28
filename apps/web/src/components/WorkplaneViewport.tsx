@@ -652,6 +652,7 @@ function syncMoveDimensionOverlay(
         planeY: session.planeY,
         deltaX: session.deltaX,
         deltaZ: session.deltaZ,
+        lift: session.lift,
         accuracy,
         width: rect.width,
         height: rect.height,
@@ -1128,6 +1129,43 @@ function moveDimensionAnchorForCamera(state: ThreeState, frame: SelectionFrame) 
     return leftmost;
   });
   return leftVisibleCorner.world;
+}
+
+/**
+ * The way the lift arrow moves a selection is measured up the corner the X and Y moves start from,
+ * from the height of its bottom (#979).
+ */
+function liftMoveDimensionSession(
+  state: ThreeState,
+  transform: { selectionFrame: SelectionFrame; items: Array<{ id: string; startShape: WorkplaneShape; startCenter: THREE.Vector3 }> },
+  axis: THREE.Vector3,
+): MoveDimensionSession {
+  const frame = transform.selectionFrame;
+  const corner = moveDimensionAnchorForCamera(state, frame);
+  const bottom = framePoint(frame, 0, frame.min.y, 0);
+  const start = corner.clone().addScaledVector(axis, bottom.clone().sub(corner).dot(axis));
+  return {
+    active: true,
+    originX: start.x,
+    originZ: start.z,
+    planeY: start.y,
+    deltaX: 0,
+    deltaZ: 0,
+    items: [],
+    lift: {
+      start: { x: start.x, y: start.y, z: start.z },
+      axis: { x: axis.x, y: axis.y, z: axis.z },
+      delta: 0,
+      side: { x: frame.center.x, y: start.y, z: frame.center.z },
+      items: transform.items.map((item) => ({
+        id: item.id,
+        centerX: item.startCenter.x,
+        centerY: item.startCenter.y,
+        centerZ: item.startCenter.z,
+        height: item.startShape.height,
+      })),
+    },
+  };
 }
 
 function localResizePlaneForFrame(frame: SelectionFrame, localY = frame.min.y) {
@@ -2009,8 +2047,60 @@ export function WorkplaneViewport({
     }
   }, [clearOriginDimensions, refreshOriginDimensions]);
 
+  /** A typed way up or down for what the lift arrow just moved (#979); minus goes down. */
+  const commitLiftDimension = useCallback(
+    (rawValue: string) => {
+      const session = moveDimensionSessionRef.current;
+      const lift = session?.lift;
+      const typed = parseMeasureMm(rawValue);
+      if (!session || !lift || !Number.isFinite(typed)) {
+        return;
+      }
+      // No body goes below the lowest or above the highest elevation the lift arrow allows.
+      let minimum = -Infinity;
+      let maximum = Infinity;
+      if (Math.abs(lift.axis.y) > 1e-6) {
+        lift.items.forEach((item) => {
+          const bottom = item.centerY - item.height / 2;
+          const low = (MIN_ELEVATION - bottom) / lift.axis.y;
+          const high = (MAX_ELEVATION - bottom) / lift.axis.y;
+          minimum = Math.max(minimum, Math.min(low, high));
+          maximum = Math.min(maximum, Math.max(low, high));
+        });
+      }
+      lift.delta = clamp(typed, minimum, maximum);
+
+      onInteractionActiveChange?.(true);
+      lift.items.forEach((item) => {
+        const centerY = item.centerY + lift.axis.y * lift.delta;
+        onUpdateShape(item.id, {
+          x: cleanNearZero(item.centerX + lift.axis.x * lift.delta, 0.0005),
+          z: cleanNearZero(item.centerZ + lift.axis.z * lift.delta, 0.0005),
+          elevation: cleanNearZero(clamp(centerY - item.height / 2, MIN_ELEVATION, MAX_ELEVATION), 0.0005),
+        });
+      });
+      onInteractionActiveChange?.(false);
+      if (threeRef.current) {
+        syncMoveDimensionOverlay(
+          threeRef.current,
+          session,
+          moveDimensionOverlayRef,
+          setMoveDimensionOverlay,
+          workspaceRef.current.accuracy,
+          resolvedThemeRef.current,
+        );
+        threeRef.current.needsRender = true;
+      }
+    },
+    [onInteractionActiveChange, onUpdateShape],
+  );
+
   const commitMoveDimension = useCallback(
     (axis: MoveDimensionAxis, rawValue: string) => {
+      if (axis === "lift") {
+        commitLiftDimension(rawValue);
+        return;
+      }
       const session = moveDimensionSessionRef.current;
       // A typed Y move counts towards the back (#182); inside it moves along minus z.
       const typed = parseMeasureMm(rawValue);
@@ -2051,7 +2141,7 @@ export function WorkplaneViewport({
         threeRef.current.needsRender = true;
       }
     },
-    [onInteractionActiveChange, onUpdateShape],
+    [commitLiftDimension, onInteractionActiveChange, onUpdateShape],
   );
 
   const rememberResizeAnchor = useCallback((shapeId: string, kind: TransformHandleKind, handleKey: string) => {
@@ -4105,6 +4195,21 @@ export function WorkplaneViewport({
             ),
           });
         });
+        if (state && !transform.duplicate && moveDimensionsEnabledRef.current) {
+          const session = moveDimensionSessionRef.current?.lift
+            ? moveDimensionSessionRef.current
+            : (moveDimensionSessionRef.current = liftMoveDimensionSession(state, transform, axis));
+          if (session.lift) session.lift.delta = delta;
+          session.active = true;
+          syncMoveDimensionOverlay(
+            state,
+            session,
+            moveDimensionOverlayRef,
+            setMoveDimensionOverlay,
+            workspaceRef.current.accuracy,
+            resolvedThemeRef.current,
+          );
+        }
         if (state) {
           const readoutWorld = (transform.liftHandlePoint ?? transform.selectionFrame.center).clone().addScaledVector(axis, delta);
           const readoutPoint = projectToScreen(readoutWorld, state);
@@ -4250,6 +4355,26 @@ export function WorkplaneViewport({
     }, 250);
   }, []);
 
+  /** After a lift the way stays shown at the body and can be typed; a lift that went nowhere shows none. */
+  const settleLiftMoveDimension = useCallback(() => {
+    const session = moveDimensionSessionRef.current;
+    if (session?.lift && Math.abs(session.lift.delta) > 1e-9) {
+      session.active = false;
+    } else {
+      clearMoveDimensions();
+    }
+    if (threeRef.current) {
+      syncMoveDimensionOverlay(
+        threeRef.current,
+        moveDimensionSessionRef.current,
+        moveDimensionOverlayRef,
+        setMoveDimensionOverlay,
+        workspaceRef.current.accuracy,
+        resolvedThemeRef.current,
+      );
+    }
+  }, [clearMoveDimensions]);
+
   const finishTransform = useCallback((event: ReactPointerEvent<Element>) => {
     const transform = transformRef.current;
     if (!transform) {
@@ -4280,6 +4405,7 @@ export function WorkplaneViewport({
     }
     if (transform.kind === "lift") {
       setPinnedMeasureKey(getElevationMeasureKey(transformOverlayRef.current));
+      settleLiftMoveDimension();
     }
     if (transform.kind === "lift" && transform.hasMoved) {
       suppressLiftEditAfterDrag();
@@ -4305,7 +4431,7 @@ export function WorkplaneViewport({
     }
     onInteractionActiveChange?.(false);
     bakeRotatedShapes.forEach((id) => onUpdateShape(id, { bakeTransform: true }));
-  }, [onDuplicateShapesMoved, onInteractionActiveChange, onUpdateShape, suppressCornerEditAfterDrag, suppressLiftEditAfterDrag]);
+  }, [onDuplicateShapesMoved, onInteractionActiveChange, onUpdateShape, settleLiftMoveDimension, suppressCornerEditAfterDrag, suppressLiftEditAfterDrag]);
 
   // The calculation a box was last set from (#180), while it still gives the body's size; the
   // box then opens on the formula instead of the number, as the Properties field does.
@@ -6503,6 +6629,7 @@ export function WorkplaneViewport({
         }
         if (transform.kind === "lift") {
           setPinnedMeasureKey(getElevationMeasureKey(transformOverlayRef.current));
+          settleLiftMoveDimension();
         } else if (transform.kind === "height") {
           setPinnedMeasureKey(null);
           setHoverMeasureKey(null);
