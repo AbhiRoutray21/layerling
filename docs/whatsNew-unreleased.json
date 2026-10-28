@@ -1,6 +1,16 @@
 [
   {
     "title": {
+      "de": "Maßband: klarere Beschriftung",
+      "en": "Tape measure: clearer labels"
+    },
+    "body": {
+      "de": "Jede Beschriftung nennt die Achsen, entlang derer gemessen wird, etwa X, XY oder 3D. Fährst du mit der Maus darüber, siehst du die Strecke je Achse, über einem Punkt seine Lage. Beschriftungen stehen neben der Linie statt darauf, und Messungen hinter anderen Körpern werden blasser.",
+      "en": "Each label names the axes it measures along, such as X, XY or 3D. Hover it to see the reach along each axis, hover a point to see where it is. Labels sit beside their line instead of on it, and measurements behind other bodies fade."
+    }
+  },
+  {
+    "title": {
       "de": "Gebogenes Rohr: Öffnung wieder mittig",
       "en": "Bent tube: the opening is centred again"
     },
