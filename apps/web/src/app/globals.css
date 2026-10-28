@@ -13495,6 +13495,18 @@ html[data-theme="dark"] .theme-check {
   text-overflow: ellipsis;
 }
 
+/* The toolbar's group and bundle marks, small enough for a row; the thicker
+   stroke keeps them from thinning to a hairline at this size. */
+.outliner-shape-name .outliner-kind-icon {
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  margin-right: 5px;
+  vertical-align: -3px;
+  stroke-width: 3.6;
+  opacity: 0.75;
+}
+
 .outliner-shape-kind {
   font-size: 10px;
   color: #9a8877;
