@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+## 1.117.1
+
 - **A filleted hollow body stays round when resized:** A hollow body is hollowed again at its new size, but one filleted or chamfered after the hollowing kept bands of wall thickness at its sides instead and only stretched the middle, which turned a round tube into a rounded square. Such a body is now hollowed again too, and its fillets and chamfers go back on the same edges. The edges are found by where they lie, since the CAD kernel numbers the edges of a tube pulled into an oval differently. Reported by Herr Herumradler in the drucktipps3d forum.
 - **Deleting a point of a smooth sketch outline changes only its neighbours:** Deleting a point laid the handles of every smooth point in the sketch anew, so handles set by hand elsewhere were lost and the outline changed far from the point. Now only the two points beside it are smoothed again. Reported by Herr Herumradler in the drucktipps3d forum.
 - **Keys for the snap grid (#748):** The snap step changes many times while designing, and each time meant a trip to the menu at the bottom right. Alt+1 to Alt+0 now pick that entry of the snap menu, in its order (Alt+1 turns snapping off, Alt+2 is the finest step, custom measures follow), and comma and period make the step one size finer or coarser. Both work in the 3D view and in a sketch, where comma and period still start a typed length while a line is drawn. The F keys were left alone, since the browser uses them. Asked for by @KimA998 and @Hiaber in #748.
