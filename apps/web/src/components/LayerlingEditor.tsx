@@ -29,7 +29,7 @@ import { iconSourceFromFile, PICTURE_FILE_ACCEPT, type IconSource } from "@/lib/
 import { loadedManifoldRuntime, onManifoldReady } from "@/lib/manifoldHandle";
 import { canApplySketchCornerTreatment } from "@/lib/sketchFilletChamfer";
 import { SKETCH_POLYGON_DEFAULT_SIDES, SKETCH_STAR_DEFAULT_INNER_PERCENT, sketchPrimitiveGeometry } from "@/lib/sketchPrimitives";
-import { cloneSketchProfile, orderedSketchPaths, sketchWithPointMode, withSmoothSketchHandles } from "@/lib/sketchSmoothHandles";
+import { cloneSketchProfile, orderedSketchPaths, sketchWithPointMode, withSmoothHandlesAfterRemoval, withSmoothSketchHandles } from "@/lib/sketchSmoothHandles";
 import { curveThroughPoints } from "@/lib/sketchCurveThroughPoints";
 import { changesLockedOutline, setSketchPointsLocked, sketchLockState } from "@/lib/sketchLock";
 import { curveSketchSegment, isSegmentCurved, straightenSketchSegment } from "@/lib/sketchSegmentCurve";
@@ -81,7 +81,7 @@ import { ShortcutsModal } from "./workplane/ShortcutsModal";
 import { InteractiveHelp } from "./InteractiveHelp";
 import { ShapeContextMenu, type ShapeContextMenuItem } from "./workplane/ShapeContextMenu";
 import { nextSelectionTransparency } from "@/lib/selectionTransparency";
-import { canonicalizeShape, cloneWorkplaneShapeTreeWithFreshIds, cleanNearZero, cleanRotationDegrees, isNonSolidShape, meshYawDegrees, preservesEdgeTreatmentSize, serializeShapesForSync, shapeDepth, shapeExtrudeDeformPatch, shapeHasShapeDeform, shapeTaperPatch, shapeTransformShouldRemainEditable, shapeWidth, shapeWithParametricSource, patchTouchesBodyParameters, withHoleMode, workplaneShapesEqual, shellNeedingRebuild, hollowStretchSincePicture } from "@/lib/workplaneShapes";
+import { canonicalizeShape, cloneWorkplaneShapeTreeWithFreshIds, cleanNearZero, cleanRotationDegrees, isNonSolidShape, meshYawDegrees, preservesEdgeTreatmentSize, serializeShapesForSync, shapeDepth, shapeExtrudeDeformPatch, shapeHasShapeDeform, shapeTaperPatch, shapeTransformShouldRemainEditable, shapeWidth, shapeWithParametricSource, patchTouchesBodyParameters, withHoleMode, workplaneShapesEqual, shellNeedingRebuild, hollowStretchSincePicture, edgeTreatmentsAfterShell } from "@/lib/workplaneShapes";
 import { pasteCenteringShift } from "@/lib/pasteCentering";
 import { faceWorkplaneCenteringShift, workplaneCenteringOffset } from "@/lib/workplaneCentering";
 import { projectShapesExtent } from "@/components/workplane/ViewportOverlays";
@@ -4942,7 +4942,7 @@ export function LayerlingEditor({
     (id: string) => {
       // A point between two sides is bridged; at a crossing the sides that run on are joined (#641).
       const next = sketchProfileWithoutPoint(sketchProfile, id);
-      commitSketchProfile(next.segments.some((segment) => segment.kind === "smooth") ? withSmoothSketchHandles(next) : next, t("status.sketchPointRemoved"));
+      commitSketchProfile(withSmoothHandlesAfterRemoval(sketchProfile, next, id), t("status.sketchPointRemoved"));
       if (sketchActivePointId === id) setSketchActivePointId(null);
       setSketchSelection(null);
     },
@@ -6826,9 +6826,12 @@ export function LayerlingEditor({
     return { response, sourceParts };
   }, [postCadModifierRequestAsync]);
 
-  const applyCadModifierForMcp = useCallback(async (
+  // `lay` only computes the treated body and hands it back, without the checks and the commit: a hollow
+  // body hollowed again after resizing lays its fillets anew on the fresh walls that way (forum, 621213).
+  const edgeTreatedShape = useCallback(async (
     shape: WorkplaneShape,
     params: Record<string, unknown>,
+    lay?: (modified: WorkplaneShape) => void,
   ) => {
     invalidateCadModifierSession();
     const sourceFingerprint = projectShapesFingerprint([shape]);
@@ -6922,6 +6925,10 @@ export function LayerlingEditor({
       preserveEdgeSize,
       createdAt,
     );
+    if (lay) {
+      lay(modifiedShape);
+      return null;
+    }
     const currentTarget = shapesRef.current.find((candidate) => candidate.id === shape.id);
     if (
       projectInfoRef.current.projectId !== sourceProjectId ||
@@ -6943,6 +6950,24 @@ export function LayerlingEditor({
       selectableEdgeIds: selectableIds,
     };
   }, [commitShapes, invalidateCadModifierSession, prepareCadModifierForMcp, postCadModifierRequestAsync]);
+  const applyCadModifierForMcp = useCallback(async (shape: WorkplaneShape, params: Record<string, unknown>) => {
+    const result = await edgeTreatedShape(shape, params);
+    if (!result) throw new Error("The edge treatment returned nothing");
+    return result;
+  }, [edgeTreatedShape]);
+  const relaidEdgeTreatment = useCallback(async (shape: WorkplaneShape, feature: EdgeTreatmentFeature) => {
+    let laid: WorkplaneShape | null = null;
+    await edgeTreatedShape(shape, {
+      kind: feature.kind,
+      amount: feature.amount,
+      edgeIds: feature.edgeIds,
+      preserveEdgeSize: true,
+      ...(feature.chamferAngle !== undefined ? { chamferAngle: feature.chamferAngle } : {}),
+      ...(feature.endAmount !== undefined ? { endAmount: feature.endAmount } : {}),
+    }, (modified) => { laid = modified; });
+    if (!laid) throw new Error("The edge treatment returned nothing");
+    return laid as WorkplaneShape;
+  }, [edgeTreatedShape]);
 
   /*
    * Aushoehlen laeuft ueber denselben Weg wie Fase und Rundung: der Koerper
@@ -7339,7 +7364,14 @@ export function LayerlingEditor({
         return;
       }
       shellRebuildBusyRef.current = true;
+      // Fillets and chamfers laid after the hollowing go on again, on the same edges of the fresh walls.
+      const after = edgeTreatmentsAfterShell(stale) ?? [];
       void shellShape(before, amount, openings ?? "none", shellEdges ?? "round", stale)
+        .then(async (hollowed) => {
+          let rebuilt = hollowed;
+          for (const later of after) rebuilt = await relaidEdgeTreatment(rebuilt, later.feature);
+          return rebuilt;
+        })
         .then((rebuilt) => {
           if (replaceRebuiltShape(stale.id, fingerprint, rebuilt)) setNotice(t("status.shellRebuilt", { size: Number(amount.toFixed(2)) }));
         })
@@ -7356,7 +7388,7 @@ export function LayerlingEditor({
         });
     }, 250);
     return () => window.clearTimeout(timer);
-  }, [deleteFaceTool, edgeModifier, projectInteractionActive, replaceRebuiltShape, shapes, shellRebuildRound, shellShape, shellTool]);
+  }, [deleteFaceTool, edgeModifier, projectInteractionActive, relaidEdgeTreatment, replaceRebuiltShape, shapes, shellRebuildRound, shellShape, shellTool]);
 
   /*
    * Ein Skizzenkoerper, dessen Groesse geaendert wurde, wird aus seiner Skizze
