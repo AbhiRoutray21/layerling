@@ -74,12 +74,15 @@ const listeners = new Set<() => void>();
 let serverSetting: ServerSetting = null;
 let simple = typeof window !== "undefined" ? resolveSimpleMode(readStoredChoice(), serverSetting) : false;
 
+export function applySimpleMode(on: boolean) {
+  if (typeof document === "undefined") return;
+  if (on) document.documentElement.dataset.simpleMode = "on";
+  else delete document.documentElement.dataset.simpleMode;
+}
+
 function publish() {
   simple = resolveSimpleMode(readStoredChoice(), serverSetting);
-  if (typeof document !== "undefined") {
-    if (simple) document.documentElement.dataset.simpleMode = "on";
-    else delete document.documentElement.dataset.simpleMode;
-  }
+  applySimpleMode(simple);
   listeners.forEach((listener) => listener());
 }
 
