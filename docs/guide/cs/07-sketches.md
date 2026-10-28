@@ -146,7 +146,7 @@ Stěny nyní mají sklon zvenku i zevnitř. Zúžení škáluje celý obrys, pro
 
 - **{{ui:sketch.imageRotation}}:** otáčí kolem středu zahnutými šipkami u rohů nebo číselně; [[Shift]] přichytává po 15°.
 - **{{ui:sketch.centreImageX}}** a **{{ui:sketch.centreImageY}}:** přesunou střed na X = 0 nebo Y = 0. U rotace je X = 0 osou, takže obrázek bude vůči ní souměrný.
-- **{{ui:sketch.calibrateImage}}:** označte dva body se známou vzdáleností, například konce pravítka nebo průměru, a zadejte skutečný rozměr. Obrázek se rovnoměrně přepočte, první bod zůstane na místě.
+- **{{ui:sketch.calibrateImage}}:** tlačítko je nahoře hned pod náhledem; označte dva body se známou vzdáleností, například konce pravítka nebo průměru, a zadejte skutečný rozměr. Obrázek se rovnoměrně přepočte, první bod zůstane na místě.
 - **{{ui:sketch.cropImage}}:** úchyty místo změny velikosti ořezávají. Odříznutá část zůstává uložená a vrátí se přes {{ui:sketch.uncropImage}} nebo vytažením úchytu zpět ven.
 
 Tyto volby mění pouze podklad, nikoli náčrt.

@@ -150,7 +150,7 @@ Under {{ui:sketch.imageAlign}} you line up a photo that was not taken straight:
 
 - **{{ui:sketch.imageRotation}}:** Turn the picture about its centre, with the curved arrows beyond its corners or as a number in degrees. With [[Shift]] the arrows snap in 15° steps.
 - **{{ui:sketch.centreImageX}}** and **{{ui:sketch.centreImageY}}:** put the picture's centre on X = 0 or Y = 0. For a revolve, X = 0 is the axis, so the picture then lies symmetric about it.
-- **{{ui:sketch.calibrateImage}}:** Click two points in the picture whose distance you know, the ends of a ruler or a known diameter, and type the real distance. The picture is scaled evenly so that distance is right; the first point stays where it was.
+- **{{ui:sketch.calibrateImage}}:** Its button sits at the top, right under the preview. Click two points in the picture whose distance you know, the ends of a ruler or a known diameter, and type the real distance. The picture is scaled evenly so that distance is right; the first point stays where it was.
 - **{{ui:sketch.cropImage}}:** The handles on the frame now crop the picture instead of scaling it; what is cut away stays stored and comes back with {{ui:sketch.uncropImage}} or when a handle is pulled out again.
 
 All four touch the reference only, never the sketch.

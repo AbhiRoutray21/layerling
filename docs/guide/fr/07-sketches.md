@@ -146,7 +146,7 @@ Sous {{ui:sketch.imageAlign}} vous alignez une photo qui n'a pas été prise dir
 
 - **{{ui:sketch.imageRotation}} :** Tournez l'image autour de son centre, avec les flèches courbes à ses coins ou sous forme de nombre en degrés. Avec [[Shift]], les flèches s'enclenchent par pas de 15°.
 - **{{ui:sketch.centreImageX}}** et **{{ui:sketch.centreImageY}} :** placent le centre de l'image sur X = 0 ou Y = 0. Pour une révolution, X = 0 est l'axe, donc l'image est alors symétrique par rapport à lui.
-- **{{ui:sketch.calibrateImage}} :** Cliquez sur deux points de l'image dont vous connaissez la distance, les extrémités d'une règle ou un diamètre connu, et saisissez la distance réelle. L'image est mise à l'échelle uniformément afin que la distance soit correcte ; le premier point reste là où il était.
+- **{{ui:sketch.calibrateImage}} :** Son bouton se trouve en haut, juste sous l'aperçu. Cliquez sur deux points de l'image dont vous connaissez la distance, les extrémités d'une règle ou un diamètre connu, et saisissez la distance réelle. L'image est mise à l'échelle uniformément afin que la distance soit correcte ; le premier point reste là où il était.
 - **{{ui:sketch.cropImage}} :** Les poignées du cadre recadrent désormais l'image au lieu de la redimensionner ; ce qui est coupé reste stocké et revient avec {{ui:sketch.uncropImage}} ou lorsqu'une poignée est à nouveau retirée.
 
 Tous les quatre touchent uniquement à la référence, jamais au croquis.

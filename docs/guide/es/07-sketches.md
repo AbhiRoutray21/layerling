@@ -150,7 +150,7 @@ En {{ui:sketch.imageAlign}} enderezas una foto que salió torcida:
 
 - **{{ui:sketch.imageRotation}}:** Gira la imagen alrededor de su centro, con las flechas curvas junto a sus esquinas o escribiendo los grados. Con [[Mayús]], las flechas se ajustan en pasos de 15°.
 - **{{ui:sketch.centreImageX}}** y **{{ui:sketch.centreImageY}}:** colocan el centro de la imagen en X = 0 o en Y = 0. En una revolución, X = 0 es el eje, así que la imagen queda simétrica respecto a él.
-- **{{ui:sketch.calibrateImage}}:** Haz clic en dos puntos de la imagen cuya distancia conozcas, como los extremos de una regla o un diámetro conocido, y escribe la distancia real. La imagen se escala por igual para que esa distancia sea correcta; el primer punto se queda donde estaba.
+- **{{ui:sketch.calibrateImage}}:** Su botón está arriba, justo debajo de la vista previa. Haz clic en dos puntos de la imagen cuya distancia conozcas, como los extremos de una regla o un diámetro conocido, y escribe la distancia real. La imagen se escala por igual para que esa distancia sea correcta; el primer punto se queda donde estaba.
 - **{{ui:sketch.cropImage}}:** Los tiradores del marco recortan ahora la imagen en lugar de escalarla; lo recortado se guarda y vuelve con {{ui:sketch.uncropImage}} o al volver a estirar un tirador hacia fuera.
 
 Las cuatro actúan solo sobre la imagen de plantilla, nunca sobre el boceto.

@@ -133,7 +133,7 @@ Az {{ui:sketch.imageAlign}} alatt egy nem egyenesen készült fényképet igazí
 
 - **{{ui:sketch.imageRotation}}:** A kép elforgatása a közepe körül, a sarkainál lévő ívelt nyilakkal vagy fokban megadott számként. [[Shift]] billentyűvel a nyilak 15°-os lépésekben illeszkednek.
 - **{{ui:sketch.centreImageX}}** és **{{ui:sketch.centreImageY}}:** a kép közepét X = 0-ra vagy Y = 0-ra teszi. Forgatásnál az X = 0 a tengely, így a kép ezután szimmetrikusan fekszik körülötte.
-- **{{ui:sketch.calibrateImage}}:** Kattints a képen két olyan pontra, amelyek távolságát ismered, egy vonalzó két végére vagy egy ismert átmérőre, és gépeld be a valódi távolságot. A kép egyenletesen úgy méreteződik, hogy ez a távolság stimmeljen; az első pont a helyén marad.
+- **{{ui:sketch.calibrateImage}}:** A gombja felül van, közvetlenül az előnézet alatt. Kattints a képen két olyan pontra, amelyek távolságát ismered, egy vonalzó két végére vagy egy ismert átmérőre, és gépeld be a valódi távolságot. A kép egyenletesen úgy méreteződik, hogy ez a távolság stimmeljen; az első pont a helyén marad.
 - **{{ui:sketch.cropImage}}:** A keret fogantyúi ilyenkor méretezés helyett körbevágják a képet; ami levágódik, tárolva marad, és az {{ui:sketch.uncropImage}} gombbal vagy egy fogantyú újbóli kihúzásával visszajön.
 
 Mind a négy csak a mintaképet érinti, a vázlatot soha.

@@ -150,7 +150,7 @@ Unter {{ui:sketch.imageAlign}} richtest du ein Foto aus, das nicht gerade aufgen
 
 - **{{ui:sketch.imageRotation}}:** Drehe das Bild um seine Mitte, mit den gebogenen Pfeilen an seinen Ecken oder als Zahl in Grad. Mit [[Umschalt]] rasten die Pfeile in 15°-Schritten ein.
 - **{{ui:sketch.centreImageX}}** und **{{ui:sketch.centreImageY}}:** setzen die Bildmitte auf X = 0 beziehungsweise Y = 0. Beim Drehkörper ist X = 0 die Drehachse, das Bild liegt dann symmetrisch darüber.
-- **{{ui:sketch.calibrateImage}}:** Klicke zwei Punkte im Bild, deren Abstand du kennst, etwa die Enden eines Lineals oder einen bekannten Durchmesser, und tippe den wirklichen Abstand ein. Das Bild wird gleichmäßig so skaliert, dass die Strecke stimmt; der erste Punkt bleibt, wo er war.
+- **{{ui:sketch.calibrateImage}}:** Der Knopf steht oben, gleich unter der Vorschau. Klicke zwei Punkte im Bild, deren Abstand du kennst, etwa die Enden eines Lineals oder einen bekannten Durchmesser, und tippe den wirklichen Abstand ein. Das Bild wird gleichmäßig so skaliert, dass die Strecke stimmt; der erste Punkt bleibt, wo er war.
 - **{{ui:sketch.cropImage}}:** Die Griffe am Rahmen schneiden das Bild zu statt es zu skalieren; was wegfällt, bleibt gespeichert und kommt mit {{ui:sketch.uncropImage}} oder beim Herausziehen eines Griffs zurück.
 
 Alle vier wirken nur auf die Vorlage, nie auf die Skizze.

@@ -149,7 +149,7 @@ Under {{ui:sketch.imageAlign}} justerer du et foto der ikke blev taget lige:
 
 - **{{ui:sketch.imageRotation}}:** Drej billedet omkring dets midte, med de buede pile ved dets hjørner eller som et tal i grader. Med [[Shift]] snapper pilene i 15°-trin.
 - **{{ui:sketch.centreImageX}}** og **{{ui:sketch.centreImageY}}:** lægger billedets midte på X = 0 eller Y = 0. For en revolvering er X = 0 aksen, så billedet ligger så symmetrisk omkring den.
-- **{{ui:sketch.calibrateImage}}:** Klik to punkter i billedet hvis afstand du kender, enderne af en lineal eller en kendt diameter, og tast den virkelige afstand. Billedet skaleres jævnt så den afstand er rigtig; det første punkt bliver hvor det var.
+- **{{ui:sketch.calibrateImage}}:** Knappen sidder øverst, lige under forhåndsvisningen. Klik to punkter i billedet hvis afstand du kender, enderne af en lineal eller en kendt diameter, og tast den virkelige afstand. Billedet skaleres jævnt så den afstand er rigtig; det første punkt bliver hvor det var.
 - **{{ui:sketch.cropImage}}:** Håndtagene på rammen beskærer nu billedet i stedet for at skalere det; hvad der klippes væk forbliver gemt og kommer tilbage med {{ui:sketch.uncropImage}} eller når et håndtag trækkes ud igen.
 
 Alle fire rører kun referencen, aldrig skitsen.

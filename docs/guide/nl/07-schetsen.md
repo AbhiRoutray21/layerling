@@ -148,7 +148,7 @@ Onder {{ui:sketch.imageAlign}} lijn je een foto uit die niet recht genomen is:
 
 - **{{ui:sketch.imageRotation}}:** Draai de afbeelding om haar midden, met de gebogen pijlen bij haar hoeken of als getal in graden. Met [[Shift]] klikken de pijlen vast in stappen van 15°.
 - **{{ui:sketch.centreImageX}}** en **{{ui:sketch.centreImageY}}:** zetten het midden van de afbeelding op X = 0 of Y = 0. Bij draaien is X = 0 de as, zodat de afbeelding dan symmetrisch om de as ligt.
-- **{{ui:sketch.calibrateImage}}:** Klik twee punten in de afbeelding aan waarvan je de afstand kent, de uiteinden van een liniaal of een bekende diameter, en typ de echte afstand in. De afbeelding wordt gelijkmatig geschaald zodat die afstand klopt; het eerste punt blijft waar het was.
+- **{{ui:sketch.calibrateImage}}:** De knop staat bovenaan, direct onder het voorbeeld. Klik twee punten in de afbeelding aan waarvan je de afstand kent, de uiteinden van een liniaal of een bekende diameter, en typ de echte afstand in. De afbeelding wordt gelijkmatig geschaald zodat die afstand klopt; het eerste punt blijft waar het was.
 - **{{ui:sketch.cropImage}}:** De handgrepen op het kader snijden de afbeelding nu bij in plaats van haar te schalen; wat weggesneden is blijft bewaard en komt terug met {{ui:sketch.uncropImage}} of wanneer een handgreep weer naar buiten wordt getrokken.
 
 Alle vier raken alleen de referentie, nooit de schets.

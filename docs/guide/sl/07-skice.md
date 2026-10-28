@@ -148,7 +148,7 @@ Pod {{ui:sketch.imageAlign}} poravnaš fotografijo, ki ni bila posneta naravnost
 
 - **{{ui:sketch.imageRotation}}:** Zavrti sliko okoli njene sredine, z ukrivljenimi puščicami ob njenih vogalih ali kot številka v stopinjah. S [[Shift]] se puščice zaskočijo v korakih po 15°.
 - **{{ui:sketch.centreImageX}}** in **{{ui:sketch.centreImageY}}:** postavita središče slike na X = 0 oziroma Y = 0. Pri vrtenini je X = 0 os vrtenja, slika potem leži simetrično nad njo.
-- **{{ui:sketch.calibrateImage}}:** Klikni dve točki v sliki, katerih razdaljo poznaš, na primer konca ravnila ali znan premer, in vpiši resnično razdaljo. Slika se enakomerno poveča tako, da razdalja ustreza; prva točka ostane, kjer je bila.
+- **{{ui:sketch.calibrateImage}}:** Gumb je zgoraj, takoj pod predogledom. Klikni dve točki v sliki, katerih razdaljo poznaš, na primer konca ravnila ali znan premer, in vpiši resnično razdaljo. Slika se enakomerno poveča tako, da razdalja ustreza; prva točka ostane, kjer je bila.
 - **{{ui:sketch.cropImage}}:** Ročice na okvirju sliko obrežejo namesto da bi jo povečale; kar odpade, ostane shranjeno in se vrne z {{ui:sketch.uncropImage}} ali ob izvlečenju ročice.
 
 Vsa štiri delujejo samo na predlogo, nikoli na skico.

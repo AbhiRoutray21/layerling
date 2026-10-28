@@ -149,7 +149,7 @@ In {{ui:sketch.imageAlign}} puoi correggere l’orientamento di una foto non sca
 
 - **{{ui:sketch.imageRotation}}:** ruota l’immagine attorno al suo centro usando le frecce curve oltre i suoi angoli oppure inserendo un valore in gradi. Con [[Shift]] le frecce si agganciano a incrementi di 15°.
 - **{{ui:sketch.centreImageX}}** e **{{ui:sketch.centreImageY}}:** posizionano il centro dell’immagine su X = 0 o Y = 0. Per una rotazione, X = 0 è l’asse e l’immagine risulta simmetrica rispetto a esso.
-- **{{ui:sketch.calibrateImage}}:** fai clic su due punti dell’immagine la cui distanza reale è nota, per esempio le estremità di un righello o un diametro noto, e inserisci la misura. L’immagine viene ridimensionata in modo uniforme per corrispondere alla distanza reale; il primo punto resta fermo.
+- **{{ui:sketch.calibrateImage}}:** il pulsante è in alto, subito sotto l’anteprima; fai clic su due punti dell’immagine la cui distanza reale è nota, per esempio le estremità di un righello o un diametro noto, e inserisci la misura. L’immagine viene ridimensionata in modo uniforme per corrispondere alla distanza reale; il primo punto resta fermo.
 - **{{ui:sketch.cropImage}}:** le maniglie del riquadro ritagliano l’immagine invece di ridimensionarla. La parte tagliata resta memorizzata e ricompare con {{ui:sketch.uncropImage}} oppure trascinando di nuovo una maniglia verso l’esterno.
 
 Tutte e quattro le opzioni modificano solo l’immagine di riferimento, non lo schizzo.

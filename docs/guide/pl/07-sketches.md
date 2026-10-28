@@ -150,7 +150,7 @@ W {{ui:sketch.imageAlign}} wyrównujesz zdjęcie, które nie zostało zrobione n
 
 - **{{ui:sketch.imageRotation}}:** obróć obraz wokół jego środka zakrzywionymi strzałkami przy jego narożnikach albo liczbą w stopniach. Z [[Shift]] strzałki przyciągają się co 15°.
 - **{{ui:sketch.centreImageX}}** i **{{ui:sketch.centreImageY}}:** ustawiają środek obrazu na X = 0 albo Y = 0. Przy obracaniu X = 0 to oś, więc obraz leży wtedy symetrycznie względem niej.
-- **{{ui:sketch.calibrateImage}}:** kliknij dwa punkty na obrazie, których odległość znasz, końce linijki albo znaną średnicę, i wpisz rzeczywistą odległość. Obraz zostaje równomiernie przeskalowany tak, żeby ta odległość się zgadzała. Pierwszy punkt zostaje na miejscu.
+- **{{ui:sketch.calibrateImage}}:** przycisk jest na górze, tuż pod podglądem; kliknij dwa punkty na obrazie, których odległość znasz, końce linijki albo znaną średnicę, i wpisz rzeczywistą odległość. Obraz zostaje równomiernie przeskalowany tak, żeby ta odległość się zgadzała. Pierwszy punkt zostaje na miejscu.
 - **{{ui:sketch.cropImage}}:** uchwyty na ramce przycinają teraz obraz zamiast go skalować. To, co odcięte, zostaje zachowane i wraca przez {{ui:sketch.uncropImage}} albo gdy uchwyt zostanie wyciągnięty z powrotem.
 
 Wszystkie cztery dotyczą tylko wzorca, nigdy szkicu.

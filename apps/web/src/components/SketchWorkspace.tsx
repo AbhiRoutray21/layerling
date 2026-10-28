@@ -3351,34 +3351,7 @@ function SketchImageInspector({
         <span>{image.pixelWidth} × {image.pixelHeight} px</span>
       </div>
       <div className="property-card">
-        <div className="property-card-header static"><span>{t("sketch.imageProperties")}</span></div>
         <div className="property-list">
-          <SketchImageRange label={t("sketch.imageWidth")} value={image.width} min={0.5} max={200} accuracy={accuracy} disabled={image.locked} onChange={updateWidth} />
-          <SketchImageRange label={t("sketch.imageHeight")} value={image.depth} min={0.5} max={200} accuracy={accuracy} disabled={image.locked} onChange={updateDepth} />
-          <SketchImageRange label={t("sketch.imageOpacity")} value={(image.opacity ?? 0.55) * 100} min={5} max={100} accuracy={1} suffix="%" disabled={image.locked} onChange={(opacity) => onUpdate({ opacity: opacity / 100 }, t("sketch.imageOpacityUpdated"))} />
-          <SketchImagePositionField label={t("sketch.imagePositionX")} value={image.x} accuracy={accuracy} disabled={image.locked} onChange={(x) => onUpdate({ x }, t("sketch.imageMoved"))} />
-          <SketchImagePositionField label={t("sketch.imagePositionY")} value={image.z} accuracy={accuracy} disabled={image.locked} onChange={(z) => onUpdate({ z }, t("sketch.imageMoved"))} />
-          <button className={`sketch-image-aspect-toggle ${image.lockAspect !== false ? "active" : ""}`} type="button" disabled={image.locked} onClick={() => onUpdate({ lockAspect: image.lockAspect === false }, t("sketch.imageAspectUpdated"))}>
-            {image.lockAspect !== false ? <Link size={17} /> : <Link2Off size={17} />}
-            <span>{image.lockAspect !== false ? t("sketch.aspectLocked") : t("sketch.aspectUnlocked")}</span>
-          </button>
-        </div>
-      </div>
-      <div className="property-card">
-        <div className="property-card-header static"><span>{t("sketch.imageAlign")}</span></div>
-        <div className="property-list sketch-image-align">
-          <SketchImageRange label={t("sketch.imageRotation")} value={image.rotation ?? 0} min={-180} max={180} accuracy={1} suffix="°" disabled={image.locked} onChange={(rotation) => onUpdate({ rotation: normalizeImageRotation(rotation) }, t("sketch.imageRotated"))} />
-          <div className="sketch-image-action-row">
-            <button className="sketch-image-aspect-toggle" type="button" disabled={image.locked} title={revolve ? t("sketch.centreImageAxisHint") : undefined} onClick={() => onUpdate(centreImage("x"), t("sketch.imageCentred"))}>
-              <AlignCenterVertical size={17} />
-              <span>{t("sketch.centreImageX")}</span>
-            </button>
-            <button className="sketch-image-aspect-toggle" type="button" disabled={image.locked} onClick={() => onUpdate(centreImage("z"), t("sketch.imageCentred"))}>
-              <AlignCenterHorizontal size={17} />
-              <span>{t("sketch.centreImageY")}</span>
-            </button>
-          </div>
-          {revolve ? <p className="sketch-image-hint">{t("sketch.centreImageAxisHint")}</p> : null}
           <button className={`sketch-image-aspect-toggle ${calibration ? "active" : ""}`} type="button" disabled={image.locked} onClick={() => onCalibrate({ type: calibration ? "cancel" : "start" })}>
             <Ruler size={17} />
             <span>{calibration ? t("sketch.calibrateCancel") : t("sketch.calibrateImage")}</span>
@@ -3408,6 +3381,37 @@ function SketchImageInspector({
               </button>
             </label>
           ) : null}
+        </div>
+      </div>
+      <div className="property-card">
+        <div className="property-card-header static"><span>{t("sketch.imageProperties")}</span></div>
+        <div className="property-list">
+          <SketchImageRange label={t("sketch.imageWidth")} value={image.width} min={0.5} max={200} accuracy={accuracy} disabled={image.locked} onChange={updateWidth} />
+          <SketchImageRange label={t("sketch.imageHeight")} value={image.depth} min={0.5} max={200} accuracy={accuracy} disabled={image.locked} onChange={updateDepth} />
+          <SketchImageRange label={t("sketch.imageOpacity")} value={(image.opacity ?? 0.55) * 100} min={5} max={100} accuracy={1} suffix="%" disabled={image.locked} onChange={(opacity) => onUpdate({ opacity: opacity / 100 }, t("sketch.imageOpacityUpdated"))} />
+          <SketchImagePositionField label={t("sketch.imagePositionX")} value={image.x} accuracy={accuracy} disabled={image.locked} onChange={(x) => onUpdate({ x }, t("sketch.imageMoved"))} />
+          <SketchImagePositionField label={t("sketch.imagePositionY")} value={image.z} accuracy={accuracy} disabled={image.locked} onChange={(z) => onUpdate({ z }, t("sketch.imageMoved"))} />
+          <button className={`sketch-image-aspect-toggle ${image.lockAspect !== false ? "active" : ""}`} type="button" disabled={image.locked} onClick={() => onUpdate({ lockAspect: image.lockAspect === false }, t("sketch.imageAspectUpdated"))}>
+            {image.lockAspect !== false ? <Link size={17} /> : <Link2Off size={17} />}
+            <span>{image.lockAspect !== false ? t("sketch.aspectLocked") : t("sketch.aspectUnlocked")}</span>
+          </button>
+        </div>
+      </div>
+      <div className="property-card">
+        <div className="property-card-header static"><span>{t("sketch.imageAlign")}</span></div>
+        <div className="property-list sketch-image-align">
+          <SketchImageRange label={t("sketch.imageRotation")} value={image.rotation ?? 0} min={-180} max={180} accuracy={1} suffix="°" disabled={image.locked} onChange={(rotation) => onUpdate({ rotation: normalizeImageRotation(rotation) }, t("sketch.imageRotated"))} />
+          <div className="sketch-image-action-row">
+            <button className="sketch-image-aspect-toggle" type="button" disabled={image.locked} title={revolve ? t("sketch.centreImageAxisHint") : undefined} onClick={() => onUpdate(centreImage("x"), t("sketch.imageCentred"))}>
+              <AlignCenterVertical size={17} />
+              <span>{t("sketch.centreImageX")}</span>
+            </button>
+            <button className="sketch-image-aspect-toggle" type="button" disabled={image.locked} onClick={() => onUpdate(centreImage("z"), t("sketch.imageCentred"))}>
+              <AlignCenterHorizontal size={17} />
+              <span>{t("sketch.centreImageY")}</span>
+            </button>
+          </div>
+          {revolve ? <p className="sketch-image-hint">{t("sketch.centreImageAxisHint")}</p> : null}
           <button className={`sketch-image-aspect-toggle ${cropMode ? "active" : ""}`} type="button" disabled={image.locked} onClick={() => onCropMode(!cropMode)}>
             <Crop size={17} />
             <span>{cropMode ? t("sketch.cropImageDone") : t("sketch.cropImage")}</span>
