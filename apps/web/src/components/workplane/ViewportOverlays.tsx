@@ -2027,7 +2027,10 @@ function importedShapeProjectionBounds(
   yAxis: THREE.Vector3,
   zAxis: THREE.Vector3,
 ) {
-  if (!shape.importedMesh?.positions.length) {
+  // A body wrapped round a cylinder keeps the cylinder as its box, the same one the properties show and the
+  // alignment centres; its points cover only an arc and an engraving reaches a hair past it, so measuring
+  // them showed 92.30 by 91.72 for a 92.2 mm wrap, and typing 92.2 changed nothing (#987).
+  if (!shape.importedMesh?.positions.length || shape.cylinderWrap) {
     return null;
   }
 
