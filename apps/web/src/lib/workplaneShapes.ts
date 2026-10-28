@@ -7,6 +7,7 @@ import { MCP_SHAPE_SETTING_KEYS } from "@/lib/mcpShapeSettings";
 import { bentTubeSegmentsEqual } from "@/lib/bentTubeGeometry";
 import { vaseSettingsEqual } from "@/lib/vaseSettings";
 import { qrSettingsEqual } from "@/lib/qrCode";
+import { torusTubeRatio } from "@/lib/torusShape";
 import type { SketchStroke, WorkplaneShape } from "@/types/layerling";
 
 /** Bauwerte der Wabengitter, die es nur noch in alten Entwuerfen gibt: Die Form wird nicht mehr angeboten (#223), bleibt aber bearbeitbar. */
@@ -501,6 +502,10 @@ export function canonicalizeShape(unrepaired: WorkplaneShape): WorkplaneShape {
     next.depth = next.width;
     next.size = next.width;
   }
+  // A torus keeps its tube once it has one; a torus from before #981 takes the one it showed, its height (#981).
+  if (shape.kind === "torus" && next.torusTubeRatio === undefined) {
+    next.torusTubeRatio = torusTubeRatio(next);
+  }
   if (shape.groupedShapes) {
     next.groupedShapes = shape.groupedShapes.map(canonicalizeShape);
   }
@@ -695,6 +700,7 @@ export function workplaneShapesEqual(a: WorkplaneShape, b: WorkplaneShape) {
     a.loftSmooth === b.loftSmooth &&
     a.loftSegments === b.loftSegments &&
     a.slotEndRatio === b.slotEndRatio &&
+    a.torusTubeRatio === b.torusTubeRatio &&
     a.loftTiltX === b.loftTiltX &&
     a.loftTiltZ === b.loftTiltZ &&
     a.screwHoleShaft === b.screwHoleShaft &&

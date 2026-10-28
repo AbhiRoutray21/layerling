@@ -2188,6 +2188,7 @@ export const MESSAGES_EN = {
   "prop.steps": "Steps",
   "prop.torusSides": "Ring sides",
   "prop.torusSteps": "Tube steps",
+  "prop.torusTube": "Tube thickness",
   "prop.teeth": "Teeth",
   "prop.helixAngle": "Helix Angle",
   "prop.quality": "Quality",

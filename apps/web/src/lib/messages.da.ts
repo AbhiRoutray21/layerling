@@ -2543,6 +2543,7 @@ export const MESSAGES_DA: Partial<Record<MessageKey, string>> = {
   "prop.steps": "Trin",
   "prop.torusSides": "Ringsider",
   "prop.torusSteps": "Rørtrin",
+  "prop.torusTube": "Rørtykkelse",
   "prop.teeth": "Tænder",
   "prop.helixAngle": "Helixvinkel",
   "prop.quality": "Kvalitet",

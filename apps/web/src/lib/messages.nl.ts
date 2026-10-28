@@ -2187,6 +2187,7 @@ export const MESSAGES_NL: Record<MessageKey, string> = {
   "prop.steps": "Stappen",
   "prop.torusSides": "Ringzijden",
   "prop.torusSteps": "Buisstappen",
+  "prop.torusTube": "Buisdikte",
   "prop.teeth": "Tanden",
   "prop.helixAngle": "Schuine tandhoek",
   "prop.quality": "Kwaliteit",

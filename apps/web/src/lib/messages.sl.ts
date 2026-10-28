@@ -3612,6 +3612,7 @@ export const MESSAGES_SL: Partial<Record<MessageKey, string>> = {
   "gear.herringbone": "Puščični zobnik",
   "prop.torusSides": "Stranice obroča",
   "prop.torusSteps": "Koraki cevi",
+  "prop.torusTube": "Debelina cevi",
   "thread.axialClearanceHint": "Dodatna zračnost vzdolž navoja, v mm, povrh zračnosti: vsak zob matice je za toliko tanjši, premer pa ostane. Za navoj, ki se vrti zlahka in ne ropota vstran: zračnost naj bo okoli 0,2 do 0,3, tukaj pa nastavi 0,2. Pri 0 zračnost prihaja samo iz zračnosti v premeru, ki bočnici odpre le približno za polovico.",
   "prop.axialClearance": "Zračnost v osi (Z)",
   "prop.loftSmooth": "Mehak prehod (%)",

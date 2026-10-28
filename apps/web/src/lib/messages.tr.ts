@@ -1978,6 +1978,7 @@ export const MESSAGES_TR: Partial<Record<MessageKey, string>> = {
   "prop.steps": "Adımlar",
   "prop.torusSides": "Halka kenarları",
   "prop.torusSteps": "Boru adımları",
+  "prop.torusTube": "Boru kalınlığı",
   "prop.teeth": "Diş sayısı",
   "prop.helixAngle": "Helis açısı",
   "prop.quality": "Kalite",

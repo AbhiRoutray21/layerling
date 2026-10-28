@@ -2096,6 +2096,7 @@ export const MESSAGES_JA: Partial<Record<MessageKey, string>> = {
   "prop.steps": "ステップ数",
   "prop.torusSides": "リングの分割数",
   "prop.torusSteps": "チューブの分割数",
+  "prop.torusTube": "チューブの太さ",
   "prop.teeth": "歯数",
   "prop.helixAngle": "ねじれ角",
   "prop.quality": "品質",

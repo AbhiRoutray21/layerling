@@ -1947,6 +1947,7 @@ export const MESSAGES_IT: Partial<Record<MessageKey, string>> = {
   "prop.steps": "Passaggi",
   "prop.torusSides": "Lati dell'anello",
   "prop.torusSteps": "Passaggi del tubo",
+  "prop.torusTube": "Spessore del tubo",
   "prop.teeth": "Denti",
   "prop.helixAngle": "Angolo dell'elica",
   "prop.quality": "Qualità",

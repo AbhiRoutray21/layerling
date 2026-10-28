@@ -2180,6 +2180,7 @@ export const MESSAGES_RU: Partial<Record<MessageKey, string>> = {
   "prop.steps": "Шаги",
   "prop.torusSides": "Стороны кольца",
   "prop.torusSteps": "Шаги трубки",
+  "prop.torusTube": "Толщина трубки",
   "prop.teeth": "Зубья",
   "prop.helixAngle": "Угол наклона зубьев",
   "prop.quality": "Качество",

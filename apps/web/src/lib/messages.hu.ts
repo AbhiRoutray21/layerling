@@ -1970,6 +1970,7 @@ export const MESSAGES_HU: Partial<Record<MessageKey, string>> = {
   "prop.steps": "Lépések",
   "prop.torusSides": "Gyűrű oldalai",
   "prop.torusSteps": "Cső lépései",
+  "prop.torusTube": "Cső vastagsága",
   "prop.teeth": "Fogszám",
   "prop.helixAngle": "Ferdeségi szög",
   "prop.quality": "Minőség",

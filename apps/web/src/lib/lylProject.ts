@@ -1696,6 +1696,11 @@ function validateShapeDefinition(definition: Record<string, unknown>, label: str
       if (value < 0 || value > 1e6) throw new Error(`${label}.${key} is outside the supported range`);
     }
   }
+  if (kind === "torus" && definition.torusTubeRatio !== undefined) {
+    // Up to 1, not 0.5: a design from before #981 carries its height as the tube, and that may have been taller than the hole allowed.
+    const ratio = finiteNumber(definition.torusTubeRatio, `${label}.torusTubeRatio`);
+    if (ratio <= 0 || ratio > 1) throw new Error(`${label}.torusTubeRatio is outside the supported range`);
+  }
   if (kind === "slot" && definition.slotEndRatio !== undefined) {
     const ratio = finiteNumber(definition.slotEndRatio, `${label}.slotEndRatio`);
     if (ratio <= 0 || ratio > 1) throw new Error(`${label}.slotEndRatio is outside the supported range`);

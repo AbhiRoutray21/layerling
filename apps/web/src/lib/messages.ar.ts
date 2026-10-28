@@ -2043,6 +2043,7 @@ export const MESSAGES_AR: Partial<Record<MessageKey, string>> = {
   "prop.steps": "الخطوات",
   "prop.torusSides": "أضلاع الحلقة",
   "prop.torusSteps": "خطوات الأنبوب",
+  "prop.torusTube": "سماكة الأنبوب",
   "prop.teeth": "الأسنان",
   "prop.helixAngle": "زاوية الحلزون",
   "prop.quality": "الجودة",

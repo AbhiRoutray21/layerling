@@ -95,6 +95,7 @@ export const MESSAGES_CS: Record<MessageKey, string> = {
   "loft.smoothHint": "Při 0 se těleso zužuje přímočaře jako kužel. Při 100 mají boky průběh ve tvaru S: na obou koncích začínají rovnoběžně s osou a rozměr se mění mezi nimi, například u plynulého přechodu z úzké trubky na širší.",
   "prop.torusSides": "Počet segmentů prstence",
   "prop.torusSteps": "Počet segmentů průřezu",
+  "prop.torusTube": "Tloušťka prstence",
   "prop.axialClearance": "Axiální vůle (Z)",
   "thread.axialClearanceHint": "Dodatečná vůle podél osy závitu v mm, nad rámec radiální vůle. Každý zub vnitřního závitu se o tuto hodnotu ztenčí, průměr se nezmění. Pro lehký chod bez bočního viklání zkuste radiální vůli přibližně 0,2 až 0,3 mm a zde 0,2 mm. Při 0 vytváří vůli pouze radiální rozšíření, které uvolní boky závitu přibližně o polovinu méně.",
   "import.keepSvgPage": "SVG: zachovat polohu na stránce výkresu",

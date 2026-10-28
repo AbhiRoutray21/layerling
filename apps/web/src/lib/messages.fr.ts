@@ -2173,6 +2173,7 @@ export const MESSAGES_FR: Partial<Record<MessageKey, string>> = {
   "prop.steps": "Étapes",
   "prop.torusSides": "Côtés de bague",
   "prop.torusSteps": "Marches en tube",
+  "prop.torusTube": "Épaisseur du tube",
   "prop.teeth": "Dents",
   "prop.helixAngle": "Angle d'hélice",
   "prop.quality": "Qualité",

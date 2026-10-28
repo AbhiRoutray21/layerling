@@ -2005,6 +2005,7 @@ export const MESSAGES_ZH_CN: Partial<Record<MessageKey, string>> = {
   "prop.steps": "步数",
   "prop.torusSides": "环向边数",
   "prop.torusSteps": "管向步数",
+  "prop.torusTube": "管粗",
   "prop.teeth": "齿数",
   "prop.helixAngle": "螺旋角",
   "prop.quality": "质量",
