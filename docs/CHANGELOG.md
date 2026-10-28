@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+## 1.117.2
+
 - **Vertical text (#981):** Letters could only be set side by side; text running down a door frame or along a pen meant placing them one by one. Straight text now has *Letters top to bottom* under Properties: the letters are stacked, each centred on one upright line, the box turns upright and the letters keep their size, and the letter spacing sets the gap between them. Name tags have the switch too, with all their layers, and so does the Text pattern of the surface texture. Through MCP, `layerling_update_object` and `layerling_layer_text` take `vertical`, `layerling_texture_surface` takes `textVertical`. Asked for by @RepairItDude in #981.
 - **Calibrate sits under the picture in a sketch:** In the settings of a sketch's template picture, *Calibrate* came last under Align, below the fold of a smaller window, so it seemed missing. It now sits at the top, right under the preview, and the guide says where to find it.
 - **Q hides the sizes and distances around the selection (#981):** While moving small parts, the size marks, the movement dimensions and the distances to the origin covered what was being moved. [[Q]] now hides them for a while and [[Q]] again brings them back; a short message says which. A handle the pointer is on still shows its size, and the settings stay as they are. The keyboard shortcuts window and the guide (chapter Measuring and notes) list the key, and `layerling_measurements` takes `dimensions` to do the same through MCP. Asked for by @RepairItDude in #981.
