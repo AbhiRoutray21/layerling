@@ -894,6 +894,8 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "shortcuts.placeWorkplane": "Arbeitsebene setzen",
   "shortcuts.placeWorkplaneOnSelection": "Auf die gewählte Fläche setzen",
   "shortcuts.resetWorkplane": "Zurück auf die Grundplatte",
+  "shortcuts.snapGridPick": "Einrastraster wählen: der Eintrag mit dieser Nummer im Menü",
+  "shortcuts.snapGridStep": "Einrastraster eine Stufe feiner oder gröber",
   "shortcuts.reverseWorkplane": "Beim Setzen gedrückt halten: Richtung umkehren",
   "shortcuts.leaveMode": "Arbeitsebenen- oder Maßband-Modus verlassen",
   "shortcuts.sketchEscape": "Werkzeug ablegen (zurück zu Auswählen), dann Auswahl aufheben",

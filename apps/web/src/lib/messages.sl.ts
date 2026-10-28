@@ -770,6 +770,8 @@ export const MESSAGES_SL: Partial<Record<MessageKey, string>> = {
   "shortcuts.placeWorkplane": "Postavi delovno ravnino",
   "shortcuts.placeWorkplaneOnSelection": "Postavi jo na izbrano ploskev",
   "shortcuts.resetWorkplane": "Vrni jo na osnovno ploščo",
+  "shortcuts.snapGridPick": "Izberi korak pripenjanja: vnos s to številko v meniju",
+  "shortcuts.snapGridStep": "Mreža pripenjanja za stopnjo finejša ali grobejša",
   "shortcuts.reverseWorkplane": "Drži med postavljanjem za obrnitev smeri",
   "shortcuts.leaveMode": "Zapusti način delovne ravnine ali merilnega traku",
   "shortcuts.sketchEscape": "Odloži orodje (nazaj na Izberi), nato počisti izbor",

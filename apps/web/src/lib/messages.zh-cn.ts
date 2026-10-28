@@ -853,6 +853,8 @@ export const MESSAGES_ZH_CN: Partial<Record<MessageKey, string>> = {
   "shortcuts.placeWorkplane": "放置工作平面",
   "shortcuts.placeWorkplaneOnSelection": "将其放到选中的面上",
   "shortcuts.resetWorkplane": "放回底板",
+  "shortcuts.snapGridPick": "选择吸附步长：菜单中该编号的项",
+  "shortcuts.snapGridStep": "吸附网格细一级或粗一级",
   "shortcuts.reverseWorkplane": "放置时按住可反向",
   "shortcuts.leaveMode": "退出工作平面或卷尺模式",
   "shortcuts.sketchEscape": "放下工具（回到“选择”），然后清除选择",

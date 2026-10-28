@@ -18,5 +18,15 @@
       "de": "Der Torus hat jetzt eine eigene „Wulstdicke“. Die Höhe staucht den Wulst nur noch, statt ihn dicker zu machen, und so bleibt ein flacher Ring offen. Ziehst du an den Griffen, wächst der Wulst mit.",
       "en": "The torus now has its own \"Tube thickness\". The height only squashes the tube instead of making it thicker, so a flat ring stays open. Drag the handles and the tube grows along."
     }
+  },
+  {
+    "title": {
+      "de": "Tasten für das Einrastraster",
+      "en": "Keys for the snap grid"
+    },
+    "body": {
+      "de": "Alt+1 bis Alt+0 wählen den Eintrag mit dieser Nummer im Rastermenü, Alt+1 schaltet das Einrasten aus. Komma und Punkt machen den Schritt eine Stufe feiner oder gröber, im 3D-Fenster wie in der Skizze.",
+      "en": "Alt+1 to Alt+0 pick that entry of the snap menu, and Alt+1 turns snapping off. Comma and period make the step one size finer or coarser, in the 3D view and in a sketch alike."
+    }
   }
 ]

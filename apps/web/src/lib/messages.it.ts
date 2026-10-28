@@ -819,6 +819,8 @@ export const MESSAGES_IT: Partial<Record<MessageKey, string>> = {
   "shortcuts.placeWorkplane": "Posiziona un piano di lavoro",
   "shortcuts.placeWorkplaneOnSelection": "Posizionalo sulla faccia selezionata",
   "shortcuts.resetWorkplane": "Riportalo sulla piastra di base",
+  "shortcuts.snapGridPick": "Scegliere il passo di aggancio: la voce con quel numero nel menu",
+  "shortcuts.snapGridStep": "Griglia di aggancio di un passo più fine o più grossa",
   "shortcuts.reverseWorkplane": "Tieni premuto durante il posizionamento per invertire la direzione",
   "shortcuts.leaveMode": "Esci dalla modalità piano di lavoro o misurazione",
   "shortcuts.sketchEscape": "Posa lo strumento (torna a Seleziona), poi deseleziona tutto",

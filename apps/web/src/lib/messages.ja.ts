@@ -898,6 +898,8 @@ export const MESSAGES_JA: Partial<Record<MessageKey, string>> = {
   "shortcuts.placeWorkplane": "作業平面を置く",
   "shortcuts.placeWorkplaneOnSelection": "選択した面に置く",
   "shortcuts.resetWorkplane": "ベースプレートに戻す",
+  "shortcuts.snapGridPick": "スナップグリッドを選ぶ：メニューのその番号の項目",
+  "shortcuts.snapGridStep": "スナップグリッドを一段細かく／粗く",
   "shortcuts.reverseWorkplane": "置くときに押したまま: 向きを反転",
   "shortcuts.leaveMode": "作業平面またはメジャーモードを終了",
   "shortcuts.sketchEscape": "ツールを置く(選択に戻る)、次に選択を解除",

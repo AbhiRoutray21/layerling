@@ -1434,6 +1434,8 @@ export const MESSAGES_DA: Partial<Record<MessageKey, string>> = {
   "shortcuts.placeWorkplane": "Placér et arbejdsplan",
   "shortcuts.placeWorkplaneOnSelection": "Placér det på den valgte flade",
   "shortcuts.resetWorkplane": "Tilbage på grundpladen",
+  "shortcuts.snapGridPick": "Vælg snap-gitter: punktet med det nummer i menuen",
+  "shortcuts.snapGridStep": "Snap-gitter et trin finere eller grovere",
   "shortcuts.reverseWorkplane": "Hold under placering for at vende retningen",
   "shortcuts.leaveMode": "Forlad arbejdsplan- eller målebåndstilstand",
   "shortcuts.sketchEscape": "Læg værktøjet fra dig (tilbage til Vælg), ryd derefter markeringen",

@@ -1013,6 +1013,8 @@ export const MESSAGES_CS: Record<MessageKey, string> = {
   "shortcuts.placeWorkplane": "Umístit pracovní rovinu",
   "shortcuts.placeWorkplaneOnSelection": "Umístit ji na vybranou plochu",
   "shortcuts.resetWorkplane": "Vrátit ji na podložku",
+  "shortcuts.snapGridPick": "Vybrat krok přichytávání: položka s tímto číslem v nabídce",
+  "shortcuts.snapGridStep": "Krok přichytávání o stupeň jemnější nebo hrubší",
   "shortcuts.reverseWorkplane": "Při umísťování držte pro obrácení směru",
   "shortcuts.leaveMode": "Ukončit režim pracovní roviny nebo měření",
   "shortcuts.sketchEscape": "Odložit nástroj (zpět na Vybrat), pak zrušit výběr",

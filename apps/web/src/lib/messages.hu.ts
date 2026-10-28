@@ -823,6 +823,8 @@ export const MESSAGES_HU: Partial<Record<MessageKey, string>> = {
   "shortcuts.placeWorkplane": "Munkasík elhelyezése",
   "shortcuts.placeWorkplaneOnSelection": "Elhelyezés a kijelölt lapon",
   "shortcuts.resetWorkplane": "Vissza az alaplapra",
+  "shortcuts.snapGridPick": "Illesztőrács választása: a menü ilyen sorszámú eleme",
+  "shortcuts.snapGridStep": "Illesztőrács egy fokkal finomabb vagy durvább",
   "shortcuts.reverseWorkplane": "Elhelyezés közben nyomva tartva megfordítja az irányt",
   "shortcuts.leaveMode": "Kilépés a munkasík vagy a mérőszalag módból",
   "shortcuts.sketchEscape": "Az eszköz letétele (vissza a Kijelöléshez), majd a kijelölés megszüntetése",

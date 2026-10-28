@@ -895,6 +895,8 @@ export const MESSAGES_EN = {
   "shortcuts.placeWorkplane": "Place a workplane",
   "shortcuts.placeWorkplaneOnSelection": "Place it on the selected face",
   "shortcuts.resetWorkplane": "Put it back on the base plate",
+  "shortcuts.snapGridPick": "Pick a snap grid step: the entry of that number in the menu",
+  "shortcuts.snapGridStep": "Snap grid one step finer or coarser",
   "shortcuts.reverseWorkplane": "Hold while placing to reverse the direction",
   "shortcuts.leaveMode": "Leave workplane or tape measure mode",
   "shortcuts.sketchEscape": "Put the tool down (back to Select), then clear the selection",
