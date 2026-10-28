@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **A large copy pastes into another design again (#964):** The editor is taken down and built anew while another design loads, and its own clipboard went with it. A copy under 1 MB still came through the browser's local storage, but a larger one, a big group say, then had only the system clipboard left, which the browser may not hand over: "layerling clipboard is empty". The last copy now also stays with the page (`pageClipboard` in `LayerlingEditor.tsx`), so Copy, Home, another design and Paste bring it along as long as the window is open. Checked in the editor with the local storage emptied after copying: the group pastes into a new design, before it said the clipboard was empty. Reported by @T-Debban.
+
 ## 1.117.0
 
 - **The first visit downloads about 10 MB less:** The offline copy left out the guide's pictures and its page for printing only for the German, English and Dutch guides. The 16 other languages' print pages (about 400 KB each) and the pictures of the Arabic guide went into the cache of every new visitor. `precachePaths` in `generate-service-worker.mjs` now leaves out `img/` and `print-all.html` in every language's folder.

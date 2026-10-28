@@ -396,6 +396,12 @@ function parseClipboardShapes(serialized: string): ClipboardPayload<WorkplaneSha
   return { copiedAt: payload.copiedAt, shapes };
 }
 
+/**
+ * The last copy made in this page (#964). It outlives the editor, which is taken down and built anew while another
+ * design loads: a copy too large for local storage, a big group say, was gone by the time it was pasted there.
+ */
+let pageClipboard: ClipboardPayload<WorkplaneShape> | null = null;
+
 function readSharedClipboard(): ClipboardPayload<WorkplaneShape> | null {
   if (typeof window === "undefined") {
     return null;
@@ -456,6 +462,7 @@ function writeSharedClipboard(shapes: WorkplaneShape[], copiedAt: number) {
   if (typeof window === "undefined") {
     return;
   }
+  pageClipboard = { copiedAt, shapes };
   const serialized = encodeClipboardPayload(serializeShapesForSync(shapes), copiedAt);
   try {
     if (serialized.length > LOCAL_CLIPBOARD_LIMIT) {
@@ -3258,7 +3265,7 @@ export function LayerlingEditor({
   useEffect(() => {
     setSystemClipboardSupported(Boolean(navigator.clipboard));
     const adoptShared = () => {
-      const shared = readSharedClipboard();
+      const shared = newestClipboard([pageClipboard, readSharedClipboard()]);
       if (shared && shared.copiedAt >= clipboardCopiedAtRef.current) {
         clipboardCopiedAtRef.current = shared.copiedAt;
         setClipboard(shared.shapes);
@@ -5954,6 +5961,7 @@ export function LayerlingEditor({
     // storage) or another browser (system clipboard).
     const newest = newestClipboard([
       { copiedAt: clipboardCopiedAtRef.current, shapes: clipboard },
+      pageClipboard,
       readSharedClipboard(),
       await readSystemClipboard(),
     ]);
