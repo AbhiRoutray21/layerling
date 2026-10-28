@@ -91,6 +91,7 @@ import { cadModifierGridfinityForShape, cadModifierHelicalGearForShape, cadModif
 import { DEFAULT_OVERHANG_ANGLE, normalizeOverhangAngle, overhangArea } from "@/lib/overhang";
 import { sectionMeasurement, sectionPointToWorld, snapSectionPoint } from "@/lib/sectionMeasure";
 import { DEFAULT_INFILL_PERCENT, DEFAULT_WALLS, PRINT_MATERIAL_DENSITY, PRINT_MATERIALS, FILAMENT_DIAMETER_MM, normalizePrintMaterial, printEstimate, printEstimateWithInfill } from "@/lib/printEstimate";
+import { matchingEdgeIds } from "@/lib/edgeMatching";
 import { CAD_MODIFIER_MAX_SHARP_ANGLE, CAD_MODIFIER_REQUEST_TIMEOUT_MS, CAD_MODIFIER_PREPARE_TRIANGLE_LIMIT, cadModifierPrepareTimeoutMs, cadModifierTimeoutMessage, cadModifierUserErrorMessage, cadModifierWorkerFailureMessage, cadModifierCandidateEdge, defaultCadModifierTangentChain, rescueSharpAngleForEdges, selectableCadModifierEdge, type CadModifierRequestPhase } from "@/lib/cadModifierRuntime";
 import { createCadPreviewQueue } from "@/lib/cadPreviewQueue";
 import { cloneWorkplaneShapeSnapshot, compactEdgeTreatmentHistory, edgeTreatmentAppliedFrame, groupBeforeEdgeTreatments, restoreShapeBeforeEdgeTreatment, wasGroupBeforeEdgeTreatments } from "@/lib/edgeTreatmentHistory";
@@ -6955,19 +6956,29 @@ export function LayerlingEditor({
     if (!result) throw new Error("The edge treatment returned nothing");
     return result;
   }, [edgeTreatedShape]);
-  const relaidEdgeTreatment = useCallback(async (shape: WorkplaneShape, feature: EdgeTreatmentFeature) => {
+  const relaidEdgeTreatment = useCallback(async (shape: WorkplaneShape, entry: NonNullable<WorkplaneShape["edgeTreatmentHistory"]>[number]) => {
+    const { feature } = entry;
+    // The edges are found again by where they lie, not by their numbers, which a stretched body changes.
+    const sharpAngle = 25;
+    const [{ response: old }, { response: fresh }] = [
+      await prepareCadModifierForMcp(entry.before, sharpAngle),
+      await prepareCadModifierForMcp(shape, sharpAngle),
+    ];
+    const edgeIds = matchingEdgeIds(old.edges, feature.edgeIds ?? [], fresh.edges,
+      fresh.edges.filter((edge) => selectableCadModifierEdge(edge, sharpAngle)).map((edge) => edge.id));
+    if (!edgeIds) throw new Error("The edges of the fillet were not found again on the rebuilt body");
     let laid: WorkplaneShape | null = null;
     await edgeTreatedShape(shape, {
       kind: feature.kind,
       amount: feature.amount,
-      edgeIds: feature.edgeIds,
+      edgeIds,
       preserveEdgeSize: true,
       ...(feature.chamferAngle !== undefined ? { chamferAngle: feature.chamferAngle } : {}),
       ...(feature.endAmount !== undefined ? { endAmount: feature.endAmount } : {}),
     }, (modified) => { laid = modified; });
     if (!laid) throw new Error("The edge treatment returned nothing");
     return laid as WorkplaneShape;
-  }, [edgeTreatedShape]);
+  }, [edgeTreatedShape, prepareCadModifierForMcp]);
 
   /*
    * Aushoehlen laeuft ueber denselben Weg wie Fase und Rundung: der Koerper
@@ -7369,7 +7380,7 @@ export function LayerlingEditor({
       void shellShape(before, amount, openings ?? "none", shellEdges ?? "round", stale)
         .then(async (hollowed) => {
           let rebuilt = hollowed;
-          for (const later of after) rebuilt = await relaidEdgeTreatment(rebuilt, later.feature);
+          for (const later of after) rebuilt = await relaidEdgeTreatment(rebuilt, later);
           return rebuilt;
         })
         .then((rebuilt) => {
