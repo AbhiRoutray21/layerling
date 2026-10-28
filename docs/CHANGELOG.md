@@ -6,6 +6,10 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **The first visit downloads about 10 MB less:** The offline copy left out the guide's pictures and its page for printing only for the German, English and Dutch guides. The 16 other languages' print pages (about 400 KB each) and the pictures of the Arabic guide went into the cache of every new visitor. `precachePaths` in `generate-service-worker.mjs` now leaves out `img/` and `print-all.html` in every language's folder.
+- **Import, Export and Attachments can be moved:** Like the tool panels, the window under these three buttons is dragged by its title bar and docks again with a double click or when dropped near its place. Moved low down, its content scrolls, so the export button stays reachable. The question mark of the attachments jumps to their section of the guide.
+- **The start page and the README name the newer tools:** Offset and Cut out, Surface texture and the Vase have their own entries in "What else layerling does" (German, English, Czech, Dutch, French, Russian, Slovenian) and in the README, which also names the paraboloid, the STEP import with every body in its colour, the position measured from the edges and the stencil bridges.
+
 ## 1.116.1
 
 - **Opening a design from the server shows on its card (PR #976):** A large design takes a few seconds to download, and nothing on the start page showed the click had landed, so people clicked again. While it opens, the card dims its picture under a turning circle and its line reads "Opening server design …"; further clicks, its menu and dragging wait until it is open, and an error frees the card again. Contributed by @foofoodog.
