@@ -382,6 +382,13 @@ const BORDER_WALL = 0.15;
  * or rope 3 mm high came down over a few long triangles, frayed.
  */
 const RUN_OUT_STEPS = 4;
+
+/** In how many steps a pattern standing out is cut round a corner of an outline (see cornerCuts). */
+const CORNER_STEPS = 4;
+/** Where a weave's stakes are cut across (see weaveCuts): shares of the stake's half width from its middle. */
+const WEAVE_STAKE_PLACES = [0.4, 0.7, 0.87, 0.95, 0.99];
+/** Where its weavers' bands are cut along: shares of the band's half height from its middle (its joints too). */
+const WEAVE_BAND_PLACES = [0.4, 0.7, 0.9];
 /** How far past the fade the distance to a smooth edge is known: the longest triangle on a straight face reaching into it. */
 const FADE_BEYOND = 10;
 /**
@@ -1634,10 +1641,11 @@ function standsOut(s: SurfaceTextureSettings) {
 /**
  * Grooves and knurling cut in round a body (a cylinder, along an angular body's outline) end at a border with a short
  * wall too (see BORDER_WALL), as on the straight faces of a body all round: faded out over the fade, a V groove's end
- * was a ramp of two twisted halves, and came out as a crooked arrow.
+ * was a ramp of two twisted halves, and came out as a crooked arrow. So does an image cut in: its dark places ran out
+ * at the rim over the grid's triangles, in notches with teeth along their top.
  */
 function endsInWall(s: SurfaceTextureSettings) {
-  return !standsOut(s) && s.projection === "cylinder" && (s.pattern === "grooves" || s.pattern === "knurl");
+  return !standsOut(s) && s.projection === "cylinder" && (s.pattern === "grooves" || s.pattern === "knurl" || s.pattern === "image");
 }
 
 /** Grooves and knurling around a cylinder or flat are cut into strips along the grooves (see sliceStripes). */
@@ -3339,6 +3347,68 @@ export function createSurfaceTextureSession(positions: ArrayLike<number>) {
     }
     return out;
   }
+  /**
+   * A weave round the axis cut along its stakes and rows (see weave): upright at places across each stake's round back,
+   * steepest by its edges, and level at the joints between the rows and across the weavers' bands. Its stakes rise from
+   * the weaver at a slant to the grid, and their sides and the rows' joints came out in a sawtooth over its diagonals.
+   * Only on the sides round the axis (not on a top or bottom, nor on faces staying smooth).
+   */
+  function weaveCuts(mesh: SurfaceMesh, s: SurfaceTextureSettings, layout: SurfaceTextureLayout, maxTriangles: number, smoothFace: Uint8Array) {
+    const ax = AXIS_INDEX[s.axis];
+    const [i1, i2] = acrossAxes(s.axis);
+    const S = layout.cell, rowH = (2 / 3) * S;
+    const r = (clamp(s.width, 0.1, 1) * S) / 4;
+    const kinds = baseFaceKinds(ax);
+    const sides = (m: SurfaceMesh) => Uint8Array.from({ length: m.indices.length / 3 }, (_, f) => (!smoothFace[m.parents[f]] && kinds[m.parents[f]] === 1 ? 1 : 0));
+    const turn = 2 * Math.PI * layout.radius;
+    let v = mesh.vertices;
+    const U = Float64Array.from({ length: v.length / 3 }, (_, i) => aroundAngle(layout, v[i * 3 + i1], v[i * 3 + i2]) * layout.radius);
+    const du = (i: number, j: number) => {
+      const d = U[j] - U[i];
+      return d - turn * Math.round(d / turn);
+    };
+    const across = WEAVE_STAKE_PLACES.flatMap((t) => [t * r, S - t * r]);
+    let out = soundOr(mesh, sliceByField(mesh, U, du, S, across, sides(mesh)));
+    v = out.vertices;
+    const V = Float64Array.from({ length: v.length / 3 }, (_, i) => v[i * 3 + ax]);
+    const along = [0, ...WEAVE_BAND_PLACES.flatMap((t) => [rowH * (0.5 - 0.5 * t), rowH * (0.5 + 0.5 * t)])];
+    out = soundOr(out, sliceByField(out, V, (i, j) => V[j] - V[i], rowH, along, sides(out)));
+    return out.indices.length / 3 > maxTriangles ? mesh : out;
+  }
+
+  /**
+   * A pattern standing out round an angular body's outline bends round its corners in an arc (see edgeRounding), over
+   * `reach` either side of each: cut upright at its steps there, so the arc is made of strips along the corner. Over the
+   * grid's diagonals it came out as a column of teeth down every corner.
+   */
+  function cornerCuts(mesh: SurfaceMesh, s: SurfaceTextureSettings, layout: SurfaceTextureLayout, maxTriangles: number, smoothFace: Uint8Array) {
+    const ax = AXIS_INDEX[s.axis];
+    const [i1, i2] = acrossAxes(s.axis);
+    const kinds = baseFaceKinds(ax);
+    const turn = 2 * Math.PI * layout.radius;
+    const around = (a: number, b: number) => {
+      const u = aroundAngle(layout, a, b) * layout.radius;
+      return u - turn * Math.floor(u / turn);
+    };
+    const levels: number[] = [];
+    for (const c of layout.outline?.corners ?? []) {
+      const reach = Math.min(c.reach, Math.max(1, s.depth));
+      for (const away of [[c.before[1], -c.before[0]], [-c.after[1], c.after[0]]]) {
+        for (let k = 1; k <= CORNER_STEPS; k += 1) levels.push(around(c.at[0] + ((k * reach) / CORNER_STEPS) * away[0], c.at[1] + ((k * reach) / CORNER_STEPS) * away[1]));
+      }
+    }
+    if (!levels.length) return mesh;
+    const v = mesh.vertices;
+    const U = Float64Array.from({ length: v.length / 3 }, (_, i) => around(v[i * 3 + i1], v[i * 3 + i2]));
+    const du = (i: number, j: number) => {
+      const d = U[j] - U[i];
+      return d - turn * Math.round(d / turn);
+    };
+    const sliced = Uint8Array.from({ length: mesh.indices.length / 3 }, (_, f) => (!smoothFace[mesh.parents[f]] && kinds[mesh.parents[f]] === 1 ? 1 : 0));
+    const out = soundOr(mesh, sliceByField(mesh, U, du, turn, levels, sliced));
+    return out.indices.length / 3 > maxTriangles ? mesh : out;
+  }
+
   /** Points of the mesh lying on side faces round the axis only (not on a top or bottom too). */
   function sidePointsFor(mesh: SurfaceMesh, ax: number) {
     return pointKindsFor(mesh, ax).map((k) => (k === 1 ? 1 : 0));
@@ -3827,6 +3897,8 @@ export function createSurfaceTextureSession(positions: ArrayLike<number>) {
     // Not refined at the flanks: faces cut exactly already, and faces that stay smooth (the top of a box: its grid only
     // went finer and finer along the pattern's lines, and no point there moves).
     const cutFaces = straight ? Uint8Array.from(straight, (k, f) => (k === 255 && !smooth.faces[f] ? 0 : 1)) : smooth.faces;
+    if (s.pattern === "weave" && s.projection === "cylinder" && !mesh.limited) mesh = weaveCuts(mesh, s, layout, maxTriangles, smooth.faces);
+    if (s.projection === "cylinder" && layout.outline?.corners.length && standsOut(s) && !mesh.limited) mesh = cornerCuts(mesh, s, layout, maxTriangles, smooth.faces);
     if (!slice && !cracks && !text && !mesh.limited && !cellSliced) mesh = refineFlanks(mesh, s, layout, edge / 2.5, maxTriangles, cutFaces);
     // Only when they were cut: over the budget they were not.
     const straightAxis = straightCut ? straight : null;
@@ -4007,11 +4079,13 @@ export function createSurfaceTextureSession(positions: ArrayLike<number>) {
       }
       pointFlags = new Uint8Array(onCut.length);
       for (let i = 0; i < flags.length; i += 1) pointFlags[i] = flags[i] && !onCut[i] ? 1 : 0;
-    } else if (distance && endsInWall(s)) {
+    } else if (distance && (endsInWall(s) || (s.projection === "cylinder" && standsOut(s)))) {
       // Round the axis the grooves end at a border with a wall too (see endsInWall): cut along it and the foot of the wall,
-      // on the faces that get the pattern (the distance to a rim changes linearly over a triangle there).
+      // on the faces that get the pattern (the distance to a rim changes linearly over a triangle there). A pattern
+      // standing out runs out up to the rim (see RUN_OUT_STEPS): cut at its steps.
       const reach = s.fade + s.margin;
       const wall = Math.min(BORDER_WALL, s.fade);
+      const levels = standsOut(s) ? Array.from({ length: RUN_OUT_STEPS }, (_, k) => s.margin + ((k + 1) * s.fade) / RUN_OUT_STEPS) : wall > 0 ? [reach - wall, reach] : [reach];
       const I = mesh.indices;
       const sliced = new Uint8Array(I.length / 3);
       let any = false;
@@ -4024,8 +4098,15 @@ export function createSurfaceTextureSession(positions: ArrayLike<number>) {
       if (any) {
         const known = reach + FADE_BEYOND;
         const field = Float64Array.from(distance, (d) => Math.min(d, known));
-        cutMesh = sliceByField(mesh, field, (i, j) => field[j] - field[i], 1e6, wall > 0 ? [reach - wall, reach] : [reach], sliced);
+        cutMesh = sliceByField(mesh, field, (i, j) => field[j] - field[i], 1e6, levels, sliced);
         if (cutMesh.indices.length / 3 > maxTriangles) cutMesh.limited = true;
+        // Cut exactly, not halved as well: halving the band's triangles round the side made teeth along a wall's top and
+        // a run-out's rim. On a top or bottom a run-out is still halved (the points on its cuts too): its cuts follow the
+        // rim in long steps there, and rope frayed along it.
+        if (!state.slice) {
+          const kinds = standsOut(s) ? pointKindsFor(cutMesh, AXIS_INDEX[s.axis]) : null;
+          pointFlags = Uint8Array.from({ length: cutMesh.vertices.length / 3 }, (_, i) => (kinds && kinds[i] === 2 && (i >= flags.length || flags[i]) ? 1 : 0));
+        }
       }
     }
     if (state.slice) {
@@ -4218,6 +4299,21 @@ export function createSurfaceTextureSession(positions: ArrayLike<number>) {
           }
         }
       }
+      // Round an angular body's outline, a bump cut in right on a corner was folded round it into a heart, half on either
+      // side: such bumps stay off whole, as at a border.
+      if (s.pattern === "bumps" && !standsOut(s) && s.projection === "cylinder" && layout.outline?.corners.length) {
+        const radius = (layout.cell / 2) * s.width;
+        const turn = 2 * Math.PI * layout.radius;
+        const ax = AXIS_INDEX[s.axis];
+        const cornerU = layout.outline.corners.map((c) => aroundAngle(layout, c.at[0], c.at[1]) * layout.radius);
+        for (let i = 0; i < n; i += 1) {
+          if (faded.weights[i] === 0 || Math.abs(normals[i * 3 + ax]) > 0.8) continue;
+          const u = aroundAngle(layout, v[i * 3 + i1], v[i * 3 + i2]) * layout.radius, w = v[i * 3 + ax];
+          const site = hexSite(u, w, layout.cell);
+          if (Math.hypot(u - site.x, w - site.y) >= radius) continue;
+          if (cornerU.some((at) => Math.abs(site.x - at - turn * Math.round((site.x - at) / turn)) < radius)) faded.weights[i] = 0;
+        }
+      }
       return faded;
     };
 
@@ -4228,7 +4324,7 @@ export function createSurfaceTextureSession(positions: ArrayLike<number>) {
     // fade over such a long triangle would smear and look restless. There - only there - it is refined finely; on the
     // straight faces of an angular body cut along lines of equal distance to the edge.
     // A pattern standing out: its run-out, finer still (see RUN_OUT_STEPS).
-    if (r.crossMax > 0 || r.straightAxis || standsOut(s)) {
+    if (r.crossMax > 0 || r.straightAxis || standsOut(s) || endsInWall(s)) {
       const weightKey = JSON.stringify([r.key, s.bottomFree, s.topFree, s.zoneFrom, s.zoneTo, s.keepEdges, s.edgeAngle, s.fade, s.direction, s.margin, s.outside, s.inside, layout.center, s.masks, s.faces]);
       const runOut = standsOut(s) ? Math.min(0.5, Math.max(s.fade, 0.25) / RUN_OUT_STEPS) : Math.min(0.5, Math.max(s.fade, 0.25) / 2);
       if (fadeCache?.key === weightKey) state = fadeCache.state;
