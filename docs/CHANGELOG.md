@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+## 1.116.0
+
 - **Tape measure, clearer labels and better rendering (PR #961):** Each label starts with the axes the measurement runs along (`X`, `Y`, `Z`, `XY`, `XZ`, `YZ` or `3D`). Hovering a label shows the reach along each axis (ΔX, ΔY, ΔZ), hovering a point shows its X, Y and Z, and while the second point is placed a tip beside the pointer shows axes, length and reach. Labels sit beside their line instead of on it and step aside for other lines, points and labels. Every line has an outline, light orange in the dark and graphite themes. A measurement mostly behind another body fades, and hovering it brings it back; the body both ends sit on, holes, see-through bodies and what the section view cuts away do not count. The midpoint mark is the size of a point, where the reference point will go. The guide's chapter 10 is updated in all languages. Contributed by @gogades.
 - **Japanese: the latest 42 sentences, and "Bring into design" reads as what it does (PR #970, PR #971):** The sentences of the recent releases are translated, and the history view's button now says 今のデザインに追加, "add to the current design", instead of a wording that read like rolling the design back. Contributed by @yokobond.
 - **Danish and Brazilian Portuguese (PR #960, PR #966):** Danish gets the last new sentence of 1.115.0, two added sentences and an order in chapter 12 that had fallen out of step; chapter 15 of the guide (installing as an app, offline, self-hosting) is now in Brazilian Portuguese. Contributed by @Henrikth12 and @lmagalhaes.
