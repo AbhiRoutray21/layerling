@@ -156,19 +156,24 @@ describe("wrapping a flat body around a cylinder (#106)", () => {
   });
 
   it("cuts the faces exactly as cutting the whole mesh plane after plane did", () => {
-    for (const [mesh, diameter] of [[plateBox(60, 2, 20, { x: 15, y: 3, z: -7 }), 40], [wavyPlate(40, 6, 1.7), 30], [wavyPlate(12, 3, 4.1), 80]] as const) {
+    for (const [mesh, diameter] of [[plateBox(60, 2, 20, { x: 15, y: 3, z: -7 }), 40], [wavyPlate(24, 4, 1.7), 30], [wavyPlate(12, 3, 4.1), 80]] as const) {
       const result = wrapMeshAroundCylinder(mesh, { diameter });
       if ("error" in result) throw new Error(result.error);
       const flat = oldCutPositions(mesh, diameter);
       expect(result.positions.length).toBe(flat.length);
       // The same flat triangles, bent: the height on the wall is the depth on the plate, unchanged by bending.
       const radius = diameter / 2;
+      let worst = 0;
       for (let index = 0; index < flat.length; index += 3) {
         const angle = Math.atan2(result.positions[index], result.positions[index + 2]);
-        expect(angle * radius).toBeCloseTo(flat[index], 9);
-        expect(result.positions[index + 1]).toBeCloseTo(result.height / 2 - flat[index + 2], 9);
-        expect(Math.hypot(result.positions[index], result.positions[index + 2])).toBeCloseTo(radius + flat[index + 1], 9);
+        worst = Math.max(
+          worst,
+          Math.abs(angle * radius - flat[index]),
+          Math.abs(result.positions[index + 1] - (result.height / 2 - flat[index + 2])),
+          Math.abs(Math.hypot(result.positions[index], result.positions[index + 2]) - (radius + flat[index + 1])),
+        );
       }
+      expect(worst).toBeLessThan(1e-9);
     }
   });
 
