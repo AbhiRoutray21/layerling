@@ -18,5 +18,15 @@
       "de": "Stellst du eine Sicherung wieder her und landen die Entwürfe auf dem Server, etwa in der Docker-Version, behalten sie jetzt ihr Vorschaubild. Bisher blieb die Kachel leer, bis der Entwurf einmal im Editor gespeichert wurde.",
       "en": "When you restore a backup and the designs go to the server, as in the Docker version, they now keep their picture. Until now the card stayed blank until the design was saved once in the editor."
     }
+  },
+  {
+    "title": {
+      "de": "Position von der Mitte oder von der Kante",
+      "en": "Position from the middle or from the edge"
+    },
+    "body": {
+      "de": "In der Karte Position wählst du jetzt, wovon X und Y messen: von der Mitte des Körpers wie bisher oder von seiner linken und vorderen Kante. So legst du eine Kante genau auf ein Maß, ohne die halbe Breite auszurechnen.",
+      "en": "In the Position card you now choose what X and Y measure from: the middle of the body as before, or its left and front edges. So you put an edge exactly on a measure without working out half the width."
+    }
   }
 ]
