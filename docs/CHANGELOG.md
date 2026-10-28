@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **Tape measure, clearer labels and better rendering:** Axis tags, Hovering shows delta changes, XYZ point position.  Better label placement. Fading labels and lines behind bodies, hovering brings them back.
+
 ## 1.115.0
 
 - **A STEP file with several solids comes in as one body each, under its own name (#830):** A STEP file from another CAD program, an assembly of posts, rails and panels say, was read as one body: the solids were welded into one mesh, their names were gone, and "Separate parts" then found only the pieces that do not touch (8 instead of 23 for a stand whose parts all touch). The kernel now reads the file as an XCAF document, which carries the solids, their names, the tree of groups and the placement of each instance (`importedShapesFromStepAssembly` in `stepAssemblyImport.ts`, `importXCAFFromSTEP` of occt-wasm). Every solid comes in as a body of its own under the name the file gives it, in its place to the others, selected together, with its exact body kept so a STEP export hands it back exactly; a message says how many came in. A file with one solid, with more than 400 solids, or one the kernel cannot take apart comes in as one body as before. Not yet: the colours of the file (the kernel's reader does not hand them over; the parts take layerling's alternating colours) and the groups of its tree (the parts lie side by side). Tried with a 23-solid stand (23 bodies in 3 s, together 2400 x 1000 x 650 mm as the file) and in `stepAssemblyImport.e2e.ts` against the real kernel. Asked for by @ValSimDim.
