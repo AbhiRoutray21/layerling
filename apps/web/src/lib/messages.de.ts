@@ -1065,7 +1065,7 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "welcome.moreHolePatternTitle": "Lochmuster",
   "welcome.moreHolePatternBody": "Eine ebene Fläche eines Körpers anklicken und Löcher darin verteilen: rund, quadratisch, rechteckig, als Sechseck oder Langloch, im Raster oder versetzt, mit Abstand, Rand zur Kante und Tiefe (durch die ganze Form oder ein Maß). Eine Vorschau zeigt die Löcher, bevor du sie erzeugst; sie bleiben normale Aussparungen, mit dem Körper gruppiert - für Lüftungsgitter, Lautsprecher, Körbe und Gehäuse.",
   "welcome.moreTextureTitle": "Oberflächentextur",
-  "welcome.moreTextureBody": "ein Relief auf jeden Körper legen, für Griff oder Aussehen - Rändel, Rillen, Waben, Holzmaserung, Seil, ein Bild als Höhenkarte oder Text, rund um runde Körper oder flach entlang einer Achse.",
+  "welcome.moreTextureBody": "ein Relief auf jeden Körper legen, für Griff oder Aussehen - Rändel, Rillen, Waben, Ziegel, Carbon, Baumrinde, Holzmaserung, Seil, ein Bild als Höhenkarte oder Text, rund um runde Körper oder flach entlang einer Achse.",
   "welcome.moreVaseTitle": "Vasen und Töpfe",
   "welcome.moreVaseBody": "eine eigene Form für Vasen, Töpfe und Lampenschirme: Körperform, Querschnitt, Verdrehung, Muster, Abflusslöcher, Untersetzer und Deckel - massiv für den Vasenmodus des Slicers oder hohl.",
   "welcome.moreOffsetTitle": "Versetzen und Ausschneiden",

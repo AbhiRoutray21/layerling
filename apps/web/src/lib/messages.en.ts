@@ -1066,7 +1066,7 @@ export const MESSAGES_EN = {
   "welcome.moreHolePatternTitle": "Hole pattern",
   "welcome.moreHolePatternBody": "Click a flat face of a body and spread holes over it: round, square, rectangular, hexagonal or slots, in a grid or staggered, with spacing, margin to the edge and depth (through the whole body or a set depth). A preview shows the holes before you create them; they stay ordinary holes, grouped with the body - for vents, speaker grilles, baskets and enclosures.",
   "welcome.moreTextureTitle": "Surface texture",
-  "welcome.moreTextureBody": "lay a relief onto any body, for grip or for looks - knurling, grooves, honeycomb, wood grain, rope, a picture as a height map or text, around round bodies or flat along an axis.",
+  "welcome.moreTextureBody": "lay a relief onto any body, for grip or for looks - knurling, grooves, honeycomb, bricks, carbon fibre, tree bark, wood grain, rope, a picture as a height map or text, around round bodies or flat along an axis.",
   "welcome.moreVaseTitle": "Vases and pots",
   "welcome.moreVaseBody": "a shape of its own for vases, pots and lampshades: body form, cross-section, twist, patterns, drain holes, a saucer and a lid - solid for the slicer's vase mode or hollow.",
   "welcome.moreOffsetTitle": "Offset and cut out",
