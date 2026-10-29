@@ -78,5 +78,15 @@
       "de": "Einen Skizzenkörper, den du im 3D-Editor gedreht oder verschoben hast, zeigt die Skizze jetzt genau so, wie er auf der Platte steht, auf dem Raster der Platte.",
       "en": "A sketch body you turned or moved in the 3D editor now shows in the sketch exactly as it stands on the plate, on the plate's grid."
     }
+  },
+  {
+    "title": {
+      "de": "Saubere Kante bei Oberflächenstrukturen",
+      "en": "Clean rim on surface textures"
+    },
+    "body": {
+      "de": "Auch auf runden Körpern, etwa einem Sechskant, lässt die Oberflächenstruktur Noppen und Löcher am glatten Rand jetzt ganz weg, statt sie halb abzuschneiden.",
+      "en": "On round bodies too, a hexagonal prism for example, the surface texture now leaves bumps and holes at the smooth rim off whole instead of cutting them in half."
+    }
   }
 ]
