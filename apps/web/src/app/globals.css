@@ -6174,6 +6174,25 @@ html[data-theme="dark"] .sketch-shape-options .unit {
   cursor: move;
 }
 
+/* A Bezier handle (#1008) answers the pointer like a point: the hand, and lit up. Its wider ring catches near misses
+   unseen, so the reference image under it is not grabbed instead. */
+.sketch-curve-handles .sketch-curve-handle {
+  cursor: pointer;
+}
+
+.sketch-curve-handles .sketch-curve-handle circle {
+  cursor: pointer;
+}
+
+.sketch-curve-handles circle.sketch-curve-handle-hit {
+  fill: transparent;
+  stroke: none;
+}
+
+.sketch-curve-handles .sketch-curve-handle:hover circle:not(.sketch-curve-handle-hit):not(.sketch-handle-selected) {
+  fill: #f08036;
+}
+
 .sketch-points circle {
   fill: #ffffff;
   stroke: #5c3914;

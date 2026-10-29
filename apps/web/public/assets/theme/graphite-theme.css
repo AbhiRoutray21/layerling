@@ -2433,6 +2433,15 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .sketch-shape-options .
   stroke: #f08036;
 }
 
+:where(html[data-theme="dark"][data-palette="graphite"]) .sketch-curve-handles circle.sketch-curve-handle-hit {
+  fill: transparent;
+  stroke: none;
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .sketch-curve-handles .sketch-curve-handle:hover circle:not(.sketch-curve-handle-hit):not(.sketch-handle-selected) {
+  fill: #f08036;
+}
+
 :where(html[data-theme="dark"][data-palette="graphite"]) .sketch-points circle {
   fill: #ffffff;
   stroke: #3b3b3b;
