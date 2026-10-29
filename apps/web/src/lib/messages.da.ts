@@ -1212,7 +1212,7 @@ export const MESSAGES_DA: Partial<Record<MessageKey, string>> = {
   "edge.revertOffset": "Forskydning ({size} mm)",
   "historyStep.offsetOne": "Forskød {name}",
   "historyStep.offsetMany": "Forskød {count} objekter",
-  "guide.edges.offset": "Forskydning flytter hver flade på et legeme den samme afstand, udad eller indad. Forstør en kopi og behold den som hul for at få spillerummet i en pasning, eller formindsk et legeme til en tap, der skal i et hul. Legemer, der kun er et trekantsnet, kan ofte ikke forskydes.",
+  "guide.edges.offset": "Forskydning flytter hver flade på et legeme den samme afstand, udad eller indad. Forstør en kopi og behold den som hul for at få spillerummet i en pasning, eller formindsk et legeme til en tap, der skal i et hul. Legemer, der kun er et mesh af trekanter, kan ofte ikke forskydes.",
   "deleteFace.title": "Slet flade",
   "deleteFace.subtitle": "Fladerne omkring lukker åbningen",
   "deleteFace.help": "Klik på de flader, der skal væk; et nyt klik tager en flade ud igen. Fladerne omkring vokser, indtil åbningen er lukket: en afrunding, et hul eller en tap er væk, og formen forbliver eksakt.",
