@@ -38,5 +38,15 @@
       "de": "Ein für mehrere Körper gesetzter Drehpunkt geht beim Gruppieren auf die Gruppe über. Mit „Drehpunkt markieren“ im Rechtsklick-Menü wird er zum Bezugspunkt, an dem andere Teile einrasten.",
       "en": "A pivot set for several bodies passes to the group made of them. \"Mark the pivot\" in the right-click menu turns it into a reference point that other parts snap to."
     }
+  },
+  {
+    "title": {
+      "de": "Maße bleiben bei kleinen Teilen nah",
+      "en": "Sizes stay close on tiny parts"
+    },
+    "body": {
+      "de": "Bei Teilen unter einem Millimeter standen die Maße beim Heranzoomen weit außerhalb des Bildes. Jetzt bleiben sie dicht neben dem Körper, so dass du zum Ablesen nicht mehr herauszoomen musst.",
+      "en": "On parts below a millimetre, the sizes ended up far outside the view when you zoomed in. They now stay right next to the body, so you no longer have to zoom out to read them."
+    }
   }
 ]
