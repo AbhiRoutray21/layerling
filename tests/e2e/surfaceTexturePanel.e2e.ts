@@ -90,12 +90,12 @@ function choose(select: HTMLSelectElement, value: string) {
 }
 
 describe("the surface texture card in a shape's settings", () => {
-  it("lists the thirteen patterns, knurling first chosen", () => {
+  it("lists the sixteen patterns, knurling first chosen", () => {
     const { panel } = mount(cylinder);
     const pattern = selectWith(panel, "knurl")!;
     expect(pattern.value).toBe("knurl");
     expect([...pattern.options].map((option) => option.textContent)).toEqual([
-      "Grooves", "Knurling", "Honeycomb", "Bumps", "Cells", "Knitting", "Rope", "Basket weave", "Carbon (twill)", "Grain", "Image", "Cracks (kintsugi)", "Text (stuck on)",
+      "Grooves", "Knurling", "Honeycomb", "Bumps", "Cells", "Bricks", "Knitting", "Rope", "Basket weave", "Bark", "Wood grain", "Carbon (twill)", "Grain", "Image", "Cracks (kintsugi)", "Text (stuck on)",
     ]);
   });
 
@@ -129,6 +129,55 @@ describe("the surface texture card in a shape's settings", () => {
     const images = selectWith(panel, "topography")!;
     expect(images.options).toHaveLength(12);
     expect(button(panel, "Load your own image…")).toBeDefined();
+  });
+
+  it("lays bricks in a bond, with a course's height and the joint's width in mm", async () => {
+    const { panel, calls } = mount(cylinder);
+    choose(selectWith(panel, "knurl")!, "bricks");
+    const bond = selectWith(panel, "flemish")!;
+    expect(bond.value).toBe("running");
+    expect([...bond.options].map((option) => option.textContent)).toEqual(["Running bond", "Stack bond", "English bond", "English cross bond", "Flemish bond"]);
+    expect(rangeNamed(panel, "Brick length")?.value).toBe("12.00");
+    expect(rangeNamed(panel, "Course height")?.value).toBe("4.00");
+    expect(rangeNamed(panel, "Joint width")?.value).toBe("0.80");
+    choose(bond, "english");
+    await act(async () => button(panel, "Apply texture")!.click());
+    expect(calls.applied[0]).toMatchObject({ pattern: "bricks", brickBond: "english", spacing: 12, brickHeight: 4, brickJoint: 0.8, depth: 0.6, profile: "flat" });
+    // Leaving bricks gives the next pattern its own spacing and profile back.
+    choose(selectWith(panel, "bricks")!, "knurl");
+    expect(rangeNamed(panel, "Spacing")?.value).toBe("3.00");
+  });
+
+  it("starts a bark at its tree's size and depth, with the annual rings on the ends", () => {
+    const { panel } = mount(cylinder);
+    choose(selectWith(panel, "knurl")!, "bark");
+    const tree = selectWith(panel, "birch")!;
+    expect(tree.value).toBe("oak");
+    expect([...tree.options].map((option) => option.textContent)).toEqual(["Oak", "Pine", "Spruce", "Birch", "Beech"]);
+    expect(rangeNamed(panel, "Bark size")?.value).toBe("8.00");
+    expect(rangeNamed(panel, "Depth")?.value).toBe("1.50");
+    expect(rangeNamed(panel, "Ring width")?.value).toBe("3.00");
+    choose(tree, "birch");
+    expect(rangeNamed(panel, "Bark size")?.value).toBe("10.00");
+    expect(rangeNamed(panel, "Depth")?.value).toBe("0.60");
+    // Leaving bark gives knurling its own spacing and depth back.
+    choose(selectWith(panel, "bark")!, "knurl");
+    expect(rangeNamed(panel, "Spacing")?.value).toBe("3.00");
+    expect(rangeNamed(panel, "Depth")?.value).toBe("0.60");
+  });
+
+  it("lays wood grain by wood, cut and ring width, and hands them to the editor", async () => {
+    const { panel, calls } = mount(cylinder);
+    choose(selectWith(panel, "knurl")!, "wood");
+    const wood = selectWith(panel, "walnut")!;
+    expect([...wood.options].map((option) => option.textContent)).toEqual(["Oak", "Ash", "Beech", "Pine", "Walnut"]);
+    expect(selectWith(panel, "flatSawn")?.value).toBe("log");
+    expect(rangeNamed(panel, "Ring width")?.value).toBe("3.00");
+    choose(wood, "pine");
+    expect(rangeNamed(panel, "Ring width")?.value).toBe("4.00");
+    choose(selectWith(panel, "flatSawn")!, "flatSawn");
+    await act(async () => button(panel, "Apply texture")!.click());
+    expect(calls.applied[0]).toMatchObject({ pattern: "wood", woodType: "pine", woodCut: "flatSawn", ringWidth: 4, topFree: 0, bottomFree: 0 });
   });
 
   it("shows a textured body's settings, to change or to remove", async () => {
