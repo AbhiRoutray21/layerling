@@ -58,5 +58,25 @@
       "de": "Eine Gruppe aus mehreren Teilen, die jeweils eigene Löcher haben, etwa ein kopierter Halter, ließ sich kaum abschrägen oder abrunden: Das Werkzeug rechnete Minuten und brach ab. Jetzt baut es solche Gruppen exakt und ist in Sekunden bereit.",
       "en": "A group of several parts that each have their own holes, a copied holder for example, could hardly be chamfered or rounded: the tool worked for minutes and then gave up. It now builds such groups exactly and is ready in seconds."
     }
+  },
+  {
+    "title": {
+      "de": "Drehring in der Skizze",
+      "en": "Turning ring in the sketch"
+    },
+    "body": {
+      "de": "Beim Drehen in der Skizze erscheint ein Ring wie im 3D-Editor: Darin rastet die Drehung in 22,5°-Schritten ein, außerhalb geht sie in ganzen Grad. Das Raster stört dabei nicht mehr, 90° gelingen sofort.",
+      "en": "Turning in the sketch shows a ring as in the 3D editor: inside it the turn snaps to 22.5°, outside it goes in whole degrees. The grid no longer gets in the way, so 90° is easy."
+    }
+  },
+  {
+    "title": {
+      "de": "Skizze öffnet sich wie in 3D",
+      "en": "Sketch opens as in 3D"
+    },
+    "body": {
+      "de": "Einen Skizzenkörper, den du im 3D-Editor gedreht oder verschoben hast, zeigt die Skizze jetzt genau so, wie er auf der Platte steht, auf dem Raster der Platte.",
+      "en": "A sketch body you turned or moved in the 3D editor now shows in the sketch exactly as it stands on the plate, on the plate's grid."
+    }
   }
 ]
