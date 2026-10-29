@@ -1,5 +1,20 @@
 [
   {
+    "version": "1.119.0",
+    "items": [
+      {
+        "title": {
+          "de": "Übergang aus Skizzen",
+          "en": "Loft sketches"
+        },
+        "body": {
+          "de": "Zwei Skizzen oder importierte SVGs werden ein Körper: unten der eine Umriss, oben der andere, dazwischen gerade Wände. Aus zwei Ringen wird ein hohler Rahmen, und „Gruppe bearbeiten“ öffnet die Skizzen wieder.",
+          "en": "Two sketches or imported SVGs become one body: one outline at the bottom, the other at the top, straight walls between them. Two rings give a hollow frame, and Edit group opens the sketches again."
+        }
+      }
+    ]
+  },
+  {
     "version": "1.118.1",
     "items": [
       {
