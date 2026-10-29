@@ -19,6 +19,7 @@ import {
   normalizeSurfaceTexture,
   surfaceTexturePositions,
   SURFACE_TEXTURE_MAX_MASK_PLANES,
+  type SurfaceTextureCarbonWeave,
   type SurfaceTextureCrackStart,
   type SurfaceTextureCrackStyle,
   type SurfaceTextureDetail,
@@ -69,6 +70,8 @@ export const SURFACE_TEXTURE_LABELS: {
   mask: Record<SurfaceTextureMaskMode | "none", MessageKey>;
   crackStyle: Record<SurfaceTextureCrackStyle, MessageKey>;
   crackStart: Record<SurfaceTextureCrackStart, MessageKey>;
+  carbonWeave: Record<SurfaceTextureCarbonWeave, MessageKey>;
+  carbonWeaveHint: Record<SurfaceTextureCarbonWeave, MessageKey>;
   image: Record<SurfaceTextureImage, MessageKey>;
   tiling: Record<SurfaceTextureTiling, MessageKey>;
   capStyle: Record<SurfaceTextureCapStyle, MessageKey>;
@@ -84,6 +87,7 @@ export const SURFACE_TEXTURE_LABELS: {
     knit: "surfaceTexture.knit",
     rope: "surfaceTexture.rope",
     weave: "surfaceTexture.weave",
+    carbon: "surfaceTexture.carbon",
     grain: "surfaceTexture.grain",
     image: "surfaceTexture.image",
     cracks: "surfaceTexture.cracks",
@@ -98,6 +102,8 @@ export const SURFACE_TEXTURE_LABELS: {
   mask: { none: "surfaceTexture.maskNone", exclude: "surfaceTexture.maskExclude", only: "surfaceTexture.maskOnly" },
   crackStyle: { crack: "surfaceTexture.crackStyleCrack", lightning: "surfaceTexture.crackStyleLightning" },
   crackStart: { top: "surfaceTexture.crackStartTop", bottom: "surfaceTexture.crackStartBottom", rim: "surfaceTexture.crackStartRim", anywhere: "surfaceTexture.crackStartAnywhere" },
+  carbonWeave: { twill22: "surfaceTexture.carbonTwill22", twill21: "surfaceTexture.carbonTwill21", twill31: "surfaceTexture.carbonTwill31" },
+  carbonWeaveHint: { twill22: "surfaceTexture.carbonTwill22Hint", twill21: "surfaceTexture.carbonTwill21Hint", twill31: "surfaceTexture.carbonTwill31Hint" },
   image: {
     topography: "surfaceTexture.imageTopography",
     wood: "surfaceTexture.imageWood",

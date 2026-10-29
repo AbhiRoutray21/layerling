@@ -20,8 +20,9 @@
  *   levels of its profile (a half ball, a cone, a soft or a flat top).
  * - Cells (Voronoi): cut like honeycomb, along the borders between cells of
  *   irregular shape; another seed, another arrangement.
- * - Knitting, rope, basket weave, grain and an image (a grey height map, see
- *   surfaceTextureImages.ts): refined evenly, finer where the value jumps.
+ * - Knitting, rope, basket weave, carbon (twill), grain and an image (a grey
+ *   height map, see surfaceTextureImages.ts): refined evenly, finer where the
+ *   value jumps; round the axis a weave and carbon are cut along their bands too.
  * - Cracks (kintsugi, see surfaceTextureCracks.ts): lines that grow across the surface,
  *   with kinks, branches and a tapering width; only the band round them is
  *   refined. Their notch can be filled by a body of its own (gold, a second
@@ -82,7 +83,7 @@ import {
   type SurfaceTextureOwnImage,
 } from "@/lib/surfaceTextureImages";
 
-export const SURFACE_TEXTURE_PATTERNS = ["grooves", "knurl", "honeycomb", "bumps", "cells", "knit", "rope", "weave", "grain", "image", "cracks", "text"] as const;
+export const SURFACE_TEXTURE_PATTERNS = ["grooves", "knurl", "honeycomb", "bumps", "cells", "knit", "rope", "weave", "carbon", "grain", "image", "cracks", "text"] as const;
 export type SurfaceTexturePattern = (typeof SURFACE_TEXTURE_PATTERNS)[number];
 /** Cross-section of a groove or joint: round (cosine), pointed (V) or flat (a flat floor with steep flanks). */
 /** round: a soft bell; pointed: a V (a cone on a bump); flat: a flat floor or top; dome: a half circle (half a ball on a bump). */
@@ -107,6 +108,13 @@ export type SurfaceTextureCrackStyle = (typeof SURFACE_TEXTURE_CRACK_STYLES)[num
 /** Where cracks begin: at the top rim (a vase, a cup), at the bottom, at the rim towards the middle (a plate), anywhere. */
 export const SURFACE_TEXTURE_CRACK_STARTS = ["top", "bottom", "rim", "anywhere"] as const;
 export type SurfaceTextureCrackStart = (typeof SURFACE_TEXTURE_CRACK_STARTS)[number];
+
+/**
+ * How carbon fibre is woven: twill 2/2 (a band over two crossing bands, then under two - the even diagonal of most carbon
+ * parts), 2/1 and 3/1 (over two or three, under one: long floats one way, short ones the other).
+ */
+export const SURFACE_TEXTURE_CARBON_WEAVES = ["twill22", "twill21", "twill31"] as const;
+export type SurfaceTextureCarbonWeave = (typeof SURFACE_TEXTURE_CARBON_WEAVES)[number];
 
 /** Image: a ready image (see surfaceTextureImages.ts) or one's own. */
 export const SURFACE_TEXTURE_IMAGES = [...SURFACE_TEXTURE_IMAGE_PRESETS, "own"] as const;
@@ -237,6 +245,10 @@ export type SurfaceTextureSettings = {
   textTurn: number;
   /** Cells and grain: another number, another arrangement. */
   seed: number;
+  /** Carbon: the weave (the spacing is the width of the upright bands). */
+  carbonWeave: SurfaceTextureCarbonWeave;
+  /** Carbon: the width of the crossing bands, mm (0: as wide as the upright ones; else an uneven weave). */
+  carbonCross: number;
   /** Image: which one (light = the full depth); "own" is `imageOwn`. The tile's width is the spacing. */
   image: SurfaceTextureImage;
   /** One's own image: its grey values, at most SURFACE_TEXTURE_OWN_IMAGE_SIZE points a side. */
@@ -305,6 +317,8 @@ export const SURFACE_TEXTURE_DEFAULTS: Readonly<SurfaceTextureSettings> = Object
   textTurn: 0,
   textOutline: [],
   seed: 1,
+  carbonWeave: "twill22",
+  carbonCross: 0,
   image: "topography",
   imageOwn: null,
   tileHeight: 0,
@@ -342,6 +356,7 @@ export const SURFACE_TEXTURE_LIMITS: Record<NumberKey, [number, number]> = {
   textHeight: [0, 100],
   textTurn: [-180, 180],
   seed: [1, 9999],
+  carbonCross: [0, 50],
   tileHeight: [0, 200],
   imageTurn: [-180, 180],
   imageBlur: [0, 8],
@@ -356,6 +371,7 @@ const CHOICES = {
   detail: SURFACE_TEXTURE_DETAILS,
   crackStyle: SURFACE_TEXTURE_CRACK_STYLES,
   crackStart: SURFACE_TEXTURE_CRACK_STARTS,
+  carbonWeave: SURFACE_TEXTURE_CARBON_WEAVES,
   image: SURFACE_TEXTURE_IMAGES,
   imageTiling: SURFACE_TEXTURE_TILINGS,
   capStyle: SURFACE_TEXTURE_CAP_STYLES,
@@ -413,7 +429,7 @@ export const SURFACE_TEXTURE_PREVIEW_TRIANGLES = 200_000;
 /** Cut along their cell borders (see sliceCells). */
 const CELL_PATTERNS: readonly SurfaceTexturePattern[] = ["honeycomb", "bumps", "cells"];
 /** Around a cylinder a whole number of cells, stitches, strands, stakes or tiles goes round. */
-const ROUND_PATTERNS: readonly SurfaceTexturePattern[] = ["honeycomb", "bumps", "cells", "knit", "rope", "weave", "image"];
+const ROUND_PATTERNS: readonly SurfaceTexturePattern[] = ["honeycomb", "bumps", "cells", "knit", "rope", "weave", "carbon", "image"];
 const SQRT3 = Math.sqrt(3);
 
 function clamp(value: number, min: number, max: number) {
@@ -480,6 +496,8 @@ export const SURFACE_TEXTURE_STARTERS: Partial<Record<SurfaceTexturePattern, Par
   knit: { spacing: 5, depth: 1.2, width: 0.85, profile: "round", direction: "outward" },
   rope: { spacing: 6, depth: 3, width: 0.6, profile: "round", direction: "outward" },
   weave: { spacing: 10, depth: 1.6, width: 0.6, profile: "round", direction: "outward" },
+  // Carbon: bands as fine as a print still shows them, raised a little, a narrow gap between.
+  carbon: { spacing: 2.5, depth: 0.4, width: 0.95, profile: "round", direction: "outward" },
   grain: { spacing: 1.2, depth: 0.25 },
   image: { depth: 0.6 },
 };
@@ -781,6 +799,61 @@ function weave(u: number, v: number, S: number, s: SurfaceTextureSettings) {
   // A round rod, 0 at its edge: the weaver covers the stake's foot, a wide back stays where the weaver runs under it.
   const stake = x < r ? 0.7 * yarn((x / r) * (x / r), s.profile) : 0;
   return Math.max(weaver, stake);
+}
+
+/** Carbon: how many crossing bands a band lies over, then under (see SURFACE_TEXTURE_CARBON_WEAVES). */
+const CARBON_FLOATS: Record<SurfaceTextureCarbonWeave, [number, number]> = { twill22: [2, 2], twill21: [2, 1], twill31: [3, 1] };
+/** A carbon band's flat middle, as a share of its half width; its edges fall off by the profile beyond. */
+const CARBON_FLAT = 0.6;
+/** How much a band swells over its float: at its ends, where it dives under, it is this much lower than in the middle. */
+const CARBON_SWELL = 0.6;
+/** And under a crossing band it sinks by this share further (seen only in the gaps between the crossing bands). */
+const CARBON_DIP = 0.3;
+/**
+ * Where the two bands are about as high, the higher is taken softly over this much of the height: a sharp crease there
+ * runs aslant to the cuts and came out in teeth.
+ */
+const CARBON_BLEND = 0.12;
+/**
+ * Where carbon bands are cut along round the axis (see carbonCuts): places on a band's falling edge, from the end of its
+ * flat middle (0) over half way down to its border (1).
+ */
+const CARBON_PLACES = [0, 0.5, 1];
+
+/** The crossing bands' width, mm: as asked, or as wide as the upright bands (as fitted round the axis). */
+function carbonCrossWidth(s: SurfaceTextureSettings, layout: SurfaceTextureLayout) {
+  return s.carbonCross > 0 ? s.carbonCross : layout.cell;
+}
+
+/**
+ * Carbon fibre in twill: upright bands `Su` apart and crossing bands `Sv` apart. An upright band lies over `over` crossing
+ * bands and under `under`, and the next one does the same one band higher - the diagonal of a twill, rising to the right.
+ * A band is a flat tape with soft edges (`width` its share of the spacing, `profile` its edges) that swells over each
+ * float and comes down where it dives under the crossing band; the height is the higher of the two (taken softly where
+ * they are about as high, see CARBON_BLEND). Both are continuous everywhere, so the relief has no steps. Around a
+ * cylinder the number of upright bands is a multiple of over + under (see makeSurfaceTextureLayout), or the diagonal
+ * would break at the seam.
+ */
+function carbon(u: number, v: number, Su: number, Sv: number, s: SurfaceTextureSettings) {
+  const [over, under] = CARBON_FLOATS[s.carbonWeave];
+  const period = over + under;
+  const i = Math.floor(u / Su), j = Math.floor(v / Sv);
+  const fu = u / Su - i, fv = v / Sv - j;
+  // Where the upright band is in its repeat (it lies over while k < over), and the crossing band in its own.
+  const k = (((j - i) % period) + period) % period;
+  const kc = period - 1 - k;
+  const w = clamp(s.width, 0.1, 1);
+  const tape = (f: number) => {
+    const a = Math.abs(2 * f - 1) / w;
+    return a >= 1 ? 0 : surfaceFalloff((a - CARBON_FLAT) / (1 - CARBON_FLAT), s.profile);
+  };
+  // Along a band, p from 0 to 1 over a float or the stretch beneath the crossing bands.
+  const onTop = (p: number) => 1 - CARBON_SWELL + CARBON_SWELL * Math.sin(Math.PI * p);
+  const beneath = (p: number) => (1 - CARBON_SWELL) * (1 - CARBON_DIP * Math.sin(Math.PI * p));
+  const upright = tape(fu) * (k < over ? onTop((k + fv) / over) : beneath((k - over + fv) / under));
+  const crossing = tape(fv) * (kc < under ? onTop((kc + fu) / under) : beneath((kc - under + fu) / over));
+  const h = Math.max(0, CARBON_BLEND - Math.abs(upright - crossing)) / CARBON_BLEND;
+  return Math.min(1, Math.max(upright, crossing) + (h * h * CARBON_BLEND) / 4);
 }
 
 function valueNoise(x: number, y: number, z: number) {
@@ -1255,6 +1328,8 @@ function patternValue(u: number, v: number, s: SurfaceTextureSettings, layout: S
       return rope(u, v, layout.cell, s);
     case "weave":
       return weave(u, v, layout.cell, s);
+    case "carbon":
+      return carbon(u, v, layout.cell, carbonCrossWidth(s, layout), s);
     case "image":
       return imageValue(u, v, s, layout);
     default:
@@ -1545,8 +1620,10 @@ export function makeSurfaceTextureLayout(base: SurfaceBase, asked: SurfaceTextur
       layout.angle = ((s.angle < 0 ? -1 : 1) * (Math.acos(Math.min(1, (k * s.spacing) / C)) * 180)) / Math.PI;
     }
   } else if (ROUND_PATTERNS.includes(s.pattern)) {
-    // Weave: an even number of stakes, or two weavers "over" would meet at the seam.
-    const k = s.pattern === "weave" ? Math.max(2, 2 * Math.round(C / (2 * s.spacing))) : Math.max(1, Math.round(C / s.spacing));
+    // Weave: an even number of stakes, or two weavers "over" would meet at the seam; carbon: a whole number of its
+    // repeats, or the twill's diagonal would break there.
+    const repeat = s.pattern === "weave" ? 2 : s.pattern === "carbon" ? CARBON_FLOATS[s.carbonWeave][0] + CARBON_FLOATS[s.carbonWeave][1] : 1;
+    const k = Math.max(repeat, repeat * Math.round(C / (repeat * s.spacing)));
     layout.cell = C / k;
     layout.around = k;
   }
@@ -1656,9 +1733,10 @@ function stripesAreCut(s: SurfaceTextureSettings) {
   return (s.pattern === "grooves" || s.pattern === "knurl") && s.projection !== "allRound";
 }
 
-/** What else shapes the pattern and so its refining: the cells' and the grain's seed, the image and its tiles. */
+/** What else shapes the pattern and so its refining: the cells' and the grain's seed, the image and its tiles, the carbon's weave and crossing bands. */
 function patternExtras(s: SurfaceTextureSettings) {
   if (s.pattern === "cells" || s.pattern === "grain") return [s.seed];
+  if (s.pattern === "carbon") return [s.carbonWeave, s.carbonCross];
   if (s.pattern === "image") return [s.image === "own" && s.imageOwn ? ownImageKey(s.imageOwn) : s.image, s.tileHeight, s.imageTurn, s.imageInvert, s.imageBlur, s.imageTiling];
   return null;
 }
@@ -1672,9 +1750,9 @@ function targetEdge(s: SurfaceTextureSettings) {
   // An image: about 14 points per tile and step of detail (its tile has 256 image points and more).
   if (s.pattern === "image") return Math.min(s.spacing, s.tileHeight > 0 ? s.tileHeight : s.spacing) / (steps * 14);
   const narrow = s.width < 0.35 && s.pattern !== "grain" ? 0.65 : 1;
-  // Knitting: a stitch has two loops of about a quarter of its width each; a rope's strands and the weave's rows are
-  // narrower than the spacing too.
-  const size = s.pattern === "grain" ? s.spacing / 2 : s.pattern === "knit" ? s.spacing / 2.2 : s.pattern === "rope" ? s.spacing / 1.5 : s.pattern === "weave" ? s.spacing / 2 : s.spacing;
+  // Knitting: a stitch has two loops of about a quarter of its width each; a rope's strands, the weave's rows and a carbon
+  // band's edges are narrower than the spacing too (round the axis those are cut along, see carbonCuts).
+  const size = s.pattern === "grain" ? s.spacing / 2 : s.pattern === "knit" ? s.spacing / 2.2 : s.pattern === "rope" ? s.spacing / 1.5 : s.pattern === "weave" ? s.spacing / 2 : s.pattern === "carbon" ? Math.min(s.spacing, s.carbonCross || s.spacing) * (s.projection === "cylinder" ? 2 : 0.5) : s.spacing;
   return (size / steps) * narrow;
 }
 
@@ -3401,6 +3479,37 @@ export function createSurfaceTextureSession(positions: ArrayLike<number>) {
   }
 
   /**
+   * Carbon round the axis cut along its bands (see carbon): upright at places across the edges of the upright bands, level
+   * at the same places of the crossing bands - where a band falls off to the gap beside it. Over the grid's diagonals the
+   * gaps came out in a sawtooth. Only on the sides round the axis, as a weave's cuts.
+   */
+  function carbonCuts(mesh: SurfaceMesh, s: SurfaceTextureSettings, layout: SurfaceTextureLayout, maxTriangles: number, smoothFace: Uint8Array) {
+    const ax = AXIS_INDEX[s.axis];
+    const [i1, i2] = acrossAxes(s.axis);
+    const Su = layout.cell, Sv = carbonCrossWidth(s, layout);
+    const w = clamp(s.width, 0.1, 1);
+    const kinds = baseFaceKinds(ax);
+    const sides = (m: SurfaceMesh) => Uint8Array.from({ length: m.indices.length / 3 }, (_, f) => (!smoothFace[m.parents[f]] && kinds[m.parents[f]] === 1 ? 1 : 0));
+    // Both edges of a band, its middle half a spacing in; at full width the two outermost meet in the gap, once.
+    const places = (S: number) => {
+      const half = CARBON_PLACES.map((t) => ((CARBON_FLAT + t * (1 - CARBON_FLAT)) * w * S) / 2);
+      return [...new Set(half.flatMap((h) => [S / 2 - h, S / 2 + h]).map((x) => Number((x % S).toFixed(6))))];
+    };
+    const turn = 2 * Math.PI * layout.radius;
+    let v = mesh.vertices;
+    const U = Float64Array.from({ length: v.length / 3 }, (_, i) => aroundAngle(layout, v[i * 3 + i1], v[i * 3 + i2]) * layout.radius);
+    const du = (i: number, j: number) => {
+      const d = U[j] - U[i];
+      return d - turn * Math.round(d / turn);
+    };
+    let out = soundOr(mesh, sliceByField(mesh, U, du, Su, places(Su), sides(mesh)));
+    v = out.vertices;
+    const V = Float64Array.from({ length: v.length / 3 }, (_, i) => v[i * 3 + ax]);
+    out = soundOr(out, sliceByField(out, V, (i, j) => V[j] - V[i], Sv, places(Sv), sides(out)));
+    return out.indices.length / 3 > maxTriangles ? mesh : out;
+  }
+
+  /**
    * A pattern standing out round an angular body's outline bends round its corners in an arc (see edgeRounding), over
    * `reach` either side of each: cut upright at its steps there, so the arc is made of strips along the corner. Over the
    * grid's diagonals it came out as a column of teeth down every corner.
@@ -3924,6 +4033,7 @@ export function createSurfaceTextureSession(positions: ArrayLike<number>) {
     // went finer and finer along the pattern's lines, and no point there moves).
     const cutFaces = straight ? Uint8Array.from(straight, (k, f) => (k === 255 && !smooth.faces[f] ? 0 : 1)) : smooth.faces;
     if (s.pattern === "weave" && s.projection === "cylinder" && !mesh.limited) mesh = weaveCuts(mesh, s, layout, maxTriangles, smooth.faces);
+    if (s.pattern === "carbon" && s.projection === "cylinder" && !mesh.limited) mesh = carbonCuts(mesh, s, layout, maxTriangles, smooth.faces);
     if (s.projection === "cylinder" && layout.outline?.corners.length && standsOut(s) && !mesh.limited) mesh = cornerCuts(mesh, s, layout, maxTriangles, smooth.faces);
     if (!slice && !cracks && !text && !mesh.limited && !cellSliced) mesh = refineFlanks(mesh, s, layout, edge / 2.5, maxTriangles, cutFaces);
     // Only when they were cut: over the budget they were not.
