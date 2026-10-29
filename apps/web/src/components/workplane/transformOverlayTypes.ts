@@ -125,6 +125,33 @@ export function dimensionMarkScreenPush(
   return { x: dx * scale, y: dy * scale };
 }
 
+/**
+ * Largest screen distance between a measured edge and its dimension label.
+ *
+ * The same fixed world offset grows without bound as you zoom in: on a part
+ * below a millimetre that fills the view, the label landed many screen widths
+ * away and you had to zoom out to read it (#989).
+ */
+export const DIMENSION_LABEL_MAX_SCREEN_OFFSET = 120;
+
+/**
+ * Factor that pulls a whole dimension mark towards its edge when the projected
+ * world offset puts the label further away than `maxOffset`. Rail, extension
+ * lines and label shrink by the same factor towards their own base points, so
+ * the mark keeps its shape. Returns 1 when the label is already close enough.
+ */
+export function dimensionMarkScreenShrink(
+  edgeMidpoint: TransformOverlayPoint,
+  labelPoint: TransformOverlayPoint,
+  maxOffset = DIMENSION_LABEL_MAX_SCREEN_OFFSET,
+): number {
+  const distance = Math.hypot(labelPoint.x - edgeMidpoint.x, labelPoint.y - edgeMidpoint.y);
+  if (!Number.isFinite(distance) || distance <= maxOffset) {
+    return 1;
+  }
+  return maxOffset / distance;
+}
+
 type RotationDirectionVector = { x: number; y: number; z: number };
 
 export function rotationPlaneDirectionSign(

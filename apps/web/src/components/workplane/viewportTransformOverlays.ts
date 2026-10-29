@@ -9,7 +9,7 @@ import { t } from "@/lib/i18n";
 import { horizontalPlacementWorkplane, type PlacementWorkplane } from "@/lib/placementWorkplane";
 import { liftGeometryForFrame, type SelectionFrame } from "@/lib/liftGeometry";
 import { liftHandleScreenPoint } from "@/components/workplane/transformOverlayTypes";
-import { dimensionMarkScreenPush, isPointInsideTransformBounds, rotateHandleArrow, rotationPlaneDirectionSign, transformBoundsIntersectClipVolume, transformOverlayScreenPoint, type DimensionMark, type RotationAxis, type RotationPlaneView, type TransformOverlayState } from "@/components/workplane/TransformOverlay";
+import { dimensionMarkScreenPush, dimensionMarkScreenShrink, isPointInsideTransformBounds, rotateHandleArrow, rotationPlaneDirectionSign, transformBoundsIntersectClipVolume, transformOverlayScreenPoint, type DimensionMark, type RotationAxis, type RotationPlaneView, type TransformOverlayState } from "@/components/workplane/TransformOverlay";
 import { cuboidCorners, pointAlongAxes } from "@/lib/alignFrame";
 import type { AlignAxis, AlignHandleStatus, AlignTarget, MeasurementAccuracy, WorkplaneShape } from "@/types/layerling";
 import { outwardFaceNormal } from "@/lib/layFlat";
@@ -158,17 +158,23 @@ export function makeDimensionMark(
   const railOffset = 5.8;
   const extensionOverrun = 1.4;
   const labelOffset = 3.2;
-  const railFrom = project(fromWorld.clone().add(outwardAxis.clone().multiplyScalar(railOffset)));
-  const railTo = project(toWorld.clone().add(outwardAxis.clone().multiplyScalar(railOffset)));
-  const extensionFrom = project(fromWorld.clone().add(outwardAxis.clone().multiplyScalar(railOffset + extensionOverrun)));
-  const extensionTo = project(toWorld.clone().add(outwardAxis.clone().multiplyScalar(railOffset + extensionOverrun)));
   const edgeMidpoint = project(fromWorld.clone().lerp(toWorld, 0.5));
-  const labelPoint = project(
+  const projectedLabel = project(
     fromWorld
       .clone()
       .lerp(toWorld, 0.5)
       .add(outwardAxis.clone().multiplyScalar(railOffset + labelOffset)),
   );
+  // Zoomed far in on a tiny part, the same world offset puts the mark off
+  // screen (#989). Pull every piece towards its own base point by one factor.
+  const shrink = dimensionMarkScreenShrink(edgeMidpoint, projectedLabel);
+  const pulled = (point: { x: number; y: number }, base: { x: number; y: number }) =>
+    shrink === 1 ? point : { x: base.x + (point.x - base.x) * shrink, y: base.y + (point.y - base.y) * shrink };
+  const railFrom = pulled(project(fromWorld.clone().add(outwardAxis.clone().multiplyScalar(railOffset))), from);
+  const railTo = pulled(project(toWorld.clone().add(outwardAxis.clone().multiplyScalar(railOffset))), to);
+  const extensionFrom = pulled(project(fromWorld.clone().add(outwardAxis.clone().multiplyScalar(railOffset + extensionOverrun))), from);
+  const extensionTo = pulled(project(toWorld.clone().add(outwardAxis.clone().multiplyScalar(railOffset + extensionOverrun))), to);
+  const labelPoint = pulled(projectedLabel, edgeMidpoint);
   // The world offset above shrinks to a few pixels when zoomed out, which puts
   // the label under a rotate handle. Lift the whole mark together so the label
   // keeps its distance without tearing away from its own rail.

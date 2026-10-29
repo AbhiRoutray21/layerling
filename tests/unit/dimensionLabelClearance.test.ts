@@ -1,7 +1,9 @@
 import { describe, expect, it } from "vitest";
 import {
+  DIMENSION_LABEL_MAX_SCREEN_OFFSET,
   DIMENSION_LABEL_MIN_SCREEN_OFFSET,
   dimensionMarkScreenPush,
+  dimensionMarkScreenShrink,
 } from "@/components/workplane/transformOverlayTypes";
 
 const EDGE = { x: 600, y: 470 };
@@ -76,5 +78,40 @@ describe("dimension label clearance from rotate handles", () => {
     const justUnder = pushedDistance(labelAt(DIMENSION_LABEL_MIN_SCREEN_OFFSET - 0.01, 0));
     const justOver = pushedDistance(labelAt(DIMENSION_LABEL_MIN_SCREEN_OFFSET + 0.01, 0));
     expect(Math.abs(justOver - justUnder)).toBeLessThan(0.1);
+  });
+});
+
+describe("dimension label stays near a tiny part zoomed in (#989)", () => {
+  function shrunkDistance(labelPoint: { x: number; y: number }) {
+    const shrink = dimensionMarkScreenShrink(EDGE, labelPoint);
+    return Math.hypot(labelPoint.x - EDGE.x, labelPoint.y - EDGE.y) * shrink;
+  }
+
+  it("keeps the maximum clear of the rotate handles", () => {
+    expect(DIMENSION_LABEL_MAX_SCREEN_OFFSET).toBeGreaterThan(DIMENSION_LABEL_MIN_SCREEN_OFFSET);
+    // The rail sits 5.8 of the 9mm out, so it must still clear the 28 + 20px handle area.
+    expect((DIMENSION_LABEL_MAX_SCREEN_OFFSET * 5.8) / 9).toBeGreaterThan(28 + 20);
+  });
+
+  it("pulls far labels in to exactly the maximum", () => {
+    // 9mm world offset on a 0.5mm part filling the view: thousands of pixels.
+    for (const distance of [121, 320, 1200, 10800]) {
+      for (const angle of DIRECTIONS) {
+        expect(shrunkDistance(labelAt(distance, angle))).toBeCloseTo(DIMENSION_LABEL_MAX_SCREEN_OFFSET, 6);
+      }
+    }
+  });
+
+  it("leaves labels within the maximum untouched", () => {
+    for (const distance of [0.5, 9, 62, 90, DIMENSION_LABEL_MAX_SCREEN_OFFSET - 0.01]) {
+      for (const angle of DIRECTIONS) {
+        expect(dimensionMarkScreenShrink(EDGE, labelAt(distance, angle))).toBe(1);
+      }
+    }
+  });
+
+  it("returns no shrink for degenerate input", () => {
+    expect(dimensionMarkScreenShrink(EDGE, { x: Number.NaN, y: EDGE.y })).toBe(1);
+    expect(dimensionMarkScreenShrink(EDGE, { x: Number.POSITIVE_INFINITY, y: EDGE.y })).toBe(1);
   });
 });
