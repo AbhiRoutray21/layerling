@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "title": {
+      "de": "Heben um einen genauen Weg",
+      "en": "Lift by an exact distance"
+    },
+    "body": {
+      "de": "Beim Ziehen am schwarzen Pfeil über einem Körper steht jetzt an seiner vorderen Ecke, wie weit er hoch- oder runterging. Nach dem Loslassen klickst du auf die Zahl und tippst den genauen Weg ein, so wie beim Verschieben in X und Y.",
+      "en": "Dragging the black arrow above a body now shows at its front corner how far it went up or down. Once you let go, click the number and type the exact distance, as you can when moving in X and Y."
+    }
+  }
+]

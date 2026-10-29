@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **The lift arrow shows how far it moved (#979):** Moving in X and Y showed the distance dragged and let you type it exactly; lifting with the black arrow above a body only showed the height above the workplane. While lifting, a line up the front corner now shows the way up or down, and once you let go a click on its number takes an exact distance, a minus going down, for all selected bodies together. It follows the setting for the movement dimensions and Q. Asked for by @VZ-studios in #979.
+
 ## 1.117.2
 
 - **Vertical text (#981):** Letters could only be set side by side; text running down a door frame or along a pen meant placing them one by one. Straight text now has *Letters top to bottom* under Properties: the letters are stacked, each centred on one upright line, the box turns upright and the letters keep their size, and the letter spacing sets the gap between them. Name tags have the switch too, with all their layers, and so does the Text pattern of the surface texture. Through MCP, `layerling_update_object` and `layerling_layer_text` take `vertical`, `layerling_texture_surface` takes `textVertical`. Asked for by @RepairItDude in #981.

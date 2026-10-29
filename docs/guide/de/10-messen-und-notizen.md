@@ -50,7 +50,7 @@ Das Maßband und das Winkellineal bleiben stehen, wenn du eine Skizze machst und
 
 In den Einstellungen unter {{ui:workspace.appearance}} gibt es zwei Schalter für laufende Maße:
 
-- {{ui:workspace.showMoveDimensions}} zeigt beim Verschieben, um wie viel du dich bewegst.
+- {{ui:workspace.showMoveDimensions}} zeigt beim Verschieben, um wie viel du dich bewegst. Das gilt auch beim Heben mit dem schwarzen Pfeil über einem Körper; der Weg steht dann an seiner vorderen Ecke. Nach dem Loslassen klickst du auf so eine Zahl und tippst den genauen Weg ein; ein Minus geht nach unten.
 - {{ui:workspace.showOriginDimensions}} zeigt die Abstände der Auswahl zum Nullpunkt der Platte, auch bei mehreren markierten Körpern.
 
 Mit {{ui:workspace.dimensionsAlwaysVisible}} bleiben die Maße dauerhaft sichtbar.

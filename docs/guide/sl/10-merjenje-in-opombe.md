@@ -48,7 +48,7 @@ Merilni trak in kotno ravnilo ostaneta tam, kjer sta, ko skiciraš in se vrneš 
 
 V nastavitvah pod {{ui:workspace.appearance}} sta dve stikali za tekoče mere:
 
-- {{ui:workspace.showMoveDimensions}} pri premikanju pokaže, za koliko se premikaš.
+- {{ui:workspace.showMoveDimensions}} pri premikanju pokaže, za koliko se premikaš. To velja tudi pri dvigovanju s črno puščico nad telesom; pot se pokaže ob njegovem sprednjem vogalu. Ko spustiš, klikni takšno število in vpiši natančno razdaljo; minus gre navzdol.
 - {{ui:workspace.showOriginDimensions}} pokaže razdalje izbora do ničle plošče, tudi pri več označenih telesih.
 
 Z {{ui:workspace.dimensionsAlwaysVisible}} mere ostanejo trajno vidne.

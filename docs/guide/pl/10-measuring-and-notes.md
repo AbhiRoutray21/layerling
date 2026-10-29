@@ -50,7 +50,7 @@ Zarówno narzędzie Zmierz, jak i kątownik zostają tam, gdzie są, gdy szkicuj
 
 W ustawieniach w sekcji {{ui:workspace.appearance}} są dwa przełączniki wymiarów na żywo:
 
-- {{ui:workspace.showMoveDimensions}} pokazuje podczas przeciągania, o ile przesuwasz.
+- {{ui:workspace.showMoveDimensions}} pokazuje podczas przeciągania, o ile przesuwasz. Dotyczy to też podnoszenia czarną strzałką nad bryłą; droga pokazuje się przy jej przednim narożniku. Po puszczeniu kliknij taką liczbę i wpisz dokładną odległość; wartość ujemna idzie w dół.
 - {{ui:workspace.showOriginDimensions}} pokazuje odległości zaznaczenia od początku układu płyty, także przy kilku zaznaczonych bryłach.
 
 Z {{ui:workspace.dimensionsAlwaysVisible}} wymiary są widoczne cały czas.

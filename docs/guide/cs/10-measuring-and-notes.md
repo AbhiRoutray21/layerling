@@ -48,7 +48,7 @@ Měřicí nástroj i úhelník zůstávají na místě při přechodu do náčrt
 
 V nastavení {{ui:workspace.appearance}} jsou dva přepínače průběžného kótování:
 
-- {{ui:workspace.showMoveDimensions}} zobrazuje posunutí během tažení.
+- {{ui:workspace.showMoveDimensions}} zobrazuje posunutí během tažení. Patří sem i zvedání černou šipkou nad tělesem, měřené podél jeho přední hrany. Po puštění klikni na takové číslo a napiš přesnou vzdálenost; záporná hodnota jde dolů.
 - {{ui:workspace.showOriginDimensions}} zobrazuje vzdálenosti výběru od počátku podložky, i při výběru více těles.
 
 {{ui:workspace.dimensionsAlwaysVisible}} ponechá rozměry zobrazené trvale.

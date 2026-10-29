@@ -48,7 +48,7 @@ A mérőszalag és a derékszögvonalzó is a helyén marad, amíg vázlatot ké
 
 A beállításokban a {{ui:workspace.appearance}} alatt két kapcsoló van az élő méretekhez:
 
-- A {{ui:workspace.showMoveDimensions}} húzás közben mutatja, mennyit mozdulsz.
+- A {{ui:workspace.showMoveDimensions}} húzás közben mutatja, mennyit mozdulsz. Ez a test feletti fekete nyíllal való emelésre is érvényes; az utat az elülső sarkánál mutatja. Elengedés után kattints egy ilyen számra, és írd be a pontos távolságot; a negatív érték lefelé visz.
 - Az {{ui:workspace.showOriginDimensions}} a kijelölés távolságait mutatja a tárgyasztal origójától, több kijelölt testnél is.
 
 A {{ui:workspace.dimensionsAlwaysVisible}} beállítással a méretek állandóan láthatók maradnak.

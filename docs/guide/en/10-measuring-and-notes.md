@@ -50,7 +50,7 @@ Both the tape measure and the framing square stay where they are while you sketc
 
 In the settings under {{ui:workspace.appearance}} there are two switches for live dimensions:
 
-- {{ui:workspace.showMoveDimensions}} shows by how much you move while dragging.
+- {{ui:workspace.showMoveDimensions}} shows by how much you move while dragging. That includes lifting with the black arrow above a body; the way up or down shows at its front corner. Once you let go, click such a number and type the exact distance; a minus goes down.
 - {{ui:workspace.showOriginDimensions}} shows the distances of the selection to the origin of the plate, also with several selected bodies.
 
 With {{ui:workspace.dimensionsAlwaysVisible}} the dimensions stay visible permanently.

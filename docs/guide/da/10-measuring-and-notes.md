@@ -54,7 +54,7 @@ Både målebåndet og vinkelmåleren bliver hvor de er mens du skitser og kommer
 
 Under {{ui:workspace.appearance}} i indstillingerne er der to kontakter for levende dimensioner:
 
-- {{ui:workspace.showMoveDimensions}} viser hvor meget du flytter mens du trækker.
+- {{ui:workspace.showMoveDimensions}} viser hvor meget du flytter mens du trækker. Det gælder også, når du løfter med den sorte pil over et legeme; vejen måles op langs dets forreste hjørne. Når du har sluppet, klikker du på sådan et tal og skriver den nøjagtige afstand; minus går ned.
 - {{ui:workspace.showOriginDimensions}} viser afstandene fra markeringen til pladens nulpunkt, også med flere valgte former.
 
 Med {{ui:workspace.dimensionsAlwaysVisible}} bliver dimensionerne permanent synlige.

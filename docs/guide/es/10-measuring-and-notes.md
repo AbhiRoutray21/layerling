@@ -50,7 +50,7 @@ Tanto la cinta métrica como la escuadra se quedan donde están mientras dibujas
 
 En los ajustes, en {{ui:workspace.appearance}}, hay dos interruptores para ver medidas en directo:
 
-- {{ui:workspace.showMoveDimensions}} muestra cuánto te desplazas mientras arrastras.
+- {{ui:workspace.showMoveDimensions}} muestra cuánto te desplazas mientras arrastras. También al levantar con la flecha negra sobre un cuerpo; el recorrido aparece en su esquina delantera. Al soltar, haz clic en ese número y escribe la distancia exacta; un valor negativo baja.
 - {{ui:workspace.showOriginDimensions}} muestra las distancias de la selección al origen de la placa, también con varios cuerpos seleccionados.
 
 Con {{ui:workspace.dimensionsAlwaysVisible}}, las medidas se ven siempre.

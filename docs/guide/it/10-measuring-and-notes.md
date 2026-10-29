@@ -50,7 +50,7 @@ Il metro a nastro e la squadra restano al loro posto mentre lavori nello schizzo
 
 Nelle impostazioni, sotto {{ui:workspace.appearance}}, trovi due interruttori per visualizzare le misure in tempo reale:
 
-- {{ui:workspace.showMoveDimensions}} mostra di quanto si sposta il corpo mentre lo trascini.
+- {{ui:workspace.showMoveDimensions}} mostra di quanto si sposta il corpo mentre lo trascini. Vale anche per il sollevamento con la freccia nera sopra il corpo; lo spostamento appare al suo angolo anteriore. Dopo aver rilasciato, fai clic su quel numero e digita la distanza esatta; un valore negativo scende.
 - {{ui:workspace.showOriginDimensions}} mostra la distanza della selezione dall’origine della piastra, anche quando sono selezionati più corpi.
 
 Con {{ui:workspace.dimensionsAlwaysVisible}} le misure restano sempre visibili.
