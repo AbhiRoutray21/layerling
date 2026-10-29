@@ -2254,6 +2254,7 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "prop.textVertical": "Buchstaben untereinander",
   "prop.textRadius": "Bogenradius",
   "prop.textInward": "Unten am Kreis",
+  "prop.textInwardColumn": "Auf der rechten Seite",
   "prop.textFlipped": "Auf den Kopf stellen",
   "prop.segments": "Segmente",
   "prop.sidesFollowSize": "Seiten folgen der Größe",

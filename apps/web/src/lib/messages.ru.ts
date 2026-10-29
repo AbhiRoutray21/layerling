@@ -2247,6 +2247,7 @@ export const MESSAGES_RU: Partial<Record<MessageKey, string>> = {
   "prop.textVertical": "Буквы сверху вниз",
   "prop.textRadius": "Радиус дуги",
   "prop.textInward": "По нижнему краю",
+  "prop.textInwardColumn": "С правой стороны",
   "prop.textFlipped": "Вверх ногами",
   "prop.segments": "Сегменты",
   "prop.sidesFollowSize": "Стороны зависят от размера",

@@ -2548,17 +2548,22 @@ function getShapePropertiesWithAppLimits(shape: WorkplaneShape, onUpdate: ShapeI
         hint: t("prop.textSpacingHint"),
         onChange: (spacing: number) => onUpdate(textSpacingPatch(shape, spacing)),
       },
-      // Straight text (#981): the letters stacked top to bottom; the box turns upright and the letters keep their size.
-      ...(isCurved ? [] : [{
+      // The letters stacked top to bottom (#981). Straight: the box turns upright and the letters keep their size. Curved: the
+      // column runs along the circle at its left side, the letters standing upright; the box follows in curvedTextPatch.
+      {
         type: "toggle",
         id: "textVertical",
         label: t("prop.textVertical"),
         value: Boolean(shape.textVertical),
         onChange: (vertical: boolean) => {
+          if (isCurved) {
+            onUpdate({ textVertical: vertical || undefined });
+            return;
+          }
           const next = { ...shape, textVertical: vertical || undefined } as WorkplaneShape;
           onUpdate({ textVertical: vertical || undefined, ...(shape.textStretch ? {} : textLetterSizePatch(next, textLetterSize(shape))) });
         },
-      } satisfies ShapePropertyConfig]),
+      } satisfies ShapePropertyConfig,
       // Straight text (#382): the letters keep their proportions in the box, or are stretched to fill it.
       ...(isCurved ? [] : [{
         type: "toggle",
@@ -2573,8 +2578,7 @@ function getShapePropertiesWithAppLimits(shape: WorkplaneShape, onUpdate: ShapeI
         label: t("prop.textCurved"),
         value: isCurved,
         // Radius, letter size and the box follow in curvedTextPatch.
-        // Curved text has no vertical letters (#981): curving it lays the line on the circle.
-        onChange: (textCurved) => onUpdate({ textCurved, ...(textCurved && shape.textVertical ? { textVertical: undefined } : {}) }),
+        onChange: (textCurved) => onUpdate({ textCurved }),
       },
     ];
     if (isCurved) {
@@ -2591,17 +2595,19 @@ function getShapePropertiesWithAppLimits(shape: WorkplaneShape, onUpdate: ShapeI
         {
           type: "toggle",
           id: "textInward",
-          label: t("prop.textInward"),
+          // A column of upright letters (#981) runs along the circle's left side, or its right side with this on.
+          label: shape.textVertical ? t("prop.textInwardColumn") : t("prop.textInward"),
           value: Boolean(shape.textInward),
           onChange: (textInward) => onUpdate({ textInward }),
         },
-        {
+        // Upside down turns a line of letters round; a column of upright letters has no such thing.
+        ...(shape.textVertical ? [] : [{
           type: "toggle",
           id: "textFlipped",
           label: t("prop.textFlipped"),
           value: Boolean(shape.textFlipped),
-          onChange: (textFlipped) => onUpdate({ textFlipped }),
-        },
+          onChange: (textFlipped: boolean) => onUpdate({ textFlipped }),
+        } satisfies ShapePropertyConfig]),
       );
     }
     return properties;

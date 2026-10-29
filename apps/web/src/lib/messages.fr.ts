@@ -2240,6 +2240,7 @@ export const MESSAGES_FR: Partial<Record<MessageKey, string>> = {
   "prop.textVertical": "Lettres de haut en bas",
   "prop.textRadius": "Rayon de l'arc",
   "prop.textInward": "En bas",
+  "prop.textInwardColumn": "Du côté droit",
   "prop.textFlipped": "À l'envers",
   "prop.segments": "Segments",
   "prop.sidesFollowSize": "Les côtés suivent la taille",

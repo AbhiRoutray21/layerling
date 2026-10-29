@@ -2254,6 +2254,7 @@ export const MESSAGES_NL: Record<MessageKey, string> = {
   "prop.textVertical": "Letters onder elkaar",
   "prop.textRadius": "Boogstraal",
   "prop.textInward": "Langs de onderkant",
+  "prop.textInwardColumn": "Aan de rechterkant",
   "prop.textFlipped": "Ondersteboven",
   "prop.segments": "Segmenten",
   "prop.sidesFollowSize": "Zijden volgen de grootte",

@@ -2255,6 +2255,7 @@ export const MESSAGES_EN = {
   "prop.textVertical": "Letters top to bottom",
   "prop.textRadius": "Arc radius",
   "prop.textInward": "Along the bottom",
+  "prop.textInwardColumn": "On the right side",
   "prop.textFlipped": "Upside down",
   "prop.segments": "Segments",
   "prop.sidesFollowSize": "Sides follow the size",

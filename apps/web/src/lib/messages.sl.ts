@@ -1681,6 +1681,7 @@ export const MESSAGES_SL: Partial<Record<MessageKey, string>> = {
   "prop.textVertical": "Črke ena pod drugo",
   "prop.textRadius": "Polmer loka",
   "prop.textInward": "Po spodnji strani",
+  "prop.textInwardColumn": "Na desni strani",
   "prop.textFlipped": "Na glavo",
   "prop.segments": "Segmenti",
   "prop.sidesFollowSize": "Stranice sledijo velikosti",

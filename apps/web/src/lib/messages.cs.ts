@@ -2304,6 +2304,7 @@ export const MESSAGES_CS: Record<MessageKey, string> = {
   "prop.textVertical": "Písmena pod sebou",
   "prop.textRadius": "Poloměr oblouku",
   "prop.textInward": "Podél spodní strany",
+  "prop.textInwardColumn": "Na pravé straně",
   "prop.textFlipped": "Vzhůru nohama",
   "prop.segments": "Segmenty",
   "prop.sidesFollowSize": "Počet stran podle rozměru",
