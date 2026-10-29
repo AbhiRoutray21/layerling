@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **Polish brought up to date (#1011):** The interface and the guide in Polish cover 1.121.0 again, the lid, the cookie cutter, the flexi joints and the ribbon pin included. Contributed by @cyryllo in #1011.
+- **The parts of a cookie cutter are named in the interface's language (#1011):** Wall, rim, inner walls, bridges, plate and fillets were named in English in the code, so a translation could not reach them and the guide had to quote "Inner walls" as it was. They now take their names from the catalogue (`cookieCutter.part.*`), as the lid and the flexi links do. Reported by @cyryllo in #1011.
 - **Flexi joints, Cookie cutter and Lid have icons of the set:** Their Lucide icons - a worm, a cookie and an open box - took the colour of their group as the only ones in Modify, so they stood out orange as if they were switched on, and their lines and height did not match the drawn icons beside them. They are drawn now like the rest (`toolbarIcons.tsx`, 48 grid, the same line and faint fill): a bent chain of three links, a cookie with a bite out of it, a box with its lid lifted. Any Lucide icon left among the tools takes the dark of the drawn ones too, and lights up only while its tool is on. The Help box in the title row has its four icons in one colour and no name beside them, which read as a button.
 
 ## 1.121.0

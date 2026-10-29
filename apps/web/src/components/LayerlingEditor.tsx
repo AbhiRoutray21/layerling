@@ -9132,19 +9132,20 @@ export function LayerlingEditor({
       const anchor = { x: wallBuilt.x, z: wallBuilt.z };
       const finish = (built: WorkplaneShape, name: string) =>
         canonicalizeShape({ ...place(built, anchor), id: createLocalId("cutter"), name, color, hole: false });
-      const parts = [finish(wallBuilt, "Wall"), finish(await extrude(profiles.rim, options.rimHeight), "Rim")];
+      // The parts are named in the interface's language, as the editor's other tools name what they make (cyryllo, #1011).
+      const parts = [finish(wallBuilt, t("cookieCutter.part.wall")), finish(await extrude(profiles.rim, options.rimHeight), t("cookieCutter.part.rim"))];
       // The walls round the holes are a body of their own, so they can be lower than the outer wall and only press the inside
       // into the dough; the bridges hold them, standing on the rim's level, on the side the hand presses.
-      if (profiles.inner) parts.push(finish(await extrudeWall(profiles.inner, options.height - options.imprint), "Inner walls"));
-      if (profiles.bridges) parts.push(finish(await extrude(profiles.bridges, options.bridgeHeight), "Bridges"));
+      if (profiles.inner) parts.push(finish(await extrudeWall(profiles.inner, options.height - options.imprint), t("cookieCutter.part.innerWalls")));
+      if (profiles.bridges) parts.push(finish(await extrude(profiles.bridges, options.bridgeHeight), t("cookieCutter.part.bridges")));
       // Instead of the bridges, a plate over the whole outline on the side the hand presses (avxmw, #982).
-      if (profiles.plate) parts.push(finish(await extrude(profiles.plate, options.plate), "Plate"));
+      if (profiles.plate) parts.push(finish(await extrude(profiles.plate, options.plate), t("cookieCutter.part.plate")));
       // The fillets where the walls stand on the rim, the bridges or the plate: one mesh of fine steps, lifted to where it starts.
       const fillets = options.fillet > 0 ? cookieCutterFillets(await getManifoldRuntime(), profiles, options) : null;
-      const filletSource = canonicalizeShape({ id: createLocalId("cutter"), name: "Fillets", kind: "mesh", color, x: 0, z: 0, elevation: 0, size: 1, width: 1, depth: 1, height: 1, rotation: 0 });
+      const filletSource = canonicalizeShape({ id: createLocalId("cutter"), name: t("cookieCutter.part.fillets"), kind: "mesh", color, x: 0, z: 0, elevation: 0, size: 1, width: 1, depth: 1, height: 1, rotation: 0 });
       const filletBody = fillets ? shapeFromCadMesh(filletSource, fillets.positions, new Float32Array(0), fillets.indices, "") : null;
       if (filletBody) {
-        const placed = finish({ ...filletBody, cadBrep: undefined }, "Fillets");
+        const placed = finish({ ...filletBody, cadBrep: undefined }, t("cookieCutter.part.fillets"));
         parts.push(canonicalizeShape({ ...placed, elevation: (placed.elevation ?? 0) + (filletBody.elevation ?? 0) }));
       }
       if (projectInfoRef.current.projectId !== sourceProjectId || projectShapesFingerprint(shapesRef.current) !== sourceFingerprint) {
