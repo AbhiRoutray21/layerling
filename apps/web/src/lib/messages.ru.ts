@@ -782,6 +782,8 @@ export const MESSAGES_RU: Partial<Record<MessageKey, string>> = {
   "status.bugReportBuilding": "Формирование отчёта об ошибке…",
   "status.bugReportSaved": "Отчёт об ошибке сохранён в ZIP-архив. Приложите файл к сообщению на форуме или на GitHub.",
   "editor.group.help": "Справка",
+  "editor.ribbonPin": "Держать все группы открытыми",
+  "editor.ribbonUnpin": "Сворачивать группы, когда не хватает места",
   "editor.guide": "Краткое руководство",
   "guide.title": "Краткое руководство",
   "guide.close": "Закрыть краткое руководство",

@@ -784,6 +784,8 @@ export const MESSAGES_NL: Record<MessageKey, string> = {
   "status.bugReportBuilding": "Foutrapport wordt samengesteld …",
   "status.bugReportSaved": "Foutrapport opgeslagen als ZIP. Voeg het bestand toe aan je bericht op het forum of op GitHub.",
   "editor.group.help": "Help",
+  "editor.ribbonPin": "Alle groepen open houden",
+  "editor.ribbonUnpin": "Groepen inklappen als er geen ruimte is",
   "editor.guide": "Snelgids",
   "guide.title": "Snelgids",
   "guide.close": "Snelgids sluiten",

@@ -1458,6 +1458,26 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .shell-openings-summary
   background: rgba(255, 255, 255, 0.58);
 }
 
+:where(html[data-theme="dark"][data-palette="graphite"]) .toolbar-ribbon-pin {
+  color: #787878;
+  background: transparent;
+  border: 0;
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .toolbar-ribbon-pin:hover {
+  color: #484848;
+  background: rgba(255, 255, 255, 0.58);
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .toolbar-ribbon-pin.active {
+  color: #d07415;
+}
+
+html[data-theme="dark"]:where([data-palette="graphite"]) .toolbar-ribbon-pin:hover {
+  color: #f1f1f1;
+  background: #3a3a3a;
+}
+
 :where(html[data-theme="dark"][data-palette="graphite"]) .toolbar-title-help {
   --group-color: var(--group-help);
   background: color-mix(in srgb, var(--group-color) 7%, var(--toolbar-tile));

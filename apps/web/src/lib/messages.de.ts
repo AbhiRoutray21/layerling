@@ -784,6 +784,8 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "status.bugReportBuilding": "Fehlerbericht wird erstellt …",
   "status.bugReportSaved": "Fehlerbericht als ZIP gespeichert. Häng die Datei an deinen Beitrag im Forum oder bei GitHub.",
   "editor.group.help": "Hilfe",
+  "editor.ribbonPin": "Alle Gruppen offen halten",
+  "editor.ribbonUnpin": "Gruppen bei Platzmangel einklappen",
   "editor.guide": "Kurzanleitung",
   "guide.title": "Kurzanleitung",
   "guide.close": "Kurzanleitung schließen",

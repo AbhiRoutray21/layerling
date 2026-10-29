@@ -785,6 +785,8 @@ export const MESSAGES_EN = {
   "status.bugReportBuilding": "Building the bug report …",
   "status.bugReportSaved": "Bug report saved as a ZIP. Attach the file to your post in the forum or on GitHub.",
   "editor.group.help": "Help",
+  "editor.ribbonPin": "Keep all groups open",
+  "editor.ribbonUnpin": "Fold groups when there is no room",
   "editor.guide": "Quick guide",
   "guide.title": "Quick guide",
   "guide.close": "Close the quick guide",

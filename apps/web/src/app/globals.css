@@ -3879,6 +3879,34 @@ html[data-theme="dark"] .shell-openings-summary {
   opacity: 0.35;
 }
 
+/* The pin that keeps every group of the ribbon open, as it was before the groups learned to fold (Stefan, 29.10.2026). */
+.toolbar-ribbon-pin {
+  display: grid;
+  width: 30px;
+  height: 30px;
+  margin-right: -2px;
+  place-items: center;
+  color: #a58c6c;
+  background: transparent;
+  border: 0;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.toolbar-ribbon-pin:hover {
+  color: #634729;
+  background: rgba(255, 255, 255, 0.58);
+}
+
+.toolbar-ribbon-pin.active {
+  color: #d07415;
+}
+
+html[data-theme="dark"] .toolbar-ribbon-pin:hover {
+  color: #f7f2ea;
+  background: #463727;
+}
+
 /* The help in the title row: a small group with its name, coloured as it was in the ribbon. */
 .toolbar-title-help {
   --group-color: var(--group-help);

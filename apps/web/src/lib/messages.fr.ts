@@ -775,6 +775,8 @@ export const MESSAGES_FR: Partial<Record<MessageKey, string>> = {
   "status.bugReportBuilding": "Construire le rapport de bug…",
   "status.bugReportSaved": "Rapport de bug enregistré au format ZIP. Joignez le fichier à votre message sur le forum ou sur GitHub.",
   "editor.group.help": "Aide",
+  "editor.ribbonPin": "Garder tous les groupes ouverts",
+  "editor.ribbonUnpin": "Replier les groupes quand la place manque",
   "editor.guide": "Guide rapide",
   "guide.title": "Guide rapide",
   "guide.close": "Fermer le guide rapide",

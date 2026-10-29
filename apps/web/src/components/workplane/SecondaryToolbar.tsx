@@ -2,7 +2,7 @@
 
 import { GuideHelpLink } from "@/components/GuideHelpLink";
 import { ShapeMenuPanel } from "@/components/workplane/ShapeMenuPanel";
-import { AlertTriangle, ArrowDownToLine, ArrowUpFromLine, Check, CircleHelp, Cookie, Percent, Circle as CircleIcon, Eye, EyeOff, Hexagon as HexagonIcon, ListTree, Pencil, Pentagon as PentagonIcon, Rotate3d, Route as RouteIcon, Search, Square as SquareIcon, Star as StarIcon, Triangle as TriangleIcon, Worm, X } from "lucide-react";
+import { AlertTriangle, ArrowDownToLine, ArrowUpFromLine, Check, CircleHelp, Cookie, Percent, Circle as CircleIcon, Eye, EyeOff, Hexagon as HexagonIcon, ListTree, Pencil, Pentagon as PentagonIcon, Pin, PinOff, Rotate3d, Route as RouteIcon, Search, Square as SquareIcon, Star as StarIcon, Triangle as TriangleIcon, Worm, X } from "lucide-react";
 import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from "react";
 import { useWheelField } from "@/lib/useWheelField";
 import { wheelNextValue } from "@/lib/wheelValueStep";
@@ -547,8 +547,25 @@ export function SecondaryToolbar({
   }, [historyViewActive]);
   const simpleMode = useSimpleMode();
   // Groups the window has no room for fold into one button that opens on hover or a tap (Stefan, 29.10.2026). The simple
-  // mode keeps every tool in sight, as it always did.
-  useToolbarCollapse(toolbarContentRef, !simpleMode);
+  // mode keeps every tool in sight, as it always did, and so does the pin in the title row, for whoever wants it so.
+  const [ribbonPinned, setRibbonPinned] = useState(false);
+  useEffect(() => {
+    try {
+      setRibbonPinned(window.localStorage.getItem("layerling.editor.ribbonPinned") === "true");
+    } catch {
+      // Blocked storage: the groups fold as the window needs.
+    }
+  }, []);
+  const toggleRibbonPinned = () => {
+    const next = !ribbonPinned;
+    setRibbonPinned(next);
+    try {
+      window.localStorage.setItem("layerling.editor.ribbonPinned", String(next));
+    } catch {
+      // The pin still holds for this visit.
+    }
+  };
+  useToolbarCollapse(toolbarContentRef, !simpleMode && !ribbonPinned);
   /** The one button a folded group shows under its name, with the icon of the tool it is known by. */
   const collapseBox = (label: string, Icon: ComponentType) => (
     <div className="toolbar-section-tools toolbar-collapse-box">
@@ -1470,6 +1487,18 @@ export function SecondaryToolbar({
           </label>
         </div>
         <div className="toolbar-title-row-actions">
+          {simpleMode ? null : (
+            <button
+              className={`toolbar-ribbon-pin ${ribbonPinned ? "active" : ""}`}
+              type="button"
+              aria-pressed={ribbonPinned}
+              aria-label={t("editor.ribbonPin")}
+              title={ribbonPinned ? t("editor.ribbonUnpin") : t("editor.ribbonPin")}
+              onClick={toggleRibbonPinned}
+            >
+              {ribbonPinned ? <Pin size={17} aria-hidden="true" /> : <PinOff size={17} aria-hidden="true" />}
+            </button>
+          )}
           {/* The help is the same in 3D and in a sketch, so it sits in the title row they share, as a small group with its
               name, and the ribbon keeps its room for the tools (Stefan, 29.10.2026). */}
           {simpleMode ? null : (

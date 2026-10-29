@@ -907,6 +907,8 @@ export const MESSAGES_CS: Record<MessageKey, string> = {
   "status.bugReportBuilding": "Příprava hlášení chyby…",
   "status.bugReportSaved": "Hlášení chyby bylo uloženo jako ZIP. Přiložte soubor k příspěvku na fóru nebo GitHubu.",
   "editor.group.help": "Nápověda",
+  "editor.ribbonPin": "Ponechat všechny skupiny otevřené",
+  "editor.ribbonUnpin": "Sbalit skupiny, když není místo",
   "editor.guide": "Stručný průvodce",
   "guide.title": "Stručný průvodce",
   "guide.close": "Zavřít stručného průvodce",

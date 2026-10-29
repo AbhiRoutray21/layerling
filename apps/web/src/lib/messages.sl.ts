@@ -672,6 +672,8 @@ export const MESSAGES_SL: Partial<Record<MessageKey, string>> = {
   "status.bugReportBuilding": "Priprava poročila o napaki …",
   "status.bugReportSaved": "Poročilo o napaki shranjeno. Datoteko priloži objavi v forumu ali na GitHubu.",
   "editor.group.help": "Pomoč",
+  "editor.ribbonPin": "Vse skupine naj ostanejo odprte",
+  "editor.ribbonUnpin": "Strni skupine, ko zmanjka prostora",
   "editor.guide": "Hitri vodnik",
   "guide.title": "Hitri vodnik",
   "guide.close": "Zapri hitri vodnik",
