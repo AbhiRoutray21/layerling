@@ -447,6 +447,48 @@ export function ToolbarSurfaceTextureIcon(props: IconProps) {
   );
 }
 
+/** Three links of a print-in-place chain in a gentle bend, held by the round joints between them. */
+export function ToolbarFlexiIcon(props: IconProps) {
+  return (
+    <ToolbarVectorIcon {...props}>
+      <rect x="4" y="25" width="14" height="10" rx="3.5" transform="rotate(-24 11 30)" {...SOLID} />
+      <rect x="4" y="25" width="14" height="10" rx="3.5" transform="rotate(-24 11 30)" />
+      <rect x="17" y="18" width="14" height="10" rx="3.5" {...SOLID} />
+      <rect x="17" y="18" width="14" height="10" rx="3.5" />
+      <rect x="30" y="25" width="14" height="10" rx="3.5" transform="rotate(24 37 30)" {...SOLID} />
+      <rect x="30" y="25" width="14" height="10" rx="3.5" transform="rotate(24 37 30)" />
+      <circle cx="17.5" cy="26" r="3" fill="currentColor" stroke="none" />
+      <circle cx="30.5" cy="26" r="3" fill="currentColor" stroke="none" />
+    </ToolbarVectorIcon>
+  );
+}
+
+/** A star cutter seen from above: the thin wall between the outline and the cookie inside it. */
+export function ToolbarCookieCutterIcon(props: IconProps) {
+  const outer = "M24 7 29.1 19 42.1 20.1 32.2 28.7 35.2 41.4 24 34.6 12.8 41.4 15.8 28.7 5.9 20.1 18.9 19Z";
+  const inner = "M24 12.8 27.5 21.1 36.6 21.9 29.7 27.9 31.8 36.7 24 32 16.2 36.7 18.3 27.9 11.4 21.9 20.5 21.1Z";
+  return (
+    <ToolbarVectorIcon {...props}>
+      <path d={`${outer}${inner}`} fillRule="evenodd" fill="currentColor" opacity="0.3" stroke="none" />
+      <path d={outer} />
+      <path d={inner} strokeWidth="1.8" />
+    </ToolbarVectorIcon>
+  );
+}
+
+/** A box cut open, its lid lifted above it with the lip that fits into the opening. */
+export function ToolbarLidIcon(props: IconProps) {
+  return (
+    <ToolbarVectorIcon {...props}>
+      <path d="M8 23h7v10h18V23h7v17H8Z" {...SOLID} />
+      <path d="M8 23h7v10h18V23h7v17H8Z" />
+      <path d="M6 9h36v6H6Z" {...SOLID} />
+      <path d="M6 9h36v6H6Z" />
+      <path d="M16.5 15v4h15v-4" />
+    </ToolbarVectorIcon>
+  );
+}
+
 export function ToolbarSnapGridIcon(props: IconProps) {
   return (
     <ToolbarVectorIcon {...props}>
