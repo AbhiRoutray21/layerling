@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **A cookie cutter from overlapping parts runs round all of them (#982):** Two shapes that overlap - a box and a cylinder over its corner - gave each its own wall, crossing in the middle of the cutter, unless they were grouped first. The outlines the workplane cuts through the parts are now united before the cutter is built (`unitedFootprint`, each body by the even-odd rule, then the union of all), so overlapping parts give one outline round all of them; parts apart from each other still give a cutter each. Reported by @raradek in #982.
+
 ## 1.119.0
 
 - **A cookie cutter from a text body timed out (#982):** Since 1.118.1 the cutter tried to chamfer the cutting edge onto every wall. A text body gives its outline as hundreds of short straight pieces cut from its triangles, and one try of the CAD kernel at chamfering the 1 670 pieces of "Wera" ran 159 s before it failed, so the sketch worker stopped at 30 s and the cutter was not made at all. Rims of more than 200 pieces now take no edge at once (the wall gets a flat top and the message says so, as intended), and no further try starts after 8 s. Reported by @avxmw in #982.
