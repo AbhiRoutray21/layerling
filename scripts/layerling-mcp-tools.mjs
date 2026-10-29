@@ -741,6 +741,25 @@ export const tools = [
     },
   },
   {
+    name: "layerling_flexi_joints",
+    description: "Make flexi links from the given objects, like the editor's Flexi joints button: a body lying flat on the plate (a fish, a snake, a dragon drawn as a sketch or SVG and extruded) is cut across its length into links, with a joint printed in place at every cut, so the links swing to the sides once printed. Solids among the ids are joined and holes among them cut away; the links replace them as meshes in one bundle, from the body's start to its end. Each joint is an upright knuckle, thicker in the middle than at its ends (45 degree cones, no support needed), held in a socket of the next link with the clearance all round; the cut between two links is a V that opens by the swing angle. axis: X or Y, the side to cut along (default the body's longer side); joints (default as many as the body's length and width suggest; without it fewer are tried when they lie too close); clearance in mm (0.1 to 1, default 0.4); swing to each side in degrees (5 to 60, default 30; a small joint may allow less, the answer says how much); size, the knuckle's diameter at its widest in mm (default the largest that fits, up to 12); start and end, how far the first joint lies from the body's start and the last from its end along the axis in mm (default links of equal length). Where a joint goes the body should be about 6 mm high and 12 mm wide at least; a joint that does not fit is named in the error. Returns the new bundle with joints, links, the smallest swing and the axis.",
+    inputSchema: {
+      ...editorTargetSchema,
+      required: ["ids"],
+      properties: {
+        ...editorTargetSchema.properties,
+        ids: { type: "array", items: { type: "string" } },
+        axis: { type: "string", enum: ["X", "Y"] },
+        joints: { type: "number" },
+        clearance: { type: "number" },
+        swing: { type: "number" },
+        size: { type: "number" },
+        start: { type: "number" },
+        end: { type: "number" },
+      },
+    },
+  },
+  {
     name: "layerling_loft_sketches",
     description: "Loft between two sketch bodies, like the editor's Loft sketches button: two extruded sketch or SVG bodies, each with one outline (a ring with holes in both is fine, as long as both have as many), become one exact body whose bottom is the outline of the lower body at its bottom and whose top is the outline of the upper body at its top, with straight walls between them - for a funnel, a transition piece or a tapered frame. Each outline is taken where its body stands, turned about the vertical and stretched as the body is; bodies tipped over are refused. The two bodies stay inside the result as a group with groupOperation loft: layerling_open_group opens them, and closing the group builds the loft again. Returns the new object.",
     inputSchema: {

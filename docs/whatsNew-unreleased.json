@@ -1,6 +1,16 @@
 [
   {
     "title": {
+      "de": "Flexi-Gelenke",
+      "en": "Flexi joints"
+    },
+    "body": {
+      "de": "Das neue Werkzeug Flexi-Gelenke teilt einen flachen Körper, etwa einen selbst gezeichneten Fisch oder Drachen, in Glieder und setzt an jeden Schnitt ein Gelenk, das gleich mitgedruckt wird. Nach dem Druck bewegt sich die Figur, ohne Stützen und ohne Zusammenbauen.",
+      "en": "The new Flexi joints tool cuts a flat body, a fish or a dragon you drew yourself, into links and puts a joint printed in place at every cut. Once printed, the figure moves, without support or assembly."
+    }
+  },
+  {
+    "title": {
       "de": "Oberflächentextur: Ziegel, Rinde und Holz",
       "en": "Surface texture: bricks, bark and wood"
     },
