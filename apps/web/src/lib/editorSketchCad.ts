@@ -10,11 +10,11 @@ import { buildSketchRevolveMesh, normalizeSketchRevolveSettings } from "@/lib/sk
 import { placementWorkplaneCoordinates, type PlacementWorkplane } from "@/lib/placementWorkplane";
 import { silhouetteSketchProfile } from "@/lib/sketchCadProfile";
 import { sweepPlan } from "@/lib/cadSketchSweep";
-import { filledGrowPockets, strokedSketchProfile } from "@/lib/sketchStroke";
+import { filledGrowPockets, strokeEdgeChamfer, strokedSketchProfile } from "@/lib/sketchStroke";
 import { keyringSketchProfile } from "@/lib/sketchKeyring";
 import type { ManifoldToplevel } from "manifold-3d";
 import type { CadModifierDeflection } from "@/lib/cadModifierTypes";
-import { SKETCH_INSET_UNSUPPORTED, SKETCH_STROKE_UNSUPPORTED, type SketchCadBuildResponse } from "@/lib/sketchCadTypes";
+import { SKETCH_EDGE_FAILED, SKETCH_INSET_UNSUPPORTED, SKETCH_STROKE_UNSUPPORTED, type SketchCadBuildResponse } from "@/lib/sketchCadTypes";
 import { insetSketchProfile } from "@/lib/faceTool";
 import type { SketchInset, SketchOperation, SketchProfile, SketchRevolveSettings, SketchStroke, WorkplaneShape } from "@/types/layerling";
 import { MIN_SHAPE_DIMENSION, cleanModelDimension, getManifoldRuntime, meshForShape } from "@/lib/editorMeshCore";
@@ -93,8 +93,10 @@ export async function cadShapeFromSketchProfile(profile: SketchProfile, height: 
   const safeHeight = Math.max(MIN_SHAPE_DIMENSION, height);
   // A silhouette leaves its holes out first, so its outer line runs round the outside only (#197).
   const buildProfile = profile.silhouette ? silhouetteSketchProfile(profile) : profile;
+  // A cutting edge (#982) is chamfered onto whatever the stroke is built as, the kernel's own outline or the straight pieces.
+  const topChamfer = strokeEdgeChamfer(profile.stroke, safeHeight);
   const buildOnWorker = (build: SketchProfile, stroke?: SketchStroke, inset?: SketchInset) =>
-    requestSketchCad({ type: "build", profile: cloneSketchProfile(build), height: safeHeight, ...(stroke ? { stroke } : {}), ...(inset ? { inset } : {}) });
+    requestSketchCad({ type: "build", profile: cloneSketchProfile(build), height: safeHeight, ...(stroke ? { stroke } : {}), ...(inset ? { inset } : {}), ...(topChamfer > 0 ? { topChamfer } : {}) });
   let response: SketchCadBuildResponse;
   // A key ring hole (#391): the outline the sketch fills with its ear and its hole is worked out here and built as an area.
   const withKeyring = profile.keyring ? keyringSketchProfile(await getManifoldRuntime(), profile) : null;
@@ -135,7 +137,7 @@ export async function cadShapeFromSketchProfile(profile: SketchProfile, height: 
   } else {
     response = await buildOnWorker(buildProfile);
   }
-  if (response.type === "error") throw new Error(response.message);
+  if (response.type === "error") throw new Error(response.message === SKETCH_EDGE_FAILED ? t("sketch.edgeFailed") : response.message);
   const source = canonicalizeShape({
     ...(existing ?? {
       id: createLocalId("sketch-extrusion"),
