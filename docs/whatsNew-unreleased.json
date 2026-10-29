@@ -8,5 +8,15 @@
       "de": "Beim Ziehen am schwarzen Pfeil über einem Körper steht jetzt an seiner vorderen Ecke, wie weit er hoch- oder runterging. Nach dem Loslassen klickst du auf die Zahl und tippst den genauen Weg ein, so wie beim Verschieben in X und Y.",
       "en": "Dragging the black arrow above a body now shows at its front corner how far it went up or down. Once you let go, click the number and type the exact distance, as you can when moving in X and Y."
     }
+  },
+  {
+    "title": {
+      "de": "Maßband: auch nach innen",
+      "en": "Tape measure: inwards too"
+    },
+    "body": {
+      "de": "Eine negative Länge schiebt den Körper über den ersten Messpunkt hinaus, etwa ein Loch 5 mm hinter die Kante eines Quaders. Mit Shift bleibt die Messung gerade, und das Fadenkreuz lässt den Fangpunkt frei.",
+      "en": "A negative length moves the body past the first measuring point, a hole 5 mm inside the edge of a box for example. Shift keeps the measurement straight, and the crosshair leaves the snap point visible."
+    }
   }
 ]

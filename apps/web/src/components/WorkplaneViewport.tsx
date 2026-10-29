@@ -80,7 +80,7 @@ import type { CadModifierEdge } from "@/lib/cadModifierTypes";
 import { type CadFacePick } from "@/lib/cadFacePick";
 import { disposeCadFacePickMesh } from "@/lib/cadFacePickMesh";
 import { latchedDragAxis, type DragAxis } from "@/lib/dragAxisLatch";
-import { axisLockedPoint, circleOfEdgePoints, perpendicularFootOnSegment, pointAcrossCircle, pointOnCircle } from "@/lib/tapeCircle";
+import { axisLockedPoint, circleOfEdgePoints, perpendicularFootOnSegment, pointAcrossCircle, pointOnCircle, tapeLengthShift } from "@/lib/tapeCircle";
 import { syncHistoryPickHighlight, syncPickHighlight } from "@/components/workplane/historyPickHighlight";
 import { orbitViewBy, panViewBy } from "@/lib/viewArrowKeys";
 import { useViewportKeyboardHooks } from "@/components/workplane/viewportKeyboard";
@@ -1786,6 +1786,7 @@ export function WorkplaneViewport({
   const noteClickSuppressedRef = useRef<string | null>(null);
   const tapeOverlayRef = useRef<TapeOverlayState | null>(null);
   const tapeIdRef = useRef(-1);
+  const tapeShiftHintShownRef = useRef(false);
   if (tapeIdRef.current < 0) tapeIdRef.current = highestTapeIdNumber(tapeModel); // New ids count on from the kept measurements' (#881).
   const rulerDimensionOverlayRef = useRef<RulerDimensionOverlayState | null>(null);
   const cornerRulerModeRef = useRef(false);
@@ -3681,6 +3682,12 @@ export function WorkplaneViewport({
           startNormal: candidate.surfaceNormal ?? null,
           hover: { x: point.x, y: point.y, z: point.z, attachment: point.attachment },
         });
+        // A first point a little off the middle gives a slanted line; Shift keeps it straight (#589),
+        // which nobody finds by chance (#963). Said once per visit, at the moment it helps.
+        if (!tapeShiftHintShownRef.current) {
+          tapeShiftHintShownRef.current = true;
+          onNotice?.(t("status.tapeShiftHint"));
+        }
         return;
       }
       if (current.startPointId === point.id) {
@@ -3697,7 +3704,7 @@ export function WorkplaneViewport({
         : [...current.segments, { id: `tape-segment-${++tapeIdRef.current}`, startId: current.startPointId, endId: point.id }];
       storeTapeModel({ points, segments, startPointId: null, startEdge: null, startNormal: null, hover: null });
     },
-    [storeTapeModel],
+    [onNotice, storeTapeModel],
   );
 
   const updateTapeHover = useCallback(
@@ -5446,7 +5453,8 @@ export function WorkplaneViewport({
   }, []);
 
   // A typed length moves the body at one end of a measurement along the measured line, until the
-  // distance is the typed one; the points stay on the body, so the measurement follows (#823).
+  // distance is the typed one; the points stay on the body, so the measurement follows (#823). A
+  // negative length takes it that far past the other point, from the edge of a box to inside it (#963).
   const beginTapeLengthEdit = useCallback((segmentId: string) => {
     const state = threeRef.current;
     const segment = tapeOverlayRef.current?.segments.find((entry) => entry.id === segmentId);
@@ -5465,13 +5473,11 @@ export function WorkplaneViewport({
     const shapeId = tapeMovableShapeId(tapeModelRef.current, edit.segmentId, selectedIdsRef.current);
     const shape = shapeId ? shapesRef.current.find((entry) => entry.id === shapeId) : undefined;
     const [start, end] = tapeSegmentWorldPoints(state, tapeModelRef.current, edit.segmentId);
-    if (!shape || !start || !end || !Number.isFinite(value) || value < 0) return;
-    const length = start.distanceTo(end);
-    if (length < 1e-6) return;
+    if (!shape || !start || !end || !Number.isFinite(value)) return;
     const segment = tapeModelRef.current.segments.find((entry) => entry.id === edit.segmentId);
     const movesEnd = tapeModelRef.current.points.find((point) => point.id === segment?.endId)?.attachment?.shapeId === shape.id;
-    const shift = end.clone().sub(start).multiplyScalar((value - length) / length);
-    if (!movesEnd) shift.negate();
+    const shift = tapeLengthShift(start, end, value, movesEnd);
+    if (!shift) return;
     onInteractionActiveChange?.(true);
     onUpdateShape(shape.id, {
       ...(Math.abs(shift.x) > 1e-9 ? { x: cleanNearZero(shape.x + shift.x, 0.0005) } : {}),
