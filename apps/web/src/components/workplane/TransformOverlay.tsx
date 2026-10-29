@@ -12,14 +12,15 @@ import {
 
 export {
   continuousSnappedWheelRotation,
+  dimensionMarkNeedsScreenLayout,
   dimensionMarkScreenPush,
-  dimensionMarkScreenShrink,
   getElevationMeasureKey,
   isPointInsideTransformBounds,
   measureKeyForHandle,
   normalizedRotationPlaneBasis,
   rotateHandleArrow,
   rotationPlaneDirectionSign,
+  screenSpaceDimensionMark,
   transformBoundsIntersectClipVolume,
   transformOverlayScreenPoint,
   snappedRotationDelta,
