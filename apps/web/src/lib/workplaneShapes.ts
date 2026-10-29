@@ -779,6 +779,7 @@ export function workplaneShapesEqual(a: WorkplaneShape, b: WorkplaneShape) {
     a.edgeResizeMode === b.edgeResizeMode &&
     a.cadBrep === b.cadBrep &&
     a.cadBrepFrame === b.cadBrepFrame &&
+    a.sketchPose === b.sketchPose &&
     a.cadPrimitiveFrame === b.cadPrimitiveFrame &&
     a.groupedShapes === b.groupedShapes &&
     a.groupedBaseWidth === b.groupedBaseWidth &&

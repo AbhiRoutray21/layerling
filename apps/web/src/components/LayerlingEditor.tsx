@@ -161,7 +161,7 @@ import { DEFAULT_SKETCH_STROKE, normalizeSketchStroke, strokedSketchProfile } fr
 import { bottomCadModifierEdgeIds, horizontalCadModifierEdgeIds, topCadModifierEdgeIds, verticalCadModifierEdgeIds } from "@/lib/topEdges";
 import { tangentCadEdgeChain } from "@/lib/cadEdgeChain";
 import { sketchEditTurn, turnedSketchProfile, type SketchEditTurn } from "@/lib/sketchEditTurn";
-import { movedWithEditedOutline, placedLikeExisting, placeSketchShape, sketchBodyAnchor, type SketchAnchor } from "@/lib/sketchPlacement";
+import { movedWithEditedOutline, placedLikeExisting, placeSketchShape, sketchBodyAnchor, sketchPoseOf, type SketchAnchor } from "@/lib/sketchPlacement";
 import { notesWithSketchNotes, sketchNoteFrame, sketchNotesFromBody } from "@/lib/sketchNotes";
 import { useSketchNotes } from "@/lib/useSketchNotes";
 import { useEditorNotes } from "@/lib/useEditorNotes";
@@ -2303,7 +2303,8 @@ function separateShapeParts(shape: WorkplaneShape) {
  * its own, as when the sketch is edited down to it, so each part stays where it was, keeps the body's
  * height, turn and colour, and has a sketch of its own to edit. The first part keeps the body's id.
  */
-async function separateSketchBodyParts(shape: WorkplaneShape) {
+async function separateSketchBodyParts(baked: WorkplaneShape) {
+  const shape = sketchPoseOf(baked);
   const profiles = shape.sketchProfile ? sketchOutlineParts(shape.sketchProfile) : [];
   if (profiles.length < 2) return [];
   const quaternion = quaternionForShape(shape);
@@ -4714,21 +4715,23 @@ export function LayerlingEditor({
     let turn: SketchEditTurn | null = null;
     sketchEditAnchorRef.current = null;
     if (operation === "extrude" || operation === "sweep") {
-      const quaternion = quaternionForShape(selectedShape);
+      // Baked by an edge treatment, the body opens its sketch where it was drawn, turned as it was (#1006).
+      const body = sketchPoseOf(selectedShape);
+      const quaternion = quaternionForShape(body);
       const normal = new THREE.Vector3(0, 1, 0).applyQuaternion(quaternion).normalize();
       const xAxis = new THREE.Vector3(1, 0, 0).applyQuaternion(quaternion).normalize();
       const zAxis = new THREE.Vector3(0, 0, 1).applyQuaternion(quaternion).normalize();
       // The sketch is drawn over the body: the point of the outline under the body's middle goes there.
-      const anchor = sketchBodyAnchor(selectedShape);
+      const anchor = sketchBodyAnchor(body);
       sketchEditAnchorRef.current = anchor;
       const profileCenterX = anchor.x;
       const profileCenterZ = anchor.z;
       const origin = new THREE.Vector3(
-        selectedShape.x,
-        (selectedShape.elevation ?? 0) + selectedShape.height / 2,
-        selectedShape.z,
+        body.x,
+        (body.elevation ?? 0) + body.height / 2,
+        body.z,
       )
-        .addScaledVector(normal, -selectedShape.height / 2)
+        .addScaledVector(normal, -body.height / 2)
         .addScaledVector(xAxis, -profileCenterX)
         .addScaledVector(zAxis, -profileCenterZ);
       editWorkplane = placementWorkplaneFromSurface(
@@ -4738,7 +4741,7 @@ export function LayerlingEditor({
       );
       // Turned only about the vertical, it opens on the plate as it stands in 3D, turned and moved, on the plate's grid
       // (forum, 621358); before, its own frame made the bodies round it look turned and the grid sit off the plate's.
-      const upright = !selectedShape.rotationX && !selectedShape.rotationZ && !selectedShape.mirrorX && !selectedShape.mirrorY && !selectedShape.mirrorZ;
+      const upright = !body.rotationX && !body.rotationZ && !body.mirrorX && !body.mirrorY && !body.mirrorZ;
       turn = upright && !selectedShape.sketchProfile.keyring
         ? sketchEditTurn({ x: origin.x, z: origin.z }, { x: xAxis.x, z: xAxis.z }, { x: zAxis.x, z: zAxis.z })
         : null;
@@ -5467,7 +5470,9 @@ export function LayerlingEditor({
     const turn = sketchEditTurnRef.current;
     // The notes are not part of the body's sketch: they become the body's own.
     const { notes: sketchNotes, ...drawnProfile } = turn ? turnedSketchProfile(sketchProfile, turn, "toBody") : sketchProfile;
-    const edited = editingSketchShapeId ? shapes.find((shape) => shape.id === editingSketchShapeId) ?? null : null;
+    const editedBody = editingSketchShapeId ? shapes.find((shape) => shape.id === editingSketchShapeId) ?? null : null;
+    // A body baked by an edge treatment is built again where its sketch lay, turned as it was (#1006).
+    const edited = editedBody ? sketchPoseOf(editedBody) : null;
     // Switched to another kind of body (#655): a new body of that kind takes the edited one's place.
     const switchedBody = edited && sketchOperationSwitchRef.current ? edited : null;
     const existing = switchedBody ? null : edited;

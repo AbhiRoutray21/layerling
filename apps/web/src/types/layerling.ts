@@ -730,6 +730,17 @@ export type CadBrepFrame = {
 };
 
 /**
+ * Where an extruded sketch body's sketch lay once an edge treatment or hollowing baked its turn and place into its exact
+ * body (#1006): `transform` takes sketch points (y up from the sketch) into the exact body's own coordinates, `height`
+ * is the extrusion's and `anchor` the point of the outline under the body's middle, as it was before.
+ */
+export type SketchPose = {
+  transform: number[];
+  height: number;
+  anchor: { x: number; z: number };
+};
+
+/**
  * Was ein Koerper war, bevor eine Drehung ihn in ein Netz gebacken hat.
  *
  * Gedreht wird um die Mitte des Rahmens, und danach muss der Rahmen neu
@@ -1195,6 +1206,7 @@ export type WorkplaneShape = {
   edgeResizeMode?: "scale" | "preserve";
   cadBrep?: string;
   cadBrepFrame?: CadBrepFrame;
+  sketchPose?: SketchPose;
   // The finest tessellation deflection any edge treatment on this body has
   // needed so far. Carried forward as a floor for the next one, so a later
   // fillet with a larger radius cannot re-tessellate an already finely

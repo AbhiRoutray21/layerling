@@ -48,5 +48,15 @@
       "de": "Unter Blattform gibt es jetzt Finger: Jeder Knöchel trägt seinen eigenen Finger, und die beiden Seiten greifen wie zwei Kämme ineinander. So klappt das Scharnier ganz herum und liegt zugeklappt flach, etwa zwischen Kasten und Deckel.",
       "en": "Leaf shape now offers fingers: each knuckle carries a finger of its own, and the two sides interlock like two combs. The hinge folds all the way round and lies flat when closed, between a box and its lid for example."
     }
+  },
+  {
+    "title": {
+      "de": "Skizze bearbeiten nach einer Fase",
+      "en": "Edit sketch after a chamfer"
+    },
+    "body": {
+      "de": "Hatte ein gedrehter Skizzenkörper, etwa aus einer SVG, eine Fase oder Rundung bekommen, öffnete sich seine Skizze verdreht und verschoben. Sie liegt jetzt wieder genau über dem Körper.",
+      "en": "After a fillet or chamfer on a turned sketch body, from an SVG for example, its sketch opened turned and moved. It now lies right over the body again."
+    }
   }
 ]
