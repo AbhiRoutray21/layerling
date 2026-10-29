@@ -74,7 +74,7 @@ summary: 卷尺、标尺与角尺，到原点的距离，附着在零件上的�
 
 ## 参考点
 
-参考点是空间中的一个纯标记，就像车间里的铅笔记号或放样点：它不属于任何实体，永远不会被打印，其他东西会吸附到它上面。右键单击实体，选择 {{ui:contextMenu.markCenter}}、{{ui:contextMenu.markCorners}} 或 {{ui:contextMenu.markMidpoints}}：点会出现在实体的顶面上（如果选中了多个，则出现在整个选择的顶面上）。 {{ui:contextMenu.markFaceCenter}} 则把点放在你右键单击的那个平面的中心，例如侧面或端面。
+参考点是空间中的一个纯标记，就像车间里的铅笔记号或放样点：它不属于任何实体，永远不会被打印，其他东西会吸附到它上面。右键单击实体，选择 {{ui:contextMenu.markCenter}}、{{ui:contextMenu.markCorners}} 或 {{ui:contextMenu.markMidpoints}}：点会出现在实体的顶面上（如果选中了多个，则出现在整个选择的顶面上）。 {{ui:contextMenu.markFaceCenter}} 则把点放在你右键单击的那个平面的中心，例如侧面或端面。设置了旋转中心时，{{ui:contextMenu.markPivot}}会在其上放一个点，这样另一个零件的中心就能吸附到选择所绕的那个点上。
 
 - 拖动点可移动它，或单击它查看坐标并输入新坐标；坐标使用你设定的单位。如果卡片挡住了东西，可以抓住它的标题单独拖开：其他卡片留在原处，双击标题即可归位。你最后碰过的卡片显示在其他卡片前面。卡片中的 **Delete all**，或右键菜单（实体的，或 3D 视图中空白处的）中的 **Delete all reference points**，会一次删除所有点。{{ui:common.delete}} 删除它。
 - 卷尺也能标记点：{{ui:camera.tapeMarkMiddle}}，即测量正中那个半填充的标记，会在测量中间放置一个点，例如圆孔的中心。它也能从一个点开始测量：卷尺吸附参考点就像吸附角一样。
