@@ -183,7 +183,7 @@ import type { CadFaceInfo, CadModifierComponentMesh, CadModifierDeflection, CadM
 import { getSectionBounds, sectionAxisLetter, sectionMeshInFrame, sectionPlacementWorkplane, sectionPointFromFrame, sectionPointToFrame, type SectionFrame, type SectionOrientation, type SectionPlaneAxis, type SectionPlaneSettings } from "@/lib/sectionView";
 import { FOOTPRINT_CUT_HEIGHT, footprintCutOffset, projectSectionPoint, SECTION_VIEW_FACE, sectionSvgDocument, sliceMeshContours } from "@/lib/sectionSvg";
 import type { AlignAxis, AlignHandleStatus, AlignTarget, EdgeTreatmentFeature, GridSize, ParametricSource, ProjectAsset, ProjectAttachment, ShapeAsset, ShapeCustomization, ShapeKind, SketchImage, SketchOperation, SketchPoint, SketchProfile, SketchRevolveSettings, SketchSegment, ShellEdges, ShellOpenings, ShellSide, SweepAnchor, WorkplaneNote, WorkplaneShape, WorkplaneWorkspaceSettings } from "@/types/layerling";
-import { type Vec3, type MeshData, type Cuboid, type ShapeUpdatePatch, type ManifoldSolid, MIN_SHAPE_DIMENSION, resetManifoldRuntime, cleanModelDimension, getManifoldRuntime, meshForShape, meshReachAlong, appendMeshData, formatTriangleCount, shapeAabb, boundsForShapes, boundsForCuboids, meshAabb, boundsForPositions, quantizedPointKey } from "@/lib/editorMeshCore";
+import { type Vec3, type MeshData, type Cuboid, type ShapeUpdatePatch, type ManifoldSolid, MIN_SHAPE_DIMENSION, resetManifoldRuntime, cleanModelDimension, getManifoldRuntime, meshForShape, meshReachAlong, appendMeshData, formatTriangleCount, shapeAabb, boundsForShapes, boundsForCuboids, meshAabb, boundsForPositions, quantizedPointKey, sameShapeApartFromPlacement } from "@/lib/editorMeshCore";
 import { meshPartCount } from "@/lib/meshPartCount";
 import { buildGroupedShapeOffThread, exportSolidVolumeOffThread, callOffFaceRead, faceReadInWorker, createFaceReadKeeper, faceReadPositionsOffThread, simplifyTrianglePositionsOffThread, splitShapesByPlaneOffThread, subscribeGeometryBusy, warmGeometryWorker } from "@/lib/geometryWorker";
 import { roundedAlignedValue } from "@/lib/alignRounding";
@@ -2210,6 +2210,9 @@ function cadModifierSourceParts(shape: WorkplaneShape) {
  * counted it again at every step and stalled the drag.
  */
 const importedPartCounts = new WeakMap<object, number>();
+// The same for a shape built from its settings: moving, turning or picking a vase counted its 200,000
+// triangles again (0.2 s at every step of a drag), and a spring or a gear the same way.
+const builtPartCounts: Array<{ shape: WorkplaneShape; count: number }> = [];
 
 /** Stand-ins for "no edges", the same arrays at every render, so the workplane does not draw the edge lines again for nothing. */
 const NO_MODIFIER_EDGES: CadModifierEdge[] = [];
@@ -2218,7 +2221,15 @@ const NO_EDGE_IDS: number[] = [];
 function separablePartCount(shape: WorkplaneShape) {
   if (shape.locked || shape.hole) return 0;
   if (shape.groupedShapes?.length && !shape.importedMesh) return shape.groupedShapes.length;
-  if (!shape.importedMesh) return meshPartCount(meshForShape(shape), SEPARATE_PARTS_VERTEX_TOLERANCE);
+  if (!shape.importedMesh) {
+    // Text stands in for itself until its font has loaded, so it is counted each time.
+    const known = shape.kind === "text" ? undefined : builtPartCounts.find((entry) => sameShapeApartFromPlacement(entry.shape, shape));
+    if (known) return known.count;
+    const count = meshPartCount(meshForShape(shape), SEPARATE_PARTS_VERTEX_TOLERANCE);
+    if (shape.kind !== "text") builtPartCounts.push({ shape: { ...shape }, count });
+    if (builtPartCounts.length > 24) builtPartCounts.shift();
+    return count;
+  }
   const cached = importedPartCounts.get(shape.importedMesh);
   if (cached !== undefined) return cached;
   const count = meshPartCount(meshForShape(shape), SEPARATE_PARTS_VERTEX_TOLERANCE);
