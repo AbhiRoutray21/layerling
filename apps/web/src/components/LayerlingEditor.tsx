@@ -158,6 +158,7 @@ import { svgSketchMatchesMesh } from "@/lib/svgSketch";
 import { DEFAULT_SKETCH_STROKE, normalizeSketchStroke, strokedSketchProfile } from "@/lib/sketchStroke";
 import { bottomCadModifierEdgeIds, horizontalCadModifierEdgeIds, topCadModifierEdgeIds, verticalCadModifierEdgeIds } from "@/lib/topEdges";
 import { tangentCadEdgeChain } from "@/lib/cadEdgeChain";
+import { sketchEditTurn, turnedSketchProfile, type SketchEditTurn } from "@/lib/sketchEditTurn";
 import { movedWithEditedOutline, placedLikeExisting, placeSketchShape, sketchBodyAnchor, type SketchAnchor } from "@/lib/sketchPlacement";
 import { notesWithSketchNotes, sketchNoteFrame, sketchNotesFromBody } from "@/lib/sketchNotes";
 import { useSketchNotes } from "@/lib/useSketchNotes";
@@ -4594,6 +4595,8 @@ export function LayerlingEditor({
 
   /** Where the edited body's middle is in the sketch, when the sketch of an existing body was opened (#291). */
   const sketchEditAnchorRef = useRef<SketchAnchor | null>(null);
+  // A body turned about the vertical is edited on the plate as it stands (forum, 621358): how to turn the drawing back.
+  const sketchEditTurnRef = useRef<SketchEditTurn | null>(null);
   /**
    * The edited body's own kind and workplane, once its sketch was switched to another kind of body (#655):
    * finishing then makes a new body of that kind in the old one's place, and switching back edits it as before.
@@ -4606,11 +4609,14 @@ export function LayerlingEditor({
     editingId: string | null = null,
     revolveSettings?: Partial<SketchRevolveSettings>,
     workplaneOverride?: PlacementWorkplane,
+    turn?: SketchEditTurn | null,
   ) => {
     const body = editingId ? shapesRef.current.find((shape) => shape.id === editingId) : undefined;
     const drawn = profile ?? emptySketchProfile();
     // The body's notes come along, shown on the sketch, and go back to the body when it is finished.
-    const initial = cloneSketchProfile({ ...drawn, notes: body ? sketchNotesFromBody(notesRef.current, body, sketchNoteFrame(body, operation, drawn, revolveSettings)) : [] });
+    const own = { ...drawn, notes: body ? sketchNotesFromBody(notesRef.current, body, sketchNoteFrame(body, operation, drawn, revolveSettings)) : [] };
+    sketchEditTurnRef.current = turn ?? null;
+    const initial = cloneSketchProfile(turn ? turnedSketchProfile(own, turn, "toPlate") : own);
     setCruiseAsset(null);
     setNoteMode(false);
     setWorkplaneMode(false);
@@ -4648,6 +4654,7 @@ export function LayerlingEditor({
     }
     const operation = sketchBodyOperation(selectedShape);
     let editWorkplane: PlacementWorkplane | undefined;
+    let turn: SketchEditTurn | null = null;
     sketchEditAnchorRef.current = null;
     if (operation === "extrude" || operation === "sweep") {
       const quaternion = quaternionForShape(selectedShape);
@@ -4672,6 +4679,13 @@ export function LayerlingEditor({
         { x: normal.x, y: normal.y, z: normal.z },
         { x: xAxis.x, y: xAxis.y, z: xAxis.z },
       );
+      // Turned only about the vertical, it opens on the plate as it stands in 3D, turned and moved, on the plate's grid
+      // (forum, 621358); before, its own frame made the bodies round it look turned and the grid sit off the plate's.
+      const upright = !selectedShape.rotationX && !selectedShape.rotationZ && !selectedShape.mirrorX && !selectedShape.mirrorY && !selectedShape.mirrorZ;
+      turn = upright && !selectedShape.sketchProfile.keyring
+        ? sketchEditTurn({ x: origin.x, z: origin.z }, { x: xAxis.x, z: xAxis.z }, { x: zAxis.x, z: zAxis.z })
+        : null;
+      if (turn) editWorkplane = placementWorkplaneFromSurface({ x: 0, y: origin.y, z: 0 }, { x: 0, y: 1, z: 0 }, { x: 1, y: 0, z: 0 });
     } else if (operation === "revolve") {
       const quaternion = quaternionForShape(selectedShape);
       const normal = new THREE.Vector3(0, 1, 0).applyQuaternion(quaternion).normalize();
@@ -4687,13 +4701,14 @@ export function LayerlingEditor({
         { x: xAxis.x, y: xAxis.y, z: xAxis.z },
       );
     }
-    beginSketch(operation, selectedShape.sketchProfile, selectedShape.id, selectedShape.sketchRevolve, editWorkplane);
+    beginSketch(operation, selectedShape.sketchProfile, selectedShape.id, selectedShape.sketchRevolve, editWorkplane, turn);
   }, [beginSketch, selectedShape, selectedShapes.length]);
 
   const cancelSketch = useCallback(() => {
     setSketchActive(false);
     setNoteMode(false);
     sketchEditAnchorRef.current = null;
+    sketchEditTurnRef.current = null;
     sketchOperationSwitchRef.current = null;
     setSketchActivePointId(null);
     setSketchSelection(null);
@@ -5391,8 +5406,10 @@ export function LayerlingEditor({
   }, [sketchActive, sketchOperation, sketchProfile]);
 
   const finishSketch = useCallback(async () => {
+    // Drawn on the plate for a turned body: back into the body's frame, which it keeps.
+    const turn = sketchEditTurnRef.current;
     // The notes are not part of the body's sketch: they become the body's own.
-    const { notes: sketchNotes, ...drawnProfile } = sketchProfile;
+    const { notes: sketchNotes, ...drawnProfile } = turn ? turnedSketchProfile(sketchProfile, turn, "toBody") : sketchProfile;
     const edited = editingSketchShapeId ? shapes.find((shape) => shape.id === editingSketchShapeId) ?? null : null;
     // Switched to another kind of body (#655): a new body of that kind takes the edited one's place.
     const switchedBody = edited && sketchOperationSwitchRef.current ? edited : null;
@@ -5477,6 +5494,7 @@ export function LayerlingEditor({
     setSketchRevolvePreview(null);
     setEditingSketchShapeId(null);
     sketchEditAnchorRef.current = null;
+    sketchEditTurnRef.current = null;
     sketchOperationSwitchRef.current = null;
     setToolbarMode("geometry");
   }, [activeSketchWorkplane, commitShapes, editingSketchShapeId, shapes, sketchOperation, sketchProfile, sketchRevolveSettings]);
