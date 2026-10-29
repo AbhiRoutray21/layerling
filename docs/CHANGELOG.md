@@ -6,6 +6,7 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **The height above the workplane among the sizes (#979):** With "Dimensions always visible" a selected body showed its width, depth and height, but its height above the workplane only while the black arrow was hovered, unlike Tinkercad. A body that does not stand on the workplane now shows it with the other sizes, and a click on the number takes a new value (a calculation it was set from comes back in the box); on the workplane, where it would only be a 0, it stays away. Q hides it with the others. Suggested by @PBusardo in #979.
 - **Vertical text along a curve (#981):** The letters one under another could only be set on straight text; on a curve the switch was off, so a name down the rim of a disk meant placing each letter by hand. *Letters top to bottom* now also works on curved text: the letters form a column along the left side of the circle of the text radius, each one standing upright, so the name follows the rim of a disk. *On the right side* puts the column on the other side of the circle, and the radius and letter size move it and fit it. Through MCP, `vertical` sets it on curved text too.
 
 ## 1.120.1

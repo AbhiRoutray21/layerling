@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "title": {
+      "de": "Höhe über der Arbeitsebene bei den Maßen",
+      "en": "Height above the workplane among the sizes"
+    },
+    "body": {
+      "de": "Schwebt ein markierter Körper über der Arbeitsebene, steht seine Höhe darüber jetzt gleich bei Breite, Tiefe und Höhe. Ein Klick auf die Zahl nimmt einen neuen Wert.",
+      "en": "When a selected body floats above the workplane, its height above it now shows right with its width, depth and height. Click the number to type a new one."
+    }
+  }
+]
