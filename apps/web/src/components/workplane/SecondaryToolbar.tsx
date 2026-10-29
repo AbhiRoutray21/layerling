@@ -1506,11 +1506,10 @@ export function SecondaryToolbar({
               {ribbonPinned ? <Pin size={17} aria-hidden="true" /> : <PinOff size={17} aria-hidden="true" />}
             </button>
           )}
-          {/* The help is the same in 3D and in a sketch, so it sits in the title row they share, as a small group with its
-              name, and the ribbon keeps its room for the tools (Stefan, 29.10.2026). */}
+          {/* The help is the same in 3D and in a sketch, so it sits in the title row they share, framed in its colour, and
+              the ribbon keeps its room for the tools (Stefan, 29.10.2026). No name beside it: that read as a button too. */}
           {simpleMode ? null : (
-            <div className="toolbar-title-help" data-group="help" role="group" aria-label={t("editor.group.help")}>
-              <span className="toolbar-title-help-label">{t("editor.group.help")}</span>
+            <div className="toolbar-title-help" data-group="help" role="group" aria-label={t("editor.group.help")} title={t("editor.group.help")}>
               <button className="action-icon-button" type="button" aria-label={t("palette.open")} title={t("palette.open")} aria-haspopup="dialog" data-layerling-tool="command-search" onClick={openPalette}>
                 <Search className="toolbar-search-icon" aria-hidden="true" />
               </button>

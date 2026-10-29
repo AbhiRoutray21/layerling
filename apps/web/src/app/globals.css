@@ -3907,13 +3907,15 @@ html[data-theme="dark"] .toolbar-ribbon-pin:hover {
   background: #463727;
 }
 
-/* The help in the title row: a small group with its name, coloured as it was in the ribbon. */
+/* The help in the title row: its four buttons framed in the help colour, as the group was in the ribbon, without its name
+   (that read as a button). All four in the brown of the title row - the search and the question mark were near-black
+   beside the guide and the keyboard (Stefan, 29.10.2026). */
 .toolbar-title-help {
   --group-color: var(--group-help);
   display: flex;
   height: 34px;
   margin-right: 8px;
-  padding: 0 4px 0 9px;
+  padding: 0 4px;
   align-items: center;
   gap: 2px;
   background: color-mix(in srgb, var(--group-color) 7%, var(--toolbar-tile));
@@ -3921,30 +3923,34 @@ html[data-theme="dark"] .toolbar-ribbon-pin:hover {
   border-radius: 10px;
 }
 
-.toolbar-title-help-label {
-  margin-right: 4px;
-  color: var(--group-color);
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 10px;
-  font-weight: 800;
-  text-transform: uppercase;
-  white-space: nowrap;
-  user-select: none;
-}
-
 .toolbar-title-help .action-icon-button {
   width: 30px;
   height: 28px;
+  color: #634729;
 }
 
-/* On a narrow window - a tablet held upright - the name of the design needs the room: the help keeps its icons, the
-   colour scheme its palette. */
-@media (max-width: 1100px) {
-  .toolbar-title-help {
-    padding-left: 4px;
-  }
+.toolbar-title-help .action-icon-button .toolbar-search-icon,
+.toolbar-title-help .action-icon-button .toolbar-vector-art-icon {
+  color: inherit;
+}
 
-  .toolbar-title-help-label,
+.toolbar-title-help .action-icon-button:hover,
+.toolbar-title-help .action-icon-button.active {
+  color: var(--group-color);
+}
+
+html[data-theme="dark"] .toolbar-title-help .action-icon-button {
+  color: #e3d3c0;
+}
+
+html[data-theme="dark"] .toolbar-title-help .action-icon-button:hover,
+html[data-theme="dark"] .toolbar-title-help .action-icon-button.active {
+  color: #f7f2ea;
+}
+
+/* On a narrow window - a tablet held upright - the name of the design needs the room: the colour scheme keeps its
+   palette only. */
+@media (max-width: 1100px) {
   .toolbar-title-row-actions .theme-switch:not(.language-switch) .theme-switch-label {
     display: none;
   }

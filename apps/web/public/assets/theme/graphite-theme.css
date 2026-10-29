@@ -1484,8 +1484,27 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .toolbar-ribbon-pin:hov
   border: 2px solid var(--group-color);
 }
 
-:where(html[data-theme="dark"][data-palette="graphite"]) .toolbar-title-help-label {
+:where(html[data-theme="dark"][data-palette="graphite"]) .toolbar-title-help .action-icon-button {
+  color: #484848;
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .toolbar-title-help .action-icon-button .toolbar-search-icon,
+:where(html[data-theme="dark"][data-palette="graphite"]) .toolbar-title-help .action-icon-button .toolbar-vector-art-icon {
+  color: inherit;
+}
+
+:where(html[data-theme="dark"][data-palette="graphite"]) .toolbar-title-help .action-icon-button:hover,
+:where(html[data-theme="dark"][data-palette="graphite"]) .toolbar-title-help .action-icon-button.active {
   color: var(--group-color);
+}
+
+html[data-theme="dark"]:where([data-palette="graphite"]) .toolbar-title-help .action-icon-button {
+  color: #d2d2d2;
+}
+
+html[data-theme="dark"]:where([data-palette="graphite"]) .toolbar-title-help .action-icon-button:hover,
+html[data-theme="dark"]:where([data-palette="graphite"]) .toolbar-title-help .action-icon-button.active {
+  color: #f1f1f1;
 }
 
 :where(html[data-theme="dark"][data-palette="graphite"]) .toolbar-workspace-tabs button {
