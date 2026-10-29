@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **Vertical text along a curve (#981):** The letters one under another could only be set on straight text; on a curve the switch was off, so a name down the rim of a disk meant placing each letter by hand. *Letters top to bottom* now also works on curved text: the letters form a column along the left side of the circle of the text radius, each one standing upright, so the name follows the rim of a disk. *On the right side* puts the column on the other side of the circle, and the radius and letter size move it and fit it. Through MCP, `vertical` sets it on curved text too.
+
 ## 1.120.1
 
 - **A hollowed and filleted body rebuilt itself over and over, creeping along x (forum, 621472):** Since 1.117.2 a hollow body whose edges were filleted after the hollowing is hollowed again when it is resized, and the fillets are laid on the fresh walls. Whether it had been resized was read against the size it had straight after the hollowing - but a fillet makes the box a little smaller and moves its middle, so a body that had not been touched counted as resized: every two or three seconds it was hollowed and filleted again with "Walls recalculated", each time 0.16 mm further along x. Size and place are now read against the frame the last fillet left (`shellRebuildReference`). Reported by StonXX in the forum, with the design.
