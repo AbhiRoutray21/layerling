@@ -6,6 +6,7 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **Curved text keeps its place when the arc radius changes (#981):** The middle of the shape is the centre of the circle, so a bigger radius in the properties pushed the letters away from it - a column of vertical letters slid off the plate to the left, an arc moved up. The shape now moves the other way by the change, turned and mirrored as it is, so the letters stay where they sit and only bend more or less (`curvedRadiusPatch`). Centring the text on a disk still puts it concentric. Unit test in `textGeometry.test.ts`, checked in the editor. Reported by @RepairItDude in #981.
 - **Cookie cutter: the letters of a name are held to each other too (#982):** Each piece inside the outline was held by bridges to the outline round it only, and a bar never runs across another piece, so a letter in the middle of a name in a star found no clear way out between its neighbours: its bar only grazed it, and the e hung almost free. The pieces of one outline are now also joined to each other, the closest two first as long as they are not joined yet through others, so the bridges run as a web through all of them - a word gets a chain of short bars from letter to letter - and no bar runs across a third piece or another bar (`cookieCutterBridges`). Unit tests in `cookieCutter.test.ts`. Suggested by @avxmw in #982.
 
 ## 1.120.2

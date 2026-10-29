@@ -155,7 +155,7 @@ Napis ma biec nie prosto, tylko wzdłuż krawędzi monety, pokrywki albo pierśc
 
 Gdy je włączysz, tekst biegnie wzdłuż okręgu. Wszystkie litery stoją na tej samej linii bazowej, tak równo jak w zwykłym tekście. Są cztery ustawienia:
 
-- **{{ui:prop.textRadius}}** (od 5 do 500 mm): promień okręgu, po którym biegnie linia bazowa liter.
+- **{{ui:prop.textRadius}}** (od 5 do 500 mm): promień okręgu, po którym biegnie linia bazowa liter. Litery zostają na swoim miejscu, zmienia się tylko ich wygięcie.
 - **{{ui:nameTag.letterSize}}:** jak wysokie są litery. Nie zależy już od szerokości kształtu.
 - **{{ui:prop.textInward}}:** przenosi tekst z góry okręgu na jego dół. Litery są wtedy zwrócone głowami do środka.
 - **{{ui:prop.textFlipped}}:** odwraca tylko litery, żeby dało się je czytać z drugiej strony. Tekst zostaje na swoim miejscu na okręgu.
