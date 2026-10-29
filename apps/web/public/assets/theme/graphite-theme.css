@@ -1688,6 +1688,10 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .toolbar-title-help .ac
   color: var(--toolbar-icon);
 }
 
+:where(html[data-theme="dark"][data-palette="graphite"]) .toolbar-icon:not(.disabled):not(.active) > svg.lucide {
+  color: var(--toolbar-icon);
+}
+
 :where(html[data-theme="dark"][data-palette="graphite"]) .toolbar-icon.active {
   background: var(--group-color);
   box-shadow: none;

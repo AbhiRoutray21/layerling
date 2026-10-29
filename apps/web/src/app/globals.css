@@ -4319,6 +4319,12 @@ html[data-theme="dark"] .toolbar-title-help .action-icon-button.active {
   color: var(--toolbar-icon);
 }
 
+/* A Lucide icon among the tools takes the dark of the drawn icons beside it, not the group colour the button carries:
+   Flexi joints, Cookie cutter and Lid stood out orange among the Modify tools as if they were on (Stefan, 29.10.2026). */
+.toolbar-icon:not(.disabled):not(.active) > svg.lucide {
+  color: var(--toolbar-icon);
+}
+
 /* An armed tool lights up in the colour of the group it belongs to. */
 .toolbar-icon.active {
   background: var(--group-color);
