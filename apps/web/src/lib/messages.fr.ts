@@ -1646,6 +1646,7 @@ export const MESSAGES_FR: Partial<Record<MessageKey, string>> = {
   "contextMenu.simplify": "Simplifier le maillage…",
   "contextMenu.markCenter": "Marquez le centre",
   "contextMenu.markFaceCenter": "Marquer le centre de cette face",
+  "contextMenu.markPivot": "Marquer le pivot",
   "contextMenu.markCorners": "Marquez les coins",
   "contextMenu.markMidpoints": "Marquez les milieux des bords",
   "contextMenu.removeAllPoints": "Supprimer tous les points de référence ({count})",

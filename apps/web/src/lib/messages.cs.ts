@@ -1723,6 +1723,7 @@ export const MESSAGES_CS: Record<MessageKey, string> = {
   "contextMenu.simplify": "Zjednodušit polygonovou síť…",
   "contextMenu.markCenter": "Označit střed",
   "contextMenu.markFaceCenter": "Označit střed této stěny",
+  "contextMenu.markPivot": "Označit střed otáčení",
   "contextMenu.markCorners": "Označit rohy",
   "contextMenu.markMidpoints": "Označit středy hran",
   "contextMenu.deleteKey": "Del",

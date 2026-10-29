@@ -2887,6 +2887,7 @@ export const MESSAGES_PT_BR: Partial<Record<MessageKey, string>> = {
   "contextMenu.simplify": "Simplificar malha…",
   "contextMenu.markCenter": "Marcar o centro",
   "contextMenu.markFaceCenter": "Marcar o centro desta face",
+  "contextMenu.markPivot": "Marcar o pivô",
   "contextMenu.markCorners": "Marcar os cantos",
   "contextMenu.markMidpoints": "Marcar os meios das arestas",
   "contextMenu.removeAllPoints": "Excluir todos os pontos de referência ({count})",

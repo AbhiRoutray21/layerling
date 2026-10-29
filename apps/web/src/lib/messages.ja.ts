@@ -1659,6 +1659,7 @@ export const MESSAGES_JA: Partial<Record<MessageKey, string>> = {
   "contextMenu.simplify": "メッシュを簡略化…",
   "contextMenu.markCenter": "中心に印を付ける",
   "contextMenu.markFaceCenter": "この面の中心に印を付ける",
+  "contextMenu.markPivot": "回転の中心に印を付ける",
   "contextMenu.markCorners": "角に印を付ける",
   "contextMenu.markMidpoints": "エッジの中点に印を付ける",
   "contextMenu.removeAllPoints": "基準点をすべて消す（{count}個）",

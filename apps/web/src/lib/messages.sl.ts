@@ -1317,6 +1317,7 @@ export const MESSAGES_SL: Partial<Record<MessageKey, string>> = {
   "contextMenu.simplify": "Poenostavi mrežo …",
   "contextMenu.markCenter": "Označi središče",
   "contextMenu.markFaceCenter": "Označi sredino te ploskve",
+  "contextMenu.markPivot": "Označi vrtišče",
   "contextMenu.markCorners": "Označi oglišča",
   "contextMenu.markMidpoints": "Označi sredine robov",
   "contextMenu.removeAllPoints": "Izbriši vse referenčne točke ({count})",

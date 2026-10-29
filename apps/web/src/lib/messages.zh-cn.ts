@@ -1571,6 +1571,7 @@ export const MESSAGES_ZH_CN: Partial<Record<MessageKey, string>> = {
   "contextMenu.simplify": "简化网格…",
   "contextMenu.markCenter": "标记中心",
   "contextMenu.markFaceCenter": "标记此面的中心",
+  "contextMenu.markPivot": "标记旋转中心",
   "contextMenu.markCorners": "标记角点",
   "contextMenu.markMidpoints": "标记边中点",
   "contextMenu.removeAllPoints": "删除所有参考点（{count}）",

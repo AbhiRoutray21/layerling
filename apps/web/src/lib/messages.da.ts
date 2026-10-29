@@ -2127,6 +2127,7 @@ export const MESSAGES_DA: Partial<Record<MessageKey, string>> = {
   "contextMenu.simplify": "Forenkl mesh …",
   "contextMenu.markCenter": "Markér centrum",
   "contextMenu.markFaceCenter": "Markér midten af denne flade",
+  "contextMenu.markPivot": "Markér drejepunktet",
   "contextMenu.markCorners": "Markér hjørnerne",
   "contextMenu.markMidpoints": "Markér kantmidtpunkterne",
   "contextMenu.deleteKey": "Slet",

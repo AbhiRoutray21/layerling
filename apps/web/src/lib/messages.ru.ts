@@ -1653,6 +1653,7 @@ export const MESSAGES_RU: Partial<Record<MessageKey, string>> = {
   "contextMenu.simplify": "Упростить сетку…",
   "contextMenu.markCenter": "Отметить центр",
   "contextMenu.markFaceCenter": "Отметить центр этой грани",
+  "contextMenu.markPivot": "Отметить точку вращения",
   "contextMenu.markCorners": "Отметить углы",
   "contextMenu.markMidpoints": "Отметить середины кромок",
   "contextMenu.removeAllPoints": "Удалить все опорные точки ({count})",
