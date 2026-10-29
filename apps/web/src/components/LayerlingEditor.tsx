@@ -38,7 +38,7 @@ import { chordHandles, withBezierHandles, withBezierStartHandle } from "@/lib/sk
 import { sketchProfileWithoutPoint } from "@/lib/sketchPointRemoval";
 import { sketchProfileWithArc, type SketchArcEnd } from "@/lib/sketchArc";
 import { withSegmentsConstruction } from "@/lib/sketchConstruction";
-import { alignAxesForWorkplane, cuboidAlongAxes, shiftAlongAxis, type AlignAxes } from "@/lib/alignFrame";
+import { alignAxesForWorkplane, shiftAlongAxis, type AlignAxes } from "@/lib/alignFrame";
 import { WorkplaneViewport, type LayFlatPick, type ViewportToolMemory } from "./WorkplaneViewport";
 import { layFlatRotation } from "@/lib/layFlat";
 import { SketchWorkspace, type SketchMeasurement, type SketchPrimitive, type SketchSelection, type SketchTool } from "./SketchWorkspace";
@@ -184,10 +184,11 @@ import type { CadFaceInfo, CadModifierComponentMesh, CadModifierDeflection, CadM
 import { getSectionBounds, sectionAxisLetter, sectionMeshInFrame, sectionPlacementWorkplane, sectionPointFromFrame, sectionPointToFrame, type SectionFrame, type SectionOrientation, type SectionPlaneAxis, type SectionPlaneSettings } from "@/lib/sectionView";
 import { FOOTPRINT_CUT_HEIGHT, footprintCutOffset, projectSectionPoint, SECTION_VIEW_FACE, sectionSvgDocument, sliceMeshContours } from "@/lib/sectionSvg";
 import type { AlignAxis, AlignHandleStatus, AlignTarget, EdgeTreatmentFeature, GridSize, ParametricSource, ProjectAsset, ProjectAttachment, ShapeAsset, ShapeCustomization, ShapeKind, SketchImage, SketchOperation, SketchPoint, SketchProfile, SketchRevolveSettings, SketchSegment, ShellEdges, ShellOpenings, ShellSide, SweepAnchor, WorkplaneNote, WorkplaneShape, WorkplaneWorkspaceSettings } from "@/types/layerling";
-import { type Vec3, type MeshData, type Cuboid, type ShapeUpdatePatch, type ManifoldSolid, MIN_SHAPE_DIMENSION, resetManifoldRuntime, cleanModelDimension, getManifoldRuntime, meshForShape, meshReachAlong, appendMeshData, formatTriangleCount, shapeAabb, boundsForShapes, boundsForCuboids, meshAabb, boundsForPositions, quantizedPointKey, sameShapeApartFromPlacement } from "@/lib/editorMeshCore";
+import { type Vec3, type MeshData, type Cuboid, type ShapeUpdatePatch, type ManifoldSolid, MIN_SHAPE_DIMENSION, resetManifoldRuntime, cleanModelDimension, getManifoldRuntime, meshForShape, meshReachAlong, appendMeshData, formatTriangleCount, boundsForShapes, boundsForCuboids, meshAabb, boundsForPositions, quantizedPointKey, sameShapeApartFromPlacement } from "@/lib/editorMeshCore";
 import { meshPartCount } from "@/lib/meshPartCount";
 import { buildGroupedShapeOffThread, exportSolidVolumeOffThread, callOffFaceRead, faceReadInWorker, createFaceReadKeeper, faceReadPositionsOffThread, simplifyTrianglePositionsOffThread, splitShapesByPlaneOffThread, subscribeGeometryBusy, warmGeometryWorker } from "@/lib/geometryWorker";
 import { roundedAlignedValue } from "@/lib/alignRounding";
+import { frameAabb, sizeAlignmentState, sizedShapesForSelection } from "@/lib/alignSize";
 import { cloneAsGroupChild, meshDataToManifoldMesh, shapeToManifoldSolid, withClosedHolesNote, unionOverlappingExportMeshes, exportBodiesWithLooseHoles, formatSectionOffset, SECTION_SEEN_FROM_KEYS, expandBundles, visibleExportShapes, multicolorExportSolids, exportFaceColors, colorSeparatedExportMeshes, disposeManifold, canIntersectShapes, buildIntersectionShapeFromSelection, canHullShapes, buildHullShapeFromSelection, groupedShape, quaternionForShape, rotationFromQuaternion, cleanShapePatch, restoreGroupedChildren, restoreGroupedChildrenForEdges } from "@/lib/editorBooleans";
 import { handleViewArrowKey } from "@/lib/viewArrowKeys";
 import { escapeWasHandled } from "@/lib/escapeHandled";
@@ -1763,15 +1764,18 @@ function alignmentLabel(axis: AlignAxis, target: AlignTarget) {
   return target === "min" ? t("align.bottom") : target === "max" ? t("align.top") : t("align.middle");
 }
 
-/** The box of a part along a workplane's axes, as the alignment measures it there (#232). */
-function frameAabb(shape: WorkplaneShape, axes: AlignAxes): Cuboid {
-  const mesh = shape.cylinderWrap && shape.importedMesh ? null : meshForShape(shape);
-  const own = mesh && mesh.vertices.length > 0 ? cuboidAlongAxes(mesh.vertices, axes) : null;
-  if (own) return own;
-  const box = shapeAabb(shape);
-  const corners: Array<[number, number, number]> = [];
-  for (const x of [box.minX, box.maxX]) for (const y of [box.minY, box.maxY]) for (const z of [box.minZ, box.maxZ]) corners.push([x, y, z]);
-  return cuboidAlongAxes(corners, axes) ?? box;
+/** What Align by size says: how many parts took the size, and how many could not (#998). */
+function sizedAlignmentMessage(sized: { resized: number; skipped: number }, label: string) {
+  if (sized.resized === 0 && sized.skipped === 0) return t("status.alreadySized");
+  const done = sized.resized === 0 ? null : sized.resized === 1 ? t("status.sizedOne", { alignment: label }) : t("status.sizedMany", { count: sized.resized, alignment: label });
+  const left = sized.skipped === 0 ? null : t("status.sizedSkipped", { count: sized.skipped });
+  return [done, left].filter(Boolean).join(". ");
+}
+
+/** The size mode's dots say where the parts stretch to, and the middle one which size they take (#998). */
+function sizeAlignmentLabel(axis: AlignAxis, target: AlignTarget) {
+  if (target === "center") return axis === "x" ? t("align.sizeWidth") : axis === "z" ? t("align.sizeDepth") : t("align.sizeHeight");
+  return alignmentLabel(axis, target);
 }
 
 function alignmentStatuses(selection: WorkplaneShape[], anchorId: string | null, axes: AlignAxes | null = null): AlignHandleStatus[] {
@@ -1800,12 +1804,18 @@ function alignmentStatuses(selection: WorkplaneShape[], anchorId: string | null,
         return bounds ? Math.abs(alignCoordinate(bounds, axis, target, naturalById.get(shape.id) ?? null, axes) - targetValue) > ALIGN_EPSILON : false;
       });
       const label = alignmentLabel(axis, target);
+      const size = sizeAlignmentState(selection, anchorId, axis, target, axes);
       return {
         axis,
         target,
         aligned,
         disabled: !wouldMove,
         title: aligned ? t("align.already", { label }) : t("align.do", { label }),
+        size: {
+          aligned: size.aligned,
+          disabled: !size.wouldChange,
+          title: size.aligned ? t("align.sizeAlready", { label: sizeAlignmentLabel(axis, target) }) : t("align.sizeDo", { label: sizeAlignmentLabel(axis, target) }),
+        },
       };
     }),
   );
@@ -2751,7 +2761,7 @@ export function LayerlingEditor({
   const [alignMode, setAlignMode] = useState(false);
   const [multiSelect, setMultiSelect] = useState(false);
   const [alignAnchorId, setAlignAnchorId] = useState<string | null>(null);
-  const [alignPreview, setAlignPreview] = useState<{ axis: AlignAxis; target: AlignTarget } | null>(null);
+  const [alignPreview, setAlignPreview] = useState<{ axis: AlignAxis; target: AlignTarget; size?: boolean } | null>(null);
   const [mirrorMode, setMirrorMode] = useState(false);
   const [splitSession, setSplitSession] = useState<SplitSession | null>(null);
   const [mirrorPreviewAxis, setMirrorPreviewAxis] = useState<AlignAxis | null>(null);
@@ -3659,6 +3669,8 @@ export function LayerlingEditor({
   // A workplane set on a face lets the align tool measure along its axes (#232); on the plate it is the world's.
   const alignAxes = useMemo(() => alignAxesForWorkplane(placementWorkplane), [placementWorkplane]);
   const alignHandleStatuses = useMemo(() => (alignMode ? alignmentStatuses(selectedShapes, effectiveAlignAnchorId, alignAxes) : []), [alignAxes, alignMode, effectiveAlignAnchorId, selectedShapes]);
+  // Align by size (#998) stretches no part past the largest size the settings allow, as scaling by percent.
+  const alignSizeLimit = useCallback((shape: WorkplaneShape) => shapeDimensionLimit(workspaceSettingsRef.current, shape.kind, 1000), []);
   // The box the handles stand on along those axes, of the anchor or of the whole selection, from the shapes as they are (no preview).
   const alignFrameBounds = useMemo(() => {
     if (!alignMode || !alignAxes || selectedShapes.length < 2) return null;
@@ -3687,6 +3699,8 @@ export function LayerlingEditor({
         ? [...shapes, faceToolPreview.shape]
         : edgeModifier?.preview && cadModifierBaseShapeRef.current
         ? shapes.map((shape) => shape.id === cadModifierBaseShapeRef.current?.id ? edgeModifier.preview as WorkplaneShape : shape)
+        : alignMode && alignPreview?.size
+        ? sizedShapesForSelection(shapes, selectedIds, selectedShapes, effectiveAlignAnchorId, alignPreview.axis, alignPreview.target, alignAxes, alignSizeLimit).nextShapes
         : alignMode && alignPreview
         ? alignedShapesForSelection(shapes, selectedIds, selectedShapes, effectiveAlignAnchorId, alignPreview.axis, alignPreview.target, alignAxes).nextShapes
         : mirrorMode && mirrorPreviewAxis
@@ -6273,9 +6287,21 @@ export function LayerlingEditor({
   );
 
   const alignSelectionTo = useCallback(
-    (axis: AlignAxis, target: AlignTarget) => {
+    (axis: AlignAxis, target: AlignTarget, size = false) => {
       if (selectedShapes.length < 2) {
         setNotice(t("status.selectTwoToAlign"));
+        return;
+      }
+
+      if (size) {
+        const sized = sizedShapesForSelection(shapes, selectedIds, selectedShapes, effectiveAlignAnchorId, axis, target, alignAxes, alignSizeLimit);
+        setAlignPreview(null);
+        const message = sizedAlignmentMessage(sized, sizeAlignmentLabel(axis, target));
+        if (sized.resized === 0) {
+          setNotice(message);
+          return;
+        }
+        commitShapes(sized.nextShapes, selectedIds, message);
         return;
       }
 
@@ -6291,11 +6317,11 @@ export function LayerlingEditor({
         ? t("status.alignedOne", { alignment: alignmentLabel(axis, target) })
         : t("status.alignedMany", { count: moved, alignment: alignmentLabel(axis, target) }));
     },
-    [alignAxes, commitShapes, effectiveAlignAnchorId, selectedIds, selectedShapes, shapes],
+    [alignAxes, alignSizeLimit, commitShapes, effectiveAlignAnchorId, selectedIds, selectedShapes, shapes],
   );
 
-  const previewAlignSelection = useCallback((axis: AlignAxis, target: AlignTarget) => {
-    setAlignPreview({ axis, target });
+  const previewAlignSelection = useCallback((axis: AlignAxis, target: AlignTarget, size = false) => {
+    setAlignPreview({ axis, target, size });
   }, []);
 
   const clearAlignPreview = useCallback(() => {
@@ -10463,6 +10489,25 @@ export function LayerlingEditor({
         const validIds = selectedForAlign.map((shape) => shape.id);
         const requestedAnchorId = typeof params.anchorId === "string" ? params.anchorId : null;
         const anchorId = effectiveAlignmentAnchorId(selectedForAlign, requestedAnchorId);
+        if (params.mode === "size") {
+          const sized = sizedShapesForSelection(currentShapes(), validIds, selectedForAlign, anchorId, axis, target, alignAxesForWorkplane(placementWorkplaneRef.current), alignSizeLimit);
+          const message = sizedAlignmentMessage(sized, sizeAlignmentLabel(axis, target));
+          if (sized.resized === 0) {
+            setSelectedIds(validIds);
+            selectedIdsRef.current = validIds;
+            setNotice(message);
+          } else {
+            commitShapes(sized.nextShapes, validIds, message);
+          }
+          return {
+            resized: sized.resized,
+            skipped: sized.skipped,
+            selectedIds: validIds,
+            anchorId,
+            objects: (sized.resized ? sized.nextShapes : selectedForAlign).filter((shape) => validIds.includes(shape.id)).map(mcpShapeSummary),
+          };
+        }
+        if (params.mode !== undefined && params.mode !== "position") throw new Error("align_objects mode must be position or size");
         const { nextShapes, moved } = alignedShapesForSelection(currentShapes(), validIds, selectedForAlign, anchorId, axis, target, alignAxesForWorkplane(placementWorkplaneRef.current));
         if (moved === 0) {
           setSelectedIds(validIds);
@@ -11782,6 +11827,7 @@ export function LayerlingEditor({
       throw error;
     }
   }, [
+    alignSizeLimit,
     buildSectionSvg,
     rebuildSketchBodyFill,
     applyCustomFontToSelection,

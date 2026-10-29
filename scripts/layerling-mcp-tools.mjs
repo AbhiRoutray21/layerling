@@ -520,6 +520,7 @@ export const tools = [
         anchorId: { type: "string", description: "Optional object id to keep fixed as the alignment reference." },
         axis: { type: "string", enum: ["x", "y", "z"], description: "x=left/right, z=front/back, y=bottom/top - or along the set workplane's x, z and normal." },
         target: { type: "string", enum: ["min", "center", "max"], description: "Which side/center to align." },
+        mode: { type: "string", enum: ["position", "size"], description: "position (default) moves the objects; size stretches them to the reference instead." },
       },
     },
   },
@@ -724,9 +725,9 @@ export const tools = [
         height: { type: "number" },
         rim: { type: "number" },
         rimHeight: { type: "number" },
-      },
         edge: { type: "number" },
         mirror: { type: "boolean" },
+      },
     },
   },
   {

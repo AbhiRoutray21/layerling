@@ -462,6 +462,8 @@ export type AlignHandleStatus = {
   disabled: boolean;
   aligned: boolean;
   title: string;
+  /** The same dot with Alt held: it stretches the parts to the reference instead of moving them (#998). */
+  size?: { disabled: boolean; aligned: boolean; title: string };
 };
 
 export type SketchPoint = {

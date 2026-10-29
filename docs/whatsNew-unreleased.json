@@ -8,5 +8,15 @@
       "de": "Die Ausstechform spiegelt den Umriss jetzt, weil man sie zum Ausstechen umdreht: Schrift und Logos kommen richtig herum aus dem Teig. Die Wand läuft oben auf eine schmale Schneidkante zu, deren Breite du unter Eigenschaften änderst.",
       "en": "The cookie cutter now mirrors the outline, since you turn it over to cut: text and logos come out of the dough the right way round. The wall runs up to a thin cutting edge, and you change its width under Properties."
     }
+  },
+  {
+    "title": {
+      "de": "Größe angleichen",
+      "en": "Match sizes"
+    },
+    "body": {
+      "de": "Halte beim Ausrichten Alt gedrückt: Die Punkte werden zu Quadraten und strecken die Teile bis an die Kante eines anderen oder auf seine Breite, Länge oder Höhe, statt sie zu verschieben.",
+      "en": "Hold Alt while aligning: the dots turn into squares and stretch the parts to the side of another or to its width, length or height instead of moving them."
+    }
   }
 ]
