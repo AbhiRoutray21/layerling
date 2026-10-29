@@ -710,6 +710,22 @@ export const tools = [
     },
   },
   {
+    name: "layerling_cookie_cutter",
+    description: "Make a cookie cutter from the given objects, like the editor's Cookie cutter button: a wall and a flat rim round the outline, as two sketch bodies in one bundle that replaces the objects. One extruded sketch body gives its own outline; anything else (shapes built in layerling, an imported mesh, several parts) gives what it stands on, the outlines the workplane cuts through it - holes inside stay open. The wall and the rim are lines outside the outline in the sketch fill modes, so change them under Properties afterwards. All sizes in mm: wall (thickness, default 1.2), height (default 15), rim (how far the rim reaches beyond the wall, default 4), rimHeight (default 2).",
+    inputSchema: {
+      ...editorTargetSchema,
+      required: ["ids"],
+      properties: {
+        ...editorTargetSchema.properties,
+        ids: { type: "array", items: { type: "string" } },
+        wall: { type: "number" },
+        height: { type: "number" },
+        rim: { type: "number" },
+        rimHeight: { type: "number" },
+      },
+    },
+  },
+  {
     name: "layerling_ungroup_objects",
     description: "Ungroup one or more grouped objects by id and preserve their edited geometry.",
     inputSchema: {

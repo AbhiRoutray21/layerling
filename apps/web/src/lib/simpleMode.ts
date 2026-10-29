@@ -26,7 +26,7 @@ export function simpleModeFromParameter(value: unknown): SimpleModeChoice | null
 export const SIMPLE_MODE_TOOLS: ReadonlySet<string> = new Set([
   "copy", "paste", "duplicate", "delete", "undo", "redo",
   "group", "ungroup",
-  "mirror", "chamfer", "fillet", "hollow",
+  "mirror", "chamfer", "fillet", "hollow", "cookieCutter",
   "align",
 ]);
 

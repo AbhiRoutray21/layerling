@@ -18,7 +18,8 @@ import { curvedTextPatch, MAX_TEXT_SPACING, MIN_TEXT_SPACING } from "@/lib/textG
 import { normalizeTextEdge } from "@/lib/textEdge";
 import { DEFAULT_TEXT_LAYERS, layerTextKeyringArgument, placedKeyring, layerTextLayersError, nameTagOffsets, normalizeTextLayers, type NameTagKeyring } from "@/lib/textLayers";
 import { NAME_TAG_LAYERS, NAME_TAG_LETTER_SIZE, textLetterSize, textLetterSizePatch, textShrinkPatch, textSpacingPatch } from "@/lib/nameTag";
-import { DEFAULT_ICON_TAG_WIDTH, ICON_TAG_LAYERS, MAX_ICON_TAG_WIDTH, MIN_ICON_TAG_WIDTH, normalizeIconTagCount } from "@/lib/iconTag";
+import { DEFAULT_ICON_TAG_WIDTH, ICON_TAG_LAYERS, MAX_ICON_TAG_WIDTH, MIN_ICON_TAG_WIDTH, isIconLayerBody, normalizeIconTagCount } from "@/lib/iconTag";
+import { cookieCutterProfiles, normalizeCookieCutterOptions, outlineFromLoops, type CookieCutterOptions } from "@/lib/cookieCutter";
 import type { IconLayerPatch, IconTagControls, ReferenceImageControls, TextLayerPatch } from "@/components/workplane/ShapeInspector";
 import { calibratedReferenceImage, dataUrlByteLength, isReferenceImage, LARGE_REFERENCE_IMAGE_BYTES, mirrorHidesReferenceImage, referenceImageOpacity, referenceImagePixelDistance, referenceImageShape } from "@/lib/referenceImage";
 import { IconTagPanel } from "@/components/workplane/IconTagPanel";
@@ -180,7 +181,7 @@ import { screenAlignedNudge } from "@/lib/keyboardNudge";
 import { LAYERLING_MCP_HEARTBEAT_MS, LAYERLING_MCP_POLL_RETRY_MS, LAYERLING_MCP_ROUTE, type LayerlingMcpCommand, type LayerlingMcpSceneSummary, type LayerlingMcpViewFace } from "@/lib/layerlingMcpProtocol";
 import type { CadFaceInfo, CadModifierComponentMesh, CadModifierDeflection, CadModifierDisplayEdge, CadModifierEdge, CadModifierFaces, CadModifierGridfinityPart, CadModifierHelicalGearPart, CadModifierKind, CadModifierMeshPart, CadModifierPrimitivePart, CadModifierProfilePart, CadModifierQuality, CadModifierSpringPart, CadModifierThreadPart, CadModifierWorkerRequest, CadModifierWorkerResponse } from "@/lib/cadModifierTypes";
 import { getSectionBounds, sectionAxisLetter, sectionMeshInFrame, sectionPlacementWorkplane, sectionPointFromFrame, sectionPointToFrame, type SectionFrame, type SectionOrientation, type SectionPlaneAxis, type SectionPlaneSettings } from "@/lib/sectionView";
-import { footprintCutOffset, projectSectionPoint, SECTION_VIEW_FACE, sectionSvgDocument, sliceMeshContours } from "@/lib/sectionSvg";
+import { FOOTPRINT_CUT_HEIGHT, footprintCutOffset, projectSectionPoint, SECTION_VIEW_FACE, sectionSvgDocument, sliceMeshContours } from "@/lib/sectionSvg";
 import type { AlignAxis, AlignHandleStatus, AlignTarget, EdgeTreatmentFeature, GridSize, ParametricSource, ProjectAsset, ProjectAttachment, ShapeAsset, ShapeCustomization, ShapeKind, SketchImage, SketchOperation, SketchPoint, SketchProfile, SketchRevolveSettings, SketchSegment, ShellEdges, ShellOpenings, ShellSide, SweepAnchor, WorkplaneNote, WorkplaneShape, WorkplaneWorkspaceSettings } from "@/types/layerling";
 import { type Vec3, type MeshData, type Cuboid, type ShapeUpdatePatch, type ManifoldSolid, MIN_SHAPE_DIMENSION, resetManifoldRuntime, cleanModelDimension, getManifoldRuntime, meshForShape, meshReachAlong, appendMeshData, formatTriangleCount, shapeAabb, boundsForShapes, boundsForCuboids, meshAabb, boundsForPositions, quantizedPointKey } from "@/lib/editorMeshCore";
 import { meshPartCount } from "@/lib/meshPartCount";
@@ -1297,6 +1298,19 @@ async function footprintSvg(shapes: readonly WorkplaneShape[], title: string) {
   const result = offset === null ? null : sectionSvgDocument(bodies, "y", offset, title);
   if (!result) throw new Error(t("status.sectionSvgNothing"));
   return result;
+}
+
+/**
+ * What the shapes stand on as one outline for a cookie cutter (#982): the closed outlines the workplane cuts through them,
+ * as a sketch round the middle of their box, with that middle and the height of their lowest point. Null when nothing closed is cut.
+ */
+async function footprintOutline(shapes: readonly WorkplaneShape[]) {
+  const { solids, meshes: cut, cut: wasCut } = await exportBodiesWithLooseHoles(shapes);
+  const { meshes } = await colorSeparatedExportMeshes(solids, cut, wasCut);
+  const offset = footprintCutOffset(meshes);
+  if (offset === null) return null;
+  const outline = outlineFromLoops(meshes.flatMap((mesh) => sliceMeshContours(mesh, "y", offset)));
+  return outline ? { ...outline, floor: offset - FOOTPRINT_CUT_HEIGHT } : null;
 }
 
 /**
@@ -8767,6 +8781,61 @@ export function LayerlingEditor({
     commitShapes([...shapesRef.current.filter((shape) => !operandIds.has(shape.id)), hull], hull.id, t("status.hulledMany", { count: groupable.length }));
   }, [refuseLockedSelection, commitShapes, selectedShapes]);
 
+  /**
+   * A cookie cutter from the selection (#982): the wall and the rim as two sketch bodies in a bundle, in place of what it is made
+   * from. One extruded sketch body gives its own outline; anything else - bodies built here, an imported mesh, several parts -
+   * gives what it stands on, the outlines the workplane cuts through it. The same code the MCP action uses.
+   */
+  const makeCookieCutter = useCallback(async (given?: Partial<Record<keyof CookieCutterOptions, unknown>>, only?: readonly WorkplaneShape[]) => {
+    const fail = (message: string) => {
+      setNotice(message);
+      return { ok: false as const, message };
+    };
+    const targets = (only ?? selectedShapes).filter((shape) => !isNonSolidShape(shape));
+    if (!targets.length) return fail(t("status.cookieCutterNeedsShape"));
+    if (targets.some((shape) => shape.locked)) return fail(t("status.objectLocked"));
+    const options = normalizeCookieCutterOptions(given);
+    const sourceFingerprint = projectShapesFingerprint(shapesRef.current);
+    const sourceProjectId = projectInfoRef.current.projectId;
+    setNotice(t("status.buildingSketch"), true);
+    try {
+      const single = targets.length === 1 && isIconLayerBody(targets[0]) ? targets[0] : null;
+      let outline: SketchProfile;
+      let place: (built: WorkplaneShape) => WorkplaneShape;
+      if (single) {
+        const stretch = sketchBodyStretch(single);
+        outline = stretch ? stretchedSketchProfile(single.sketchProfile, stretch.x, stretch.z) : single.sketchProfile;
+        place = (built) => placeSketchShape(built, placementWorkplaneRef.current, single);
+      } else {
+        const found = await footprintOutline(targets);
+        if (!found) return fail(t("status.cookieCutterNoOutline"));
+        outline = found.profile;
+        place = (built) => canonicalizeShape({ ...built, x: found.x, z: found.z, elevation: found.floor });
+      }
+      const profiles = cookieCutterProfiles(outline, options);
+      const color = targets[0].color;
+      const build = async (profile: SketchProfile, height: number, name: string) =>
+        canonicalizeShape({ ...place(await cadShapeFromSketchProfile(profile, height, single)), id: createLocalId("cutter"), name, color, hole: false });
+      const wall = await build(profiles.wall, options.height, "Wall");
+      const rim = await build(profiles.rim, options.rimHeight, "Rim");
+      if (projectInfoRef.current.projectId !== sourceProjectId || projectShapesFingerprint(shapesRef.current) !== sourceFingerprint) {
+        return fail(t("status.cookieCutterChanged"));
+      }
+      const group = groupedShape([wall, rim]);
+      if (!group) return fail(t("status.cookieCutterNoOutline"));
+      const cutter = withSelectionPivot(canonicalizeShape({ ...group, name: t("cookieCutter.name"), groupOperation: "bundle" }), activeRotationPivot);
+      const consumed = new Set(targets.map((shape) => shape.id));
+      commitShapes([...shapesRef.current.filter((shape) => !consumed.has(shape.id)), cutter], cutter.id, t("status.cookieCutterMade"));
+      return { ok: true as const, id: cutter.id };
+    } catch (error) {
+      const message = error instanceof Error && error.message === "cookie-cutter-outline-too-complex"
+        ? t("status.cookieCutterTooComplex")
+        : error instanceof Error ? localizedError(error.message) : t("status.sketchCannotExtrude");
+      setNotice(message, true);
+      return { ok: false as const, message };
+    }
+  }, [commitShapes, selectedShapes, activeRotationPivot]);
+
   // Each step answers with what happened, so the buttons can show it and MCP can pass it on.
   const refuseOpenGroupStep = useCallback((message: string): OpenGroupOutcome => {
     setNotice(message);
@@ -10673,6 +10742,16 @@ export function LayerlingEditor({
         const hull = canonicalizeShape({ ...result.group, groupOperation: "hull" });
         commitShapes([...currentShapes().filter((shape) => !ids.has(shape.id)), hull], hull.id, t("status.hulledMany", { count: groupable.length }));
         return { object: mcpShapeSummary(hull) };
+      }
+
+      if (command.action === "cookie_cutter") {
+        const ids = new Set(mcpStringArray(params.ids));
+        const targets = currentShapes().filter((shape) => ids.has(shape.id));
+        if (!targets.length) throw new Error("Pass the ids of the objects to make a cookie cutter from");
+        const result = await makeCookieCutter({ wall: params.wall, height: params.height, rim: params.rim, rimHeight: params.rimHeight }, targets);
+        if (!result.ok) throw new Error(result.message);
+        const cutter = currentShapes().find((shape) => shape.id === result.id);
+        return { object: cutter ? mcpShapeSummary(cutter) : { id: result.id } };
       }
 
       if (command.action === "ungroup_objects") {
@@ -13542,6 +13621,7 @@ export function LayerlingEditor({
         canGroup={!selectionLocked && selectedShapes.length > 1 && selectedShapes.every((shape) => !isNonSolidShape(shape))}
         canIntersect={!selectionLocked && canIntersectShapes(selectedShapes.filter((shape) => !isNonSolidShape(shape)))}
         canHull={!selectionLocked && canHullShapes(selectedShapes.filter((shape) => !isNonSolidShape(shape)))}
+        canCookieCutter={!selectionLocked && selectedShapes.some((shape) => !isNonSolidShape(shape))}
         canUngroup={!selectionLocked && selectedShapes.some((shape) => Boolean(shape.groupedShapes?.length) || wasGroupBeforeEdgeTreatments(shape))}
         canModifySelection={hasSelection && !selectionLocked}
         hasClipboard={clipboard.length > 0 || systemClipboardSupported}
@@ -13610,6 +13690,7 @@ export function LayerlingEditor({
         onBundle={bundleSelected}
         onIntersect={intersectSelected}
         onHull={hullSelected}
+        onCookieCutter={() => void makeCookieCutter()}
         onIntersectPreview={toggleIntersectPreview}
         intersectPreviewActive={Boolean(intersectPreviewIds)}
         onFillet={() => edgeModifier?.kind === "fillet" ? cancelEdgeModifier() : startEdgeModifier("fillet")}
