@@ -180,7 +180,7 @@ export const MESSAGES_EN = {
   "welcome.moreLoftSketchesTitle": "Loft sketches",
   "welcome.moreLoftSketchesBody": "joins two sketches or imported SVGs into one body: the outline of the lower one at the bottom, the outline of the upper one at the top, with straight walls between them - a funnel, a transition piece or, from two rings, a tapered frame. Edit group opens the two sketches again.",
   "welcome.moreCookieCutterTitle": "Cookie cutter",
-  "welcome.moreCookieCutterBody": "makes a cookie cutter from a sketch, an SVG or any shape in one click: a thin wall round the outline and a flat rim round its foot. The outline is mirrored, so text comes out of the dough the right way round, and the wall runs up to a cutting edge. The inside of an e or an a gets a wall of its own, held by bridges, and wall, edge, height and rim can be changed afterwards under Properties.",
+  "welcome.moreCookieCutterBody": "makes a cookie cutter from a sketch, an SVG or any shape in one click: a thin wall round the outline and a flat rim round its foot. The outline is mirrored, so text comes out of the dough the right way round, and the wall runs up to a cutting edge. The inside of an e or an a gets a wall of its own, held by bridges - made lower, it only presses a text into the dough - and wall, edge, height and rim can be changed afterwards under Properties.",
   "welcome.moreFlexiTitle": "Flexi joints",
   "welcome.moreFlexiBody": "cuts a flat body - a fish, a snake or a dragon you drew yourself - into links with a joint printed in place at every cut, so the figure moves once printed, without support or assembly.",
   "welcome.moreSketchTitle": "Sketches",
