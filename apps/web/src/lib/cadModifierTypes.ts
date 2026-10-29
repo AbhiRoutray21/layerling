@@ -121,6 +121,11 @@ export type CadModifierProfilePart = {
   /** Loft only: the section at the top, loop for loop and piece for piece the partner of `loops`. */
   topLoops?: CadModifierProfileLoop[];
   /**
+   * Loft only, instead of `topLoops`: the top is this one point at `height` (a pointed pyramid). The bottom is then
+   * one outline of straight lines, and every side is the flat triangle from one of its edges to the point.
+   */
+  apex?: { x: number; z: number };
+  /**
    * Loft only: the section turns this many degrees from bottom to top, evenly, around
    * `twistCenter` (which moves with the lean). The sides are then no longer ruled: the body is a
    * smooth loft through sections a few degrees apart (#184).

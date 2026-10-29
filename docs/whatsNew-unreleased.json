@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "title": {
+      "de": "Fläche löschen bei Keil, Pyramide und Paraboloid",
+      "en": "Delete face for the wedge, pyramid and paraboloid"
+    },
+    "body": {
+      "de": "Ragt ein Keil, eine Pyramide oder ein Paraboloid aus einem anderen Körper heraus, gruppierst du die beiden und nimmst das Überstehende mit „Fläche löschen“ weg. Auch der STEP-Export nimmt sie jetzt mit, als Körper wie als Aussparung.",
+      "en": "Where a wedge, a pyramid or a paraboloid sticks out of another body, group the two and take off what sticks out with Delete face. The STEP export now takes them too, as bodies and as holes."
+    }
+  }
+]
