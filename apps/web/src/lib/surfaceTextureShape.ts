@@ -19,6 +19,8 @@ import {
   normalizeSurfaceTexture,
   surfaceTexturePositions,
   SURFACE_TEXTURE_MAX_MASK_PLANES,
+  type SurfaceTextureBrickBond,
+  type SurfaceTextureBarkType,
   type SurfaceTextureCrackStart,
   type SurfaceTextureCrackStyle,
   type SurfaceTextureDetail,
@@ -30,6 +32,8 @@ import {
   type SurfaceTextureProfile,
   type SurfaceTextureProjection,
   type SurfaceTextureSettings,
+  type SurfaceTextureWoodCut,
+  type SurfaceTextureWoodType,
   type SurfaceTextureStats,
   type SurfaceTextureTiling,
   type SurfaceTextureCapEdge,
@@ -69,6 +73,13 @@ export const SURFACE_TEXTURE_LABELS: {
   mask: Record<SurfaceTextureMaskMode | "none", MessageKey>;
   crackStyle: Record<SurfaceTextureCrackStyle, MessageKey>;
   crackStart: Record<SurfaceTextureCrackStart, MessageKey>;
+  brickBond: Record<SurfaceTextureBrickBond, MessageKey>;
+  brickBondHint: Record<SurfaceTextureBrickBond, MessageKey>;
+  barkType: Record<SurfaceTextureBarkType, MessageKey>;
+  barkTypeHint: Record<SurfaceTextureBarkType, MessageKey>;
+  woodType: Record<SurfaceTextureWoodType, MessageKey>;
+  woodCut: Record<SurfaceTextureWoodCut, MessageKey>;
+  woodCutHint: Record<SurfaceTextureWoodCut, MessageKey>;
   image: Record<SurfaceTextureImage, MessageKey>;
   tiling: Record<SurfaceTextureTiling, MessageKey>;
   capStyle: Record<SurfaceTextureCapStyle, MessageKey>;
@@ -81,9 +92,12 @@ export const SURFACE_TEXTURE_LABELS: {
     honeycomb: "surfaceTexture.honeycomb",
     bumps: "surfaceTexture.bumps",
     cells: "surfaceTexture.cells",
+    bricks: "surfaceTexture.bricks",
     knit: "surfaceTexture.knit",
     rope: "surfaceTexture.rope",
     weave: "surfaceTexture.weave",
+    bark: "surfaceTexture.bark",
+    wood: "surfaceTexture.wood",
     grain: "surfaceTexture.grain",
     image: "surfaceTexture.image",
     cracks: "surfaceTexture.cracks",
@@ -98,6 +112,31 @@ export const SURFACE_TEXTURE_LABELS: {
   mask: { none: "surfaceTexture.maskNone", exclude: "surfaceTexture.maskExclude", only: "surfaceTexture.maskOnly" },
   crackStyle: { crack: "surfaceTexture.crackStyleCrack", lightning: "surfaceTexture.crackStyleLightning" },
   crackStart: { top: "surfaceTexture.crackStartTop", bottom: "surfaceTexture.crackStartBottom", rim: "surfaceTexture.crackStartRim", anywhere: "surfaceTexture.crackStartAnywhere" },
+  brickBond: {
+    running: "surfaceTexture.bondRunning",
+    stack: "surfaceTexture.bondStack",
+    english: "surfaceTexture.bondEnglish",
+    englishCross: "surfaceTexture.bondEnglishCross",
+    flemish: "surfaceTexture.bondFlemish",
+  },
+  brickBondHint: {
+    running: "surfaceTexture.bondRunningHint",
+    stack: "surfaceTexture.bondStackHint",
+    english: "surfaceTexture.bondEnglishHint",
+    englishCross: "surfaceTexture.bondEnglishCrossHint",
+    flemish: "surfaceTexture.bondFlemishHint",
+  },
+  barkType: { oak: "surfaceTexture.barkOak", pine: "surfaceTexture.barkPine", spruce: "surfaceTexture.barkSpruce", birch: "surfaceTexture.barkBirch", beech: "surfaceTexture.barkBeech" },
+  barkTypeHint: {
+    oak: "surfaceTexture.barkOakHint",
+    pine: "surfaceTexture.barkPineHint",
+    spruce: "surfaceTexture.barkSpruceHint",
+    birch: "surfaceTexture.barkBirchHint",
+    beech: "surfaceTexture.barkBeechHint",
+  },
+  woodType: { oak: "surfaceTexture.woodOak", ash: "surfaceTexture.woodAsh", beech: "surfaceTexture.woodBeech", pine: "surfaceTexture.woodPine", walnut: "surfaceTexture.woodWalnut" },
+  woodCut: { log: "surfaceTexture.woodCutLog", flatSawn: "surfaceTexture.woodCutFlatSawn", quarterSawn: "surfaceTexture.woodCutQuarterSawn" },
+  woodCutHint: { log: "surfaceTexture.woodCutLogHint", flatSawn: "surfaceTexture.woodCutFlatSawnHint", quarterSawn: "surfaceTexture.woodCutQuarterSawnHint" },
   image: {
     topography: "surfaceTexture.imageTopography",
     wood: "surfaceTexture.imageWood",
