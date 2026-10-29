@@ -1,5 +1,20 @@
 [
   {
+    "version": "1.120.1",
+    "items": [
+      {
+        "title": {
+          "de": "Ausstechform: Schrift nur eindrücken",
+          "en": "Cookie cutter: press text in"
+        },
+        "body": {
+          "de": "Die Wände um Buchstaben und andere Löcher sind jetzt ein eigener Teil der Ausstechform. Stellst du sie unter Eigenschaften niedriger, drücken sie die Schrift nur in den Teig, und nur der äußere Rand sticht aus. Jedes Innenteil hält jetzt an zwei kräftigeren Stegen.",
+          "en": "The walls round letters and other holes are now a part of the cookie cutter of their own. Make them lower under Properties and they only press the text into the dough, while only the outer ring cuts. Each inner part is now held by two stronger bridges."
+        }
+      }
+    ]
+  },
+  {
     "version": "1.120.0",
     "items": [
       {
