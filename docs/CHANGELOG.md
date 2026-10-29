@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **Cookie cutter: the letters of a name are held to each other too (#982):** Each piece inside the outline was held by bridges to the outline round it only, and a bar never runs across another piece, so a letter in the middle of a name in a star found no clear way out between its neighbours: its bar only grazed it, and the e hung almost free. The pieces of one outline are now also joined to each other, the closest two first as long as they are not joined yet through others, so the bridges run as a web through all of them - a word gets a chain of short bars from letter to letter - and no bar runs across a third piece or another bar (`cookieCutterBridges`). Unit tests in `cookieCutter.test.ts`. Suggested by @avxmw in #982.
+
 ## 1.120.2
 
 - **A body with a chamfered bottom edge showed too small under a new sketch (#1006):** The outline of another body in the sketch editor was taken from its bottom face, and a chamfer or fillet on the bottom edges takes that face in from the wall, so a 10 x 10 mm box showed as 9 x 9 mm. The outline of a body with an edge treatment now follows its wall as seen from above. The body itself was never changed. Reported by @uninteressant2026 in #1006.
