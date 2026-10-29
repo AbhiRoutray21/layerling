@@ -1,5 +1,80 @@
 [
   {
+    "version": "1.120.0",
+    "items": [
+      {
+        "title": {
+          "de": "Flexi-Gelenke",
+          "en": "Flexi joints"
+        },
+        "body": {
+          "de": "Das neue Werkzeug Flexi-Gelenke teilt einen flachen Körper, etwa einen selbst gezeichneten Fisch oder Drachen, in Glieder und setzt an jeden Schnitt ein Gelenk, das gleich mitgedruckt wird. Nach dem Druck bewegt sich die Figur, ohne Stützen und ohne Zusammenbauen.",
+          "en": "The new Flexi joints tool cuts a flat body, a fish or a dragon you drew yourself, into links and puts a joint printed in place at every cut. Once printed, the figure moves, without support or assembly."
+        }
+      },
+      {
+        "title": {
+          "de": "Namen auch für ausgegraute Symbole",
+          "en": "Names for greyed-out icons too"
+        },
+        "body": {
+          "de": "Fährst du über ein ausgegrautes Symbol im Menüband, steht jetzt auch dort sein Name. Die Ausstechform findest du jetzt unter Anpassen.",
+          "en": "Hovering a greyed-out icon in the ribbon now shows its name too. The cookie cutter is now under Modify."
+        }
+      },
+      {
+        "title": {
+          "de": "Oberflächentextur: Ziegel, Rinde und Holz",
+          "en": "Surface texture: bricks, bark and wood"
+        },
+        "body": {
+          "de": "Drei neue Muster: eine Ziegelmauer in fünf Verbänden, Baumrinde von Eiche, Kiefer, Fichte, Birke oder Buche und eine Holzmaserung, die wie bei echtem Holz durch den Körper läuft.",
+          "en": "Three new patterns: a brick wall in five bonds, the bark of oak, pine, spruce, birch or beech, and wood grain that runs through the body as in real wood."
+        }
+      },
+      {
+        "title": {
+          "de": "Oberflächentextur: Carbon",
+          "en": "Surface texture: carbon"
+        },
+        "body": {
+          "de": "Das neue Muster Carbon (Köper) legt ein Gewebe aus Bändern über den Körper, als Köper 2/2, 2/1 oder 3/1, auf Wunsch mit breiteren oder schmaleren Querbändern.",
+          "en": "The new pattern Carbon (twill) lays a weave of bands over the body, as twill 2/2, 2/1 or 3/1, with wider or narrower crossing bands if you like."
+        }
+      },
+      {
+        "title": {
+          "de": "Scharnier: Schraubenlöcher und runde Ecken",
+          "en": "Hinge: screw holes and rounded corners"
+        },
+        "body": {
+          "de": "Die Blätter des Scharniers bekommen jetzt bis zu sechs Schraubenlöcher, angesenkt für Senkkopfschrauben oder gerade, mit einstellbarem Abstand längs und quer. Der Eckenradius rundet die äußeren Ecken der Blätter.",
+          "en": "The hinge's leaves now take up to six screw holes, countersunk for flat-head screws or straight, with the spacing along and across set by you. The corner radius rounds the leaves' outer corners."
+        }
+      },
+      {
+        "title": {
+          "de": "Scharnier mit Fingern",
+          "en": "A finger hinge"
+        },
+        "body": {
+          "de": "Unter Blattform gibt es jetzt Finger: Jeder Knöchel trägt seinen eigenen Finger, und die beiden Seiten greifen wie zwei Kämme ineinander. So klappt das Scharnier ganz herum und liegt zugeklappt flach, etwa zwischen Kasten und Deckel.",
+          "en": "Leaf shape now offers fingers: each knuckle carries a finger of its own, and the two sides interlock like two combs. The hinge folds all the way round and lies flat when closed, between a box and its lid for example."
+        }
+      },
+      {
+        "title": {
+          "de": "Skizze bearbeiten nach einer Fase",
+          "en": "Edit sketch after a chamfer"
+        },
+        "body": {
+          "de": "Hatte ein gedrehter Skizzenkörper, etwa aus einer SVG, eine Fase oder Rundung bekommen, öffnete sich seine Skizze verdreht und verschoben. Sie liegt jetzt wieder genau über dem Körper.",
+          "en": "After a fillet or chamfer on a turned sketch body, from an SVG for example, its sketch opened turned and moved. It now lies right over the body again."
+        }
+      }
+    ]
+  },
+  {
     "version": "1.119.2",
     "items": [
       {
