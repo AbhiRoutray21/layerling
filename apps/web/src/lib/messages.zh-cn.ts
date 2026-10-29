@@ -369,7 +369,7 @@ export const MESSAGES_ZH_CN: Partial<Record<MessageKey, string>> = {
   "sketch.shapeMoved": "草图形状已移动",
   "sketch.shapeResized": "草图形状已调整大小",
   "sketch.shapeRotated": "选中项已旋转",
-  "sketch.rotateSelection": "旋转选中项（Shift：以 15° 为步进）",
+  "sketch.rotateSelection": "旋转选中项（环内以 22.5° 为步进，环外以 1° 为步进，Shift：以 15° 为步进）",
   "sketch.imageMoved": "草图图像已移动",
   "sketch.imageResized": "草图图像已调整大小",
   "sketch.viewControls": "草图视图控制",

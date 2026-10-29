@@ -388,7 +388,7 @@ export const MESSAGES_NL: Record<MessageKey, string> = {
   "sketch.shapeMoved": "Schetsvorm verplaatst",
   "sketch.shapeResized": "Schetsvorm geschaald",
   "sketch.shapeRotated": "Selectie gedraaid",
-  "sketch.rotateSelection": "Selectie draaien (Shift: in stappen van 15°)",
+  "sketch.rotateSelection": "Selectie draaien (binnen de ring in stappen van 22,5°, erbuiten in stappen van 1°, Shift: in stappen van 15°)",
   "sketch.imageMoved": "Schetsafbeelding verplaatst",
   "sketch.imageResized": "Schetsafbeelding geschaald",
   "sketch.viewControls": "Weergaveknoppen van de schets",

@@ -369,7 +369,7 @@ export const MESSAGES_ZH_TW: Partial<Record<MessageKey, string>> = {
   "sketch.shapeMoved": "草圖形狀已移動",
   "sketch.shapeResized": "草圖形狀已調整大小",
   "sketch.shapeRotated": "選取項目已旋轉",
-  "sketch.rotateSelection": "旋轉選取項目（Shift：以 15° 為單位）",
+  "sketch.rotateSelection": "旋轉選取項目（環內以 22.5° 為單位，環外以 1° 為單位，Shift：以 15° 為單位）",
   "sketch.imageMoved": "草圖影像已移動",
   "sketch.imageResized": "草圖影像已調整大小",
   "sketch.viewControls": "草圖視圖控制項",

@@ -388,7 +388,7 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "sketch.shapeMoved": "Skizzenform verschoben",
   "sketch.shapeResized": "Skizzenform skaliert",
   "sketch.shapeRotated": "Auswahl gedreht",
-  "sketch.rotateSelection": "Auswahl drehen (Umschalt: in 15°-Schritten)",
+  "sketch.rotateSelection": "Auswahl drehen (im Ring in 22,5°-Schritten, außerhalb in 1°-Schritten, Umschalt: in 15°-Schritten)",
   "sketch.imageMoved": "Vorlagenbild verschoben",
   "sketch.imageResized": "Vorlagenbild skaliert",
   "sketch.viewControls": "Ansichtssteuerung der Skizze",

@@ -335,7 +335,7 @@ export const MESSAGES_IT: Partial<Record<MessageKey, string>> = {
   "sketch.shapeMoved": "Forma dello schizzo spostata",
   "sketch.shapeResized": "Dimensioni della forma dello schizzo modificate",
   "sketch.shapeRotated": "Selezione ruotata",
-  "sketch.rotateSelection": "Ruota la selezione (Maiusc incrementa di 15°)",
+  "sketch.rotateSelection": "Ruota la selezione (dentro l’anello a passi di 22,5°, fuori a passi di 1°, Maiusc a passi di 15°)",
   "sketch.imageMoved": "Immagine dello schizzo spostata",
   "sketch.imageResized": "Dimensioni dell'immagine dello schizzo modificate",
   "sketch.viewControls": "Controlli della vista dello schizzo",

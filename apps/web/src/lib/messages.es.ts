@@ -373,7 +373,7 @@ export const MESSAGES_ES: Partial<Record<MessageKey, string>> = {
   "sketch.shapeMoved": "Forma del boceto movida",
   "sketch.shapeResized": "Forma del boceto redimensionada",
   "sketch.shapeRotated": "Selección girada",
-  "sketch.rotateSelection": "Girar la selección (Mayús: en pasos de 15°)",
+  "sketch.rotateSelection": "Girar la selección (dentro del anillo en pasos de 22,5°, fuera en pasos de 1°, Mayús: en pasos de 15°)",
   "sketch.imageMoved": "Imagen del boceto movida",
   "sketch.imageResized": "Imagen del boceto redimensionada",
   "sketch.viewControls": "Controles de la vista del boceto",

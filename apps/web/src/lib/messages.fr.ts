@@ -381,7 +381,7 @@ export const MESSAGES_FR: Partial<Record<MessageKey, string>> = {
   "sketch.shapeMoved": "Forme d'esquisse déplacée",
   "sketch.shapeResized": "Forme d'esquisse redimensionnée",
   "sketch.shapeRotated": "Sélection tournée",
-  "sketch.rotateSelection": "Tourner la sélection (Maj : par pas de 15°)",
+  "sketch.rotateSelection": "Tourner la sélection (dans l’anneau par pas de 22,5°, en dehors par pas de 1°, Maj : par pas de 15°)",
   "sketch.imageMoved": "Image d'esquisse déplacée",
   "sketch.imageResized": "Image d'esquisse redimensionnée",
   "sketch.viewControls": "Contrôles de la vue d'esquisse",

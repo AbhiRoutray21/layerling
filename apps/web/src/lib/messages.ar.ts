@@ -380,7 +380,7 @@ export const MESSAGES_AR: Partial<Record<MessageKey, string>> = {
   "sketch.shapeMoved": "تم نقل شكل الرسم التخطيطي",
   "sketch.shapeResized": "تم تغيير حجم شكل الرسم التخطيطي",
   "sketch.shapeRotated": "تم تدوير التحديد",
-  "sketch.rotateSelection": "تدوير التحديد (Shift: بخطوات 15°)",
+  "sketch.rotateSelection": "تدوير التحديد (داخل الحلقة بخطوات 22.5°، خارجها بخطوات 1°، Shift: بخطوات 15°)",
   "sketch.imageMoved": "تم نقل صورة الرسم التخطيطي",
   "sketch.imageResized": "تم تغيير حجم صورة الرسم التخطيطي",
   "sketch.viewControls": "عناصر التحكم في عرض الرسم التخطيطي",

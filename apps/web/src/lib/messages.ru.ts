@@ -390,7 +390,7 @@ export const MESSAGES_RU: Partial<Record<MessageKey, string>> = {
   "sketch.shapeMoved": "Фигура эскиза перемещена",
   "sketch.shapeResized": "Размер фигуры эскиза изменён",
   "sketch.shapeRotated": "Выделение повёрнуто",
-  "sketch.rotateSelection": "Повернуть выделение (Shift: с шагом 15°)",
+  "sketch.rotateSelection": "Повернуть выделение (внутри кольца с шагом 22,5°, снаружи с шагом 1°, Shift: с шагом 15°)",
   "sketch.imageMoved": "Изображение эскиза перемещено",
   "sketch.imageResized": "Размер изображения эскиза изменён",
   "sketch.viewControls": "Управление видом эскиза",

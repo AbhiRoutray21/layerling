@@ -377,7 +377,7 @@ export const MESSAGES_PL: Partial<Record<MessageKey, string>> = {
   "sketch.shapeMoved": "Przesunięto kształt szkicu",
   "sketch.shapeResized": "Zmieniono rozmiar kształtu szkicu",
   "sketch.shapeRotated": "Zaznaczenie obrócone",
-  "sketch.rotateSelection": "Obróć zaznaczenie (Shift: co 15°)",
+  "sketch.rotateSelection": "Obróć zaznaczenie (wewnątrz pierścienia co 22,5°, na zewnątrz co 1°, Shift: co 15°)",
   "sketch.imageMoved": "Przesunięto obraz szkicu",
   "sketch.imageResized": "Zmieniono rozmiar obrazu szkicu",
   "sketch.viewControls": "Sterowanie widokiem szkicu",

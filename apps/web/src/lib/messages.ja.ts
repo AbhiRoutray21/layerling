@@ -391,7 +391,7 @@ export const MESSAGES_JA: Partial<Record<MessageKey, string>> = {
   "sketch.shapeMoved": "スケッチシェイプを移動しました",
   "sketch.shapeResized": "スケッチシェイプのサイズを変更しました",
   "sketch.shapeRotated": "選んだものを回しました",
-  "sketch.rotateSelection": "選んだものを回す（Shift: 15°刻み）",
+  "sketch.rotateSelection": "選んだものを回す（リングの内側で22.5°刻み、外側で1°刻み、Shift: 15°刻み）",
   "sketch.imageMoved": "スケッチ画像を移動しました",
   "sketch.imageResized": "スケッチ画像のサイズを変更しました",
   "sketch.viewControls": "スケッチ表示の操作",

@@ -389,7 +389,7 @@ export const MESSAGES_EN = {
   "sketch.shapeMoved": "Sketch shape moved",
   "sketch.shapeResized": "Sketch shape resized",
   "sketch.shapeRotated": "Selection turned",
-  "sketch.rotateSelection": "Turn the selection (Shift: in steps of 15°)",
+  "sketch.rotateSelection": "Turn the selection (inside the ring in steps of 22.5°, outside in steps of 1°, Shift: in steps of 15°)",
   "sketch.imageMoved": "Sketch image moved",
   "sketch.imageResized": "Sketch image resized",
   "sketch.viewControls": "Sketch view controls",

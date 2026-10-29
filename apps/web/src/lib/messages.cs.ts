@@ -10,7 +10,7 @@ export const MESSAGES_CS: Record<MessageKey, string> = {
   "welcome.moreDrawingTitle": "Výkres pro dílnu",
   "welcome.moreDrawingBody": "Export → Výkres: nárys, půdorys a bokorys v měřítku 1:1 na formátu ISO, s celkovými rozměry, skrytými hranami a tabulkou kruhových otvorů. Uložte jako PDF nebo SVG pro tisk či práci u soustruhu a frézky.",
   "sketch.shapeRotated": "Výběr otočen",
-  "sketch.rotateSelection": "Otočit výběr (se Shiftem po 15°)",
+  "sketch.rotateSelection": "Otočit výběr (uvnitř kruhu po 22,5°, venku po 1°, se Shiftem po 15°)",
   "shortcuts.sizeAroundCenter": "Při zadávání rozměru vedle tělesa: změnit velikost vůči středu místo protějšího okraje",
   "status.pointsRemoved": "Odstraněné referenční body: {count}",
   "status.alreadyWrapped": "Tento tvar už je obtočený kolem válce. Nejprve zrušte obtočení nebo začněte znovu z rovinného tvaru.",

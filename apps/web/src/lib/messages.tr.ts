@@ -346,7 +346,7 @@ export const MESSAGES_TR: Partial<Record<MessageKey, string>> = {
   "sketch.shapeMoved": "Eskiz şekli taşındı",
   "sketch.shapeResized": "Eskiz şekli yeniden boyutlandırıldı",
   "sketch.shapeRotated": "Seçim döndürüldü",
-  "sketch.rotateSelection": "Seçimi döndür (Shift: 15°'lik adımlarla)",
+  "sketch.rotateSelection": "Seçimi döndür (halkanın içinde 22,5°’lik, dışında 1°’lik adımlarla, Shift: 15°’lik adımlarla)",
   "sketch.imageMoved": "Eskiz resmi taşındı",
   "sketch.imageResized": "Eskiz resmi yeniden boyutlandırıldı",
   "sketch.viewControls": "Eskiz görünüm kontrolleri",

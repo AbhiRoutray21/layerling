@@ -337,7 +337,7 @@ export const MESSAGES_HU: Partial<Record<MessageKey, string>> = {
   "sketch.shapeMoved": "Vázlatalakzat áthelyezve",
   "sketch.shapeResized": "Vázlatalakzat átméretezve",
   "sketch.shapeRotated": "Kijelölés elforgatva",
-  "sketch.rotateSelection": "A kijelölés elforgatása (Shift: 15°-os lépésekben)",
+  "sketch.rotateSelection": "A kijelölés elforgatása (a gyűrűn belül 22,5°-os, kívül 1°-os lépésekben, Shift: 15°-os lépésekben)",
   "sketch.imageMoved": "Vázlatkép áthelyezve",
   "sketch.imageResized": "Vázlatkép átméretezve",
   "sketch.viewControls": "Vázlatnézet vezérlői",

@@ -3675,7 +3675,7 @@ export const MESSAGES_DA: Partial<Record<MessageKey, string>> = {
   "sketch.operationHint": "Hvad skitsen bliver til: ekstruderet, drejet eller trukket langs en sti",
   "status.sketchSweepAnchorChanged": "{anchor}. Afslut skitsen for at bygge legemet",
   "status.sketchOperationChanged": "Nu: {operation}. Afslut skitsen for at bygge legemet",
-  "sketch.rotateSelection": "Vend markeringen (Shift: i trin på 15°)",
+  "sketch.rotateSelection": "Vend markeringen (inden for ringen i trin på 22,5°, uden for i trin på 1°, Shift: i trin på 15°)",
   "sketch.shapeRotated": "Markering vendt",
   "sketch.showPartEdges": "Vis delene set igennem: alle deres kanter på skitseplanet",
   "sketch.sweep": "Sweep-skitse",

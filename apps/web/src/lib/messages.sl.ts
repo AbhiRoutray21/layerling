@@ -370,7 +370,7 @@ export const MESSAGES_SL: Partial<Record<MessageKey, string>> = {
   "sketch.shapeMoved": "Oblika skice premaknjena",
   "sketch.shapeResized": "Velikost oblike skice spremenjena",
   "sketch.shapeRotated": "Izbor zavrten",
-  "sketch.rotateSelection": "Zavrti izbor (Shift: po korakih po 15°)",
+  "sketch.rotateSelection": "Zavrti izbor (znotraj obroča po korakih po 22,5°, zunaj po 1°, Shift: po korakih po 15°)",
   "sketch.imageMoved": "Slika skice premaknjena",
   "sketch.imageResized": "Velikost slike skice spremenjena",
   "sketch.viewControls": "Upravljanje pogleda skice",
