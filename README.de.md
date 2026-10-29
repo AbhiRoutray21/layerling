@@ -87,6 +87,7 @@ Ein vollständiges CAD-Paket ist es nicht: Es gibt keine parametrische Zeitleist
 - **Bündeln** – Strg+B hält Teile zusammen wie das Bündel in Tinkercad: Sie bewegen, drehen und skalieren sich gemeinsam, behalten aber ihre Farben und bleiben im Export getrennte Körper – praktisch für den Mehrfarbdruck.
 - **Schnittmenge** – nur das behalten, wo sich die ausgewählten Körper und Aussparungen überlappen.
 - **Hülle** – die gewählten Formen in ihre konvexe Hülle packen, den kleinsten Körper ohne Dellen um alle: Eine Halbkugel auf einem Zylinder wird zur Kuppel, vier Pfosten zu einem Kasten mit runden Ecken. Aussparungen in der Auswahl werden danach herausgeschnitten.
+- **Ausstechform** – mit einem Klick eine Wand und ein flacher Rand um den Umriss einer Skizze oder SVG, oder um das, worauf eine Form steht; Löcher bleiben offen. Wanddicke, Höhe und Rand sind die Füllarten der Skizze, jedes lässt sich danach ändern.
 - **Teilen** – Körper oder Aussparungen mit einer Ebene in zwei schneiden; ein ausgehöhlter Körper behält seinen Hohlraum. Gedreht schneidet die Ebene schräg; am Pfeil ziehen verschiebt sie, und mit „Fläche wählen“ legst du sie auf eine beliebige Fläche.
 
 ### Bearbeiten

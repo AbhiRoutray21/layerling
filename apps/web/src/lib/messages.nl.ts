@@ -176,6 +176,8 @@ export const MESSAGES_NL: Record<MessageKey, string> = {
   "welcome.moreSplitBody": "een lichaam of gat in tweeën snijden met een vlak dat je verschuift en kantelt voor een schuine snede - handig voor onderdelen die te groot zijn voor het printbed.",
   "welcome.moreHullTitle": "Omhulsel",
   "welcome.moreHullBody": "legt één convex lichaam om de gekozen vormen, alsof ze in krimpfolie zijn verpakt: een halve bol op een cilinder wordt een koepel zonder trede, vier hoekpalen een doos met ronde hoeken. Uitsparingen in de selectie worden daarna uit het omhulsel gesneden, en Groep bewerken opent het weer.",
+  "welcome.moreCookieCutterTitle": "Uitsteekvorm",
+  "welcome.moreCookieCutterBody": "maakt met één klik een uitsteekvorm van een schets, een SVG of een willekeurige vorm: een dunne wand rond de omtrek en een platte rand rond de voet. Gaten blijven open, en wand, hoogte en rand pas je daarna aan onder Eigenschappen.",
   "welcome.moreSketchTitle": "Schetsen",
   "welcome.moreSketchBody": "contouren tekenen, elke rechte zijde krommen (dubbelklikken op het lichaam opent de schets weer), tijdens het tekenen de lengte en hoek van een lijn typen (“50<30”) of in stappen van 15° laten vastklikken, lijnen op een exacte lengte en hoeken op een exacte hoek zetten, hoeken afronden of afschuinen, hulplijnen tekenen waar punten op vastklikken, en ze extruderen of rond een as wentelen - of alleen de lijn met een breedte opbouwen, als lijst of als strook.",
   "welcome.moreLibraryTitle": "Vormenbibliotheek",

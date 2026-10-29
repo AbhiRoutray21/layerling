@@ -307,6 +307,8 @@ export const MESSAGES_CS: Record<MessageKey, string> = {
   "welcome.moreSplitBody": "rozdělte plné nebo odečítací těleso na dvě části posunutím a naklopením řezné roviny. Hodí se pro díly, které se nevejdou na tiskovou podložku.",
   "welcome.moreHullTitle": "Obal",
   "welcome.moreHullBody": "obalí vybrané tvary jedním konvexním tělesem, jako smršťovací fólií: půlkoule na válci se změní v kupoli bez schodu, čtyři rohové sloupky v krabici se zaoblenými rohy. Otvory ve výběru se potom z obalu vyříznou a Upravit skupinu ho znovu otevře.",
+  "welcome.moreCookieCutterTitle": "Vykrajovátko",
+  "welcome.moreCookieCutterBody": "vytvoří jedním kliknutím vykrajovátko ze skici, SVG nebo libovolného tvaru: tenká stěna kolem obrysu a plochý okraj kolem paty. Otvory zůstanou otevřené a stěnu, výšku i okraj můžeš poté změnit ve Vlastnostech.",
   "welcome.moreSketchTitle": "Náčrty",
   "welcome.moreSketchBody": "kreslete obrysy, zakřivujte přímé úsečky a zadávejte délky i úhly během kreslení („50<30“). Shift přichytává po 15°. Zaoblujte či zkoste rohy, používejte pomocné konstrukční čáry a vytvořte těleso vysunutím nebo rotací profilu. Z čáry s určenou šířkou lze vytvořit také rám či pás. Dvojklik na těleso znovu otevře jeho náčrt.",
   "welcome.moreLibraryTitle": "Knihovna tvarů",

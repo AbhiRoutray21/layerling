@@ -176,6 +176,8 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "welcome.moreSplitBody": "einen Körper oder eine Aussparung mit einer Ebene in zwei schneiden, die sich verschieben und für einen Schrägschnitt kippen lässt - praktisch für Teile, die nicht auf die Druckplatte passen.",
   "welcome.moreHullTitle": "Hülle",
   "welcome.moreHullBody": "legt einen einzigen konvexen Körper um die gewählten Formen, als wären sie in Schrumpffolie gepackt: Eine Halbkugel auf einem Zylinder wird zur Kuppel ohne Stufe, vier Eckpfosten zu einem Kasten mit runden Ecken. Aussparungen in der Auswahl werden danach aus der Hülle geschnitten, und „Gruppe bearbeiten“ öffnet sie wieder.",
+  "welcome.moreCookieCutterTitle": "Ausstechform",
+  "welcome.moreCookieCutterBody": "macht aus einer Skizze, einer SVG oder einer beliebigen Form mit einem Klick eine Ausstechform: eine dünne Wand um den Umriss und ein flacher Rand um den Fuß. Löcher bleiben offen, Wand, Höhe und Rand lassen sich danach unter Eigenschaften ändern.",
   "welcome.moreSketchTitle": "Skizzen",
   "welcome.moreSketchBody": "Umrisse zeichnen, einen echten Bogen durch drei Punkte legen, jede gerade Seite krümmen (ein Doppelklick auf den Körper öffnet die Skizze wieder), Linien schon beim Zeichnen nach Länge und Winkel eintippen („50<30“) oder in 15°-Schritten einrasten, Linien auf genaue Länge und Ecken auf genauen Winkel tippen, Ecken verrunden oder fasen, eine Auswahl an einer Achse oder Linie spiegeln, Hilfslinien ziehen, an denen Punkte einrasten, eine Lücke schließen, indem du ein offenes Ende auf das andere ziehst, und zu Körpern extrudieren oder um eine Achse drehen - oder nur die Linie mit einer Breite bauen, als Rahmen oder Streifen.",
   "welcome.moreLibraryTitle": "Formenbibliothek",

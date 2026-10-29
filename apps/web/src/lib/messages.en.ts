@@ -177,6 +177,8 @@ export const MESSAGES_EN = {
   "welcome.moreSplitBody": "cut a body or a hole in two with a plane you move and tilt for an angled cut - handy for parts too big for the print bed.",
   "welcome.moreHullTitle": "Hull",
   "welcome.moreHullBody": "wraps the selected shapes in one convex body, as if shrink-wrapped: a half sphere on a cylinder becomes a dome with no step, four corner posts a box with round corners. Holes in the selection are cut out of the hull afterwards, and Edit group opens it again.",
+  "welcome.moreCookieCutterTitle": "Cookie cutter",
+  "welcome.moreCookieCutterBody": "makes a cookie cutter from a sketch, an SVG or any shape in one click: a thin wall round the outline and a flat rim round its foot. Holes stay open, and wall, height and rim can be changed afterwards under Properties.",
   "welcome.moreSketchTitle": "Sketches",
   "welcome.moreSketchBody": "draw outlines, lay a true arc through three points, curve any straight side (a double click on the body opens its sketch again), type a line's length and angle while drawing (\"50<30\") or snap it in 15° steps, type lines to an exact length and corners to an exact angle, fillet or chamfer corners, mirror a selection across an axis or a line, draw construction lines that points snap to, close a gap by dragging one open end onto the other, and extrude them or revolve them around an axis - or build just the line with a width, as a frame or a stripe.",
   "welcome.moreLibraryTitle": "Shape library",
