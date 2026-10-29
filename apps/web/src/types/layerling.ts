@@ -1097,8 +1097,8 @@ export type WorkplaneShape = {
    */
   textStretch?: boolean;
   /**
-   * Straight text only (#981): the letters stacked top to bottom, each centred on one upright line, instead of
-   * side by side. Curved text ignores it.
+   * The letters stacked top to bottom (#981), each centred on one upright line, instead of side by side. Curved text
+   * runs them as a column along the circle at its left side (its right side with textInward), the letters upright.
    */
   textVertical?: boolean;
   /**

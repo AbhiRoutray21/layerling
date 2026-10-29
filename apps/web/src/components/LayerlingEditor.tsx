@@ -10287,8 +10287,10 @@ export function LayerlingEditor({
           if (typeof params.silhouette === "boolean") patch.textSilhouette = params.silhouette || undefined;
           // Straight text only (#382): the letters stretched to fill the box, or fitted with their proportions.
           if (typeof params.stretch === "boolean") patch.textStretch = params.stretch || undefined;
-          // Straight text only (#981): the letters stacked top to bottom; the box turns upright and the letters keep their size.
-          if (typeof params.vertical === "boolean" && !target.textCurved) {
+          // The letters stacked top to bottom (#981). Straight: the box turns upright and the letters keep their size. Curved: the
+          // column runs along the circle, the letters upright, and the box follows in curvedTextPatch.
+          if (typeof params.vertical === "boolean" && target.textCurved) patch.textVertical = params.vertical || undefined;
+          else if (typeof params.vertical === "boolean") {
             const vertical = { ...target, ...patch, textVertical: params.vertical || undefined } as WorkplaneShape;
             Object.assign(patch, { textVertical: params.vertical || undefined }, vertical.textStretch ? {} : textLetterSizePatch(vertical, textLetterSize({ ...target, ...patch } as WorkplaneShape)));
           }
