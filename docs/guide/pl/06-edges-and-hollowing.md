@@ -83,6 +83,18 @@ Jeśli później zmienisz rozmiar wydrążonej bryły, layerling od razu wydrą�
 
 > **Wskazówka:** przy dyszy 0,4 mm dobrym początkiem jest ścianka od 1,2 do 2 mm: wystarczająco cienka, żeby oszczędzić materiał, i wystarczająco gruba na solidną część.
 
+## Pokrywka do otwartej bryły
+
+{{ui:editor.tool.lid}} tworzy pokrywkę do bryły otwartej u góry: pudełka wydrążonego z otwartą górą, doniczki, tacki. Zaznacz bryłę i kliknij {{ui:editor.tool.lid}}. W oknie wybierasz rodzaj:
+
+- {{ui:lid.type.plug}}: płyta tak duża jak bryła, a pod nią kołnierz, który wchodzi w otwór.
+- {{ui:lid.type.cap}}: płyta szersza od bryły o grubość ścianki, a pod nią obrzeże, które obejmuje ją z zewnątrz.
+- {{ui:lid.type.flat}}: tylko płyta, do położenia lub przyklejenia.
+
+Następnie ustawiasz grubość ({{ui:lid.thickness}}), pasowanie ({{ui:lid.fit}}, luz na stronę między pokrywką a bryłą: 0,1 mm ciasno, 0,2 mm normalnie, 0,3 mm luźno lub dowolna wartość do 1 mm) oraz jak głęboko sięga kołnierz lub obrzeże i jak gruba jest jego ścianka. Kliknij {{ui:lid.apply}}: pokrywka leży obok bryły, odwrócona płytą w dół, więc drukuje się bez podpór. Bryła zostaje bez zmian. Pokrywka podąża za każdym obrysem, okrągłym lub kanciastym, bo jest zdejmowana z samej bryły tuż pod jej krawędzią. Bryła bez otworu u góry dostaje tylko płaską pokrywkę; dla dwóch pozostałych najpierw wydrąż ją z otwartą górą.
+
+> **Wskazówka:** To, jak ciasno siedzi pokrywka, zależy od drukarki. Najpierw wydrukuj małe pudełko z pokrywką; jeśli jest za ciasna, wybierz następne, luźniejsze pasowanie.
+
 ## Odsuwanie brył
 
 Każdą ścianę bryły można przesunąć o tę samą odległość na zewnątrz lub do środka. Tego potrzebuje pasowanie, pokrywka lub połączenie zatrzaskowe: luz 0,1-0,3 mm dookoła, podczas gdy detale zostają na miejscu, czego skalowanie nie daje.
