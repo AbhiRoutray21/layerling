@@ -11,6 +11,16 @@
   },
   {
     "title": {
+      "de": "Namen auch für ausgegraute Symbole",
+      "en": "Names for greyed-out icons too"
+    },
+    "body": {
+      "de": "Fährst du über ein ausgegrautes Symbol im Menüband, steht jetzt auch dort sein Name. Die Ausstechform findest du jetzt unter Anpassen.",
+      "en": "Hovering a greyed-out icon in the ribbon now shows its name too. The cookie cutter is now under Modify."
+    }
+  },
+  {
+    "title": {
       "de": "Oberflächentextur: Ziegel, Rinde und Holz",
       "en": "Surface texture: bricks, bark and wood"
     },
