@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "title": {
+      "de": "Mehr Platz zum Bauen",
+      "en": "More room to build"
+    },
+    "body": {
+      "de": "Das Menüband bleibt jetzt auch in kleineren Fenstern eine Zeile hoch: Gruppen, für die der Platz fehlt, klappen zu einem Knopf zusammen und öffnen sich, wenn du mit der Maus darauf zeigst oder sie antippst. Start und Hilfe stehen dafür oben in der Titelzeile.",
+      "en": "The ribbon now stays one row high in smaller windows too: groups there is no room for fold into one button that opens when you point at it or tap it. Start and Help moved up into the title row for this."
+    }
+  }
+]

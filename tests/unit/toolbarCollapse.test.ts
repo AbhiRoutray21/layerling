@@ -23,6 +23,13 @@ describe("groups of the ribbon that fold up when the window is narrow", () => {
     expect(groupsToCollapse(groups, 100)).toEqual(["manage", "clipboard", "modify"]);
   });
 
+  it("opens small groups again when a wide one folded after them left room for them", () => {
+    // 930 open in 560: manage and clipboard fold (708), not enough, modify folds too (252); then clipboard (338) and manage
+    // (474) fit open again. In 400 only clipboard does.
+    expect(groupsToCollapse(groups, 560)).toEqual(["modify"]);
+    expect(groupsToCollapse(groups, 400)).toEqual(["manage", "modify"]);
+  });
+
   it("leaves a group alone that is no wider folded than open", () => {
     expect(groupsToCollapse([{ key: "small", width: COLLAPSED_GROUP_WIDTH, priority: 1 }, { key: "big", width: 300, priority: 2 }], 200)).toEqual(["big"]);
   });
