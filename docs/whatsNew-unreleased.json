@@ -48,5 +48,15 @@
       "de": "Bei Teilen unter einem Millimeter standen die Maße beim Heranzoomen weit außerhalb des Bildes. Jetzt bleiben sie dicht neben dem Körper, so dass du zum Ablesen nicht mehr herauszoomen musst.",
       "en": "On parts below a millimetre, the sizes ended up far outside the view when you zoomed in. They now stay right next to the body, so you no longer have to zoom out to read them."
     }
+  },
+  {
+    "title": {
+      "de": "Abschrägen von Gruppen mit Löchern",
+      "en": "Chamfering groups with holes"
+    },
+    "body": {
+      "de": "Eine Gruppe aus mehreren Teilen, die jeweils eigene Löcher haben, etwa ein kopierter Halter, ließ sich kaum abschrägen oder abrunden: Das Werkzeug rechnete Minuten und brach ab. Jetzt baut es solche Gruppen exakt und ist in Sekunden bereit.",
+      "en": "A group of several parts that each have their own holes, a copied holder for example, could hardly be chamfered or rounded: the tool worked for minutes and then gave up. It now builds such groups exactly and is ready in seconds."
+    }
   }
 ]
