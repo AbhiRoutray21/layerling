@@ -1029,6 +1029,31 @@ function unzipAsync(bytes: Uint8Array) {
   });
 }
 
+/** Only the project.json of a package, or nothing when it cannot be read; the rest stays packed. */
+function unzipProjectJson(bytes: Uint8Array) {
+  return new Promise<Uint8Array | null>((resolve) => {
+    try {
+      inspectZipBeforeExpansion(bytes);
+    } catch {
+      resolve(null);
+      return;
+    }
+    unzip(bytes, { filter: (file) => file.name === "project.json" }, (error, files) => {
+      resolve(error ? null : files["project.json"] ?? null);
+    });
+  });
+}
+
+function packagedLylProjectName(projectJson: Uint8Array | null) {
+  if (!projectJson) return null;
+  try {
+    const name = (JSON.parse(strFromU8(projectJson)) as { metadata?: { projectName?: unknown } } | null)?.metadata?.projectName;
+    return typeof name === "string" ? name : null;
+  } catch {
+    return null;
+  }
+}
+
 export async function exportLylProject(input: LylProjectExportInput) {
   const placementElevation = Number.isFinite(input.placementElevation) ? input.placementElevation : 0;
   const placementWorkplane = normalizePlacementWorkplane(input.placementWorkplane, placementElevation);
@@ -2326,6 +2351,9 @@ export async function withLylProjectName(input: ArrayBuffer | Uint8Array, projec
   const name = projectName.trim();
   const prefix = strFromU8(bytes.subarray(0, Math.min(bytes.length, 64))).trimStart();
   if (!name || prefix.startsWith("{")) return bytes;
+  // Only project.json is read to compare the name: unpacking and checking every mesh of every design
+  // made backing up many large designs slow (#991). The whole package is opened only to rename it.
+  if (packagedLylProjectName(await unzipProjectJson(bytes)) === name) return bytes;
   const { files, validated } = await readPackagedLyl(bytes);
   if (validated.document.metadata.projectName === name) return bytes;
   const raw = JSON.parse(strFromU8(files["project.json"])) as { metadata: { projectName: string } };
