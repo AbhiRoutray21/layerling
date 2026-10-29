@@ -714,7 +714,7 @@ export const tools = [
   },
   {
     name: "layerling_cookie_cutter",
-    description: "Make a cookie cutter from the given objects, like the editor's Cookie cutter button: a wall and a flat rim round the outline, as two sketch bodies in one bundle that replaces the objects. One extruded sketch body gives its own outline; anything else (shapes built in layerling, an imported mesh, several parts) gives what it stands on, the outlines the workplane cuts through it - holes inside stay open. The wall and the rim are lines outside the outline in the sketch fill modes, so change them under Properties afterwards. The wall's top runs in to a cutting edge, and the outline is mirrored left to right, because the cutter is printed on its rim and turned over to cut: a text or logo comes out the right way round. All sizes in mm: wall (thickness, default 1.2), height (default 15), rim (how far the rim reaches beyond the wall, default 4), rimHeight (default 2), edge (the cutting edge's width on top of the wall, default 0.4, 0 for a flat top; if the outline has steps too short for it, the wall gets a flat top and the answer has a note); mirror (default true; false for an outline that should stay as drawn).",
+    description: "Make a cookie cutter from the given objects, like the editor's Cookie cutter button: a wall and a flat rim round the outline, as two sketch bodies in one bundle that replaces the objects. One extruded sketch body gives its own outline; anything else (shapes built in layerling, an imported mesh, several parts) gives what it stands on, the outlines the workplane cuts through it - holes inside get walls of their own (see inner). The wall and the rim are lines outside the outline in the sketch fill modes, so change them under Properties afterwards. The wall's top runs in to a cutting edge, and the outline is mirrored left to right, because the cutter is printed on its rim and turned over to cut: a text or logo comes out the right way round. All sizes in mm: wall (thickness, default 1.2), height (default 15), rim (how far the rim reaches beyond the wall, default 4), rimHeight (default 2), edge (the cutting edge's width on top of the wall, default 0.4, 0 for a flat top; if the outline has steps too short for it, the wall gets a flat top and the answer has a note); mirror (default true; false for an outline that should stay as drawn); inner (default true: holes in the outline, the inside of an e or an a, get walls of their own, held to the outer wall by bridges at the rim; false leaves them open as before), bridge (the bridges' width, default 2) and bridgeHeight (default 2). A text lying flat gives its letters' own curves.",
     inputSchema: {
       ...editorTargetSchema,
       required: ["ids"],
@@ -727,6 +727,9 @@ export const tools = [
         rimHeight: { type: "number" },
         edge: { type: "number" },
         mirror: { type: "boolean" },
+        inner: { type: "boolean" },
+        bridge: { type: "number" },
+        bridgeHeight: { type: "number" },
       },
     },
   },

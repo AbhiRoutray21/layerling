@@ -168,7 +168,7 @@ export const MESSAGES_SL: Partial<Record<MessageKey, string>> = {
   "welcome.moreLoftSketchesTitle": "Prehod med skicama",
   "welcome.moreLoftSketchesBody": "poveže dve skici ali uvožena SVG v eno telo: spodaj obris spodnje, zgoraj obris zgornje, vmes ravne stene - lijak, prehodni kos ali iz dveh obročev okvir, ki se oži. Uredi skupino znova odpre obe skici.",
   "welcome.moreCookieCutterTitle": "Modelček",
-  "welcome.moreCookieCutterBody": "z enim klikom naredi modelček za piškote iz skice, SVG-ja ali poljubne oblike: tanka stena okoli obrisa in ploščat rob okoli vznožja. Obris se zrcali, da napis pride iz testa pravilno obrnjen, stena pa se zgoraj zoži v rezilo. Luknje ostanejo odprte, steno, rezilo, višino in rob lahko pozneje spremeniš v Lastnostih.",
+  "welcome.moreCookieCutterBody": "z enim klikom naredi modelček za piškote iz skice, SVG-ja ali poljubne oblike: tanka stena okoli obrisa in ploščat rob okoli vznožja. Obris se zrcali, da napis pride iz testa pravilno obrnjen, stena pa se zgoraj zoži v rezilo. Notranjost črk e ali a dobi svojo steno, ki jo držijo mostički, steno, rezilo, višino in rob lahko pozneje spremeniš v Lastnostih.",
   "welcome.moreSketchTitle": "Skice",
   "welcome.moreSketchBody": "nariši konture (dvojni klik na telo znova odpre njegovo skico), vnesi črte z natančno dolžino in kote z natančnim kotom, zaoblji ali posneti oglišča ter jih iztisni ali zavrti okoli osi.",
   "welcome.moreLibraryTitle": "Knjižnica oblik",

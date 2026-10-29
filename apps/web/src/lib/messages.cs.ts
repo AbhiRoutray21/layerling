@@ -310,7 +310,7 @@ export const MESSAGES_CS: Record<MessageKey, string> = {
   "welcome.moreLoftSketchesTitle": "Přechod mezi náčrty",
   "welcome.moreLoftSketchesBody": "spojí dva náčrty nebo importované SVG do jednoho tělesa: dole obrys spodního, nahoře obrys horního, mezi nimi rovné stěny - trychtýř, přechodový kus nebo ze dvou prstenců zužující se rám. „Upravit skupinu“ oba náčrty znovu otevře.",
   "welcome.moreCookieCutterTitle": "Vykrajovátko",
-  "welcome.moreCookieCutterBody": "vytvoří jedním kliknutím vykrajovátko ze skici, SVG nebo libovolného tvaru: tenká stěna kolem obrysu a plochý okraj kolem paty. Obrys se zrcadlí, aby text vyšel z těsta správně, a stěna nahoře končí ostřím. Otvory zůstanou otevřené a stěnu, ostří, výšku i okraj můžeš poté změnit ve Vlastnostech.",
+  "welcome.moreCookieCutterBody": "vytvoří jedním kliknutím vykrajovátko ze skici, SVG nebo libovolného tvaru: tenká stěna kolem obrysu a plochý okraj kolem paty. Obrys se zrcadlí, aby text vyšel z těsta správně, a stěna nahoře končí ostřím. Vnitřek písmen e nebo a dostane vlastní stěnu drženou můstky a stěnu, ostří, výšku i okraj můžeš poté změnit ve Vlastnostech.",
   "welcome.moreSketchTitle": "Náčrty",
   "welcome.moreSketchBody": "kreslete obrysy, zakřivujte přímé úsečky a zadávejte délky i úhly během kreslení („50<30“). Shift přichytává po 15°. Zaoblujte či zkoste rohy, používejte pomocné konstrukční čáry a vytvořte těleso vysunutím nebo rotací profilu. Z čáry s určenou šířkou lze vytvořit také rám či pás. Dvojklik na těleso znovu otevře jeho náčrt.",
   "welcome.moreLibraryTitle": "Knihovna tvarů",

@@ -6,6 +6,9 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **Cookie cutters keep the inside of letters, held by bridges (#982):** The cutter only ran round the silhouette, so the inside of an e or an a was lost from the cookie. The wall now runs round every hole of the outline as well, and bridges at the rim's level - on the side the hand presses, as CookieCAD does it - hold those inner walls to the outer one, one bar each where hole and outline come closest; a piece lying inside a hole is held to that hole. The bridges are a sketch body of their own in the bundle, 2 mm wide and 2 mm high (MCP `inner`, `bridge`, `bridgeHeight`). Suggested by @avxmw in #982.
+- **A cookie cutter from a text uses the letters' own curves (#982):** A text lying flat gave its outline by cutting through its triangles, hundreds of short pieces the kernel cannot put a cutting edge on. It now gives the letters' exact curves, as the edge tool takes them (`textGlyphProfiles`), so the wall follows them exactly; letters that touch or overlap still take the cut, which unites them.
+
 ## 1.119.1
 
 - **A cookie cutter from overlapping parts runs round all of them (#982):** Two shapes that overlap - a box and a cylinder over its corner - gave each its own wall, crossing in the middle of the cutter, unless they were grouped first. The outlines the workplane cuts through the parts are now united before the cutter is built (`unitedFootprint`, each body by the even-odd rule, then the union of all), so overlapping parts give one outline round all of them; parts apart from each other still give a cutter each. Reported by @raradek in #982.
