@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+## 1.119.1
+
 - **A cookie cutter from overlapping parts runs round all of them (#982):** Two shapes that overlap - a box and a cylinder over its corner - gave each its own wall, crossing in the middle of the cutter, unless they were grouped first. The outlines the workplane cuts through the parts are now united before the cutter is built (`unitedFootprint`, each body by the even-odd rule, then the union of all), so overlapping parts give one outline round all of them; parts apart from each other still give a cutter each. Reported by @raradek in #982.
 - **A cylinder's cookie cutter has its cutting edge again (#982):** 1.119.0 left the edge off every outline of more than 200 rim pieces, to stop a text body from timing out - and with it a plain cylinder, whose footprint has some 240. What made the text slow was not the number of pieces but arcs a few thousandths of a millimetre long, which the kernel cannot chamfer and spends minutes failing on; a clean outline of 900 pieces chamfers in 3.5 s. The edge is now left off when a rim piece is shorter than 0.01 mm or there are more than 1 000 of them.
 
