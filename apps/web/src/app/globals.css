@@ -3909,6 +3909,23 @@ html[data-theme="dark"] .shell-openings-summary {
   height: 28px;
 }
 
+/* On a narrow window - a tablet held upright - the name of the design needs the room: the help keeps its icons, the
+   colour scheme its palette. */
+@media (max-width: 1100px) {
+  .toolbar-title-help {
+    padding-left: 4px;
+  }
+
+  .toolbar-title-help-label,
+  .toolbar-title-row-actions .theme-switch:not(.language-switch) .theme-switch-label {
+    display: none;
+  }
+
+  .toolbar-workspace-tabs button {
+    padding-inline: 12px;
+  }
+}
+
 .toolbar-title-help .action-icon-button svg {
   width: 22px;
   height: 22px;
