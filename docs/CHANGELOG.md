@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **The cutting edge in fine steps where the kernel cannot chamfer (#982):** The kernel's chamfer fails on a logo's sharp points and on pieces a hundredth of a millimetre long - the Wera logo from #982, a serif text - so those cutters got a flat top. The wall is now built there from polygon offsets (`steppedEdgeWall`, Manifold): the stroke up to the edge, then steps of 0.1 mm, each set in by one step on both sides, up to the same narrow top. A 0.2 mm print layer cannot tell the steps from the slope; the wall is a triangle mesh rather than an exact body. Reported by @avxmw in #982.
+
 - **Cookie cutters keep the inside of letters, held by bridges (#982):** The cutter only ran round the silhouette, so the inside of an e or an a was lost from the cookie. The wall now runs round every hole of the outline as well, and bridges at the rim's level - on the side the hand presses, as CookieCAD does it - hold those inner walls to the outer one, one bar each where hole and outline come closest; a piece lying inside a hole is held to that hole. The bridges are a sketch body of their own in the bundle, 2 mm wide and 2 mm high (MCP `inner`, `bridge`, `bridgeHeight`). Suggested by @avxmw in #982.
 - **A cookie cutter from a text uses the letters' own curves (#982):** A text lying flat gave its outline by cutting through its triangles, hundreds of short pieces the kernel cannot put a cutting edge on. It now gives the letters' exact curves, as the edge tool takes them (`textGlyphProfiles`), so the wall follows them exactly; letters that touch or overlap still take the cut, which unites them.
 
