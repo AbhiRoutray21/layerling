@@ -463,15 +463,18 @@ export function ToolbarFlexiIcon(props: IconProps) {
   );
 }
 
-/** A star cutter seen from above: the thin wall between the outline and the cookie inside it. */
+/** A round cookie with a bite out of it and a few chips: what the cutter is for (Stefan, 29.10.2026 - a star read as a star). */
 export function ToolbarCookieCutterIcon(props: IconProps) {
-  const outer = "M24 7 29.1 19 42.1 20.1 32.2 28.7 35.2 41.4 24 34.6 12.8 41.4 15.8 28.7 5.9 20.1 18.9 19Z";
-  const inner = "M24 12.8 27.5 21.1 36.6 21.9 29.7 27.9 31.8 36.7 24 32 16.2 36.7 18.3 27.9 11.4 21.9 20.5 21.1Z";
+  const cookie = "M28.5 11A16 16 0 1 0 38 20.5A9 9 0 0 1 28.5 11Z";
   return (
     <ToolbarVectorIcon {...props}>
-      <path d={`${outer}${inner}`} fillRule="evenodd" fill="currentColor" opacity="0.3" stroke="none" />
-      <path d={outer} />
-      <path d={inner} strokeWidth="1.8" />
+      <path d={cookie} {...SOLID} />
+      <path d={cookie} />
+      <circle cx="17" cy="21" r="2" fill="currentColor" stroke="none" />
+      <circle cx="25.5" cy="30" r="2" fill="currentColor" stroke="none" />
+      <circle cx="15.5" cy="32" r="1.7" fill="currentColor" stroke="none" />
+      <circle cx="24" cy="19.5" r="1.5" fill="currentColor" stroke="none" />
+      <circle cx="32" cy="30.5" r="1.7" fill="currentColor" stroke="none" />
     </ToolbarVectorIcon>
   );
 }
