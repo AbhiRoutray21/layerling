@@ -125,7 +125,6 @@ export const MESSAGES_FR: Partial<Record<MessageKey, string>> = {
   "dashboard.backupAllTitle": "Enregistrez chaque motif de ce navigateur et les formes personnalisées dans un seul fichier ZIP - « Restaurer la sauvegarde » les ramène tous, aussi sur un autre ordinateur",
   "dashboard.backupSelected": "Sauvegarder",
   "dashboard.backupSelectedTitle": "Enregistrez les motifs choisis, dans leurs dossiers, dans un seul fichier ZIP - « Restaurer la sauvegarde » les ramène, aussi sur un autre ordinateur",
-  "dashboard.backupFolder": "Sauvegarder le dossier",
   "dashboard.backupFolderTitle": "Enregistrez ce dossier avec tous ses motifs et dossiers dans un seul fichier ZIP - « Restaurer la sauvegarde » le ramène",
   "dashboard.restoreBackup": "Restaurer la sauvegarde",
   "dashboard.restoreBackupTitle": "Choisissez un fichier de sauvegarde créé par « Sauvegarder tout » : tous ses motifs et formes personnalisées reviennent, ceux qui sont déjà là sont ignorés",

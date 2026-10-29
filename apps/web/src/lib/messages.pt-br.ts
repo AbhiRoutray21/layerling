@@ -133,7 +133,6 @@ export const MESSAGES_PT_BR: Partial<Record<MessageKey, string>> = {
   "dashboard.backupAllTitle": "Salva todos os projetos deste navegador e as formas personalizadas em um arquivo ZIP - \"Restaurar backup\" traz tudo de volta, também em outro computador",
   "dashboard.backupSelected": "Fazer backup",
   "dashboard.backupSelectedTitle": "Salva os designs escolhidos, nas pastas deles, em um único arquivo ZIP - “Restaurar backup” os traz de volta, também em outro computador",
-  "dashboard.backupFolder": "Fazer backup da pasta",
   "dashboard.backupFolderTitle": "Salva esta pasta com todos os designs e pastas dentro dela em um único arquivo ZIP - “Restaurar backup” a traz de volta",
   "dashboard.restoreBackup": "Restaurar backup",
   "dashboard.restoreBackupTitle": "Escolha um arquivo criado por “Fazer backup de tudo” para restaurar os projetos e as formas personalizadas. Projetos que já estão aqui não são importados de novo",

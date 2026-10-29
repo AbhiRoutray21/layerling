@@ -130,7 +130,6 @@ export const MESSAGES_NL: Record<MessageKey, string> = {
   "dashboard.backupAllTitle": "Alle ontwerpen van deze browser en de eigen vormen in één ZIP-bestand opslaan - met \"Back-up terugzetten\" komen ze allemaal terug, ook op een andere computer",
   "dashboard.backupSelected": "Back-up",
   "dashboard.backupSelectedTitle": "Sla de gekozen ontwerpen in hun mappen op in één ZIP-bestand - “Back-up terugzetten” haalt ze terug, ook op een andere computer",
-  "dashboard.backupFolder": "Map back-uppen",
   "dashboard.backupFolderTitle": "Sla deze map met alle ontwerpen en mappen erin op in één ZIP-bestand - “Back-up terugzetten” haalt hem terug",
   "dashboard.restoreBackup": "Back-up terugzetten",
   "dashboard.restoreBackupTitle": "Kies een back-upbestand dat “Alles back-uppen” heeft gemaakt: alle ontwerpen en eigen vormen komen terug, ontwerpen die er al zijn worden overgeslagen",

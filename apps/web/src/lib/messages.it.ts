@@ -106,7 +106,6 @@ export const MESSAGES_IT: Partial<Record<MessageKey, string>> = {
   "dashboard.backupAllTitle": "Salva tutti i progetti di questo browser e le forme personalizzate in un unico file ZIP: \"Ripristina backup\" li recupera tutti, anche su un altro computer",
   "dashboard.backupSelected": "Backup",
   "dashboard.backupSelectedTitle": "Salva i progetti scelti, nelle loro cartelle, in un unico file ZIP - “Ripristina backup” li riporta indietro, anche su un altro computer",
-  "dashboard.backupFolder": "Backup della cartella",
   "dashboard.backupFolderTitle": "Salva questa cartella con tutti i progetti e le cartelle che contiene in un unico file ZIP - “Ripristina backup” la riporta indietro",
   "dashboard.backupFallbackName": "Progetto",
   "dashboard.sortRecent": "Recenti",

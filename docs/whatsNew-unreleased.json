@@ -18,5 +18,15 @@
       "de": "Eine negative Länge schiebt den Körper über den ersten Messpunkt hinaus, etwa ein Loch 5 mm hinter die Kante eines Quaders. Mit Shift bleibt die Messung gerade, und das Fadenkreuz lässt den Fangpunkt frei.",
       "en": "A negative length moves the body past the first measuring point, a hole 5 mm inside the edge of a box for example. Shift keeps the measurement straight, and the crosshair leaves the snap point visible."
     }
+  },
+  {
+    "title": {
+      "de": "Nur einige Entwürfe sichern",
+      "en": "Back up only some designs"
+    },
+    "body": {
+      "de": "Nach „Auswählen“ sichert „Sichern“ nur die gewählten Entwürfe, und „Sichern“ im Menü eines Ordners den ganzen Ordner. Sichern geht außerdem schneller, vor allem bei großen Entwürfen.",
+      "en": "After \"Select\", \"Back up\" saves just the chosen designs, and \"Back up\" in a folder's menu saves the whole folder. Backing up is also quicker, above all with large designs."
+    }
   }
 ]

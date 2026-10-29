@@ -4132,7 +4132,7 @@ function Dashboard({
                                   }}
                                 >
                                   <Archive size={16} />
-                                  <span>{t("dashboard.backupFolder")}</span>
+                                  <span>{t("dashboard.backupSelected")}</span>
                                 </button>
                                 <button
                                   className="delete"

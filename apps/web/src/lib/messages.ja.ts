@@ -135,7 +135,6 @@ export const MESSAGES_JA: Partial<Record<MessageKey, string>> = {
   "dashboard.backupAllTitle": "このブラウザーのすべてのデザインとカスタムシェイプを1つのZIPファイルに保存します。「バックアップを戻す」で、別のコンピューターでもすべて元に戻ります",
   "dashboard.backupSelected": "バックアップ",
   "dashboard.backupSelectedTitle": "選んだデザインをフォルダーごと1つのZIPファイルに保存します。「バックアップを戻す」で、別のコンピューターでも元に戻ります",
-  "dashboard.backupFolder": "フォルダーをバックアップ",
   "dashboard.backupFolderTitle": "このフォルダーを中のすべてのデザインとフォルダーごと1つのZIPファイルに保存します。「バックアップを戻す」で元に戻ります",
   "dashboard.restoreBackup": "バックアップを戻す",
   "dashboard.restoreBackupTitle": "「すべてバックアップ」で作ったバックアップのファイルを選びます。すべてのデザインとカスタムシェイプが戻ります。今ここにあるデザインは、とばされます",

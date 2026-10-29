@@ -261,7 +261,6 @@ export const MESSAGES_CS: Record<MessageKey, string> = {
   "dashboard.backupAllTitle": "Uložit všechny projekty tohoto prohlížeče a vlastní tvary do jednoho souboru ZIP; „Obnovit ze zálohy“ vše vrátí, i na jiném počítači",
   "dashboard.backupSelected": "Zálohovat",
   "dashboard.backupSelectedTitle": "Uložit vybrané návrhy v jejich složkách do jednoho souboru ZIP - „Obnovit ze zálohy“ je vrátí, i na jiném počítači",
-  "dashboard.backupFolder": "Zálohovat složku",
   "dashboard.backupFolderTitle": "Uložit tuto složku se všemi návrhy a složkami v ní do jednoho souboru ZIP - „Obnovit ze zálohy“ ji vrátí",
   "dashboard.restoreBackup": "Obnovit ze zálohy",
   "dashboard.restoreBackupTitle": "Vyberte soubor vytvořený tlačítkem „Zálohovat vše“: vrátí se všechny jeho projekty a vlastní tvary, projekty, které už tu jsou, se přeskočí",

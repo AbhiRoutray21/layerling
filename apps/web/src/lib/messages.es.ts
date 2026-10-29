@@ -126,7 +126,6 @@ export const MESSAGES_ES: Partial<Record<MessageKey, string>> = {
   "dashboard.backupAllTitle": "Guardar todos los diseños de este navegador y las formas personalizadas en un solo archivo ZIP: «Restaurar copia de seguridad» los recupera todos, también en otro ordenador",
   "dashboard.backupSelected": "Copia de seguridad",
   "dashboard.backupSelectedTitle": "Guarda los diseños elegidos, en sus carpetas, en un solo archivo ZIP - “Restaurar copia de seguridad” los recupera, también en otro ordenador",
-  "dashboard.backupFolder": "Copia de la carpeta",
   "dashboard.backupFolderTitle": "Guarda esta carpeta con todos sus diseños y carpetas en un solo archivo ZIP - “Restaurar copia de seguridad” la recupera",
   "dashboard.restoreBackup": "Restaurar copia de seguridad",
   "dashboard.restoreBackupTitle": "Elegir un archivo hecho con «Hacer copia de seguridad»: vuelven todos sus diseños y formas personalizadas, y se omiten los diseños que ya están aquí",

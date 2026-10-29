@@ -132,7 +132,6 @@ export const MESSAGES_AR: Partial<Record<MessageKey, string>> = {
   "dashboard.backupAllTitle": "احفظ كل تصاميم هذا المتصفح والأشكال المخصصة في ملف ZIP واحد - \"استعادة نسخة احتياطية\" يعيدها جميعًا، حتى على كمبيوتر آخر",
   "dashboard.backupSelected": "نسخ احتياطي",
   "dashboard.backupSelectedTitle": "احفظ التصاميم المختارة في ملف ZIP واحد ضمن مجلداتها - “استعادة نسخة احتياطية” يعيدها، حتى على حاسوب آخر",
-  "dashboard.backupFolder": "نسخ المجلد احتياطيًا",
   "dashboard.backupFolderTitle": "احفظ هذا المجلد بكل ما فيه من تصاميم ومجلدات في ملف ZIP واحد - “استعادة نسخة احتياطية” يعيده",
   "dashboard.restoreBackup": "استعادة نسخة احتياطية",
   "dashboard.restoreBackupTitle": "اختر ملف نسخة احتياطية أنشأه «نسخ احتياطي للكل»: تعود كل تصاميمه وأشكاله المخصصة، وتُتخطّى التصاميم الموجودة هنا من قبل",

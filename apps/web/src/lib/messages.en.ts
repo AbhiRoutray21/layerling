@@ -131,7 +131,6 @@ export const MESSAGES_EN = {
   "dashboard.backupAllTitle": "Save every design of this browser and the custom shapes in one ZIP file - \"Restore backup\" brings them all back, also on another computer",
   "dashboard.backupSelected": "Back up",
   "dashboard.backupSelectedTitle": "Save the chosen designs in one ZIP file, in their folders - “Restore backup” brings them back, also on another computer",
-  "dashboard.backupFolder": "Back up folder",
   "dashboard.backupFolderTitle": "Save this folder with every design and folder in it in one ZIP file - “Restore backup” brings it back",
   "dashboard.restoreBackup": "Restore backup",
   "dashboard.restoreBackupTitle": "Pick a backup file that “Back up all” made: all its designs and custom shapes come back, and designs that are already here are skipped",

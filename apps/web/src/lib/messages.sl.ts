@@ -119,7 +119,6 @@ export const MESSAGES_SL: Partial<Record<MessageKey, string>> = {
   "dashboard.backupAllTitle": "Shrani vse projekte tega brskalnika in lastne oblike v eno datoteko ZIP – „Obnovi varnostno kopijo“ jih vse vrne, tudi na drugem računalniku",
   "dashboard.backupSelected": "Varnostna kopija",
   "dashboard.backupSelectedTitle": "Shrani izbrane modele v njihovih mapah v eno datoteko ZIP - „Obnovi varnostno kopijo“ jih vrne, tudi na drugem računalniku",
-  "dashboard.backupFolder": "Varnostna kopija mape",
   "dashboard.backupFolderTitle": "Shrani to mapo z vsemi modeli in mapami v njej v eno datoteko ZIP - „Obnovi varnostno kopijo“ jo vrne",
   "dashboard.restoreBackup": "Obnovi varnostno kopijo",
   "dashboard.restoreBackupTitle": "Izberite datoteko, ki jo je naredil gumb „Varnostna kopija vsega“: vsi njeni projekti in lastne oblike se vrnejo, projekti, ki so že tu, se preskočijo",

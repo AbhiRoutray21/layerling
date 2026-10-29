@@ -130,7 +130,6 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "dashboard.backupAllTitle": "Alle Entwürfe dieses Browsers und die eigenen Formen als eine ZIP-Datei sichern - „Sicherung wiederherstellen“ holt sie zurück, auch auf einem anderen Rechner",
   "dashboard.backupSelected": "Sichern",
   "dashboard.backupSelectedTitle": "Die gewählten Entwürfe in ihren Ordnern als eine ZIP-Datei sichern - „Sicherung wiederherstellen“ holt sie zurück, auch auf einem anderen Rechner",
-  "dashboard.backupFolder": "Ordner sichern",
   "dashboard.backupFolderTitle": "Diesen Ordner mit allen Entwürfen und Ordnern darin als eine ZIP-Datei sichern - „Sicherung wiederherstellen“ holt ihn zurück",
   "dashboard.restoreBackup": "Sicherung wiederherstellen",
   "dashboard.restoreBackupTitle": "Eine mit „Alle sichern“ erzeugte Sicherungsdatei wählen: alle ihre Entwürfe und eigenen Formen kommen zurück, schon vorhandene Entwürfe werden übersprungen",

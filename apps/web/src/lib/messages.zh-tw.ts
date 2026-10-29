@@ -124,7 +124,6 @@ export const MESSAGES_ZH_TW: Partial<Record<MessageKey, string>> = {
   "dashboard.backupAllTitle": "將這個瀏覽器的所有設計和自訂形狀儲存到一個 ZIP 檔案——「還原備份」可將它們全部還原，在另一台電腦上也可以",
   "dashboard.backupSelected": "備份",
   "dashboard.backupSelectedTitle": "將所選設計連同其資料夾儲存到一個 ZIP 檔案——「還原備份」可將它們還原，在另一台電腦上也可以",
-  "dashboard.backupFolder": "備份資料夾",
   "dashboard.backupFolderTitle": "將此資料夾及其中所有設計和資料夾儲存到一個 ZIP 檔案——「還原備份」可將其還原",
   "dashboard.restoreBackup": "還原備份",
   "dashboard.restoreBackupTitle": "選擇由「全部備份」建立的備份檔案：其中所有設計和自訂形狀都會還原，已經在這裡的設計則會略過",

@@ -111,7 +111,6 @@ export const MESSAGES_PT_PT: Partial<Record<MessageKey, string>> = {
   "dashboard.backupAllTitle": "Guarda todos os projetos deste navegador e as formas personalizadas num único ficheiro ZIP. \"Restaurar cópia de segurança\" permite recuperar tudo, mesmo noutro computador",
   "dashboard.backupSelected": "Cópia de segurança",
   "dashboard.backupSelectedTitle": "Guarda os designs escolhidos, nas respetivas pastas, num único ficheiro ZIP - “Restaurar cópia de segurança” repõe-nos, também noutro computador",
-  "dashboard.backupFolder": "Cópia da pasta",
   "dashboard.backupFolderTitle": "Guarda esta pasta com todos os designs e pastas que contém num único ficheiro ZIP - “Restaurar cópia de segurança” repõe-na",
   "error.serverListAll": "Este servidor ainda não consegue listar todos os seus projetos. Atualiza o layerling no servidor.",
   "error.shapesFolderRename": "A pasta das formas personalizadas não pode ser renomeada.",

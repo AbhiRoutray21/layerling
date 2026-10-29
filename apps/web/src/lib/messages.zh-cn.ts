@@ -124,7 +124,6 @@ export const MESSAGES_ZH_CN: Partial<Record<MessageKey, string>> = {
   "dashboard.backupAllTitle": "将此浏览器的所有设计和自定义形状保存到一个 ZIP 文件——“恢复备份”可将它们全部恢复，在另一台电脑上也可以",
   "dashboard.backupSelected": "备份",
   "dashboard.backupSelectedTitle": "将所选设计连同其文件夹保存到一个 ZIP 文件——“恢复备份”可将它们恢复，在另一台电脑上也可以",
-  "dashboard.backupFolder": "备份文件夹",
   "dashboard.backupFolderTitle": "将此文件夹及其中所有设计和文件夹保存到一个 ZIP 文件——“恢复备份”可将其恢复",
   "dashboard.restoreBackup": "恢复备份",
   "dashboard.restoreBackupTitle": "选择一个由“全部备份”生成的备份文件：其中的所有设计和自定义形状都会恢复，已在此处的设计会跳过",

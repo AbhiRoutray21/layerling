@@ -130,7 +130,6 @@ export const MESSAGES_PL: Partial<Record<MessageKey, string>> = {
   "dashboard.backupAllTitle": "Zapisz wszystkie projekty z tej przeglądarki i własne kształty w jednym pliku ZIP. „Przywróć kopię zapasową” przywraca je wszystkie, także na innym komputerze",
   "dashboard.backupSelected": "Kopia zapasowa",
   "dashboard.backupSelectedTitle": "Zapisz wybrane projekty wraz z ich folderami w jednym pliku ZIP - „Przywróć kopię zapasową” przywraca je, także na innym komputerze",
-  "dashboard.backupFolder": "Kopia folderu",
   "dashboard.backupFolderTitle": "Zapisz ten folder ze wszystkimi projektami i folderami w jednym pliku ZIP - „Przywróć kopię zapasową” go przywraca",
   "dashboard.restoreBackup": "Przywróć kopię zapasową",
   "dashboard.restoreBackupTitle": "Wybierz plik utworzony przez „Kopia zapasowa wszystkiego”: wszystkie jego projekty i własne kształty wrócą, projekty, które już są, zostaną pominięte",

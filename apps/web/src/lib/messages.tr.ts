@@ -102,7 +102,6 @@ export const MESSAGES_TR: Partial<Record<MessageKey, string>> = {
   "dashboard.backupAllTitle": "Bu tarayıcıdaki tüm tasarımları ve özel şekilleri tek bir ZIP dosyasına kaydet - \"Yedeği geri yükle\" hepsini geri getirir, başka bir bilgisayarda da",
   "dashboard.backupSelected": "Yedekle",
   "dashboard.backupSelectedTitle": "Seçilen tasarımları klasörleriyle birlikte tek bir ZIP dosyasına kaydeder - “Yedeği geri yükle” onları başka bir bilgisayarda da geri getirir",
-  "dashboard.backupFolder": "Klasörü yedekle",
   "dashboard.backupFolderTitle": "Bu klasörü içindeki tüm tasarımlar ve klasörlerle birlikte tek bir ZIP dosyasına kaydeder - “Yedeği geri yükle” onu geri getirir",
   "dashboard.restoreBackup": "Yedeği geri yükle",
   "dashboard.restoreBackupTitle": "“Tümünü yedekle” ile yapılmış bir yedek dosyası seç: içindeki tüm tasarımlar ve özel şekiller geri gelir, burada zaten olan tasarımlar atlanır",

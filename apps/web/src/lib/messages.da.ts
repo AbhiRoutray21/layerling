@@ -704,7 +704,6 @@ export const MESSAGES_DA: Partial<Record<MessageKey, string>> = {
   "dashboard.backupAllTitle": "Gem alle designs i denne browser og egne former i én ZIP-fil – \"Gendan sikkerhedskopi\" henter dem alle tilbage, også på en anden computer",
   "dashboard.backupSelected": "Sikkerhedskopiér",
   "dashboard.backupSelectedTitle": "Gem de valgte designs i deres mapper i én ZIP-fil - ”Gendan sikkerhedskopi” henter dem tilbage, også på en anden computer",
-  "dashboard.backupFolder": "Sikkerhedskopiér mappe",
   "dashboard.backupFolderTitle": "Gem denne mappe med alle designs og mapper i den i én ZIP-fil - ”Gendan sikkerhedskopi” henter den tilbage",
   "dashboard.restoreBackup": "Gendan sikkerhedskopi",
   "dashboard.restoreBackupTitle": "Vælg en fil lavet med „Sikkerhedskopiér alle“: alle designs og egne former kommer tilbage, designs der allerede er her springes over",

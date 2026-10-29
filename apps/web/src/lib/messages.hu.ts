@@ -108,7 +108,6 @@ export const MESSAGES_HU: Partial<Record<MessageKey, string>> = {
   "dashboard.backupAllTitle": "A böngésző összes tervének és a saját alakzatoknak a mentése egyetlen ZIP-fájlba – a „Mentés visszaállítása” mindet visszaadja, másik számítógépen is",
   "dashboard.backupSelected": "Mentés",
   "dashboard.backupSelectedTitle": "A kiválasztott tervek mentése a mappáikkal együtt egyetlen ZIP-fájlba - a „Mentés visszaállítása” visszahozza őket, másik gépen is",
-  "dashboard.backupFolder": "Mappa mentése",
   "dashboard.backupFolderTitle": "A mappa mentése a benne lévő összes tervvel és mappával egyetlen ZIP-fájlba - a „Mentés visszaállítása” visszahozza",
   "dashboard.restoreBackup": "Mentés visszaállítása",
   "dashboard.restoreBackupTitle": "Válassz egy fájlt, amelyet a „Minden mentése” készített: minden terve és saját alakzata visszatér, a már meglévő terveket kihagyja",
