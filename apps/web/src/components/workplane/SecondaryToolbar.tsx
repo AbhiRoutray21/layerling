@@ -23,6 +23,7 @@ import { NoteToolButton } from "@/components/workplane/NoteToolButton";
 import type { CadModifierKind } from "@/lib/cadModifierTypes";
 import type { ShapeAsset, SketchOperation, WorkplaneWorkspaceSettings } from "@/types/layerling";
 import { TopPanel } from "./TopActionPanel";
+import { useToolbarCollapse } from "./useToolbarCollapse";
 
 
 /** Die Befehle der Suche, die im Verlaufsblick wach bleiben: sie aendern nichts am Entwurf. */
@@ -545,6 +546,17 @@ export function SecondaryToolbar({
     setVisibilityOpen(false);
   }, [historyViewActive]);
   const simpleMode = useSimpleMode();
+  // Groups the window has no room for fold into one button that opens on hover or a tap (Stefan, 29.10.2026). The simple
+  // mode keeps every tool in sight, as it always did.
+  useToolbarCollapse(toolbarContentRef, !simpleMode);
+  /** The one button a folded group shows under its name, with the icon of the tool it is known by. */
+  const collapseBox = (label: string, Icon: ComponentType) => (
+    <div className="toolbar-section-tools toolbar-collapse-box">
+      <button className="toolbar-icon toolbar-collapse-trigger" type="button" aria-label={label} title={label} aria-expanded={false} data-collapse-trigger>
+        <Icon />
+      </button>
+    </div>
+  );
   const [paletteOpen, setPaletteOpen] = useState(false);
   const openPalette = () => {
     // The command search lists everything, also what the simple mode keeps away (#695).
@@ -876,25 +888,15 @@ export function SecondaryToolbar({
       <div ref={toolbarContentRef} className={`toolbar-mode-content ${toolbarMode}`}>
         {toolbarMode === "geometry" ? (
           <>
-      {onHome ? (
-        <div className="tool-group editor-nav-group">
-          <div className="toolbar-section toolbar-home-section" data-group="home">
-            <div className="toolbar-section-label">{t("editor.group.home")}</div>
-            <div className="toolbar-section-tools">
-              <button className="toolbar-icon editor-home-control" aria-label={t("editor.homeDashboard")} title={t("editor.homeDashboard")} onClick={onHome}>
-                <ToolbarHomeIcon />
-              </button>
-            </div>
-          </div>
-        </div>
-      ) : null}
       <div className="tool-group left">
-        <div className="toolbar-section" data-group="clipboard" inert={historyViewActive}>
+        <div className="toolbar-section" data-group="clipboard" data-collapse="2" inert={historyViewActive}>
           <div className="toolbar-section-label">{t("editor.group.clipboard")}</div>
+          {collapseBox(t("editor.group.clipboard"), ToolbarPasteIcon)}
           <div className="toolbar-section-tools">{leftTools.slice(0, 4).map(renderToolButton)}</div>
         </div>
-        <div className="toolbar-section" data-group="history">
+        <div className="toolbar-section" data-group="history" data-collapse="3">
           <div className="toolbar-section-label">{t("editor.group.history")}</div>
+          {collapseBox(t("editor.group.history"), ToolbarUndoIcon)}
           <div className="toolbar-section-tools">{inSimpleMode(leftTools.slice(4)).map(renderToolButton)}</div>
         </div>
         <div className="toolbar-section toolbar-shapes-section" data-group="shapes" ref={shapesMenuRef} inert={historyViewActive}>
@@ -1009,8 +1011,9 @@ export function SecondaryToolbar({
       <div className="toolbar-spacer" />
       <div className="tool-group right" inert={historyViewActive}>
         {simpleMode ? null : (
-        <div className="toolbar-section compact toolbar-visibility-section" data-group="visibility" ref={visibilityMenuRef}>
+        <div className="toolbar-section compact toolbar-visibility-section" data-group="visibility" data-collapse="5" ref={visibilityMenuRef}>
           <div className="toolbar-section-label">{t("editor.group.visibility")}</div>
+          {collapseBox(t("editor.group.visibility"), ToolbarHideSelectedIcon)}
           <div className="toolbar-section-tools">
             {visibilityTools.map(renderToolButton)}
             <span className="visibility-trigger-wrap">
@@ -1110,21 +1113,25 @@ export function SecondaryToolbar({
           ) : null}
         </div>
         )}
-        <div className="toolbar-section" data-group="combine">
+        <div className="toolbar-section" data-group="combine" data-collapse="6">
           <div className="toolbar-section-label">{t("editor.group.combine")}</div>
+          {collapseBox(t("editor.group.combine"), ToolbarGroupIcon)}
           <div className="toolbar-section-tools">{inSimpleMode(combineTools).map(renderToolButton)}</div>
         </div>
-        <div className="toolbar-section" data-group="modify">
+        <div className="toolbar-section" data-group="modify" data-collapse="7">
           <div className="toolbar-section-label">{t("editor.group.modify")}</div>
+          {collapseBox(t("editor.group.modify"), ToolbarFilletIcon)}
           <div className="toolbar-section-tools">{inSimpleMode(modifyTools).map(renderToolButton)}</div>
         </div>
-        <div className="toolbar-section" data-group="arrange">
+        <div className="toolbar-section" data-group="arrange" data-collapse="4">
           <div className="toolbar-section-label">{t("editor.group.arrange")}</div>
+          {collapseBox(t("editor.group.arrange"), ToolbarAlignIcon)}
           <div className="toolbar-section-tools">{inSimpleMode(arrangeTools).map(renderToolButton)}</div>
         </div>
       </div>
-      <div className="toolbar-section toolbar-actions-section" data-group="manage">
+      <div className="toolbar-section toolbar-actions-section" data-group="manage" data-collapse="1">
         <div className="toolbar-section-label">{t("editor.group.manage")}</div>
+        {collapseBox(t("editor.group.manage"), ToolbarSettingsIcon)}
         <div className="action-buttons">
           {simpleMode ? null : <NoteToolButton active={noteMode} shortcut={COMMAND_SHORTCUTS.note} onClick={onNoteTool} disabled={historyViewActive} />}
           {simpleMode ? null : <button className="action-icon-button" aria-label={t("editor.import")} title={`${t("editor.import")} (${COMMAND_SHORTCUTS.import})`} onClick={() => onTopPanel("import")} disabled={historyViewActive}>
@@ -1148,23 +1155,6 @@ export function SecondaryToolbar({
           </button>
         </div>
       </div>
-      {simpleMode ? null : <div className="toolbar-section toolbar-actions-section" data-group="help">
-        <div className="toolbar-section-label">{t("editor.group.help")}</div>
-        <div className="action-buttons">
-          <button className="action-icon-button" aria-label={t("palette.open")} title={t("palette.open")} aria-haspopup="dialog" data-layerling-tool="command-search" onClick={openPalette}>
-            <Search className="toolbar-search-icon" aria-hidden="true" />
-          </button>
-          <button className="action-icon-button" aria-label={t("editor.guide")} title={t("editor.guide")} onClick={onGuide}>
-            <ToolbarGuideIcon />
-          </button>
-          <button className="action-icon-button" aria-label={t("editor.keyboardShortcuts")} title={t("editor.keyboardShortcuts")} onClick={onShortcuts}>
-            <ToolbarKeyboardIcon />
-          </button>
-          <button className={`action-icon-button ${interactiveHelpActive ? "active" : ""}`} type="button" aria-label={t("interactiveHelp.title")} title={`${t("interactiveHelp.title")} (${COMMAND_SHORTCUTS["interactive-help"]})`} aria-pressed={interactiveHelpActive} data-layerling-tool="interactive-help" data-help-exempt onClick={onInteractiveHelp}>
-            <CircleHelp className="toolbar-search-icon" aria-hidden="true" />
-          </button>
-        </div>
-      </div>}
           </>
         ) : (
           <div className="sketch-toolbar-ribbon" aria-label={t("sketch.toolbar")}>
@@ -1314,12 +1304,14 @@ export function SecondaryToolbar({
                     </button>
                   </div>
                 </div>
-                <div className="toolbar-section sketch-clipboard-section" data-group="clipboard">
+                <div className="toolbar-section sketch-clipboard-section" data-group="clipboard" data-collapse="1">
                   <div className="toolbar-section-label">{t("editor.group.clipboard")}</div>
+                  {collapseBox(t("editor.group.clipboard"), ToolbarPasteIcon)}
                   <div className="toolbar-section-tools">{sketchClipboardTools.map(renderToolButton)}</div>
                 </div>
-                <div className="toolbar-section sketch-history-section" data-group="history">
+                <div className="toolbar-section sketch-history-section" data-group="history" data-collapse="2">
                   <div className="toolbar-section-label">{t("editor.group.history")}</div>
+                  {collapseBox(t("editor.group.history"), ToolbarUndoIcon)}
                   <div className="toolbar-section-tools">
                     <button className={`toolbar-icon ${sketchCanUndo ? "" : "disabled"}`} type="button" aria-label={t("sketch.undo")} title={`${t("status.undo")} (${COMMAND_SHORTCUTS["sketch-undo"]})`} onClick={onSketchUndo} disabled={!sketchCanUndo}>
                       <ToolbarUndoIcon />
@@ -1401,24 +1393,6 @@ export function SecondaryToolbar({
               <div className="toolbar-section-label">{t("editor.group.manage")}</div>
               <div className="action-buttons"><NoteToolButton active={noteMode} shortcut={COMMAND_SHORTCUTS.note} onClick={onNoteTool} /></div>
             </div>}
-            {/* Sketch mode has its own keys; the help opens from here too. */}
-            {simpleMode ? null : <div className="toolbar-section toolbar-actions-section" data-group="help">
-              <div className="toolbar-section-label">{t("editor.group.help")}</div>
-              <div className="action-buttons">
-                <button className="action-icon-button" aria-label={t("palette.open")} title={t("palette.open")} aria-haspopup="dialog" data-layerling-tool="command-search" onClick={openPalette}>
-                  <Search className="toolbar-search-icon" aria-hidden="true" />
-                </button>
-                <button className="action-icon-button" aria-label={t("editor.guide")} title={t("editor.guide")} onClick={onGuide}>
-                  <ToolbarGuideIcon />
-                </button>
-                <button className="action-icon-button" aria-label={t("editor.keyboardShortcuts")} title={t("editor.keyboardShortcuts")} onClick={onShortcuts}>
-                  <ToolbarKeyboardIcon />
-                </button>
-                <button className={`action-icon-button ${interactiveHelpActive ? "active" : ""}`} type="button" aria-label={t("interactiveHelp.title")} title={`${t("interactiveHelp.title")} (${COMMAND_SHORTCUTS["interactive-help"]})`} aria-pressed={interactiveHelpActive} data-layerling-tool="interactive-help" data-help-exempt onClick={onInteractiveHelp}>
-                  <CircleHelp className="toolbar-search-icon" aria-hidden="true" />
-                </button>
-              </div>
-            </div>}
           </div>
         )}
       </div>
@@ -1432,6 +1406,20 @@ export function SecondaryToolbar({
             <span className="toolbar-brand-tagline">{t("brand.tagline")}</span>
           </span>
         </div>
+        {/* Back to the start page, before the tabs rather than as a group of its own in the ribbon, which needs the room
+            (Stefan, 29.10.2026). An open sketch is finished or left first, as before, when the button was only in 3D. */}
+        {onHome ? (
+          <button
+            className="toolbar-title-home editor-home-control"
+            type="button"
+            aria-label={t("editor.homeDashboard")}
+            title={t("editor.homeDashboard")}
+            disabled={toolbarMode !== "geometry"}
+            onClick={onHome}
+          >
+            <ToolbarHomeIcon />
+          </button>
+        ) : null}
         <div className="toolbar-workspace-tabs" role="tablist" aria-label={t("editor.modeLabel")}>
           <button
             className={toolbarMode === "geometry" ? "active" : ""}
@@ -1482,6 +1470,25 @@ export function SecondaryToolbar({
           </label>
         </div>
         <div className="toolbar-title-row-actions">
+          {/* The help is the same in 3D and in a sketch, so it sits in the title row they share, as a small group with its
+              name, and the ribbon keeps its room for the tools (Stefan, 29.10.2026). */}
+          {simpleMode ? null : (
+            <div className="toolbar-title-help" data-group="help" role="group" aria-label={t("editor.group.help")}>
+              <span className="toolbar-title-help-label">{t("editor.group.help")}</span>
+              <button className="action-icon-button" type="button" aria-label={t("palette.open")} title={t("palette.open")} aria-haspopup="dialog" data-layerling-tool="command-search" onClick={openPalette}>
+                <Search className="toolbar-search-icon" aria-hidden="true" />
+              </button>
+              <button className="action-icon-button" type="button" aria-label={t("editor.guide")} title={t("editor.guide")} onClick={onGuide}>
+                <ToolbarGuideIcon />
+              </button>
+              <button className="action-icon-button" type="button" aria-label={t("editor.keyboardShortcuts")} title={t("editor.keyboardShortcuts")} onClick={onShortcuts}>
+                <ToolbarKeyboardIcon />
+              </button>
+              <button className={`action-icon-button ${interactiveHelpActive ? "active" : ""}`} type="button" aria-label={t("interactiveHelp.title")} title={`${t("interactiveHelp.title")} (${COMMAND_SHORTCUTS["interactive-help"]})`} aria-pressed={interactiveHelpActive} data-layerling-tool="interactive-help" data-help-exempt onClick={onInteractiveHelp}>
+                <CircleHelp className="toolbar-search-icon" aria-hidden="true" />
+              </button>
+            </div>
+          )}
           <ThemeSwitch />
           <LanguageSwitch />
         </div>
