@@ -731,6 +731,18 @@ export const tools = [
     },
   },
   {
+    name: "layerling_loft_sketches",
+    description: "Loft between two sketch bodies, like the editor's Loft sketches button: two extruded sketch or SVG bodies, each with one outline (a ring with holes in both is fine, as long as both have as many), become one exact body whose bottom is the outline of the lower body at its bottom and whose top is the outline of the upper body at its top, with straight walls between them - for a funnel, a transition piece or a tapered frame. Each outline is taken where its body stands, turned about the vertical and stretched as the body is; bodies tipped over are refused. The two bodies stay inside the result as a group with groupOperation loft: layerling_open_group opens them, and closing the group builds the loft again. Returns the new object.",
+    inputSchema: {
+      ...editorTargetSchema,
+      required: ["ids"],
+      properties: {
+        ...editorTargetSchema.properties,
+        ids: { type: "array", items: { type: "string" }, minItems: 2, maxItems: 2, description: "The two sketch bodies." },
+      },
+    },
+  },
+  {
     name: "layerling_ungroup_objects",
     description: "Ungroup one or more grouped objects by id and preserve their edited geometry.",
     inputSchema: {

@@ -89,6 +89,7 @@ Ein vollständiges CAD-Paket ist es nicht: Es gibt keine parametrische Zeitleist
 - **Schnittmenge** – nur das behalten, wo sich die ausgewählten Körper und Aussparungen überlappen.
 - **Hülle** – die gewählten Formen in ihre konvexe Hülle packen, den kleinsten Körper ohne Dellen um alle: Eine Halbkugel auf einem Zylinder wird zur Kuppel, vier Pfosten zu einem Kasten mit runden Ecken. Aussparungen in der Auswahl werden danach herausgeschnitten.
 - **Ausstechform** – mit einem Klick eine Wand und ein flacher Rand um den Umriss einer Skizze oder SVG, oder um das, worauf eine Form steht; Löcher bleiben offen. Der Umriss wird gespiegelt, damit Schrift und Logos richtig herum aus dem Teig kommen, und die Wand läuft oben auf eine schmale Schneidkante zu. Wanddicke, Schneidkante, Höhe und Rand sind die Füllarten der Skizze, jedes lässt sich danach ändern.
+- **Übergang aus Skizzen** – zwei Skizzen oder importierte SVGs werden ein genauer Körper, unten der Umriss der unteren, oben der der oberen, dazwischen gerade Wände: ein Trichter, ein Übergang von eckig auf rund oder aus zwei Ringen ein sich verjüngender Rahmen. „Gruppe bearbeiten“ öffnet die beiden Skizzen wieder.
 - **Teilen** – Körper oder Aussparungen mit einer Ebene in zwei schneiden; ein ausgehöhlter Körper behält seinen Hohlraum. Gedreht schneidet die Ebene schräg; am Pfeil ziehen verschiebt sie, und mit „Fläche wählen“ legst du sie auf eine beliebige Fläche.
 
 ### Bearbeiten

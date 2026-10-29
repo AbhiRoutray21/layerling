@@ -904,7 +904,7 @@ function nodeGroupOperation(node: LylShapeNodeV1, nodeById: Map<string, LylShape
   if (node.definition.groupOperation === "intersection") return "boolean-intersection";
   if (node.definition.groupOperation === "bundle") return "group";
   // A hull keeps its parts as a group does; the operation itself travels in the definition (#863).
-  if (node.definition.groupOperation === "hull") return "group";
+  if (node.definition.groupOperation === "hull" || node.definition.groupOperation === "loft") return "group";
   const children = (node.groupedShapeNodeIds ?? []).map((id) => nodeById.get(id)).filter(Boolean) as LylShapeNodeV1[];
   const hasHole = children.some((child) => child.definition.hole === true);
   const hasSolid = children.some((child) => child.definition.hole !== true);
