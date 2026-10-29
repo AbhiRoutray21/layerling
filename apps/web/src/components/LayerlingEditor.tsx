@@ -72,7 +72,7 @@ import { scaleShapesByPercent } from "@/lib/scaleByPercent";
 import { canToggleGroupColors, colorForParts, groupShowsPartColors } from "@/lib/groupColors";
 import { disposeBoundsTree } from "three-mesh-bvh";
 import { SHELL_SIDES, shellMaxThickness, shellOpeningsFor, shellOpenSides } from "@/lib/shellLimits";
-import { arrayFollowingPivot, arrayGroupsCopies, circleStepDegrees, clampArrayCount, moveAlongRadius, rotateAroundVertical, rowOffset, singleAxisSpacing, type ArraySettings } from "@/lib/shapeArray";
+import { arrayCirclePivot, arrayFollowingPivot, arrayGroupsCopies, circleStepDegrees, clampArrayCount, moveAlongRadius, rotateAroundVertical, rowOffset, singleAxisSpacing, type ArraySettings } from "@/lib/shapeArray";
 import { bedOverhangs, keepDismissedOverhangs, printerPresetById, shapeBedFootprint, type BedOverhang } from "@/lib/printBed";
 import { SplitPanel, type SplitWorkplaneDirection } from "./workplane/SplitPanel";
 import { NO_SPLIT_ROTATION, modelSplitPlane, snapSplitPositionToVertices, splitOrientationForNormal, splitAxisFromLabel, splitAxisLabel, splitRotationAxes, type SplitRotation } from "@/lib/modelSplit";
@@ -6003,8 +6003,15 @@ export function LayerlingEditor({
     if (!arrayTool || selectedShapes.length === 0) return;
     const copies = arrayCopies(selectedShapes, arrayTool);
     const groupPieces = arrayGroupsCopies(arrayTool) && !selectedShapes.some((shape) => isNonSolidShape(shape));
+    // A circle leaves its centre as the pieces' pivot, to align another part to or mark it (#990).
+    const piecesBounds = boundsForShapes([...selectedShapes, ...copies]);
+    const circlePivot = arrayCirclePivot(arrayTool, piecesBounds.minY, piecesBounds.maxY, activeRotationPivot);
     setArrayTool(null);
-    const keepLoose = (message: string) => commitShapes([...shapes, ...copies], [...selectedIds, ...copies.map((shape) => shape.id)], message);
+    const keepLoose = (message: string) => {
+      const ids = [...selectedIds, ...copies.map((shape) => shape.id)];
+      commitShapes([...shapes, ...copies], ids, message);
+      if (circlePivot) setRotationPivot({ selectionKey: ids.join("|"), point: circlePivot });
+    };
     if (!groupPieces) {
       keepLoose(t("status.arrayCreated", { count: copies.length }));
       return;
@@ -6030,13 +6037,13 @@ export function LayerlingEditor({
       return;
     }
     const selected = new Set(selectedIds);
-    const editableGroup = canonicalizeShape({ ...group, groupOperation: "group" });
+    const editableGroup = withSelectionPivot(canonicalizeShape({ ...group, groupOperation: "group" }), circlePivot);
     commitShapes(
       [...shapesRef.current.filter((shape) => !selected.has(shape.id)), editableGroup],
       editableGroup.id,
       result.openGapEdges ? t("status.cutLeftOpen", { count: result.openGapEdges }) : result.mergeWarning ?? t("status.groupedMany", { count: pieces.length }),
     );
-  }, [arrayTool, commitShapes, selectedIds, selectedShapes, shapes]);
+  }, [activeRotationPivot, arrayTool, commitShapes, selectedIds, selectedShapes, shapes]);
 
   const duplicateShapeAt = useCallback((id: string, position: { x: number; z: number }) => {
     const shape = shapesRef.current.find((entry) => entry.id === id);
@@ -11429,13 +11436,14 @@ export function LayerlingEditor({
           radiusChange: mcpNumber(params.radiusChange, 0),
         };
         const copies = arrayCopies(sources, settings);
+        const piecesBounds = boundsForShapes([...sources, ...copies]);
+        const circlePivot = arrayCirclePivot(settings, piecesBounds.minY, piecesBounds.maxY);
+        const pivotAnswer = circlePivot ? { pivot: { x: circlePivot.x, y: -circlePivot.z, z: circlePivot.y } } : {};
         const looseResult = (message: string, warning?: string) => {
-          commitShapes(
-            [...shapesRef.current, ...copies],
-            [...sources.map((shape) => shape.id), ...copies.map((shape) => shape.id)],
-            message,
-          );
-          return { settings, originals: sources.map((shape) => shape.id), copies: copies.map(mcpShapeSummary), ...(warning ? { warning } : {}) };
+          const ids = [...sources.map((shape) => shape.id), ...copies.map((shape) => shape.id)];
+          commitShapes([...shapesRef.current, ...copies], ids, message);
+          if (circlePivot) setRotationPivot({ selectionKey: ids.join("|"), point: circlePivot });
+          return { settings, originals: sources.map((shape) => shape.id), copies: copies.map(mcpShapeSummary), ...pivotAnswer, ...(warning ? { warning } : {}) };
         };
         // `group: true` groups the originals and the copies as the Pattern window's box does (#828); left out, they stay loose.
         if (params.group !== true) return looseResult(t("status.arrayCreated", { count: copies.length }));
@@ -11456,9 +11464,9 @@ export function LayerlingEditor({
           return looseResult(result.failureNotice, result.failureNotice);
         }
         const sourceIds = new Set(sources.map((shape) => shape.id));
-        const editableGroup = canonicalizeShape({ ...result.group, groupOperation: "group" });
+        const editableGroup = withSelectionPivot(canonicalizeShape({ ...result.group, groupOperation: "group" }), circlePivot);
         commitShapes([...currentShapes().filter((shape) => !sourceIds.has(shape.id)), editableGroup], editableGroup.id, result.mergeWarning ?? t("status.groupedMany", { count: pieces.length }));
-        return { settings, group: mcpShapeSummary(editableGroup), pieces: pieces.length, ...(result.mergeWarning ? { warning: result.mergeWarning } : {}) };
+        return { settings, group: mcpShapeSummary(editableGroup), pieces: pieces.length, ...pivotAnswer, ...(result.mergeWarning ? { warning: result.mergeWarning } : {}) };
       }
 
       if (command.action === "apply_edge_treatment") {
