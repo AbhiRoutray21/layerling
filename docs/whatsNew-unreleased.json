@@ -1,12 +1,12 @@
 [
   {
     "title": {
-      "de": "Mehr Platz zum Bauen",
-      "en": "More room to build"
+      "de": "Neu: Das Menüband klappt Gruppen ein",
+      "en": "New: the ribbon folds groups away"
     },
     "body": {
-      "de": "Das Menüband bleibt jetzt auch in kleineren Fenstern eine Zeile hoch: Gruppen, für die der Platz fehlt, klappen zu einem Knopf zusammen und öffnen sich, wenn du mit der Maus darauf zeigst oder sie antippst. Start und Hilfe stehen dafür oben in der Titelzeile. Die Stecknadel vor „Hilfe“ hält alle Gruppen offen, wenn du es lieber so hast.",
-      "en": "The ribbon now stays one row high in smaller windows too: groups there is no room for fold into one button that opens when you point at it or tap it. Start and Help moved up into the title row for this. The pin before Help keeps all groups open if you prefer."
+      "de": "Damit mehr Platz zum Bauen bleibt, ist das Menüband jetzt immer nur eine Zeile hoch. Passen nicht alle Gruppen ins Fenster, klappen die seltener gebrauchten zu einem Knopf zusammen; zeig mit der Maus darauf oder tippe ihn an, dann öffnen sich ihre Werkzeuge. Der Start-Knopf (das Haus) steht jetzt links neben „3D-Editor“, die Hilfe oben rechts. Lieber alles offen wie bisher? Klicke oben rechts auf die Stecknadel vor „Hilfe“: Dann bleiben alle Gruppen offen, auch beim nächsten Mal. Ein zweiter Klick schaltet zurück.",
+      "en": "To leave more room for building, the ribbon now always stays one row high. When not all groups fit into the window, the ones used least fold into one button; point at it or tap it and its tools open. The Start button (the house) now sits left of \"3D editor\", the help at the top right. Prefer everything open as before? Click the pin before \"Help\" at the top right: all groups then stay open, next time too. A second click switches back."
     }
   }
 ]
