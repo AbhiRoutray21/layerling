@@ -1,5 +1,40 @@
 [
   {
+    "version": "1.124.1",
+    "items": [
+      {
+        "title": {
+          "de": "Eine Reihe gleichmäßig über eine Platte verteilen",
+          "en": "Spread a row evenly over a plate"
+        },
+        "body": {
+          "de": "Im Muster gibt es unter „Reihe“ jetzt „Über einen Körper verteilen“: Setze ein Loch auf eine Platte, wähle entlang X oder Y und den Abstand zum Rand, und die Löcher füllen die Platte von einem Ende zum anderen. Der Abstand folgt der Anzahl, du musst ihn nicht mehr ausrechnen - etwa für ein Schlüsselbrett oder eine Garderobe.",
+          "en": "The pattern's row has a new \"Spread over a body\": put a hole on a plate, choose along X or Y and the gap to the edge, and the holes fill the plate from one end to the other. The spacing follows the count, so there is nothing left to work out - for a key holder or a coat rack, say."
+        }
+      },
+      {
+        "title": {
+          "de": "SVGs aus Adobe Illustrator",
+          "en": "SVGs from Adobe Illustrator"
+        },
+        "body": {
+          "de": "Mit „Speichern unter → SVG“ aus Illustrator gespeicherte Dateien lehnte layerling bisher ab („SVG entities are not supported“). Jetzt lassen sie sich ganz normal importieren. Klappt ein Import nicht, steht der Grund in deiner Sprache da, mit einem Hinweis, was hilft.",
+          "en": "Files saved from Illustrator with Save As → SVG used to be refused (\"SVG entities are not supported\"). Now they import like any other. When an import does not work, the reason is shown in your language, with a hint at what helps."
+        }
+      },
+      {
+        "title": {
+          "de": "Gewindelöcher, in die die Schraube auch passt",
+          "en": "Tapped holes the bolt actually fits"
+        },
+        "body": {
+          "de": "Eine Gewindestange oder Schraube, die du als Aussparung setzt, hat das volle Maß der Schraube und kein Spiel, das Loch wird gedruckt also zu eng. layerling weist jetzt darauf hin und macht mit einem Klick ein Gewindeloch daraus, das das eingestellte Spiel bekommt.",
+          "en": "A threaded rod or screw that you set as a hole has the bolt's full size and no play, so the printed hole comes out too tight. layerling now points this out and turns it into a tapped hole with one click, which gets the clearance you set."
+        }
+      }
+    ]
+  },
+  {
     "version": "1.124.0",
     "items": [
       {

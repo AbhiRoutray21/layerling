@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+## 1.124.1
+
 - **A threaded rod or screw set as a hole says so (#1039):** A 3/8-16 knob printed too tight for its bolt in PETG and PLA. The size was right, but the thread was a threaded rod made a hole: a rod and a screw are the bolt at full size, and only a nut and a tapped hole get the clearance (`radialAllowance` in `threadGeometry.ts`), so the hole had the bolt's own diameter. The inspector now shows a hint under Type when a rod or screw is a hole, with "Make it a tapped hole", which switches the type and keeps the length. Chapter 9 of every guide language says the same at the tapped hole.
 
 - **SVGs saved by Adobe Illustrator import (asked in the Facebook group):** Illustrator's "Save As SVG" declares its namespaces as entities in the document type and uses them on the `<svg>` element (`xmlns:i="&ns_ai;"`), and every such file was refused with "SVG entities are not supported" - on screen in English, whatever the interface language. `resolveSvgTextEntities` in `svgImport.ts` now resolves an internal subset of nothing but plain text entities and drops it before the checks; an external or parameter entity, a value with markup or another reference, an ATTLIST, a redefined built-in entity or a file that would grow by more than double stays refused as before. The reasons a file did not import now come in the interface language (`importFailureReason` in `modelImport.ts`, in the editor and on the start page), and the entity message says how to save the file again as a plain SVG (Inkscape "Optimized SVG", Illustrator Export As). New test `svgImportEntities.test.ts`.
