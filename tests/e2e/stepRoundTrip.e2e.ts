@@ -118,6 +118,35 @@ describe("STEP export round-trip (real OCCT kernel)", () => {
     }
   });
 
+  it("exports a hinge with cones as its exact parts, each recess cut, with the display mesh's volume (#1007)", async () => {
+    const { hingePlan, hingeTriangles } = await import("@/lib/hingeGeometry");
+    const volume = (fields: Parameters<typeof hingeTriangles>[0]) => hingeTriangles(fields).reduce(
+      (sum, [a, b, c]) => sum + (a[0] * (b[1] * c[2] - b[2] * c[1]) - a[1] * (b[0] * c[2] - b[2] * c[0]) + a[2] * (b[0] * c[1] - b[1] * c[0])) / 6,
+      0,
+    );
+    const cases = [
+      { width: 40, depth: 40, height: 8 },
+      { width: 40, depth: 40, height: 8, hingeAngle: 90, hingeScrewHoles: 2, hingeCornerRadius: 3 },
+      { width: 40, depth: 40, height: 6, hingeLeafThickness: 6, hingeLeafStyle: "fingers" as const, hingeAngle: 135 },
+      { width: 60, depth: 50, height: 10, hingeKnuckles: 7, hingeClearance: 0.3, hingeConeSize: 3, mirrorY: true },
+      { width: 50, depth: 44, height: 8, hingeLeafStyle: "fingers" as const, hingeCornerRadius: 2, hingeAngle: 45, mirrorZ: true },
+      { width: 50, depth: 44, height: 8, hingeScrewHoles: 3, hingeScrewCountersink: false, hingeAngle: 45, mirrorZ: true },
+    ];
+    for (const fields of cases) {
+      // Drawn with 384 sides the display mesh's knuckles and cones are within two tenths of a cubic millimetre of the true
+      // circles; its screw holes and rounded corners have sides of their own, a few tenths off.
+      const drawn = { ...fields, hingeStyle: "cone", sides: 384 };
+      const hinge = shape({ kind: "hinge", name: "Hinge", size: fields.width, rotation: 30, x: 12, z: -7, elevation: 3, ...drawn });
+      const { blob, exportedCount, skipped } = await exportShapesToStep([hinge]);
+      expect(skipped).toEqual([]);
+      expect(exportedCount).toBe(1);
+      // Close enough that a single recess left uncut, or a cone left off, would show.
+      const plan = hingePlan(drawn);
+      const recess = (PI * plan.recessRadius ** 2 * plan.recessDepth) / 3;
+      expect(Math.abs(await reimportVolume(blob) - volume(drawn))).toBeLessThan(recess / 4);
+    }
+  });
+
   it("exports box + cylinder + sphere as exact B-Rep with conserved volume", async () => {
     const box = shape({ kind: "box", name: "Box", x: -30, width: 10, depth: 6, height: 4 });
     const cyl = shape({ kind: "cylinder", name: "Cyl", x: 0, width: 8, depth: 8, height: 12 });
