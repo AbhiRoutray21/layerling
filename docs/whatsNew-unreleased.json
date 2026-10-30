@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "title": {
+      "de": "Knöpfe der Arbeitsbereich-Einstellungen wieder sauber",
+      "en": "Tidy buttons under the workspace settings"
+    },
+    "body": {
+      "de": "Auf dem Mac liefen „Meine Vorgabe verwenden“ und „Als Vorgabe gesichert“ über den Rand ihrer Knöpfe hinaus. Jetzt bleibt die Beschriftung auf einer Zeile, und ist es zu eng, rücken die Knöpfe unter den Hinweis.",
+      "en": "On the Mac, the labels of the two buttons at the foot of the workspace settings ran out over their edges. Now each label stays on one line, and where it is too tight the buttons move below the hint."
+    }
+  }
+]

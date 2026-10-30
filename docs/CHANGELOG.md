@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **The buttons under the workspace settings keep their labels inside (#1045):** On a Mac, "Meine Vorgabe verwenden" and "Als Vorgabe gesichert" wrapped onto two lines and ran out of the top and bottom of their buttons. The buttons had a fixed height of 34 px but nothing kept their label on one line, and next to the hint they were squeezed; Avenir Next is wider than Arial, so German labels no longer fitted. The labels now stay on one line and the buttons grow with them (`min-height` instead of `height`); the hint "Save the current settings for this design" wraps its own words instead, and when it would be narrower than 160 px the buttons move to a row of their own below it, right-aligned. Reported by @JK85659 in #1045.
+
 ## 1.124.2
 
 - **A folded ribbon group shows that it opens:** A group the window has no room for folds into one button under its name, and that button looked like any tool, with the icon of the tool the group is known by: some took History's for Undo and did not see that a click opens the group's tools. A tab in the group's colour with a chevron now hangs under the folded button (`.toolbar-collapse-trigger::before`), turned up while the group is open, and the button's hint and accessible name say "History: click to show its tools" in every language instead of the group's name alone. The guide's ribbon paragraph mentions the arrow (English and German, where the folding is described).
