@@ -8,5 +8,15 @@
       "de": "Die Druckerliste kennt jetzt Delta-Drucker von FLSun, SeeMeCNC, Anycubic und Rolohaun. Mit einem von ihnen ist die Arbeitsfläche rund wie die Platte, und layerling warnt, wenn ein Körper über den Rand ragt.",
       "en": "The printer list now has delta printers by FLSun, SeeMeCNC, Anycubic and Rolohaun. With one of them the workplane is round like the plate, and layerling warns when a body reaches past the rim."
     }
+  },
+  {
+    "title": {
+      "de": "Der Verlauf als Liste",
+      "en": "The history as a list"
+    },
+    "body": {
+      "de": "Der Listen-Knopf in der Verlaufsansicht zeigt alle Schritte mit Namen und Maß untereinander, den neuesten oben. Ein Klick springt zu diesem Stand, ohne erst am Schieber zu suchen.",
+      "en": "The list button in the History view shows every step by name and measure, the newest at the top. A click jumps to that state without hunting along the slider."
+    }
   }
 ]
