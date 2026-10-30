@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+## 1.124.2
+
 - **A folded ribbon group shows that it opens:** A group the window has no room for folds into one button under its name, and that button looked like any tool, with the icon of the tool the group is known by: some took History's for Undo and did not see that a click opens the group's tools. A tab in the group's colour with a chevron now hangs under the folded button (`.toolbar-collapse-trigger::before`), turned up while the group is open, and the button's hint and accessible name say "History: click to show its tools" in every language instead of the group's name alone. The guide's ribbon paragraph mentions the arrow (English and German, where the folding is described).
 
 - **Sharper headings on the Mac (mail from a user):** Titles, tabs, ribbon labels and window headings stood at font-weight 800 to 900. On macOS the interface font is Avenir Next, whose 800 is its Heavy cut; with `-webkit-font-smoothing: antialiased` and the tight letter spacing it ran together at small sizes and looked blurred, more so since the start page and the title row were redone last week. All 103 such weights in the stylesheets (and the vase editor's axis labels) are 600 now, Avenir Next Demi Bold. On Windows the headings are a little lighter too: there 800 and 900 picked Arial Black, which Windows lists as Arial's heaviest cut, and 600 picks Arial Bold.
