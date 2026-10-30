@@ -993,6 +993,8 @@ async function restoreEdgeTreatmentInShape(shape: WorkplaneShape, path: number[]
       hidden: shape.hidden,
       edgeResizeMode: shape.edgeResizeMode,
       groupOperation: shape.groupOperation,
+      // Built again, the group is not a new one: it keeps the colours it showed (#1029).
+      multicolor: shape.multicolor,
       edgeTreatments: shape.edgeTreatments,
       edgeTreatmentHistory: shape.edgeTreatmentHistory?.length ? compactEdgeTreatmentHistory(shape.edgeTreatmentHistory) : undefined,
     }),
