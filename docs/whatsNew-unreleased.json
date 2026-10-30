@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "title": {
+      "de": "Delta-Drucker mit runder Platte",
+      "en": "Delta printers with a round plate"
+    },
+    "body": {
+      "de": "Die Druckerliste kennt jetzt Delta-Drucker von FLSun, SeeMeCNC, Anycubic und Rolohaun. Mit einem von ihnen ist die Arbeitsfläche rund wie die Platte, und layerling warnt, wenn ein Körper über den Rand ragt.",
+      "en": "The printer list now has delta printers by FLSun, SeeMeCNC, Anycubic and Rolohaun. With one of them the workplane is round like the plate, and layerling warns when a body reaches past the rim."
+    }
+  }
+]

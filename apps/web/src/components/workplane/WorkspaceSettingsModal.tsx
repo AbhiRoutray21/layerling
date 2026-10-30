@@ -1257,7 +1257,9 @@ export function WorkspaceSettingsModal({
                   </label>
                   <p className="workspace-printer-info">
                     {chosenPrinter
-                      ? t("workspace.printerInfo", { width: chosenPrinter.width, depth: chosenPrinter.depth, height: chosenPrinter.height })
+                      ? chosenPrinter.round
+                        ? t("workspace.printerInfoRound", { diameter: chosenPrinter.width, height: chosenPrinter.height })
+                        : t("workspace.printerInfo", { width: chosenPrinter.width, depth: chosenPrinter.depth, height: chosenPrinter.height })
                       : t("workspace.printerHint")}
                   </p>
                   <WorkspaceToggle
