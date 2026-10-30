@@ -3451,8 +3451,44 @@ function triangleDistance2(p: number[], a: number[], b: number[], c: number[]) {
 }
 
 /**
+ * How tightly the body bends at each input triangle: the largest bend per mm from it to the triangles sharing a
+ * corner with it over smooth edges (bending by less than `cosLimit`), from middle to middle. A cylinder's mantle of
+ * radius r gives about 1/r, a fillet of 1 mm about 1, a flat face 0. Corners rather than edges: in a row of a round
+ * split into triangles, every other one has no edge to the next row and would pass for flat.
+ */
+function triangleCurvatures(base: SurfaceBase, normals: Float64Array, cosLimit: number) {
+  const v = base.vertices, I = base.indices, T = I.length / 3;
+  const centers = new Float64Array(T * 3);
+  const byCorner = new Map<number, number[]>();
+  for (let t = 0; t < T; t += 1) {
+    for (let k = 0; k < 3; k += 1) {
+      centers[t * 3 + k] = (v[I[t * 3] * 3 + k] + v[I[t * 3 + 1] * 3 + k] + v[I[t * 3 + 2] * 3 + k]) / 3;
+      const list = byCorner.get(I[t * 3 + k]);
+      if (list) list.push(t);
+      else byCorner.set(I[t * 3 + k], [t]);
+    }
+  }
+  const curvatures = new Float64Array(T);
+  for (let t = 0; t < T; t += 1) {
+    for (let k = 0; k < 3; k += 1) {
+      for (const u of byCorner.get(I[t * 3 + k])!) {
+        if (u === t) continue;
+        const cos = normals[t * 3] * normals[u * 3] + normals[t * 3 + 1] * normals[u * 3 + 1] + normals[t * 3 + 2] * normals[u * 3 + 2];
+        if (cos < cosLimit) continue;
+        const distance = Math.hypot(centers[t * 3] - centers[u * 3], centers[t * 3 + 1] - centers[u * 3 + 1], centers[t * 3 + 2] - centers[u * 3 + 2]);
+        if (distance > 1e-9) curvatures[t] = Math.max(curvatures[t], Math.acos(Math.min(1, cos)) / distance);
+      }
+    }
+  }
+  return curvatures;
+}
+
+/**
  * The body's faces: every input triangle (screen frame) numbered by the face it lies on - the region reached from it
- * over edges that bend by less than `edgeAngle` (a box's side, a cylinder's mantle or its top). `count` faces.
+ * over edges that bend by less than `edgeAngle` (a box's side, a cylinder's mantle or its top). A fillet bends softly
+ * but tightly: where a round of a radius under a tenth of the body's size meets a face more than four times flatter,
+ * that is an edge too, so a filleted cup's mantle stays apart from its rim, its inside and its bottom (#1043).
+ * `count` faces.
  */
 export function surfaceTextureFaceIds(base: SurfaceBase, edgeAngle: number) {
   const v = base.vertices, I = base.indices, T = I.length / 3;
@@ -3476,6 +3512,12 @@ export function surfaceTextureFaceIds(base: SurfaceBase, edgeAngle: number) {
     }
   }
   const cosLimit = Math.cos((edgeAngle * Math.PI) / 180);
+  const curvatures = triangleCurvatures(base, normals, cosLimit);
+  const tight = 10 / Math.max(base.size[0], base.size[1], base.size[2], 1e-9);
+  const rounded = (t: number, u: number) => {
+    const high = Math.max(curvatures[t], curvatures[u]), low = Math.min(curvatures[t], curvatures[u]);
+    return high > tight && high > 4 * low;
+  };
   const ids = new Int32Array(T).fill(-1);
   let count = 0;
   for (let first = 0; first < T; first += 1) {
@@ -3488,6 +3530,7 @@ export function surfaceTextureFaceIds(base: SurfaceBase, edgeAngle: number) {
         for (const u of byEdge.get(edge(I[t * 3 + k], I[t * 3 + ((k + 1) % 3)])) ?? []) {
           if (ids[u] >= 0) continue;
           if (normals[t * 3] * normals[u * 3] + normals[t * 3 + 1] * normals[u * 3 + 1] + normals[t * 3 + 2] * normals[u * 3 + 2] < cosLimit) continue;
+          if (rounded(t, u)) continue;
           ids[u] = count;
           queue.push(u);
         }
@@ -3495,7 +3538,68 @@ export function surfaceTextureFaceIds(base: SurfaceBase, edgeAngle: number) {
     }
     count += 1;
   }
-  return { ids, normals, count };
+  return mergeSmallRoundedPatches(base, ids, count, normals, byEdge, cosLimit);
+}
+
+/**
+ * Faces split off only by the rounding rule that stay small all round (a box under a quarter of the body's size) are
+ * no fillet but bumps on a rough or scanned body: each goes back to the face it shares most smooth edge with, so a
+ * picked face does not leave specks without pattern. A fillet runs along its edge and keeps its own face.
+ */
+function mergeSmallRoundedPatches(base: SurfaceBase, ids: Int32Array, count: number, normals: Float64Array, byEdge: Map<number, number[]>, cosLimit: number) {
+  const v = base.vertices, I = base.indices, T = I.length / 3;
+  const lo = new Float64Array(count * 3).fill(Infinity), hi = new Float64Array(count * 3).fill(-Infinity);
+  const sizes = new Int32Array(count);
+  for (let t = 0; t < T; t += 1) {
+    const f = ids[t];
+    sizes[f] += 1;
+    for (let c = 0; c < 3; c += 1) {
+      for (let k = 0; k < 3; k += 1) {
+        const value = v[I[t * 3 + c] * 3 + k];
+        lo[f * 3 + k] = Math.min(lo[f * 3 + k], value);
+        hi[f * 3 + k] = Math.max(hi[f * 3 + k], value);
+      }
+    }
+  }
+  const limit = 0.25 * Math.max(base.size[0], base.size[1], base.size[2]);
+  const small = (f: number) => Math.hypot(hi[f * 3] - lo[f * 3], hi[f * 3 + 1] - lo[f * 3 + 1], hi[f * 3 + 2] - lo[f * 3 + 2]) < limit;
+  // Smooth edge length shared between two faces.
+  const shared = new Map<number, Map<number, number>>();
+  for (const [key, list] of byEdge) {
+    if (list.length !== 2) continue;
+    const [t, u] = list, f = ids[t], g = ids[u];
+    if (f === g) continue;
+    if (normals[t * 3] * normals[u * 3] + normals[t * 3 + 1] * normals[u * 3 + 1] + normals[t * 3 + 2] * normals[u * 3 + 2] < cosLimit) continue;
+    const a = Math.floor(key / 67108864), b = key % 67108864;
+    const length = Math.hypot(v[a * 3] - v[b * 3], v[a * 3 + 1] - v[b * 3 + 1], v[a * 3 + 2] - v[b * 3 + 2]);
+    for (const [x, y] of [[f, g], [g, f]]) {
+      const row = shared.get(x) ?? new Map<number, number>();
+      row.set(y, (row.get(y) ?? 0) + length);
+      shared.set(x, row);
+    }
+  }
+  const parent = Int32Array.from({ length: count }, (_, f) => f);
+  const root = (f: number): number => (parent[f] === f ? f : (parent[f] = root(parent[f])));
+  const order = Array.from({ length: count }, (_, f) => f).filter((f) => shared.has(f) && small(f)).sort((f, g) => sizes[f] - sizes[g]);
+  for (const f of order) {
+    let best = -1, longest = 0;
+    for (const [g, length] of shared.get(f)!) {
+      if (length > longest && root(g) !== root(f)) {
+        longest = length;
+        best = g;
+      }
+    }
+    if (best >= 0) parent[root(f)] = root(best);
+  }
+  // Numbered again from 0.
+  const renumber = new Int32Array(count).fill(-1);
+  let merged = 0;
+  for (let t = 0; t < T; t += 1) {
+    const r = root(ids[t]);
+    if (renumber[r] < 0) renumber[r] = merged++;
+    ids[t] = renumber[r];
+  }
+  return { ids, normals, count: merged };
 }
 
 /** The body's box in the inside frame (x, y up, z to the viewer), from the screen frame's (x, y back, z up). */
