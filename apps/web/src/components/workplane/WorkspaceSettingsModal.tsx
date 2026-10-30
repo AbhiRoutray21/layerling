@@ -6,6 +6,7 @@ import { MAX_OVERHANG_ANGLE, MIN_OVERHANG_ANGLE } from "@/lib/overhangLimits";
 import { Box as BoxIcon, ChevronDown, Grid3X3, History, Palette, Plus, RotateCcw, Ruler, Trash2, X } from "lucide-react";
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useMovablePanel } from "@/lib/useMovablePanel";
+import { SpaceMouseSetting } from "@/components/workplane/SpaceMouseSetting";
 import { createPortal } from "react-dom";
 import { HexColorInput, HexColorPicker } from "react-colorful";
 import { APP_THEME_OPTIONS, type AppThemePreference } from "@/lib/appTheme";
@@ -1107,6 +1108,18 @@ export function WorkspaceSettingsModal({
                       <span>{t("workspace.fast")}</span>
                     </small>
                   </label>
+                  <label className="workspace-select" data-help={t("workspace.mouseScheme")}>
+                    <span>{t("workspace.mouseScheme")}</span>
+                    <select
+                      value={workspace.mouseScheme}
+                      onChange={(event) => patchWorkspace({ mouseScheme: event.currentTarget.value === "slicer" ? "slicer" : "layerling" })}
+                    >
+                      <option value="layerling">{t("workspace.mouseSchemeLayerling")}</option>
+                      <option value="slicer">{t("workspace.mouseSchemeSlicer")}</option>
+                    </select>
+                    <small>{workspace.mouseScheme === "slicer" ? t("workspace.mouseSchemeSlicerHint") : t("workspace.mouseSchemeLayerlingHint")}</small>
+                  </label>
+                  <SpaceMouseSetting />
                   <WorkspaceToggle
                     label={t("workspace.cameraInertia")}
                     description={workspace.fastMode ? t("workspace.offInFastMode") : t("workspace.cameraInertiaHint")}

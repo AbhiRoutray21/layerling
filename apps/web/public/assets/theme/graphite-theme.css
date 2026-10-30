@@ -4537,7 +4537,8 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .font-picker-option.act
   accent-color: #cf710f;
 }
 
-:where(html[data-theme="dark"][data-palette="graphite"]) .workspace-range small {
+:where(html[data-theme="dark"][data-palette="graphite"]) .workspace-range small,
+:where(html[data-theme="dark"][data-palette="graphite"]) .workspace-select > small {
   color: #5a5a5a;
 }
 
@@ -5803,6 +5804,7 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .workspace-settings-nav
 html[data-theme="dark"]:where([data-palette="graphite"]) .workspace-settings-nav button,
 html[data-theme="dark"]:where([data-palette="graphite"]) .workspace-dimensions label,
 html[data-theme="dark"]:where([data-palette="graphite"]) .workspace-range small,
+html[data-theme="dark"]:where([data-palette="graphite"]) .workspace-select > small,
 html[data-theme="dark"]:where([data-palette="graphite"]) .workspace-history-labels,
 html[data-theme="dark"]:where([data-palette="graphite"]) .workspace-history-note,
 html[data-theme="dark"]:where([data-palette="graphite"]) .workspace-toggle-copy small,

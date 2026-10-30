@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "title": {
+      "de": "Maustasten wie im Slicer, und die 3D-Maus",
+      "en": "Mouse buttons like your slicer, and a 3D mouse"
+    },
+    "body": {
+      "de": "In den Einstellungen unter Darstellung lassen sich die Maustasten jetzt wie in Bambu Studio und OrcaSlicer belegen: Ziehen mit links auf leerer Fläche dreht die Ansicht, rechts verschiebt sie. Und eine SpaceMouse steuert die Ansicht in Chrome und Edge, einmal dort verbunden.",
+      "en": "Under Appearance in the settings, the mouse buttons can now work as in Bambu Studio and OrcaSlicer: a left drag on empty space turns the view, the right button shifts it. And a SpaceMouse steers the view in Chrome and Edge once it is connected there."
+    }
+  }
+]

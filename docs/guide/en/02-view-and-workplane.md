@@ -18,6 +18,10 @@ With the mouse:
 
 How fast the wheel zooms is set with {{ui:workspace.zoomSpeed}} in the settings, under {{ui:workspace.appearance}}: a slider from 1 to 14, 5 to begin with. It sets the wheel and the trackpad only: the buttons and the keys [[+]] and [[−]] always zoom in the same small steps. One notch of a mouse wheel zooms alike in every browser, a trackpad zooms with how far you stroke.
 
+**Mouse buttons as in your slicer.** If you are used to Bambu Studio or OrcaSlicer, set {{ui:workspace.mouseScheme}} in the settings, under {{ui:workspace.appearance}}, to {{ui:workspace.mouseSchemeSlicer}}. A left drag on empty space then turns the view, the right button shifts it as the middle one does, and Shift with a left drag draws the selection box. A drag on a body still moves it, and a short right click still opens the menu. In a sketch the right button shifts the view too.
+
+**3D mouse.** A SpaceMouse or another 3D mouse turns, shifts and zooms the 3D view: push the cap away to zoom in, slide it to shift the view, tilt it to tilt the view and twist it to turn the view round. In the settings, under {{ui:workspace.appearance}}, click {{ui:workspace.spaceMouseConnect}} and choose the device in the window the browser opens; it remembers the choice, so this is needed only once. This works in Chrome and Edge, which can reach such devices; Firefox and Safari cannot.
+
 On a tablet or phone, two fingers zoom (spread and pinch) and move the view (slide together). One finger on empty space turns the view, and a tap there clears the selection; on a shape or a handle it works on the design, just like the left mouse button. To turn the view with a finger that starts on a shape too, switch on {{ui:camera.touchRotate}} in the camera bar. That switch shows on devices with a touch screen.
 
 A graphics tablet with a pen behaves like a mouse: the tip is the left button, the barrel button on the pen the right one, for turning the view and for the menu. The tablet's hotkeys can be set in its driver to layerling's [keyboard shortcuts](chapter:shortcuts).

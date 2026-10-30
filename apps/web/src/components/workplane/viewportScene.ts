@@ -3,7 +3,7 @@
 import { sectionPointFromFrame, sectionPointToFrame, type SectionPlaneSettings } from "@/lib/sectionView";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
-import { leftButtonCameraAction } from "@/lib/cameraMouseButtons";
+import { cameraButtonsFor, leftButtonCameraAction } from "@/lib/cameraMouseButtons";
 import { LineMaterial } from "three/examples/jsm/lines/LineMaterial.js";
 import { type AppThemePalette, type ResolvedAppTheme } from "@/lib/appTheme";
 import type { ModelSplitPlane } from "@/lib/modelSplit";
@@ -272,15 +272,28 @@ export function createThreeScene(host: HTMLDivElement): ThreeState {
     }
     // Ctrl or Cmd with the left button moves the view (#654), see leftButtonCameraAction.
     controls.mouseButtons.LEFT = leftButtonCameraAction(event);
-    controls.mouseButtons.MIDDLE = THREE.MOUSE.PAN;
-    controls.mouseButtons.RIGHT = THREE.MOUSE.ROTATE;
+    Object.assign(controls.mouseButtons, cameraButtonsFor(state.mouseScheme));
   };
   const resetLayerlingMouseButtons = (event?: PointerEvent) => {
     if (event) cameraPointers.delete(event.pointerId);
     controls.mouseButtons.LEFT = null;
-    controls.mouseButtons.MIDDLE = THREE.MOUSE.PAN;
-    controls.mouseButtons.RIGHT = THREE.MOUSE.ROTATE;
+    Object.assign(controls.mouseButtons, cameraButtonsFor(state.mouseScheme));
   };
+  /*
+   * A left drag on empty space turns the view in the slicer scheme (#1013). The view only knows the press hit nothing
+   * after OrbitControls has seen it with the left button switched off, so the turn is started here by hand: on the
+   * pointer the controls already follow, or as a fresh press when they were off at the time.
+   */
+  type OrbitInternals = { _isTrackingPointer: (event: PointerEvent) => boolean; _onPointerDown: (event: PointerEvent) => void; _onMouseDown: (event: PointerEvent) => void };
+  const turnWithLeftButton = (event: PointerEvent) => {
+    const orbit = controls as unknown as OrbitInternals;
+    cameraPointers.set(event.pointerId, event);
+    controls.enabled = true;
+    controls.mouseButtons.LEFT = THREE.MOUSE.ROTATE;
+    if (orbit._isTrackingPointer(event)) orbit._onMouseDown(event);
+    else orbit._onPointerDown(event);
+  };
+  state.turnWithLeftButton = turnWithLeftButton;
   const preventContextMenu = (event: MouseEvent) => {
     event.preventDefault();
   };
@@ -412,6 +425,8 @@ export function rebuildWorkplane(
   state.lights.fill.position.set(fillPosition.x, fillPosition.y, fillPosition.z);
   state.needsRender = true;
   state.controls.zoomSpeed = orbitControlsZoomSpeed(workspace.zoomSpeed);
+  state.mouseScheme = workspace.mouseScheme;
+  Object.assign(state.controls.mouseButtons, cameraButtonsFor(workspace.mouseScheme));
 
   const activeIsBase = placementWorkplaneIsBase(placementWorkplane);
   // A workplane lying on the plate shares its plane, so the plate drops its grid (#178).

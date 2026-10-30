@@ -57,6 +57,8 @@ import { planarFaceCentre } from "@/lib/faceCentre";
 import { scaledHorizontalShapePatch } from "@/lib/scaleByPercent";
 import { displayYTurn, insideZ } from "@/lib/displayAxes";
 import { boundsInsideRect, marqueeMode } from "@/lib/marqueeSelection";
+import { slicerLeftTurn } from "@/lib/cameraMouseButtons";
+import { useSpaceMouse } from "@/components/workplane/useSpaceMouse";
 import { canBeginShapeDrag, handleDimensionLimit, DEFAULT_SNAP_GRID, effectiveViewSettings, normalizeSnapGrid, normalizeWorkspaceSettings, readWorkspaceDefault, saveShapeDefaultsForNewDesigns, saveWorkspaceDefault, customSnapGridLabel, snapGridForShortcut, snapGridForUnits, snapGridOptions, snapGridStep as snapStep, workplaneSettingsFingerprint, workspaceForUnits, workspaceHydrationSyncDecision, zoomDistanceScale, ZOOM_STEP_IN, ZOOM_STEP_OUT } from "@/lib/workplaneSettings";
 import { withShapeDefaults } from "@/lib/shapeDefaults";
 import { WORKPLANE_LINE_ELEVATION } from "@/lib/workplaneGrid";
@@ -1608,6 +1610,8 @@ export function WorkplaneViewport({
   const sectionFineDraggingRef = useRef(false);
   const hostRef = useRef<HTMLDivElement | null>(null);
   const threeRef = useRef<ThreeState | null>(null);
+  // A 3D mouse the site may use steers this view (#1013).
+  useSpaceMouse(threeRef);
   const shapesRef = useRef(shapes);
   const alignReferenceShapesRef = useRef(alignReferenceShapes);
   const mirrorReferenceShapesRef = useRef(mirrorReferenceShapes);
@@ -1629,6 +1633,8 @@ export function WorkplaneViewport({
   const cameraTouchRef = useRef(false);
   const touchRotateRef = useRef(false);
   const touchEmptyTapRef = useRef<{ pointerId: number; x: number; y: number } | null>(null);
+  /** A left press on empty space that turns the view in the slicer scheme (#1013): let go where it began, it clears the selection. */
+  const slicerEmptyPressRef = useRef<{ pointerId: number; x: number; y: number } | null>(null);
   // A finger held still on a body or on empty space opens the menu a right click opens (#337).
   const longPressRef = useRef<{ pointerId: number; timer: number; stop: () => void } | null>(null);
   const longPressFiredRef = useRef<number | null>(null);
@@ -6033,6 +6039,14 @@ export function WorkplaneViewport({
         handOverTouchToCamera();
         return;
       }
+      if (!id && slicerLeftTurn(workspaceRef.current.mouseScheme, event) && state.turnWithLeftButton) {
+        // As in Bambu Studio and OrcaSlicer, a left drag on empty space turns the view (#1013); Shift draws the box.
+        event.preventDefault();
+        emptyPressRef.current = { x: event.clientX, y: event.clientY };
+        slicerEmptyPressRef.current = { pointerId: event.pointerId, x: event.clientX, y: event.clientY };
+        state.turnWithLeftButton(event.nativeEvent);
+        return;
+      }
       if (!id) {
         const startX = event.clientX - rect.left;
         const startY = event.clientY - rect.top;
@@ -6617,6 +6631,16 @@ export function WorkplaneViewport({
         }
         touchPointersRef.current.delete(event.pointerId);
         if (touchPointersRef.current.size === 0) cameraTouchRef.current = false;
+      }
+      const slicerEmptyPress = slicerEmptyPressRef.current;
+      if (slicerEmptyPress && slicerEmptyPress.pointerId === event.pointerId) {
+        slicerEmptyPressRef.current = null;
+        // A click on empty space that did not turn the view clears the selection, as a click there always did.
+        if (Math.hypot(event.clientX - slicerEmptyPress.x, event.clientY - slicerEmptyPress.y) < 5) {
+          if (multiSelectRef.current) onMultiSelectEndRef.current?.();
+          else onSelectShape(null);
+        }
+        return;
       }
       const state = threeRef.current;
       const splitDrag = splitDragRef.current;
