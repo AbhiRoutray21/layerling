@@ -18,5 +18,15 @@
       "de": "Bei einem Becher mit verrundeten Rändern nahm „Flächen anklicken“ für die Oberflächenstruktur bisher den ganzen Becher, innen und unten mit. Jetzt endet eine Fläche auch an einer engen Rundung: Ein Klick auf die Außenseite nimmt nur die Außenseite, die Rundungen lassen sich einzeln dazuwählen.",
       "en": "On a cup with rounded rims, Pick faces for the surface texture used to take the whole cup, the inside and the bottom too. Now a face also ends at a tight round: a click on the outside takes only the outside, and the rounds can be picked on their own."
     }
+  },
+  {
+    "title": {
+      "de": "Klarere Überschriften auf dem Mac",
+      "en": "Crisper headings on the Mac"
+    },
+    "body": {
+      "de": "Überschriften, Reiter und Leistentitel nutzen auf dem Mac jetzt Avenir Next Demi Bold statt Heavy. Bei kleinen Größen liefen die Buchstaben vorher zusammen und wirkten unscharf. Unter Windows sieht alles aus wie bisher.",
+      "en": "Headings, tabs and ribbon labels on the Mac now use Avenir Next Demi Bold instead of Heavy. At small sizes the letters used to run together and looked blurred. On Windows everything looks as before."
+    }
   }
 ]
