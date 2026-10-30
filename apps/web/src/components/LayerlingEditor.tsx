@@ -3774,7 +3774,11 @@ export function LayerlingEditor({
         : faceToolPreview?.shape
         ? [...shapes, faceToolPreview.shape]
         : edgeModifier?.preview && cadModifierBaseShapeRef.current
-        ? shapes.map((shape) => shape.id === cadModifierBaseShapeRef.current?.id ? edgeModifier.preview as WorkplaneShape : shape)
+        ? shapes.map((shape) => {
+          if (shape.id !== cadModifierBaseShapeRef.current?.id) return shape;
+          const preview = edgeModifier.preview as WorkplaneShape;
+          return preview.groupedShapes?.length ? { ...preview, multicolor: false } : preview;
+        })
         : alignMode && alignPreview?.size
         ? sizedShapesForSelection(shapes, selectedIds, selectedShapes, effectiveAlignAnchorId, alignPreview.axis, alignPreview.target, alignAxes, alignSizeLimit).nextShapes
         : alignMode && alignPreview
@@ -10919,6 +10923,7 @@ export function LayerlingEditor({
 
       if (command.action === "group_objects") {
         const ids = new Set(mcpStringArray(params.ids));
+        // Group geometry and its default colour must not depend on the order IDs were supplied.
         const groupable = currentShapes().filter((shape) => ids.has(shape.id));
         if (groupable.length < 2) throw new Error("Select at least two objects to group");
         if (groupable.some((shape) => shape.locked)) throw new Error("Unlock every selected object before grouping");

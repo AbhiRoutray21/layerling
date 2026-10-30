@@ -37,8 +37,10 @@ describe("groupShowsPartColors", () => {
     expect(groupShowsPartColors(shape())).toBe(false);
   });
 
-  it("keeps what a group showed before the switch existed", () => {
-    expect(groupShowsPartColors(shape({ kind: "mesh", groupedShapes: parts }))).toBe(true);
+  it("starts plain solid groups in one colour but keeps separate-part groups multicoloured by default", () => {
+    expect(groupShowsPartColors(shape({ kind: "mesh", groupedShapes: parts }))).toBe(false);
+    expect(groupShowsPartColors(shape({ kind: "mesh", groupedShapes: parts, multicolor: true }))).toBe(true);
+    expect(groupShowsPartColors(shape({ kind: "mesh", groupedShapes: [parts[0], { ...parts[1], hole: true }] }))).toBe(true);
     expect(groupShowsPartColors(shape({ kind: "mesh", groupedShapes: parts, importedMesh: cutMesh }))).toBe(false);
   });
 
