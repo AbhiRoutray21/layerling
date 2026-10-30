@@ -341,6 +341,12 @@ layerling 会拒绝覆盖，并让你重新加载或以其他名称保存。这�
 该文件夹**没有登录保护**：任何能访问该页面的人都能读取、写入和删除其中的内容。在家庭网络或工作坊里这正是想要的；
 在公网可访问的站点上，请保护它或干脆不要使用。
 
+该文件夹也可以放在 Web 根目录之外，那里没有任何地址能访问到它，无论有没有 `.htaccess`：把
+`LAYERLING_SHARED_PROJECTS_DIR`（Node 服务器读取的同一个设置）设为它的路径——Apache 中用
+`SetEnv LAYERLING_SHARED_PROJECTS_DIR /var/layerling-projects`，nginx 中用
+`fastcgi_param LAYERLING_SHARED_PROJECTS_DIR /var/layerling-projects;`，Docker 中作为容器的环境变量。
+这个文件夹随后取代 `store`；它同样必须存在，并且 Web 服务器可以写入。
+
 部署时有一件事要记住：如果用会删除多余内容的选项来镜像导出——`rsync --delete`、`robocopy /MIR`、WinSCP `-delete`——
 请明确排除 `store`，否则每次更新都会清空项目。
 

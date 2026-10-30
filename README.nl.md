@@ -314,6 +314,12 @@ Apache zet `store.php` er een `.htaccess` in die elke directe aanvraag weigert. 
 `location /store/ { deny all; }`). `store.php` controleert bovendien elke export die het opslaat en weigert een bestand
 dat in een browser iets zou kunnen uitvoeren.
 
+De map kan ook buiten de webroot staan, waar geen adres hem bereikt, met of zonder `.htaccess`: zet
+`LAYERLING_SHARED_PROJECTS_DIR`, dezelfde instelling die de Node-server leest, op zijn pad – in Apache met
+`SetEnv LAYERLING_SHARED_PROJECTS_DIR /var/layerling-projects`, in nginx met
+`fastcgi_param LAYERLING_SHARED_PROJECTS_DIR /var/layerling-projects;`, in Docker als omgevingsvariabele van de
+container. Die map neemt dan de plaats van `store` in; ook die moet bestaan en beschrijfbaar zijn voor de webserver.
+
 Eén ding om te onthouden bij het uitrollen: spiegel je de export met een optie die alles wat extra is verwijdert – `rsync
 --delete`, `robocopy /MIR`, WinSCP `-delete` – sluit `store` dan expliciet uit, anders wist elke update de projecten.
 

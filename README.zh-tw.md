@@ -336,6 +336,12 @@ layerling 會拒絕覆寫，並讓你重新載入或另存新檔。這是共用�
 該資料夾**沒有登入保護**：任何能存取該頁面的人都能讀取、寫入和刪除其中的內容。在家庭網路或工作坊裡這正是想要的；
 在可公開存取的網站上，請保護它或乾脆不要使用。
 
+該資料夾也可以放在 Web 根目錄之外，那裡沒有任何位址能存取到它，無論有沒有 `.htaccess`：把
+`LAYERLING_SHARED_PROJECTS_DIR`（Node 伺服器讀取的同一個設定）設為它的路徑——Apache 中用
+`SetEnv LAYERLING_SHARED_PROJECTS_DIR /var/layerling-projects`，nginx 中用
+`fastcgi_param LAYERLING_SHARED_PROJECTS_DIR /var/layerling-projects;`，Docker 中作為容器的環境變數。
+這個資料夾隨後取代 `store`；它同樣必須存在，並且 Web 伺服器可以寫入。
+
 部署時有一件事要記住：如果用會刪除多餘內容的選項來鏡像匯出檔案——`rsync --delete`、`robocopy /MIR`、WinSCP `-delete`——
 請明確排除 `store`，否則每次更新都會清空專案。
 

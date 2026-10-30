@@ -356,6 +356,13 @@ Apache legt `store.php` dort eine `.htaccess` an, die jeden direkten Abruf abwei
 `location /store/ { deny all; }`). `store.php` prüft außerdem jeden Export, den es speichert, und weist eine Datei ab,
 die in einem Browser etwas ausführen könnte.
 
+Der Ordner kann auch außerhalb des Web-Roots liegen, wo ihn keine Adresse erreicht, ob mit `.htaccess` oder ohne:
+Setze `LAYERLING_SHARED_PROJECTS_DIR`, dieselbe Einstellung, die der Node-Server liest, auf seinen Pfad – in Apache
+mit `SetEnv LAYERLING_SHARED_PROJECTS_DIR /var/layerling-projects`, in nginx mit
+`fastcgi_param LAYERLING_SHARED_PROJECTS_DIR /var/layerling-projects;`, in Docker als Umgebungsvariable des
+Containers. Dieser Ordner tritt dann an die Stelle von `store`; auch er muss vorhanden sein und für den Webserver
+beschreibbar.
+
 Beim Ausliefern daran denken: Wer den Export mit einer Option spiegelt, die Überzähliges löscht – `rsync --delete`,
 `robocopy /MIR`, WinSCP `-delete` –, muss `store` ausdrücklich ausnehmen. Sonst räumt jedes Update die Projekte weg.
 

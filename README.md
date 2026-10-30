@@ -349,6 +349,12 @@ do, so deny access to `store/` there yourself (in Apache: `<Directory /var/www/h
 in nginx: `location /store/ { deny all; }`). `store.php` also checks every export it saves, so a file that could run in a
 browser is refused either way.
 
+The folder can also live outside the web root, where no address reaches it at all, `.htaccess` or not: set
+`LAYERLING_SHARED_PROJECTS_DIR`, the same setting the Node server reads, to its path – in Apache with
+`SetEnv LAYERLING_SHARED_PROJECTS_DIR /var/layerling-projects`, in nginx with
+`fastcgi_param LAYERLING_SHARED_PROJECTS_DIR /var/layerling-projects;`, in Docker as an environment variable of the
+container. That folder then takes the place of `store`; it too has to exist and be writable for the web server.
+
 One thing to remember when deploying: if you mirror the export with an option that removes anything extra – `rsync
 --delete`, `robocopy /MIR`, WinSCP `-delete` – exclude `store` explicitly, or every update will wipe the projects.
 

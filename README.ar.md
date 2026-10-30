@@ -321,6 +321,12 @@ LAYERLING_SHARED_PROJECTS_DIR=/srv/layerling-projects npm run start
 وفي nginx: ‏`location /store/ { deny all; }`). ويتحقق `store.php` أيضًا من كل ملف مصدَّر يحفظه، فيُرفض الملف الذي يمكن أن يعمل في
 متصفح في كل الأحوال.
 
+يمكن أيضًا أن يكون المجلد خارج جذر الويب، حيث لا يصل إليه أي عنوان، مع `.htaccess` أو بدونه: اضبط
+`LAYERLING_SHARED_PROJECTS_DIR`، وهو الإعداد نفسه الذي يقرؤه خادم Node، على مساره – في Apache بـ
+`SetEnv LAYERLING_SHARED_PROJECTS_DIR /var/layerling-projects`، وفي nginx بـ
+`fastcgi_param LAYERLING_SHARED_PROJECTS_DIR /var/layerling-projects;`، وفي Docker كمتغير بيئة للحاوية.
+عندها يحل هذا المجلد محل `store`؛ ويجب أن يكون موجودًا وقابلًا للكتابة من خادم الويب كذلك.
+
 شيء يجب تذكّره عند النشر: إذا كنت تنسخ التصدير بخيار يحذف كل ما هو زائد – `rsync
 --delete`، أو `robocopy /MIR`، أو `-delete` في WinSCP – فاستثنِ `store` صراحة، وإلا فسيمسح كل تحديث المشاريع.
 
