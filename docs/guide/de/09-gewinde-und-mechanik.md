@@ -193,6 +193,12 @@ Mache die Tropfenbohrung zur Aussparung und gruppiere sie mit dem Teil. Sie lieg
 
 Ein **Gewindeloch** auf der Seite hängt oben genauso durch. Gib ihm eine eigene Tropfenbohrung: Füge eine {{ui:shape.teardrop}} als Aussparung hinzu, deren {{ui:prop.teardropDiameter}} der Kern des Gewindes ist, der Durchmesser, den seine Zähne freilassen (bei M10 etwa 8,4 mm), so lang wie das Gewindeloch, und wähle beide aus. Klicke {{ui:editor.tool.align}} und richte sie in der Mitte aus - die Mitte der Tropfenbohrung ist die Mitte ihres runden Teils, nicht die ihres Kastens mit der Spitze, die beiden Kreise liegen also genau aufeinander - und gruppiere beide mit dem Teil. Das Gewinde wird wie sonst geschnitten, und die Spitze öffnet die Oberseite des Lochs, so dass es ohne Stützen druckt.
 
+## Anschlussöffnungen
+
+Ein Gehäuse für Elektronik braucht eine Öffnung für das Kabel. Die {{ui:shape.port}} ist genau das: eine liegende Aussparung mit gerundeten Ecken. Wähle unter {{ui:prop.portPreset}} die Buchse - {{ui:port.usbC}}, {{ui:port.microUsb}} oder {{ui:port.usbA}} -, und sie bekommt deren Maß plus etwa 0,25 mm Luft auf jeder Seite. {{ui:port.usbCPlug}} ist für eine Buchse, die hinter der Wand sitzt, sodass das Steckergehäuse hineinreichen muss. Breite, Höhe und {{ui:prop.portCorner}} lassen sich von Hand ändern; die Liste zeigt dann {{ui:port.custom}}.
+
+Sie kommt als Aussparung und zeigt nach vorn. Stelle die {{ui:prop.portDepth}} etwas größer ein als die Wand dick ist, schiebe sie dorthin, wo die Buchse auf der Platine sitzt, und gruppiere sie mit dem Gehäuse. Für eine Seitenwand drehst du sie um 90° um die senkrechte Achse.
+
 ## Stufen- und Senkbohrung
 
 Ein Schraubenkopf soll oft nicht überstehen. Die {{ui:shape.counterbore}} schneidet dafür eine runde Tasche für einen Zylinderkopf (DIN 912), die {{ui:shape.countersink}} einen Kegel für eine Senkkopfschraube (DIN 7991). Beide stehen mit dem Kopf nach oben: Der {{ui:prop.screwHoleHead}} ist der Durchmesser der Tasche oder des Kegels, der {{ui:prop.screwHoleShaft}} die Bohrung darunter, die {{ui:prop.screwHoleLength}} die ganze Länge. Bei der Stufenbohrung stellst du die {{ui:prop.screwHoleHeadDepth}} ein, bei der Senkbohrung den {{ui:prop.screwHoleAngle}} (90° passt zu Senkschrauben). Die Vorgaben passen zu einer M3-Schraube.

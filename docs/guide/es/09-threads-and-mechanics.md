@@ -185,6 +185,12 @@ Convierte la lágrima en orificio y agrúpala con la pieza. Su longitud va en el
 
 Un **orificio roscado** tumbado se descuelga por arriba de la misma manera. Dale su propia lágrima: añade, como orificio, un {{ui:shape.teardrop}} cuyo {{ui:prop.teardropDiameter}} sea el del núcleo de la rosca, el diámetro que dejan libre sus dientes (unos 8,4 mm para M10), con la misma longitud que el orificio roscado, y selecciona los dos. Haz clic en {{ui:editor.tool.align}} y alinéalos por el centro (el centro de la lágrima es el de su parte redonda, no el de su caja con la punta, así que los dos círculos quedan uno sobre otro) y agrupa los dos con la pieza. La rosca se corta como siempre y la punta abre la parte superior del orificio, así que se imprime sin soportes.
 
+## Aberturas para conectores
+
+Una caja para electrónica necesita una abertura para el cable. La {{ui:shape.port}} es esa abertura: un hueco tumbado con las esquinas redondeadas. Elige el conector en {{ui:prop.portPreset}} - {{ui:port.usbC}}, {{ui:port.microUsb}} o {{ui:port.usbA}} - y toma su medida más unos 0,25 mm de holgura por cada lado. {{ui:port.usbCPlug}} es para un conector que queda detrás de la pared, donde tiene que entrar la carcasa del enchufe. El ancho, el alto y el {{ui:prop.portCorner}} se pueden cambiar a mano; la lista muestra entonces {{ui:port.custom}}.
+
+Llega como hueco y mirando al frente. Pon la {{ui:prop.portDepth}} un poco mayor que el grosor de la pared, muévela adonde está el conector en la placa y agrúpala con la caja. Para una pared lateral, gírala 90° alrededor del eje vertical.
+
 ## Escariado y avellanado
 
 A menudo, la cabeza de un tornillo no debe sobresalir. El {{ui:shape.counterbore}} recorta un alojamiento redondo para un tornillo de cabeza cilíndrica (DIN 912), y el {{ui:shape.countersink}}, un cono para un tornillo de cabeza avellanada (DIN 7991). Los dos se colocan con el lado de la cabeza hacia arriba: {{ui:prop.screwHoleHead}} es el diámetro del alojamiento o del cono; {{ui:prop.screwHoleShaft}}, el del taladro de debajo, y {{ui:prop.screwHoleLength}}, la longitud completa. En el escariado ajustas {{ui:prop.screwHoleHeadDepth}}, y en el avellanado, {{ui:prop.screwHoleAngle}} (90° va bien para tornillos de cabeza avellanada). Los valores predeterminados sirven para un tornillo M3.

@@ -189,6 +189,12 @@ Maak van het druppelgat een gat en groepeer het met het onderdeel. De lengte loo
 
 Een **getapt gat** op zijn zij zakt aan de bovenkant op dezelfde manier door. Geef het een eigen druppelgat: voeg een {{ui:shape.teardrop}} toe als gat, met als {{ui:prop.teardropDiameter}} de kern van de schroefdraad, de diameter die zijn tanden vrijlaten (bij M10 ongeveer 8,4 mm), even lang als het getapte gat, en selecteer beide. Klik op {{ui:editor.tool.align}} en lijn ze uit in het midden - het midden van het druppelgat is het midden van zijn ronde deel, niet van zijn doos met de punt, dus de twee cirkels liggen precies op elkaar - en groepeer beide met het onderdeel. De schroefdraad wordt zoals gewoonlijk gesneden en de punt opent de bovenkant van het gat, zodat het zonder steunen print.
 
+## Aansluitopeningen
+
+Een behuizing voor elektronica heeft een opening voor de kabel nodig. De {{ui:shape.port}} is die opening: een liggend gat met afgeronde hoeken. Kies de aansluiting bij {{ui:prop.portPreset}} - {{ui:port.usbC}}, {{ui:port.microUsb}} of {{ui:port.usbA}} - en hij krijgt de maat daarvan plus ongeveer 0,25 mm speling aan elke kant. {{ui:port.usbCPlug}} is voor een aansluiting die achter de wand zit, waar de behuizing van de stekker in moet. Breedte, hoogte en {{ui:prop.portCorner}} kun je met de hand wijzigen; de lijst toont dan {{ui:port.custom}}.
+
+Hij komt als gat en wijst naar voren. Zet de {{ui:prop.portDepth}} iets groter dan de wand dik is, schuif hem naar de plek van de aansluiting op de printplaat en groepeer hem met de behuizing. Voor een zijwand draai je hem 90° om de verticale as.
+
 ## Verzinkboring en verzinking
 
 Een schroefkop moet vaak niet uitsteken. De {{ui:shape.counterbore}} snijdt een ronde kamer voor een cilinderkopschroef met binnenzeskant (DIN 912), de {{ui:shape.countersink}} een kegel voor een verzonken schroef (DIN 7991). Beide staan met het kopeinde omhoog: de {{ui:prop.screwHoleHead}} is de diameter van de kamer of de kegel, de {{ui:prop.screwHoleShaft}} de boring eronder, de {{ui:prop.screwHoleLength}} de hele lengte. Bij de verzinkboring stel je de {{ui:prop.screwHoleHeadDepth}} in, bij de verzinking de {{ui:prop.screwHoleAngle}} (90° past bij verzonken schroeven). De standaardwaarden passen bij een M3-schroef.

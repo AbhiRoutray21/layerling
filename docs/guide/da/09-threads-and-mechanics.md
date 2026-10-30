@@ -197,6 +197,12 @@ Gør dråbehullet til et hul og gruppér det med delen. Dets længde løber lang
 
 Et **gevindhul** på siden falder sammen foroven på samme måde. Giv det en dråbeform af sin egen: tilføj et {{ui:shape.teardrop}}-hul, hvis {{ui:prop.teardropDiameter}} er gevindets kerne, den diameter tænderne lader fri (omkring 8,4 mm for M10), med samme længde som gevindhullet, og vælg begge. Klik på {{ui:editor.tool.align}} og bring dem på linje i midten – midten af dråbeformen er midten af den runde del, ikke af kassen med spidsen, så de to cirkler ligger oven i hinanden – og gruppér begge med delen. Gevindet skæres som sædvanligt, og spidsen åbner toppen af hullet, så det printer uden støtter.
 
+## Stikåbninger
+
+En kasse til elektronik skal have en åbning til kablet. {{ui:shape.port}} er netop den åbning: en liggende udskæring med afrundede hjørner. Vælg stikket under {{ui:prop.portPreset}} - {{ui:port.usbC}}, {{ui:port.microUsb}} eller {{ui:port.usbA}} - så får den stikkets mål plus ca. 0,25 mm luft på hver side. {{ui:port.usbCPlug}} er til et stik, der sidder bag væggen, så stikhuset skal kunne nå ind. Bredde, højde og {{ui:prop.portCorner}} kan ændres i hånden; listen viser så {{ui:port.custom}}.
+
+Den kommer som udskæring og vender fremad. Sæt {{ui:prop.portDepth}} lidt større end vægtykkelsen, flyt den hen, hvor stikket sidder på printet, og gruppér den med kassen. Til en sidevæg drejer du den 90° om den lodrette akse.
+
 ## Forsænkning og undersænkning
 
 {{ui:shape.counterbore}} er et hul med en bred, plan forsænkning i toppen, til en skrue med et unbrakonav. {{ui:shape.countersink}} er et hul der konusformes ned fra toppen, til en skrue med undersænket hoved. Begge er huller, og i indstillingerne sætter du hovedets diameter, skaftets diameter, dybden af forsænkningen eller konusvinklen.

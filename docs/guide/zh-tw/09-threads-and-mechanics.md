@@ -175,6 +175,12 @@ G 規格是符合 ISO 228-1 的平行惠氏管螺紋，常見於水、瓦斯、�
 
 側放的**螺紋孔**同樣會在頂部下垂。給它配一個自己的淚滴孔：新增一個 {{ui:shape.teardrop}} 孔，其 {{ui:prop.teardropDiameter}} 為螺紋芯部，即螺牙讓出的直徑（M10 約 8.4 mm），長度與螺紋孔相同，然後同時選取兩者。點擊 {{ui:editor.tool.align}}，讓它們在中央對齊——淚滴孔的中心是其圓部的中心，而不是含尖端外框的中心，所以兩個圓彼此重合——再把兩者與零件群組。螺紋照常切出，尖端打開孔的頂部，因此不需支撐即可列印。
 
+## 接頭開孔
+
+電子產品外殼需要為線材留開孔。{{ui:shape.port}} 就是這種開孔：一個橫放、帶圓角的挖空體。在 {{ui:prop.portPreset}} 中選擇接頭（{{ui:port.usbC}}、{{ui:port.microUsb}} 或 {{ui:port.usbA}}），它就會取得該接頭的尺寸，並在每邊多留約 0.25 mm 間隙。{{ui:port.usbCPlug}} 用於裝在壁後方的接頭，插頭外殼需要伸進來。寬度、高度和 {{ui:prop.portCorner}} 都可以手動修改，此時清單會顯示 {{ui:port.custom}}。
+
+它預設為挖空體，朝向前方。把 {{ui:prop.portDepth}} 設得比壁厚稍大，移到電路板上接頭所在的位置，再與外殼組合。用於側壁時，繞垂直軸旋轉 90°。
+
 ## 沉頭孔與錐形沉頭孔
 
 螺絲頭常常不該凸出。{{ui:shape.counterbore}} 為內六角螺絲（DIN 912）切出圓形沉頭孔，{{ui:shape.countersink}} 為沉頭螺絲（DIN 7991）切出錐形沉頭孔。兩者都以頭部一端朝上：{{ui:prop.screwHoleHead}} 是沉頭孔或錐面的直徑，{{ui:prop.screwHoleShaft}} 是其下方的孔，{{ui:prop.screwHoleLength}} 是總長度。沉頭孔上你設定 {{ui:prop.screwHoleHeadDepth}}，錐形沉頭孔上設定 {{ui:prop.screwHoleAngle}}（90° 適合沉頭螺絲）。預設值適合 M3 螺絲。

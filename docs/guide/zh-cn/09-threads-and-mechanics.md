@@ -175,6 +175,12 @@ G 规格是符合 ISO 228-1 的平行惠氏管螺纹，常见于水、燃气、�
 
 侧放的**螺纹孔**同样会在顶部下垂。给它配一个自己的泪滴孔：添加一个 {{ui:shape.teardrop}} 孔，其 {{ui:prop.teardropDiameter}} 为螺纹芯部，即齿让出的直径（M10 约为 8.4 mm），长度与螺纹孔相同，然后同时选中两者。点击 {{ui:editor.tool.align}}，让它们在中间对齐——泪滴孔的中心是其圆部的中心，而不是带尖端的外框中心，所以两个圆彼此重合——再把两者与零件分组。螺纹照常切出，尖端打开孔的顶部，因此无需支撑即可打印。
 
+## 接口开孔
+
+电子产品外壳需要给线缆留开孔。{{ui:shape.port}} 就是这种开孔：一个横放的、带圆角的挖空体。在 {{ui:prop.portPreset}} 中选择接口（{{ui:port.usbC}}、{{ui:port.microUsb}} 或 {{ui:port.usbA}}），它就会得到该接口的尺寸，并在每边多留约 0.25 mm 间隙。{{ui:port.usbCPlug}} 用于装在壁后面的接口，插头外壳需要伸进来。宽度、高度和 {{ui:prop.portCorner}} 都可以手动修改，此时列表显示 {{ui:port.custom}}。
+
+它默认是挖空体，朝向前方。把 {{ui:prop.portDepth}} 设得比壁厚稍大，移到电路板上接口所在的位置，再与外壳组合。用于侧壁时，绕竖直轴旋转 90°。
+
 ## 沉孔与锥形沉孔
 
 螺钉头常常不应该凸出。{{ui:shape.counterbore}} 为内六角螺钉（DIN 912）切出圆形的沉孔，{{ui:shape.countersink}} 为沉头螺钉（DIN 7991）切出锥形沉孔。两者都以头部一端朝上：{{ui:prop.screwHoleHead}} 是沉孔或锥面的直径，{{ui:prop.screwHoleShaft}} 是其下方的孔，{{ui:prop.screwHoleLength}} 是总长度。沉孔上你设置 {{ui:prop.screwHoleHeadDepth}}，锥形沉孔上设置 {{ui:prop.screwHoleAngle}}（90° 适合沉头螺钉）。默认值适合 M3 螺钉。

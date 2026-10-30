@@ -189,6 +189,12 @@ Tvar přepněte na výřez a slučte s dílem. Délka směřuje podél hloubky a
 
 Stejně se prověšuje vodorovný **závitový otvor**. Přidejte {{ui:shape.teardrop}} s {{ui:prop.teardropDiameter}} podle průměru jádra závitu, tedy volného prostoru mezi zuby, například asi 8,4 mm pro M10. Délka odpovídá závitovému otvoru. Vyberte oba a přes {{ui:editor.tool.align}} zarovnejte středy. Střed kapkovitého otvoru odpovídá středu kruhové části, nikoli obálce se špičkou. Pak oba slučte s tělesem. Závit se vyřízne běžně a hrot otevře horní část pro tisk bez podpěr.
 
+## Otvory pro konektory
+
+Krabička pro elektroniku potřebuje otvor pro kabel. {{ui:shape.port}} je přesně takový otvor: ležící výřez se zaoblenými rohy. V poli {{ui:prop.portPreset}} vyberte konektor - {{ui:port.usbC}}, {{ui:port.microUsb}} nebo {{ui:port.usbA}} - a otvor dostane jeho rozměr s vůlí asi 0,25 mm na každé straně. {{ui:port.usbCPlug}} je pro konektor, který sedí za stěnou, takže do otvoru musí zasahovat pouzdro zástrčky. Šířku, výšku a {{ui:prop.portCorner}} lze změnit ručně; seznam pak ukáže {{ui:port.custom}}.
+
+Otvor přichází jako výřez a míří dopředu. Nastavte {{ui:prop.portDepth}} o něco větší, než je tloušťka stěny, posuňte ho tam, kde konektor sedí na desce, a seskupte ho s krabičkou. Pro boční stěnu ho otočte o 90° kolem svislé osy.
+
 ## Válcové a kuželové zahloubení
 
 Pro zapuštěnou hlavu šroubu slouží {{ui:shape.counterbore}} jako válcová kapsa pro válcovou hlavu DIN 912 a {{ui:shape.countersink}} jako kužel pro zápustnou hlavu DIN 7991. Oba tvary míří hlavou vzhůru. {{ui:prop.screwHoleHead}} je průměr kapsy či kužele, {{ui:prop.screwHoleShaft}} průměr průchozího otvoru a {{ui:prop.screwHoleLength}} celková délka. U válcového nastavujete {{ui:prop.screwHoleHeadDepth}}, u kuželového {{ui:prop.screwHoleAngle}}, obvykle 90°. Výchozí hodnoty odpovídají M3.

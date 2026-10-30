@@ -189,6 +189,12 @@ Faites un trou dans la larme et regroupez-la avec la pièce. Sa longueur s'éten
 
 Un **trou taraudé** situé sur le côté s'affaisse également au sommet de la même manière. Donnez-lui sa propre larme : ajoutez un trou {{ui:shape.teardrop}} dont le {{ui:prop.teardropDiameter}} correspond au noyau du filetage, le diamètre que ses dents laissent libre (environ 8,4 mm pour du M10), de même longueur que le trou taraudé, et sélectionnez les deux. Cliquez sur {{ui:editor.tool.align}} et alignez-les au milieu — le milieu de la larme est le milieu de sa partie ronde, et non de sa boîte avec la pointe, de sorte que les deux cercles se superposent parfaitement — puis regroupez les deux avec la pièce. Le filetage est découpé comme d'habitude et la pointe ouvre le haut du trou, ce qui permet de l'imprimer sans supports.
 
+## Ouvertures de connecteur
+
+Un boîtier pour l'électronique a besoin d'une ouverture pour le câble. L'{{ui:shape.port}} est cette ouverture : un perçage couché aux coins arrondis. Choisissez le connecteur sous {{ui:prop.portPreset}} - {{ui:port.usbC}}, {{ui:port.microUsb}} ou {{ui:port.usbA}} - et elle prend sa taille plus environ 0,25 mm de jeu de chaque côté. {{ui:port.usbCPlug}} sert pour un connecteur placé derrière la paroi, où le boîtier de la fiche doit entrer. La largeur, la hauteur et le {{ui:prop.portCorner}} se modifient à la main ; la liste affiche alors {{ui:port.custom}}.
+
+Elle arrive en perçage, tournée vers l'avant. Réglez la {{ui:prop.portDepth}} un peu au-dessus de l'épaisseur de la paroi, placez-la là où le connecteur se trouve sur la carte et groupez-la avec le boîtier. Pour une paroi latérale, tournez-la de 90° autour de l'axe vertical.
+
 ## Lamage et fraisage
 
 Une tête de vis ne devrait souvent pas être fière. Le {{ui:shape.counterbore}} découpe une poche ronde pour une vis à tête creuse (DIN 912), le {{ui:shape.countersink}} un cône pour une vis à tête fraisée (DIN 7991). Les deux se tiennent avec la tête vers le haut : le {{ui:prop.screwHoleHead}} est le diamètre de la poche ou du cône, le {{ui:prop.screwHoleShaft}} l'alésage en dessous, le {{ui:prop.screwHoleLength}} toute la longueur. Sur le lamage, vous placez le {{ui:prop.screwHoleHeadDepth}}, sur le fraisage le {{ui:prop.screwHoleAngle}} (90° convient aux vis à tête fraisée). Les valeurs par défaut correspondent à une vis M3.

@@ -189,6 +189,12 @@ Kapljično izvrtino naredi za luknjo in jo združi v skupino z delom. Z dolžino
 
 **Navojna luknja** na boku se zgoraj povesi na enak način. Daj ji lastno kapljico: dodaj luknjo {{ui:shape.teardrop}}, katere {{ui:prop.teardropDiameter}} je jedro navoja, premer, ki ga zobci pustijo prostega (za M10 približno 8,4 mm), z enako dolžino kot navojna luknja, in izberi obe. Klikni {{ui:editor.tool.align}} in ju poravnaj po sredini – sredina kapljice je sredina njenega okroglega dela, ne njenega okvirja s konico, zato se krožnici prekrivata – ter obe skupaj z delom združi v skupino. Navoj se izreže kot običajno, konica pa odpre vrh luknje, zato se natisne brez podpor.
 
+## Odprtine za priključke
+
+Ohišje za elektroniko potrebuje odprtino za kabel. {{ui:shape.port}} je prav to: ležeča izrezna oblika z zaobljenimi vogali. Pod {{ui:prop.portPreset}} izberi priključek - {{ui:port.usbC}}, {{ui:port.microUsb}} ali {{ui:port.usbA}} - in dobi njegovo mero z zračnostjo približno 0,25 mm na vsaki strani. {{ui:port.usbCPlug}} je za priključek, ki je za steno, kamor mora seči ohišje vtiča. Širino, višino in {{ui:prop.portCorner}} lahko spremeniš ročno; seznam takrat pokaže {{ui:port.custom}}.
+
+Pride kot izrezna oblika in gleda naprej. Nastavi {{ui:prop.portDepth}} nekoliko večjo od debeline stene, jo premakni tja, kjer je priključek na plošči, in jo združi z ohišjem. Za stransko steno jo zavrti za 90° okoli navpične osi.
+
 ## Stopničasta in udirna izvrtina
 
 Glava vijaka pogosto ne sme štrleti. {{ui:shape.counterbore}} za to izreže okroglo žep za valjasto glavo (DIN 912), {{ui:shape.countersink}} stožec za vijak z udirno glavo (DIN 7991). Obe stojita z glavo navzgor: {{ui:prop.screwHoleHead}} je premer žepa ali stožca, {{ui:prop.screwHoleShaft}} izvrtina pod njim, {{ui:prop.screwHoleLength}} celotna dolžina. Pri stopničasti izvrtini nastaviš {{ui:prop.screwHoleHeadDepth}}, pri udirni {{ui:prop.screwHoleAngle}} (90° ustreza vijakom z udirno glavo). Privzete vrednosti ustrezajo vijaku M3.

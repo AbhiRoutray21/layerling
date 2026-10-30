@@ -1,6 +1,16 @@
 [
   {
     "title": {
+      "de": "Öffnung für USB-Buchsen",
+      "en": "An opening for USB sockets"
+    },
+    "body": {
+      "de": "Die neue Form „Anschlussöffnung“ setzt das Loch für eine USB-C-, Micro-USB- oder USB-A-Buchse in eine Gehäusewand. Buchse wählen, an die Wand schieben, gruppieren - das Maß mit etwas Luft zum Drucken ist schon drin.",
+      "en": "The new shape \"Port opening\" puts the hole for a USB-C, Micro-USB or USB-A socket into a box wall. Pick the socket, move it onto the wall, group - the size with a little room for printing is already in."
+    }
+  },
+  {
+    "title": {
       "de": "Versetzen klappt bei jedem Buchstaben",
       "en": "Offset works on every letter"
     },

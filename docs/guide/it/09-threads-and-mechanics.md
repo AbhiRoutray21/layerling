@@ -182,6 +182,12 @@ Imposta la forma teardrop come foro e raggruppala con il pezzo. La lunghezza seg
 
 Anche un **foro filettato** orizzontale tende a cedere in alto. Aggiungigli una forma teardrop: inserisci un foro {{ui:shape.teardrop}} il cui {{ui:prop.teardropDiameter}} corrisponda al nocciolo della filettatura, cioè al diametro libero lasciato dai denti (circa 8,4 mm per M10), e usa la stessa lunghezza del foro filettato; poi seleziona entrambi. Con {{ui:editor.tool.align}} allineali al centro: il centro della forma teardrop è il centro della parte rotonda, non quello del riquadro che include la punta, quindi i due cerchi coincideranno. Raggruppali entrambi con il pezzo. La filettatura viene sottratta come al solito e la punta apre la parte superiore del foro, che può essere stampato senza supporti.
 
+## Aperture per connettori
+
+Una scatola per l'elettronica ha bisogno di un'apertura per il cavo. L'{{ui:shape.port}} è proprio questa: un foro sdraiato con gli angoli arrotondati. Scegli il connettore in {{ui:prop.portPreset}} - {{ui:port.usbC}}, {{ui:port.microUsb}} o {{ui:port.usbA}} - e prende la sua misura più circa 0,25 mm di gioco per lato. {{ui:port.usbCPlug}} è per un connettore che sta dietro la parete, dove deve entrare il corpo della spina. Larghezza, altezza e {{ui:prop.portCorner}} si possono cambiare a mano; l'elenco mostra allora {{ui:port.custom}}.
+
+Arriva come foro, rivolta in avanti. Imposta la {{ui:prop.portDepth}} un po' più dello spessore della parete, spostala dove il connettore si trova sulla scheda e raggruppala con la scatola. Per una parete laterale, ruotala di 90° attorno all'asse verticale.
+
 ## Lamatura e svasatura
 
 Spesso la testa di una vite non deve sporgere dalla superficie. {{ui:shape.counterbore}} crea una sede cilindrica per una vite a testa cilindrica con esagono incassato (DIN 912); {{ui:shape.countersink}} crea una sede conica per una vite a testa svasata (DIN 7991). Entrambe le forme si posizionano con la testa rivolta verso l’alto: {{ui:prop.screwHoleHead}} è il diametro della sede o del cono, {{ui:prop.screwHoleShaft}} quello del foro sottostante e {{ui:prop.screwHoleLength}} la lunghezza totale. Per la lamatura imposti {{ui:prop.screwHoleHeadDepth}}; per la svasatura imposti {{ui:prop.screwHoleAngle}} (90° è adatto alle viti svasate). I valori iniziali corrispondono a una vite M3.

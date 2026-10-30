@@ -185,6 +185,12 @@ Tedd lyukká a csepp alakú lyukat, és csoportosítsd az alkatrésszel. A hossz
 
 Egy oldalán fekvő **menetes furat** teteje ugyanígy belóg. Adj neki saját cseppet: adj hozzá egy {{ui:shape.teardrop}} lyukat, amelynek az {{ui:prop.teardropDiameter}} értéke a menet magja, vagyis az az átmérő, amelyet a fogai szabadon hagynak (M10-nél nagyjából 8,4 mm), ugyanakkora hosszal, mint a menetes furat, és jelöld ki mindkettőt. Kattints az {{ui:editor.tool.align}} gombra, és igazítsd őket középen egy vonalba – a csepp közepe a kerek részének közepe, nem a csúcsos dobozáé, így a két kör egymásra kerül –, majd csoportosítsd mindkettőt az alkatrésszel. A menet a szokásos módon vágódik ki, a csúcs pedig megnyitja a lyuk tetejét, így támasz nélkül nyomtatható.
 
+## Csatlakozónyílások
+
+Egy elektronikai doboznak nyílás kell a kábelhez. A {{ui:shape.port}} pontosan ez: fekvő kivágás lekerekített sarkokkal. A {{ui:prop.portPreset}} mezőben válaszd ki az aljzatot - {{ui:port.usbC}}, {{ui:port.microUsb}} vagy {{ui:port.usbA}} -, és megkapja annak méretét, minden oldalon kb. 0,25 mm hézaggal. A {{ui:port.usbCPlug}} a fal mögött ülő aljzathoz való, ahol a dugó házának is be kell férnie. A szélesség, a magasság és a {{ui:prop.portCorner}} kézzel is állítható; ilyenkor a lista ezt mutatja: {{ui:port.custom}}.
+
+Kivágásként érkezik, előre nézve. A {{ui:prop.portDepth}} legyen kicsit nagyobb a fal vastagságánál, told oda, ahol az aljzat a panelen ül, és csoportosítsd a dobozzal. Oldalfalhoz forgasd el 90°-kal a függőleges tengely körül.
+
 ## Hengeres és kúpos süllyesztés
 
 Egy csavarfej gyakran ne álljon ki. A {{ui:shape.counterbore}} egy belső kulcsnyílású, hengeres fejű csavarhoz (DIN 912) vág kerek zsebet, a {{ui:shape.countersink}} egy süllyesztett fejű csavarhoz (DIN 7991) kúpot. Mindkettő a fej felőli végével felfelé áll: a {{ui:prop.screwHoleHead}} a zseb vagy a kúp átmérője, a {{ui:prop.screwHoleShaft}} az alatta lévő furat, a {{ui:prop.screwHoleLength}} a teljes hossz. A hengeres süllyesztésnél a {{ui:prop.screwHoleHeadDepth}}, a kúposnál a {{ui:prop.screwHoleAngle}} értékét állítod be (a 90° a süllyesztett fejű csavarokhoz illik). Az alapértékek M3-as csavarhoz illenek.

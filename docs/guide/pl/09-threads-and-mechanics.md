@@ -193,6 +193,12 @@ Zmień otwór łezkowy w otwór i zgrupuj go z częścią. Jego długość biegn
 
 **Otwór gwintowany** na boku opada u góry w ten sam sposób. Daj mu własną łezkę: dodaj otwór {{ui:shape.teardrop}}, którego {{ui:prop.teardropDiameter}} to rdzeń gwintu, czyli średnica, którą zostawiają wolną jego zwoje (około 8,4 mm dla M10), o tej samej długości co otwór gwintowany, i zaznacz oba. Kliknij {{ui:editor.tool.align}} i ustaw je w jednej linii na środku. Środek otworu łezkowego to środek jego okrągłej części, a nie prostopadłościanu otaczającego razem ze szpicem, więc oba okręgi leżą na sobie. Zgrupuj oba z częścią. Gwint zostaje wycięty jak zwykle, a szpic otwiera górę otworu, więc drukuje się on bez podpór.
 
+## Otwory na złącza
+
+Obudowa do elektroniki potrzebuje otworu na kabel. {{ui:shape.port}} to właśnie taki otwór: leżące wycięcie z zaokrąglonymi narożnikami. W polu {{ui:prop.portPreset}} wybierz złącze - {{ui:port.usbC}}, {{ui:port.microUsb}} lub {{ui:port.usbA}} - a otwór dostanie jego wymiar z luzem ok. 0,25 mm z każdej strony. {{ui:port.usbCPlug}} jest dla złącza schowanego za ścianką, gdzie musi wejść obudowa wtyczki. Szerokość, wysokość i {{ui:prop.portCorner}} można zmienić ręcznie; lista pokazuje wtedy {{ui:port.custom}}.
+
+Otwór pojawia się jako wycięcie skierowane do przodu. Ustaw {{ui:prop.portDepth}} nieco większą niż grubość ścianki, przesuń go tam, gdzie złącze siedzi na płytce, i zgrupuj z obudową. Dla ścianki bocznej obróć go o 90° wokół osi pionowej.
+
 ## Pogłębienie walcowe i stożkowe
 
 Łeb śruby często nie powinien wystawać. {{ui:shape.counterbore}} wycina okrągłą kieszeń pod śrubę z łbem walcowym z gniazdem (DIN 912), a {{ui:shape.countersink}} stożek pod śrubę z łbem stożkowym (DIN 7991). Oba stoją końcem na łeb do góry: {{ui:prop.screwHoleHead}} to średnica kieszeni albo stożka, {{ui:prop.screwHoleShaft}} to otwór poniżej, a {{ui:prop.screwHoleLength}} to cała długość. Na pogłębieniu walcowym ustawiasz {{ui:prop.screwHoleHeadDepth}}, a na stożkowym {{ui:prop.screwHoleAngle}} (90° pasuje do śrub z łbem stożkowym). Wartości domyślne pasują do śruby M3.
