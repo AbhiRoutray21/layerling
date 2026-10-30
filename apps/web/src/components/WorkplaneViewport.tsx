@@ -68,6 +68,7 @@ import { ownSideForMark } from "@/lib/dimensionSides";
 import { SelectionCounter } from "@/components/workplane/SelectionCounter";
 import { TouchMultiSelectButton } from "@/components/workplane/TouchMultiSelectButton";
 import { showsTouchMultiSelect } from "@/lib/touchMultiSelect";
+import { normalizeSlopeSide, SLOPE_MIN_END, slopeEndHeight } from "@/lib/slopeAlong";
 import { TransformOverlay, continuousSnappedWheelRotation, getElevationMeasureKey, measureKeyForHandle, ROTATION_WHEEL_SHIFT_SNAP_DEGREES, ROTATION_WHEEL_SNAP_DEGREES, snappedRotationDelta, snappedWheelRotation, type DimensionMark, type EditingCorner, type EditingDimension, type EditingRotation, type PinnedRotationWheelView, type RotationAxis, type RotationPlaneView, type RotationReadout, type TransformHandleKind, type TransformOverlayState } from "@/components/workplane/TransformOverlay";
 import { type AlignAxes, type FrameCuboid } from "@/lib/alignFrame";
 import type { AlignAxis, AlignHandleStatus, AlignTarget, GridSize, MeasurementAccuracy, ShapeAsset, WorkplaneNote, WorkplaneNoteAnchor, WorkplaneShape, WorkplaneWorkspaceSettings } from "@/types/layerling";
@@ -2191,6 +2192,8 @@ export function WorkplaneViewport({
       }
       return;
     }
+    // The slope's dot changes no size: it leaves the anchor of the last resize as it was.
+    if (handleKey === "slope-end") return;
     if (kind === "height") {
       lastResizeAnchorRef.current = {
         shapeId,
@@ -4193,6 +4196,14 @@ export function WorkplaneViewport({
         const rawDelta = currentPoint && transform.liftStartPoint
           ? currentPoint.clone().sub(transform.liftStartPoint).dot(axis)
           : 0;
+        // Slope along: the dot on the lower end moves that end's height, between the floor's minimum and the body's height.
+        if (transform.handleKey === "slope-end") {
+          const start = transform.startShape;
+          const startEnd = slopeEndHeight(start);
+          const nextEnd = clamp(startEnd + snapValue(rawDelta, step), Math.min(SLOPE_MIN_END, start.height), start.height);
+          onUpdateShape(start.id, { slopeEnd: Math.round(nextEnd * 1e4) / 1e4, slopeSide: normalizeSlopeSide(start.kind, start.slopeSide) });
+          return true;
+        }
         const resizingFromBottom = transform.handleKey === "bottom-height";
         const rawFrameHeight = transform.selectionFrame.height + (resizingFromBottom ? -rawDelta : rawDelta);
         const printerHeight = printerPresetById(workspaceRef.current.printer)?.height;

@@ -776,6 +776,9 @@ export type ParametricSource = {
   extrudeTwist?: number;
   extrudeTopOffsetX?: number;
   extrudeTopOffsetZ?: number;
+  slopeEnd?: number;
+  slopeSide?: "back" | "front" | "left" | "right";
+  slopeCurve?: number;
 };
 
 export type CadPrimitiveFrame = {
@@ -835,6 +838,15 @@ export type WorkplaneShape = {
   extrudeTopOffsetX?: number;
   /** Shifts the top face along the shape's local Z axis, in mm. */
   extrudeTopOffsetZ?: number;
+  /**
+   * Slope along: the height of the top at the far end, in mm. The kept
+   * end stays at the body's height; missing or equal to the height means no slope.
+   */
+  slopeEnd?: number;
+  /** Slope along: which end goes down ("back" unless set; a round roof or a wedge slopes front or back). */
+  slopeSide?: "back" | "front" | "left" | "right";
+  /** Slope along: -1 to 1, 0 a straight top, above 0 bulging up, below 0 sagging. */
+  slopeCurve?: number;
   teeth?: number;
   toothSize?: number;
   toothWidth?: number;

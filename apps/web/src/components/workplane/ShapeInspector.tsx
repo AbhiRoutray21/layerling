@@ -295,6 +295,7 @@ import {
 import { regularPolygonAspect } from "@/lib/regularPolygonFootprint";
 import { DEFAULT_TAPER_DIMENSION_MAX, MAX_HIGH_RESOLUTION_SIDES, MAX_HIGH_RESOLUTION_STEPS, POSITION_TYPED_LIMIT, RULER_MAX_LENGTH, customSnapGridLabel, positionReach, shapeDimensionLimit, snapGridOptions, snapGridStep } from "@/lib/workplaneSettings";
 import { printerPresetById } from "@/lib/printBed";
+import { normalizeSlopeCurve, normalizeSlopeSide, shapeSupportsSlope, SLOPE_MIN_END, slopeAlongWidth, slopeEndHeight, slopeSidesFor } from "@/lib/slopeAlong";
 import type { BentTubeInnerProfile, BentTubeProfile, CustomSnapGrid, GearType, GridfinityCompartmentLabel, GridfinityType, GridSize, MeasurementAccuracy, ShapeCustomization, SketchProfile, SketchStroke, SketchStrokeAlign, SketchStrokeJoin, ThreadHead, ThreadProfile, ThreadRole, WorkplaneShape, WorkplaneWorkspaceSettings } from "@/types/layerling";
 import { selectWholeValue } from "@/lib/numberField";
 import { formulaMatchesValue, formulaToRemember, withFieldFormula, type FieldFormulas } from "@/lib/fieldFormulas";
@@ -3135,6 +3136,61 @@ export function ShapeInspector({
     },
   ];
   /*
+   * Slope along (slopeAlong.ts): the far end's height in millimetres and as an
+   * angle, the side it goes down to and how much the top curves. The angle is
+   * the straight line's from end to end, so it stays the same when only the
+   * curve changes.
+   */
+  const slopeShown = shapeSupportsSlope(shape);
+  const slopeSide = normalizeSlopeSide(shape.kind, shape.slopeSide);
+  const slopeLength = slopeAlongWidth(slopeSide) ? shapeWidth(shape) : shapeDepth(shape);
+  const slopeEndValue = slopeEndHeight(shape);
+  const slopeAngle = (Math.atan2(shape.height - slopeEndValue, Math.max(1e-6, slopeLength)) * 180) / Math.PI;
+  const slopeMaxAngle = (Math.atan2(shape.height - Math.min(SLOPE_MIN_END, shape.height), Math.max(1e-6, slopeLength)) * 180) / Math.PI;
+  const slopeProperties: ShapePropertyConfig[] = !slopeShown ? [] : [
+    {
+      type: "select",
+      id: "slopeSide",
+      label: t("prop.slopeSide"),
+      value: slopeSide,
+      options: slopeSidesFor(shape.kind).map((side) => ({ value: side, label: t(`slope.side.${side}`) })),
+      onChange: (value) => onUpdate({ slopeSide: normalizeSlopeSide(shape.kind, value), slopeEnd: shape.slopeEnd ?? shape.height }),
+    },
+    {
+      id: "slopeEnd",
+      label: t("prop.slopeEnd"),
+      value: slopeEndValue,
+      min: Math.min(SLOPE_MIN_END, shape.height),
+      max: shape.height,
+      step: 0.1,
+      hint: t("slope.endHint"),
+      onChange: (slopeEnd) => onUpdate({ slopeEnd: Math.min(shape.height, Math.max(Math.min(SLOPE_MIN_END, shape.height), slopeEnd)), slopeSide: shape.slopeSide ?? slopeSide }),
+    },
+    {
+      id: "slopeAngle",
+      label: t("prop.slopeAngle"),
+      value: Math.round(slopeAngle * 100) / 100,
+      min: 0,
+      max: Math.floor(slopeMaxAngle * 100) / 100,
+      step: 0.5,
+      onChange: (angle) => {
+        const drop = Math.tan((Math.min(89.9, Math.max(0, angle)) * Math.PI) / 180) * slopeLength;
+        onUpdate({ slopeEnd: Math.max(Math.min(SLOPE_MIN_END, shape.height), shape.height - drop), slopeSide: shape.slopeSide ?? slopeSide });
+      },
+    },
+    {
+      id: "slopeCurve",
+      label: t("prop.slopeCurve"),
+      value: Math.round(normalizeSlopeCurve(shape.slopeCurve) * 100),
+      min: -100,
+      max: 100,
+      step: 1,
+      hint: t("slope.curveHint"),
+      onChange: (percent) => onUpdate({ slopeCurve: normalizeSlopeCurve(percent / 100), slopeEnd: shape.slopeEnd ?? shape.height, slopeSide: shape.slopeSide ?? slopeSide }),
+    },
+  ];
+  const slopeDefaults: PropertyDefaultValues = new Map<string, number | string | boolean>([["slopeEnd", shape.height], ["slopeAngle", 0], ["slopeCurve", 0]]);
+  /*
    * Wo der Koerper steht, zum Eintippen: X und Y auf der Platte (die Mitte
    * seines Rahmens, mit denselben Vorzeichen wie die Masse auf der
    * Arbeitsflaeche), Z als Hoehe seiner Unterkante. Die Regler reichen so weit
@@ -3214,6 +3270,7 @@ export function ShapeInspector({
   const [rotationOpen, setRotationOpen] = useInspectorCard("rotation", false);
   const [taperOpen, setTaperOpen] = useInspectorCard("taper", false);
   const [twistOpen, setTwistOpen] = useInspectorCard("twist", false);
+  const [slopeOpen, setSlopeOpen] = useInspectorCard("slope", false);
   const [gearTeethOpen, setGearTeethOpen] = useInspectorCard("gearTeeth", true);
   const [vaseFormOpen, setVaseFormOpen] = useInspectorCard("vaseForm", true);
   const [vaseFloorOpen, setVaseFloorOpen] = useInspectorCard("vaseFloor", false);
@@ -3748,6 +3805,25 @@ export function ShapeInspector({
           {twistOpen ? (
             <div className="property-list" id={`twist-${shape.id}`}>
               <ShapePropertyRows formulas={shape.formulas} onFormula={noteFormula} properties={twistProperties} defaults={propertyDefaults?.twist} workspace={workspace} disabled={locked} onInteractionActiveChange={onInteractionActiveChange} />
+            </div>
+          ) : null}
+        </div>
+      ) : null}
+      {slopeShown ? (
+        <div className={`property-card ${slopeOpen ? "" : "collapsed"}`} data-help-section-all="shapeSettings">
+          <button
+            className="property-card-header"
+            type="button"
+            aria-expanded={slopeOpen}
+            aria-controls={`slope-${shape.id}`}
+            onClick={() => setSlopeOpen((open) => !open)}
+          >
+            <span>{t("inspector.slope")}</span>
+            <ChevronUp className={slopeOpen ? "" : "collapsed"} size={25} strokeWidth={2.8} />
+          </button>
+          {slopeOpen ? (
+            <div className="property-list" id={`slope-${shape.id}`}>
+              <ShapePropertyRows formulas={shape.formulas} onFormula={noteFormula} properties={slopeProperties} defaults={slopeDefaults} workspace={workspace} disabled={locked} onInteractionActiveChange={onInteractionActiveChange} />
             </div>
           ) : null}
         </div>

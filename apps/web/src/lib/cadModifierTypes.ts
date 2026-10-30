@@ -129,6 +129,19 @@ export type CadModifierProfilePart = {
   twistCenter?: { x: number; z: number };
   /** Degrees between two sections of a twisted loft, where the standard step is too coarse for an outline with fine teeth (a knurl). */
   twistStep?: number;
+  /**
+   * Loft only: the sections at the shares `t` of the way up, scaled by `sx` across and `sz` in
+   * height from the shape's own section; `loops` is the first of them and `topLoops` the last - a round roof
+   * or a wedge sloping along its length. Two sections are joined by a ruled loft, more smoothly.
+   */
+  sections?: Array<{ t: number; sx: number; sz: number }>;
+  /**
+   * Extrusion only: what the body keeps of itself inside a second prism - `loops` (one outline)
+   * pushed `height` along its local y and placed by `frame` (a 3x4 matrix, row by row) in the
+   * part's own frame. An upright body whose top slopes along its length (slope along) is its
+   * plain extrusion trimmed by its side outline pushed across.
+   */
+  trim?: { loops: CadModifierProfileLoop[]; height: number; frame: number[] };
   /** Loft only: 0 to 1, how much of an S-curve the sides take between the ends instead of a straight line (#271); built like a turned loft, through sections. */
   smooth?: number;
   /** Loft only, with a twist: how far the lean moves the top; the turning centre moves along with it. */

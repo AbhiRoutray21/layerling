@@ -1,4 +1,5 @@
 "use client";
+import { normalizeSlopeCurve, normalizeSlopeSide, shapeSupportsSlope } from "@/lib/slopeAlong";
 import { AlertTriangle, X } from "lucide-react";
 import { ObjectListPanel } from "@/components/workplane/ObjectListPanel";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -1053,6 +1054,9 @@ function parametricSourceForBake(shape: WorkplaneShape): ParametricSource | unde
     extrudeTwist: shape.extrudeTwist,
     extrudeTopOffsetX: shape.extrudeTopOffsetX,
     extrudeTopOffsetZ: shape.extrudeTopOffsetZ,
+    slopeEnd: shape.slopeEnd,
+    slopeSide: shape.slopeSide,
+    slopeCurve: shape.slopeCurve,
   };
 }
 
@@ -1089,6 +1093,9 @@ function rebuiltParametricShape(shape: WorkplaneShape, patch: Partial<WorkplaneS
     extrudeTwist: source.extrudeTwist,
     extrudeTopOffsetX: source.extrudeTopOffsetX,
     extrudeTopOffsetZ: source.extrudeTopOffsetZ,
+    slopeEnd: source.slopeEnd,
+    slopeSide: source.slopeSide,
+    slopeCurve: source.slopeCurve,
     importedMesh: undefined,
     parametricSource: undefined,
     rotation: 0,
@@ -1195,6 +1202,9 @@ function bakeShapeTransformIntoMesh(shape: WorkplaneShape): WorkplaneShape {
     extrudeTwist: undefined,
     extrudeTopOffsetX: undefined,
     extrudeTopOffsetZ: undefined,
+    slopeEnd: undefined,
+    slopeSide: undefined,
+    slopeCurve: undefined,
     importedMesh: {
       positions,
       baseWidth: rawWidth,
@@ -2437,6 +2447,20 @@ function mcpTaperPatch(shape: WorkplaneShape, params: Record<string, unknown>, m
     bottomWidth: mcpOptionalNumber(params.taperBottomWidth),
     bottomDepth: mcpOptionalNumber(params.taperBottomDepth),
   }, maxDimension);
+}
+
+/**
+ * Slope along (slopeAlong.ts) belongs to the single body like the taper, so it does not come
+ * through `normalizeShapeCustomizations` either: the lower end's height in mm, its side and
+ * the curve (-1 to 1), for creating a shape and for changing one.
+ */
+function mcpSlopePatch(shape: WorkplaneShape, params: Record<string, unknown>): Partial<WorkplaneShape> {
+  const patch: Partial<WorkplaneShape> = {};
+  if (!shapeSupportsSlope(shape)) return patch;
+  if (typeof params.slopeSide === "string") patch.slopeSide = normalizeSlopeSide(shape.kind, params.slopeSide);
+  if (typeof params.slopeCurve === "number") patch.slopeCurve = normalizeSlopeCurve(params.slopeCurve);
+  if (typeof params.slopeEnd === "number" && Number.isFinite(params.slopeEnd)) patch.slopeEnd = Math.max(0, params.slopeEnd);
+  return patch;
 }
 
 /**
@@ -10273,6 +10297,7 @@ export function LayerlingEditor({
           }
           shape = { ...shape, ...mcpTaperPatch(shape, params, shapeDimensionLimit(workspaceSettingsRef.current, shape.kind, DEFAULT_TAPER_DIMENSION_MAX)) };
           shape = { ...shape, ...mcpExtrudeDeformPatch(shape, params) };
+          shape = { ...shape, ...mcpSlopePatch(shape, params) };
           if (shape.kind === "bentTube") {
             shape = { ...shape, ...mcpBentTubePatch(shape, params) };
           }
@@ -10421,6 +10446,7 @@ export function LayerlingEditor({
         // umbaut - erst Breite und Tiefe anwenden, dann die Kanten darauf.
         Object.assign(patch, mcpTaperPatch({ ...target, ...patch }, params, shapeDimensionLimit(workspaceSettingsRef.current, target.kind, DEFAULT_TAPER_DIMENSION_MAX)));
         Object.assign(patch, mcpExtrudeDeformPatch({ ...target, ...patch }, params));
+        Object.assign(patch, mcpSlopePatch(target, params));
         if (target.kind === "loft") {
           // The stored ends were set above as they came; the frame and the place follow from them here.
           const change = mcpLoftChange(params);

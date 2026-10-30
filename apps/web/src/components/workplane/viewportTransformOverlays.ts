@@ -13,6 +13,7 @@ import { dimensionMarkNeedsScreenLayout, dimensionMarkScreenPush, isPointInsideT
 import { cuboidCorners, pointAlongAxes } from "@/lib/alignFrame";
 import type { AlignAxis, AlignHandleStatus, AlignTarget, MeasurementAccuracy, WorkplaneShape } from "@/types/layerling";
 import { outwardFaceNormal } from "@/lib/layFlat";
+import { normalizeSlopeSide, shapeSupportsSlope, slopeEndHeight } from "@/lib/slopeAlong";
 import { JOINED_FACE_REACH, nearestFaceTriangle, planarFaceTriangles } from "@/lib/rotationPivot";
 import { roundFaceTriangles } from "@/lib/roundFaceAxis";
 import { isReferenceImage, referenceImageFacingAxis } from "@/lib/referenceImage";
@@ -387,6 +388,18 @@ export function syncTransformOverlay(
     left: project(footprintWorld.left),
   };
   const heightPoint = project(showLowerHandles ? lowerCenterWorld : upperCenterWorld);
+  // Slope along (slopeAlong.ts): a dot on the top of the lower end, dragged up and down like the height.
+  const slopeShape = frame.singleShape && shapeSupportsSlope(frame.singleShape) && typeof frame.singleShape.slopeEnd === "number" ? frame.singleShape : null;
+  const slopePoint = (() => {
+    if (!slopeShape) return { x: 0, y: 0, visible: false };
+    const side = normalizeSlopeSide(slopeShape.kind, slopeShape.slopeSide);
+    const y = frame.min.y + slopeEndHeight(slopeShape);
+    const world = side === "back" ? framePoint(frame, 0, y, frame.min.z)
+      : side === "front" ? framePoint(frame, 0, y, frame.max.z)
+        : side === "left" ? framePoint(frame, frame.min.x, y, 0)
+          : framePoint(frame, frame.max.x, y, 0);
+    return project(world);
+  })();
   const liftBasePoint = project(liftBaseWorld);
   // A thin body puts the arrow a few pixels from the height handle; it keeps its distance on the screen.
   const liftPoint = liftHandleScreenPoint(liftBasePoint, project(liftHandle), showLowerLiftHandle);
@@ -569,6 +582,7 @@ export function syncTransformOverlay(
     { point: mid.far, handle: { key: "far-mid", className: "edge dark", kind: "scale" as const, x: mid.far.x, y: mid.far.y, title: t("transform.resize") } },
     { point: mid.left, handle: { key: "left-mid", className: "edge dark", kind: "scale" as const, x: mid.left.x, y: mid.left.y, title: t("transform.resize") } },
     { point: heightPoint, handle: { key: heightHandleKey, className: "height-top", kind: "height" as const, x: heightPoint.x, y: heightPoint.y, title: t("transform.height") } },
+    { point: slopePoint, handle: { key: "slope-end", className: "height-top slope-end", kind: "height" as const, x: slopePoint.x, y: slopePoint.y, title: t("transform.slope") } },
     { point: liftPoint, handle: { key: liftHandleKey, className: showLowerLiftHandle ? "height-lift lower" : "height-lift", kind: "lift" as const, x: liftPoint.x, y: liftPoint.y, title: t("transform.lift"), angle: liftHandleAngle } },
   ].filter(({ point }) => point.visible).map(({ handle }) => handle);
   const rotationChromeVisible = !cameraInsideSelection && centerPoint.visible;
