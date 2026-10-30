@@ -68,7 +68,7 @@ import { ownSideForMark } from "@/lib/dimensionSides";
 import { SelectionCounter } from "@/components/workplane/SelectionCounter";
 import { TouchMultiSelectButton } from "@/components/workplane/TouchMultiSelectButton";
 import { showsTouchMultiSelect } from "@/lib/touchMultiSelect";
-import { normalizeSlopeSide, SLOPE_MIN_END, slopeEndHeight } from "@/lib/slopeAlong";
+import { narrowCrossWidth, narrowEndWidth, normalizeSlopeSide, SLOPE_MIN_END, slopeAlongWidth, slopeEndHeight } from "@/lib/slopeAlong";
 import { TransformOverlay, continuousSnappedWheelRotation, getElevationMeasureKey, measureKeyForHandle, ROTATION_WHEEL_SHIFT_SNAP_DEGREES, ROTATION_WHEEL_SNAP_DEGREES, snappedRotationDelta, snappedWheelRotation, type DimensionMark, type EditingCorner, type EditingDimension, type EditingRotation, type PinnedRotationWheelView, type RotationAxis, type RotationPlaneView, type RotationReadout, type TransformHandleKind, type TransformOverlayState } from "@/components/workplane/TransformOverlay";
 import { type AlignAxes, type FrameCuboid } from "@/lib/alignFrame";
 import type { AlignAxis, AlignHandleStatus, AlignTarget, GridSize, MeasurementAccuracy, ShapeAsset, WorkplaneNote, WorkplaneNoteAnchor, WorkplaneShape, WorkplaneWorkspaceSettings } from "@/types/layerling";
@@ -2193,7 +2193,7 @@ export function WorkplaneViewport({
       return;
     }
     // The slope's dot changes no size: it leaves the anchor of the last resize as it was.
-    if (handleKey === "slope-end") return;
+    if (handleKey === "slope-end" || handleKey === "narrow-end") return;
     if (kind === "height") {
       lastResizeAnchorRef.current = {
         shapeId,
@@ -3942,7 +3942,11 @@ export function WorkplaneViewport({
       const scaleStartPoint = scalePlane ? toRawPlanePoint(event.clientX, event.clientY, scalePlane) ?? undefined : undefined;
       const scaleSigns = kind === "scale" ? resizeSignsForHandle(resizeHandleKey) : undefined;
       const scaleAnchorPoint = kind === "scale" && scaleSigns ? resizeAnchorPointForFrame(frame, scaleSigns) : undefined;
-      const liftAxis = kind === "lift" ? lift.axis : kind === "height" ? frame.yAxis.clone().normalize() : undefined;
+      // The narrowing's dot moves across the body, along the axis its end's width runs on.
+      const narrowAxis = handleKey === "narrow-end"
+        ? (slopeAlongWidth(normalizeSlopeSide(shape.kind, shape.narrowSide)) ? frame.zAxis : frame.xAxis).clone().normalize()
+        : null;
+      const liftAxis = kind === "lift" ? lift.axis : narrowAxis ?? (kind === "height" ? frame.yAxis.clone().normalize() : undefined);
       const liftHandlePoint = liftAxis
         ? (kind === "lift"
             ? lift.pointAt(handlesLowerSide ? lift.low : lift.high).addScaledVector(liftAxis, liftOffset)
@@ -4197,6 +4201,15 @@ export function WorkplaneViewport({
           ? currentPoint.clone().sub(transform.liftStartPoint).dot(axis)
           : 0;
         // Slope along: the dot on the lower end moves that end's height, between the floor's minimum and the body's height.
+        // Narrow along: the dot on the narrow end's side moves that end's half-width.
+        if (transform.handleKey === "narrow-end") {
+          const start = transform.startShape;
+          const startWidth = narrowEndWidth(start);
+          const full = narrowCrossWidth(start);
+          const nextWidth = clamp(startWidth + 2 * snapValue(rawDelta, step), 0, full);
+          onUpdateShape(start.id, { narrowEnd: Math.round(nextWidth * 1e4) / 1e4, narrowSide: normalizeSlopeSide(start.kind, start.narrowSide) });
+          return true;
+        }
         if (transform.handleKey === "slope-end") {
           const start = transform.startShape;
           const startEnd = slopeEndHeight(start);

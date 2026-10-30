@@ -1,5 +1,5 @@
 "use client";
-import { normalizeSlopeCurve, normalizeSlopeSide, shapeSupportsSlope } from "@/lib/slopeAlong";
+import { normalizeNarrowStart, normalizeSlopeCurve, normalizeSlopeSide, shapeSupportsNarrow, shapeSupportsSlope } from "@/lib/slopeAlong";
 import { AlertTriangle, X } from "lucide-react";
 import { ObjectListPanel } from "@/components/workplane/ObjectListPanel";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -1057,6 +1057,10 @@ function parametricSourceForBake(shape: WorkplaneShape): ParametricSource | unde
     slopeEnd: shape.slopeEnd,
     slopeSide: shape.slopeSide,
     slopeCurve: shape.slopeCurve,
+    narrowEnd: shape.narrowEnd,
+    narrowSide: shape.narrowSide,
+    narrowCurve: shape.narrowCurve,
+    narrowStart: shape.narrowStart,
   };
 }
 
@@ -1096,6 +1100,10 @@ function rebuiltParametricShape(shape: WorkplaneShape, patch: Partial<WorkplaneS
     slopeEnd: source.slopeEnd,
     slopeSide: source.slopeSide,
     slopeCurve: source.slopeCurve,
+    narrowEnd: source.narrowEnd,
+    narrowSide: source.narrowSide,
+    narrowCurve: source.narrowCurve,
+    narrowStart: source.narrowStart,
     importedMesh: undefined,
     parametricSource: undefined,
     rotation: 0,
@@ -1205,6 +1213,10 @@ function bakeShapeTransformIntoMesh(shape: WorkplaneShape): WorkplaneShape {
     slopeEnd: undefined,
     slopeSide: undefined,
     slopeCurve: undefined,
+    narrowEnd: undefined,
+    narrowSide: undefined,
+    narrowCurve: undefined,
+    narrowStart: undefined,
     importedMesh: {
       positions,
       baseWidth: rawWidth,
@@ -2450,9 +2462,10 @@ function mcpTaperPatch(shape: WorkplaneShape, params: Record<string, unknown>, m
 }
 
 /**
- * Slope along (slopeAlong.ts) belongs to the single body like the taper, so it does not come
- * through `normalizeShapeCustomizations` either: the lower end's height in mm, its side and
- * the curve (-1 to 1), for creating a shape and for changing one.
+ * Slope along and narrow along (slopeAlong.ts) belong to the single body like the taper, so
+ * they do not come through `normalizeShapeCustomizations` either: the lower end's height in
+ * mm, its side and the curve (-1 to 1); the narrow end's width in mm, its side, the curve and
+ * where the narrowing starts (0 to 0.95) - for creating a shape and for changing one.
  */
 function mcpSlopePatch(shape: WorkplaneShape, params: Record<string, unknown>): Partial<WorkplaneShape> {
   const patch: Partial<WorkplaneShape> = {};
@@ -2460,6 +2473,11 @@ function mcpSlopePatch(shape: WorkplaneShape, params: Record<string, unknown>): 
   if (typeof params.slopeSide === "string") patch.slopeSide = normalizeSlopeSide(shape.kind, params.slopeSide);
   if (typeof params.slopeCurve === "number") patch.slopeCurve = normalizeSlopeCurve(params.slopeCurve);
   if (typeof params.slopeEnd === "number" && Number.isFinite(params.slopeEnd)) patch.slopeEnd = Math.max(0, params.slopeEnd);
+  if (!shapeSupportsNarrow(shape)) return patch;
+  if (typeof params.narrowSide === "string") patch.narrowSide = normalizeSlopeSide(shape.kind, params.narrowSide);
+  if (typeof params.narrowCurve === "number") patch.narrowCurve = normalizeSlopeCurve(params.narrowCurve);
+  if (typeof params.narrowStart === "number") patch.narrowStart = normalizeNarrowStart(params.narrowStart);
+  if (typeof params.narrowEnd === "number" && Number.isFinite(params.narrowEnd)) patch.narrowEnd = Math.max(0, params.narrowEnd);
   return patch;
 }
 

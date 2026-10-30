@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { normalizeSlopeSide, shapeHasSlope, slopeCurveForShape, slopeDistance, slopeEndHeight, slopeMesh, slopeTopAt } from "@/lib/slopeAlong";
+import { narrowCurveForShape, narrowHalfWidthAt, normalizeSlopeSide, shapeHasNarrow, shapeHasSlope, slopeCurveForShape, slopeDistance, slopeEndHeight, slopeMesh, slopeTopAt } from "@/lib/slopeAlong";
 import type { WorkplaneShape } from "@/types/layerling";
 
 function shape(kind: WorkplaneShape["kind"], extra: Partial<WorkplaneShape> = {}): WorkplaneShape {
@@ -14,6 +14,7 @@ describe("slope along", () => {
     expect(shapeHasSlope(shape("box"))).toBe(false);
     expect(shapeHasSlope(shape("cylinder", { slopeEnd: 8 }))).toBe(true);
     expect(shapeHasSlope(shape("sphere", { slopeEnd: 8 }))).toBe(false);
+    expect(shapeHasNarrow(shape("tube", { narrowEnd: 8 }))).toBe(false);
     expect(normalizeSlopeSide("wedge", "right")).toBe("back");
   });
 
@@ -63,4 +64,18 @@ describe("slope along", () => {
     expect(out[1][1]).toBeCloseTo(0, 9);
   });
 
+  it("narrows from where it starts to the end, never wider or narrower than the two widths", () => {
+    expect(shapeHasNarrow(shape("box", { narrowEnd: 10 }))).toBe(true);
+    expect(shapeHasNarrow(shape("box", { narrowEnd: 30 }))).toBe(false);
+    for (const narrowCurve of [0, 1, -1]) {
+      const curve = narrowCurveForShape(shape("box", { narrowEnd: 6, narrowStart: 0.5, narrowCurve }));
+      expect(narrowHalfWidthAt(curve, 0)).toBeCloseTo(15, 9);
+      expect(narrowHalfWidthAt(curve, 20)).toBeCloseTo(15, 9);
+      expect(narrowHalfWidthAt(curve, 40)).toBeCloseTo(3, 9);
+      for (let s = 20; s <= 40; s += 0.5) {
+        expect(narrowHalfWidthAt(curve, s)).toBeLessThanOrEqual(15 + 1e-9);
+        expect(narrowHalfWidthAt(curve, s)).toBeGreaterThanOrEqual(3 - 1e-9);
+      }
+    }
+  });
 });

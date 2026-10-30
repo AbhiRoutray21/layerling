@@ -461,6 +461,10 @@ export function shapeFromCadMesh(
     slopeEnd: undefined,
     slopeSide: undefined,
     slopeCurve: undefined,
+    narrowEnd: undefined,
+    narrowSide: undefined,
+    narrowCurve: undefined,
+    narrowStart: undefined,
     importedMesh: {
       positions: flattenedPositions,
       normals: flattenedNormals.length === flattenedPositions.length ? flattenedNormals : undefined,

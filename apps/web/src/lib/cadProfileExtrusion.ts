@@ -8,7 +8,7 @@ import { profileArcPoint, profileLoopBounds, TWIST_SECTION_STEP, validateCadProf
 import { cadTransformFromMatrix } from "@/lib/cadBakeMetadata";
 import { CAD_MODIFIER_EXACT_SEGMENT_LIMIT } from "@/lib/cadModifierRuntime";
 import { deformsAboutOrigin, meshYawDegrees, mirrorSign, shapeDepth, shapeHasExtrudeDeform, shapeHasShapeDeform, shapeHasTaper, shapeTaperDimensions, shapeWidth } from "@/lib/workplaneShapes";
-import { alongLevels, LYING_ALONG_KINDS, normalizeSlopeSide, shapeHasAlongDeform, slopeAlongWidth, slopeCurveForShape, slopeScaleAt, slopeSectionCount } from "@/lib/slopeAlong";
+import { alongLevels, LYING_ALONG_KINDS, narrowCurveForShape, narrowHalfWidthAt, normalizeSlopeSide, shapeHasAlongDeform, shapeHasNarrow, shapeHasSlope, slopeAlongWidth, slopeCurveForShape, slopeScaleAt, slopeSectionCount } from "@/lib/slopeAlong";
 import { regularPolygonFootprintScale } from "@/lib/regularPolygonFootprint";
 import { roundSideCount } from "@/lib/roundSideCount";
 import { drawnRound, ROUND_FROM_BENT_TUBE_QUALITY, ROUND_FROM_HALF_SPHERE_STEPS, ROUND_FROM_ROOF_SIDES, ROUND_FROM_SIDES, ROUND_FROM_SPHERE_STEPS } from "@/lib/roundness";
@@ -1254,8 +1254,16 @@ function alongWidthFrame(width: number): ProfileFrame {
  * close enough that the top stays within a hundredth of a millimetre.
  */
 function slopedProfile(shape: WorkplaneShape, width: number, depth: number, designedRound?: boolean): CadModifierProfilePart | null {
-  if (shape.kind === "box") return slopedBoxProfile(shape, width, depth);
+  const slope = shapeHasSlope(shape);
+  const narrow = shapeHasNarrow(shape);
+  if (shape.kind === "box") {
+    // A box both sloping and narrowing stays on the display mesh for now.
+    if (slope && narrow) return null;
+    return slope ? slopedBoxProfile(shape, width, depth) : narrowedBoxProfile(shape, width, depth);
+  }
   if (LYING_ALONG_KINDS.has(shape.kind)) return alongRoofProfile(shape, depth, designedRound);
+  // An upright prism narrowing has no exact body yet; it keeps its display mesh.
+  if (narrow) return null;
   return trimmedUprightProfile(shape, width, depth, designedRound);
 }
 
@@ -1345,10 +1353,44 @@ function slopedBoxProfile(shape: WorkplaneShape, width: number, depth: number): 
 }
 
 /**
- * A round roof or a wedge sloping (front to back only): its section lofted along
- * the length, each section as high as the top there. Where the top runs straight
- * the loft is ruled between two sections - exact; where it curves it goes smoothly
- * through sections close enough to stay within a hundredth of a millimetre.
+ * A box narrowing along its length: its outline seen from above - the wide part,
+ * then both sides running in (straight or the display's Bezier) to the narrow end -
+ * pushed straight up. Flat faces, two ruled or Bezier sides: exact.
+ */
+function narrowedBoxProfile(shape: WorkplaneShape, width: number, depth: number): CadModifierProfilePart {
+  const side = normalizeSlopeSide(shape.kind, shape.narrowSide);
+  const curve = narrowCurveForShape(shape);
+  const alongWidth = slopeAlongWidth(side);
+  const keepAt = keptEndAt(side, (alongWidth ? width : depth) / 2);
+  const at = alongAt(keepAt, curve.total);
+  // (along, across) -> the outline's (x, z): along the depth, across is x; along the width, across is z.
+  const point = (along: number, across: number) => (alongWidth ? { x: along, z: across } : { x: across, z: along });
+  const straight = Math.abs(curve.control.s - curve.length / 2) < 1e-9 && Math.abs(curve.control.y - (curve.keep + curve.end) / 2) < 1e-9;
+  const side1: CadModifierProfileSegment[] = [];
+  const side2: CadModifierProfileSegment[] = [];
+  const startAt = at(curve.start);
+  const farAt = at(curve.total);
+  const control = at(curve.start + curve.control.s);
+  // One side from the kept end to the far end, the other back; each a line to where the narrowing starts, then the curve.
+  if (curve.start > 1e-9) side1.push({ kind: "line", ...point(startAt, curve.keep) });
+  side1.push(straight ? { kind: "line", ...point(farAt, curve.end) } : { kind: "bezier", ...point(farAt, curve.end), controls: [point(control, curve.control.y)] });
+  side1.push({ kind: "line", ...point(farAt, -curve.end) });
+  side2.push(straight ? { kind: "line", ...point(startAt, -curve.keep) } : { kind: "bezier", ...point(startAt, -curve.keep), controls: [point(control, -curve.control.y)] });
+  if (curve.start > 1e-9) side2.push({ kind: "line", ...point(keepAt, -curve.keep) });
+  const start = point(keepAt, curve.keep);
+  const segments = [...side1, ...side2, { kind: "line", ...start } as CadModifierProfileSegment];
+  const part: CadModifierProfilePart = { kind: "extrusion", loops: [{ ...start, segments }], height: shape.height, transform: profileTransformForShape(shape) };
+  validateCadProfile(part);
+  return part;
+}
+
+/**
+ * A round roof sloping, narrowing or both (front to back only): its half-ellipse
+ * lofted along the length, each section as high as the top and as wide as the
+ * narrowing there. Where both lines run straight the loft is ruled between two
+ * sections - exact; where one curves it goes smoothly through sections close
+ * enough to stay within a hundredth of a millimetre; where the narrowing starts
+ * the loft breaks, so that corner stays sharp.
  */
 function alongRoofProfile(shape: WorkplaneShape, depth: number, designedRound?: boolean): CadModifierProfilePart | null {
   // A wedge is its right triangle - the tall side on the right - pushed along the depth, as the display draws it.
@@ -1356,15 +1398,22 @@ function alongRoofProfile(shape: WorkplaneShape, depth: number, designedRound?: 
     ? { loops: [polygonLoop([{ x: -shapeWidth(shape) / 2, z: 0 }, { x: shapeWidth(shape) / 2, z: 0 }, { x: shapeWidth(shape) / 2, z: shape.height }])], frame: alongDepthFrame(depth) }
     : cadProfileForShapeKind(shape, designedRound);
   if (!base?.frame || base.frame.kind !== "extrusion") return null;
-  const slope = { side: normalizeSlopeSide(shape.kind, shape.slopeSide), curve: slopeCurveForShape(shape) };
+  const slope = shapeHasSlope(shape) ? { side: normalizeSlopeSide(shape.kind, shape.slopeSide), curve: slopeCurveForShape(shape) } : null;
+  const narrow = shapeHasNarrow(shape) ? { side: normalizeSlopeSide(shape.kind, shape.narrowSide), curve: narrowCurveForShape(shape) } : null;
   // alongDepthFrame: the loft runs from the front (e = 0) to the back (e = depth); a back side keeps the front.
   const fromKept = (side: string, e: number) => (side === "back" ? e : depth - e);
   const toE = (side: string, s: number) => (side === "back" ? s : depth - s);
-  const sz = (e: number) => slopeScaleAt(slope.curve, fromKept(slope.side, e));
+  const sz = (e: number) => (slope ? slopeScaleAt(slope.curve, fromKept(slope.side, e)) : 1);
+  const sx = (e: number) => (narrow ? narrowHalfWidthAt(narrow.curve, fromKept(narrow.side, e)) / Math.max(1e-9, narrow.curve.keep) : 1);
   const stops = new Set<number>([0, depth]);
-  alongLevels(slope.curve.length, 0, slope.curve, false).forEach((s) => stops.add(toE(slope.side, s)));
+  const corners = new Set<number>();
+  if (slope) alongLevels(slope.curve.length, 0, slope.curve, false).forEach((s) => stops.add(toE(slope.side, s)));
+  if (narrow) {
+    alongLevels(narrow.curve.total, narrow.curve.start, narrow.curve, false).forEach((s) => stops.add(toE(narrow.side, s)));
+    if (narrow.curve.start > 1e-9) corners.add(toE(narrow.side, narrow.curve.start));
+  }
   const es = [...stops].sort((a, b) => a - b);
-  const sections = es.map((e) => ({ t: e / depth, sx: 1, sz: sz(e) }));
+  const sections = es.map((e) => ({ t: e / depth, sx: sx(e), sz: sz(e), corner: [...corners].some((c) => Math.abs(c - e) < 1e-9) }));
   const scaled = (index: number) => base.loops.map((loop) => mapLoop(loop, sections[index].sx, 0, sections[index].sz, 0));
   const part: CadModifierProfilePart = {
     kind: "loft",
@@ -1385,7 +1434,7 @@ export function cadModifierProfileForShape(shape: WorkplaneShape, options: { des
   const depth = shapeDepth(shape);
   if (![width, depth, shape.height].every((value) => Number.isFinite(value) && value > 0)) return null;
   if (shapeHasAlongDeform(shape)) {
-    // A slope together with a taper, a twist or a lean stays on the display mesh.
+    // A slope or a narrowing together with a taper, a twist or a lean stays on the display mesh.
     if (shapeHasTaper(shape) || shapeHasExtrudeDeform(shape)) return null;
     try {
       return slopedProfile(shape, width, depth, options.designedRound);

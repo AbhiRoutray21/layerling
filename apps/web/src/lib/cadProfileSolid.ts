@@ -600,8 +600,9 @@ function loopScaled(loop: CadModifierProfileLoop, sx: number, sz: number): CadMo
 }
 
 /**
- * A loft through the bottom section scaled step by step (slope along, `sections`): ruled
- * between two sections, smooth through more.
+ * A loft through the bottom section scaled step by step (slope and narrowing along, `sections`):
+ * split at its corners into runs, each run ruled between two sections or smooth through more,
+ * the runs fused into one body.
  */
 function sectionedLoftSolid(cad: OcctKernel, profile: CadModifierProfilePart, tolerance: number) {
   const sections = profile.sections ?? [];
@@ -609,7 +610,7 @@ function sectionedLoftSolid(cad: OcctKernel, profile: CadModifierProfilePart, to
   let run: typeof sections = [];
   sections.forEach((section, index) => {
     run.push(section);
-    if (index > 0 && index === sections.length - 1) {
+    if (index > 0 && (section.corner || index === sections.length - 1)) {
       runs.push(run);
       run = [section];
     }

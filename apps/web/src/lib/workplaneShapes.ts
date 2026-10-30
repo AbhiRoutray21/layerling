@@ -82,6 +82,10 @@ export function shapeWithParametricSource(shape: WorkplaneShape): WorkplaneShape
     slopeEnd: source.slopeEnd,
     slopeSide: source.slopeSide,
     slopeCurve: source.slopeCurve,
+    narrowEnd: source.narrowEnd,
+    narrowSide: source.narrowSide,
+    narrowCurve: source.narrowCurve,
+    narrowStart: source.narrowStart,
   };
 }
 
@@ -609,6 +613,10 @@ export function workplaneShapesEqual(a: WorkplaneShape, b: WorkplaneShape) {
     a.slopeEnd === b.slopeEnd &&
     a.slopeSide === b.slopeSide &&
     a.slopeCurve === b.slopeCurve &&
+    a.narrowEnd === b.narrowEnd &&
+    a.narrowSide === b.narrowSide &&
+    a.narrowCurve === b.narrowCurve &&
+    a.narrowStart === b.narrowStart &&
     a.teeth === b.teeth &&
     a.toothSize === b.toothSize &&
     a.toothWidth === b.toothWidth &&

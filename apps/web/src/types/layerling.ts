@@ -779,6 +779,10 @@ export type ParametricSource = {
   slopeEnd?: number;
   slopeSide?: "back" | "front" | "left" | "right";
   slopeCurve?: number;
+  narrowEnd?: number;
+  narrowSide?: "back" | "front" | "left" | "right";
+  narrowCurve?: number;
+  narrowStart?: number;
 };
 
 export type CadPrimitiveFrame = {
@@ -847,6 +851,17 @@ export type WorkplaneShape = {
   slopeSide?: "back" | "front" | "left" | "right";
   /** Slope along: -1 to 1, 0 a straight top, above 0 bulging up, below 0 sagging. */
   slopeCurve?: number;
+  /**
+   * Narrow along: seen from above, the width of the narrow end in mm,
+   * both long sides running in evenly. Missing or the full width means no narrowing.
+   */
+  narrowEnd?: number;
+  /** Narrow along: which end narrows ("back" unless set; a round roof or a wedge narrows front or back). */
+  narrowSide?: "back" | "front" | "left" | "right";
+  /** Narrow along: -1 to 1, 0 straight sides, above 0 bulging out, below 0 drawn in. */
+  narrowCurve?: number;
+  /** Narrow along: 0 to 0.95, the share of the length from the wide end where the narrowing starts. */
+  narrowStart?: number;
   teeth?: number;
   toothSize?: number;
   toothWidth?: number;

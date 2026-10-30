@@ -295,7 +295,7 @@ import {
 import { regularPolygonAspect } from "@/lib/regularPolygonFootprint";
 import { DEFAULT_TAPER_DIMENSION_MAX, MAX_HIGH_RESOLUTION_SIDES, MAX_HIGH_RESOLUTION_STEPS, POSITION_TYPED_LIMIT, RULER_MAX_LENGTH, customSnapGridLabel, positionReach, shapeDimensionLimit, snapGridOptions, snapGridStep } from "@/lib/workplaneSettings";
 import { printerPresetById } from "@/lib/printBed";
-import { normalizeSlopeCurve, normalizeSlopeSide, shapeSupportsSlope, SLOPE_MIN_END, slopeAlongWidth, slopeEndHeight, slopeSidesFor } from "@/lib/slopeAlong";
+import { narrowCrossWidth, narrowEndWidth, normalizeNarrowStart, normalizeSlopeCurve, normalizeSlopeSide, shapeSupportsNarrow, shapeSupportsSlope, SLOPE_MIN_END, slopeAlongWidth, slopeEndHeight, slopeSidesFor } from "@/lib/slopeAlong";
 import type { BentTubeInnerProfile, BentTubeProfile, CustomSnapGrid, GearType, GridfinityCompartmentLabel, GridfinityType, GridSize, MeasurementAccuracy, ShapeCustomization, SketchProfile, SketchStroke, SketchStrokeAlign, SketchStrokeJoin, ThreadHead, ThreadProfile, ThreadRole, WorkplaneShape, WorkplaneWorkspaceSettings } from "@/types/layerling";
 import { selectWholeValue } from "@/lib/numberField";
 import { formulaMatchesValue, formulaToRemember, withFieldFormula, type FieldFormulas } from "@/lib/fieldFormulas";
@@ -3191,6 +3191,62 @@ export function ShapeInspector({
   ];
   const slopeDefaults: PropertyDefaultValues = new Map<string, number | string | boolean>([["slopeEnd", shape.height], ["slopeAngle", 0], ["slopeCurve", 0]]);
   /*
+   * Narrow along (slopeAlong.ts): seen from above, both long sides run in towards one
+   * end - its width, where along the length it starts and how much the sides curve.
+   */
+  const narrowSide = normalizeSlopeSide(shape.kind, shape.narrowSide);
+  const narrowFull = narrowCrossWidth({ ...shape, narrowSide });
+  const narrowKeep = { narrowEnd: shape.narrowEnd ?? narrowFull, narrowSide: shape.narrowSide ?? narrowSide };
+  const narrowShown = shapeSupportsNarrow(shape);
+  const narrowProperties: ShapePropertyConfig[] = !narrowShown ? [] : [
+    {
+      type: "select",
+      id: "narrowSide",
+      label: t("prop.narrowSide"),
+      value: narrowSide,
+      options: slopeSidesFor(shape.kind).map((side) => ({ value: side, label: t(`slope.side.${side}`) })),
+      onChange: (value) => {
+        const side = normalizeSlopeSide(shape.kind, value);
+        // The other axis has another full width: a narrowing that was set keeps its share of it.
+        const full = narrowCrossWidth({ ...shape, narrowSide: side });
+        const share = shape.narrowEnd === undefined ? 1 : narrowEndWidth({ ...shape, narrowSide }) / Math.max(1e-9, narrowFull);
+        onUpdate({ narrowSide: side, narrowEnd: Math.round(full * share * 100) / 100 });
+      },
+    },
+    {
+      id: "narrowEnd",
+      label: t("prop.narrowEnd"),
+      // The body keeps a sliver of 0.01 mm at a point; the field shows the 0 that was typed.
+      value: Math.min(narrowFull, Math.max(0, shape.narrowEnd ?? narrowFull)),
+      min: 0,
+      max: narrowFull,
+      step: 0.1,
+      hint: t("narrow.endHint"),
+      onChange: (narrowEnd) => onUpdate({ ...narrowKeep, narrowEnd: Math.min(narrowFull, Math.max(0, narrowEnd)) }),
+    },
+    {
+      id: "narrowStart",
+      label: t("prop.narrowStart"),
+      value: Math.round(normalizeNarrowStart(shape.narrowStart) * 100),
+      min: 0,
+      max: 95,
+      step: 1,
+      hint: t("narrow.startHint"),
+      onChange: (percent) => onUpdate({ ...narrowKeep, narrowStart: normalizeNarrowStart(percent / 100) }),
+    },
+    {
+      id: "narrowCurve",
+      label: t("prop.slopeCurve"),
+      value: Math.round(normalizeSlopeCurve(shape.narrowCurve) * 100),
+      min: -100,
+      max: 100,
+      step: 1,
+      hint: t("narrow.curveHint"),
+      onChange: (percent) => onUpdate({ ...narrowKeep, narrowCurve: normalizeSlopeCurve(percent / 100) }),
+    },
+  ];
+  const narrowDefaults: PropertyDefaultValues = new Map<string, number | string | boolean>([["narrowEnd", narrowFull], ["narrowStart", 0], ["narrowCurve", 0]]);
+  /*
    * Wo der Koerper steht, zum Eintippen: X und Y auf der Platte (die Mitte
    * seines Rahmens, mit denselben Vorzeichen wie die Masse auf der
    * Arbeitsflaeche), Z als Hoehe seiner Unterkante. Die Regler reichen so weit
@@ -3271,6 +3327,7 @@ export function ShapeInspector({
   const [taperOpen, setTaperOpen] = useInspectorCard("taper", false);
   const [twistOpen, setTwistOpen] = useInspectorCard("twist", false);
   const [slopeOpen, setSlopeOpen] = useInspectorCard("slope", false);
+  const [narrowOpen, setNarrowOpen] = useInspectorCard("narrow", false);
   const [gearTeethOpen, setGearTeethOpen] = useInspectorCard("gearTeeth", true);
   const [vaseFormOpen, setVaseFormOpen] = useInspectorCard("vaseForm", true);
   const [vaseFloorOpen, setVaseFloorOpen] = useInspectorCard("vaseFloor", false);
@@ -3824,6 +3881,25 @@ export function ShapeInspector({
           {slopeOpen ? (
             <div className="property-list" id={`slope-${shape.id}`}>
               <ShapePropertyRows formulas={shape.formulas} onFormula={noteFormula} properties={slopeProperties} defaults={slopeDefaults} workspace={workspace} disabled={locked} onInteractionActiveChange={onInteractionActiveChange} />
+            </div>
+          ) : null}
+        </div>
+      ) : null}
+      {narrowShown ? (
+        <div className={`property-card ${narrowOpen ? "" : "collapsed"}`} data-help-section-all="shapeSettings">
+          <button
+            className="property-card-header"
+            type="button"
+            aria-expanded={narrowOpen}
+            aria-controls={`narrow-${shape.id}`}
+            onClick={() => setNarrowOpen((open) => !open)}
+          >
+            <span>{t("inspector.narrow")}</span>
+            <ChevronUp className={narrowOpen ? "" : "collapsed"} size={25} strokeWidth={2.8} />
+          </button>
+          {narrowOpen ? (
+            <div className="property-list" id={`narrow-${shape.id}`}>
+              <ShapePropertyRows formulas={shape.formulas} onFormula={noteFormula} properties={narrowProperties} defaults={narrowDefaults} workspace={workspace} disabled={locked} onInteractionActiveChange={onInteractionActiveChange} />
             </div>
           ) : null}
         </div>

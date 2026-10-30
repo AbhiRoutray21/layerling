@@ -24,11 +24,13 @@ export const SLOPE_SIDES: SlopeSide[] = ["back", "front", "left", "right"];
 export const SLOPE_MIN_END = 0.2;
 
 /*
- * Where it makes sense: bodies with a length to run along. A round roof and a wedge lie
- * along their depth (their section stands in the width), so they slope front or back; the
- * upright prisms take any side.
+ * Where the two make sense: bodies with a length to run along. A round roof and a wedge lie
+ * along their depth (their section stands in the width), so they slope and narrow front or
+ * back; the upright prisms take any side. A tube or ring only slopes - narrowed, its wall
+ * would get thinner across than along.
  */
 const SLOPE_KINDS = new Set<WorkplaneShape["kind"]>(["box", "roundRoof", "wedge", "roundedBox", "cylinder", "ellipse", "polygon", "tube", "ring"]);
+const NARROW_KINDS = new Set<WorkplaneShape["kind"]>(["box", "roundRoof", "wedge", "roundedBox", "cylinder", "ellipse", "polygon"]);
 /** Kinds lying along their depth: their section stands across the width. */
 export const LYING_ALONG_KINDS = new Set<WorkplaneShape["kind"]>(["roundRoof", "wedge"]);
 
@@ -147,9 +149,76 @@ export function slopeSectionCount(curve: SlopeCurve) {
   return Math.min(96, Math.max(8, Math.ceil(Math.sqrt(drop / 0.01))));
 }
 
-/** A deformation along the length. */
+/*
+ * Narrow along (Szűkülés hosszában): seen from above, the two long sides of a box
+ * or a round roof run in towards one end, evenly from both sides, so that end
+ * stays in the middle. The half-width follows the same kind of Bezier as the
+ * slope's top, from where the narrowing starts (a share of the length) to the
+ * end: straight, bulging out (a rounded bow) or drawn in.
+ */
+
+/** Narrowest an end may get, in mm: drawn as a point, but the body keeps a face there. */
+export const NARROW_MIN_END = 0.01;
+
+export function shapeSupportsNarrow(shape: Pick<WorkplaneShape, "kind" | "radius" | "importedMesh" | "groupedShapes">) {
+  return shapeSupportsSlope(shape) && NARROW_KINDS.has(shape.kind);
+}
+
+/** The width across the narrowing: the depth for a box narrowing to the left or right, else the width. */
+export function narrowCrossWidth(shape: Pick<WorkplaneShape, "kind" | "width" | "depth" | "size" | "narrowSide">) {
+  const side = normalizeSlopeSide(shape.kind, shape.narrowSide);
+  return slopeAlongWidth(side) ? (shape.depth ?? shape.size) : (shape.width ?? shape.size);
+}
+
+/** The narrow end's width in mm, between NARROW_MIN_END and the full width. */
+export function narrowEndWidth(shape: Pick<WorkplaneShape, "kind" | "width" | "depth" | "size" | "narrowSide" | "narrowEnd">) {
+  const full = narrowCrossWidth(shape);
+  const end = typeof shape.narrowEnd === "number" && Number.isFinite(shape.narrowEnd) ? shape.narrowEnd : full;
+  return Math.min(full, Math.max(Math.min(NARROW_MIN_END, full), end));
+}
+
+/** 0 to 0.95: where along the length the narrowing begins. */
+export function normalizeNarrowStart(value: unknown) {
+  const number = typeof value === "number" && Number.isFinite(value) ? value : 0;
+  return Math.min(0.95, Math.max(0, number));
+}
+
+export function shapeHasNarrow(shape: WorkplaneShape) {
+  if (!shapeSupportsNarrow(shape)) return false;
+  if (typeof shape.narrowEnd !== "number" || !Number.isFinite(shape.narrowEnd)) return false;
+  return narrowCrossWidth(shape) - narrowEndWidth(shape) > 1e-6;
+}
+
+/** Either deformation along the length. */
 export function shapeHasAlongDeform(shape: WorkplaneShape) {
-  return shapeHasSlope(shape);
+  return shapeHasSlope(shape) || shapeHasNarrow(shape);
+}
+
+export type NarrowCurve = SlopeCurve & {
+  /** Where the narrowing starts, mm from the wide end; the Bezier runs from there to the end. */
+  start: number;
+  /** The whole length along the narrowing, mm. */
+  total: number;
+};
+
+/** The half-width's Bezier, from (start, W/2) to (total, E/2). */
+export function narrowCurveForShape(shape: WorkplaneShape): NarrowCurve {
+  const side = normalizeSlopeSide(shape.kind, shape.narrowSide);
+  const total = slopeAlongWidth(side) ? (shape.width ?? shape.size) : (shape.depth ?? shape.size);
+  const start = total * normalizeNarrowStart(shape.narrowStart);
+  const length = total - start;
+  const keep = narrowCrossWidth(shape) / 2;
+  const end = narrowEndWidth(shape) / 2;
+  const curve = normalizeSlopeCurve(shape.narrowCurve);
+  const middle = { s: length / 2, y: (keep + end) / 2 };
+  const corner = curve >= 0 ? { s: length, y: keep } : { s: 0, y: end };
+  const share = Math.abs(curve);
+  return { length, keep, end, start, total, control: { s: middle.s + (corner.s - middle.s) * share, y: middle.y + (corner.y - middle.y) * share } };
+}
+
+/** Half the width (mm) at `s` mm from the wide end. */
+export function narrowHalfWidthAt(curve: NarrowCurve, s: number) {
+  return s <= curve.start ? curve.keep : slopeTopAt(curve, s - curve.start);
 }
 
 function curveIsStraight(curve: SlopeCurve) {
@@ -158,7 +227,7 @@ function curveIsStraight(curve: SlopeCurve) {
 
 /**
  * Where along the length a body has to be cut into sections for the display, in mm from
- * the kept end: `from` exactly, and short steps where a line curves
+ * the kept (wide) end: the narrowing's start exactly, and short steps where a line curves
  * (or, on a round roof, where its sides would fold inside long triangles).
  */
 export function alongLevels(length: number, from: number, curve: SlopeCurve, roof: boolean) {
@@ -187,13 +256,15 @@ function sliceAlongAxis(vertices: readonly Vec3[], faces: readonly Face[], axis:
 }
 
 /**
- * A body's mesh with its slope applied: cut first where the top curves along the
- * length, then every corner's height above the bottom scaled by the top's height
- * at its place, worked out from where the corner stood before.
+ * A body's mesh with its slope and its narrowing applied: cut first where a line
+ * bends or curves along the length, then every corner's height above the bottom
+ * scaled by the top's height at its place, and its distance from the middle across
+ * by the width there. Both are worked out from where the corner stood before.
  */
 export function slopeMesh(vertices: readonly Vec3[], faces: readonly Face[], shape: WorkplaneShape) {
   const slope = shapeHasSlope(shape);
-  if (!vertices.length || !slope) return { vertices: vertices.slice() as Vec3[], faces: faces.slice() as Face[] };
+  const narrow = shapeHasNarrow(shape);
+  if (!vertices.length || (!slope && !narrow)) return { vertices: vertices.slice() as Vec3[], faces: faces.slice() as Face[] };
   const bounds = (list: readonly Vec3[]) => {
     const min = { x: Infinity, y: Infinity, z: Infinity };
     const max = { x: -Infinity, y: -Infinity, z: -Infinity };
@@ -204,7 +275,7 @@ export function slopeMesh(vertices: readonly Vec3[], faces: readonly Face[], sha
     return { min, max };
   };
   const { min, max } = bounds(vertices);
-  // A lying body's sloped sides are ruled surfaces between its end sections: short pieces keep the long triangles from folding.
+  // A lying body's sloped or narrowed sides are ruled surfaces between its end sections: short pieces keep the long triangles from folding.
   const roof = LYING_ALONG_KINDS.has(shape.kind);
   // A distance from the kept end (mm) as the mesh's own coordinate along that axis.
   const coordinate = (side: SlopeSide, s: number, length: number) => {
@@ -218,17 +289,32 @@ export function slopeMesh(vertices: readonly Vec3[], faces: readonly Face[], sha
   };
   let mesh = { vertices: vertices.slice() as Vec3[], faces: faces.slice() as Face[] };
   const slopeSide = normalizeSlopeSide(shape.kind, shape.slopeSide);
+  const narrowSide = normalizeSlopeSide(shape.kind, shape.narrowSide);
   const slopeCurve = slope ? slopeCurveForShape(shape) : null;
+  const narrowCurve = narrow ? narrowCurveForShape(shape) : null;
   const cuts: Record<0 | 2, number[]> = { 0: [], 2: [] };
   if (slopeCurve) {
     const axis = slopeAlongWidth(slopeSide) ? 0 : 2;
     alongLevels(slopeCurve.length, 0, slopeCurve, roof).forEach((s) => cuts[axis].push(coordinate(slopeSide, s, slopeCurve.length)));
   }
+  if (narrowCurve) {
+    const axis = slopeAlongWidth(narrowSide) ? 0 : 2;
+    alongLevels(narrowCurve.total, narrowCurve.start, narrowCurve, roof).forEach((s) => cuts[axis].push(coordinate(narrowSide, s, narrowCurve.total)));
+  }
   for (const axis of [0, 2] as const) mesh = sliceAlongAxis(mesh.vertices, mesh.faces, axis, cuts[axis]);
+  const centerX = (min.x + max.x) / 2;
+  const centerZ = (min.z + max.z) / 2;
   const out = mesh.vertices.map(([x, y, z]): Vec3 => {
+    let nx = x;
     let ny = y;
+    let nz = z;
     if (slopeCurve) ny = min.y + (y - min.y) * slopeScaleAt(slopeCurve, slopeDistance(slopeSide, x, z, min, max, slopeCurve.length));
-    return [x, ny, z];
+    if (narrowCurve) {
+      const factor = narrowHalfWidthAt(narrowCurve, slopeDistance(narrowSide, x, z, min, max, narrowCurve.total)) / Math.max(1e-9, narrowCurve.keep);
+      if (slopeAlongWidth(narrowSide)) nz = centerZ + (z - centerZ) * factor;
+      else nx = centerX + (x - centerX) * factor;
+    }
+    return [nx, ny, nz];
   });
   return { vertices: out, faces: mesh.faces };
 }

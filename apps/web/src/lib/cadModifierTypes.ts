@@ -131,10 +131,11 @@ export type CadModifierProfilePart = {
   twistStep?: number;
   /**
    * Loft only: the sections at the shares `t` of the way up, scaled by `sx` across and `sz` in
-   * height from the shape's own section; `loops` is the first of them and `topLoops` the last - a round roof
-   * or a wedge sloping along its length. Two sections are joined by a ruled loft, more smoothly.
+   * height from the shape's own section; `loops` is the first of them and `topLoops` the last - a round roof sloping or narrowing
+   * along its length. Two neighbours where nothing between them curves are joined by a ruled
+   * loft, the rest smoothly; a `corner` breaks the loft there, so the edge stays sharp.
    */
-  sections?: Array<{ t: number; sx: number; sz: number }>;
+  sections?: Array<{ t: number; sx: number; sz: number; corner?: boolean }>;
   /**
    * Extrusion only: what the body keeps of itself inside a second prism - `loops` (one outline)
    * pushed `height` along its local y and placed by `frame` (a 3x4 matrix, row by row) in the

@@ -12,7 +12,7 @@ import { createBooleanHollowCylinderGeometry, createBooleanRoundRoofGeometry } f
 import { createPrismGeometry } from "@/lib/prismGeometry";
 import { createRoundedBoxGeometry } from "@/lib/roundedBoxGeometry";
 import { transformMesh } from "@/lib/editorMeshCore";
-import { slopeCurveForShape } from "@/lib/slopeAlong";
+import { narrowCurveForShape, shapeHasNarrow, slopeCurveForShape } from "@/lib/slopeAlong";
 
 /*
  * Slope along: the exact body (a box's side outline pushed across, a round roof's
@@ -96,6 +96,13 @@ function topOf(source: WorkplaneShape) {
   const c = slopeCurveForShape(source);
   if (!(typeof source.slopeEnd === "number")) return () => source.height;
   return sampled({ x: 0, y: c.keep }, { x: c.control.s, y: c.control.y }, { x: c.length, y: c.end });
+}
+
+function halfWidthOf(source: WorkplaneShape) {
+  const c = narrowCurveForShape(source);
+  if (!(typeof source.narrowEnd === "number")) return () => c.keep;
+  const curve = sampled({ x: 0, y: c.keep }, { x: c.control.s, y: c.control.y }, { x: c.length, y: c.end });
+  return (s: number) => (s <= c.start ? c.keep : curve(s - c.start));
 }
 
 /** The integral of f over [0, length]. */
@@ -184,6 +191,49 @@ describe("slope along: exact bodies", () => {
     trueBounds(solid).forEach((value, index) => expect(Math.abs(value - expected.bounds[index])).toBeLessThan(0.05));
   });
 
+
+  const narrowBoxes: Array<[string, Partial<WorkplaneShape>]> = [
+    ["to the back, straight, from the wide end", { narrowEnd: 10, narrowSide: "back" }],
+    ["to the front, to a point, from the middle", { narrowEnd: 0, narrowSide: "front", narrowStart: 0.5 }],
+    ["to the left, bulging out like a bow, from the middle", { narrowEnd: 4, narrowSide: "left", narrowStart: 0.5, narrowCurve: 1 }],
+    ["to the right, drawn in", { narrowEnd: 6, narrowSide: "right", narrowCurve: -0.6, narrowStart: 0.2 }],
+  ];
+
+  it.each(narrowBoxes)("builds a box narrowing %s: the hand-worked volume, where the mesh stands", (_name, extra) => {
+    const source = shape("box", extra);
+    const { solid, expected, part } = body(source);
+    expect(part.kind).toBe("extrusion");
+    expect(cadProfileSolidMismatch(cad, solid, expected)).toBeNull();
+    const c = narrowCurveForShape(source);
+    const exact = integrate((s) => 2 * halfWidthOf(source)(s), c.total) * source.height;
+    expect(Math.abs(cad.getVolume(solid) / exact - 1)).toBeLessThan(1e-4);
+    expect(Math.abs(expected.volume / exact - 1)).toBeLessThan(3e-3);
+    trueBounds(solid).forEach((value, index) => expect(Math.abs(value - expected.bounds[index])).toBeLessThan(0.05));
+  });
+
+  const narrowRoofs: Array<[string, Partial<WorkplaneShape>, number]> = [
+    ["narrowing to the back, straight", { narrowEnd: 12, narrowSide: "back" }, 1e-4],
+    ["narrowing to the front like a bow, from the middle", { narrowEnd: 2, narrowSide: "front", narrowStart: 0.5, narrowCurve: 1 }, 1e-4],
+    ["narrowing and sloping to the back together", { narrowEnd: 10, narrowSide: "back", slopeEnd: 8, slopeSide: "back" }, 1e-4],
+    ["narrowing to the front from a third while sloping to the back, curved", { narrowEnd: 8, narrowSide: "front", narrowStart: 0.33, narrowCurve: -0.5, slopeEnd: 9, slopeSide: "back", slopeCurve: 0.5 }, 1e-4],
+  ];
+
+  it.each(narrowRoofs)("builds a round roof %s: half-ellipses as wide and high as the lines say", (_name, extra, tolerance) => {
+    const source = shape("roundRoof", extra);
+    const { solid, expected, part } = body(source);
+    expect(part.kind).toBe("loft");
+    expect(cadProfileSolidMismatch(cad, solid, expected)).toBeNull();
+    const depth = source.depth!;
+    const top = topOf(source);
+    const half = halfWidthOf(source);
+    // Measured from the front: a back side keeps the front end, a front side the back end.
+    const fromKept = (side: unknown, z: number) => (side === "front" ? depth - z : z);
+    const exact = integrate((z) => (Math.PI / 2) * half(fromKept(source.narrowSide ?? "back", z)) * top(fromKept(source.slopeSide ?? "back", z)), depth);
+    expect(Math.abs(cad.getVolume(solid) / exact - 1)).toBeLessThan(tolerance);
+    trueBounds(solid).forEach((value, index) => expect(Math.abs(value - expected.bounds[index])).toBeLessThan(0.05));
+  });
+
+
   const uprights: Array<[string, WorkplaneShape, (z: number) => number]> = [
     // [name, shape, its footprint's width across at z (mm from the middle along the slope's axis)]
     ["a cylinder cut down to the back, straight", shape("cylinder", { width: 30, depth: 30, slopeEnd: 8, slopeSide: "back" }), (z) => 2 * Math.sqrt(Math.max(0, 225 - z * z))],
@@ -213,21 +263,38 @@ describe("slope along: exact bodies", () => {
 
   it.each([
     ["sloping to the back", { slopeEnd: 6, slopeSide: "back" as const }],
-  ])("builds a wedge %s: its triangle as high as the top says", (_name, extra) => {
+    ["narrowing to the front from the middle, bulging", { narrowEnd: 6, narrowSide: "front" as const, narrowStart: 0.5, narrowCurve: 0.7 }],
+    ["sloping and narrowing to the back together", { slopeEnd: 8, slopeSide: "back" as const, narrowEnd: 10, narrowSide: "back" as const }],
+  ])("builds a wedge %s: its triangle as wide and high as the lines say", (_name, extra) => {
     const source = shape("wedge", extra);
     const { solid, expected, part } = body(source);
     expect(part.kind).toBe("loft");
     expect(cadProfileSolidMismatch(cad, solid, expected)).toBeNull();
     const depth = source.depth!;
     const top = topOf(source);
+    const half = halfWidthOf(source);
     const fromKept = (side: unknown, z: number) => (side === "front" ? depth - z : z);
-    const exact = integrate((z) => (source.width! / 2) * top(fromKept(source.slopeSide ?? "back", z)), depth);
+    const exact = integrate((z) => (half(fromKept(source.narrowSide ?? "back", z)) * top(fromKept(source.slopeSide ?? "back", z))), depth);
     expect(Math.abs(cad.getVolume(solid) / exact - 1)).toBeLessThan(1e-4);
   });
 
+  it("leaves a narrowing cylinder on its display mesh, the mesh the hand-worked volume", () => {
+    const source = shape("cylinder", { width: 30, depth: 30, narrowEnd: 10, narrowSide: "back" });
+    expect(cadModifierProfileForShape(source)).toBeNull();
+    const mesh = transformMesh(localMesh(source), source);
+    const half = halfWidthOf(source);
+    const exact = source.height * integrate((s) => 2 * Math.sqrt(Math.max(0, 225 - (15 - s) ** 2)) * (half(s) / 15), 30);
+    expect(Math.abs(cadProfileExpectation(mesh.vertices, mesh.faces).volume / exact - 1)).toBeLessThan(3e-3);
+  });
+
+  it("does not narrow a tube or a ring", () => {
+    expect(shapeHasNarrow(shape("tube", { width: 30, depth: 30, narrowEnd: 10 }))).toBe(false);
+    expect(shapeHasNarrow(shape("ring", { width: 30, depth: 30, narrowEnd: 10 }))).toBe(false);
+  });
 
   it("leaves a slope with a taper on the display mesh, and a box without one to its primitive", () => {
     expect(cadModifierProfileForShape(shape("box", { slopeEnd: 8, taperTopWidth: 20 }))).toBeNull();
     expect(cadModifierProfileForShape(shape("box", { slopeEnd: 20 }))).toBeNull();
+    expect(cadModifierProfileForShape(shape("box", { slopeEnd: 8, narrowEnd: 10 }))).toBeNull();
   });
 });

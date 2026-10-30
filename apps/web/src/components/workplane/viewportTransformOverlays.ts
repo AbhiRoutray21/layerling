@@ -13,7 +13,7 @@ import { dimensionMarkNeedsScreenLayout, dimensionMarkScreenPush, isPointInsideT
 import { cuboidCorners, pointAlongAxes } from "@/lib/alignFrame";
 import type { AlignAxis, AlignHandleStatus, AlignTarget, MeasurementAccuracy, WorkplaneShape } from "@/types/layerling";
 import { outwardFaceNormal } from "@/lib/layFlat";
-import { normalizeSlopeSide, shapeSupportsSlope, slopeEndHeight } from "@/lib/slopeAlong";
+import { narrowEndWidth, normalizeSlopeSide, shapeSupportsNarrow, shapeSupportsSlope, slopeEndHeight } from "@/lib/slopeAlong";
 import { JOINED_FACE_REACH, nearestFaceTriangle, planarFaceTriangles } from "@/lib/rotationPivot";
 import { roundFaceTriangles } from "@/lib/roundFaceAxis";
 import { isReferenceImage, referenceImageFacingAxis } from "@/lib/referenceImage";
@@ -400,6 +400,20 @@ export function syncTransformOverlay(
           : framePoint(frame, frame.max.x, y, 0);
     return project(world);
   })();
+  // Narrow along: a dot on the narrow end's side, dragged across like a width.
+  const narrowShape = frame.singleShape && shapeSupportsNarrow(frame.singleShape) && typeof frame.singleShape.narrowEnd === "number" ? frame.singleShape : null;
+  const narrowPoint = (() => {
+    if (!narrowShape) return { x: 0, y: 0, visible: false };
+    const side = normalizeSlopeSide(narrowShape.kind, narrowShape.narrowSide);
+    const half = narrowEndWidth({ ...narrowShape, narrowSide: side }) / 2;
+    // On a box halfway up its end; on a round roof at the foot, where its side meets the plate.
+    const y = frame.min.y + (narrowShape.kind === "roundRoof" ? 0 : (frame.max.y - frame.min.y) / 2);
+    const world = side === "back" ? framePoint(frame, half, y, frame.min.z)
+      : side === "front" ? framePoint(frame, half, y, frame.max.z)
+        : side === "left" ? framePoint(frame, frame.min.x, y, half)
+          : framePoint(frame, frame.max.x, y, half);
+    return project(world);
+  })();
   const liftBasePoint = project(liftBaseWorld);
   // A thin body puts the arrow a few pixels from the height handle; it keeps its distance on the screen.
   const liftPoint = liftHandleScreenPoint(liftBasePoint, project(liftHandle), showLowerLiftHandle);
@@ -583,6 +597,7 @@ export function syncTransformOverlay(
     { point: mid.left, handle: { key: "left-mid", className: "edge dark", kind: "scale" as const, x: mid.left.x, y: mid.left.y, title: t("transform.resize") } },
     { point: heightPoint, handle: { key: heightHandleKey, className: "height-top", kind: "height" as const, x: heightPoint.x, y: heightPoint.y, title: t("transform.height") } },
     { point: slopePoint, handle: { key: "slope-end", className: "height-top slope-end", kind: "height" as const, x: slopePoint.x, y: slopePoint.y, title: t("transform.slope") } },
+    { point: narrowPoint, handle: { key: "narrow-end", className: "height-top slope-end", kind: "height" as const, x: narrowPoint.x, y: narrowPoint.y, title: t("transform.narrow") } },
     { point: liftPoint, handle: { key: liftHandleKey, className: showLowerLiftHandle ? "height-lift lower" : "height-lift", kind: "lift" as const, x: liftPoint.x, y: liftPoint.y, title: t("transform.lift"), angle: liftHandleAngle } },
   ].filter(({ point }) => point.visible).map(({ handle }) => handle);
   const rotationChromeVisible = !cameraInsideSelection && centerPoint.visible;
