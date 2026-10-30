@@ -33,7 +33,7 @@ import { DEFAULT_QR_WIDTH, MAX_QR_HEIGHT, MAX_QR_WIDTH, MIN_QR_HEIGHT, MIN_QR_WI
 import { iconSourceFromFile, PICTURE_FILE_ACCEPT, type IconSource } from "@/lib/pictureIcon";
 import { loadedManifoldRuntime, onManifoldReady } from "@/lib/manifoldHandle";
 import { canApplySketchCornerTreatment } from "@/lib/sketchFilletChamfer";
-import { SKETCH_POLYGON_DEFAULT_SIDES, SKETCH_STAR_DEFAULT_INNER_PERCENT, sketchPrimitiveGeometry } from "@/lib/sketchPrimitives";
+import { SKETCH_POLYGON_DEFAULT_SIDES, SKETCH_STAR_DEFAULT_INNER_PERCENT, sketchPrimitiveGeometry, sketchPrimitiveStartSize } from "@/lib/sketchPrimitives";
 import { cloneSketchProfile, orderedSketchPaths, sketchWithPointMode, withSmoothHandlesAfterRemoval, withSmoothSketchHandles } from "@/lib/sketchSmoothHandles";
 import { curveThroughPoints } from "@/lib/sketchCurveThroughPoints";
 import { changesLockedOutline, setSketchPointsLocked, sketchLockState } from "@/lib/sketchLock";
@@ -5145,7 +5145,9 @@ export function LayerlingEditor({
 
   const addSketchPrimitive = useCallback(
     (primitive: SketchPrimitive, center: { x: number; z: number } = { x: 0, z: 0 }) => {
-      const { points, segments } = sketchPrimitiveGeometry(primitive, center, createLocalId, undefined, sketchShapeOptions);
+      // Rectangle, circle and ellipse start at the box's and the cylinder's size from the shape defaults (#1048).
+      const start = sketchPrimitiveStartSize(primitive, workspaceSettings.shapeCustomizations);
+      const { points, segments } = sketchPrimitiveGeometry(primitive, center, createLocalId, start.size, { ...sketchShapeOptions, depth: start.depth });
 
       const next: SketchProfile = {
         ...sketchProfile,
@@ -5157,7 +5159,7 @@ export function LayerlingEditor({
       setSketchSelection(null);
       setSketchTool("select");
     },
-    [commitSketchProfile, sketchProfile, sketchShapeOptions],
+    [commitSketchProfile, sketchProfile, sketchShapeOptions, workspaceSettings.shapeCustomizations],
   );
 
   const pressSketchPoint = useCallback(

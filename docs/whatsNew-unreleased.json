@@ -48,5 +48,15 @@
       "de": "Fasen, Verrunden und „Fläche löschen“ gehen jetzt auch am Scharnier mit Kegeln. Der STEP-Export, der es bisher ausließ, nimmt es mit seinen echten Kegeln mit.",
       "en": "Chamfers, fillets and \"Delete face\" now work on the hinge with cones too. The STEP export, which used to leave it out, now takes it with its true cones."
     }
+  },
+  {
+    "title": {
+      "de": "Skizzenformen in deiner Vorgabegröße",
+      "en": "Sketch shapes in your default size"
+    },
+    "body": {
+      "de": "Rechteck, Kreis und Ellipse in der Skizze beginnen jetzt so groß, wie du Quader und Zylinder in den Formvorgaben eingestellt hast, statt immer mit 20 mm.",
+      "en": "The rectangle, circle and ellipse in a sketch now start as large as you set the box and the cylinder in the shape defaults, instead of always at 20 mm."
+    }
   }
 ]
