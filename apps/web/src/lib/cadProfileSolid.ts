@@ -111,7 +111,18 @@ export function validateCadProfile(profile: CadModifierProfilePart) {
   if (!Number.isFinite(profile.height) || profile.height <= 0) throw new Error("The profile has no height");
   if (!profile.loops.length) throw new Error("The profile has no outline");
   if (profile.kind === "sweep") validateSweepPath(profile.path);
-  if (profile.kind === "loft") {
+  if (profile.kind === "loft" && profile.apex) {
+    // A loft to a point: one outline of straight lines below it, and no top section.
+    if (!Number.isFinite(profile.apex.x) || !Number.isFinite(profile.apex.z)) throw new Error("The loft's point is not a number");
+    if (profile.topLoops || profile.loops.length !== 1 || profile.loops[0].segments.some((segment) => segment.kind !== "line")) {
+      throw new Error("A loft to a point needs one straight-sided outline and no top");
+    }
+    // Its sides are built flat, so nothing may turn, tilt, smooth or chamfer them.
+    const tilted = Math.abs(profile.tilt?.x ?? 0) > 1e-9 || Math.abs(profile.tilt?.z ?? 0) > 1e-9;
+    if (Math.abs(profile.twist ?? 0) > 1e-9 || tilted || (profile.smooth ?? 0) > 1e-9 || (profile.capChamfer?.size ?? 0) > 1e-4) {
+      throw new Error("A loft to a point cannot be turned, tilted, smoothed or chamfered");
+    }
+  } else if (profile.kind === "loft") {
     // The top has to be the bottom's partner piece for piece: the loft joins them in that order.
     // A piece may face one of another kind - a side of a square a quarter of a circle (#188).
     const top = profile.topLoops ?? [];
@@ -387,7 +398,8 @@ function sidesAreFlat(profile: CadModifierProfilePart, tolerance: number) {
 /**
  * A tapered or leaning prism whose sides all stay flat (a box, or a polygon
  * scaled evenly), built face by face so that every side is a plane - a
- * lofted side comes out as a B-spline even when it is flat.
+ * lofted side comes out as a B-spline even when it is flat. A loft to a point
+ * (a pyramid) has no top: each side is the triangle from a bottom edge to the point.
  */
 function flatLoftSolid(cad: OcctKernel, profile: CadModifierProfilePart, tolerance: number) {
   const top = profile.topLoops ?? [];
@@ -399,13 +411,14 @@ function flatLoftSolid(cad: OcctKernel, profile: CadModifierProfilePart, toleran
     faces.push(face);
   };
   cap(profile.loops, 0);
-  cap(top, profile.height);
+  const apex = profile.apex ? { x: profile.apex.x, y: profile.height, z: profile.apex.z } : null;
+  if (!apex) cap(top, profile.height);
   profile.loops.forEach((loop, index) => {
     const lower = loopCorners(loop, 0);
-    const upper = loopCorners(top[index], profile.height);
+    const upper = apex ? [] : loopCorners(top[index], profile.height);
     lower.forEach((a, corner) => {
       const next = (corner + 1) % lower.length;
-      faces.push(cad.makeFace(ring([a, lower[next], upper[next], upper[corner]])));
+      faces.push(cad.makeFace(ring(apex ? [a, lower[next], apex] : [a, lower[next], upper[next], upper[corner]])));
     });
   });
   const sewn = cad.sew(faces, tolerance * 100);
@@ -633,6 +646,8 @@ function sectionedLoftSolid(cad: OcctKernel, profile: CadModifierProfilePart, to
 }
 
 function loftSolid(cad: OcctKernel, profile: CadModifierProfilePart, tolerance: number) {
+  // A triangle is always flat.
+  if (profile.apex) return flatLoftSolid(cad, profile, tolerance);
   const top = profile.topLoops ?? [];
   if ((profile.sections?.length ?? 0) > 2) return sectionedLoftSolid(cad, profile, tolerance);
   if (Math.abs(profile.twist ?? 0) > 1e-9 || Math.abs(profile.tilt?.x ?? 0) > 1e-9 || Math.abs(profile.tilt?.z ?? 0) > 1e-9 || (profile.smooth ?? 0) > 1e-9) {

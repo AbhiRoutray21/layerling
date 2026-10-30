@@ -21,6 +21,7 @@ import { buildHoneycombHoles, normalizeHoneycombCellSize, normalizeHoneycombFram
 import { dovetailOutlineForShape } from "@/lib/dovetailGeometry";
 import { loftProfileLoops } from "@/lib/loftGeometry";
 import { teardropExactSection } from "@/lib/teardropGeometry";
+import { normalizePyramidTop, pyramidOutline } from "@/lib/pyramidGeometry";
 import { screwHoleProfile } from "@/lib/screwHoleGeometry";
 import { DEFAULT_ROUNDED_BOX_CORNER_FILLET, DEFAULT_ROUNDED_BOX_TOP_BOTTOM_FILLET, normalizeCornerFillet, normalizeRoundedBoxQuality, normalizeTopBottomFillet } from "@/lib/roundedBoxGeometry";
 import { textGlyphShapes, textKeyringOf } from "@/lib/textGeometry";
@@ -46,7 +47,7 @@ type Point = { x: number; z: number };
 type Arc = { cx: number; cz: number; rx: number; rz: number; start: number; end: number };
 type Corner = { start: Point; end: Point; arc?: Arc };
 
-export const CAD_PROFILE_SHAPE_KINDS = new Set<WorkplaneShape["kind"]>(["polygon", "star", "heart", "crescent", "slot", "honeycomb", "gear", "knurl", "dovetail", "teardrop", "counterbore", "countersink", "doubleCountersink", "ellipse", "cylinder", "tube", "ring", "halfSphere", "sphere", "cone", "roundRoof", "roundedBox", "text", "bentTube", "loft"]);
+export const CAD_PROFILE_SHAPE_KINDS = new Set<WorkplaneShape["kind"]>(["polygon", "star", "heart", "crescent", "slot", "honeycomb", "gear", "knurl", "dovetail", "teardrop", "counterbore", "countersink", "doubleCountersink", "ellipse", "cylinder", "tube", "ring", "halfSphere", "paraboloid", "sphere", "cone", "pyramid", "wedge", "roundRoof", "roundedBox", "text", "bentTube", "loft"]);
 
 function shortestAngleDelta(from: number, to: number) {
   let delta = to - from;
@@ -671,6 +672,27 @@ function bevelGearProfile(shape: WorkplaneShape, width: number, depth: number): 
   return part;
 }
 
+/**
+ * A pyramid (createPyramidGeometry): its base, the regular polygon filling the footprint, lofted to its tip on the
+ * axis, or to its top, the same polygon filling the top's measures. To the tip every side is a flat triangle; a top
+ * that narrows by different factors across and along leaves some sides out of plane, and those are the ruled surface
+ * between their edges, as on a tapered prism. The corners are rounded to the display mesh's 32-bit floats and run the
+ * way round a box's outline does: the kernel's fillet on the base edges fails less often so.
+ */
+function pyramidProfile(shape: WorkplaneShape, width: number, depth: number): CadModifierProfilePart {
+  const ring = (across: number, along: number) => {
+    const corners = pyramidOutline(shape.sides ?? 4, across, along).map(([x, z]) => ({ x: Math.fround(x), z: Math.fround(z) }));
+    return polygonLoop(ringArea(corners) > 0 ? corners : corners.reverse());
+  };
+  const topWidth = normalizePyramidTop(shape.topWidth, width);
+  const topDepth = normalizePyramidTop(shape.topDepth, depth);
+  const part: CadModifierProfilePart = { kind: "loft", loops: [ring(Math.max(0.01, width), Math.max(0.01, depth))], height: shape.height, transform: profileTransformForShape(shape) };
+  if (topWidth <= 0 || topDepth <= 0) part.apex = { x: 0, z: 0 };
+  else part.topLoops = [ring(topWidth, topDepth)];
+  validateCadProfile(part);
+  return part;
+}
+
 /** Straight text is laid out at this size and then scaled into its frame (createTextGeometry). */
 /**
  * The transition (#188): its bottom and top outline, cut into partner pieces, joined by a
@@ -987,6 +1009,11 @@ export function cadProfileForShapeKind(shape: WorkplaneShape, designedRound = fa
         frame: alongDepthFrame(depth),
       };
     }
+    case "wedge": {
+      // A right triangle in the front view, its right angle at the bottom of +x (createBooleanWedgeGeometry), pushed along the depth.
+      const half = width / 2;
+      return { loops: [polygonLoop([{ x: -half, z: 0 }, { x: half, z: 0 }, { x: half, z: shape.height }])], frame: alongDepthFrame(depth) };
+    }
     case "ellipse":
     case "cylinder": {
       // createPrismGeometry. Drawn with few sides (see drawnRound) it is the
@@ -1024,6 +1051,17 @@ export function cadProfileForShapeKind(shape: WorkplaneShape, designedRound = fa
       const ry = shape.height;
       const loop: CadModifierProfileLoop = { x: 0, z: 0, segments: [{ kind: "line", x: rx, z: 0 }, arcSegment({ cx: 0, cz: 0, rx, rz: ry, start: 0, end: Math.PI / 2 }), { kind: "line", x: 0, z: 0 }] };
       return { loops: [loop], frame: { kind: "revolution", height: ry, local: upright(depth / width) } };
+    }
+    case "paraboloid": {
+      // A dome whose height falls with the square of the distance from the axis (createParaboloidGeometry),
+      // stretched to the depth when the footprint is oval. Its section is exactly the quadratic Bezier curve
+      // from the rim to the tip with its control point half way in at the full height. Drawn with few steps it
+      // is faceted and stays on its display mesh, as the half sphere.
+      const corners = Math.max(8, Math.round(shape.steps ?? ROUND_FROM_HALF_SPHERE_STEPS) * 2);
+      if (!drawnRound(shape.steps, ROUND_FROM_HALF_SPHERE_STEPS, corners, Math.max(width, shape.height * 2), Math.max(depth, shape.height * 2))) return null;
+      const radius = width / 2;
+      const loop: CadModifierProfileLoop = { x: 0, z: 0, segments: [{ kind: "line", x: radius, z: 0 }, { kind: "bezier", x: 0, z: shape.height, controls: [{ x: radius / 2, z: shape.height }] }, { kind: "line", x: 0, z: 0 }] };
+      return { loops: [loop], frame: { kind: "revolution", height: shape.height, local: upright(depth / width) } };
     }
     case "sphere": {
       // SphereGeometry scaled to width, height and depth, standing on y = 0: a
@@ -1152,7 +1190,7 @@ function profileTransformForShape(shape: WorkplaneShape, local?: THREE.Matrix4) 
  * of the exact-body plan), an imported or grouped body, or a body that already
  * carries its own BREP.
  */
-const SIDED_ROUND_KINDS = new Set<WorkplaneShape["kind"]>(["cylinder", "ellipse", "cone", "tube", "ring", "roundRoof", "sphere", "halfSphere"]);
+const SIDED_ROUND_KINDS = new Set<WorkplaneShape["kind"]>(["cylinder", "ellipse", "cone", "tube", "ring", "roundRoof", "sphere", "halfSphere", "paraboloid"]);
 
 /**
  * The shape as designed round: a round kind's side or step count left unset,
@@ -1393,10 +1431,7 @@ function narrowedBoxProfile(shape: WorkplaneShape, width: number, depth: number)
  * the loft breaks, so that corner stays sharp.
  */
 function alongRoofProfile(shape: WorkplaneShape, depth: number, designedRound?: boolean): CadModifierProfilePart | null {
-  // A wedge is its right triangle - the tall side on the right - pushed along the depth, as the display draws it.
-  const base = shape.kind === "wedge"
-    ? { loops: [polygonLoop([{ x: -shapeWidth(shape) / 2, z: 0 }, { x: shapeWidth(shape) / 2, z: 0 }, { x: shapeWidth(shape) / 2, z: shape.height }])], frame: alongDepthFrame(depth) }
-    : cadProfileForShapeKind(shape, designedRound);
+  const base = cadProfileForShapeKind(shape, designedRound);
   if (!base?.frame || base.frame.kind !== "extrusion") return null;
   const slope = shapeHasSlope(shape) ? { side: normalizeSlopeSide(shape.kind, shape.slopeSide), curve: slopeCurveForShape(shape) } : null;
   const narrow = shapeHasNarrow(shape) ? { side: normalizeSlopeSide(shape.kind, shape.narrowSide), curve: narrowCurveForShape(shape) } : null;
@@ -1453,6 +1488,7 @@ export function cadModifierProfileForShape(shape: WorkplaneShape, options: { des
   try {
     if (shape.kind === "gear" && normalizeGearType(shape.gearType) === "bevel") return bevelGearProfile(shape, width, depth);
     if (shape.kind === "loft") return loftShapeProfile(shape);
+    if (shape.kind === "pyramid") return pyramidProfile(shape, width, depth);
     const profile = cadProfileForShapeKind(shape, options.designedRound);
     if (!profile) return null;
     const part: CadModifierProfilePart = {
