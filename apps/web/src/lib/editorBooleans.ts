@@ -9,7 +9,7 @@ import { ADDITION, Brush, Evaluator, HOLLOW_INTERSECTION, HOLLOW_SUBTRACTION, IN
 import * as THREE from "three";
 import { numberLocale, t } from "@/lib/i18n";
 import { sphereTessellation } from "@/lib/sphereTessellation";
-import { groupShowsPartColors } from "@/lib/groupColors";
+import { groupDisplayMergeable, groupShowsPartColors } from "@/lib/groupColors";
 import { acceleratedRaycast, computeBoundsTree } from "three-mesh-bvh";
 import { groupedContentScale, groupedPartSizeScale, scaleGroupedVertices } from "@/lib/groupScale";
 import { dropSplitSlivers, unionSplitManifoldComponents } from "@/lib/manifoldSplit";
@@ -1674,10 +1674,9 @@ async function manifoldUnionMeshShape(
 export function buildGroupDisplayMesh(shape: WorkplaneShape): NonNullable<WorkplaneShape["importedMesh"]> | null {
   const runtime = loadedManifoldRuntime();
   const parts = shape.groupedShapes;
-  if (!runtime || shape.hole || shape.importedMesh || shape.groupOperation === "bundle" || shape.groupOperation === "hull" || shapeHasTaper(shape) || shapeHasShapeDeform(shape) || !parts || parts.length < 2) return null;
-  // Keep this first implementation intentionally narrow: plain, visible, solid primitives only. Bundles, nested
-  // groups, holes and imported meshes retain the existing renderer rather than risking a misleading partial merge.
-  if (parts.some((part) => part.hidden || part.hole || part.locked || part.importedMesh || part.groupedShapes?.length)) return null;
+  // Plain, visible, solid primitives only. Bundles, nested groups, holes and imported meshes retain the existing
+  // renderer rather than risking a misleading partial merge.
+  if (!runtime || !parts || !groupDisplayMergeable(shape)) return null;
   // Manifold's triangulation can depend on operand order, especially for coplanar/coincident faces.
   // Use a canonical order so selecting the same solids in a different order cannot change the displayed
   // boundary mesh. This order is only for the derived display mesh; saved child order is untouched.
@@ -2242,6 +2241,16 @@ function mergedMeshShape(selection: WorkplaneShape[], groupChildren?: WorkplaneS
   };
 }
 
+/**
+ * A group the person makes of plain solids is drawn as one body, so it starts in one colour; Multicolor brings
+ * the parts' colours back. Groups saved before keep showing their parts' colours (#1029), and so do the groups
+ * the editor makes itself (a name tag's plate and letters).
+ */
+function newPlainGroup(selection: WorkplaneShape[]): WorkplaneShape | null {
+  const group = groupedShape(selection);
+  return group && groupDisplayMergeable(group) ? { ...group, multicolor: false } : group;
+}
+
 export function groupedShape(selection: WorkplaneShape[]): WorkplaneShape | null {
   const groupable = selection.filter((shape) => !shape.locked);
   if (groupable.length < 2) {
@@ -2598,7 +2607,7 @@ export async function buildGroupedShapeFromSelection(selected: WorkplaneShape[],
         : manifoldCutGroup ?? booleanMeshShape(booleanSelection, groupable))
     : hasImportedMesh
       ? bakedImportedMerge ?? groupedShape(groupable)
-      : groupedShape(groupable);
+      : newPlainGroup(groupable);
   const consumed = !group && hasSolid && hasHole && cutFullyConsumesSolids(booleanSelection);
   // The cut was made, but the fallback left its face open: say so when the cause is gaps in the surface (#346).
   const openGapEdges = group && hasImportedMesh && hasSolid && hasHole && OPEN_CUT_ID.test(group.id)

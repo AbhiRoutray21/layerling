@@ -1,11 +1,13 @@
 import type { WorkplaneShape } from "@/types/layerling";
+import { shapeHasShapeDeform } from "@/lib/workplaneShapes";
 
 /**
  * Whether a group shows each part in its own colour ("Multicolor" in
  * similar tools) instead of one colour for the whole group.
  *
- * A bundle keeps its parts' colours until Multicolor is switched off. A plain-solid group defaults to one colour
- * because its display mesh is merged on demand; groups that cannot be merged keep their separate-part default.
+ * A bundle keeps its parts' colours until Multicolor is switched off. Without an explicit choice a
+ * group keeps what it always did: parts that stay separate bodies show their
+ * own colour, a group that was cut into one mesh shows the group colour.
  */
 export function groupShowsPartColors(shape: WorkplaneShape): boolean {
   if (!shape.groupedShapes?.length) return false;
@@ -13,13 +15,21 @@ export function groupShowsPartColors(shape: WorkplaneShape): boolean {
   if (shape.groupOperation === "bundle") return shape.multicolor ?? true;
   // A hull is one body round its parts: there is no part of it to show in its own colour (#863).
   if (shape.groupOperation === "hull" || shape.groupOperation === "loft") return false;
-  // Plain-solid groups are one visible body by default, so Multicolor starts off. This also gives older saved
-  // groups the new display behaviour without changing their stored data. Groups that cannot use the display-only
-  // merge keep their previous separate-part default.
-  const displayMergeable = !shape.hole && !shape.importedMesh && shape.groupedShapes.every((part) =>
-    !part.hidden && !part.hole && !part.locked && !part.importedMesh && !part.groupedShapes?.length,
-  );
-  return shape.multicolor ?? (shape.importedMesh ? false : !displayMergeable);
+  return shape.multicolor ?? !shape.importedMesh;
+}
+
+/**
+ * Whether a group is drawn as one merged body (display only, the saved group keeps its parts): a plain
+ * group of plain, visible, unlocked solids. Bundles, hulls, lofts, holes, imported meshes, nested groups
+ * and a tapered or deformed group keep showing their parts. A group made from now on starts with
+ * Multicolor off when this holds; a saved one keeps the colours it showed (#1029).
+ */
+export function groupDisplayMergeable(shape: WorkplaneShape): boolean {
+  const parts = shape.groupedShapes;
+  if (!parts || parts.length < 2 || shape.hole || shape.importedMesh) return false;
+  if (shape.groupOperation && shape.groupOperation !== "group") return false;
+  if (shapeHasShapeDeform(shape)) return false;
+  return parts.every((part) => !part.hidden && !part.hole && !part.locked && !part.importedMesh && !part.groupedShapes?.length);
 }
 
 /** Whether the "Multicolor" switch applies to this shape at all. */

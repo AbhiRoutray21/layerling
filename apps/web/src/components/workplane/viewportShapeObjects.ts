@@ -2,7 +2,7 @@
 
 import * as THREE from "three";
 import { acceleratedRaycast, computeBoundsTree, disposeBoundsTree } from "three-mesh-bvh";
-import { groupShowsPartColors } from "@/lib/groupColors";
+import { groupDisplayMergeable, groupShowsPartColors } from "@/lib/groupColors";
 import { RoundedBoxGeometry } from "three/examples/jsm/geometries/RoundedBoxGeometry.js";
 import { LineSegments2 } from "three/examples/jsm/lines/LineSegments2.js";
 import { LineSegmentsGeometry } from "three/examples/jsm/lines/LineSegmentsGeometry.js";
@@ -65,39 +65,112 @@ export const importedGeometryCache = new WeakMap<
   { geometry: THREE.BufferGeometry; edges: Map<number, THREE.EdgesGeometry> }
 >();
 export const preservedImportedGeometryCache = new WeakMap<WorkplaneShape, THREE.BufferGeometry>();
-// Display-only group meshes are keyed by the same geometry signature used by the viewport. They are deliberately
-// kept out of WorkplaneShape and therefore never become part of a saved project.
-const displayGroupMeshCache = new Map<string, NonNullable<WorkplaneShape["importedMesh"]> | null>();
-const DISPLAY_GROUP_MESH_CACHE_LIMIT = 24;
+// Display-only group meshes, one per group (#1029). They are deliberately kept out of WorkplaneShape and therefore
+// never become part of a saved project.
+type GroupDisplayMesh = NonNullable<WorkplaneShape["importedMesh"]>;
+type GroupDisplayEntry = { key: string; mesh: GroupDisplayMesh | null; round: number };
+const displayGroupMeshes = new Map<string, GroupDisplayEntry>();
+const DISPLAY_GROUP_MESH_LIMIT = 512;
+/**
+ * A group is merged this long after its last change, not while it is drawn: the union took 219 ms for 40 cylinders
+ * and the part colours 2.6 s more, so a group being stretched or reshaped shows its separate parts and becomes
+ * one body once it rests. Moving or turning it keeps the merged body, which is built round the group's centre.
+ */
+const DISPLAY_GROUP_MERGE_DELAY_MS = 250;
+const pendingGroupMerges = new Map<string, { key: string; shape: WorkplaneShape }>();
+let groupMergeTimer: ReturnType<typeof setTimeout> | undefined;
+let groupDisplayRound = 0;
+const groupDisplayListeners = new Set<() => void>();
 
-function displayMeshForGroup(shape: WorkplaneShape): NonNullable<WorkplaneShape["importedMesh"]> | null {
+/** The viewport draws again when a group has become one body. */
+export function onGroupDisplayReady(listener: () => void) {
+  groupDisplayListeners.add(listener);
+  return () => {
+    groupDisplayListeners.delete(listener);
+  };
+}
+
+/** For a group's signature: changes when its merged body (or its colours) is ready, so only that group is built again. */
+function groupDisplayRoundOf(shape: WorkplaneShape) {
+  return displayGroupMeshes.get(shape.id)?.round ?? 0;
+}
+
+/** What the merged body depends on. The Multicolor switch is left out: it changes the colouring, not the union. */
+function groupDisplayKey(shape: WorkplaneShape) {
+  return JSON.stringify({
+    width: shapeWidth(shape), depth: shapeDepth(shape), height: shape.height,
+    children: (shape.groupedShapes ?? []).map((child) => ({
+      id: child.id, hidden: child.hidden, width: shapeWidth(child), depth: shapeDepth(child), height: child.height,
+      transform: shapeTransformSignature(child), geometry: shapeGeometrySignature(child),
+    })),
+  });
+}
+
+function partColorsReady(mesh: GroupDisplayMesh, parts: WorkplaneShape[] | undefined) {
+  return !parts || mesh.triangleCount > PART_COLOR_TRIANGLE_LIMIT || Boolean(partColoredGeometryCache.get(mesh)?.has(parts));
+}
+
+function scheduleGroupMerge(shape: WorkplaneShape, key: string) {
+  pendingGroupMerges.set(shape.id, { key, shape });
+  if (groupMergeTimer !== undefined) clearTimeout(groupMergeTimer);
+  groupMergeTimer = setTimeout(runGroupMerges, DISPLAY_GROUP_MERGE_DELAY_MS);
+}
+
+/** One group per turn, so the page answers in between when several wait (a design just opened). */
+function runGroupMerges() {
+  groupMergeTimer = undefined;
+  if (!mergeNextGroup()) return;
+  groupDisplayListeners.forEach((listener) => listener());
+  if (pendingGroupMerges.size > 0) groupMergeTimer = setTimeout(runGroupMerges, 0);
+}
+
+function mergeNextGroup() {
+  const next = pendingGroupMerges.entries().next();
+  if (next.done) return false;
+  const [id, { key, shape }] = next.value;
+  pendingGroupMerges.delete(id);
+  const known = displayGroupMeshes.get(id);
+  const mesh = known?.key === key ? known.mesh : buildGroupDisplayMesh(shape);
+  // The part colours are the slow half: worked out here as well, not while the group is drawn.
+  if (mesh && groupShowsPartColors(shape)) getPartColoredMeshGeometry({ ...shape, importedMesh: mesh });
+  displayGroupMeshes.delete(id);
+  displayGroupMeshes.set(id, { key, mesh, round: ++groupDisplayRound });
+  while (displayGroupMeshes.size > DISPLAY_GROUP_MESH_LIMIT) {
+    const oldest = displayGroupMeshes.keys().next().value;
+    if (oldest === undefined) break;
+    displayGroupMeshes.delete(oldest);
+  }
+  return true;
+}
+
+/** Merges every group that waits, at once: for tests, which draw without waiting. */
+export function flushGroupDisplayMerges() {
+  if (groupMergeTimer !== undefined) clearTimeout(groupMergeTimer);
+  groupMergeTimer = undefined;
+  while (mergeNextGroup()) { /* next group */ }
+}
+
+function displayMeshForGroup(shape: WorkplaneShape): GroupDisplayMesh | null {
   if (!loadedManifoldRuntime()) {
     // Asking for the kernel can throw where it cannot be fetched (no window, as in a unit test): the group stays drawn
     // as separate parts, as it is until the kernel arrives.
     try { requestManifoldRuntime(); } catch { /* keep the separate-part view */ }
     return null;
   }
-  const parts = shape.groupedShapes;
-  if (!parts || parts.length < 2 || shape.hole || shape.importedMesh || shape.groupOperation === "bundle" || shape.groupOperation === "hull" || shapeHasTaper(shape) || shapeHasShapeDeform(shape)) return null;
-  if (parts.some((part) => part.hidden || part.hole || part.locked || part.importedMesh || part.groupedShapes?.length)) return null;
-  // Exclude the Multicolor switch from this cache key: it changes vertex colouring, not the boolean result.
-  const key = JSON.stringify({
-    width: shapeWidth(shape), depth: shapeDepth(shape), height: shape.height,
-    displayMergeRevision: manifoldRevision(),
-    children: parts.map((child) => ({
-      id: child.id, hidden: child.hidden, width: shapeWidth(child), depth: shapeDepth(child), height: child.height,
-      transform: shapeTransformSignature(child), geometry: shapeGeometrySignature(child),
-    })),
-  });
-  if (displayGroupMeshCache.has(key)) return displayGroupMeshCache.get(key) ?? null;
-  const mesh = buildGroupDisplayMesh(shape);
-  displayGroupMeshCache.set(key, mesh);
-  while (displayGroupMeshCache.size > DISPLAY_GROUP_MESH_CACHE_LIMIT) {
-    const oldest = displayGroupMeshCache.keys().next().value;
-    if (oldest === undefined) break;
-    displayGroupMeshCache.delete(oldest);
+  if (!groupDisplayMergeable(shape)) return null;
+  const key = groupDisplayKey(shape);
+  const known = displayGroupMeshes.get(shape.id);
+  if (known?.key !== key) {
+    scheduleGroupMerge(shape, key);
+    return null;
   }
-  return mesh;
+  if (!known.mesh) return null;
+  // Multicolor switched on after the merge: the separate parts show the colours until they are worked out.
+  if (groupShowsPartColors(shape) && !partColorsReady(known.mesh, shape.groupedShapes)) {
+    scheduleGroupMerge(shape, key);
+    return null;
+  }
+  return known.mesh;
 }
 /**
  * Shared by every solid's material: switching overhangs on or changing the
@@ -458,8 +531,8 @@ export function shapeGeometrySignature(shape: WorkplaneShape): string {
       width: shapeWidth(shape),
       depth: shapeDepth(shape),
       height: shape.height,
-      // A group that was drawn separately before the kernel loaded is rebuilt when the display-only merge becomes available.
-      displayMergeRevision: manifoldRevision(),
+      // A group drawn as separate parts is built again when the kernel has loaded and when its merged body is ready.
+      displayMerge: groupDisplayMergeable(shape) ? [manifoldRevision(), groupDisplayRoundOf(shape)] : 0,
       // Changing Multicolor changes whether the merged mesh needs vertex colours, so the viewport object must be rebuilt.
       partColors: groupShowsPartColors(shape) ? shapeResourceId(shape.groupedShapes) : 0,
       taper,

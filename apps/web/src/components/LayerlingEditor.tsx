@@ -993,6 +993,8 @@ async function restoreEdgeTreatmentInShape(shape: WorkplaneShape, path: number[]
       hidden: shape.hidden,
       edgeResizeMode: shape.edgeResizeMode,
       groupOperation: shape.groupOperation,
+      // Built again, the group is not a new one: it keeps the colours it showed (#1029).
+      multicolor: shape.multicolor,
       edgeTreatments: shape.edgeTreatments,
       edgeTreatmentHistory: shape.edgeTreatmentHistory?.length ? compactEdgeTreatmentHistory(shape.edgeTreatmentHistory) : undefined,
     }),
@@ -3822,11 +3824,7 @@ export function LayerlingEditor({
         : faceToolPreview?.shape
         ? [...shapes, faceToolPreview.shape]
         : edgeModifier?.preview && cadModifierBaseShapeRef.current
-        ? shapes.map((shape) => {
-          if (shape.id !== cadModifierBaseShapeRef.current?.id) return shape;
-          const preview = edgeModifier.preview as WorkplaneShape;
-          return preview.groupedShapes?.length ? { ...preview, multicolor: false } : preview;
-        })
+        ? shapes.map((shape) => shape.id === cadModifierBaseShapeRef.current?.id ? edgeModifier.preview as WorkplaneShape : shape)
         : alignMode && alignPreview?.size
         ? sizedShapesForSelection(shapes, selectedIds, selectedShapes, effectiveAlignAnchorId, alignPreview.axis, alignPreview.target, alignAxes, alignSizeLimit).nextShapes
         : alignMode && alignPreview
@@ -10973,7 +10971,6 @@ export function LayerlingEditor({
 
       if (command.action === "group_objects") {
         const ids = new Set(mcpStringArray(params.ids));
-        // Group geometry and its default colour must not depend on the order IDs were supplied.
         const groupable = currentShapes().filter((shape) => ids.has(shape.id));
         if (groupable.length < 2) throw new Error("Select at least two objects to group");
         if (groupable.some((shape) => shape.locked)) throw new Error("Unlock every selected object before grouping");

@@ -1,6 +1,9 @@
 import manifoldModule, { type ManifoldToplevel } from "manifold-3d";
+import * as THREE from "three";
 import { beforeAll, describe, expect, it } from "vitest";
 import { buildGroupDisplayMesh, buildGroupedShapeFromSelection } from "@/lib/editorBooleans";
+import { createShapeObject, flushGroupDisplayMerges, shapeGeometrySignature } from "@/components/workplane/viewportShapeObjects";
+import { groupShowsPartColors } from "@/lib/groupColors";
 import { rememberManifoldRuntime } from "@/lib/manifoldHandle";
 import type { WorkplaneShape } from "@/types/layerling";
 
@@ -36,7 +39,8 @@ describe("display-only group merge", () => {
     expect(result.group).toBeTruthy();
     expect(result.group?.importedMesh).toBeUndefined();
     expect(result.group?.groupedShapes).toHaveLength(2);
-    expect(result.group?.multicolor).toBeUndefined();
+    // A group made now starts in one colour; Multicolor brings the parts' colours back (#1029).
+    expect(result.group?.multicolor).toBe(false);
 
     const mesh = buildGroupDisplayMesh(result.group!);
     expect(mesh).toBeTruthy();
@@ -67,5 +71,50 @@ describe("display-only group merge", () => {
     // Equal bounds alone can hide different triangle splits at shared/coplanar faces. The canonical
     // operand order must produce the same triangle positions as well.
     expect(reverseMesh!.positions).toEqual(firstMesh!.positions);
+  });
+
+  it("leaves a group saved before in its parts' colours", async () => {
+    const result = await buildGroupedShapeFromSelection([solid("a", 0, 0), solid("b", 5, 5, "box", "#0000ff")], 100_000);
+    const saved = { ...result.group!, multicolor: undefined };
+    expect(groupShowsPartColors(saved)).toBe(true);
+  });
+
+  it("draws the parts first and the merged body once the group rests", async () => {
+    const result = await buildGroupedShapeFromSelection([solid("p", 0, 0), solid("q", 5, 5, "box", "#0000ff")], 100_000);
+    const group = { ...result.group!, id: "resting-group" };
+    const surfaceOf = (object: THREE.Object3D) => object.children.find((child) => child instanceof THREE.Mesh && child.userData.shapeSurface);
+    const contentOf = (object: THREE.Object3D) => object.children.find((child) => child.userData.groupedShapeContent);
+
+    const first = createShapeObject(group, false, undefined, false);
+    expect(contentOf(first)).toBeTruthy();
+    const before = shapeGeometrySignature(group);
+
+    flushGroupDisplayMerges();
+    expect(shapeGeometrySignature(group)).not.toBe(before);
+    const merged = createShapeObject(group, false, undefined, false);
+    expect(contentOf(merged)).toBeFalsy();
+    expect(surfaceOf(merged)).toBeTruthy();
+
+    // Stretched, it shows its parts again until it rests; moved, it keeps the merged body.
+    const moved = { ...group, x: group.x + 30 };
+    expect(contentOf(createShapeObject(moved, false, undefined, false))).toBeFalsy();
+    const stretched = { ...group, width: (group.width ?? 10) * 2, groupedShapes: group.groupedShapes!.map((part) => ({ ...part, width: (part.width ?? 10) * 2 })) };
+    expect(contentOf(createShapeObject(stretched, false, undefined, false))).toBeTruthy();
+    flushGroupDisplayMerges();
+    expect(contentOf(createShapeObject(stretched, false, undefined, false))).toBeFalsy();
+  });
+
+  it("works out the part colours before it shows the merged body with them", async () => {
+    const result = await buildGroupedShapeFromSelection([solid("r", 0, 0), solid("s", 5, 5, "box", "#0000ff")], 100_000);
+    const group = { ...result.group!, id: "coloured-group", multicolor: false };
+    createShapeObject(group, false, undefined, false);
+    flushGroupDisplayMerges();
+    const coloured = { ...group, multicolor: true };
+    const waiting = createShapeObject(coloured, false, undefined, false);
+    expect(waiting.children.some((child) => child.userData.groupedShapeContent)).toBe(true);
+    flushGroupDisplayMerges();
+    const ready = createShapeObject(coloured, false, undefined, false);
+    const surface = ready.children.find((child): child is THREE.Mesh => child instanceof THREE.Mesh && Boolean(child.userData.shapeSurface));
+    expect(surface?.geometry.getAttribute("color")).toBeTruthy();
   });
 });

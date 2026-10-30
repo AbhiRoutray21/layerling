@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { canToggleGroupColors, colorForParts, groupShowsPartColors } from "@/lib/groupColors";
+import { canToggleGroupColors, colorForParts, groupDisplayMergeable, groupShowsPartColors } from "@/lib/groupColors";
 import type { WorkplaneShape } from "@/types/layerling";
 
 function shape(overrides: Partial<WorkplaneShape> = {}): WorkplaneShape {
@@ -37,10 +37,8 @@ describe("groupShowsPartColors", () => {
     expect(groupShowsPartColors(shape())).toBe(false);
   });
 
-  it("starts plain solid groups in one colour but keeps separate-part groups multicoloured by default", () => {
-    expect(groupShowsPartColors(shape({ kind: "mesh", groupedShapes: parts }))).toBe(false);
-    expect(groupShowsPartColors(shape({ kind: "mesh", groupedShapes: parts, multicolor: true }))).toBe(true);
-    expect(groupShowsPartColors(shape({ kind: "mesh", groupedShapes: [parts[0], { ...parts[1], hole: true }] }))).toBe(true);
+  it("keeps what a group showed before the switch existed", () => {
+    expect(groupShowsPartColors(shape({ kind: "mesh", groupedShapes: parts }))).toBe(true);
     expect(groupShowsPartColors(shape({ kind: "mesh", groupedShapes: parts, importedMesh: cutMesh }))).toBe(false);
   });
 
@@ -75,5 +73,26 @@ describe("colorForParts", () => {
   it("hands the colour down for a single shape and for a hull", () => {
     expect(colorForParts(shape(), "#800080")).toBe("#800080");
     expect(colorForParts(shape({ kind: "mesh", groupedShapes: parts, groupOperation: "hull" }), "#800080")).toBe("#800080");
+  });
+});
+
+describe("groupDisplayMergeable", () => {
+  it("merges a plain group of plain solids", () => {
+    expect(groupDisplayMergeable(shape({ kind: "mesh", groupedShapes: parts }))).toBe(true);
+    expect(groupDisplayMergeable(shape({ kind: "mesh", groupedShapes: parts, groupOperation: "group" }))).toBe(true);
+  });
+
+  it("leaves bundles, hulls, cut groups, holes and nested groups as their parts", () => {
+    expect(groupDisplayMergeable(shape({ kind: "mesh", groupedShapes: parts, groupOperation: "bundle" }))).toBe(false);
+    expect(groupDisplayMergeable(shape({ kind: "mesh", groupedShapes: parts, groupOperation: "hull" }))).toBe(false);
+    expect(groupDisplayMergeable(shape({ kind: "mesh", groupedShapes: parts, importedMesh: cutMesh }))).toBe(false);
+    expect(groupDisplayMergeable(shape({ kind: "mesh", groupedShapes: [parts[0], { ...parts[1], hole: true }] }))).toBe(false);
+    expect(groupDisplayMergeable(shape({ kind: "mesh", groupedShapes: [parts[0], shape({ id: "c", kind: "mesh", groupedShapes: parts })] }))).toBe(false);
+  });
+
+  it("leaves a tapered group as its parts, and its colours as they were (#1029)", () => {
+    const tapered = shape({ kind: "mesh", groupedShapes: parts, taperTopWidth: 10 } as Partial<WorkplaneShape>);
+    expect(groupDisplayMergeable(tapered)).toBe(false);
+    expect(groupShowsPartColors(tapered)).toBe(true);
   });
 });
