@@ -8233,6 +8233,13 @@ html[data-theme="dark"] .touch-multi-select {
   background: #f5f2ec;
 }
 
+/* Slope along: the lower end's dot, round so it is not taken for the height. */
+.transform-handle.height-top.slope-end {
+  border-radius: 50%;
+  background: #e0873a;
+  border-color: #6b3a12;
+}
+
 .transform-handle.edge,
 .transform-handle.dark {
   width: 9px;

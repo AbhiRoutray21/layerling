@@ -3360,6 +3360,11 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .touch-multi-select {
   background: #f1f1f1;
 }
 
+:where(html[data-theme="dark"][data-palette="graphite"]) .transform-handle.height-top.slope-end {
+  background: #e0873a;
+  border-color: #6b3a12;
+}
+
 :where(html[data-theme="dark"][data-palette="graphite"]) .transform-handle.edge,
 :where(html[data-theme="dark"][data-palette="graphite"]) .transform-handle.dark {
   background: #3a3a3a;

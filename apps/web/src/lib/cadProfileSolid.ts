@@ -586,8 +586,55 @@ function piecewiseLoftSolid(cad: OcctKernel, profile: CadModifierProfilePart, to
   return solid;
 }
 
+/** A loop scaled by `sx` across (x) and `sz` in height (z) about the origin. */
+function loopScaled(loop: CadModifierProfileLoop, sx: number, sz: number): CadModifierProfileLoop {
+  return {
+    x: loop.x * sx,
+    z: loop.z * sz,
+    segments: loop.segments.map((segment): CadModifierProfileSegment => {
+      if (segment.kind === "line") return { ...segment, x: segment.x * sx, z: segment.z * sz };
+      if (segment.kind === "bezier") return { ...segment, x: segment.x * sx, z: segment.z * sz, controls: segment.controls.map((control) => ({ x: control.x * sx, z: control.z * sz })) };
+      return { ...segment, x: segment.x * sx, z: segment.z * sz, cx: segment.cx * sx, cz: segment.cz * sz, rx: segment.rx * sx, rz: segment.rz * sz };
+    }),
+  };
+}
+
+/**
+ * A loft through the bottom section scaled step by step (slope and narrowing along, `sections`):
+ * split at its corners into runs, each run ruled between two sections or smooth through more,
+ * the runs fused into one body.
+ */
+function sectionedLoftSolid(cad: OcctKernel, profile: CadModifierProfilePart, tolerance: number) {
+  const sections = profile.sections ?? [];
+  const runs: Array<typeof sections> = [];
+  let run: typeof sections = [];
+  sections.forEach((section, index) => {
+    run.push(section);
+    if (index > 0 && (section.corner || index === sections.length - 1)) {
+      runs.push(run);
+      run = [section];
+    }
+  });
+  // `loops` is the first section already: the others are scaled relative to it.
+  const first = sections[0];
+  const runSolid = (index: number, part: typeof sections) => {
+    const wires = part.map((section) => cad.transform(loopWire(cad, loopScaled(profile.loops[index], section.sx / first.sx, section.sz / first.sz), tolerance), [1, 0, 0, 0, 0, 1, 0, profile.height * section.t, 0, 0, 1, 0]));
+    const lofted = cad.loft(wires, true, part.length === 2);
+    const solids = cad.isSolid(lofted) ? [lofted] : cad.getSubShapes(lofted, "solid");
+    if (solids.length !== 1) throw new Error("A sectioned loft did not become one solid");
+    return cad.getVolume(solids[0]) < 0 ? cad.reverseShape(solids[0]) : solids[0];
+  };
+  const solidOf = (index: number) => runs.slice(1).reduce((body, part) => cad.fuse(body, runSolid(index, part)), runSolid(index, runs[0]));
+  let solid = solidOf(0);
+  for (let index = 1; index < profile.loops.length; index += 1) solid = cad.cut(solid, solidOf(index));
+  const solids = cad.isSolid(solid) ? [solid] : cad.getSubShapes(solid, "solid");
+  if (solids.length !== 1) throw new Error("The sectioned loft did not become one solid");
+  return solids[0];
+}
+
 function loftSolid(cad: OcctKernel, profile: CadModifierProfilePart, tolerance: number) {
   const top = profile.topLoops ?? [];
+  if ((profile.sections?.length ?? 0) > 2) return sectionedLoftSolid(cad, profile, tolerance);
   if (Math.abs(profile.twist ?? 0) > 1e-9 || Math.abs(profile.tilt?.x ?? 0) > 1e-9 || Math.abs(profile.tilt?.z ?? 0) > 1e-9 || (profile.smooth ?? 0) > 1e-9) {
     return twistedLoftSolid(cad, profile, tolerance);
   }
@@ -870,7 +917,18 @@ export function grownProfileSolid(cad: OcctKernel, profile: CadModifierProfilePa
   return solid;
 }
 
-export function profileExtrusionSolid(cad: OcctKernel, profile: CadModifierProfilePart) {
+export function profileExtrusionSolid(cad: OcctKernel, profile: CadModifierProfilePart): ShapeHandle {
+  if (profile.trim && profile.kind === "extrusion") {
+    // Slope along: the plain body, and what of it lies inside the side outline pushed across.
+    const base = profileExtrusionSolid(cad, { ...profile, trim: undefined });
+    const trim = profile.trim;
+    const face = cad.makeFace(loopWire(cad, trim.loops[0], profileExtent(profile) * 1e-6));
+    const prism = cad.transform(cad.extrude(face, 0, trim.height, 0), trim.frame);
+    const kept = cad.common(base, prism);
+    const solids = cad.isSolid(kept) ? [kept] : cad.getSubShapes(kept, "solid");
+    if (solids.length !== 1 || !cad.isValid(solids[0]) || !(cad.getVolume(solids[0]) > 0)) throw new Error("The trimmed profile solid is not valid");
+    return solids[0];
+  }
   validateCadProfile(profile);
   if (profile.kind === "extrusion" && profile.grow) {
     try {

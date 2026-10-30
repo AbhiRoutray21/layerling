@@ -38,6 +38,7 @@ import { roundSideCount } from "@/lib/roundSideCount";
 import { createPyramidGeometry } from "@/lib/pyramidGeometry";
 import { positionsForTwist, twistBandCount } from "@/lib/heightSlices";
 import { toCreasedNormals } from "@/lib/creasedNormals";
+import { shapeHasAlongDeform, slopePositions } from "@/lib/slopeAlong";
 import { DEFAULT_EDGE_LINE_COLOR } from "@/lib/workplaneGrid";
 import { deformsAboutOrigin, mirroredAxisCount, mirrorSign, preservesEdgeTreatmentSize, resizedImportedCoordinates, resizedImportedMeshPositions, shapeDepth, shapeExtrudeDeformAt, shapeHasExtrudeDeform, shapeHasShapeDeform, shapeHasTaper, shapeSupportsTaper, shapeTaperDimensions, shapeTaperScaleAt, shapeWidth } from "@/lib/workplaneShapes";
 import { sphereTessellation } from "@/lib/sphereTessellation";
@@ -145,6 +146,13 @@ export function tapeShapeTopologyKey(shape: WorkplaneShape): string {
     extrudeTwist: shape.extrudeTwist,
     extrudeTopOffsetX: shape.extrudeTopOffsetX,
     extrudeTopOffsetZ: shape.extrudeTopOffsetZ,
+    slopeEnd: shape.slopeEnd,
+    slopeSide: shape.slopeSide,
+    slopeCurve: shape.slopeCurve,
+    narrowEnd: shape.narrowEnd,
+    narrowSide: shape.narrowSide,
+    narrowCurve: shape.narrowCurve,
+    narrowStart: shape.narrowStart,
     teeth: shape.teeth,
     toothSize: shape.toothSize,
     toothWidth: shape.toothWidth,
@@ -402,8 +410,12 @@ export function shapeGeometrySignature(shape: WorkplaneShape): string {
   // Twist/lean reshape the mesh the same way taper does, so a change to
   // either has to bust this signature - otherwise the cached geometry from
   // before the twist stays on screen.
-  const deform = shapeHasExtrudeDeform(shape)
-    ? { twist: shape.extrudeTwist, offsetX: shape.extrudeTopOffsetX, offsetZ: shape.extrudeTopOffsetZ }
+  // A slope along (slopeAlong.ts) rebuilds the mesh per vertex too, worked out in millimetres.
+  const slope = shapeHasAlongDeform(shape)
+    ? { end: shape.slopeEnd, side: shape.slopeSide, curve: shape.slopeCurve, narrow: [shape.narrowEnd, shape.narrowSide, shape.narrowCurve, shape.narrowStart] }
+    : null;
+  const deform = shapeHasExtrudeDeform(shape) || slope
+    ? { twist: shape.extrudeTwist, offsetX: shape.extrudeTopOffsetX, offsetZ: shape.extrudeTopOffsetZ, slope }
     : null;
   if (shape.groupedShapes?.length && !shape.importedMesh) {
     return JSON.stringify({
@@ -476,6 +488,13 @@ export function shapeGeometrySignature(shape: WorkplaneShape): string {
     extrudeTwist: shape.extrudeTwist,
     extrudeTopOffsetX: shape.extrudeTopOffsetX,
     extrudeTopOffsetZ: shape.extrudeTopOffsetZ,
+    slopeEnd: shape.slopeEnd,
+    slopeSide: shape.slopeSide,
+    slopeCurve: shape.slopeCurve,
+    narrowEnd: shape.narrowEnd,
+    narrowSide: shape.narrowSide,
+    narrowCurve: shape.narrowCurve,
+    narrowStart: shape.narrowStart,
     teeth: shape.teeth,
     toothSize: shape.toothSize,
     toothWidth: shape.toothWidth,
@@ -2142,7 +2161,17 @@ export function taperGeometryForShape(geometry: THREE.BufferGeometry, shape: Wor
     position.setXYZ(index, localX, y, localZ);
   }
   position.needsUpdate = true;
-  if (bands > 1 && !shape.imagePlate) {
+  // A slope along (slopeAlong.ts) lowers the top towards one end, after the taper and the twist.
+  const sloped = shapeHasAlongDeform(shape) && !shape.imagePlate;
+  if (sloped) {
+    const flat = tapered.index ? tapered.toNonIndexed() : tapered;
+    const next = new THREE.BufferGeometry();
+    next.setAttribute("position", new THREE.BufferAttribute(slopePositions(flat.getAttribute("position").array, shape), 3));
+    if (flat !== tapered) flat.dispose();
+    if (!tapered.userData.cached) tapered.dispose();
+    tapered = next;
+  }
+  if ((bands > 1 || sloped) && !shape.imagePlate) {
     // Smooth across the small folds between the bands, sharp at the body's own edges - judged in
     // millimetres: a unit body stretched afterwards would show its folds steeper or flatter.
     // The body stays in millimetres from here on, so its edge lines are judged there too;
@@ -2281,7 +2310,8 @@ export function addShapeEdgeDecorations(group: THREE.Group, mesh: THREE.Mesh, pr
       // bei einem runden Koerper wird jede Facette zu einem Strich. Er zeigt
       // deshalb nur seine echten Kanten, etwa Deckel- und Bodenrand.
       // A twisted side folds a little at every band (#184): only its real edges get a line, as on a thread.
-      const twisted = Math.abs(shape.extrudeTwist ?? 0) > 1e-6;
+      // A slope along folds its curved top in short pieces the same way.
+      const twisted = Math.abs(shape.extrudeTwist ?? 0) > 1e-6 || shapeHasAlongDeform(shape);
       const selectedThreshold = shape.importedMesh ? NORMAL_IMPORTED_SELECTION_EDGE_ANGLE : shape.kind === "thread" || twisted || (shape.transparent && !shape.hole) ? 25 : 1;
       const edgesGeometry = !selectedOutline && allEdgeLines
         ? calmEdgesGeometry(shape, prepared)
