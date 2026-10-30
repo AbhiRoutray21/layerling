@@ -1978,6 +1978,8 @@ export const MESSAGES_PL: Partial<Record<MessageKey, string>> = {
   "gear.rackHint": "Podziałka {pitchLength} mm na ząb, długość to zęby × podziałka. Toczy się po niej koło o module {module}: jego środek stoi w odległości jego zęby × moduł / 2 przed linią podziałową, która leży {offset} mm za wierzchołkami zębów.",
   "gear.rackRoundHint": "Okrągłe zęby, podziałka {pitchLength} mm na ząb, długość to zęby × podziałka. Toczy się po niej okrągłe koło o module {module}: jego środek stoi w odległości jego zęby × moduł / 2 przed linią podziałową, która leży {offset} mm za wierzchołkami zębów.",
   "inspector.threadRole": "Rodzaj",
+  "inspector.threadBoltAsHoleHint": "Pręt gwintowany lub śruba ma pełny rozmiar śruby i zero luzu. Jako otwór wychodzi za ciasny dla śruby: do otworu, w który wkręca się śrubę, użyj Otworu gwintowanego.",
+  "inspector.threadMakeTappedHole": "Zamień na otwór gwintowany",
   "inspector.threadHead": "Łeb",
   "inspector.thread": "Gwint",
   "thread.rod": "Pręt gwintowany",

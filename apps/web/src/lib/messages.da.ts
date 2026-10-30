@@ -2316,6 +2316,8 @@ export const MESSAGES_DA: Partial<Record<MessageKey, string>> = {
   "gear.rackHint": "Deling {pitchLength} mm pr. tand; længden er tænder × deling. Et gear med modul {module} ruller på det: dets centrum står dets tænder × modul / 2 foran delelinjen, som ligger {offset} mm bag tandspidserne.",
   "gear.rackRoundHint": "Runde tænder, deling {pitchLength} mm pr. tand; længden er tænder × deling. Et rundt gear med modul {module} ruller på det: dets centrum står dets tænder × modul / 2 foran delelinjen, som ligger {offset} mm bag tandspidserne.",
   "inspector.threadRole": "Type",
+  "inspector.threadBoltAsHoleHint": "En gevindstang eller skrue har boltens fulde mål og intet spillerum. Som hul bliver den for stram til bolten: til et hul, som en bolt skrues i, skal du bruge Gevindhul.",
+  "inspector.threadMakeTappedHole": "Lav det til et gevindhul",
   "inspector.threadHead": "Hoved",
   "inspector.thread": "Gevind",
   "thread.rod": "Gevindstang",

@@ -1662,6 +1662,8 @@ export const MESSAGES_HU: Partial<Record<MessageKey, string>> = {
   "gear.rackHint": "Fogosztás: {pitchLength} mm foganként; a hossz = fogszám × osztás. Egy {module} modulú fogaskerék gördül rajta: a középpontja a saját fogszáma × modul / 2 távolságra áll a gördülőegyenes előtt, amely {offset} mm-rel a fogcsúcsok mögött van.",
   "gear.rackRoundHint": "Kerek fogak, fogosztás: {pitchLength} mm foganként; a hossz = fogszám × osztás. Egy {module} modulú kerek fogaskerék gördül rajta: a középpontja a saját fogszáma × modul / 2 távolságra áll a gördülőegyenes előtt, amely {offset} mm-rel a fogcsúcsok mögött van.",
   "inspector.threadRole": "Típus",
+  "inspector.threadBoltAsHoleHint": "A menetes szár vagy csavar a csavar teljes méretű, holtjáték nélkül. Furatként túl szűk lesz a csavarnak: olyan furathoz, amelybe csavart hajtasz, válaszd a Menetes furatot.",
+  "inspector.threadMakeTappedHole": "Átalakítás menetes furattá",
   "inspector.threadHead": "Fej",
   "inspector.thread": "Menet",
   "thread.rod": "Menetes szár",

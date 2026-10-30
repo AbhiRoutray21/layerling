@@ -12,7 +12,7 @@ Wybierz {{ui:shape.thread}} w bibliotece kształtów. W {{ui:inspector.threadRol
 - **{{ui:thread.rod}}:** walec z gwintem, na przykład śruba bez łba.
 - **{{ui:thread.screw}}:** z łbem. Wybierasz {{ui:inspector.threadHead}}: {{ui:thread.headCylinder}}, {{ui:thread.headCountersunk}} albo {{ui:thread.headHex}}.
 - **{{ui:thread.nut}}:** pasująca nakrętka.
-- **{{ui:thread.bore}}:** otwór z gwintem wewnętrznym. Jest otworem. Wsuń go w część, zgrupuj oba, a część będzie miała gwint wewnętrzny.
+- **{{ui:thread.bore}}:** otwór z gwintem wewnętrznym. Jest otworem. Wsuń go w część, zgrupuj oba, a część będzie miała gwint wewnętrzny. Do otworu, w który wkręca się śrubę, zawsze używaj {{ui:thread.bore}}: {{ui:thread.rod}} lub {{ui:thread.screw}} jako otwór ma pełny rozmiar śruby bez luzu i wychodzi za ciasno. Jeśli mimo to ustawisz go jako otwór, layerling o tym przypomni, a {{ui:inspector.threadMakeTappedHole}} zamieni go w {{ui:thread.bore}}.
 
 ![Śruba z łbem walcowym. Po prawej: rodzaj i kształt łba, niżej rozmiar, skok i zarys.](shot:thread-screw)
 

@@ -1712,6 +1712,8 @@ export const MESSAGES_ES: Partial<Record<MessageKey, string>> = {
   "gear.rackHint": "Paso de {pitchLength} mm por diente; la longitud es dientes × paso. Un engranaje de módulo {module} rueda sobre ella: su centro queda a sus dientes × módulo / 2 por delante de la línea primitiva, que está {offset} mm por detrás de las puntas de los dientes.",
   "gear.rackRoundHint": "Dientes redondos, paso de {pitchLength} mm por diente; la longitud es dientes × paso. Un engranaje redondo de módulo {module} rueda sobre ella: su centro queda a sus dientes × módulo / 2 por delante de la línea primitiva, que está {offset} mm por detrás de las puntas de los dientes.",
   "inspector.threadRole": "Tipo",
+  "inspector.threadBoltAsHoleHint": "Una varilla roscada o un tornillo tiene el tamaño completo del perno y ninguna holgura. Como agujero queda demasiado justo para el perno: para un agujero en el que se enrosca un perno, usa Orificio roscado.",
+  "inspector.threadMakeTappedHole": "Convertir en orificio roscado",
   "inspector.threadHead": "Cabeza",
   "inspector.thread": "Rosca",
   "thread.rod": "Varilla roscada",

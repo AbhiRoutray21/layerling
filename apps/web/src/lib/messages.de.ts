@@ -1981,6 +1981,8 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "gear.rackHint": "Teilung {pitchLength} mm je Zahn, die Länge ist Zähne × Teilung. Ein Rad mit Modul {module} rollt darauf ab: seine Mitte steht seine Zähne × Modul / 2 vor der Teillinie, die {offset} mm hinter den Zahnspitzen liegt.",
   "gear.rackRoundHint": "Runde Zähne, Teilung {pitchLength} mm je Zahn, die Länge ist Zähne × Teilung. Ein rundes Rad mit Modul {module} rollt darauf ab: seine Mitte steht seine Zähne × Modul / 2 vor der Teillinie, die {offset} mm hinter den Zahnspitzen liegt.",
   "inspector.threadRole": "Art",
+  "inspector.threadBoltAsHoleHint": "Eine Gewindestange oder Schraube hat das volle Maß des Bolzens und kein Spiel. Als Loch wird sie für den Bolzen zu eng: Für ein Loch, in das eine Schraube kommt, nimm Gewindeloch.",
+  "inspector.threadMakeTappedHole": "In Gewindeloch umwandeln",
   "inspector.threadHead": "Kopfform",
   "inspector.thread": "Gewinde",
   "thread.rod": "Gewindestange",

@@ -12,7 +12,7 @@ Scegli {{ui:shape.thread}} nella libreria delle forme. In {{ui:inspector.threadR
 - **{{ui:thread.rod}}:** un cilindro filettato, per esempio una vite senza testa.
 - **{{ui:thread.screw}}:** una vite con testa. Scegli {{ui:inspector.threadHead}}: {{ui:thread.headCylinder}}, {{ui:thread.headCountersunk}} oppure {{ui:thread.headHex}}.
 - **{{ui:thread.nut}}:** il dado compatibile.
-- **{{ui:thread.bore}}:** un foro filettato. È un foro: inseriscilo in un pezzo e raggruppali entrambi per creare una filettatura interna.
+- **{{ui:thread.bore}}:** un foro filettato. È un foro: inseriscilo in un pezzo e raggruppali entrambi per creare una filettatura interna. Per un foro in cui si avvita un bullone usa sempre il {{ui:thread.bore}}: una {{ui:thread.rod}} o una {{ui:thread.screw}} come foro ha la misura piena del bullone senza gioco e risulta troppo stretta. Se la imposti comunque come foro, layerling lo segnala e {{ui:inspector.threadMakeTappedHole}} la trasforma in {{ui:thread.bore}}.
 
 ![Una vite con testa cilindrica. A destra: tipo e forma della testa; più sotto, dimensione, passo e profilo.](shot:thread-screw)
 

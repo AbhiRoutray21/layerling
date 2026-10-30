@@ -12,7 +12,7 @@ Vložte {{ui:shape.thread}} a v {{ui:inspector.threadRole}} zvolte:
 - **{{ui:thread.rod}}:** válec se závitem, například šroub bez hlavy.
 - **{{ui:thread.screw}}:** šroub s hlavou {{ui:inspector.threadHead}} typu {{ui:thread.headCylinder}}, {{ui:thread.headCountersunk}} nebo {{ui:thread.headHex}}.
 - **{{ui:thread.nut}}:** odpovídající matice.
-- **{{ui:thread.bore}}:** závitový výřez. Zasuňte jej do dílu a slučte, aby vznikl vnitřní závit.
+- **{{ui:thread.bore}}:** závitový výřez. Zasuňte jej do dílu a slučte, aby vznikl vnitřní závit. Pro otvor, do kterého se šroubuje šroub, vždy použijte {{ui:thread.bore}}: {{ui:thread.rod}} nebo {{ui:thread.screw}} jako otvor má plnou velikost šroubu bez vůle a vyjde příliš těsný. Pokud ji přesto nastavíte jako otvor, layerling na to upozorní a {{ui:inspector.threadMakeTappedHole}} z ní udělá {{ui:thread.bore}}.
 
 ![Šroub s válcovou hlavou. Vpravo jsou typ dílu, hlava, velikost, stoupání a profil.](shot:thread-screw)
 

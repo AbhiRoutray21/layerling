@@ -3707,6 +3707,16 @@ export function ShapeInspector({
                 onChange={threadRoleProperty.onChange}
               />
             ) : null}
+            {/* A rod or screw is the bolt at full size: cut as a hole it leaves no play (#1039). */}
+            {threadRoleProperty && shape.hole && (threadRoleProperty.value === "rod" || threadRoleProperty.value === "screw") ? (
+              <>
+                <p className="cylinder-wrap-hint">{t("inspector.threadBoltAsHoleHint")}</p>
+                <button className="inspector-action-button" type="button" disabled={locked} onClick={() => threadRoleProperty.onChange("bore")}>
+                  <RefreshCw size={17} strokeWidth={2.5} />
+                  <span>{t("inspector.threadMakeTappedHole")}</span>
+                </button>
+              </>
+            ) : null}
             {threadHeadProperty ? (
               <IconOptionSelector
                 label={t("inspector.threadHead")}

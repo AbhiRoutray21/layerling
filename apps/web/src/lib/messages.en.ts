@@ -1982,6 +1982,8 @@ export const MESSAGES_EN = {
   "gear.rackHint": "Pitch {pitchLength} mm per tooth; the length is teeth × pitch. A gear of module {module} rolls on it: its centre stands its teeth × module / 2 in front of the pitch line, which lies {offset} mm behind the tooth tips.",
   "gear.rackRoundHint": "Round teeth, pitch {pitchLength} mm per tooth; the length is teeth × pitch. A round gear of module {module} rolls on it: its centre stands its teeth × module / 2 in front of the pitch line, which lies {offset} mm behind the tooth tips.",
   "inspector.threadRole": "Type",
+  "inspector.threadBoltAsHoleHint": "A threaded rod or screw has the bolt's full size and no play. As a hole it comes out too tight for the bolt: for a hole a bolt screws into, use Tapped hole.",
+  "inspector.threadMakeTappedHole": "Make it a tapped hole",
   "inspector.threadHead": "Head",
   "inspector.thread": "Thread",
   "thread.rod": "Threaded rod",

@@ -2042,6 +2042,8 @@ export const MESSAGES_CS: Record<MessageKey, string> = {
   "gear.rackHint": "Rozteč {pitchLength} mm na zub; délka = počet zubů × rozteč. Zabírá s kolem modulu {module}: střed kola je počet jeho zubů × modul / 2 před roztečnou přímkou, která leží {offset} mm za vrcholy zubů.",
   "gear.rackRoundHint": "Oblé zuby s roztečí {pitchLength} mm na zub; délka = počet zubů × rozteč. Zabírá s oblým kolem modulu {module}: střed kola je počet jeho zubů × modul / 2 před roztečnou přímkou, která leží {offset} mm za vrcholy zubů.",
   "inspector.threadRole": "Typ",
+  "inspector.threadBoltAsHoleHint": "Závitová tyč nebo šroub má plnou velikost šroubu a žádnou vůli. Jako otvor vyjde pro šroub příliš těsný: pro otvor, do kterého se šroub zašroubuje, použijte Závitový otvor.",
+  "inspector.threadMakeTappedHole": "Změnit na závitový otvor",
   "inspector.threadHead": "Hlava",
   "inspector.thread": "Závit",
   "thread.rod": "Závitová tyč",

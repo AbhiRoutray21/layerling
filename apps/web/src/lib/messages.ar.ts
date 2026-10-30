@@ -1727,6 +1727,8 @@ export const MESSAGES_AR: Partial<Record<MessageKey, string>> = {
   "gear.rackHint": "الخطوة {pitchLength} مم لكل سن؛ والطول = الأسنان × الخطوة. ترس موديوله {module} يتدحرج عليها: يقع مركزه أمام خط الخطوة بمقدار أسنانه × الموديول / 2، وخط الخطوة يقع {offset} مم خلف رؤوس الأسنان.",
   "gear.rackRoundHint": "أسنان مستديرة، الخطوة {pitchLength} مم لكل سن؛ والطول = الأسنان × الخطوة. ترس مستدير الأسنان موديوله {module} يتدحرج عليها: يقع مركزه أمام خط الخطوة بمقدار أسنانه × الموديول / 2، وخط الخطوة يقع {offset} مم خلف رؤوس الأسنان.",
   "inspector.threadRole": "النوع",
+  "inspector.threadBoltAsHoleHint": "القضيب الملولب أو البرغي له المقاس الكامل للمسمار بلا خلوص. كثقب يخرج ضيقًا جدًا على المسمار: لثقب يُربط فيه مسمار استخدم ثقب ملولب.",
+  "inspector.threadMakeTappedHole": "تحويله إلى ثقب ملولب",
   "inspector.threadHead": "الرأس",
   "inspector.thread": "السن اللولبي",
   "thread.rod": "قضيب ملولب",

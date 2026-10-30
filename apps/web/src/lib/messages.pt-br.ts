@@ -608,6 +608,8 @@ export const MESSAGES_PT_BR: Partial<Record<MessageKey, string>> = {
   "inspector.objectSnapHint": "Arestas e centros se prendem a outras formas. Segure Alt ao arrastar para pausar isso.",
   "inspector.gearType": "Tipo de engrenagem",
   "inspector.threadRole": "Tipo",
+  "inspector.threadBoltAsHoleHint": "Uma barra roscada ou um parafuso tem o tamanho cheio do parafuso e nenhuma folga. Como furo, fica justo demais para o parafuso: para um furo em que se rosqueia um parafuso, use Furo roscado.",
+  "inspector.threadMakeTappedHole": "Transformar em furo roscado",
   "inspector.threadHead": "Cabeça",
   "inspector.thread": "Rosca",
   "inspector.bundleNote": "Um conjunto apenas mantém as peças juntas: cada uma conserva sua cor e seu tipo, os orifícios não removem material, e cada peça é exportada como um sólido separado. A tecla E abre o conjunto para edição; Ctrl+Shift+G o desfaz.",

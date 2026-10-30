@@ -1691,6 +1691,8 @@ export const MESSAGES_ZH_CN: Partial<Record<MessageKey, string>> = {
   "gear.rackHint": "每齿齿距 {pitchLength} mm；长度为齿数 × 齿距。模数为 {module} 的齿轮可在其上滚动：其中心位于分度线前方 齿数 × 模数 / 2 处，分度线在齿顶后方 {offset} mm。",
   "gear.rackRoundHint": "圆弧齿，每齿齿距 {pitchLength} mm；长度为齿数 × 齿距。模数为 {module} 的圆齿齿轮可在其上滚动：其中心位于分度线前方 齿数 × 模数 / 2 处，分度线在齿顶后方 {offset} mm。",
   "inspector.threadRole": "类型",
+  "inspector.threadBoltAsHoleHint": "螺纹杆或螺钉是螺栓的完整尺寸，没有间隙。作为孔时，螺栓会拧不进去：要做拧螺栓的孔，请使用“螺纹孔”。",
+  "inspector.threadMakeTappedHole": "改为螺纹孔",
   "inspector.threadHead": "头部",
   "inspector.thread": "螺纹",
   "thread.rod": "螺纹杆",

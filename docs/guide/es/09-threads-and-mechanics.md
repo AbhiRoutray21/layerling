@@ -12,7 +12,7 @@ Elige {{ui:shape.thread}} en la biblioteca de formas. En {{ui:inspector.threadRo
 - **{{ui:thread.rod}}:** un cilindro roscado, por ejemplo un tornillo sin cabeza.
 - **{{ui:thread.screw}}:** con cabeza. En {{ui:inspector.threadHead}} eliges entre {{ui:thread.headCylinder}}, {{ui:thread.headCountersunk}} y {{ui:thread.headHex}}.
 - **{{ui:thread.nut}}:** la tuerca correspondiente.
-- **{{ui:thread.bore}}:** un orificio roscado. Es un orificio: arrástralo dentro de una pieza, agrupa las dos y la pieza tendrá una rosca interior.
+- **{{ui:thread.bore}}:** un orificio roscado. Es un orificio: arrástralo dentro de una pieza, agrupa las dos y la pieza tendrá una rosca interior. Para un agujero en el que se enrosca un perno, usa siempre {{ui:thread.bore}}: una {{ui:thread.rod}} o un {{ui:thread.screw}} como hueco tiene el tamaño completo del perno sin holgura y queda demasiado justo. Si aun así lo pones como hueco, layerling lo avisa y {{ui:inspector.threadMakeTappedHole}} lo convierte en {{ui:thread.bore}}.
 
 ![Un tornillo de cabeza cilíndrica. A la derecha, el tipo y la forma de la cabeza; más abajo, el tamaño, el paso y el perfil.](shot:thread-screw)
 

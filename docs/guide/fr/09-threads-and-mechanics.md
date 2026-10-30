@@ -12,7 +12,7 @@ Choisissez {{ui:shape.thread}} dans la bibliothèque de formes. Sous {{ui:inspec
 - **{{ui:thread.rod}} :** un cylindre avec filetage, par exemple une vis sans tête.
 - **{{ui:thread.screw}} :** avec une tête. Vous choisissez le {{ui:inspector.threadHead}} : {{ui:thread.headCylinder}}, {{ui:thread.headCountersunk}} ou {{ui:thread.headHex}}.
 - **{{ui:thread.nut}} :** l'écrou correspondant.
-- **{{ui:thread.bore}} :** un trou taraudé. C'est un trou. Faites-le glisser dans une pièce, regroupez les deux et la pièce aura un filetage interne.
+- **{{ui:thread.bore}} :** un trou taraudé. C'est un trou. Faites-le glisser dans une pièce, regroupez les deux et la pièce aura un filetage interne. Pour un trou dans lequel se visse un boulon, prenez toujours le {{ui:thread.bore}} : une {{ui:thread.rod}} ou une {{ui:thread.screw}} en perçage a la taille pleine du boulon, sans jeu, et sort trop serrée. Si vous la mettez quand même en perçage, layerling le signale, et {{ui:inspector.threadMakeTappedHole}} la change en {{ui:thread.bore}}.
 
 ![Une vis avec une culasse. À droite : type et forme de la tête, plus bas taille, pas et profil.](shot:thread-screw)
 

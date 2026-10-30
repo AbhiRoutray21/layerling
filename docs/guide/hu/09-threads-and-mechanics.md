@@ -12,7 +12,7 @@ Válaszd az alakzattárban a {{ui:shape.thread}} alakzatot. A {{ui:inspector.thr
 - **{{ui:thread.rod}}:** menetes henger, például fej nélküli csavar.
 - **{{ui:thread.screw}}:** fejjel. Kiválasztod a {{ui:inspector.threadHead}} típusát: {{ui:thread.headCylinder}}, {{ui:thread.headCountersunk}} vagy {{ui:thread.headHex}}.
 - **{{ui:thread.nut}}:** a hozzá illő anya.
-- **{{ui:thread.bore}}:** menetes furat. Ez lyuk. Húzd bele egy alkatrészbe, csoportosítsd a kettőt, és az alkatrészben belső menet lesz.
+- **{{ui:thread.bore}}:** menetes furat. Ez lyuk. Húzd bele egy alkatrészbe, csoportosítsd a kettőt, és az alkatrészben belső menet lesz. Olyan furathoz, amelybe csavart hajtasz, mindig a {{ui:thread.bore}} legyen: a {{ui:thread.rod}} vagy {{ui:thread.screw}} üregként a csavar teljes mérete, holtjáték nélkül, és túl szűk lesz. Ha mégis üregnek állítod, a layerling figyelmeztet, és a {{ui:inspector.threadMakeTappedHole}} gombbal {{ui:thread.bore}} lesz belőle.
 
 ![Egy hengeres fejű csavar. Jobbra: fajta és fejforma, lejjebb méret, menetemelkedés és profil.](shot:thread-screw)
 

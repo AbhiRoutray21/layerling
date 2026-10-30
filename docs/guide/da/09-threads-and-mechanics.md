@@ -12,7 +12,7 @@ Vælg {{ui:shape.thread}} i formbiblioteket. Under {{ui:inspector.threadRole}} b
 - **{{ui:thread.rod}}:** en cylinder med gevind, for eksempel en skrue uden hoved.
 - **{{ui:thread.screw}}:** med hoved. Du vælger {{ui:inspector.threadHead}}: {{ui:thread.headCylinder}}, {{ui:thread.headCountersunk}} eller {{ui:thread.headHex}}.
 - **{{ui:thread.nut}}:** den matchende møtrik.
-- **{{ui:thread.bore}}:** et gevindhul. Det er et hul. Træk det ind i en del, gruppér begge, og delen har et indvendigt gevind.
+- **{{ui:thread.bore}}:** et gevindhul. Det er et hul. Træk det ind i en del, gruppér begge, og delen har et indvendigt gevind. Til et hul, som en bolt skrues i, skal du altid bruge {{ui:thread.bore}}: En {{ui:thread.rod}} eller {{ui:thread.screw}} som hul har boltens fulde mål uden spillerum og bliver for stram. Sætter du den alligevel som hul, gør layerling opmærksom på det, og {{ui:inspector.threadMakeTappedHole}} laver den om til et {{ui:thread.bore}}.
 
 ![En skrue med cylinderhoved. Til højre: type og hovedform, længere nede størrelse, deling og profil.](shot:thread-screw)
 

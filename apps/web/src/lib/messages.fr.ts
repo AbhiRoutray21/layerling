@@ -1967,6 +1967,8 @@ export const MESSAGES_FR: Partial<Record<MessageKey, string>> = {
   "gear.rackHint": "Pas {pitchLength} mm par dent ; la longueur est égale aux dents × pas. Un engrenage du module {module} roule dessus : son centre place ses dents × module / 2 devant la ligne de pas, qui se trouve {offset} mm derrière les pointes des dents.",
   "gear.rackRoundHint": "Dents rondes, pas {pitchLength} mm par dent ; la longueur est égale aux dents × pas. Un engrenage rond du module {module} roule dessus : son centre place ses dents × module / 2 devant la ligne de pas, qui se trouve {offset} mm derrière les pointes des dents.",
   "inspector.threadRole": "Type",
+  "inspector.threadBoltAsHoleHint": "Une tige filetée ou une vis a la taille pleine du boulon, sans jeu. En trou, elle sort trop serrée pour le boulon : pour un trou dans lequel se visse un boulon, utilisez Trou taraudé.",
+  "inspector.threadMakeTappedHole": "En faire un trou taraudé",
   "inspector.threadHead": "Tête",
   "inspector.thread": "Filetage",
   "thread.rod": "Tige filetée",

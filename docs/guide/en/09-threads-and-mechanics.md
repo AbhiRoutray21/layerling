@@ -12,7 +12,7 @@ Choose {{ui:shape.thread}} in the shape library. Under {{ui:inspector.threadRole
 - **{{ui:thread.rod}}:** a cylinder with thread, for example a screw without a head.
 - **{{ui:thread.screw}}:** with a head. You choose the {{ui:inspector.threadHead}}: {{ui:thread.headCylinder}}, {{ui:thread.headCountersunk}} or {{ui:thread.headHex}}.
 - **{{ui:thread.nut}}:** the matching nut.
-- **{{ui:thread.bore}}:** a tapped hole. It is a hole. Drag it into a part, group both, and the part has an internal thread.
+- **{{ui:thread.bore}}:** a tapped hole. It is a hole. Drag it into a part, group both, and the part has an internal thread. For a hole a bolt screws into, always use the {{ui:thread.bore}}: a {{ui:thread.rod}} or {{ui:thread.screw}} set as a hole has the bolt's full size without play and comes out too tight. If you set one as a hole anyway, layerling points this out, and {{ui:inspector.threadMakeTappedHole}} turns it into a {{ui:thread.bore}}.
 
 ![A screw with a cylinder head. On the right: kind and head shape, further down size, pitch and profile.](shot:thread-screw)
 

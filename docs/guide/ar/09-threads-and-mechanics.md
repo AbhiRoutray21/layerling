@@ -12,7 +12,7 @@ summary: براغي وصواميل وثقوب ملولبة تتطابق معًا
 - **{{ui:thread.rod}}:** أسطوانة عليها سن لولبي، مثل برغي بلا رأس.
 - **{{ui:thread.screw}}:** برأس. تختار {{ui:inspector.threadHead}}: {{ui:thread.headCylinder}} أو {{ui:thread.headCountersunk}} أو {{ui:thread.headHex}}.
 - **{{ui:thread.nut}}:** الصامولة المطابقة.
-- **{{ui:thread.bore}}:** ثقب ملولب. وهو ثقب: اسحبه إلى داخل قطعة، وجمّعهما، فتحصل القطعة على سن لولبي داخلي.
+- **{{ui:thread.bore}}:** ثقب ملولب. وهو ثقب: اسحبه إلى داخل قطعة، وجمّعهما، فتحصل القطعة على سن لولبي داخلي. للثقب الذي يُربط فيه مسمار استخدم دائمًا {{ui:thread.bore}}: الـ{{ui:thread.rod}} أو الـ{{ui:thread.screw}} كتجويف له المقاس الكامل للمسمار بلا خلوص فيخرج ضيقًا جدًا. إن جعلته تجويفًا رغم ذلك ينبّهك layerling، و{{ui:inspector.threadMakeTappedHole}} يحوّله إلى {{ui:thread.bore}}.
 
 ![برغي برأس أسطواني. على اليمين: النوع وشكل الرأس، وتحتهما الحجم والخطوة وشكل السن.](shot:thread-screw)
 

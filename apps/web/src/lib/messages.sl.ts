@@ -1621,6 +1621,8 @@ export const MESSAGES_SL: Partial<Record<MessageKey, string>> = {
   "gear.helical": "Poševni zobnik",
   "gear.bevel": "Stožčasti zobnik",
   "inspector.threadRole": "Vrsta",
+  "inspector.threadBoltAsHoleHint": "Navojna palica ali vijak ima polno mero vijaka in nobene zračnosti. Kot luknja je za vijak pretesna: za luknjo, v katero se privije vijak, uporabi Navojno luknjo.",
+  "inspector.threadMakeTappedHole": "Spremeni v navojno luknjo",
   "inspector.threadHead": "Glava",
   "inspector.thread": "Navoj",
   "thread.rod": "Navojna palica",

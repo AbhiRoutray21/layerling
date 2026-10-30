@@ -12,7 +12,7 @@ V knjižnici oblik izberi {{ui:shape.thread}}. Pod {{ui:inspector.threadRole}} s
 - **{{ui:thread.rod}}:** valj z navojem, na primer vijak brez glave.
 - **{{ui:thread.screw}}:** z glavo. {{ui:inspector.threadHead}} izbereš: {{ui:thread.headCylinder}}, {{ui:thread.headCountersunk}} ali {{ui:thread.headHex}}.
 - **{{ui:thread.nut}}:** ustrezna matica.
-- **{{ui:thread.bore}}:** navojna luknja. To je luknja. Povleci jo v del, oboje združi v skupino in del ima notranji navoj.
+- **{{ui:thread.bore}}:** navojna luknja. To je luknja. Povleci jo v del, oboje združi v skupino in del ima notranji navoj. Za luknjo, v katero se privije vijak, vedno uporabi {{ui:thread.bore}}: {{ui:thread.rod}} ali {{ui:thread.screw}} kot luknja ima polno mero vijaka brez zračnosti in je pretesna. Če jo vseeno nastaviš kot luknjo, te layerling opozori, {{ui:inspector.threadMakeTappedHole}} pa iz nje naredi {{ui:thread.bore}}.
 
 ![Vijak z valjasto glavo. Desno sta vrsta in oblika glave, nižje velikost, korak in profil.](shot:thread-screw)
 

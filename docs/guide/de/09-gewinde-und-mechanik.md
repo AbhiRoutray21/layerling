@@ -12,7 +12,7 @@ Wähle {{ui:shape.thread}} in der Formenbibliothek. Unter {{ui:inspector.threadR
 - **{{ui:thread.rod}}:** ein Zylinder mit Gewinde, zum Beispiel eine Schraube ohne Kopf.
 - **{{ui:thread.screw}}:** mit Kopf. Die {{ui:inspector.threadHead}} wählst du aus: {{ui:thread.headCylinder}}, {{ui:thread.headCountersunk}} oder {{ui:thread.headHex}}.
 - **{{ui:thread.nut}}:** die passende Mutter.
-- **{{ui:thread.bore}}:** ein Gewindeloch. Es ist eine Aussparung. Ziehe es in ein Teil, gruppiere beides, und das Teil hat ein Innengewinde.
+- **{{ui:thread.bore}}:** ein Gewindeloch. Es ist eine Aussparung. Ziehe es in ein Teil, gruppiere beides, und das Teil hat ein Innengewinde. Für ein Loch, in das eine Schraube kommt, nimm immer das {{ui:thread.bore}}: Eine {{ui:thread.rod}} oder {{ui:thread.screw}} als Aussparung hat das volle Maß der Schraube ohne Spiel und wird zu eng. Setzt du sie trotzdem als Aussparung, weist layerling darauf hin, und {{ui:inspector.threadMakeTappedHole}} macht ein {{ui:thread.bore}} daraus.
 
 ![Eine Schraube mit Zylinderkopf. Rechts stehen Art und Kopfform, weiter unten Größe, Steigung und Profil.](shot:thread-screw)
 

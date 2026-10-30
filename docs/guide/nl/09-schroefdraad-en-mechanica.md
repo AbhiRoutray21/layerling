@@ -12,7 +12,7 @@ Kies {{ui:shape.thread}} in de vormenbibliotheek. Onder {{ui:inspector.threadRol
 - **{{ui:thread.rod}}:** een cilinder met schroefdraad, bijvoorbeeld een schroef zonder kop.
 - **{{ui:thread.screw}}:** met een kop. Je kiest de {{ui:inspector.threadHead}}: {{ui:thread.headCylinder}}, {{ui:thread.headCountersunk}} of {{ui:thread.headHex}}.
 - **{{ui:thread.nut}}:** de bijpassende moer.
-- **{{ui:thread.bore}}:** een getapt gat. Het is een gat. Sleep het in een onderdeel, groepeer de twee, en het onderdeel heeft binnendraad.
+- **{{ui:thread.bore}}:** een getapt gat. Het is een gat. Sleep het in een onderdeel, groepeer de twee, en het onderdeel heeft binnendraad. Gebruik voor een gat waar een bout in gaat altijd het {{ui:thread.bore}}: een {{ui:thread.rod}} of {{ui:thread.screw}} als gat heeft de volle maat van de bout zonder speling en wordt te krap. Zet je er toch een als gat, dan wijst layerling je erop en maakt {{ui:inspector.threadMakeTappedHole}} er een {{ui:thread.bore}} van.
 
 ![Een schroef met een cilinderkop. Rechts: soort en kopvorm, verder omlaag maat, spoed en profiel.](shot:thread-screw)
 

@@ -1779,6 +1779,8 @@ export const MESSAGES_JA: Partial<Record<MessageKey, string>> = {
   "gear.rackHint": "ピッチは1歯あたり {pitchLength} mm、長さは歯数 × ピッチです。モジュール {module} の歯車がその上を転がります。歯車の中心はピッチ線の手前に歯数 × モジュール / 2 の位置にあり、ピッチ線は歯先から {offset} mm 奥にあります。",
   "gear.rackRoundHint": "丸い歯、ピッチは1歯あたり {pitchLength} mm、長さは歯数 × ピッチです。モジュール {module} の丸歯車がその上を転がります。歯車の中心はピッチ線の手前に歯数 × モジュール / 2 の位置にあり、ピッチ線は歯先から {offset} mm 奥にあります。",
   "inspector.threadRole": "種類",
+  "inspector.threadBoltAsHoleHint": "寸切りボルトやねじはボルトの実寸そのままで、遊びがありません。穴にするとボルトにはきつすぎます。ボルトをねじ込む穴には「ねじ穴」を使ってください。",
+  "inspector.threadMakeTappedHole": "ねじ穴に変える",
   "inspector.threadHead": "頭部",
   "inspector.thread": "ねじ",
   "thread.rod": "寸切りボルト",

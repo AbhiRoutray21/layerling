@@ -1646,6 +1646,8 @@ export const MESSAGES_IT: Partial<Record<MessageKey, string>> = {
   "gear.rackHint": "Passo di {pitchLength} mm per dente; la lunghezza è uguale al numero di denti × passo. Un ingranaggio di modulo {module} scorre sulla cremagliera: il suo centro si trova davanti alla linea primitiva a una distanza pari a numero di denti × modulo / 2. La linea primitiva si trova {offset} mm dietro le punte dei denti.",
   "gear.rackRoundHint": "Denti arrotondati, passo di {pitchLength} mm per dente; la lunghezza è uguale al numero di denti × passo. Un ingranaggio arrotondato di modulo {module} scorre sulla cremagliera: il suo centro si trova davanti alla linea primitiva a una distanza pari a numero di denti × modulo / 2. La linea primitiva si trova {offset} mm dietro le punte dei denti.",
   "inspector.threadRole": "Tipo",
+  "inspector.threadBoltAsHoleHint": "Una barra filettata o una vite ha la misura piena del bullone e nessun gioco. Come foro risulta troppo stretto per il bullone: per un foro in cui si avvita un bullone usa Foro filettato.",
+  "inspector.threadMakeTappedHole": "Trasforma in foro filettato",
   "inspector.threadHead": "Testa",
   "inspector.thread": "Filettatura",
   "thread.rod": "Barra filettata",

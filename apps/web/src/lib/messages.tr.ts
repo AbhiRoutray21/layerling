@@ -1678,6 +1678,8 @@ export const MESSAGES_TR: Partial<Record<MessageKey, string>> = {
   "gear.rackHint": "Diş başına adım {pitchLength} mm; uzunluk diş × adım. {module} modüllü bir dişli üzerinde yuvarlanır: merkezi, diş uçlarının {offset} mm gerisinde duran taksimat çizgisinin, kendi dişleri × modül / 2 önünde durur.",
   "gear.rackRoundHint": "Yuvarlak dişler, diş başına adım {pitchLength} mm; uzunluk diş × adım. {module} modüllü yuvarlak bir dişli üzerinde yuvarlanır: merkezi, diş uçlarının {offset} mm gerisinde duran taksimat çizgisinin, kendi dişleri × modül / 2 önünde durur.",
   "inspector.threadRole": "Tür",
+  "inspector.threadBoltAsHoleHint": "Dişli çubuk veya vida, cıvatanın tam ölçüsündedir ve boşluğu yoktur. Delik olarak cıvata için fazla dar çıkar: içine cıvata vidalanan bir delik için Diş açılmış delik kullanın.",
+  "inspector.threadMakeTappedHole": "Diş açılmış deliğe çevir",
   "inspector.threadHead": "Baş",
   "inspector.thread": "Diş",
   "thread.rod": "Dişli çubuk",

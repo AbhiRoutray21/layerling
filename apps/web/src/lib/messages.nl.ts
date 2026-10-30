@@ -1981,6 +1981,8 @@ export const MESSAGES_NL: Record<MessageKey, string> = {
   "gear.rackHint": "Steek {pitchLength} mm per tand; de lengte is tanden × steek. Een tandwiel met module {module} rolt erover: zijn middelpunt staat zijn tanden × module / 2 vóór de steeklijn, die {offset} mm achter de tandtoppen ligt.",
   "gear.rackRoundHint": "Ronde tanden, steek {pitchLength} mm per tand; de lengte is tanden × steek. Een rond tandwiel met module {module} rolt erover: zijn middelpunt staat zijn tanden × module / 2 vóór de steeklijn, die {offset} mm achter de tandtoppen ligt.",
   "inspector.threadRole": "Type",
+  "inspector.threadBoltAsHoleHint": "Een draadeind of schroef heeft de volle maat van de bout en geen speling. Als gat wordt hij te krap voor de bout: gebruik voor een gat waar een bout in gaat Getapt gat.",
+  "inspector.threadMakeTappedHole": "Maak er een getapt gat van",
   "inspector.threadHead": "Kop",
   "inspector.thread": "Schroefdraad",
   "thread.rod": "Draadeind",

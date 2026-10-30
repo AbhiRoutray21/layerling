@@ -12,7 +12,7 @@ summary: 相互配合的螺钉、螺母与螺纹孔，以及齿轮、弹簧、�
 - **{{ui:thread.rod}}：** 带螺纹的圆柱体，例如没有头的螺钉。
 - **{{ui:thread.screw}}：** 带头部。你可以选择 {{ui:inspector.threadHead}}：{{ui:thread.headCylinder}}、{{ui:thread.headCountersunk}} 或 {{ui:thread.headHex}}。
 - **{{ui:thread.nut}}：** 配套的螺母。
-- **{{ui:thread.bore}}：** 螺纹孔。它属于孔。把它拖进零件，将两者分组，零件就有内螺纹。
+- **{{ui:thread.bore}}：** 螺纹孔。它属于孔。把它拖进零件，将两者分组，零件就有内螺纹。 要做拧螺栓的孔，请始终使用{{ui:thread.bore}}：{{ui:thread.rod}}或{{ui:thread.screw}}作为孔时是螺栓的完整尺寸，没有间隙，会太紧。如果仍把它设为孔，layerling 会提示你，点击{{ui:inspector.threadMakeTappedHole}}即可改为{{ui:thread.bore}}。
 
 ![一个带圆柱头的螺钉。右侧：类型和头部形状，往下是规格、螺距和牙型。](shot:thread-screw)
 
