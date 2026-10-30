@@ -1,12 +1,12 @@
 [
   {
     "title": {
-      "de": "Öffnung für USB-Buchsen",
-      "en": "An opening for USB sockets"
+      "de": "Öffnungen für USB, HDMI, DisplayPort und RJ45",
+      "en": "Openings for USB, HDMI, DisplayPort and RJ45"
     },
     "body": {
-      "de": "Die neue Form „Anschlussöffnung“ setzt das Loch für eine USB-C-, Micro-USB- oder USB-A-Buchse in eine Gehäusewand. Buchse wählen, an die Wand schieben, gruppieren - das Maß mit etwas Luft zum Drucken ist schon drin.",
-      "en": "The new shape \"Port opening\" puts the hole for a USB-C, Micro-USB or USB-A socket into a box wall. Pick the socket, move it onto the wall, group - the size with a little room for printing is already in."
+      "de": "Die neue Form „Anschlussöffnung“ setzt das Loch für eine Buchse in eine Gehäusewand: USB-C, Micro-USB, USB-A, HDMI, Mini-HDMI, DisplayPort, Mini-DisplayPort oder RJ45. Buchse wählen, an die Wand schieben, gruppieren. Die Maße kommen aus Datenblättern und Normen, mit etwas Luft zum Drucken, bei HDMI und DisplayPort mit den schrägen Ecken.",
+      "en": "The new shape \"Port opening\" puts the hole for a socket into a box wall: USB-C, Micro-USB, USB-A, HDMI, Mini HDMI, DisplayPort, Mini DisplayPort or RJ45. Pick the socket, move it onto the wall, group. The sizes come from data sheets and standards, with a little room for printing, and HDMI and DisplayPort get their slanted corners."
     }
   },
   {
