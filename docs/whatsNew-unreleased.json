@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "title": {
+      "de": "Eine Reihe gleichmäßig über eine Platte verteilen",
+      "en": "Spread a row evenly over a plate"
+    },
+    "body": {
+      "de": "Im Muster gibt es unter „Reihe“ jetzt „Über einen Körper verteilen“: Setze ein Loch auf eine Platte, wähle entlang X oder Y und den Abstand zum Rand, und die Löcher füllen die Platte von einem Ende zum anderen. Der Abstand folgt der Anzahl, du musst ihn nicht mehr ausrechnen - etwa für ein Schlüsselbrett oder eine Garderobe.",
+      "en": "The pattern's row has a new \"Spread over a body\": put a hole on a plate, choose along X or Y and the gap to the edge, and the holes fill the plate from one end to the other. The spacing follows the count, so there is nothing left to work out - for a key holder or a coat rack, say."
+    }
+  }
+]

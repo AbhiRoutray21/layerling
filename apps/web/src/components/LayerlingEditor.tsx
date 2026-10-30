@@ -76,7 +76,7 @@ import { scaleShapesByPercent } from "@/lib/scaleByPercent";
 import { canToggleGroupColors, colorForParts, groupShowsPartColors } from "@/lib/groupColors";
 import { disposeBoundsTree } from "three-mesh-bvh";
 import { SHELL_SIDES, shellMaxThickness, shellOpeningsFor, shellOpenSides } from "@/lib/shellLimits";
-import { arrayCirclePivot, arrayFollowingPivot, arrayGroupsCopies, circleStepDegrees, clampArrayCount, moveAlongRadius, rotateAroundVertical, rowOffset, singleAxisSpacing, type ArraySettings } from "@/lib/shapeArray";
+import { arrayCirclePivot, arrayFitGap, arrayFitShift, arrayFollowingPivot, arrayGroupsCopies, arrayWithFit, circleStepDegrees, clampArrayCount, moveAlongRadius, rotateAroundVertical, rowOffset, singleAxisSpacing, type ArraySettings } from "@/lib/shapeArray";
 import { bedOverhangs, keepDismissedOverhangs, printerPresetById, shapeBedFootprint, type BedOverhang } from "@/lib/printBed";
 import { SplitPanel, type SplitWorkplaneDirection } from "./workplane/SplitPanel";
 import { NO_SPLIT_ROTATION, modelSplitPlane, snapSplitPositionToVertices, splitOrientationForNormal, splitAxisFromLabel, splitAxisLabel, splitRotationAxes, type SplitRotation } from "@/lib/modelSplit";
@@ -1618,6 +1618,34 @@ async function downloadBlobFile(filename: string, blob: Blob) {
   window.setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
+
+/**
+ * The body a row can be spread over (#1037): of the other solids, the smallest whose footprint holds the middle of the
+ * pieces and is larger than they are both ways - the plate the holes sit in or on.
+ */
+function arrayFitBodyFor(pieces: WorkplaneShape[], shapes: WorkplaneShape[]) {
+  if (pieces.length === 0) return null;
+  const ids = new Set(pieces.map((shape) => shape.id));
+  const box = boundsForShapes(pieces);
+  const middleX = (box.minX + box.maxX) / 2;
+  const middleZ = (box.minZ + box.maxZ) / 2;
+  let best: { shape: WorkplaneShape; area: number } | null = null;
+  for (const shape of shapes) {
+    if (ids.has(shape.id) || shape.hole || isNonSolidShape(shape)) continue;
+    const body = boundsForShapes([shape]);
+    if (middleX < body.minX || middleX > body.maxX || middleZ < body.minZ || middleZ > body.maxZ) continue;
+    if (body.maxX - body.minX <= box.maxX - box.minX || body.maxZ - body.minZ <= box.maxZ - box.minZ) continue;
+    const area = (body.maxX - body.minX) * (body.maxZ - body.minZ);
+    if (!best || area < best.area) best = { shape, area };
+  }
+  return best?.shape ?? null;
+}
+
+/** The pattern's settings with a fit to a body worked out into spacings; the body gone, they stay as they are. */
+function arraySettingsResolved(settings: ArraySettings, sources: WorkplaneShape[], shapes: WorkplaneShape[]): ArraySettings {
+  const body = settings.fit ? shapes.find((shape) => shape.id === settings.fit?.bodyId) : undefined;
+  return arrayWithFit(settings, boundsForShapes(sources), body ? boundsForShapes([body]) : null);
+}
 
 /**
  * The copies of a pattern: every selected shape, once per extra piece, moved
@@ -3805,8 +3833,8 @@ export function LayerlingEditor({
   }, [alignAxes, alignMode, effectiveAlignAnchorId, selectedShapes]);
   // The copies a pattern would add, shown on the workplane until "Create".
   const arrayPreview = useMemo(
-    () => (arrayTool && selectedShapes.length > 0 ? arrayCopies(selectedShapes, arrayTool) : null),
-    [arrayTool, selectedShapes],
+    () => (arrayTool && selectedShapes.length > 0 ? arrayCopies(selectedShapes, arraySettingsResolved(arrayTool, selectedShapes, shapes)) : null),
+    [arrayTool, selectedShapes, shapes],
   );
   // The holes a hole pattern would cut, shown on the face until "Create".
   const holePatternPreview = useMemo(
@@ -4133,6 +4161,24 @@ export function LayerlingEditor({
     if (arrayPivotX === undefined || arrayPivotZ === undefined) return;
     setArrayTool((current) => (current ? arrayFollowingPivot(current, { x: arrayPivotX, z: arrayPivotZ }) : current));
   }, [arrayPivotX, arrayPivotZ]);
+
+  // A row spread over a body (#1037): the body it runs over - the one chosen, or else the one under the pieces - and
+  // the pieces' gap to its nearer end along the chosen axis.
+  const arrayIsRow = arrayTool?.mode === "row";
+  const arrayFitBodyId = arrayTool?.fit?.bodyId;
+  const arrayFitAxis = arrayTool?.fit?.axis;
+  const arrayFitBody = useMemo(
+    () => (!arrayIsRow ? null : arrayFitBodyId ? shapes.find((shape) => shape.id === arrayFitBodyId) ?? null : arrayFitBodyFor(selectedShapes, shapes)),
+    [arrayFitBodyId, arrayIsRow, selectedShapes, shapes],
+  );
+  const arrayFitSpans = useMemo(() => {
+    if (!arrayFitBody || !arrayFitAxis || selectedShapes.length === 0) return null;
+    const pieces = boundsForShapes(selectedShapes);
+    const body = boundsForShapes([arrayFitBody]);
+    return arrayFitAxis === "x"
+      ? { piece: { min: pieces.minX, max: pieces.maxX }, body: { min: body.minX, max: body.maxX } }
+      : { piece: { min: pieces.minZ, max: pieces.maxZ }, body: { min: body.minZ, max: body.maxZ } };
+  }, [arrayFitAxis, arrayFitBody, selectedShapes]);
 
 
   const pickRotationPivot = useCallback(async (target: PivotPoint | null, face?: LayFlatPick | null) => {
@@ -6083,7 +6129,7 @@ export function LayerlingEditor({
 
   const applyArrayTool = useCallback(async () => {
     if (!arrayTool || selectedShapes.length === 0) return;
-    const copies = arrayCopies(selectedShapes, arrayTool);
+    const copies = arrayCopies(selectedShapes, arraySettingsResolved(arrayTool, selectedShapes, shapes));
     const groupPieces = arrayGroupsCopies(arrayTool) && !selectedShapes.some((shape) => isNonSolidShape(shape));
     // A circle leaves its centre as the pieces' pivot, to align another part to or mark it (#990).
     const piecesBounds = boundsForShapes([...selectedShapes, ...copies]);
@@ -6126,6 +6172,16 @@ export function LayerlingEditor({
       result.openGapEdges ? t("status.cutLeftOpen", { count: result.openGapEdges }) : result.mergeWarning ?? t("status.groupedMany", { count: pieces.length }),
     );
   }, [activeRotationPivot, arrayTool, commitShapes, selectedIds, selectedShapes, shapes]);
+
+  // A new gap moves the originals; a run of changes is one step of the history, like a run of arrow keys.
+  const setArrayFitGap = useCallback((gap: number) => {
+    if (!arrayFitSpans || !arrayFitAxis) return;
+    const shift = arrayFitShift(arrayFitSpans.piece, arrayFitSpans.body, gap);
+    if (Math.abs(shift) < 1e-9) return;
+    const selected = new Set(selectedIds);
+    const moved = shapes.map((shape) => (!selected.has(shape.id) ? shape : arrayFitAxis === "x" ? { ...shape, x: shape.x + shift } : { ...shape, z: shape.z + shift }));
+    commitShapes(moved, selectedIds, undefined, "array-fit-gap");
+  }, [arrayFitAxis, arrayFitSpans, commitShapes, selectedIds, shapes]);
 
   const duplicateShapeAt = useCallback((id: string, position: { x: number; z: number }) => {
     const shape = shapesRef.current.find((entry) => entry.id === id);
@@ -11669,10 +11725,30 @@ export function LayerlingEditor({
       if (command.action === "array_objects") {
         const requestedIds = mcpStringArray(params.ids);
         const ids = requestedIds.length > 0 ? requestedIds : selectedIdsRef.current;
-        const sources = ids.map((id) => findShape(id)).filter((shape): shape is WorkplaneShape => Boolean(shape));
-        if (sources.length === 0) throw new Error("No objects to repeat - pass ids or select something first");
-        if (sources.some((shape) => shape.locked)) throw new Error("A locked object cannot be repeated - unlock it first");
+        const picked = ids.map((id) => findShape(id)).filter((shape): shape is WorkplaneShape => Boolean(shape));
+        if (picked.length === 0) throw new Error("No objects to repeat - pass ids or select something first");
+        if (picked.some((shape) => shape.locked)) throw new Error("A locked object cannot be repeated - unlock it first");
         const mode = params.mode === "circle" ? "circle" : "row";
+        // `fitAxis` spreads a row over a body as the Pattern window does (#1037): `fitTo`, or else the body under the
+        // pieces; `edgeGap` first moves the originals that far in from the body's nearer end.
+        let fit: ArraySettings["fit"] = null;
+        let sources = picked;
+        if (mode === "row" && (params.fitAxis === "x" || params.fitAxis === "y")) {
+          const axis = params.fitAxis;
+          const body = params.fitTo !== undefined ? findShape(params.fitTo) : arrayFitBodyFor(picked, currentShapes());
+          if (!body) throw new Error("No body to spread the row over: pass fitTo, or place the pieces on or in a body");
+          fit = { axis, bodyId: body.id };
+          if (params.edgeGap !== undefined) {
+            const box = boundsForShapes(picked);
+            const bodyBox = boundsForShapes([body]);
+            const shift = axis === "x"
+              ? arrayFitShift({ min: box.minX, max: box.maxX }, { min: bodyBox.minX, max: bodyBox.maxX }, Math.max(0, mcpNumber(params.edgeGap, 0)))
+              : arrayFitShift({ min: box.minZ, max: box.maxZ }, { min: bodyBox.minZ, max: bodyBox.maxZ }, Math.max(0, mcpNumber(params.edgeGap, 0)));
+            sources = picked.map((shape) => (axis === "x" ? { ...shape, x: shape.x + shift } : { ...shape, z: shape.z + shift }));
+          }
+        }
+        const movedSources = new Map(sources.filter((shape, index) => shape !== picked[index]).map((shape) => [shape.id, shape]));
+        const withMovedSources = (list: WorkplaneShape[]) => (movedSources.size ? list.map((shape) => movedSources.get(shape.id) ?? shape) : list);
         const direction = params.direction === "y" || params.direction === "z" ? params.direction : "x";
         const bounds = boundsForShapes(sources);
         // spacingX / spacingY / spacingZ step along several axes at once; the
@@ -11681,7 +11757,7 @@ export function LayerlingEditor({
         const spacings = perAxis
           ? { spacingX: mcpNumber(params.spacingX, 0), spacingY: mcpNumber(params.spacingY, 0), spacingZ: mcpNumber(params.spacingZ, 0) }
           : singleAxisSpacing(direction, mcpNumber(params.spacing, bounds.maxX - bounds.minX + 5));
-        const settings: ArraySettings = {
+        const settings: ArraySettings = arraySettingsResolved({
           mode,
           count: clampArrayCount(mcpNumber(params.count, 2)),
           ...spacings,
@@ -11691,14 +11767,15 @@ export function LayerlingEditor({
           rotateCopies: params.rotateCopies !== false,
           rise: mcpNumber(params.rise, 0),
           radiusChange: mcpNumber(params.radiusChange, 0),
-        };
+          fit,
+        }, sources, currentShapes());
         const copies = arrayCopies(sources, settings);
         const piecesBounds = boundsForShapes([...sources, ...copies]);
         const circlePivot = arrayCirclePivot(settings, piecesBounds.minY, piecesBounds.maxY);
         const pivotAnswer = circlePivot ? { pivot: { x: circlePivot.x, y: -circlePivot.z, z: circlePivot.y } } : {};
         const looseResult = (message: string, warning?: string) => {
           const ids = [...sources.map((shape) => shape.id), ...copies.map((shape) => shape.id)];
-          commitShapes([...shapesRef.current, ...copies], ids, message);
+          commitShapes([...withMovedSources(shapesRef.current), ...copies], ids, message);
           if (circlePivot) setRotationPivot({ selectionKey: ids.join("|"), point: circlePivot });
           return { settings, originals: sources.map((shape) => shape.id), copies: copies.map(mcpShapeSummary), ...pivotAnswer, ...(warning ? { warning } : {}) };
         };
@@ -14723,9 +14800,13 @@ export function LayerlingEditor({
       {arrayTool && selectedShapes.length > 0 ? (
         <ArrayPanel
           targetName={selectedShapes.length === 1 ? selectedShapes[0].name : t("array.targetMany", { count: selectedShapes.length })}
-          settings={arrayTool}
+          settings={arraySettingsResolved(arrayTool, selectedShapes, shapes)}
           workspace={workspaceSettings}
           pivotSet={Boolean(activeRotationPivot)}
+          fitBody={arrayFitBody ? { id: arrayFitBody.id, name: arrayFitBody.name } : null}
+          fitGap={arrayFitSpans ? arrayFitGap(arrayFitSpans.piece, arrayFitSpans.body).gap : null}
+          fitGapMax={arrayFitSpans ? (arrayFitSpans.body.max - arrayFitSpans.body.min) / 2 : 0}
+          onFitGap={setArrayFitGap}
           onChange={(patch) => setArrayTool((current) => current ? { ...current, ...patch } : current)}
           onApply={applyArrayTool}
           onCancel={() => {
