@@ -6,6 +6,9 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **Two Brazilian Portuguese guide chapters up to date (PR #1014):** Chapter 05 now has the cookie cutter, the letters of a name joined to each other included, and the three paragraphs on lofting between sketches; chapter 01 describes the ribbon's title row, the folding groups and the pin, greyed-out icons and the interactive help. The cookie cutter's part names still show in English in pt-BR until the interface catches up. Contributed by @lmagalhaes.
+- **The surface texture tool in Brazilian Portuguese (PR #1017, PR #1021):** Its patterns, profiles, masks and bonds, and all its labels, hints and status messages, are in pt-BR, so the panel no longer mixes languages. The same batch brings the hinge, hole pattern, ribbon pin, dense mesh and STEP import texts and the offset and texture cards on the welcome page into pt-BR, catches up three reworded sentences and calls a body "sólido" in the loft texts. Contributed by @lmagalhaes.
+
 ## 1.121.1
 
 - **Polish brought up to date (#1011):** The interface and the guide in Polish cover 1.121.0 again, the lid, the cookie cutter, the flexi joints and the ribbon pin included. Contributed by @cyryllo in #1011.
