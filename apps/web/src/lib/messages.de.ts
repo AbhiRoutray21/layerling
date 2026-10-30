@@ -3803,7 +3803,7 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "error.sketchOpenPaths": "Alle Pfade der Skizze sind offen. Schließe mindestens eine Kontur, bevor du die Skizze beendest. Oder schalte „Als Kontur bauen“ ein, dann wird die offene Linie selbst mit einer Breite gebaut.",
   "error.svgEmpty": "Die SVG-Datei ist leer.",
   "error.svgTooLarge": "Die SVG-Datei ist zu groß. Erlaubt sind höchstens {size} MB.",
-  "error.svgEntities": "Diese SVG-Datei nutzt Entitäten oder eine eigene Dokumenttyp-Definition. Erlaubt ist nur ein einfaches SVG-Dokument.",
+  "error.svgEntities": "Diese SVG-Datei hat eine eigene Dokumenttyp-Definition, die layerling nicht sicher lesen kann. Speichere sie noch einmal als einfaches SVG, etwa in Inkscape als „Optimiertes SVG“ oder in Illustrator mit „Exportieren als → SVG“.",
   "error.svgNaN": "Die SVG-Datei enthält ungültige Zahlen. Achte in Tinkercad darauf, dass die Arbeitsebene das Modell schneidet, bevor du den Querschnitt exportierst.",
   "error.svgTooComplex": "Die SVG-Datei ist zu umfangreich. Vereinfache die Zeichnung und versuche es noch einmal.",
   "error.svgExternal": "Die SVG-Datei verweist nur auf eine Datei außerhalb, die layerling nicht öffnen kann. Öffne das Bild selbst (PNG oder JPG) oder speichere die SVG mit der Zeichnung darin.",

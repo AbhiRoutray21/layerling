@@ -120,7 +120,7 @@ import { rotateSketchPoints, selectedClosedSketchPoints } from "@/lib/sketchRota
 import { PROJECT_THUMBNAIL_IDLE_MS, projectThumbnailSceneChanged, type ProjectThumbnailSceneKey } from "@/lib/projectThumbnail";
 import { importedShapeFromObj } from "@/lib/objImport";
 import { takeImportSvgWidth } from "@/lib/importPreferences";
-import { importFailureSummary, importModelFiles } from "@/lib/modelImport";
+import { importFailureReason, importFailureSummary, importModelFiles } from "@/lib/modelImport";
 import { dedupeProjectAssets } from "@/lib/projectAssets";
 import { useCustomShapes } from "@/lib/useCustomShapes";
 import { packBackup } from "@/lib/projectBackup";
@@ -13514,7 +13514,7 @@ export function LayerlingEditor({
 
     if (!importedShapes.length) {
       setNotice(failures.length === 1 && files.length <= 1
-        ? failures[0].reason
+        ? importFailureReason(failures[0])
         : t("status.importNoneFailed", { total: Math.max(files.length, failures.length), summary: failureSummary }), true);
       return { importedIds: [], failures };
     }

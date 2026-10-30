@@ -3782,7 +3782,7 @@ export const MESSAGES_FR: Partial<Record<MessageKey, string>> = {
   "error.sketchOpenPaths": "Tous les chemins de profil sont ouverts. Fermez au moins une boucle avant de terminer l'esquisse. Ou activez « Construire comme un trait » pour construire la ligne ouverte elle-même avec une largeur.",
   "error.svgEmpty": "Le fichier SVG est vide.",
   "error.svgTooLarge": "Le fichier SVG est trop volumineux. Le maximum est de {size} Mo.",
-  "error.svgEntities": "Ce fichier SVG utilise des entités ou un type de document qui lui est propre. Seul un document SVG brut est pris en charge.",
+  "error.svgEntities": "Ce fichier SVG a son propre type de document, que layerling ne peut pas lire en toute sécurité. Enregistre-le à nouveau en SVG simple, par exemple dans Inkscape en « SVG optimisé » ou dans Illustrator avec Exporter sous → SVG.",
   "error.svgNaN": "Le fichier SVG contient des nombres invalides. Dans Tinkercad, assurez-vous que le plan de travail coupe le modèle avant d'exporter la coupe transversale.",
   "error.svgTooComplex": "Le fichier SVG est trop complexe. Simplifiez le dessin et réessayez.",
   "error.svgExternal": "Le fichier SVG pointe uniquement vers un fichier externe que layerling ne peut pas ouvrir. Ouvrez l'image elle-même (PNG ou JPG), ou enregistrez le SVG en intégrant le dessin.",

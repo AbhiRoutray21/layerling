@@ -3554,7 +3554,7 @@ export const MESSAGES_DA: Partial<Record<MessageKey, string>> = {
   "error.sketchOpenPaths": "Alle profilstier er åbne. Luk mindst én løkke før du afslutter skitsen. Eller slå „Byg som en streg“ til, så bygges den åbne linje selv med en bredde.",
   "error.svgEmpty": "SVG-filen er tom.",
   "error.svgTooLarge": "SVG-filen er for stor. Maksimum er {size} MB.",
-  "error.svgEntities": "Denne SVG-fil bruger enheder eller en dokumenttype af sin egen. Kun et almindeligt SVG-dokument understøttes.",
+  "error.svgEntities": "Denne SVG-fil har sin egen dokumenttype, som layerling ikke kan læse sikkert. Gem den igen som almindelig SVG, fx i Inkscape som \"Optimeret SVG\" eller i Illustrator med Eksportér som → SVG.",
   "error.svgNaN": "SVG-filen indeholder ugyldige tal. I Tinkercad skal du sørge for at arbejdsplanet skærer modellen før du eksporterer tværsnittet.",
   "error.svgTooComplex": "SVG-filen er for kompleks. Forenkl tegningen og prøv igen.",
   "error.svgExternal": "SVG-filen refererer til eksterne filer. Indlejr kunsten i filen.",

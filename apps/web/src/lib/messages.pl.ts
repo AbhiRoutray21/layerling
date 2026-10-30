@@ -3787,7 +3787,7 @@ export const MESSAGES_PL: Partial<Record<MessageKey, string>> = {
   "error.sketchOpenPaths": "Wszystkie ścieżki profilu są otwarte. Zamknij co najmniej jedną pętlę przed zakończeniem szkicu. Albo włącz „Buduj jako obrys”, aby zbudować samą otwartą linię z szerokością.",
   "error.svgEmpty": "Plik SVG jest pusty.",
   "error.svgTooLarge": "Plik SVG jest za duży. Maksimum to {size} MB.",
-  "error.svgEntities": "Ten plik SVG używa encji lub własnego typu dokumentu. Obsługiwany jest tylko zwykły dokument SVG.",
+  "error.svgEntities": "Ten plik SVG ma własną definicję typu dokumentu, której layerling nie może bezpiecznie odczytać. Zapisz go ponownie jako zwykły SVG, np. w Inkscape jako „Zoptymalizowany SVG” lub w Illustratorze przez Eksportuj jako → SVG.",
   "error.svgNaN": "Plik SVG zawiera niepoprawne liczby. W Tinkercadzie upewnij się, że płaszczyzna robocza przecina model, zanim wyeksportujesz przekrój.",
   "error.svgTooComplex": "Plik SVG jest zbyt złożony. Uprość rysunek i spróbuj ponownie.",
   "error.svgExternal": "Plik SVG tylko wskazuje plik poza sobą, którego layerling nie może otworzyć. Otwórz sam obraz (PNG lub JPG) albo zapisz SVG z rysunkiem w środku.",

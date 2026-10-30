@@ -2824,7 +2824,7 @@ export const MESSAGES_TR: Partial<Record<MessageKey, string>> = {
   "error.sketchOpenPaths": "Tüm profil yolları açık. Eskizi bitirmeden önce en az bir döngüyü kapat. Veya açık çizginin kendisini bir genişlikle oluşturmak için 'Kontur olarak oluştur'u aç.",
   "error.svgEmpty": "SVG dosyası boş.",
   "error.svgTooLarge": "SVG dosyası çok büyük. En fazla {size} MB olabilir.",
-  "error.svgEntities": "Bu SVG dosyası kendi varlıklarını veya belge türünü kullanıyor. Sadece düz bir SVG belgesi desteklenir.",
+  "error.svgEntities": "Bu SVG dosyasının, layerling'in güvenle okuyamadığı kendine ait bir belge türü var. Dosyayı düz SVG olarak yeniden kaydet; örneğin Inkscape'te \"Optimize Edilmiş SVG\" olarak ya da Illustrator'da Farklı Dışa Aktar → SVG ile.",
   "error.svgNaN": "SVG dosyası geçersiz sayılar içeriyor. Tinkercad'de, kesiti dışa aktarmadan önce çalışma düzleminin modeli kestiğinden emin ol.",
   "error.svgTooComplex": "SVG dosyası çok karmaşık. Çizimi sadeleştirip tekrar dene.",
   "error.svgExternal": "SVG sadece dışındaki bir dosyaya işaret ediyor, layerling onu açamaz. O resmin kendisini aç (PNG veya JPG) veya SVG'yi çizimi içinde olacak şekilde kaydet.",

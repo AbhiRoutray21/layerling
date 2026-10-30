@@ -3803,7 +3803,7 @@ export const MESSAGES_NL: Record<MessageKey, string> = {
   "error.sketchOpenPaths": "Alle profielpaden zijn open. Sluit minstens één lus voordat je de schets afrondt. Of zet „Als lijn bouwen” aan om de open lijn zelf met een breedte te bouwen.",
   "error.svgEmpty": "Het SVG-bestand is leeg.",
   "error.svgTooLarge": "Het SVG-bestand is te groot. Het maximum is {size} MB.",
-  "error.svgEntities": "Dit SVG-bestand gebruikt eigen entiteiten of een eigen documenttype. Alleen een gewoon SVG-document wordt ondersteund.",
+  "error.svgEntities": "Dit SVG-bestand heeft een eigen documenttype dat layerling niet veilig kan lezen. Sla het opnieuw op als gewone SVG, bijvoorbeeld in Inkscape als \"Geoptimaliseerde SVG\" of in Illustrator met Exporteren als → SVG.",
   "error.svgNaN": "Het SVG-bestand bevat ongeldige getallen. Zorg er in Tinkercad voor dat het werkvlak het model snijdt voordat je de doorsnede exporteert.",
   "error.svgTooComplex": "Het SVG-bestand is te complex. Vereenvoudig de tekening en probeer het opnieuw.",
   "error.svgExternal": "Het SVG-bestand verwijst alleen naar een bestand daarbuiten, dat layerling niet kan openen. Open die afbeelding zelf (PNG of JPG), of sla de SVG op met de tekening erin.",

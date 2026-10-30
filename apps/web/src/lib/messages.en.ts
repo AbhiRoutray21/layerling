@@ -3804,7 +3804,7 @@ export const MESSAGES_EN = {
   "error.sketchOpenPaths": "All profile paths are open. Close at least one loop before finishing the sketch. Or switch on 'Build as a stroke' to build the open line itself with a width.",
   "error.svgEmpty": "The SVG file is empty.",
   "error.svgTooLarge": "The SVG file is too large. The maximum is {size} MB.",
-  "error.svgEntities": "This SVG file uses entities or a document type of its own. Only a plain SVG document is supported.",
+  "error.svgEntities": "This SVG file has a document type of its own that layerling can't read safely. Save it again as a plain SVG, for example in Inkscape as \"Optimized SVG\" or in Illustrator with Export As → SVG.",
   "error.svgNaN": "The SVG file contains invalid numbers. In Tinkercad, make sure the workplane intersects the model before exporting the cross-section.",
   "error.svgTooComplex": "The SVG file is too complex. Simplify the drawing and try again.",
   "error.svgExternal": "The SVG only points to a file outside it, which layerling cannot open. Open that picture itself (PNG or JPG), or save the SVG with its drawing inside.",

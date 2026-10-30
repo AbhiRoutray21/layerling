@@ -3068,7 +3068,7 @@ export const MESSAGES_SL: Partial<Record<MessageKey, string>> = {
   "error.sketchOpenPaths": "Vse poti profila so odprte. Pred zaključkom skice zapri vsaj eno zanko. Ali vklopite »Zgradi kot potezo«, da se odprta črta zgradi sama s širino.",
   "error.svgEmpty": "Datoteka SVG je prazna.",
   "error.svgTooLarge": "Datoteka SVG je prevelika. Največ je {size} MB.",
-  "error.svgEntities": "Ta datoteka SVG uporablja entitete ali lastno vrsto dokumenta. Podprt je samo navaden dokument SVG.",
+  "error.svgEntities": "Ta datoteka SVG ima lastno definicijo vrste dokumenta, ki je layerling ne more varno prebrati. Shrani jo znova kot navaden SVG, na primer v Inkscapu kot »Optimiziran SVG« ali v Illustratorju z Izvozi kot → SVG.",
   "error.svgNaN": "Datoteka SVG vsebuje neveljavna števila. V Tinkercadu poskrbi, da delovna ravnina seka model, preden izvoziš presek.",
   "error.svgTooComplex": "Datoteka SVG je preveč zapletena. Poenostavi risbo in poskusi znova.",
   "error.svgExternal": "SVG samo kaže na datoteko zunaj sebe, ki je layerling ne more odpreti. Odpri to sliko samo (PNG ali JPG) ali shrani SVG z risbo v njem.",

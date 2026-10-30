@@ -3789,7 +3789,7 @@ export const MESSAGES_CS: Record<MessageKey, string> = {
   "error.sketchOpenPaths": "Všechny obrysy profilu jsou otevřené. Před dokončením náčrtu uzavřete alespoň jednu smyčku. Nebo zapněte „Vytvořit jako obrysový pás“ a otevřená čára se vytvoří sama se šířkou.",
   "error.svgEmpty": "SVG soubor je prázdný.",
   "error.svgTooLarge": "SVG soubor je příliš velký. Maximum je {size} MB.",
-  "error.svgEntities": "SVG používá entity nebo vlastní typ dokumentu. Podporován je pouze běžný SVG dokument.",
+  "error.svgEntities": "Tento soubor SVG má vlastní definici typu dokumentu, kterou layerling nedokáže bezpečně přečíst. Ulož ho znovu jako obyčejné SVG, třeba v Inkscapu jako „Optimalizované SVG“ nebo v Illustratoru přes Exportovat jako → SVG.",
   "error.svgNaN": "SVG obsahuje neplatná čísla. V Tinkercadu před exportem průřezu ověřte, že pracovní rovina protíná model.",
   "error.svgTooComplex": "SVG je příliš složité. Zjednodušte kresbu a zkuste to znovu.",
   "error.svgExternal": "SVG pouze odkazuje na externí soubor, který Layerling nemůže otevřít. Otevřete přímo obrázek PNG nebo JPG, nebo uložte SVG s vloženou grafikou.",

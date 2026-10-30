@@ -2848,7 +2848,7 @@ export const MESSAGES_ZH_CN: Partial<Record<MessageKey, string>> = {
   "error.sketchOpenPaths": "所有轮廓路径都是开放的。完成草图前请至少闭合一个回路。也可以打开“按描边构建”，用一定宽度构建这条开放线本身。",
   "error.svgEmpty": "SVG 文件为空。",
   "error.svgTooLarge": "SVG 文件过大。上限为 {size} MB。",
-  "error.svgEntities": "此 SVG 文件使用了实体或自定义文档类型。仅支持普通 SVG 文档。",
+  "error.svgEntities": "这个 SVG 文件带有 layerling 无法安全读取的自定义文档类型。请把它重新保存为普通 SVG，例如在 Inkscape 中另存为“优化的 SVG”，或在 Illustrator 中用“导出为 → SVG”。",
   "error.svgNaN": "SVG 文件包含无效数字。在 Tinkercad 中，导出横截面之前请确保工作平面与模型相交。",
   "error.svgTooComplex": "SVG 文件过于复杂。请简化图形后重试。",
   "error.svgExternal": "此 SVG 只指向了一个外部文件，layerling 无法打开。请直接打开那张图片（PNG 或 JPG），或保存包含绘图内容的 SVG。",

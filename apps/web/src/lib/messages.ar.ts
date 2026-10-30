@@ -2988,7 +2988,7 @@ export const MESSAGES_AR: Partial<Record<MessageKey, string>> = {
   "error.sketchOpenPaths": "كل مسارات المقطع مفتوحة. أغلق حلقة واحدة على الأقل قبل إنهاء الرسم التخطيطي. أو فعّل «البناء كخط بعرض» لبناء الخط المفتوح نفسه بعرض.",
   "error.svgEmpty": "ملف SVG فارغ.",
   "error.svgTooLarge": "ملف SVG كبير جدًا. الحد الأقصى هو {size} ميجابايت.",
-  "error.svgEntities": "يستخدم ملف SVG هذا كيانات أو نوع مستند خاصًا به. لا يُدعم إلا مستند SVG عادي.",
+  "error.svgEntities": "يحتوي ملف SVG هذا على تعريف خاص لنوع المستند لا يستطيع layerling قراءته بأمان. احفظه مرة أخرى كملف SVG عادي، مثلًا في Inkscape بصيغة \"Optimized SVG\" أو في Illustrator عبر Export As ← SVG.",
   "error.svgNaN": "يحتوي ملف SVG على أرقام غير صالحة. في Tinkercad، تأكد من أن سطح العمل يتقاطع مع النموذج قبل تصدير المقطع العرضي.",
   "error.svgTooComplex": "ملف SVG معقد جدًا. بسّط الرسم وحاول مرة أخرى.",
   "error.svgExternal": "ملف SVG يشير فقط إلى ملف خارجه، لا يستطيع layerling فتحه. افتح تلك الصورة نفسها (PNG أو JPG)، أو احفظ ملف SVG ورسمه بداخله.",

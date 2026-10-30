@@ -3026,7 +3026,7 @@ export const MESSAGES_JA: Partial<Record<MessageKey, string>> = {
   "error.sketchOpenPaths": "すべてのプロファイルのパスが開いています。スケッチを完了する前に、少なくとも1つのループを閉じてください。または「線として作る」をオンにすると、開いた線そのものを幅のある線として作れます。",
   "error.svgEmpty": "SVGファイルが空です。",
   "error.svgTooLarge": "SVGファイルが大きすぎます。最大は{size} MBです。",
-  "error.svgEntities": "このSVGファイルはエンティティまたは独自の文書型を使っています。プレーンなSVG文書だけ読み込めます。",
+  "error.svgEntities": "このSVGファイルには、layerlingが安全に読めない独自の文書型定義があります。プレーンなSVGとして保存し直してください。たとえばInkscapeでは「最適化SVG」、Illustratorでは「書き出し形式 → SVG」を使います。",
   "error.svgNaN": "SVGファイルに正しくない数値が含まれています。Tinkercadでは、断面をエクスポートする前に作業平面がモデルと交差していることを確かめてください。",
   "error.svgTooComplex": "SVGファイルが複雑すぎます。図を簡単にして、もう一度試してください。",
   "error.svgExternal": "このSVGは、中にない外のファイルを指しているだけで、layerlingでは開けません。その絵そのもの（PNGかJPG）を開くか、絵を中に入れてSVGを保存し直してください。",

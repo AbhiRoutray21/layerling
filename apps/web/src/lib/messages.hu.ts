@@ -2842,7 +2842,7 @@ export const MESSAGES_HU: Partial<Record<MessageKey, string>> = {
   "error.sketchOpenPaths": "Minden profilútvonal nyitott. A vázlat befejezése előtt zárj le legalább egy hurkot. Vagy kapcsold be a „Vonalként készüljön” beállítást, és a nyitott vonal maga épül fel szélességgel.",
   "error.svgEmpty": "Az SVG-fájl üres.",
   "error.svgTooLarge": "Az SVG-fájl túl nagy. A legnagyobb megengedett méret {size} MB.",
-  "error.svgEntities": "Ez az SVG-fájl saját entitásokat vagy saját dokumentumtípust használ. Csak egyszerű SVG-dokumentum támogatott.",
+  "error.svgEntities": "Ennek az SVG-fájlnak saját dokumentumtípusa van, amelyet a layerling nem tud biztonságosan beolvasni. Mentsd el újra egyszerű SVG-ként, például Inkscape-ben „Optimalizált SVG”-ként vagy Illustratorban az Exportálás másként → SVG paranccsal.",
   "error.svgNaN": "Az SVG-fájl érvénytelen számokat tartalmaz. Tinkercadben ügyelj rá, hogy a munkasík metssze a modellt, mielőtt exportálod a keresztmetszetet.",
   "error.svgTooComplex": "Az SVG-fájl túl összetett. Egyszerűsítsd a rajzot, és próbáld újra.",
   "error.svgExternal": "Az SVG csak egy rajta kívüli fájlra mutat, amelyet a layerling nem tud megnyitni. Nyisd meg magát a képet (PNG vagy JPG), vagy mentsd az SVG-t úgy, hogy a rajz benne legyen.",

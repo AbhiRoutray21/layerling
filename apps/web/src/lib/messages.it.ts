@@ -2780,7 +2780,7 @@ export const MESSAGES_IT: Partial<Record<MessageKey, string>> = {
   "error.sketchOpenPaths": "Tutti i percorsi del profilo sono aperti. Chiudi almeno un contorno prima di terminare lo schizzo. Oppure attiva «Crea come tratto» per creare la linea aperta stessa con uno spessore.",
   "error.svgEmpty": "Il file SVG è vuoto.",
   "error.svgTooLarge": "Il file SVG è troppo grande. Il limite massimo è {size} MB.",
-  "error.svgEntities": "Questo file SVG utilizza entità o un tipo di documento personalizzato. È supportato solo un documento SVG semplice.",
+  "error.svgEntities": "Questo file SVG ha un tipo di documento proprio che layerling non può leggere in sicurezza. Salvalo di nuovo come SVG semplice, ad esempio in Inkscape come \"SVG ottimizzato\" o in Illustrator con Esporta come → SVG.",
   "error.svgNaN": "Il file SVG contiene numeri non validi. In Tinkercad, assicurati che il piano di lavoro intersechi il modello prima di esportare la sezione.",
   "error.svgTooComplex": "Il file SVG è troppo complesso. Semplifica il disegno e riprova.",
   "error.svgExternal": "Il file SVG fa riferimento solo a un'immagine esterna che layerling non può aprire. Apri direttamente l'immagine (PNG o JPG) oppure salva l'SVG includendo il disegno al suo interno.",
