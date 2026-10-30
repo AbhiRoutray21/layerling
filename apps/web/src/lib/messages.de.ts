@@ -3644,6 +3644,8 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "outliner.collapse": "Gruppe einklappen",
   "outliner.expand": "Gruppe aufklappen",
   "outliner.rename": "Umbenennen",
+  "outliner.sortByName": "Benannte Formen A–Z sortieren",
+  "outliner.sortAsAdded": "In der Reihenfolge des Anlegens zeigen",
   "outliner.children": "{count} Teile",
   "outliner.lock": "Objekt sperren",
   "outliner.unlock": "Objekt entsperren",

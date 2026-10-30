@@ -3400,6 +3400,8 @@ export const MESSAGES_DA: Partial<Record<MessageKey, string>> = {
   "outliner.collapse": "Sammenfold gruppe",
   "outliner.expand": "Udvid gruppe",
   "outliner.rename": "Omdøb",
+  "outliner.sortByName": "Sortér navngivne figurer A–Å",
+  "outliner.sortAsAdded": "Vis i den rækkefølge, de blev tilføjet",
   "outliner.children": "{count} dele",
   "outliner.lock": "Lås objekt",
   "outliner.unlock": "Lås objekt op",

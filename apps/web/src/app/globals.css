@@ -13645,6 +13645,12 @@ html[data-theme="dark"] .theme-check {
   background: #e9e0d3;
 }
 
+/* Sorted A to Z: the button stays lit, so the list's order does not come as a surprise (#1046). */
+.outliner-sort-button.active {
+  color: #ad6206;
+  background: #f6e7d2;
+}
+
 .outliner-search-wrap {
   position: relative;
   display: flex;
@@ -14006,6 +14012,11 @@ html[data-theme="dark"] .outliner-close-button {
 html[data-theme="dark"] .outliner-close-button:hover {
   color: #ffffff;
   background: #443a30;
+}
+
+html[data-theme="dark"] .outliner-sort-button.active {
+  color: #f0a64a;
+  background: #4a3826;
 }
 
 html[data-theme="dark"] .outliner-search-wrap {

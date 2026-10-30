@@ -2687,6 +2687,8 @@ export const MESSAGES_HU: Partial<Record<MessageKey, string>> = {
   "outliner.collapse": "Csoport összecsukása",
   "outliner.expand": "Csoport kinyitása",
   "outliner.rename": "Átnevezés",
+  "outliner.sortByName": "Elnevezett alakzatok rendezése A–Z",
+  "outliner.sortAsAdded": "Megjelenítés a hozzáadás sorrendjében",
   "outliner.children": "{count} rész",
   "outliner.lock": "Objektum zárolása",
   "outliner.unlock": "Objektum feloldása",

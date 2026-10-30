@@ -3415,6 +3415,8 @@ export const MESSAGES_PT_BR: Partial<Record<MessageKey, string>> = {
   "outliner.collapse": "Recolher grupo",
   "outliner.expand": "Expandir grupo",
   "outliner.rename": "Renomear",
+  "outliner.sortByName": "Ordenar formas com nome de A a Z",
+  "outliner.sortAsAdded": "Mostrar na ordem em que foram adicionadas",
   "outliner.children": "{count} peças",
   "outliner.lock": "Bloquear objeto",
   "outliner.unlock": "Desbloquear objeto",

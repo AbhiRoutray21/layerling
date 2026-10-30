@@ -3631,6 +3631,8 @@ export const MESSAGES_CS: Record<MessageKey, string> = {
   "outliner.collapse": "Sbalit skupinu",
   "outliner.expand": "Rozbalit skupinu",
   "outliner.rename": "Přejmenovat",
+  "outliner.sortByName": "Seřadit pojmenované tvary A–Z",
+  "outliner.sortAsAdded": "Zobrazit v pořadí přidání",
   "outliner.children": "Počet částí: {count}",
   "outliner.lock": "Zamknout objekt",
   "outliner.unlock": "Odemknout objekt",

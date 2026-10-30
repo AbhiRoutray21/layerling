@@ -2934,6 +2934,8 @@ export const MESSAGES_SL: Partial<Record<MessageKey, string>> = {
   "outliner.collapse": "Skrči skupino",
   "outliner.expand": "Razširi skupino",
   "outliner.rename": "Preimenuj",
+  "outliner.sortByName": "Razvrsti poimenovane oblike od A do Ž",
+  "outliner.sortAsAdded": "Prikaži v vrstnem redu dodajanja",
   "outliner.children": "Delov: {count}",
   "outliner.lock": "Zakleni objekt",
   "outliner.unlock": "Odkleni objekt",

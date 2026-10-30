@@ -3645,6 +3645,8 @@ export const MESSAGES_EN = {
   "outliner.collapse": "Collapse group",
   "outliner.expand": "Expand group",
   "outliner.rename": "Rename",
+  "outliner.sortByName": "Sort named shapes A–Z",
+  "outliner.sortAsAdded": "Show in the order added",
   "outliner.children": "{count} parts",
   "outliner.lock": "Lock object",
   "outliner.unlock": "Unlock object",

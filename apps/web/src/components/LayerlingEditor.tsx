@@ -6,7 +6,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { SAVED_VIEW_KEYS } from "@/lib/designView";
 import * as THREE from "three";
 import type { AppThemePreference, ResolvedAppTheme } from "@/lib/appTheme";
-import { t, type MessageKey } from "@/lib/i18n";
+import { getLanguage, t, type MessageKey } from "@/lib/i18n";
+import { isObjectListOrder, sortObjectList } from "@/lib/objectListSearch";
 import { useLanguage } from "@/lib/useLanguage";
 import { loftShapePatch, type LoftMeasures } from "@/lib/loftGeometry";
 import { hingeHasExactParts } from "@/lib/hingeGeometry";
@@ -138,7 +139,7 @@ import { useFileAccept } from "@/lib/fileAccept";
 import { exportLylProject, LYL_CREATED_WITH_VERSION, LYL_MEDIA_TYPE } from "@/lib/lylProject";
 import { isBuildMessage, reportWorkerBuild } from "@/lib/buildStamp";
 import { ensureLylFileWritable, forgetLylFile, forgetStlFile, linkedLylFile, linkedStlFile, lylFileAccessSupported, pickLylFileToOpen, pickLylFileToSave, pickStlFileToSave, rememberLylFile, rememberStlFile, writeLylFile, type LylFileHandle } from "@/lib/lylFileAccess";
-import { clipboardShape, displayShapeName, iconTagAsset, qrCodeAsset, makeShapeFromAsset, nameTagAsset, shapeAssetLabel, toolbarShapeAssets } from "@/lib/shapeCatalog";
+import { clipboardShape, displayShapeName, hasOwnShapeName, iconTagAsset, qrCodeAsset, makeShapeFromAsset, nameTagAsset, shapeAssetLabel, toolbarShapeAssets } from "@/lib/shapeCatalog";
 import { importedShapeFromStl } from "@/lib/stlImport";
 import { exportMeshesToStl } from "@/lib/stlExport";
 import { exportMeshesTo3mfAsync, THREE_MF_MEDIA_TYPE } from "@/lib/threemfExport";
@@ -10273,7 +10274,10 @@ export function LayerlingEditor({
       if (attachmentResult !== undefined) return attachmentResult;
 
       if (command.action === "list_objects") {
-        return { objects: currentShapes().map(mcpShapeSummary) };
+        // sort "name" gives the object list's A to Z order: named shapes first, the rest as added (#1046).
+        const order = isObjectListOrder(params.sort) ? params.sort : "added";
+        const listed = sortObjectList(currentShapes(), order, hasOwnShapeName, displayShapeName, getLanguage());
+        return { objects: listed.map(mcpShapeSummary) };
       }
 
       if (command.action === "select_objects") {

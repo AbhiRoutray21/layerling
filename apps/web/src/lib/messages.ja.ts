@@ -2867,6 +2867,8 @@ export const MESSAGES_JA: Partial<Record<MessageKey, string>> = {
   "outliner.collapse": "グループを折りたたむ",
   "outliner.expand": "グループを広げる",
   "outliner.rename": "名前を変更",
+  "outliner.sortByName": "名前を付けた図形をA–Z順に並べる",
+  "outliner.sortAsAdded": "追加した順に表示",
   "outliner.children": "{count}個のパーツ",
   "outliner.lock": "オブジェクトをロック",
   "outliner.unlock": "オブジェクトのロックを解除",

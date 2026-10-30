@@ -3634,6 +3634,8 @@ export const MESSAGES_RU: Partial<Record<MessageKey, string>> = {
   "outliner.collapse": "Свернуть группу",
   "outliner.expand": "Развернуть группу",
   "outliner.rename": "Переименовать",
+  "outliner.sortByName": "Сортировать именованные фигуры от А до Я",
+  "outliner.sortAsAdded": "Показать в порядке добавления",
   "outliner.children": "Деталей: {count}",
   "outliner.lock": "Заблокировать объект",
   "outliner.unlock": "Разблокировать объект",

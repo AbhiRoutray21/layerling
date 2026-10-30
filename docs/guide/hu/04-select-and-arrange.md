@@ -21,6 +21,7 @@ Sok résznél a nézetben könnyű elveszíteni a fonalat. Az objektumlista ({{u
 - A címke mutatja, hogy egy rész {{ui:outliner.solid}} vagy {{ui:outliner.hole}}.
 - A lakat és a szem egyes részeket zárol és rejt el.
 - Az {{ui:outliner.rename}} saját nevet ad egy résznek; a beállítások tetején a név melletti ceruza ugyanezt teszi a kijelölt alakzattal. Nagyobb terveknél az értelmes nevek rengeteget segítenek.
+- A címsor A–Z gombja ({{ui:outliner.sortByName}}) ábécérendbe rendezi az általad elnevezett alakzatokat, a számokat számként kezelve (2. rész a 10. rész előtt). Az alapértelmezett nevüket viselő alakzatok alattuk maradnak a hozzáadás sorrendjében, a legújabb a végén, és a csoportokon belüli részek ugyanígy rendeződnek. Csak a lista változik, a terv soha. Egy második kattintás ismét a hozzáadás sorrendjében mutat mindent, és a böngésző megjegyzi a választást.
 - A keresőmező név és fajta szerint is megtalálja az alakzatokat, így a „henger” vagy a „lyuk” szóra is. A csoportokon belül is keres, akármilyen mélyen vannak egymásba ágyazva: egy találatot tartalmazó csoport a listában marad, és kinyílik, hogy megmutassa az egyező részeket és a hozzájuk vezető csoportokat. A saját neve alapján megtalált csoport megnyitáskor az összes részét mutatja.
 - A címsor bal szélén lévő nyíl a címsoráig összecsukja a listát, majd újra kinyitja.
 

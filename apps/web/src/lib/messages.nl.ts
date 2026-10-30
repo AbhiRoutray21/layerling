@@ -3644,6 +3644,8 @@ export const MESSAGES_NL: Record<MessageKey, string> = {
   "outliner.collapse": "Groep inklappen",
   "outliner.expand": "Groep uitklappen",
   "outliner.rename": "Hernoemen",
+  "outliner.sortByName": "Benoemde vormen sorteren van A tot Z",
+  "outliner.sortAsAdded": "Tonen in de volgorde van toevoegen",
   "outliner.children": "{count} delen",
   "outliner.lock": "Object vergrendelen",
   "outliner.unlock": "Object ontgrendelen",

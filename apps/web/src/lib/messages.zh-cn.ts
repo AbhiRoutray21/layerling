@@ -2693,6 +2693,8 @@ export const MESSAGES_ZH_CN: Partial<Record<MessageKey, string>> = {
   "outliner.collapse": "收起分组",
   "outliner.expand": "展开分组",
   "outliner.rename": "重命名",
+  "outliner.sortByName": "将已命名的形状按名称排序",
+  "outliner.sortAsAdded": "按添加顺序显示",
   "outliner.children": "{count} 个部件",
   "outliner.lock": "锁定对象",
   "outliner.unlock": "解锁对象",

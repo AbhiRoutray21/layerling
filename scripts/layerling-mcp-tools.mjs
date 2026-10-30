@@ -320,7 +320,17 @@ export const tools = [
   {
     name: "layerling_list_objects",
     description: "List all current objects available in the editor with exact dimensions, position, rotation, and object ids.",
-    inputSchema: editorTargetSchema,
+    inputSchema: {
+      ...editorTargetSchema,
+      properties: {
+        ...editorTargetSchema.properties,
+        sort: {
+          type: "string",
+          enum: ["added", "name"],
+          description: "Order of the list. \"added\" (default) is the design's order, the newest last; \"name\" is the object list's A-Z order: shapes with a name of their own first, alphabetically with numbers counted (Part 2 before Part 10), then the rest as added.",
+        },
+      },
+    },
   },
   {
     name: "layerling_select_objects",

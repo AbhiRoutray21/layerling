@@ -55,6 +55,8 @@ layerling_list_objects({ editorNumber })
 
 For object edits, use exact object `id` values from the scene. Do not invent object names; names are helpful labels only.
 
+`layerling_list_objects` lists the objects in the design's order, the newest last. `sort: "name"` gives the object list's A-Z order instead: objects with a name of their own first, alphabetically with numbers counted (Part 2 before Part 10), then the rest as added. It only orders the answer, never the design.
+
 Every object carries a `settings` block beside its dimensions, holding what the dimensions do not say: the side count of a round body, the size and pitch of a thread, the turns of a spring, the taper of a box, the lettering of a text. Every value it reports can be set again through `layerling_create_shape` and `layerling_update_object`. A thread on a standard size also reports its name in `settings.threadSize`. A round body whose `settings.sidesFollowSize` is true has no fixed side count of its own - the number shown is what it is drawn with at its current size, and it changes as the object grows. `includeRawShapes` is only needed for the full shape record and can be large.
 
 Useful tools:

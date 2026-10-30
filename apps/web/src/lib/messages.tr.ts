@@ -2679,6 +2679,8 @@ export const MESSAGES_TR: Partial<Record<MessageKey, string>> = {
   "outliner.collapse": "Grubu daralt",
   "outliner.expand": "Grubu genişlet",
   "outliner.rename": "Yeniden adlandır",
+  "outliner.sortByName": "Adlandırılmış şekilleri A–Z sırala",
+  "outliner.sortAsAdded": "Eklenme sırasına göre göster",
   "outliner.children": "{count} parça",
   "outliner.lock": "Nesneyi kilitle",
   "outliner.unlock": "Nesnenin kilidini aç",

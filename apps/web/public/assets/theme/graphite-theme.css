@@ -6466,6 +6466,11 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .theme-check {
   color: #b7791f;
 }
 
+:where(html[data-theme="dark"][data-palette="graphite"]) .outliner-sort-button.active {
+  color: #c05621;
+  background: #ececec;
+}
+
 :where(html[data-theme="dark"][data-palette="graphite"]) .outliner-children-list {
   background: rgba(239, 239, 239, 0.4);
   border-top: 1px dashed #e3e3e3;
@@ -6581,6 +6586,11 @@ html[data-theme="dark"]:where([data-palette="graphite"]) .outliner-action-btn.ac
 
 html[data-theme="dark"]:where([data-palette="graphite"]) .outliner-action-btn.active-hidden {
   color: #ecc94b;
+}
+
+html[data-theme="dark"]:where([data-palette="graphite"]) .outliner-sort-button.active {
+  color: #ed8936;
+  background: #3d3d3d;
 }
 
 html[data-theme="dark"]:where([data-palette="graphite"]) .outliner-badge.badge-solid {

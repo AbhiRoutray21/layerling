@@ -2829,6 +2829,8 @@ export const MESSAGES_AR: Partial<Record<MessageKey, string>> = {
   "outliner.collapse": "طي المجموعة",
   "outliner.expand": "توسيع المجموعة",
   "outliner.rename": "إعادة تسمية",
+  "outliner.sortByName": "رتّب الأشكال المسمّاة أبجديًا",
+  "outliner.sortAsAdded": "اعرض بترتيب الإضافة",
   "outliner.children": "الأجزاء: {count}",
   "outliner.lock": "قفل الجسم",
   "outliner.unlock": "إلغاء قفل الجسم",
