@@ -8,5 +8,15 @@
       "de": "In den Einstellungen unter Darstellung lassen sich die Maustasten jetzt wie in Bambu Studio und OrcaSlicer belegen: Ziehen mit links auf leerer Fläche dreht die Ansicht, rechts verschiebt sie. Und eine SpaceMouse steuert die Ansicht in Chrome und Edge, einmal dort verbunden.",
       "en": "Under Appearance in the settings, the mouse buttons can now work as in Bambu Studio and OrcaSlicer: a left drag on empty space turns the view, the right button shifts it. And a SpaceMouse steers the view in Chrome and Edge once it is connected there."
     }
+  },
+  {
+    "title": {
+      "de": "Hirth-Verzahnung",
+      "en": "Hirth joint"
+    },
+    "body": {
+      "de": "Eine neue Form neben dem Zahnrad: eine Scheibe mit V-förmigen Zähnen, die strahlenförmig von der Mitte ausgehen. Eine umgedrehte Kopie greift in jedem Zahnschritt hinein und zentriert sich selbst, etwa für ein verstellbares Gelenk oder einen Rastknopf.",
+      "en": "A new shape next to the gears: a disc with V-shaped teeth running out from the centre. A copy turned over locks into it at every tooth and centres itself, for a hinge you can set at an angle or a knob that clicks into place."
+    }
   }
 ]

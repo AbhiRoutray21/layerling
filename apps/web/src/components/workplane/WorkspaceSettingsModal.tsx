@@ -84,6 +84,7 @@ import type { BentTubeProfile, CustomSnapGrid, GearProfile, GearType, GridSize, 
 import { DEFAULT_LOFT } from "@/lib/loftGeometry";
 import { DEFAULT_GRIDFINITY_TRAY_SIZE, normalizeGridfinityType } from "@/lib/gridfinityGeometry";
 import { selectWholeValue } from "@/lib/numberField";
+import { DEFAULT_HIRTH_BORE, DEFAULT_HIRTH_TEETH, MAX_HIRTH_TEETH, MIN_HIRTH_TEETH, MIN_HIRTH_TOOTH_HEIGHT, hirthBoreLimit, hirthToothHeightLimit } from "@/lib/hirthGeometry";
 
 type WorkspaceSettings = WorkplaneWorkspaceSettings;
 type WorkspaceSettingsSection = "appearance" | "measurement" | "workplane" | "shapes" | "history";
@@ -339,6 +340,13 @@ function specialFieldsForShape(
       );
     }
     return fields;
+  }
+  if (kind === "hirth") {
+    return [
+      { type: "number", key: "teeth", label: t("prop.teeth"), defaultValue: defaults.teeth ?? DEFAULT_HIRTH_TEETH, min: MIN_HIRTH_TEETH, max: MAX_HIRTH_TEETH, step: 1 },
+      { type: "number", key: "toothSize", label: t("prop.hirthToothHeight"), defaultValue: defaults.toothSize ?? 2.6, min: MIN_HIRTH_TOOTH_HEIGHT, max: hirthToothHeightLimit(dimensions.width, dimensions.depth, dimensions.height), unit: "mm" },
+      { type: "number", key: "centerHoleSize", label: t("prop.centerHole"), defaultValue: defaults.centerHoleSize ?? DEFAULT_HIRTH_BORE, min: 0, max: hirthBoreLimit(dimensions.width, dimensions.depth), unit: "mm" },
+    ];
   }
   if (kind === "star") {
     return [
