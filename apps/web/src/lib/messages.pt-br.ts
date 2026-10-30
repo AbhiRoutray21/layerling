@@ -2982,6 +2982,8 @@ export const MESSAGES_PT_BR: Partial<Record<MessageKey, string>> = {
   "status.nothingToUndo": "Nada para desfazer",
   "status.undo": "Desfazer",
   "status.redo": "Refazer",
+  "status.undoneStep": "Desfeito: {step}",
+  "status.redoneStep": "Refeito: {step}",
   "status.undoWorkplaneBase": "Desfazer - o plano de trabalho voltou à placa base",
   "status.undoWorkplaneFace": "Desfazer - o plano de trabalho voltou para uma face",
   "status.redoWorkplaneBase": "Refazer - o plano de trabalho voltou à placa base",

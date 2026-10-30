@@ -1508,6 +1508,8 @@ export const MESSAGES_CS: Record<MessageKey, string> = {
   "status.nothingToUndo": "Není co vrátit",
   "status.undo": "Zpět",
   "status.redo": "Znovu",
+  "status.undoneStep": "Vráceno zpět: {step}",
+  "status.redoneStep": "Provedeno znovu: {step}",
   "status.undoWorkplaneBase": "Zpět: pracovní rovina je opět na základní podložce",
   "status.undoWorkplaneFace": "Zpět: pracovní rovina je opět na ploše tělesa",
   "status.redoWorkplaneBase": "Znovu: pracovní rovina je opět na základní podložce",

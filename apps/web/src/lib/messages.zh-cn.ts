@@ -1209,6 +1209,8 @@ export const MESSAGES_ZH_CN: Partial<Record<MessageKey, string>> = {
   "status.nothingToUndo": "没有可撤销的操作",
   "status.undo": "撤销",
   "status.redo": "重做",
+  "status.undoneStep": "已撤销：{step}",
+  "status.redoneStep": "已重做：{step}",
   "status.undoWorkplaneBase": "撤销：工作平面已回到平台",
   "status.undoWorkplaneFace": "撤销：工作平面已回到某个面上",
   "status.redoWorkplaneBase": "重做：工作平面已回到平台",

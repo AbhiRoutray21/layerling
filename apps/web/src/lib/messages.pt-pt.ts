@@ -1172,6 +1172,8 @@ export const MESSAGES_PT_PT: Partial<Record<MessageKey, string>> = {
   "status.nothingToUndo": "Não há nada para anular",
   "status.undo": "Anular",
   "status.redo": "Refazer",
+  "status.undoneStep": "Anulado: {step}",
+  "status.redoneStep": "Refeito: {step}",
   "status.undoWorkplaneBase": "Anular: o plano de trabalho voltou à plataforma base",
   "status.undoWorkplaneFace": "Anular: o plano de trabalho voltou a uma face",
   "status.redoWorkplaneBase": "Refazer: o plano de trabalho voltou à plataforma base",

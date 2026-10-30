@@ -153,7 +153,7 @@ Solo {{ui:scalePercent.apply}} modifica il progetto; un solo Annulla ripristina 
 
 ## Annullare
 
-{{ui:editor.tool.undo}} ([[Ctrl]]+[[Z]]) e {{ui:editor.tool.redo}} ([[Ctrl]]+[[Shift]]+[[Z]] o [[Ctrl]]+[[Y]]) permettono di scorrere la cronologia. Nelle impostazioni, sotto {{ui:workspace.history}}, scegli quante operazioni mantenere nel progetto salvato.
+{{ui:editor.tool.undo}} ([[Ctrl]]+[[Z]]) e {{ui:editor.tool.redo}} ([[Ctrl]]+[[Shift]]+[[Z]] o [[Ctrl]]+[[Y]]) permettono di scorrere la cronologia. Nelle impostazioni, sotto {{ui:workspace.history}}, scegli quante operazioni mantenere nel progetto salvato. Passando sopra uno dei due pulsanti, il suggerimento nomina il passaggio che annullerebbe o ripeterebbe, con la misura quando il passaggio ne ha una, per esempio «Arrotondati gli spigoli di Box (5 mm)»; il messaggio successivo dice lo stesso. Per tornare indietro di più passaggi alla volta, usa la vista della cronologia qui sotto.
 
 ## Rivedere la cronologia
 

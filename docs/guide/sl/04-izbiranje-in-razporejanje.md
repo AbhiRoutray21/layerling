@@ -153,7 +153,7 @@ Pri več delih izbereš, kako rastejo:
 
 ## Razveljavitev
 
-{{ui:editor.tool.undo}} ([[Ctrl]]+[[Z]]) in {{ui:editor.tool.redo}} ([[Ctrl]]+[[Shift]]+[[Z]] ali [[Ctrl]]+[[Y]]) greta po korakih skozi tvojo zgodovino. Koliko korakov potuje s shranjenim načrtom, nastaviš v nastavitvah pod {{ui:workspace.history}}.
+{{ui:editor.tool.undo}} ([[Ctrl]]+[[Z]]) in {{ui:editor.tool.redo}} ([[Ctrl]]+[[Shift]]+[[Z]] ali [[Ctrl]]+[[Y]]) greta po korakih skozi tvojo zgodovino. Koliko korakov potuje s shranjenim načrtom, nastaviš v nastavitvah pod {{ui:workspace.history}}. Ko pokažeš na enega od gumbov, njegov namig poimenuje korak, ki ga razveljavi ali uveljavi, z mero, kjer jo korak ima, na primer »Zaobljeni robovi: Box (5 mm)«; sporočilo po koraku pove isto. Za več korakov nazaj naenkrat uporabi pogled zgodovine spodaj.
 
 ## Pogled nazaj: pogled zgodovine
 

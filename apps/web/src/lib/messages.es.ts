@@ -1228,6 +1228,8 @@ export const MESSAGES_ES: Partial<Record<MessageKey, string>> = {
   "status.nothingToUndo": "No hay nada que deshacer",
   "status.undo": "Deshecho",
   "status.redo": "Rehecho",
+  "status.undoneStep": "Deshecho: {step}",
+  "status.redoneStep": "Rehecho: {step}",
   "status.undoWorkplaneBase": "Deshecho: el plano de trabajo vuelve a estar sobre la placa base",
   "status.undoWorkplaneFace": "Deshecho: el plano de trabajo vuelve a estar sobre una cara",
   "status.redoWorkplaneBase": "Rehecho: el plano de trabajo vuelve a estar sobre la placa base",

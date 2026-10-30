@@ -153,7 +153,7 @@ AI 可以透過 MCP 橋接使用 `layerling_push_face` 完成同樣的事（參�
 
 ## 復原
 
-{{ui:editor.tool.undo}}（[[Ctrl]]+[[Z]]）和 {{ui:editor.tool.redo}}（[[Ctrl]]+[[Shift]]+[[Z]] 或 [[Ctrl]]+[[Y]]）會在歷史記錄中前後步進。儲存的設計會附帶多少步歷史，可在設定中的 {{ui:workspace.history}} 下設定。
+{{ui:editor.tool.undo}}（[[Ctrl]]+[[Z]]）和 {{ui:editor.tool.redo}}（[[Ctrl]]+[[Shift]]+[[Z]] 或 [[Ctrl]]+[[Y]]）會在歷史記錄中前後步進。儲存的設計會附帶多少步歷史，可在設定中的 {{ui:workspace.history}} 下設定。把指標指向任一按鈕，其提示會說出它將復原或重做的步驟，步驟有尺寸時也一併給出，例如「已為 Box 的邊加上圓角（5 mm）」；操作後的訊息也會這樣說。要一次後退多步，請使用下面的歷史檢視。
 
 ## 回看：歷史記錄檢視
 

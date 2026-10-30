@@ -153,7 +153,7 @@ Pas {{ui:scalePercent.apply}} verandert het ontwerp, en één stap terug maakt h
 
 ## Ongedaan maken
 
-{{ui:editor.tool.undo}} ([[Ctrl]]+[[Z]]) en {{ui:editor.tool.redo}} ([[Ctrl]]+[[Shift]]+[[Z]] of [[Ctrl]]+[[Y]]) stappen door je geschiedenis. Hoeveel stappen er met het opgeslagen ontwerp meegaan, stel je in de instellingen in onder {{ui:workspace.history}}.
+{{ui:editor.tool.undo}} ([[Ctrl]]+[[Z]]) en {{ui:editor.tool.redo}} ([[Ctrl]]+[[Shift]]+[[Z]] of [[Ctrl]]+[[Y]]) stappen door je geschiedenis. Hoeveel stappen er met het opgeslagen ontwerp meegaan, stel je in de instellingen in onder {{ui:workspace.history}}. Wijs een van beide knoppen aan en de tooltip noemt de stap die hij ongedaan maakt of opnieuw doet, met de maat als de stap er een heeft, zoals "Randen van Box afgerond (5 mm)"; de melding erna zegt hetzelfde. Om meerdere stappen tegelijk terug te gaan, gebruik je de geschiedenisweergave hieronder.
 
 ## Terugkijken: de geschiedenisweergave
 

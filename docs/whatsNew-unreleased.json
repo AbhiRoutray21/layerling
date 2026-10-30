@@ -1,6 +1,16 @@
 [
   {
     "title": {
+      "de": "Rückgängig sagt, was es zurücknimmt",
+      "en": "Undo says what it takes back"
+    },
+    "body": {
+      "de": "Zeigst du auf Rückgängig oder Wiederholen, nennt der Tooltip den Schritt samt Maß, etwa „Kanten von Box gerundet (5 mm)“, und die Meldung nach Strg+Z sagt, was zurückgenommen wurde.",
+      "en": "Point at Undo or Redo and the tooltip names the step with its measure, such as \"Rounded the edges of Box (5 mm)\", and the message after Ctrl+Z says what was undone."
+    }
+  },
+  {
+    "title": {
       "de": "Skizze aus dem Schnitt",
       "en": "Sketch from the cut"
     },

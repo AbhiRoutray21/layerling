@@ -136,7 +136,7 @@ Csak a {{ui:scalePercent.apply}} módosítja a tervet, és egy lépés visszavon
 
 ## Visszavonás
 
-A {{ui:editor.tool.undo}} ([[Ctrl]]+[[Z]]) és a {{ui:editor.tool.redo}} ([[Ctrl]]+[[Shift]]+[[Z]] vagy [[Ctrl]]+[[Y]]) végiglépked az előzményeiden. Hogy hány lépés kerüljön a mentett tervbe, azt a beállításokban az {{ui:workspace.history}} alatt adod meg.
+A {{ui:editor.tool.undo}} ([[Ctrl]]+[[Z]]) és a {{ui:editor.tool.redo}} ([[Ctrl]]+[[Shift]]+[[Z]] vagy [[Ctrl]]+[[Y]]) végiglépked az előzményeiden. Hogy hány lépés kerüljön a mentett tervbe, azt a beállításokban az {{ui:workspace.history}} alatt adod meg. Ha valamelyik gomb fölé viszed a mutatót, a súgója megnevezi a lépést, amelyet visszavon vagy újra végrehajt, és a méretet is, ha a lépésnek van, például „Élek lekerekítve: Box (5 mm)”; az utána megjelenő üzenet ugyanezt mondja. Ha egyszerre több lépést mennél vissza, használd lejjebb az előzmények nézetet.
 
 ## Visszatekintés: az előzménynézet
 
