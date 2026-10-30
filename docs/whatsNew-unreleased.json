@@ -1,6 +1,16 @@
 [
   {
     "title": {
+      "de": "Versetzen klappt bei jedem Buchstaben",
+      "en": "Offset works on every letter"
+    },
+    "body": {
+      "de": "Texte mit A, B, M, N, W oder 9 ließen sich nicht versetzen. Jetzt werden ihre Buchstaben über die Umrisse breiter oder schmaler, auch als Loch mit Spiel und beim Ausschneiden.",
+      "en": "Texts with an A, B, M, N, W or 9 could not be offset. Now their letters grow or shrink along their outlines, also as a hole with clearance and when cutting out."
+    }
+  },
+  {
+    "title": {
       "de": "Hirth-Verzahnung bleibt rund",
       "en": "The Hirth joint stays round"
     },

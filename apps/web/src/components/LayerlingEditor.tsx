@@ -16,6 +16,7 @@ import { copyViaSelectionField, decodeClipboardPayload, encodeClipboardPayload, 
 import { bentTubeNaturalDimensions, normalizedBentTubeFields } from "@/lib/bentTubeGeometry";
 import { gridfinityListPatch } from "@/lib/gridfinityGeometry";
 import { DEFAULT_THREAD_PROFILE, defaultThreadHeadHeight, normalizeThreadHeadHeight, threadNaturalFootprint, threadSettings } from "@/lib/threadGeometry";
+import { textOffsetAsFill } from "@/lib/textFillChoice";
 import { curvedTextPatch, MAX_TEXT_SPACING, MIN_TEXT_SPACING } from "@/lib/textGeometry";
 import { normalizeTextEdge } from "@/lib/textEdge";
 import { DEFAULT_TEXT_LAYERS, layerTextKeyringArgument, placedKeyring, layerTextLayersError, nameTagOffsets, normalizeTextLayers, type NameTagKeyring } from "@/lib/textLayers";
@@ -7345,7 +7346,15 @@ export function LayerlingEditor({
    */
   const offsetShape = useCallback(async (target: WorkplaneShape, distance: number, shrink: boolean, edges: ShellEdges, keepCopy: boolean) => {
     const source = keepCopy ? cloneWorkplaneShapeTreeWithFreshIds(target, "offset") : target;
-    const offset = await shellShape(source, distance, "none", edges, target, { shrink });
+    let offset: WorkplaneShape;
+    try {
+      offset = await shellShape(source, distance, "none", edges, target, { shrink });
+    } catch (error) {
+      // Some letters stop the kernel's offset (Discussion #1037); a plain text is then offset through its outlines.
+      const asFill = error instanceof Error && error.message.includes("This body cannot be grown or shrunk by this distance") ? textOffsetAsFill(source, distance, shrink, edges) : null;
+      if (!asFill) throw error;
+      offset = asFill;
+    }
     return keepCopy ? withHoleMode(offset, true) : offset;
   }, [shellShape]);
 

@@ -107,6 +107,8 @@ Every face of a body can be moved by the same distance, out or in. That is what 
 
 Without the tick the body itself is offset. It becomes a fixed exact body, like after a chamfer: the list at the top of the panel takes the offset back, and {{ui:edge.editAction}} opens the tool again with the old distance. Only bodies that are exact CAD bodies can be offset - boxes, cylinders and the other shapes, groups of them, imported STEP parts. A body that is only a triangle mesh, such as many STL imports, often cannot be. A distance that is too big for the body, for example a shrink beyond its thinnest wall, is refused.
 
+A text whose letters the kernel cannot offset as a body - in some fonts an A, B, M, N, W or 9 - is offset through its outlines instead: it gets the fill {{ui:prop.textWider}} by the distance (narrower when it shrinks) and grows by as much at the top and the bottom. It stays a text you can go on editing. This works for a text with filled letters and no rounding; one that already has a fill mode is refused as before.
+
 ## Deleting faces
 
 A fillet in the way, a hole in the wrong place, a boss you no longer need: {{ui:editor.tool.deleteFace}} takes it off the body again, without building the body anew.

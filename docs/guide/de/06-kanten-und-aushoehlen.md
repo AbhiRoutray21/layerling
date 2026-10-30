@@ -107,6 +107,8 @@ Jede Fläche eines Körpers lässt sich um dieselbe Strecke nach außen oder inn
 
 Ohne den Haken wird der Körper selbst versetzt. Er wird zu einem festen exakten Körper, wie nach einer Fase: Die Liste oben im Fenster nimmt den Versatz zurück, und {{ui:edge.editAction}} öffnet das Werkzeug wieder mit dem alten Abstand. Versetzen lassen sich nur exakte CAD-Körper - Quader, Zylinder und die anderen Formen, Gruppen davon, importierte STEP-Teile. Ein Körper, der nur ein Dreiecksnetz ist, wie viele STL-Importe, lässt sich oft nicht versetzen. Ein Abstand, der für den Körper zu groß ist, etwa ein Verkleinern über die dünnste Wand hinaus, wird abgelehnt.
 
+Ein Text, dessen Buchstaben der Kern nicht als Körper versetzen kann - in manchen Schriften ein A, B, M, N, W oder 9 -, wird stattdessen über seine Umrisse versetzt: Er bekommt die Füllung {{ui:prop.textWider}} um den Abstand (beim Verkleinern schmaler) und wird oben und unten um ebenso viel höher. Er bleibt ein Text, den du weiter bearbeiten kannst. Das gilt für einen Text mit gefüllten Buchstaben ohne Rundung; einer, der schon eine Füllart hat, wird wie bisher abgelehnt.
+
 ## Flächen löschen
 
 Eine Verrundung, die stört, ein Loch an der falschen Stelle, ein Zapfen, der nicht mehr gebraucht wird: {{ui:editor.tool.deleteFace}} nimmt sie wieder vom Körper, ohne dass du ihn neu bauen musst.
