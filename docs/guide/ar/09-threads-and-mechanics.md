@@ -11,6 +11,7 @@ summary: براغي وصواميل وثقوب ملولبة تتطابق معًا
 
 - **{{ui:thread.rod}}:** أسطوانة عليها سن لولبي، مثل برغي بلا رأس.
 - **{{ui:thread.screw}}:** برأس. تختار {{ui:inspector.threadHead}}: {{ui:thread.headCylinder}} أو {{ui:thread.headCountersunk}} أو {{ui:thread.headHex}}.
+  في الأسفل تضبط {{ui:prop.headDiameter}} (وفي الرأس السداسي {{ui:prop.headAcrossFlats}}؛ أما الرأس الغاطس فيتبع قطره ارتفاعه) و{{ui:inspector.threadDrive}} في وجه الرأس: {{ui:thread.driveHex}} أو {{ui:thread.driveTorx}} أو {{ui:thread.drivePhillips}} أو {{ui:thread.driveNone}} لبرغي يُدار باليد أو بالمفتاح. {{ui:prop.driveSize}} هو العرض بين أسطح التجويف السداسي أو القطر الخارجي لنجمة Torx أو امتداد الصليب؛ و{{ui:prop.driveDepth}} هو مدى عمقه، تسعة أعشار الرأس على الأكثر، والقيمة 0 تحذفه. ما دمت لم تغيّرها فهي تتبع المقاس؛ ويبدأ الرأس السداسي بلا محرّك. المحرّك جزء من الجسم الدقيق، فيظهر أيضًا في تصدير STEP.
 - **{{ui:thread.nut}}:** الصامولة المطابقة.
 - **{{ui:thread.bore}}:** ثقب ملولب. وهو ثقب: اسحبه إلى داخل قطعة، وجمّعهما، فتحصل القطعة على سن لولبي داخلي. للثقب الذي يُربط فيه مسمار استخدم دائمًا {{ui:thread.bore}}: الـ{{ui:thread.rod}} أو الـ{{ui:thread.screw}} كتجويف له المقاس الكامل للمسمار بلا خلوص فيخرج ضيقًا جدًا. إن جعلته تجويفًا رغم ذلك ينبّهك layerling، و{{ui:inspector.threadMakeTappedHole}} يحوّله إلى {{ui:thread.bore}}.
 

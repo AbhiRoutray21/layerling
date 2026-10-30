@@ -11,6 +11,7 @@ Wybierz {{ui:shape.thread}} w bibliotece kształtów. W {{ui:inspector.threadRol
 
 - **{{ui:thread.rod}}:** walec z gwintem, na przykład śruba bez łba.
 - **{{ui:thread.screw}}:** z łbem. Wybierasz {{ui:inspector.threadHead}}: {{ui:thread.headCylinder}}, {{ui:thread.headCountersunk}} albo {{ui:thread.headHex}}.
+  Niżej ustawiasz {{ui:prop.headDiameter}} (przy łbie sześciokątnym {{ui:prop.headAcrossFlats}}; przy łbie stożkowym średnica wynika z wysokości) i {{ui:inspector.threadDrive}} w czole łba: {{ui:thread.driveHex}}, {{ui:thread.driveTorx}}, {{ui:thread.drivePhillips}} albo {{ui:thread.driveNone}} dla śruby kręconej ręką lub kluczem. {{ui:prop.driveSize}} to rozmiar klucza imbusowego, średnica zewnętrzna gwiazdy Torx albo rozpiętość krzyża; {{ui:prop.driveDepth}} mówi, jak głęboko sięga, najwyżej dziewięć dziesiątych łba, a 0 je pomija. Dopóki ich nie zmienisz, idą za rozmiarem; łeb sześciokątny zaczyna bez gniazda. Gniazdo należy do dokładnej bryły, więc trafia też do eksportu STEP.
 - **{{ui:thread.nut}}:** pasująca nakrętka.
 - **{{ui:thread.bore}}:** otwór z gwintem wewnętrznym. Jest otworem. Wsuń go w część, zgrupuj oba, a część będzie miała gwint wewnętrzny. Do otworu, w który wkręca się śrubę, zawsze używaj {{ui:thread.bore}}: {{ui:thread.rod}} lub {{ui:thread.screw}} jako otwór ma pełny rozmiar śruby bez luzu i wychodzi za ciasno. Jeśli mimo to ustawisz go jako otwór, layerling o tym przypomni, a {{ui:inspector.threadMakeTappedHole}} zamieni go w {{ui:thread.bore}}.
 

@@ -11,6 +11,7 @@ V knjižnici oblik izberi {{ui:shape.thread}}. Pod {{ui:inspector.threadRole}} s
 
 - **{{ui:thread.rod}}:** valj z navojem, na primer vijak brez glave.
 - **{{ui:thread.screw}}:** z glavo. {{ui:inspector.threadHead}} izbereš: {{ui:thread.headCylinder}}, {{ui:thread.headCountersunk}} ali {{ui:thread.headHex}}.
+  Nižje nastaviš {{ui:prop.headDiameter}} (pri šestrobi glavi {{ui:prop.headAcrossFlats}}; pri ugreznjeni glavi premer sledi višini) in {{ui:inspector.threadDrive}} v čelu glave: {{ui:thread.driveHex}}, {{ui:thread.driveTorx}}, {{ui:thread.drivePhillips}} ali {{ui:thread.driveNone}} za vijak, ki ga vrtiš z roko ali ključem. {{ui:prop.driveSize}} je velikost ključa notranjega šestroba, zunanji premer zvezde Torx ali razpon križa; {{ui:prop.driveDepth}} pove, kako globoko seže, največ devet desetin glave, 0 pa ga izpusti. Dokler jih ne spremeniš, sledijo velikosti; šestroba glava se začne brez pogona. Pogon je del natančnega telesa, zato pride tudi v izvoz STEP.
 - **{{ui:thread.nut}}:** ustrezna matica.
 - **{{ui:thread.bore}}:** navojna luknja. To je luknja. Povleci jo v del, oboje združi v skupino in del ima notranji navoj. Za luknjo, v katero se privije vijak, vedno uporabi {{ui:thread.bore}}: {{ui:thread.rod}} ali {{ui:thread.screw}} kot luknja ima polno mero vijaka brez zračnosti in je pretesna. Če jo vseeno nastaviš kot luknjo, te layerling opozori, {{ui:inspector.threadMakeTappedHole}} pa iz nje naredi {{ui:thread.bore}}.
 

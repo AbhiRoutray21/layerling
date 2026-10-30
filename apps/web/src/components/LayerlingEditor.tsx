@@ -14,7 +14,7 @@ import { hingePartScope, hingeWorldParts } from "@/lib/hingeParts";
 import { copyViaSelectionField, decodeClipboardPayload, encodeClipboardPayload, LOCAL_CLIPBOARD_LIMIT, newestClipboard, type ClipboardPayload } from "@/lib/clipboardPayload";
 import { bentTubeNaturalDimensions, normalizedBentTubeFields } from "@/lib/bentTubeGeometry";
 import { gridfinityListPatch } from "@/lib/gridfinityGeometry";
-import { DEFAULT_THREAD_PROFILE, defaultThreadHeadHeight, normalizeThreadHeadHeight, threadNaturalFootprint, threadSettings } from "@/lib/threadGeometry";
+import { DEFAULT_THREAD_PROFILE, defaultThreadHeadHeight, normalizeThreadHeadHeight, threadDriveFields, threadDriveSettings, threadNaturalFootprint, threadSettings } from "@/lib/threadGeometry";
 import { textOffsetAsFill } from "@/lib/textFillChoice";
 import { curvedTextPatch, MAX_TEXT_SPACING, MIN_TEXT_SPACING } from "@/lib/textGeometry";
 import { normalizeTextEdge } from "@/lib/textEdge";
@@ -2547,9 +2547,18 @@ function applyMcpThreadSettings(
   // Stand der Kopf auf seinem Normmass, waechst er mit dem Durchmesser mit -
   // sonst saesse nach einem Wechsel von M8 auf M5 der Kopf einer M8 auf einer
   // duenneren Schraube. Wer die Hoehe selbst angibt, behaelt sie.
-  const settings = requestedHead === undefined && headFollowsStandard
+  const sized = requestedHead === undefined && headFollowsStandard
     ? { ...merged, headHeight: normalizeThreadHeadHeight(defaultThreadHeadHeight(merged), merged) }
     : merged;
+  // Head diameter and drive (#1052) checked against the head as it now is. Like the head height,
+  // the three measures belong to the one screw and do not come through the shape defaults.
+  const driveFields = threadDriveFields({
+    threadHeadDiameter: mcpOptionalNumber(params.threadHeadDiameter) ?? shape.threadHeadDiameter,
+    threadDrive: shape.threadDrive,
+    threadDriveSize: mcpOptionalNumber(params.threadDriveSize) ?? shape.threadDriveSize,
+    threadDriveDepth: mcpOptionalNumber(params.threadDriveDepth) ?? shape.threadDriveDepth,
+  }, sized);
+  const settings = { ...sized, ...threadDriveSettings(driveFields, sized) };
   const footprint = threadNaturalFootprint(settings);
   const keepFootprint = params.width !== undefined || params.depth !== undefined || params.size !== undefined;
   return {
@@ -2570,6 +2579,7 @@ function applyMcpThreadSettings(
     threadChamfer: settings.chamfer,
     threadChamferBottom: settings.chamferLow,
     threadHeadChamfer: settings.headChamfer,
+    ...driveFields,
     ...(keepFootprint ? {} : {
       width: footprint.width,
       depth: footprint.depth,
@@ -10593,6 +10603,10 @@ export function LayerlingEditor({
             threadChamfer: threaded.threadChamfer,
             threadChamferBottom: threaded.threadChamferBottom,
             threadHeadChamfer: threaded.threadHeadChamfer,
+            threadHeadDiameter: threaded.threadHeadDiameter,
+            threadDrive: threaded.threadDrive,
+            threadDriveSize: threaded.threadDriveSize,
+            threadDriveDepth: threaded.threadDriveDepth,
             width: threaded.width,
             depth: threaded.depth,
           });

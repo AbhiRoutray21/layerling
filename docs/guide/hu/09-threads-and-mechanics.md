@@ -11,6 +11,7 @@ Válaszd az alakzattárban a {{ui:shape.thread}} alakzatot. A {{ui:inspector.thr
 
 - **{{ui:thread.rod}}:** menetes henger, például fej nélküli csavar.
 - **{{ui:thread.screw}}:** fejjel. Kiválasztod a {{ui:inspector.threadHead}} típusát: {{ui:thread.headCylinder}}, {{ui:thread.headCountersunk}} vagy {{ui:thread.headHex}}.
+  Lejjebb állítod be a {{ui:prop.headDiameter}} (hatlapfejnél a {{ui:prop.headAcrossFlats}}; süllyesztett fejnél az átmérő a magasságot követi) és a fejfelület {{ui:inspector.threadDrive}}: {{ui:thread.driveHex}}, {{ui:thread.driveTorx}}, {{ui:thread.drivePhillips}} vagy {{ui:thread.driveNone}} a kézzel vagy kulccsal hajtott csavarhoz. A {{ui:prop.driveSize}} a belső hatszög kulcsnyílása, a Torx csillag külső átmérője vagy a kereszt fesztávja; a {{ui:prop.driveDepth}} azt adja meg, milyen mélyre ér, legfeljebb a fej kilenc tizedéig, a 0 pedig elhagyja. Amíg nem változtatod meg őket, a mérethez igazodnak; a hatlapfej hajtás nélkül indul. A hajtás a pontos test része, így a STEP-exportba is bekerül.
 - **{{ui:thread.nut}}:** a hozzá illő anya.
 - **{{ui:thread.bore}}:** menetes furat. Ez lyuk. Húzd bele egy alkatrészbe, csoportosítsd a kettőt, és az alkatrészben belső menet lesz. Olyan furathoz, amelybe csavart hajtasz, mindig a {{ui:thread.bore}} legyen: a {{ui:thread.rod}} vagy {{ui:thread.screw}} üregként a csavar teljes mérete, holtjáték nélkül, és túl szűk lesz. Ha mégis üregnek állítod, a layerling figyelmeztet, és a {{ui:inspector.threadMakeTappedHole}} gombbal {{ui:thread.bore}} lesz belőle.
 

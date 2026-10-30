@@ -11,6 +11,7 @@ Vložte {{ui:shape.thread}} a v {{ui:inspector.threadRole}} zvolte:
 
 - **{{ui:thread.rod}}:** válec se závitem, například šroub bez hlavy.
 - **{{ui:thread.screw}}:** šroub s hlavou {{ui:inspector.threadHead}} typu {{ui:thread.headCylinder}}, {{ui:thread.headCountersunk}} nebo {{ui:thread.headHex}}.
+  Níže nastavíte {{ui:prop.headDiameter}} (u šestihranné hlavy {{ui:prop.headAcrossFlats}}; u zápustné hlavy se průměr řídí výškou) a {{ui:inspector.threadDrive}} v čele hlavy: {{ui:thread.driveHex}}, {{ui:thread.driveTorx}}, {{ui:thread.drivePhillips}} nebo {{ui:thread.driveNone}} pro šroub, který se točí rukou nebo klíčem. {{ui:prop.driveSize}} je rozměr přes plochy vnitřního šestihranu, vnější průměr hvězdy Torx nebo rozpětí kříže; {{ui:prop.driveDepth}} udává, jak hluboko sahá, nejvýše devět desetin hlavy, a 0 ho vynechá. Dokud je nezměníte, řídí se velikostí; šestihranná hlava začíná bez pohonu. Pohon je součástí přesného tělesa, a tak se dostane i do exportu STEP.
 - **{{ui:thread.nut}}:** odpovídající matice.
 - **{{ui:thread.bore}}:** závitový výřez. Zasuňte jej do dílu a slučte, aby vznikl vnitřní závit. Pro otvor, do kterého se šroubuje šroub, vždy použijte {{ui:thread.bore}}: {{ui:thread.rod}} nebo {{ui:thread.screw}} jako otvor má plnou velikost šroubu bez vůle a vyjde příliš těsný. Pokud ji přesto nastavíte jako otvor, layerling na to upozorní a {{ui:inspector.threadMakeTappedHole}} z ní udělá {{ui:thread.bore}}.
 

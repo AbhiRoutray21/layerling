@@ -1,6 +1,16 @@
 [
   {
     "title": {
+      "de": "Schrauben mit Torx, Kreuzschlitz oder ohne Antrieb",
+      "en": "Screws with Torx, Phillips or no drive"
+    },
+    "body": {
+      "de": "Eine Schraube bekommt jetzt den Antrieb, den du willst: Innensechskant, Torx, Kreuzschlitz oder keinen. Größe und Tiefe des Antriebs und der Kopfdurchmesser lassen sich einstellen, so passt auch in einen flachen Kopf ein brauchbarer Antrieb.",
+      "en": "A screw now takes the drive you want: hex socket, Torx, Phillips or none. The drive's size and depth and the head diameter can be set, so a flat head gets a usable drive too."
+    }
+  },
+  {
+    "title": {
       "de": "Öffnungen für USB, HDMI, DisplayPort und RJ45",
       "en": "Openings for USB, HDMI, DisplayPort and RJ45"
     },
