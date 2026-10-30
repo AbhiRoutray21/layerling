@@ -466,6 +466,7 @@ export const MESSAGES_SL: Partial<Record<MessageKey, string>> = {
   "editor.group.home": "Domov",
   "editor.group.clipboard": "Odložišče",
   "editor.group.history": "Zgodovina",
+  "editor.group.foldedHint": "{group}: klikni za prikaz orodij",
   "editor.group.shapes": "Oblike",
   "editor.group.visibility": "Vidnost",
   "editor.group.combine": "Združevanje",

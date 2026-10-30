@@ -490,6 +490,7 @@ export const MESSAGES_HU: Partial<Record<MessageKey, string>> = {
   "editor.group.home": "Kezdőlap",
   "editor.group.clipboard": "Vágólap",
   "editor.group.history": "Előzmények",
+  "editor.group.foldedHint": "{group}: kattints az eszközök megjelenítéséhez",
   "editor.group.shapes": "Alakzatok",
   "editor.group.visibility": "Láthatóság",
   "editor.group.combine": "Egyesítés",

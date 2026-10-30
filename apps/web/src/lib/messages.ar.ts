@@ -535,6 +535,7 @@ export const MESSAGES_AR: Partial<Record<MessageKey, string>> = {
   "editor.group.home": "الرئيسية",
   "editor.group.clipboard": "الحافظة",
   "editor.group.history": "السجل",
+  "editor.group.foldedHint": "{group}: انقر لعرض أدواتها",
   "editor.group.shapes": "الأشكال",
   "editor.group.visibility": "الرؤية",
   "editor.group.combine": "دمج",

@@ -553,6 +553,7 @@ export const MESSAGES_RU: Partial<Record<MessageKey, string>> = {
   "editor.group.home": "Главная",
   "editor.group.clipboard": "Буфер обмена",
   "editor.group.history": "История",
+  "editor.group.foldedHint": "{group}: нажмите, чтобы показать инструменты",
   "editor.group.shapes": "Фигуры",
   "editor.group.visibility": "Видимость",
   "editor.group.combine": "Объединение",

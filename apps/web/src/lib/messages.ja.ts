@@ -548,6 +548,7 @@ export const MESSAGES_JA: Partial<Record<MessageKey, string>> = {
   "editor.group.home": "ホーム",
   "editor.group.clipboard": "クリップボード",
   "editor.group.history": "履歴",
+  "editor.group.foldedHint": "{group}：クリックしてツールを表示",
   "editor.group.shapes": "シェイプ",
   "editor.group.visibility": "表示",
   "editor.group.combine": "結合",

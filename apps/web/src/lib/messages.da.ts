@@ -1177,6 +1177,7 @@ export const MESSAGES_DA: Partial<Record<MessageKey, string>> = {
   "editor.group.home": "Hjem",
   "editor.group.clipboard": "Udklipsholder",
   "editor.group.history": "Historik",
+  "editor.group.foldedHint": "{group}: klik for at vise værktøjerne",
   "editor.group.shapes": "Former",
   "editor.group.visibility": "Synlighed",
   "editor.group.combine": "Kombinér",

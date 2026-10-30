@@ -28,5 +28,15 @@
       "de": "Überschriften, Reiter und Leistentitel sind etwas weniger fett. Auf dem Mac liefen die Buchstaben bei kleinen Größen zusammen und wirkten unscharf; jetzt nutzt die Oberfläche dort Avenir Next Demi Bold statt Heavy, unter Windows Arial Bold statt Arial Black.",
       "en": "Headings, tabs and ribbon labels are a little less heavy. On the Mac the letters ran together at small sizes and looked blurred; now the interface uses Avenir Next Demi Bold there instead of Heavy, and Arial Bold instead of Arial Black on Windows."
     }
+  },
+  {
+    "title": {
+      "de": "Zugeklappte Gruppen zeigen, dass sie aufgehen",
+      "en": "Folded groups show that they open"
+    },
+    "body": {
+      "de": "Ist das Fenster schmal, klappen Gruppen im Menüband zu einem Knopf zusammen. Der sah aus wie ein einzelnes Werkzeug, „Verlauf“ etwa wie Rückgängig. Jetzt hängt darunter ein kleiner Pfeil in der Farbe der Gruppe, und der Hinweistext sagt, dass ein Klick die Werkzeuge zeigt.",
+      "en": "When the window is narrow, groups in the ribbon fold into one button. It looked like a single tool, History like Undo, say. Now a small arrow in the group's colour hangs beneath it, and its hint says that a click shows the tools."
+    }
   }
 ]

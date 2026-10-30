@@ -679,6 +679,7 @@ export const MESSAGES_CS: Record<MessageKey, string> = {
   "editor.group.home": "Domů",
   "editor.group.clipboard": "Schránka",
   "editor.group.history": "Historie",
+  "editor.group.foldedHint": "{group}: kliknutím zobrazíte nástroje",
   "editor.group.shapes": "Tvary",
   "editor.group.visibility": "Viditelnost",
   "editor.group.combine": "Spojování",

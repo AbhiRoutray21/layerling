@@ -553,6 +553,7 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "editor.group.home": "Start",
   "editor.group.clipboard": "Zwischenablage",
   "editor.group.history": "Verlauf",
+  "editor.group.foldedHint": "{group}: klicken, um die Werkzeuge zu zeigen",
   "editor.group.shapes": "Formen",
   "editor.group.visibility": "Sichtbarkeit",
   "editor.group.combine": "Verbinden",

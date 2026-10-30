@@ -355,6 +355,7 @@ export const MESSAGES_PT_BR: Partial<Record<MessageKey, string>> = {
   "editor.group.home": "Início",
   "editor.group.clipboard": "Área de transferência",
   "editor.group.history": "Histórico",
+  "editor.group.foldedHint": "{group}: clique para mostrar as ferramentas",
   "editor.group.shapes": "Formas",
   "editor.group.visibility": "Visibilidade",
   "editor.group.combine": "Combinar",

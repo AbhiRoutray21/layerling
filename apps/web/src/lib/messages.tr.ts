@@ -499,6 +499,7 @@ export const MESSAGES_TR: Partial<Record<MessageKey, string>> = {
   "editor.group.home": "Giriş",
   "editor.group.clipboard": "Pano",
   "editor.group.history": "Geçmiş",
+  "editor.group.foldedHint": "{group}: araçları göstermek için tıklayın",
   "editor.group.shapes": "Şekiller",
   "editor.group.visibility": "Görünürlük",
   "editor.group.combine": "Birleştir",

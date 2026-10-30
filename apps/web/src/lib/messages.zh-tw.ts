@@ -522,6 +522,7 @@ export const MESSAGES_ZH_TW: Partial<Record<MessageKey, string>> = {
   "editor.group.home": "首頁",
   "editor.group.clipboard": "剪貼簿",
   "editor.group.history": "歷史記錄",
+  "editor.group.foldedHint": "{group}：點選以顯示其中的工具",
   "editor.group.shapes": "形狀",
   "editor.group.visibility": "可見性",
   "editor.group.combine": "合併",

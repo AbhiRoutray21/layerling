@@ -554,6 +554,7 @@ export const MESSAGES_EN = {
   "editor.group.home": "Home",
   "editor.group.clipboard": "Clipboard",
   "editor.group.history": "History",
+  "editor.group.foldedHint": "{group}: click to show its tools",
   "editor.group.shapes": "Shapes",
   "editor.group.visibility": "Visibility",
   "editor.group.combine": "Combine",

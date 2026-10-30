@@ -553,6 +553,7 @@ export const MESSAGES_NL: Record<MessageKey, string> = {
   "editor.group.home": "Start",
   "editor.group.clipboard": "Klembord",
   "editor.group.history": "Geschiedenis",
+  "editor.group.foldedHint": "{group}: klik om de gereedschappen te tonen",
   "editor.group.shapes": "Vormen",
   "editor.group.visibility": "Zichtbaarheid",
   "editor.group.combine": "Combineren",
