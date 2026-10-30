@@ -1,6 +1,16 @@
 [
   {
     "title": {
+      "de": "Skizze aus dem Schnitt",
+      "en": "Sketch from the cut"
+    },
+    "body": {
+      "de": "Im Schnittfenster beginnt „Skizze aus Schnitt“ eine neue Skizze direkt auf dem Schnitt, mit seinen Umrissen schon darin, Löcher als echte Kreise. So startet ein Deckel, ein Einsatz oder eine Dichtung mit dem Umriss des Teils, an das sie passen sollen.",
+      "en": "In the section view, \"Sketch from cut\" starts a new sketch right on the cut with its outlines already in it, holes as true circles. A lid, an insert or a gasket then starts from the outline of the part it has to fit."
+    }
+  },
+  {
+    "title": {
       "de": "Maustasten wie im Slicer, und die 3D-Maus",
       "en": "Mouse buttons like your slicer, and a 3D mouse"
     },

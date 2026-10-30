@@ -62,6 +62,7 @@ V každém projektu si také můžete uložit čtyři vlastní pohledy. [[Shift]
 - Tlačítko vedle os obrátí zobrazovanou stranu řezu, {{ui:camera.sectionReset}} vrátí rovinu doprostřed a {{ui:camera.sectionShowPlane}} skryje modrou rovinu.
 - Odkryté části včetně vnitřních stěn lze vybírat kliknutím.
 - {{ui:camera.sectionWorkplane}} umístí pracovní rovinu na rovinu řezu.
+- {{ui:camera.sectionSketch}} začne nový náčrt přímo na řezu, ve kterém už jsou obrysy řezu jako čáry: díra přijde jako skutečná kružnice, zaoblený roh jako oblouk. Upravte je, smažte, co nepotřebujete, kreslete dál a dokončete: těleso vyroste z řezu na stranu, která je odříznutá, takže díl, který musí sedět na jiný, například víko, vložka nebo těsnění, začíná přímo obrysem toho dílu. Tlačítko vedle os volí tuto stranu. Stejně jako u SVG se počítají jen viditelná tělesa a díry jsou už odečtené.
 - {{ui:camera.sectionMeasure}} měří v řezu dvěma kliknutími. Body se přichytávají k obrysu, přednostně k rohům. Druhý bod na protější stěně se umístí kolmo proti prvnímu. Bez přesného míření tak změříte tloušťku stěny, mezeru nebo vůli. Třetí kliknutí začne další měření, [[Esc]] měření ukončí. Posun řezné roviny měření vymaže.
 - {{ui:camera.sectionExportSvg}} uloží obrysy v řezu jako SVG v měřítku 1:1 pro laser, plotr, šablonu nebo těsnění. Řez X je viděn zprava, Y zepředu a Z shora. Zahrnou se jen viditelná tělesa s již odečtenými výřezy. Tělesa stejné barvy se sjednotí do jednoho obrysu. Každá barva zůstává samostatnou nevyplněnou cestou pro oddělené vrstvy v laserovém programu.
 

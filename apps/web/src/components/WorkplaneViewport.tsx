@@ -1,7 +1,7 @@
 "use client";
 import type { SurfaceTextureFace, SurfaceTextureSettings } from "@/lib/surfaceTexture";
 import { markEscapeHandled } from "@/lib/escapeHandled";
-import { ArrowDownToLine, Check, ChevronLeft, ChevronRight, Crosshair, Cuboid, Download, Eye, EyeOff, FlipHorizontal, GripVertical, Home, Layers, Minus, MousePointer2, PanelsTopLeft, PictureInPicture2, Plus, Rotate3d, RotateCcw, Ruler, RulerDimensionLine, Slice, Spline, Trash2, X } from "lucide-react";
+import { ArrowDownToLine, Check, ChevronLeft, ChevronRight, Crosshair, Cuboid, Download, Eye, EyeOff, FlipHorizontal, GripVertical, Home, Layers, Minus, MousePointer2, PanelsTopLeft, PencilLine, PictureInPicture2, Plus, Rotate3d, RotateCcw, Ruler, RulerDimensionLine, Slice, Spline, Trash2, X } from "lucide-react";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type Dispatch, type DragEvent, type MutableRefObject, type PointerEvent as ReactPointerEvent, type ReactNode, type SetStateAction, type WheelEvent as ReactWheelEvent } from "react";
 import { objectSnapOffset, shiftSnapBox, type ObjectSnapGuide, type SnapBox } from "@/lib/objectSnap";
 import { dragReach } from "@/lib/dragReach";
@@ -283,6 +283,8 @@ type WorkplaneViewportProps = {
   onThemePreferenceChange?: (preference: AppThemePreference) => void;
   /** Der aktuelle Schnitt als SVG: rechnet der Editor, aus denselben Koerpern wie der Export. */
   onExportSectionSvg?: (axis: SectionPlaneAxis, offset: number, frame: SectionFrame | null) => void;
+  /** A new sketch from the cut's outlines, on the cut (#1022). */
+  onSketchFromSection?: (settings: SectionPlaneSettings) => void;
   /** The cut's outlines, from the same bodies as the SVG - what section measuring snaps to. */
   onSectionContours?: (axis: SectionPlaneAxis, offset: number, frame: SectionFrame | null) => Promise<SectionLoop[]>;
   /** The bodies of the cut with their colours, to fill the cut face of the section view (#516). */
@@ -1473,6 +1475,7 @@ export function WorkplaneViewport({
   resolvedTheme = "light",
   onThemePreferenceChange,
   onExportSectionSvg,
+  onSketchFromSection,
   onSectionContours,
   onSectionBodies,
 }: WorkplaneViewportProps) {
@@ -7793,6 +7796,19 @@ export function WorkplaneViewport({
                         >
                           <Layers size={14} strokeWidth={2.2} aria-hidden="true" />
                           <span>{t("camera.sectionWorkplane")}</span>
+                        </button>
+                        <button
+                          type="button"
+                          className="section-action-btn section-workplane-btn"
+                          disabled={!onSketchFromSection}
+                          onClick={() => {
+                            if (sectionMeasureModeRef.current) setSectionMeasureMode(false);
+                            onSketchFromSection?.(sectionSettings);
+                          }}
+                          title={t("camera.sectionSketchHint")}
+                        >
+                          <PencilLine size={14} strokeWidth={2.2} aria-hidden="true" />
+                          <span>{t("camera.sectionSketch")}</span>
                         </button>
                       </div>
 

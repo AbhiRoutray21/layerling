@@ -1518,6 +1518,22 @@ export const tools = [
     },
   },
   {
+  {
+    name: "layerling_sketch_from_section",
+    description: "Make a sketch from a cut through the design, like \"Sketch from cut\" in the editor's section view (#1022): the outlines the plane cuts from the bodies become the lines of a new extruded sketch lying on the cut, so a part that has to fit another one starts from that part's own outline - a lid, an insert, a gasket, a mating piece. Same bodies as layerling_export_section_svg: visible solids only, holes already taken off, bodies of one colour joined. The round parts come back as true arcs and circles (a hole is a circle, a fillet an arc), free curves as arcs within 0.01 mm, the rest as straight lines. axis and offset work like layerling_export_section_svg and default to the section view as it is set (also turned to the workplane or the view) or the middle of the design. The sketch faces the side that the section view takes away (flipped, default as the section view, else false), so its body grows out of the cut into that side. With height (mm) the body is built at once and returned as object; without it the sketch opens in the editor to be changed and finished by hand (fails while another sketch is open). Returns axis, offset, flipped, outlines, openLeftOut (outlines that did not close, left out), segments and object or sketchOpened. Fails with a message when the plane misses every visible solid or the cut has more than 2500 lines and curves.",
+    inputSchema: {
+      ...editorTargetSchema,
+      properties: {
+        ...editorTargetSchema.properties,
+        axis: { type: "string", enum: ["x", "y", "z"], description: "Cutting axis, as in layerling_set_section_view. Defaults to the axis of the section view." },
+        offset: { type: "number", description: "Where the plane cuts, in mm: an x position, a height above the plate or a z position. Defaults to the section view's position, or the middle of the design." },
+        flipped: { type: "boolean", description: "Which side the sketch faces and its body grows into: false towards smaller x, height or z (the side the section view takes away unless flipped), true towards greater. Defaults to the section view's." },
+        height: { type: "number", description: "Build the body at once, this many mm out of the cut (more than 0, at most 1000). Left out, the sketch opens in the editor instead." },
+        name: { type: "string", description: "Name of the new body (with height)." },
+        color: { type: "string", description: "Colour of the new body (with height)." },
+      },
+    },
+  },
     name: "layerling_export_drawing",
     description: "Make the editor's \"Drawing\" export: front, top and right-side views in first-angle layout on an ISO sheet at 1:1, with the overall size of each view, hidden edges and a table of the round bores that run parallel to a view axis (diameter and position from the lower-left corner of the view). Same bodies as the export: visible solids only, holes already taken off. ids limits it to those objects (loose holes still cut them); without ids it is the whole design. Returns sheet (\"ISO A3\" and so on, or \"custom\"), widthMm and heightMm of the sheet, views (id F, T or R, size, bore count), bores (id, view, diameterMm, xMm, yMm) and, by format, svg (the drawing as SVG text, the default) or pdfBase64 (the vector PDF, base64). Threads, depths, tolerances and bores at an angle are not dimensioned. Fails with a message when there is no visible solid or the design is too complex (over 100,000 triangles, 200 bores, 5,080 mm).",
     inputSchema: {

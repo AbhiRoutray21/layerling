@@ -187,6 +187,7 @@ import { screenAlignedNudge } from "@/lib/keyboardNudge";
 import { LAYERLING_MCP_HEARTBEAT_MS, LAYERLING_MCP_POLL_RETRY_MS, LAYERLING_MCP_ROUTE, type LayerlingMcpCommand, type LayerlingMcpSceneSummary, type LayerlingMcpViewFace } from "@/lib/layerlingMcpProtocol";
 import type { CadFaceInfo, CadModifierComponentMesh, CadModifierDeflection, CadModifierDisplayEdge, CadModifierEdge, CadModifierFaces, CadModifierGridfinityPart, CadModifierHelicalGearPart, CadModifierHirthPart, CadModifierKind, CadModifierMeshPart, CadModifierPrimitivePart, CadModifierProfilePart, CadModifierQuality, CadModifierSpringPart, CadModifierThreadPart, CadModifierWorkerRequest, CadModifierWorkerResponse } from "@/lib/cadModifierTypes";
 import { getSectionBounds, sectionAxisLetter, sectionMeshInFrame, sectionPlacementWorkplane, sectionPointFromFrame, sectionPointToFrame, type SectionFrame, type SectionOrientation, type SectionPlaneAxis, type SectionPlaneSettings } from "@/lib/sectionView";
+import { MAX_SECTION_SKETCH_SEGMENTS, sectionSketchProfile } from "@/lib/sectionSketch";
 import { FOOTPRINT_CUT_HEIGHT, footprintCutOffset, projectSectionPoint, SECTION_VIEW_FACE, sectionSvgDocument, sliceMeshContours } from "@/lib/sectionSvg";
 import type { AlignAxis, AlignHandleStatus, AlignTarget, EdgeTreatmentFeature, GridSize, ParametricSource, ProjectAsset, ProjectAttachment, ShapeAsset, ShapeCustomization, ShapeKind, SketchImage, SketchOperation, SketchPoint, SketchProfile, SketchRevolveSettings, SketchSegment, ShellEdges, ShellOpenings, ShellSide, SweepAnchor, WorkplaneNote, WorkplaneShape, WorkplaneWorkspaceSettings } from "@/types/layerling";
 import { type Vec3, type MeshData, type Cuboid, type ShapeUpdatePatch, type ManifoldSolid, MIN_SHAPE_DIMENSION, resetManifoldRuntime, cleanModelDimension, getManifoldRuntime, meshForShape, meshReachAlong, appendMeshData, formatTriangleCount, boundsForShapes, boundsForCuboids, meshAabb, boundsForPositions, quantizedPointKey, sameShapeApartFromPlacement } from "@/lib/editorMeshCore";
@@ -10046,6 +10047,36 @@ export function LayerlingEditor({
     }
   }, [buildSectionSvg, projectName]);
 
+  /** The cut's outlines as a sketch on the workplane on the cut (#1022), for the panel's button and the MCP action. */
+  const sectionSketchAt = useCallback(async (settings: Pick<SectionPlaneSettings, "axis" | "offset" | "flipped" | "frame">) => {
+    const frame = settings.frame ?? null;
+    const { bodies } = await sectionBodiesAt(settings.axis, settings.offset, frame);
+    if (bodies.length === 0) throw new Error(t("status.sectionSvgNothing"));
+    const workplane = sectionPlacementWorkplane(settings);
+    const made = sectionSketchProfile(bodies.flatMap((body) => body.loops), settings.axis, settings.offset, frame, workplane);
+    if (made.tooMany) throw new Error(t("status.sectionSketchTooMany", { count: MAX_SECTION_SKETCH_SEGMENTS }));
+    if (!made.profile) throw new Error(t("status.sectionSvgMissed"));
+    return { profile: made.profile, outlines: made.outlines, openLeftOut: made.openLeftOut, workplane };
+  }, [sectionBodiesAt]);
+
+  const sketchFromSection = useCallback(async (settings: Pick<SectionPlaneSettings, "axis" | "offset" | "flipped" | "frame">) => {
+    // A sketch already open would be thrown away.
+    if (sketchActive) {
+      setNotice(t("status.sectionSketchFinishFirst"), true);
+      return;
+    }
+    setNotice(t("status.buildingSectionSketch"), true);
+    try {
+      const made = await sectionSketchAt(settings);
+      beginSketch("extrude", made.profile, null, undefined, made.workplane);
+      const parts = [t("status.sectionSketchStarted", { count: made.outlines })];
+      if (made.openLeftOut > 0) parts.push(t("status.sectionSketchOpen", { count: made.openLeftOut }));
+      setNotice(parts.join(" "), made.openLeftOut > 0);
+    } catch (error) {
+      setNotice(error instanceof Error ? localizedError(error.message) : t("status.sectionSketchFailed"), true);
+    }
+  }, [beginSketch, sectionSketchAt, sketchActive]);
+
   // Der Dateiimport steht weiter unten; die MCP-Aktion nimmt denselben Weg.
   const importFilesRef = useRef<((files: File[], fileHandle?: LylFileHandle, options?: { keepSvgPage?: boolean; svgWidth?: number | null }) => Promise<{ importedIds: string[]; failures: Array<{ fileName: string; reason: string }> }>) | null>(null);
 
@@ -11965,6 +11996,41 @@ export function LayerlingEditor({
         };
       }
 
+      if (command.action === "sketch_from_section") {
+        // The cut's outlines as a sketch on the cut (#1022), the plane resolved as for the section SVG.
+        const axisParam = params.axis === undefined ? undefined : mcpString(params.axis, "x").toLowerCase();
+        if (axisParam !== undefined && axisParam !== "x" && axisParam !== "y" && axisParam !== "z") throw new Error("axis must be x, y or z");
+        const current = window.layerlingSectionView?.({}).settings;
+        const axis = (axisParam ?? current?.axis ?? "x") as SectionPlaneAxis;
+        const followsView = axisParam === undefined && params.offset === undefined && Boolean(current?.enabled);
+        const offset = params.offset !== undefined
+          ? mcpNumber(params.offset, 0)
+          : current?.enabled && current.axis === axis
+            ? current.offset
+            : getSectionBounds(currentShapes(), axis, workspaceSettings.width, workspaceSettings.depth).center;
+        const flipped = params.flipped !== undefined ? params.flipped === true : followsView ? current?.flipped === true : false;
+        const frame = followsView ? current?.frame ?? null : null;
+        const height = params.height === undefined ? null : mcpNumber(params.height, 0);
+        if (height !== null && !(height > 0 && height <= 1000)) throw new Error("height must be more than 0 and at most 1000 mm");
+        if (height === null && sketchActive) throw new Error("A sketch is open in the editor: finish or cancel it first");
+        const made = await sectionSketchAt({ axis, offset, flipped, frame });
+        const counts = { axis, offset, flipped, outlines: made.outlines, openLeftOut: made.openLeftOut, segments: made.profile.segments.length };
+        if (height === null) {
+          beginSketch("extrude", made.profile, null, undefined, made.workplane);
+          setNotice(t("status.sectionSketchStarted", { count: made.outlines }));
+          return { ...counts, sketchOpened: true };
+        }
+        const extrusion = await cadShapeFromSketchProfile(made.profile, height, null);
+        const named = {
+          ...extrusion,
+          ...(typeof params.name === "string" && params.name.trim() ? { name: params.name.trim().slice(0, 60) } : {}),
+          ...(typeof params.color === "string" && params.color.trim() ? { color: params.color.trim() } : {}),
+        };
+        const placed = placeSketchShape(named, made.workplane, null);
+        commitShapes([...currentShapes(), placed], placed.id, t("status.exactSketchCreated"));
+        return { ...counts, object: mcpShapeSummary(placed) };
+      }
+
       if (command.action === "export_drawing") {
         // The drawing the export window makes: three views at 1:1 with the overall sizes and the round
         // bores, from the same bodies as the export. ids limit it to those objects (holes still cut).
@@ -12200,6 +12266,9 @@ export function LayerlingEditor({
   }, [
     alignSizeLimit,
     buildSectionSvg,
+    sectionSketchAt,
+    beginSketch,
+    sketchActive,
     rebuildSketchBodyFill,
     applyCustomFontToSelection,
     addReferencePoints,
@@ -14498,6 +14567,7 @@ export function LayerlingEditor({
           resolvedTheme={resolvedTheme}
           onThemePreferenceChange={onThemePreferenceChange}
           onExportSectionSvg={(axis, offset, frame) => void exportSectionSvg(axis, offset, frame)}
+          onSketchFromSection={(settings) => void sketchFromSection(settings)}
           onSectionContours={sectionContours}
           onSectionBodies={sectionBodies}
           />
