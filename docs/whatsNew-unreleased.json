@@ -21,12 +21,12 @@
   },
   {
     "title": {
-      "de": "Klarere Überschriften auf dem Mac",
-      "en": "Crisper headings on the Mac"
+      "de": "Klarere Überschriften",
+      "en": "Crisper headings"
     },
     "body": {
-      "de": "Überschriften, Reiter und Leistentitel nutzen auf dem Mac jetzt Avenir Next Demi Bold statt Heavy. Bei kleinen Größen liefen die Buchstaben vorher zusammen und wirkten unscharf. Unter Windows sieht alles aus wie bisher.",
-      "en": "Headings, tabs and ribbon labels on the Mac now use Avenir Next Demi Bold instead of Heavy. At small sizes the letters used to run together and looked blurred. On Windows everything looks as before."
+      "de": "Überschriften, Reiter und Leistentitel sind etwas weniger fett. Auf dem Mac liefen die Buchstaben bei kleinen Größen zusammen und wirkten unscharf; jetzt nutzt die Oberfläche dort Avenir Next Demi Bold statt Heavy, unter Windows Arial Bold statt Arial Black.",
+      "en": "Headings, tabs and ribbon labels are a little less heavy. On the Mac the letters ran together at small sizes and looked blurred; now the interface uses Avenir Next Demi Bold there instead of Heavy, and Arial Bold instead of Arial Black on Windows."
     }
   }
 ]
