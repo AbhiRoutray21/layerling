@@ -11,7 +11,6 @@ import { gridfinityPartSolid } from "@/lib/gridfinitySolid";
 import { hirthPartSolid } from "@/lib/hirthSolid";
 import { profileExtrusionSolid } from "@/lib/cadProfileSolid";
 import { applyCadTransform } from "@/lib/cadModifierRuntime";
-import { hingeHasExactParts } from "@/lib/hingeGeometry";
 import { hingeWorldParts } from "@/lib/hingeParts";
 import { restoreGroupedChildren } from "@/lib/editorBooleans";
 
@@ -358,15 +357,28 @@ function buildGridfinityBody(brep: Brep, shape: WorkplaneShape): BuildOutcome {
   return buildPlacedBody(brep, part, (kernel) => gridfinityPartSolid(kernel, part!));
 }
 
-/** The hinge as the boxes, cylinders and tubes it is made of, fused, its screw holes cut out: two bodies that turn against each other. */
+/**
+ * The hinge as the boxes, cylinders, tubes and cones it is made of, fused, its screw holes cut out: two bodies that turn
+ * against each other. Each knuckle of the cone hinge's B has its recesses cut first, before the cones in them are added.
+ */
 function buildHingeBody(brep: Brep, shape: WorkplaneShape): BuildOutcome {
   const solids: BrepSolid[] = [];
   const holes: BrepSolid[] = [];
+  const knuckles = new Map<number, { solids: BrepSolid[]; holes: BrepSolid[] }>();
   for (const part of hingeWorldParts(shape)) {
     const source = stepSourceForShape(part);
     const built = source === "primitive" ? buildExactSolid(brep, part) : source === "profile" ? buildProfileBody(brep, part) : { skip: `its ${part.kind} part has no exact body` };
     if ("skip" in built) return built;
-    (part.hole ? holes : solids).push(built.solid);
+    const own = part.knuckle === undefined ? { solids, holes } : knuckles.get(part.knuckle) ?? { solids: [], holes: [] };
+    if (part.knuckle !== undefined) knuckles.set(part.knuckle, own);
+    (part.hole ? own.holes : own.solids).push(built.solid);
+  }
+  for (const knuckle of knuckles.values()) {
+    const joined = brep.fuseAll(knuckle.solids as Parameters<Brep["fuseAll"]>[0]);
+    if (!joined.ok) return { skip: "a knuckle of the hinge could not be joined" };
+    const cut = brep.cutAll(joined.value as BrepSolid, knuckle.holes);
+    if (!cut.ok) return { skip: "the hinge's recesses could not be cut" };
+    solids.push(cut.value as BrepSolid);
   }
   const fused = brep.fuseAll(solids as Parameters<Brep["fuseAll"]>[0]);
   if (!fused.ok) return { skip: "the hinge's parts could not be joined" };
@@ -481,7 +493,7 @@ async function buildScope(brep: Brep, shapes: WorkplaneShape[], skipped: Skipped
       parts.push(...await buildScope(brep, restoreGroupedChildren(shape).filter((child) => !child.hidden), skipped));
       continue;
     }
-    if (shape.kind === "hinge" && hingeHasExactParts(shape) && !shape.cadBrep && !shapeHasShapeDeform(shape)) {
+    if (shape.kind === "hinge" && !shape.cadBrep && !shapeHasShapeDeform(shape)) {
       built = buildHingeBody(brep, shape);
     } else if (source === "imported") {
       built = await buildImportedBody(brep, shape);
