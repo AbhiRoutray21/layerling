@@ -38,5 +38,15 @@
       "de": "Der Knopf A–Z in der Titelleiste der Objektliste stellt die Formen, denen du einen Namen gegeben hast, alphabetisch nach oben, „Teil 2“ vor „Teil 10“. Die übrigen bleiben darunter in der Reihenfolge des Anlegens, die neueste zuletzt.",
       "en": "The A–Z button in the object list's title bar puts the shapes you have named at the top in alphabetical order, Part 2 before Part 10. The others stay below in the order you added them, the newest last."
     }
+  },
+  {
+    "title": {
+      "de": "Fasen, Verrunden und STEP am Scharnier mit Kegeln",
+      "en": "Chamfers, fillets and STEP for the hinge with cones"
+    },
+    "body": {
+      "de": "Fasen, Verrunden und „Fläche löschen“ gehen jetzt auch am Scharnier mit Kegeln. Der STEP-Export, der es bisher ausließ, nimmt es mit seinen echten Kegeln mit.",
+      "en": "Chamfers, fillets and \"Delete face\" now work on the hinge with cones too. The STEP export, which used to leave it out, now takes it with its true cones."
+    }
   }
 ]
