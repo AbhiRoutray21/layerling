@@ -3115,6 +3115,8 @@ export const MESSAGES_PT_BR: Partial<Record<MessageKey, string>> = {
   "status.packagingProject": "Empacotando o projeto editável, o histórico e os recursos sem duplicatas…",
   "status.savedProject": "Projeto editável do layerling salvo (.lyl)",
   "status.savedToFile": "Salvo em {name}",
+  "status.renameDraftToFile": "Dar este nome também ao projeto",
+  "status.draftRenamedToFile": "Projeto renomeado para {name}",
   "status.saveFileFailed": "Não foi possível gravar em {name}. Escolha o arquivo de novo em Exportar, Salvar como.",
   "status.fileNotWritable": "Sem permissão para alterar {name}. Escolha o arquivo de novo em Exportar, Salvar como.",
   "status.saveProjectFailed": "Não foi possível salvar o projeto do layerling",

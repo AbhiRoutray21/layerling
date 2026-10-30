@@ -1648,6 +1648,8 @@ export const MESSAGES_NL: Record<MessageKey, string> = {
   "status.packagingProject": "Bewerkbaar ontwerp, geschiedenis en ontdubbelde assets inpakken…",
   "status.savedProject": "Bewerkbaar layerling-ontwerp (.lyl) opgeslagen",
   "status.savedToFile": "Opgeslagen in {name}",
+  "status.renameDraftToFile": "Het ontwerp ook zo noemen",
+  "status.draftRenamedToFile": "Ontwerp hernoemd naar {name}",
   "status.saveFileFailed": "Kon niet naar {name} schrijven. Kies het bestand opnieuw via Exporteren, Opslaan als.",
   "status.fileNotWritable": "Geen toestemming om {name} te wijzigen. Kies het bestand opnieuw via Exporteren, Opslaan als.",
   "status.saveProjectFailed": "Kon layerling-ontwerp niet opslaan",

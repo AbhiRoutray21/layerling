@@ -1648,6 +1648,8 @@ export const MESSAGES_DE: Record<MessageKey, string> = {
   "status.packagingProject": "Bearbeitbarer Entwurf, Verlauf und abgeglichene Ressourcen werden gepackt …",
   "status.savedProject": "Bearbeitbarer layerling-Entwurf (.lyl) gespeichert",
   "status.savedToFile": "In {name} gespeichert",
+  "status.renameDraftToFile": "Entwurf auch so nennen",
+  "status.draftRenamedToFile": "Entwurf in {name} umbenannt",
   "status.saveFileFailed": "In {name} konnte nicht geschrieben werden. Wähle die Datei unter Exportieren, Speichern unter neu.",
   "status.fileNotWritable": "Keine Berechtigung, {name} zu ändern. Wähle die Datei unter Exportieren, Speichern unter neu.",
   "status.saveProjectFailed": "Der layerling-Entwurf konnte nicht gespeichert werden",

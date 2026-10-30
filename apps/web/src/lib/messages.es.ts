@@ -1468,6 +1468,8 @@ export const MESSAGES_ES: Partial<Record<MessageKey, string>> = {
   "status.packagingProject": "Empaquetando el diseño editable, el historial y los recursos sin duplicados…",
   "status.savedProject": "Diseño editable de layerling guardado (.lyl)",
   "status.savedToFile": "Guardado en {name}",
+  "status.renameDraftToFile": "Dar también este nombre al diseño",
+  "status.draftRenamedToFile": "Diseño renombrado a {name}",
   "status.saveFileFailed": "No se ha podido escribir en {name}. Vuelve a elegir el archivo con Exportar, Guardar como.",
   "status.fileNotWritable": "No tienes permiso para cambiar {name}. Vuelve a elegir el archivo con Exportar, Guardar como.",
   "status.saveProjectFailed": "No se ha podido guardar el diseño de layerling",

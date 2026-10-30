@@ -1,6 +1,16 @@
 [
   {
     "title": {
+      "de": "Den Dateinamen für den Entwurf übernehmen",
+      "en": "Take the file name for the design"
+    },
+    "body": {
+      "de": "Gibst du der Datei beim Speichern einen anderen Namen als dem Entwurf, bietet die Meldung danach einen Knopf an, der den Entwurf genauso nennt. Wer den anderen Namen mit Absicht gewählt hat, etwa mit einer Versionsnummer, lässt ihn einfach stehen.",
+      "en": "If you give the file a different name than the design when saving, the message afterwards offers a button that names the design the same. If you picked the other name on purpose, say with a version number, just leave it."
+    }
+  },
+  {
+    "title": {
       "de": "Noppen: keine Lücken mehr, auf Wunsch in geraden Reihen",
       "en": "Bumps: no more gaps, and straight rows if you like"
     },

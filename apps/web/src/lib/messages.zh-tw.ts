@@ -1449,6 +1449,8 @@ export const MESSAGES_ZH_TW: Partial<Record<MessageKey, string>> = {
   "status.packagingProject": "正在打包可編輯設計、歷史記錄與去除重複後的資源…",
   "status.savedProject": "已儲存可編輯的 layerling 設計（.lyl）",
   "status.savedToFile": "已儲存到 {name}",
+  "status.renameDraftToFile": "設計也使用這個名稱",
+  "status.draftRenamedToFile": "設計已重新命名為 {name}",
   "status.saveFileFailed": "無法寫入 {name}。請使用「匯出 → 另存新檔」重新選擇檔案。",
   "status.fileNotWritable": "沒有變更 {name} 的權限。請使用「匯出 → 另存新檔」重新選擇檔案。",
   "status.saveProjectFailed": "無法儲存 layerling 設計",

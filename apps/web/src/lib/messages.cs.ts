@@ -1717,6 +1717,8 @@ export const MESSAGES_CS: Record<MessageKey, string> = {
   "status.packagingProject": "Balení upravitelného projektu, historie a podkladů bez duplicit…",
   "status.savedProject": "Uložen upravitelný projekt layerlingu (.lyl)",
   "status.savedToFile": "Uloženo do {name}",
+  "status.renameDraftToFile": "Pojmenovat takto i projekt",
+  "status.draftRenamedToFile": "Projekt přejmenován na {name}",
   "status.saveFileFailed": "Do {name} nelze zapisovat. Vyberte soubor znovu v Export → Uložit jako.",
   "status.fileNotWritable": "Nemáte oprávnění měnit {name}. Vyberte soubor znovu v Export → Uložit jako.",
   "status.saveProjectFailed": "Projekt layerlingu se nepodařilo uložit",

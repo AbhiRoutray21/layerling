@@ -1483,6 +1483,8 @@ export const MESSAGES_AR: Partial<Record<MessageKey, string>> = {
   "status.packagingProject": "جارٍ تجهيز التصميم القابل للتعديل والسجل والملفات المرفقة دون تكرار…",
   "status.savedProject": "تم حفظ تصميم layerling القابل للتعديل (.lyl)",
   "status.savedToFile": "تم الحفظ في {name}",
+  "status.renameDraftToFile": "تسمية التصميم بهذا الاسم أيضًا",
+  "status.draftRenamedToFile": "تمت إعادة تسمية التصميم إلى {name}",
   "status.saveFileFailed": "تعذر الكتابة إلى {name}. اختر الملف من جديد عبر تصدير ← حفظ باسم.",
   "status.fileNotWritable": "لا يوجد إذن بتغيير {name}. اختر الملف من جديد عبر تصدير ← حفظ باسم.",
   "status.saveProjectFailed": "تعذر حفظ تصميم layerling",

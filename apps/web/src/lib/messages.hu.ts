@@ -1421,6 +1421,8 @@ export const MESSAGES_HU: Partial<Record<MessageKey, string>> = {
   "status.packagingProject": "A szerkeszthető terv, az előzmények és a duplikátummentes erőforrások csomagolása…",
   "status.savedProject": "Szerkeszthető layerling terv mentve (.lyl)",
   "status.savedToFile": "Mentve ide: {name}",
+  "status.renameDraftToFile": "A tervet is nevezd így",
+  "status.draftRenamedToFile": "A terv új neve: {name}",
   "status.saveFileFailed": "Nem sikerült írni ebbe: {name}. Válaszd ki újra a fájlt az Exportálás, Mentés másként menüvel.",
   "status.fileNotWritable": "Nincs jogosultság módosítani ezt: {name}. Válaszd ki újra a fájlt az Exportálás, Mentés másként menüvel.",
   "status.saveProjectFailed": "Nem sikerült menteni a layerling tervet",

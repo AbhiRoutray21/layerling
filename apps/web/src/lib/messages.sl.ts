@@ -3862,6 +3862,8 @@ export const MESSAGES_SL: Partial<Record<MessageKey, string>> = {
   "historyView.deleteConfirm": "Izbriši zgodovino",
   "status.historyCleared": "Zgodovina izbrisana – načrt ohrani trenutno stanje",
   "status.savedToFile": "Shranjeno v {name}",
+  "status.renameDraftToFile": "Tudi projekt poimenuj tako",
+  "status.draftRenamedToFile": "Projekt preimenovan v {name}",
   "status.saveFileFailed": "V {name} ni bilo mogoče pisati. Datoteko znova izberi z Izvoz, Shrani kot.",
   "status.fileNotWritable": "Ni dovoljenja za spreminjanje {name}. Datoteko znova izberi z Izvoz, Shrani kot.",
   "newVersion.titleMismatch": "Del te strani je iz druge različice",

@@ -2078,6 +2078,8 @@ export const MESSAGES_DA: Partial<Record<MessageKey, string>> = {
   "status.packagingProject": "Pakker redigerbart design, historik og deduplikerede aktiver …",
   "status.savedProject": "Gemt redigerbart layerling-design (.lyl)",
   "status.savedToFile": "Gemt til {name}",
+  "status.renameDraftToFile": "Giv også designet dette navn",
+  "status.draftRenamedToFile": "Designet er omdøbt til {name}",
   "status.saveFileFailed": "Kunne ikke skrive til {name}. Vælg filen igen med Eksportér, Gem som.",
   "status.fileNotWritable": "Ingen tilladelse til at ændre {name}. Vælg filen igen med Eksportér, Gem som.",
   "status.saveProjectFailed": "Kunne ikke gemme layerling-design",

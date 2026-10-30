@@ -1537,6 +1537,8 @@ export const MESSAGES_JA: Partial<Record<MessageKey, string>> = {
   "status.packagingProject": "編集できるデザイン、履歴、重なりをのぞいたアセットをまとめています…",
   "status.savedProject": "編集可能なlayerlingデザイン（.lyl）を保存しました",
   "status.savedToFile": "{name}に保存しました",
+  "status.renameDraftToFile": "デザインもこの名前にする",
+  "status.draftRenamedToFile": "デザインの名前を {name} に変更しました",
   "status.saveFileFailed": "{name}に書き込めませんでした。エクスポートの「名前を付けて保存」でファイルを選び直してください。",
   "status.fileNotWritable": "{name}を変更する権限がありません。エクスポートの「名前を付けて保存」でファイルを選び直してください。",
   "status.saveProjectFailed": "layerlingデザインを保存できませんでした",

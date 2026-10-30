@@ -1643,6 +1643,8 @@ export const MESSAGES_RU: Partial<Record<MessageKey, string>> = {
   "status.packagingProject": "Упаковка редактируемого проекта, истории и ресурсов без дубликатов…",
   "status.savedProject": "Сохранён редактируемый проект layerling (.lyl)",
   "status.savedToFile": "Сохранено в {name}",
+  "status.renameDraftToFile": "Назвать так и проект",
+  "status.draftRenamedToFile": "Проект переименован в {name}",
   "status.saveFileFailed": "Не удалось записать в {name}. Выберите файл заново в окне «Экспорт» через «Сохранить как…».",
   "status.fileNotWritable": "Нет прав на изменение {name}. Выберите файл заново в окне «Экспорт» через «Сохранить как…».",
   "status.saveProjectFailed": "Не удалось сохранить проект layerling",

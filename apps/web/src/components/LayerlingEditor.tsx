@@ -12981,6 +12981,7 @@ export function LayerlingEditor({
     // before anything that takes time. A browser without it keeps the download.
     const projectId = projectInfoRef.current.projectId ?? "";
     let fileHandle: LylFileHandle | null = null;
+    let pickedNewFile = false;
     if (target === "file" || target === "fileAs") {
       if (!lylFileAccessSupported()) {
         target = "download";
@@ -12991,7 +12992,10 @@ export function LayerlingEditor({
             setNotice(t("status.fileNotWritable", { name: fileHandle.name }), true);
             return;
           }
-          fileHandle ??= await pickLylFileToSave(projectExportFileName(exportName, "lyl"));
+          if (!fileHandle) {
+            fileHandle = await pickLylFileToSave(projectExportFileName(exportName, "lyl"));
+            pickedNewFile = true;
+          }
           // Closed without a choice: nothing to do.
           if (!fileHandle) return;
         } catch {
@@ -13047,7 +13051,22 @@ export function LayerlingEditor({
           throw new Error(t("status.saveFileFailed", { name: fileHandle.name }));
         }
         rememberLylFile(projectId, fileHandle);
-        setNotice(t("status.savedToFile", { name: fileHandle.name }));
+        // A different name typed into the file dialog may be on purpose (a version, a date), so
+        // the draft only takes it on a click (#1035).
+        const fileStem = fileHandle.name.replace(/\.(lyl|skf)$/i, "").trim();
+        const offerRename = pickedNewFile && onProjectNameChange && fileStem
+          && fileHandle.name !== projectExportFileName(projectName, "lyl");
+        setNotice(
+          t("status.savedToFile", { name: fileHandle.name }),
+          Boolean(offerRename),
+          offerRename ? {
+            label: t("status.renameDraftToFile"),
+            run: () => {
+              onProjectNameChange(fileStem);
+              setNotice(t("status.draftRenamedToFile", { name: fileStem }));
+            },
+          } : null,
+        );
       } else {
         const buffer = bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength) as ArrayBuffer;
         await downloadBlobFile(projectExportFileName(exportName, "lyl"), new Blob([buffer], { type: LYL_MEDIA_TYPE }));
@@ -13059,7 +13078,7 @@ export function LayerlingEditor({
     } finally {
       setLylExporting(false);
     }
-  }, [onSaveSharedProject, placementElevation, placementWorkplane, projectCreatedAt, projectModifiedAt, projectName, lylExporting, snapGrid]);
+  }, [onProjectNameChange, onSaveSharedProject, placementElevation, placementWorkplane, projectCreatedAt, projectModifiedAt, projectName, lylExporting, snapGrid]);
 
   /** Ctrl+S: into the file the design is tied to; the first time it asks for one (#251). */
   const saveDesignRef = useRef<() => void>(() => undefined);

@@ -1442,6 +1442,8 @@ export const MESSAGES_TR: Partial<Record<MessageKey, string>> = {
   "status.packagingProject": "Düzenlenebilir tasarım, geçmiş ve tekilleştirilmiş varlıklar paketleniyor…",
   "status.savedProject": "Düzenlenebilir layerling tasarımı (.lyl) kaydedildi",
   "status.savedToFile": "{name} dosyasına kaydedildi",
+  "status.renameDraftToFile": "Tasarıma da bu adı ver",
+  "status.draftRenamedToFile": "Tasarımın adı {name} olarak değiştirildi",
   "status.saveFileFailed": "{name} dosyasına yazılamadı. Dosyayı Dışa aktar, Farklı kaydet ile yeniden seç.",
   "status.fileNotWritable": "{name} dosyasını değiştirme izni yok. Dosyayı Dışa aktar, Farklı kaydet ile yeniden seç.",
   "status.saveProjectFailed": "layerling tasarımı kaydedilemedi",
