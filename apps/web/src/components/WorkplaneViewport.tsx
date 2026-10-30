@@ -8,7 +8,7 @@ import { dragReach } from "@/lib/dragReach";
 import { useMovablePanel, type MovablePanelOptions } from "@/lib/useMovablePanel";
 import { computeSectionPlaneVector, DEFAULT_SECTION_SETTINGS, getSectionBounds, SECTION_AXES_SHOWN, sectionAxisLetter, sectionAxisVector, sectionFineWindow, sectionFrameFromView, sectionFrameFromWorkplane, sectionPlacementWorkplane, sectionPointFromFrame, sectionPointToFrame, type SectionFrame, type SectionOrientation, type SectionPlaneAxis, type SectionPlaneSettings } from "@/lib/sectionView";
 import { projectSectionPoint, type SectionBody, type SectionLoop, type SectionPoint } from "@/lib/sectionSvg";
-import { sectionCapMesh } from "@/lib/sectionCaps";
+import { normalizeSectionCutFace, SECTION_CUT_FACES, sectionCapMesh, sectionHatchSpacing, sectionHatchTexture, sectionHatchTurned, sectionHatchUvs, type SectionCutFace } from "@/lib/sectionCaps";
 import { sectionMeasurement, sectionPointToWorld, snapSectionPoint, type SectionSnap } from "@/lib/sectionMeasure";
 import * as THREE from "three";
 import { triangleTouchesRect, type ScreenRect } from "@/lib/screenRectHit";
@@ -68,6 +68,7 @@ import { ownSideForMark } from "@/lib/dimensionSides";
 import { SelectionCounter } from "@/components/workplane/SelectionCounter";
 import { TouchMultiSelectButton } from "@/components/workplane/TouchMultiSelectButton";
 import { showsTouchMultiSelect } from "@/lib/touchMultiSelect";
+import { narrowCrossWidth, narrowEndWidth, normalizeSlopeSide, SLOPE_MIN_END, slopeAlongWidth, slopeEndHeight } from "@/lib/slopeAlong";
 import { TransformOverlay, continuousSnappedWheelRotation, getElevationMeasureKey, measureKeyForHandle, ROTATION_WHEEL_SHIFT_SNAP_DEGREES, ROTATION_WHEEL_SNAP_DEGREES, snappedRotationDelta, snappedWheelRotation, type DimensionMark, type EditingCorner, type EditingDimension, type EditingRotation, type PinnedRotationWheelView, type RotationAxis, type RotationPlaneView, type RotationReadout, type TransformHandleKind, type TransformOverlayState } from "@/components/workplane/TransformOverlay";
 import { type AlignAxes, type FrameCuboid } from "@/lib/alignFrame";
 import type { AlignAxis, AlignHandleStatus, AlignTarget, GridSize, MeasurementAccuracy, ShapeAsset, WorkplaneNote, WorkplaneNoteAnchor, WorkplaneShape, WorkplaneWorkspaceSettings } from "@/types/layerling";
@@ -328,6 +329,7 @@ function readMoveDimensionsEnabled() {
 
 const PROPORTION_LOCK_STORAGE_KEY = "layerling.editor.keepProportions";
 const POINT_CARD_OFFSET_STORAGE_KEY = "layerling.editor.pointCardOffset";
+const SECTION_CUT_FACE_STORAGE_KEY = "layerling.editor.sectionCutFace";
 const POINT_CARD_OFFSETS_STORAGE_KEY = "layerling.editor.pointCardOffsets";
 
 /** The card of a reference point, as far as the person has moved it from its pin. */
@@ -351,6 +353,14 @@ function readPointCardOffsets(): Record<string, PointCardOffset> {
       .map(([id, offset]) => [id, { x: Number(offset.x), y: Number(offset.y) }]));
   } catch {
     return {};
+  }
+}
+
+function readSectionCutFace(): SectionCutFace {
+  try {
+    return normalizeSectionCutFace(window.localStorage.getItem(SECTION_CUT_FACE_STORAGE_KEY));
+  } catch {
+    return "hatch";
   }
 }
 
@@ -430,7 +440,7 @@ declare global {
     layerlingCaptureView?: (face?: LayerlingMcpViewFace) => Promise<string> | string;
     layerlingCaptureImage?: (options?: { plate?: boolean; transparent?: boolean; scale?: number }) => string;
     /** The section view for MCP: applies what is given, returns the settings it ends on and the plane's range. */
-    layerlingSectionView?: (patch: Partial<SectionPlaneSettings> & { center?: boolean }) => { settings: SectionPlaneSettings; bounds: { min: number; max: number; center: number } };
+    layerlingSectionView?: (patch: Partial<SectionPlaneSettings> & { center?: boolean; cutFace?: SectionCutFace }) => { settings: SectionPlaneSettings; bounds: { min: number; max: number; center: number }; cutFace: SectionCutFace };
     /** "Hide workplane" in the camera bar for MCP: sets it when given, returns whether the plate is shown. */
     layerlingWorkplaneDisplay?: (visible?: boolean) => { visible: boolean };
     /** The measurements of the tape measure for MCP: shows or hides them when asked, returns what is there (#881). */
@@ -1575,6 +1585,25 @@ export function WorkplaneViewport({
   const [sectionSettings, setSectionSettings] = useState<SectionPlaneSettings>(DEFAULT_SECTION_SETTINGS);
   const sectionSettingsRef = useRef(sectionSettings);
   sectionSettingsRef.current = sectionSettings;
+  // How the cut face looks (#446) is the person's choice, kept in this browser for every design;
+  // read after mounting, so the page drawn on the server and the first one in the browser agree.
+  const [sectionCutFace, setSectionCutFace] = useState<SectionCutFace>("hatch");
+  const sectionCutFaceRef = useRef(sectionCutFace);
+  sectionCutFaceRef.current = sectionCutFace;
+  useEffect(() => {
+    const stored = readSectionCutFace();
+    sectionCutFaceRef.current = stored;
+    setSectionCutFace(stored);
+  }, []);
+  const changeSectionCutFace = useCallback((cutFace: SectionCutFace) => {
+    sectionCutFaceRef.current = cutFace;
+    setSectionCutFace(cutFace);
+    try {
+      window.localStorage.setItem(SECTION_CUT_FACE_STORAGE_KEY, cutFace);
+    } catch {
+      // The choice still holds in this editor session when storage is unavailable.
+    }
+  }, []);
   const sectionViewOpenRef = useRef(sectionViewOpen);
   sectionViewOpenRef.current = sectionViewOpen;
   // Messen auf der Schnittebene: zwei Punkte, an den Umriss des Schnitts gerastet.
@@ -2163,6 +2192,8 @@ export function WorkplaneViewport({
       }
       return;
     }
+    // The slope's dot changes no size: it leaves the anchor of the last resize as it was.
+    if (handleKey === "slope-end" || handleKey === "narrow-end") return;
     if (kind === "height") {
       lastResizeAnchorRef.current = {
         shapeId,
@@ -2539,7 +2570,7 @@ export function WorkplaneViewport({
   // The face is cut for the newest plane, one round at a time, and a round is never thrown away because the plane
   // moved on: with a delay that every move restarts, a plane that moves faster than the delay never let the face
   // be cut, and it only came back when the hand rested (#516, rondlh: "lags behind, sometimes a second").
-  type SectionCapWish = { axis: SectionPlaneAxis; offset: number; frame: SectionFrame | null; shapes: typeof shapes };
+  type SectionCapWish = { axis: SectionPlaneAxis; offset: number; frame: SectionFrame | null; shapes: typeof shapes; cutFace: SectionCutFace };
   const sectionBodiesRef = useRef(onSectionBodies);
   sectionBodiesRef.current = onSectionBodies;
   const sectionCapRunnerRef = useRef<LatestRunner<SectionCapWish> | null>(null);
@@ -2552,9 +2583,9 @@ export function WorkplaneViewport({
         const current = threeRef.current;
         const now = runner.wanted();
         // The face of a design that has changed since, or of a section that is off, is not shown.
-        if (current && now && now.shapes === wish.shapes) buildSectionCaps(current, bodies, wish.axis, wish.offset, wish.frame);
+        if (current && now && now.shapes === wish.shapes && now.cutFace === wish.cutFace) buildSectionCaps(current, bodies, wish.axis, wish.offset, wish.frame, wish.cutFace);
       },
-      (a, b) => a.axis === b.axis && a.offset === b.offset && a.frame === b.frame && a.shapes === b.shapes,
+      (a, b) => a.axis === b.axis && a.offset === b.offset && a.frame === b.frame && a.shapes === b.shapes && a.cutFace === b.cutFace,
     );
     sectionCapRunnerRef.current = runner;
   }
@@ -2562,13 +2593,14 @@ export function WorkplaneViewport({
   useEffect(() => {
     const runner = sectionCapRunnerRef.current;
     if (!runner) return;
-    if (!sectionSettings.enabled || !onSectionBodies) {
+    // "Open" leaves the cut as the clipping makes it (#446): nothing is cut, nothing is drawn.
+    if (!sectionSettings.enabled || !onSectionBodies || sectionCutFace === "open") {
       runner.clear();
       if (threeRef.current) clearSectionCaps(threeRef.current);
       return;
     }
-    runner.request({ axis: sectionSettings.axis, offset: sectionSettings.offset, frame: sectionSettings.frame ?? null, shapes });
-  }, [sectionSettings.enabled, sectionSettings.axis, sectionSettings.offset, sectionSettings.frame, shapes, onSectionBodies]);
+    runner.request({ axis: sectionSettings.axis, offset: sectionSettings.offset, frame: sectionSettings.frame ?? null, shapes, cutFace: sectionCutFace });
+  }, [sectionSettings.enabled, sectionSettings.axis, sectionSettings.offset, sectionSettings.frame, shapes, onSectionBodies, sectionCutFace]);
 
   useEffect(() => () => sectionCapRunnerRef.current?.clear(), []);
 
@@ -3910,7 +3942,11 @@ export function WorkplaneViewport({
       const scaleStartPoint = scalePlane ? toRawPlanePoint(event.clientX, event.clientY, scalePlane) ?? undefined : undefined;
       const scaleSigns = kind === "scale" ? resizeSignsForHandle(resizeHandleKey) : undefined;
       const scaleAnchorPoint = kind === "scale" && scaleSigns ? resizeAnchorPointForFrame(frame, scaleSigns) : undefined;
-      const liftAxis = kind === "lift" ? lift.axis : kind === "height" ? frame.yAxis.clone().normalize() : undefined;
+      // The narrowing's dot moves across the body, along the axis its end's width runs on.
+      const narrowAxis = handleKey === "narrow-end"
+        ? (slopeAlongWidth(normalizeSlopeSide(shape.kind, shape.narrowSide)) ? frame.zAxis : frame.xAxis).clone().normalize()
+        : null;
+      const liftAxis = kind === "lift" ? lift.axis : narrowAxis ?? (kind === "height" ? frame.yAxis.clone().normalize() : undefined);
       const liftHandlePoint = liftAxis
         ? (kind === "lift"
             ? lift.pointAt(handlesLowerSide ? lift.low : lift.high).addScaledVector(liftAxis, liftOffset)
@@ -4164,6 +4200,23 @@ export function WorkplaneViewport({
         const rawDelta = currentPoint && transform.liftStartPoint
           ? currentPoint.clone().sub(transform.liftStartPoint).dot(axis)
           : 0;
+        // Slope along: the dot on the lower end moves that end's height, between the floor's minimum and the body's height.
+        // Narrow along: the dot on the narrow end's side moves that end's half-width.
+        if (transform.handleKey === "narrow-end") {
+          const start = transform.startShape;
+          const startWidth = narrowEndWidth(start);
+          const full = narrowCrossWidth(start);
+          const nextWidth = clamp(startWidth + 2 * snapValue(rawDelta, step), 0, full);
+          onUpdateShape(start.id, { narrowEnd: Math.round(nextWidth * 1e4) / 1e4, narrowSide: normalizeSlopeSide(start.kind, start.narrowSide) });
+          return true;
+        }
+        if (transform.handleKey === "slope-end") {
+          const start = transform.startShape;
+          const startEnd = slopeEndHeight(start);
+          const nextEnd = clamp(startEnd + snapValue(rawDelta, step), Math.min(SLOPE_MIN_END, start.height), start.height);
+          onUpdateShape(start.id, { slopeEnd: Math.round(nextEnd * 1e4) / 1e4, slopeSide: normalizeSlopeSide(start.kind, start.slopeSide) });
+          return true;
+        }
         const resizingFromBottom = transform.handleKey === "bottom-height";
         const rawFrameHeight = transform.selectionFrame.height + (resizingFromBottom ? -rawDelta : rawDelta);
         const printerHeight = printerPresetById(workspaceRef.current.printer)?.height;
@@ -7155,6 +7208,7 @@ export function WorkplaneViewport({
       const bounds = getSectionBounds(shapesRef.current, axis, workspaceRef.current.width, workspaceRef.current.depth, frame);
       const switchingOn = patch.enabled === true && !current.enabled && current.offset === 0;
       const recenter = patch.center === true || axis !== current.axis || orientation !== currentOrientation || patch.orientation === "view" || switchingOn;
+      if (patch.cutFace !== undefined) changeSectionCutFace(normalizeSectionCutFace(patch.cutFace));
       const next: SectionPlaneSettings = {
         enabled: patch.enabled ?? current.enabled,
         axis,
@@ -7166,12 +7220,12 @@ export function WorkplaneViewport({
       };
       sectionSettingsRef.current = next;
       setSectionSettings(next);
-      return { settings: next, bounds: { min: bounds.min, max: bounds.max, center: bounds.center } };
+      return { settings: next, bounds: { min: bounds.min, max: bounds.max, center: bounds.center }, cutFace: sectionCutFaceRef.current };
     };
     return () => {
       delete window.layerlingSectionView;
     };
-  }, []);
+  }, [changeSectionCutFace]);
 
   // The editor stays mounted when you go back to the overview, so a cut set in
   // one design used to carry over into the next one: shapes placed there
@@ -7757,6 +7811,30 @@ export function WorkplaneViewport({
                         );
                       })()}
 
+                      {/* The cut face (#446): hatched like a drawing, filled plain, or open to look into the skin of the body. */}
+                      <div className="section-popover-axis-row section-cut-face-row">
+                        <span className="section-label">{t("camera.sectionCutFace")}</span>
+                        <div className="section-axis-buttons section-orientation-buttons" role="radiogroup" aria-label={t("camera.sectionCutFace")}>
+                          {SECTION_CUT_FACES.map((cutFace) => {
+                            const active = sectionCutFace === cutFace;
+                            const name = cutFace === "hatch" ? "Hatch" : cutFace === "fill" ? "Fill" : "Open";
+                            return (
+                              <button
+                                key={cutFace}
+                                type="button"
+                                role="radio"
+                                aria-checked={active}
+                                className={`section-axis-btn section-orientation-btn ${active ? "active" : ""}`}
+                                onClick={() => changeSectionCutFace(cutFace)}
+                                title={t(`camera.sectionCutFace${name}Hint`)}
+                              >
+                                {t(`camera.sectionCutFace${name}`)}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+
                       <div className="section-measure-row">
                         <button
                           type="button"
@@ -8295,21 +8373,29 @@ function clearSectionCaps(state: ThreeState) {
   state.needsRender = true;
 }
 
-/** The filled cut face of the section view: one flat mesh per body, on the plane, in its colour a little darker. */
-function buildSectionCaps(state: ThreeState, bodies: readonly SectionBody[], axis: SectionPlaneAxis, offset: number, frame: SectionFrame | null = null) {
+/**
+ * The filled cut face of the section view: one flat mesh per body, on the plane, in its colour a little darker,
+ * hatched unless the panel says "Filled" (#446). "Open" never gets here.
+ */
+function buildSectionCaps(state: ThreeState, bodies: readonly SectionBody[], axis: SectionPlaneAxis, offset: number, frame: SectionFrame | null = null, cutFace: SectionCutFace = "hatch") {
   clearSectionCaps(state);
+  if (cutFace === "open") return;
   const group = new THREE.Group();
   group.name = "SectionCaps";
-  for (const body of bodies) {
-    const cap = sectionCapMesh(body.loops);
-    if (cap.triangles.length === 0) continue;
+  const caps = bodies.map((body) => ({ body, cap: sectionCapMesh(body.loops) })).filter(({ cap }) => cap.triangles.length > 0);
+  const hatch = cutFace === "hatch" && caps.length > 0 ? sectionHatchTexture() : null;
+  const spacing = hatch ? sectionHatchSpacing(caps.map(({ cap }) => cap)) : 1;
+  const turned = hatch ? sectionHatchTurned(caps.map(({ body, cap }) => ({ cap, loops: body.loops }))) : [];
+  caps.forEach(({ body, cap }, index) => {
     const positions: number[] = [];
     cap.points.forEach((point) => positions.push(...sectionPointFromFrame(sectionPointToWorld(point, axis, offset), frame)));
     const geometry = new THREE.BufferGeometry();
     geometry.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
+    if (hatch) geometry.setAttribute("uv", new THREE.Float32BufferAttribute(sectionHatchUvs(cap.points, spacing, turned[index]), 2));
     geometry.setIndex(cap.triangles);
     const material = new THREE.MeshBasicMaterial({
       color: new THREE.Color(body.color).multiplyScalar(0.78),
+      map: hatch,
       // A see-through body keeps a see-through cut face (#575), as dim as the body itself.
       transparent: Boolean(body.seeThrough),
       opacity: body.seeThrough ? TRANSPARENT_SOLID_OPACITY : 1,
@@ -8322,7 +8408,7 @@ function buildSectionCaps(state: ThreeState, bodies: readonly SectionBody[], axi
     const mesh = new THREE.Mesh(geometry, material);
     mesh.name = "SectionCap";
     group.add(mesh);
-  }
+  });
   if (group.children.length === 0) return;
   state.scene.add(group);
   state.sectionCapGroup = group;
