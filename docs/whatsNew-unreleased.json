@@ -1,6 +1,16 @@
 [
   {
     "title": {
+      "de": "Hirth-Verzahnung bleibt rund",
+      "en": "The Hirth joint stays round"
+    },
+    "body": {
+      "de": "Statt Länge und Breite hat die Hirth-Verzahnung jetzt einen Durchmesser, und jeder Griff ändert nur diesen. So greifen die Zähne immer rundum ineinander.",
+      "en": "Instead of a length and a width, the Hirth joint now has one diameter, and every handle changes just that. So its teeth always interlock all round."
+    }
+  },
+  {
+    "title": {
       "de": "Knöpfe der Arbeitsbereich-Einstellungen wieder sauber",
       "en": "Tidy buttons under the workspace settings"
     },

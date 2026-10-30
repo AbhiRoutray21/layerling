@@ -468,7 +468,7 @@ export function syncTransformOverlay(
   // handle shows that single mark instead of a separate width and depth line
   // (which used to appear together at a corner handle, and independently
   // editable at all, letting the two drift apart).
-  const isCircularFootprint = frame.singleShape?.kind === "cylinder" || frame.singleShape?.kind === "star";
+  const isCircularFootprint = frame.singleShape?.kind === "cylinder" || frame.singleShape?.kind === "star" || frame.singleShape?.kind === "hirth";
   const footprintDimensionMarks = Object.fromEntries(
     footprintHandleKeys.map((handleKey) => {
       if (isCircularFootprint) {

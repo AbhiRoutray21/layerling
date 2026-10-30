@@ -6,6 +6,8 @@ code still carries it - so a lower number further down is older, not newer.
 
 ## Unreleased
 
+- **The Hirth joint stays round (Discussion #1016):** The panel gave the Hirth joint a Length and a Width, and the side handles on the workplane stretched it into an oval, 30 by 54 mm in the report; its teeth then no longer interlock when one half is turned on the other. It now keeps one diameter like the cylinder and the star: the panel shows a single Diameter (it keeps the angle between the flanks as Length and Width did), every handle and the dimension mark change that one diameter, and `canonicalizeShape` sets the depth to the width, so a joint stretched before opens round again. The guide says so in English, German and Polish, the languages that describe the joint. Unit test in `hirthGeometry.test.ts`. Suggested by @Oldandretired in #1016.
+
 - **The buttons under the workspace settings keep their labels inside (#1045):** On a Mac, "Meine Vorgabe verwenden" and "Als Vorgabe gesichert" wrapped onto two lines and ran out of the top and bottom of their buttons. The buttons had a fixed height of 34 px but nothing kept their label on one line, and next to the hint they were squeezed; Avenir Next is wider than Arial, so German labels no longer fitted. The labels now stay on one line and the buttons grow with them (`min-height` instead of `height`); the hint "Save the current settings for this design" wraps its own words instead, and when it would be narrower than 160 px the buttons move to a row of their own below it, right-aligned. Reported by @JK85659 in #1045.
 
 ## 1.124.2
