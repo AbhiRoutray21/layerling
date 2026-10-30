@@ -524,16 +524,13 @@ async function buildScope(brep: Brep, shapes: WorkplaneShape[], skipped: Skipped
 }
 
 /**
- * The kernel takes a colour as linear light and writes it to the file as sRGB, so a colour handed over as it is came out
- * paler in the file (#d12a2a as #ea7171). Handed over as linear light, unrounded (on the 0-255 scale the kernel divides
- * by 255), the file carries the colour as it shows here.
+ * The colour as the kernel takes it for the file: sRGB on the 0-255 scale, as it shows here. Up to occt-wasm 5.8 the
+ * kernel took it as linear light and turned it into sRGB on writing, so layerling handed it over linearised (else
+ * #d12a2a came out as #ea7171); since 5.9 it stores the colour as given, and the linearised one came out as #a30606.
  */
 export function stepColorForKernel(color: string): [number, number, number, number] {
   const hex = /^#?([0-9a-f]{6})$/i.exec(color)?.[1] ?? "ff0000";
-  const channel = (offset: number) => {
-    const value = parseInt(hex.slice(offset, offset + 2), 16) / 255;
-    return (value <= 0.04045 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4) * 255;
-  };
+  const channel = (offset: number) => parseInt(hex.slice(offset, offset + 2), 16);
   return [channel(0), channel(2), channel(4), 255];
 }
 
