@@ -45,6 +45,8 @@ layerling 的每個零件都從一個形狀開始。其餘一切都是由形狀�
 - **{{ui:inspector.makeEllipse}}：** 僅適用於圓柱。圓柱一律是圓的：只有一個直徑，每個控制點都會同時改變兩側。想要橢圓，點擊這個選項，它就會變成 {{ui:shape.ellipse}}——同一個實體，之後你可以分別設定長度與寬度。帶有倒角、圓角或壁的圓柱，以及轉過或群組過的圓柱，不能這樣轉換；這些情況請一開始就選用 {{ui:shape.ellipse}}。
 - **{{ui:inspector.taper}}：** 頂部與底部尺寸不同，例如做斜面或漏斗。
 - **{{ui:inspector.twist}}：** 讓頂部相對底部扭轉，或往側邊偏移。這樣就能做出扭轉的柱子與傾斜的高塔。
+- **{{ui:inspector.slope}}：** 讓頂部朝一端傾斜下降。{{ui:prop.slopeSide}} 選擇哪一端，{{ui:prop.slopeEnd}} 或 {{ui:prop.slopeAngle}} 決定降多低，{{ui:prop.slopeCurve}} 決定頂部是直的（0）、向上鼓起（大於 0）還是下凹（小於 0）。另一端保持物體的高度；低端頂部的橘色圓點可拖曳調整其高度。適合沿長度方向降低的屋頂、坡道或斜切的管端。可用於：{{ui:shape.box}}、{{ui:shape.roundedBox}}、{{ui:shape.cylinder}}、{{ui:shape.ellipse}}、{{ui:shape.polygon}}、{{ui:shape.tube}}、環、{{ui:shape.wedge}}、{{ui:shape.roundRoof}}。物體仍是精確實體，可倒角、圓角並匯出 STEP。
+- **{{ui:inspector.narrow}}：** 從上方看，讓兩條長邊均勻地朝一端收攏。{{ui:prop.narrowSide}} 選擇哪一端，{{ui:prop.narrowEnd}} 設定該端寬度（0 為尖端），{{ui:prop.narrowStart}} 設定收窄從哪裡開始（寬端為 0 %，中間為 50 %），{{ui:prop.slopeCurve}} 決定兩側是直的（0）、像船頭一樣向外鼓（大於 0）還是向內收（小於 0）。窄端側面的橘色圓點可拖曳調整其寬度。可用於除管和環以外的相同形狀。保持精確的有：{{ui:shape.box}}、{{ui:shape.wedge}}、{{ui:shape.roundRoof}}；其餘以網格顯示。
 
 ![一個由橘色方塊、藍色銷釘和孔組成的群組，被挖成單一實體。開啟多色後，銷釘保持藍色、方塊保持橘色，孔壁則採用方塊的顏色。](shot:group-multicolor)
 
